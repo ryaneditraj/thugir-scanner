@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-15T22:06:00.000Z",
+  "updated_at": "2026-08-15T22:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,17 +22,17 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2088,
   "discovery_findings": 23710,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-15T22:06:00.000Z",
+  "improvements_shipped": 1202,
+  "last_run": "2026-08-15T22:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 588,
+      "probes_run": 581,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,29 +48,29 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings) — no benchmark misses"
+      "note": "Stable 6/6 recall (48 findings) — no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 55,
-      "focus": "WSL modules 1701-1705 expansion + support-reliability-lab tenant path drain",
-      "improvements_shipped_this_run": 0
+      "focus": "WSL modules 1697-1700 catalog + support-reliability-lab stale-cache and big-upload incident oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "support-reliability-lab.vercel.app/s/stale-cache: 8 findings — admin-console + serverless-timeout live oracles; reflexion-escalated-ssti likely FP",
-      "support-reliability-lab.vercel.app/s/big-upload: 8 findings — incident lab tenant path with admin-console + timeout oracles",
-      "support-reliability-lab.vercel.app/s/missing-trace: 5 findings — broken-trace tenant path with incident oracles",
-      "web-security-learning-labs.vercel.app/module/1701-1703: 7 findings each — placeholder module-route-evidence only",
-      "web-security-learning-labs.vercel.app/module/1704: 8 findings — placeholder module-route-evidence only",
-      "web-security-learning-labs.vercel.app/module/1705: 5 findings — placeholder module-route-evidence only"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1699: placeholder-module-route-live-oracle via extended catalog 1697-1700",
+      "support-reliability-lab.vercel.app/s/stale-cache: stale-cache incident oracles (+3 route-specific slugs)",
+      "support-reliability-lab.vercel.app/s/big-upload: big-upload 413 payload oracles (+2 route-specific slugs)",
+      "web-security-learning-labs.vercel.app/module/1701-1705: placeholder module-route-evidence only (queued ahead of catalog extension)",
+      "Vercel Security Checkpoint blocks live probes on support-reliability-lab — curated tenant incident map fallback"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + other slugs)",
-      "WSL modules 1701-1705: placeholder module stubs only — no vuln-category live oracles",
+      "WSL modules 1701-1705: placeholder module stubs only — extend CATALOG_MAX beyond 1700",
+      "support-reliability-lab.vercel.app/s/missing-trace: missing-trace incident oracle still absent",
       "support-reliability-lab.vercel.app/s/* tenant paths: reflexion-escalated-ssti likely false-positive on Next.js incident lab pages",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass live oracle flaky when OTP mail delivery rate-limited",
       "nextjs-security-lesson.vercel.app: unreachable from cloud agent (repeated errors)",
@@ -78,13 +78,15 @@
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "support-reliability-lab.vercel.app/s/stale-cache": 8,
-    "support-reliability-lab.vercel.app/s/big-upload": 8,
+    "juice-shop.herokuapp.com": 48,
+    "support-reliability-lab.vercel.app/s/stale-cache": 5,
+    "support-reliability-lab.vercel.app/s/big-upload": 5,
     "web-security-learning-labs.vercel.app/module/1704": 8,
     "web-security-learning-labs.vercel.app/module/1701": 7,
     "web-security-learning-labs.vercel.app/module/1702": 7,
     "web-security-learning-labs.vercel.app/module/1703": 7,
+    "web-security-learning-labs.vercel.app/module/1699": 5,
+    "web-security-learning-labs.vercel.app/module/1700": 5,
     "support-reliability-lab.vercel.app/s/missing-trace": 5,
     "web-security-learning-labs.vercel.app/module/1705": 5,
     "dvwu.vercel.app/labs/path-traversal": 14,

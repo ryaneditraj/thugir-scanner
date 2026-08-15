@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-15T21:04:59.953Z",
-  "total": 2393,
-  "uniqueSlugs": 2389,
+  "generatedAt": "2026-08-15T22:04:03.001Z",
+  "total": 2397,
+  "uniqueSlugs": 2393,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2375,
+    "generic": 2379,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2308,
+    "deep": 2312,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 112,
-    "Security misconfiguration": 173,
+    "Security misconfiguration": 177,
     "Broken authentication": 146,
     "Injection": 358,
     "Cross-site scripting": 697,
@@ -1957,8 +1957,12 @@
     "supabase-service-role-in-bundle",
     "support-reliability-lab-admin-console-live-oracle",
     "support-reliability-lab-admin-console-route-live-oracle",
+    "support-reliability-lab-big-upload-payload-live-oracle",
+    "support-reliability-lab-big-upload-payload-route-live-oracle",
     "support-reliability-lab-serverless-timeout-live-oracle",
     "support-reliability-lab-serverless-timeout-route-live-oracle",
+    "support-reliability-lab-stale-cache-live-oracle",
+    "support-reliability-lab-stale-cache-route-live-oracle",
     "tech-stack-disclosure",
     "testasp-login-sqli-live-oracle",
     "testasp-login-sqli-route-live-oracle",
