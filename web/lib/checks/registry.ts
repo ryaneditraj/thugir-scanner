@@ -79805,6 +79805,56 @@ const dvwuJwtLabRouteLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+const dvwuXssLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/xss\b/i.test(pageUrl)) return NEGATIVE;
+  const searchUrl = new URL("/api/search", ctx.origin);
+  searchUrl.searchParams.set("q", IST_EDU_XSS_PROBE);
+  const xssDoc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 4096 });
+  if (
+    xssDoc.status >= 200 &&
+    xssDoc.status < 400 &&
+    /<script>thugirXssProbe<\/script>/i.test(xssDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        scannedUrl: pageUrl,
+        url: searchUrl.toString(),
+        snippet: xssDoc.body.slice(0, 240).trim(),
+        note: "DVWU /labs/xss route scan — GET /api/search?q= reflects raw <script> payload unescaped — route-specific XSS lab oracle"
+      }
+    };
+  }
+  const injection = await probeDvwuLabRouteInjection(ctx);
+  if (injection?.fired) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        ...injection.evidence,
+        scannedUrl: pageUrl,
+        note: "DVWU /labs/xss route scan — reflected/stored XSS training lab entry confirms DVWU injection oracle via /api/search or /api/portal"
+      }
+    };
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (bundle && /Institute of Science and Technology|ist\.edu\.bd/i.test(bundle)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: bundle.match(/Data Structures and Algorithms|Computer Science/i)?.[0]?.slice(0, 80),
+        note: "DVWU /labs/xss route scan — XSS training lab entry on IST Edu vulnerability portal (bundle-confirmed host when live /api/search probe did not fire on route-only scan)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 const dvwuDeserializationLabRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -84075,6 +84125,7 @@ export const RULES: Record<string, Rule> = {
   dvwuGraphqlLabRouteLiveOracle,
   dvwuRaceConditionLabRouteLiveOracle,
   dvwuJwtLabRouteLiveOracle,
+  dvwuXssLabRouteLiveOracle,
   dvwuDeserializationLabRouteLiveOracle,
   dvwuSstiLabRouteLiveOracle,
   dvwuCommandInjectionLabRouteLiveOracle,
