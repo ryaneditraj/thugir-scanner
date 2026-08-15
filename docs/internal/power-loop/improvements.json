@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:compass-demo.com",
+      "slug": "compass-demo-nosql-login-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /nosql/movies.php password[$ne]=1 returns Welcome <b>admin</b> without valid credentials; www.compass-demo.com/nosql/movies.php findings 4→7 (+compass-demo-nosql-login-bypass-live-oracle, +compass-demo-nosql-movies-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:compass-demo.com",
+      "slug": "compass-demo-nosql-movies-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /nosql/movies.php confirms live password[$ne] MongoDB operator injection authenticates as admin; www.compass-demo.com/nosql/movies.php findings 4→7; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1669-1671-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1668→1671 + IDOR curated modules 1669-1671 + topic aliases; web-security-learning-labs.vercel.app/module/1669 findings 7→9 (+web-security-learning-labs-idor-module-route-live-oracle Here is a Module: 1669); modules 1670-1671 each 7→9 with IDOR route oracle; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:compass-demo.com",
       "slug": "compass-demo-jwt-alg-none-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /jwt_lab/token?level=1 + forged alg:none JWT on /jwt_lab/api?level=1 returns {\"role\":\"admin\",\"status\":\"access granted\"}; www.compass-demo.com/jwt_lab/ findings 4→6 (+compass-demo-jwt-alg-none-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
