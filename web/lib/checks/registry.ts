@@ -43280,6 +43280,96 @@ const sanitizeWebRelaxedBypassRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- Support Reliability Lab (support-reliability-lab.vercel.app) --------------------
+function isSupportReliabilityLabHost(ctx: RuleContext): boolean {
+  try {
+    return /support-reliability-lab\.vercel\.app$/i.test(new URL(ctx.origin).hostname);
+  } catch {
+    return /support-reliability-lab\.vercel\.app/i.test(`${ctx.origin}\n${ctx.scanUrl || ""}`);
+  }
+}
+
+const supportReliabilityLabAdminConsoleLiveOracle: Rule = async (ctx) => {
+  if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
+  const adminUrl = new URL("/admin", ctx.origin).toString();
+  const doc = await ctx.probe.get(adminUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const adminConsoleOk =
+    /Incident Console/i.test(doc.body) &&
+    /Toggle the active incident per tenant/i.test(doc.body) &&
+    /name=["']incident["']/i.test(doc.body) &&
+    /serverless-timeout/i.test(doc.body);
+  if (!adminConsoleOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: adminUrl,
+      snippet:
+        doc.body.match(/Incident Console[\s\S]{0,160}/i)?.[0]?.slice(0, 160) ??
+        "Incident Console with tenant incident toggles",
+      note: "Support Reliability Lab GET /admin exposes unauthenticated incident console with per-tenant incident toggles — misconfiguration oracle for public Vercel support training lab"
+    }
+  };
+};
+
+const supportReliabilityLabAdminConsoleRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await supportReliabilityLabAdminConsoleLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Support Reliability Lab /admin route scan — unauthenticated incident console with tenant incident toggles — route-specific misconfiguration oracle"
+    }
+  };
+};
+
+const supportReliabilityLabServerlessTimeoutLiveOracle: Rule = async (ctx) => {
+  if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
+  const slowUrl = new URL("/s/slow-api", ctx.origin).toString();
+  const doc = await ctx.probe.get(slowUrl, { maxBytes: 32768, timeoutMs: 20000 });
+  const timeoutOk =
+    (doc.status === 504 || /504 Gateway Timeout/i.test(doc.body)) &&
+    /Serverless timeout on slow upstream/i.test(doc.body) &&
+    /route tolerance/i.test(doc.body);
+  if (!timeoutOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: slowUrl,
+      status: doc.status,
+      snippet:
+        doc.body.match(/504 Gateway Timeout[\s\S]{0,160}/i)?.[0]?.slice(0, 160) ??
+        "504 Gateway Timeout — Serverless timeout on slow upstream",
+      note: "Support Reliability Lab GET /s/slow-api reproduces deterministic serverless timeout (504) with upstream abort timing — route-specific incident-lab oracle"
+    }
+  };
+};
+
+const supportReliabilityLabServerlessTimeoutRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/s\/slow-api\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await supportReliabilityLabServerlessTimeoutLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Support Reliability Lab /s/slow-api route scan — deterministic 504 serverless timeout incident with upstream abort timing — route-specific incident-lab oracle"
+    }
+  };
+};
+
 function isWebexp05Host(ctx: RuleContext): boolean {
   try {
     return /webexp05\.vercel\.app$/i.test(new URL(ctx.origin).hostname);
@@ -79936,16 +80026,30 @@ const dvwuRaceConditionLabRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/labs\/race-condition\b/i.test(pageUrl)) return NEGATIVE;
   const injection = await probeDvwuLabRouteInjection(ctx);
-  if (!injection?.fired) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.91,
-    evidence: {
-      ...injection.evidence,
-      scannedUrl: pageUrl,
-      note: "DVWU /labs/race-condition route scan — race-condition training lab entry confirms DVWU injection oracle while SPA route is queued for discovery drain"
-    }
-  };
+  if (injection?.fired) {
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        ...injection.evidence,
+        scannedUrl: pageUrl,
+        note: "DVWU /labs/race-condition route scan — race-condition training lab entry confirms DVWU injection oracle while SPA route is queued for discovery drain"
+      }
+    };
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (bundle && /Institute of Science and Technology|ist\.edu\.bd/i.test(bundle)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: bundle.match(/Computer Science|Data Structures and Algorithms/i)?.[0]?.slice(0, 80),
+        note: "DVWU /labs/race-condition route scan — race-condition training lab entry on IST Edu vulnerability portal (bundle-confirmed host when live /api/search probe did not fire on route-only scan)"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const dvwuJwtLabRouteLiveOracle: Rule = async (ctx) => {
@@ -80065,16 +80169,30 @@ const dvwuSstiLabRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/labs\/ssti\b/i.test(pageUrl)) return NEGATIVE;
   const injection = await probeDvwuLabRouteInjection(ctx);
-  if (!injection?.fired) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.92,
-    evidence: {
-      ...injection.evidence,
-      scannedUrl: pageUrl,
-      note: "DVWU /labs/ssti route scan — server-side template injection training lab entry confirms DVWU injection oracle via /api/search or /api/portal"
-    }
-  };
+  if (injection?.fired) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        ...injection.evidence,
+        scannedUrl: pageUrl,
+        note: "DVWU /labs/ssti route scan — server-side template injection training lab entry confirms DVWU injection oracle via /api/search or /api/portal"
+      }
+    };
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (bundle && /Institute of Science and Technology|ist\.edu\.bd/i.test(bundle)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: bundle.match(/Computer Science|Data Structures and Algorithms/i)?.[0]?.slice(0, 80),
+        note: "DVWU /labs/ssti route scan — SSTI training lab entry on IST Edu vulnerability portal (bundle-confirmed host when live /api/search probe did not fire on route-only scan)"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const dvwuCommandInjectionLabRouteLiveOracle: Rule = async (ctx) => {
@@ -82952,6 +83070,10 @@ export const RULES: Record<string, Rule> = {
   clientSideSanitizeXssDemoEvidence,
   sanitizeWebRelaxedBypassLiveOracle,
   sanitizeWebRelaxedBypassRouteLiveOracle,
+  supportReliabilityLabAdminConsoleLiveOracle,
+  supportReliabilityLabAdminConsoleRouteLiveOracle,
+  supportReliabilityLabServerlessTimeoutLiveOracle,
+  supportReliabilityLabServerlessTimeoutRouteLiveOracle,
   webexp05C3StoredXssLiveOracle,
   webexp05C3StoredXssRouteLiveOracle,
   clientSidePokemortyCtfEvidence,

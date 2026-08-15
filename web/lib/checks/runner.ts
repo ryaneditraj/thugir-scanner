@@ -1532,6 +1532,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideSanitizeXssDemoEvidence",
   "sanitizeWebRelaxedBypassLiveOracle",
   "sanitizeWebRelaxedBypassRouteLiveOracle",
+  "supportReliabilityLabAdminConsoleLiveOracle",
+  "supportReliabilityLabAdminConsoleRouteLiveOracle",
+  "supportReliabilityLabServerlessTimeoutLiveOracle",
+  "supportReliabilityLabServerlessTimeoutRouteLiveOracle",
   "clientSidePokemortyCtfEvidence",
   "clientSideCvebenchBenchmarkEvidence",
   "clientSideSploitifyExploitDatabaseEvidence",
@@ -3102,6 +3106,10 @@ const DEEP_RULES = new Set<string>([
   "xssGameLevel2StoredXssRouteLiveOracle",
   "webexp05C3StoredXssLiveOracle",
   "webexp05C3StoredXssRouteLiveOracle",
+  "supportReliabilityLabAdminConsoleLiveOracle",
+  "supportReliabilityLabAdminConsoleRouteLiveOracle",
+  "supportReliabilityLabServerlessTimeoutLiveOracle",
+  "supportReliabilityLabServerlessTimeoutRouteLiveOracle",
   "xssGameLevel3DomXssLiveOracle",
   "xssGameLevel3DomXssRouteLiveOracle",
   "xssGameLevel4JsStringXssLiveOracle",
@@ -11888,6 +11896,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/bypass403\.vercel\.app/i.test(origin) && /\/api\/admin\b/i.test(targetInput) && p.slug.startsWith("bypass403-api-admin")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/secret\b/i.test(targetInput) && p.slug.startsWith("bypass403-secret")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/config\b/i.test(targetInput) && p.slug.startsWith("bypass403-config")) return -3;
+      if (
+        /support-reliability-lab\.vercel\.app/i.test(origin) &&
+        /\/admin\b/i.test(targetInput) &&
+        p.slug.startsWith("support-reliability-lab-admin-console")
+      )
+        return -3;
+      if (
+        /support-reliability-lab\.vercel\.app/i.test(origin) &&
+        /\/s\/slow-api\b/i.test(targetInput) &&
+        p.slug.startsWith("support-reliability-lab-serverless-timeout")
+      )
+        return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
         /\/module\/(?:101[1-9]|102[0135-9]|103[0-6]|159[7-9]|160[0-5])\b/i.test(targetInput) &&

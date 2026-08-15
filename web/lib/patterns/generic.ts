@@ -25952,6 +25952,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "support-reliability-lab-admin-console-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Support Reliability Lab unauthenticated incident console live oracle",
+    description:
+      "GET /admin on support-reliability-lab.vercel.app exposes the incident console with per-tenant incident toggles without authentication — Vercel support training lab misconfiguration oracle.",
+    impactOneline:
+      "Public incident consoles let anyone toggle deterministic failure modes across tenant subdomains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "supportReliabilityLabAdminConsoleLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect incident toggles behind authentication — Support Reliability Lab is intentional training software.",
+      steps: [
+        "Require authentication before exposing incident management consoles.",
+        "Restrict admin routes to internal networks or VPN-only access.",
+        "Run support incident labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /admin incident console is reachable without authentication. Show how to protect operational toggles on support training labs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "support-reliability-lab-admin-console-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Support Reliability Lab /admin incident console route live oracle",
+    description:
+      "When scanning /admin, the Support Reliability Lab incident console exposes tenant incident toggles without authentication — route-specific misconfiguration oracle.",
+    impactOneline:
+      "Route scans on /admin need live confirmation that incident toggles are publicly reachable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "supportReliabilityLabAdminConsoleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect incident toggles behind authentication on /admin routes.",
+      steps: [
+        "Require authentication before exposing incident management consoles.",
+        "Restrict admin routes to internal networks or VPN-only access.",
+        "Run support incident labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /admin route scan confirms unauthenticated incident toggles. Show route-specific protection for support training labs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "support-reliability-lab-serverless-timeout-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "Support Reliability Lab serverless timeout incident live oracle",
+    description:
+      "GET /s/slow-api reproduces a deterministic 504 Gateway Timeout with upstream abort timing — Support Reliability Lab serverless-timeout incident oracle.",
+    impactOneline:
+      "Deterministic timeout incidents help validate observability playbooks but confirm the tenant is intentionally degraded.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "supportReliabilityLabServerlessTimeoutLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Timeout incidents are intentional in the lab — isolate training tenants from production traffic.",
+      steps: [
+        "Run incident labs only on dedicated training subdomains.",
+        "Document expected 504 responses in support playbooks.",
+        "Do not expose timeout tenants on production customer domains."
+      ]
+    },
+    fixPrompt:
+      "Our /s/slow-api tenant reproduces deterministic serverless timeouts. Show how to isolate incident labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "support-reliability-lab-serverless-timeout-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "Support Reliability Lab /s/slow-api timeout route live oracle",
+    description:
+      "When scanning /s/slow-api, the Support Reliability Lab reproduces a deterministic 504 with upstream abort timing — route-specific serverless-timeout incident oracle.",
+    impactOneline:
+      "Route scans on /s/slow-api confirm the slow-api tenant is in a serverless-timeout incident state.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "supportReliabilityLabServerlessTimeoutRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Timeout incidents are intentional — isolate training tenants from production traffic.",
+      steps: [
+        "Run incident labs only on dedicated training subdomains.",
+        "Document expected 504 responses in support playbooks.",
+        "Do not expose timeout tenants on production customer domains."
+      ]
+    },
+    fixPrompt:
+      "Our /s/slow-api route scan confirms deterministic serverless timeout incidents. Show route-specific isolation for support training labs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pokemorty-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
