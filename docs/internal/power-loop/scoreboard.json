@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-15T05:20:00.000Z",
+  "updated_at": "2026-08-15T06:04:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2808,
-  "total_findings": 27621,
+  "total_sites_scanned": 2820,
+  "total_findings": 27783,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2001,
-  "discovery_findings": 22920,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-15T05:20:00.000Z",
+  "discovery_urls_added": 2006,
+  "discovery_findings": 22954,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-15T06:04:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 32,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 588,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (32 findings) — no benchmark misses"
+      "note": "Stable 6/6 first-pass recall (47 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_validated": 5,
-      "improvements_shipped_this_run": 3,
-      "focus": "WSL modules 1653-1657 IDOR catalog extension + runner priority regex + pattern description"
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 34,
+      "focus": "WSL module/1658-1662 catalog expansion + nextjs-security-lesson unreachable (3 errors)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (32 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1653: 7→6 findings — web-security-learning-labs-idor-module-route-live-oracle shipped (catalog extended to 1657; IDOR oracle replaces generic placeholder)",
-      "web-security-learning-labs.vercel.app/module/1654-1657: each fires IDOR route oracle (Here is a Module: {id} CSR placeholder shell)",
-      "runner priority regex extended 1650→1657 for web-security-learning-labs-idor-module slugs"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1658-1662: 34 findings — placeholder module-route-evidence only (7/7/7/8/5)",
+      "nextjs-security-lesson.vercel.app/*: scan errors — site unreachable from cloud agent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "WSL module/1658+: not yet in catalog — extend WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX when new modules ship",
-      "nextjs-security-lesson.vercel.app/* — routes unreachable (DNS/host down); queue drain blocked",
-      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles exist but low finding counts on /basic when scanned as route URL",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent",
-      "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment confirmation oracle absent when scanning route URL without signup flow"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "WSL module/1658-1662: placeholder pages, module-route-evidence only — no route-specific vuln oracles",
+      "nextjs-security-lesson.vercel.app: deployment down or blocks cloud-agent egress"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 32,
-    "web-security-learning-labs.vercel.app/module/1653": 6,
-    "web-security-learning-labs.vercel.app/module/1657": 6,
-    "web-security-learning-labs.vercel.app/module/1651": 6,
-    "web-security-learning-labs.vercel.app/module/1633": 9,
-    "zero-health.vercel.app/api/lab-results/1": 9,
-    "dvwu.vercel.app/labs/sqli": 14,
-    "dvwu.vercel.app/labs/ssrf": 13,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "juice-shop.herokuapp.com": 47,
+    "web-security-learning-labs.vercel.app/module/1658": 7,
+    "web-security-learning-labs.vercel.app/module/1659": 7,
+    "web-security-learning-labs.vercel.app/module/1660": 7,
+    "web-security-learning-labs.vercel.app/module/1661": 8,
+    "web-security-learning-labs.vercel.app/module/1662": 5
   }
 }

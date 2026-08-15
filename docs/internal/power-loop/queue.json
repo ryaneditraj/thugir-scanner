@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://web-security-learning-labs.vercel.app/module/1658",
+      "source": "web-security-learning-labs Vercel — module 1658 security lab route (WSL catalog expansion past 1657, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1659",
+      "source": "web-security-learning-labs Vercel — module 1659 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1660",
+      "source": "web-security-learning-labs Vercel — module 1660 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1661",
+      "source": "web-security-learning-labs Vercel — module 1661 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1662",
+      "source": "web-security-learning-labs Vercel — module 1662 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
       "url": "https://web-security-learning-labs.vercel.app/module/1657",
       "source": "web-security-learning-labs Vercel — module 1657 security lab route (WSL catalog expansion, Aug 2026)",
       "auth": "oss_deploy"
