@@ -12403,6 +12403,26 @@
       "url": "https://b.compass-demo.com/",
       "source": "Compass Security CORS Playground — configurable CORS policy cross-origin oracle (compass-demo.com hub)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://zero-health.vercel.app/api/auth/login",
+      "source": "aligorithm/Zero-Health — SQLi auth-bypass oracle POST /api/auth/login (challenges.md Challenge 2)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zero-health.vercel.app/api/users/profile?user_id=1",
+      "source": "aligorithm/Zero-Health — parameter pollution oracle GET /api/users/profile (challenges.md Challenge 9)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zero-health.vercel.app/api/auth/verify-token",
+      "source": "aligorithm/Zero-Health — JWT alg-none verify oracle POST /api/auth/verify-token (challenges.md Challenge 7)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/users-vulnerable/1",
+      "source": "DaniSam-STU/security-lab — parameterized IDOR oracle GET /api/users-vulnerable/:id (README CWE-639)",
+      "auth": "oss_deploy"
     }
   ]
 }
