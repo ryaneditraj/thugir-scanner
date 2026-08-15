@@ -26160,6 +26160,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "support-reliability-lab-missing-trace-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "Support Reliability Lab missing-trace incident live oracle",
+    description:
+      "GET /s/missing-trace reproduces broken trace correlation — downstream traceparent propagation mismatch between CONNECTED and connected upstream responses — Support Reliability Lab incident oracle.",
+    impactOneline:
+      "Broken distributed trace correlation hides orphaned downstream spans during incident triage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "supportReliabilityLabMissingTraceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Trace correlation failures are intentional in the lab — document expected propagation in playbooks.",
+      steps: [
+        "Run incident labs only on dedicated training subdomains.",
+        "Document traceparent propagation requirements in support playbooks.",
+        "Do not expose missing-trace tenants on production customer domains."
+      ]
+    },
+    fixPrompt:
+      "Our /s/missing-trace tenant reproduces broken trace correlation incidents. Show how to isolate support training labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "support-reliability-lab-missing-trace-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "Support Reliability Lab /s/missing-trace route live oracle",
+    description:
+      "When scanning /s/missing-trace, broken trace correlation incident markers and downstream traceparent propagation mismatch confirm the missing-trace tenant oracle.",
+    impactOneline:
+      "Route scans on /s/missing-trace confirm the broken-trace correlation incident tenant.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "supportReliabilityLabMissingTraceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Trace correlation failures are intentional — isolate training tenants from production traffic.",
+      steps: [
+        "Run incident labs only on dedicated training subdomains.",
+        "Document traceparent propagation requirements in support playbooks.",
+        "Do not expose missing-trace tenants on production customer domains."
+      ]
+    },
+    fixPrompt:
+      "Our /s/missing-trace route scan confirms broken trace correlation incidents. Show route-specific isolation for support training labs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pokemorty-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -60819,6 +60871,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Compass /xss_lab route documents reflected XSS training. Show route-specific output encoding.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "compass-demo-csrf-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "Compass Security CSRF demo registration live oracle",
+    description:
+      "POST /csrf/index.php accepts cross-site registration without anti-CSRF token on Compass Security INSECURE CSRF demo app — CSRF training oracle.",
+    impactOneline:
+      "Missing CSRF tokens let attackers forge state-changing requests from victim browsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoCsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens on state-changing POST forms — Compass CSRF Lab is intentional training software.",
+      steps: [
+        "Issue per-session CSRF tokens and validate on every state-changing request.",
+        "Use SameSite cookies and verify Origin/Referer headers.",
+        "Run Compass training labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass /csrf/index.php accepts registration POSTs without CSRF tokens. Show anti-CSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "compass-demo-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "Compass Security /csrf CSRF route live oracle",
+    description:
+      "When scanning /csrf, live registration POST without anti-CSRF token or curated INSECURE CSRF demo markers confirm Compass Security CSRF training module.",
+    impactOneline:
+      "Route-specific confirmation that Compass /csrf documents missing CSRF protection on registration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens on /csrf registration forms.",
+      steps: [
+        "Issue per-session CSRF tokens and validate on every state-changing request.",
+        "Use SameSite cookies and verify Origin/Referer headers.",
+        "Run Compass training labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass /csrf route documents missing CSRF protection. Show route-specific anti-CSRF remediation.",
     version: 1,
     enabled: true
   }

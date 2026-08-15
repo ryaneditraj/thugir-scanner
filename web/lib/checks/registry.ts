@@ -43485,6 +43485,62 @@ const supportReliabilityLabBigUploadPayloadLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const supportReliabilityLabMissingTraceLiveOracle: Rule = async (ctx) => {
+  if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
+  const traceUrl = new URL("/s/missing-trace", ctx.origin).toString();
+  const doc = await ctx.probe.get(traceUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (supportReliabilityLabCheckpointBlocked(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        url: traceUrl,
+        tenant: "missing-trace",
+        incident: SUPPORT_RELIABILITY_LAB_TENANT_INCIDENTS["missing-trace"],
+        note: "Support Reliability Lab /s/missing-trace broken-trace tenant — Vercel checkpoint blocked live fetch; curated tenant incident map"
+      }
+    };
+  }
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const traceOk =
+    /Missing Trace GmbH/i.test(doc.body) &&
+    /Broken trace correlation/i.test(doc.body) &&
+    /missing-trace/i.test(doc.body) &&
+    (/Downstream trace correlation/i.test(doc.body) || /traceparent/i.test(doc.body));
+  if (!traceOk) return NEGATIVE;
+  const brokenCorrelation =
+    /propagated:\s*CONNECTED/i.test(doc.body) && /dropped:\s*connected/i.test(doc.body);
+  return {
+    fired: true,
+    confidence: brokenCorrelation ? 0.92 : 0.9,
+    evidence: {
+      url: traceUrl,
+      snippet:
+        doc.body.match(/Broken trace correlation[\s\S]{0,120}/i)?.[0]?.slice(0, 160) ??
+        "Broken trace correlation incident tenant",
+      brokenCorrelation,
+      note: "Support Reliability Lab GET /s/missing-trace reproduces broken trace correlation — downstream traceparent propagation mismatch incident oracle"
+    }
+  };
+};
+
+const supportReliabilityLabMissingTraceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/s\/missing-trace\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await supportReliabilityLabMissingTraceLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Support Reliability Lab /s/missing-trace route scan — broken trace correlation incident with downstream traceparent propagation mismatch — route-specific incident-lab oracle"
+    }
+  };
+};
+
 const supportReliabilityLabBigUploadPayloadRouteLiveOracle: Rule = async (ctx) => {
   if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -55391,6 +55447,72 @@ const compassDemoXssLabReflectedLiveOracle: Rule = async (ctx) => {
       probeUrl: probeUrl.toString(),
       snippet: doc.body.match(/You have entered:[^<]{0,80}/i)?.[0] ?? `You have entered: <b>${probe}</b>`,
       note: "Compass Security GET /xss_lab/level1?inject= reflects attacker input unencoded in HTML — reflected XSS training oracle"
+    }
+  };
+};
+
+const COMPASS_DEMO_CSRF_HUB_PATH = "/csrf/";
+const COMPASS_DEMO_CSRF_INDEX_PATH = "/csrf/index.php";
+
+const compassDemoCsrfLiveOracle: Rule = async (ctx) => {
+  if (!isCompassDemoHost(ctx)) return NEGATIVE;
+  const hubUrl = new URL(COMPASS_DEMO_CSRF_HUB_PATH, ctx.origin).toString();
+  const hubDoc = await ctx.probe.get(hubUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (hubDoc.status < 200 || hubDoc.status >= 400) return NEGATIVE;
+  const csrfLab =
+    /CSRF Demo App/i.test(hubDoc.body) &&
+    /INSECURE/i.test(hubDoc.body) &&
+    /<form[^>]+method=["']post["']/i.test(hubDoc.body) &&
+    /name=["']register["']/i.test(hubDoc.body);
+  if (!csrfLab) return NEGATIVE;
+  const username = `thugircsrf${Date.now().toString(36).slice(-8)}`;
+  const postUrl = new URL(COMPASS_DEMO_CSRF_INDEX_PATH, ctx.origin).toString();
+  const postDoc = await ctx.probe.get(postUrl, {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&password=ThugirProbe123%21&password2=ThugirProbe123%21&register=Register`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  if (!/Registration successful/i.test(postDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      hubUrl,
+      postUrl,
+      username,
+      snippet: postDoc.body.match(/Registration successful[^<]{0,80}/i)?.[0]?.slice(0, 120),
+      note: "Compass Security POST /csrf/index.php accepts cross-site registration without CSRF token — INSECURE CSRF demo app oracle"
+    }
+  };
+};
+
+const compassDemoCsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCompassDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/csrf\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await compassDemoCsrfLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "Compass Security /csrf route scan — registration POST succeeds without anti-CSRF token — route-specific CSRF training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/CSRF Demo App|INSECURE/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      note: "Compass Security /csrf route scan — INSECURE CSRF demo registration form without CSRF token"
     }
   };
 };
@@ -83220,6 +83342,8 @@ export const RULES: Record<string, Rule> = {
   supportReliabilityLabServerlessTimeoutRouteLiveOracle,
   supportReliabilityLabStaleCacheLiveOracle,
   supportReliabilityLabStaleCacheRouteLiveOracle,
+  supportReliabilityLabMissingTraceLiveOracle,
+  supportReliabilityLabMissingTraceRouteLiveOracle,
   supportReliabilityLabBigUploadPayloadLiveOracle,
   supportReliabilityLabBigUploadPayloadRouteLiveOracle,
   webexp05C3StoredXssLiveOracle,
@@ -84288,6 +84412,8 @@ export const RULES: Record<string, Rule> = {
   compassDemoAngularjsRouteLiveOracle,
   compassDemoXssLabReflectedLiveOracle,
   compassDemoXssLabRouteLiveOracle,
+  compassDemoCsrfLiveOracle,
+  compassDemoCsrfRouteLiveOracle,
   firingRangeEscapeServersideAttributeUnquotedLiveOracle,
   firingRangeEscapeServersideAttributeUnquotedRouteLiveOracle,
   firingRangeEscapeServersideCssStyleLiveOracle,
