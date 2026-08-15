@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1673-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1672→1673 + IDOR curated module 1673 + runner priority 167[0-3]; web-security-learning-labs.vercel.app/module/1673 findings 7→9 (+web-security-learning-labs-idor-module-route-live-oracle Here is a Module: 1673); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-web-site.vercel.app",
+      "slug": "vulnerable-web-site-open-redirect-xxe-route-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /open-redirect + /xxe routes redirect HTTP 307 to /login; vulnerable-web-site.vercel.app/open-redirect findings 5→6 (+vulnerable-web-site-open-redirect-route-live-oracle); /xxe findings 5→6 (+vulnerable-web-site-xxe-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/sqli returns HTTP 307 Location /login?next=%2Fchallenges%2Fsqli; ai-security-platform-iota.vercel.app/challenges/sqli findings 6→7 (+ai-security-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:zero-health.vercel.app",
       "slug": "zerohealth-verify-token-route-live-oracle",
       "status": "shipped",
