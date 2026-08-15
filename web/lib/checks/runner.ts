@@ -2734,6 +2734,7 @@ const DEEP_RULES = new Set<string>([
   "aiSecuritySecurityHeadersRouteLiveOracle",
   "aiSecurityInsecurePasswordsRouteLiveOracle",
   "aiSecurityAiPhishingRouteLiveOracle",
+  "aiSecuritySqliRouteLiveOracle",
   "aiSecurityRateLimitingBruteforceLiveOracle",
   "aiSecurityLoginRouteLiveOracle",
   "juiceShopForgottenBackupDisclosure",
@@ -2801,6 +2802,8 @@ const DEEP_RULES = new Set<string>([
   "vulnerableWebSiteSqliRouteLiveOracle",
   "vulnerableWebSitePathTraversalRouteLiveOracle",
   "vulnerableWebSiteCommandInjectionRouteLiveOracle",
+  "vulnerableWebSiteOpenRedirectRouteLiveOracle",
+  "vulnerableWebSiteXxeRouteLiveOracle",
   "vulnerableWebSiteSsrfRouteLiveOracle",
   "clientSideSecLabPlaygroundEvidence",
   "clientSideSecCodeEducationalEvidence",
@@ -7281,7 +7284,18 @@ function extractVulnerableWebSiteSeeds(html: string, pageUrl: string): string[] 
     return [];
   }
   const out = new Set<string>();
-  for (const p of ["/xss", "/csrf", "/clickjacking", "/ssrf", "/sqli", "/path-traversal", "/command-injection", "/home"]) {
+  for (const p of [
+    "/xss",
+    "/csrf",
+    "/clickjacking",
+    "/ssrf",
+    "/sqli",
+    "/path-traversal",
+    "/command-injection",
+    "/open-redirect",
+    "/xxe",
+    "/home"
+  ]) {
     try {
       out.add(new URL(p, pageUrl).toString());
     } catch {
@@ -11507,7 +11521,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-2])\b/i.test(targetInput) &&
+        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-3])\b/i.test(targetInput) &&
         p.slug.startsWith("web-security-learning-labs-idor-module")
       )
         return -3;

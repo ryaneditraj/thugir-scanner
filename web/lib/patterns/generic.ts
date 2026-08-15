@@ -32392,6 +32392,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnerable-web-site-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vulnerable Web Site /open-redirect route live oracle",
+    description:
+      "When scanning /open-redirect on vulnerable-web-site.vercel.app, the route redirects to login confirming an auth-gated open redirect training lab surface — route-specific open redirect lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that vulnerable-web-site exposes an auth-gated open redirect reproduction lab on the discovery queue.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableWebSiteOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets against an allowlist — VulnSite is intentional training software.",
+      steps: [
+        "Require authentication before exposing open redirect lab panels.",
+        "Validate redirect URLs against a fixed allowlist of trusted hosts.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vulnerable-web-site.vercel.app /open-redirect route is an auth-gated open redirect lab. Show redirect allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnerable-web-site-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vulnerable Web Site /xxe route live oracle",
+    description:
+      "When scanning /xxe on vulnerable-web-site.vercel.app, the route redirects to login confirming an auth-gated XML external entity (XXE) training lab surface — route-specific XXE lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that vulnerable-web-site exposes an auth-gated XXE reproduction lab on the discovery queue.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableWebSiteXxeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers — VulnSite is intentional training software.",
+      steps: [
+        "Require authentication before exposing XXE lab panels.",
+        "Disable DTD and external entity processing in XML parsers.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vulnerable-web-site.vercel.app /xxe route is an auth-gated XXE lab. Show safe XML parser configuration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-nivara-security-evidence",
     platform: "generic",
     category: "Information disclosure",
@@ -33506,6 +33558,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /challenges/rate-limiting signIn action accepts unlimited failed logins. Show server-side rate limiting for Next.js auth.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "AI Security Platform SQLi challenge route live oracle",
+    description:
+      "When scanning /challenges/sqli on ai-security-platform-iota.vercel.app, the route redirects to /login?next=/challenges/sqli confirming an auth-gated SQL injection CWE-89 challenge route on the discovery queue.",
+    impactOneline:
+      "Route-specific confirmation that AI Security Platform preserves a SQL injection challenge route for scanner calibration even when the 14-challenge public catalog omits sqli.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecuritySqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — use parameterized queries and prepared statements.",
+      steps: [
+        "Never concatenate user input into SQL queries.",
+        "Use parameterized queries or ORM methods with bound parameters.",
+        "Require authentication before exposing SQL injection lab panels."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/sqli route redirects to login preserving a CWE-89 SQL injection challenge URL. Show parameterized query remediation for Next.js + Supabase.",
     version: 1,
     enabled: true
   },
@@ -41681,7 +41759,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs extended IDOR module route live oracle",
     description:
-      "When scanning extended curated IDOR catalog modules (1597–1672) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell without object-reference lab content — route-specific IDOR catalog placeholder oracle.",
+      "When scanning extended curated IDOR catalog modules (1597–1673) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell without object-reference lab content — route-specific IDOR catalog placeholder oracle.",
     impactOneline:
       "Route-specific identification of unreleased WSL IDOR catalog modules prevents missing topic context on empty Next.js shells.",
     detectorKind: "rule_ref",

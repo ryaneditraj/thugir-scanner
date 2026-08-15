@@ -38306,7 +38306,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1672;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1673;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -38399,7 +38399,8 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1669": "IDOR",
   "1670": "IDOR",
   "1671": "IDOR",
-  "1672": "IDOR"
+  "1672": "IDOR",
+  "1673": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -70626,6 +70627,12 @@ const vulnerableWebSitePathTraversalRouteLiveOracle: Rule = async (ctx) =>
 const vulnerableWebSiteCommandInjectionRouteLiveOracle: Rule = async (ctx) =>
   probeVulnerableWebSiteLoginGatedLabRoute(ctx, "command-injection", "command injection");
 
+const vulnerableWebSiteOpenRedirectRouteLiveOracle: Rule = async (ctx) =>
+  probeVulnerableWebSiteLoginGatedLabRoute(ctx, "open-redirect", "open redirect");
+
+const vulnerableWebSiteXxeRouteLiveOracle: Rule = async (ctx) =>
+  probeVulnerableWebSiteLoginGatedLabRoute(ctx, "xxe", "XXE");
+
 const vulnerableWebSiteSsrfRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnerableWebSiteHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -71142,6 +71149,50 @@ const aiSecurityInsecurePasswordsRouteLiveOracle: Rule = (ctx) =>
 
 const aiSecurityAiPhishingRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "ai-phishing");
+
+const aiSecuritySqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAiSecurityPlatformHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenges\/sqli\b/i.test(pageUrl)) return NEGATIVE;
+
+  const sqliUrl = new URL("/challenges/sqli", AI_SECURITY_PLATFORM_HOME).toString();
+  const sqliDoc = await ctx.probe.get(sqliUrl, {
+    maxBytes: 4096,
+    timeoutMs: 12000,
+    redirect: "manual"
+  });
+  const location = sqliDoc.headers["location"] || "";
+  const loginRedirect =
+    /\/login\b/i.test(ctx.home.finalUrl || "") ||
+    /\/login\b/i.test(pageUrl) ||
+    ([301, 302, 303, 307, 308].includes(sqliDoc.status) &&
+      (/\/login\b/i.test(location) ||
+        /next=%2Fchallenges%2Fsqli|next=\/challenges\/sqli/i.test(location)));
+
+  const catalog = await aiSecurityPlatformFetchCatalog(ctx);
+  const corpus = `${ctx.combined}\n${pageUrl}\n${catalog}\n${location}`;
+  const sqliInRedirect =
+    /next=%2Fchallenges%2Fsqli|next=\/challenges\/sqli/i.test(location) ||
+    /next=%2Fchallenges%2Fsqli|next=\/challenges\/sqli/i.test(pageUrl);
+  const platformContext =
+    /SQL[\s-]?Injection|CWE-89|OWASP Top 10|14 challenges/i.test(corpus);
+
+  if (!loginRedirect && !sqliInRedirect) return NEGATIVE;
+  if (!platformContext && !sqliInRedirect) return NEGATIVE;
+
+  return {
+    fired: true,
+    confidence: sqliInRedirect ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      sqliStatus: sqliDoc.status,
+      location,
+      note: loginRedirect
+        ? "AI Security Platform /challenges/sqli route redirects to /login?next=/challenges/sqli — auth-gated SQL injection CWE-89 challenge route on discovery queue (14-challenge catalog; sqli route preserved for route-specific scanner oracle)"
+        : "AI Security Platform documents SQL injection CWE-89 challenge route /challenges/sqli in platform training context"
+    }
+  };
+};
 
 async function aiSecurityExtractSignInActionId(ctx: RuleContext): Promise<string | null> {
   const loginUrl = new URL("/login", AI_SECURITY_PLATFORM_HOME).toString();
@@ -82918,6 +82969,7 @@ export const RULES: Record<string, Rule> = {
   aiSecuritySecurityHeadersRouteLiveOracle,
   aiSecurityInsecurePasswordsRouteLiveOracle,
   aiSecurityAiPhishingRouteLiveOracle,
+  aiSecuritySqliRouteLiveOracle,
   aiSecurityRateLimitingBruteforceLiveOracle,
   aiSecurityLoginRouteLiveOracle,
   juiceShopForgottenBackupDisclosure,
@@ -82986,6 +83038,8 @@ export const RULES: Record<string, Rule> = {
   vulnerableWebSiteSqliRouteLiveOracle,
   vulnerableWebSitePathTraversalRouteLiveOracle,
   vulnerableWebSiteCommandInjectionRouteLiveOracle,
+  vulnerableWebSiteOpenRedirectRouteLiveOracle,
+  vulnerableWebSiteXxeRouteLiveOracle,
   vulnerableWebSiteSsrfRouteLiveOracle,
   clientSideSecLabPlaygroundEvidence,
   clientSideSecCodeEducationalEvidence,
