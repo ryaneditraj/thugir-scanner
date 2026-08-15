@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-15T04:10:00.000Z",
+  "updated_at": "2026-08-15T05:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2798,
-  "total_findings": 27483,
+  "total_sites_scanned": 2808,
+  "total_findings": 27621,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1996,
-  "discovery_findings": 22899,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-15T04:10:00.000Z",
+  "discovery_urls_added": 2001,
+  "discovery_findings": 22920,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-15T05:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
@@ -48,40 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings, pages=6 probes=582) — no benchmark misses"
+      "note": "Stable 6/6 recall (48 findings, 37 juice-shop live oracles) — no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_validated": 3,
-      "improvements_shipped_this_run": 3,
-      "focus": "WSL modules 1651-1652 IDOR catalog + Zero Health lab-results IDOR + chatbot/chat SQLi route oracles"
+      "urls_added": 5,
+      "urls_scanned": 4,
+      "findings": 21,
+      "focus": "brokencrystals BOLA/userinfo/CSRF oracles + AiSOC/Palisade demos queued; OWASP GenAI lessons + WSL module/1633 drained",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1651: 7→9 findings — web-security-learning-labs-idor-module-route-live-oracle shipped (catalog extended to 1652)",
-      "zero-health.vercel.app/api/lab-results/1: 8→9 findings — zerohealth-lab-results-route-live-oracle shipped (IDOR via server.js fallback)",
-      "zero-health.vercel.app/api/chatbot/chat: 8→9 findings — zerohealth-chatbot-chat-route-live-oracle shipped (chatbot.js SQLi fallback)",
-      "dvwu.vercel.app/labs/ssrf: 13 findings — dvwu-ssrf-redirect-route-live-oracle (prior run)",
-      "dvwu.vercel.app/labs/sqli: 14 findings — dvwu-portal-sqli-route-live-oracle (prior run)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 37 live oracles) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1633: 9 findings — module-route-evidence + placeholder oracle",
+      "owaspbased-lessons.vercel.app/lesson/prompt-injection: 4 findings — client-side LLM lesson evidence",
+      "owaspbased-lessons.vercel.app/lesson/info-disclosure: 4 findings — LLM info-disclosure lesson evidence",
+      "owaspbased-lessons.vercel.app/lesson/unbounded-consumption: 4 findings — LLM unbounded-consumption lesson evidence"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "zero-health.vercel.app hosts unrelated Next.js app — Zero Health oracles use GitHub OSS fallback (server.js/chatbot.js/challenges.md)",
-      "WSL module/1653-1657: placeholder pages, module-route-evidence only — no route-specific vuln oracles",
-      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles exist but low finding counts on /basic when scanned as route URL",
+      "nextjs-security-lesson.vercel.app/* — all 4 routes unreachable (DNS/host down); queue drain blocked",
+      "brokencrystals.com/api/users/one/admin/photo + /api/v1/userinfo + /api/auth/dom-csrf-flow: queued but not yet scanned this run",
+      "tryaisoc.com + app.trypalisade.dev: new HN/OSS demos queued — pending queue drain",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent",
-      "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment confirmation oracle absent when scanning route URL without signup flow"
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
-    "web-security-learning-labs.vercel.app/module/1651": 9,
-    "zero-health.vercel.app/api/lab-results/1": 9,
-    "zero-health.vercel.app/api/chatbot/chat": 9,
+    "web-security-learning-labs.vercel.app/module/1633": 9,
+    "owaspbased-lessons.vercel.app/lesson/prompt-injection": 4,
+    "owaspbased-lessons.vercel.app/lesson/info-disclosure": 4,
+    "owaspbased-lessons.vercel.app/lesson/unbounded-consumption": 4,
     "dvwu.vercel.app/labs/sqli": 14,
     "dvwu.vercel.app/labs/ssrf": 13,
-    "dvwu.vercel.app/labs/graphql": 12,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "vulnbank.org/sup3r_s3cr3t_admin": 20
   }
