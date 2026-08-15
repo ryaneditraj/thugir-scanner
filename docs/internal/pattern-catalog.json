@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-15T01:05:22.970Z",
-  "total": 2357,
-  "uniqueSlugs": 2353,
+  "generatedAt": "2026-08-15T02:14:02.049Z",
+  "total": 2358,
+  "uniqueSlugs": 2354,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2339,
+    "generic": 2340,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2272,
+    "deep": 2273,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 112,
     "Security misconfiguration": 165,
     "Broken authentication": 141,
-    "Injection": 351,
+    "Injection": 352,
     "Cross-site scripting": 686,
     "Open redirect": 21,
     "general": 20,
@@ -966,6 +966,7 @@
     "dvwu-ssrf-redirect-live-oracle",
     "dvwu-ssrf-redirect-route-live-oracle",
     "dvwu-ssti-lab-route-live-oracle",
+    "dvwu-xxe-lab-route-live-oracle",
     "euri-sec-csp-dynamic-script-live-oracle",
     "euri-sec-csp-dynamic-script-route-live-oracle",
     "exposed-api-config",

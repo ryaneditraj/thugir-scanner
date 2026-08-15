@@ -2455,6 +2455,7 @@ const DEEP_RULES = new Set<string>([
   "dvwuDeserializationLabRouteLiveOracle",
   "dvwuSstiLabRouteLiveOracle",
   "dvwuCommandInjectionLabRouteLiveOracle",
+  "dvwuXxeLabRouteLiveOracle",
   "dvwuFilesClientLfiRouteLiveOracle",
   "dvwuPathTraversalClientRouteLiveOracle",
   "vulnExposeXssPlaygroundRouteLiveOracle",
@@ -11360,8 +11361,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
-        /\/labs\/command-injection\b/i.test(targetInput) &&
+        /\/labs\/(?:command-injection|cmdi)\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-command-injection")
+      )
+        return -3;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/labs\/xxe\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-xxe")
       )
         return -3;
       if (

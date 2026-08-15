@@ -56851,7 +56851,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "DVWU command-injection lab route live oracle",
     description:
-      "When scanning /labs/command-injection on dvwu.vercel.app, confirm the OS command injection training lab route with live DVWU injection oracle — route-specific command injection lab oracle.",
+      "When scanning /labs/command-injection or /labs/cmdi on dvwu.vercel.app, confirm the OS command injection training lab route with live DVWU injection oracle — route-specific command injection lab oracle.",
     impactOneline:
       "Route-specific confirmation that DVWU exposes a command injection training lab entry on the discovery queue.",
     detectorKind: "rule_ref",
@@ -56866,7 +56866,33 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our dvwu.vercel.app /labs/command-injection route is an OS command injection training lab. Show safe subprocess remediation.",
+      "Our dvwu.vercel.app /labs/command-injection or /labs/cmdi route is an OS command injection training lab. Show safe subprocess remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-xxe-lab-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVWU XXE lab route live oracle",
+    description:
+      "When scanning /labs/xxe on dvwu.vercel.app, confirm the XML external entity (XXE) training lab route with live DVWU injection oracle — route-specific XXE lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that DVWU exposes an XXE training lab entry on the discovery queue.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuXxeLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — disable external entity resolution in XML parsers in production.",
+      steps: [
+        "Disable DTD processing and external entities in XML parsers.",
+        "Use JSON or safer serialization formats where possible.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /labs/xxe route is an XML external entity (XXE) training lab. Show safe XML parser configuration remediation.",
     version: 1,
     enabled: true
   },
