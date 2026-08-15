@@ -2510,6 +2510,7 @@ const DEEP_RULES = new Set<string>([
   "dvwuDeserializationLabRouteLiveOracle",
   "dvwuSstiLabRouteLiveOracle",
   "dvwuCommandInjectionLabRouteLiveOracle",
+  "dvwuFileUploadLabRouteLiveOracle",
   "dvwuXxeLabRouteLiveOracle",
   "dvwuFilesClientLfiRouteLiveOracle",
   "dvwuPathTraversalClientRouteLiveOracle",
@@ -11499,6 +11500,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/labs\/idor\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-dashboard-idor")
+      )
+        return -3;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/labs\/file-upload\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-file-upload-lab")
+      )
+        return -3;
+      if (
         /vulnshop\.vercel\.app/i.test(origin) &&
         /\/api\/v1\/cart\/update-price\b/i.test(targetInput) &&
         p.slug.startsWith("vulnshop-update-price")
@@ -11548,7 +11561,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-3])\b/i.test(targetInput) &&
+        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-8])\b/i.test(targetInput) &&
         p.slug.startsWith("web-security-learning-labs-idor-module")
       )
         return -3;

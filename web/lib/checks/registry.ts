@@ -38306,7 +38306,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1683;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1688;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -38410,7 +38410,12 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1680": "IDOR",
   "1681": "IDOR",
   "1682": "IDOR",
-  "1683": "IDOR"
+  "1683": "IDOR",
+  "1684": "IDOR",
+  "1685": "IDOR",
+  "1686": "IDOR",
+  "1687": "IDOR",
+  "1688": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -38560,7 +38565,12 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1680": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1681": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1682": /IDOR|Insecure Direct Object Reference|object reference/i,
-  "1683": /IDOR|Insecure Direct Object Reference|object reference/i
+  "1683": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1684": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1685": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1686": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1687": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1688": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -80014,6 +80024,30 @@ const dvwuDashboardIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const dvwuFileUploadLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/file-upload\b/i.test(pageUrl)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (
+    !/<svg onload=alert\(['"]Stored XSS/i.test(bundle) ||
+    !/onerror=alert\(['"]XSS/i.test(bundle)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["svg onload stored XSS payload", "img onerror XSS payload"],
+      snippet: bundle.match(/<svg onload=alert[\s\S]{0,60}/i)?.[0]?.slice(0, 80),
+      note: "DVWU /labs/file-upload route scan — client bundle documents SVG/img stored-XSS upload bypass payloads for the file-upload training lab"
+    }
+  };
+};
+
 const allSeeingEyeReadRouteLiveOracle: Rule = async (ctx) => {
   if (!isAllSeeingEyeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -84102,6 +84136,7 @@ export const RULES: Record<string, Rule> = {
   istEduRegisterAuthSqliRouteLiveOracle,
   istEduDashboardIdorRouteLiveOracle,
   dvwuDashboardIdorRouteLiveOracle,
+  dvwuFileUploadLabRouteLiveOracle,
   istEduNewsletterCrlfRouteLiveOracle,
   istEduCsrfStateChangeLiveOracle,
   istEduCommentsXssRouteLiveOracle,
