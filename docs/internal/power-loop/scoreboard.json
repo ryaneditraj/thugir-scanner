@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-15T11:10:00.000Z",
+  "updated_at": "2026-08-15T11:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2845,
-  "total_findings": 28164,
+  "total_sites_scanned": 2850,
+  "total_findings": 28202,
   "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2021,
-  "discovery_findings": 23059,
+  "discovery_urls_added": 2025,
+  "discovery_findings": 23069,
   "improvements_shipped": 1199,
-  "last_run": "2026-08-15T11:10:00.000Z",
+  "last_run": "2026-08-15T11:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,42 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings) — no benchmark misses"
+      "note": "Stable 6/6 recall (48 findings) — no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
+      "urls_added": 4,
       "urls_scanned": 4,
-      "findings": 32,
-      "focus": "WSL IDOR catalog 1669-1671 + Compass NoSQL login bypass",
-      "improvements_shipped_this_run": 3
+      "findings": 10,
+      "focus": "Zero-Health auth SQLi + profile parameter pollution + JWT verify-token + seclab parameterized IDOR (parallel run covered WSL 1669-1671 + compass-demo)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1669: 7→9 findings — web-security-learning-labs-idor-module-route-live-oracle (Here is a Module: 1669)",
-      "web-security-learning-labs.vercel.app/module/1670: 7→9 findings — IDOR route oracle shipped",
-      "web-security-learning-labs.vercel.app/module/1671: 7→9 findings — IDOR route oracle shipped",
-      "www.compass-demo.com/nosql/movies.php: 4→7 findings — compass-demo-nosql-login-bypass-live-oracle + movies-route-live-oracle (password[$ne] bypass)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "zero-health.vercel.app/api/auth/login: 2 findings — auth login API surface (no dedicated zero-health SQLi live oracle yet)",
+      "zero-health.vercel.app/api/users/profile?user_id=1: 2 findings — profile parameter-pollution route probed",
+      "zero-health.vercel.app/api/auth/verify-token: 2 findings — JWT verify-token route probed",
+      "seclab.vercel.app/api/users-vulnerable/1: 4 findings — parameterized IDOR route still returns Angular SPA shell"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "b.compass-demo.com/: CORS playground configurable-policy live oracle still absent",
-      "compass-demo.com/xss_lab/: XSS challenge route oracles absent (7 levels, alert(1) goal)",
-      "compass-demo.com/csp_demo: CSP bypass challenge live oracles absent despite multi-level lab surface",
-      "compass-demo.com/angularjs/angularjs_demo.php: AngularJS SCE-disabled XSS oracle absent",
-      "web-security-learning-labs.vercel.app/module/1672: placeholder page — module-route-evidence only until catalog extended",
-      "nextjs-security-lesson.vercel.app/* — routes unreachable; queue slots wasted on errors",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
+      "zero-health.vercel.app/api/*: challenge-specific live oracles absent (auth SQLi, profile pollution, JWT alg-none need dedicated oracles beyond generic reflexion)",
+      "seclab.vercel.app/api/users-vulnerable/1: live IDOR API absent — Angular stub shell only",
+      "compass-demo.com/xss_lab/: XSS challenge route oracles absent (parallel run gap)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "nextjs-security-lesson.vercel.app/* — routes unreachable; queue slots wasted on errors"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 48,
+    "zero-health.vercel.app/api/lab-results/1": 9,
     "web-security-learning-labs.vercel.app/module/1669": 9,
-    "web-security-learning-labs.vercel.app/module/1670": 9,
-    "web-security-learning-labs.vercel.app/module/1671": 9,
     "www.compass-demo.com/nosql/movies.php": 7,
-    "www.compass-demo.com/jwt_lab": 6,
-    "www.compass-demo.com/cors/attack/api.php": 6,
-    "compass-demo.com/csp_demo": 4
+    "seclab.vercel.app/api/users-vulnerable/1": 4,
+    "zero-health.vercel.app/api/auth/login": 2,
+    "zero-health.vercel.app/api/users/profile?user_id=1": 2
   }
 }
