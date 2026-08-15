@@ -54418,6 +54418,136 @@ const firingRangeCorsAllowOriginRegexDotRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const COMPASS_DEMO_HOST_RE = /compass-demo\.com/i;
+const COMPASS_DEMO_JWT_LAB_API_PATH = "/jwt_lab/api";
+const COMPASS_DEMO_JWT_LAB_TOKEN_PATH = "/jwt_lab/token";
+const COMPASS_DEMO_CORS_NULL_ORIGIN_VICTIM_URL =
+  "https://victim.compass-demo.com/nullorigin/victim/index.php";
+
+function isCompassDemoHost(ctx: RuleContext): boolean {
+  const corpus = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || "", ctx.combined].join("\n");
+  return COMPASS_DEMO_HOST_RE.test(corpus);
+}
+
+const compassDemoJwtAlgNoneLiveOracle: Rule = async (ctx) => {
+  if (!isCompassDemoHost(ctx)) return NEGATIVE;
+  const tokenUrl = new URL(`${COMPASS_DEMO_JWT_LAB_TOKEN_PATH}?level=1`, ctx.origin).toString();
+  const tokenDoc = await ctx.probe.get(tokenUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (tokenDoc.status < 200 || tokenDoc.status >= 400) return NEGATIVE;
+  if (!/"token"\s*:\s*"eyJ/i.test(tokenDoc.body)) return NEGATIVE;
+
+  const apiUrl = new URL(`${COMPASS_DEMO_JWT_LAB_API_PATH}?level=1`, ctx.origin).toString();
+  const badToken = "thugir.invalid.probe.token";
+  const algNoneToken = buildAlgNoneJwt({ role: "admin", exp: 1999999999 });
+  const [noAuth, badAuth, noneAuth] = await Promise.all([
+    ctx.probe.get(apiUrl, { maxBytes: 4096, timeoutMs: 15000 }),
+    ctx.probe.get(apiUrl, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: `Bearer ${badToken}` }
+    }),
+    ctx.probe.get(apiUrl, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: `Bearer ${algNoneToken}` }
+    })
+  ]);
+  const adminGranted =
+    noneAuth.status >= 200 &&
+    noneAuth.status < 300 &&
+    /admin|access granted/i.test(noneAuth.body) &&
+    !/admin|access granted/i.test(noAuth.body) &&
+    !/admin|access granted/i.test(badAuth.body);
+  if (!adminGranted) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      tokenUrl,
+      apiUrl,
+      statusWithAlgNone: noneAuth.status,
+      snippet: noneAuth.body.slice(0, 200).trim(),
+      note: "Compass Security JWT Lab GET /jwt_lab/api accepts forged alg:none JWT with role:admin — JWT none-algorithm bypass oracle"
+    }
+  };
+};
+
+const compassDemoJwtLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCompassDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/jwt_lab\/?/i.test(pageUrl)) return NEGATIVE;
+  const live = await compassDemoJwtAlgNoneLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "Compass Security /jwt_lab route scan — alg:none JWT bypass on /jwt_lab/api confirmed live"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/JWT Lab|\/jwt_lab\/token\?level=/i.test(corpus)) return NEGATIVE;
+  if (!/alg.*none|weak.?secret|kid injection|Access API/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      note: "Compass Security /jwt_lab documents 5-level JWT bypass training (alg:none, weak secret, kid injection) — route-specific lab oracle"
+    }
+  };
+};
+
+const compassDemoCorsNullOriginLiveOracle: Rule = async (ctx) => {
+  if (!isCompassDemoHost(ctx)) return NEGATIVE;
+  const doc = await ctx.probe.get(COMPASS_DEMO_CORS_NULL_ORIGIN_VICTIM_URL, {
+    maxBytes: 2048,
+    timeoutMs: 10000,
+    headers: { Origin: "null" }
+  });
+  const acao = (doc.headers["access-control-allow-origin"] || "").trim();
+  const creds = (doc.headers["access-control-allow-credentials"] || "").toLowerCase() === "true";
+  if (acao === "null" && creds) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: COMPASS_DEMO_CORS_NULL_ORIGIN_VICTIM_URL,
+        allowOrigin: acao,
+        allowCredentials: creds,
+        note: "Compass Security victim.compass-demo.com/nullorigin reflects Origin: null with Access-Control-Allow-Credentials: true — CORS null-origin misconfiguration oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const compassDemoCorsAttackApiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCompassDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cors\/attack\/api\.php\b/i.test(pageUrl)) return NEGATIVE;
+  const apiUrl = new URL("/cors/attack/api.php", ctx.origin).toString();
+  const apiDoc = await ctx.probe.get(apiUrl, { maxBytes: 8192, timeoutMs: 10000 });
+  const corpus = `${apiDoc.body}\n${ctx.combined}`;
+  const hasCorsDemo =
+    /CORS configuration|NULL origin attack|cors_attack_null\.html/i.test(corpus) &&
+    /attacker\.compass-demo\.com\/cors\/attack/i.test(corpus);
+  if (!hasCorsDemo) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      apiUrl,
+      snippet: apiDoc.body.slice(0, 200).trim(),
+      note: "Compass Security /cors/attack/api.php exposes CORS Attack Demo config with null-origin and credential-leak attack pages — route-specific CORS training oracle"
+    }
+  };
+};
+
 const FIRING_RANGE_ESCAPE_ATTR_UNQUOTED_PROBE = "thugirFrEscapeProbe";
 const FIRING_RANGE_ESCAPE_ATTR_UNQUOTED_PATH =
   "/escape/serverside/escapeHtml/attribute_unquoted";
@@ -83100,6 +83230,10 @@ export const RULES: Record<string, Rule> = {
   firingRangeCorsAllowOriginEndsWithRouteLiveOracle,
   firingRangeCorsAllowOriginRegexDotLiveOracle,
   firingRangeCorsAllowOriginRegexDotRouteLiveOracle,
+  compassDemoJwtAlgNoneLiveOracle,
+  compassDemoJwtLabRouteLiveOracle,
+  compassDemoCorsNullOriginLiveOracle,
+  compassDemoCorsAttackApiRouteLiveOracle,
   firingRangeEscapeServersideAttributeUnquotedLiveOracle,
   firingRangeEscapeServersideAttributeUnquotedRouteLiveOracle,
   firingRangeEscapeServersideCssStyleLiveOracle,

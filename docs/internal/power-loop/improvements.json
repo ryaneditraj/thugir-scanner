@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:compass-demo.com",
+      "slug": "compass-demo-jwt-alg-none-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /jwt_lab/token?level=1 + forged alg:none JWT on /jwt_lab/api?level=1 returns {\"role\":\"admin\",\"status\":\"access granted\"}; www.compass-demo.com/jwt_lab/ findings 4→6 (+compass-demo-jwt-alg-none-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:compass-demo.com",
+      "slug": "compass-demo-jwt-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan /jwt_lab confirms live alg:none bypass on /jwt_lab/api; www.compass-demo.com/jwt_lab/ findings 4→6 (+compass-demo-jwt-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:compass-demo.com",
+      "slug": "compass-demo-cors-attack-api-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cors/attack/api.php HTML exposes CORS configuration + NULL origin attack links on attacker.compass-demo.com; www.compass-demo.com/cors/attack/api.php findings 4→6 (+compass-demo-cors-attack-api-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1667-1668-idor-catalog",
       "status": "shipped",
