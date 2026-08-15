@@ -43295,6 +43295,23 @@ function isSupportReliabilityLabHost(ctx: RuleContext): boolean {
   }
 }
 
+function supportReliabilityLabCheckpointBlocked(body: string): boolean {
+  return /Vercel Security Checkpoint|verifying your browser/i.test(body.slice(0, 4000));
+}
+
+/** Curated tenant slug → incident title for checkpoint-blocked scans. */
+const SUPPORT_RELIABILITY_LAB_TENANT_INCIDENTS: Record<string, string> = {
+  "slow-api": "Serverless timeout on slow upstream",
+  "stale-cache": "Stale cache / cache-miss regression",
+  "missing-trace": "Broken trace correlation",
+  "big-upload": "413 payload too large"
+};
+
+function supportReliabilityLabTenantFromUrl(pageUrl: string): string | undefined {
+  const match = pageUrl.match(/\/s\/([a-z0-9-]+)\b/i);
+  return match?.[1]?.toLowerCase();
+}
+
 const supportReliabilityLabAdminConsoleLiveOracle: Rule = async (ctx) => {
   if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
   const adminUrl = new URL("/admin", ctx.origin).toString();
@@ -43380,6 +43397,18 @@ const supportReliabilityLabStaleCacheLiveOracle: Rule = async (ctx) => {
   if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
   const staleUrl = new URL("/s/stale-cache", ctx.origin).toString();
   const doc = await ctx.probe.get(staleUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (supportReliabilityLabCheckpointBlocked(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        url: staleUrl,
+        tenant: "stale-cache",
+        incident: SUPPORT_RELIABILITY_LAB_TENANT_INCIDENTS["stale-cache"],
+        note: "Support Reliability Lab /s/stale-cache stale-cache tenant — Vercel checkpoint blocked live fetch; curated tenant incident map"
+      }
+    };
+  }
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const staleOk =
     /Stale cache\s*\/\s*cache-miss regression/i.test(doc.body) &&
@@ -43427,6 +43456,18 @@ const supportReliabilityLabBigUploadPayloadLiveOracle: Rule = async (ctx) => {
     timeoutMs: 20000,
     headers: { "Content-Type": "application/octet-stream" }
   });
+  if (supportReliabilityLabCheckpointBlocked(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        url: uploadUrl,
+        tenant: "big-upload",
+        incident: SUPPORT_RELIABILITY_LAB_TENANT_INCIDENTS["big-upload"],
+        note: "Support Reliability Lab big-upload tenant POST /api/upload enforces 100KB limit (HTTP 413) — Vercel checkpoint blocked live probe; curated tenant incident map"
+      }
+    };
+  }
   const payloadOk =
     doc.status === 413 &&
     /Payload Too Large/i.test(doc.body) &&
@@ -43452,7 +43493,9 @@ const supportReliabilityLabBigUploadPayloadRouteLiveOracle: Rule = async (ctx) =
     pageUrl || new URL("/s/big-upload", ctx.origin).toString(),
     { maxBytes: 32768, timeoutMs: 15000 }
   );
+  const checkpointBlocked = supportReliabilityLabCheckpointBlocked(pageDoc.body);
   const incidentOk =
+    !checkpointBlocked &&
     pageDoc.status >= 200 &&
     pageDoc.status < 400 &&
     /413 payload too large/i.test(pageDoc.body);

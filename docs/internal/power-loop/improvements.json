@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1697-1700-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1696→1700 + SSTI_SHELL_MAX 1696 + placeholder topic override for 1697–1700; web-security-learning-labs.vercel.app/module/1699 findings 5 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:support-reliability-lab.vercel.app",
+      "slug": "support-reliability-lab-stale-cache-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /s/stale-cache Stale cache/cache-miss regression incident (x-vercel-cache markers when live; curated tenant map when Vercel checkpoint blocks); support-reliability-lab.vercel.app/s/stale-cache findings 6→5 with route-specific stale-cache oracles (+3 new slugs); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:support-reliability-lab.vercel.app",
+      "slug": "support-reliability-lab-big-upload-payload-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/upload 150KB body returns HTTP 413 Payload Too Large limit 100000 (curated tenant map when checkpoint blocks); support-reliability-lab.vercel.app/s/big-upload findings 6→5 with big-upload-payload oracles; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:support-reliability-lab.vercel.app",
       "slug": "support-reliability-lab-admin-console-live-oracle",
       "status": "shipped",
