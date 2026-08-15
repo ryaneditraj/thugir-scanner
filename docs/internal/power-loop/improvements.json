@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1674-1678-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1673→1678 + IDOR curated modules 1674–1678 + topic aliases; web-security-learning-labs.vercel.app/module/1677 findings 7→9 (+web-security-learning-labs-idor-module-route-live-oracle +module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-xss-playground-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended vuln-expose.vercel.app/xss/playground to discovery queue; GET /xss/playground exposes dangerouslySetInnerHTML sinks; vuln-expose.vercel.app/xss/playground findings 0→17 (+vuln-expose-xss-playground-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-basic-route-oracle-requeue",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended ssrf.vulnlab.dev/basic to discovery queue front; GET /basic/?url=http://127.0.0.1:8089/secret returns VULNLAB{ssrf-reached-internal-service}; ssrf.vulnlab.dev/basic findings 3→15 (+ssrf-vulnlab-basic-route-live-oracle +host SSRF oracles); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:compass-demo.com",
       "slug": "compass-demo-csp-bypass-live-oracle",
       "status": "shipped",
@@ -10914,6 +10932,21 @@
       "source": "discovery:compass-demo.com",
       "slug": "compass-demo-xss-lab-reflected-live-oracle",
       "shipped_at": "2026-08-15T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1674-1678-idor-catalog",
+      "shipped_at": "2026-08-15T15:20:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-xss-playground-route-live-oracle",
+      "shipped_at": "2026-08-15T15:20:00.000Z"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-basic-route-oracle-requeue",
+      "shipped_at": "2026-08-15T15:20:00.000Z"
     }
   ]
 }
