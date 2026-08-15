@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "source": "discovery:zero-health.vercel.app",
+      "slug": "zerohealth-verify-token-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js app.post('/api/auth/verify-token') allows algorithm:none + jwt.decode bypass; zero-health.vercel.app/api/auth/verify-token findings 2→3 (+zerohealth-verify-token-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zero-health.vercel.app",
+      "slug": "zerohealth-auth-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js app.post('/api/login') uses string-interpolated email SQL; zero-health.vercel.app/api/auth/login findings 2→3 (+zerohealth-auth-login-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zero-health.vercel.app",
+      "slug": "zerohealth-users-profile-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js GET /api/users/profile parameter pollution + SQLi; zero-health.vercel.app/api/users/profile?user_id=1 findings 2→3 (+zerohealth-users-profile-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1672-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1671→1672 + IDOR curated module 1672 + topic alias; web-security-learning-labs.vercel.app/module/1672 findings 7→7 with +web-security-learning-labs-idor-module-route-live-oracle (Here is a Module: 1672); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:compass-demo.com",
       "slug": "compass-demo-nosql-login-bypass-live-oracle",
       "status": "shipped",
@@ -10819,6 +10843,26 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-idor-pattern-desc-1666",
       "shipped_at": "2026-08-15T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1672-idor-catalog",
+      "shipped_at": "2026-08-15T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:zero-health.vercel.app",
+      "slug": "zerohealth-users-profile-route-live-oracle",
+      "shipped_at": "2026-08-15T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:zero-health.vercel.app",
+      "slug": "zerohealth-auth-login-route-live-oracle",
+      "shipped_at": "2026-08-15T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:zero-health.vercel.app",
+      "slug": "zerohealth-verify-token-route-live-oracle",
+      "shipped_at": "2026-08-15T12:10:00.000Z"
     }
   ]
 }
