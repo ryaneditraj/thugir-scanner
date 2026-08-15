@@ -32990,6 +32990,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-users-profile-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Zero Health users profile route live oracle",
+    description:
+      "When scanning /api/users/profile, GET uses parameter pollution (last user_id wins) and string-interpolated SQL to return arbitrary user profiles — route-specific IDOR/SQLi oracle.",
+    impactOneline:
+      "Route-specific oracle confirms user profile IDOR training lab when scanning the profile API path directly.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthUsersProfileRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — parameterize queries and enforce object-level authorization.",
+      steps: [
+        "Use parameterized queries for all user profile lookups.",
+        "Reject duplicate user_id parameters and bind IDs from verified JWT claims.",
+        "Apply ownership checks so admins cannot enumerate arbitrary profiles via pollution."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/profile route uses parameter pollution and string-interpolated SQL. Show parameterized queries with strict auth scoping.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-auth-login-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Zero Health auth login SQLi route live oracle",
+    description:
+      "When scanning /api/auth/login or /api/login, POST accepts SQLi in the email field (admin@test.com' OR '1'='1) and returns a JWT — route-specific authentication SQLi oracle.",
+    impactOneline:
+      "Route-specific oracle confirms authentication SQLi training lab when scanning login API paths directly.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthAuthLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — use parameterized queries and rate limiting on login.",
+      steps: [
+        "Use parameterized queries for all login email lookups.",
+        "Add rate limiting and account lockout on failed login attempts.",
+        "Never interpolate user input into SQL strings."
+      ]
+    },
+    fixPrompt:
+      "Our /api/login route uses string-interpolated email in SQL. Show parameterized queries with rate limiting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-verify-token-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Zero Health verify-token JWT route live oracle",
+    description:
+      "When scanning /api/auth/verify-token, POST accepts algorithm:none and returns valid:true with decoded payload — route-specific JWT algorithm confusion oracle.",
+    impactOneline:
+      "Route-specific oracle confirms JWT algorithm confusion training lab when scanning verify-token API path directly.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthVerifyTokenRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — reject alg:none and use strict JWT verification.",
+      steps: [
+        "Disallow algorithm:none in jwt.verify options.",
+        "Never let clients specify the verification algorithm.",
+        "Use a fixed algorithm allowlist with strong secrets."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/verify-token accepts user-controlled algorithm:none. Show strict JWT verification with fixed algorithms.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "zerohealth-prescriptions-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -41603,7 +41681,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs extended IDOR module route live oracle",
     description:
-      "When scanning extended curated IDOR catalog modules (1597–1671) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell without object-reference lab content — route-specific IDOR catalog placeholder oracle.",
+      "When scanning extended curated IDOR catalog modules (1597–1672) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell without object-reference lab content — route-specific IDOR catalog placeholder oracle.",
     impactOneline:
       "Route-specific identification of unreleased WSL IDOR catalog modules prevents missing topic context on empty Next.js shells.",
     detectorKind: "rule_ref",
