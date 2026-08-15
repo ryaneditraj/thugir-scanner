@@ -2094,6 +2094,9 @@ const DEEP_RULES = new Set<string>([
   "zerohealthReportsGenerateRouteLiveOracle",
   "zerohealthFilesRouteLiveOracle",
   "zerohealthUsersRouteLiveOracle",
+  "zerohealthUsersProfileRouteLiveOracle",
+  "zerohealthAuthLoginRouteLiveOracle",
+  "zerohealthVerifyTokenRouteLiveOracle",
   "zerohealthPrescriptionsRouteLiveOracle",
   "zerohealthDebugTokenRouteLiveOracle",
   "zerohealthDebugConnectionRouteLiveOracle",
@@ -10741,6 +10744,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (/zerohealth\.aliyu\.dev/i.test(origin) && p.slug.startsWith("zerohealth-")) return -2;
+      if (/zero-health\.vercel\.app/i.test(origin) && p.slug.startsWith("zerohealth-")) return -2;
       if (/public-firing-range\.appspot\.com/i.test(origin) && p.slug.startsWith("firing-range-")) return -2;
       if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) && /juice-shop-addresss/.test(p.slug)) return -3;
       if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) && p.slug.startsWith("juice-shop-")) return -2;
@@ -11503,7 +11507,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-1])\b/i.test(targetInput) &&
+        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-2])\b/i.test(targetInput) &&
         p.slug.startsWith("web-security-learning-labs-idor-module")
       )
         return -3;

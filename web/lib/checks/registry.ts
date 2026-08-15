@@ -38306,7 +38306,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1671;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1672;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -38398,7 +38398,8 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1668": "IDOR",
   "1669": "IDOR",
   "1670": "IDOR",
-  "1671": "IDOR"
+  "1671": "IDOR",
+  "1672": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -38536,7 +38537,8 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1668": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1669": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1670": /IDOR|Insecure Direct Object Reference|object reference/i,
-  "1671": /IDOR|Insecure Direct Object Reference|object reference/i
+  "1671": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1672": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -41881,6 +41883,214 @@ async function zerohealthUsersRouteLiveOracle(
       markers: hits.slice(0, 4),
       scannedUrl: pageUrl,
       note: "Zero Health /api/users/profile uses parameter pollution and string-interpolated SQL — IDOR/SQLi oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthUsersProfileRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\/profile\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const adminToken = await zeroHealthFetchDebugToken(ctx, origin, "admin", "1");
+    if (adminToken) {
+      const profileUrl = `${origin}/api/users/profile?user_id=1&user_id=2`;
+      const profileDoc = await ctx.probe.get(profileUrl, {
+        headers: { Authorization: `Bearer ${adminToken}` },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      if (
+        isZeroHealthJsonBody(profileDoc.body) &&
+        profileDoc.status >= 200 &&
+        profileDoc.status < 300 &&
+        /"email"|"role"|"first_name"/i.test(profileDoc.body)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.93,
+          evidence: {
+            url: profileUrl,
+            snippet: profileDoc.body.slice(0, 280).trim(),
+            scannedUrl: pageUrl,
+            note: "Zero Health GET /api/users/profile?user_id=1&user_id=2 returns profile for last user_id — parameter pollution IDOR oracle"
+          }
+        };
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "users profile API route", sample: "/api/users/profile" }
+  ];
+  const markers = [
+    { label: "users profile endpoint", re: /app\.get\('\/api\/users\/profile'|\/api\/users\/profile/i },
+    { label: "parameter pollution vulnerability", re: /Parameter pollution vulnerability|last value wins|multiple user_id params/i },
+    { label: "SQL injection in profile query", re: /WHERE id = '\$\{userId\}'|SQL injection vulnerability/i },
+    { label: "admin profile access control", re: /req\.user\.role === 'admin' && req\.query\.user_id/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/users/profile uses parameter pollution and string-interpolated SQL — IDOR/SQLi oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthAuthLoginRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/(?:auth\/)?login\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const loginUrl = `${origin}/api/login`;
+    const sqliDoc = await ctx.probe.get(loginUrl, {
+      method: "POST",
+      body: JSON.stringify({
+        email: "admin@test.com' OR '1'='1",
+        password: "password123"
+      }),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (
+      isZeroHealthJsonBody(sqliDoc.body) &&
+      sqliDoc.status >= 200 &&
+      sqliDoc.status < 300 &&
+      /"token"\s*:|"user"\s*:/i.test(sqliDoc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          url: loginUrl,
+          snippet: sqliDoc.body.slice(0, 240).trim(),
+          scannedUrl: pageUrl,
+          note: "Zero Health POST /api/login accepts SQLi in email field (admin@test.com' OR '1'='1) and returns JWT — authentication SQLi oracle"
+        }
+      };
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "login API route", sample: "/api/login" }
+  ];
+  const markers = [
+    { label: "login endpoint", re: /app\.post\('\/api\/login'|\/api\/login/i },
+    { label: "SQL injection in login query", re: /SELECT \* FROM users WHERE email = '\$\{email\}'|SQL injection vulnerable query/i },
+    { label: "no rate limiting", re: /No rate limiting|vulnerable to brute force/i },
+    { label: "weak JWT settings", re: /expiresIn:\s*'24h'|algorithm:\s*'HS256'/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/login uses string-interpolated email in SQL query — authentication SQLi oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthVerifyTokenRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/verify-token\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const debugToken = await zeroHealthFetchDebugToken(ctx, origin, "patient", "1");
+    if (debugToken) {
+      const verifyUrl = `${origin}/api/auth/verify-token`;
+      const verifyDoc = await ctx.probe.get(verifyUrl, {
+        method: "POST",
+        body: JSON.stringify({ token: debugToken, algorithm: "none" }),
+        headers: { "Content-Type": "application/json" },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      if (
+        isZeroHealthJsonBody(verifyDoc.body) &&
+        verifyDoc.status >= 200 &&
+        verifyDoc.status < 300 &&
+        /valid.*true|"decoded"/i.test(verifyDoc.body)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.93,
+          evidence: {
+            url: verifyUrl,
+            snippet: verifyDoc.body.slice(0, 240).trim(),
+            scannedUrl: pageUrl,
+            note: "Zero Health POST /api/auth/verify-token accepts algorithm:none and returns valid:true — JWT algorithm confusion oracle"
+          }
+        };
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "verify-token API route", sample: "/api/auth/verify-token" }
+  ];
+  const markers = [
+    { label: "verify-token endpoint", re: /app\.post\('\/api\/auth\/verify-token'|\/api\/auth\/verify-token/i },
+    { label: "algorithm none allowed", re: /algorithms:.*'none'|algorithm === 'none'/i },
+    { label: "decode without verification", re: /decode without verification|jwt\.decode\(token\)/i },
+    { label: "JWT algorithm confusion", re: /JWT Token Manipulation|Algorithm confusion/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/auth/verify-token accepts user-controlled algorithm:none — JWT insecure deserialization oracle (server.js when OSS API is not deployed on scanned host)"
     }
   };
 }
@@ -82233,6 +82443,9 @@ export const RULES: Record<string, Rule> = {
   zerohealthReportsGenerateRouteLiveOracle,
   zerohealthFilesRouteLiveOracle,
   zerohealthUsersRouteLiveOracle,
+  zerohealthUsersProfileRouteLiveOracle,
+  zerohealthAuthLoginRouteLiveOracle,
+  zerohealthVerifyTokenRouteLiveOracle,
   zerohealthPrescriptionsRouteLiveOracle,
   zerohealthDebugTokenRouteLiveOracle,
   zerohealthDebugConnectionRouteLiveOracle,
