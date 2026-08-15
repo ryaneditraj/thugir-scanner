@@ -12228,6 +12228,31 @@
       "url": "https://pentest-fauxbank.vercel.app/api/auth/login",
       "source": "pentest-fauxbank Vercel — auth login API oracle (public vulnerable banking lab)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/one/admin/photo",
+      "source": "NeuraLegion/brokencrystals — admin profile photo BOLA oracle GET /api/users/one/{user}/photo (Swagger README)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/v1/userinfo/admin@brokencrystals.com",
+      "source": "NeuraLegion/brokencrystals — userinfo disclosure oracle GET /api/v1/userinfo/{email} (swagger-json)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/dom-csrf-flow",
+      "source": "NeuraLegion/brokencrystals — DOM CSRF token flow oracle GET /api/auth/dom-csrf-flow (swagger-json)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://tryaisoc.com",
+      "source": "beenuar/AiSOC — Fly.io public demo with seeded incidents + demo-mode API (GitHub infra/fly README, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://app.trypalisade.dev",
+      "source": "kenlacroix/palisade — live read-only demo scanning deliberately-vulnerable targets incl. LiteLLM CVE-2026-42208 (trypalisade.dev README)",
+      "auth": "public_demo"
     }
   ]
 }
