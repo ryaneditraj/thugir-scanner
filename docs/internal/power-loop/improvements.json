@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "client-side-pwnshop-avatar-xss-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PWN-012 + POST /profile/upload-avatar + Stored XSS via SVG Avatar markers in vulnerability registry; pwnshopAvatarUploadRouteLiveOracle bundle fallback when OTP-gated live upload probe fails; pwnshop.ctfsecurity.com/profile/upload-avatar findings include client-side-pwnshop-avatar-xss-oracle + pwnshop-avatar-upload-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-lab-route-runner-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: deep-scan priority boost for /labs/sqli, /labs/lfi, /labs/path-traversal, /labs/csrf, /labs/ssrf, /labs/broken-auth, /labs/open-redirect + extractDvwuVulnPortalSeeds adds broken-auth/open-redirect/file-upload/command-injection; dvwu.vercel.app/labs/idor route scan confirms dvwu-dashboard-idor-route-live-oracle (13 findings); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-unscanned-labs-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended 12 unscanned DVWU lab routes (idor, lfi, path-traversal, csrf, broken-auth, open-redirect, cmdi, deserialization, race-condition, ssti, xxe, file-upload) to discovery queue front; dvwu.vercel.app/labs/idor 13 findings with route-specific oracles; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1684-1688-idor-catalog",
       "status": "shipped",
