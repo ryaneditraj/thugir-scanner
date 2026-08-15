@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-15T10:15:07.468Z",
-  "total": 2368,
-  "uniqueSlugs": 2364,
+  "generatedAt": "2026-08-15T11:04:22.999Z",
+  "total": 2370,
+  "uniqueSlugs": 2366,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2350,
+    "generic": 2352,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2283,
+    "deep": 2285,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 112,
     "Security misconfiguration": 167,
     "Broken authentication": 145,
-    "Injection": 353,
+    "Injection": 355,
     "Cross-site scripting": 686,
     "Open redirect": 21,
     "general": 20,
@@ -857,6 +857,8 @@
     "compass-demo-cors-attack-api-route-live-oracle",
     "compass-demo-jwt-alg-none-live-oracle",
     "compass-demo-jwt-lab-route-live-oracle",
+    "compass-demo-nosql-login-bypass-live-oracle",
+    "compass-demo-nosql-movies-route-live-oracle",
     "convex-open-query-no-auth",
     "cors-reflect-origin",
     "crapi-check-otp-route-live-oracle",
