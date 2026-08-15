@@ -54826,6 +54826,174 @@ const compassDemoNosqlMoviesRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const COMPASS_DEMO_CSP_DEMO_PATH = "/csp_demo/";
+const COMPASS_DEMO_CSP_LEVEL1_PATH = "/csp_demo/level1";
+const COMPASS_DEMO_ANGULARJS_DEMO_PATH = "/angularjs/angularjs_demo.php";
+const COMPASS_DEMO_XSS_LAB_LEVEL1_PATH = "/xss_lab/level1";
+const COMPASS_DEMO_XSS_LAB_REFLECTION_PROBE = "thugirCompassXssProbe";
+
+const compassDemoCspBypassLiveOracle: Rule = async (ctx) => {
+  if (!isCompassDemoHost(ctx)) return NEGATIVE;
+  const hubUrl = new URL(COMPASS_DEMO_CSP_DEMO_PATH, ctx.origin).toString();
+  const levelUrl = new URL(COMPASS_DEMO_CSP_LEVEL1_PATH, ctx.origin).toString();
+  const [hubDoc, levelDoc] = await Promise.all([
+    ctx.probe.get(hubUrl, { maxBytes: 16384, timeoutMs: 15000 }),
+    ctx.probe.get(levelUrl, { maxBytes: 16384, timeoutMs: 15000 })
+  ]);
+  if (levelDoc.status < 200 || levelDoc.status >= 400) return NEGATIVE;
+  const csp = (levelDoc.headers["content-security-policy"] || "").toLowerCase();
+  const weakCsp = /unsafe-inline|unsafe-eval/.test(csp);
+  const levelLab =
+    /CSP Bypass/i.test(levelDoc.body) &&
+    (/Level\s+1/i.test(levelDoc.body) || /bypass the Content-Security-Policy/i.test(levelDoc.body));
+  const hubLab =
+    hubDoc.status >= 200 &&
+    hubDoc.status < 400 &&
+    /CSP Bypass Lab/i.test(hubDoc.body) &&
+    /\/csp_demo\/level[1-8]/i.test(hubDoc.body);
+  if (!weakCsp || !levelLab) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hubLab ? 0.93 : 0.91,
+    evidence: {
+      hubUrl,
+      levelUrl,
+      contentSecurityPolicy: csp.slice(0, 160),
+      snippet: levelDoc.body.match(/CSP Bypass[^<]{0,80}/i)?.[0] ?? "CSP Bypass Lab",
+      note: "Compass Security /csp_demo/level1 serves Content-Security-Policy with unsafe-inline and documents CSP bypass training challenges — weak CSP oracle"
+    }
+  };
+};
+
+const compassDemoCspDemoRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCompassDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/csp_demo\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await compassDemoCspBypassLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "Compass Security /csp_demo route scan — level1 confirms unsafe-inline CSP bypass training lab"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/CSP Bypass Lab|\/csp_demo\/level/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      note: "Compass Security /csp_demo route scan — multi-level Content-Security-Policy bypass training lab"
+    }
+  };
+};
+
+const compassDemoAngularjsXssLiveOracle: Rule = async (ctx) => {
+  if (!isCompassDemoHost(ctx)) return NEGATIVE;
+  const demoUrl = new URL(COMPASS_DEMO_ANGULARJS_DEMO_PATH, ctx.origin).toString();
+  const doc = await ctx.probe.get(demoUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const evalSink = /eval\s*\(\s*userInput\s*\)/i.test(doc.body);
+  const unsafeBind = /ng-bind-html-unsafe/i.test(doc.body);
+  const compileBind = /bind-html-compile/i.test(doc.body);
+  const angularLab = /AngularJS Demo|Output Encoding/i.test(doc.body);
+  if (!evalSink || !unsafeBind || !compileBind || !angularLab) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      demoUrl,
+      snippet: doc.body.match(/ng-bind-html-unsafe[^<]{0,60}/i)?.[0] ?? "ng-bind-html-unsafe",
+      note: "Compass Security /angularjs/angularjs_demo.php exposes eval(userInput), ng-bind-html-unsafe, and bind-html-compile XSS sinks — AngularJS output-encoding bypass oracle"
+    }
+  };
+};
+
+const compassDemoAngularjsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCompassDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/angularjs\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await compassDemoAngularjsXssLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "Compass Security /angularjs route scan — eval + ng-bind-html-unsafe + bind-html-compile XSS training sinks confirmed live"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/AngularJS Demo|ng-bind-html-unsafe|bind-html-compile/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      note: "Compass Security /angularjs route scan — AngularJS output-encoding bypass training module"
+    }
+  };
+};
+
+const compassDemoXssLabReflectedLiveOracle: Rule = async (ctx) => {
+  if (!isCompassDemoHost(ctx)) return NEGATIVE;
+  const probe = COMPASS_DEMO_XSS_LAB_REFLECTION_PROBE;
+  const probeUrl = new URL(COMPASS_DEMO_XSS_LAB_LEVEL1_PATH, ctx.origin);
+  probeUrl.searchParams.set("inject", probe);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const reflected = new RegExp(
+    `You have entered:\\s*<b>${probe.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</b>`,
+    "i"
+  ).test(doc.body);
+  if (!reflected) return NEGATIVE;
+  if (!/XSS Lab|removeBadStuff/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      probeUrl: probeUrl.toString(),
+      snippet: doc.body.match(/You have entered:[^<]{0,80}/i)?.[0] ?? `You have entered: <b>${probe}</b>`,
+      note: "Compass Security GET /xss_lab/level1?inject= reflects attacker input unencoded in HTML — reflected XSS training oracle"
+    }
+  };
+};
+
+const compassDemoXssLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCompassDemoHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/xss_lab\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await compassDemoXssLabReflectedLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "Compass Security /xss_lab route scan — level1 reflects inject param without HTML encoding — route-specific reflected XSS oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/XSS Lab|\/xss_lab\/level/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      note: "Compass Security /xss_lab route scan — multi-level reflected XSS bypass training lab"
+    }
+  };
+};
+
 const FIRING_RANGE_ESCAPE_ATTR_UNQUOTED_PROBE = "thugirFrEscapeProbe";
 const FIRING_RANGE_ESCAPE_ATTR_UNQUOTED_PATH =
   "/escape/serverside/escapeHtml/attribute_unquoted";
@@ -83570,6 +83738,12 @@ export const RULES: Record<string, Rule> = {
   compassDemoCorsAttackApiRouteLiveOracle,
   compassDemoNosqlLoginBypassLiveOracle,
   compassDemoNosqlMoviesRouteLiveOracle,
+  compassDemoCspBypassLiveOracle,
+  compassDemoCspDemoRouteLiveOracle,
+  compassDemoAngularjsXssLiveOracle,
+  compassDemoAngularjsRouteLiveOracle,
+  compassDemoXssLabReflectedLiveOracle,
+  compassDemoXssLabRouteLiveOracle,
   firingRangeEscapeServersideAttributeUnquotedLiveOracle,
   firingRangeEscapeServersideAttributeUnquotedRouteLiveOracle,
   firingRangeEscapeServersideCssStyleLiveOracle,

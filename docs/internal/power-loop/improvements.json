@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:compass-demo.com",
+      "slug": "compass-demo-csp-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /csp_demo/level1 returns Content-Security-Policy with unsafe-inline + CSP Bypass Lab level markers; compass-demo.com/csp_demo findings 4→9 (+compass-demo-csp-bypass-live-oracle +compass-demo-csp-demo-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:compass-demo.com",
+      "slug": "compass-demo-angularjs-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /angularjs/angularjs_demo.php exposes eval(userInput) + ng-bind-html-unsafe + bind-html-compile sinks; compass-demo.com/angularjs/angularjs_demo.php findings 4→9 (+compass-demo-angularjs-xss-live-oracle +compass-demo-angularjs-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:compass-demo.com",
+      "slug": "compass-demo-xss-lab-reflected-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /xss_lab/level1?inject=thugirCompassXssProbe reflects You have entered: <b>thugirCompassXssProbe</b> unencoded; compass-demo.com/xss_lab/ findings 3→8 (+compass-demo-xss-lab-reflected-live-oracle +compass-demo-xss-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1673-idor-catalog",
       "status": "shipped",
@@ -10881,6 +10899,21 @@
       "source": "discovery:zero-health.vercel.app",
       "slug": "zerohealth-verify-token-route-live-oracle",
       "shipped_at": "2026-08-15T12:10:00.000Z"
+    },
+    {
+      "source": "discovery:compass-demo.com",
+      "slug": "compass-demo-csp-bypass-live-oracle",
+      "shipped_at": "2026-08-15T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:compass-demo.com",
+      "slug": "compass-demo-angularjs-xss-live-oracle",
+      "shipped_at": "2026-08-15T14:15:00.000Z"
+    },
+    {
+      "source": "discovery:compass-demo.com",
+      "slug": "compass-demo-xss-lab-reflected-live-oracle",
+      "shipped_at": "2026-08-15T14:15:00.000Z"
     }
   ]
 }
