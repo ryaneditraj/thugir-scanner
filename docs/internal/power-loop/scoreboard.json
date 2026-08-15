@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-15T18:04:51.793Z",
+  "updated_at": "2026-08-15T18:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -21,9 +21,9 @@
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2056,
-  "discovery_findings": 23414,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-15T18:04:51.793Z",
+  "discovery_findings": 23451,
+  "improvements_shipped": 1205,
+  "last_run": "2026-08-15T18:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
@@ -48,21 +48,22 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings, 35 juice-shop live oracles); secret-resend slug still absent — sensitive_data via juice-shop-leaked-api-key"
+      "note": "Stable 6/6 recall (48 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 36,
-      "focus": "WSL catalog expansion modules 1689–1693 (live HTTP 200 verified)",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 8,
+      "findings": 70,
+      "focus": "WSL IDOR 1684-1688 catalog + dvwu IDOR/file-upload route oracles; WSL 1689-1693 queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1689–1693: 36 discovery findings — placeholder module-route-evidence only",
-      "web-security-learning-labs.vercel.app/module/1692–1693: web-security-learning-labs-placeholder-module-route-live-oracle (new slug)",
-      "nextjs-security-lesson.vercel.app/protected|docs|login: unreachable scan errors (repeated)"
+      "web-security-learning-labs.vercel.app/module/1687: 8→9 findings — WSL IDOR catalog 1684-1688 + runner priority 168[0-8]",
+      "dvwu.vercel.app/labs/idor: 13 findings — dvwu-dashboard-idor-route-live-oracle with route priority boost",
+      "dvwu.vercel.app/labs/file-upload: 12 findings — dvwu-file-upload-lab-route-live-oracle shipped (SVG stored-XSS bundle markers)",
+      "web-security-learning-labs.vercel.app/module/1689–1693: placeholder module-route-evidence only (prior queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -70,20 +71,23 @@
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
       "nextjs-security-lesson.vercel.app: unreachable from cloud agent (repeated errors)",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent"
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent",
+      "seclab.vercel.app/ssti — SSTI lab route is Angular SPA stub; live template-injection oracle absent",
+      "zero-health.vercel.app/api/auth/login: route oracles need server.js fallback when OSS API not deployed"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "web-security-learning-labs.vercel.app/module/1687": 9,
+    "dvwu.vercel.app/labs/idor": 13,
+    "dvwu.vercel.app/labs/file-upload": 12,
     "web-security-learning-labs.vercel.app/module/1692": 8,
     "web-security-learning-labs.vercel.app/module/1689": 7,
-    "web-security-learning-labs.vercel.app/module/1690": 7,
-    "web-security-learning-labs.vercel.app/module/1691": 7,
-    "web-security-learning-labs.vercel.app/module/1693": 7,
     "dvwu.vercel.app/labs/xss": 15,
     "web-security-learning-labs.vercel.app/module/1679": 9,
     "brokencrystals.com/api/auth/admin/login": 22,
     "ssrf.vulnlab.dev/basic": 15,
+    "vuln-expose.vercel.app/xss/playground": 17,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "vulnbank.org/sup3r_s3cr3t_admin": 20
   }

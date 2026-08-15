@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1684-1688-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1683→1688 + IDOR curated modules 1684–1688 + topic aliases; web-security-learning-labs.vercel.app/module/1687 findings 8→9 (+web-security-learning-labs-idor-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-idor-module-runner-priority-1684-1688",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner IDOR module priority regex extended 168[0-3]→168[0-8]; web-security-learning-labs.vercel.app/module/1687 fires web-security-learning-labs-idor-module-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-file-upload-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bundle documents <svg onload=alert('Stored XSS!')> and img onerror XSS payloads on /labs/file-upload; dvwu.vercel.app/labs/file-upload findings 12 (+dvwu-file-upload-lab-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-xss-lab-route-live-oracle",
       "status": "shipped",
