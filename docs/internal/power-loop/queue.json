@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-15T20:05:00.000Z",
+  "updated_at": "2026-08-15T21:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://support-reliability-lab.vercel.app/s/stale-cache",
+      "source": "esterkane/support-reliability-lab — cache-regression tenant path /s/stale-cache (stale CDN cache incident playbook)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://support-reliability-lab.vercel.app/s/big-upload",
+      "source": "esterkane/support-reliability-lab — payload-too-large tenant path /s/big-upload (413 upload limit incident playbook)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://support-reliability-lab.vercel.app/s/missing-trace",
+      "source": "esterkane/support-reliability-lab — broken-trace tenant path /s/missing-trace (orphaned downstream spans incident playbook)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1699",
+      "source": "web-security-learning-labs Vercel — module 1699 security lab route (OSS deploy hub expansion past 1698)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1700",
+      "source": "web-security-learning-labs Vercel — module 1700 security lab route (OSS deploy hub expansion past 1699)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://support-reliability-lab.vercel.app/",
       "source": "esterkane/support-reliability-lab — Vercel support incident lab with deterministic timeout/cache/trace failures (GitHub README Aug 2026)",
