@@ -22184,6 +22184,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pwnshop-avatar-xss-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Pwnshop avatar upload stored XSS oracle (PWN-012)",
+    description:
+      "Pwnshop documents POST /profile/upload-avatar accepting SVG files with onload handlers served at /uploads/ without sanitization — the PWN-012 stored XSS training oracle.",
+    impactOneline:
+      "Stored SVG XSS on profile avatars can hijack sessions when malicious uploads are rendered to other users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnshopAvatarXssOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject SVG uploads or sanitize served avatar content — Pwnshop PWN-012 is intentional lab software.",
+      steps: [
+        "Allow only raster image formats (PNG/JPEG/WebP) for avatar uploads.",
+        "Serve user uploads from a separate domain without script execution.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /profile/upload-avatar endpoint stores SVG with onload XSS. Show avatar upload hardening and content-type validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pwnshop-path-traversal-oracle",
     platform: "generic",
     category: "Broken access control",
