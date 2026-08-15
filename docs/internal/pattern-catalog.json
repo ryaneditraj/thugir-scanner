@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-15T11:04:22.999Z",
-  "total": 2370,
-  "uniqueSlugs": 2366,
+  "generatedAt": "2026-08-15T12:05:01.027Z",
+  "total": 2373,
+  "uniqueSlugs": 2369,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,25 +9,25 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2352,
+    "generic": 2355,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2285,
+    "deep": 2288,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 481,
+    "Broken access control": 482,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 112,
     "Security misconfiguration": 167,
-    "Broken authentication": 145,
-    "Injection": 355,
+    "Broken authentication": 146,
+    "Injection": 356,
     "Cross-site scripting": 686,
     "Open redirect": 21,
     "general": 20,
@@ -2387,6 +2387,7 @@
     "zen-demo-java-request-ssrf-live-oracle",
     "zerohealth-admin-users-route-live-oracle",
     "zerohealth-ai-chat-sqli-route-live-oracle",
+    "zerohealth-auth-login-route-live-oracle",
     "zerohealth-chatbot-chat-route-live-oracle",
     "zerohealth-chatbot-history-route-live-oracle",
     "zerohealth-command-injection-route-live-oracle",
@@ -2413,7 +2414,9 @@
     "zerohealth-search-reflected-xss-route-live-oracle",
     "zerohealth-stored-xss-route-live-oracle",
     "zerohealth-upload-advanced-route-live-oracle",
+    "zerohealth-users-profile-route-live-oracle",
     "zerohealth-users-route-live-oracle",
+    "zerohealth-verify-token-route-live-oracle",
     "zerohealth-xxe-route-live-oracle"
   ],
   "moatNote": "Pattern library is product IP: AI-builder misconfigs with evidence + fix prompts, not a CVE dump."
