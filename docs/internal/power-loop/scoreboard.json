@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-15T03:05:00.000Z",
+  "updated_at": "2026-08-15T03:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1991,
   "discovery_findings": 22817,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-15T03:05:00.000Z",
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-15T03:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
     "benchmark": {
@@ -55,36 +55,38 @@
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 66,
-      "focus": "Zero-Health API BOLA/LLM/debug routes + WSL catalog 1651-1652 + DVWU graphql rescan",
-      "improvements_shipped_this_run": 0
+      "focus": "WSL catalog 1646-1650 IDOR + nextjs-security-lesson JWT session oracles + Zero-Health API routes",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "zero-health.vercel.app/api/debug/connection: 9 findings — zerohealth-debug-connection-route-live-oracle (verbose DB connection leak)",
-      "zero-health.vercel.app/api/lab-results/1: 8 findings — generic misconfig only, no BOLA live oracle yet",
-      "zero-health.vercel.app/api/chatbot/chat: 8 findings — generic misconfig only, no LLM prompt-injection oracle yet",
+      "web-security-learning-labs.vercel.app/module/1648: IDOR catalog expansion to 1650 (+web-security-learning-labs-idor-module-route-live-oracle)",
+      "nextjs-security-lesson.vercel.app/protected: 2→3 findings — secure-nextjs-lesson-protected-route-live-oracle with JWT session seeding",
+      "nextjs-security-lesson.vercel.app/admin: 2→3 findings — secure-nextjs-lesson-admin-rbac-route-live-oracle",
+      "nextjs-security-lesson.vercel.app/docs: 2→3 findings — secure-nextjs-lesson-docs-acl-route-live-oracle",
+      "nextjs-security-lesson.vercel.app/login: 2→3 findings — secure-nextjs-lesson-login-csrf-route-live-oracle (+ checkpoint fallback corpus)",
+      "zero-health.vercel.app/api/debug/connection: 9 findings — zerohealth-debug-connection-route-live-oracle",
       "web-security-learning-labs.vercel.app/module/1651: 7 findings — module-route-evidence placeholder",
-      "web-security-learning-labs.vercel.app/module/1652: 7 findings — module-route-evidence placeholder",
-      "dvwu.vercel.app/labs/graphql: 12 findings — dvwu-graphql-lab-route-live-oracle + sql-error-disclosure"
+      "dvwu.vercel.app/labs/graphql: 12 findings — dvwu-graphql-lab-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "nextjs-security-lesson.vercel.app: Vercel Security Checkpoint intermittently blocks live session login in cloud agent — fallback corpus used",
       "zero-health.vercel.app/api/lab-results/1: BOLA oracle absent — route returns SPA shell not lab-results JSON",
-      "zero-health.vercel.app/api/chatbot/chat: LLM prompt-injection oracle absent without authenticated session",
-      "WSL module/1651-1652: placeholder pages, module-route-evidence only (same as 1648-1650 catalog expansion)"
+      "WSL module/1651-1652: placeholder pages, module-route-evidence only"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
     "zero-health.vercel.app/api/debug/connection": 9,
+    "web-security-learning-labs.vercel.app/module/1648": 6,
+    "nextjs-security-lesson.vercel.app/protected": 3,
+    "nextjs-security-lesson.vercel.app/admin": 3,
+    "nextjs-security-lesson.vercel.app/docs": 3,
+    "nextjs-security-lesson.vercel.app/login": 3,
     "dvwu.vercel.app/labs/graphql": 12,
-    "zero-health.vercel.app/api/lab-results/1": 8,
-    "zero-health.vercel.app/api/chatbot/chat": 8,
-    "web-security-learning-labs.vercel.app/module/1650": 8,
     "web-security-learning-labs.vercel.app/module/1651": 7,
-    "web-security-learning-labs.vercel.app/module/1652": 7,
-    "web-security-learning-labs.vercel.app/module/1648": 7,
     "pwnshop.ctfsecurity.com/profile/upload-avatar": 44
   }
 }
