@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-15T10:15:00.000Z",
+  "updated_at": "2026-08-15T11:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2843,
-  "total_findings": 28110,
-  "critical_findings": 58,
+  "total_sites_scanned": 2845,
+  "total_findings": 28164,
+  "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2021,
-  "discovery_findings": 23052,
+  "discovery_findings": 23059,
   "improvements_shipped": 1199,
-  "last_run": "2026-08-15T10:15:00.000Z",
+  "last_run": "2026-08-15T11:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,45 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings) — no benchmark misses"
+      "note": "Stable 6/6 recall (47 findings) — no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 12,
-      "focus": "Compass JWT alg:none + CORS attack API route oracles",
+      "urls_scanned": 4,
+      "findings": 32,
+      "focus": "WSL IDOR catalog 1669-1671 + Compass NoSQL login bypass",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "www.compass-demo.com/jwt_lab/: 4→6 findings — compass-demo-jwt-alg-none-live-oracle + jwt-lab-route-live-oracle shipped",
-      "www.compass-demo.com/cors/attack/api.php: 4→6 findings — compass-demo-cors-attack-api-route-live-oracle shipped (NULL origin attack config)",
-      "web-security-learning-labs.vercel.app/module/1671: 7 findings with module-route-evidence (placeholder module)",
-      "web-security-learning-labs.vercel.app/module/1672: 7 findings with module-route-evidence (placeholder module)",
-      "www.compass-demo.com/nosql/movies.php: 4 findings — misconfig/dir-discovery only, no NoSQL login-bypass live oracle",
-      "compass-demo.com/csp_demo: 4 findings — misconfig/dir-discovery only, no CSP-bypass live oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1669: 7→9 findings — web-security-learning-labs-idor-module-route-live-oracle (Here is a Module: 1669)",
+      "web-security-learning-labs.vercel.app/module/1670: 7→9 findings — IDOR route oracle shipped",
+      "web-security-learning-labs.vercel.app/module/1671: 7→9 findings — IDOR route oracle shipped",
+      "www.compass-demo.com/nosql/movies.php: 4→7 findings — compass-demo-nosql-login-bypass-live-oracle + movies-route-live-oracle (password[$ne] bypass)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "b.compass-demo.com/: CORS playground configurable-policy live oracle still absent",
       "compass-demo.com/xss_lab/: XSS challenge route oracles absent (7 levels, alert(1) goal)",
-      "compass-demo.com/nosql/movies.php: NoSQL injection login-bypass oracle absent (mongoDB $ne bypass)",
       "compass-demo.com/csp_demo: CSP bypass challenge live oracles absent despite multi-level lab surface",
       "compass-demo.com/angularjs/angularjs_demo.php: AngularJS SCE-disabled XSS oracle absent",
-      "WSL module/1671-1672: placeholder pages — module-route-evidence only until real lab content ships",
+      "web-security-learning-labs.vercel.app/module/1672: placeholder page — module-route-evidence only until catalog extended",
       "nextjs-security-lesson.vercel.app/* — routes unreachable; queue slots wasted on errors",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
+    "juice-shop.herokuapp.com": 47,
+    "web-security-learning-labs.vercel.app/module/1669": 9,
+    "web-security-learning-labs.vercel.app/module/1670": 9,
+    "web-security-learning-labs.vercel.app/module/1671": 9,
+    "www.compass-demo.com/nosql/movies.php": 7,
     "www.compass-demo.com/jwt_lab": 6,
     "www.compass-demo.com/cors/attack/api.php": 6,
-    "web-security-learning-labs.vercel.app/module/1671": 7,
-    "web-security-learning-labs.vercel.app/module/1672": 7,
-    "www.compass-demo.com/nosql/movies.php": 4,
-    "compass-demo.com/csp_demo": 4,
-    "b.compass-demo.com": 1
+    "compass-demo.com/csp_demo": 4
   }
 }
