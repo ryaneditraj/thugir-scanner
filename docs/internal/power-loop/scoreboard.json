@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-15T06:13:14.017Z",
+  "updated_at": "2026-08-15T07:04:18.470Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2810,
-  "total_findings": 27717,
+  "total_sites_scanned": 2820,
+  "total_findings": 27809,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2001,
-  "discovery_findings": 22920,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-15T06:13:14.017Z",
+  "discovery_urls_added": 2006,
+  "discovery_findings": 22942,
+  "improvements_shipped": 1196,
+  "last_run": "2026-08-15T07:04:18.470Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 562,
+      "probes_run": 586,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings) — no benchmark misses"
+      "note": "Stable 6/6 recall (48 findings, 586 probes) — no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_validated": 3,
-      "improvements_shipped_this_run": 3,
-      "focus": "WSL modules 1658-1660 IDOR catalog extension + runner priority regex + pattern description"
+      "urls_added": 5,
+      "urls_scanned": 4,
+      "urls_errored": 4,
+      "findings": 22,
+      "focus": "WSL modules 1663-1666 catalog expansion + react2shell.com CVE-2025-55182 demo + owaspbased-lessons GenAI oracles"
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1658: 7→9 findings — web-security-learning-labs-idor-module-route-live-oracle shipped (catalog extended to 1660)",
-      "web-security-learning-labs.vercel.app/module/1659-1660: each fires IDOR route oracle (Here is a Module: {id} CSR placeholder shell)",
-      "runner priority regex extended 1657→1660 for web-security-learning-labs-idor-module slugs"
+      "web-security-learning-labs.vercel.app/module/1633: 9 findings — web-security-learning-labs-idor-module-route-live-oracle",
+      "owaspbased-lessons.vercel.app/lesson/unbounded-consumption: 4 findings — owasp-genai-unbounded-consumption-route-live-oracle",
+      "owaspbased-lessons.vercel.app/lesson/prompt-injection: 4 findings — owasp-genai-prompt-injection-route-live-oracle",
+      "owaspbased-lessons.vercel.app/lesson/info-disclosure: 5 findings — owasp-genai-sensitive-info-route-live-oracle + thugir-dir-discovery"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "WSL module/1661+: HTTP 403 — extend WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX when new modules ship",
-      "nextjs-security-lesson.vercel.app/* — routes unreachable (DNS/host down); queue drain blocked",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)"
+      "nextjs-security-lesson.vercel.app/* — 4 queue URLs errored (host unreachable); drain blocked",
+      "WSL modules 1663-1666 queued but not yet scanned — extend catalog priority regex past 1662",
+      "react2shell.com queued but not yet scanned — CVE-2025-55182 RSC RCE simulation oracle pending",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "web-security-learning-labs.vercel.app/module/1633": 9,
+    "owaspbased-lessons.vercel.app/lesson/info-disclosure": 5,
+    "owaspbased-lessons.vercel.app/lesson/unbounded-consumption": 4,
+    "owaspbased-lessons.vercel.app/lesson/prompt-injection": 4,
     "web-security-learning-labs.vercel.app/module/1658": 9,
-    "web-security-learning-labs.vercel.app/module/1659": 9,
-    "web-security-learning-labs.vercel.app/module/1660": 6,
-    "web-security-learning-labs.vercel.app/module/1657": 9,
-    "zero-health.vercel.app/api/lab-results/1": 9,
-    "zero-health.vercel.app/api/debug/connection": 9,
-    "dvwu.vercel.app/labs/command-injection": 12,
     "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
