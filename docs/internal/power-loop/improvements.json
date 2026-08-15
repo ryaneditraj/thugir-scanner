@@ -2195,6 +2195,24 @@
       "slug": "vulnshop-apply-discount-payment-manipulation-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/checkout/apply-discount stacks unlimited discounts per chethan-vinayak/vulnshop README #33; vulnshop.vercel.app/api/v1/checkout/apply-discount findings 6→8 (+vulnshop-apply-discount-payment-manipulation + route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1638-1642-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1637→1642 + IDOR curated modules 1638-1642 + topic aliases + runner priority /module/(1597-1642); web-security-learning-labs.vercel.app/module/1640 findings 7→9 (+web-security-learning-labs-idor-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-idor-placeholder-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: placeholder oracle skips WEB_SECURITY_LEARNING_EXTENDED_IDOR_MODULE_IDS; module/1637 findings 8→9 with IDOR oracle replacing placeholder-module-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-command-injection-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/command-injection route scan confirms DVWU injection oracle via /api/search or /api/portal; dvwu.vercel.app/labs/command-injection findings 11→12 (+dvwu-command-injection-lab-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ],
   "shipped": [
