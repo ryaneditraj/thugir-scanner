@@ -12443,6 +12443,31 @@
       "url": "https://seclab.vercel.app/api/users-vulnerable/1",
       "source": "DaniSam-STU/security-lab — parameterized IDOR oracle GET /api/users-vulnerable/:id (README CWE-639)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1674",
+      "source": "web-security-learning-labs Vercel — module 1674 security lab route (WSL catalog expansion past 1673, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1675",
+      "source": "web-security-learning-labs Vercel — module 1675 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1676",
+      "source": "web-security-learning-labs Vercel — module 1676 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/admin/users",
+      "source": "sr33jih/vulnshop — BFLA admin users list oracle GET /api/v1/admin/users (OWASP API Top 10 lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/admin/orders",
+      "source": "sr33jih/vulnshop — BFLA admin orders list oracle GET /api/v1/admin/orders (OWASP API Top 10 lab)",
+      "auth": "public_demo"
     }
   ]
 }
