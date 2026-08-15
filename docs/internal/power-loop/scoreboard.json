@@ -15,13 +15,13 @@
       ]
     }
   },
-  "total_sites_scanned": 2831,
-  "total_findings": 27995,
+  "total_sites_scanned": 2837,
+  "total_findings": 28025,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2011,
-  "discovery_findings": 22984,
+  "discovery_urls_added": 2016,
+  "discovery_findings": 23014,
   "improvements_shipped": 1199,
   "last_run": "2026-08-15T09:15:00.000Z",
   "last_run_summary": {
@@ -52,31 +52,38 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_validated": 2,
-      "focus": "WSL modules 1667-1668 IDOR catalog expansion",
+      "urls_added": 5,
+      "urls_scanned": 9,
+      "findings": 46,
+      "focus": "Compass JWT/CORS labs + WSL modules 1669-1670 + OWASP GenAI lesson drain",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1667: 7→9 findings — web-security-learning-labs-idor-module-route-live-oracle shipped",
-      "web-security-learning-labs.vercel.app/module/1668: 7→9 findings — IDOR route oracle shipped"
+      "www.compass-demo.com/jwt_lab/: 4 findings — postmessage-dom-xss-evidence + dir-discovery, no JWT-bypass live oracle",
+      "www.compass-demo.com/cors/attack/api.php: 4 findings — insecure-cookies + misconfig, no CORS credential-leak live oracle",
+      "b.compass-demo.com/: 1 finding — missing-security-headers only on CORS playground shell",
+      "web-security-learning-labs.vercel.app/module/1669: 7 findings with module-route-evidence",
+      "web-security-learning-labs.vercel.app/module/1670: 7 findings with module-route-evidence",
+      "owaspbased-lessons.vercel.app/lesson/*: 14 findings across unbounded-consumption, prompt-injection, info-disclosure (+3 GenAI route oracles)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "compass-demo.com/xss_lab + /csrf/: route-specific XSS/CSRF live oracles absent (hub-level client-side evidence only)",
-      "WSL module/1669+: extend WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX when new modules ship",
-      "nextjs-security-lesson.vercel.app/* — routes unreachable (DNS/host down)",
+      "compass-demo.com/jwt_lab: JWT alg-none/weak-key bypass oracle absent — only generic postMessage XSS evidence",
+      "compass-demo.com/cors/attack/api.php: null-origin credential-leak CORS oracle absent despite misconfigured ACAO headers in page",
+      "WSL module/1671+: extend WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX when new modules ship",
+      "nextjs-security-lesson.vercel.app/* — routes unreachable (DNS/host down); queue slots wasted each run",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + forgotten-backup)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
-    "web-security-learning-labs.vercel.app/module/1667": 9,
-    "web-security-learning-labs.vercel.app/module/1668": 9,
-    "compass-demo.com": 5,
-    "compass-demo.com/xss_lab": 3,
-    "compass-demo.com/csrf": 4,
-    "web-security-learning-labs.vercel.app/module/1664": 8,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "www.compass-demo.com/jwt_lab": 4,
+    "www.compass-demo.com/cors/attack/api.php": 4,
+    "web-security-learning-labs.vercel.app/module/1669": 7,
+    "web-security-learning-labs.vercel.app/module/1670": 7,
+    "owaspbased-lessons.vercel.app/lesson/unbounded-consumption": 5,
+    "owaspbased-lessons.vercel.app/lesson/prompt-injection": 4,
+    "owaspbased-lessons.vercel.app/lesson/info-disclosure": 5
   }
 }

@@ -1,6 +1,31 @@
 {
   "discovery_urls": [
     {
+      "url": "https://www.compass-demo.com/jwt_lab/",
+      "source": "Compass Security JWT Lab — 5-level JWT bypass training oracle (compass-demo.com demo overview)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.compass-demo.com/cors/attack/api.php",
+      "source": "Compass Security CORS Attack Demo — misconfigured API with null-origin and credential leaks (compass-demo.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1669",
+      "source": "web-security-learning-labs Vercel — module 1669 security lab route (WSL catalog expansion past 1668, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1670",
+      "source": "web-security-learning-labs Vercel — module 1670 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://b.compass-demo.com/",
+      "source": "Compass Security CORS Playground — configurable CORS policy cross-origin oracle (compass-demo.com hub)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://compass-demo.com/",
       "source": "Compass Security web demos — intentional XSS/CSRF/CORS/JWT/NoSQL/CSP bypass training hub (compass-demo.com)",
       "auth": "public_demo"
@@ -12327,6 +12352,31 @@
     {
       "url": "https://react2shell.com",
       "source": "CVE-2025-55182 React2Shell educational demo — RSC deserialization RCE simulation (react2shell.com official site)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.compass-demo.com/jwt_lab/",
+      "source": "Compass Security JWT Lab — 5-level JWT bypass training oracle (compass-demo.com demo overview)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.compass-demo.com/cors/attack/api.php",
+      "source": "Compass Security CORS Attack Demo — misconfigured API with null-origin and credential leaks (compass-demo.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1669",
+      "source": "web-security-learning-labs Vercel — module 1669 security lab route (WSL catalog expansion past 1668, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1670",
+      "source": "web-security-learning-labs Vercel — module 1670 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://b.compass-demo.com/",
+      "source": "Compass Security CORS Playground — configurable CORS policy cross-origin oracle (compass-demo.com hub)",
       "auth": "public_demo"
     }
   ]
