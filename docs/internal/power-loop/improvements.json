@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1658-1660-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1657→1660 + IDOR curated modules 1658-1660 + topic aliases 1658-1660; web-security-learning-labs.vercel.app/module/1658 findings 7→9 (+web-security-learning-labs-idor-module-route-live-oracle Here is a Module: 1658); modules 1659-1660 each fire IDOR route oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-idor-priority-1660",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner priority regex extended from 165[0-7] to 165[0-9]|1660 for web-security-learning-labs-idor-module slugs on /module/1597-1660 routes; ensures IDOR oracle runs before generic placeholder on extended catalog modules; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-idor-pattern-desc-1660",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: generic.ts web-security-learning-labs-idor-module-route-live-oracle description updated 1597–1657→1597–1660; pattern-catalog regenerated; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1653-1657-idor-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1652→1657 + IDOR curated modules 1653-1657 + topic aliases 1651-1657; web-security-learning-labs.vercel.app/module/1653 findings 7→6 with web-security-learning-labs-idor-module-route-live-oracle (Here is a Module: 1653) replacing generic placeholder oracle; modules 1654-1657 each fire IDOR route oracle; benchmark juice-shop 32 findings 6/6 maintained"
@@ -10666,6 +10684,21 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-idor-pattern-desc-1657",
       "shipped_at": "2026-08-15T05:20:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1658-1660-idor-catalog",
+      "shipped_at": "2026-08-15T06:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-idor-priority-1660",
+      "shipped_at": "2026-08-15T06:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-idor-pattern-desc-1660",
+      "shipped_at": "2026-08-15T06:15:00.000Z"
     }
   ]
 }
