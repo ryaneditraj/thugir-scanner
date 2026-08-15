@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-15T01:14:00.000Z",
+  "updated_at": "2026-08-15T02:05:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2772,
-  "total_findings": 27136,
+  "total_sites_scanned": 2778,
+  "total_findings": 27239,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1981,
-  "discovery_findings": 22696,
+  "discovery_urls_added": 1986,
+  "discovery_findings": 22751,
   "improvements_shipped": 1196,
-  "last_run": "2026-08-15T01:14:00.000Z",
+  "last_run": "2026-08-15T02:05:00.000Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 586,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -54,31 +54,33 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 5,
-      "findings": 47,
-      "focus": "DVWU CRLF + notices LFI routes + WSL catalog modules 1643-1645",
+      "findings": 55,
+      "focus": "DVWU graphql + ssrf + sqli routes + WSL catalog modules 1648/1650",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "dvwu.vercel.app/labs/crlf: 13 findings — dvwu-csrf-newsletter-crlf-route-live-oracle + dvwu-crlf-client-route-live-oracle",
-      "dvwu.vercel.app/labs/notices: 13 findings — dvwu-notices-lfi-route-live-oracle + notices-file-lfi-probe (critical LFI)",
-      "web-security-learning-labs.vercel.app/module/1643-1645: 7 findings each — placeholder module-route-evidence only"
+      "dvwu.vercel.app/labs/graphql: 12 findings — dvwu-graphql-lab-route-live-oracle (GraphQL injection)",
+      "dvwu.vercel.app/labs/ssrf: 13 findings — dvwu-ssrf-redirect-route-live-oracle + redirect whitelist bypass SSRF",
+      "dvwu.vercel.app/labs/sqli: 14 findings — dvwu-portal-sqli-route-live-oracle + dvwu-search-sqli-route-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1648-1650: 8 findings each — placeholder module-route-evidence only"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "WSL module/1643-1645: placeholder pages, module-route-evidence only (same as 1630-1642 catalog expansion)",
+      "WSL module/1648-1650: placeholder pages, module-route-evidence only (same as 1630-1647 catalog expansion)",
+      "dvwu.vercel.app/labs/ssrf: route-specific SSRF oracle present but no dedicated /labs/ssrf endpoint probe beyond redirect bypass",
       "nextjs-security-lesson.vercel.app/{admin,login,docs,protected}: scanner reach errors — middleware-gated routes need session/JWT seeding"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "dvwu.vercel.app/labs/sqli": 14,
+    "dvwu.vercel.app/labs/ssrf": 13,
+    "dvwu.vercel.app/labs/graphql": 12,
+    "web-security-learning-labs.vercel.app/module/1648": 8,
+    "web-security-learning-labs.vercel.app/module/1650": 8,
     "dvwu.vercel.app/labs/crlf": 13,
-    "dvwu.vercel.app/labs/notices": 13,
-    "web-security-learning-labs.vercel.app/module/1643": 7,
-    "web-security-learning-labs.vercel.app/module/1644": 7,
-    "web-security-learning-labs.vercel.app/module/1645": 7,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 44,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52
+    "dvwu.vercel.app/labs/notices": 13
   }
 }
