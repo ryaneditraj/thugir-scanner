@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1679-1683-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1678→1683 + IDOR curated modules 1679–1683 + topic aliases; web-security-learning-labs.vercel.app/module/1681 findings 0→9 (+web-security-learning-labs-idor-module-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-command-injection-ssti-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended dvwu.vercel.app/labs/command-injection + /labs/ssti to discovery queue front; command-injection findings 11→12 (+dvwu-command-injection-lab-route-live-oracle); ssti findings 12 (+dvwu-ssti-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-redirect-blocklist-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended ssrf.vulnlab.dev/redirect + /blocklist to discovery queue front; redirect findings 0→15 (+ssrf-vulnlab-redirect-route-live-oracle); blocklist findings 0→15 (+ssrf-vulnlab-blocklist-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1674-1678-idor-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1673→1678 + IDOR curated modules 1674–1678 + topic aliases; web-security-learning-labs.vercel.app/module/1677 findings 7→9 (+web-security-learning-labs-idor-module-route-live-oracle +module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
@@ -2474,6 +2492,21 @@
     }
   ],
   "shipped": [
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-redirect-blocklist-queue-drain",
+      "shipped_at": "2026-08-15T16:00:00.000Z"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-command-injection-ssti-queue-drain",
+      "shipped_at": "2026-08-15T16:00:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1679-1683-idor-catalog",
+      "shipped_at": "2026-08-15T16:00:00.000Z"
+    },
     {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-blog-post-back-javascript-scoped-probe",
