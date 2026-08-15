@@ -2083,6 +2083,8 @@ const DEEP_RULES = new Set<string>([
   "zerohealthAdminUsersRouteLiveOracle",
   "zerohealthMessagesSqliRouteLiveOracle",
   "zerohealthChatbotHistoryRouteLiveOracle",
+  "zerohealthLabResultsRouteLiveOracle",
+  "zerohealthChatbotChatRouteLiveOracle",
   "zerohealthReportsGenerateRouteLiveOracle",
   "zerohealthFilesRouteLiveOracle",
   "zerohealthUsersRouteLiveOracle",
