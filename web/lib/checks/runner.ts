@@ -1939,6 +1939,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePwnshopEvidence",
   "clientSidePwnshopSstiOracle",
   "clientSidePwnshopReviewXssOracle",
+  "clientSidePwnshopAvatarXssOracle",
   "clientSidePwnshopPathTraversalOracle",
   "clientSidePwnshopPrototypePollutionOracle",
   "pwnshopDebugInfoLiveOracle",
@@ -7563,6 +7564,7 @@ function extractDvwuVulnPortalSeeds(html: string, pageUrl: string): string[] {
     "/labs/lfi",
     "/labs/xxe",
     "/labs/cmdi",
+    "/labs/command-injection",
     "/labs/path-traversal",
     "/labs/idor",
     "/labs/graphql",
@@ -7570,6 +7572,9 @@ function extractDvwuVulnPortalSeeds(html: string, pageUrl: string): string[] {
     "/labs/jwt",
     "/labs/deserialization",
     "/labs/ssti",
+    "/labs/broken-auth",
+    "/labs/open-redirect",
+    "/labs/file-upload",
     "/api/comments",
     "/newsletter"
   ]) {
@@ -11512,6 +11517,45 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/labs\/sqli\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-") &&
+        /sqli|portal/.test(p.slug)
+      )
+        return -3;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/labs\/(?:lfi|path-traversal|files|notices)\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-") &&
+        /lfi|path-traversal|files|notices/.test(p.slug)
+      )
+        return -3;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/labs\/(?:csrf|crlf)|\/newsletter\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-") &&
+        /csrf|crlf|newsletter/.test(p.slug)
+      )
+        return -3;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/labs\/ssrf\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-ssrf")
+      )
+        return -3;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/labs\/broken-auth\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-broken-auth")
+      )
+        return -3;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/labs\/open-redirect\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-open-redirect")
+      )
+        return -3;
+      if (
         /vulnshop\.vercel\.app/i.test(origin) &&
         /\/api\/v1\/cart\/update-price\b/i.test(targetInput) &&
         p.slug.startsWith("vulnshop-update-price")
@@ -11955,6 +11999,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("pwnshop-avatar")
       )
         return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/profile\/(?:upload-avatar|update-avatar)\b/i.test(targetInput) &&
+        p.slug.startsWith("client-side-pwnshop-avatar")
+      )
+        return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/profile\/upload-avatar/i.test(targetInput) &&

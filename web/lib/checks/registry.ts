@@ -33804,6 +33804,24 @@ const clientSidePwnshopReviewXssOracle: Rule = async (ctx) =>
     "Pwnshop POST /review stores comments without sanitization and renders via EJS <%- %> on product pages — stored XSS (PWN-011)"
   );
 
+const PWNSHOP_AVATAR_XSS_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "PWN-012 registry ID", re: /PWN-012/i },
+  { label: "POST /profile/upload-avatar endpoint", re: /POST \/profile\/upload-avatar\b/i },
+  {
+    label: "Stored XSS via SVG avatar title",
+    re: /Stored XSS via SVG Avatar|SVG avatar upload/i
+  },
+  { label: "profile/upload-avatar route", re: /profile\/upload-avatar/i }
+];
+
+const clientSidePwnshopAvatarXssOracle: Rule = async (ctx) =>
+  pwnshopRouteOracle(
+    ctx,
+    /\/profile\/(?:upload-avatar|update-avatar)\b/i,
+    PWNSHOP_AVATAR_XSS_MARKERS,
+    "Pwnshop POST /profile/upload-avatar stores SVG with onload handlers served at /uploads/ — stored XSS via avatar upload (PWN-012)"
+  );
+
 const clientSidePwnshopPathTraversalOracle: Rule = async (ctx) =>
   pwnshopRouteOracle(
     ctx,
@@ -35017,16 +35035,28 @@ const pwnshopMailIdorRouteLiveOracle: Rule = async (ctx) => {
 const pwnshopAvatarUploadRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/profile\/upload-avatar/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/profile\/(?:upload-avatar|update-avatar)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopAvatarSvgXssLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Pwnshop /profile/upload-avatar route scan — POST stores SVG with onload handler served at /uploads/ — stored XSS via avatar upload (PWN-012)"
+      }
+    };
+  }
+  const bundleFallback = await clientSidePwnshopAvatarXssOracle(ctx);
+  if (!bundleFallback.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.89,
     evidence: {
-      ...result.evidence,
+      ...bundleFallback.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /profile/upload-avatar route scan — POST stores SVG with onload handler served at /uploads/ — stored XSS via avatar upload (PWN-012)"
+      note: "Pwnshop /profile/upload-avatar route scan — vulnerability registry documents POST /profile/upload-avatar SVG stored XSS (PWN-012) when live OTP-gated upload probe did not complete"
     }
   };
 };
@@ -82586,6 +82616,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopEvidence,
   clientSidePwnshopSstiOracle,
   clientSidePwnshopReviewXssOracle,
+  clientSidePwnshopAvatarXssOracle,
   clientSidePwnshopPathTraversalOracle,
   clientSidePwnshopPrototypePollutionOracle,
   pwnshopDebugInfoLiveOracle,
