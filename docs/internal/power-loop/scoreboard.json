@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14T23:14:00.000Z",
+  "updated_at": "2026-08-15T00:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2753,
-  "total_findings": 26821,
+  "total_sites_scanned": 2765,
+  "total_findings": 26993,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1971,
-  "discovery_findings": 22609,
+  "discovery_urls_added": 1976,
+  "discovery_findings": 22649,
   "improvements_shipped": 1196,
-  "last_run": "2026-08-14T23:14:00.000Z",
+  "last_run": "2026-08-15T00:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 46,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 581,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings, 35 juice-shop live oracles); no benchmark misses"
+      "note": "Stable 6/6 recall (46 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 4,
-      "findings": 19,
-      "focus": "dariansweb/secure-nextjs-lesson (new OSS deploy) + OWASP GenAI misinformation/excessive-agency/vector-embedding",
+      "urls_scanned": 5,
+      "findings": 40,
+      "focus": "WSL module/1639-1642 catalog expansion + DVWU command-injection lab",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "nextjs-security-lesson.vercel.app/: 6 findings — dangerous-html-sinks + reflexion-escalated-ssti on homepage (new dariansweb/secure-nextjs-lesson OSS deploy)",
-      "owaspbased-lessons.vercel.app/lesson/misinformation: 4 findings — owasp-genai-misinformation-route-live-oracle (LLM09)",
-      "owaspbased-lessons.vercel.app/lesson/excessive-agency: 4 findings — owasp-genai-excessive-agency-route-live-oracle (LLM06)",
-      "owaspbased-lessons.vercel.app/lesson/vector-embedding: 5 findings — owasp-genai-vector-embedding-route-live-oracle (LLM08)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1639-1641: 7 findings each — module-route-evidence + client-side bundle only (placeholder modules)",
+      "web-security-learning-labs.vercel.app/module/1642: 8 findings — web-security-learning-labs-placeholder-module-route-live-oracle added",
+      "dvwu.vercel.app/labs/command-injection: 11 findings — dvwu-portal-sqli-live-oracle + dvwu-search-sqli-live-oracle + dvwu-ssrf-redirect-live-oracle (no route-specific command-injection oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "nextjs-security-lesson.vercel.app/{admin,login,docs,protected}: scanner reach errors after homepage OK — middleware-gated routes need session/JWT seeding for live oracles",
-      "nextjs-security-lesson.vercel.app/: no route-specific CSRF/RBAC/ACL oracles yet (homepage SSTI/XSS sinks only)",
+      "WSL module/1639-1642: placeholder pages, module-route-evidence only — no category-specific live oracles",
+      "dvwu.vercel.app/labs/command-injection: route-specific command-injection oracle absent (sqli/ssrf oracles from portal shell only)",
       "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
       "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent without OTP session"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "nextjs-security-lesson.vercel.app/": 6,
-    "owaspbased-lessons.vercel.app/lesson/misinformation": 4,
-    "owaspbased-lessons.vercel.app/lesson/excessive-agency": 4,
-    "owaspbased-lessons.vercel.app/lesson/vector-embedding": 5,
-    "owaspbased-lessons.vercel.app/lesson/unbounded-consumption": 5,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "juice-shop.herokuapp.com": 46,
+    "dvwu.vercel.app/labs/command-injection": 11,
+    "web-security-learning-labs.vercel.app/module/1642": 8,
+    "web-security-learning-labs.vercel.app/module/1639": 7,
+    "web-security-learning-labs.vercel.app/module/1640": 7,
+    "web-security-learning-labs.vercel.app/module/1641": 7,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "brokencrystals.com/userlogin?logobgcolor=red": 52
   }
 }
