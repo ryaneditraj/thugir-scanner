@@ -82,6 +82,8 @@
     "web-security-learning-labs.vercel.app/module/1677": 7,
     "web-security-learning-labs.vercel.app/module/1678": 7,
     "compass-demo.com/csp_demo": 9,
-    "compass-demo.com/angularjs/angularjs_demo.php": 9
+    "compass-demo.com/angularjs/angularjs_demo.php": 9,
+    "web-security-learning-labs.vercel.app/module/1673": 9,
+    "vulnerable-web-site.vercel.app/open-redirect": 6
   }
 }
