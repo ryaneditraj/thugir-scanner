@@ -38306,7 +38306,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1652;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1657;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -38379,7 +38379,12 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1649": "IDOR",
   "1650": "IDOR",
   "1651": "IDOR",
-  "1652": "IDOR"
+  "1652": "IDOR",
+  "1653": "IDOR",
+  "1654": "IDOR",
+  "1655": "IDOR",
+  "1656": "IDOR",
+  "1657": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -38496,7 +38501,14 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1647": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1648": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1649": /IDOR|Insecure Direct Object Reference|object reference/i,
-  "1650": /IDOR|Insecure Direct Object Reference|object reference/i
+  "1650": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1651": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1652": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1653": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1654": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1655": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1656": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1657": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {
