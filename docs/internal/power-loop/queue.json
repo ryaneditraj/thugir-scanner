@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-15T14:06:00.000Z",
+  "updated_at": "2026-08-15T15:04:23.305Z",
   "discovery_urls": [
+    {
+      "url": "https://dvwu.vercel.app/labs/xss",
+      "source": "zahidoverflow/dvwu — XSS reflected/stored lab /labs/xss (DVWU Vercel deploy, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/jwt",
+      "source": "zahidoverflow/dvwu — JWT algorithm confusion lab /labs/jwt (DVWU Vercel deploy, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://seclab.vercel.app/ssti",
+      "source": "DaniSam-STU/security-lab — SSTI lab route (seclab.vercel.app README, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/",
+      "source": "kOaDT/oss-oopssec-store — BFLA live-stream hijack walkthrough (Jun 2026 blog, Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/",
+      "source": "kOaDT/oss-oopssec-store — race-condition TOCTOU coupon abuse walkthrough (Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vuln-expose.vercel.app/network-tools",
       "source": "JuaniVeltri/vuln-expose — SSRF/ping network-tools lab module (GitHub README VulnSite)",
@@ -802,11 +827,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://dvwu.vercel.app/labs/jwt",
-      "source": "zahidoverflow/dvwu — JWT algorithm confusion lab /labs/jwt (DVWU Vercel deploy)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level5.php",
       "source": "webspoilt/vulnforge-academy — Level 5 reflected XSS challenge (GitHub README OWASP A03)",
       "auth": "oss_deploy"
@@ -992,11 +1012,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/",
-      "source": "kOaDT/oss-oopssec-store — BFLA live-stream hijack walkthrough (Jun 2026 blog)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/",
       "source": "kOaDT/oss-oopssec-store — CSRF admin order-update walkthrough (Apr 2026 blog)",
       "auth": "public_demo"
@@ -1079,11 +1094,6 @@
     {
       "url": "https://dvwu.vercel.app/labs/deserialization",
       "source": "zahidoverflow/dvwu — insecure deserialization lab /labs/deserialization (DVWU Vercel deploy)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/jwt",
-      "source": "zahidoverflow/dvwu — JWT algorithm confusion lab /labs/jwt (DVWU Vercel deploy)",
       "auth": "public_demo"
     },
     {
@@ -1285,11 +1295,6 @@
       "url": "https://sandbox-graveyard.vercel.app/",
       "source": "Faraday sandbox-graveyard — intentional Next.js pentest target for auth/IDOR/SSRF/API abuse (Faraday blog 2026)",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/xss",
-      "source": "zahidoverflow/damn-vulnerable-web-university — XSS training lab /labs/xss (DVWU Vercel mirror)",
-      "auth": "oss_deploy"
     },
     {
       "url": "https://dvwu.vercel.app/labs/csrf",
@@ -1654,11 +1659,6 @@
     {
       "url": "https://seclab.vercel.app/ssrf",
       "source": "DaniSam-STU/security-lab — SSRF attack demo module on Vercel deploy (GitHub README)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://seclab.vercel.app/ssti",
-      "source": "DaniSam-STU/security-lab — SSTI attack demo module on Vercel deploy (GitHub README)",
       "auth": "oss_deploy"
     },
     {
@@ -11411,11 +11411,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/",
-      "source": "kOaDT/oss-oopssec-store — race-condition TOCTOU coupon abuse walkthrough with vulnerable code oracle",
-      "auth": "oss_deploy"
-    },
-    {
       "url": "https://the0x-pwn.github.io/lab-xss/",
       "source": "the0x-pwn/lab-xss — 10-challenge reflected/DOM/filter-bypass XSS training dashboard (GitHub Pages)",
       "auth": "public_demo"
@@ -12495,5 +12490,6 @@
       "source": "sr33jih/vulnshop — BFLA admin orders list oracle GET /api/v1/admin/orders (OWASP API Top 10 lab)",
       "auth": "public_demo"
     }
-  ]
+  ],
+  "discovery_urls_added": 0
 }

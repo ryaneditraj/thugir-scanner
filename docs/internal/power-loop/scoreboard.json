@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-15T14:44:36.023Z",
+  "updated_at": "2026-08-15T15:05:29.651Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2870,
-  "total_findings": 28465,
+  "total_sites_scanned": 2876,
+  "total_findings": 28565,
   "critical_findings": 66,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2039,
-  "discovery_findings": 23189,
+  "discovery_findings": 23241,
   "improvements_shipped": 1196,
-  "last_run": "2026-08-15T14:44:36.023Z",
+  "last_run": "2026-08-15T15:05:29.651Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "15",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 583,
+      "probes_run": 581,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,40 @@
           ]
         }
       },
-      "note": "Primary Heroku cold-start failed; staging fallback 47 findings 6/6 recall with 31 juice-shop live-oracles"
+      "note": "Stable 6/6 first-pass recall (48 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 5,
-      "findings": 66,
-      "focus": "vuln-expose network-tools/blog/invoices route oracles + WSL modules 1677–1678 catalog expansion",
+      "findings": 52,
+      "focus": "DVWU XSS/JWT first-pass route oracles + OopsSec live-stream/race-condition walkthroughs + seclab SSTI stub",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (47 findings, 583 probes) — primary Heroku failed, staging fallback",
-      "vuln-expose.vercel.app/network-tools: 18 findings — vuln-expose-network-tools-route-live-oracle + SSRF/ping lab module",
-      "vuln-expose.vercel.app/blog: 17 findings — vuln-expose-blog-stored-xss-route-live-oracle shipped",
-      "vuln-expose.vercel.app/invoices: 17 findings — vuln-expose-invoices-sqli-route-live-oracle shipped",
-      "web-security-learning-labs.vercel.app/module/1677: 7 findings — WSL catalog module route evidence",
-      "web-security-learning-labs.vercel.app/module/1678: 7 findings — WSL catalog module route evidence"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 581 probes) — no benchmark misses",
+      "dvwu.vercel.app/labs/xss: 14 findings — dvwu-search-xss-route-live-oracle + dvwu-comments-xss-route-live-oracle first-pass",
+      "dvwu.vercel.app/labs/jwt: 12 findings — dvwu-jwt-lab-route-live-oracle confirmed",
+      "koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/: 8 findings — oopssec-live-stream-bfla-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/: 12 findings — oopssec-race-condition-coupon-route-live-oracle shipped",
+      "seclab.vercel.app/ssti: 6 findings — Angular SPA stub only (seclab-angular-stub-route-live-oracle), no SSTI live oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "nextjs-security-lesson.vercel.app/protected|docs|login — discovery queue errors (site unreachable)",
-      "vuln-expose.vercel.app/network-tools/blog/invoices — route oracles fire but live SSRF ping / stored XSS / invoices SQLi probes need authenticated session",
-      "web-security-learning-labs.vercel.app/module/1677–1678 — module-specific injection oracles still absent (generic WSL module evidence only)",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)"
+      "seclab.vercel.app/ssti — SSTI lab route is Angular SPA stub; live template-injection oracle absent",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "dvwu.vercel.app/labs/xss — XSS route oracles fire but stored XSS confirmation needs authenticated session on comments panel"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 48,
+    "dvwu.vercel.app/labs/xss": 14,
+    "dvwu.vercel.app/labs/jwt": 12,
+    "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/": 12,
+    "koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/": 8,
+    "seclab.vercel.app/ssti": 6,
     "vuln-expose.vercel.app/network-tools": 18,
-    "vuln-expose.vercel.app/blog": 17,
-    "vuln-expose.vercel.app/invoices": 17,
-    "web-security-learning-labs.vercel.app/module/1677": 7,
-    "web-security-learning-labs.vercel.app/module/1678": 7,
-    "compass-demo.com/csp_demo": 9,
-    "compass-demo.com/angularjs/angularjs_demo.php": 9,
-    "web-security-learning-labs.vercel.app/module/1673": 9,
-    "vulnerable-web-site.vercel.app/open-redirect": 6
+    "vuln-expose.vercel.app/blog": 17
   }
 }
