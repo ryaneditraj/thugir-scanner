@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1664-1666-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1663→1666 + IDOR curated modules 1664-1666 + topic aliases; web-security-learning-labs.vercel.app/module/1664 findings 7→8 (+web-security-learning-labs-idor-module-route-live-oracle Here is a Module: 1664); module/1665 7→8; module/1666 6 findings with IDOR route oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-idor-priority-1666",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner priority regex extended 166[0-3]→166[0-6] for web-security-learning-labs-idor-module slugs on /module/1597-1666 routes; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-idor-pattern-desc-1666",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: generic.ts web-security-learning-labs-idor-module-route-live-oracle description updated 1597–1663→1597–1666; pattern-catalog regenerated; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1661-1663-idor-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1660→1663 + IDOR curated modules 1661-1663 + topic aliases; web-security-learning-labs.vercel.app/module/1661 findings 8 with +web-security-learning-labs-idor-module-route-live-oracle (Here is a Module: 1661); module/1662 5→9 with IDOR route oracle; benchmark juice-shop 48 findings 6/6 maintained"
@@ -10732,6 +10750,21 @@
       "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-command-injection-route-html-fallback",
       "shipped_at": "2026-08-15T07:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1664-1666-idor-catalog",
+      "shipped_at": "2026-08-15T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-idor-priority-1666",
+      "shipped_at": "2026-08-15T08:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-idor-pattern-desc-1666",
+      "shipped_at": "2026-08-15T08:10:00.000Z"
     }
   ]
 }
