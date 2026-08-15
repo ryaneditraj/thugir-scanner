@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1667-1668-idor-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1666→1668 + IDOR curated modules 1667-1668 + topic aliases; web-security-learning-labs.vercel.app/module/1667 findings 7→9 (+web-security-learning-labs-idor-module-route-live-oracle Here is a Module: 1667); module/1668 7→9 with IDOR route oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-idor-priority-1668",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner priority regex extended 166[0-6]→166[0-8] for web-security-learning-labs-idor-module slugs on /module/1597-1668 routes; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-idor-pattern-desc-1668",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: generic.ts web-security-learning-labs-idor-module-route-live-oracle description updated 1597–1666→1597–1668; pattern-catalog regenerated; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1664-1666-idor-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1663→1666 + IDOR curated modules 1664-1666 + topic aliases; web-security-learning-labs.vercel.app/module/1664 findings 7→8 (+web-security-learning-labs-idor-module-route-live-oracle Here is a Module: 1664); module/1665 7→8; module/1666 6 findings with IDOR route oracle; benchmark juice-shop 48 findings 6/6 maintained"
