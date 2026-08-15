@@ -38306,7 +38306,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1632;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1637;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 
 for (let moduleNum = WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN; moduleNum <= WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX; moduleNum++) {
@@ -38359,7 +38359,12 @@ const WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES: Record<string, string> = {
   "1629": "IDOR",
   "1630": "IDOR",
   "1631": "IDOR",
-  "1632": "IDOR"
+  "1632": "IDOR",
+  "1633": "IDOR",
+  "1634": "IDOR",
+  "1635": "IDOR",
+  "1636": "IDOR",
+  "1637": "IDOR"
 };
 for (const [moduleId, topic] of Object.entries(WEB_SECURITY_LEARNING_EXTENDED_CURATED_MODULES)) {
   WEB_SECURITY_LEARNING_MODULE_TOPICS[moduleId] = topic;
@@ -38458,7 +38463,12 @@ const WEB_SECURITY_LEARNING_MODULE_TOPIC_ALIASES: Record<string, RegExp> = {
   "1629": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1630": /IDOR|Insecure Direct Object Reference|object reference/i,
   "1631": /IDOR|Insecure Direct Object Reference|object reference/i,
-  "1632": /IDOR|Insecure Direct Object Reference|object reference/i
+  "1632": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1633": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1634": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1635": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1636": /IDOR|Insecure Direct Object Reference|object reference/i,
+  "1637": /IDOR|Insecure Direct Object Reference|object reference/i
 };
 
 function webSecurityLearningLabsPlaceholderModuleShell(moduleId: string, corpus: string): boolean {

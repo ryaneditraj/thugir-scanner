@@ -9307,8 +9307,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   ) {
     await primeBrokencrystalsRouteOracleProbes(probe, origin, effectiveTargetInput);
   }
+  const pwnshopPostCrawlOtpPrimeRoute =
+    /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/search\/filters/i.test(targetInput);
   if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
-    await primePwnshopOtpSessionForDeepScan(probe, origin, targetInput, home);
+    // Auth-gated routes re-prime OTP after crawl — skip redundant pre-crawl handshake (rate limits).
+    if (!pwnshopPostCrawlOtpPrimeRoute) {
+      await primePwnshopOtpSessionForDeepScan(probe, origin, targetInput, home);
+    }
     await primePwnshopAuditLogOracleForDeepScan(probe, origin, targetInput, home);
   }
   if (/bypass403\.vercel\.app/i.test(origin)) {
@@ -10802,7 +10807,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("pwnshop-") &&
         /avatar|upload/.test(p.slug)
       )
-        return -3;
+        return -4;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/debug\/info|\/api\/v1\/events|\/admin\/export-orders|\/logs\b/i.test(targetInput) &&
@@ -11408,7 +11413,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-9]|163[0-2])\b/i.test(targetInput) &&
+        /\/module\/(?:159[7-9]|160[0-9]|161[0-9]|162[0-9]|163[0-7])\b/i.test(targetInput) &&
         p.slug.startsWith("web-security-learning-labs-idor-module")
       )
         return -3;
@@ -11777,7 +11782,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/profile\/upload-avatar/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-avatar")
       )
-        return -3;
+        return -4;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/profile\/upload-avatar/i.test(targetInput) &&
