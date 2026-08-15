@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-xss-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search?q=<script> reflects unescaped on /labs/xss route scan; dvwu.vercel.app/labs/xss findings 14→15 (+dvwu-xss-lab-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "wsl-idor-module-runner-priority-1674-1683",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner IDOR module priority regex extended 167[0-3]→167[0-9]|168[0-3]; web-security-learning-labs.vercel.app/module/1679 findings 7→9 (+web-security-learning-labs-idor-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-admin-login-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: deep-scan priority boost for /api/auth/admin/login + brokencrystals-admin-login-*; brokencrystals.com/api/auth/admin/login route scan confirms brokencrystals-admin-login-bfla-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1679-1683-idor-catalog",
       "status": "shipped",
