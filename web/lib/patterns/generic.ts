@@ -41603,7 +41603,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "info",
     title: "Web Security Learning Labs extended IDOR module route live oracle",
     description:
-      "When scanning extended curated IDOR catalog modules (1597–1652) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell without object-reference lab content — route-specific IDOR catalog placeholder oracle.",
+      "When scanning extended curated IDOR catalog modules (1597–1657) on web-security-learning-labs.vercel.app, confirm the Here is a Module: {id} placeholder shell without object-reference lab content — route-specific IDOR catalog placeholder oracle.",
     impactOneline:
       "Route-specific identification of unreleased WSL IDOR catalog modules prevents missing topic context on empty Next.js shells.",
     detectorKind: "rule_ref",
