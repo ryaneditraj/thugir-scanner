@@ -41883,6 +41883,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "crapi-user-videos-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI user videos BOLA live oracle",
+    description:
+      "GET /identity/api/v2/user/videos/{id} returns another user's video_name and conversion_params without object-level authorization — the crAPI video BOLA profile oracle.",
+    impactOneline:
+      "Live crAPI video BOLA oracle confirms cross-user video metadata reads when probing /identity/api/v2/user/videos/{id}.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiUserVideosBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — enforce object-level authorization on video endpoints in production.",
+      steps: [
+        "Verify the authenticated user owns the video before returning metadata.",
+        "Use opaque non-guessable video IDs and avoid sequential identifiers.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI /identity/api/v2/user/videos/{id} endpoint returns another user's video metadata. Show BOLA remediation for video resources.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-user-videos-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI user videos route BOLA live oracle",
+    description:
+      "When scanning /identity/api/v2/user/videos, authenticated GET on /user/videos/{id} returns another user's video metadata without object-level authorization — route-specific crAPI BOLA oracle.",
+    impactOneline:
+      "Route scans on user video endpoints should confirm cross-user video metadata reads (OWASP crAPI challenge 5).",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiUserVideosBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — enforce object-level authorization on video endpoints in production.",
+      steps: [
+        "Verify the authenticated user owns the video before returning metadata.",
+        "Use opaque non-guessable video IDs and avoid sequential identifiers.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /identity/api/v2/user/videos route scan confirms BOLA via cross-user video metadata reads. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi-community-posts-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -47293,6 +47345,32 @@ export const genericPatterns: Pattern[] = [
       "Live SSTI preview oracle on Burp Bounty Lab confirms content-parameter template injection profile coverage distinct from /ssti/render.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "burpbountySstiPreviewLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into template engines without a strict sandbox.",
+      steps: [
+        "Use logic-less templates or sandboxed rendering contexts.",
+        "Reject template syntax characters in user-controlled preview fields.",
+        "Isolate Burp Bounty Lab SSTI routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ssti/preview endpoint evaluates user content as templates. Show how to sandbox preview rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ssti-preview-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /ssti/preview route SSTI live oracle",
+    description:
+      "When scanning /ssti/preview, content={{7*7}} evaluates arithmetic to 49 in the preview div — route-specific SSTI content-preview profile oracle.",
+    impactOneline:
+      "Route-specific SSTI oracle confirms server-side template injection when scanning the Burp Bounty Lab /ssti/preview practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySstiPreviewRouteLiveOracle" },
     tierRequired: "deep",
     remediation: {
       summary: "Never pass user input into template engines without a strict sandbox.",
