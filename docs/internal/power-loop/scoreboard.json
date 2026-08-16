@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T06:20:00.000Z",
+  "updated_at": "2026-08-16T07:19:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2734,
-  "total_findings": 26698,
+  "total_sites_scanned": 2731,
+  "total_findings": 26582,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1959,
-  "discovery_findings": 22629,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-16T06:20:00.000Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22545,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-16T07:19:30.000Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 16,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 500,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings) — no benchmark misses"
+      "note": "Stable 6/6 recall (16 findings); generic bundle + live-oracle mix; no secret-resend slug"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 3,
-      "findings": 139,
-      "focus": "WSL catalog 1731-1740 + Broken Crystals PUT info route oracle + Pwnshop chat jailbreak refresh",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 58,
+      "focus": "WSL modules 1741-1743 catalog expansion + ist-edu-bd command-injection + vulnshop products API + queue drain 1737/1739/1740",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1732: placeholder-module-route-live-oracle now fires (catalog 1730→1740)",
-      "brokencrystals.com/api/users/one/regular_user/info: 17→87 findings — brokencrystals-mass-assignment-put-route-live-oracle shipped",
-      "pwnshop.ctfsecurity.com/api/v1/chat/query: 17→45 findings — pwnshop-chat-prompt-injection jailbreak fix restores PWN-031 oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (16 findings) — no benchmark misses",
+      "vulnshop.vercel.app/api/v1/products: 14 findings — vulnshop-products-sqli-route-live-oracle + payment/wallet/order live oracles",
+      "ist-edu-bd.vercel.app/labs/command-injection: 8 findings — LFI probe + SQLi evidence but no route-specific command-injection live oracle",
+      "web-security-learning-labs.vercel.app/module/1742: 8 findings — placeholder module + dangerous-html-sinks",
+      "web-security-learning-labs.vercel.app/module/1741: 6 findings — active WSL module route evidence",
+      "web-security-learning-labs.vercel.app/module/1743: 5 findings — placeholder module route"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "nextjs-security-lesson.vercel.app/{admin,login,docs,protected}: scanner reach errors — middleware-gated routes need session/JWT seeding",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle intermittent under PwnMail OTP rate limits when batched"
+      "ist-edu-bd.vercel.app/labs/command-injection: no route-specific command-injection live oracle (LFI/SQLi probes only)",
+      "web-security-learning-labs.vercel.app/module/1743: placeholder module — no vuln-specific live oracle beyond platform evidence",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via leaked-api-key + security-question)",
+      "dvwu.vercel.app/labs/race-condition + /labs/xxe: queued but not drained this run (48h skip window)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "brokencrystals.com/api/users/one/regular_user/info": 87,
-    "pwnshop.ctfsecurity.com/api/v1/chat/query": 45,
-    "web-security-learning-labs.vercel.app/module/1732": 7,
-    "dvwu.vercel.app/labs/cmdi": 14,
-    "pwnshop.ctfsecurity.com/seller/preview": 44
+    "juice-shop.herokuapp.com": 16,
+    "vulnshop.vercel.app/api/v1/products": 14,
+    "web-security-learning-labs.vercel.app/module/1742": 8,
+    "ist-edu-bd.vercel.app/labs/command-injection": 8,
+    "web-security-learning-labs.vercel.app/module/1740": 7,
+    "web-security-learning-labs.vercel.app/module/1741": 6,
+    "web-security-learning-labs.vercel.app/module/1739": 5,
+    "web-security-learning-labs.vercel.app/module/1743": 5,
+    "web-security-learning-labs.vercel.app/module/1737": 5
   }
 }
