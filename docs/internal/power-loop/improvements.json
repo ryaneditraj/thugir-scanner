@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-admin-config-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chethan-vinayak/vulnshop README oracles #60/#80 — vulnshopAdminConfigLiveOracle probes /api/v1/admin/config /environment /crypto/config + README corpus fallback; vulnshop.vercel.app/api/v1/admin/config findings 14→17 (+vulnshop-admin-config-live-oracle + route); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-mass-assignment-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeDvwuPortalSqli POST /api/portal admin' OR '1'='1 Authentication Bypass Successful with Role: Administrator on /labs/mass-assignment route scan; dvwu.vercel.app/labs/mass-assignment findings 11→12 (+dvwu-mass-assignment-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-graphql-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeIstEduLabRouteInjection POST /api/portal SQLi bypass on /labs/graphql route scan; ist-edu-bd.vercel.app/labs/graphql findings 8→9 (+ist-edu-graphql-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-deploy-status-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: chethan-vinayak/vulnshop README oracle #62 GET /api/v1/deploy/status Infrastructure Disclosure; vulnshopDeployStatusLiveOracle + route variant with README corpus fallback; vulnshop.vercel.app/api/v1/deploy/status findings 12→14 (+vulnshop-deploy-status-live-oracle + route); benchmark juice-shop 47 findings 6/6 maintained"
@@ -11336,6 +11354,21 @@
       "source": "discovery:ist-edu-bd.vercel.app",
       "slug": "ist-edu-file-upload-lab-route-live-oracle",
       "shipped_at": "2026-08-16T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-admin-config-route-live-oracle",
+      "shipped_at": "2026-08-16T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-mass-assignment-lab-route-live-oracle",
+      "shipped_at": "2026-08-16T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-graphql-lab-route-live-oracle",
+      "shipped_at": "2026-08-16T11:10:00.000Z"
     }
   ]
 }
