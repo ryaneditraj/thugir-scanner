@@ -33146,6 +33146,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnerable-web-site-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Vulnerable Web Site /login route session live oracle",
+    description:
+      "When scanning /login on vulnerable-web-site.vercel.app, POST /api/user signup plus POST /api/login returns a session token and GET /profile succeeds — route-specific session oracle for auth-gated CSRF/XSS/SSRF lab probes.",
+    impactOneline:
+      "Route-specific confirmation that the login surface bootstraps authenticated sessions for Vulnerable Web Site training labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableWebSiteLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rate-limit signup/login and isolate training labs — VulnSite is intentional training software.",
+      steps: [
+        "Add rate limiting on /api/user and /api/login endpoints.",
+        "Require email verification before granting session tokens.",
+        "Run Vulnerable Web Site only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vulnerable-web-site.vercel.app /login route bootstraps sessions for CSRF/XSS lab probes. Show signup/login hardening for training deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnerable-web-site-csrf-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
