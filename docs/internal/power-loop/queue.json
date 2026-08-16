@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T12:05:00.000Z",
+  "updated_at": "2026-08-16T13:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1750",
@@ -12854,7 +12854,32 @@
       "url": "https://web-security-learning-labs.vercel.app/module/1756",
       "source": "web-security-learning-labs Vercel — module 1756 security lab route (WSL catalog expansion, Aug 2026 discovery)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/damn-vulnerable-ai-bank-dvaib/",
+      "source": "OWASP VWAD — Damn Vulnerable AI Bank DVAIB prompt-injection training lab directory entry (web search Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.dvaib.com/",
+      "source": "Subhash Dasyam DVAIB — Damn Vulnerable AI Bank live prompt-injection scenarios (OWASP VWAD + web search Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/comments",
+      "source": "yashasrnair/VulnShop — stored XSS comments oracle GET/POST /api/v1/comments (GitHub README A03 injection)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1757",
+      "source": "web-security-learning-labs Vercel — module 1757 security lab route (WSL catalog expansion past 1756, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1758",
+      "source": "web-security-learning-labs Vercel — module 1758 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
     }
   ],
-  "discovery_urls_added": 20
+  "discovery_urls_added": 25
 }
