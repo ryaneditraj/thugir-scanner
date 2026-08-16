@@ -11731,6 +11731,12 @@ const burpbountySstiPreviewLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountySstiPreviewRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/ssti\/preview\b/i,
+  burpbountySstiPreviewLiveOracle,
+  "Burp Bounty Lab /ssti/preview route scan — content={{7*7}} evaluates to 49 in preview div — SSTI content-preview profile oracle"
+);
+
 const burpbountyXssUrlLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const canary = `thugirUrlXss${Date.now().toString(36)}`;
@@ -38983,7 +38989,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1764;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1767;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -76357,6 +76363,114 @@ const crapiVehicleLocationRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const CRAPI_USER_VIDEOS_ROUTE_FALLBACK = `
+GET /identity/api/v2/user/videos/{videoId}
+returns video_name conversion_params for another user's video without object-level authorization
+BOLA API1:2023 OWASP crAPI challenge 5
+`;
+
+const CRAPI_USER_VIDEOS_PROBE_IDS = [1, 2, 3, 4, 5, 10, 20, 30, 36, 37, 52, 53];
+
+function parseCrapiVideoIds(body: string): number[] {
+  try {
+    const data = JSON.parse(body) as unknown;
+    if (!Array.isArray(data)) return [];
+    return data
+      .map((v) => (typeof v === "object" && v && "id" in v ? Number((v as { id?: number }).id) : NaN))
+      .filter((id) => Number.isInteger(id) && id > 0);
+  } catch {
+    return [];
+  }
+}
+
+function parseCrapiVideoRecord(body: string): { id?: number; video_name?: string; conversion_params?: string } | null {
+  try {
+    const data = JSON.parse(body) as { id?: number; video_name?: string; conversion_params?: string };
+    if (!data || typeof data !== "object") return null;
+    if (!data.video_name && !data.conversion_params && data.id == null) return null;
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+const crapiUserVideosBolaLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (isCrapiAuthRoute(ctx)) return NEGATIVE;
+  const jwt = await tryCrapiLabJwt(ctx);
+  if (!jwt) return NEGATIVE;
+  const authHeaders = { Authorization: `Bearer ${jwt}` };
+  const listUrl = new URL("/identity/api/v2/user/videos", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: authHeaders
+  });
+  const ownVideoIds = new Set<number>(parseCrapiVideoIds(listDoc.body));
+  for (const videoId of CRAPI_USER_VIDEOS_PROBE_IDS) {
+    const videoUrl = new URL(`/identity/api/v2/user/videos/${videoId}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(videoUrl, {
+      maxBytes: 8192,
+      timeoutMs: 15000,
+      headers: authHeaders
+    });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    const video = parseCrapiVideoRecord(doc.body);
+    if (!video) continue;
+    const resolvedId = video.id ?? videoId;
+    if (ownVideoIds.has(resolvedId)) continue;
+    if (!video.video_name && !video.conversion_params) continue;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        listUrl,
+        videoUrl,
+        videoId: resolvedId,
+        videoName: video.video_name,
+        conversionParams: video.conversion_params,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: `crAPI GET /identity/api/v2/user/videos/${resolvedId} returns another user's video metadata (video_name/conversion_params) without object-level authorization — BOLA oracle (API1)`
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const crapiUserVideosBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/user\/videos\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await crapiUserVideosBolaLiveOracle(ctx);
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "crAPI /identity/api/v2/user/videos route scan — authenticated GET on /user/videos/{id} returns another user's video metadata without object-level authorization — BOLA route oracle (API1)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_USER_VIDEOS_ROUTE_FALLBACK}`;
+  if (
+    !/\/identity\/api\/v2\/user\/videos/i.test(corpus) ||
+    !/conversion_params|video_name|BOLA|API1/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /identity/api/v2/user/videos/{videoId} — video_name, conversion_params",
+      note: "crAPI /identity/api/v2/user/videos route scan — OWASP crAPI documents cross-user video metadata reads (API1) — route corpus fallback when JWT signup/login chain is unreachable"
+    }
+  };
+};
+
 const crapiCommunityPostsRouteLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -85116,6 +85230,8 @@ export const RULES: Record<string, Rule> = {
   crapiVehicleBolaLiveOracle,
   crapiVehicleRouteLiveOracle,
   crapiVehicleLocationRouteLiveOracle,
+  crapiUserVideosBolaLiveOracle,
+  crapiUserVideosBolaRouteLiveOracle,
   crapiCommunityPostsRouteLiveOracle,
   crapiContactMechanicSsrfLiveOracle,
   crapiContactMechanicSsrfRouteLiveOracle,
@@ -86085,6 +86201,7 @@ export const RULES: Record<string, Rule> = {
   burpbountyRedirectMetaLiveOracle,
   burpbountyRedirectMetaRouteLiveOracle,
   burpbountySstiRenderRouteLiveOracle,
+  burpbountySstiPreviewRouteLiveOracle,
   burpbountySsrfSchemeRouteLiveOracle,
   burpbountyXxeParseRouteLiveOracle,
   burpbountyXssEncodedLiveOracle,
