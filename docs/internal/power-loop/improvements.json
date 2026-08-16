@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1711-1715-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1710→1715 + runner placeholder-module priority regex extended for 1711–1715; web-security-learning-labs.vercel.app/module/1711 findings 7→5 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1709 findings 5→8 with placeholder oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:support-reliability-lab.vercel.app",
+      "slug": "support-reliability-lab-broken-domain-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /s/broken-domain Invalid custom domain configuration + wildcard needs nameservers + docs/incidents/invalid-domain.md; support-reliability-lab.vercel.app/s/broken-domain findings 11 (+support-reliability-lab-broken-domain-live-oracle +route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:support-reliability-lab.vercel.app",
+      "slug": "support-reliability-lab-home-hub-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET / Support Reliability Lab multi-tenant incident hub with tenant table and /admin link; support-reliability-lab.vercel.app/ findings 13 (+support-reliability-lab-home-hub-live-oracle +route-live-oracle +admin-console); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1701-1710-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1700→1710 + runner placeholder-module priority regex extended for 1701–1710; web-security-learning-labs.vercel.app/module/1706 findings 5 (+web-security-learning-labs-placeholder-module-route-live-oracle without checkpoint fallback); benchmark juice-shop 48 findings 6/6 maintained"
