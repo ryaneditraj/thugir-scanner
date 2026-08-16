@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T07:18:08.956Z",
+  "updated_at": "2026-08-16T07:19:59.464Z",
   "discovery_urls": [
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1741",
@@ -347,11 +347,6 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://dvwu.vercel.app/labs/deserialization",
-      "source": "zahidoverflow/dvwu — insecure deserialization lab /labs/deserialization (DVWU Vercel deploy)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://dvwu.vercel.app/labs/race-condition",
       "source": "zahidoverflow/damn-vulnerable-web-university — race condition lab module (dvwu.vercel.app README)",
       "auth": "public_demo"
@@ -360,11 +355,6 @@
       "url": "https://dvwu.vercel.app/labs/xxe",
       "source": "zahidoverflow/damn-vulnerable-web-university — XXE training lab /labs/xxe (DVWU Vercel mirror)",
       "auth": "oss_deploy"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/file-upload",
-      "source": "zahidoverflow/dvwu — unrestricted file upload lab module (DVWU Vercel deploy README)",
-      "auth": "public_demo"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1694",
@@ -12754,6 +12744,16 @@
       "url": "https://vulnshop.vercel.app/api/v1/admin/orders",
       "source": "sr33jih/vulnshop — BFLA admin orders list oracle GET /api/v1/admin/orders (OWASP API Top 10 lab)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1745",
+      "source": "web-security-learning-labs Vercel — module 1745 security lab route (WSL catalog expansion past 1740, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1744",
+      "source": "web-security-learning-labs Vercel — module 1744 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
     }
   ],
   "discovery_urls_added": 10
