@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-transfer-csrf-fallback-hardening",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SECUREBANK_BLOG_ARTICLE_FALLBACK extended with Fake page posts a transfer form + silently sends bank transfer request; csrfOk accepts returns a 403; securebank-blog.vercel.app/transfer findings 2→4 (+securebank-blog-transfer-csrf-route-live-oracle on 404-only corpus); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1776-1780-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1775→1780 + placeholder priority regex extended to module/1780; web-security-learning-labs.vercel.app/module/1778 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-web-site.vercel.app",
+      "slug": "vulnerable-web-site-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/user signup + POST /api/login returns session token and GET /profile succeeds when scanning /login; vulnerable-web-site.vercel.app/login findings 5→6 (+vulnerable-web-site-login-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1773-1775-catalog",
       "status": "shipped",
@@ -11588,6 +11606,21 @@
       "source": "discovery:hack-health-tutorial.vercel.app",
       "slug": "hack-health-a03-sql-injection-route-live-oracle",
       "shipped_at": "2026-08-16T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-transfer-csrf-fallback-hardening",
+      "shipped_at": "2026-08-16T21:20:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1776-1780-catalog",
+      "shipped_at": "2026-08-16T21:20:00.000Z"
+    },
+    {
+      "source": "discovery:vulnerable-web-site.vercel.app",
+      "slug": "vulnerable-web-site-login-route-live-oracle",
+      "shipped_at": "2026-08-16T21:20:00.000Z"
     }
   ]
 }

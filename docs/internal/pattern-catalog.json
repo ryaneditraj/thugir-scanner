@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-16T20:12:41.635Z",
-  "total": 2438,
-  "uniqueSlugs": 2434,
+  "generatedAt": "2026-08-16T21:18:02.314Z",
+  "total": 2439,
+  "uniqueSlugs": 2435,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2420,
+    "generic": 2421,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2353,
+    "deep": 2354,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 116,
     "Security misconfiguration": 186,
-    "Broken authentication": 146,
+    "Broken authentication": 147,
     "Injection": 369,
     "Cross-site scripting": 700,
     "Open redirect": 21,
@@ -2200,6 +2200,7 @@
     "vulnerable-web-site-clickjacking-route-live-oracle",
     "vulnerable-web-site-command-injection-route-live-oracle",
     "vulnerable-web-site-csrf-route-live-oracle",
+    "vulnerable-web-site-login-route-live-oracle",
     "vulnerable-web-site-open-redirect-route-live-oracle",
     "vulnerable-web-site-path-traversal-route-live-oracle",
     "vulnerable-web-site-sqli-route-live-oracle",

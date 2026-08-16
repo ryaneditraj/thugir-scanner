@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T21:42:13.607Z",
+  "updated_at": "2026-08-16T21:42:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -20,10 +20,10 @@
   "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2005,
+  "discovery_urls_added": 2007,
   "discovery_findings": 23352,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-16T21:42:13.607Z",
+  "improvements_shipped": 1202,
+  "last_run": "2026-08-16T21:42:00.000Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
@@ -52,11 +52,11 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 97,
-      "focus": "DVWU XSS/JWT labs + vuln-expose network-tools/blog/invoices + WSL 1677-1678 queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 7,
+      "urls_scanned": 10,
+      "findings": 115,
+      "focus": "DVWU XSS/JWT + vuln-expose hubs + WSL 1677-1678 queue drain + SecureBank CSRF fallback + VWS login oracle",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
@@ -65,13 +65,15 @@
       "vuln-expose.vercel.app/network-tools: 18 findings — SSRF/ping oracle hub",
       "vuln-expose.vercel.app/blog: 17 findings — stored XSS comment oracle",
       "vuln-expose.vercel.app/invoices: 17 findings — IDOR invoice enumeration hub",
-      "web-security-learning-labs.vercel.app/module/1677: 9 findings — WSL extended module route oracle",
+      "securebank-blog.vercel.app/transfer: 2→4 findings — securebank-blog-transfer-csrf-fallback-hardening",
+      "vulnerable-web-site.vercel.app/login: 5→6 findings — vulnerable-web-site-login-route-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1778: 7→8 findings — WSL catalog 1776-1780 expansion",
       "damn-vulnerable-startup.fly.dev/challenges/owasp: scan error (fly.dev unreachable)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "New queue URLs (WSL 1776-1778, dvaib.com/login, vulnshop /api/v1/cart) not yet scanned — prior queue backlog",
+      "New queue URLs (dvaib.com/login, vulnshop /api/v1/cart, WSL 1776-1780) not yet scanned — prior queue backlog",
       "damn-vulnerable-startup.fly.dev/*: DVS DeployBro fly.dev returns errors",
       "vampi.lab.pentest-forge.com/*: PentestForge labs return 502 Bad Gateway"
     ]
@@ -83,7 +85,7 @@
     "vuln-expose.vercel.app/invoices": 17,
     "dvwu.vercel.app/labs/xss": 15,
     "dvwu.vercel.app/labs/jwt": 12,
-    "web-security-learning-labs.vercel.app/module/1677": 9,
-    "web-security-learning-labs.vercel.app/module/1678": 9
+    "securebank-blog.vercel.app/transfer": 4,
+    "vulnerable-web-site.vercel.app/login": 6
   }
 }
