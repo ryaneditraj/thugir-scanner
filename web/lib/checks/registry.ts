@@ -20603,6 +20603,90 @@ const clientSideJavaSecLabEvidence: Rule = async (ctx) => {
   };
 };
 
+function isJavaSecLabHost(ctx: RuleContext): boolean {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  return /whgojp\.top/i.test(pageUrl) || /JavaSecLab|JavaSeclab/i.test(ctx.combined);
+}
+
+const JAVA_SECLAB_WIKI_FALLBACK = `
+GET /xss/reflect/vul1?payload= — JSON-return reflected XSS (GET/POST)
+GET /xss/reflect/vul2?payload= — String direct output reflected XSS
+GET /xss/reflect/vul3?type=html&payload= — text/html reflected XSS
+`;
+
+const JAVASECLAB_XSS_REFLECTION_PROBE = "thugir-javaseclab-xss-reflect-probe";
+
+const javaSecLabReflectedXssLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probe = JAVASECLAB_XSS_REFLECTION_PROBE;
+  const vul2Url = new URL(
+    `/xss/reflect/vul2?payload=${encodeURIComponent(probe)}`,
+    ctx.origin
+  ).toString();
+  const doc = await ctx.probe.get(vul2Url, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status >= 200 && doc.status < 400 && doc.body.includes(probe)) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        probeUrl: vul2Url,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "JavaSecLab GET /xss/reflect/vul2?payload= reflects attacker input directly in response body — reflected XSS training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabReflectedXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/xss\/(?:reflected|reflect)\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabReflectedXssLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "JavaSecLab /xss/reflected route scan — GET /xss/reflect/vul2?payload= reflects input in response — route-specific reflected XSS training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/JavaSecLab|JavaSeclab|whgojp\/JavaSecLab/i.test(corpus)) return NEGATIVE;
+  if (!/\/xss\/reflect\/vul2|reflect.*payload=/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /xss/reflect/vul2?payload= — String direct output reflected XSS",
+      note: "JavaSecLab /xss/reflected route scan — reflected XSS training module documented in wiki (auth-gated public demo)"
+    }
+  };
+};
+
+const javaSecLabDruidBasicJsonRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/druid\/basic\.json\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await druidMonitorExposed(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "JavaSecLab /druid/basic.json route scan — unauthenticated Druid basic.json exposes JDBC drivers and JVM metadata — route-specific misconfiguration oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 // --- Pwned Labs cloud security training platform (pwnedlabs.io) -----------------------
 const CLIENT_PWNEDLABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -38336,7 +38420,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1715;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1722;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -83035,6 +83119,9 @@ export const RULES: Record<string, Rule> = {
   clientSideJuicesecLabEvidence,
   clientSideJuicesecChallengeRouteEvidence,
   clientSideJavaSecLabEvidence,
+  javaSecLabReflectedXssLiveOracle,
+  javaSecLabReflectedXssRouteLiveOracle,
+  javaSecLabDruidBasicJsonRouteLiveOracle,
   clientSidePwnedlabsEvidence,
   clientSidePwnedlabsGitSecretsEvidence,
   clientSideRedtigerHackitEvidence,
