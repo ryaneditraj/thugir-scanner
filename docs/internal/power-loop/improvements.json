@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:www.dvaib.com",
+      "slug": "dvaib-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/register + POST /api/auth/login returns bearer token and GET /api/auth/me succeeds when scanning /login; www.dvaib.com/login findings 0→8 (+dvaib-login-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-cart-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /api/v1/cart route scan now fires price-manipulation oracle via README #34 corpus + VULNSHOP_FLASK_ROUTE_URL_ORACLES cart path; vulnshop.vercel.app/api/v1/cart findings 0→17 (+vulnshop-cart-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1781-1785-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1780→1785 + placeholder priority regex extended to module/1785; web-security-learning-labs.vercel.app/module/1783 findings 0→5 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:securebank-blog.vercel.app",
       "slug": "securebank-blog-transfer-csrf-fallback-hardening",
       "status": "shipped",
@@ -11621,6 +11639,21 @@
       "source": "discovery:vulnerable-web-site.vercel.app",
       "slug": "vulnerable-web-site-login-route-live-oracle",
       "shipped_at": "2026-08-16T21:20:00.000Z"
+    },
+    {
+      "source": "discovery:www.dvaib.com",
+      "slug": "dvaib-login-route-live-oracle",
+      "shipped_at": "2026-08-16T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-cart-route-live-oracle",
+      "shipped_at": "2026-08-16T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1781-1785-catalog",
+      "shipped_at": "2026-08-16T22:10:00.000Z"
     }
   ]
 }
