@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-16T07:19:59.464Z",
+  "updated_at": "2026-08-16T08:03:30.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1747",
+      "source": "web-security-learning-labs Vercel — module 1747 security lab route (WSL catalog expansion past 1746, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1746",
+      "source": "web-security-learning-labs Vercel — module 1746 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/deploy/status",
+      "source": "chethan-vinayak/vulnshop — infrastructure disclosure oracle GET /api/v1/deploy/status (README route #62, Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/labs/deserialization",
+      "source": "zahidoverflow/damn-vulnerable-web-university — insecure deserialization lab /labs/deserialization (ist-edu-bd Vercel deploy, Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/labs/file-upload",
+      "source": "zahidoverflow/damn-vulnerable-web-university — unrestricted file upload lab /labs/file-upload (ist-edu-bd Vercel deploy, Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1741",
       "source": "web-security-learning-labs Vercel — module 1741 security lab route (WSL catalog expansion past 1740, Aug 2026 discovery)",
