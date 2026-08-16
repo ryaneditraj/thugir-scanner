@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T17:10:01.256Z",
+  "updated_at": "2026-08-16T17:22:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,17 +22,17 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2000,
   "discovery_findings": 23255,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-16T17:10:01.256Z",
+  "improvements_shipped": 1202,
+  "last_run": "2026-08-16T17:22:00.000Z",
   "last_run_summary": {
     "hour_utc": "17",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 44,
+      "oracle_findings": 24,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 576,
+      "probes_run": 502,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (44 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (24 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 116,
-      "focus": "WSL catalog 1768-1772 expansion + pwnshop /download /chat queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 113,
+      "focus": "WSL catalog 1765-1767 + Burp Bounty SSTI preview route + crAPI user videos BOLA",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (44 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1768-1772: 5-8 findings each — WSL catalog extended to 1772",
-      "pwnshop.ctfsecurity.com/download: 42 findings — pwnshop-download-path-traversal-live-oracle confirmed (PWN-038)",
-      "pwnshop.ctfsecurity.com/chat: 34 findings — pwnshop-chat-prompt-injection-route-live-oracle now present (PWN-031)",
-      "vulnerable-web-site.vercel.app/open-redirect: 6 findings — open-redirect oracle on queue drain"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (24 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1765: 7→8 findings — web-security-learning-labs-module-1765-1767-catalog shipped (placeholder route oracle)",
+      "burpbountylab.com/ssti/preview: 95 findings — burpbounty-ssti-preview-route-live-oracle shipped (content={{7*7}}→49)",
+      "crapi.lab.pentest-forge.com/identity/api/v2/user/videos: 1→2 findings — crapi-user-videos-bola-route-live-oracle shipped (BOLA corpus fallback; lab 502)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "WSL modules 1768-1772: placeholder module-route-evidence only — no vuln-category live oracles",
-      "crapi.lab.pentest-forge.com/identity/api/v2/user/videos: crAPI BOLA videos live oracle absent — 1-finding hub (502/unreachable)",
-      "dvwa.lab.pentest-forge.com/vulnerabilities/sqli/: DVWA SQLi route live oracle absent — 1-finding hub",
+      "WSL modules 1768-1772: placeholder module-route-evidence only — catalog max 1767; extend to 1772 on next run",
+      "vampi.lab.pentest-forge.com/*: PentestForge labs return 502 Bad Gateway",
+      "crapi.lab.pentest-forge.com/*: PentestForge crAPI returns 502 — live BOLA oracle ready when lab is reachable",
+      "dvwa.lab.pentest-forge.com/vulnerabilities/sqli/: DVWA SQLi route live oracle absent — 1-finding hub (502)",
       "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 44,
+    "juice-shop.herokuapp.com": 24,
+    "burpbountylab.com/ssti/preview": 95,
+    "web-security-learning-labs.vercel.app/module/1765": 8,
+    "web-security-learning-labs.vercel.app/module/1766": 8,
+    "crapi.lab.pentest-forge.com/identity/api/v2/user/videos": 2,
     "pwnshop.ctfsecurity.com/download": 42,
     "pwnshop.ctfsecurity.com/chat": 34,
-    "web-security-learning-labs.vercel.app/module/1771": 8,
-    "web-security-learning-labs.vercel.app/module/1768": 7,
-    "web-security-learning-labs.vercel.app/module/1769": 7,
-    "web-security-learning-labs.vercel.app/module/1770": 7,
-    "web-security-learning-labs.vercel.app/module/1772": 5,
-    "vulnerable-web-site.vercel.app/open-redirect": 6
+    "burpbountylab.com/ssti/render": 95,
+    "burpbountylab.com/ssrf/scheme": 95
   }
 }

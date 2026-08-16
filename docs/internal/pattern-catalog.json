@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-16T16:35:42.322Z",
-  "total": 2433,
-  "uniqueSlugs": 2429,
+  "generatedAt": "2026-08-16T17:07:50.895Z",
+  "total": 2436,
+  "uniqueSlugs": 2432,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2415,
+    "generic": 2418,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2348,
+    "deep": 2351,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 489,
+    "Broken access control": 491,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 116,
     "Security misconfiguration": 186,
     "Broken authentication": 146,
-    "Injection": 367,
+    "Injection": 368,
     "Cross-site scripting": 700,
     "Open redirect": 21,
     "general": 20,
@@ -276,6 +276,7 @@
     "burpbounty-ssrf-scheme-live-oracle",
     "burpbounty-ssrf-scheme-route-live-oracle",
     "burpbounty-ssti-preview-live-oracle",
+    "burpbounty-ssti-preview-route-live-oracle",
     "burpbounty-ssti-render-live-oracle",
     "burpbounty-ssti-render-route-live-oracle",
     "burpbounty-swagger-json-live-oracle",
@@ -889,6 +890,8 @@
     "crapi-shop-orders-id-bola-route-live-oracle",
     "crapi-signup-open-registration-live-oracle",
     "crapi-signup-route-live-oracle",
+    "crapi-user-videos-bola-live-oracle",
+    "crapi-user-videos-bola-route-live-oracle",
     "crapi-vehicle-bola-live-oracle",
     "crapi-vehicle-location-route-live-oracle",
     "crapi-vehicle-route-live-oracle",
