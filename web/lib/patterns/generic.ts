@@ -22574,6 +22574,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvaib-prompt-injection-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "DVAIB deposit-manipulation prompt-injection live oracle",
+    description:
+      "POST /api/chat with a deposit-manipulation jailbreak credits $500 without authorization (vulnerability_exploited:true) after guest registration — Damn Vulnerable AI Bank training oracle.",
+    impactOneline:
+      "Prompt injection against AI banking assistants can trigger unauthorized financial transactions via tool-calling.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaibPromptInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never let LLM tool calls execute financial actions from unsanitized user prompts — DVAIB is intentional lab software.",
+      steps: [
+        "Require multi-factor confirmation for all deposit and transfer tool invocations.",
+        "Strip instruction-override phrases before sending user messages to the model.",
+        "Run DVAIB only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our DVAIB /api/chat endpoint credits deposits from prompt-injection jailbreaks. Show LLM tool-call guardrail remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvaib-prompt-injection-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "DVAIB prompt-injection route live oracle",
+    description:
+      "When scanning dvaib.com, live POST /api/chat deposit-manipulation prompt injection or unauthenticated /api/stats/home training-lab stats confirm the Damn Vulnerable AI Bank oracle.",
+    impactOneline:
+      "Route scans on DVAIB confirm live LLM prompt-injection scenarios against an AI banking assistant.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaibPromptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden AI banking chat endpoints against prompt injection — DVAIB is intentional lab software.",
+      steps: [
+        "Require MFA for all financial tool calls triggered by LLM agents.",
+        "Monitor /api/chat for deposit-manipulation jailbreak patterns.",
+        "Run DVAIB only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our DVAIB route scan confirms deposit-manipulation prompt injection. Show route-specific LLM guardrail remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-mass-assignment-admin-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -24726,6 +24778,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnShop /products route documents SQLi search. Show route-specific parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-product-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnShop product ID SQLi live oracle",
+    description:
+      "GET /product?id= reflects SQL injection via product ID parameter when Flask backend is reachable — README oracle #1.",
+    impactOneline:
+      "SQL injection on product detail pages can leak or modify database records.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProductSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize SQL product detail queries — VulnShop is intentional training software.",
+      steps: [
+        "Use prepared statements for product ID lookups.",
+        "Never concatenate user input into SQL WHERE clauses.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /product?id= route is SQL-injectable. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-product-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnShop /product SQLi route live oracle",
+    description:
+      "When scanning /product?id=, live SQLi on id= parameter or README oracle #1 documents injectable product detail lookup.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /product module documents SQL injection via ID parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProductSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize SQL product detail queries on /product routes.",
+      steps: [
+        "Use prepared statements for product ID lookups.",
+        "Never concatenate user input into SQL WHERE clauses.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /product route documents SQLi on id=. Show route-specific parameterized query remediation.",
     version: 1,
     enabled: true
   },

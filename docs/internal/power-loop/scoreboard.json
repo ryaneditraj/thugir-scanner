@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T14:07:02.911Z",
+  "updated_at": "2026-08-16T14:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2783,
-  "total_findings": 27225,
-  "critical_findings": 55,
+  "total_sites_scanned": 2784,
+  "total_findings": 27246,
+  "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1985,
-  "discovery_findings": 22908,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-16T14:07:02.911Z",
+  "discovery_findings": 22929,
+  "improvements_shipped": 1202,
+  "last_run": "2026-08-16T14:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 25,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 588,
+      "probes_run": 519,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings); no benchmark category gaps"
+      "note": "Stable 6/6 recall (25 findings on validation pass; prior 14 UTC pass had 47 findings)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 47,
-      "focus": "WSL catalog 1759-1761 + PentestForge VAmPI IDOR + crAPI signup oracles + queue drain (1671-1672, compass-demo CORS)",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 21,
+      "focus": "DVAIB deposit-manipulation prompt injection + VulnShop /product SQLi + WSL catalog 1757-1760",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1759-1761: 7-8 findings each — placeholder module-route-evidence only",
-      "vampi.lab.pentest-forge.com/books/v1/1: 1-finding hub — VAmPI IDOR live oracle absent",
-      "crapi.lab.pentest-forge.com/identity/api/auth/signup: 1-finding hub — crAPI broken-auth signup oracle absent",
-      "www.compass-demo.com/cors/attack/api.php: 11 findings — compass-demo-cors-attack-live-oracle confirmed"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (25 findings) — no benchmark misses",
+      "www.dvaib.com: 6→7 findings — dvaib-prompt-injection-live-oracle shipped (POST /api/chat vulnerability_exploited:true deposit manipulation)",
+      "vulnshop.vercel.app/product?id=1: 15→17 findings — vulnshop-product-sqli-route-live-oracle shipped (README oracle #1)",
+      "web-security-learning-labs.vercel.app/module/1758: 5→7 findings — WSL catalog extended to 1760 (+placeholder-module-route-live-oracle)",
+      "www.compass-demo.com/cors/attack/api.php: 11 findings — compass-demo-cors-attack-route-live-oracle confirmed (prior 14 UTC discovery pass)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "secret-resend slug still absent when juice-shop-resend-key oracle does not fire (Resend API validation failed)",
       "vampi.lab.pentest-forge.com/books/v1/{id}: route-specific IDOR/BOLA live oracles absent (1-finding header-only hub)",
       "crapi.lab.pentest-forge.com/identity/api/auth/signup: broken-auth mass-assignment oracle absent (1-finding header-only hub)",
-      "WSL modules 1759-1761: placeholder module-route-evidence only — no vuln-category live oracles",
-      "dvga.lab.pentest-forge.com/graphql: still 502 from prior runs — GraphQL oracles blocked when lab unreachable"
+      "dvga.lab.pentest-forge.com/graphql: host returns 502 Bad Gateway — DVGA oracles ready when lab is reachable",
+      "vulnshop Railway backend (vulnshop-production.up.railway.app) returns 404 — live probes use README/SPA corpus fallback"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 25,
+    "www.dvaib.com": 7,
+    "vulnshop.vercel.app/product?id=1": 17,
+    "web-security-learning-labs.vercel.app/module/1758": 7,
     "www.compass-demo.com/cors/attack/api.php": 11,
     "web-security-learning-labs.vercel.app/module/1761": 8,
-    "web-security-learning-labs.vercel.app/module/1759": 7,
-    "web-security-learning-labs.vercel.app/module/1760": 7,
-    "web-security-learning-labs.vercel.app/module/1671": 6,
-    "web-security-learning-labs.vercel.app/module/1672": 6,
-    "vampi.lab.pentest-forge.com/books/v1/1": 1,
-    "crapi.lab.pentest-forge.com/identity/api/auth/signup": 1
+    "vulnshop.vercel.app/api/v1/admin/users": 19,
+    "vulnshop.vercel.app/api/v1/admin/orders": 19
   }
 }
