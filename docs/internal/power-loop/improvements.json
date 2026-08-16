@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:victim.compass-demo.com",
+      "slug": "compass-demo-cors-null-origin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET victim.compass-demo.com/nullorigin/victim/index.php Origin:null returns 302 ACAO:null + Access-Control-Allow-Credentials:true (redirect:manual probe); victim route findings 3→5 (+compass-demo-cors-null-origin-live-oracle + route); compass-demo.com hub 10→11; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1761-1764-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1760→1764 + placeholder priority regex extended to 1764; web-security-learning-labs.vercel.app/module/1764 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.lab.pentest-forge.com",
+      "slug": "crapi-pentest-forge-host-detection",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isCrapiLabHost extended to crapi.lab.pentest-forge.com so existing crapi-signup-route-live-oracle runs on PentestForge crAPI; lab returned 502 at validation time — oracle ready when lab is reachable; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1757-1760-catalog",
       "status": "shipped",

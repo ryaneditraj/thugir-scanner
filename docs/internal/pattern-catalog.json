@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-16T14:16:08.597Z",
-  "total": 2428,
-  "uniqueSlugs": 2424,
+  "generatedAt": "2026-08-16T15:35:19.896Z",
+  "total": 2430,
+  "uniqueSlugs": 2426,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2410,
+    "generic": 2412,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2343,
+    "deep": 2345,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 116,
-    "Security misconfiguration": 184,
+    "Security misconfiguration": 186,
     "Broken authentication": 146,
     "Injection": 365,
     "Cross-site scripting": 700,
@@ -860,6 +860,8 @@
     "compass-demo-angularjs-route-live-oracle",
     "compass-demo-angularjs-xss-live-oracle",
     "compass-demo-cors-attack-api-route-live-oracle",
+    "compass-demo-cors-null-origin-live-oracle",
+    "compass-demo-cors-null-origin-route-live-oracle",
     "compass-demo-csp-bypass-live-oracle",
     "compass-demo-csp-demo-route-live-oracle",
     "compass-demo-csrf-live-oracle",
