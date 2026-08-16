@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "updated_at": "2026-08-16T09:06:00.000Z",
+=======
+  "updated_at": "2026-08-16T09:10:00.000Z",
+>>>>>>> 3098e01f (docs: log 3 discovery oracles shipped — vulnshop deploy-status + ist-edu labs)
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,6 +19,7 @@
       ]
     }
   },
+<<<<<<< HEAD
   "total_sites_scanned": 2753,
   "total_findings": 26900,
   "critical_findings": 55,
@@ -24,6 +29,17 @@
   "discovery_findings": 22721,
   "improvements_shipped": 1199,
   "last_run": "2026-08-16T09:06:00.000Z",
+=======
+  "total_sites_scanned": 2745,
+  "total_findings": 26832,
+  "critical_findings": 55,
+  "teacher_delta_count": 0,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1965,
+  "discovery_findings": 22652,
+  "improvements_shipped": 1205,
+  "last_run": "2026-08-16T09:10:00.000Z",
+>>>>>>> 3098e01f (docs: log 3 discovery oracles shipped — vulnshop deploy-status + ist-edu labs)
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
@@ -48,6 +64,7 @@
           ]
         }
       },
+<<<<<<< HEAD
       "note": "Stable 6/6 recall (47 findings); full juice-shop live-oracle pass on warm Heroku"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
@@ -72,10 +89,34 @@
       "ist-edu-bd.vercel.app/labs/graphql: no GraphQL introspection or injection route oracle",
       "vulnshop.vercel.app/api/v1/admin/config: admin-config disclosure route oracle absent (other vulnshop API oracles fire)",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via leaked-api-key + security-question)"
+=======
+      "note": "Stable 6/6 recall (47 findings); no benchmark misses"
+    },
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "discovery": {
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 32,
+      "focus": "vulnshop deploy/status README oracle #62 + ist-edu deserialization/file-upload route oracles",
+      "improvements_shipped_this_run": 3
+    },
+    "notable_findings": [
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "vulnshop.vercel.app/api/v1/deploy/status: 12→14 findings — vulnshop-deploy-status-route-live-oracle shipped (README oracle #62 infrastructure disclosure)",
+      "ist-edu-bd.vercel.app/labs/deserialization: 8→9 findings — ist-edu-deserialization-lab-route-live-oracle shipped (live /api/portal SQLi probe)",
+      "ist-edu-bd.vercel.app/labs/file-upload: 8→9 findings — ist-edu-file-upload-lab-route-live-oracle shipped (SVG/img stored-XSS bundle markers)"
+    ],
+    "learning_gaps": [
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "ist-edu-bd.vercel.app/labs/command-injection: no CMDI API in deployed SPA bundle (rejected — phantom runner seed)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via leaked-api-key + security-question)",
+      "web-security-learning-labs.vercel.app/module/1748+: Vercel Security Checkpoint blocks automated scans"
+>>>>>>> 3098e01f (docs: log 3 discovery oracles shipped — vulnshop deploy-status + ist-edu labs)
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
+<<<<<<< HEAD
     "vulnshop.vercel.app/api/v1/admin/config": 14,
     "dvwu.vercel.app/labs/mass-assignment": 11,
     "compass-demo.com/xss_lab/": 9,
@@ -85,5 +126,16 @@
     "web-security-learning-labs.vercel.app/module/1749": 7,
     "compass-demo.com/": 10,
     "dvwu.vercel.app/labs/xxe": 14
+=======
+    "vulnshop.vercel.app/api/v1/deploy/status": 14,
+    "ist-edu-bd.vercel.app/labs/deserialization": 9,
+    "ist-edu-bd.vercel.app/labs/file-upload": 9,
+    "dvwu.vercel.app/labs/xxe": 14,
+    "ist-edu-bd.vercel.app/labs/path-traversal": 11,
+    "ist-edu-bd.vercel.app/files": 10,
+    "dvwu.vercel.app/labs/race-condition": 12,
+    "web-security-learning-labs.vercel.app/module/1746": 8,
+    "web-security-learning-labs.vercel.app/module/1747": 8
+>>>>>>> 3098e01f (docs: log 3 discovery oracles shipped — vulnshop deploy-status + ist-edu labs)
   }
 }
