@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T13:08:00.000Z",
+  "updated_at": "2026-08-16T13:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1980,
   "discovery_findings": 22861,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-16T13:08:00.000Z",
+  "improvements_shipped": 1202,
+  "last_run": "2026-08-16T13:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 44,
+      "oracle_findings": 46,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,42 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (44 findings, 33 juice-shop live oracles); no benchmark misses"
+      "note": "Stable 6/6 recall (46 findings); secret-resend bridge ready when resend-key oracle fires"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 58,
-      "focus": "WSL modules 1658-1672 queue drain + compass-demo CORS/JWT labs + DVAIB/VWAD + vulnshop comments queued",
-      "improvements_shipped_this_run": 0
+      "urls_added": 3,
+      "urls_scanned": 3,
+      "findings": 47,
+      "focus": "vulnshop BFLA admin/users + admin/orders route oracles + WSL catalog 1752-1756",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (44 findings) — no benchmark misses",
-      "www.compass-demo.com/cors/attack/api.php: 11 findings — compass-demo-jwt-alg-none + nosql-login-bypass + cors-attack-api-route oracles",
-      "web-security-learning-labs.vercel.app/module/1671: 9 findings — web-security-learning-labs-idor-module-route-live-oracle",
-      "web-security-learning-labs.vercel.app/module/1672: 9 findings — WSL IDOR module route oracle",
-      "web-security-learning-labs.vercel.app/module/1670: 9 findings — WSL catalog drain 1658-1672",
-      "b.compass-demo.com/: 1 finding — missing-security-headers only (subdomain stub)",
-      "vwad.owasp.org/app/damn-vulnerable-ai-bank-dvaib/ + www.dvaib.com + vulnshop comments: queued for next drain"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
+      "vulnshop.vercel.app/api/v1/admin/users: 19 findings — vulnshop-admin-users-bfla-route-live-oracle shipped (README oracle #27 / API5:2023)",
+      "vulnshop.vercel.app/api/v1/admin/orders: 19 findings — vulnshop-admin-orders-bfla-route-live-oracle shipped (SPA admin/orders BFLA)",
+      "web-security-learning-labs.vercel.app/module/1752: 8 findings — WSL catalog extended to 1756 (+placeholder-module-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via leaked-api-key + security-answers)",
-      "b.compass-demo.com/: compass-demo subdomain returns minimal surface — only header misconfig",
-      "DVAIB (www.dvaib.com) + VWAD directory entry queued — LLM prompt-injection oracles need dedicated probes",
-      "vulnshop.vercel.app/api/v1/comments stored-XSS oracle queued — not yet drained from queue head"
+      "secret-resend slug still absent when juice-shop-resend-key oracle does not fire (Resend API validation failed this run)",
+      "dvga.lab.pentest-forge.com/graphql: host returns 502 Bad Gateway — DVGA oracles ready when lab is reachable",
+      "vulnshop Railway backend (vulnshop-production.up.railway.app) returns 404 Application not found — live BFLA probes use README/SPA corpus fallback"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 44,
+    "juice-shop.herokuapp.com": 46,
+    "vulnshop.vercel.app/api/v1/admin/users": 19,
+    "vulnshop.vercel.app/api/v1/admin/orders": 19,
+    "web-security-learning-labs.vercel.app/module/1752": 8,
     "www.compass-demo.com/cors/attack/api.php": 11,
     "web-security-learning-labs.vercel.app/module/1671": 9,
     "web-security-learning-labs.vercel.app/module/1672": 9,
-    "web-security-learning-labs.vercel.app/module/1670": 9,
-    "web-security-learning-labs.vercel.app/module/1669": 7,
-    "web-security-learning-labs.vercel.app/module/1668": 6,
-    "web-security-learning-labs.vercel.app/module/1658": 6,
-    "b.compass-demo.com/": 1
+    "vulnshop.vercel.app/api/v1/admin/config": 17,
+    "dvwu.vercel.app/labs/mass-assignment": 12
   }
 }
