@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T21:42:00.000Z",
+  "updated_at": "2026-08-16T22:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1776",
@@ -13044,7 +13044,32 @@
       "url": "https://vulnshop.vercel.app/api/v1/cart",
       "source": "yashasrnair/VulnShop — BOLA cart enumeration oracle GET /api/v1/cart (OWASP API Top 10 lab)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level7.php",
+      "source": "webspoilt/vulnforge-academy — Level 7 IDOR parameter manipulation (levels 7-9 IDOR tier, GitHub README Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level8.php",
+      "source": "webspoilt/vulnforge-academy — Level 8 IDOR challenge (levels 7-9 IDOR tier, GitHub README Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level9.php",
+      "source": "webspoilt/vulnforge-academy — Level 9 IDOR challenge (levels 7-9 IDOR tier, GitHub README Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level10.php",
+      "source": "webspoilt/vulnforge-academy — Level 10 authentication brute-force challenge (levels 10-12 auth tier, GitHub README Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php",
+      "source": "webspoilt/vulnforge-academy — Level 20 nightmare multi-vector chain challenge (GitHub README Aug 2026 discovery)",
+      "auth": "oss_deploy"
     }
   ],
-  "discovery_urls_added": 32
+  "discovery_urls_added": 37
 }
