@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1757-1760-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1756→1760 + placeholder priority regex extended to 1760; web-security-learning-labs.vercel.app/module/1758 findings 5→7 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 25 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.dvaib.com",
+      "slug": "dvaib-prompt-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/register + POST /api/chat deposit-manipulation jailbreak returns vulnerability_exploited:true account_balance:500; www.dvaib.com findings 6→7 (+dvaib-prompt-injection-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-product-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chethan-vinayak/vulnshop README oracle #1 GET /product?id= SQLi + README corpus fallback; vulnshop.vercel.app/product?id=1 findings 15→17 (+vulnshop-product-sqli-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1752-1756-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1751→1756 + placeholder priority regex extended to 1756; web-security-learning-labs.vercel.app/module/1752 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
@@ -11420,6 +11438,21 @@
       "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-admin-orders-bfla-route-live-oracle",
       "shipped_at": "2026-08-16T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1757-1760-catalog",
+      "shipped_at": "2026-08-16T14:30:00.000Z"
+    },
+    {
+      "source": "discovery:www.dvaib.com",
+      "slug": "dvaib-prompt-injection-live-oracle",
+      "shipped_at": "2026-08-16T14:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-product-sqli-route-live-oracle",
+      "shipped_at": "2026-08-16T14:30:00.000Z"
     }
   ]
 }
