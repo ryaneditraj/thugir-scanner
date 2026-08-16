@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1716-1722-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1715→1722 + runner placeholder-module priority regex extended for 1716–1722; web-security-learning-labs.vercel.app/module/1721 findings 7 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1716 previously 7 without placeholder oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-reflected-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /xss/reflect/vul2?payload= wiki corpus + route scan on /xss/reflected; whgojp.top/xss/reflected findings 7→8 (+javaseclab-reflected-xss-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-druid-basic-json-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /druid/basic.json ResultCode:1 JDBC drivers exposed; whgojp.top/druid/basic.json findings 8 (+javaseclab-druid-basic-json-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1711-1715-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1710→1715 + runner placeholder-module priority regex extended for 1711–1715; web-security-learning-labs.vercel.app/module/1711 findings 7→5 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1709 findings 5→8 with placeholder oracle; benchmark juice-shop 48 findings 6/6 maintained"
@@ -11165,6 +11183,21 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1701-1710-catalog",
       "shipped_at": "2026-08-16T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1716-1722-catalog",
+      "shipped_at": "2026-08-16T03:25:00.000Z"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-reflected-xss-route-live-oracle",
+      "shipped_at": "2026-08-16T03:25:00.000Z"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-druid-basic-json-route-live-oracle",
+      "shipped_at": "2026-08-16T03:25:00.000Z"
     }
   ]
 }

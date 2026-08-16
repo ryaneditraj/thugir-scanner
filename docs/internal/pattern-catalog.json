@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-16T01:06:05.979Z",
-  "total": 2405,
-  "uniqueSlugs": 2401,
+  "generatedAt": "2026-08-16T03:06:52.236Z",
+  "total": 2408,
+  "uniqueSlugs": 2404,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2387,
+    "generic": 2390,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2320,
+    "deep": 2323,
     "continuous": 0
   },
   "byCategory": {
@@ -25,10 +25,10 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 112,
-    "Security misconfiguration": 183,
+    "Security misconfiguration": 184,
     "Broken authentication": 146,
     "Injection": 358,
-    "Cross-site scripting": 697,
+    "Cross-site scripting": 699,
     "Open redirect": 21,
     "general": 20,
     "SSRF": 14,
@@ -1600,6 +1600,9 @@
     "ist-edu-register-auth-sqli-route-live-oracle",
     "ist-edu-search-xss-route-live-oracle",
     "ist-edu-ssrf-redirect-route-live-oracle",
+    "javaseclab-druid-basic-json-route-live-oracle",
+    "javaseclab-reflected-xss-live-oracle",
+    "javaseclab-reflected-xss-route-live-oracle",
     "juice-shop-addresss-bola-live-oracle",
     "juice-shop-addresss-bola-route-live-oracle",
     "juice-shop-addresss-id-bola-live-oracle",
