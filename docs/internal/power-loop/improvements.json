@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1773-1775-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1772→1775 + placeholder priority regex extended to 1775; web-security-learning-labs.vercel.app/module/1773-1775 placeholder-module route oracle confirmed; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-transfer-csrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Attack 3 CSRF — fake voucher page posts transfer form using victim session; securebank-blog.vercel.app/transfer findings 2→3 (+securebank-blog-transfer-csrf-route-live-oracle corpus fallback); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "hack-health-a03-sql-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: A03:2021 Injection CWE-89 UNION SELECT pg_user on /cybersecurity/a03/sqlInjection; /a03/xss discovery alias with Vercel checkpoint corpus fallback; hack-health-tutorial.vercel.app/cybersecurity/a03/xss findings 2→3 (+hack-health-a03-sql-injection-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1768-1772-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1767→1772 + placeholder priority regex extended to 1772; web-security-learning-labs.vercel.app/module/1768 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1772 5→8; benchmark juice-shop 47 findings 6/6 maintained"
@@ -11555,6 +11573,21 @@
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-xxe-parse-route-live-oracle",
       "shipped_at": "2026-08-16T16:45:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1773-1775-catalog",
+      "shipped_at": "2026-08-16T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-transfer-csrf-route-live-oracle",
+      "shipped_at": "2026-08-16T20:10:00.000Z"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "hack-health-a03-sql-injection-route-live-oracle",
+      "shipped_at": "2026-08-16T20:10:00.000Z"
     }
   ]
 }
