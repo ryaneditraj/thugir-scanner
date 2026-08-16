@@ -2963,6 +2963,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsFileLfiLiveOracle",
   "brokencrystalsMassAssignmentLiveOracle",
   "brokencrystalsMassAssignmentPutLiveOracle",
+  "brokencrystalsMassAssignmentPutRouteLiveOracle",
   "brokencrystalsSignupRouteLiveOracle",
   "brokencrystalsAdminpermissionRouteLiveOracle",
   "brokencrystalsSearchAdminMassAssignmentRouteLiveOracle",

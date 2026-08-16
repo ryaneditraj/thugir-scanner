@@ -38478,6 +38478,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-mass-assignment-put-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals profile info route mass-assignment oracle",
+    description:
+      "When scanning /api/users/one/{email}/info, PUT accepts hidden isAdmin:true and escalates an existing user to administrator — route-specific profile-update mass-assignment oracle.",
+    impactOneline:
+      "Mass-assignment on profile updates lets authenticated users escalate privileges by binding hidden admin fields on API routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMassAssignmentPutRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Whitelist updatable profile fields and reject privileged attributes — Broken Crystals is intentional lab software.",
+      steps: [
+        "Filter isAdmin and role fields out of user profile update DTOs.",
+        "Verify admin permission changes only through audited admin endpoints.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/one/{email}/info route accepts isAdmin:true on PUT. Show mass-assignment remediation for profile update endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-brokencrystals-dom-xss-evidence",
     platform: "generic",
     category: "Cross-site scripting",

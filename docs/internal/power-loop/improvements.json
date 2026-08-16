@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1731-1740-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1730→1740 + placeholder priority regex 17(?:0\\d|1\\d|2[0-9]|3[0-9]|40); web-security-learning-labs.vercel.app/module/1732 findings 7→7 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mass-assignment-put-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /api/users/one/{email}/info accepts isAdmin:true then GET adminpermission confirms escalation; brokencrystals.com/api/users/one/regular_user/info findings 17→87 (+brokencrystals-mass-assignment-put-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-prompt-injection-jailbreak-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /chat jailbreak updated to repeat-verbatim probe leaking INTERNAL AGENT PRIVILEGED COMMANDS (old developer-debug prompt no longer fires); pwnshop.ctfsecurity.com/api/v1/chat/query findings 17→45 (+pwnshop-chat-prompt-injection-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:secure-bank-bay.vercel.app",
       "slug": "secure-bank-bay-transfer-csrf-spa-bundle-fetch",
       "status": "shipped",
