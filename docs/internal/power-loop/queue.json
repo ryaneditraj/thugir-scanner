@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-16T14:03:46.848Z",
+  "updated_at": "2026-08-16T15:03:27.308Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1762",
+      "source": "web-security-learning-labs Vercel — module 1762 security lab route (WSL catalog expansion past 1761, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1763",
+      "source": "web-security-learning-labs Vercel — module 1763 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1764",
+      "source": "web-security-learning-labs Vercel — module 1764 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/download",
+      "source": "ctfsec/pwnshop — path traversal file download lab PWN-038 (GitHub README, prepended for queue drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/chat",
+      "source": "ctfsec/pwnshop — AI chatbot LLM prompt-injection entry point (PWN-037+, prepended for queue drain)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1759",
       "source": "web-security-learning-labs Vercel — module 1759 security lab route (WSL catalog expansion past 1758, Aug 2026 discovery)",
@@ -3825,11 +3850,6 @@
       "url": "https://vulnshop.vercel.app/products/1",
       "source": "yashasrnair/VulnShop — product detail stored XSS + SSRF demo panel (GitHub README)",
       "auth": "oss_deploy"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/download",
-      "source": "ctfsec/pwnshop — path traversal file download lab PWN-038 (GitHub README)",
-      "auth": "public_demo"
     },
     {
       "url": "https://vulnshop.vercel.app/admin",
@@ -7946,11 +7966,6 @@
     {
       "url": "https://ginandjuice.shop/my-account",
       "source": "PortSwigger Gin & Juice Shop — session/auth oracle with disclosed carlos:hunter2 credentials",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/chat",
-      "source": "ctfsec/pwnshop — LLM prompt-injection / agentic attack entry point (GitHub README)",
       "auth": "public_demo"
     },
     {
