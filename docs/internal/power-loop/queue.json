@@ -1,6 +1,41 @@
 {
-  "updated_at": "2026-08-16T06:06:00.000Z",
+  "updated_at": "2026-08-16T07:10:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1745",
+      "source": "web-security-learning-labs Vercel — module 1745 security lab route (WSL catalog expansion past 1740, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1744",
+      "source": "web-security-learning-labs Vercel — module 1744 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1743",
+      "source": "web-security-learning-labs Vercel — module 1743 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1742",
+      "source": "web-security-learning-labs Vercel — module 1742 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1741",
+      "source": "web-security-learning-labs Vercel — module 1741 security lab route (WSL catalog expansion past 1740, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/users/1",
+      "source": "sr33jih/vulnshop — BOLA user profile oracle GET /api/v1/users/:id (OWASP API Top 10 lab, profile sub-resource alias)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secure-bank-bay.vercel.app/transfer",
+      "source": "Areeeshaa/SecureBank — CSRF bank transfer oracle GET /transfer (FAST-NUCES Attack Mode live demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1740",
       "source": "web-security-learning-labs Vercel — module 1740 security lab route (WSL catalog expansion past 1736, Aug 2026 discovery)",
