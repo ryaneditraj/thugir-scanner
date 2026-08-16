@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1741-1745-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1740→1745 + placeholder priority regex 17(?:0\\d|1\\d|2[0-9]|3[0-9]|4[0-5]); web-security-learning-labs.vercel.app/module/1741 fires web-security-learning-labs-placeholder-module-route-live-oracle (5 findings); module/1745 placeholder oracle confirmed; benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-users-id-profile-bola-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isVulnshopUsersProfileBolaRoute matches /api/v1/users/{id} and /profile suffix; vulnshop.vercel.app/api/v1/users/1 findings 14→15 (+vulnshop-users-profile-bola-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "secure-bank-bay-transfer-csrf-queue-drain-07utc",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended secure-bank-bay.vercel.app/transfer to discovery queue; deep scan confirms secure-bank-bay-transfer-csrf-route-live-oracle fires via SPA bundle fetch (POST /api/transactions/transfer + Vulnerable (No CSRF) + CSRF Forged Request); findings 8→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1731-1740-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1730→1740 + placeholder priority regex 17(?:0\\d|1\\d|2[0-9]|3[0-9]|40); web-security-learning-labs.vercel.app/module/1732 findings 7→7 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"

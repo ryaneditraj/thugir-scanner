@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T06:20:00.000Z",
+  "updated_at": "2026-08-16T07:17:14.319Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2734,
-  "total_findings": 26698,
+  "total_sites_scanned": 2726,
+  "total_findings": 26579,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1959,
-  "discovery_findings": 22629,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-16T06:20:00.000Z",
+  "discovery_urls_added": 1958,
+  "discovery_findings": 22511,
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-16T07:17:14.319Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 586,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,36 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings) — no benchmark misses"
+      "note": "Stable 6/6 recall (45 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
+      "urls_added": 7,
       "urls_scanned": 3,
-      "findings": 139,
-      "focus": "WSL catalog 1731-1740 + Broken Crystals PUT info route oracle + Pwnshop chat jailbreak refresh",
+      "findings": 32,
+      "focus": "WSL catalog 1741-1745 expansion + vulnshop users/{id} profile BOLA route alias + secure-bank-bay transfer CSRF queue drain",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1732: placeholder-module-route-live-oracle now fires (catalog 1730→1740)",
-      "brokencrystals.com/api/users/one/regular_user/info: 17→87 findings — brokencrystals-mass-assignment-put-route-live-oracle shipped",
-      "pwnshop.ctfsecurity.com/api/v1/chat/query: 17→45 findings — pwnshop-chat-prompt-injection jailbreak fix restores PWN-031 oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (45 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1741: placeholder-module oracle confirmed on modules 1741-1745 (WSL catalog max 1745)",
+      "vulnshop.vercel.app/api/v1/users/1: 14→15 findings — vulnshop-users-profile-bola-route-live-oracle fires on /users/{id} alias",
+      "secure-bank-bay.vercel.app/transfer: 8→9 findings — secure-bank-bay-transfer-csrf-route-live-oracle confirmed via SPA bundle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "nextjs-security-lesson.vercel.app/{admin,login,docs,protected}: scanner reach errors — middleware-gated routes need session/JWT seeding",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle intermittent under PwnMail OTP rate limits when batched"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "vulnshop-production.up.railway.app backend unreachable — profile BOLA live probe falls back to README oracle"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "brokencrystals.com/api/users/one/regular_user/info": 87,
-    "pwnshop.ctfsecurity.com/api/v1/chat/query": 45,
-    "web-security-learning-labs.vercel.app/module/1732": 7,
+    "juice-shop.herokuapp.com": 45,
+    "web-security-learning-labs.vercel.app/module/1741": 8,
+    "vulnshop.vercel.app/api/v1/users/1": 15,
+    "secure-bank-bay.vercel.app/transfer": 9,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
     "dvwu.vercel.app/labs/cmdi": 14,
-    "pwnshop.ctfsecurity.com/seller/preview": 44
+    "brokencrystals.com/api/users/one/regular_user/adminpermission": 89
   }
 }
