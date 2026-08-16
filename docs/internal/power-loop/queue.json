@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-08-16T19:05:49.620Z",
+  "updated_at": "2026-08-16T20:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnerable-web-site.vercel.app/login",
+      "source": "megmogmog1965/vulnerable-web-site — login SQLi + session oracle (Vercel README, web search Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://damn-vulnerable-startup.fly.dev/challenges/owasp",
+      "source": "0xSV1/DVS DeployBro — OWASP Top 10 (2025) challenge grid on fly.dev public demo (web search Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/blog/post?postId=1",
+      "source": "PortSwigger Gin & Juice Shop — DOM XSS oracle /blog/post?postId= (web search Aug 2026)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1773",
       "source": "web-security-learning-labs Vercel — module 1773 security lab route (WSL catalog expansion past 1772, Aug 2026 discovery)",
