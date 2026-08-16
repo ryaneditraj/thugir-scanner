@@ -24444,6 +24444,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ist-edu-ssti-lab-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "IST Edu SSTI lab route live oracle",
+    description:
+      "When scanning /labs/ssti, POST /api/portal SQLi bypass confirms the server-side template injection training lab on the IST Edu vulnerability portal.",
+    impactOneline:
+      "Route-specific confirmation that IST Edu /labs/ssti documents SSTI training scenarios with live injection oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduSstiLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use logic-less templating and sandbox template engines — IST Edu is intentional training software.",
+      steps: [
+        "Never pass user input directly into template expressions.",
+        "Use allow-listed template variables and auto-escaping engines.",
+        "Run IST Edu labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our IST Edu /labs/ssti route confirms server-side template injection training. Show SSTI-safe templating remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-hidden-admin-manager-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
