@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-16T08:03:30.000Z",
+  "updated_at": "2026-08-16T09:02:33.294Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1748",
+      "source": "web-security-learning-labs Vercel — module 1748 security lab route (WSL catalog expansion past 1747, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1749",
+      "source": "web-security-learning-labs Vercel — module 1749 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/admin/config",
+      "source": "chethan-vinayak/vulnshop — admin configuration disclosure oracle GET /api/v1/admin/config (README BFLA lab, Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/labs/graphql",
+      "source": "zahidoverflow/damn-vulnerable-web-university — GraphQL introspection/injection lab /labs/graphql (ist-edu-bd Vercel deploy, Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/mass-assignment",
+      "source": "zahidoverflow/dvwu — mass-assignment privilege escalation lab /labs/mass-assignment (DVWU Vercel deploy, Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1747",
       "source": "web-security-learning-labs Vercel — module 1747 security lab route (WSL catalog expansion past 1746, Aug 2026 discovery)",
@@ -12781,5 +12806,5 @@
       "auth": "oss_deploy"
     }
   ],
-  "discovery_urls_added": 10
+  "discovery_urls_added": 15
 }
