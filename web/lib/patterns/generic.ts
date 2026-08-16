@@ -24392,6 +24392,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-admin-users-bfla-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop admin users BFLA live oracle",
+    description:
+      "GET /api/v1/admin/users with a forged is_admin JWT returns the full user roster including plaintext passwords — README oracle #27 (API5:2023 Broken Function Level Authorization).",
+    impactOneline:
+      "Any caller with a weakly-signed JWT can invoke admin-only user-list functions and harvest credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopAdminUsersBflaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce role checks on admin user-list endpoints — VulnShop is intentional lab software.",
+      steps: [
+        "Verify admin role server-side on every /admin/users route.",
+        "Use strong JWT signing secrets and reject alg:none tokens.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/admin/users endpoint accepts forged admin JWTs. Show BFLA remediation for admin API routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-admin-users-bfla-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/admin/users route BFLA live oracle",
+    description:
+      "When scanning /api/v1/admin/users, live Railway probe or README corpus documents admin user roster exposure via forged JWT — API5:2023 BFLA oracle #27.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop admin user-list APIs lack function-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopAdminUsersBflaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate and authorize /api/v1/admin/users before deploying any API backend.",
+      steps: [
+        "Require verified admin role on all admin user-list routes.",
+        "Rotate weak JWT signing secrets.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/admin/users route documents BFLA. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-admin-orders-bfla-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop admin orders BFLA live oracle",
+    description:
+      "GET /api/v1/admin/orders or /api/admin/orders with a forged is_admin JWT returns cross-customer order data without function-level authorization — API5:2023 BFLA.",
+    impactOneline:
+      "Admin order-list functions callable with weak JWTs expose customer order history and PII.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopAdminOrdersBflaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce admin role checks on order-list endpoints — VulnShop is intentional lab software.",
+      steps: [
+        "Verify admin role server-side on /admin/orders routes.",
+        "Use strong JWT signing and short-lived tokens.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop admin orders endpoint lacks function-level authorization. Show BFLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-admin-orders-bfla-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/admin/orders route BFLA live oracle",
+    description:
+      "When scanning /api/v1/admin/orders, live Railway probe or SPA bundle documents admin order roster exposure without function-level authorization — API5:2023 BFLA.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop admin order-list APIs lack function-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopAdminOrdersBflaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate /api/v1/admin/orders before deploying any API backend.",
+      steps: [
+        "Require verified admin role on admin order-list routes.",
+        "Restrict order exports to authorized admin sessions.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/admin/orders route documents BFLA. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvwu-mass-assignment-lab-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
