@@ -61265,6 +61265,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "compass-demo-cors-null-origin-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Compass Security CORS null-origin misconfiguration live oracle",
+    description:
+      "GET victim.compass-demo.com/nullorigin/victim/index.php with Origin: null returns Access-Control-Allow-Origin: null and Access-Control-Allow-Credentials: true — Compass Security CORS null-origin training oracle.",
+    impactOneline:
+      "CORS policies that whitelist Origin: null with credentials let sandboxed pages steal authenticated responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoCorsNullOriginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never whitelist Origin: null with Access-Control-Allow-Credentials — Compass CORS demos are intentional training.",
+      steps: [
+        "Reject null origin in CORS allow-lists when credentials are enabled.",
+        "Use explicit origin allow-lists instead of reflecting arbitrary Origin headers.",
+        "Run Compass CORS labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass victim.compass-demo.com/nullorigin reflects Origin: null with credentials. Show CORS allow-list hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "compass-demo-cors-null-origin-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Compass Security CORS null-origin victim route live oracle",
+    description:
+      "When scanning /nullorigin/victim/ on victim.compass-demo.com, live Origin: null probe confirms Access-Control-Allow-Origin: null with credentials — Compass Security CORS null-origin route oracle.",
+    impactOneline:
+      "Route-specific confirmation that Compass /nullorigin/victim documents CORS null-origin credential-leak misconfiguration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "compassDemoCorsNullOriginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject null origin in CORS allow-lists when credentials are enabled on /nullorigin/victim routes.",
+      steps: [
+        "Reject null origin in CORS allow-lists when credentials are enabled.",
+        "Use explicit origin allow-lists instead of reflecting arbitrary Origin headers.",
+        "Run Compass CORS labs only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Compass /nullorigin/victim route reflects Origin: null with credentials. Show route-specific CORS hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "compass-demo-cors-attack-api-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
