@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1748-1751-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1747→1751 + placeholder priority regex extended to 1751; web-security-learning-labs.vercel.app/module/1748 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-ssti-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeIstEduLabRouteInjection POST /api/portal admin' OR '1'='1 Authentication Bypass Successful on /labs/ssti route scan; ist-edu-bd.vercel.app/labs/ssti findings 8→9 (+ist-edu-ssti-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga.lab.pentest-forge.com",
+      "slug": "dvga-pentest-forge-host-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isDvgaLiveHost + dvgaCanonicalOrigin extended for dvga.lab.pentest-forge.com; dvga.tools.escape.tech/graphql regression 11 findings with dvga-graphql-introspection-route-live-oracle + batching + sqli-filter oracles; pentest-forge host currently 502; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-admin-config-route-live-oracle",
       "status": "shipped",
