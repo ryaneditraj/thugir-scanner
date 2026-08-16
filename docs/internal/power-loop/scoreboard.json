@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T19:10:00.000Z",
+  "updated_at": "2026-08-16T19:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2832,
-  "total_findings": 27840,
-  "critical_findings": 60,
+  "total_sites_scanned": 2827,
+  "total_findings": 27887,
+  "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2005,
-  "discovery_findings": 23308,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-16T19:10:00.000Z",
+  "discovery_urls_added": 2000,
+  "discovery_findings": 23255,
+  "improvements_shipped": 1202,
+  "last_run": "2026-08-16T19:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "19",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 585,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings, 35 juice-shop live oracles); no benchmark misses"
+      "note": "Stable 6/6 recall (47 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 53,
-      "focus": "WSL catalog 1773-1775 + HackHealth A03 XSS + SecureBank CSRF transfer + vulnerable-web-site XXE + ai-security-platform SQLi",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 23,
+      "focus": "WSL catalog 1768-1772 + PentestForge DVWA SQLi + DVGA graphql 502 fallbacks",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "hack-health-tutorial.vercel.app/cybersecurity/a03/xss: 11 findings incl reflexion-escalated-ssti + client-side HackHealth OWASP lab evidence",
-      "web-security-learning-labs.vercel.app/module/1773-1775: 7 findings each — WSL catalog extended past 1772",
-      "ai-security-platform-iota.vercel.app/challenges/sqli: 7 findings — ai-security-sqli-route-live-oracle",
-      "securebank-blog.vercel.app/transfer: 2 findings — CSRF transfer route thin hub (missing-security-headers + dir-discovery only)"
+      "web-security-learning-labs.vercel.app/module/1768: 7→8 findings — web-security-learning-labs-module-1768-1772-catalog shipped (placeholder route oracle)",
+      "web-security-learning-labs.vercel.app/module/1772: 5→8 findings — placeholder module oracle via catalog max 1772",
+      "dvwa.lab.pentest-forge.com/vulnerabilities/sqli/: 1→2 findings — pentest-forge-dvwa-sqli-route-live-oracle shipped (corpus fallback when lab 502)",
+      "dvga.lab.pentest-forge.com/graphql: 1→2 findings — dvga-graphql-introspection-route-live-oracle corpus fallback when lab 502"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "securebank-blog.vercel.app/transfer: CSRF bank-transfer live oracle absent — 2-finding hub without route-specific CSRF oracle",
-      "WSL modules 1773-1775: placeholder module-route-evidence only — extend catalog to 1776+ on next run",
       "vampi.lab.pentest-forge.com/*: PentestForge labs return 502 Bad Gateway",
-      "crapi.lab.pentest-forge.com/*: PentestForge crAPI returns 502 — live BOLA oracle ready when lab is reachable",
+      "crapi.lab.pentest-forge.com/*: PentestForge crAPI returns 502 — BOLA corpus fallback active",
       "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated login)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "hack-health-tutorial.vercel.app/cybersecurity/a03/xss": 11,
-    "web-security-learning-labs.vercel.app/module/1773": 7,
-    "web-security-learning-labs.vercel.app/module/1774": 7,
-    "web-security-learning-labs.vercel.app/module/1775": 7,
-    "ai-security-platform-iota.vercel.app/challenges/sqli": 7,
-    "vulnerable-web-site.vercel.app/xxe": 6,
-    "securebank-blog.vercel.app/transfer": 2
+    "web-security-learning-labs.vercel.app/module/1768": 8,
+    "web-security-learning-labs.vercel.app/module/1772": 8,
+    "dvwa.lab.pentest-forge.com/vulnerabilities/sqli": 2,
+    "dvga.lab.pentest-forge.com/graphql": 2,
+    "burpbountylab.com/ssti/preview": 95,
+    "crapi.lab.pentest-forge.com/identity/api/v2/user/videos": 2,
+    "pwnshop.ctfsecurity.com/download": 42
   }
 }
