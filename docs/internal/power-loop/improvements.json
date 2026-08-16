@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-deploy-status-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chethan-vinayak/vulnshop README oracle #62 GET /api/v1/deploy/status Infrastructure Disclosure; vulnshopDeployStatusLiveOracle + route variant with README corpus fallback; vulnshop.vercel.app/api/v1/deploy/status findings 12→14 (+vulnshop-deploy-status-live-oracle + route); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-deserialization-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeIstEduLabRouteInjection POST /api/portal admin' OR '1'='1 Authentication Bypass Successful on /labs/deserialization route scan; ist-edu-bd.vercel.app/labs/deserialization findings 8→9 (+ist-edu-deserialization-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-file-upload-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle documents <svg onload=alert('Stored XSS!')> and img onerror XSS upload payloads; ist-edu-bd.vercel.app/labs/file-upload findings 8→9 (+ist-edu-file-upload-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:ist-edu-bd.vercel.app",
       "slug": "ist-edu-files-client-lfi-route-live-oracle",
       "status": "shipped",
@@ -11303,6 +11321,21 @@
       "source": "discovery:whgojp.top",
       "slug": "javaseclab-reflected-xss-wiki-fallback",
       "shipped_at": "2026-08-16T04:30:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-deploy-status-route-live-oracle",
+      "shipped_at": "2026-08-16T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-deserialization-lab-route-live-oracle",
+      "shipped_at": "2026-08-16T09:10:00.000Z"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-file-upload-lab-route-live-oracle",
+      "shipped_at": "2026-08-16T09:10:00.000Z"
     }
   ]
 }
