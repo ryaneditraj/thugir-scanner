@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-files-client-lfi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: istEduFilesClientLfiRouteLiveOracle ported from DVWU — SPA bundle Document Library + LFI vuln-hint + ?file=../../../etc/passwd; ist-edu-bd.vercel.app/files findings 8→10 (+ist-edu-files-client-lfi-route-live-oracle + extended ist-edu-notices-lfi-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-path-traversal-client-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: istEduPathTraversalClientRouteLiveOracle confirms Path traversal detected + Document Library markers in bundle; ist-edu-bd.vercel.app/labs/path-traversal findings 8→11 (+ist-edu-path-traversal-client-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1746-1747-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1745→1747 + placeholder priority regex 17(?:0\\d|1\\d|2[0-9]|3[0-9]|4[0-7]); web-security-learning-labs.vercel.app/module/1746 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1747 placeholder oracle confirmed; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-command-injection-route-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: ist-edu-bd deployed SPA bundle has no /labs/* routes and no command-injection/CMDI API — /labs/command-injection URL is runner-seeded but app only exposes /portal /search /files /notices routes; no portable live oracle without false positives (same as ist-edu-xxe rejection)"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1741-1745-catalog",
       "status": "shipped",
