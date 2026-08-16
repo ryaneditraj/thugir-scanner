@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-16T00:07:20.257Z",
-  "total": 2401,
-  "uniqueSlugs": 2397,
+  "generatedAt": "2026-08-16T01:06:05.979Z",
+  "total": 2405,
+  "uniqueSlugs": 2401,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2383,
+    "generic": 2387,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2316,
+    "deep": 2320,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 112,
-    "Security misconfiguration": 179,
+    "Security misconfiguration": 183,
     "Broken authentication": 146,
     "Injection": 358,
     "Cross-site scripting": 697,
@@ -1961,6 +1961,10 @@
     "support-reliability-lab-admin-console-route-live-oracle",
     "support-reliability-lab-big-upload-payload-live-oracle",
     "support-reliability-lab-big-upload-payload-route-live-oracle",
+    "support-reliability-lab-broken-domain-live-oracle",
+    "support-reliability-lab-broken-domain-route-live-oracle",
+    "support-reliability-lab-home-hub-live-oracle",
+    "support-reliability-lab-home-hub-route-live-oracle",
     "support-reliability-lab-missing-trace-live-oracle",
     "support-reliability-lab-missing-trace-route-live-oracle",
     "support-reliability-lab-serverless-timeout-live-oracle",
