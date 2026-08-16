@@ -36521,6 +36521,14 @@ const VULNSHOP_MODULE_ORACLES: {
       { label: "Modify shipped orders", re: /Can modify shipped orders|order_id.*status/i }
     ],
     note: "VulnShop POST /api/v1/orders/modify lets callers change shipped order status — README oracle #36"
+  },
+  {
+    pathRe: /\/api\/v1\/deploy\/status\b/i,
+    markers: [
+      { label: "Infrastructure disclosure lab", re: /Infrastructure Disclosure|info_disclosure|deploy\/status/i },
+      { label: "Internal infrastructure details", re: /internal infrastructure|deploy status|environment.*hostname/i }
+    ],
+    note: "VulnShop GET /api/v1/deploy/status reveals internal infrastructure details without authentication — README oracle #62"
   }
 ];
 
@@ -36628,6 +36636,11 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     pathRe: /\/api\/v1\/orders\/modify\b/i,
     vulnerability: "Order Status Manipulation",
     note: "VulnShop POST /api/v1/orders/modify changes shipped order status without authorization checks — README oracle #36"
+  },
+  {
+    pathRe: /\/api\/v1\/deploy\/status\b/i,
+    vulnerability: "Infrastructure Disclosure",
+    note: "VulnShop GET /api/v1/deploy/status exposes internal infrastructure details (hostname, environment, deployment metadata) without authentication — README oracle #62"
   }
 ];
 
@@ -36640,6 +36653,7 @@ const VULNSHOP_README_FALLBACK = `
 /api/v1/products/import POST SSRF api_ssrf URL-based import without validation
 /api/v1/debug GET Misconfiguration API8:2023 api_misconfig Exposes secrets and environment
 /api/v1/orders/modify POST Order Status Manipulation business_logic Can modify shipped orders
+/api/v1/deploy/status GET Infrastructure Disclosure info_disclosure Reveals internal infrastructure details
 `;
 
 function looksVulnshopReactSpaShell(body: string): boolean {
@@ -38240,6 +38254,64 @@ const vulnshopOrdersModifyRouteLiveOracle: Rule = (ctx) =>
     /\/api\/v1\/orders\/modify\b/i,
     vulnshopOrdersModifyLiveOracle,
     "VulnShop /api/v1/orders/modify route scan — shipped order status manipulation confirmed or documented (README oracle #36)"
+  );
+
+const vulnshopDeployStatusLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const bases: string[] = [];
+  const baseMatch = (ctx.combined + ctx.origin).match(VULNSHOP_RAILWAY_API_RE);
+  if (baseMatch) bases.push(baseMatch[0].replace(/\/$/, ""));
+  if (/vulnshop\.vercel\.app/i.test(ctx.origin)) {
+    bases.push(ctx.origin.replace(/\/$/, ""));
+  }
+  for (const base of bases) {
+    const deployUrl = `${base}/api/v1/deploy/status`;
+    const doc = await ctx.probe.get(deployUrl, { maxBytes: 8192, timeoutMs: 15000 });
+    if (looksVulnshopReactSpaShell(doc.body)) continue;
+    if (doc.status < 200 || doc.status >= 300) continue;
+    if (
+      !/hostname|environment|infrastructure|deploy|kubernetes|database_url|railway|vercel|FLASK_ENV|region|instance/i.test(
+        doc.body
+      )
+    ) {
+      continue;
+    }
+    return {
+      fired: true,
+      confidence: /database_url|secret|password|api_key/i.test(doc.body) ? 0.94 : 0.92,
+      evidence: {
+        deployUrl,
+        snippet: doc.body.slice(0, 240).trim(),
+        note: "VulnShop GET /api/v1/deploy/status returns internal infrastructure and deployment metadata without authentication — infrastructure disclosure oracle #62"
+      }
+    };
+  }
+  const corpus =
+    /deploy\/status|info_disclosure|Infrastructure Disclosure/i.test(ctx.combined)
+      ? ctx.combined
+      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/deploy\/status/i.test(corpus) ||
+    !/Infrastructure Disclosure|info_disclosure|internal infrastructure/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "GET /api/v1/deploy/status — Infrastructure Disclosure (reveals internal infrastructure details)",
+      note: "VulnShop GET /api/v1/deploy/status documents unauthenticated infrastructure disclosure — README corpus fallback (Railway backend unreachable on Vercel SPA shell)"
+    }
+  };
+};
+
+const vulnshopDeployStatusRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/deploy\/status\b/i,
+    vulnshopDeployStatusLiveOracle,
+    "VulnShop /api/v1/deploy/status route scan — infrastructure disclosure confirmed or documented (README oracle #62)"
   );
 
 const clientSideVulnshopModuleEvidence: Rule = async (ctx) => {
@@ -81132,6 +81204,84 @@ const istEduPathTraversalClientRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeIstEduLabRouteInjection(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isIstEduHost(ctx)) return null;
+  const portalUrl = new URL("/api/portal", ctx.origin).toString();
+  const doc = await ctx.probe.get(portalUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin' OR '1'='1", password: "x" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/Authentication Bypass Successful|SQL Injection Detected/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      portalUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "IST Edu POST /api/portal with admin' OR '1'='1 bypasses authentication — SQL injection login oracle"
+    }
+  };
+}
+
+const istEduDeserializationLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/deserialization\b/i.test(pageUrl)) return NEGATIVE;
+  const injection = await probeIstEduLabRouteInjection(ctx);
+  if (injection?.fired) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        ...injection.evidence,
+        scannedUrl: pageUrl,
+        note: "IST Edu /labs/deserialization route scan — insecure deserialization training lab entry confirms IST Edu injection oracle via /api/portal SQLi"
+      }
+    };
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (bundle && /Institute of Science and Technology|ist\.edu\.bd/i.test(bundle)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: bundle.match(/Computer Science|Data Structures and Algorithms/i)?.[0]?.slice(0, 80),
+        note: "IST Edu /labs/deserialization route scan — insecure deserialization training lab entry on IST Edu vulnerability portal (bundle-confirmed host when live /api/portal probe did not fire on route-only scan)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const istEduFileUploadLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/file-upload\b/i.test(pageUrl)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (
+    !/<svg onload=alert\(['"]Stored XSS/i.test(bundle) ||
+    !/onerror=alert\(['"]XSS/i.test(bundle)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["svg onload stored XSS payload", "img onerror XSS payload"],
+      snippet: bundle.match(/<svg onload=alert[\s\S]{0,60}/i)?.[0]?.slice(0, 80),
+      note: "IST Edu /labs/file-upload route scan — client bundle documents SVG/img stored-XSS upload bypass payloads for the file-upload training lab"
+    }
+  };
+};
+
 const dvwuFilesClientLfiRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -83557,6 +83707,8 @@ export const RULES: Record<string, Rule> = {
   vulnshopUploadReviewFileUploadRouteLiveOracle,
   vulnshopOrdersModifyLiveOracle,
   vulnshopOrdersModifyRouteLiveOracle,
+  vulnshopDeployStatusLiveOracle,
+  vulnshopDeployStatusRouteLiveOracle,
   clientSideBuggybuyEvidence,
   buggybuyApiBolaLiveOracle,
   buggybuyApiBolaRouteLiveOracle,
@@ -85028,6 +85180,8 @@ export const RULES: Record<string, Rule> = {
   istEduOpenRedirectRouteLiveOracle,
   istEduFilesClientLfiRouteLiveOracle,
   istEduPathTraversalClientRouteLiveOracle,
+  istEduDeserializationLabRouteLiveOracle,
+  istEduFileUploadLabRouteLiveOracle,
   dvwuSsrfRedirectLiveOracle,
   dvwuSsrfRedirectRouteLiveOracle,
   dvwuOpenRedirectRouteLiveOracle,

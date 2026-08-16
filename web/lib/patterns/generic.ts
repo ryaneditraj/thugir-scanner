@@ -24288,6 +24288,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-deploy-status-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "VulnShop deploy status infrastructure disclosure live oracle",
+    description:
+      "GET /api/v1/deploy/status on the VulnShop backend reveals internal infrastructure and deployment metadata without authentication — README oracle #62.",
+    impactOneline:
+      "Unauthenticated callers can enumerate deployment environment, hostnames, and infrastructure details.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopDeployStatusLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or authenticate /api/v1/deploy/status before deploying any API backend.",
+      steps: [
+        "Delete infrastructure disclosure routes from production and staging backends.",
+        "Restrict deployment metadata to authenticated admin roles only.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop GET /api/v1/deploy/status leaks infrastructure details. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-deploy-status-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "VulnShop /api/v1/deploy/status route live oracle",
+    description:
+      "When scanning /api/v1/deploy/status, live Railway backend probe or README oracle #62 documents infrastructure disclosure on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/deploy/status documents unauthenticated infrastructure disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopDeployStatusRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or authenticate /api/v1/deploy/status before deploying any API backend.",
+      steps: [
+        "Delete infrastructure disclosure routes from production and staging backends.",
+        "Restrict deployment metadata to authenticated admin roles only.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/deploy/status route documents infrastructure disclosure. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-hidden-admin-manager-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -42087,6 +42139,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our ist-edu-bd.vercel.app /labs/path-traversal route exposes a client-side Document Library with traversal detection. Show server-side path canonicalization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-deserialization-lab-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "IST Edu insecure deserialization lab route live oracle",
+    description:
+      "When scanning /labs/deserialization on ist-edu-bd.vercel.app, confirm the insecure deserialization training lab route with live IST Edu injection oracle — route-specific deserialization lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that IST Edu exposes an insecure deserialization training lab entry on the discovery queue.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduDeserializationLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — never deserialize untrusted data in production.",
+      steps: [
+        "Avoid native deserialization of attacker-controlled input.",
+        "Use safe serialization formats (JSON) with strict schema validation.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our ist-edu-bd.vercel.app /labs/deserialization route is an insecure deserialization training lab. Show safe deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-file-upload-lab-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "IST Edu file-upload lab route live oracle",
+    description:
+      "When scanning /labs/file-upload on ist-edu-bd.vercel.app, the SPA bundle documents SVG/img stored-XSS upload bypass payloads — route-specific unrestricted file upload training oracle.",
+    impactOneline:
+      "Route-specific confirmation that IST Edu /labs/file-upload documents dangerous upload bypass payloads in the client bundle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduFileUploadLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — validate file types server-side in production.",
+      steps: [
+        "Enforce server-side content-type and extension allowlists on uploads.",
+        "Strip scriptable content from SVG uploads or serve uploads from a separate origin.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our ist-edu-bd.vercel.app /labs/file-upload route documents stored XSS via SVG upload. Show upload validation remediation.",
     version: 1,
     enabled: true
   },
