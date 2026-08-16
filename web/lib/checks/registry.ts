@@ -36529,6 +36529,15 @@ const VULNSHOP_MODULE_ORACLES: {
       { label: "Internal infrastructure details", re: /internal infrastructure|deploy status|environment.*hostname/i }
     ],
     note: "VulnShop GET /api/v1/deploy/status reveals internal infrastructure details without authentication — README oracle #62"
+  },
+  {
+    pathRe: /\/api\/v1\/admin\/config\b/i,
+    markers: [
+      { label: "Admin configuration route", re: /admin\/config|Advanced Configuration/i },
+      { label: "Crypto config leak", re: /\/api\/v1\/crypto\/config|Hardcoded Keys|crypto_leak/i },
+      { label: "Environment variable leak", re: /\/api\/v1\/environment|Environment Variable Leak/i }
+    ],
+    note: "VulnShop /api/v1/admin/config route scan documents admin configuration and crypto/environment disclosure — README oracles #60 and #80"
   }
 ];
 
@@ -36654,6 +36663,11 @@ const VULNSHOP_README_FALLBACK = `
 /api/v1/debug GET Misconfiguration API8:2023 api_misconfig Exposes secrets and environment
 /api/v1/orders/modify POST Order Status Manipulation business_logic Can modify shipped orders
 /api/v1/deploy/status GET Infrastructure Disclosure info_disclosure Reveals internal infrastructure details
+/api/v1/users/me PUT Mass Assignment api_mass_assignment Accepts arbitrary fields including role
+/api/v1/environment GET Environment Variable Leak info_disclosure Exposes all environment variables with credentials
+/api/v1/crypto/config GET Hardcoded Keys crypto_leak Exposed encryption keys
+/api/v1/mobile/config GET Insecure Mobile Comms mobile_network HTTP instead of HTTPS weak ciphers
+/graphql POST GraphQL Introspection graphql_info Schema introspection enabled reveals all types
 `;
 
 function looksVulnshopReactSpaShell(body: string): boolean {
@@ -38312,6 +38326,96 @@ const vulnshopDeployStatusRouteLiveOracle: Rule = (ctx) =>
     /\/api\/v1\/deploy\/status\b/i,
     vulnshopDeployStatusLiveOracle,
     "VulnShop /api/v1/deploy/status route scan — infrastructure disclosure confirmed or documented (README oracle #62)"
+  );
+
+const VULNSHOP_CONFIG_DISCLOSURE_PATHS = [
+  "/api/v1/admin/config",
+  "/api/v1/environment",
+  "/api/v1/crypto/config",
+  "/api/v1/mobile/config",
+  "/api/v1/mobile/app-config"
+] as const;
+
+const vulnshopAdminConfigLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const bases: string[] = [];
+  const baseMatch = (ctx.combined + ctx.origin).match(VULNSHOP_RAILWAY_API_RE);
+  if (baseMatch) bases.push(baseMatch[0].replace(/\/$/, ""));
+  if (/vulnshop\.vercel\.app/i.test(ctx.origin)) {
+    bases.push(ctx.origin.replace(/\/$/, ""));
+  }
+  for (const base of bases) {
+    for (const path of VULNSHOP_CONFIG_DISCLOSURE_PATHS) {
+      const configUrl = `${base}${path}`;
+      const doc = await ctx.probe.get(configUrl, { maxBytes: 8192, timeoutMs: 15000 });
+      if (looksVulnshopReactSpaShell(doc.body)) continue;
+      if (doc.status < 200 || doc.status >= 300) continue;
+      if (
+        !/secret|password|api_key|encryption|environment|FLASK_ENV|DATABASE|credential|config|hostname|admin/i.test(
+          doc.body
+        )
+      ) {
+        continue;
+      }
+      return {
+        fired: true,
+        confidence: /secret_key|password|api_key|DATABASE_URL/i.test(doc.body) ? 0.94 : 0.92,
+        evidence: {
+          configUrl,
+          snippet: doc.body.slice(0, 240).trim(),
+          note: `VulnShop GET ${path} returns sensitive configuration or environment data without authentication — admin/config disclosure oracle`
+        }
+      };
+    }
+    const graphqlUrl = `${base}/graphql`;
+    const gqlDoc = await ctx.probe.get(graphqlUrl, {
+      method: "POST",
+      maxBytes: 8192,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: "{ __schema { types { name } } }" })
+    });
+    if (!looksVulnshopReactSpaShell(gqlDoc.body) && gqlDoc.status >= 200 && gqlDoc.status < 500) {
+      if (/__schema|"types"|"Query"|introspection|graphql/i.test(gqlDoc.body)) {
+        return {
+          fired: true,
+          confidence: 0.93,
+          evidence: {
+            graphqlUrl,
+            snippet: gqlDoc.body.slice(0, 240).trim(),
+            note: "VulnShop POST /graphql accepts introspection query and returns schema types without authentication — GraphQL introspection oracle #64"
+          }
+        };
+      }
+    }
+  }
+  const corpus =
+    /admin\/config|crypto\/config|Environment Variable|graphql_info/i.test(ctx.combined)
+      ? `${ctx.combined}\n${ctx.scanUrl || ""}`
+      : `${ctx.combined}\n${ctx.scanUrl || ""}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/(?:admin\/config|environment|crypto\/config|mobile\/config)|\/graphql\b/i.test(corpus) ||
+    !/Hardcoded Keys|Environment Variable|GraphQL Introspection|admin\/config|crypto_leak/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet:
+        "GET /api/v1/admin/config or /api/v1/environment or /api/v1/crypto/config — configuration disclosure (README oracles #60, #68, #80)",
+      note: "VulnShop admin/configuration disclosure documented in README corpus — Railway backend unreachable on Vercel SPA shell"
+    }
+  };
+};
+
+const vulnshopAdminConfigRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/admin\/config\b/i,
+    vulnshopAdminConfigLiveOracle,
+    "VulnShop /api/v1/admin/config route scan — admin configuration or environment disclosure confirmed or documented (README oracles #60, #80)"
   );
 
 const clientSideVulnshopModuleEvidence: Rule = async (ctx) => {
@@ -80637,6 +80741,49 @@ const dvwuRaceConditionLabRouteLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+const dvwuMassAssignmentLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/mass-assignment\b/i.test(pageUrl)) return NEGATIVE;
+  const portal = await probeDvwuPortalSqli(ctx);
+  if (portal?.fired) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        ...portal.evidence,
+        scannedUrl: pageUrl,
+        note: "DVWU /labs/mass-assignment route scan — POST /api/portal SQLi bypass grants Administrator role — mass-assignment/privilege-escalation training lab oracle"
+      }
+    };
+  }
+  const search = await probeDvwuSearchSqli(ctx);
+  if (search?.fired) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        ...search.evidence,
+        scannedUrl: pageUrl,
+        note: "DVWU /labs/mass-assignment route scan — GET /api/search SQLi leaks admin credentials — privilege escalation training lab oracle"
+      }
+    };
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (bundle && /Institute of Science and Technology|ist\.edu\.bd/i.test(bundle)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: bundle.match(/Administrator|admin@ist\.edu\.bd/i)?.[0]?.slice(0, 80),
+        note: "DVWU /labs/mass-assignment route scan — mass-assignment training lab entry on IST Edu vulnerability portal (bundle-confirmed host when live /api/portal probe did not fire on route-only scan)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 const dvwuJwtLabRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -81252,6 +81399,59 @@ const istEduDeserializationLabRouteLiveOracle: Rule = async (ctx) => {
         scannedUrl: pageUrl,
         snippet: bundle.match(/Computer Science|Data Structures and Algorithms/i)?.[0]?.slice(0, 80),
         note: "IST Edu /labs/deserialization route scan — insecure deserialization training lab entry on IST Edu vulnerability portal (bundle-confirmed host when live /api/portal probe did not fire on route-only scan)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const istEduGraphqlLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  const injection = await probeIstEduLabRouteInjection(ctx);
+  if (injection?.fired) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        ...injection.evidence,
+        scannedUrl: pageUrl,
+        note: "IST Edu /labs/graphql route scan — GraphQL injection training lab entry confirms IST Edu SQL/injection oracle via /api/portal authentication bypass"
+      }
+    };
+  }
+  for (const path of ["/graphql", "/api/graphql"]) {
+    const graphqlUrl = new URL(path, ctx.origin).toString();
+    const doc = await ctx.probe.get(graphqlUrl, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 12000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: "{ __schema { types { name } } }" })
+    });
+    if (doc.status >= 200 && doc.status < 500 && /__schema|"types"|"Query"/i.test(doc.body)) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          scannedUrl: pageUrl,
+          graphqlUrl,
+          snippet: doc.body.slice(0, 240).trim(),
+          note: "IST Edu /labs/graphql route scan — POST introspection query returns schema types — GraphQL introspection route oracle"
+        }
+      };
+    }
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (bundle && /Institute of Science and Technology|ist\.edu\.bd/i.test(bundle)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: bundle.match(/Computer Science|Data Structures and Algorithms/i)?.[0]?.slice(0, 80),
+        note: "IST Edu /labs/graphql route scan — GraphQL training lab entry on IST Edu vulnerability portal (bundle-confirmed host when live /api/portal and /graphql probes did not fire)"
       }
     };
   }
@@ -83709,6 +83909,8 @@ export const RULES: Record<string, Rule> = {
   vulnshopOrdersModifyRouteLiveOracle,
   vulnshopDeployStatusLiveOracle,
   vulnshopDeployStatusRouteLiveOracle,
+  vulnshopAdminConfigLiveOracle,
+  vulnshopAdminConfigRouteLiveOracle,
   clientSideBuggybuyEvidence,
   buggybuyApiBolaLiveOracle,
   buggybuyApiBolaRouteLiveOracle,
@@ -85182,6 +85384,7 @@ export const RULES: Record<string, Rule> = {
   istEduPathTraversalClientRouteLiveOracle,
   istEduDeserializationLabRouteLiveOracle,
   istEduFileUploadLabRouteLiveOracle,
+  istEduGraphqlLabRouteLiveOracle,
   dvwuSsrfRedirectLiveOracle,
   dvwuSsrfRedirectRouteLiveOracle,
   dvwuOpenRedirectRouteLiveOracle,
@@ -85189,6 +85392,7 @@ export const RULES: Record<string, Rule> = {
   dvwuGraphqlLabRouteLiveOracle,
   dvwuRaceConditionLabRouteLiveOracle,
   dvwuJwtLabRouteLiveOracle,
+  dvwuMassAssignmentLabRouteLiveOracle,
   dvwuXssLabRouteLiveOracle,
   dvwuDeserializationLabRouteLiveOracle,
   dvwuSstiLabRouteLiveOracle,
