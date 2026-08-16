@@ -38429,7 +38429,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1745;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1747;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -79944,7 +79944,13 @@ const istEduSearchXssRouteLiveOracle: Rule = async (ctx) => {
 const istEduNoticesLfiRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:api\/notices|labs\/(?:sqli|idor|xss|csrf|ssrf|lfi|xxe))\b/i.test(pageUrl)) return NEGATIVE;
+  if (
+    !/\/(?:api\/notices|labs\/(?:sqli|idor|xss|csrf|ssrf|lfi|xxe|cmdi|command-injection|path-traversal)|files|notices)\b/i.test(
+      pageUrl
+    )
+  ) {
+    return NEGATIVE;
+  }
   for (const payload of NOTICES_FILE_LFI_PAYLOADS) {
     const url = new URL("/api/notices", ctx.origin);
     url.searchParams.set("file", payload);
@@ -81069,6 +81075,59 @@ const dvwuBrokenAuthRouteLiveOracle: Rule = async (ctx) => {
       markers: ["20050@ist.edu.bd", "password123", "Authentication Bypass"],
       snippet: bundle.match(/20050@ist\.edu\.bd[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
       note: "DVWU /labs/broken-auth route scan — SPA documents hardcoded credentials and SQL injection authentication bypass on /api/portal"
+    }
+  };
+};
+
+const istEduFilesClientLfiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/(?:lfi|path-traversal|xxe|cmdi)|files|notices)\/?$/i.test(pathname)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (!/Document Library/i.test(bundle)) return NEGATIVE;
+  if (!/file viewer is vulnerable to LFI|LFI Vulnerability/i.test(bundle)) return NEGATIVE;
+  if (!/\?file=\.\.\/\.\.\/\.\.\/etc\/passwd/i.test(bundle)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["Document Library", "LFI vuln-hint", "?file=../../../etc/passwd"],
+      snippet: bundle.match(/file viewer is vulnerable to LFI[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "IST Edu /labs/lfi or /files route scan — SPA Document Library exposes client-side LFI training lab with path traversal payloads"
+    }
+  };
+};
+
+const istEduPathTraversalClientRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/labs\/path-traversal\/?$/i.test(pathname)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (!/Path traversal detected/i.test(bundle)) return NEGATIVE;
+  if (!/Document Library/i.test(bundle)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["Path traversal detected", "Document Library"],
+      snippet: bundle.match(/Path traversal detected[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "IST Edu /labs/path-traversal route scan — SPA Document Library exposes client-side path traversal training lab with ../ detection"
     }
   };
 };
@@ -84967,6 +85026,8 @@ export const RULES: Record<string, Rule> = {
   allSeeingEyeHelloRouteLiveOracle,
   istEduSsrfRedirectRouteLiveOracle,
   istEduOpenRedirectRouteLiveOracle,
+  istEduFilesClientLfiRouteLiveOracle,
+  istEduPathTraversalClientRouteLiveOracle,
   dvwuSsrfRedirectLiveOracle,
   dvwuSsrfRedirectRouteLiveOracle,
   dvwuOpenRedirectRouteLiveOracle,
