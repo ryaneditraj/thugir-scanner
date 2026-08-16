@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T00:03:18.263Z",
+  "updated_at": "2026-08-16T00:05:24.644Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2726,
-  "total_findings": 26578,
+  "total_sites_scanned": 2734,
+  "total_findings": 26628,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1951,
-  "discovery_findings": 22487,
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22537,
   "improvements_shipped": 1199,
-  "last_run": "2026-08-16T00:03:18.263Z",
+  "last_run": "2026-08-16T00:05:24.644Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,34 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (48 findings, 36 juice-shop live oracles); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 22,
-      "focus": "support-reliability-lab missing-trace tenant + compass-demo CSRF registration oracle",
-      "improvements_shipped_this_run": 2
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 50,
+      "focus": "WSL modules 1711-1715 expansion + queue drain 1706-1708 placeholder modules",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "support-reliability-lab.vercel.app/s/missing-trace: 5→12 findings — missing-trace broken trace correlation route oracle shipped",
-      "compass-demo.com/csrf/: 4→10 findings — CSRF registration without token live oracle shipped"
+      "web-security-learning-labs.vercel.app/module/1711-1715: 7 findings each — module-route-evidence + dangerous-html-sinks (placeholder hub pages, no vuln-category live oracles)",
+      "web-security-learning-labs.vercel.app/module/1706-1708: 5 findings each — placeholder-module-route-live-oracle (queue backlog drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key and other slugs)",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-category-bypass oracle requires OTP session (intermittent in cloud scans)",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS oracle OTP-gated (works when session primes)",
+      "WSL modules 1694-1715: placeholder module pages only — no route-specific vuln-category live oracles",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-category-bypass oracle requires OTP session",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS oracle OTP-gated",
       "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle OTP-gated"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
-    "support-reliability-lab.vercel.app/s/missing-trace": 12,
-    "compass-demo.com/csrf": 10,
-    "ssrf.vulnlab.dev/basic": 15,
+    "web-security-learning-labs.vercel.app/module/1711": 7,
+    "web-security-learning-labs.vercel.app/module/1712": 7,
+    "web-security-learning-labs.vercel.app/module/1713": 7,
+    "web-security-learning-labs.vercel.app/module/1714": 7,
+    "web-security-learning-labs.vercel.app/module/1715": 7,
+    "web-security-learning-labs.vercel.app/module/1706": 5,
+    "web-security-learning-labs.vercel.app/module/1707": 5,
+    "web-security-learning-labs.vercel.app/module/1708": 5,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "vulnbank.org/sup3r_s3cr3t_admin": 20,
     "brokencrystals.com/api/users/one/regular_user/adminpermission": 89
