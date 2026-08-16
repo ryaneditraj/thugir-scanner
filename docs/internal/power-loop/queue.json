@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-16T03:03:40.918Z",
+  "updated_at": "2026-08-16T04:02:30.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1725",
+      "source": "web-security-learning-labs Vercel — module 1725 security lab route (WSL catalog expansion past 1724, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1726",
+      "source": "web-security-learning-labs Vercel — module 1726 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/deserialization",
+      "source": "zahidoverflow/dvwu — insecure deserialization lab /labs/deserialization (DVWU Vercel deploy, Aug 2026 priority drain)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/file-upload",
+      "source": "zahidoverflow/dvwu — unrestricted file upload lab /labs/file-upload (DVWU Vercel deploy, Aug 2026 priority drain)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://secure-bank-bay.vercel.app/transfer",
+      "source": "Areeeshaa/SecureBank — CSRF bank transfer oracle GET /transfer (FAST-NUCES Attack Mode live demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1723",
       "source": "web-security-learning-labs Vercel — module 1723 security lab route (WSL catalog expansion past 1722, Aug 2026)",
