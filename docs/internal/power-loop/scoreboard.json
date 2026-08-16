@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T22:08:00.000Z",
+  "updated_at": "2026-08-16T22:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2845,
-  "total_findings": 28218,
+  "total_sites_scanned": 2848,
+  "total_findings": 28248,
   "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2012,
-  "discovery_findings": 23398,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-16T22:08:00.000Z",
+  "discovery_urls_added": 2015,
+  "discovery_findings": 23428,
+  "improvements_shipped": 1205,
+  "last_run": "2026-08-16T22:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
@@ -48,44 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings, 35 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (47 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 46,
-      "focus": "WSL 1776-1780 catalog expansion + 1679-1680 IDOR modules + vulnforge IDOR/auth/nightmare queue additions",
-      "improvements_shipped_this_run": 0
+      "urls_added": 3,
+      "urls_scanned": 3,
+      "findings": 30,
+      "focus": "dvaib.com/login session bootstrap + vulnshop /api/v1/cart price oracle + WSL catalog 1781-1785",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1776: 8 findings — WSL placeholder module route expansion",
-      "web-security-learning-labs.vercel.app/module/1777: 8 findings — WSL catalog module 1777",
-      "web-security-learning-labs.vercel.app/module/1778: 8 findings — WSL catalog module 1778",
-      "web-security-learning-labs.vercel.app/module/1679: 6 findings — WSL extended IDOR module route live oracle",
-      "web-security-learning-labs.vercel.app/module/1680: 6 findings — WSL extended IDOR module route live oracle",
-      "web-security-learning-labs.vercel.app/module/1779: 5 findings — WSL placeholder module 1779",
-      "web-security-learning-labs.vercel.app/module/1780: 5 findings — WSL placeholder module 1780",
-      "damn-vulnerable-startup.fly.dev/challenges/owasp: scan error (fly.dev unreachable)"
+      "www.dvaib.com/login: 0→8 findings — dvaib-login-route-live-oracle (register/login + /api/auth/me)",
+      "vulnshop.vercel.app/api/v1/cart: 0→17 findings — vulnshop-cart-route-live-oracle price manipulation (README #34)",
+      "web-security-learning-labs.vercel.app/module/1783: 0→5 findings — WSL catalog 1781-1785 expansion",
+      "web-security-learning-labs.vercel.app/module/1776-1780: placeholder-module route oracles from prior queue drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "WSL modules 1776-1780 return placeholder-module-route oracles — no route-specific vuln live oracles yet",
-      "vulnforge-academy levels 7-10 + level20 queued but not scanned this run (queue backlog ahead of WSL drain)",
-      "dvaib.com/login + vulnshop /api/v1/cart still in queue backlog",
-      "damn-vulnerable-startup.fly.dev/*: DVS DeployBro fly.dev returns errors"
+      "WSL modules 1776-1785 return placeholder-module-route oracles — no route-specific vuln live oracles yet",
+      "vulnforge-academy levels 7-10 + level20 queued but not scanned (queue backlog)",
+      "damn-vulnerable-startup.fly.dev/*: DVS DeployBro fly.dev returns errors",
+      "vulnshop Railway backend unreachable — cart/price oracles use README corpus fallback"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
+    "vulnshop.vercel.app/api/v1/cart": 17,
+    "www.dvaib.com/login": 8,
+    "web-security-learning-labs.vercel.app/module/1783": 5,
     "web-security-learning-labs.vercel.app/module/1776": 8,
-    "web-security-learning-labs.vercel.app/module/1777": 8,
     "web-security-learning-labs.vercel.app/module/1778": 8,
-    "web-security-learning-labs.vercel.app/module/1679": 6,
-    "web-security-learning-labs.vercel.app/module/1680": 6,
-    "web-security-learning-labs.vercel.app/module/1779": 5,
-    "web-security-learning-labs.vercel.app/module/1780": 5
+    "vuln-expose.vercel.app/network-tools": 18
   }
 }
