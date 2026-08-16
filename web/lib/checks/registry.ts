@@ -36538,6 +36538,24 @@ const VULNSHOP_MODULE_ORACLES: {
       { label: "Environment variable leak", re: /\/api\/v1\/environment|Environment Variable Leak/i }
     ],
     note: "VulnShop /api/v1/admin/config route scan documents admin configuration and crypto/environment disclosure — README oracles #60 and #80"
+  },
+  {
+    pathRe: /\/api\/v1\/admin\/users\b/i,
+    markers: [
+      { label: "Admin users BFLA route", re: /\/api\/v1\/admin\/users|api_bfla|Function Auth/i },
+      { label: "API5 function authorization", re: /API5:2023|Broken Function Level Authorization/i },
+      { label: "Admin users list", re: /admin\/users|List all users/i }
+    ],
+    note: "VulnShop GET /api/v1/admin/users — Function Auth (API5:2023) admin endpoint with only signature check — README oracle #27"
+  },
+  {
+    pathRe: /\/api\/v1\/admin\/orders\b/i,
+    markers: [
+      { label: "Admin orders BFLA route", re: /\/api\/v1\/admin\/orders|admin\/orders/i },
+      { label: "API5 function authorization", re: /API5:2023|Broken Function Level Authorization|api_bfla/i },
+      { label: "Admin orders list", re: /List all orders|admin orders/i }
+    ],
+    note: "VulnShop GET /api/v1/admin/orders — admin order roster without function-level authorization (BFLA / API5:2023)"
   }
 ];
 
@@ -36668,6 +36686,10 @@ const VULNSHOP_README_FALLBACK = `
 /api/v1/crypto/config GET Hardcoded Keys crypto_leak Exposed encryption keys
 /api/v1/mobile/config GET Insecure Mobile Comms mobile_network HTTP instead of HTTPS weak ciphers
 /graphql POST GraphQL Introspection graphql_info Schema introspection enabled reveals all types
+/api/v1/admin/users GET Function Auth API5:2023 api_bfla Admin endpoint with only signature check
+/api/admin/users GET Broken Function Level Authorization api_bfla List all users without role check
+/api/v1/admin/orders GET Function Auth API5:2023 api_bfla Admin orders list without function-level authorization
+/api/admin/orders GET Broken Function Level Authorization api_bfla List all orders without role check
 `;
 
 function looksVulnshopReactSpaShell(body: string): boolean {
@@ -38418,6 +38440,148 @@ const vulnshopAdminConfigRouteLiveOracle: Rule = (ctx) =>
     "VulnShop /api/v1/admin/config route scan — admin configuration or environment disclosure confirmed or documented (README oracles #60, #80)"
   );
 
+const VULNSHOP_ADMIN_USERS_PATHS = ["/api/v1/admin/users", "/api/admin/users"] as const;
+const VULNSHOP_ADMIN_ORDERS_PATHS = ["/api/v1/admin/orders", "/api/admin/orders"] as const;
+
+function vulnshopProbeBases(ctx: RuleContext): string[] {
+  const bases: string[] = [];
+  const apiBase = vulnshopApiBase(ctx);
+  if (apiBase) bases.push(apiBase.replace(/\/api$/, ""));
+  if (/vulnshop\.vercel\.app/i.test(ctx.origin)) {
+    bases.push(ctx.origin.replace(/\/$/, ""));
+  }
+  const railwayMatch = (ctx.combined + ctx.origin).match(VULNSHOP_RAILWAY_API_RE);
+  if (railwayMatch) {
+    bases.push(railwayMatch[0].replace(/\/$/, ""));
+  }
+  return [...new Set(bases)];
+}
+
+const vulnshopAdminUsersBflaLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const forged = vulnshopForgedAdminJwt();
+  for (const base of vulnshopProbeBases(ctx)) {
+    for (const path of VULNSHOP_ADMIN_USERS_PATHS) {
+      const usersUrl = `${base}${path}`;
+      const doc = await ctx.probe.get(usersUrl, {
+        maxBytes: 8192,
+        timeoutMs: 15000,
+        headers: { Authorization: `Bearer ${forged}` }
+      });
+      if (looksVulnshopReactSpaShell(doc.body)) continue;
+      if (doc.status < 200 || doc.status >= 300) continue;
+      if (
+        !/"password"\s*:/i.test(doc.body) &&
+        !/"email"\s*:/i.test(doc.body) &&
+        !/"username"\s*:/i.test(doc.body)
+      ) {
+        continue;
+      }
+      if (
+        !/"is_admin"\s*:/i.test(doc.body) &&
+        !/"role"\s*:\s*"admin"/i.test(doc.body) &&
+        !/\[\s*\{/.test(doc.body)
+      ) {
+        continue;
+      }
+      return {
+        fired: true,
+        confidence: /"password"\s*:/i.test(doc.body) ? 0.94 : 0.92,
+        evidence: {
+          usersUrl,
+          snippet: doc.body.slice(0, 240).trim(),
+          note: `VulnShop GET ${path} with forged is_admin JWT returns user roster with admin fields — BFLA admin users oracle (README #27 / API5:2023)`
+        }
+      };
+    }
+  }
+  const corpus =
+    /\/api\/v1\/admin\/users|api_bfla|Function Auth/i.test(ctx.combined)
+      ? `${ctx.combined}\n${ctx.scanUrl || ""}`
+      : `${ctx.combined}\n${ctx.scanUrl || ""}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/admin\/users|\/api\/admin\/users/i.test(corpus) ||
+    !/api_bfla|Function Auth|API5:2023|Broken Function Level Authorization/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "GET /api/v1/admin/users — Function Auth (API5:2023) admin endpoint with only signature check",
+      note: "VulnShop GET /api/v1/admin/users documents BFLA — README oracle #27 (Railway backend unreachable on Vercel SPA shell)"
+    }
+  };
+};
+
+const vulnshopAdminUsersBflaRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/admin\/users\b/i,
+    vulnshopAdminUsersBflaLiveOracle,
+    "VulnShop /api/v1/admin/users route scan — forged JWT admin user roster confirmed or documented (README oracle #27 / API5:2023 BFLA)"
+  );
+
+const vulnshopAdminOrdersBflaLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const forged = vulnshopForgedAdminJwt();
+  for (const base of vulnshopProbeBases(ctx)) {
+    for (const path of VULNSHOP_ADMIN_ORDERS_PATHS) {
+      const ordersUrl = `${base}${path}`;
+      const doc = await ctx.probe.get(ordersUrl, {
+        maxBytes: 8192,
+        timeoutMs: 15000,
+        headers: { Authorization: `Bearer ${forged}` }
+      });
+      if (looksVulnshopReactSpaShell(doc.body)) continue;
+      if (doc.status < 200 || doc.status >= 300) continue;
+      if (
+        !/"order/i.test(doc.body) &&
+        !/"status"\s*:/i.test(doc.body) &&
+        !/"total/i.test(doc.body) &&
+        !/\[\s*\{/.test(doc.body)
+      ) {
+        continue;
+      }
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          ordersUrl,
+          snippet: doc.body.slice(0, 240).trim(),
+          note: `VulnShop GET ${path} with forged is_admin JWT returns cross-customer order roster — BFLA admin orders oracle (API5:2023)`
+        }
+      };
+    }
+  }
+  const corpus = /admin\/orders|api_bfla|Function Auth/i.test(ctx.combined)
+    ? `${ctx.combined}\n${ctx.scanUrl || ""}`
+    : `${ctx.combined}\n${ctx.scanUrl || ""}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/admin\/orders|\/api\/admin\/orders|admin\/orders/i.test(corpus) ||
+    !/api_bfla|Function Auth|API5:2023|Broken Function Level Authorization|List all orders/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "GET /api/admin/orders — admin order roster without function-level authorization",
+      note: "VulnShop admin orders list documents BFLA — SPA bundle admin/orders route (Railway backend unreachable on Vercel SPA shell)"
+    }
+  };
+};
+
+const vulnshopAdminOrdersBflaRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/admin\/orders\b/i,
+    vulnshopAdminOrdersBflaLiveOracle,
+    "VulnShop /api/v1/admin/orders route scan — admin order roster BFLA confirmed or documented (API5:2023)"
+  );
+
 const clientSideVulnshopModuleEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const urlCorpus = [pageUrl, ctx.scanUrl].filter(Boolean).join("\n");
@@ -38605,7 +38769,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1751;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1756;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -83946,6 +84110,10 @@ export const RULES: Record<string, Rule> = {
   vulnshopDeployStatusRouteLiveOracle,
   vulnshopAdminConfigLiveOracle,
   vulnshopAdminConfigRouteLiveOracle,
+  vulnshopAdminUsersBflaLiveOracle,
+  vulnshopAdminUsersBflaRouteLiveOracle,
+  vulnshopAdminOrdersBflaLiveOracle,
+  vulnshopAdminOrdersBflaRouteLiveOracle,
   clientSideBuggybuyEvidence,
   buggybuyApiBolaLiveOracle,
   buggybuyApiBolaRouteLiveOracle,

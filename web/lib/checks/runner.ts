@@ -3,7 +3,7 @@
 // scripts + a couple of harmless backend reads. No crawl, no auth, no multi-step probing.
 
 import type { Pattern, PatternFinding, Platform } from "../patterns/types";
-import { patternsForTier, lockedTeasersForPlatform } from "../patterns";
+import { patternsForTier, lockedTeasersForPlatform, findPattern } from "../patterns";
 import { detectPlatform } from "../detect";
 import {
   BlockedTargetError,
@@ -2738,6 +2738,10 @@ const DEEP_RULES = new Set<string>([
   "vulnshopDeployStatusRouteLiveOracle",
   "vulnshopAdminConfigLiveOracle",
   "vulnshopAdminConfigRouteLiveOracle",
+  "vulnshopAdminUsersBflaLiveOracle",
+  "vulnshopAdminUsersBflaRouteLiveOracle",
+  "vulnshopAdminOrdersBflaLiveOracle",
+  "vulnshopAdminOrdersBflaRouteLiveOracle",
   "clientSideVulnlabAuditApiEvidence",
   "clientSideVulnlabHandsOnLabEvidence",
   "clientSideVibeEvalEvidence",
@@ -7396,6 +7400,8 @@ function extractVulnshopSeeds(html: string, pageUrl: string): string[] {
     "/api/process",
     "/api/v1/wallet/add-funds",
     "/api/v1/checkout/apply-discount",
+    "/api/v1/admin/users",
+    "/api/v1/admin/orders",
     "/template",
     "/track-order",
     "/support",
@@ -11005,6 +11011,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/admin\/(?:users|orders)\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-admin-")
+      )
+        return -4;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
         /\/api\/v1\/(?:orders|users)\b/i.test(targetInput) &&
         p.slug.startsWith("vulnshop-")
       )
@@ -12014,7 +12026,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[01])|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-6])|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
@@ -12206,6 +12218,33 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     if (f && f.confidence >= DEEP_MIN_CONFIDENCE && !seen.has(f.patternSlug)) {
       seen.add(f.patternSlug);
       findings.push(f);
+    }
+  }
+
+  if (
+    /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+    seen.has("juice-shop-resend-key-live-oracle") &&
+    !seen.has("secret-resend")
+  ) {
+    const resendPattern = findPattern("secret-resend");
+    const resendOracle = findings.find((f) => f.patternSlug === "juice-shop-resend-key-live-oracle");
+    if (resendPattern && resendOracle) {
+      seen.add("secret-resend");
+      findings.push({
+        patternSlug: resendPattern.slug,
+        category: resendPattern.category,
+        title: resendPattern.title,
+        severity: resendPattern.severityDefault,
+        tierRequired: resendPattern.tierRequired,
+        impactOneline: resendPattern.impactOneline,
+        evidence: {
+          ...resendOracle.evidence,
+          note: "secret-resend slug bridged from juice-shop-resend-key-live-oracle — Resend API key validated against api.resend.com/domains (Leaked Resend API Key challenge)"
+        },
+        remediation: resendPattern.remediation,
+        fixPrompt: resendPattern.fixPrompt,
+        confidence: resendOracle.confidence
+      });
     }
   }
 
