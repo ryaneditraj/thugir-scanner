@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T15:09:30.465Z",
+  "updated_at": "2026-08-16T15:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2793,
-  "total_findings": 27409,
+  "total_sites_scanned": 2796,
+  "total_findings": 27420,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1990,
-  "discovery_findings": 23045,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-16T15:09:30.465Z",
+  "discovery_findings": 23055,
+  "improvements_shipped": 1202,
+  "last_run": "2026-08-16T15:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 587,
+      "probes_run": 588,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,43 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (48 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 116,
-      "focus": "WSL 1762-1764 catalog + pwnshop download path-traversal + chat LLM + compass-demo nosql/csp/angularjs drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 14,
+      "focus": "Compass CORS null-origin patterns + WSL catalog 1764 + crAPI PentestForge host wiring",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/download: 44 findings — pwnshop-download-path-traversal-live-oracle + route-live-oracle confirmed (PWN-038)",
-      "pwnshop.ctfsecurity.com/chat: 20 findings — corpus oracles fire but route-specific chat prompt-injection live oracle absent on /chat entry",
-      "web-security-learning-labs.vercel.app/module/1762-1764: 7 findings each — placeholder WSL module-route-evidence only",
-      "www.compass-demo.com/nosql/movies.php: 11 findings — compass-demo-nosql-login-bypass-live-oracle confirmed",
-      "compass-demo.com/csp_demo: 10 findings — compass-demo CSP bypass oracles confirmed",
-      "compass-demo.com/angularjs/angularjs_demo.php: 10 findings — compass-demo-angularjs-xss-live-oracle confirmed"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "victim.compass-demo.com/nullorigin/victim/index.php: 3→5 findings — compass-demo-cors-null-origin-route-live-oracle shipped (302 ACAO:null + credentials)",
+      "compass-demo.com/: 10→11 findings — compass-demo-cors-null-origin-live-oracle pattern wired (rule existed without slug)",
+      "web-security-learning-labs.vercel.app/module/1764: 7→8 findings — WSL catalog extended to 1764 (+placeholder-module-route-live-oracle)",
+      "crapi.lab.pentest-forge.com/identity/api/auth/signup: isCrapiLabHost extended — signup oracle ready when lab is reachable (502 at validation)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pwnshop.ctfsecurity.com/chat: route-specific LLM prompt-injection live oracle absent despite 20-finding hub",
-      "WSL modules 1762-1764: placeholder module-route-evidence only — no vuln-category live oracles",
-      "vampi.lab.pentest-forge.com/books/v1/{id}: route-specific IDOR/BOLA live oracles absent (scanned 14 UTC)",
-      "crapi.lab.pentest-forge.com/identity/api/auth/signup: broken-auth signup oracle absent (scanned 14 UTC)"
+      "secret-resend slug still absent when juice-shop-resend-key oracle does not fire (Resend API validation failed)",
+      "vampi.lab.pentest-forge.com/books/v1/{id}: VAmPI oracles wired but lab returns 502 Bad Gateway",
+      "crapi.lab.pentest-forge.com/identity/api/auth/signup: host detection shipped — lab returns 502 at validation time",
+      "dvga.lab.pentest-forge.com/graphql: host returns 502 Bad Gateway — DVGA oracles ready when lab is reachable",
+      "pwnshop.ctfsecurity.com/chat: route-specific LLM prompt-injection live oracle absent despite 20-finding hub"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 48,
+    "victim.compass-demo.com/nullorigin/victim/index.php": 5,
+    "compass-demo.com": 11,
+    "web-security-learning-labs.vercel.app/module/1764": 8,
     "pwnshop.ctfsecurity.com/download": 44,
-    "pwnshop.ctfsecurity.com/chat": 20,
     "www.compass-demo.com/nosql/movies.php": 11,
-    "compass-demo.com/csp_demo": 10,
-    "compass-demo.com/angularjs/angularjs_demo.php": 10,
-    "web-security-learning-labs.vercel.app/module/1762": 7,
-    "web-security-learning-labs.vercel.app/module/1763": 7,
-    "web-security-learning-labs.vercel.app/module/1764": 7
+    "www.compass-demo.com/cors/attack/api.php": 11,
+    "vulnshop.vercel.app/product?id=1": 17
   }
 }
