@@ -22652,6 +22652,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvaib-login-route-live-oracle",
+    platform: "generic",
+    category: "Authentication bypass",
+    severityDefault: "high",
+    title: "DVAIB login route session live oracle",
+    description:
+      "When scanning /login on dvaib.com, POST /api/auth/register + POST /api/auth/login returns a bearer token and GET /api/auth/me succeeds — session bootstrap oracle for auth-gated prompt-injection lab probes.",
+    impactOneline:
+      "Route-specific confirmation that DVAIB /login exposes a working register/login API chain for AI banking assistant training scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaibLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden DVAIB auth endpoints — intentional training software for prompt-injection scenarios.",
+      steps: [
+        "Require MFA before LLM tool calls can modify account balances.",
+        "Rate-limit /api/auth/register and monitor for scanner-driven account sprawl.",
+        "Run DVAIB only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our DVAIB /login route scan confirms open register/login for AI banking lab sessions. Show auth hardening for training deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-mass-assignment-admin-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -24032,24 +24058,24 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Broken access control",
     severityDefault: "high",
-    title: "VulnShop /cart flash-sale race condition route live oracle",
+    title: "VulnShop /cart price manipulation route live oracle",
     description:
-      "When scanning /cart, live concurrent POST /api/v1/flash-sale race or curated Flask-route oracle confirms flash-sale inventory race condition training module.",
+      "When scanning /api/v1/cart, live POST /api/v1/cart/update-price or curated Flask-route oracle confirms client-side price manipulation training module (README oracle #34).",
     impactOneline:
-      "Route-specific confirmation that VulnShop /cart documents concurrent flash-sale purchase race conditions.",
+      "Route-specific confirmation that VulnShop /api/v1/cart documents client-supplied price manipulation without server-side verification.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "vulnshopCartRouteLiveOracle" },
     tierRequired: "deep",
     remediation: {
-      summary: "Use atomic inventory decrements on /api/v1/flash-sale.",
+      summary: "Verify cart prices server-side on VulnShop — intentional training software.",
       steps: [
-        "Protect flash-sale stock counters with mutexes or transactional updates.",
-        "Reject concurrent purchases that would oversell limited inventory.",
+        "Reject client-supplied prices on /api/v1/cart/update-price.",
+        "Bind checkout totals to authoritative product catalog prices.",
         "Run VulnShop only on isolated scanner evaluation infrastructure."
       ]
     },
     fixPrompt:
-      "Our VulnShop /cart route documents a flash-sale inventory race condition. Show route-specific locking remediation.",
+      "Our VulnShop /api/v1/cart route documents client-side price manipulation. Show route-specific server-side price verification remediation.",
     version: 1,
     enabled: true
   },
