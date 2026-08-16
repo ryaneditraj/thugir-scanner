@@ -11471,6 +11471,21 @@
       "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-product-sqli-route-live-oracle",
       "shipped_at": "2026-08-16T14:30:00.000Z"
+    },
+    {
+      "source": "discovery:victim.compass-demo.com",
+      "slug": "compass-demo-cors-null-origin-route-live-oracle",
+      "shipped_at": "2026-08-16T15:45:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1761-1764-catalog",
+      "shipped_at": "2026-08-16T15:45:00.000Z"
+    },
+    {
+      "source": "discovery:crapi.lab.pentest-forge.com",
+      "slug": "crapi-pentest-forge-host-detection",
+      "shipped_at": "2026-08-16T15:45:00.000Z"
     }
   ]
 }
