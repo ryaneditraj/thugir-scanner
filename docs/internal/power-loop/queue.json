@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-16T09:02:33.294Z",
+  "updated_at": "2026-08-16T11:04:56.441Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1750",
+      "source": "web-security-learning-labs Vercel — module 1750 security lab route (WSL catalog expansion past 1749, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1751",
+      "source": "web-security-learning-labs Vercel — module 1751 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/labs/ssti",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SSTI lab /labs/ssti (ist-edu-bd Vercel deploy, Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/labs/path-traversal",
+      "source": "zahidoverflow/damn-vulnerable-web-university — path traversal lab /labs/path-traversal (ist-edu-bd Vercel deploy, Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.lab.pentest-forge.com/graphql",
+      "source": "PentestForge Lab — DVGA GraphQL introspection/injection oracle endpoint /graphql (lab.pentest-forge.com, Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1748",
       "source": "web-security-learning-labs Vercel — module 1748 security lab route (WSL catalog expansion past 1747, Aug 2026 discovery)",

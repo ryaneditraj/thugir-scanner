@@ -1,97 +1,27 @@
 {
   "runs": [
     {
-      "run_id": "2026-08-15T09:05:20.263Z",
-      "url": "https://owaspbased-lessons.vercel.app/lesson/prompt-injection",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "owasp-genai-prompt-injection-route-live-oracle",
-          "title": "OWASP GenAI prompt-injection lesson route live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "AI security"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-prompt-injection-evidence",
-          "title": "Prompt-injection red-team or scanner functionality in client bundle",
-          "severity": "medium",
-          "confidence": 0.84,
-          "category": "AI security"
-        },
-        {
-          "slug": "client-side-owasp-genai-lab-evidence",
-          "title": "OWASP GenAI Security Lab disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 568,
-      "status": "ok",
-      "scanned_at": "2026-08-15T09:05:20.263Z"
-    },
-    {
-      "run_id": "2026-08-15T09:05:33.464Z",
-      "url": "https://owaspbased-lessons.vercel.app/lesson/info-disclosure",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "owasp-genai-sensitive-info-route-live-oracle",
-          "title": "OWASP GenAI sensitive-info lesson route live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "AI security"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-prompt-injection-evidence",
-          "title": "Prompt-injection red-team or scanner functionality in client bundle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "client-side-owasp-genai-lab-evidence",
-          "title": "OWASP GenAI Security Lab disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 604,
-      "status": "ok",
-      "scanned_at": "2026-08-15T09:05:33.464Z"
+      "run_id": "2026-08-16T11:04:56.452Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 6/6 recall (47 findings, pages=6 probes=587)",
+      "teacher_delta": [],
+      "benchmark_recall": {
+        "categories_expected": 6,
+        "categories_hit": 6,
+        "gap": [],
+        "hit": [
+          "xss",
+          "sqli",
+          "idor",
+          "auth_bypass",
+          "sensitive_data",
+          "misconfig"
+        ]
+      },
+      "scanned_at": "2026-08-16T11:04:56.452Z"
     },
     {
       "run_id": "2026-08-15T09:05:51.894Z",
