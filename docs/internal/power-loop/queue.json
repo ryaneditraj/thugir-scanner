@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-16T15:03:27.308Z",
+  "updated_at": "2026-08-16T16:04:24.559Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1765",
+      "source": "web-security-learning-labs Vercel — module 1765 security lab route (WSL catalog expansion past 1764, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1766",
+      "source": "web-security-learning-labs Vercel — module 1766 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1767",
+      "source": "web-security-learning-labs Vercel — module 1767 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://crapi.lab.pentest-forge.com/identity/api/v2/user/videos",
+      "source": "PentestForge Lab — crAPI BOLA oracle GET /identity/api/v2/user/videos (lab.pentest-forge.com, Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwa.lab.pentest-forge.com/vulnerabilities/sqli/",
+      "source": "PentestForge Lab — DVWA SQLi oracle /vulnerabilities/sqli/ (lab.pentest-forge.com, Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1762",
       "source": "web-security-learning-labs Vercel — module 1762 security lab route (WSL catalog expansion past 1761, Aug 2026 discovery)",
