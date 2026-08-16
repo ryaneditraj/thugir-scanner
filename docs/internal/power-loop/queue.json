@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-16T01:03:31.185Z",
+  "updated_at": "2026-08-16T02:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://support-reliability-lab.vercel.app/s/broken-domain",
+      "source": "esterkane/support-reliability-lab — invalid custom-domain tenant path /s/broken-domain (broken-domain incident playbook)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1721",
+      "source": "web-security-learning-labs Vercel — module 1721 security lab route (WSL catalog expansion past 1720, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1722",
+      "source": "web-security-learning-labs Vercel — module 1722 security lab route (WSL catalog expansion, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/users/1",
+      "source": "sr33jih/vulnshop — BOLA user profile IDOR oracle GET /api/v1/users/:id (OWASP API Top 10 lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/xss/reflected",
+      "source": "whgojp/JavaSecLab — reflected XSS training module (JavaSecLab public demo homepage)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1716",
       "source": "web-security-learning-labs Vercel — module 1716 security lab route (OSS deploy hub expansion past 1715, Aug 2026 discovery)",
@@ -12801,5 +12826,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 0
+  "discovery_urls_added": 5
 }
