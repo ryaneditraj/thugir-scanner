@@ -38965,7 +38965,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1760;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1764;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -55985,6 +55985,22 @@ const compassDemoCorsNullOriginLiveOracle: Rule = async (ctx) => {
     };
   }
   return NEGATIVE;
+};
+
+const compassDemoCorsNullOriginRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/nullorigin\/victim\//i.test(pageUrl)) return NEGATIVE;
+  const result = await compassDemoCorsNullOriginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Compass Security /nullorigin/victim route scan — victim reflects Origin: null with Access-Control-Allow-Credentials: true — CORS null-origin misconfiguration oracle"
+    }
+  };
 };
 
 const compassDemoCorsAttackApiRouteLiveOracle: Rule = async (ctx) => {
@@ -75952,6 +75968,12 @@ function isCrapi1Host(ctx: RuleContext): boolean {
 }
 
 function isCrapiLabHost(ctx: RuleContext): boolean {
+  try {
+    const host = new URL(ctx.origin).hostname.toLowerCase();
+    if (host.includes("crapi") && host.endsWith(".lab.pentest-forge.com")) return true;
+  } catch {
+    /* ignore */
+  }
   return /crapi2?\.apisec\.ai/i.test(ctx.origin);
 }
 
@@ -85468,6 +85490,7 @@ export const RULES: Record<string, Rule> = {
   compassDemoJwtAlgNoneLiveOracle,
   compassDemoJwtLabRouteLiveOracle,
   compassDemoCorsNullOriginLiveOracle,
+  compassDemoCorsNullOriginRouteLiveOracle,
   compassDemoCorsAttackApiRouteLiveOracle,
   compassDemoNosqlLoginBypassLiveOracle,
   compassDemoNosqlMoviesRouteLiveOracle,
