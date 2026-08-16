@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "secure-bank-bay-transfer-csrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: secureBankBayTransferCsrfRouteLiveOracle delegated to transactions oracle which gated on /api/transactions pageUrl — fixed with shared secureBankBayCsrfTransferCorpusHit(); secure-bank-bay.vercel.app/transfer findings 8→9 (+route-specific CSRF oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1723-1726-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1722→1726 + runner placeholder-module priority regex extended for 1723–1726; web-security-learning-labs.vercel.app/module/1725 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-reflected-xss-wiki-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JAVA_SECLAB_WIKI_FALLBACK corpus now includes JavaSecLab platform marker so /xss/reflected route oracle fires without relying on login-page branding alone; whgojp.top/xss/reflected javaseclab-reflected-xss-route-live-oracle maintained; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1716-1722-catalog",
       "status": "shipped",
@@ -11198,6 +11216,21 @@
       "source": "discovery:whgojp.top",
       "slug": "javaseclab-druid-basic-json-route-live-oracle",
       "shipped_at": "2026-08-16T03:25:00.000Z"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "secure-bank-bay-transfer-csrf-route-live-oracle",
+      "shipped_at": "2026-08-16T04:30:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1723-1726-catalog",
+      "shipped_at": "2026-08-16T04:30:00.000Z"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-reflected-xss-wiki-fallback",
+      "shipped_at": "2026-08-16T04:30:00.000Z"
     }
   ]
 }
