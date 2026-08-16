@@ -14822,6 +14822,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "hack-health-a03-sql-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "HackHealth A03 SQL injection route live oracle",
+    description:
+      "When scanning /cybersecurity/a03/sqlInjection (or the discovery alias /cybersecurity/a03/xss) on hack-health-tutorial.vercel.app, the Nextra A03 Injection tutorial documents intentional login SQLi with UNION SELECT pg_user enumeration — route-specific SQLi training oracle (404 alias fetches sqlInjection module corpus).",
+    impactOneline:
+      "Route-specific confirmation of HackHealth A03 Injection tutorial enables targeted scanner calibration for educational SQLi labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hackHealthA03SqlInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and restrict tutorial labs to local dev.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries or an ORM.",
+        "Host HackHealth attack tutorials on localhost only, not public Vercel deploys.",
+        "Remove UNION-based enumeration examples from production-facing docs."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth /cybersecurity/a03/sqlInjection route documents intentional login SQLi. Show parameterized query fixes for the attack lab.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hack-health-intro-evidence",
     platform: "generic",
     category: "Injection",
@@ -25766,6 +25792,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our securebank-blog /admin route documents RBAC with 403 for non-admin users. Show server-side authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "securebank-blog-transfer-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "SecureBank blog CSRF transfer route live oracle",
+    description:
+      "When scanning /transfer on securebank-blog.vercel.app, the Medium article documents Attack Mode CSRF bank transfer via a fake voucher page posting a transfer form using the victim session cookie — route-specific CSRF training oracle (404 route fetches / article corpus).",
+    impactOneline:
+      "Educational SecureBank blog walkthrough exposes intentional CSRF transfer patterns for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBlogTransferCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational attack/secure mode toggles must never ship to production deployments.",
+      steps: [
+        "Include a unique CSRF token in every state-changing form.",
+        "Validate the CSRF token server-side before processing transfers.",
+        "Host vulnerable demos on isolated lab subdomains with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our securebank-blog /transfer route documents Attack Mode CSRF bank transfer via cross-site form POST. Show CSRF token remediation.",
     version: 1,
     enabled: true
   },

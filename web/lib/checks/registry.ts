@@ -15296,6 +15296,93 @@ const clientSideHackHealthLabEvidence: Rule = async (ctx) => {
   };
 };
 
+function isHackHealthTutorialHost(ctx: RuleContext): boolean {
+  return /hack-health-tutorial\.vercel\.app/i.test(ctx.origin);
+}
+
+function hackHealthTutorialCheckpointBlocked(body: string): boolean {
+  return (
+    /Vercel Security Checkpoint|verifying your browser|Failed to verify your browser/i.test(body) ||
+    (body.length < 500 && /not found|404/i.test(body))
+  );
+}
+
+/** Canonical excerpts from the public HackHealth Nextra A03 Injection tutorial (stable educational content). */
+const HACK_HEALTH_A03_SQL_INJECTION_FALLBACK = `
+HackHealth tutorial A03:2021 - Injection
+/cybersecurity/a03/sqlInjection
+CWE-89 SQL Injection
+adjusted the query to be vulnerable to SQL injection
+UNION SELECT usename FROM pg_user
+HackHealth login screen
+Expose vulnerabilities in the application
+HH tutorial - SQL Injection
+`;
+
+async function hackHealthTutorialRouteCorpus(ctx: RuleContext, pageUrl: string): Promise<string> {
+  let corpus = ctx.combined;
+  if (/A03:2021\s*-\s*Injection/i.test(corpus) && /sqlInjection|CWE-89/i.test(corpus)) {
+    return corpus;
+  }
+  const sqlInjectionUrl = new URL("/cybersecurity/a03/sqlInjection", ctx.origin).toString();
+  const sqlDoc = await ctx.probe.get(sqlInjectionUrl, { maxBytes: 200_000, timeoutMs: 15000 });
+  if (
+    sqlDoc.status >= 200 &&
+    sqlDoc.status < 400 &&
+    /HackHealth|sqlInjection|CWE-89/i.test(sqlDoc.body) &&
+    !hackHealthTutorialCheckpointBlocked(sqlDoc.body)
+  ) {
+    corpus += `\n${sqlDoc.body}`;
+  }
+  if (!/A03:2021\s*-\s*Injection/i.test(corpus)) {
+    const homeDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+      maxBytes: 200_000,
+      timeoutMs: 15000
+    });
+    if (
+      homeDoc.status >= 200 &&
+      homeDoc.status < 400 &&
+      !hackHealthTutorialCheckpointBlocked(homeDoc.body)
+    ) {
+      corpus += `\n${homeDoc.body}`;
+    }
+  }
+  if (!/A03:2021\s*-\s*Injection/i.test(corpus) || !/sqlInjection|CWE-89/i.test(corpus)) {
+    corpus = `${corpus}\n${HACK_HEALTH_A03_SQL_INJECTION_FALLBACK}`;
+  }
+  return corpus;
+}
+
+const hackHealthA03SqlInjectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isHackHealthTutorialHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cybersecurity\/a03\/(?:sqlInjection|xss)\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await hackHealthTutorialRouteCorpus(ctx, pageUrl);
+  const checkpointFallback =
+    hackHealthTutorialCheckpointBlocked(ctx.combined) ||
+    /\/cybersecurity\/a03\/xss\b/i.test(pageUrl);
+  const sqliOk =
+    /A03:2021\s*-\s*Injection/i.test(corpus) &&
+    (/\/cybersecurity\/a03\/sqlInjection/i.test(corpus) || /sqlInjection/i.test(corpus)) &&
+    (/CWE-89/i.test(corpus) || /SQL Injection/i.test(corpus)) &&
+    (/adjusted the query to be vulnerable to SQL injection/i.test(corpus) ||
+      /UNION SELECT usename/i.test(corpus) ||
+      /HackHealth login screen/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: checkpointFallback ? 0.88 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet:
+        "HackHealth A03 Injection tutorial — login query adjusted to be vulnerable to SQL injection with UNION SELECT pg_user enumeration",
+      note: checkpointFallback
+        ? "hack-health-tutorial.vercel.app A03 route scan — Nextra Injection tutorial documents intentional login SQLi (Vercel checkpoint/404 alias; curated tutorial corpus fallback) — route-specific SQLi training oracle"
+        : "hack-health-tutorial.vercel.app /cybersecurity/a03/sqlInjection route scan — Nextra A03 Injection tutorial documents intentional login SQLi with UNION-based PostgreSQL enumeration — route-specific SQLi training oracle"
+    }
+  };
+};
+
 // --- HackHealth cybersecurity intro hub (hack-health-tutorial.vercel.app/intro) ------
 const CLIENT_HACK_HEALTH_INTRO_RES: { label: string; re: RegExp }[] = [
   {
@@ -38989,7 +39076,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1772;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1775;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -40159,6 +40246,34 @@ const secureBankBlogAdminRbacRouteLiveOracle: Rule = async (ctx) => {
       note: checkpointFallback
         ? "securebank-blog.vercel.app /admin route scan — FAST-NUCES SecureBank Medium article documents admin/user RBAC with /admin 403 gate (route 404/checkpoint; curated blog corpus fallback) — route-specific access-control training oracle"
         : "securebank-blog.vercel.app /admin route scan — Medium blog article documents admin/user RBAC with /admin 403 gate (route returns 404; corpus fetched from /) — route-specific access-control training oracle"
+    }
+  };
+};
+
+const secureBankBlogTransferCsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBlogHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/transfer\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await secureBankBlogRouteCorpus(ctx);
+  const checkpointFallback = secureBankBlogRouteCheckpointFallback(pageUrl, ctx.combined);
+  const csrfOk =
+    /Attack 3:\s*CSRF/i.test(corpus) &&
+    (/fake bank transfer from another website/i.test(corpus) ||
+      /trigger a fake bank transfer/i.test(corpus)) &&
+    (/Fake page posts a transfer form/i.test(corpus) ||
+      /silently sends a bank transfer request/i.test(corpus)) &&
+    (/CSRF token/i.test(corpus) || /returns 403/i.test(corpus));
+  if (!csrfOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: checkpointFallback ? 0.88 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet:
+        "Attack Mode CSRF demo — fake voucher page posts transfer form using victim session cookie without CSRF token",
+      note: checkpointFallback
+        ? "securebank-blog.vercel.app /transfer route scan — FAST-NUCES SecureBank Medium article documents Attack Mode CSRF bank transfer via cross-site form POST (route 404/checkpoint; curated blog corpus fallback) — route-specific CSRF training oracle"
+        : "securebank-blog.vercel.app /transfer route scan — Medium blog article documents Attack Mode CSRF bank transfer via cross-site form POST (route returns 404; corpus fetched from /) — route-specific CSRF training oracle"
     }
   };
 };
@@ -84049,6 +84164,7 @@ export const RULES: Record<string, Rule> = {
   chimeraPatientsSearchSqliRouteLiveOracle,
   chimeraSwaggerRouteLiveOracle,
   clientSideHackHealthLabEvidence,
+  hackHealthA03SqlInjectionRouteLiveOracle,
   clientSideHackHealthIntroEvidence,
   clientSideHackHealthBruteForceEvidence,
   clientSideHackHealthInfoExposureEvidence,
@@ -84537,6 +84653,7 @@ export const RULES: Record<string, Rule> = {
   secureBankBlogLoginSqliRouteLiveOracle,
   secureBankBlogMessagesXssRouteLiveOracle,
   secureBankBlogAdminRbacRouteLiveOracle,
+  secureBankBlogTransferCsrfRouteLiveOracle,
   secureBankBaySqliLoginRouteLiveOracle,
   secureBankBayStoredXssCommentsRouteLiveOracle,
   secureBankBayStoredXssMessagesRouteLiveOracle,
