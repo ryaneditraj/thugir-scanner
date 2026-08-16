@@ -1,6 +1,18 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1701-1710-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1700→1710 + runner placeholder-module priority regex extended for 1701–1710; web-security-learning-labs.vercel.app/module/1706 findings 5 (+web-security-learning-labs-placeholder-module-route-live-oracle without checkpoint fallback); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:support-reliability-lab.vercel.app",
+      "slug": "support-reliability-lab-reflexion-fp-suppress",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: supportReliabilityLabReflexionSuppressed on reflexion XSS/SQLi/SSTI — stale-cache findings 8→6 (removed reflexion-escalated-ssti FP, +support-reliability-lab-stale-cache-route-live-oracle); big-upload findings 8→6 (+big-upload-payload-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:support-reliability-lab.vercel.app",
       "slug": "support-reliability-lab-missing-trace-live-oracle",
       "status": "shipped",
@@ -11124,7 +11136,17 @@
     {
       "source": "discovery:compass-demo.com",
       "slug": "compass-demo-csrf-live-oracle",
-      "shipped_at": "2026-08-15T23:30:00.000Z"
+      "shipped_at": "2026-08-16T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:support-reliability-lab.vercel.app",
+      "slug": "support-reliability-lab-reflexion-fp-suppress",
+      "shipped_at": "2026-08-16T00:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1701-1710-catalog",
+      "shipped_at": "2026-08-16T00:10:00.000Z"
     }
   ]
 }
