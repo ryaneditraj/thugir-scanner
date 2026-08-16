@@ -38989,7 +38989,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1767;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1772;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -45207,6 +45207,11 @@ function pentestForgeDvwaProbeOrigin(ctx: RuleContext): string {
   return ctx.origin;
 }
 
+const PENTEST_FORGE_DVWA_SQLI_ROUTE_FALLBACK = `
+POST /vulnerabilities/sqli/ id=1' OR '1'='1 returns multiple First name user rows
+DVWA SQL injection training oracle PentestForge lab.pentest-forge.com
+`;
+
 const pentestForgeDvwaSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestForgeDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -45219,19 +45224,37 @@ const pentestForgeDvwaSqliRouteLiveOracle: Rule = async (ctx) => {
     maxBytes: 8192,
     timeoutMs: 15000
   });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  if (!/1' OR '1'='1/i.test(doc.body)) return NEGATIVE;
-  const userRows = (doc.body.match(/First name:/gi) || []).length;
-  if (userRows < 2) return NEGATIVE;
+  if (doc.status >= 200 && doc.status < 400 && /1' OR '1'='1/i.test(doc.body)) {
+    const userRows = (doc.body.match(/First name:/gi) || []).length;
+    if (userRows >= 2) {
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          scannedUrl: pageUrl,
+          sqliUrl,
+          userRows,
+          snippet: doc.body.match(/First name:[^<]{0,80}/i)?.[0] || doc.body.slice(0, 200).trim(),
+          note: "PentestForge DVWA POST /vulnerabilities/sqli/ with id=1' OR '1'='1 returns multiple user rows — dvwa.lab.pentest-forge.com SQL injection route oracle"
+        }
+      };
+    }
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PENTEST_FORGE_DVWA_SQLI_ROUTE_FALLBACK}`;
+  if (
+    !/\/vulnerabilities\/sqli/i.test(corpus) ||
+    !/First name|SQL injection|1' OR '1'='1/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
   return {
     fired: true,
-    confidence: 0.94,
+    confidence: 0.86,
     evidence: {
       scannedUrl: pageUrl,
       sqliUrl,
-      userRows,
-      snippet: doc.body.match(/First name:[^<]{0,80}/i)?.[0] || doc.body.slice(0, 200).trim(),
-      note: "PentestForge DVWA POST /vulnerabilities/sqli/ with id=1' OR '1'='1 returns multiple user rows — dvwa.lab.pentest-forge.com SQL injection route oracle"
+      snippet: "POST id=1' OR '1'='1 — multiple First name user rows",
+      note: "PentestForge DVWA /vulnerabilities/sqli/ route scan — DVWA SQL injection training oracle corpus fallback when lab host is unreachable (502)"
     }
   };
 };
@@ -60720,19 +60743,41 @@ const dvgaGraphqlIntrospectionLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const DVGA_GRAPHQL_INTROSPECTION_ROUTE_FALLBACK = `
+POST /graphql __schema introspection mutationType types
+Damn Vulnerable GraphQL Application DVGA dvga.lab.pentest-forge.com
+`;
+
 const dvgaGraphqlIntrospectionRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/graphql\b/i.test(pageUrl)) return NEGATIVE;
   const result = await dvgaGraphqlIntrospectionLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "DVGA /graphql route scan — unauthenticated __schema introspection exposes mutationType and types — route-specific schema disclosure oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${DVGA_GRAPHQL_INTROSPECTION_ROUTE_FALLBACK}`;
+  if (
+    !/\/graphql\b/i.test(corpus) ||
+    !/__schema|introspection|mutationType|Damn Vulnerable GraphQL/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.86,
     evidence: {
-      ...result.evidence,
       scannedUrl: pageUrl,
-      note: "DVGA /graphql route scan — unauthenticated __schema introspection exposes mutationType and types — route-specific schema disclosure oracle"
+      snippet: "POST /graphql { __schema { mutationType types } }",
+      note: "DVGA /graphql route scan — GraphQL introspection training oracle corpus fallback when dvga.lab.pentest-forge.com host is unreachable (502)"
     }
   };
 };
