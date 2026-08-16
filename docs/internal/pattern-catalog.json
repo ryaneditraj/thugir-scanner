@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-16T05:04:54.834Z",
-  "total": 2408,
-  "uniqueSlugs": 2404,
+  "generatedAt": "2026-08-16T06:19:47.510Z",
+  "total": 2409,
+  "uniqueSlugs": 2405,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2390,
+    "generic": 2391,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2323,
+    "deep": 2324,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 483,
+    "Broken access control": 484,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -145,6 +145,7 @@
     "brokencrystals-marketplace-route-live-oracle",
     "brokencrystals-mass-assignment-live-oracle",
     "brokencrystals-mass-assignment-put-live-oracle",
+    "brokencrystals-mass-assignment-put-route-live-oracle",
     "brokencrystals-mcp-get-config-live-oracle",
     "brokencrystals-mcp-get-config-route-live-oracle",
     "brokencrystals-mcp-process-numbers-live-oracle",
