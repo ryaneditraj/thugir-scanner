@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T11:10:00.000Z",
+  "updated_at": "2026-08-16T12:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2756,
-  "total_findings": 26918,
+  "total_sites_scanned": 2765,
+  "total_findings": 27029,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1970,
-  "discovery_findings": 22739,
-  "improvements_shipped": 1208,
-  "last_run": "2026-08-16T11:10:00.000Z",
+  "discovery_urls_added": 1975,
+  "discovery_findings": 22803,
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-16T12:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
@@ -52,33 +52,40 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 35,
-      "focus": "vulnshop admin/config + dvwu mass-assignment + ist-edu graphql route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 64,
+      "focus": "WSL modules 1750-1751 + ist-edu SSTI/path-traversal + compass JWT/CSRF labs + DVGA graphql",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "vulnshop.vercel.app/api/v1/admin/config: 14→17 findings — vulnshop-admin-config-route-live-oracle shipped (README #60/#80 config disclosure)",
-      "dvwu.vercel.app/labs/mass-assignment: 11→12 findings — dvwu-mass-assignment-lab-route-live-oracle shipped (portal SQLi Administrator role oracle)",
-      "ist-edu-bd.vercel.app/labs/graphql: 8→9 findings — ist-edu-graphql-lab-route-live-oracle shipped (portal SQLi injection oracle)"
+      "ist-edu-bd.vercel.app/labs/path-traversal: 11 findings — notices-file-lfi-probe critical LFI oracle on file query param",
+      "www.compass-demo.com/jwt_lab/: 11 findings — compass-demo-jwt-alg-none-live-oracle + nosql-login-bypass",
+      "compass-demo.com/csrf/: 10 findings — compass-demo-csrf-route-live-oracle on /csrf route",
+      "web-security-learning-labs.vercel.app/module/1750: 7 findings — first scan of WSL catalog expansion",
+      "web-security-learning-labs.vercel.app/module/1751: 7 findings — WSL module route live oracle",
+      "ist-edu-bd.vercel.app/labs/ssti: 8 findings — SSTI lab route evidence",
+      "dvga.lab.pentest-forge.com/graphql: 1 finding — missing headers only (no GraphQL-specific oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via leaked-api-key + security-question)",
-      "web-security-learning-labs.vercel.app/module/1748+: Vercel Security Checkpoint may block automated scans"
+      "dvga.lab.pentest-forge.com/graphql: GraphQL introspection/injection live oracles absent (1-finding header hub)",
+      "vulnshop.vercel.app/api/v1/admin/users + admin/orders: still queued — BFLA route oracles not yet scanned",
+      "web-security-learning-labs.vercel.app/module/1752-1756: added to queue this run, pending scan"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
+    "ist-edu-bd.vercel.app/labs/path-traversal": 11,
+    "www.compass-demo.com/jwt_lab/": 11,
+    "compass-demo.com/csrf/": 10,
+    "web-security-learning-labs.vercel.app/module/1667": 9,
+    "ist-edu-bd.vercel.app/labs/ssti": 8,
+    "web-security-learning-labs.vercel.app/module/1750": 7,
+    "web-security-learning-labs.vercel.app/module/1751": 7,
     "vulnshop.vercel.app/api/v1/admin/config": 17,
-    "dvwu.vercel.app/labs/mass-assignment": 12,
-    "ist-edu-bd.vercel.app/labs/graphql": 9,
-    "vulnshop.vercel.app/api/v1/deploy/status": 14,
-    "dvwu.vercel.app/labs/xxe": 14,
-    "compass-demo.com/xss_lab/": 9,
-    "ist-edu-bd.vercel.app/labs/deserialization": 9,
-    "ist-edu-bd.vercel.app/labs/file-upload": 9
+    "dvwu.vercel.app/labs/mass-assignment": 12
   }
 }
