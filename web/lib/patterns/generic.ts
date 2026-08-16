@@ -46008,6 +46008,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-ssti-render-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /ssti/render route SSTI live oracle",
+    description:
+      "When scanning /ssti/render, template={{7*7}} evaluates arithmetic to 49 in the output div — route-specific SSTI template-render profile oracle.",
+    impactOneline:
+      "Route-specific SSTI oracle confirms server-side template injection when scanning the Burp Bounty Lab /ssti/render practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySstiRenderRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into template engines without a strict sandbox.",
+      steps: [
+        "Use logic-less templates or sandboxed rendering contexts.",
+        "Reject template syntax characters in user-controlled fields.",
+        "Isolate Burp Bounty Lab SSTI routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ssti/render endpoint evaluates user templates. Show how to sandbox template rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-ssrf-fetch-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -46097,6 +46123,32 @@ export const genericPatterns: Pattern[] = [
       "Live XXE probe confirms external entity injection oracle for Burp Bounty scanner profile calibration.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "burpbountyXxeParseLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers.",
+      steps: [
+        "Set disallow-doctype-decl and disable external entities in the XML parser.",
+        "Use JSON instead of XML for untrusted input.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /xxe/parse endpoint resolves external XML entities to /etc/passwd. Show how to disable XXE in XML parsers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-xxe-parse-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /xxe/parse route XXE live oracle",
+    description:
+      "When scanning /xxe/parse, POST external entity payload returns /etc/passwd contents — route-specific XXE profile oracle.",
+    impactOneline:
+      "Route-specific XXE oracle confirms external entity injection when scanning the Burp Bounty Lab /xxe/parse practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyXxeParseRouteLiveOracle" },
     tierRequired: "deep",
     remediation: {
       summary: "Disable external entity resolution in XML parsers.",
@@ -46721,6 +46773,32 @@ export const genericPatterns: Pattern[] = [
       "Live file:// SSRF probe confirms scheme bypass distinct from /ssrf/fetch http-only routes.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "burpbountySsrfSchemeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict outbound fetchers to http/https schemes and block file://, gopher://, and other dangerous protocols.",
+      steps: [
+        "Allowlist http and https schemes before fetching attacker-supplied URLs.",
+        "Reject file://, gopher://, dict://, and localhost targets.",
+        "Isolate Burp Bounty Lab SSRF routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ssrf/scheme endpoint fetches file:///etc/passwd. Show scheme allowlisting and SSRF mitigations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ssrf-scheme-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /ssrf/scheme route SSRF live oracle",
+    description:
+      "When scanning /ssrf/scheme, ?url=file:///etc/passwd returns Linux /etc/passwd via file:// scheme bypass — route-specific SSRF profile oracle.",
+    impactOneline:
+      "Route-specific file:// SSRF oracle confirms scheme bypass when scanning the Burp Bounty Lab /ssrf/scheme practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySsrfSchemeRouteLiveOracle" },
     tierRequired: "deep",
     remediation: {
       summary: "Restrict outbound fetchers to http/https schemes and block file://, gopher://, and other dangerous protocols.",

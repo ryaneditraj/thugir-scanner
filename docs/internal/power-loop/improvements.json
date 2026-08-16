@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssti-render-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ssti/render?template={{7*7}} evaluates to 49 in output div; burpbountylab.com/ssti/render findings 94→95 (+burpbounty-ssti-render-route-live-oracle); benchmark juice-shop 44 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssrf-scheme-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ssrf/scheme?url=file:///etc/passwd returns root:x:0:0 passwd lines; burpbountylab.com/ssrf/scheme findings 93→95 (+burpbounty-ssrf-scheme-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xxe-parse-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /xxe/parse external entity payload returns /etc/passwd; burpbountylab.com/xxe/parse findings 94 (+burpbounty-xxe-parse-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:victim.compass-demo.com",
       "slug": "compass-demo-cors-null-origin-route-live-oracle",
       "status": "shipped",
@@ -11486,6 +11504,21 @@
       "source": "discovery:crapi.lab.pentest-forge.com",
       "slug": "crapi-pentest-forge-host-detection",
       "shipped_at": "2026-08-16T15:45:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssti-render-route-live-oracle",
+      "shipped_at": "2026-08-16T16:45:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssrf-scheme-route-live-oracle",
+      "shipped_at": "2026-08-16T16:45:00.000Z"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-xxe-parse-route-live-oracle",
+      "shipped_at": "2026-08-16T16:45:00.000Z"
     }
   ]
 }

@@ -11690,6 +11690,24 @@ const burpbountyRedirectMetaRouteLiveOracle = burpBountyRouteLiveOracle(
   "Burp Bounty Lab /redirect/meta route scan — meta refresh and location.replace redirect to attacker URL — open redirect profile oracle"
 );
 
+const burpbountySstiRenderRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/ssti\/render\b/i,
+  burpbountySstiRenderLiveOracle,
+  "Burp Bounty Lab /ssti/render route scan — template={{7*7}} evaluates to 49 in output — SSTI template-render profile oracle"
+);
+
+const burpbountySsrfSchemeRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/ssrf\/scheme\b/i,
+  burpbountySsrfSchemeLiveOracle,
+  "Burp Bounty Lab /ssrf/scheme route scan — ?url=file:///etc/passwd returns /etc/passwd via file:// scheme bypass — SSRF profile oracle"
+);
+
+const burpbountyXxeParseRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/xxe\/parse\b/i,
+  burpbountyXxeParseLiveOracle,
+  "Burp Bounty Lab /xxe/parse route scan — POST external entity resolves /etc/passwd — XXE profile oracle"
+);
+
 const burpbountySstiPreviewLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/ssti/preview", ctx.origin);
@@ -86066,6 +86084,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyPtIncludeRouteLiveOracle,
   burpbountyRedirectMetaLiveOracle,
   burpbountyRedirectMetaRouteLiveOracle,
+  burpbountySstiRenderRouteLiveOracle,
+  burpbountySsrfSchemeRouteLiveOracle,
+  burpbountyXxeParseRouteLiveOracle,
   burpbountyXssEncodedLiveOracle,
   burpbountySsrfImgLiveOracle,
   burpbountySsrfImgRouteLiveOracle,
