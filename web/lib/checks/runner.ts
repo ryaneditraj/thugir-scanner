@@ -3258,6 +3258,9 @@ const DEEP_RULES = new Set<string>([
   "burpbountyXssEncodedLiveOracle",
   "burpbountySsrfImgLiveOracle",
   "burpbountySsrfImgRouteLiveOracle",
+  "burpbountySstiRenderRouteLiveOracle",
+  "burpbountySsrfSchemeRouteLiveOracle",
+  "burpbountyXxeParseRouteLiveOracle",
   "burpbountySqliUserRouteLiveOracle",
   "burpbountySstiPreviewLiveOracle",
   "burpbountyXssUrlLiveOracle",
@@ -12073,6 +12076,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/burpbountylab\.com/i.test(origin) && /\/ssrf\/img\b/i.test(targetInput) && p.slug === "burpbounty-ssrf-img-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/pt\/include\b/i.test(targetInput) && p.slug === "burpbounty-pt-include-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/redirect\/meta\b/i.test(targetInput) && p.slug === "burpbounty-redirect-meta-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/ssti\/render\b/i.test(targetInput) && p.slug === "burpbounty-ssti-render-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/ssrf\/scheme\b/i.test(targetInput) && p.slug === "burpbounty-ssrf-scheme-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/xxe\/parse\b/i.test(targetInput) && p.slug === "burpbounty-xxe-parse-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/command-injection\/?$/i.test(targetInput) && p.slug === "sec-research-lab-command-injection-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/jwt-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-jwt-lab-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/prototype-pollution\/?$/i.test(targetInput) && p.slug === "sec-research-lab-prototype-pollution-route-live-oracle") return -3;
