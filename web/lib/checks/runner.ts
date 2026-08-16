@@ -1544,6 +1544,10 @@ const DEEP_RULES = new Set<string>([
   "supportReliabilityLabMissingTraceRouteLiveOracle",
   "supportReliabilityLabBigUploadPayloadLiveOracle",
   "supportReliabilityLabBigUploadPayloadRouteLiveOracle",
+  "supportReliabilityLabBrokenDomainLiveOracle",
+  "supportReliabilityLabBrokenDomainRouteLiveOracle",
+  "supportReliabilityLabHomeHubLiveOracle",
+  "supportReliabilityLabHomeHubRouteLiveOracle",
   "clientSidePokemortyCtfEvidence",
   "clientSideCvebenchBenchmarkEvidence",
   "clientSideSploitifyExploitDatabaseEvidence",
@@ -3124,6 +3128,10 @@ const DEEP_RULES = new Set<string>([
   "supportReliabilityLabMissingTraceRouteLiveOracle",
   "supportReliabilityLabBigUploadPayloadLiveOracle",
   "supportReliabilityLabBigUploadPayloadRouteLiveOracle",
+  "supportReliabilityLabBrokenDomainLiveOracle",
+  "supportReliabilityLabBrokenDomainRouteLiveOracle",
+  "supportReliabilityLabHomeHubLiveOracle",
+  "supportReliabilityLabHomeHubRouteLiveOracle",
   "xssGameLevel3DomXssLiveOracle",
   "xssGameLevel3DomXssRouteLiveOracle",
   "xssGameLevel4JsStringXssLiveOracle",
@@ -11941,6 +11949,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /support-reliability-lab\.vercel\.app/i.test(origin) &&
+        /\/s\/broken-domain\b/i.test(targetInput) &&
+        p.slug.startsWith("support-reliability-lab-broken-domain")
+      )
+        return -3;
+      if (
+        /support-reliability-lab\.vercel\.app/i.test(origin) &&
+        /^https?:\/\/[^/]+\/?$/i.test(targetInput) &&
+        p.slug.startsWith("support-reliability-lab-home-hub")
+      )
+        return -3;
+      if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
         /\/module\/(?:101[1-9]|102[0135-9]|103[0-6]|159[7-9]|160[0-5])\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-module-route-live-oracle"
@@ -11948,7 +11968,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]|170[0-9]|1710))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]|170[0-9]|171[0-5]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
