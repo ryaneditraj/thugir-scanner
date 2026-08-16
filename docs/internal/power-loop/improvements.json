@@ -2,9 +2,21 @@
   "candidates": [
     {
       "source": "discovery:secure-bank-bay.vercel.app",
-      "slug": "secure-bank-bay-transfer-csrf-route-live-oracle",
+      "slug": "secure-bank-bay-transfer-csrf-spa-bundle-fetch",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: secureBankBayTransferCsrfRouteLiveOracle delegated to transactions oracle which gated on /api/transactions pageUrl — fixed with shared secureBankBayCsrfTransferCorpusHit(); secure-bank-bay.vercel.app/transfer findings 8→9 (+route-specific CSRF oracle); benchmark juice-shop 45 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: secureBankBaySpaBundleCorpus() fetches /assets/index-*.js when ctx.combined lacks CSRF markers — POST /api/transactions/transfer + Vulnerable (No CSRF) + CSRF Forged Request in bundle; secure-bank-bay.vercel.app/transfer findings 8→9 (+secure-bank-bay-transfer-csrf-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-1700-placeholder-regex-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner placeholder-module priority regex had 170[0-9]|171[0-9]|172[0-6] nested under 1(?:...) matching 11700-11726 instead of 1700-1726 — fixed with top-level 17(?:0\\d|1\\d|2[0-9]|30); web-security-learning-labs.vercel.app/module/1723 findings 7→8 (+placeholder-module-route-live-oracle); benchmark 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1727-1730-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1726→1730; web-security-learning-labs.vercel.app/module/1727 findings 7 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
