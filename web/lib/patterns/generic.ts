@@ -24340,6 +24340,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-admin-config-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "VulnShop admin configuration disclosure live oracle",
+    description:
+      "GET /api/v1/admin/config, /api/v1/environment, or /api/v1/crypto/config on the VulnShop backend returns secrets, environment variables, or encryption keys without authentication — README oracles #60 and #80.",
+    impactOneline:
+      "Unauthenticated callers can read admin configuration, environment variables, or cryptographic settings.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopAdminConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate admin configuration endpoints and remove secrets from API responses.",
+      steps: [
+        "Require admin authentication on all /api/v1/*/config routes.",
+        "Move secrets to environment variables not exposed via HTTP.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop admin/config routes leak configuration without auth. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-admin-config-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/admin/config route live oracle",
+    description:
+      "When scanning /api/v1/admin/config, live Railway backend probe or README corpus documents admin configuration and environment disclosure on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/admin/config documents unauthenticated configuration disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopAdminConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate /api/v1/admin/config before deploying any API backend.",
+      steps: [
+        "Delete or authenticate admin configuration routes.",
+        "Restrict crypto and environment config to authenticated admin roles.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/admin/config route documents configuration disclosure. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-mass-assignment-lab-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "DVWU mass-assignment lab route live oracle",
+    description:
+      "When scanning /labs/mass-assignment, POST /api/portal SQLi bypass grants Administrator role or GET /api/search SQLi leaks admin credentials — DVWU mass-assignment/privilege-escalation training oracle.",
+    impactOneline:
+      "Route-specific confirmation that DVWU /labs/mass-assignment documents privilege escalation via injection on the IST Edu vulnerability portal.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuMassAssignmentLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and block mass-assignment of privileged fields — DVWU is intentional training software.",
+      steps: [
+        "Use allow-lists for accepted JSON fields on profile and registration APIs.",
+        "Never bind role or is_admin from client-supplied request bodies.",
+        "Run DVWU only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVWU /labs/mass-assignment route confirms privilege escalation via SQLi. Show mass-assignment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-graphql-lab-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "IST Edu GraphQL lab route live oracle",
+    description:
+      "When scanning /labs/graphql, POST /api/portal SQLi bypass or live GraphQL introspection confirms the GraphQL injection training lab on the IST Edu vulnerability portal.",
+    impactOneline:
+      "Route-specific confirmation that IST Edu /labs/graphql documents GraphQL or SQL injection training scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduGraphqlLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production and use parameterized queries — IST Edu is intentional training software.",
+      steps: [
+        "Disable introspection on public GraphQL endpoints.",
+        "Validate and sanitize all GraphQL query variables.",
+        "Run IST Edu labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our IST Edu /labs/graphql route confirms injection or introspection exposure. Show GraphQL hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-hidden-admin-manager-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
