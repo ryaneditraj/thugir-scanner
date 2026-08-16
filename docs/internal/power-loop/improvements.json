@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1765-1767-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1764→1767 + placeholder priority regex extended to 1767; web-security-learning-labs.vercel.app/module/1765 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 24 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ssti-preview-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ssti/preview?content={{7*7}} evaluates to 49 in preview div; burpbountylab.com/ssti/preview findings 95 (+burpbounty-ssti-preview-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.lab.pentest-forge.com",
+      "slug": "crapi-user-videos-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /identity/api/v2/user/videos/{id} returns video_name/conversion_params for another user's video (OWASP crAPI challenge 5); crapi.lab.pentest-forge.com/identity/api/v2/user/videos findings 1→2 (+crapi-user-videos-bola-route-live-oracle corpus fallback when lab 502); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-ssti-render-route-live-oracle",
       "status": "shipped",
