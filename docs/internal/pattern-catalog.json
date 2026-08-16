@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-16T12:04:00.364Z",
-  "total": 2420,
-  "uniqueSlugs": 2416,
+  "generatedAt": "2026-08-16T13:10:39.660Z",
+  "total": 2424,
+  "uniqueSlugs": 2420,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2402,
+    "generic": 2406,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2335,
+    "deep": 2339,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 485,
+    "Broken access control": 489,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -2227,8 +2227,12 @@
     "vulnlab-validate-xss-live-oracle",
     "vulnshop-admin-config-live-oracle",
     "vulnshop-admin-config-route-live-oracle",
+    "vulnshop-admin-orders-bfla-live-oracle",
+    "vulnshop-admin-orders-bfla-route-live-oracle",
     "vulnshop-admin-panel-live-oracle",
     "vulnshop-admin-panel-route-live-oracle",
+    "vulnshop-admin-users-bfla-live-oracle",
+    "vulnshop-admin-users-bfla-route-live-oracle",
     "vulnshop-api-info-component-disclosure-route-live-oracle",
     "vulnshop-api-process-deserialization-route-live-oracle",
     "vulnshop-apply-discount-payment-manipulation-live-oracle",

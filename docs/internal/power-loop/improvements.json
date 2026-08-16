@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1752-1756-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1751→1756 + placeholder priority regex extended to 1756; web-security-learning-labs.vercel.app/module/1752 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-admin-users-bfla-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chethan-vinayak/vulnshop README oracle #27 GET /api/v1/admin/users api_bfla + README corpus fallback; vulnshop.vercel.app/api/v1/admin/users findings 19 (+vulnshop-admin-users-bfla-live-oracle + route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-admin-orders-bfla-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle admin/orders + README BFLA corpus; vulnshop.vercel.app/api/v1/admin/orders findings 19 (+vulnshop-admin-orders-bfla-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1748-1751-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1747→1751 + placeholder priority regex extended to 1751; web-security-learning-labs.vercel.app/module/1748 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
@@ -11387,6 +11405,21 @@
       "source": "discovery:ist-edu-bd.vercel.app",
       "slug": "ist-edu-graphql-lab-route-live-oracle",
       "shipped_at": "2026-08-16T11:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1752-1756-catalog",
+      "shipped_at": "2026-08-16T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-admin-users-bfla-route-live-oracle",
+      "shipped_at": "2026-08-16T13:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-admin-orders-bfla-route-live-oracle",
+      "shipped_at": "2026-08-16T13:10:00.000Z"
     }
   ]
 }
