@@ -55968,8 +55968,10 @@ const compassDemoCorsNullOriginLiveOracle: Rule = async (ctx) => {
   const doc = await ctx.probe.get(COMPASS_DEMO_CORS_NULL_ORIGIN_VICTIM_URL, {
     maxBytes: 2048,
     timeoutMs: 10000,
-    headers: { Origin: "null" }
+    headers: { Origin: "null" },
+    redirect: "manual"
   });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const acao = (doc.headers["access-control-allow-origin"] || "").trim();
   const creds = (doc.headers["access-control-allow-credentials"] || "").toLowerCase() === "true";
   if (acao === "null" && creds) {
