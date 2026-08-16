@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T11:04:56.436Z",
+  "updated_at": "2026-08-16T11:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,13 +15,74 @@
       ]
     }
   },
-  "total_sites_scanned": 2753,
-  "total_findings": 26900,
+  "total_sites_scanned": 2762,
+  "total_findings": 27009,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1970,
-  "discovery_findings": 22721,
+  "discovery_urls_added": 1975,
+  "discovery_findings": 22783,
   "improvements_shipped": 1199,
-  "last_run": "2026-08-16T11:04:56.436Z"
+  "last_run": "2026-08-16T11:10:00.000Z",
+  "last_run_summary": {
+    "hour_utc": "11",
+    "benchmark": {
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 47,
+      "oracle_recall": "6/6",
+      "gap": [],
+      "pages_crawled": 6,
+      "probes_run": 587,
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "note": "Stable 6/6 recall (47 findings); full juice-shop live-oracle pass on warm Heroku"
+    },
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "discovery": {
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 62,
+      "focus": "WSL 1750-1751 catalog + ist-edu ssti/path-traversal + DVGA /graphql route + queue drain (compass-demo csrf, WSL 1667-1668)",
+      "improvements_shipped_this_run": 0
+    },
+    "notable_findings": [
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "ist-edu-bd.vercel.app/labs/path-traversal: 11 findings — ist-edu-path-traversal-client-route-live-oracle + notices LFI route oracles",
+      "ist-edu-bd.vercel.app/labs/ssti: 8 findings — generic SQLi/LFI probes only, no route-specific SSTI live oracle",
+      "dvga.lab.pentest-forge.com/graphql: 1 finding — missing headers only; GraphQL introspection/injection oracle absent",
+      "web-security-learning-labs.vercel.app/module/1750-1751: 7 findings each — placeholder module-route-evidence only",
+      "compass-demo.com/csrf/: 10 findings — CSRF training hub with live oracles"
+    ],
+    "learning_gaps": [
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "ist-edu-bd.vercel.app/labs/ssti: no route-specific SSTI live oracle (generic portal SQLi/LFI only)",
+      "dvga.lab.pentest-forge.com/graphql: GraphQL introspection/IDOR/injection oracles absent (1-finding hub)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via leaked-api-key + security-question)",
+      "scoreboard.json had merge conflict markers — resolved this run before queue drain"
+    ]
+  },
+  "discovery_highlights": {
+    "juice-shop.herokuapp.com": 47,
+    "ist-edu-bd.vercel.app/labs/path-traversal": 11,
+    "compass-demo.com/csrf/": 10,
+    "web-security-learning-labs.vercel.app/module/1667": 9,
+    "web-security-learning-labs.vercel.app/module/1668": 9,
+    "ist-edu-bd.vercel.app/labs/ssti": 8,
+    "web-security-learning-labs.vercel.app/module/1750": 7,
+    "web-security-learning-labs.vercel.app/module/1751": 7,
+    "dvga.lab.pentest-forge.com/graphql": 1
+  }
 }
