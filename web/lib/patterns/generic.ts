@@ -42039,6 +42039,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ist-edu-files-client-lfi-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "IST Edu Document Library client-side LFI route live oracle",
+    description:
+      "When scanning /labs/lfi, /files, or /notices on ist-edu-bd.vercel.app, the SPA bundle documents a client-side Document Library file viewer vulnerable to path traversal — route-specific LFI training oracle.",
+    impactOneline:
+      "Client-side file viewers that accept traversal paths teach attackers patterns replayed against real file-serving endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduFilesClientLfiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — never trust client-side path validation for file access in production.",
+      steps: [
+        "Allowlist permitted filenames server-side before reading any file.",
+        "Reject ../ sequences and encoded traversal payloads.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our ist-edu-bd.vercel.app /labs/lfi route exposes a client-side Document Library with LFI training payloads. Show server-side path validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-path-traversal-client-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "IST Edu Document Library path-traversal route live oracle",
+    description:
+      "When scanning /labs/path-traversal on ist-edu-bd.vercel.app, the SPA bundle documents a client-side Document Library file viewer that detects path traversal sequences — route-specific directory traversal training oracle.",
+    impactOneline:
+      "Client-side path traversal labs document traversal patterns attackers replay against real file-serving endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduPathTraversalClientRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — canonicalize paths server-side and reject parent-directory sequences in production.",
+      steps: [
+        "Resolve paths against a fixed base directory and reject .. segments.",
+        "Use an allow-list of readable filenames instead of user-supplied paths.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our ist-edu-bd.vercel.app /labs/path-traversal route exposes a client-side Document Library with traversal detection. Show server-side path canonicalization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ist-edu-portal-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",
