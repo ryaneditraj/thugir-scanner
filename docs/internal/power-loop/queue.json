@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-16T00:05:00.000Z",
+  "updated_at": "2026-08-16T01:03:31.185Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1716",
+      "source": "web-security-learning-labs Vercel — module 1716 security lab route (OSS deploy hub expansion past 1715, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1717",
+      "source": "web-security-learning-labs Vercel — module 1717 security lab route (OSS deploy hub expansion past 1716)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1718",
+      "source": "web-security-learning-labs Vercel — module 1718 security lab route (OSS deploy hub expansion past 1717)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1719",
+      "source": "web-security-learning-labs Vercel — module 1719 security lab route (OSS deploy hub expansion past 1718)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1720",
+      "source": "web-security-learning-labs Vercel — module 1720 security lab route (OSS deploy hub expansion past 1719)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1711",
       "source": "web-security-learning-labs Vercel — module 1711 security lab route (OSS deploy hub expansion past 1710, Aug 2026 discovery)",
