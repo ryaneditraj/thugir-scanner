@@ -13069,7 +13069,32 @@
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php",
       "source": "webspoilt/vulnforge-academy — Level 20 nightmare multi-vector chain challenge (GitHub README Aug 2026 discovery)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1786",
+      "source": "web-security-learning-labs Vercel — module 1786 security lab route (WSL catalog expansion past 1780, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1787",
+      "source": "web-security-learning-labs Vercel — module 1787 security lab route (WSL catalog expansion, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1788",
+      "source": "web-security-learning-labs Vercel — module 1788 security lab route (WSL catalog expansion, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1789",
+      "source": "web-security-learning-labs Vercel — module 1789 security lab route (WSL catalog expansion, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1790",
+      "source": "web-security-learning-labs Vercel — module 1790 security lab route (WSL catalog expansion, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
     }
   ],
-  "discovery_urls_added": 37
+  "discovery_urls_added": 42
 }
