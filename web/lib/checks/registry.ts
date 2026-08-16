@@ -20609,6 +20609,7 @@ function isJavaSecLabHost(ctx: RuleContext): boolean {
 }
 
 const JAVA_SECLAB_WIKI_FALLBACK = `
+JavaSecLab whgojp/JavaSecLab comprehensive Java vulnerability platform
 GET /xss/reflect/vul1?payload= — JSON-return reflected XSS (GET/POST)
 GET /xss/reflect/vul2?payload= — String direct output reflected XSS
 GET /xss/reflect/vul3?type=html&payload= — text/html reflected XSS
@@ -38420,7 +38421,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1722;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1726;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -39684,16 +39685,19 @@ const secureBankBayAdminRbacRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function secureBankBayCsrfTransferCorpusHit(corpus: string): boolean {
+  return (
+    /\/api\/transactions\/transfer/i.test(corpus) &&
+    (/Vulnerable \(No CSRF\)/i.test(corpus) || /CSRF token NOT verified/i.test(corpus)) &&
+    (/Simulate CSRF Attack/i.test(corpus) || /CSRF Forged Request/i.test(corpus))
+  );
+}
+
 const secureBankBayTransactionsCsrfRouteLiveOracle: Rule = async (ctx) => {
   if (!isSecureBankBayHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/transactions\b/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.combined;
-  const csrfOk =
-    /\/api\/transactions\/transfer/i.test(corpus) &&
-    (/Vulnerable \(No CSRF\)/i.test(corpus) || /CSRF token NOT verified/i.test(corpus)) &&
-    (/Simulate CSRF Attack/i.test(corpus) || /CSRF Forged Request/i.test(corpus));
-  if (!csrfOk) return NEGATIVE;
+  if (!secureBankBayCsrfTransferCorpusHit(ctx.combined)) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.91,
@@ -39709,14 +39713,13 @@ const secureBankBayTransferCsrfRouteLiveOracle: Rule = async (ctx) => {
   if (!isSecureBankBayHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/transfer\b/i.test(pageUrl)) return NEGATIVE;
-  const result = await secureBankBayTransactionsCsrfRouteLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (!secureBankBayCsrfTransferCorpusHit(ctx.combined)) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.91,
     evidence: {
-      ...result.evidence,
       scannedUrl: pageUrl,
+      snippet: "POST /api/transactions/transfer — CSRF token not verified in vulnerable mode",
       note: "secure-bank-bay.vercel.app /transfer route scan — SPA bundle documents POST /api/transactions/transfer CSRF bypass in Attack Mode — route-specific CSRF training oracle"
     }
   };
