@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T20:16:00.000Z",
+  "updated_at": "2026-08-16T21:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2829,
-  "total_findings": 27981,
+  "total_sites_scanned": 2830,
+  "total_findings": 28028,
   "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2000,
   "discovery_findings": 23255,
-  "improvements_shipped": 1205,
-  "last_run": "2026-08-16T20:16:00.000Z",
+  "improvements_shipped": 1202,
+  "last_run": "2026-08-16T21:20:00.000Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
@@ -52,17 +52,17 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
+      "urls_added": 5,
       "urls_scanned": 3,
-      "findings": 11,
-      "focus": "WSL catalog 1773-1775 + SecureBank CSRF transfer + HackHealth A03 SQLi checkpoint fallbacks",
+      "findings": 18,
+      "focus": "SecureBank CSRF fallback hardening + WSL catalog 1776-1780 + vulnerable-web-site login session oracle",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1773: placeholder-module route oracle via catalog max 1775",
-      "securebank-blog.vercel.app/transfer: 2→3 findings — securebank-blog-transfer-csrf-route-live-oracle shipped (Attack 3 CSRF corpus fallback)",
-      "hack-health-tutorial.vercel.app/cybersecurity/a03/xss: 2→3 findings — hack-health-a03-sql-injection-route-live-oracle shipped (Vercel checkpoint + /a03/xss alias fallback)"
+      "securebank-blog.vercel.app/transfer: 2→4 findings — securebank-blog-transfer-csrf-fallback-hardening (404-only corpus now fires CSRF oracle)",
+      "web-security-learning-labs.vercel.app/module/1778: 7→8 findings — web-security-learning-labs-module-1776-1780-catalog shipped",
+      "vulnerable-web-site.vercel.app/login: 5→6 findings — vulnerable-web-site-login-route-live-oracle (signup/login session + /profile confirmation)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -74,9 +74,9 @@
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "web-security-learning-labs.vercel.app/module/1773": 5,
-    "securebank-blog.vercel.app/transfer": 3,
-    "hack-health-tutorial.vercel.app/cybersecurity/a03/xss": 3,
+    "securebank-blog.vercel.app/transfer": 4,
+    "web-security-learning-labs.vercel.app/module/1778": 8,
+    "vulnerable-web-site.vercel.app/login": 6,
     "burpbountylab.com/ssti/preview": 95,
     "pwnshop.ctfsecurity.com/wallet": 44,
     "pwnshop.ctfsecurity.com/download": 42,

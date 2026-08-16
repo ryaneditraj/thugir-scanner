@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-16T20:05:00.000Z",
+  "updated_at": "2026-08-16T21:20:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1776",
+      "source": "web-security-learning-labs Vercel — module 1776 security lab route (WSL catalog expansion past 1775, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1777",
+      "source": "web-security-learning-labs Vercel — module 1777 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1778",
+      "source": "web-security-learning-labs Vercel — module 1778 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1779",
+      "source": "web-security-learning-labs Vercel — module 1779 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1780",
+      "source": "web-security-learning-labs Vercel — module 1780 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://vulnerable-web-site.vercel.app/login",
       "source": "megmogmog1965/vulnerable-web-site — login SQLi + session oracle (Vercel README, web search Aug 2026)",

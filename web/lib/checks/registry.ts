@@ -39076,7 +39076,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1775;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1780;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -40129,6 +40129,7 @@ admin'--
 Attack 2: Cross-Site Scripting (XSS)
 messages page lets users post text. In attack mode, whatever you type gets stored as raw HTML and rendered directly.
 Attack 3: CSRF — The Invisible Request
+Fake page posts a transfer form that silently sends a bank transfer request using your session cookie without a CSRF token.
 We also built two roles: admin and user. The /admin route checks the role stored in the session and returns a 403 error for anyone who isn't an admin.
 `;
 
@@ -40234,7 +40235,7 @@ const secureBankBlogAdminRbacRouteLiveOracle: Rule = async (ctx) => {
   const adminOk =
     /\/admin/i.test(corpus) &&
     (/403 error for anyone who isn't an admin/i.test(corpus) ||
-      /returns a 403/i.test(corpus)) &&
+      /returns\s+(?:a\s+)?403/i.test(corpus)) &&
     (/two roles/i.test(corpus) || /\badmin\b.*\buser\b/i.test(corpus));
   if (!adminOk) return NEGATIVE;
   return {
@@ -40262,7 +40263,7 @@ const secureBankBlogTransferCsrfRouteLiveOracle: Rule = async (ctx) => {
       /trigger a fake bank transfer/i.test(corpus)) &&
     (/Fake page posts a transfer form/i.test(corpus) ||
       /silently sends a bank transfer request/i.test(corpus)) &&
-    (/CSRF token/i.test(corpus) || /returns 403/i.test(corpus));
+    (/CSRF token/i.test(corpus) || /returns\s+(?:a\s+)?403/i.test(corpus));
   if (!csrfOk) return NEGATIVE;
   return {
     fired: true,
@@ -72082,6 +72083,60 @@ async function vulnerableWebSiteSessionCookie(ctx: RuleContext): Promise<string 
   return vwsSessionCookieFromLoginBody(loginDoc.body, loginDoc.setCookies);
 }
 
+const vulnerableWebSiteLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnerableWebSiteHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const session = await vulnerableWebSiteSessionCookie(ctx);
+  if (session) {
+    const profileUrl = new URL("/profile", ctx.origin).toString();
+    const profileDoc = await ctx.probe.get(profileUrl, {
+      headers: { Cookie: session },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    const profileOk =
+      profileDoc.status >= 200 &&
+      profileDoc.status < 400 &&
+      !/\/login\b/i.test(profileDoc.body);
+    return {
+      fired: true,
+      confidence: profileOk ? 0.91 : 0.89,
+      evidence: {
+        scannedUrl: pageUrl,
+        profileStatus: profileDoc.status,
+        note: profileOk
+          ? "vulnerable-web-site.vercel.app POST /api/user signup + POST /api/login returns session token and GET /profile succeeds — login route session oracle for auth-gated CSRF/XSS/SSRF lab probes"
+          : "vulnerable-web-site.vercel.app POST /api/user signup + POST /api/login returns session token — login route session oracle for auth-gated lab probes"
+      }
+    };
+  }
+  if (
+    !/Vulnerable Web Site|vulnerable-web-site/i.test(ctx.combined) &&
+    !/vulnerable-web-site\.vercel\.app/i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
+  const loginDoc = await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  const loginPageOk =
+    loginDoc.status >= 200 &&
+    loginDoc.status < 400 &&
+    /Vulnerable Web Site|Log in|Sign up/i.test(loginDoc.body);
+  if (!loginPageOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      note: "vulnerable-web-site.vercel.app /login route scan — public login surface for CSRF/XSS/clickjacking/SSRF lab session bootstrap (signup/login API chain unreachable from scanner egress)"
+    }
+  };
+};
+
 async function probeVulnerableWebSiteUserUpdateForm(
   ctx: RuleContext,
   cookie?: string | null
@@ -85250,6 +85305,7 @@ export const RULES: Record<string, Rule> = {
   seclabIdorVulnerableRouteLiveOracle,
   seclabPathTraversalRouteLiveOracle,
   seclabSsrfVulnerableRouteLiveOracle,
+  vulnerableWebSiteLoginRouteLiveOracle,
   vulnerableWebSiteCsrfRouteLiveOracle,
   vulnerableWebSiteStoredXssRouteLiveOracle,
   vulnerableWebSiteClickjackingRouteLiveOracle,
