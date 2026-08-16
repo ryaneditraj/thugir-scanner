@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-16T12:10:00.000Z",
+  "updated_at": "2026-08-16T13:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2765,
-  "total_findings": 27029,
+  "total_sites_scanned": 2774,
+  "total_findings": 27131,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1975,
-  "discovery_findings": 22803,
-  "improvements_shipped": 1202,
-  "last_run": "2026-08-16T12:10:00.000Z",
+  "discovery_urls_added": 1980,
+  "discovery_findings": 22861,
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-16T13:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 44,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 587,
+      "probes_run": 576,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,43 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (44 findings, 33 juice-shop live oracles); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 64,
-      "focus": "WSL catalog 1748-1751 + IST Edu SSTI + PentestForge DVGA host + compass JWT/CSRF labs",
-      "improvements_shipped_this_run": 3
+      "findings": 58,
+      "focus": "WSL modules 1658-1672 queue drain + compass-demo CORS/JWT labs + DVAIB/VWAD + vulnshop comments queued",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1748: 7→8 findings — WSL catalog extended to 1751 (+web-security-learning-labs-placeholder-module-route-live-oracle)",
-      "ist-edu-bd.vercel.app/labs/ssti: 8→9 findings — ist-edu-ssti-lab-route-live-oracle shipped (portal SQLi injection oracle)",
-      "dvga.tools.escape.tech/graphql: 11 findings — DVGA host detection extended for dvga.lab.pentest-forge.com (pentest-forge currently 502)",
-      "ist-edu-bd.vercel.app/labs/path-traversal: 11 findings — notices-file-lfi-probe critical LFI oracle",
-      "www.compass-demo.com/jwt_lab/: 11 findings — compass-demo-jwt-alg-none-live-oracle + nosql-login-bypass",
-      "compass-demo.com/csrf/: 10 findings — compass-demo-csrf-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (44 findings) — no benchmark misses",
+      "www.compass-demo.com/cors/attack/api.php: 11 findings — compass-demo-jwt-alg-none + nosql-login-bypass + cors-attack-api-route oracles",
+      "web-security-learning-labs.vercel.app/module/1671: 9 findings — web-security-learning-labs-idor-module-route-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1672: 9 findings — WSL IDOR module route oracle",
+      "web-security-learning-labs.vercel.app/module/1670: 9 findings — WSL catalog drain 1658-1672",
+      "b.compass-demo.com/: 1 finding — missing-security-headers only (subdomain stub)",
+      "vwad.owasp.org/app/damn-vulnerable-ai-bank-dvaib/ + www.dvaib.com + vulnshop comments: queued for next drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via leaked-api-key + security-question)",
-      "dvga.lab.pentest-forge.com/graphql: host returns 502 Bad Gateway — DVGA oracles ready when lab is reachable",
-      "vulnshop.vercel.app/api/v1/admin/users + admin/orders: BFLA route oracles still queued"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via leaked-api-key + security-answers)",
+      "b.compass-demo.com/: compass-demo subdomain returns minimal surface — only header misconfig",
+      "DVAIB (www.dvaib.com) + VWAD directory entry queued — LLM prompt-injection oracles need dedicated probes",
+      "vulnshop.vercel.app/api/v1/comments stored-XSS oracle queued — not yet drained from queue head"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "dvga.tools.escape.tech/graphql": 11,
-    "ist-edu-bd.vercel.app/labs/path-traversal": 11,
-    "www.compass-demo.com/jwt_lab/": 11,
-    "compass-demo.com/csrf/": 10,
-    "web-security-learning-labs.vercel.app/module/1748": 8,
-    "ist-edu-bd.vercel.app/labs/ssti": 9,
-    "web-security-learning-labs.vercel.app/module/1750": 7,
-    "web-security-learning-labs.vercel.app/module/1751": 7,
-    "vulnshop.vercel.app/api/v1/admin/config": 17,
-    "dvwu.vercel.app/labs/mass-assignment": 12
+    "juice-shop.herokuapp.com": 44,
+    "www.compass-demo.com/cors/attack/api.php": 11,
+    "web-security-learning-labs.vercel.app/module/1671": 9,
+    "web-security-learning-labs.vercel.app/module/1672": 9,
+    "web-security-learning-labs.vercel.app/module/1670": 9,
+    "web-security-learning-labs.vercel.app/module/1669": 7,
+    "web-security-learning-labs.vercel.app/module/1668": 6,
+    "web-security-learning-labs.vercel.app/module/1658": 6,
+    "b.compass-demo.com/": 1
   }
 }
