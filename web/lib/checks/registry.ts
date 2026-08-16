@@ -38605,7 +38605,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1747;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1751;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -60120,11 +60120,14 @@ function isDvgaLiveHost(ctx: RuleContext): boolean {
       const host = new URL(raw).hostname.toLowerCase();
       return (
         /^(?:www\.)?dvga2?\.tools\.escape\.tech$/i.test(host) ||
+        /^dvga\.lab\.pentest-forge\.com$/i.test(host) ||
         /xplat-demo\.threatx\.io/i.test(host) ||
         /pentest-ground\.com/i.test(host)
       );
     } catch {
-      return /dvga2?\.tools\.escape\.tech|xplat-demo\.threatx\.io|pentest-ground\.com/i.test(raw);
+      return /dvga2?\.tools\.escape\.tech|dvga\.lab\.pentest-forge\.com|xplat-demo\.threatx\.io|pentest-ground\.com/i.test(
+        raw
+      );
     }
   });
 }
@@ -60137,6 +60140,7 @@ function dvgaCanonicalOrigin(ctx: RuleContext): string {
       const host = u.hostname.toLowerCase();
       if (/^(?:www\.)?dvga\.tools\.escape\.tech$/i.test(host)) return "https://dvga.tools.escape.tech";
       if (/^(?:www\.)?dvga2\.tools\.escape\.tech$/i.test(host)) return "https://dvga2.tools.escape.tech";
+      if (/^dvga\.lab\.pentest-forge\.com$/i.test(host)) return "https://dvga.lab.pentest-forge.com";
       if (/xplat-demo\.threatx\.io|pentest-ground\.com/i.test(host)) {
         u.protocol = "https:";
         return u.origin;
@@ -81458,6 +81462,37 @@ const istEduGraphqlLabRouteLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+const istEduSstiLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/ssti\b/i.test(pageUrl)) return NEGATIVE;
+  const injection = await probeIstEduLabRouteInjection(ctx);
+  if (injection?.fired) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        ...injection.evidence,
+        scannedUrl: pageUrl,
+        note: "IST Edu /labs/ssti route scan — server-side template injection training lab entry confirms IST Edu injection oracle via /api/portal SQLi authentication bypass"
+      }
+    };
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (bundle && /Institute of Science and Technology|ist\.edu\.bd/i.test(bundle)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: bundle.match(/Computer Science|Data Structures and Algorithms/i)?.[0]?.slice(0, 80),
+        note: "IST Edu /labs/ssti route scan — SSTI training lab entry on IST Edu vulnerability portal (bundle-confirmed host when live /api/portal probe did not fire on route-only scan)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 const istEduFileUploadLabRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -85383,6 +85418,7 @@ export const RULES: Record<string, Rule> = {
   istEduFilesClientLfiRouteLiveOracle,
   istEduPathTraversalClientRouteLiveOracle,
   istEduDeserializationLabRouteLiveOracle,
+  istEduSstiLabRouteLiveOracle,
   istEduFileUploadLabRouteLiveOracle,
   istEduGraphqlLabRouteLiveOracle,
   dvwuSsrfRedirectLiveOracle,
