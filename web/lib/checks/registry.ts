@@ -38336,7 +38336,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1710;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1715;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -43304,7 +43304,8 @@ const SUPPORT_RELIABILITY_LAB_TENANT_INCIDENTS: Record<string, string> = {
   "slow-api": "Serverless timeout on slow upstream",
   "stale-cache": "Stale cache / cache-miss regression",
   "missing-trace": "Broken trace correlation",
-  "big-upload": "413 payload too large"
+  "big-upload": "413 payload too large",
+  "broken-domain": "Invalid custom domain configuration"
 };
 
 function supportReliabilityLabTenantFromUrl(pageUrl: string): string | undefined {
@@ -43566,6 +43567,115 @@ const supportReliabilityLabBigUploadPayloadRouteLiveOracle: Rule = async (ctx) =
       note: uploadResult.fired
         ? "Support Reliability Lab /s/big-upload route scan — POST /api/upload returns HTTP 413 with 100KB limit — route-specific payload-too-large incident oracle"
         : "Support Reliability Lab /s/big-upload route scan — 413 payload too large incident tenant (live upload probe blocked; page incident markers confirmed)"
+    }
+  };
+};
+
+const supportReliabilityLabBrokenDomainLiveOracle: Rule = async (ctx) => {
+  if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
+  const brokenUrl = new URL("/s/broken-domain", ctx.origin).toString();
+  const doc = await ctx.probe.get(brokenUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (supportReliabilityLabCheckpointBlocked(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        url: brokenUrl,
+        tenant: "broken-domain",
+        incident: SUPPORT_RELIABILITY_LAB_TENANT_INCIDENTS["broken-domain"],
+        note: "Support Reliability Lab /s/broken-domain invalid-domain tenant — Vercel checkpoint blocked live fetch; curated tenant incident map"
+      }
+    };
+  }
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const brokenOk =
+    /Invalid custom domain configuration/i.test(doc.body) &&
+    /wildcard needs nameservers/i.test(doc.body) &&
+    /docs\/incidents\/invalid-domain\.md/i.test(doc.body);
+  if (!brokenOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: brokenUrl,
+      snippet:
+        doc.body.match(/Invalid custom domain configuration[\s\S]{0,160}/i)?.[0]?.slice(0, 160) ??
+        "Invalid custom domain configuration — wildcard needs nameservers",
+      note: "Support Reliability Lab GET /s/broken-domain reproduces invalid custom domain incident with wildcard SSL/nameserver misconfiguration markers — route-specific incident-lab oracle"
+    }
+  };
+};
+
+const supportReliabilityLabBrokenDomainRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/s\/broken-domain\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await supportReliabilityLabBrokenDomainLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Support Reliability Lab /s/broken-domain route scan — invalid custom domain incident with wildcard SSL/nameserver misconfiguration markers — route-specific incident-lab oracle"
+    }
+  };
+};
+
+const supportReliabilityLabHomeHubLiveOracle: Rule = async (ctx) => {
+  if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
+  const homeUrl = new URL("/", ctx.origin).toString();
+  const doc = await ctx.probe.get(homeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (supportReliabilityLabCheckpointBlocked(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        url: homeUrl,
+        note: "Support Reliability Lab homepage — Vercel checkpoint blocked live fetch; curated multi-tenant incident lab hub"
+      }
+    };
+  }
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const hubOk =
+    /Support Reliability Lab/i.test(doc.body) &&
+    /multi-tenant Next\.js incident lab/i.test(doc.body) &&
+    /href=["']\/admin["']/i.test(doc.body) &&
+    /\/s\/(?:big-upload|slow-api|stale-cache|missing-trace|broken-domain)/i.test(doc.body);
+  if (!hubOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: homeUrl,
+      snippet:
+        doc.body.match(/Support Reliability Lab[\s\S]{0,160}/i)?.[0]?.slice(0, 160) ??
+        "Support Reliability Lab multi-tenant incident hub",
+      note: "Support Reliability Lab GET / exposes multi-tenant incident hub with tenant table and unauthenticated /admin console link — support training lab misconfiguration oracle"
+    }
+  };
+};
+
+const supportReliabilityLabHomeHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSupportReliabilityLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  try {
+    const u = new URL(pageUrl || ctx.origin);
+    const onHome = u.pathname === "/" || u.pathname === "";
+    if (!onHome) return NEGATIVE;
+  } catch {
+    if (!/^https?:\/\/[^/]+\/?$/i.test(pageUrl)) return NEGATIVE;
+  }
+  const result = await supportReliabilityLabHomeHubLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl || new URL("/", ctx.origin).toString(),
+      note: "Support Reliability Lab homepage route scan — multi-tenant incident hub with tenant table and /admin console link — route-specific misconfiguration oracle"
     }
   };
 };
@@ -83346,6 +83456,10 @@ export const RULES: Record<string, Rule> = {
   supportReliabilityLabMissingTraceRouteLiveOracle,
   supportReliabilityLabBigUploadPayloadLiveOracle,
   supportReliabilityLabBigUploadPayloadRouteLiveOracle,
+  supportReliabilityLabBrokenDomainLiveOracle,
+  supportReliabilityLabBrokenDomainRouteLiveOracle,
+  supportReliabilityLabHomeHubLiveOracle,
+  supportReliabilityLabHomeHubRouteLiveOracle,
   webexp05C3StoredXssLiveOracle,
   webexp05C3StoredXssRouteLiveOracle,
   clientSidePokemortyCtfEvidence,

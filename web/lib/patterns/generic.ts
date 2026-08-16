@@ -26212,6 +26212,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "support-reliability-lab-broken-domain-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "Support Reliability Lab invalid-domain incident live oracle",
+    description:
+      "GET /s/broken-domain reproduces an invalid custom domain configuration incident with wildcard SSL/nameserver misconfiguration markers — Support Reliability Lab DNS incident oracle.",
+    impactOneline:
+      "Invalid-domain incidents help validate DNS/cert playbooks but confirm the tenant is intentionally degraded.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "supportReliabilityLabBrokenDomainLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DNS incidents are intentional in the lab — isolate training tenants from production traffic.",
+      steps: [
+        "Run incident labs only on dedicated training subdomains.",
+        "Document expected DNS/nameserver validation in support playbooks.",
+        "Do not expose broken-domain tenants on production customer domains."
+      ]
+    },
+    fixPrompt:
+      "Our /s/broken-domain tenant reproduces invalid custom domain incidents. Show how to isolate incident labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "support-reliability-lab-broken-domain-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "Support Reliability Lab /s/broken-domain route live oracle",
+    description:
+      "When scanning /s/broken-domain, invalid custom domain configuration incident markers and wildcard SSL/nameserver guidance confirm the broken-domain tenant oracle.",
+    impactOneline:
+      "Route scans on /s/broken-domain confirm the invalid-domain configuration incident tenant.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "supportReliabilityLabBrokenDomainRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DNS incidents are intentional — isolate training tenants from production traffic.",
+      steps: [
+        "Run incident labs only on dedicated training subdomains.",
+        "Document DNS/nameserver validation in support playbooks.",
+        "Do not expose broken-domain tenants on production customer domains."
+      ]
+    },
+    fixPrompt:
+      "Our /s/broken-domain route scan confirms invalid custom domain incidents. Show route-specific isolation for support training labs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "support-reliability-lab-home-hub-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "Support Reliability Lab multi-tenant incident hub live oracle",
+    description:
+      "GET / on support-reliability-lab.vercel.app exposes the multi-tenant incident hub with tenant table and unauthenticated /admin console link — Support Reliability Lab hub misconfiguration oracle.",
+    impactOneline:
+      "Public incident hubs help validate support playbooks but confirm /admin is intentionally exposed for training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "supportReliabilityLabHomeHubLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Incident hubs are intentional in the lab — gate /admin behind authentication in production.",
+      steps: [
+        "Run incident labs only on dedicated training subdomains.",
+        "Require authentication before exposing incident consoles in production.",
+        "Document tenant incident toggles only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Support Reliability Lab homepage exposes a multi-tenant incident hub with public /admin. Show how to gate incident consoles in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "support-reliability-lab-home-hub-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "info",
+    title: "Support Reliability Lab homepage route live oracle",
+    description:
+      "When scanning the Support Reliability Lab homepage, the multi-tenant incident hub with tenant table and /admin console link confirms the hub misconfiguration oracle.",
+    impactOneline:
+      "Route scans on the homepage confirm the public multi-tenant incident lab hub.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "supportReliabilityLabHomeHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Incident hubs are intentional — gate /admin behind authentication in production.",
+      steps: [
+        "Run incident labs only on dedicated training subdomains.",
+        "Require authentication before exposing incident consoles in production.",
+        "Document tenant incident toggles only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Support Reliability Lab homepage route scan confirms a public incident hub. Show route-specific access control for incident consoles.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pokemorty-ctf-evidence",
     platform: "generic",
     category: "Broken access control",
