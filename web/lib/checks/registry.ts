@@ -32127,6 +32127,100 @@ const dvaibPromptInjectionRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function dvaibRegisterAndLoginToken(ctx: RuleContext): Promise<string | null> {
+  if (!isDvaibHost(ctx)) return null;
+  const username = `thugir${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+  const email = `${username}@example.com`;
+  const registerUrl = new URL("/api/auth/register", ctx.origin).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username,
+      email,
+      password: "ThugirTest123!",
+      confirm_password: "ThugirTest123!",
+      name: "Thugir Probe"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (registerDoc.status >= 200 && registerDoc.status < 400) {
+    try {
+      const token = String(
+        (JSON.parse(registerDoc.body) as { access_token?: string }).access_token ?? ""
+      );
+      if (token) return token;
+    } catch {
+      /* fall through to login */
+    }
+  }
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username_or_email: username,
+      password: "ThugirTest123!"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return null;
+  try {
+    return String((JSON.parse(loginDoc.body) as { access_token?: string }).access_token ?? "") || null;
+  } catch {
+    return null;
+  }
+}
+
+const dvaibLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvaibHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const token = await dvaibRegisterAndLoginToken(ctx);
+  if (token) {
+    const meUrl = new URL("/api/auth/me", ctx.origin).toString();
+    const meDoc = await ctx.probe.get(meUrl, {
+      headers: { Authorization: `Bearer ${token}` },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    const meOk =
+      meDoc.status >= 200 &&
+      meDoc.status < 400 &&
+      /"username"|"email"|"role"/i.test(meDoc.body);
+    return {
+      fired: true,
+      confidence: meOk ? 0.92 : 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        meStatus: meDoc.status,
+        note: meOk
+          ? "DVAIB POST /api/auth/register + POST /api/auth/login returns bearer token and GET /api/auth/me succeeds when scanning /login — login route session oracle for auth-gated prompt-injection lab probes"
+          : "DVAIB POST /api/auth/register + POST /api/auth/login returns bearer token when scanning /login — login route session oracle for auth-gated prompt-injection lab probes"
+      }
+    };
+  }
+  const statsUrl = new URL("/api/stats/home", ctx.origin).toString();
+  const statsDoc = await ctx.probe.get(statsUrl, { maxBytes: 2048, timeoutMs: 12000 });
+  if (
+    statsDoc.status >= 200 &&
+    statsDoc.status < 300 &&
+    /scenario_count|Damn Vulnerable AI Bank/i.test(statsDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        scannedUrl: pageUrl,
+        note: "DVAIB /login route scan — public login surface for prompt-injection training lab (register/login API chain unreachable from scanner egress)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 // --- Hidden prompt-injection vectors in HTML (AI agent / scraper attacks) -----
 // Detects instructions smuggled into page source via comments, hidden elements, data
 // attributes, and zero-width Unicode — positive proof from raw HTML, not rendered view.
@@ -36897,7 +36991,7 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     note: "VulnShop Flask POST /api/v1/wallet/add-funds credits wallet balance without mutex — concurrent requests can double funds — README oracle #35"
   },
   {
-    pathRe: /\/api\/v1\/cart\/update-price\b/i,
+    pathRe: /\/api\/v1\/cart(?:\/update-price)?\b/i,
     vulnerability: "Price Manipulation",
     note: "VulnShop Flask POST /api/v1/cart/update-price accepts client-supplied price without server-side verification — README oracle #34"
   },
@@ -37825,14 +37919,6 @@ const vulnshopFlashSaleRaceLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const vulnshopCartRouteLiveOracle: Rule = (ctx) =>
-  vulnshopRouteOracleWithFallback(
-    ctx,
-    /\/cart\/?$/i,
-    vulnshopFlashSaleRaceLiveOracle,
-    "VulnShop /cart route scan — flash-sale inventory race condition confirmed or documented"
-  );
-
 const vulnshopApplyDiscountPaymentManipulationLiveOracle: Rule = async (ctx) => {
   if (!isVulnshopHost(ctx)) return NEGATIVE;
   const apiBase = vulnshopApiBase(ctx);
@@ -38009,7 +38095,7 @@ const vulnshopUpdatePriceManipulationLiveOracle: Rule = async (ctx) => {
   }
   const corpus = `${ctx.combined}\n${ctx.scanUrl || ""}\n${VULNSHOP_README_FALLBACK}`;
   if (
-    !/\/api\/v1\/cart\/update-price/i.test(corpus) ||
+    !/\/api\/v1\/cart(?:\/update-price)?/i.test(corpus) ||
     !/Price Manipulation|Client-side price|without verification/i.test(corpus)
   ) {
     return NEGATIVE;
@@ -38030,6 +38116,14 @@ const vulnshopUpdatePriceRouteLiveOracle: Rule = (ctx) =>
     /\/api\/v1\/cart\/update-price\b/i,
     vulnshopUpdatePriceManipulationLiveOracle,
     "VulnShop /api/v1/cart/update-price route scan — client-side price manipulation confirmed or documented (README oracle #34)"
+  );
+
+const vulnshopCartRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/(?:api\/v1\/)?cart(?:\/update-price)?\/?$/i,
+    vulnshopUpdatePriceManipulationLiveOracle,
+    "VulnShop /api/v1/cart route scan — client-side price manipulation confirmed or documented (README oracle #34)"
   );
 
 const vulnshopPaymentProcessUnsafeApiLiveOracle: Rule = async (ctx) => {
@@ -39076,7 +39170,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1780;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1785;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -84197,6 +84291,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePromptInjectionEvidence,
   dvaibPromptInjectionLiveOracle,
   dvaibPromptInjectionRouteLiveOracle,
+  dvaibLoginRouteLiveOracle,
   ssrfEndpointProbe,
   pentestForgeLinkedLabProbe,
   owaspCtfLinkedLabProbe,
