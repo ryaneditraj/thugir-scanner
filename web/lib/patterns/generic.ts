@@ -61029,5 +61029,83 @@ export const genericPatterns: Pattern[] = [
       "Our Compass /csrf route documents missing CSRF protection. Show route-specific anti-CSRF remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "javaseclab-reflected-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "JavaSecLab reflected XSS live oracle",
+    description:
+      "GET /xss/reflect/vul2?payload= on JavaSecLab reflects attacker input directly in the response body — reflected XSS training oracle.",
+    impactOneline:
+      "Reflected XSS lets attackers inject scripts that execute in victim browsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabReflectedXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode output contextually and validate input — JavaSecLab is intentional lab software.",
+      steps: [
+        "HTML-encode user input before reflecting in responses.",
+        "Use Content-Security-Policy headers to mitigate XSS impact.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /xss/reflect/vul2 endpoint reflects payloads unencoded. Show reflected XSS remediation for Spring Boot.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-reflected-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "JavaSecLab /xss/reflected route live oracle",
+    description:
+      "When scanning /xss/reflected or /xss/reflect routes on whgojp.top, live vul2 reflection probe or curated wiki corpus confirms JavaSecLab reflected XSS training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents reflected XSS scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabReflectedXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode output contextually on reflected XSS routes.",
+      steps: [
+        "HTML-encode user input before reflecting in responses.",
+        "Use Content-Security-Policy headers to mitigate XSS impact.",
+        "Auth-gate vulnerability training platforms."
+      ]
+    },
+    fixPrompt:
+      "Our /xss/reflected route is a JavaSecLab reflected XSS training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-druid-basic-json-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "JavaSecLab /druid/basic.json route live oracle",
+    description:
+      "When scanning /druid/basic.json on whgojp.top, unauthenticated Druid basic.json exposes JDBC drivers and JVM metadata — route-specific misconfiguration oracle.",
+    impactOneline:
+      "Exposed Druid monitor leaks database connection pool and JVM configuration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabDruidBasicJsonRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict Druid monitor to internal networks and require authentication.",
+      steps: [
+        "Set druid.stat-view-servlet.login-username and login-password in production.",
+        "Block /druid/* from the public internet via firewall or reverse proxy.",
+        "Disable Druid stat servlet when not needed for operations."
+      ]
+    },
+    fixPrompt:
+      "Our /druid/basic.json endpoint is publicly reachable on JavaSecLab. Show route-specific Druid lockdown.",
+    version: 1,
+    enabled: true
   }
 ];
