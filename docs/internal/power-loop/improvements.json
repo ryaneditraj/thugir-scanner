@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1768-1772-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1767→1772 + placeholder priority regex extended to 1772; web-security-learning-labs.vercel.app/module/1768 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1772 5→8; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwa.lab.pentest-forge.com",
+      "slug": "pentest-forge-dvwa-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vulnerabilities/sqli/ id=1' OR '1'='1 returns multiple First name rows when lab reachable; corpus fallback when 502; pentestForgeDvwaSqliRouteLiveOracle registered in DEEP_RULES; dvwa.lab.pentest-forge.com/vulnerabilities/sqli/ findings 1→2; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga.lab.pentest-forge.com",
+      "slug": "dvga-graphql-introspection-route-502-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql __schema introspection when live; corpus fallback when dvga.lab.pentest-forge.com returns 502; dvga.lab.pentest-forge.com/graphql findings 1→2 (+dvga-graphql-introspection-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1765-1767-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1764→1767 + placeholder priority regex extended to 1767; web-security-learning-labs.vercel.app/module/1765 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 24 findings 6/6 maintained"
