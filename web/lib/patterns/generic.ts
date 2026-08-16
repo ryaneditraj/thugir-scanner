@@ -24658,7 +24658,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "VulnShop user profile API BOLA route live oracle",
     description:
-      "When scanning /api/v1/users/{id}/profile, unauthenticated GET returns user profile fields without object-level authorization — route-specific API1 BOLA oracle.",
+      "When scanning /api/v1/users/{id} or /api/v1/users/{id}/profile, unauthenticated GET returns user profile fields without object-level authorization — route-specific API1 BOLA oracle.",
     impactOneline:
       "Route-specific confirmation that VulnShop documents BOLA on user profile API routes.",
     detectorKind: "rule_ref",

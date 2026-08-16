@@ -37196,10 +37196,14 @@ const vulnshopUsersProfileBolaLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+function isVulnshopUsersProfileBolaRoute(pageUrl: string): boolean {
+  return /\/api\/v1\/users\/\d+(?:\/profile)?\/?$/i.test(pageUrl);
+}
+
 const vulnshopUsersProfileBolaRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/users\/\d+\/profile\b/i.test(pageUrl)) return NEGATIVE;
+  if (!isVulnshopUsersProfileBolaRoute(pageUrl)) return NEGATIVE;
   const live = await vulnshopUsersProfileBolaLiveOracle(ctx);
   if (live.fired) {
     return {
@@ -37208,7 +37212,9 @@ const vulnshopUsersProfileBolaRouteLiveOracle: Rule = async (ctx) => {
       evidence: {
         ...live.evidence,
         scannedUrl: pageUrl,
-        note: "VulnShop /api/v1/users/{id}/profile route scan — unauthenticated user profile disclosure confirmed (API1 BOLA)"
+        note: /\/profile\b/i.test(pageUrl)
+          ? "VulnShop /api/v1/users/{id}/profile route scan — unauthenticated user profile disclosure confirmed (API1 BOLA)"
+          : "VulnShop /api/v1/users/{id} route scan — live GET /api/v1/users/{id}/profile confirms unauthenticated profile disclosure (API1 BOLA)"
       }
     };
   }
@@ -37217,7 +37223,9 @@ const vulnshopUsersProfileBolaRouteLiveOracle: Rule = async (ctx) => {
     confidence: 0.87,
     evidence: {
       scannedUrl: pageUrl,
-      note: "VulnShop /api/v1/users/{id}/profile route scan — chethan-vinayak/vulnshop README oracle #22 documents BOLA on user profile API"
+      note: /\/profile\b/i.test(pageUrl)
+        ? "VulnShop /api/v1/users/{id}/profile route scan — chethan-vinayak/vulnshop README oracle #22 documents BOLA on user profile API"
+        : "VulnShop /api/v1/users/{id} route scan — chethan-vinayak/vulnshop README oracle #22 documents BOLA on user profile API (profile sub-resource)"
     }
   };
 };
@@ -38421,7 +38429,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1740;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1745;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
