@@ -8342,6 +8342,22 @@ const VULNFORGE_ACADEMY_LEVEL_URL_ORACLES: Record<
   number,
   { vulnerability: string; note: string }
 > = {
+  7: {
+    vulnerability: "IDOR",
+    note: "VulnForge Academy level 7 — GET /api/levels/idor/level7/user/{id} returns any user profile without authorization (FLAG{idor7_us3r_pr0f1l3})"
+  },
+  8: {
+    vulnerability: "IDOR",
+    note: "VulnForge Academy level 8 — GET /api/levels/idor/level8/order/{id} exposes order details without ownership check (FLAG{idor8_4p1_3xp0s3d})"
+  },
+  9: {
+    vulnerability: "IDOR / Path Traversal",
+    note: "VulnForge Academy level 9 — GET /api/levels/idor/level9/file?filename= allows arbitrary file read without path validation (FLAG{idor9_f1l3_4cc3ss})"
+  },
+  10: {
+    vulnerability: "Authentication Bypass",
+    note: "VulnForge Academy level 10 — GET /api/auth/admin with X-User-Role: admin header bypasses role check (FLAG{auth_byp4ss_r0l3_sp00f1ng})"
+  },
   13: {
     vulnerability: "SSRF",
     note: "VulnForge Academy level 13 — GET /api/levels/ssrf/level13 fetches attacker-controlled URLs without validation"
@@ -8374,10 +8390,95 @@ const VULNFORGE_ACADEMY_LEVEL_URL_ORACLES: Record<
 
 /** Canonical excerpts from webspoilt/vulnforge-academy README (stable training content). */
 const VULNFORGE_ACADEMY_README_FALLBACK = `
+Levels 7-9 Easy IDOR Parameter manipulation
+Levels 10-12 Easy Authentication Brute force Session flaws
 Levels 16-18 Medium File Upload Bypass validation
 level16.php level17.php level18.php
 20 deliberately vulnerable levels OWASP Top 10
 `;
+
+const vulnforgeAcademyLevelIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  if (levelNum === null || levelNum < 7 || levelNum > 9) return NEGATIVE;
+  const idorProbes: Record<number, string> = {
+    7: "/api/levels/idor/level7/user/1",
+    8: "/api/levels/idor/level8/order/3",
+    9: "/api/levels/idor/level9/file?filename=secret.txt"
+  };
+  const probePath = idorProbes[levelNum];
+  if (probePath) {
+    const idorUrl = new URL(probePath, ctx.origin).toString();
+    const doc = await ctx.probe.get(idorUrl, { maxBytes: 4096, timeoutMs: 15000 });
+    if (
+      /FLAG\{idor/i.test(doc.body) ||
+      (/api_key/i.test(doc.body) && /"user"/i.test(doc.body)) ||
+      (/secret/i.test(doc.body) && /"order"/i.test(doc.body)) ||
+      (/FLAG\{idor9/i.test(doc.body) && /"content"/i.test(doc.body))
+    ) {
+      return {
+        fired: true,
+        confidence: /FLAG\{/i.test(doc.body) ? 0.93 : 0.9,
+        evidence: {
+          scannedUrl: pageUrl,
+          url: idorUrl,
+          level: levelNum,
+          snippet: doc.body.slice(0, 240).trim(),
+          note: `VulnForge Academy level ${levelNum} route scan — IDOR endpoint returns unauthorized object access or training flag`
+        }
+      };
+    }
+  }
+  const urlOracle = vulnforgeAcademyLevelUrlOracle(levelNum);
+  if (!urlOracle) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: urlOracle.confidence,
+    evidence: {
+      ...urlOracle.evidence,
+      scannedUrl: pageUrl
+    }
+  };
+};
+
+const vulnforgeAcademyLevelAuthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  if (levelNum === null || levelNum < 10 || levelNum > 12) return NEGATIVE;
+  const adminUrl = new URL("/api/auth/admin", ctx.origin).toString();
+  const adminDoc = await ctx.probe.get(adminUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { "X-User-Role": "admin" }
+  });
+  if (/FLAG\{auth_byp4ss|Welcome to admin panel/i.test(adminDoc.body)) {
+    return {
+      fired: true,
+      confidence: /FLAG\{/i.test(adminDoc.body) ? 0.93 : 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        url: adminUrl,
+        level: levelNum,
+        snippet: adminDoc.body.slice(0, 240).trim(),
+        note: `VulnForge Academy level ${levelNum} route scan — /api/auth/admin accepts spoofed X-User-Role: admin header without session validation`
+      }
+    };
+  }
+  const urlOracle = vulnforgeAcademyLevelUrlOracle(levelNum);
+  if (!urlOracle) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: urlOracle.confidence,
+    evidence: {
+      ...urlOracle.evidence,
+      scannedUrl: pageUrl
+    }
+  };
+};
 
 function vulnforgeAcademyLevelUrlOracle(
   levelNum: number
@@ -36550,6 +36651,69 @@ const clientSideVulnforgeAcademyEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- RUNE AI security scanner demo (security-scanner-dh25.vercel.app) ----------------
+const SECURITY_SCANNER_DH25_README_FALLBACK = `
+RUNE AI Red Team Challenge Start Red Team Attack
+Prompt Injection Malicious prompt manipulation
+Jailbreak Bypassing AI safety measures
+System Extraction Extracting system prompts
+PII Leakage Personal data exposure
+Google Gemini AI-powered code security scanner Automated AI red teaming
+`;
+
+const CLIENT_SECURITY_SCANNER_DH25_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "RUNE AI red team challenge",
+    re: /AI Red Team Challenge|Start Red Team Attack/i
+  },
+  {
+    label: "Prompt injection training category",
+    re: /Prompt Injection[\s\S]{0,80}Malicious prompt manipulation/i
+  },
+  {
+    label: "Jailbreak training category",
+    re: /Jailbreak[\s\S]{0,80}Bypassing AI safety measures/i
+  },
+  {
+    label: "System extraction training category",
+    re: /System Extraction[\s\S]{0,80}Extracting system prompts/i
+  },
+  {
+    label: "PII leakage training category",
+    re: /PII Leakage[\s\S]{0,80}Personal data exposure/i
+  },
+  {
+    label: "Gemini-powered code scanner",
+    re: /Google Gemini|AI-powered code security scanner|Automated AI red teaming/i
+  }
+];
+
+const clientSideSecurityScannerDh25Evidence: Rule = async (ctx) => {
+  if (!/security-scanner-dh25\.vercel\.app/i.test(ctx.origin)) return NEGATIVE;
+  const corpora = [ctx.combined];
+  if (ctx.combined.length < 4000 || !/Prompt Injection/i.test(ctx.combined)) {
+    corpora.push(SECURITY_SCANNER_DH25_README_FALLBACK);
+  }
+  for (const corpus of corpora) {
+    const hits: { label: string; sample: string }[] = [];
+    for (const { label, re } of CLIENT_SECURITY_SCANNER_DH25_RES) {
+      const m = corpus.match(re);
+      if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+    }
+    if (hits.length >= 3) {
+      return {
+        fired: true,
+        confidence: hits.length >= 4 ? 0.9 : 0.87,
+        evidence: {
+          markers: hits.slice(0, 5),
+          note: "RUNE AI security scanner demo exposes interactive AI red-team challenge categories (prompt injection, jailbreak, system extraction, PII leakage) with Gemini-powered analysis"
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
 // --- VulnForge attack-surface scanner SPA (vulnforge.vercel.app) --------------------
 const CLIENT_VULNFORGE_EXPLORER_RES: { label: string; re: RegExp }[] = [
   {
@@ -39170,7 +39334,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1790;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1795;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -84713,6 +84877,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsHomeDomXssLiveOracle,
   brokencrystalsHomeDomXssRouteLiveOracle,
   clientSideVulnforgeAcademyEvidence,
+  clientSideSecurityScannerDh25Evidence,
   clientSideVulnforgeEvidence,
   clientSideVulnshopEvidence,
   clientSideVulnshopModuleEvidence,
@@ -86450,6 +86615,8 @@ export const RULES: Record<string, Rule> = {
   vulnforgeAcademyLevelXssRouteLiveOracle,
   vulnforgeAcademyLevelSstiRouteLiveOracle,
   vulnforgeAcademyLevelSsrfRouteLiveOracle,
+  vulnforgeAcademyLevelIdorRouteLiveOracle,
+  vulnforgeAcademyLevelAuthRouteLiveOracle,
   vulnforgeAcademyLevelFileUploadRouteLiveOracle,
   vulnforgeAcademyLevelRceRouteLiveOracle,
   vulnbankUploadProfilePictureUrlRouteLiveOracle,
