@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-17T07:05:00.000Z",
+  "updated_at": "2026-08-17T09:09:24.709Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1821",
+      "source": "web-security-learning-labs Vercel — module 1821 security lab route (WSL catalog expansion past 1820, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1822",
+      "source": "web-security-learning-labs Vercel — module 1822 security lab route (WSL catalog expansion past 1820, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1823",
+      "source": "web-security-learning-labs Vercel — module 1823 security lab route (WSL catalog expansion past 1820, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1824",
+      "source": "web-security-learning-labs Vercel — module 1824 security lab route (WSL catalog expansion past 1820, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1825",
+      "source": "web-security-learning-labs Vercel — module 1825 security lab route (WSL catalog expansion past 1820, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://vulnbank.org/api/virtual-cards",
       "source": "Commando-X/vuln-bank — virtual card BOLA enumeration oracle GET /api/virtual-cards (openapi.json Aug 2026 discovery)",
