@@ -6903,6 +6903,7 @@ function extractVulnExposeSeeds(html: string, pageUrl: string): string[] {
     "/xss/playground",
     "/xss/profile",
     "/xss/comments",
+    "/xss/csp-bypass",
     "/idor/dashboard",
     "/cmdi",
     "/network-tools",
@@ -11522,6 +11523,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/sqli\/blind\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-sqli-blind")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/xss\/csp-bypass\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-xss-csp")
+      )
+        return -3;
+      if (
         /vulnerable-web-site\.vercel\.app/i.test(origin) &&
         /\/login\b/i.test(targetInput) &&
         p.slug.startsWith("vulnerable-web-site-login")
@@ -12185,6 +12198,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/api\/comments\b/i.test(targetInput) &&
         p.slug.startsWith("vuln-expose-") &&
         /comments/.test(p.slug)
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/sqli\/blind\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-sqli-blind")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/xss\/csp-bypass\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-xss-csp")
       )
         return -3;
       if (
