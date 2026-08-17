@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-17T11:35:48.418Z",
+  "updated_at": "2026-08-17T17:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/uploads/import-from-url",
+      "source": "Escape Duck Store — SSRF image-import oracle POST /api/v1/uploads/import-from-url (vulnerabilities index Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/uploads/fetch-url",
+      "source": "Escape Duck Store — SSRF link-preview oracle GET /api/v1/uploads/fetch-url (Escape blog Dec 2025)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/testimonials",
+      "source": "Escape Duck Store — stored XSS testimonials page oracle (Escape agentic pentest benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/users",
+      "source": "Escape Duck Store — broken access control admin users list oracle GET /api/v1/admin/users",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1841",
+      "source": "web-security-learning-labs Vercel — module 1841 security lab route (WSL catalog expansion Aug 2026)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1840",
       "source": "web-security-learning-labs Vercel — module 1840 security lab route (WSL catalog expansion past 1835, Aug 2026 web discovery)",
