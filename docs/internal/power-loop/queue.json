@@ -13319,7 +13319,32 @@
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level11.php",
       "source": "webspoilt/vulnforge-academy — Level 11 authentication brute-force challenge (levels 10-12 auth tier, GitHub README Aug 2026 discovery)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://duck-store.escape.tech/vulnerabilities",
+      "source": "Escape Duck Store — published vulnerability catalog + challenge writeup surface (escape.tech blog Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/products/filter/by-color",
+      "source": "Escape Duck Store — SQLi oracle GET /api/v1/products/filter/by-color color+sort params (Devroxana challenge writeup)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/",
+      "source": "Escape Duck Store — unauthenticated testimonials update BOLA oracle (Escape agentic pentest benchmark blog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/login",
+      "source": "nodegoat-websec Heroku — OWASP NodeGoat login SQLi / weak-auth surface (web search Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/profile",
+      "source": "nodegoat-websec Heroku — sensitive-data + ReDoS profile route oracle (prior power-loop improvements)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 58
+  "discovery_urls_added": 63
 }
