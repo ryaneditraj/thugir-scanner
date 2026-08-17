@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-avatar-upload-otp-prime",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopAvatarUploadOracleForDeepScan clears OTP cache + extended retry waits post-crawl on /profile/upload-avatar; pwnshop.ctfsecurity.com/profile/upload-avatar findings 13→46 (+pwnshop-avatar-upload-route-live-oracle +pwnshop-avatar-svg-xss-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-login-weak-credentials-route-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login admin/Admin_123 returns 302 Location /dashboard; nodegoat-websec.herokuapp.com/login findings 8→10 (+nodegoat-login-weak-credentials-live-oracle +nodegoat-login-weak-credentials-route-live-oracle); runner priority -3 on /login; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-route-priority-wsl-1845-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -2/-3 priority for duck-store-* on filter/by-color and testimonials routes; WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1840→1845 + placeholder regex 184[0-5]; duck-store.escape.tech/api/v1/products/filter/by-color findings 23 (+duck-store-products-filter-sqli-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-export-orders-admin-otp-cache-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: pwnshopFreshMassAssignmentAdminOtpSession no longer caches failed null (verified-session + inflight WeakMaps); primePwnshopExportOrdersOracleForDeepScan + client-side-pwnshop-export-orders-oracle corpus fallback; pwnshop.ctfsecurity.com/admin/export-orders findings 24→44 (+pwnshop-export-orders-csv-route-live-oracle +client-side-pwnshop-export-orders-oracle); benchmark juice-shop 44 findings 6/6 maintained"
