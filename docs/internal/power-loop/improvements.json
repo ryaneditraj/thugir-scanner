@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1811-1815-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1810→1815 + placeholder priority regex extended to 181[0-5]; web-security-learning-labs.vercel.app/module/1811 findings 0→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.lab.pentest-forge.com",
+      "slug": "crapi-signup-route-502-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: crapiSignupRouteLiveOracle CRAPI_SIGNUP_ROUTE_FALLBACK when POST /identity/api/auth/signup returns 502; crapi.lab.pentest-forge.com/identity/api/auth/signup findings 1→2 (+crapi-signup-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-config-parse-fix",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: juiceShopResendKeyLiveOracle application-configuration fetch maxBytes 16384→65536 fixes truncated JSON (parse false→true) and enables social feed corpus (0→719562 bytes); no live re_ key in feeds (likely revoked); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-wallet-topup-corpus-fallback",
       "status": "shipped",
@@ -11789,6 +11807,21 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-wallet-topup-route-priority",
       "shipped_at": "2026-08-17T05:20:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1811-1815-catalog",
+      "shipped_at": "2026-08-17T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:crapi.lab.pentest-forge.com",
+      "slug": "crapi-signup-route-502-fallback",
+      "shipped_at": "2026-08-17T06:10:00.000Z"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-config-parse-fix",
+      "shipped_at": "2026-08-17T06:10:00.000Z"
     }
   ]
 }
