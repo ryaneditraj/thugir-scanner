@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "updated_at": "2026-08-17T00:05:00.000Z",
   "discovery_urls": [
     {
@@ -24,6 +25,48 @@
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1795",
       "source": "web-security-learning-labs Vercel — module 1795 security lab route (WSL catalog expansion, Aug 2026 web discovery)",
+=======
+  "updated_at": "2026-08-16T23:35:00.000Z",
+  "discovery_urls": [
+    {
+      "url": "https://vuln-expose.vercel.app/api/users",
+      "source": "JuaniVeltri/vuln-expose — IDOR / parameter manipulation oracle GET /api/users (VulnSite README; route queue drain Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/sqli/blind",
+      "source": "JuaniVeltri/vuln-expose — blind SQLi lab /sqli/blind with /api/users SUBSTRING oracle (VulnSite README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/xss/csp-bypass",
+      "source": "JuaniVeltri/vuln-expose — CSP bypass advanced lab /xss/csp-bypass (VulnSite README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1786",
+      "source": "web-security-learning-labs Vercel — module 1786 security lab route (WSL catalog expansion past 1785, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1787",
+      "source": "web-security-learning-labs Vercel — module 1787 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1788",
+      "source": "web-security-learning-labs Vercel — module 1788 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1789",
+      "source": "web-security-learning-labs Vercel — module 1789 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1790",
+      "source": "web-security-learning-labs Vercel — module 1790 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+>>>>>>> c7c13977 (docs: power-loop validation for vuln-expose routes + WSL 1790)
       "auth": "oss_deploy"
     },
     {

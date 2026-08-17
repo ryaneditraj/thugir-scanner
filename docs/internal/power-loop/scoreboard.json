@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-17T00:06:00.000Z",
+  "updated_at": "2026-08-17T00:57:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2861,
-  "total_findings": 28426,
-  "critical_findings": 59,
+  "total_sites_scanned": 2869,
+  "total_findings": 28595,
+  "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2025,
-  "discovery_findings": 23512,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-17T00:06:00.000Z",
+  "discovery_urls_added": 2033,
+  "discovery_findings": 23547,
+  "improvements_shipped": 1202,
+  "last_run": "2026-08-17T00:57:00.000Z",
   "last_run_summary": {
     "hour_utc": "00",
     "benchmark": {
@@ -52,36 +52,36 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 48,
-      "focus": "WSL catalog expansion 1791-1795 + queue drain modules 1686-1687",
-      "improvements_shipped_this_run": 0
+      "urls_added": 13,
+      "urls_scanned": 11,
+      "findings": 107,
+      "focus": "vuln-expose /api/users + /sqli/blind + /xss/csp-bypass route oracles + WSL catalog 1786-1790 + queue drain 1791-1795",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "vuln-expose.vercel.app/api/users: 0→16 findings — vuln-expose-users-api-route-live-oracle (plaintext passwords + SQL echo)",
+      "vuln-expose.vercel.app/sqli/blind: 0→18 findings — vuln-expose-sqli-blind-route-live-oracle",
+      "vuln-expose.vercel.app/xss/csp-bypass: 0→17 findings — vuln-expose-xss-csp-bypass-route-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1788: 0→8 findings — WSL catalog 1786-1790 expansion",
       "web-security-learning-labs.vercel.app/module/1791-1794: 7 findings each — WSL module route evidence + curated route oracle",
-      "web-security-learning-labs.vercel.app/module/1795: 8 findings — WSL IDOR module route live oracle present",
-      "web-security-learning-labs.vercel.app/module/1686-1687: 6 findings each — placeholder module route evidence only",
-      "damn-vulnerable-startup.fly.dev/challenges/owasp: unreachable (fly.dev error)"
+      "web-security-learning-labs.vercel.app/module/1795: 8 findings — WSL IDOR module route live oracle present"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "WSL modules 1791-1795 return placeholder/curated route oracles — no route-specific vuln live oracles yet",
-      "WSL modules 1686-1687: 6-finding hubs without route-specific vuln live oracles",
+      "WSL modules 1786-1795 return placeholder/curated route oracles — no route-specific vuln live oracles yet",
       "damn-vulnerable-startup.fly.dev/*: DVS DeployBro fly.dev unreachable",
-      "vulnforge-academy levels 7-10 + level20 queued but not scanned (queue backlog ahead of them)"
+      "vulnforge-academy levels 7-10 + level20 queued but not scanned (queue backlog)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
+    "vuln-expose.vercel.app/api/users": 16,
+    "vuln-expose.vercel.app/sqli/blind": 18,
+    "vuln-expose.vercel.app/xss/csp-bypass": 17,
+    "web-security-learning-labs.vercel.app/module/1788": 8,
     "web-security-learning-labs.vercel.app/module/1795": 8,
-    "web-security-learning-labs.vercel.app/module/1791": 7,
-    "web-security-learning-labs.vercel.app/module/1792": 7,
-    "web-security-learning-labs.vercel.app/module/1793": 7,
-    "web-security-learning-labs.vercel.app/module/1794": 7,
-    "web-security-learning-labs.vercel.app/module/1686": 6,
-    "web-security-learning-labs.vercel.app/module/1687": 6
+    "web-security-learning-labs.vercel.app/module/1791": 7
   }
 }
