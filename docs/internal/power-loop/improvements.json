@@ -1,10 +1,22 @@
 {
   "candidates": [
     {
-      "source": "discovery:web-security-learning-labs.vercel.app",
-      "slug": "web-security-learning-labs-module-1871-1875-catalog",
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-mcp-tools-enumeration-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1870→1875 + placeholder priority regex extended to 187[0-5]; web-security-learning-labs.vercel.app/module/1871-1875 findings 5 each (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 44 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /mcp/tools tools/list returns list_coupons with 'secret ones - VULNERABLE!' without auth; duck-store.escape.tech/mcp/tools findings 25→26 (+duck-store-mcp-tools-enumeration-live-oracle +duck-store-mcp-tools-route-live-oracle); benchmark juice-shop 44 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1876-1880-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1875→1880 + placeholder priority regex extended to 187\\d|1880; web-security-learning-labs.vercel.app/module/1876 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-product-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /search?q=test' MySQL syntax error on product catalog pages; pwnshop.ctfsecurity.com/product/1 findings 24→44 (+pwnshop-product-search-sqli-route-live-oracle); benchmark juice-shop 44 findings 6/6 maintained"
     },
     {
       "source": "discovery:duck-store.escape.tech",
