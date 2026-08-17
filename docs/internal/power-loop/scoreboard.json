@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-17T04:03:36.265Z",
+  "updated_at": "2026-08-17T04:06:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2885,
-  "total_findings": 28993,
+  "total_sites_scanned": 2892,
+  "total_findings": 29039,
   "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2033,
-  "discovery_findings": 23762,
+  "discovery_urls_added": 2038,
+  "discovery_findings": 23808,
   "improvements_shipped": 1199,
-  "last_run": "2026-08-17T04:03:36.265Z",
+  "last_run": "2026-08-17T04:06:30.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 586,
+      "probes_run": 587,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings, probes=586); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (47 findings, probes=587); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 8,
-      "urls_scanned": 8,
-      "findings": 172,
-      "focus": "WSL 1796-1800 catalog + brokencrystals JWT x5c/process_numbers route drain + vulnerable-web-site login fast-fail",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 46,
+      "focus": "WSL catalog 1801-1805 expansion + queue drain 1794-1795; damn-vulnerable-startup.fly.dev unreachable",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1796: 8 findings — placeholder-module-route-live-oracle shipped (catalog 1795→1800)",
-      "brokencrystals.com/api/auth/jwt/x5c/validate: 85 findings — brokencrystals-jwt-x5c-rogue-route-live-oracle queue drain",
-      "brokencrystals.com/api/process_numbers: 45 findings — brokencrystals-process-numbers-route-live-oracle queue drain",
-      "vulnerable-web-site.vercel.app/login: 5→6 findings — vulnerable-web-site-login-route-live-oracle fast-fail on Vercel API timeout"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1801-1805: 7-8 findings each — placeholder-module-route-live-oracle on new catalog slots",
+      "web-security-learning-labs.vercel.app/module/1794-1795: 5 findings each — queue drain placeholder oracles",
+      "damn-vulnerable-startup.fly.dev/challenges/owasp: unreachable (Fly.dev host down)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "WSL modules 1683-1688 return placeholder/curated route oracles — no route-specific vuln live oracles yet",
-      "vulnforge-academy levels 11-12 auth tier pending live API deployment",
-      "security-scanner-dh25 backend /api/analyze not deployed on Vercel — client-side evidence oracle only"
+      "WSL modules 1801-1805 are placeholder routes — no route-specific vuln live oracles yet",
+      "damn-vulnerable-startup.fly.dev consistently unreachable from cloud agent",
+      "vulnforge-academy levels 11-12 auth tier pending live API deployment"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
+    "juice-shop.herokuapp.com": 47,
     "brokencrystals.com/api/auth/jwt/x5c/validate": 85,
     "brokencrystals.com/api/process_numbers": 45,
-    "web-security-learning-labs.vercel.app/module/1796": 8,
-    "web-security-learning-labs.vercel.app/module/1797": 8,
-    "web-security-learning-labs.vercel.app/module/1798": 8,
-    "web-security-learning-labs.vercel.app/module/1799": 8,
+    "web-security-learning-labs.vercel.app/module/1804": 8,
+    "web-security-learning-labs.vercel.app/module/1801": 7,
+    "web-security-learning-labs.vercel.app/module/1802": 7,
+    "web-security-learning-labs.vercel.app/module/1803": 7,
+    "web-security-learning-labs.vercel.app/module/1805": 7,
     "vulnerable-web-site.vercel.app/login": 6,
-    "vulnforge-academy.vercel.app/backend/includes/levels/easy/level7.php": 6,
     "ssrf.vulnlab.dev/basic": 15
   }
 }
