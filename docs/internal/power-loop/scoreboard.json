@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 481,
+      "probes_run": 586,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,7 +48,7 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (48 findings, probes=586); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
