@@ -2,12 +2,33 @@
   "updated_at": "2026-08-17T22:05:00.000Z",
   "discovery_urls": [
     {
+<<<<<<< HEAD
       "url": "https://brokencrystals.com/api/users/one/regular_user/adminpermission",
       "source": "NeuraLegion/brokencrystals — adminpermission mass-assignment oracle queue drain (Aug 2026)",
+=======
+      "url": "https://duck-store.escape.tech/api/v1/users/me/profile",
+      "source": "Escape Duck Store — mass-assignment oracle PUT /api/v1/users/me/profile (duck-store.escape.tech/vulnerabilities + Devroxana writeup Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/mcp/tools",
+      "source": "Escape Duck Store — MCP unauthenticated tools enumeration GET /mcp/tools (Devroxana writeup + Escape MCP ASM blog Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/mcp/resources",
+      "source": "Escape Duck Store — MCP unauthenticated resources disclosure GET /mcp/resources (Devroxana writeup Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/benefits",
+      "source": "nodegoat-websec Heroku — benefits SQLi + BOLA admin route oracle (OWASP NodeGoat README + 1337skills cheatsheet Aug 2026)",
+>>>>>>> 387f821c790f07906d0b7ef92b1e96bdad679dc5
       "auth": "public_demo"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1871",
+<<<<<<< HEAD
       "source": "web-security-learning-labs Vercel — module 1871 placeholder route (catalog expansion past 1870, Aug 2026)",
       "auth": "oss_deploy"
     },
@@ -29,6 +50,9 @@
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1875",
       "source": "web-security-learning-labs Vercel — module 1875 placeholder route (catalog expansion past 1870, Aug 2026)",
+=======
+      "source": "web-security-learning-labs Vercel — module 1871 placeholder route (catalog expansion past 1870, Aug 2026 web discovery)",
+>>>>>>> 387f821c790f07906d0b7ef92b1e96bdad679dc5
       "auth": "oss_deploy"
     },
     {
