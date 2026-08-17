@@ -22,7 +22,11 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1978,
   "discovery_findings": 23001,
+<<<<<<< HEAD
   "improvements_shipped": 1205,
+=======
+  "improvements_shipped": 1202,
+>>>>>>> fabac284 (power-scan: benchmark + 5 discovery, 109 findings [19 UTC])
   "last_run": "2026-08-17T19:09:44.995Z",
   "last_run_summary": {
     "hour_utc": "19",
