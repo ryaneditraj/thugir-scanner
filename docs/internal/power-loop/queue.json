@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-17T17:05:00.000Z",
+  "updated_at": "2026-08-17T18:11:00.000Z",
   "discovery_urls": [
     {
       "url": "https://duck-store.escape.tech/api/v1/uploads/import-from-url",
@@ -13369,6 +13369,31 @@
       "url": "https://nodegoat-websec.herokuapp.com/profile",
       "source": "nodegoat-websec Heroku — sensitive-data + ReDoS profile route oracle (prior power-loop improvements)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1851",
+      "source": "web-security-learning-labs Vercel — module 1851 placeholder route (catalog expansion past 1850, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1852",
+      "source": "web-security-learning-labs Vercel — module 1852 placeholder route (catalog expansion past 1850, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1853",
+      "source": "web-security-learning-labs Vercel — module 1853 placeholder route (catalog expansion past 1850, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1854",
+      "source": "web-security-learning-labs Vercel — module 1854 placeholder route (catalog expansion past 1850, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1855",
+      "source": "web-security-learning-labs Vercel — module 1855 placeholder route (catalog expansion past 1850, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
     }
   ]
 }
