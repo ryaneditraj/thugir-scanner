@@ -40138,6 +40138,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-check-balance-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank /check_balance IDOR route live oracle",
+    description:
+      "When scanning /check_balance on vulnbank.org, GET /check_balance/{account_number} returns account balance and username without authentication — route-specific balance-enumeration IDOR oracle.",
+    impactOneline:
+      "Route-specific confirmation that balance lookup endpoints leak financial data without authentication on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankCheckBalanceIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication before returning account balances — Vuln Bank is intentional training software.",
+      steps: [
+        "Gate /check_balance behind session or token authentication.",
+        "Return generic errors for unknown account numbers to prevent enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /check_balance route scan confirms unauthenticated balance lookups succeed. Show route-specific access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-graphql-introspection-live-oracle",
     platform: "generic",
     category: "Information disclosure",
@@ -40368,6 +40393,31 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /register endpoint accepts is_admin:true and /sup3r_s3cr3t_admin exposes the admin panel. Show BOPLA remediation and admin route protection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-sup3r-secret-admin-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank hidden admin panel route live oracle",
+    description:
+      "When scanning /sup3r_s3cr3t_admin on vulnbank.org, BOPLA signup with is_admin:true grants access to the hidden admin panel — route-specific hidden admin oracle.",
+    impactOneline:
+      "Route-specific confirmation that hidden admin routes are reachable after mass-assignment on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankSup3rSecretAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block privileged fields on registration and protect admin routes with server-side role checks — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject is_admin and other privilege fields from registration JSON bodies.",
+        "Enforce admin role verification on /sup3r_s3cr3t_admin independent of client-supplied flags."
+      ]
+    },
+    fixPrompt:
+      "Our /sup3r_s3cr3t_admin route scan confirms BOPLA signup exposes the admin panel. Show route-specific admin route protection.",
     version: 1,
     enabled: true
   },
