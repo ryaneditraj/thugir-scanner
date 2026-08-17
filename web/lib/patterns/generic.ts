@@ -22574,6 +22574,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-product-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pwnshop product search SQLi route live oracle (PWN-010)",
+    description:
+      "When scanning /product/<id>, GET /search?q=test' confirms MySQL syntax errors from concatenated product search queries — route-specific SQL injection oracle.",
+    impactOneline:
+      "Route-specific product catalog scans should surface SQL injection in the linked search endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopProductSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for product search SQL.",
+      steps: [
+        "Replace string-concatenated search queries with prepared statements.",
+        "Return generic search errors without revealing SQL structure.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /product route scan confirms SQLi on GET /search. Show route-specific parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-admin-login-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -55352,6 +55378,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /mcp/tools/list_coupons route leaks private codes without auth. Show route-specific MCP remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-mcp-tools-enumeration-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store MCP tools enumeration live oracle",
+    description:
+      "POST /mcp/tools tools/list returns an unauthenticated MCP tool registry including list_coupons described as exposing secret coupon codes — the Escape Duck Store MCP gateway enumeration oracle.",
+    impactOneline:
+      "Unauthenticated MCP tool enumeration can reveal sensitive business-logic tools and attack surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreMcpToolsEnumerationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on MCP gateway endpoints and restrict tool registry visibility.",
+      steps: [
+        "Gate MCP tools/list behind session or API-key authentication.",
+        "Remove secret-coupon tools from anonymous tool registries.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our MCP tools/list endpoint exposes secret coupon tools without auth. Show MCP gateway access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-mcp-tools-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store MCP tools route live oracle",
+    description:
+      "When scanning /mcp/tools, unauthenticated tools/list exposes list_coupons and other MCP tools without authentication — route-specific MCP enumeration oracle.",
+    impactOneline:
+      "Route-specific scans should surface excessive MCP tool exposure on /mcp/tools paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreMcpToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict MCP tool enumeration to authenticated clients.",
+      steps: [
+        "Require auth on /mcp/tools tools/list.",
+        "Filter sensitive tools from anonymous MCP registries.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /mcp/tools route scan confirms unauthenticated MCP tool enumeration. Show route-specific MCP remediation.",
     version: 1,
     enabled: true
   },

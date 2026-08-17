@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-17T22:12:51.286Z",
-  "total": 2460,
-  "uniqueSlugs": 2456,
+  "generatedAt": "2026-08-17T23:07:06.918Z",
+  "total": 2463,
+  "uniqueSlugs": 2459,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2442,
+    "generic": 2445,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2375,
+    "deep": 2378,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 500,
+    "Broken access control": 502,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 116,
     "Security misconfiguration": 186,
     "Broken authentication": 151,
-    "Injection": 370,
+    "Injection": 371,
     "Cross-site scripting": 701,
     "Open redirect": 21,
     "general": 20,
@@ -936,6 +936,8 @@
     "duck-store-coupons-route-live-oracle",
     "duck-store-mcp-coupons-disclosure-live-oracle",
     "duck-store-mcp-coupons-route-live-oracle",
+    "duck-store-mcp-tools-enumeration-live-oracle",
+    "duck-store-mcp-tools-route-live-oracle",
     "duck-store-open-redirect-live-oracle",
     "duck-store-open-redirect-route-live-oracle",
     "duck-store-orders-bola-live-oracle",
@@ -1838,6 +1840,7 @@
     "pwnshop-product-review-stored-xss-review-route-live-oracle",
     "pwnshop-product-review-stored-xss-route-live-oracle",
     "pwnshop-product-search-sqli-live-oracle",
+    "pwnshop-product-search-sqli-route-live-oracle",
     "pwnshop-prototype-pollution-search-filters-live-oracle",
     "pwnshop-prototype-pollution-search-filters-route-live-oracle",
     "pwnshop-register-seller-ssti-route-live-oracle",

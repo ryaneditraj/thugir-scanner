@@ -35143,6 +35143,23 @@ const pwnshopProductSearchSqliLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pwnshopProductSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/product\/\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopProductSearchSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /product/<id> route scan — product catalog page confirms GET /search SQL injection oracle (PWN-010)"
+    }
+  };
+};
+
 const pwnshopAdminLoginSqliLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const url = new URL("/admin/login", ctx.origin).toString();
@@ -39668,7 +39685,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1875;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1880;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -49475,6 +49492,58 @@ const duckStoreMcpCouponsRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Duck Store MCP route scan — list_coupons tool exposes private promotion codes without auth"
+    }
+  };
+};
+
+const duckStoreMcpToolsEnumerationLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const url = new URL("/mcp/tools", ctx.origin).toString();
+  const payload = JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list" });
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json, text/event-stream"
+    },
+    maxBytes: 32768,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const sseBody = doc.body.replace(/^event:\s*message\s*/m, "").replace(/^data:\s*/m, "");
+  const corpus = `${doc.body}\n${sseBody}`;
+  if (!/"name"\s*:\s*"list_coupons"/i.test(corpus)) return NEGATIVE;
+  if (!/secret ones|VULNERABLE|validate_coupon/i.test(corpus)) return NEGATIVE;
+  const toolCount = (corpus.match(/"name"\s*:\s*"/g) ?? []).length;
+  if (toolCount < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /VULNERABLE/i.test(corpus) ? 0.93 : 0.91,
+    evidence: {
+      url,
+      toolCount,
+      snippet: corpus.slice(0, 220).trim(),
+      note: "Duck Store POST /mcp/tools tools/list returns unauthenticated MCP tool registry including list_coupons described as exposing secret coupon codes — MCP tools enumeration oracle"
+    }
+  };
+};
+
+const duckStoreMcpToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/mcp\/tools(?:\/|$)/i.test(pageUrl) || /\/mcp\/tools\/list_coupons/i.test(pageUrl)) {
+    return NEGATIVE;
+  }
+  const result = await duckStoreMcpToolsEnumerationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /mcp/tools route scan — unauthenticated tools/list exposes secret coupon MCP tools without authentication"
     }
   };
 };
@@ -85505,6 +85574,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopTrackIdorLiveOracle,
   pwnshopTrackIdorRouteLiveOracle,
   pwnshopProductSearchSqliLiveOracle,
+  pwnshopProductSearchSqliRouteLiveOracle,
   pwnshopAdminLoginSqliLiveOracle,
   pwnshopChatPromptInjectionLiveOracle,
   pwnshopChatPromptInjectionRouteLiveOracle,
@@ -86463,6 +86533,8 @@ export const RULES: Record<string, Rule> = {
   duckStoreSsrfImportFromUrlRouteLiveOracle,
   duckStoreMcpCouponsDisclosureLiveOracle,
   duckStoreMcpCouponsRouteLiveOracle,
+  duckStoreMcpToolsEnumerationLiveOracle,
+  duckStoreMcpToolsRouteLiveOracle,
   duckStoreProductsFilterSqliLiveOracle,
   duckStoreProductsFilterSqliRouteLiveOracle,
   duckStoreCartNegativeQuantityLiveOracle,

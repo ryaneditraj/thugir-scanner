@@ -1,39 +1,34 @@
 {
-  "updated_at": "2026-08-17T23:05:13.202Z",
+  "updated_at": "2026-08-17T23:15:00.000Z",
   "discovery_urls": [
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1876",
-      "source": "web-security-learning-labs Vercel — module 1876 placeholder route (catalog expansion past 1875, Aug 2026 web discovery)",
+      "source": "web-security-learning-labs Vercel — module 1876 placeholder route (catalog expansion past 1875, Aug 2026)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1877",
-      "source": "web-security-learning-labs Vercel — module 1877 placeholder route (catalog expansion past 1875, Aug 2026 web discovery)",
+      "source": "web-security-learning-labs Vercel — module 1877 placeholder route (catalog expansion past 1875, Aug 2026)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1878",
-      "source": "web-security-learning-labs Vercel — module 1878 placeholder route (catalog expansion past 1875, Aug 2026 web discovery)",
+      "source": "web-security-learning-labs Vercel — module 1878 placeholder route (catalog expansion past 1875, Aug 2026)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1879",
-      "source": "web-security-learning-labs Vercel — module 1879 placeholder route (catalog expansion past 1875, Aug 2026 web discovery)",
+      "source": "web-security-learning-labs Vercel — module 1879 placeholder route (catalog expansion past 1875, Aug 2026)",
       "auth": "oss_deploy"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1880",
-      "source": "web-security-learning-labs Vercel — module 1880 placeholder route (catalog expansion past 1875, Aug 2026 web discovery)",
+      "source": "web-security-learning-labs Vercel — module 1880 placeholder route (catalog expansion past 1875, Aug 2026)",
       "auth": "oss_deploy"
     },
     {
-      "url": "https://pwnshop.ctfsecurity.com/debug/info",
-      "source": "ctfsec/pwnshop — PWN-018 debug endpoint oracle GET /debug/info (README route map Aug 2026 discovery)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
-      "source": "ctfsec/pwnshop — PWN-019 unauthenticated audit log GET /api/v1/events (README route map Aug 2026 discovery)",
+      "url": "https://duck-store.escape.tech/mcp/tools",
+      "source": "Escape Duck Store — MCP unauthenticated tools enumeration POST /mcp/tools tools/list (Devroxana writeup + Escape MCP ASM blog Aug 2026)",
       "auth": "public_demo"
     },
     {
@@ -4314,6 +4309,16 @@
     {
       "url": "https://pwnshop.ctfsecurity.com/vulnerabilities",
       "source": "r007sec/pwnshop README — interactive 45-vuln index at /vulnerabilities (OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/debug/info",
+      "source": "r007sec/pwnshop — PWN-018 intentionally public debug endpoint (OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
+      "source": "r007sec/pwnshop — PWN-005 unauthenticated audit-log JSON API (OSS deploy)",
       "auth": "public_demo"
     },
     {
