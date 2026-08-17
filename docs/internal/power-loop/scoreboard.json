@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-17T11:10:00.000Z",
+  "updated_at": "2026-08-17T11:35:48.418Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2730,
-  "total_findings": 26600,
+  "total_sites_scanned": 2733,
+  "total_findings": 26697,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1956,
-  "discovery_findings": 22579,
-  "improvements_shipped": 1161,
-  "last_run": "2026-08-17T11:10:00.000Z",
+  "discovery_urls_added": 1963,
+  "discovery_findings": 22676,
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-17T11:35:48.418Z",
   "last_run_summary": {
     "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 44,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 589,
+      "probes_run": 459,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,43 +48,34 @@
           ]
         }
       },
-      "note": "Rich 6/6 recall (47 findings, 30+ juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (44 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 45,
-      "focus": "WSL module 1811-1817 queue drain + Duck Store escape.tech API oracles + nodegoat-websec login/profile queued",
-      "improvements_shipped_this_run": 0
+      "urls_added": 7,
+      "urls_scanned": 3,
+      "findings": 97,
+      "focus": "pwnshop admin/export-orders CSV oracle + product/1 review route + WSL modules 1836-1840",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1816: 8 findings — WSL catalog expansion",
-      "web-security-learning-labs.vercel.app/module/1817: 8 findings — WSL catalog expansion",
-      "web-security-learning-labs.vercel.app/module/1811: 8 findings — WSL catalog expansion",
-      "web-security-learning-labs.vercel.app/module/1812: 6 findings — WSL catalog expansion",
-      "web-security-learning-labs.vercel.app/module/1813-1815: 5 findings each — WSL catalog expansion",
-      "damn-vulnerable-startup.fly.dev/challenges/owasp: unreachable (fly.dev cold/dead)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (44 findings) — no benchmark misses",
+      "pwnshop.ctfsecurity.com/admin/export-orders: 24→44 findings — admin OTP cache fix + export-orders corpus fallback shipped",
+      "pwnshop.ctfsecurity.com/product/1: 20→45 findings — product-review route priority + OTP prime shipped",
+      "web-security-learning-labs.vercel.app/module/1836: 8 findings with placeholder-module-route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "duck-store.escape.tech + nodegoat-websec routes queued but not reached in 8-URL queue slice this hour",
-      "damn-vulnerable-startup.fly.dev/*: fly.dev instance unreachable across repeated queue drains",
-      "WSL modules 1811-1817: stable 5-8 finding hubs without route-specific live oracles beyond generic bundle checks"
+      "pwnshop batch scans still rate-limit OTP when multiple auth-gated routes scanned sequentially"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "web-security-learning-labs.vercel.app/module/1816": 8,
-    "web-security-learning-labs.vercel.app/module/1817": 8,
-    "web-security-learning-labs.vercel.app/module/1811": 8,
-    "web-security-learning-labs.vercel.app/module/1812": 6,
-    "web-security-learning-labs.vercel.app/module/1813": 5,
-    "web-security-learning-labs.vercel.app/module/1814": 5,
-    "web-security-learning-labs.vercel.app/module/1815": 5,
+    "pwnshop.ctfsecurity.com/admin/export-orders": 44,
+    "pwnshop.ctfsecurity.com/product/1": 45,
+    "web-security-learning-labs.vercel.app/module/1836": 8,
+    "juice-shop.herokuapp.com": 44,
     "vulnbank.org/sup3r_s3cr3t_admin": 27,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "ssrf.vulnlab.dev/basic": 15
   }
 }
