@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-guest-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreTestimonialsStoredXssLiveProbe WeakMap cache + duckStoreTestimonialsGuestRouteLiveOracle on /testimonials/guest; duck-store.escape.tech/api/v1/testimonials/guest findings 21→25 (+duck-store-testimonials-guest-route-live-oracle); stored-xss-route narrowed to exclude /guest suffix; benchmark juice-shop 44 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1861-1865-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1860→1865 + placeholder priority regex extended to 186[0-5]; web-security-learning-labs.vercel.app/module/1861 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1865 placeholder oracle fires; benchmark juice-shop 44 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-login-profile-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended nodegoat-websec.herokuapp.com/login + /profile + duck-store filter/by-color to discovery queue front; login findings 10 (+nodegoat-login-weak-credentials-route-live-oracle); profile findings 11 (+nodegoat-profile-sensitive-data-route-live-oracle +profile-redos-route); filter/by-color 24 (+duck-store-products-filter-sqli-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-admin-users-bfla-roster-buffer-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/admin/users truncated at 16KB hid admin@duck-store.escape after probe churn; maxBytes 65536 + roster marker fallback; duck-store.escape.tech/api/v1/admin/users findings 19→24 (+duck-store-admin-users-bfla-live-oracle +duck-store-admin-users-bfla-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
@@ -12023,6 +12041,21 @@
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-dashboard-route-live-oracle",
       "shipped_at": "2026-08-17T17:30:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-guest-route-live-oracle",
+      "shipped_at": "2026-08-17T20:12:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1861-1865-catalog",
+      "shipped_at": "2026-08-17T20:12:00.000Z"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-login-profile-queue-drain",
+      "shipped_at": "2026-08-17T20:12:00.000Z"
     }
   ]
 }
