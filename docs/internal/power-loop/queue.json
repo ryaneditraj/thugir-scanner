@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-17T19:05:00.000Z",
+  "updated_at": "2026-08-17T20:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
+      "source": "Escape Duck Store — unauthenticated testimonial update oracle PUT /api/v1/testimonials/{id} (Escape ASM benchmark blog Apr 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/cart/add",
+      "source": "Escape Duck Store — negative quantity business-logic oracle POST /api/v1/cart/add (duck-store vulnerabilities index)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/coupons",
+      "source": "Escape Duck Store — coupon information disclosure oracle GET /api/v1/orders/coupons (Devroxana challenge writeup)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/login",
+      "source": "Escape Duck Store — 2FA bypass + weak admin credentials oracle POST /api/v1/auth/login (duck-store vulnerabilities index)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
+      "source": "Escape Duck Store — 100% discount + shipping bypass oracle POST /api/v1/orders/checkout (duck-store vulnerabilities index)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/mcp/info",
       "source": "Escape Duck Store — MCP unauthenticated access oracle GET /mcp/info (Devroxana challenge writeup + Escape ASM blog Aug 2026)",
