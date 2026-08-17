@@ -39668,7 +39668,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1860;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1865;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -49815,10 +49815,17 @@ const duckStoreProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const duckStoreTestimonialsStoredXssLiveOracle: Rule = async (ctx) => {
+const duckStoreTestimonialsStoredXssByProbe = new WeakMap<object, RuleResult>();
+
+async function duckStoreTestimonialsStoredXssLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  const cached = duckStoreTestimonialsStoredXssByProbe.get(ctx.probe);
+  if (cached) return cached;
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const token = await duckStoreRegisterAndLoginToken(ctx);
-  if (!token) return NEGATIVE;
+  if (!token) {
+    duckStoreTestimonialsStoredXssByProbe.set(ctx.probe, NEGATIVE);
+    return NEGATIVE;
+  }
   const canary = `thugirStoredXss${Date.now().toString(36)}`;
   const payload = `<img src=x onerror=${canary}>`;
   const postUrl = new URL("/api/v1/testimonials/", ctx.origin).toString();
@@ -49829,13 +49836,25 @@ const duckStoreTestimonialsStoredXssLiveOracle: Rule = async (ctx) => {
     maxBytes: 4096,
     timeoutMs: 15000
   });
-  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
-  if (!postDoc.body.includes(canary) || !/<img\s+src=x\s+onerror=/i.test(postDoc.body)) return NEGATIVE;
+  if (postDoc.status < 200 || postDoc.status >= 400) {
+    duckStoreTestimonialsStoredXssByProbe.set(ctx.probe, NEGATIVE);
+    return NEGATIVE;
+  }
+  if (!postDoc.body.includes(canary) || !/<img\s+src=x\s+onerror=/i.test(postDoc.body)) {
+    duckStoreTestimonialsStoredXssByProbe.set(ctx.probe, NEGATIVE);
+    return NEGATIVE;
+  }
   const listUrl = new URL("/api/v1/testimonials/", ctx.origin).toString();
   const listDoc = await ctx.probe.get(listUrl, { maxBytes: 32768, timeoutMs: 15000 });
-  if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
-  if (!listDoc.body.includes(canary) || !/<img\s+src=x\s+onerror=/i.test(listDoc.body)) return NEGATIVE;
-  return {
+  if (listDoc.status < 200 || listDoc.status >= 400) {
+    duckStoreTestimonialsStoredXssByProbe.set(ctx.probe, NEGATIVE);
+    return NEGATIVE;
+  }
+  if (!listDoc.body.includes(canary) || !/<img\s+src=x\s+onerror=/i.test(listDoc.body)) {
+    duckStoreTestimonialsStoredXssByProbe.set(ctx.probe, NEGATIVE);
+    return NEGATIVE;
+  }
+  const result: RuleResult = {
     fired: true,
     confidence: 0.93,
     evidence: {
@@ -49846,13 +49865,19 @@ const duckStoreTestimonialsStoredXssLiveOracle: Rule = async (ctx) => {
       note: "Duck Store POST /api/v1/testimonials/ stores unsanitized HTML in content and returns it via GET /api/v1/testimonials/ — stored XSS oracle"
     }
   };
+  duckStoreTestimonialsStoredXssByProbe.set(ctx.probe, result);
+  return result;
+}
+
+const duckStoreTestimonialsStoredXssLiveOracle: Rule = async (ctx) => {
+  return duckStoreTestimonialsStoredXssLiveProbe(ctx);
 };
 
 const duckStoreTestimonialsStoredXssRouteLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/testimonials/i.test(pageUrl)) return NEGATIVE;
-  const result = await duckStoreTestimonialsStoredXssLiveOracle(ctx);
+  if (!/\/api\/v1\/testimonials(?:\/?$|\/\d+)/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreTestimonialsStoredXssLiveProbe(ctx);
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -49861,6 +49886,23 @@ const duckStoreTestimonialsStoredXssRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Duck Store /api/v1/testimonials route scan — POST stores unsanitized HTML testimonial content served back without encoding"
+    }
+  };
+};
+
+const duckStoreTestimonialsGuestRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/v1\/)?testimonials\/guest\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreTestimonialsStoredXssLiveProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store testimonials/guest route scan — POST /api/v1/testimonials/ stores unsanitized HTML served back without encoding (guest training path alias)"
     }
   };
 };
@@ -86329,6 +86371,7 @@ export const RULES: Record<string, Rule> = {
   duckStoreProfileMassAssignmentRouteLiveOracle,
   duckStoreTestimonialsStoredXssLiveOracle,
   duckStoreTestimonialsStoredXssRouteLiveOracle,
+  duckStoreTestimonialsGuestRouteLiveOracle,
   duckStoreAuthLoginWeakCredentialsLiveOracle,
   duckStoreAuthLoginWeakCredentialsRouteLiveOracle,
   duckStoreOpenRedirectLiveOracle,

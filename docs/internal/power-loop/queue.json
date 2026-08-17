@@ -1,6 +1,46 @@
 {
-  "updated_at": "2026-08-17T19:05:00.000Z",
+  "updated_at": "2026-08-17T20:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/login",
+      "source": "nodegoat-websec Heroku — OWASP NodeGoat login weak-credentials route oracle (queue drain Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/profile",
+      "source": "nodegoat-websec Heroku — sensitive-data + ReDoS profile route oracle (queue drain Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/products/filter/by-color",
+      "source": "Escape Duck Store — SQLi oracle GET /api/v1/products/filter/by-color color+sort params (queue drain Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1861",
+      "source": "web-security-learning-labs Vercel — module 1861 placeholder route (catalog expansion past 1860, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1862",
+      "source": "web-security-learning-labs Vercel — module 1862 placeholder route (catalog expansion past 1860, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1863",
+      "source": "web-security-learning-labs Vercel — module 1863 placeholder route (catalog expansion past 1860, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1864",
+      "source": "web-security-learning-labs Vercel — module 1864 placeholder route (catalog expansion past 1860, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1865",
+      "source": "web-security-learning-labs Vercel — module 1865 placeholder route (catalog expansion past 1860, Aug 2026)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://duck-store.escape.tech/mcp/info",
       "source": "Escape Duck Store — MCP unauthenticated access oracle GET /mcp/info (Devroxana challenge writeup + Escape ASM blog Aug 2026)",

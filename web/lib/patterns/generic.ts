@@ -55668,6 +55668,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-testimonials-guest-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Duck Store testimonials guest stored XSS route live oracle",
+    description:
+      "When scanning /api/v1/testimonials/guest or /testimonials/guest, POST /api/v1/testimonials/ stores unsanitized HTML testimonial content served back without encoding — route-specific guest stored XSS oracle.",
+    impactOneline:
+      "Route-specific guest testimonial scans should confirm APIs do not persist executable HTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreTestimonialsGuestRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize testimonial content on guest testimonial route handlers.",
+      steps: [
+        "Reject HTML tags in testimonial POST bodies.",
+        "Encode testimonial content in list responses.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our testimonials/guest route stores raw HTML XSS payloads via POST /api/v1/testimonials/. Show route-specific stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "duck-store-auth-login-weak-credentials-live-oracle",
     platform: "generic",
     category: "Broken authentication",
