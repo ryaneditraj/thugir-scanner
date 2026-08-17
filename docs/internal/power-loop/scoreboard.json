@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-17T17:10:00.000Z",
+  "updated_at": "2026-08-17T17:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2752,
-  "total_findings": 27120,
+  "total_sites_scanned": 2753,
+  "total_findings": 27143,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1968,
   "discovery_findings": 22807,
-  "improvements_shipped": 1202,
-  "last_run": "2026-08-17T17:10:00.000Z",
+  "improvements_shipped": 1205,
+  "last_run": "2026-08-17T17:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "17",
     "benchmark": {
@@ -52,35 +52,31 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 130,
-      "focus": "Escape Duck Store SSRF/upload oracles + WSL 1841-1838 queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "WSL 1846-1850 catalog + duck-store open-redirect bundle regex + nodegoat dashboard route oracle",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "duck-store.escape.tech/api/v1/uploads/import-from-url: 25 findings — SSRF fetch-url + admin BFLA + testimonials XSS live oracles",
-      "duck-store.escape.tech/api/v1/uploads/fetch-url: 24 findings — duck-store-ssrf-fetch-url-route-live-oracle confirmed",
-      "duck-store.escape.tech/testimonials: 26 findings — stored XSS + BOLA testimonial oracles",
-      "duck-store.escape.tech/api/v1/admin/users: 24 findings — duck-store-admin-users-bfla-live-oracle (critical)",
-      "web-security-learning-labs.vercel.app/module/1841-1838: 7-8 findings each — placeholder module-route evidence only"
+      "web-security-learning-labs.vercel.app/module/1846: placeholder-module-route-live-oracle shipped (catalog max 1850)",
+      "duck-store.escape.tech/api/v1/open-redirect: 22→23 findings — duckStoreSpaBundleBody Vite bundle regex fix (+duck-store-open-redirect-route-live-oracle)",
+      "nodegoat-websec.herokuapp.com/dashboard: 9→10 findings — +nodegoat-dashboard-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "duck-store import-from-url: no dedicated import-from-url SSRF route oracle slug (fetch-url oracle present)",
-      "WSL modules 1841-1838: placeholder/module-route-evidence only — no vuln-category live oracles",
-      "nodegoat-websec /profile and duck-store /api/v1/products/filter/by-color still queued — not reached in 8-URL slice"
+      "WSL modules above 1850: placeholder shells not yet in catalog"
     ]
   },
   "discovery_highlights": {
+    "web-security-learning-labs.vercel.app/module/1846": 5,
+    "duck-store.escape.tech/api/v1/open-redirect": 23,
+    "nodegoat-websec.herokuapp.com/dashboard": 10,
     "duck-store.escape.tech/api/v1/uploads/import-from-url": 25,
-    "duck-store.escape.tech/testimonials": 26,
-    "duck-store.escape.tech/api/v1/uploads/fetch-url": 24,
-    "duck-store.escape.tech/api/v1/admin/users": 24,
     "juice-shop.herokuapp.com": 47,
-    "duck-store.escape.tech/api/v1/products/filter/by-color": 23,
     "pwnshop.ctfsecurity.com/profile/upload-avatar": 46
   }
 }

@@ -45196,6 +45196,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-dashboard-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "NodeGoat /dashboard route weak credentials live oracle",
+    description:
+      "When scanning /dashboard, default training credentials (admin/Admin_123) authenticate and grant dashboard access — route-specific weak authentication oracle.",
+    impactOneline:
+      "Route scans on /dashboard need live confirmation that default credentials still grant authenticated access.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatDashboardRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rotate default NodeGoat credentials before exposing dashboard routes publicly.",
+      steps: [
+        "Block or rotate admin/Admin_123 and user1/User1_123 before public deployment.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /dashboard route scan confirms default NodeGoat credentials authenticate. Show route-specific login hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "nodegoat-profile-sensitive-data-live-oracle",
     platform: "generic",
     category: "Sensitive data exposure",

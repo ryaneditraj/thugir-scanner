@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1846-1850-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1845→1850 + placeholder priority regex extended to 184\\d|1850; web-security-learning-labs.vercel.app/module/1846 findings 7→5 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1850 placeholder oracle fires; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-open-redirect-bundle-regex-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreSpaBundleBody regex index-[^\"]+→index[^\"]+ matches Vite index.CBaA5t-d.js bundle; /api/v1/open-redirect route scan findings 22→23 (+duck-store-open-redirect-route-live-oracle); runner -3 priority on open-redirect paths; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-dashboard-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: nodegoatDashboardRouteLiveOracle on /dashboard delegates to weak-credentials live probe; nodegoat-websec.herokuapp.com/dashboard findings 9→10 (+nodegoat-dashboard-route-live-oracle); runner priority -3 on /dashboard; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-avatar-upload-otp-prime",
       "status": "shipped",
@@ -11954,6 +11972,21 @@
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-sup3r-secret-admin-route-live-oracle",
       "shipped_at": "2026-08-17T10:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1846-1850-catalog",
+      "shipped_at": "2026-08-17T17:30:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-open-redirect-bundle-regex-fix",
+      "shipped_at": "2026-08-17T17:30:00.000Z"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-dashboard-route-live-oracle",
+      "shipped_at": "2026-08-17T17:30:00.000Z"
     }
   ]
 }
