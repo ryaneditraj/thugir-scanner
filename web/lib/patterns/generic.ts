@@ -56006,6 +56006,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-testimonials-unauth-put-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Duck Store testimonials unauthenticated PUT live oracle",
+    description:
+      "PUT /api/v1/testimonials/{id} accepts content updates without any Authorization header — unauthenticated write oracle.",
+    impactOneline:
+      "Unauthenticated testimonial updates let anyone deface featured reviews and corrupt user-generated content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreTestimonialsUnauthPutLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on PUT /api/v1/testimonials/{id} — Duck Store is intentional lab software.",
+      steps: [
+        "Reject PUT requests without a valid Bearer JWT.",
+        "Verify JWT user_id matches testimonial owner before allowing updates.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PUT /api/v1/testimonials/{id} accepts unauthenticated updates. Show auth enforcement remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-testimonials-unauth-put-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Duck Store testimonials unauthenticated PUT route live oracle",
+    description:
+      "When scanning /api/v1/testimonials/{id}, PUT without Authorization header overwrites testimonial content — route-specific unauthenticated write oracle.",
+    impactOneline:
+      "Route-specific scans should confirm testimonial update endpoints require authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreTestimonialsUnauthPutRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block unauthenticated PUT on /api/v1/testimonials/{id} route handlers.",
+      steps: [
+        "Middleware should reject PUT without Bearer JWT on testimonial routes.",
+        "Return 401 for missing or invalid authentication on testimonial updates.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/testimonials/{id} route accepts unauthenticated PUT. Show route-specific auth remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "duck-store-auth-totp-bypass-live-oracle",
     platform: "generic",
     category: "Broken authentication",
