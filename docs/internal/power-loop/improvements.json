@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1826-1830-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1825→1830 + placeholder priority regex extended to 182\\d|1830; web-security-learning-labs.vercel.app/module/1826 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1830 placeholder oracle fires; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-bopla-register-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnbankBoplaRegisterRouteLiveOracle on /register delegates to BOPLA live probe; vulnbank.org/register findings 27→28 (+vulnbank-bopla-register-route-live-oracle); runner priority -2 on /register; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-bill-payments-virtual-cards-route-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnbankBillPaymentsNegativeAmountRouteLiveOracle + vulnbankVirtualCardsBolaRouteLiveOracle on queue URLs; vulnbank.org/api/bill-payments/create findings 26→27 (+bill-payments-route); vulnbank.org/api/virtual-cards 26→27 (+virtual-cards-bola-route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1821-1825-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1820→1825 + placeholder priority regex extended to 182[0-5]; web-security-learning-labs.vercel.app/module/1821 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1822 6→8; benchmark juice-shop 48 findings 6/6 maintained"

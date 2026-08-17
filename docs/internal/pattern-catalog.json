@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-17T08:18:48.702Z",
-  "total": 2446,
-  "uniqueSlugs": 2442,
+  "generatedAt": "2026-08-17T09:22:44.936Z",
+  "total": 2449,
+  "uniqueSlugs": 2445,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2428,
+    "generic": 2431,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2361,
+    "deep": 2364,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 493,
+    "Broken access control": 496,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -2176,7 +2176,9 @@
     "vulnbank-ai-system-info-live-oracle",
     "vulnbank-ai-system-info-route-live-oracle",
     "vulnbank-bill-payments-negative-amount-live-oracle",
+    "vulnbank-bill-payments-negative-amount-route-live-oracle",
     "vulnbank-bopla-register-live-oracle",
+    "vulnbank-bopla-register-route-live-oracle",
     "vulnbank-check-balance-idor-live-oracle",
     "vulnbank-graphql-introspection-live-oracle",
     "vulnbank-merchant-payment-charge-live-oracle",
@@ -2202,6 +2204,7 @@
     "vulnbank-v3-user-idor-live-oracle",
     "vulnbank-v3-user-idor-route-live-oracle",
     "vulnbank-virtual-cards-bola-live-oracle",
+    "vulnbank-virtual-cards-bola-route-live-oracle",
     "vulnerable-web-site-clickjacking-route-live-oracle",
     "vulnerable-web-site-command-injection-route-live-oracle",
     "vulnerable-web-site-csrf-route-live-oracle",
