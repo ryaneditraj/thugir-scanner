@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-export-orders-admin-otp-cache-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopFreshMassAssignmentAdminOtpSession no longer caches failed null (verified-session + inflight WeakMaps); primePwnshopExportOrdersOracleForDeepScan + client-side-pwnshop-export-orders-oracle corpus fallback; pwnshop.ctfsecurity.com/admin/export-orders findings 24→44 (+pwnshop-export-orders-csv-route-live-oracle +client-side-pwnshop-export-orders-oracle); benchmark juice-shop 44 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-product-review-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for pwnshop-product-review* on /product/d+ routes + post-crawl OTP prime extended to /product/d+; pwnshop.ctfsecurity.com/product/1 findings 20→45 (+pwnshop-product-review-stored-xss-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1836-1840-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1835→1840 + placeholder priority regex extended to 183d|1840; web-security-learning-labs.vercel.app/module/1836 findings 0→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 44 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1831-1835-catalog",
       "status": "shipped",
@@ -3140,6 +3158,21 @@
     }
   ],
   "shipped": [
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1836-1840-catalog",
+      "shipped_at": "2026-08-17T11:33:35.730Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-product-review-route-priority",
+      "shipped_at": "2026-08-17T11:33:35.730Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-export-orders-admin-otp-cache-fix",
+      "shipped_at": "2026-08-17T11:33:35.730Z"
+    },
     {
       "source": "discovery:ssrf.vulnlab.dev",
       "slug": "ssrf-vulnlab-redirect-blocklist-queue-drain",

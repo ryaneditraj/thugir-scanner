@@ -1,29 +1,39 @@
 {
-  "updated_at": "2026-08-17T11:10:00.000Z",
+  "updated_at": "2026-08-17T11:35:48.418Z",
   "discovery_urls": [
     {
-      "url": "https://duck-store.escape.tech/vulnerabilities",
-      "source": "Escape Duck Store — published vulnerability catalog + challenge writeup surface (escape.tech blog Aug 2026 web discovery)",
+      "url": "https://web-security-learning-labs.vercel.app/module/1840",
+      "source": "web-security-learning-labs Vercel — module 1840 security lab route (WSL catalog expansion past 1835, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1839",
+      "source": "web-security-learning-labs Vercel — module 1839 security lab route (WSL catalog expansion past 1835, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1838",
+      "source": "web-security-learning-labs Vercel — module 1838 security lab route (WSL catalog expansion past 1835, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1837",
+      "source": "web-security-learning-labs Vercel — module 1837 security lab route (WSL catalog expansion past 1835, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1836",
+      "source": "web-security-learning-labs Vercel — module 1836 security lab route (WSL catalog expansion past 1835, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/admin/export-orders",
+      "source": "ctfsec/pwnshop — CSV formula injection oracle GET /admin/export-orders (PWN-013, queue drain)",
       "auth": "public_demo"
     },
     {
-      "url": "https://duck-store.escape.tech/api/v1/products/filter/by-color",
-      "source": "Escape Duck Store — SQLi oracle GET /api/v1/products/filter/by-color color+sort params (Devroxana challenge writeup)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/testimonials/",
-      "source": "Escape Duck Store — unauthenticated testimonials update BOLA oracle (Escape agentic pentest benchmark blog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://nodegoat-websec.herokuapp.com/login",
-      "source": "nodegoat-websec Heroku — OWASP NodeGoat login SQLi / weak-auth surface (web search Aug 2026)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://nodegoat-websec.herokuapp.com/profile",
-      "source": "nodegoat-websec Heroku — sensitive-data + ReDoS profile route oracle (prior power-loop improvements)",
+      "url": "https://pwnshop.ctfsecurity.com/product/1",
+      "source": "ctfsec/pwnshop — stored XSS product review oracle POST /review on product pages (PWN-011)",
       "auth": "public_demo"
     },
     {
@@ -269,11 +279,6 @@
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1780",
       "source": "web-security-learning-labs Vercel — module 1780 security lab route (WSL catalog expansion, Aug 2026 discovery)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://vulnerable-web-site.vercel.app/login",
-      "source": "megmogmog1965/vulnerable-web-site — login SQLi + session oracle (Vercel README, web search Aug 2026)",
       "auth": "oss_deploy"
     },
     {
@@ -1462,11 +1467,6 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://brokencrystals.com/api/auth/jwt/x5c/validate",
-      "source": "NeuraLegion/brokencrystals — JWT x5c certificate-chain bypass oracle POST /api/auth/jwt/x5c/validate (swagger + issue #688)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://brokencrystals.com/api/spawn",
       "source": "NeuraLegion/brokencrystals — OS command injection via query param (README oracle)",
       "auth": "benchmark"
@@ -1475,11 +1475,6 @@
       "url": "https://brokencrystals.com/api/render",
       "source": "NeuraLegion/brokencrystals — SSTI via doT templating on /api/render (README oracle)",
       "auth": "benchmark"
-    },
-    {
-      "url": "https://brokencrystals.com/api/process_numbers",
-      "source": "NeuraLegion/brokencrystals — expression injection oracle POST /api/process_numbers processing_expression (README)",
-      "auth": "public_demo"
     },
     {
       "url": "https://seclab.vercel.app/api/xss-vulnerable",
@@ -1599,16 +1594,6 @@
     {
       "url": "https://vaultapp-omega.vercel.app/api/transactions",
       "source": "MRMcyber/vaultapp — transaction history IDOR oracle GET /api/transactions (README IDOR lab #2)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/admin/export-orders",
-      "source": "ctfsec/pwnshop vulnerabilities — CSV formula injection oracle GET /admin/export-orders (PWN-013)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/product/1",
-      "source": "ctfsec/pwnshop vulnerabilities — stored XSS product review oracle POST /review on product pages (PWN-011)",
       "auth": "public_demo"
     },
     {
@@ -3352,11 +3337,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://vulnbank.org/sup3r_s3cr3t_admin",
-      "source": "Commando-X/vuln-bank — exposed admin panel path (Medium pentest report recon)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://brokencrystals.com/marketplace?__proto__[Test]=Test",
       "source": "NeuraLegion/brokencrystals — prototype pollution DOM XSS oracle GET /marketplace?__proto__ (README)",
       "auth": "benchmark"
@@ -3379,11 +3359,6 @@
     {
       "url": "http://burpbountylab.com/swagger.json",
       "source": "BountySecurity/BurpBountyLab — swagger.json API spec exposure (misc module)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vulnbank.org/api/virtual-cards",
-      "source": "Commando-X/vuln-bank — BOLA virtual-cards API endpoint (OWASP API1; Medium pentest reports)",
       "auth": "public_demo"
     },
     {
@@ -13344,7 +13319,31 @@
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level11.php",
       "source": "webspoilt/vulnforge-academy — Level 11 authentication brute-force challenge (levels 10-12 auth tier, GitHub README Aug 2026 discovery)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://duck-store.escape.tech/vulnerabilities",
+      "source": "Escape Duck Store — published vulnerability catalog + challenge writeup surface (escape.tech blog Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/products/filter/by-color",
+      "source": "Escape Duck Store — SQLi oracle GET /api/v1/products/filter/by-color color+sort params (Devroxana challenge writeup)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/",
+      "source": "Escape Duck Store — unauthenticated testimonials update BOLA oracle (Escape agentic pentest benchmark blog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/login",
+      "source": "nodegoat-websec Heroku — OWASP NodeGoat login SQLi / weak-auth surface (web search Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/profile",
+      "source": "nodegoat-websec Heroku — sensitive-data + ReDoS profile route oracle (prior power-loop improvements)",
+      "auth": "public_demo"
     }
-  ],
-  "discovery_urls_added": 63
+  ]
 }
