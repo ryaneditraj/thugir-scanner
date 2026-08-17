@@ -36511,6 +36511,40 @@ const fauxbankAccountsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const fauxbankTransactionsRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/transactions\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await fauxbankIdorAccountsProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /transactions route scan — authenticated user reads another customer's account by predictable ID (lesson #1 IDOR)"
+    }
+  };
+};
+
+const fauxbankSettingsRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/settings\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await fauxbankProfileSensitiveDataLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /settings route scan — GET /api/profile exposes ssnFake and PII without redaction"
+    }
+  };
+};
+
 const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const cookie = await pwnshopRegisterAndLoginCookie(ctx);
@@ -39394,7 +39428,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1820;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1825;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -84976,6 +85010,8 @@ export const RULES: Record<string, Rule> = {
   fauxbankLoansRouteLiveOracle,
   fauxbankTransferRouteLiveOracle,
   fauxbankAccountsRouteLiveOracle,
+  fauxbankTransactionsRouteLiveOracle,
+  fauxbankSettingsRouteLiveOracle,
   brokencrystalsUserloginCssInjectionLiveOracle,
   brokencrystalsUserloginCssInjectionRouteLiveOracle,
   brokencrystalsHomeDomXssLiveOracle,
