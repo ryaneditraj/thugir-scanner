@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-17T05:02:00.000Z",
+  "updated_at": "2026-08-17T06:04:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1811",
+      "source": "web-security-learning-labs Vercel — module 1811 security lab route (WSL catalog expansion past 1810, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1812",
+      "source": "web-security-learning-labs Vercel — module 1812 security lab route (WSL catalog expansion past 1810, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1813",
+      "source": "web-security-learning-labs Vercel — module 1813 security lab route (WSL catalog expansion past 1810, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1814",
+      "source": "web-security-learning-labs Vercel — module 1814 security lab route (WSL catalog expansion past 1810, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1815",
+      "source": "web-security-learning-labs Vercel — module 1815 security lab route (WSL catalog expansion past 1810, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1806",
       "source": "web-security-learning-labs Vercel — module 1806 security lab route (WSL catalog expansion past 1805, Aug 2026 web discovery)",
@@ -13186,5 +13211,5 @@
       "auth": "oss_deploy"
     }
   ],
-  "discovery_urls_added": 43
+  "discovery_urls_added": 48
 }
