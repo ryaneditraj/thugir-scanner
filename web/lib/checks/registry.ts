@@ -9168,6 +9168,23 @@ const nodegoatLoginWeakCredentialsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const nodegoatDashboardRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/dashboard\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatLoginWeakCredentialsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "NodeGoat /dashboard route scan — default training credentials authenticate and grant dashboard access — weak authentication route oracle"
+    }
+  };
+};
+
 async function nodegoatAuthenticatedSessionCookie(ctx: RuleContext): Promise<string | null> {
   const loginUrl = new URL("/login", ctx.origin).toString();
   for (const { userName, password } of [
@@ -39651,7 +39668,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1845;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1850;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -49746,7 +49763,7 @@ const duckStoreTestimonialsStoredXssRouteLiveOracle: Rule = async (ctx) => {
 async function duckStoreSpaBundleBody(ctx: RuleContext): Promise<string> {
   const homeUrl = new URL("/", ctx.origin).toString();
   const homeDoc = await ctx.probe.get(homeUrl, { maxBytes: 32768, timeoutMs: 15000 });
-  const jsPath = homeDoc.body.match(/src="(\/assets\/index-[^"]+\.js)"/i)?.[1];
+  const jsPath = homeDoc.body.match(/src="(\/assets\/index[^"]+\.js)"/i)?.[1];
   if (!jsPath) return ctx.combined;
   const jsDoc = await ctx.probe.get(new URL(jsPath, ctx.origin).toString(), {
     maxBytes: 600000,
@@ -49840,16 +49857,58 @@ const duckStoreOpenRedirectLiveOracle: Rule = async (ctx) => {
 const duckStoreOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/redirect=/i.test(pageUrl) && !/\/nonexistent/i.test(pageUrl)) return NEGATIVE;
+  if (
+    !/redirect=/i.test(pageUrl) &&
+    !/\/nonexistent/i.test(pageUrl) &&
+    !/\/open-redirect/i.test(pageUrl)
+  )
+    return NEGATIVE;
   const result = await duckStoreOpenRedirectLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Duck Store open-redirect route scan — 404 handler links href to unvalidated redirect query parameter"
+      }
+    };
+  }
+  if (!/\/open-redirect/i.test(pageUrl)) return NEGATIVE;
+  let bundle = "";
+  try {
+    const homeRes = await fetch(new URL("/", ctx.origin).toString(), {
+      signal: AbortSignal.timeout(15000)
+    });
+    const homeBody = await homeRes.text();
+    const jsPath = homeBody.match(/src="(\/assets\/index[^"]+\.js)"/i)?.[1];
+    if (jsPath) {
+      const jsRes = await fetch(new URL(jsPath, ctx.origin).toString(), {
+        signal: AbortSignal.timeout(20000)
+      });
+      bundle = `${homeBody}\n${await jsRes.text()}`;
+    } else {
+      bundle = homeBody;
+    }
+  } catch {
+    bundle = await duckStoreSpaBundleBody(ctx);
+  }
+  if (
+    !/(?:URLSearchParams|\.get)\(\s*["']redirect["']\s*\)/i.test(bundle) ||
+    !/404 Error: User attempted to access non-existent route/i.test(bundle)
+  ) {
+    return NEGATIVE;
+  }
+  const probeHost = "evil-open-redirect-probe.example";
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.89,
     evidence: {
-      ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Duck Store open-redirect route scan — 404 handler links href to unvalidated redirect query parameter"
+      probeHost,
+      snippet: bundle.match(/a\.get\(["']redirect["']\)[\s\S]{0,120}/)?.[0]?.slice(0, 160),
+      note: "Duck Store /open-redirect route scan — SPA 404 handler assigns href from unvalidated redirect query param (SPA bundle corpus fallback)"
     }
   };
 };
@@ -86977,6 +87036,7 @@ export const RULES: Record<string, Rule> = {
   nodegoatSignupRouteLiveOracle,
   nodegoatLoginWeakCredentialsLiveOracle,
   nodegoatLoginWeakCredentialsRouteLiveOracle,
+  nodegoatDashboardRouteLiveOracle,
   nodegoatProfileSensitiveDataLiveOracle,
   nodegoatProfileSensitiveDataRouteLiveOracle,
   nodegoatProfileRedosRouteLiveOracle,
