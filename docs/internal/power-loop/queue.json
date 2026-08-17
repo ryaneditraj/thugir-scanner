@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-17T06:04:00.000Z",
+  "updated_at": "2026-08-17T07:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnbank.org/api/virtual-cards",
+      "source": "Commando-X/vuln-bank — virtual card BOLA enumeration oracle GET /api/virtual-cards (openapi.json Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/bill-payments/create",
+      "source": "Commando-X/vuln-bank — bill payment business-logic oracle POST /api/bill-payments/create (openapi.json Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/register",
+      "source": "Commando-X/vuln-bank — BOPLA registration oracle POST /register (openapi.json Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1816",
+      "source": "web-security-learning-labs Vercel — module 1816 security lab route (WSL catalog expansion past 1815, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1817",
+      "source": "web-security-learning-labs Vercel — module 1817 security lab route (WSL catalog expansion past 1815, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1811",
       "source": "web-security-learning-labs Vercel — module 1811 security lab route (WSL catalog expansion past 1810, Aug 2026 web discovery)",
@@ -13211,5 +13236,5 @@
       "auth": "oss_deploy"
     }
   ],
-  "discovery_urls_added": 48
+  "discovery_urls_added": 53
 }

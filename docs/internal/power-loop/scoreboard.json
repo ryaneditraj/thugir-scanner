@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-17T06:10:00.000Z",
+  "updated_at": "2026-08-17T07:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2913,
-  "total_findings": 29380,
+  "total_sites_scanned": 2922,
+  "total_findings": 29538,
   "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2051,
-  "discovery_findings": 24034,
-  "improvements_shipped": 1202,
-  "last_run": "2026-08-17T06:10:00.000Z",
+  "discovery_urls_added": 2056,
+  "discovery_findings": 24144,
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-17T07:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 588,
+      "probes_run": 587,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); config JSON parse fixed for social feed corpus; secret-resend slug still absent"
+      "note": "Stable 6/6 recall (48 findings); no benchmark category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 9,
-      "findings": 53,
-      "focus": "WSL module 1811-1815 catalog expansion + crAPI signup 502 fallback + juice-shop config parse fix",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 110,
+      "focus": "vulnbank virtual-cards/bill-payments/register openapi routes + WSL module 1816-1817 expansion",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — application-configuration JSON parse fixed (social corpus 0→719562)",
-      "web-security-learning-labs.vercel.app/module/1811-1814: 7-8 findings each — WSL catalog 1811-1815 expansion (+placeholder-module-route-live-oracle)",
-      "web-security-learning-labs.vercel.app/module/1815: 5 findings — WSL catalog 1815 expansion",
-      "crapi.lab.pentest-forge.com/identity/api/auth/signup: 1→2 findings — signup route 502 corpus fallback (+crapi-signup-route-live-oracle)",
-      "web-security-learning-labs.vercel.app/module/1717-1718: 5 findings each — WSL queue drain",
-      "damn-vulnerable-startup.fly.dev/challenges/owasp: unreachable (fly.dev egress)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "vulnbank.org/api/virtual-cards: 26 findings — vulnbank-transactions-bola-live-oracle + IDOR/CORS hub",
+      "vulnbank.org/api/bill-payments/create: 26 findings — bill-payment route BOLA/CORS hub (no bill-payment-specific live oracle)",
+      "vulnbank.org/register: 27 findings — registration BOPLA route hub (+vulnbank-transactions-bola-live-oracle)",
+      "web-security-learning-labs.vercel.app/module/1816-1817: 6-7 findings — WSL catalog expansion past 1815",
+      "web-security-learning-labs.vercel.app/module/1811-1813: 5-8 findings — WSL placeholder-module-route-live-oracle on queue drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "WSL modules 1811-1815: placeholder/module-route-evidence only — no vuln-category live oracles",
-      "crapi.lab.pentest-forge.com intermittently 502 — signup fallback covers route scans when live POST unavailable",
-      "damn-vulnerable-startup.fly.dev consistently unreachable from cloud agent"
+      "vulnbank.org/api/virtual-cards: no virtual-card-specific BOLA live oracle (generic transactions-bola only)",
+      "vulnbank.org/api/bill-payments/create: no bill-payment business-logic live oracle",
+      "vulnbank.org/register: no BOPLA registration live oracle (is_admin:true probe absent)",
+      "WSL modules 1811-1817: placeholder/module-route-evidence only — no vuln-category live oracles"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
-    "brokencrystals.com/api/users/one/regular_user/adminpermission": 89,
-    "pwnshop.ctfsecurity.com/wallet": 44,
-    "pwnshop.ctfsecurity.com/apply-coupon": 43,
-    "brokencrystals.com/api/auth/jwt/x5c/validate": 85,
+    "vulnbank.org/register": 27,
+    "vulnbank.org/api/virtual-cards": 26,
+    "vulnbank.org/api/bill-payments/create": 26,
     "web-security-learning-labs.vercel.app/module/1811": 8,
-    "web-security-learning-labs.vercel.app/module/1812": 7,
-    "web-security-learning-labs.vercel.app/module/1813": 7,
-    "crapi.lab.pentest-forge.com/identity/api/auth/signup": 2,
-    "ssrf.vulnlab.dev/basic": 15
+    "web-security-learning-labs.vercel.app/module/1816": 6,
+    "web-security-learning-labs.vercel.app/module/1817": 7,
+    "web-security-learning-labs.vercel.app/module/1812": 5,
+    "web-security-learning-labs.vercel.app/module/1813": 5,
+    "pwnshop.ctfsecurity.com/wallet": 44
   }
 }
