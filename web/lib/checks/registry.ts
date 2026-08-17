@@ -39668,7 +39668,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1870;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1875;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -49539,6 +49539,73 @@ async function duckStoreRegisterAndLoginToken(ctx: RuleContext): Promise<string 
   }
 }
 
+const DUCK_STORE_PROBE_PASSWORD = "ThugirTest123!";
+
+/** Fresh Duck Store user for multi-step oracles (TOTP bypass) — bypasses per-origin token cache. */
+async function duckStoreRegisterFreshLoginToken(
+  ctx: RuleContext
+): Promise<{ token: string; username: string } | null> {
+  const username = `thugir_ds_fresh_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const email = `${username}@example.com`;
+  const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, email, password: DUCK_STORE_PROBE_PASSWORD }),
+    headers: {
+      "Content-Type": "application/json",
+      "X-Thugir-Nonce": `fresh-reg-${Date.now()}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 400) return null;
+  const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: DUCK_STORE_PROBE_PASSWORD }),
+    headers: {
+      "Content-Type": "application/json",
+      "X-Thugir-Nonce": `fresh-login-${Date.now()}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return null;
+  try {
+    const data = JSON.parse(loginDoc.body) as { access_token?: string; requires_totp?: boolean };
+    if (data.requires_totp || !data.access_token) return null;
+    return { token: data.access_token, username };
+  } catch {
+    return null;
+  }
+}
+
+async function duckStoreEnsureTotpEnabled(
+  ctx: RuleContext,
+  token: string,
+  username: string
+): Promise<boolean> {
+  if (await duckStoreEnableTotp(ctx, token)) return true;
+  const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: DUCK_STORE_PROBE_PASSWORD }),
+    headers: {
+      "Content-Type": "application/json",
+      "X-Thugir-Nonce": `totp-check-${Date.now()}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return false;
+  try {
+    const login = JSON.parse(loginDoc.body) as { requires_totp?: boolean; access_token?: string | null };
+    return Boolean(login.requires_totp && !login.access_token);
+  } catch {
+    return false;
+  }
+}
+
 /** Seeded roster markers for Duck Store admin/users BFLA when probe churn pushes admin@duck-store past read limits. */
 const DUCK_STORE_ADMIN_ROSTER_MARKERS =
   /admin@duck-store\.escape|sarah\.johnson@email\.com|escape\.security@email\.com/i;
@@ -50432,28 +50499,14 @@ const duckStoreTestimonialsUnauthPutRouteLiveOracle: Rule = async (ctx) => {
 
 const duckStoreAuthTotpBypassLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
-  const token = await duckStoreRegisterAndLoginToken(ctx);
-  if (!token) return NEGATIVE;
-  const enabled = await duckStoreEnableTotp(ctx, token);
-  if (!enabled) return NEGATIVE;
-  const profileUrl = new URL("/api/v1/users/me/profile", ctx.origin).toString();
-  const profileDoc = await ctx.probe.get(profileUrl, {
-    headers: { Authorization: `Bearer ${token}` },
-    maxBytes: 4096,
-    timeoutMs: 15000
-  });
-  if (profileDoc.status < 200 || profileDoc.status >= 400) return NEGATIVE;
-  let username = "";
-  try {
-    username = (JSON.parse(profileDoc.body) as { username?: string }).username ?? "";
-  } catch {
-    return NEGATIVE;
-  }
-  if (!username) return NEGATIVE;
+  const fresh = await duckStoreRegisterFreshLoginToken(ctx);
+  if (!fresh) return NEGATIVE;
+  const { token, username } = fresh;
+  if (!(await duckStoreEnsureTotpEnabled(ctx, token, username))) return NEGATIVE;
   const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();
   const loginDoc = await ctx.probe.get(loginUrl, {
     method: "POST",
-    body: JSON.stringify({ username, password: "ThugirTest123!" }),
+    body: JSON.stringify({ username, password: DUCK_STORE_PROBE_PASSWORD }),
     headers: {
       "Content-Type": "application/json",
       "X-Thugir-Nonce": `totp-relogin-${Date.now()}`

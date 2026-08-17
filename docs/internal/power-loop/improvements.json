@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1871-1875-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1870→1875 + placeholder priority regex extended to 187[0-5]; web-security-learning-labs.vercel.app/module/1871-1875 findings 5 each (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 44 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-totp-bypass-fresh-user",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreRegisterFreshLoginToken + duckStoreEnsureTotpEnabled bypass per-origin token cache — live+route totp-bypass oracles both fire on /api/v1/auth/login maxPages=6; duck-store.escape.tech/api/v1/auth/login totp-bypass-route restored after shared-cache regression; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-adminpermission-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended brokencrystals.com/api/users/one/regular_user/adminpermission to queue + -4 priority on mass-assignment/adminpermission slugs; route scan 89 findings (+brokencrystals-adminpermission-route-live-oracle +brokencrystals-mass-assignment-live-oracle); benchmark juice-shop 44 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-testimonials-unauth-put-live-oracle",
       "status": "shipped",
@@ -12074,6 +12092,21 @@
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-login-profile-queue-drain",
       "shipped_at": "2026-08-17T20:12:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1871-1875-catalog",
+      "shipped_at": "2026-08-17T22:20:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-totp-bypass-fresh-user",
+      "shipped_at": "2026-08-17T22:20:00.000Z"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-adminpermission-queue-drain",
+      "shipped_at": "2026-08-17T22:20:00.000Z"
     }
   ]
 }
