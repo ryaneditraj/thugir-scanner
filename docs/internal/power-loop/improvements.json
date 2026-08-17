@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1831-1835-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1830→1835 + placeholder priority regex extended to 183[0-5]; web-security-learning-labs.vercel.app/module/1831 findings 0→5 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1835 placeholder oracle fires; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-check-balance-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnbankCheckBalanceIdorRouteLiveOracle on /check_balance delegates to balance IDOR live probe; vulnbank.org/check_balance route scan 27 findings (+vulnbank-check-balance-idor-route-live-oracle); runner priority -2 on /check_balance; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-sup3r-secret-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnbankSup3rSecretAdminRouteLiveOracle on /sup3r_s3cr3t_admin delegates to hidden admin live probe; vulnbank.org/sup3r_s3cr3t_admin findings 20→27 (+vulnbank-sup3r-secret-admin-route-live-oracle); runner priority -2; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1826-1830-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1825→1830 + placeholder priority regex extended to 182\\d|1830; web-security-learning-labs.vercel.app/module/1826 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1830 placeholder oracle fires; benchmark juice-shop 47 findings 6/6 maintained"
@@ -11870,6 +11888,21 @@
       "source": "benchmark:juice-shop",
       "slug": "juice-shop-config-parse-fix",
       "shipped_at": "2026-08-17T06:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1831-1835-catalog",
+      "shipped_at": "2026-08-17T10:15:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-check-balance-idor-route-live-oracle",
+      "shipped_at": "2026-08-17T10:15:00.000Z"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-sup3r-secret-admin-route-live-oracle",
+      "shipped_at": "2026-08-17T10:15:00.000Z"
     }
   ]
 }

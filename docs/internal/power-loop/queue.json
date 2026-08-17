@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-08-17T10:06:07.038Z",
-=======
-  "updated_at": "2026-08-17T10:05:00.000Z",
->>>>>>> d209b87b (engine: WSL catalog 1835 + vulnbank check_balance and admin route oracles)
+  "updated_at": "2026-08-17T10:15:00.000Z",
   "discovery_urls": [
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1831",
@@ -31,8 +27,6 @@
       "auth": "oss_deploy"
     },
     {
-<<<<<<< HEAD
-=======
       "url": "https://vulnbank.org/check_balance",
       "source": "Commando-X/vuln-bank — unauthenticated balance lookup IDOR oracle GET /check_balance/{account_number} (openapi.json Aug 2026 discovery)",
       "auth": "public_demo"
@@ -43,7 +37,6 @@
       "auth": "public_demo"
     },
     {
->>>>>>> d209b87b (engine: WSL catalog 1835 + vulnbank check_balance and admin route oracles)
       "url": "https://web-security-learning-labs.vercel.app/module/1821",
       "source": "web-security-learning-labs Vercel — module 1821 security lab route (WSL catalog expansion past 1820, Aug 2026 web discovery)",
       "auth": "oss_deploy"

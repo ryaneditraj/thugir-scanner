@@ -1,6 +1,190 @@
 {
   "runs": [
     {
+      "run_id": "2026-08-16T04:03:20.430Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1724",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 421,
+      "status": "ok",
+      "scanned_at": "2026-08-16T04:03:20.430Z"
+    },
+    {
+      "run_id": "2026-08-16T04:03:24.300Z",
+      "url": "https://dvwu.vercel.app/labs/path-traversal",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 14,
+      "findings": [
+        {
+          "slug": "dvwu-portal-sqli-live-oracle",
+          "title": "DVWU portal SQL injection live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "dvwu-search-sqli-live-oracle",
+          "title": "DVWU search SQL injection live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "dvwu-notices-lfi-route-live-oracle",
+          "title": "DVWU notices LFI route live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "dvwu-ssrf-redirect-live-oracle",
+          "title": "DVWU redirect whitelist bypass SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "dvwu-files-client-lfi-route-live-oracle",
+          "title": "DVWU Document Library client-side LFI route live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "dvwu-path-traversal-client-route-live-oracle",
+          "title": "DVWU Document Library path-traversal route live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-sql-evidence",
+          "title": "Client bundle builds SQL via string concatenation",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-ist-edu-vuln-portal-evidence",
+          "title": "IST Edu intentionally vulnerable university portal disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "notices-file-lfi-probe",
+          "title": "Local file inclusion via file query parameter",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 545,
+      "status": "ok",
+      "scanned_at": "2026-08-16T04:03:24.300Z"
+    },
+    {
       "run_id": "2026-08-16T05:01:51.369Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
@@ -23591,13 +23775,13 @@
       "scanned_at": "2026-08-17T09:15:33.964Z"
     },
     {
-      "run_id": "2026-08-17T10:01:48.754Z",
+      "run_id": "2026-08-17T10:08:13.429Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
       "scan_kind": "benchmark",
       "platform": null,
-      "finding_count": 47,
+      "finding_count": 48,
       "findings": [
         {
           "slug": "juice-shop-addresss-bola-live-oracle",
@@ -23743,7 +23927,7 @@
           "slug": "juice-shop-deluxe-membership-live-oracle",
           "title": "Juice Shop deluxe membership live oracle",
           "severity": "medium",
-          "confidence": 0.93,
+          "confidence": 0.91,
           "category": "Business logic"
         },
         {
@@ -23829,6 +24013,13 @@
           "severity": "high",
           "confidence": 0.93,
           "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-privacy-requests-bola-live-oracle",
+          "title": "Juice Shop GDPR privacy-request BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
         },
         {
           "slug": "juice-shop-track-order-idor-live-oracle",
@@ -23931,256 +24122,18 @@
       ],
       "ai_findings_added": 0,
       "pages_crawled": 6,
-      "probes_run": 589,
+      "probes_run": 587,
       "status": "ok",
-      "scanned_at": "2026-08-17T10:01:48.754Z"
+      "scanned_at": "2026-08-17T10:08:13.429Z"
     },
     {
-      "run_id": "2026-08-17T10:06:07.006Z",
-      "scan_kind": "teacher_delta",
-      "status": "skipped",
-      "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-      "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok — 6/6 recall (47 findings, pages=6 probes=589)",
-      "teacher_delta": [],
-      "benchmark_recall": {
-        "juice-shop": {
-          "categories_expected": 6,
-          "categories_hit": 6,
-          "gap": [],
-          "hit": [
-            "xss",
-            "sqli",
-            "idor",
-            "auth_bypass",
-            "sensitive_data",
-            "misconfig"
-          ]
-        }
-      },
-      "scanned_at": "2026-08-17T10:06:07.006Z"
-    },
-    {
-      "run_id": "2026-08-17T10:06:13.284Z",
+      "run_id": "2026-08-17T10:09:02.742Z",
       "url": "https://web-security-learning-labs.vercel.app/module/1831",
       "auth": "oss_deploy",
       "scan_kind": "discovery",
       "platform": null,
-      "finding_count": 7,
+      "finding_count": 5,
       "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 385,
-      "status": "ok",
-      "scanned_at": "2026-08-17T10:06:13.284Z"
-    },
-    {
-      "run_id": "2026-08-17T10:06:18.741Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1832",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 385,
-      "status": "ok",
-      "scanned_at": "2026-08-17T10:06:18.741Z"
-    },
-    {
-      "run_id": "2026-08-17T10:06:23.717Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1833",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 385,
-      "status": "ok",
-      "scanned_at": "2026-08-17T10:06:23.717Z"
-    },
-    {
-      "run_id": "2026-08-17T10:06:28.885Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1834",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
         {
           "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
           "title": "Web Security Learning Labs placeholder module route live oracle",
@@ -24189,18 +24142,25 @@
           "category": "Security misconfiguration"
         },
         {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
+        {
           "slug": "client-side-web-security-learning-labs-evidence",
           "title": "Web Security Learning Labs training platform disclosed",
           "severity": "medium",
-          "confidence": 0.9,
+          "confidence": 0.86,
           "category": "Injection"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
         },
         {
           "slug": "thugir-dir-discovery",
@@ -24212,12 +24172,162 @@
       ],
       "ai_findings_added": 0,
       "pages_crawled": 6,
-      "probes_run": 421,
+      "probes_run": 398,
       "status": "ok",
-      "scanned_at": "2026-08-17T10:06:28.885Z"
+      "scanned_at": "2026-08-17T10:09:02.742Z"
     },
     {
-      "run_id": "2026-08-17T10:06:33.025Z",
+      "run_id": "2026-08-17T10:09:17.386Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1832",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 398,
+      "status": "ok",
+      "scanned_at": "2026-08-17T10:09:17.386Z"
+    },
+    {
+      "run_id": "2026-08-17T10:09:31.653Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1833",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 398,
+      "status": "ok",
+      "scanned_at": "2026-08-17T10:09:31.653Z"
+    },
+    {
+      "run_id": "2026-08-17T10:09:45.796Z",
+      "url": "https://web-security-learning-labs.vercel.app/module/1834",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 5,
+      "findings": [
+        {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "web-security-learning-labs-module-route-evidence",
+          "title": "Web Security Learning Labs module route evidence oracle",
+          "severity": "info",
+          "confidence": 0.86,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-web-security-learning-labs-evidence",
+          "title": "Web Security Learning Labs training platform disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 398,
+      "status": "ok",
+      "scanned_at": "2026-08-17T10:09:45.796Z"
+    },
+    {
+      "run_id": "2026-08-17T10:10:00.021Z",
       "url": "https://web-security-learning-labs.vercel.app/module/1835",
       "auth": "oss_deploy",
       "scan_kind": "discovery",
@@ -24225,6 +24335,13 @@
       "finding_count": 5,
       "findings": [
         {
+          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+          "title": "Web Security Learning Labs placeholder module route live oracle",
+          "severity": "info",
+          "confidence": 0.87,
+          "category": "Security misconfiguration"
+        },
+        {
           "slug": "missing-security-headers",
           "title": "Critical security headers missing",
           "severity": "medium",
@@ -24236,13 +24353,6 @@
           "title": "Web Security Learning Labs module route evidence oracle",
           "severity": "info",
           "confidence": 0.86,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
-          "title": "Web Security Learning Labs placeholder module route live oracle",
-          "severity": "info",
-          "confidence": 0.87,
           "category": "Security misconfiguration"
         },
         {
@@ -24264,22 +24374,36 @@
       "pages_crawled": 6,
       "probes_run": 398,
       "status": "ok",
-      "scanned_at": "2026-08-17T10:06:33.025Z"
+      "scanned_at": "2026-08-17T10:10:00.021Z"
     },
     {
-      "run_id": "2026-08-17T10:06:47.119Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1816",
-      "auth": "oss_deploy",
+      "run_id": "2026-08-17T10:10:14.088Z",
+      "url": "https://vulnbank.org/check_balance",
+      "auth": "public_demo",
       "scan_kind": "discovery",
       "platform": null,
-      "finding_count": 5,
+      "finding_count": 27,
       "findings": [
         {
-          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
-          "title": "Web Security Learning Labs placeholder module route live oracle",
-          "severity": "info",
-          "confidence": 0.87,
-          "category": "Security misconfiguration"
+          "slug": "vulnbank-transactions-bola-live-oracle",
+          "title": "Vuln Bank transaction history BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-check-balance-idor-live-oracle",
+          "title": "Vuln Bank unauthenticated balance lookup by account number",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-check-balance-idor-route-live-oracle",
+          "title": "Vuln Bank /check_balance IDOR route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
         },
         {
           "slug": "missing-security-headers",
@@ -24289,18 +24413,151 @@
           "category": "Security misconfiguration"
         },
         {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.86,
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
           "category": "Security misconfiguration"
         },
         {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.86,
+          "slug": "cors-reflect-origin",
+          "title": "CORS reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-ai-anonymous-chat-live-oracle",
+          "title": "Vuln Bank unauthenticated AI customer-support chat oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-ai-system-info-live-oracle",
+          "title": "Vuln Bank unauthenticated AI system-info disclosure oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vulnbank-bopla-register-live-oracle",
+          "title": "Vuln Bank registration BOPLA privilege escalation oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-sqli-login-live-oracle",
+          "title": "Vuln Bank SQL injection login bypass oracle",
+          "severity": "critical",
+          "confidence": 0.93,
           "category": "Injection"
+        },
+        {
+          "slug": "vulnbank-merchant-register-live-oracle",
+          "title": "Vuln Bank merchant registration sensitive-data oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "vulnbank-bill-payments-negative-amount-live-oracle",
+          "title": "Vuln Bank bill-payment negative-amount business-logic oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-merchant-payment-charge-live-oracle",
+          "title": "Vuln Bank merchant payment charge debug-disclosure oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-virtual-cards-bola-live-oracle",
+          "title": "Vuln Bank virtual-cards BOLA live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-upload-profile-picture-url-ssrf-live-oracle",
+          "title": "Vuln Bank profile-picture URL SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "vulnbank-transfer-negative-amount-live-oracle",
+          "title": "Vuln Bank money-transfer negative-amount business-logic oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-request-loan-negative-amount-live-oracle",
+          "title": "Vuln Bank loan request negative-amount business-logic oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-graphql-introspection-live-oracle",
+          "title": "Vuln Bank GraphQL introspection live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vulnbank-v1-forgot-password-pin-leak-live-oracle",
+          "title": "Vuln Bank v1 forgot-password API leaks reset PIN",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vulnbank-v2-forgot-password-enumeration-live-oracle",
+          "title": "Vuln Bank v2 forgot-password API enables username enumeration",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vulnbank-v3-user-idor-live-oracle",
+          "title": "Vuln Bank v3 user-details API IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-v3-reset-password-versioning-live-oracle",
+          "title": "Vuln Bank v3 reset-password accepts v1 leaked PIN",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vulnbank-sup3r-secret-admin-live-oracle",
+          "title": "Vuln Bank hidden admin panel reachable after BOPLA signup",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-request-loan-live-oracle",
+          "title": "Vuln Bank authenticated loan-request API oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
         },
         {
           "slug": "thugir-dir-discovery",
@@ -24308,28 +24565,49 @@
           "severity": "high",
           "confidence": 0.85,
           "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
         }
       ],
       "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 398,
+      "pages_crawled": 1,
+      "probes_run": 600,
       "status": "ok",
-      "scanned_at": "2026-08-17T10:06:47.119Z"
+      "scanned_at": "2026-08-17T10:10:14.088Z"
     },
     {
-      "run_id": "2026-08-17T10:07:01.302Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1817",
-      "auth": "oss_deploy",
+      "run_id": "2026-08-17T10:11:48.555Z",
+      "url": "https://vulnbank.org/sup3r_s3cr3t_admin",
+      "auth": "public_demo",
       "scan_kind": "discovery",
       "platform": null,
-      "finding_count": 5,
+      "finding_count": 27,
       "findings": [
         {
-          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
-          "title": "Web Security Learning Labs placeholder module route live oracle",
-          "severity": "info",
-          "confidence": 0.87,
-          "category": "Security misconfiguration"
+          "slug": "vulnbank-transactions-bola-live-oracle",
+          "title": "Vuln Bank transaction history BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-sup3r-secret-admin-live-oracle",
+          "title": "Vuln Bank hidden admin panel reachable after BOPLA signup",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-sup3r-secret-admin-route-live-oracle",
+          "title": "Vuln Bank hidden admin panel route live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
         },
         {
           "slug": "missing-security-headers",
@@ -24339,18 +24617,151 @@
           "category": "Security misconfiguration"
         },
         {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.86,
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
           "category": "Security misconfiguration"
         },
         {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.86,
+          "slug": "cors-reflect-origin",
+          "title": "CORS reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-ai-anonymous-chat-live-oracle",
+          "title": "Vuln Bank unauthenticated AI customer-support chat oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-ai-system-info-live-oracle",
+          "title": "Vuln Bank unauthenticated AI system-info disclosure oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vulnbank-bopla-register-live-oracle",
+          "title": "Vuln Bank registration BOPLA privilege escalation oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-sqli-login-live-oracle",
+          "title": "Vuln Bank SQL injection login bypass oracle",
+          "severity": "critical",
+          "confidence": 0.93,
           "category": "Injection"
+        },
+        {
+          "slug": "vulnbank-merchant-register-live-oracle",
+          "title": "Vuln Bank merchant registration sensitive-data oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "vulnbank-bill-payments-negative-amount-live-oracle",
+          "title": "Vuln Bank bill-payment negative-amount business-logic oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-merchant-payment-charge-live-oracle",
+          "title": "Vuln Bank merchant payment charge debug-disclosure oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-virtual-cards-bola-live-oracle",
+          "title": "Vuln Bank virtual-cards BOLA live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-upload-profile-picture-url-ssrf-live-oracle",
+          "title": "Vuln Bank profile-picture URL SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "vulnbank-transfer-negative-amount-live-oracle",
+          "title": "Vuln Bank money-transfer negative-amount business-logic oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-request-loan-negative-amount-live-oracle",
+          "title": "Vuln Bank loan request negative-amount business-logic oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-check-balance-idor-live-oracle",
+          "title": "Vuln Bank unauthenticated balance lookup by account number",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-graphql-introspection-live-oracle",
+          "title": "Vuln Bank GraphQL introspection live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vulnbank-v1-forgot-password-pin-leak-live-oracle",
+          "title": "Vuln Bank v1 forgot-password API leaks reset PIN",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vulnbank-v2-forgot-password-enumeration-live-oracle",
+          "title": "Vuln Bank v2 forgot-password API enables username enumeration",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vulnbank-v3-user-idor-live-oracle",
+          "title": "Vuln Bank v3 user-details API IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vulnbank-v3-reset-password-versioning-live-oracle",
+          "title": "Vuln Bank v3 reset-password accepts v1 leaked PIN",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vulnbank-request-loan-live-oracle",
+          "title": "Vuln Bank authenticated loan-request API oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
         },
         {
           "slug": "thugir-dir-discovery",
@@ -24358,63 +24769,20 @@
           "severity": "high",
           "confidence": 0.85,
           "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
         }
       ],
       "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 398,
+      "pages_crawled": 1,
+      "probes_run": 601,
       "status": "ok",
-      "scanned_at": "2026-08-17T10:07:01.302Z"
-    },
-    {
-      "run_id": "2026-08-17T10:07:15.484Z",
-      "url": "https://web-security-learning-labs.vercel.app/module/1811",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
-          "title": "Web Security Learning Labs placeholder module route live oracle",
-          "severity": "info",
-          "confidence": 0.87,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "web-security-learning-labs-module-route-evidence",
-          "title": "Web Security Learning Labs module route evidence oracle",
-          "severity": "info",
-          "confidence": 0.86,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-web-security-learning-labs-evidence",
-          "title": "Web Security Learning Labs training platform disclosed",
-          "severity": "medium",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 398,
-      "status": "ok",
-      "scanned_at": "2026-08-17T10:07:15.484Z"
+      "scanned_at": "2026-08-17T10:11:48.555Z"
     }
   ]
 }
