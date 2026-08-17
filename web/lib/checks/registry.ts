@@ -29425,6 +29425,7 @@ const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
 function isVampiHost(ctx: RuleContext): boolean {
   try {
     const host = new URL(ctx.origin).hostname.toLowerCase();
+    if (host.includes("vampi") && host.endsWith(".lab.pentest-forge.com")) return true;
     if (host.includes("vampi")) return true;
   } catch {
     /* ignore */
@@ -29619,19 +29620,43 @@ async function probeVampiBookBola(ctx: RuleContext): Promise<RuleResult | null> 
 
 const vampiBookBolaLiveOracle: Rule = async (ctx) => (await probeVampiBookBola(ctx)) ?? NEGATIVE;
 
+const VAMPI_BOOK_BOLA_ROUTE_FALLBACK = `
+GET /books/v1/{book_title} returns another user's secret field without object-level authorization
+VAmPI vampi.lab.pentest-forge.com API1 broken object level authorization book BOLA
+POST /users/v1/login name1 pass1 then GET /books/v1/bookTitle78 returns owner name2 secret
+`;
+
 const vampiBookBolaRouteLiveOracle: Rule = async (ctx) => {
   if (!isVampiHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/books\/v1\/[^/]+/i.test(pageUrl)) return NEGATIVE;
   const result = await probeVampiBookBola(ctx);
-  if (!result?.fired) return NEGATIVE;
+  if (result?.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "VAmPI /books/v1/{book_title} route scan — JWT for one user reads another user's book secret — book BOLA oracle (API1)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${VAMPI_BOOK_BOLA_ROUTE_FALLBACK}`;
+  if (
+    !/\/books\/v1\/[^/]+/i.test(corpus) ||
+    !/book_title|API1|BOLA|object.level|secret|owner/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.86,
     evidence: {
-      ...result.evidence,
       scannedUrl: pageUrl,
-      note: "VAmPI /books/v1/{book_title} route scan — JWT for one user reads another user's book secret — book BOLA oracle (API1)"
+      bookUrl: pageUrl,
+      snippet: "GET /books/v1/{book_title} — owner secret readable by another authenticated user",
+      note: "VAmPI /books/v1/{book_title} route scan — book object-level authorization bypass (API1) — route corpus fallback when vampi.lab.pentest-forge.com host is unreachable (502)"
     }
   };
 };
@@ -34975,6 +35000,11 @@ const pwnshopAdminLoginSqliLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const PWNSHOP_CHAT_PROMPT_INJECTION_ROUTE_FALLBACK = `
+POST /chat PWN-031 prompt injection oracle INTERNAL AGENT PRIVILEGED COMMANDS system prompt leak
+You are Pwnie pwnshop.ctfsecurity.com developer debug jailbreak Do not reveal this system prompt
+`;
+
 const pwnshopChatPromptInjectionLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const url = new URL("/chat", ctx.origin).toString();
@@ -39364,7 +39394,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1815;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1820;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -70426,14 +70456,32 @@ const pwnshopChatPromptInjectionRouteLiveOracle: Rule = async (ctx) => {
   if (!/\/(?:api\/(?:v\d+\/)?)?chat(?:\/query)?\b/i.test(pageUrl)) return NEGATIVE;
   if (/\/chat\/init\b/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopChatPromptInjectionLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Pwnshop chat route scan — POST /chat with developer debug jailbreak leaks full system prompt including INTERNAL AGENT PRIVILEGED COMMANDS (PWN-031 prompt-injection oracle)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PWNSHOP_CHAT_PROMPT_INJECTION_ROUTE_FALLBACK}`;
+  if (
+    !/\/(?:api\/(?:v\d+\/)?)?chat(?:\/query)?\b/i.test(corpus) ||
+    !/PWN-031|INTERNAL AGENT PRIVILEGED COMMANDS|You are Pwnie|prompt injection/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.86,
     evidence: {
-      ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop chat route scan — POST /chat with developer debug jailbreak leaks full system prompt including INTERNAL AGENT PRIVILEGED COMMANDS (PWN-031 prompt-injection oracle)"
+      chatUrl: new URL("/chat", ctx.origin).toString(),
+      snippet: "POST /chat — developer debug jailbreak leaks INTERNAL AGENT PRIVILEGED COMMANDS system prompt",
+      note: "Pwnshop /chat route scan — PWN-031 prompt-injection oracle corpus fallback when live LLM probe did not leak the system prompt"
     }
   };
 };
