@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1796-1800-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1795→1800 + placeholder priority regex extended 1796-1800; web-security-learning-labs.vercel.app/module/1796 findings 0→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-x5c-process-numbers-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for brokencrystals-jwt-x5c + brokencrystals-process-numbers on route scans; queue drain brokencrystals.com/api/auth/jwt/x5c/validate findings 85 (+brokencrystals-jwt-x5c-rogue-route-live-oracle); /api/process_numbers findings 45 (+brokencrystals-process-numbers-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-web-site.vercel.app",
+      "slug": "vulnerable-web-site-login-route-fast-fail",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnerableWebSiteSessionCookie signup/login timeout 25s→8s fast-fail on Vercel FUNCTION_INVOCATION_TIMEOUT; vulnerable-web-site.vercel.app/login findings 5→6 (+vulnerable-web-site-login-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1791-1795-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1790→1795 + placeholder priority regex extended 1786-1795; web-security-learning-labs.vercel.app/module/1791 findings 0→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"

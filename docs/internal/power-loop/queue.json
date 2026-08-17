@@ -1,6 +1,46 @@
 {
-  "updated_at": "2026-08-17T02:10:00.000Z",
+  "updated_at": "2026-08-17T03:15:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1796",
+      "source": "web-security-learning-labs Vercel — module 1796 security lab route (WSL catalog expansion past 1795, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1797",
+      "source": "web-security-learning-labs Vercel — module 1797 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1798",
+      "source": "web-security-learning-labs Vercel — module 1798 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1799",
+      "source": "web-security-learning-labs Vercel — module 1799 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1800",
+      "source": "web-security-learning-labs Vercel — module 1800 security lab route (WSL catalog expansion, Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/login",
+      "source": "megmogmog1965/vulnerable-web-site — login route session bootstrap (Vercel API timeouts; fast-fail to route oracle)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5c/validate",
+      "source": "NeuraLegion/brokencrystals — JWT x5c rogue certificate route oracle (queue drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/process_numbers",
+      "source": "NeuraLegion/brokencrystals — server-side JS injection route oracle POST /api/process_numbers",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1792",
       "source": "web-security-learning-labs Vercel \u2014 module 1792 security lab route (WSL catalog expansion, Aug 2026 web discovery)",
