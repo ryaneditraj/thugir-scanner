@@ -22935,6 +22935,23 @@ const vulnbankSup3rSecretAdminLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankSup3rSecretAdminRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/sup3r_s3cr3t_admin/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankSup3rSecretAdminLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /sup3r_s3cr3t_admin route scan — BOPLA signup grants access to hidden admin panel — route-specific hidden admin oracle"
+    }
+  };
+};
+
 const vulnbankCheckBalanceIdorLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const username = `thugir_bal_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -22993,6 +23010,23 @@ const vulnbankCheckBalanceIdorLiveOracle: Rule = async (ctx) => {
       balance,
       snippet: balanceDoc.body.slice(0, 280).trim(),
       note: "Vuln Bank GET /check_balance/{account_number} returns account balance without authentication — balance-enumeration IDOR oracle"
+    }
+  };
+};
+
+const vulnbankCheckBalanceIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/check_balance/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankCheckBalanceIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /check_balance route scan — GET /check_balance/{account_number} returns balance without authentication — route-specific balance-enumeration IDOR oracle"
     }
   };
 };
@@ -39479,7 +39513,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1830;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1835;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -84848,11 +84882,13 @@ export const RULES: Record<string, Rule> = {
   vulnbankV3ResetPasswordVersioningLiveOracle,
   vulnbankV3ResetPasswordVersioningRouteLiveOracle,
   vulnbankSup3rSecretAdminLiveOracle,
+  vulnbankSup3rSecretAdminRouteLiveOracle,
   vulnbankRequestLoanLiveOracle,
   vulnbankRequestLoanNegativeAmountLiveOracle,
   vulnbankRequestLoanRouteLiveOracle,
   vulnbankRequestLoanNegativeAmountRouteLiveOracle,
   vulnbankCheckBalanceIdorLiveOracle,
+  vulnbankCheckBalanceIdorRouteLiveOracle,
   vulnbankTransactionsBolaLiveOracle,
   vulnbankTransactionsBolaRouteLiveOracle,
   brokencrystalsMarketplacePrototypePollutionLiveOracle,
