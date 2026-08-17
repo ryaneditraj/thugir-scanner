@@ -21804,6 +21804,23 @@ const vulnbankBoplaRegisterLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankBoplaRegisterRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/register\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankBoplaRegisterLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /register route scan — POST accepts hidden is_admin:true and echoes debug_data.is_admin:true — route-specific BOPLA privilege escalation oracle"
+    }
+  };
+};
+
 async function vulnbankSqliLoginBypassProbe(ctx: RuleContext): Promise<RuleResult | null> {
   if (!/vulnbank\.org/i.test(ctx.origin)) return null;
   const loginUrl = new URL("/login", ctx.origin).toString();
@@ -22058,6 +22075,23 @@ const vulnbankBillPaymentsNegativeAmountLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankBillPaymentsNegativeAmountRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/bill-payments/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankBillPaymentsNegativeAmountLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /api/bill-payments route scan — POST accepts negative amount:-50 and returns success — route-specific bill-payment business-logic oracle"
+    }
+  };
+};
+
 const vulnbankMerchantPaymentChargeLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const registerUrl = new URL("/api/v1/merchants/register", ctx.origin).toString();
@@ -22222,6 +22256,23 @@ const vulnbankVirtualCardsBolaLiveOracle: Rule = async (ctx) => {
       freezeUrl,
       snippet: freezeDoc.body.slice(0, 280).trim(),
       note: "Vuln Bank user B can POST /api/virtual-cards/{cardId}/toggle-freeze on user A's virtual card without ownership check — BOLA virtual-cards oracle"
+    }
+  };
+};
+
+const vulnbankVirtualCardsBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/virtual-cards/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankVirtualCardsBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /api/virtual-cards route scan — user B can toggle-freeze user A's virtual card without ownership check — route-specific BOLA virtual-cards oracle"
     }
   };
 };
@@ -39428,7 +39479,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1825;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1830;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -84776,12 +84827,15 @@ export const RULES: Record<string, Rule> = {
   vulnbankAiSystemInfoLiveOracle,
   vulnbankAiSystemInfoRouteLiveOracle,
   vulnbankBoplaRegisterLiveOracle,
+  vulnbankBoplaRegisterRouteLiveOracle,
   vulnbankSqliLoginLiveOracle,
   vulnbankSqliLoginRouteLiveOracle,
   vulnbankMerchantRegisterLiveOracle,
   vulnbankBillPaymentsNegativeAmountLiveOracle,
+  vulnbankBillPaymentsNegativeAmountRouteLiveOracle,
   vulnbankMerchantPaymentChargeLiveOracle,
   vulnbankVirtualCardsBolaLiveOracle,
+  vulnbankVirtualCardsBolaRouteLiveOracle,
   vulnbankUploadProfilePictureUrlSsrfLiveOracle,
   vulnbankTransferNegativeAmountLiveOracle,
   vulnbankTransferNegativeAmountRouteLiveOracle,
