@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-17T11:35:48.418Z",
+  "updated_at": "2026-08-17T12:26:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2733,
-  "total_findings": 26697,
-  "critical_findings": 55,
+  "total_sites_scanned": 2743,
+  "total_findings": 26943,
+  "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1963,
-  "discovery_findings": 22676,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-17T11:35:48.418Z",
+  "discovery_findings": 22723,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-17T12:26:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 44,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,21 +48,21 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (44 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (47 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 7,
-      "urls_scanned": 3,
-      "findings": 97,
-      "focus": "pwnshop admin/export-orders CSV oracle + product/1 review route + WSL modules 1836-1840",
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "pwnshop upload-avatar OTP prime + nodegoat login weak creds + duck-store/WSL 1845",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (44 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/admin/export-orders: 24→44 findings — admin OTP cache fix + export-orders corpus fallback shipped",
-      "pwnshop.ctfsecurity.com/product/1: 20→45 findings — product-review route priority + OTP prime shipped",
-      "web-security-learning-labs.vercel.app/module/1836: 8 findings with placeholder-module-route oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: 13→46 findings — dedicated avatar OTP prime shipped (PWN-012 route oracle)",
+      "nodegoat-websec.herokuapp.com/login: 8→10 findings — default admin/Admin_123 weak-credentials route oracle shipped",
+      "duck-store.escape.tech/api/v1/products/filter/by-color: 23 findings with SQLi route oracle + duck-store route priority"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -71,11 +71,11 @@
     ]
   },
   "discovery_highlights": {
-    "pwnshop.ctfsecurity.com/admin/export-orders": 44,
-    "pwnshop.ctfsecurity.com/product/1": 45,
-    "web-security-learning-labs.vercel.app/module/1836": 8,
-    "juice-shop.herokuapp.com": 44,
-    "vulnbank.org/sup3r_s3cr3t_admin": 27,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 46,
+    "nodegoat-websec.herokuapp.com/login": 10,
+    "duck-store.escape.tech/api/v1/products/filter/by-color": 23,
+    "pwnshop.ctfsecurity.com/admin/export-orders": 45,
+    "juice-shop.herokuapp.com": 47,
     "ssrf.vulnlab.dev/basic": 15
   }
 }
