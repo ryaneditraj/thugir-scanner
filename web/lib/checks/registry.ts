@@ -39668,7 +39668,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1865;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1870;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -50379,6 +50379,57 @@ const duckStoreTestimonialsPutBolaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const duckStoreTestimonialsUnauthPutLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let testimonialId = 1;
+  const idMatch = pageUrl.match(/\/api\/v1\/testimonials\/(\d+)/i);
+  if (idMatch) testimonialId = Number(idMatch[1]);
+  const putUrl = new URL(`/api/v1/testimonials/${testimonialId}`, ctx.origin).toString();
+  const hijacked = `Unauth PUT probe ${Date.now().toString(36)}`;
+  const putDoc = await ctx.probe.get(putUrl, {
+    method: "PUT",
+    body: JSON.stringify({ content: hijacked, rating: 3 }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (putDoc.status < 200 || putDoc.status >= 400) return NEGATIVE;
+  if (!putDoc.body.includes(hijacked)) return NEGATIVE;
+  const verifyUrl = `${putUrl}?_t=${Date.now()}`;
+  const verifyDoc = await ctx.probe.get(verifyUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (verifyDoc.status < 200 || verifyDoc.status >= 400) return NEGATIVE;
+  if (!verifyDoc.body.includes(hijacked)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      putUrl,
+      testimonialId,
+      hijacked,
+      snippet: putDoc.body.slice(0, 200).trim(),
+      note: "Duck Store PUT /api/v1/testimonials/{id} accepts unauthenticated updates without any Authorization header — broken access control oracle"
+    }
+  };
+};
+
+const duckStoreTestimonialsUnauthPutRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/testimonials\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreTestimonialsUnauthPutLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/testimonials/{id} route scan — unauthenticated PUT updates testimonial content without auth — broken access control oracle"
+    }
+  };
+};
+
 const duckStoreAuthTotpBypassLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const token = await duckStoreRegisterAndLoginToken(ctx);
@@ -50421,7 +50472,7 @@ const duckStoreAuthTotpBypassLiveOracle: Rule = async (ctx) => {
   const adminUrl = new URL("/api/v1/admin/users", ctx.origin).toString();
   const adminDoc = await ctx.probe.get(adminUrl, {
     headers: { Authorization: `Bearer ${login.temp_token}` },
-    maxBytes: 16384,
+    maxBytes: 65536,
     timeoutMs: 15000
   });
   if (adminDoc.status < 200 || adminDoc.status >= 400) return NEGATIVE;
@@ -86384,6 +86435,8 @@ export const RULES: Record<string, Rule> = {
   duckStoreAdminOrdersExposureRouteLiveOracle,
   duckStoreTestimonialsPutBolaLiveOracle,
   duckStoreTestimonialsPutBolaRouteLiveOracle,
+  duckStoreTestimonialsUnauthPutLiveOracle,
+  duckStoreTestimonialsUnauthPutRouteLiveOracle,
   duckStoreAuthTotpBypassLiveOracle,
   duckStoreAuthTotpBypassRouteLiveOracle,
   firingRangeDomLocalStorageXssLiveOracle,

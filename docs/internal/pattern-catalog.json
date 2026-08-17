@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-17T20:07:28.811Z",
-  "total": 2458,
-  "uniqueSlugs": 2454,
+  "generatedAt": "2026-08-17T21:16:04.064Z",
+  "total": 2460,
+  "uniqueSlugs": 2456,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2440,
+    "generic": 2442,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2373,
+    "deep": 2375,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 498,
+    "Broken access control": 500,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -956,6 +956,8 @@
     "duck-store-testimonials-put-bola-route-live-oracle",
     "duck-store-testimonials-stored-xss-live-oracle",
     "duck-store-testimonials-stored-xss-route-live-oracle",
+    "duck-store-testimonials-unauth-put-live-oracle",
+    "duck-store-testimonials-unauth-put-route-live-oracle",
     "duck-store-users-bola-live-oracle",
     "duck-store-users-route-live-oracle",
     "dvaib-login-route-live-oracle",
