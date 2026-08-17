@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1786-1790-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1785→1790; web-security-learning-labs.vercel.app/module/1788 findings 0→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-users-api-route-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended vuln-expose.vercel.app/api/users to discovery queue; GET /api/users returns users with plaintext passwords and raw SQL query; vuln-expose.vercel.app/api/users findings 0→16 (+vuln-expose-users-api-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-sqli-blind-csp-bypass-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: added /xss/csp-bypass to extractVulnExposeSeeds + runner -3 priority for vuln-expose-sqli-blind-* and vuln-expose-xss-csp-* route scans; vuln-expose.vercel.app/sqli/blind findings 0→18 (+vuln-expose-sqli-blind-route-live-oracle); /xss/csp-bypass findings 0→17 (+vuln-expose-xss-csp-bypass-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:www.dvaib.com",
       "slug": "dvaib-login-route-live-oracle",
       "status": "shipped",
@@ -11654,6 +11672,21 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1781-1785-catalog",
       "shipped_at": "2026-08-16T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1786-1790-catalog",
+      "shipped_at": "2026-08-17T00:57:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-users-api-route-queue-drain",
+      "shipped_at": "2026-08-17T00:57:00.000Z"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-sqli-blind-csp-bypass-route-priority",
+      "shipped_at": "2026-08-17T00:57:00.000Z"
     }
   ]
 }
