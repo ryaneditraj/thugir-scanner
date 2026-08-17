@@ -2,9 +2,21 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
-      "slug": "web-security-learning-labs-module-1811-1815-catalog",
+      "slug": "web-security-learning-labs-module-1816-1820-catalog",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1810→1815 + placeholder priority regex extended to 181[0-5]; web-security-learning-labs.vercel.app/module/1811 findings 0→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1815→1820 + placeholder priority regex extended to 181\\d|1820; web-security-learning-labs.vercel.app/module/1816 findings 7→5 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vampi.lab.pentest-forge.com",
+      "slug": "vampi-book-bola-route-502-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vampiBookBolaRouteLiveOracle VAMPI_BOOK_BOLA_ROUTE_FALLBACK when vampi.lab.pentest-forge.com returns 502; vampi.lab.pentest-forge.com/books/v1/1 findings 1→2 (+vampi-book-bola-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopChatPromptInjectionRouteLiveOracle PWNSHOP_CHAT_PROMPT_INJECTION_ROUTE_FALLBACK when live LLM probe misses; pwnshop.ctfsecurity.com/chat findings 20→43 (+pwnshop-chat-prompt-injection-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
       "source": "discovery:crapi.lab.pentest-forge.com",
