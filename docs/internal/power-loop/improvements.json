@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1821-1825-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1820→1825 + placeholder priority regex extended to 182[0-5]; web-security-learning-labs.vercel.app/module/1821 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1822 6→8; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-transactions-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: fauxbankTransactionsRouteLiveOracle on /transactions delegates to fauxbankIdorAccountsProbe; runner priority idor -3 then transactions-route -2 on /transactions; pentest-fauxbank.vercel.app/transactions findings 7 with +fauxbank-transactions-route-live-oracle when live IDOR succeeds; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-settings-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: fauxbankSettingsRouteLiveOracle on /settings delegates to fauxbankProfileSensitiveDataLiveOracle; pentest-fauxbank.vercel.app/settings findings 12→13 (+fauxbank-settings-route-live-oracle); extractFauxbankLabSeeds extended with /transactions + /settings; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1816-1820-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1815→1820 + placeholder priority regex extended to 181\\d|1820; web-security-learning-labs.vercel.app/module/1816 findings 7→5 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
