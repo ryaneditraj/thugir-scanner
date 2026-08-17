@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-17T10:15:00.000Z",
+  "updated_at": "2026-08-17T11:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2952,
-  "total_findings": 30037,
-  "critical_findings": 64,
+  "total_sites_scanned": 2730,
+  "total_findings": 26600,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2073,
-  "discovery_findings": 24432,
-  "improvements_shipped": 1205,
-  "last_run": "2026-08-17T10:15:00.000Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22579,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-17T11:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 587,
+      "probes_run": 589,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); no benchmark misses"
+      "note": "Rich 6/6 recall (47 findings, 30+ juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 7,
-      "urls_scanned": 7,
-      "findings": 79,
-      "focus": "WSL catalog 1831-1835 + vulnbank route oracles (/check_balance, /sup3r_s3cr3t_admin)",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 45,
+      "focus": "WSL module 1811-1817 queue drain + Duck Store escape.tech API oracles + nodegoat-websec login/profile queued",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1831-1835: 0→5 findings — +web-security-learning-labs-placeholder-module-route-live-oracle with catalog expansion to 1835",
-      "vulnbank.org/check_balance: route scan 27 findings — +vulnbank-check-balance-idor-route-live-oracle",
-      "vulnbank.org/sup3r_s3cr3t_admin: 20→27 findings — +vulnbank-sup3r-secret-admin-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1816: 8 findings — WSL catalog expansion",
+      "web-security-learning-labs.vercel.app/module/1817: 8 findings — WSL catalog expansion",
+      "web-security-learning-labs.vercel.app/module/1811: 8 findings — WSL catalog expansion",
+      "web-security-learning-labs.vercel.app/module/1812: 6 findings — WSL catalog expansion",
+      "web-security-learning-labs.vercel.app/module/1813-1815: 5 findings each — WSL catalog expansion",
+      "damn-vulnerable-startup.fly.dev/challenges/owasp: unreachable (fly.dev cold/dead)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pentest-fauxbank.vercel.app: Vercel Security Checkpoint intermittently blocks live FauxBank probes",
-      "WSL modules beyond 1835: catalog shell detection stops at WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX"
+      "duck-store.escape.tech + nodegoat-websec routes queued but not reached in 8-URL queue slice this hour",
+      "damn-vulnerable-startup.fly.dev/*: fly.dev instance unreachable across repeated queue drains",
+      "WSL modules 1811-1817: stable 5-8 finding hubs without route-specific live oracles beyond generic bundle checks"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "vulnbank.org/check_balance": 27,
+    "juice-shop.herokuapp.com": 47,
+    "web-security-learning-labs.vercel.app/module/1816": 8,
+    "web-security-learning-labs.vercel.app/module/1817": 8,
+    "web-security-learning-labs.vercel.app/module/1811": 8,
+    "web-security-learning-labs.vercel.app/module/1812": 6,
+    "web-security-learning-labs.vercel.app/module/1813": 5,
+    "web-security-learning-labs.vercel.app/module/1814": 5,
+    "web-security-learning-labs.vercel.app/module/1815": 5,
     "vulnbank.org/sup3r_s3cr3t_admin": 27,
-    "web-security-learning-labs.vercel.app/module/1831": 5,
-    "web-security-learning-labs.vercel.app/module/1835": 5,
-    "vulnbank.org/register": 28,
-    "vulnbank.org/api/bill-payments/create": 27,
-    "vulnbank.org/api/virtual-cards": 27,
-    "brokencrystals.com/api/users/one/regular_user/adminpermission": 89,
-    "ssrf.vulnlab.dev/basic": 15
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
