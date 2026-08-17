@@ -1,11 +1,47 @@
 {
-  "updated_at": "2026-08-17T22:05:00.000Z",
+  "updated_at": "2026-08-17T23:05:13.202Z",
   "discovery_urls": [
     {
-<<<<<<< HEAD
+      "url": "https://web-security-learning-labs.vercel.app/module/1876",
+      "source": "web-security-learning-labs Vercel — module 1876 placeholder route (catalog expansion past 1875, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1877",
+      "source": "web-security-learning-labs Vercel — module 1877 placeholder route (catalog expansion past 1875, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1878",
+      "source": "web-security-learning-labs Vercel — module 1878 placeholder route (catalog expansion past 1875, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1879",
+      "source": "web-security-learning-labs Vercel — module 1879 placeholder route (catalog expansion past 1875, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1880",
+      "source": "web-security-learning-labs Vercel — module 1880 placeholder route (catalog expansion past 1875, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/debug/info",
+      "source": "ctfsec/pwnshop — PWN-018 debug endpoint oracle GET /debug/info (README route map Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
+      "source": "ctfsec/pwnshop — PWN-019 unauthenticated audit log GET /api/v1/events (README route map Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://brokencrystals.com/api/users/one/regular_user/adminpermission",
       "source": "NeuraLegion/brokencrystals — adminpermission mass-assignment oracle queue drain (Aug 2026)",
-=======
+      "auth": "public_demo"
+    },
+    {
       "url": "https://duck-store.escape.tech/api/v1/users/me/profile",
       "source": "Escape Duck Store — mass-assignment oracle PUT /api/v1/users/me/profile (duck-store.escape.tech/vulnerabilities + Devroxana writeup Aug 2026)",
       "auth": "public_demo"
@@ -23,12 +59,10 @@
     {
       "url": "https://nodegoat-websec.herokuapp.com/benefits",
       "source": "nodegoat-websec Heroku — benefits SQLi + BOLA admin route oracle (OWASP NodeGoat README + 1337skills cheatsheet Aug 2026)",
->>>>>>> 387f821c790f07906d0b7ef92b1e96bdad679dc5
       "auth": "public_demo"
     },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1871",
-<<<<<<< HEAD
       "source": "web-security-learning-labs Vercel — module 1871 placeholder route (catalog expansion past 1870, Aug 2026)",
       "auth": "oss_deploy"
     },
@@ -50,9 +84,6 @@
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1875",
       "source": "web-security-learning-labs Vercel — module 1875 placeholder route (catalog expansion past 1870, Aug 2026)",
-=======
-      "source": "web-security-learning-labs Vercel — module 1871 placeholder route (catalog expansion past 1870, Aug 2026 web discovery)",
->>>>>>> 387f821c790f07906d0b7ef92b1e96bdad679dc5
       "auth": "oss_deploy"
     },
     {
@@ -4283,16 +4314,6 @@
     {
       "url": "https://pwnshop.ctfsecurity.com/vulnerabilities",
       "source": "r007sec/pwnshop README — interactive 45-vuln index at /vulnerabilities (OSS deploy)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/debug/info",
-      "source": "r007sec/pwnshop — PWN-018 intentionally public debug endpoint (OSS deploy)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
-      "source": "r007sec/pwnshop — PWN-005 unauthenticated audit-log JSON API (OSS deploy)",
       "auth": "public_demo"
     },
     {
