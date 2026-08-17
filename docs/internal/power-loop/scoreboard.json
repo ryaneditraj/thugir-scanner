@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-17T02:02:48.190Z",
+  "updated_at": "2026-08-17T02:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2862,
-  "total_findings": 28481,
-  "critical_findings": 61,
+  "total_sites_scanned": 2870,
+  "total_findings": 28615,
+  "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2025,
-  "discovery_findings": 23538,
+  "discovery_urls_added": 2030,
+  "discovery_findings": 23672,
   "improvements_shipped": 1199,
-  "last_run": "2026-08-17T02:02:48.190Z",
+  "last_run": "2026-08-17T02:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 29,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 481,
+      "probes_run": 588,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (29 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (47 findings, 36 live-oracle slugs); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 74,
-      "focus": "WSL 1791-1794 + security-scanner-dh25 queued; queue drain modules 1683/1686-1688 + vuln-expose XSS playground + ssrf.vulnlab basic + seclab SSTI",
+      "urls_scanned": 8,
+      "findings": 134,
+      "focus": "Juice Shop B2B deserialization oracles on official demo + escape.tech; vulnforge level11-12 auth tier; WSL 1791-1793 + 1796 queue drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (29 findings) — no benchmark misses",
-      "vuln-expose.vercel.app/xss/playground: 17 findings — vuln-expose-auth-bypass-api + sqli-search + stored-xss-comments live oracles",
-      "ssrf.vulnlab.dev/basic: 15 findings — unprotected-webhook-endpoint + route-specific SSRF hub (up from 3 prior runs)",
-      "web-security-learning-labs.vercel.app/module/1683-1688: 9 findings each — WSL IDOR module route live oracle + curated route oracle",
-      "seclab.vercel.app/ssti: 6 findings — seclab SSTI route oracle",
-      "damn-vulnerable-startup.fly.dev/challenges/owasp: unreachable (fly.dev error)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark category misses",
+      "demo.owasp-juice.shop/rest/b2b/orders: 48 findings — full Juice Shop live-oracle suite on official demo B2B route",
+      "juice-shop.demo.escape.tech/rest/b2b/orders: 49 findings — escape.tech B2B oracle parity with official demo",
+      "vulnforge-academy level11/level12: 5 findings each — vulnforge-academy-level-ssti-route-live-oracle + reflexion-escalated-ssti (auth-tier routes)",
+      "web-security-learning-labs module/1791-1793 + 1796: 6-7 findings — curated module route oracles, placeholder on 1793"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "WSL modules 1683-1688 return placeholder/curated route oracles — no route-specific vuln live oracles yet",
-      "ssrf.vulnlab.dev/basic: route-specific SSRF live oracle still absent (15-finding hub)",
-      "vulnforge-academy levels 7-10 + level20 queued but not scanned (queue backlog ahead of them)",
-      "WSL 1786-1795 + security-scanner-dh25 added to queue — pending scan next runs"
+      "vulnforge-academy level11/12: SSTI reflexion oracle fires but no route-specific auth brute-force/session oracle",
+      "WSL modules 1791-1796 return curated/placeholder route oracles — no module-specific vuln live oracles",
+      "security-scanner-dh25 + WSL 1794-1795 still queued — not scanned this run (limit 8)",
+      "vulnforge level7-10 + level20 still in queue backlog"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 29,
-    "vuln-expose.vercel.app/xss/playground": 17,
-    "ssrf.vulnlab.dev/basic": 15,
-    "web-security-learning-labs.vercel.app/module/1686": 9,
-    "web-security-learning-labs.vercel.app/module/1687": 9,
-    "web-security-learning-labs.vercel.app/module/1688": 9,
-    "web-security-learning-labs.vercel.app/module/1683": 9,
-    "seclab.vercel.app/ssti": 6
+    "juice-shop.herokuapp.com": 47,
+    "demo.owasp-juice.shop/rest/b2b/orders": 48,
+    "juice-shop.demo.escape.tech/rest/b2b/orders": 49,
+    "vulnforge-academy.vercel.app/backend/includes/levels/easy/level11.php": 5,
+    "vulnforge-academy.vercel.app/backend/includes/levels/easy/level12.php": 5,
+    "web-security-learning-labs.vercel.app/module/1796": 7,
+    "web-security-learning-labs.vercel.app/module/1791": 7,
+    "web-security-learning-labs.vercel.app/module/1792": 7
   }
 }
