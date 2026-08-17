@@ -39668,7 +39668,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1850;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1855;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -49348,7 +49348,7 @@ const duckStoreSsrfFetchUrlLiveOracle: Rule = async (ctx) => {
 const duckStoreSsrfFetchUrlRouteLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/uploads\/(?:fetch-url|import-from-url)/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/v1\/uploads\/fetch-url/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreSsrfFetchUrlLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -49357,7 +49357,70 @@ const duckStoreSsrfFetchUrlRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Duck Store uploads route scan — unauthenticated /api/v1/uploads/fetch-url SSRF fetches external URLs and returns body preview"
+      note: "Duck Store /api/v1/uploads/fetch-url route scan — unauthenticated GET fetch-url SSRF fetches external URLs and returns body preview"
+    }
+  };
+};
+
+const duckStoreSsrfImportFromUrlLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const probeTarget = "https://httpbin.org/get";
+  const url = new URL("/api/v1/uploads/import-from-url", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({ url: probeTarget }),
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    maxBytes: 8192,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: {
+    url?: string;
+    status_code?: number;
+    preview?: string;
+    content_type?: string;
+    is_valid_image?: boolean;
+  };
+  try {
+    parsed = JSON.parse(doc.body) as typeof parsed;
+  } catch {
+    return NEGATIVE;
+  }
+  if (parsed.status_code !== 200 || !parsed.preview) return NEGATIVE;
+  if (!/httpbin\.org/i.test(`${parsed.url || ""}\n${parsed.preview}`)) return NEGATIVE;
+  if (!/"origin"\s*:/.test(parsed.preview) || !/"url"\s*:/.test(parsed.preview)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /python-httpx/i.test(parsed.preview) ? 0.93 : 0.91,
+    evidence: {
+      url,
+      probeTarget,
+      statusCode: parsed.status_code,
+      isValidImage: parsed.is_valid_image,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store POST /api/v1/uploads/import-from-url fetches attacker-controlled URLs server-side and returns response preview — authenticated SSRF oracle"
+    }
+  };
+};
+
+const duckStoreSsrfImportFromUrlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/uploads\/import-from-url/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreSsrfImportFromUrlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/uploads/import-from-url route scan — authenticated POST import-from-url SSRF fetches external URLs and returns body preview"
     }
   };
 };
@@ -86208,6 +86271,8 @@ export const RULES: Record<string, Rule> = {
   duckStoreCouponsRouteLiveOracle,
   duckStoreSsrfFetchUrlLiveOracle,
   duckStoreSsrfFetchUrlRouteLiveOracle,
+  duckStoreSsrfImportFromUrlLiveOracle,
+  duckStoreSsrfImportFromUrlRouteLiveOracle,
   duckStoreMcpCouponsDisclosureLiveOracle,
   duckStoreMcpCouponsRouteLiveOracle,
   duckStoreProductsFilterSqliLiveOracle,

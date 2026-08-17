@@ -55230,11 +55230,11 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Server-side request forgery",
     severityDefault: "high",
-    title: "Duck Store uploads SSRF route live oracle",
+    title: "Duck Store fetch-url SSRF route live oracle",
     description:
-      "When scanning /api/v1/uploads/fetch-url or /import-from-url, unauthenticated probes confirm server-side URL fetching with response preview — route-specific SSRF oracle.",
+      "When scanning /api/v1/uploads/fetch-url, unauthenticated probes confirm server-side URL fetching with response preview — route-specific fetch-url SSRF oracle.",
     impactOneline:
-      "Route-specific scans should surface SSRF in image-import and link-preview upload handlers.",
+      "Route-specific scans should surface SSRF in link-preview upload handlers.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "duckStoreSsrfFetchUrlRouteLiveOracle" },
     tierRequired: "deep",
@@ -55247,7 +55247,59 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our uploads route fetches arbitrary URLs for previews. Show route-specific SSRF remediation.",
+      "Our /api/v1/uploads/fetch-url route fetches arbitrary URLs for previews. Show route-specific SSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-ssrf-import-from-url-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Duck Store import-from-url SSRF live oracle",
+    description:
+      "POST /api/v1/uploads/import-from-url with JSON {url:} fetches attacker-controlled URLs server-side and returns status_code, content_type, is_valid_image, and response preview — the Escape Duck Store authenticated image-import SSRF oracle.",
+    impactOneline:
+      "Authenticated server-side URL import enables SSRF to internal services, cloud metadata, and port scanning.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreSsrfImportFromUrlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist outbound fetch destinations and block internal IP ranges on image import.",
+      steps: [
+        "Resolve and validate URLs before fetching; deny link-local and metadata IPs.",
+        "Restrict import-from-url to trusted image CDN domains only.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Duck Store /api/v1/uploads/import-from-url endpoint fetches arbitrary URLs server-side after login. Show SSRF remediation for image-import features.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-ssrf-import-from-url-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Duck Store import-from-url SSRF route live oracle",
+    description:
+      "When scanning /api/v1/uploads/import-from-url, authenticated POST probes confirm server-side URL fetching with response preview — route-specific import-from-url SSRF oracle.",
+    impactOneline:
+      "Route-specific scans should surface SSRF in authenticated image-import upload handlers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreSsrfImportFromUrlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF on authenticated image-import endpoints.",
+      steps: [
+        "Validate final fetch destinations against an allowlist.",
+        "Deny private and metadata IP ranges before outbound requests.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/uploads/import-from-url route fetches arbitrary URLs for image import. Show route-specific SSRF remediation.",
     version: 1,
     enabled: true
   },
