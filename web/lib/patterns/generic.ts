@@ -23689,6 +23689,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fauxbank-transactions-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank transactions route live oracle",
+    description:
+      "When scanning /transactions, GET /api/accounts/{id} returns another customer's balance and owner by predictable account ID — route-specific IDOR oracle for the transactions training module.",
+    impactOneline:
+      "Route scans on transaction pages need live cross-account read confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankTransactionsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize every account lookup against the session user.",
+      steps: [
+        "Verify account.ownerId matches the authenticated user before returning data.",
+        "Use non-guessable account identifiers.",
+        "Add automated IDOR regression tests on /api/accounts/*."
+      ]
+    },
+    fixPrompt:
+      "Our /transactions route exposes another customer's account via predictable IDs. Show route-specific ownership checks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-settings-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "FauxBank settings route live oracle",
+    description:
+      "When scanning /settings, GET /api/profile returns ssnFake and full customer PII without redaction — route-specific settings/profile sensitive-data oracle.",
+    impactOneline:
+      "Route scans on settings pages need live sensitive-data confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankSettingsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact sensitive profile fields from API responses.",
+      steps: [
+        "Return only fields required for the UI; mask or omit ssnFake from client-facing APIs.",
+        "Enforce field-level authorization on profile reads.",
+        "Run FauxBank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /settings route exposes ssnFake via GET /api/profile. Show route-specific profile API redaction.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-userlogin-css-injection-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
