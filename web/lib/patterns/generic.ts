@@ -45145,6 +45145,57 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-login-weak-credentials-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "NodeGoat login weak default credentials live oracle",
+    description:
+      "POST /login accepts documented default training credentials (admin/Admin_123, user1/User1_123) and redirects to /dashboard — the NodeGoat weak authentication oracle.",
+    impactOneline:
+      "Default credentials on login endpoints enable immediate account takeover in deployed training or misconfigured production apps.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatLoginWeakCredentialsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — rotate default credentials and enforce strong passwords in production.",
+      steps: [
+        "Remove or rotate default admin and user1 training passwords before any public deployment.",
+        "Enforce account lockout and MFA on login endpoints.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our NodeGoat POST /login accepts default admin/Admin_123 credentials. Show login hardening and credential rotation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-login-weak-credentials-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "NodeGoat /login route weak credentials live oracle",
+    description:
+      "When scanning /login, POST /login accepts default training credentials and redirects to /dashboard — route-specific weak authentication oracle.",
+    impactOneline:
+      "Route scans on /login need live confirmation that default credentials still authenticate.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatLoginWeakCredentialsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rotate default NodeGoat credentials before exposing login routes publicly.",
+      steps: [
+        "Block or rotate admin/Admin_123 and user1/User1_123 before public deployment.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /login route scan confirms default NodeGoat credentials authenticate. Show route-specific login hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "nodegoat-profile-sensitive-data-live-oracle",
     platform: "generic",
     category: "Sensitive data exposure",

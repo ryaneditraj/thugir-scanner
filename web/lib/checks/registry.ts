@@ -9114,6 +9114,60 @@ const nodegoatSignupRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const nodegoatLoginWeakCredentialsLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginPage = await ctx.probe.get(loginUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (loginPage.status < 200 || loginPage.status >= 400) return NEGATIVE;
+  if (!/userName/i.test(loginPage.body) || !/loginform|Enter User Name/i.test(loginPage.body))
+    return NEGATIVE;
+  for (const { userName, password } of [
+    { userName: "admin", password: "Admin_123" },
+    { userName: "user1", password: "User1_123" }
+  ]) {
+    const doc = await ctx.probe.get(loginUrl, {
+      method: "POST",
+      body: `userName=${encodeURIComponent(userName)}&password=${encodeURIComponent(password)}`,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    const location = doc.headers["location"] || "";
+    if ([301, 302, 303, 307, 308].includes(doc.status) && location && !/login/i.test(location)) {
+      return {
+        fired: true,
+        confidence: userName === "admin" ? 0.94 : 0.92,
+        evidence: {
+          loginUrl,
+          userName,
+          redirectLocation: location,
+          snippet: doc.body.slice(0, 160).trim(),
+          note: `NodeGoat POST /login accepts default training credentials (${userName}) and redirects to ${location} — weak default authentication oracle`
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
+const nodegoatLoginWeakCredentialsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatLoginWeakCredentialsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "NodeGoat /login route scan — POST /login accepts default training credentials and redirects without credential rotation — weak authentication oracle"
+    }
+  };
+};
+
 async function nodegoatAuthenticatedSessionCookie(ctx: RuleContext): Promise<string | null> {
   const loginUrl = new URL("/login", ctx.origin).toString();
   for (const { userName, password } of [
@@ -36349,6 +36403,25 @@ export async function primePwnshopExportOrdersOracleForDeepScan(
   }
 }
 
+/** Pre-warm OTP mail delivery during upload-avatar route scans (PWN-012 needs verified session). */
+export async function primePwnshopAvatarUploadOracleForDeepScan(
+  probe: ProbeCache,
+  origin: string,
+  scanUrl: string,
+  home: FetchedDoc
+): Promise<void> {
+  if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
+  if (!/\/profile\/(?:upload-avatar|update-avatar)\b/i.test(scanUrl)) return;
+  const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
+  const primeWaitsMs = [5000, 9000, 13000, 17000, 21000];
+  for (let attempt = 0; attempt < primeWaitsMs.length; attempt++) {
+    clearPwnshopOtpSessionForProbe(probe);
+    const cookie = await pwnshopCompleteOtpSession(ctx);
+    if (cookie) return;
+    await pwnshopSleep(primeWaitsMs[attempt]);
+  }
+}
+
 async function probePwnshopExportOrdersCsv(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isPwnshopHost(ctx)) return null;
   const session = await pwnshopFreshMassAssignmentAdminOtpSession(ctx);
@@ -39578,7 +39651,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1840;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1845;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -86902,6 +86975,8 @@ export const RULES: Record<string, Rule> = {
   nodegoatBenefitsNosqlRouteLiveOracle,
   nodegoatSignupOpenRegistrationLiveOracle,
   nodegoatSignupRouteLiveOracle,
+  nodegoatLoginWeakCredentialsLiveOracle,
+  nodegoatLoginWeakCredentialsRouteLiveOracle,
   nodegoatProfileSensitiveDataLiveOracle,
   nodegoatProfileSensitiveDataRouteLiveOracle,
   nodegoatProfileRedosRouteLiveOracle,
