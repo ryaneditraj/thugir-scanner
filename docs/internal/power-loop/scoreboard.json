@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-17T19:09:44.995Z",
+  "updated_at": "2026-08-17T20:11:40.025Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2770,
-  "total_findings": 27429,
+  "total_sites_scanned": 2777,
+  "total_findings": 27626,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1978,
-  "discovery_findings": 23001,
-  "improvements_shipped": 1205,
-  "last_run": "2026-08-17T19:09:44.995Z",
+  "discovery_urls_added": 1983,
+  "discovery_findings": 23198,
+  "improvements_shipped": 1202,
+  "last_run": "2026-08-17T20:11:40.025Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 44,
@@ -54,43 +54,44 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 109,
-      "focus": "duck-store MCP info/list_coupons + testimonials/guest + WSL 1856-1857; queue drain import-from-url + WSL 1836-1837",
+      "findings": 197,
+      "focus": "duck-store business-logic routes (testimonials PUT, cart/add, orders/coupons, auth/login, orders/checkout); queue drain pwnshop export-orders + product/1",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (44 findings) — no benchmark misses",
-      "duck-store.escape.tech/mcp/info: 20 findings — duck-store-mcp-coupons-disclosure-live-oracle + rich duck-store live oracles",
-      "duck-store.escape.tech/mcp/tools/list_coupons: 21 findings — +duck-store-mcp-coupons-route-live-oracle confirmed",
-      "duck-store.escape.tech/api/v1/testimonials/guest: 21 findings — guest XSS route with duck-store live oracles",
-      "web-security-learning-labs.vercel.app/module/1856: 7 findings — placeholder/module-route evidence (catalog expansion)",
-      "web-security-learning-labs.vercel.app/module/1857: 7 findings — placeholder/module-route evidence",
-      "duck-store.escape.tech/api/v1/uploads/import-from-url: 23 findings (queue drain)",
-      "web-security-learning-labs.vercel.app/module/1837: 5 findings (queue drain)"
+      "duck-store.escape.tech/api/v1/testimonials/1: 26 findings — duck-store-testimonials-bola + rich duck-store live oracles",
+      "duck-store.escape.tech/api/v1/cart/add: 26 findings — duck-store-cart-negative-quantity-live-oracle confirmed",
+      "duck-store.escape.tech/api/v1/orders/coupons: 26 findings — duck-store-coupons-disclosure-live-oracle confirmed",
+      "duck-store.escape.tech/api/v1/auth/login: 26 findings — duck-store-auth-login-weak-credentials-route-live-oracle confirmed",
+      "duck-store.escape.tech/api/v1/orders/checkout: 25 findings — duck-store-checkout-private-coupon-route-live-oracle confirmed",
+      "pwnshop.ctfsecurity.com/admin/export-orders: 44 findings (queue drain)",
+      "pwnshop.ctfsecurity.com/product/1: 24 findings (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "WSL modules 1856-1857: placeholder shells only — no vuln-category live oracles yet",
-      "duck-store testimonials/guest: no dedicated stored-xss guest-route slug (covered via page-level oracles)",
-      "nodegoat-websec login/profile + duck-store filter/by-color still queued at tail"
+      "duck-store testimonials/1: no dedicated unauthenticated-PUT update slug (Escape blog finding; BOLA oracle only)",
+      "duck-store auth/login: 2FA-bypass oracle still absent (weak-credentials route oracle present)",
+      "nodegoat-websec login/profile + duck-store filter/by-color still queued at tail",
+      "damn-vulnerable-startup.fly.dev/challenges/owasp: unreachable (fly.dev deploy down)"
     ]
   },
   "discovery_highlights": {
+    "pwnshop.ctfsecurity.com/admin/export-orders": 44,
+    "duck-store.escape.tech/api/v1/testimonials/1": 26,
+    "duck-store.escape.tech/api/v1/cart/add": 26,
+    "duck-store.escape.tech/api/v1/orders/coupons": 26,
+    "duck-store.escape.tech/api/v1/auth/login": 26,
+    "duck-store.escape.tech/api/v1/orders/checkout": 25,
+    "pwnshop.ctfsecurity.com/product/1": 24,
+    "juice-shop.herokuapp.com": 44,
     "duck-store.escape.tech/mcp/tools/list_coupons": 21,
     "duck-store.escape.tech/api/v1/testimonials/guest": 21,
     "duck-store.escape.tech/mcp/info": 20,
     "duck-store.escape.tech/api/v1/uploads/import-from-url": 23,
-    "web-security-learning-labs.vercel.app/module/1856": 7,
-    "web-security-learning-labs.vercel.app/module/1857": 7,
-    "juice-shop.herokuapp.com": 44,
     "duck-store.escape.tech/api/v1/open-redirect": 23,
     "duck-store.escape.tech/api/v1/uploads/fetch-url": 23,
-    "duck-store.escape.tech/testimonials": 23,
-    "duck-store.escape.tech/api/v1/admin/users": 24,
-    "web-security-learning-labs.vercel.app/module/1841": 5,
-    "web-security-learning-labs.vercel.app/module/1840": 5,
-    "web-security-learning-labs.vercel.app/module/1839": 5,
-    "web-security-learning-labs.vercel.app/module/1838": 5
+    "duck-store.escape.tech/testimonials": 23
   }
 }
