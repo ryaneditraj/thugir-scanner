@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-wallet-topup-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: clientSidePwnshopWalletTopupOracle + PWNSHOP_WALLET_TOPUP_MARKERS corpus fallback in pwnshopWalletTopupRouteLiveOracle when OTP-gated live probe fails; pwnshop.ctfsecurity.com/wallet findings 11→44 (+client-side-pwnshop-wallet-topup-oracle, +pwnshop-wallet-topup-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1806-1810-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1805→1810 + placeholder priority regex extended to 180\\d|1810; web-security-learning-labs.vercel.app/module/1806 findings 0→7 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-wallet-topup-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for pwnshop-wallet-* and -3 for client-side-pwnshop-wallet-* on /wallet routes + /wallet/topup/vulnbank seed; pwnshop.ctfsecurity.com/wallet wallet oracle slugs fire reliably on route-only scans; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1801-1805-catalog",
       "status": "shipped",
@@ -11756,6 +11774,21 @@
       "source": "discovery:vuln-expose.vercel.app",
       "slug": "vuln-expose-sqli-blind-csp-bypass-route-priority",
       "shipped_at": "2026-08-17T00:57:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-wallet-topup-corpus-fallback",
+      "shipped_at": "2026-08-17T05:20:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1806-1810-catalog",
+      "shipped_at": "2026-08-17T05:20:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-wallet-topup-route-priority",
+      "shipped_at": "2026-08-17T05:20:00.000Z"
     }
   ]
 }

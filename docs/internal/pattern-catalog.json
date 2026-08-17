@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-17T04:07:41.840Z",
-  "total": 2443,
-  "uniqueSlugs": 2439,
+  "generatedAt": "2026-08-17T05:17:30.887Z",
+  "total": 2444,
+  "uniqueSlugs": 2440,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2425,
+    "generic": 2426,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2358,
+    "deep": 2359,
     "continuous": 0
   },
   "byCategory": {
@@ -35,8 +35,8 @@
     "Server-side request forgery": 77,
     "Sensitive data exposure": 62,
     "AI security": 71,
+    "Business logic": 22,
     "Authentication bypass": 3,
-    "Business logic": 21,
     "Cross-site request forgery": 5,
     "Insecure file upload": 2,
     "Command injection": 2,
@@ -694,6 +694,7 @@
     "client-side-pwnshop-prototype-pollution-oracle",
     "client-side-pwnshop-review-xss-oracle",
     "client-side-pwnshop-ssti-oracle",
+    "client-side-pwnshop-wallet-topup-oracle",
     "client-side-pygoat-challenge-route-evidence",
     "client-side-pygoat-evidence",
     "client-side-qamax-adversary-evidence",

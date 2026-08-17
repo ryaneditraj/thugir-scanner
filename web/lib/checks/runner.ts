@@ -1963,6 +1963,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePwnshopSstiOracle",
   "clientSidePwnshopReviewXssOracle",
   "clientSidePwnshopAvatarXssOracle",
+  "clientSidePwnshopWalletTopupOracle",
   "clientSidePwnshopPathTraversalOracle",
   "clientSidePwnshopPrototypePollutionOracle",
   "pwnshopDebugInfoLiveOracle",
@@ -5608,7 +5609,8 @@ function extractPwnshopDocSeeds(html: string, pageUrl: string): string[] {
     "/api/v1/events",
     "/apply-coupon",
     "/profile/upload-avatar",
-    "/wallet"
+    "/wallet",
+    "/wallet/topup/vulnbank"
   ]) {
     try {
       const u = new URL(path, pageUrl);
@@ -12127,7 +12129,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8\d|9[0-9])|180[0-5]|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8\d|9[0-9])|180\d|1810|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
@@ -12254,6 +12256,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
         /\/xss\/csp-bypass\b/i.test(targetInput) &&
         p.slug.startsWith("vuln-expose-xss-csp")
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/wallet(?:\/topup)?\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-wallet")
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/wallet(?:\/topup)?\b/i.test(targetInput) &&
+        p.slug.startsWith("client-side-pwnshop-wallet")
       )
         return -3;
       if (
