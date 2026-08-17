@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-17T09:22:44.936Z",
-  "total": 2449,
-  "uniqueSlugs": 2445,
+  "generatedAt": "2026-08-17T10:08:03.569Z",
+  "total": 2451,
+  "uniqueSlugs": 2447,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2431,
+    "generic": 2433,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2364,
+    "deep": 2366,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 496,
+    "Broken access control": 498,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -2180,6 +2180,7 @@
     "vulnbank-bopla-register-live-oracle",
     "vulnbank-bopla-register-route-live-oracle",
     "vulnbank-check-balance-idor-live-oracle",
+    "vulnbank-check-balance-idor-route-live-oracle",
     "vulnbank-graphql-introspection-live-oracle",
     "vulnbank-merchant-payment-charge-live-oracle",
     "vulnbank-merchant-register-live-oracle",
@@ -2190,6 +2191,7 @@
     "vulnbank-sqli-login-live-oracle",
     "vulnbank-sqli-login-route-live-oracle",
     "vulnbank-sup3r-secret-admin-live-oracle",
+    "vulnbank-sup3r-secret-admin-route-live-oracle",
     "vulnbank-transactions-bola-live-oracle",
     "vulnbank-transactions-bola-route-live-oracle",
     "vulnbank-transfer-negative-amount-live-oracle",
