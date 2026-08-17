@@ -22236,6 +22236,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pwnshop-wallet-topup-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Pwnshop wallet top-up credited_amount oracle (PWN-042)",
+    description:
+      "Pwnshop documents POST /wallet/topup/vulnbank accepting credited_amount alongside Vulnbank card funding — the PWN-042 wallet top-up business-logic training oracle.",
+    impactOneline:
+      "Wallet top-up can credit arbitrary amounts when credited_amount overrides the charged card value.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnshopWalletTopupOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Ignore client-supplied credited_amount and verify settled charge amounts — Pwnshop PWN-042 is intentional lab software.",
+      steps: [
+        "Credit wallet only from verified Vulnbank settlement amounts.",
+        "Reject credited_amount overrides from POST bodies.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /wallet/topup/vulnbank endpoint honors credited_amount from the request body. Show wallet funding validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pwnshop-path-traversal-oracle",
     platform: "generic",
     category: "Broken access control",

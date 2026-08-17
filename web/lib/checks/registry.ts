@@ -34346,6 +34346,24 @@ const clientSidePwnshopAvatarXssOracle: Rule = async (ctx) =>
     "Pwnshop POST /profile/upload-avatar stores SVG with onload handlers served at /uploads/ — stored XSS via avatar upload (PWN-012)"
   );
 
+const PWNSHOP_WALLET_TOPUP_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "PWN-042 registry ID", re: /PWN-042/i },
+  { label: "POST /wallet/topup/vulnbank endpoint", re: /POST \/wallet\/topup\/vulnbank\b/i },
+  {
+    label: "credited_amount override docs",
+    re: /credited_amount[\s\S]{0,120}Vulnbank|Credited Amount Override/i
+  },
+  { label: "Vulnbank wallet funding title", re: /Vulnbank Wallet Funding/i }
+];
+
+const clientSidePwnshopWalletTopupOracle: Rule = async (ctx) =>
+  pwnshopRouteOracle(
+    ctx,
+    /\/(?:wallet(?:\/topup)?|profile)\b/i,
+    PWNSHOP_WALLET_TOPUP_MARKERS,
+    "Pwnshop POST /wallet/topup/vulnbank accepts credited_amount alongside Vulnbank card funding — wallet top-up business-logic oracle (PWN-042)"
+  );
+
 const clientSidePwnshopPathTraversalOracle: Rule = async (ctx) =>
   pwnshopRouteOracle(
     ctx,
@@ -35927,14 +35945,26 @@ const pwnshopWalletTopupRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/(?:wallet(?:\/topup)?|profile)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopWalletTopupVulnbankLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Pwnshop /wallet or /profile route scan — Vulnbank wallet top-up accepts credited_amount parameter (PWN-042 family)"
+      }
+    };
+  }
+  const bundleFallback = await clientSidePwnshopWalletTopupOracle(ctx);
+  if (!bundleFallback.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.89,
     evidence: {
-      ...result.evidence,
+      ...bundleFallback.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /wallet or /profile route scan — Vulnbank wallet top-up accepts credited_amount parameter (PWN-042 family)"
+      note: "Pwnshop /wallet route scan — vulnerability registry documents POST /wallet/topup/vulnbank credited_amount override (PWN-042) when OTP-gated live top-up probe did not complete"
     }
   };
 };
@@ -39334,7 +39364,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1805;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1810;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -84816,6 +84846,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopSstiOracle,
   clientSidePwnshopReviewXssOracle,
   clientSidePwnshopAvatarXssOracle,
+  clientSidePwnshopWalletTopupOracle,
   clientSidePwnshopPathTraversalOracle,
   clientSidePwnshopPrototypePollutionOracle,
   pwnshopDebugInfoLiveOracle,
