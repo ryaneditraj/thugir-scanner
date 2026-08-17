@@ -15,14 +15,14 @@
       ]
     }
   },
-  "total_sites_scanned": 2725,
-  "total_findings": 26642,
-  "critical_findings": 55,
+  "total_sites_scanned": 2895,
+  "total_findings": 29176,
+  "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1954,
-  "discovery_findings": 22621,
-  "improvements_shipped": 1164,
+  "discovery_urls_added": 2041,
+  "discovery_findings": 23945,
+  "improvements_shipped": 1202,
   "last_run": "2026-08-17T04:08:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 481,
+      "probes_run": 588,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -55,33 +55,33 @@
       "urls_added": 3,
       "urls_scanned": 3,
       "findings": 137,
-      "focus": "WSL module/1801-1805 catalog + brokencrystals adminpermission route seeds + pwnshop coupon/avatar/wallet route seeds",
+      "focus": "brokencrystals adminpermission route seeds + pwnshop coupon/avatar/wallet route seeds (WSL 1801-1805 catalog merged from parallel run)",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1801: 0→5 findings — WSL catalog 1801-1805 placeholder-module oracle shipped",
       "brokencrystals.com/api/users/one/regular_user/adminpermission: 0→89 findings — adminpermission route seeds drain (+brokencrystals-adminpermission-route-live-oracle)",
-      "pwnshop.ctfsecurity.com/apply-coupon: 23→43 findings — coupon/avatar/wallet route seeds (+pwnshop-apply-coupon-route-live-oracle, +pwnshop-coupon-category-bypass-route-live-oracle)"
+      "pwnshop.ctfsecurity.com/apply-coupon: 23→43 findings — coupon/avatar/wallet route seeds (+pwnshop-apply-coupon-route-live-oracle, +pwnshop-coupon-category-bypass-route-live-oracle)",
+      "web-security-learning-labs.vercel.app/module/1801-1805: 5-8 findings each — placeholder-module-route-live-oracle on new catalog slots"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent without OTP session on route-only scan",
       "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent when OTP-gated login blocks authenticated probes",
-      "seclab.vercel.app/ssti: Angular SPA stub only — no live SSTI API on seclab.vercel.app deployment"
+      "damn-vulnerable-startup.fly.dev consistently unreachable from cloud agent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 46,
-    "web-security-learning-labs.vercel.app/module/1801": 5,
     "brokencrystals.com/api/users/one/regular_user/adminpermission": 89,
     "pwnshop.ctfsecurity.com/apply-coupon": 43,
+    "brokencrystals.com/api/auth/jwt/x5c/validate": 85,
+    "brokencrystals.com/api/process_numbers": 45,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "web-security-learning-labs.vercel.app/module/1804": 8,
+    "web-security-learning-labs.vercel.app/module/1801": 7,
     "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 18,
-    "wrongsecrets.herokuapp.com/challenge/2": 8,
-    "ssrf.vulnlab.dev/basic": 15,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52
+    "ssrf.vulnlab.dev/basic": 15
   }
 }
