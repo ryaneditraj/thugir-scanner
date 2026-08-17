@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1791-1795-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1790→1795 + placeholder priority regex extended 1786-1795; web-security-learning-labs.vercel.app/module/1791 findings 0→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:security-scanner-dh25.vercel.app",
+      "slug": "client-side-security-scanner-dh25-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: clientSideSecurityScannerDh25Evidence + README corpus fallback detects AI Red Team Challenge / Prompt Injection / Jailbreak / PII Leakage markers; security-scanner-dh25.vercel.app findings 0→3 (+client-side-security-scanner-dh25-evidence); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-idor-auth-route-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnforgeAcademyLevelIdorRouteLiveOracle probes /api/levels/idor/level7-9 + README fallback; vulnforgeAcademyLevelAuthRouteLiveOracle probes /api/auth/admin X-User-Role spoof + README fallback; level7.php findings 0→6 (+vulnforge-academy-level-idor-route-live-oracle); level10.php findings 0→6 (+vulnforge-academy-level-auth-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1786-1790-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1785→1790; web-security-learning-labs.vercel.app/module/1788 findings 0→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
@@ -11672,6 +11690,21 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1781-1785-catalog",
       "shipped_at": "2026-08-16T22:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-idor-auth-route-oracles",
+      "shipped_at": "2026-08-17T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:security-scanner-dh25.vercel.app",
+      "slug": "client-side-security-scanner-dh25-evidence",
+      "shipped_at": "2026-08-17T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1791-1795-catalog",
+      "shipped_at": "2026-08-17T02:10:00.000Z"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
