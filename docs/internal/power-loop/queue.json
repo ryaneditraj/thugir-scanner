@@ -1,36 +1,6 @@
 {
-  "updated_at": "2026-08-17T02:05:00.000Z",
+  "updated_at": "2026-08-17T02:10:00.000Z",
   "discovery_urls": [
-    {
-      "url": "https://demo.owasp-juice.shop/rest/b2b/orders",
-      "source": "OWASP Juice Shop official demo \u2014 B2B order deserialization oracle POST /rest/b2b/orders (demo.owasp-juice.shop, Aug 2026 web discovery)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://juice-shop.demo.escape.tech/rest/b2b/orders",
-      "source": "Escape.tech Juice Shop demo \u2014 B2B order deserialization oracle (juice-shop.demo.escape.tech, Aug 2026 web discovery)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level11.php",
-      "source": "webspoilt/vulnforge-academy \u2014 Level 11 authentication brute-force challenge (levels 10-12 auth tier, GitHub README Aug 2026 discovery)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level12.php",
-      "source": "webspoilt/vulnforge-academy \u2014 Level 12 session-flaws authentication challenge (levels 10-12 auth tier, Aug 2026 discovery)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://web-security-learning-labs.vercel.app/module/1796",
-      "source": "web-security-learning-labs Vercel \u2014 module 1796 security lab route (WSL catalog expansion past 1795, Aug 2026 web discovery)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://web-security-learning-labs.vercel.app/module/1791",
-      "source": "web-security-learning-labs Vercel \u2014 module 1791 security lab route (WSL catalog expansion past 1790, Aug 2026 web discovery)",
-      "auth": "oss_deploy"
-    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1792",
       "source": "web-security-learning-labs Vercel \u2014 module 1792 security lab route (WSL catalog expansion, Aug 2026 web discovery)",
@@ -49,11 +19,6 @@
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1795",
       "source": "web-security-learning-labs Vercel \u2014 module 1795 security lab route (WSL catalog expansion, Aug 2026 web discovery)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://security-scanner-dh25.vercel.app/",
-      "source": "KeveeW1/security-scanner-dh25 \u2014 RUNE AI security scanner demo with sample vulnerable-sql.js / vulnerable-xss.html test corpus (GitHub README, Aug 2026 web discovery)",
       "auth": "oss_deploy"
     },
     {
@@ -1547,18 +1512,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://ginandjuice.shop/blog/post?postId=1",
-      "source": "PortSwigger Gin & Juice Shop \u2014 DOM-based XSS oracle /blog/post?postId= (vulnerabilities page)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://damn-vulnerable-startup.fly.dev/challenges/terminal",
       "source": "0xSV1/DVS DeployBro \u2014 interactive terminal challenge (leaked creds + command injection via deploybro CLI)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://damn-vulnerable-startup.fly.dev/challenges/owasp",
-      "source": "0xSV1/DVS DeployBro \u2014 OWASP Top 10 (2025) challenge grid on fly.dev public demo",
       "auth": "public_demo"
     },
     {
@@ -13101,11 +13056,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level7.php",
-      "source": "webspoilt/vulnforge-academy \u2014 Level 7 IDOR parameter manipulation (levels 7-9 IDOR tier, GitHub README Aug 2026 discovery)",
-      "auth": "oss_deploy"
-    },
-    {
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level8.php",
       "source": "webspoilt/vulnforge-academy \u2014 Level 8 IDOR challenge (levels 7-9 IDOR tier, GitHub README Aug 2026 discovery)",
       "auth": "oss_deploy"
@@ -13113,11 +13063,6 @@
     {
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level9.php",
       "source": "webspoilt/vulnforge-academy \u2014 Level 9 IDOR challenge (levels 7-9 IDOR tier, GitHub README Aug 2026 discovery)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level10.php",
-      "source": "webspoilt/vulnforge-academy \u2014 Level 10 authentication brute-force challenge (levels 10-12 auth tier, GitHub README Aug 2026 discovery)",
       "auth": "oss_deploy"
     },
     {
@@ -13151,5 +13096,5 @@
       "auth": "oss_deploy"
     }
   ],
-  "discovery_urls_added": 48
+  "discovery_urls_added": 43
 }
