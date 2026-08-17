@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-admin-users-bfla-roster-buffer-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/admin/users truncated at 16KB hid admin@duck-store.escape after probe churn; maxBytes 65536 + roster marker fallback; duck-store.escape.tech/api/v1/admin/users findings 19→24 (+duck-store-admin-users-bfla-live-oracle +duck-store-admin-users-bfla-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-register-token-cache",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: per-probe WeakMap caches Duck Store register/login JWT per origin — cuts registration storms during multi-oracle deep scans; admin/users route scan stable BFLA with shared session; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1856-1860-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1855→1860 + placeholder priority regex extended to 185d|1860; web-security-learning-labs.vercel.app/module/1856 findings 7 (+placeholder-module-route-live-oracle); module/1860 findings 8; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-ssrf-import-from-url-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/uploads/import-from-url with Bearer token + {url:https://httpbin.org/get} returns status_code:200 preview with httpbin origin; duck-store.escape.tech/api/v1/uploads/import-from-url findings include +duck-store-ssrf-import-from-url-live-oracle +duck-store-ssrf-import-from-url-route-live-oracle (fetch-url-route no longer misattributes import-from-url); benchmark juice-shop 48 findings 6/6 maintained"
