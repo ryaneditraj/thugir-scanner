@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-unauth-put-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /api/v1/testimonials/1 without Authorization returns 200 with updated content; probe-cache verify uses ?_t= bust; duck-store.escape.tech/api/v1/testimonials/1 findings 25→27 (+duck-store-testimonials-unauth-put-live-oracle +duck-store-testimonials-unauth-put-route-live-oracle); benchmark juice-shop 44 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-auth-totp-bypass-roster-buffer-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreAuthTotpBypassLiveOracle admin/users maxBytes 16384→65536 — roster truncation hid admin@duck-store.escape; duck-store.escape.tech/api/v1/auth/login findings 23→26 (+duck-store-auth-totp-bypass-live-oracle +duck-store-auth-totp-bypass-route-live-oracle); runner -4 priority on auth/login for totp-bypass; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1866-1870-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1865→1870 + placeholder priority regex extended to 186\\d|1870; web-security-learning-labs.vercel.app/module/1866 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 44 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-testimonials-guest-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: duckStoreTestimonialsStoredXssLiveProbe WeakMap cache + duckStoreTestimonialsGuestRouteLiveOracle on /testimonials/guest; duck-store.escape.tech/api/v1/testimonials/guest findings 21→25 (+duck-store-testimonials-guest-route-live-oracle); stored-xss-route narrowed to exclude /guest suffix; benchmark juice-shop 44 findings 6/6 maintained"
