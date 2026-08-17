@@ -39778,6 +39778,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-bopla-register-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank /register BOPLA route live oracle",
+    description:
+      "When scanning /register on vulnbank.org, POST accepts hidden is_admin:true and balance fields echoing debug_data.is_admin:true — route-specific BOPLA privilege escalation oracle.",
+    impactOneline:
+      "Route-specific scans confirm registration endpoints accept mass-assigned admin flags on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankBoplaRegisterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use allow-list DTOs for registration and never bind is_admin from client input — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject unknown fields in registration payloads and ignore is_admin from client requests.",
+        "Set administrative flags only via server-side role assignment workflows."
+      ]
+    },
+    fixPrompt:
+      "Our /register route scan confirms is_admin:true in JSON grants admin privileges. Show route-specific BOPLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-sqli-login-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -39881,6 +39906,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-bill-payments-negative-amount-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank bill-payment negative-amount route live oracle",
+    description:
+      "When scanning /api/bill-payments/create on vulnbank.org, POST accepts negative amount values and returns status:success — route-specific bill-payment business-logic oracle.",
+    impactOneline:
+      "Route-specific confirmation that bill-payment endpoints lack positive-amount validation on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankBillPaymentsNegativeAmountRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate bill-payment amounts are positive and within account limits — Vuln Bank is intentional training software.",
+      steps: [
+        "Reject negative or zero payment amounts at the API layer.",
+        "Enforce server-side balance checks before processing bill payments."
+      ]
+    },
+    fixPrompt:
+      "Our /api/bill-payments/create route scan confirms amount:-50 returns success. Show route-specific business-logic validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-merchant-payment-charge-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -39929,6 +39979,31 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/virtual-cards/{cardId}/toggle-freeze endpoint lets any logged-in user freeze another user's card. Show BOLA remediation for virtual-card APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-virtual-cards-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank virtual-cards BOLA route live oracle",
+    description:
+      "When scanning /api/virtual-cards on vulnbank.org, POST /api/virtual-cards/{cardId}/toggle-freeze accepts requests from any authenticated user without ownership verification — route-specific BOLA virtual-cards oracle.",
+    impactOneline:
+      "Route-specific confirmation that virtual-card mutation endpoints lack object-level authorization on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankVirtualCardsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce card ownership checks on every virtual-card mutation — Vuln Bank is intentional training software.",
+      steps: [
+        "Verify the authenticated user owns the virtual card before toggle-freeze or limit updates.",
+        "Use server-side authorization middleware on all /api/virtual-cards/{id} routes."
+      ]
+    },
+    fixPrompt:
+      "Our /api/virtual-cards route scan confirms any user can freeze another user's card. Show route-specific BOLA remediation.",
     version: 1,
     enabled: true
   },
