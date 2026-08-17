@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-17T07:13:18.308Z",
-  "total": 2444,
-  "uniqueSlugs": 2440,
+  "generatedAt": "2026-08-17T08:18:48.702Z",
+  "total": 2446,
+  "uniqueSlugs": 2442,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2426,
+    "generic": 2428,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2359,
+    "deep": 2361,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 492,
+    "Broken access control": 493,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -33,7 +33,7 @@
     "general": 20,
     "SSRF": 14,
     "Server-side request forgery": 77,
-    "Sensitive data exposure": 62,
+    "Sensitive data exposure": 63,
     "AI security": 71,
     "Business logic": 22,
     "Authentication bypass": 3,
@@ -1022,8 +1022,10 @@
     "fauxbank-loans-route-live-oracle",
     "fauxbank-profile-route-live-oracle",
     "fauxbank-profile-sensitive-data-live-oracle",
+    "fauxbank-settings-route-live-oracle",
     "fauxbank-stored-xss-support-probe",
     "fauxbank-support-route-live-oracle",
+    "fauxbank-transactions-route-live-oracle",
     "fauxbank-transfer-route-live-oracle",
     "finbot-admin-copilot-route-live-oracle",
     "finbot-ctf-challenges-route-live-oracle",
