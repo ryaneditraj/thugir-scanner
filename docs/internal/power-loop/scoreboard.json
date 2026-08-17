@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-17T17:30:00.000Z",
+  "updated_at": "2026-08-17T18:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2753,
-  "total_findings": 27143,
+  "total_sites_scanned": 2754,
+  "total_findings": 27191,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1968,
   "discovery_findings": 22807,
-  "improvements_shipped": 1205,
-  "last_run": "2026-08-17T17:30:00.000Z",
+  "improvements_shipped": 1208,
+  "last_run": "2026-08-17T18:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,35 +48,35 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (48 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "WSL 1846-1850 catalog + duck-store open-redirect bundle regex + nodegoat dashboard route oracle",
+      "urls_scanned": 3,
+      "findings": 37,
+      "focus": "duck-store import-from-url SSRF oracle + WSL 1851-1855 catalog + fetch-url route oracle split",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1846: placeholder-module-route-live-oracle shipped (catalog max 1850)",
-      "duck-store.escape.tech/api/v1/open-redirect: 22→23 findings — duckStoreSpaBundleBody Vite bundle regex fix (+duck-store-open-redirect-route-live-oracle)",
-      "nodegoat-websec.herokuapp.com/dashboard: 9→10 findings — +nodegoat-dashboard-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "duck-store.escape.tech/api/v1/uploads/import-from-url: +duck-store-ssrf-import-from-url-live-oracle +duck-store-ssrf-import-from-url-route-live-oracle (authenticated POST SSRF)",
+      "web-security-learning-labs.vercel.app/module/1851: 8 findings — +web-security-learning-labs-placeholder-module-route-live-oracle (catalog max 1855)",
+      "web-security-learning-labs.vercel.app/module/1855: placeholder oracle confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "duck-store import-from-url: no dedicated import-from-url SSRF route oracle slug (fetch-url oracle present)",
-      "WSL modules above 1850: placeholder shells not yet in catalog"
+      "WSL modules above 1855: placeholder shells not yet in catalog"
     ]
   },
   "discovery_highlights": {
-    "web-security-learning-labs.vercel.app/module/1846": 5,
+    "duck-store.escape.tech/api/v1/uploads/import-from-url": 21,
+    "web-security-learning-labs.vercel.app/module/1851": 8,
+    "web-security-learning-labs.vercel.app/module/1855": 8,
+    "juice-shop.herokuapp.com": 48,
     "duck-store.escape.tech/api/v1/open-redirect": 23,
     "nodegoat-websec.herokuapp.com/dashboard": 10,
-    "duck-store.escape.tech/api/v1/uploads/import-from-url": 25,
-    "juice-shop.herokuapp.com": 47,
     "pwnshop.ctfsecurity.com/profile/upload-avatar": 46
   }
 }

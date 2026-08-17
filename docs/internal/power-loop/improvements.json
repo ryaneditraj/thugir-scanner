@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-ssrf-import-from-url-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/uploads/import-from-url with Bearer token + {url:https://httpbin.org/get} returns status_code:200 preview with httpbin origin; duck-store.escape.tech/api/v1/uploads/import-from-url findings include +duck-store-ssrf-import-from-url-live-oracle +duck-store-ssrf-import-from-url-route-live-oracle (fetch-url-route no longer misattributes import-from-url); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1851-1855-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1850→1855 + placeholder priority regex extended to 185[0-5]; web-security-learning-labs.vercel.app/module/1851 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1855 placeholder oracle fires; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-ssrf-fetch-url-route-oracle-narrow",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreSsrfFetchUrlRouteLiveOracle regex narrowed to /fetch-url only (removed import-from-url); route scan on import-from-url no longer fires duck-store-ssrf-fetch-url-route-live-oracle; runner -3 priority split for fetch-url vs import-from-url SSRF slugs; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1846-1850-catalog",
       "status": "shipped",
