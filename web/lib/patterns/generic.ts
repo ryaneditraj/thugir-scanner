@@ -45046,6 +45046,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnforge-academy-level-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnForge Academy level 7–9 IDOR route live oracle",
+    description:
+      "When scanning level7–9.php routes, /api/levels/idor/level{N} exposes user profiles, orders, or files without authorization — route-specific VulnForge Academy IDOR oracle (README corpus fallback).",
+    impactOneline:
+      "VulnForge Academy IDOR levels expose predictable object references without ownership checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevelIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — enforce object-level authorization in production apps.",
+      steps: [
+        "Verify the authenticated user owns the requested resource before returning data.",
+        "Use unpredictable object identifiers instead of sequential IDs.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 7–9 routes expose IDOR via predictable user/order/file IDs. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level-auth-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "VulnForge Academy level 10–12 auth route live oracle",
+    description:
+      "When scanning level10–12.php routes, /api/auth/admin accepts spoofed X-User-Role: admin without session validation — route-specific VulnForge Academy authentication bypass oracle (README corpus fallback).",
+    impactOneline:
+      "VulnForge Academy auth levels document weak role checks and brute-forceable login surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevelAuthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — validate roles from signed sessions, not client headers.",
+      steps: [
+        "Derive authorization roles from server-side session or JWT claims only.",
+        "Rate-limit login endpoints and enforce account lockout.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 10–12 routes trust X-User-Role headers for admin access. Show server-side role validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-security-scanner-dh25-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "RUNE AI security scanner red-team demo disclosed",
+    description:
+      "security-scanner-dh25.vercel.app hosts a Gemini-powered AI red-team challenge SPA with interactive Prompt Injection, Jailbreak, System Extraction, and PII Leakage attack categories.",
+    impactOneline:
+      "Public RUNE AI scanner demos document AI vulnerability training surfaces and red-team attack patterns in client bundles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideSecurityScannerDh25Evidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RUNE AI scanner demos are training software — isolate AI red-team labs from production API keys.",
+      steps: [
+        "Do not expose production Gemini API keys in client-side bundles.",
+        "Gate AI red-team challenge UIs behind authentication in non-demo deployments.",
+        "Run vulnerability scanner demos only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "We host a RUNE-style AI red-team scanner demo with prompt injection and jailbreak challenges. Show how to isolate Gemini API keys server-side.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-upload-profile-picture-url-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
