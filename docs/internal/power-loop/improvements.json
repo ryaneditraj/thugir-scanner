@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1801-1805-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1800→1805 + placeholder priority regex extended to 180[0-5]; web-security-learning-labs.vercel.app/module/1801 findings 0→5 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-adminpermission-route-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractBrokencrystalsLabSeeds extended with /api/auth/signup, /api/users/search/admin, /api/users/one/regular_user/adminpermission; route scan brokencrystals.com/api/users/one/regular_user/adminpermission findings 0→89 (+brokencrystals-adminpermission-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-coupon-avatar-wallet-route-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractPwnshopDocSeeds extended with /apply-coupon, /profile/upload-avatar, /wallet; pwnshop.ctfsecurity.com/apply-coupon route scan findings hub 23→43 (+pwnshop-apply-coupon-route-live-oracle, +pwnshop-coupon-category-bypass-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1796-1800-catalog",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1795→1800 + placeholder priority regex extended 1796-1800; web-security-learning-labs.vercel.app/module/1796 findings 0→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
