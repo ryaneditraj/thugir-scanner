@@ -22262,6 +22262,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pwnshop-export-orders-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pwnshop CSV order export formula injection oracle (PWN-013)",
+    description:
+      "Pwnshop documents GET /admin/export-orders returning unescaped order CSV with spreadsheet formula fields in shipping addresses — the PWN-013 CSV formula injection training oracle.",
+    impactOneline:
+      "Admin CSV export can embed formula payloads that execute when opened in spreadsheet software.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnshopExportOrdersOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict order export to real admins and prefix CSV formula fields — Pwnshop PWN-013 is intentional lab software.",
+      steps: [
+        "Require verified admin role before /admin/export-orders.",
+        "Prefix formula-triggering characters in CSV exports.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our GET /admin/export-orders endpoint exports raw CSV with formula injection risk. Show CSV export hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pwnshop-path-traversal-oracle",
     platform: "generic",
     category: "Broken access control",

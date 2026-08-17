@@ -19,8 +19,10 @@ import {
   FREE_RULES,
   RULES,
   clearPwnshopOtpSessionForProbe,
+  clearPwnshopAdminOtpSessionForProbe,
   primeBypass403SessionForDeepScan,
   primePwnshopAuditLogOracleForDeepScan,
+  primePwnshopExportOrdersOracleForDeepScan,
   primePwnshopOtpSessionForDeepScan,
   primeSecureNextjsLessonSessionForDeepScan,
   primeVotingAppSessionForDeepScan,
@@ -1964,6 +1966,7 @@ const DEEP_RULES = new Set<string>([
   "clientSidePwnshopReviewXssOracle",
   "clientSidePwnshopAvatarXssOracle",
   "clientSidePwnshopWalletTopupOracle",
+  "clientSidePwnshopExportOrdersOracle",
   "clientSidePwnshopPathTraversalOracle",
   "clientSidePwnshopPrototypePollutionOracle",
   "pwnshopDebugInfoLiveOracle",
@@ -9493,13 +9496,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     await primeBrokencrystalsRouteOracleProbes(probe, origin, effectiveTargetInput);
   }
   const pwnshopPostCrawlOtpPrimeRoute =
-    /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/search\/filters/i.test(targetInput);
+    /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/search\/filters|\/product\/\d+/i.test(
+      targetInput
+    );
   if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
     // Auth-gated routes re-prime OTP after crawl — skip redundant pre-crawl handshake (rate limits).
     if (!pwnshopPostCrawlOtpPrimeRoute) {
       await primePwnshopOtpSessionForDeepScan(probe, origin, targetInput, home);
     }
     await primePwnshopAuditLogOracleForDeepScan(probe, origin, targetInput, home);
+    await primePwnshopExportOrdersOracleForDeepScan(probe, origin, targetInput, home);
   }
   if (/bypass403\.vercel\.app/i.test(origin)) {
     await primeBypass403SessionForDeepScan(probe, origin, targetInput, home);
@@ -10843,10 +10849,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const detection = detectPlatform(home, combined);
   if (
     /pwnshop|ctfsecurity\.com/i.test(origin) &&
-    /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/search\/filters/i.test(targetInput)
+    /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/search\/filters|\/product\/\d+/i.test(
+      targetInput
+    )
   ) {
     clearPwnshopOtpSessionForProbe(probe);
     await primePwnshopOtpSessionForDeepScan(probe, origin, targetInput, home);
+  }
+  if (
+    /pwnshop|ctfsecurity\.com/i.test(origin) &&
+    /\/(?:admin\/)?export-orders\b/i.test(targetInput)
+  ) {
+    clearPwnshopAdminOtpSessionForProbe(probe);
+    await primePwnshopExportOrdersOracleForDeepScan(probe, origin, targetInput, home);
   }
   if (
     /pwnshop|ctfsecurity\.com/i.test(origin) &&
@@ -11035,8 +11050,34 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/(?:admin\/)?export-orders\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-") &&
+        /export-orders/.test(p.slug)
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/(?:admin\/)?export-orders\b/i.test(targetInput) &&
+        p.slug.startsWith("client-side-pwnshop-export")
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/debug\/info|\/api\/v1\/events|\/admin\/export-orders|\/logs\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-")
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/product\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-") &&
+        /product-review|review-xss/.test(p.slug)
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/product\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("client-side-pwnshop-review")
       )
         return -3;
       if (
@@ -12180,7 +12221,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8\d|9[0-9])|180\d|181\d|182\d|183[0-5]|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8\d|9[0-9])|180\d|181\d|182\d|183\d|1840|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;

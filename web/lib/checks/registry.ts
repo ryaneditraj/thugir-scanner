@@ -34456,6 +34456,24 @@ const clientSidePwnshopAvatarXssOracle: Rule = async (ctx) =>
     "Pwnshop POST /profile/upload-avatar stores SVG with onload handlers served at /uploads/ — stored XSS via avatar upload (PWN-012)"
   );
 
+const PWNSHOP_EXPORT_ORDERS_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "PWN-013 registry ID", re: /PWN-013/i },
+  { label: "GET /admin/export-orders endpoint", re: /GET \/admin\/export-orders\b|\/admin\/export-orders/i },
+  {
+    label: "CSV formula injection docs",
+    re: /CSV formula injection|spreadsheet formula|export-orders/i
+  },
+  { label: "Order CSV export title", re: /CSV Order Export|export orders/i }
+];
+
+const clientSidePwnshopExportOrdersOracle: Rule = async (ctx) =>
+  pwnshopRouteOracle(
+    ctx,
+    /\/(?:admin\/)?export-orders\b/i,
+    PWNSHOP_EXPORT_ORDERS_MARKERS,
+    "Pwnshop GET /admin/export-orders returns unescaped order CSV with spreadsheet formula fields — CSV formula injection oracle (PWN-013)"
+  );
+
 const PWNSHOP_WALLET_TOPUP_MARKERS: { label: string; re: RegExp }[] = [
   { label: "PWN-042 registry ID", re: /PWN-042/i },
   { label: "POST /wallet/topup/vulnbank endpoint", re: /POST \/wallet\/topup\/vulnbank\b/i },
@@ -35380,7 +35398,7 @@ export async function primePwnshopOtpSessionForDeepScan(
   home: FetchedDoc
 ): Promise<void> {
   if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
-  if (!/\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/wallet\/topup\b|\/search\/filters/i.test(scanUrl)) return;
+  if (!/\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/wallet\/topup\b|\/search\/filters|\/product\/\d+/i.test(scanUrl)) return;
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
   const primeWaitsMs = /\/profile\/upload-avatar/i.test(scanUrl)
     ? [5000, 8000, 11000, 14000, 17000, 20000]
@@ -36223,7 +36241,11 @@ export async function primePwnshopAuditLogOracleForDeepScan(
   });
 }
 
-const pwnshopAdminOtpSessionByProbe = new WeakMap<
+const pwnshopVerifiedAdminOtpSessionByProbe = new WeakMap<
+  ProbeCache,
+  { cookie: string; username: string }
+>();
+const pwnshopAdminOtpSessionInFlight = new WeakMap<
   ProbeCache,
   Promise<{ cookie: string; username: string } | null>
 >();
@@ -36289,11 +36311,42 @@ async function pwnshopFreshMassAssignmentAdminOtpSessionUncached(
 async function pwnshopFreshMassAssignmentAdminOtpSession(
   ctx: RuleContext
 ): Promise<{ cookie: string; username: string } | null> {
-  const cached = pwnshopAdminOtpSessionByProbe.get(ctx.probe);
-  if (cached) return cached;
-  const promise = pwnshopFreshMassAssignmentAdminOtpSessionUncached(ctx);
-  pwnshopAdminOtpSessionByProbe.set(ctx.probe, promise);
+  const verified = pwnshopVerifiedAdminOtpSessionByProbe.get(ctx.probe);
+  if (verified) return verified;
+  const inflight = pwnshopAdminOtpSessionInFlight.get(ctx.probe);
+  if (inflight) return inflight;
+  const promise = pwnshopFreshMassAssignmentAdminOtpSessionUncached(ctx).then((session) => {
+    pwnshopAdminOtpSessionInFlight.delete(ctx.probe);
+    if (session) pwnshopVerifiedAdminOtpSessionByProbe.set(ctx.probe, session);
+    return session;
+  });
+  pwnshopAdminOtpSessionInFlight.set(ctx.probe, promise);
   return promise;
+}
+
+/** Clear cached mass-assignment admin OTP session so export-order oracles can retry after PwnMail delivery. */
+export function clearPwnshopAdminOtpSessionForProbe(probe: ProbeCache): void {
+  pwnshopVerifiedAdminOtpSessionByProbe.delete(probe);
+  pwnshopAdminOtpSessionInFlight.delete(probe);
+}
+
+/** Pre-warm mass-assignment admin OTP during export-orders route scans. */
+export async function primePwnshopExportOrdersOracleForDeepScan(
+  probe: ProbeCache,
+  origin: string,
+  scanUrl: string,
+  home: FetchedDoc
+): Promise<void> {
+  if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
+  if (!/\/(?:admin\/)?export-orders\b/i.test(scanUrl)) return;
+  const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
+  const primeWaitsMs = [3000, 6000, 9000, 12000];
+  for (let attempt = 0; attempt < primeWaitsMs.length; attempt++) {
+    clearPwnshopAdminOtpSessionForProbe(probe);
+    const session = await pwnshopFreshMassAssignmentAdminOtpSession(ctx);
+    if (session) return;
+    await pwnshopSleep(primeWaitsMs[attempt]);
+  }
 }
 
 async function probePwnshopExportOrdersCsv(ctx: RuleContext): Promise<RuleResult | null> {
@@ -36342,14 +36395,26 @@ const pwnshopExportOrdersCsvRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/export-orders\b/i.test(pageUrl)) return NEGATIVE;
   const hit = await probePwnshopExportOrdersCsv(ctx);
-  if (!hit?.fired) return NEGATIVE;
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Pwnshop /admin/export-orders route scan — mass-assignment admin reaches CSV order export without real admin credentials (PWN-013)"
+      }
+    };
+  }
+  const bundleFallback = await clientSidePwnshopExportOrdersOracle(ctx);
+  if (!bundleFallback.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: hit.confidence,
+    confidence: 0.89,
     evidence: {
-      ...hit.evidence,
+      ...bundleFallback.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /admin/export-orders route scan — mass-assignment admin reaches CSV order export without real admin credentials (PWN-013)"
+      note: "Pwnshop export-orders route scan — vulnerability registry documents GET /admin/export-orders CSV formula injection (PWN-013) when mass-assignment admin OTP probe did not complete"
     }
   };
 };
@@ -39513,7 +39578,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1835;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1840;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -85044,6 +85109,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopReviewXssOracle,
   clientSidePwnshopAvatarXssOracle,
   clientSidePwnshopWalletTopupOracle,
+  clientSidePwnshopExportOrdersOracle,
   clientSidePwnshopPathTraversalOracle,
   clientSidePwnshopPrototypePollutionOracle,
   pwnshopDebugInfoLiveOracle,
