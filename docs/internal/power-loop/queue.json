@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-17T20:05:00.000Z",
+  "updated_at": "2026-08-17T21:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/cart/add",
+      "source": "Escape Duck Store — negative-quantity business-logic oracle POST /api/v1/cart/add (duck-store.escape.tech/vulnerabilities + Devroxana writeup Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/coupons",
+      "source": "Escape Duck Store — coupon information-disclosure oracle GET /api/v1/orders/coupons (Escape blog + vulnerabilities index Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
+      "source": "Escape Duck Store — 100% discount + shipping-bypass business-logic oracle POST /api/v1/orders/checkout (Devroxana writeup Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
+      "source": "Escape Duck Store — unauthenticated PUT testimonial update BOLA oracle (Escape agentic pentest benchmark blog Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/login",
+      "source": "Escape Duck Store — 2FA bypass + weak-credentials oracle POST /api/v1/auth/login (duck-store vulnerabilities index Aug 2026)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/login",
       "source": "nodegoat-websec Heroku — OWASP NodeGoat login weak-credentials route oracle (queue drain Aug 2026)",
