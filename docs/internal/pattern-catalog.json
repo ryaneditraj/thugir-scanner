@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-17T10:08:03.569Z",
-  "total": 2451,
-  "uniqueSlugs": 2447,
+  "generatedAt": "2026-08-17T11:33:00.541Z",
+  "total": 2452,
+  "uniqueSlugs": 2448,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2433,
+    "generic": 2434,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2366,
+    "deep": 2367,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 116,
     "Security misconfiguration": 186,
     "Broken authentication": 148,
-    "Injection": 369,
+    "Injection": 370,
     "Cross-site scripting": 700,
     "Open redirect": 21,
     "general": 20,
@@ -690,6 +690,7 @@
     "client-side-pwning-juice-shop-companion-evidence",
     "client-side-pwnshop-avatar-xss-oracle",
     "client-side-pwnshop-evidence",
+    "client-side-pwnshop-export-orders-oracle",
     "client-side-pwnshop-path-traversal-oracle",
     "client-side-pwnshop-prototype-pollution-oracle",
     "client-side-pwnshop-review-xss-oracle",
