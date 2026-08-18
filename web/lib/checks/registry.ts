@@ -36456,6 +36456,25 @@ export async function primePwnshopAvatarUploadOracleForDeepScan(
   }
 }
 
+/** Pre-warm OTP + seller registration for download/SSTI route scans (PWN-038/PWN-040). */
+export async function primePwnshopSellerSessionForDeepScan(
+  probe: ProbeCache,
+  origin: string,
+  scanUrl: string,
+  home: FetchedDoc
+): Promise<void> {
+  if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
+  if (!/\/download\b|\/seller\/|\/register-seller\b/i.test(scanUrl)) return;
+  const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
+  const primeWaitsMs = [5000, 9000, 13000, 17000, 21000, 25000];
+  for (let attempt = 0; attempt < primeWaitsMs.length; attempt++) {
+    clearPwnshopOtpSessionForProbe(probe);
+    const cookie = await pwnshopEnsureSellerSession(ctx);
+    if (cookie) return;
+    await pwnshopSleep(primeWaitsMs[attempt]);
+  }
+}
+
 async function probePwnshopExportOrdersCsv(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isPwnshopHost(ctx)) return null;
   const session = await pwnshopFreshMassAssignmentAdminOtpSession(ctx);

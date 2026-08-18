@@ -24,6 +24,7 @@ import {
   primePwnshopAuditLogOracleForDeepScan,
   primePwnshopExportOrdersOracleForDeepScan,
   primePwnshopAvatarUploadOracleForDeepScan,
+  primePwnshopSellerSessionForDeepScan,
   primePwnshopOtpSessionForDeepScan,
   primeSecureNextjsLessonSessionForDeepScan,
   primeVotingAppSessionForDeepScan,
@@ -9508,7 +9509,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     await primeBrokencrystalsRouteOracleProbes(probe, origin, effectiveTargetInput);
   }
   const pwnshopPostCrawlOtpPrimeRoute =
-    /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/search\/filters|\/product\/\d+/i.test(
+    /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/search\/filters|\/product\/\d+|\/download\b|\/seller\/|\/register-seller\b/i.test(
       targetInput
     );
   if (/pwnshop|ctfsecurity\.com/i.test(origin)) {
@@ -9518,6 +9519,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     }
     await primePwnshopAuditLogOracleForDeepScan(probe, origin, targetInput, home);
     await primePwnshopExportOrdersOracleForDeepScan(probe, origin, targetInput, home);
+    await primePwnshopSellerSessionForDeepScan(probe, origin, targetInput, home);
   }
   if (/bypass403\.vercel\.app/i.test(origin)) {
     await primeBypass403SessionForDeepScan(probe, origin, targetInput, home);
@@ -10888,6 +10890,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   ) {
     await primePwnshopAuditLogOracleForDeepScan(probe, origin, targetInput, home);
   }
+  if (
+    /pwnshop|ctfsecurity\.com/i.test(origin) &&
+    /\/download\b|\/seller\/|\/register-seller\b/i.test(targetInput)
+  ) {
+    clearPwnshopOtpSessionForProbe(probe);
+    await primePwnshopSellerSessionForDeepScan(probe, origin, targetInput, home);
+  }
   const ctx: RuleContext = { origin, scanUrl: effectiveTargetInput, home, scripts, combined, probe };
 
   const all = patternsForTier("deep").sort((a, b) => {
@@ -11046,7 +11055,28 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("pwnshop-") &&
         /ssti|seller/.test(p.slug)
       )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/download\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-") &&
+        /download|path-traversal|seller/.test(p.slug)
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/download\b/i.test(targetInput) &&
+        p.slug.startsWith("client-side-pwnshop-") &&
+        /path-traversal|ssti/.test(p.slug)
+      )
         return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/seller\/(?:preview|storefront)\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-") &&
+        /ssti|seller/.test(p.slug)
+      )
+        return -4;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/search\/filters/i.test(targetInput) &&
