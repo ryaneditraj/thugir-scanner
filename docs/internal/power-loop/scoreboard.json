@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T18:13:00.000Z",
+  "updated_at": "2026-08-18T19:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2769,
-  "total_findings": 27420,
+  "total_sites_scanned": 2778,
+  "total_findings": 27522,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1979,
-  "discovery_findings": 23047,
+  "discovery_urls_added": 1984,
+  "discovery_findings": 23102,
   "improvements_shipped": 1205,
-  "last_run": "2026-08-18T18:13:00.000Z",
+  "last_run": "2026-08-18T19:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 589,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,37 @@
           ]
         }
       },
-      "note": "Rich 48-finding 6/6 pass (duplicate benchmark runs at 18:02 and 18:08 both 48 findings)"
+      "note": "Stable 6/6 recall (47 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 129,
-      "focus": "FinBot Dark Lab reset-tools + finmail/finstripe/systemutils tool-poisoning + guardrails queue add; drain wrongsecrets/ch3, ginandjuice oauth/loyalty, nodegoat a10, ssrf scheme/, WSL 1821-1823",
-      "improvements_shipped_this_run": 3
+      "findings": 55,
+      "focus": "WSL catalog extension modules 1901-1905 prepended; queue drain also hit WSL 1831-1833 (48h skip expired)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no category misses",
-      "ginandjuice.shop/my-account/loyalty: 32 findings — PortSwigger loyalty oracle hub",
-      "ginandjuice.shop/oauth/callback: 30 findings — OAuth callback open-redirect surface",
-      "brokencrystals.com/api/get_metadata: 89 findings — get-metadata-route-live-oracle restored (parallel engine run)",
-      "wrongsecrets.herokuapp.com/challenge/3: 15 findings — client-side wrongsecrets challenge evidence",
-      "ssrf.vulnlab.dev/scheme/: 15 findings — SSRF scheme-filter bypass lab",
-      "nodegoat-websec.herokuapp.com/tutorial/a10: 13 findings — unvalidated redirect tutorial route"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "web-security-learning-labs.vercel.app/module/1901-1905: 8 findings each — placeholder CSR module oracles",
+      "web-security-learning-labs.vercel.app/module/1831-1833: 5 findings each — stale queue drain after 48h skip"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "finbot darklab tool-poisoning PUT blocked by auth fix (PR #545) — read oracle only; reset-tools/guardrails queued not scanned",
-      "wrongsecrets.herokuapp.com/challenge/6-8: not hosted on Heroku demo (404) — K8s/Vault challenges need local/docker oracle"
+      "finbot darklab reset-tools/guardrails/finmail/finstripe/systemutils queued at tail — not reached this drain",
+      "WSL modules 1901-1905: placeholder-only (8 findings) — no route-specific exploit oracles yet"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "brokencrystals.com/api/get_metadata": 89,
-    "ginandjuice.shop/my-account/loyalty": 32,
-    "ginandjuice.shop/oauth/callback": 30,
-    "wrongsecrets.herokuapp.com/challenge/3": 15,
-    "ssrf.vulnlab.dev/scheme/": 15,
-    "nodegoat-websec.herokuapp.com/tutorial/a10": 13
+    "juice-shop.herokuapp.com": 47,
+    "web-security-learning-labs.vercel.app/module/1901": 8,
+    "web-security-learning-labs.vercel.app/module/1902": 8,
+    "web-security-learning-labs.vercel.app/module/1903": 8,
+    "web-security-learning-labs.vercel.app/module/1904": 8,
+    "web-security-learning-labs.vercel.app/module/1905": 8,
+    "web-security-learning-labs.vercel.app/module/1831": 5,
+    "web-security-learning-labs.vercel.app/module/1832": 5,
+    "web-security-learning-labs.vercel.app/module/1833": 5
   }
 }
