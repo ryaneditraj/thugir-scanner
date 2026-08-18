@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T20:44:05.282Z",
+  "updated_at": "2026-08-18T21:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2891,
-  "total_findings": 29818,
+  "total_sites_scanned": 2895,
+  "total_findings": 29915,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2047,
-  "discovery_findings": 24591,
-  "improvements_shipped": 1202,
-  "last_run": "2026-08-18T20:44:05.282Z",
+  "discovery_urls_added": 2050,
+  "discovery_findings": 24641,
+  "improvements_shipped": 1205,
+  "last_run": "2026-08-18T21:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
@@ -52,18 +52,17 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 31,
-      "focus": "duck-store /api/v1/auth/register open-registration route oracle (queued URL drain)",
-      "improvements_shipped_this_run": 1
+      "urls_added": 3,
+      "urls_scanned": 3,
+      "findings": 50,
+      "focus": "ginandjuice catalog SQLi route priority + vulnforge level16-19 seeds + WSL module 1911-1915 catalog",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "duck-store.escape.tech/api/v1/auth/register: 30→31 findings — duck-store-auth-register-route-live-oracle shipped",
-      "pwnshop.ctfsecurity.com/reset-password: PWN-024 otp-not-invalidated oracles already shipped by parallel 20:08 UTC run",
-      "dvga.tools.escape.tech: 14 findings with full DVGA GraphQL oracle suite",
-      "pwnshop.ctfsecurity.com/chat: 44 findings with chat-prompt-injection-route oracle"
+      "ginandjuice.shop/catalog?category=Gin: 37 findings — ginandjuice-catalog-category-sqli-route-live-oracle shipped (GET category=1' → HTTP 500)",
+      "vulnforge-academy.vercel.app/level16.php: 5 findings — vulnforge-academy-level-file-upload-route-live-oracle (no SSTI false positive)",
+      "web-security-learning-labs.vercel.app/module/1911: 8 findings — placeholder CSR oracle via catalog 1911-1915 extension"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -75,14 +74,12 @@
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
+    "ginandjuice.shop/catalog?category=Gin": 37,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php": 5,
+    "web-security-learning-labs.vercel.app/module/1911": 8,
     "duck-store.escape.tech/api/v1/auth/register": 31,
-    "hack-health-tutorial.vercel.app/cybersecurity/a03/xss": 12,
     "pwnshop.ctfsecurity.com/chat": 44,
-    "pwnshop.ctfsecurity.com/reset-password": 48,
     "dvga.tools.escape.tech": 14,
-    "web-security-learning-labs.vercel.app/module/1906": 8,
-    "brokencrystals.com/api/partners/partner1": 85,
-    "nodegoat-websec.herokuapp.com/tutorial/a2": 10,
-    "wrongsecrets.herokuapp.com/challenge/challenge-0": 14
+    "brokencrystals.com/api/partners/partner1": 85
   }
 }
