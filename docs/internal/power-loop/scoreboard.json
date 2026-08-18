@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T04:10:00.000Z",
+  "updated_at": "2026-08-18T05:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2881,
-  "total_findings": 29800,
-  "critical_findings": 62,
+  "total_sites_scanned": 2730,
+  "total_findings": 26629,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2047,
-  "discovery_findings": 24704,
-  "improvements_shipped": 1205,
-  "last_run": "2026-08-18T04:10:00.000Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22558,
+  "improvements_shipped": 1162,
+  "last_run": "2026-08-18T05:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.demo.escape.tech",
       "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 589,
+      "probes_run": 599,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,47 @@
           ]
         }
       },
-      "note": "Heroku primary + staging 503; escape.tech fallback 6/6 (50 findings)"
+      "note": "Primary+staging Heroku 503; escape.tech fallback 6/6 with 50 findings (36 juice-shop-* live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 3,
-      "findings": 120,
-      "focus": "pwnshop apply-coupon + upload-avatar + wallet auth-gated route oracles via OTP session prime verify",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 71,
+      "focus": "nodegoat a4/a6/a8/a10 tutorial drain + ssrf.vulnlab scheme-abuse + wsl modules 1779/1780 + duck-store/ginandjuice queue additions (pending drain)",
+      "improvements_shipped_this_run": 1
     },
     "notable_findings": [
-      "juice-shop.demo.escape.tech: benchmark recall 6/6 (50 findings) after Heroku cold-start fallback",
-      "pwnshop.ctfsecurity.com/apply-coupon: 23→47 findings — coupon route oracles (+apply-coupon-route +coupon-category-bypass-route)",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: 18→48 findings — avatar-upload-route-live-oracle 0.93",
-      "pwnshop.ctfsecurity.com/wallet: +pwnshop-wallet-topup-route-live-oracle on route scan",
-      "nodegoat-websec.herokuapp.com/tutorial/a4–a10: route live oracles on parallel drain",
-      "ssrf.vulnlab.dev/scheme/: 15 findings — scheme-abuse SSRF route oracle suite"
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (50 findings) — Heroku primary+staging 503 miss, escape.tech fallback",
+      "ssrf.vulnlab.dev/scheme/: 15 findings — ssrf-vulnlab-scheme-live-oracle shipped (file:// + gopher:// scheme abuse)",
+      "nodegoat-websec.herokuapp.com/tutorial/a4: 10 findings with nodegoat-tutorial-a4-route-live-oracle",
+      "nodegoat-websec.herokuapp.com/tutorial/a6: 10 findings with nodegoat-tutorial-a6-route-live-oracle",
+      "nodegoat-websec.herokuapp.com/tutorial/a8: 10 findings with nodegoat-tutorial-a8-route-live-oracle",
+      "nodegoat-websec.herokuapp.com/tutorial/a10: 10 findings with nodegoat-tutorial-a10-route-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1779: 8 findings placeholder-module hub",
+      "web-security-learning-labs.vercel.app/module/1780: 8 findings placeholder-module hub",
+      "damn-vulnerable-startup.fly.dev/challenges/owasp: unreachable (DNS/offline)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "pwnshop.ctfsecurity.com/wallet: live vulnbank top-up may need Vulnbank configured (route oracle bundle fallback 0.89)",
-      "ssrf.vulnlab.dev/gopher + /blind still queued — not drained this run"
+      "juice-shop.herokuapp.com + staging: Heroku 503 cold-start/unavailable — rely on escape.tech fallback",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "duck-store.escape.tech/api/v1/testimonials/29 + orders + link-preview + products/search: queued, not yet drained this run",
+      "ginandjuice.shop/catalog?category=Gin: queued SQLi oracle, not yet drained this run",
+      "damn-vulnerable-startup.fly.dev: offline — skip until Fly.io instance restored",
+      "nodegoat tutorial routes share ~10-finding fingerprint — route oracles present but no tutorial-specific exploit depth beyond slug match"
     ]
   },
   "discovery_highlights": {
     "juice-shop.demo.escape.tech": 50,
-    "pwnshop.ctfsecurity.com/apply-coupon": 47,
-    "pwnshop.ctfsecurity.com/profile/upload-avatar": 48,
-    "pwnshop.ctfsecurity.com/wallet": 25,
     "ssrf.vulnlab.dev/scheme/": 15,
     "nodegoat-websec.herokuapp.com/tutorial/a4": 10,
     "nodegoat-websec.herokuapp.com/tutorial/a6": 10,
     "nodegoat-websec.herokuapp.com/tutorial/a8": 10,
     "nodegoat-websec.herokuapp.com/tutorial/a10": 10,
-    "pwnshop.ctfsecurity.com/download": 44,
-    "brokencrystals.com/api/partners/partner1": 83
+    "web-security-learning-labs.vercel.app/module/1779": 8,
+    "web-security-learning-labs.vercel.app/module/1780": 8,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20
   }
 }
