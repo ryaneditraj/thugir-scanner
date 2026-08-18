@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T09:05:00.000Z",
+  "updated_at": "2026-08-18T10:55:00.000Z",
   "discovery_urls": [
     {
       "url": "https://vulnbank.org/admin/create_admin",
@@ -13828,6 +13828,31 @@
     {
       "url": "https://dvga.tools.escape.tech/graphiql",
       "source": "DVGA Escape.tech — GraphiQL developer interface /graphiql (dolevf DVGA introspection oracle, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor/api/v1/invoices",
+      "source": "GenAI-Security-Project/finbot-ctf — agent-triggering invoice POST /vendor/api/v1/invoices (README vendor portal, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor/api/v1/vendors/register",
+      "source": "GenAI-Security-Project/finbot-ctf — vendor onboarding agent route POST /vendor/api/v1/vendors/register (README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/messages/1",
+      "source": "MRMcyber/vaultapp — private message IDOR oracle GET /api/messages/:id (GitHub lab guide challenge #2, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/lab-guide",
+      "source": "MRMcyber/vaultapp — built-in IDOR lab guide with challenge hints (GitHub README deploy link, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor/signup",
+      "source": "OWASP FinBot CTF — vendor portal signup /vendor/signup (owasp-finbot-ctf.org how-it-works, Aug 2026 web discovery)",
       "auth": "public_demo"
     }
   ]
