@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T06:06:34.500Z",
+  "updated_at": "2026-08-18T07:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://dvga.tools.escape.tech/graphql",
@@ -13753,6 +13753,31 @@
     {
       "url": "https://ginandjuice.shop/catalog?category=Gin",
       "source": "PortSwigger Gin & Juice Shop — SQLi oracle GET /catalog?category= (pentest-2026-ginandjuice FINDING-017 variant, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/shipping",
+      "source": "Escape Duck Store — shipping cost manipulation oracle POST /api/v1/orders/shipping (Devroxana writeup #16, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level10.php",
+      "source": "webspoilt/vulnforge-academy — Level 10 weak-password auth challenge (levels 10-12 auth tier, GitHub README Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level12.php",
+      "source": "webspoilt/vulnforge-academy — Level 12 session fixation auth challenge (levels 10-12 auth tier, GitHub README Aug 2026 discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor/api/v1/chat",
+      "source": "OWASP FinBot CTF — agentic prompt-injection surface POST /vendor/api/v1/chat (GenAI-Security-Project README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/ctf/api/v1/challenges",
+      "source": "OWASP FinBot CTF — challenge catalog API GET /ctf/api/v1/challenges (GenAI-Security-Project README, Aug 2026 web discovery)",
       "auth": "public_demo"
     }
   ]
