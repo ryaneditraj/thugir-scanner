@@ -8028,9 +8028,25 @@ async function nodegoatNosqlLoginCookie(ctx: RuleContext): Promise<string | null
       timeoutMs: 15000,
       redirect: "manual"
     });
+    const sessionCookie = nodegoatSessionCookieFromDoc(doc);
+    if (!sessionCookie || doc.status < 200 || doc.status >= 500) continue;
     const location = doc.headers["location"] || "";
     if ([301, 302, 303, 307, 308].includes(doc.status) && location && !/login/i.test(location)) {
-      return nodegoatSessionCookieFromDoc(doc);
+      return sessionCookie;
+    }
+    if (doc.status === 200) {
+      const dashDoc = await ctx.probe.get(new URL("/dashboard", ctx.origin).toString(), {
+        maxBytes: 4096,
+        timeoutMs: 15000,
+        headers: { Cookie: sessionCookie }
+      });
+      if (
+        dashDoc.status >= 200 &&
+        dashDoc.status < 400 &&
+        /OWASP NodeGoat|dashboard/i.test(dashDoc.body)
+      ) {
+        return sessionCookie;
+      }
     }
   }
   return null;
@@ -8131,6 +8147,67 @@ const nodegoatBenefitsNosqlRouteLiveOracle: Rule = async (ctx) => {
       benefitsMarkers: benefitsMarkers.slice(0, 3),
       nosqlMarkers: nosqlHits.slice(0, 3),
       note: "NodeGoat /benefits route scan — RetireEasy benefits module with client-documented MongoDB $gt/$ne NoSQL injection patterns (allocations threshold / login bypass family)"
+    }
+  };
+};
+
+const nodegoatNosqlLoginLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const cookie = await nodegoatNosqlLoginCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const dashUrl = new URL("/dashboard", ctx.origin).toString();
+  const dashDoc = await ctx.probe.get(dashUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (dashDoc.status < 200 || dashDoc.status >= 400) return NEGATIVE;
+  const authenticated =
+    /OWASP NodeGoat/i.test(dashDoc.body) ||
+    /dashboard/i.test(dashDoc.body) ||
+    /allocations/i.test(dashDoc.body) ||
+    /benefits/i.test(dashDoc.body);
+  if (!authenticated) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      dashUrl,
+      snippet: dashDoc.body.slice(0, 200).trim(),
+      note: "NodeGoat POST /login accepts MongoDB $gt operator payloads and returns an authenticated session without valid credentials — NoSQL injection login bypass oracle"
+    }
+  };
+};
+
+const nodegoatNosqlLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/tutorial\/a[0-9]+|\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const nosqlMarkers: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_NOSQL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) nosqlMarkers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const live = await nodegoatNosqlLoginLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        nosqlMarkers: nosqlMarkers.slice(0, 3)
+      }
+    };
+  }
+  if (nosqlMarkers.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      nosqlMarkers: nosqlMarkers.slice(0, 3),
+      note: "NodeGoat tutorial/login route scan — client bundle documents MongoDB operator NoSQL injection on login when live $gt bypass probe did not complete"
     }
   };
 };
@@ -87767,6 +87844,8 @@ export const RULES: Record<string, Rule> = {
   nodegoatLearnOpenRedirectLiveOracle,
   nodegoatLearnOpenRedirectRouteLiveOracle,
   nodegoatBenefitsNosqlRouteLiveOracle,
+  nodegoatNosqlLoginLiveOracle,
+  nodegoatNosqlLoginRouteLiveOracle,
   nodegoatSignupOpenRegistrationLiveOracle,
   nodegoatSignupRouteLiveOracle,
   nodegoatLoginWeakCredentialsLiveOracle,

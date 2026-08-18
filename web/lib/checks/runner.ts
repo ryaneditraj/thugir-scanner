@@ -3219,6 +3219,8 @@ const DEEP_RULES = new Set<string>([
   "nodegoatLearnOpenRedirectLiveOracle",
   "nodegoatLearnOpenRedirectRouteLiveOracle",
   "nodegoatBenefitsNosqlRouteLiveOracle",
+  "nodegoatNosqlLoginLiveOracle",
+  "nodegoatNosqlLoginRouteLiveOracle",
   "nodegoatSignupOpenRegistrationLiveOracle",
   "nodegoatSignupRouteLiveOracle",
   "nodegoatLoginWeakCredentialsLiveOracle",
@@ -12541,6 +12543,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
         /\/dashboard\b/i.test(targetInput) &&
         p.slug.startsWith("nodegoat-dashboard-")
+      )
+        return -3;
+      if (
+        /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
+        /\/tutorial\/a[0-9]+|\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("nodegoat-nosql-login")
       )
         return -3;
       if (
