@@ -22834,6 +22834,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-otp-not-invalidated-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Pwnshop OTP not invalidated on new request (PWN-024)",
+    description:
+      "POST /login issues a new OTP without invalidating prior codes — the first OTP still verifies at POST /verify-otp after a second login request — the Pwnshop OTP reuse oracle.",
+    impactOneline:
+      "Multiple simultaneous valid OTPs widen the brute-force and session-hijack window beyond a single short-lived code.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOtpNotInvalidatedLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Invalidate prior OTPs whenever a new code is issued — Pwnshop PWN-024 is intentional lab software.",
+      steps: [
+        "Store only one active OTP per user and delete it on re-issue.",
+        "Reject expired or superseded OTPs at POST /verify-otp.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /login endpoint issues new OTPs without invalidating prior codes. Show single-use OTP lifecycle remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-otp-not-invalidated-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Pwnshop OTP not invalidated route live oracle (PWN-024)",
+    description:
+      "When scanning /reset-password, /forgot-password, /verify-otp, or /login, a second POST /login leaves the prior OTP valid at POST /verify-otp — route-specific OTP invalidation oracle.",
+    impactOneline:
+      "Route scans on password-reset and OTP pages need live confirmation that old OTPs remain valid after re-issue.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOtpNotInvalidatedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Invalidate prior OTPs whenever a new code is issued — Pwnshop is intentional lab software.",
+      steps: [
+        "Store only one active OTP per user and delete it on re-issue.",
+        "Reject expired or superseded OTPs at POST /verify-otp.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /reset-password route scan confirms prior OTPs stay valid after re-issue. Show route-specific OTP lifecycle fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-mail-inbox-idor-live-oracle",
     platform: "generic",
     category: "Broken access control",

