@@ -2440,6 +2440,8 @@ const DEEP_RULES = new Set<string>([
   "duckStoreTestimonialsGuestRouteLiveOracle",
   "duckStoreAuthLoginWeakCredentialsLiveOracle",
   "duckStoreAuthLoginWeakCredentialsRouteLiveOracle",
+  "duckStoreAuthRegisterOpenLiveOracle",
+  "duckStoreAuthRegisterRouteLiveOracle",
   "duckStoreOpenRedirectLiveOracle",
   "duckStoreOpenRedirectRouteLiveOracle",
   "duckStoreReferralCodeAbuseLiveOracle",
@@ -12759,6 +12761,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("duck-store-testimonials-unauth-put")
       )
         return -5;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/auth\/register\b/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-auth-register")
+      )
+        return -4;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
         /\/api\/v1\/auth\/login/i.test(targetInput) &&

@@ -1,6 +1,12 @@
 {
   "candidates": [
     {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-auth-register-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/register without auth returns user id; duck-store.escape.tech/api/v1/auth/register findings 30→31 (+duck-store-auth-register-open-live-oracle +duck-store-auth-register-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-learn-open-redirect-live-oracle",
       "status": "shipped",
