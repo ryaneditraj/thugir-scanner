@@ -547,9 +547,35 @@ async function primeBrokencrystalsRouteOracleProbes(
       paths.push(`/api/auth/jwt/${kind}/validate`);
     }
   }
+  if (/\/api\/(?:get_count|get_metadata)\b/i.test(scanUrl)) {
+    paths.push("/api/mcp");
+  }
   if (paths.length === 0) return;
   const urls = paths.map((p) => new URL(p, origin).toString());
   await probe.getMany(urls, { maxBytes: 65536, timeoutMs: 15000, redirect: "manual" }, 3);
+  if (/\/api\/(?:get_count|get_metadata)\b/i.test(scanUrl)) {
+    const mcpUrl = new URL("/api/mcp", origin).toString();
+    const initPayload = JSON.stringify({
+      jsonrpc: "2.0",
+      method: "initialize",
+      params: {
+        protocolVersion: "2024-11-05",
+        capabilities: {},
+        clientInfo: { name: "thugir", version: "1" }
+      },
+      id: 1
+    });
+    await probe.get(mcpUrl, {
+      method: "POST",
+      body: initPayload,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json, text/event-stream"
+      },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+  }
 }
 
 const RENDER_COLD_START_RE =
@@ -9311,7 +9337,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
   if (
     /brokencrystals\.com/i.test(targetInput) &&
-    /\/api\/(?:goto|products\/latest|testimonials\/count|command|spawn|render|process_numbers)\b/i.test(targetInput)
+    /\/api\/(?:goto|products\/latest|testimonials\/count|get_count|get_metadata|command|spawn|render|process_numbers)\b/i.test(targetInput)
   ) {
     try {
       const routeDoc = await fetchDoc(targetInput, {
@@ -9533,7 +9559,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
   if (
     /brokencrystals\.com/i.test(origin) &&
-    /\/api\/(?:goto|products\/latest|testimonials\/count|auth\/jwt\/)\b/i.test(effectiveTargetInput)
+    /\/api\/(?:goto|products\/latest|testimonials\/count|get_count|get_metadata|auth\/jwt\/)\b/i.test(effectiveTargetInput)
   ) {
     await primeBrokencrystalsRouteOracleProbes(probe, origin, effectiveTargetInput);
   }
@@ -12407,7 +12433,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8\d|9[0-9])|180\d|181\d|182\d|183\d|184\d|185\d|186\d|187\d|188\d|189\d|1900|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8\d|9[0-9])|180\d|181\d|182\d|183\d|184\d|185\d|186\d|187\d|188\d|189\d|190[0-5]|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;

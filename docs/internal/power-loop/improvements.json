@@ -1,6 +1,30 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-ssti-idor-ssrf-tier-exclusion",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnforgeAcademyLevelSstiRouteLiveOracle now defers levels 7-9 (IDOR) and 13-15 (SSRF) to tier-specific route oracles; level7.php findings 6→5 (-vulnforge-academy-level-ssti-route-live-oracle false positive); level14.php 6→4 (-SSTI, +SSRF only); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-get-count-get-metadata-route-seeding",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runDeepScan seeds brokencrystals SPA home + primeBrokencrystalsRouteOracleProbes MCP initialize for /api/get_count and /api/get_metadata route scans; brokencrystals.com/api/get_metadata findings 1→89 with +brokencrystals-get-metadata-route-live-oracle on thin discovery pass; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1901-1905-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1900→1905 + placeholder priority regex extended to 190[0-5]; web-security-learning-labs.vercel.app/module/1901 findings 8 with +web-security-learning-labs-placeholder-module-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-tool-poisoning-write-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /darklab/api/v1/supply-chain/servers/findrive/tools requires authenticated session after finbot-ctf PR #545 — anonymous temp-session returns 400/403; existing finbot-darklab-supply-chain-route-live-oracle covers read surface on findrive/tools route scans"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-get-count-mcp-sqli-route-live-oracle",
       "status": "shipped",
