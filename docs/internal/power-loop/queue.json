@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-17T23:15:00.000Z",
+  "updated_at": "2026-08-18T00:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1876",
@@ -25,6 +25,31 @@
       "url": "https://web-security-learning-labs.vercel.app/module/1880",
       "source": "web-security-learning-labs Vercel — module 1880 placeholder route (catalog expansion past 1875, Aug 2026)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/login/totp",
+      "source": "Escape Duck Store — 2FA bypass oracle POST /api/v1/auth/login/totp (Devroxana writeup + OpenAPI Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/users/",
+      "source": "Escape Duck Store — user enumeration oracle GET /api/v1/users/ (Escape blog + OpenAPI Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/1",
+      "source": "Escape Duck Store — order IDOR oracle GET /api/v1/orders/{order_id} (Devroxana writeup Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/referrer",
+      "source": "Escape Duck Store — referrer business-logic oracle GET /api/v1/orders/referrer (OpenAPI Aug 2026 discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/stats",
+      "source": "Escape Duck Store — missing admin-role oracle GET /api/v1/admin/stats (Escape benchmarking blog Aug 2026)",
+      "auth": "public_demo"
     },
     {
       "url": "https://duck-store.escape.tech/mcp/tools",
