@@ -2008,6 +2008,8 @@ const DEEP_RULES = new Set<string>([
   "pwnshopCartCheckoutRouteLiveOracle",
   "pwnshopApplyCouponRouteLiveOracle",
   "pwnshopCouponCategoryBypassRouteLiveOracle",
+  "pwnshopCheckoutHppCouponLiveOracle",
+  "pwnshopCheckoutHppCouponRouteLiveOracle",
   "pwnshopSellerPreviewSstiLiveOracle",
   "pwnshopSellerPreviewSstiRouteLiveOracle",
   "pwnshopSellerStorefrontSstiRouteLiveOracle",
@@ -3081,6 +3083,10 @@ const DEEP_RULES = new Set<string>([
   "vulnbankV3ResetPasswordVersioningRouteLiveOracle",
   "vulnbankSup3rSecretAdminLiveOracle",
   "vulnbankSup3rSecretAdminRouteLiveOracle",
+  "vulnbankCreateAdminLiveOracle",
+  "vulnbankCreateAdminRouteLiveOracle",
+  "vulnbankInternalConfigSsrfDemoLiveOracle",
+  "vulnbankInternalConfigRouteLiveOracle",
   "vulnbankRequestLoanLiveOracle",
   "vulnbankRequestLoanNegativeAmountLiveOracle",
   "vulnbankRequestLoanRouteLiveOracle",
@@ -11122,7 +11128,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:apply-coupon|cart)\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-") &&
-        /coupon|checkout/.test(p.slug)
+        /coupon|checkout|hpp/.test(p.slug)
       )
         return -3;
       if (
@@ -11289,6 +11295,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("vulnbank-sup3r-secret-admin")
       )
         return -2;
+      if (
+        /vulnbank\.org/i.test(origin) &&
+        /\/admin\/create_admin\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnbank-create-admin")
+      )
+        return -3;
+      if (
+        /vulnbank\.org/i.test(origin) &&
+        /\/internal\/config\.json\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnbank-internal-config")
+      )
+        return -3;
       if (
         /ist-edu-bd\.vercel\.app/i.test(origin) &&
         /\/(?:register|login|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|open-redirect|ssti|graphql|deserialization|file-upload)|files|newsletter)\b/i.test(

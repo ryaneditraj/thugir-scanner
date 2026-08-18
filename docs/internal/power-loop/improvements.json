@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-create-admin-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: register is_admin:true + login + POST /admin/create_admin returns status:success Admin created successfully; vulnbank.org/admin/create_admin findings 26→28 (+vulnbank-create-admin-live-oracle +vulnbank-create-admin-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-internal-config-ssrf-demo-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /internal/config.json returns HTTP 403 {\"error\":\"Internal resource. Loopback only.\"}; vulnbank.org/internal/config.json findings 26→28 (+vulnbank-internal-config-ssrf-demo-live-oracle +vulnbank-internal-config-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-checkout-hpp-coupon-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /checkout coupon_code=HALFOFF → subtotal ₦8750 grand ₦10250; coupon_code=HALFOFF&coupon_code=INVALID → subtotal ₦19000 grand ₦20500 (discount silently dropped); pwnshop.ctfsecurity.com/cart findings 47→49 (+pwnshop-checkout-hpp-coupon-live-oracle +pwnshop-checkout-hpp-coupon-route-live-oracle PWN-039); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-login-route-priority",
       "status": "shipped",
