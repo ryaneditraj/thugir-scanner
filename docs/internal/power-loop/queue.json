@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T07:05:00.000Z",
+  "updated_at": "2026-08-18T08:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://dvga.tools.escape.tech/graphql",
@@ -13778,6 +13778,31 @@
     {
       "url": "https://owasp-finbot-ctf.org/ctf/api/v1/challenges",
       "source": "OWASP FinBot CTF — challenge catalog API GET /ctf/api/v1/challenges (GenAI-Security-Project README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab",
+      "source": "OWASP FinBot CTF — MCP tool-poisoning adversary portal /darklab (GenAI-Security-Project README + i-314 case study, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/admin",
+      "source": "OWASP FinBot CTF — admin co-pilot portal /admin (GenAI-Security-Project README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/patients",
+      "source": "aligorithm/Zero-Health — unauthenticated PHI patient records API GET /api/patients (OWASP Top 10 Web+API+LLM lab, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/ai/chat",
+      "source": "aligorithm/Zero-Health — AI chatbot prompt-injection surface POST /api/ai/chat (OWASP LLM Top 10 lab, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/graphiql",
+      "source": "DVGA Escape.tech — GraphiQL developer interface /graphiql (dolevf DVGA introspection oracle, Aug 2026 web discovery)",
       "auth": "public_demo"
     }
   ]
