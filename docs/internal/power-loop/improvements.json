@@ -1,6 +1,18 @@
 {
   "candidates": [
     {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-ssrf-redos-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended nodegoat-websec.herokuapp.com/tutorial/ssrf + /tutorial/redos to discovery queue; route scans 0→12 findings each (+nodegoat-tutorial-ssrf-route-live-oracle +nodegoat-tutorial-redos-route-live-oracle +nodegoat-research-ssrf-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1916-1920-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1915→1920 + placeholder priority regex extended to 192[0-5]; web-security-learning-labs.vercel.app/module/1916 findings 5 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-catalog-category-sqli-route-priority",
       "status": "shipped",

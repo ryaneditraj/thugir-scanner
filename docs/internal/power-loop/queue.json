@@ -1,6 +1,41 @@
 {
-  "updated_at": "2026-08-18T22:07:44.222Z",
+  "updated_at": "2026-08-18T22:14:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/ssrf",
+      "source": "nodegoat-websec Heroku — SSRF tutorial route oracle queue drain (OWASP NodeGoat README, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/redos",
+      "source": "nodegoat-websec Heroku — ReDoS tutorial route oracle queue drain (OWASP NodeGoat README, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1916",
+      "source": "web-security-learning-labs Vercel — module 1916 placeholder route (catalog expansion past 1915, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1917",
+      "source": "web-security-learning-labs Vercel — module 1917 placeholder route (catalog expansion past 1915, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1918",
+      "source": "web-security-learning-labs Vercel — module 1918 placeholder route (catalog expansion past 1915, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1919",
+      "source": "web-security-learning-labs Vercel — module 1919 placeholder route (catalog expansion past 1915, Aug 2026)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1920",
+      "source": "web-security-learning-labs Vercel — module 1920 placeholder route (catalog expansion past 1915, Aug 2026)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/tools",
       "source": "GenAI-Security-Project/finbot-ctf — TaxCalc MCP tool-poisoning oracle PUT /darklab/api/v1/supply-chain/servers/taxcalc/tools (issue #544, Aug 2026 web discovery)",
