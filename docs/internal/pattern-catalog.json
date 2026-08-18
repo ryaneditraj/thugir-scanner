@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-18T12:20:35.967Z",
-  "total": 2482,
-  "uniqueSlugs": 2478,
+  "generatedAt": "2026-08-18T13:24:30.008Z",
+  "total": 2483,
+  "uniqueSlugs": 2479,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2464,
+    "generic": 2465,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2397,
+    "deep": 2398,
     "continuous": 0
   },
   "byCategory": {
@@ -33,7 +33,7 @@
     "general": 20,
     "SSRF": 14,
     "Server-side request forgery": 81,
-    "Sensitive data exposure": 63,
+    "Sensitive data exposure": 64,
     "AI security": 73,
     "Business logic": 24,
     "Authentication bypass": 3,
@@ -2514,6 +2514,7 @@
     "zerohealth-messages-sqli-route-live-oracle",
     "zerohealth-parameter-pollution-route-live-oracle",
     "zerohealth-path-traversal-route-live-oracle",
+    "zerohealth-patients-route-live-oracle",
     "zerohealth-prescriptions-route-live-oracle",
     "zerohealth-prompt-injection-route-live-oracle",
     "zerohealth-race-condition-route-live-oracle",

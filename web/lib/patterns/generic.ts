@@ -33874,6 +33874,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-patients-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Zero Health patients PHI route live oracle",
+    description:
+      "When scanning /api/patients, GET returns full patient roster (first_name, last_name, email, phone, date_of_birth) for doctor-role JWT — route-specific PHI disclosure oracle.",
+    impactOneline:
+      "Route-specific oracle confirms patient roster PHI exposure training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthPatientsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — enforce least-privilege access to patient rosters.",
+      steps: [
+        "Require strong authentication and MFA for doctor-role patient list APIs.",
+        "Paginate and audit bulk PHI exports with break-glass logging.",
+        "Never expose full patient rosters to single bearer tokens without purpose-based scoping."
+      ]
+    },
+    fixPrompt:
+      "Our /api/patients route returns full patient PHI for doctor JWTs. Show least-privilege PHI access controls and audit logging.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "zerohealth-parameter-pollution-route-live-oracle",
     platform: "generic",
     category: "API security",

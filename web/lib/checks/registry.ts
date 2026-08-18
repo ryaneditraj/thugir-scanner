@@ -8465,6 +8465,8 @@ const vulnforgeAcademyLevelSstiRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/levels\/[^/]+\/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
   const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  // Levels 10–12 are authentication labs — defer to vulnforgeAcademyLevelAuthRouteLiveOracle.
+  if (levelNum !== null && levelNum >= 10 && levelNum <= 12) return NEGATIVE;
   // Levels 16–18 are file-upload labs — defer to vulnforgeAcademyLevelFileUploadRouteLiveOracle.
   if (levelNum !== null && levelNum >= 16 && levelNum <= 18) return NEGATIVE;
   const sstiHit = await reflexionEscalatedSsti(ctx);
@@ -8503,6 +8505,14 @@ const VULNFORGE_ACADEMY_LEVEL_URL_ORACLES: Record<
   10: {
     vulnerability: "Authentication Bypass",
     note: "VulnForge Academy level 10 — GET /api/auth/admin with X-User-Role: admin header bypasses role check (FLAG{auth_byp4ss_r0l3_sp00f1ng})"
+  },
+  11: {
+    vulnerability: "Authentication Brute Force",
+    note: "VulnForge Academy level 11 — login endpoint lacks rate limiting enabling credential brute-force against weak passwords (Levels 10-12 Easy Authentication)"
+  },
+  12: {
+    vulnerability: "Session Fixation",
+    note: "VulnForge Academy level 12 — session identifier not regenerated after login enabling session fixation takeover (Levels 10-12 Easy Authentication)"
   },
   13: {
     vulnerability: "SSRF",
@@ -40419,7 +40429,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1885;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1890;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -43511,6 +43521,74 @@ async function zerohealthMedicalRecordsBolaRouteLiveOracle(
       markers: hits.slice(0, 4),
       scannedUrl: pageUrl,
       note: "Zero Health /api/medical-records exposes PHI behind weak JWT verification — BOLA oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthPatientsRouteLiveOracle(ctx: RuleContext): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/patients\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const doctorToken = await zeroHealthFetchDebugToken(ctx, origin, "doctor", "1");
+    if (doctorToken) {
+      const patientsUrl = `${origin}/api/patients`;
+      const patientsDoc = await ctx.probe.get(patientsUrl, {
+        headers: { Authorization: `Bearer ${doctorToken}` },
+        maxBytes: 8192,
+        timeoutMs: 15000
+      });
+      if (
+        isZeroHealthJsonBody(patientsDoc.body) &&
+        patientsDoc.status >= 200 &&
+        patientsDoc.status < 300 &&
+        /"first_name"|"last_name"|"date_of_birth"|"role"\s*:\s*['"]patient['"]/i.test(
+          patientsDoc.body
+        )
+      ) {
+        return {
+          fired: true,
+          confidence: /"email"|"phone"/i.test(patientsDoc.body) ? 0.93 : 0.91,
+          evidence: {
+            url: patientsUrl,
+            snippet: patientsDoc.body.slice(0, 280).trim(),
+            scannedUrl: pageUrl,
+            note: "Zero Health GET /api/patients returns full patient roster (first_name, last_name, email, DOB) with doctor-role JWT — PHI disclosure oracle"
+          }
+        };
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "patients API route", sample: "/api/patients" }
+  ];
+  const markers = [
+    { label: "patients list endpoint", re: /app\.get\('\/api\/patients'|\/api\/patients/i },
+    { label: "doctor role gate", re: /req\.user\.role\s*!==\s*['"]doctor['"]|Doctor access required/i },
+    { label: "patient PHI fields", re: /first_name,\s*last_name,\s*email,\s*phone,\s*date_of_birth/i },
+    { label: "patient roster query", re: /WHERE role = 'patient'|role = 'patient'/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health GET /api/patients returns full patient PHI roster for doctor-role JWT — PHI disclosure oracle (server.js when OSS API is not deployed on scanned host)"
     }
   };
 }
@@ -86676,6 +86754,7 @@ export const RULES: Record<string, Rule> = {
   zerohealthMassAssignmentRouteLiveOracle,
   zerohealthInformationDisclosureRouteLiveOracle,
   zerohealthMedicalRecordsBolaRouteLiveOracle,
+  zerohealthPatientsRouteLiveOracle,
   zerohealthResetPasswordReflectedXssRouteLiveOracle,
   zerohealthSearchReflectedXssRouteLiveOracle,
   zerohealthAiChatSqliRouteLiveOracle,

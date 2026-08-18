@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-patients-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: app.get('/api/patients') returns patient PHI roster for doctor JWT in Zero-Health server.js; zerohealth.aliyu.dev/api/patients findings 4→5 (+zerohealth-patients-route-live-oracle corpus fallback); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level11-12-auth-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: VULNFORGE_ACADEMY_LEVEL_URL_ORACLES extended for levels 11 (brute force) and 12 (session fixation); SSTI reflexion excluded on auth levels 10-12; level11.php findings 5→4 with +vulnforge-academy-level-auth-route-live-oracle (false SSTI removed); level12.php 3 findings with auth oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1886-1890-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1885→1890 + placeholder priority regex extended to 188\\d|1890; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1881-1885-catalog",
       "status": "shipped",
@@ -12329,6 +12347,21 @@
       "source": "discovery:owasp-finbot-ctf.org",
       "slug": "finbot-ctf-stats-route-priority",
       "shipped_at": "2026-08-18T12:25:00.000Z"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-patients-route-live-oracle",
+      "shipped_at": "2026-08-18T13:25:00.000Z"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level11-12-auth-oracles",
+      "shipped_at": "2026-08-18T13:25:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1886-1890-catalog",
+      "shipped_at": "2026-08-18T13:25:00.000Z"
     }
   ]
 }
