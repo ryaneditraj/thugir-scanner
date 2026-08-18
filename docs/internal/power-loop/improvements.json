@@ -1,10 +1,22 @@
 {
   "candidates": [
     {
-      "source": "discovery:web-security-learning-labs.vercel.app",
-      "slug": "web-security-learning-labs-module-1891-1895-catalog",
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-vendor-invoices-session-bootstrap-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1890→1895 + placeholder priority regex extended to 189[0-5]; web-security-learning-labs.vercel.app/module/1891 findings 7→6 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1895 findings 8 with placeholder oracle; benchmark juice-shop 48 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: finbotPageCsrfBootstrap /vendor/onboarding + POST /vendor/api/v1/vendors/register + POST /vendor/api/v1/invoices returns success with invoice id; owasp-finbot-ctf.org/vendor/api/v1/invoices findings 9 with +finbot-vendor-invoices-live-oracle +finbot-vendor-invoices-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1896-1900-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1895→1900 + placeholder priority regex extended to 189\\d|1900; web-security-learning-labs.vercel.app/module/1896 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-4-short-url-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds adds /challenge/4 alias alongside /challenge/challenge-4; wrongsecrets.herokuapp.com/challenge/4 findings 15 with +wrongsecrets-challenge-4-docker-build-arg-route-live-oracle; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:wrongsecrets.herokuapp.com",
