@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-18T21:22:00.000Z",
+  "updated_at": "2026-08-18T22:07:44.222Z",
   "discovery_urls": [
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/tools",
+      "source": "GenAI-Security-Project/finbot-ctf — TaxCalc MCP tool-poisoning oracle PUT /darklab/api/v1/supply-chain/servers/taxcalc/tools (issue #544, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/stats",
+      "source": "GenAI-Security-Project/finbot-ctf — supply-chain poisoned-tool stats GET /darklab/api/v1/supply-chain/stats (README Dark Lab, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/reset-tools",
+      "source": "GenAI-Security-Project/finbot-ctf — TaxCalc MCP reset-tools oracle POST /darklab/api/v1/supply-chain/servers/taxcalc/reset-tools (issue #544, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc",
+      "source": "GenAI-Security-Project/finbot-ctf — TaxCalc MCP server catalog GET /darklab/api/v1/supply-chain/servers/taxcalc (README Dark Lab, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor/api/v1/payments",
+      "source": "GenAI-Security-Project/finbot-ctf — payments agent route POST /vendor/api/v1/payments (README vendor portal payments agent, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/catalog?category=Gin",
       "source": "PortSwigger Gin & Juice Shop — SQLi oracle GET /catalog?category= (pentest-2026-ginandjuice FINDING-017 variant, Aug 2026 web discovery)",
