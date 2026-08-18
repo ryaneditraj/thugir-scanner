@@ -8109,7 +8109,8 @@ async function nodegoatNosqlLoginCookie(ctx: RuleContext): Promise<string | null
 }
 
 async function nodegoatBenefitsNosqlLiveProbe(ctx: RuleContext): Promise<RuleResult> {
-  let cookie = await nodegoatNosqlLoginCookie(ctx);
+  let cookie = await nodegoatAuthenticatedSessionCookie(ctx);
+  if (!cookie) cookie = await nodegoatNosqlLoginCookie(ctx);
   if (!cookie) cookie = await nodegoatRegisterSessionCookie(ctx);
   if (!cookie) return NEGATIVE;
   const allocationsUrl = new URL("/allocations/2", ctx.origin);
@@ -9375,15 +9376,23 @@ async function nodegoatProfileCsrfLiveProbe(ctx: RuleContext): Promise<RuleResul
     timeoutMs: 15000
   });
   if (postDoc.status < 200 || postDoc.status >= 500) return NEGATIVE;
-  const verifyDoc = await ctx.probe.get(profileUrl, {
-    maxBytes: 32768,
-    timeoutMs: 15000,
-    headers: { Cookie: cookie }
-  });
-  const escaped = marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const persisted =
-    verifyDoc.body.includes(`value="${marker}"`) ||
-    new RegExp(`value="${escaped}"`).test(verifyDoc.body);
+  const dashUrl = new URL("/dashboard", ctx.origin).toString();
+  const verifyUrls = [profileUrl, dashUrl];
+  let persisted = false;
+  let verifySnippet = "";
+  for (const verifyUrl of verifyUrls) {
+    const verifyDoc = await ctx.probe.get(verifyUrl, {
+      maxBytes: 32768,
+      timeoutMs: 15000,
+      headers: { Cookie: cookie }
+    });
+    if (verifyDoc.status < 200 || verifyDoc.status >= 400) continue;
+    if (verifyDoc.body.includes(marker)) {
+      persisted = true;
+      verifySnippet = verifyDoc.body.slice(0, 240).trim();
+      break;
+    }
+  }
   if (!persisted) return NEGATIVE;
   return {
     fired: true,
@@ -9392,7 +9401,7 @@ async function nodegoatProfileCsrfLiveProbe(ctx: RuleContext): Promise<RuleResul
       profileUrl,
       firstNameMarker: marker,
       csrfFieldPresent,
-      snippet: verifyDoc.body.slice(0, 240).trim(),
+      snippet: verifySnippet,
       note: csrfFieldPresent
         ? "NodeGoat POST /profile processes state-changing updates when _csrf field is present but omitted from forged POST body — profile CSRF oracle (A8 family)"
         : "NodeGoat POST /profile accepts forged profile updates without CSRF token — profile CSRF oracle (A8 family)"
@@ -82661,6 +82670,58 @@ const finbotDarklabSupplyChainRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeFinbotCtfStats(ctx: RuleContext): Promise<RuleResult | null> {
+  const statsUrl = new URL("/ctf/api/v1/stats", ctx.origin).toString();
+  const doc = await ctx.probe.get(statsUrl, { maxBytes: 8192, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  try {
+    const data = JSON.parse(doc.body) as {
+      challenges_total?: number;
+      badges_total?: number;
+      category_progress?: Array<{ category?: string; total?: number }>;
+    };
+    if (typeof data.challenges_total !== "number" || data.challenges_total < 5) return null;
+    if (!Array.isArray(data.category_progress) || data.category_progress.length < 2) return null;
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        statsUrl,
+        challengesTotal: data.challenges_total,
+        badgesTotal: data.badges_total,
+        categoryCount: data.category_progress.length,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "OWASP FinBot public /ctf/api/v1/stats exposes challenge progress, badge counts, and category breakdown without authentication"
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+const finbotCtfStatsLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotCtfStats(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotCtfStatsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/stats(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotCtfStats(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OWASP FinBot /stats route scan — public /ctf/api/v1/stats exposes agentic challenge progress and category breakdown without authentication"
+    }
+  };
+};
+
 function isIstEduHost(ctx: RuleContext): boolean {
   return /ist-edu-bd/i.test(ctx.origin);
 }
@@ -87331,6 +87392,8 @@ export const RULES: Record<string, Rule> = {
   finbotAdminCopilotRouteLiveOracle,
   finbotDarklabSupplyChainLiveOracle,
   finbotDarklabSupplyChainRouteLiveOracle,
+  finbotCtfStatsLiveOracle,
+  finbotCtfStatsRouteLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
