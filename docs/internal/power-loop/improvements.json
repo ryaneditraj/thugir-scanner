@@ -1,6 +1,36 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1891-1895-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1890→1895 + placeholder priority regex extended to 189[0-5]; web-security-learning-labs.vercel.app/module/1891 findings 7→6 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1895 findings 8 with placeholder oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-3-short-url-seed",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds adds /challenge/3 alias alongside /challenge/challenge-3; wrongsecrets.herokuapp.com/challenge/3 findings 15 with +wrongsecrets-challenge-3-docker-env-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-referral-register-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for duck-store-referral-code-abuse-* on /api/v1/auth/register; duck-store.escape.tech/api/v1/auth/register findings 26 with +duck-store-referral-code-abuse-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-oauth-callback-route-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /oauth/callback and /oauth-callback return 404 scanner shell; vulnerabilities oracle table (via X-Original-URL) lists 86 paths with no oauth/callback entry — no portable live oracle on ginandjuice.shop scanner eval instance"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-loyalty-route-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /my-account/loyalty returns 404 even after carlos/hunter2 login — loyalty route absent on ginandjuice.shop; only generic ginandjuice-login-route-live-oracle fires"
+    },
+    {
       "source": "discovery:zerohealth.aliyu.dev",
       "slug": "zerohealth-patients-route-live-oracle",
       "status": "shipped",
