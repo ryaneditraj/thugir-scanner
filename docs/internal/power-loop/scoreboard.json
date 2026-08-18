@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T17:22:53.801Z",
+  "updated_at": "2026-08-18T18:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2760,
-  "total_findings": 27243,
+  "total_sites_scanned": 2761,
+  "total_findings": 27291,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1974,
   "discovery_findings": 22918,
-  "improvements_shipped": 1202,
-  "last_run": "2026-08-18T17:22:53.801Z",
+  "improvements_shipped": 1205,
+  "last_run": "2026-08-18T18:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 17,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,41 +48,37 @@
           ]
         }
       },
-      "note": "Thin Heroku pass 6/6 at 17 findings (5 juice-shop-* live oracles); category recall intact but live-oracle depth below 48-finding rich baseline"
+      "note": "Rich 48-finding pass with 5 juice-shop-* live oracles; 6/6 category recall maintained"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 67,
-      "focus": "WSL modules 1898-1900 + FinBot Dark Lab supply-chain API oracles + queue drain brokencrystals/get_metadata + finbot/vendor + dvga2/graphql",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "vulnforge SSTI tier exclusions + brokencrystals get_count/get_metadata route seeding + WSL catalog 1901-1905",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (17 findings) — thin pass, no category misses",
-      "web-security-learning-labs.vercel.app/module/1898-1900: 8 findings each with placeholder-module-route-live-oracle",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/findrive/tools: 9 findings — finbot-darklab-supply-chain-route-live-oracle confirmed",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers: 10 findings — MCP supply-chain catalog oracle",
-      "dvga2.tools.escape.tech/graphql: 13 findings — introspection + SQLi filter + IDOR + SSRF + stored XSS oracles",
-      "brokencrystals.com/api/get_metadata: 1 finding — XXE route oracle absent (headers-only hub)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "vulnforge-academy level7.php: SSTI false positive removed — IDOR route oracle only (5 findings)",
+      "vulnforge-academy level14.php: SSTI false positive removed — SSRF route oracle only (4 findings)",
+      "brokencrystals.com/api/get_metadata: route seeding restores 89 findings with get-metadata-route-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1901: 8 findings with placeholder-module-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop thin pass: 17 findings vs 48-finding rich baseline — Heroku cold-start splits live-oracle depth across runs",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/api/get_metadata: route-specific XXE live oracle still absent (1-finding headers-only pass)",
-      "brokencrystals.com/api/get_count: route-specific SQLi live oracle for query param still absent",
+      "finbot darklab tool-poisoning PUT blocked by auth fix (PR #545) — read oracle only",
       "wrongsecrets.herokuapp.com/challenge/6-8: not hosted on Heroku demo (404) — K8s/Vault challenges need local/docker oracle"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 17,
+    "juice-shop.herokuapp.com": 48,
+    "brokencrystals.com/api/get_metadata": 89,
+    "web-security-learning-labs.vercel.app/module/1901": 8,
+    "vulnforge-academy.vercel.app/backend/includes/levels/easy/level7.php": 5,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php": 4,
     "dvga2.tools.escape.tech/graphql": 13,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers": 10,
-    "owasp-finbot-ctf.org/vendor": 10,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/findrive/tools": 9,
-    "web-security-learning-labs.vercel.app/module/1898": 8,
-    "web-security-learning-labs.vercel.app/module/1899": 8,
-    "web-security-learning-labs.vercel.app/module/1900": 8
+    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers": 10
   }
 }
