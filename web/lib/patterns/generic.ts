@@ -56188,6 +56188,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-products-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Duck Store product catalog BOLA live oracle",
+    description:
+      "PUT /api/v1/products/{id} accepts unauthenticated price updates without ownership or admin checks — the Duck Store product BOLA oracle.",
+    impactOneline:
+      "Broken object-level authorization on product updates lets attackers tamper with catalog pricing without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreProductsBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication before mutating product records — Duck Store is intentional lab software.",
+      steps: [
+        "Restrict PUT /api/v1/products/{id} to authenticated admin roles only.",
+        "Validate product ownership or admin privileges on all write operations.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PUT /api/v1/products/{id} endpoint accepts unauthenticated price updates. Show BOLA remediation for product APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-products-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Duck Store /api/v1/products/{id} BOLA route live oracle",
+    description:
+      "When scanning /api/v1/products/{id}, unauthenticated PUT updates catalog price without authorization — route-specific product BOLA oracle.",
+    impactOneline:
+      "Route scans on product-by-ID endpoints should confirm write operations require proper authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreProductsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication before mutating product records on route scans.",
+      steps: [
+        "Restrict PUT /api/v1/products/{id} to authenticated admin roles only.",
+        "Validate product ownership or admin privileges on all write operations.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/products/{id} route accepts unauthenticated PUT price changes. Show route-specific BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-admin-stats-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Duck Store admin stats disclosure live oracle",
+    description:
+      "GET /api/v1/admin/stats with weak admin:admin credentials returns dashboard metrics (total_users, total_products, total_orders, total_revenue) — admin stats disclosure oracle.",
+    impactOneline:
+      "Weak admin credentials combined with unprotected stats endpoints expose business-sensitive operational metrics.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAdminStatsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce strong admin credentials and protect stats endpoints — Duck Store is intentional lab software.",
+      steps: [
+        "Require strong, unique admin passwords and rotate them regularly.",
+        "Restrict /api/v1/admin/stats to authenticated admin sessions with MFA.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/admin/stats endpoint is reachable with weak admin:admin credentials. Show admin stats hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-admin-stats-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Duck Store /api/v1/admin/stats route live oracle",
+    description:
+      "When scanning /api/v1/admin/stats, weak admin:admin login returns full dashboard metrics JSON — route-specific admin stats oracle.",
+    impactOneline:
+      "Route scans on admin stats endpoints should confirm strong authentication before exposing operational metrics.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAdminStatsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect /api/v1/admin/stats with strong admin auth — Duck Store is intentional lab software.",
+      steps: [
+        "Require strong admin credentials and MFA on admin stats routes.",
+        "Return 401 for unauthenticated requests before any metrics are computed.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/admin/stats route scan confirms weak admin credentials expose dashboard metrics. Show remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvga-route-live-oracle",
     platform: "generic",
     category: "Information disclosure",
