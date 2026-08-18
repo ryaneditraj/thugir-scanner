@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-18T18:08:02.883Z",
-  "total": 2489,
-  "uniqueSlugs": 2485,
+  "generatedAt": "2026-08-18T19:07:51.176Z",
+  "total": 2490,
+  "uniqueSlugs": 2486,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2471,
+    "generic": 2472,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2404,
+    "deep": 2405,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 509,
+    "Broken access control": 510,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1729,6 +1729,7 @@
     "nodegoat-benefits-nosql-live-oracle",
     "nodegoat-benefits-nosql-route-live-oracle",
     "nodegoat-dashboard-route-live-oracle",
+    "nodegoat-learn-open-redirect-live-oracle",
     "nodegoat-learn-open-redirect-route-live-oracle",
     "nodegoat-login-weak-credentials-live-oracle",
     "nodegoat-login-weak-credentials-route-live-oracle",

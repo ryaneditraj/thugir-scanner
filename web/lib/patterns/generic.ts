@@ -45507,6 +45507,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-learn-open-redirect-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "NodeGoat /learn unvalidated open redirect live oracle",
+    description:
+      "GET /learn?url= reflects attacker-controlled URLs in a 302 Location header without validation — the NodeGoat A10 unvalidated redirects and forwards oracle.",
+    impactOneline:
+      "Unvalidated open redirects let attackers phish users via trusted NodeGoat application domains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatLearnOpenRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect destinations against an allow-list — NodeGoat is intentional OWASP training software.",
+      steps: [
+        "Allowlist redirect URL hosts before calling res.redirect().",
+        "Reject protocol-relative and external URLs unless explicitly permitted.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our GET /learn?url= endpoint reflects attacker-controlled URLs in 302 Location without validation. Show redirect destination validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "nodegoat-learn-open-redirect-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
