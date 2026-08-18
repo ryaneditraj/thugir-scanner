@@ -10292,6 +10292,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /vwad\.owasp\.org\/app\/gin-juice-shop/i.test(home.finalUrl)
       ? ["https://ginandjuice.shop/"]
       : [];
+  const ginAndJuiceLoginPrioritySeeds = /ginandjuice\.shop/i.test(home.finalUrl)
+    ? [new URL("/login", home.finalUrl).toString()]
+    : [];
   const vwadHackxorPrioritySeeds =
     /vwad\.owasp\.org\/app\/hackxor/i.test(home.finalUrl)
       ? ["https://hackxor.net/"]
@@ -10351,6 +10354,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vwadWrongsecretsPrioritySeeds,
       ...vwadWrongsecretsLiveSeeds,
       ...vwadGinJuicePrioritySeeds,
+      ...ginAndJuiceLoginPrioritySeeds,
       ...vwadGinJuiceLiveSeeds,
       ...vwadHackxorPrioritySeeds,
       ...vwadHackxorLiveSeeds,
@@ -12229,6 +12233,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/ginandjuice\.shop/i.test(origin) && p.slug.startsWith("ginandjuice")) return -2;
       if (
         /ginandjuice\.shop/i.test(origin) &&
+        /\/(?:login|my-account)\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-login")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
         /\/order\/details\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-order-details")
       )
@@ -12459,6 +12469,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/wallet(?:\/topup)?\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-wallet")
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/(?:reset-password|verify-otp|forgot-password)\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-otp-not-invalidated")
       )
         return -4;
       if (

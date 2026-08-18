@@ -35564,6 +35564,14 @@ function pwnshopOtpFromMailBody(body: string): string | null {
   return m?.[1] ?? null;
 }
 
+function pwnshopAllOtpsFromMailBody(body: string): string[] {
+  return [
+    ...new Set(
+      [...body.matchAll(/one-time verification code is:\s*(\d{6})/gi)].map((m) => m[1])
+    )
+  ];
+}
+
 async function pwnshopMailInboxToken(ctx: RuleContext, cookie: string): Promise<string | null> {
   const mailUrl = new URL("/mail", ctx.origin).toString();
   const doc = await ctx.probe.get(mailUrl, {
@@ -37158,46 +37166,6 @@ const fauxbankSettingsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
-  if (!isPwnshopHost(ctx)) return NEGATIVE;
-  const cookie = await pwnshopRegisterAndLoginCookie(ctx);
-  if (!cookie) return NEGATIVE;
-  const otpUrl = new URL("/verify-otp", ctx.origin).toString();
-  const otps = ["000001", "000002", "000003", "000004", "000005"];
-  let acceptedAttempts = 0;
-  for (const otp of otps) {
-    const doc = await ctx.probe.get(otpUrl, {
-      method: "POST",
-      body: `otp=${otp}`,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Cookie: cookie
-      },
-      maxBytes: 8192,
-      timeoutMs: 10000
-    });
-    if (doc.status === 429) return NEGATIVE;
-    if (/too many|rate.?limit|locked out|try again later/i.test(doc.body)) return NEGATIVE;
-    if (
-      doc.status >= 200 &&
-      doc.status < 500 &&
-      /Invalid or expired code/i.test(doc.body)
-    ) {
-      acceptedAttempts++;
-    }
-  }
-  if (acceptedAttempts < otps.length) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.92,
-    evidence: {
-      url: otpUrl,
-      attempts: otps.length,
-      note: "Pwnshop POST /verify-otp accepts rapid OTP guesses without HTTP 429 or lockout — brute-forceable 2FA oracle (PWN-015)"
-    }
-  };
-};
-
 async function pwnshopPollLoginOtp(ctx: RuleContext, cookie: string): Promise<string | null> {
   const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500, 10500];
   for (const waitMs of OTP_MAIL_WAITS_MS) {
@@ -37317,6 +37285,46 @@ const pwnshopOtpNotInvalidatedRouteLiveOracle: Rule = async (ctx) => {
       note: /\/reset-password\b/i.test(pageUrl)
         ? "Pwnshop /reset-password route scan — new login OTP requests do not invalidate prior OTPs at POST /verify-otp (PWN-024)"
         : "Pwnshop OTP/password-reset route scan — prior login OTP still verifies after a second POST /login issues a new code (PWN-024)"
+    }
+  };
+};
+
+const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopRegisterAndLoginCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const otpUrl = new URL("/verify-otp", ctx.origin).toString();
+  const otps = ["000001", "000002", "000003", "000004", "000005"];
+  let acceptedAttempts = 0;
+  for (const otp of otps) {
+    const doc = await ctx.probe.get(otpUrl, {
+      method: "POST",
+      body: `otp=${otp}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: cookie
+      },
+      maxBytes: 8192,
+      timeoutMs: 10000
+    });
+    if (doc.status === 429) return NEGATIVE;
+    if (/too many|rate.?limit|locked out|try again later/i.test(doc.body)) return NEGATIVE;
+    if (
+      doc.status >= 200 &&
+      doc.status < 500 &&
+      /Invalid or expired code/i.test(doc.body)
+    ) {
+      acceptedAttempts++;
+    }
+  }
+  if (acceptedAttempts < otps.length) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: otpUrl,
+      attempts: otps.length,
+      note: "Pwnshop POST /verify-otp accepts rapid OTP guesses without HTTP 429 or lockout — brute-forceable 2FA oracle (PWN-015)"
     }
   };
 };

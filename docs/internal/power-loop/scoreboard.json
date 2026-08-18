@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T08:10:00.000Z",
+  "updated_at": "2026-08-18T08:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2758,
-  "total_findings": 27149,
+  "total_sites_scanned": 2759,
+  "total_findings": 27152,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1966,
-  "discovery_findings": 22825,
-  "improvements_shipped": 1202,
-  "last_run": "2026-08-18T08:10:00.000Z",
+  "discovery_findings": 22828,
+  "improvements_shipped": 1203,
+  "last_run": "2026-08-18T08:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
@@ -52,29 +52,28 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 111,
-      "focus": "DVGA graphql x2 + pwnshop cart + finbot portals/stats + WSL 1803/1804/1796 module drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 2,
+      "focus": "ginandjuice login route priority + PWN-024 DEEP_RULES registration",
+      "improvements_shipped_this_run": 1
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no benchmark misses",
-      "dvga.tools.escape.tech/graphql: 11 findings — dvga-graphql-introspection + sqli-filter + my-pastes-idor live oracles",
-      "dvga.xplat-demo.threatx.io/graphql: 13 findings — DVGA ThreatX mirror graphql batching/introspection hub",
-      "pwnshop.ctfsecurity.com/cart: 49 findings — prototype-pollution-search-filters + admin-login-sqli + track-idor live oracles",
-      "owasp-finbot-ctf.org/portals: 8 findings — finbot-ctf-challenges-route + finbot-darklab-supply-chain live oracles"
+      "pwnshop.ctfsecurity.com/reset-password: 45→47 findings — pwnshop-otp-not-invalidated-live-oracle (PWN-024 stale OTP reuse)",
+      "ginandjuice.shop/login: 32 findings — ginandjuice-login-username-reflection-live-oracle + route oracle via login crawl seed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "finbot darklab/admin + zerohealth patients/ai/chat + dvga graphiql newly queued — pending drain",
-      "duck-store.escape.tech testimonials/29 + orders/shipping + vulnforge level10/12 + finbot vendor/chat still queued at tail",
-      "pwnshop.ctfsecurity.com/apply-coupon + profile/upload-avatar: coupon-bypass + stored-XSS SVG upload oracles still absent without authenticated session"
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount live oracle still absent when Vulnbank integration disabled",
+      "brokencrystals.com/api/spawn still queued — not drained this run (48h skip on head URLs)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 46,
+    "pwnshop.ctfsecurity.com/reset-password": 47,
+    "ginandjuice.shop/login": 32,
     "pwnshop.ctfsecurity.com/cart": 49,
     "dvga.xplat-demo.threatx.io/graphql": 13,
     "dvga.tools.escape.tech/graphql": 11,

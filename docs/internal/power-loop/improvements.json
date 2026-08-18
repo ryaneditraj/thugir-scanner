@@ -1,6 +1,12 @@
 {
   "candidates": [
     {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-login-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceLoginPrioritySeeds adds /login to crawl seeds + runner -4 priority for ginandjuice-login slugs on /login|/my-account; ginandjuice.shop/login findings 32 with ginandjuice-login-username-reflection-live-oracle + ginandjuice-login-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-nosql-login-auth-strict",
       "status": "shipped",
