@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-18T02:05:07.611Z",
+  "updated_at": "2026-08-18T03:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a2",
+      "source": "nodegoat-websec Heroku — A2 broken auth tutorial route (OWASP NodeGoat README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a3",
+      "source": "nodegoat-websec Heroku — A3 XSS tutorial route (OWASP NodeGoat README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a5",
+      "source": "nodegoat-websec Heroku — A5 security misconfiguration tutorial route (OWASP NodeGoat README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a7",
+      "source": "nodegoat-websec Heroku — A7 XSS tutorial route (OWASP NodeGoat README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a9",
+      "source": "nodegoat-websec Heroku — A9 known-vuln-components tutorial route (OWASP NodeGoat README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/reset-password",
       "source": "ctfsec/pwnshop — OTP invalidation + reset flow oracle POST /reset-password (PWN-024, Aug 2026 web discovery)",
