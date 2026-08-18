@@ -12290,6 +12290,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/xss-game\.appspot\.com/i.test(origin) && p.slug.startsWith("xss-game-")) return -2;
       if (/all-seeing-eye/i.test(origin) && p.slug.startsWith("all-seeing-eye")) return -2;
       if (/owasp-finbot-ctf\.org/i.test(origin) && p.slug.startsWith("finbot-")) return -2;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/stats\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-ctf-stats")
+      )
+        return -4;
+      if (
+        /securebank-blog\.vercel\.app/i.test(origin) &&
+        /\/(?:login|messages|admin|transfer)\b/i.test(targetInput) &&
+        p.slug.startsWith("securebank-blog")
+      )
+        return -3;
       if (/vulnweb\.netlify\.app/i.test(origin) && p.slug.startsWith("vulnweb-")) return -2;
       if (/vapi\.apisec\.ai/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
       if (/vapi\.tools\.escape\.tech/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
@@ -12356,7 +12368,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8\d|9[0-9])|180\d|181\d|182\d|183\d|184\d|185\d|186\d|187\d|1880|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8\d|9[0-9])|180\d|181\d|182\d|183\d|184\d|185\d|186\d|187\d|188[0-5]|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;

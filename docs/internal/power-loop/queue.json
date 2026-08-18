@@ -1,6 +1,51 @@
 {
-  "updated_at": "2026-08-18T10:55:00.000Z",
+  "updated_at": "2026-08-18T12:20:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://securebank-blog.vercel.app/login",
+      "source": "FAST-NUCES SecureBank Medium article — Attack 1 SQLi login oracle route drain (Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/messages",
+      "source": "FAST-NUCES SecureBank Medium article — Attack 2 stored XSS messages oracle route drain (Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/admin",
+      "source": "FAST-NUCES SecureBank Medium article — RBAC /admin 403 gate oracle route drain (Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1881",
+      "source": "WSL CSR placeholder catalog extension 1881-1885 (Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1882",
+      "source": "WSL CSR placeholder catalog extension 1881-1885 (Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1883",
+      "source": "WSL CSR placeholder catalog extension 1881-1885 (Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1884",
+      "source": "WSL CSR placeholder catalog extension 1881-1885 (Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1885",
+      "source": "WSL CSR placeholder catalog extension 1881-1885 (Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a2",
+      "source": "nodegoat-websec Heroku — A2 broken authentication tutorial weak-creds live oracle (Aug 2026)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnbank.org/admin/create_admin",
       "source": "Commando-X/vuln-bank — admin creation oracle POST /admin/create_admin (OpenAPI + Ostorlab agentic scan, Aug 2026 web discovery)",

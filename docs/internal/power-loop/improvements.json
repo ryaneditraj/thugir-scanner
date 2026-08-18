@@ -1,10 +1,22 @@
 {
   "candidates": [
     {
-      "source": "discovery:owasp-finbot-ctf.org",
-      "slug": "finbot-ctf-stats-live-oracle",
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1881-1885-catalog",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: GET /ctf/api/v1/stats returns challenges_total:19 + category_progress JSON without auth; owasp-finbot-ctf.org/stats findings 6→8 (+finbot-ctf-stats-live-oracle +finbot-ctf-stats-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1880→1885 + placeholder priority regex extended to 188[0-5]; web-security-learning-labs.vercel.app/module/1881 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a2-weak-creds-chain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: nodegoatTutorialA2RouteLiveOracle chains nodegoatLoginWeakCredentialsLiveOracle; nodegoatLoginWeakCredentialsRouteLiveOracle matches /tutorial/a2; nodegoat-websec.herokuapp.com/tutorial/a2 findings 10→14 (+nodegoat-login-weak-credentials-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-stats-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for finbot-ctf-stats-* on /stats routes; owasp-finbot-ctf.org/stats findings 6→8 (+finbot-ctf-stats-live-oracle +finbot-ctf-stats-route-live-oracle); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:nodegoat-websec.herokuapp.com",
@@ -12302,6 +12314,21 @@
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-profile-csrf-navbar-verify",
       "shipped_at": "2026-08-18T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1881-1885-catalog",
+      "shipped_at": "2026-08-18T12:25:00.000Z"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-a2-weak-creds-chain",
+      "shipped_at": "2026-08-18T12:25:00.000Z"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-stats-route-priority",
+      "shipped_at": "2026-08-18T12:25:00.000Z"
     }
   ]
 }

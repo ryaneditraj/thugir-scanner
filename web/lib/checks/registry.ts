@@ -7791,6 +7791,18 @@ const nodegoatTutorialA2RouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/tutorial\/a2\b/i.test(pageUrl)) return NEGATIVE;
+  const weakCreds = await nodegoatLoginWeakCredentialsLiveOracle(ctx);
+  if (weakCreds.fired) {
+    return {
+      fired: true,
+      confidence: weakCreds.confidence,
+      evidence: {
+        ...weakCreds.evidence,
+        scannedUrl: pageUrl,
+        note: "NodeGoat /tutorial/a2 route scan — POST /login accepts default training credentials (admin/User1_123) — A2 broken authentication live oracle"
+      }
+    };
+  }
   const result = await nodegoatTutorialMarkers(ctx, "a2", [
     {
       label: "A2 broken auth tutorial title",
@@ -9300,16 +9312,19 @@ const nodegoatLoginWeakCredentialsLiveOracle: Rule = async (ctx) => {
 const nodegoatLoginWeakCredentialsRouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:login|tutorial\/a2)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await nodegoatLoginWeakCredentialsLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
+  const onA2 = /\/tutorial\/a2\b/i.test(pageUrl);
   return {
     fired: true,
     confidence: result.confidence,
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "NodeGoat /login route scan — POST /login accepts default training credentials and redirects without credential rotation — weak authentication oracle"
+      note: onA2
+        ? "NodeGoat /tutorial/a2 route scan — POST /login accepts default training credentials — A2 broken authentication route oracle"
+        : "NodeGoat /login route scan — POST /login accepts default training credentials and redirects without credential rotation — weak authentication oracle"
     }
   };
 };
@@ -40404,7 +40419,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1880;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1885;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
