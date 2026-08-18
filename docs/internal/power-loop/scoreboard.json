@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T15:10:45.048Z",
+  "updated_at": "2026-08-18T15:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1964,
   "discovery_findings": 22704,
-  "improvements_shipped": 1202,
-  "last_run": "2026-08-18T15:10:45.048Z",
+  "improvements_shipped": 1208,
+  "last_run": "2026-08-18T15:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "15",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 591,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -55,36 +55,34 @@
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 217,
-      "focus": "wrongsecrets /challenge/4-5 + brokencrystals get_count/get_metadata + finbot vendor portal + dvga2 graphql drain",
-      "improvements_shipped_this_run": 0
+      "focus": "finbot vendor invoices CSRF bootstrap + WSL catalog 1896-1900 + wrongsecrets /challenge/4 seed",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "brokencrystals.com/api/get_count?query=1: 82 findings — full BC corpus oracles (BFLA, OIDC secret, process_numbers, SSRF)",
-      "brokencrystals.com/api/get_metadata: 40 findings — xxe-xml-post-probe + photo/fullinfo disclosure oracles",
-      "wrongsecrets.herokuapp.com/challenge/4: 15 findings — challenge-4-docker-build-arg-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/5: 15 findings — challenge-5-configmap-route-live-oracle",
-      "owasp-finbot-ctf.org/vendor: 9 findings — finbot-vendor-sidecar + darklab-supply-chain live oracles",
-      "dvga2.tools.escape.tech/graphql: 11 findings — DVGA GraphQL introspection/batching corpus",
-      "ginandjuice.shop/oauth/callback: 30 findings — oauth open-redirect + cart-checkout-auth oracles (route now reachable)"
+      "owasp-finbot-ctf.org/vendor/api/v1/invoices: 9 findings with +finbot-vendor-invoices-live-oracle +finbot-vendor-invoices-route-live-oracle (vendor register + invoice agent chain)",
+      "web-security-learning-labs.vercel.app/module/1896: 8 findings after catalog 1895→1900",
+      "wrongsecrets.herokuapp.com/challenge/4: 15 findings with +wrongsecrets-challenge-4-docker-build-arg-route-live-oracle via /challenge/4 crawl seed",
+      "brokencrystals.com/api/get_count?query=1: 82 findings — full BC corpus oracles",
+      "ginandjuice.shop/oauth/callback: 30 findings — oauth open-redirect oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/api/get_count: route-specific SQLi live oracle for query param still absent (82-finding hub via crawl seed)",
-      "ginandjuice.shop/my-account/loyalty: not scanned this run (8-URL limit); loyalty-IDOR oracle still unverified",
-      "owasp-finbot-ctf.org/vendor/api/v1/invoices: CSRF-gated agent route needs session bootstrap oracle"
+      "brokencrystals.com/api/get_count: route-specific SQLi live oracle for query param still absent",
+      "ginandjuice.shop/my-account/loyalty: loyalty-IDOR oracle still unverified",
+      "duck-store.escape.tech/api/v1/link-preview: endpoint returns 404 — SSRF link-preview oracle deferred",
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles exist but queue drain pending"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
-    "brokencrystals.com/api/get_count?query=1": 82,
-    "brokencrystals.com/api/get_metadata": 40,
-    "ginandjuice.shop/oauth/callback": 30,
+    "owasp-finbot-ctf.org/vendor/api/v1/invoices": 9,
+    "web-security-learning-labs.vercel.app/module/1896": 8,
     "wrongsecrets.herokuapp.com/challenge/4": 15,
     "wrongsecrets.herokuapp.com/challenge/5": 15,
-    "wrongsecrets.herokuapp.com/challenge/3": 15,
-    "owasp-finbot-ctf.org/vendor": 9,
-    "dvga2.tools.escape.tech/graphql": 11
+    "brokencrystals.com/api/get_count?query=1": 82,
+    "ginandjuice.shop/oauth/callback": 30,
+    "duck-store.escape.tech/api/v1/auth/register": 26
   }
 }
