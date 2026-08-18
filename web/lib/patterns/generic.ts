@@ -23172,6 +23172,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-checkout-hpp-coupon-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Pwnshop checkout HPP coupon bypass live oracle (PWN-039)",
+    description:
+      "POST /checkout with duplicate coupon_code=HALFOFF&coupon_code=INVALID causes express to coerce coupon_code into an array; the server silently discards the coupon and checkout proceeds at full price — the Pwnshop HTTP parameter pollution oracle.",
+    impactOneline:
+      "Duplicate coupon_code parameters at checkout silently drop discounts without error messages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopCheckoutHppCouponLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject array-valued coupon_code fields and normalize checkout parameters — Pwnshop PWN-039 is intentional lab software.",
+      steps: [
+        "Reject coupon_code when typeof value is not string.",
+        "Log and block duplicate parameter keys at checkout.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /checkout endpoint silently drops HALFOFF when coupon_code is duplicated. Show HPP-safe coupon parsing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-checkout-hpp-coupon-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Pwnshop /cart checkout HPP coupon route live oracle (PWN-039)",
+    description:
+      "When scanning /cart, duplicate coupon_code at POST /checkout silently discards HALFOFF discount via express array coercion — route-specific HPP coupon bypass oracle.",
+    impactOneline:
+      "Route-specific confirmation that checkout coupon logic is vulnerable to HTTP parameter pollution on Pwnshop cart flows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopCheckoutHppCouponRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject array-valued coupon_code on checkout routes — Pwnshop PWN-039 is intentional lab software.",
+      steps: [
+        "Reject coupon_code arrays at checkout settlement.",
+        "Normalize duplicate parameter keys before coupon validation.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /cart route scan confirms duplicate coupon_code drops HALFOFF at checkout. Show route-specific HPP remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-seller-preview-ssti-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -40522,6 +40574,108 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /sup3r_s3cr3t_admin route scan confirms BOPLA signup exposes the admin panel. Show route-specific admin route protection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-create-admin-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank admin creation live oracle",
+    description:
+      "POST /admin/create_admin accepts BOPLA-escalated admin JWTs and creates new administrator accounts — the Vuln Bank privileged admin-creation training oracle.",
+    impactOneline:
+      "Mass-assignment during registration combined with an unprotected admin-creation endpoint enables arbitrary admin account provisioning.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankCreateAdminLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block privileged fields on registration and restrict admin creation to existing super-admins.",
+      steps: [
+        "Reject is_admin and other privilege fields from registration JSON bodies.",
+        "Require super-admin authorization on POST /admin/create_admin.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /admin/create_admin endpoint creates admins after BOPLA signup. Show registration hardening and admin-creation authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-create-admin-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Vuln Bank /admin/create_admin route live oracle",
+    description:
+      "When scanning /admin/create_admin, BOPLA-escalated admin JWT creates a new admin account — route-specific admin-creation oracle.",
+    impactOneline:
+      "Route-specific confirmation that admin-creation endpoints accept BOPLA-escalated tokens on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankCreateAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict admin creation to super-admins and block BOPLA on registration.",
+      steps: [
+        "Reject is_admin on POST /register.",
+        "Require super-admin authorization on /admin/create_admin route handlers."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/create_admin route scan confirms BOPLA-escalated admins can create accounts. Show route-specific authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-internal-config-ssrf-demo-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "Vuln Bank internal config SSRF demo oracle",
+    description:
+      "GET /internal/config.json returns loopback-only SSRF demo metadata — the Vuln Bank in-band SSRF training oracle target documented in README.",
+    impactOneline:
+      "Internal metadata endpoints reachable only via SSRF enable cloud and loopback pivot training on Vuln Bank deployments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankInternalConfigSsrfDemoLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block external access to internal metadata routes and validate SSRF fetch targets.",
+      steps: [
+        "Reject non-loopback requests to /internal/* paths.",
+        "Allowlist outbound fetch destinations on profile-picture URL imports.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /internal/config.json endpoint is an SSRF demo target. Show loopback enforcement and SSRF egress filtering remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-internal-config-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "Vuln Bank /internal/config.json SSRF demo route live oracle",
+    description:
+      "When scanning /internal/config.json, the endpoint returns Internal resource. Loopback only. — route-specific in-band SSRF demo oracle target.",
+    impactOneline:
+      "Route-specific confirmation that internal metadata endpoints document SSRF training surfaces on Vuln Bank.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankInternalConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect internal metadata routes from external access and filter SSRF egress.",
+      steps: [
+        "Enforce loopback-only access on /internal/config.json.",
+        "Validate image_url fetch targets on profile upload endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /internal/config.json route scan confirms loopback-only SSRF demo metadata. Show route-specific SSRF remediation.",
     version: 1,
     enabled: true
   },

