@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-learn-open-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /learn?url= reflects evil-open-redirect-probe.example in 302 Location when session auth succeeds; added standalone nodegoat-learn-open-redirect-live-oracle pattern + -4 runner priority on /tutorial/a10 and /learn routes; Heroku demo auth degraded (signup 500, learn→/login) so live oracle corpus-only on public instance; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1906-1910-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1905→1910 + placeholder priority regex extended to 190[0-9]|1910; web-security-learning-labs.vercel.app/module/1906 findings 8 with +web-security-learning-labs-placeholder-module-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-portal-seed-expansion",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractFinbotCtfSeeds adds /darklab /ctf /vendor /admin portal routes + -4 runner priority for finbot-darklab-* on /darklab routes; owasp-finbot-ctf.org/darklab findings 10 with +finbot-darklab-supply-chain-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnforge-academy.vercel.app",
       "slug": "vulnforge-academy-ssti-idor-ssrf-tier-exclusion",
       "status": "shipped",
