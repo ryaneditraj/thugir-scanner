@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-18T01:13:38.840Z",
+  "updated_at": "2026-08-18T02:05:07.611Z",
   "discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/reset-password",
+      "source": "ctfsec/pwnshop — OTP invalidation + reset flow oracle POST /reset-password (PWN-024, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/logs",
+      "source": "ctfsec/pwnshop — plaintext failed-login passwords in audit log GET /logs (PWN-027 chains PWN-005, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/account/delete",
+      "source": "ctfsec/pwnshop — CSRF account deletion oracle POST /account/delete (PWN-026, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/signup",
+      "source": "nodegoat-websec Heroku — signup weak-password + mass-assignment route oracle (OWASP NodeGoat README, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-0",
+      "source": "OWASP WrongSecrets Heroku — intro challenge route secrets-in-code surface (README demo env, Aug 2026)",
+      "auth": "public_benchmark"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/download",
       "source": "Pwnshop OWASP Top 10 2025 — invoice download path traversal route oracle queue drain (PWN-038, Aug 2026)",
