@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-18T03:06:00.000Z",
+  "updated_at": "2026-08-18T04:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a4",
+      "source": "nodegoat-websec Heroku — A4 insecure direct object references tutorial route (OWASP NodeGoat README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a6",
+      "source": "nodegoat-websec Heroku — A6 security misconfiguration tutorial route (OWASP NodeGoat README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a8",
+      "source": "nodegoat-websec Heroku — A8 cross-site request forgery tutorial route (OWASP NodeGoat README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a10",
+      "source": "nodegoat-websec Heroku — A10 unvalidated redirects tutorial route (OWASP NodeGoat README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/scheme/",
+      "source": "sampsonc/vulnlab.dev — scheme-abuse SSRF lab accepts file:// and gopher:// (GitHub README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/a2",
       "source": "nodegoat-websec Heroku — A2 broken auth tutorial route (OWASP NodeGoat README, Aug 2026 web discovery)",
