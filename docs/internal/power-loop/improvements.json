@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-nosql-login-auth-strict",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: nodegoatLooksAuthenticated rejects login-page meta OWASP NodeGoat false positive; nodegoat-websec.herokuapp.com/tutorial/a3 findings 12→11 (removed spurious nodegoat-nosql-login-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-benefits-nosql-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /allocations/2?threshold=0 returns cross-user stocks/bonds without ownership check when session auth succeeds; nodegoat-tutorial-a4 route chains live IDOR probe; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-profile-csrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /profile accepts forged firstName update without CSRF token when authenticated; nodegoat-tutorial-a8 route chains CSRF probe; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-nosql-login-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /login userName[$gt]=&password[$gt]= returns authenticated /dashboard on Heroku 200+set-cookie; nodegoat-websec.herokuapp.com/tutorial/a3 findings 10→12 (+nodegoat-nosql-login-live-oracle +nodegoat-nosql-login-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"

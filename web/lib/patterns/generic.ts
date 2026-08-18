@@ -45145,6 +45145,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-benefits-nosql-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "NodeGoat allocations IDOR live oracle",
+    description:
+      "GET /allocations/:userId returns another user's allocation data without ownership checks — the NodeGoat A4 insecure direct object reference oracle.",
+    impactOneline:
+      "Unauthenticated or cross-user reads on allocations endpoints expose portfolio data via predictable user IDs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatBenefitsNosqlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — enforce object-level authorization on every direct object reference in production.",
+      steps: [
+        "Verify the session user owns the requested allocation userId before returning data.",
+        "Use unpredictable object identifiers instead of sequential user IDs.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our GET /allocations/:userId endpoint returns cross-user data without ownership checks. Show IDOR remediation for Node.js APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "nodegoat-benefits-nosql-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -45399,6 +45425,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /profile route scan confirms unencrypted SSN storage. Show route-specific PII encryption remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-profile-csrf-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "NodeGoat profile CSRF live oracle",
+    description:
+      "POST /profile accepts forged profile updates without CSRF token validation when authenticated — the NodeGoat A8 cross-site request forgery oracle.",
+    impactOneline:
+      "Missing CSRF protection on profile updates lets attackers forge state-changing requests from malicious sites.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatProfileCsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — require CSRF tokens on all state-changing forms in production.",
+      steps: [
+        "Add per-session CSRF tokens to profile and other state-changing forms.",
+        "Validate CSRF tokens server-side on every POST that mutates user data.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our POST /profile endpoint accepts forged updates without CSRF validation. Show CSRF token remediation for Express forms.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-profile-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "NodeGoat profile CSRF route live oracle",
+    description:
+      "When scanning /profile, POST accepts forged profile updates without CSRF validation — route-specific NodeGoat A8 CSRF oracle.",
+    impactOneline:
+      "Route scans on /profile should confirm CSRF tokens protect state-changing profile updates.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatProfileCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — require CSRF tokens on all state-changing forms in production.",
+      steps: [
+        "Add per-session CSRF tokens to profile and other state-changing forms.",
+        "Validate CSRF tokens server-side on every POST that mutates user data.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /profile route scan confirms forged POST updates succeed without CSRF validation. Show route-specific CSRF remediation.",
     version: 1,
     enabled: true
   },
