@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-08-18T00:05:00.000Z",
-=======
-  "updated_at": "2026-08-18T00:15:00.000Z",
->>>>>>> 907bd095 (power-loop: log pwnshop seller/download route oracle improvements [2026-08-18 UTC])
+  "updated_at": "2026-08-18T01:13:38.840Z",
   "discovery_urls": [
     {
       "url": "https://pwnshop.ctfsecurity.com/download",
@@ -18,6 +14,31 @@
     {
       "url": "https://pwnshop.ctfsecurity.com/register-seller",
       "source": "Pwnshop OWASP Top 10 2025 — register-seller SSTI route oracle queue drain (PWN-040, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1.0/card",
+      "source": "ctfsec/pwnshop — BOLA oracle PUT /api/v1.0/card update another user card (CyberXbytes API1 writeup + PWN-021 adjacent, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/auth/register",
+      "source": "ctfsec/pwnshop — mass-assignment admin self-register oracle POST /api/auth/register (PWN-021 vulnerabilities index, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/products/1",
+      "source": "Escape Duck Store — product-by-ID BOLA oracle GET /api/v1/products/:id (duck-store vulnerabilities catalog, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/partners/partner1",
+      "source": "NeuraLegion/brokencrystals — XPATH injection oracle GET /api/partners/partner1 (README API docs, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a1",
+      "source": "nodegoat-websec Heroku — A1 injection tutorial route SQLi surface (OWASP NodeGoat README, Aug 2026 web discovery)",
       "auth": "public_demo"
     },
     {
@@ -83,11 +104,6 @@
     {
       "url": "https://duck-store.escape.tech/api/v1/users/me/profile",
       "source": "Escape Duck Store — mass-assignment oracle PUT /api/v1/users/me/profile (duck-store.escape.tech/vulnerabilities + Devroxana writeup Aug 2026)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/mcp/tools",
-      "source": "Escape Duck Store — MCP unauthenticated tools enumeration GET /mcp/tools (Devroxana writeup + Escape MCP ASM blog Aug 2026)",
       "auth": "public_demo"
     },
     {
@@ -646,11 +662,6 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://pwnshop.ctfsecurity.com/download",
-      "source": "ctfsec/pwnshop — path traversal file download lab PWN-038 (GitHub README, prepended for queue drain)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://pwnshop.ctfsecurity.com/chat",
       "source": "ctfsec/pwnshop — AI chatbot LLM prompt-injection entry point (PWN-037+, prepended for queue drain)",
       "auth": "public_demo"
@@ -888,11 +899,6 @@
     {
       "url": "https://dvwu.vercel.app/labs/ssti",
       "source": "zahidoverflow/dvwu — SSTI lab /labs/ssti (DVWU Vercel deploy README)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/seller/preview",
-      "source": "ctfsec/pwnshop — SSTI seller storefront preview entry point PWN-040 (GitHub README)",
       "auth": "public_demo"
     },
     {
@@ -3001,11 +3007,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://pwnshop.ctfsecurity.com/register-seller",
-      "source": "ctfsec/pwnshop — seller registration SSTI entry point PWN-040 (GitHub README Key URLs)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-44",
       "source": "OWASP WrongSecrets — challenge-44 Vault metadata oracle (Heroku demo README)",
       "auth": "public_demo"
@@ -3633,11 +3634,6 @@
     {
       "url": "https://brokencrystals.com/api/file/azure?path=https://httpbin.org/get",
       "source": "NeuraLegion/brokencrystals — Azure metadata SSRF oracle /api/file/azure (README cloud endpoints)",
-      "auth": "benchmark"
-    },
-    {
-      "url": "https://brokencrystals.com/api/users/one/regular_user/adminpermission",
-      "source": "NeuraLegion/brokencrystals — admin permission probe oracle GET /api/users/one/{email}/adminpermission (README mass-assignment)",
       "auth": "benchmark"
     },
     {
@@ -13590,23 +13586,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://duck-store.escape.tech/api/v1/products/filter/by-color",
-      "source": "Escape Duck Store — SQLi oracle GET /api/v1/products/filter/by-color color+sort params (Devroxana challenge writeup)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://duck-store.escape.tech/api/v1/testimonials/",
       "source": "Escape Duck Store — unauthenticated testimonials update BOLA oracle (Escape agentic pentest benchmark blog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://nodegoat-websec.herokuapp.com/login",
-      "source": "nodegoat-websec Heroku — OWASP NodeGoat login SQLi / weak-auth surface (web search Aug 2026)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://nodegoat-websec.herokuapp.com/profile",
-      "source": "nodegoat-websec Heroku — sensitive-data + ReDoS profile route oracle (prior power-loop improvements)",
       "auth": "public_demo"
     },
     {

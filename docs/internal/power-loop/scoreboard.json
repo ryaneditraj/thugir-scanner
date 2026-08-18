@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T01:10:00.000Z",
+  "updated_at": "2026-08-18T01:13:38.848Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2827,
-  "total_findings": 28666,
+  "total_sites_scanned": 2841,
+  "total_findings": 28979,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2019,
-  "discovery_findings": 23876,
+  "discovery_urls_added": 2029,
+  "discovery_findings": 24141,
   "improvements_shipped": 1205,
-  "last_run": "2026-08-18T01:10:00.000Z",
+  "last_run": "2026-08-18T01:13:38.848Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 578,
+      "probes_run": 589,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,34 +52,46 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 3,
-      "findings": 113,
-      "focus": "pwnshop seller/download SSTI + path traversal route oracles via OTP+seller session prime",
+      "urls_added": 5,
+      "urls_scanned": 15,
+      "findings": 378,
+      "focus": "pwnshop api/v1.0/card BOLA + api/auth/register mass-assignment + duck-store product IDOR + brokencrystals XPATH partners + nodegoat A1 tutorial + seller/download SSTI queue drain",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/download: client-side-only → 43 findings — pwnshop-download-path-traversal-live-oracle + route oracle shipped via seller session prime",
-      "pwnshop.ctfsecurity.com/seller/preview: 24 findings — pwnshop-seller-preview-ssti-route-live-oracle fires after seller session bootstrap",
-      "pwnshop.ctfsecurity.com/register-seller: 46 findings — pwnshop-register-seller-ssti-route-live-oracle fires after seller session bootstrap",
-      "duck-store.escape.tech/api/v1/admin/stats: 26 findings — admin exposure without route-specific stats oracle"
+      "brokencrystals.com/api/partners/partner1: 85 findings — XPATH injection route oracle",
+      "pwnshop.ctfsecurity.com/register-seller: 46 findings — pwnshop-register-seller-ssti-route-live-oracle",
+      "pwnshop.ctfsecurity.com/api/v1.0/card: 43 findings — card BOLA/update oracle hub",
+      "pwnshop.ctfsecurity.com/download: 43 findings — pwnshop-download-path-traversal-live-oracle",
+      "ginandjuice.shop/blog/post?postId=1: 38 findings — DOM XSS blog post oracle (queue drain)",
+      "duck-store.escape.tech/api/v1/products/1: 25 findings — product-by-ID BOLA hub",
+      "pwnshop.ctfsecurity.com/seller/preview: 24 findings — pwnshop-seller-preview-ssti-route-live-oracle",
+      "pwnshop.ctfsecurity.com/api/auth/register: 22 findings — mass-assignment admin register oracle",
+      "nodegoat-websec.herokuapp.com/tutorial/a1: 10 findings — A1 injection tutorial surface"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
       "duck-store.escape.tech/api/v1/admin/stats: no route-specific admin-stats live oracle (generic admin-exposure only)",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent when OTP mail delivery is rate-limited"
+      "damn-vulnerable-startup.fly.dev: consistently unreachable — consider removing from queue front",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
+      "pwnshop.ctfsecurity.com/profile/upload-avatar: stored XSS via SVG avatar upload oracle still absent",
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent when OTP mail delivery is rate-limited",
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "pwnshop.ctfsecurity.com/download": 43,
-    "pwnshop.ctfsecurity.com/register-seller": 46,
-    "pwnshop.ctfsecurity.com/seller/preview": 24,
+    "brokencrystals.com/api/partners/partner1": 85,
     "brokencrystals.com/api/users/one/regular_user/adminpermission": 89,
-    "duck-store.escape.tech/mcp/tools": 26,
-    "duck-store.escape.tech/api/v1/admin/stats": 26,
-    "ssrf.vulnlab.dev/basic": 15
+    "pwnshop.ctfsecurity.com/register-seller": 46,
+    "pwnshop.ctfsecurity.com/api/v1.0/card": 43,
+    "pwnshop.ctfsecurity.com/download": 43,
+    "ginandjuice.shop/blog/post?postId=1": 38,
+    "duck-store.escape.tech/api/v1/products/1": 25,
+    "pwnshop.ctfsecurity.com/seller/preview": 24,
+    "pwnshop.ctfsecurity.com/api/auth/register": 22,
+    "nodegoat-websec.herokuapp.com/tutorial/a1": 10
   }
 }
