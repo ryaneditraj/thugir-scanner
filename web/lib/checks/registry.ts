@@ -82942,6 +82942,114 @@ const finbotDarklabSupplyChainRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeFinbotDarklabSupplyChainStats(ctx: RuleContext): Promise<RuleResult | null> {
+  const statsUrl = new URL("/darklab/api/v1/supply-chain/stats", ctx.origin).toString();
+  const doc = await ctx.probe.get(statsUrl, { maxBytes: 4096, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  try {
+    const data = JSON.parse(doc.body) as {
+      poisoned_tools?: number;
+      servers_with_overrides?: number;
+    };
+    if (typeof data.poisoned_tools !== "number") return null;
+    if (typeof data.servers_with_overrides !== "number") return null;
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        statsUrl,
+        poisonedTools: data.poisoned_tools,
+        serversWithOverrides: data.servers_with_overrides,
+        snippet: doc.body.slice(0, 160).trim(),
+        note: "OWASP FinBot Dark Lab public /darklab/api/v1/supply-chain/stats exposes poisoned-tool and override counters without authentication — supply-chain monitoring oracle"
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+const finbotDarklabSupplyChainStatsLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabSupplyChainStats(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabSupplyChainStatsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/stats\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabSupplyChainStats(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OWASP FinBot /darklab/api/v1/supply-chain/stats route scan — public poisoned-tool stats API without authentication"
+    }
+  };
+};
+
+async function probeFinbotDarklabTaxcalcServer(ctx: RuleContext): Promise<RuleResult | null> {
+  const serverUrl = new URL("/darklab/api/v1/supply-chain/servers/taxcalc", ctx.origin).toString();
+  const doc = await ctx.probe.get(serverUrl, { maxBytes: 65536, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  try {
+    const data = JSON.parse(doc.body) as {
+      server?: {
+        server_type?: string;
+        display_name?: string;
+        config?: { tax_rates?: Record<string, unknown> };
+        tool_overrides?: Record<string, unknown>;
+      };
+    };
+    const server = data.server;
+    if (!server || server.server_type !== "taxcalc") return null;
+    const taxRates = server.config?.tax_rates;
+    if (!taxRates || Object.keys(taxRates).length < 3) return null;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        serverUrl,
+        serverType: server.server_type,
+        displayName: server.display_name,
+        jurisdictionCount: Object.keys(taxRates).length,
+        hasToolOverrides: Object.keys(server.tool_overrides ?? {}).length > 0,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "OWASP FinBot Dark Lab public /darklab/api/v1/supply-chain/servers/taxcalc exposes TaxCalc MCP server config and jurisdiction tax_rates — tool-poisoning surface oracle"
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+const finbotDarklabTaxcalcServerLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabTaxcalcServer(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabTaxcalcServerRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/servers\/taxcalc\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabTaxcalcServer(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OWASP FinBot TaxCalc MCP server route scan — public /darklab/api/v1/supply-chain/servers/taxcalc exposes jurisdiction tax_rates and tool_overrides for supply-chain poisoning labs"
+    }
+  };
+};
+
 async function probeFinbotCtfStats(ctx: RuleContext): Promise<RuleResult | null> {
   const statsUrl = new URL("/ctf/api/v1/stats", ctx.origin).toString();
   const doc = await ctx.probe.get(statsUrl, { maxBytes: 8192, timeoutMs: 20000 });
@@ -87777,6 +87885,10 @@ export const RULES: Record<string, Rule> = {
   finbotAdminCopilotRouteLiveOracle,
   finbotDarklabSupplyChainLiveOracle,
   finbotDarklabSupplyChainRouteLiveOracle,
+  finbotDarklabSupplyChainStatsLiveOracle,
+  finbotDarklabSupplyChainStatsRouteLiveOracle,
+  finbotDarklabTaxcalcServerLiveOracle,
+  finbotDarklabTaxcalcServerRouteLiveOracle,
   finbotCtfStatsLiveOracle,
   finbotCtfStatsRouteLiveOracle,
   finbotVendorInvoicesLiveOracle,
