@@ -2562,6 +2562,10 @@ const DEEP_RULES = new Set<string>([
   "finbotAdminCopilotRouteLiveOracle",
   "finbotDarklabSupplyChainLiveOracle",
   "finbotDarklabSupplyChainRouteLiveOracle",
+  "finbotDarklabSupplyChainStatsLiveOracle",
+  "finbotDarklabSupplyChainStatsRouteLiveOracle",
+  "finbotDarklabTaxcalcServerLiveOracle",
+  "finbotDarklabTaxcalcServerRouteLiveOracle",
   "finbotCtfStatsLiveOracle",
   "finbotCtfStatsRouteLiveOracle",
   "finbotVendorInvoicesLiveOracle",
@@ -12752,6 +12756,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("finbot-darklab")
       )
         return -4;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/stats\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-supply-chain-stats")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/taxcalc\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-taxcalc-server")
+      )
+        return -5;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
         /\/api\/v1\/auth\/register/i.test(targetInput) &&

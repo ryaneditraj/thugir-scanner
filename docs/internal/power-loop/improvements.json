@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-supply-chain-stats-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /darklab/api/v1/supply-chain/stats returns poisoned_tools + servers_with_overrides counters; owasp-finbot-ctf.org/darklab/api/v1/supply-chain/stats findings 10→12 (+finbot-darklab-supply-chain-stats-live-oracle +finbot-darklab-supply-chain-stats-route-live-oracle); benchmark juice-shop 43 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-taxcalc-server-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /darklab/api/v1/supply-chain/servers/taxcalc returns server_type:taxcalc with jurisdiction tax_rates; owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc findings 10→11 (+finbot-darklab-taxcalc-server-live-oracle +finbot-darklab-taxcalc-server-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-file-upload-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnforgeAcademyFileUploadReflexionSuppressed skips reflexionEscalatedSsti on level16-18.php routes; vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php findings 5→4 (-reflexion-escalated-ssti false positive, +vulnforge-academy-level-file-upload-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-tutorial-ssrf-redos-queue-drain",
       "status": "shipped",

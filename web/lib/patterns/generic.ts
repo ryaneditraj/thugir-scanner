@@ -43046,6 +43046,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-darklab-supply-chain-stats-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP FinBot Dark Lab supply-chain stats live oracle",
+    description:
+      "GET /darklab/api/v1/supply-chain/stats returns poisoned_tools and servers_with_overrides counters without authentication.",
+    impactOneline:
+      "Unauthenticated supply-chain stats APIs leak MCP tool-poisoning telemetry on agentic AI training platforms.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabSupplyChainStatsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot Dark Lab is intentional agentic AI training — restrict supply-chain stats APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/stats.",
+        "Avoid exposing poisoned-tool counters without auth.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes /darklab/api/v1/supply-chain/stats with poisoned-tool counters. Show how to protect agentic supply-chain monitoring APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-supply-chain-stats-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP FinBot Dark Lab supply-chain stats route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/stats, GET confirms poisoned_tools and servers_with_overrides counters without authentication — route-specific stats oracle.",
+    impactOneline:
+      "Unauthenticated supply-chain stats APIs leak MCP tool-poisoning telemetry on agentic AI training platforms.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabSupplyChainStatsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot Dark Lab is intentional agentic AI training — restrict supply-chain stats APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/stats.",
+        "Avoid exposing poisoned-tool counters without auth.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /darklab/api/v1/supply-chain/stats route scan confirms unauthenticated poisoned-tool stats. Show remediation for agentic supply-chain monitoring APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-taxcalc-server-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab TaxCalc MCP server live oracle",
+    description:
+      "GET /darklab/api/v1/supply-chain/servers/taxcalc returns TaxCalc MCP server config with jurisdiction tax_rates and tool_overrides without authentication.",
+    impactOneline:
+      "Unauthenticated TaxCalc MCP server configs expose tool schemas attackers can poison for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabTaxcalcServerLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot Dark Lab is intentional agentic AI training — restrict TaxCalc MCP server APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/taxcalc.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes TaxCalc MCP server config at /darklab/api/v1/supply-chain/servers/taxcalc. Show how to protect agentic tax-calculation tool catalogs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-taxcalc-server-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab TaxCalc server route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/taxcalc, GET confirms TaxCalc MCP server config with jurisdiction tax_rates — route-specific tool-poisoning oracle.",
+    impactOneline:
+      "Unauthenticated TaxCalc MCP server configs expose tool schemas attackers can poison for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabTaxcalcServerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot Dark Lab is intentional agentic AI training — restrict TaxCalc MCP server APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/taxcalc.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot TaxCalc MCP server route scan confirms unauthenticated jurisdiction tax_rates. Show remediation for agentic supply-chain tool catalogs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-ctf-stats-live-oracle",
     platform: "generic",
     category: "AI security",

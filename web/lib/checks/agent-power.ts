@@ -34,6 +34,7 @@ const BYPASS403_HOST_RE = /bypass403\.vercel\.app/i;
 const WSL_HOST_RE = /web-security-learning-labs\.vercel\.app/i;
 const SECRESEARCHLAB_HOST_RE = /secresearchlab\.web\.app/i;
 const SUPPORT_RELIABILITY_LAB_HOST_RE = /support-reliability-lab\.vercel\.app/i;
+const VULNFORGE_ACADEMY_HOST_RE = /vulnforge-academy\.vercel\.app/i;
 
 /** Route scans on WSL /module/{id} shells — generic reflexion probes hit homepage, not the lab route. */
 function wslModuleRouteReflexionSuppressed(ctx: PowerCtx): boolean {
@@ -51,6 +52,14 @@ function secResearchLabReflexionSuppressed(ctx: PowerCtx): boolean {
 function supportReliabilityLabReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
   return SUPPORT_RELIABILITY_LAB_HOST_RE.test(pageUrl);
+}
+
+/** VulnForge file-upload tiers (levels 16–18) — reflexion SSTI false-positives on training shells. */
+function vulnforgeAcademyFileUploadReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!VULNFORGE_ACADEMY_HOST_RE.test(pageUrl)) return false;
+  const levelMatch = pageUrl.match(/level(1[6-8])\.php/i);
+  return levelMatch !== null;
 }
 
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
@@ -232,6 +241,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (wslModuleRouteReflexionSuppressed(ctx)) return NEGATIVE;
   if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
+  if (vulnforgeAcademyFileUploadReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 
