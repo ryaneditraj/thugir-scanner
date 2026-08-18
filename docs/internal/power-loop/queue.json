@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-18T13:05:38.619Z",
+  "updated_at": "2026-08-18T15:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/4",
+      "source": "OWASP WrongSecrets Heroku — challenge/4 Docker secrets oracle route (README challenge table, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/5",
+      "source": "OWASP WrongSecrets Heroku — challenge/5 Configmaps K8s secrets oracle route (README challenge table, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/get_count?query=1",
+      "source": "NeuraLegion/brokencrystals — SQLi oracle GET /api/get_count query param (README injection endpoints, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/get_metadata",
+      "source": "NeuraLegion/brokencrystals — XXE oracle POST /api/get_metadata XML proxy (README XXE endpoint, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor",
+      "source": "GenAI-Security-Project/finbot-ctf — vendor portal agent prompt-injection surface (owasp-finbot-ctf.org README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://dvga2.tools.escape.tech/graphql",
       "source": "Escape DVGA2 hosted GraphQL — beginner-mode introspection/batching oracle (Aug 2026 web discovery)",
