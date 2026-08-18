@@ -2534,6 +2534,8 @@ const DEEP_RULES = new Set<string>([
   "finbotDarklabSupplyChainRouteLiveOracle",
   "finbotCtfStatsLiveOracle",
   "finbotCtfStatsRouteLiveOracle",
+  "finbotVendorInvoicesLiveOracle",
+  "finbotVendorInvoicesRouteLiveOracle",
   "istEduSearchXssRouteLiveOracle",
   "istEduNoticesLfiRouteLiveOracle",
   "istEduPortalSqliRouteLiveOracle",
@@ -10048,6 +10050,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-3",
         "https://wrongsecrets.herokuapp.com/challenge/3",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-4",
+        "https://wrongsecrets.herokuapp.com/challenge/4",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-5",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-6",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-7",
@@ -12305,6 +12308,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -4;
       if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/vendor\/(?:api\/v1\/)?invoices\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-vendor-invoices")
+      )
+        return -4;
+      if (
         /securebank-blog\.vercel\.app/i.test(origin) &&
         /\/(?:login|messages|admin|transfer)\b/i.test(targetInput) &&
         p.slug.startsWith("securebank-blog")
@@ -12376,7 +12385,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8\d|9[0-9])|180\d|181\d|182\d|183\d|184\d|185\d|186\d|187\d|188\d|189[0-5]|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8\d|9[0-9])|180\d|181\d|182\d|183\d|184\d|185\d|186\d|187\d|188\d|189\d|1900|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;

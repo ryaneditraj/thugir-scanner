@@ -44857,6 +44857,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-vendor-invoices-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot vendor invoice agent live oracle",
+    description:
+      "CSRF bootstrap from /vendor/onboarding, POST /vendor/api/v1/vendors/register, then POST /vendor/api/v1/invoices creates an agent-triggering invoice processed by FinBot's multi-agent pipeline.",
+    impactOneline:
+      "Unauthenticated vendor onboarding plus invoice submission APIs let attackers trigger agentic LLM workflows without prior account linkage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotVendorInvoicesLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — gate invoice APIs behind completed vendor onboarding and strong session auth.",
+      steps: [
+        "Require authenticated vendor sessions before POST /vendor/api/v1/invoices.",
+        "Validate vendor onboarding completion before accepting invoice submissions.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot vendor portal accepts invoice POSTs after lightweight onboarding. Show how to protect agentic invoice-processing APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-vendor-invoices-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot /vendor/api/v1/invoices route live oracle",
+    description:
+      "When scanning /vendor/api/v1/invoices, CSRF session bootstrap registers a vendor and POST creates an agent-triggering invoice — route-specific FinBot invoice agent oracle.",
+    impactOneline:
+      "Route scans on FinBot invoice APIs need live agentic workflow confirmation, not just 500 error fingerprints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotVendorInvoicesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — gate invoice APIs behind completed vendor onboarding and strong session auth.",
+      steps: [
+        "Require authenticated vendor sessions before POST /vendor/api/v1/invoices.",
+        "Validate vendor onboarding completion before accepting invoice submissions.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /vendor/api/v1/invoices route scan confirms agentic invoice submission. Show how to protect invoice agent APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-finbot-demo-namespace-evidence",
     platform: "generic",
     category: "AI security",

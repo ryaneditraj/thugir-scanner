@@ -40429,7 +40429,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1895;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1900;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -82815,6 +82815,115 @@ const finbotCtfStatsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeFinbotVendorInvoiceAgent(ctx: RuleContext): Promise<RuleResult | null> {
+  const bootstrap = await finbotPageCsrfBootstrap(ctx, "/vendor/onboarding");
+  if (!bootstrap) return null;
+  const stamp = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/vendor/api/v1/vendors/register", ctx.origin).toString();
+  const vendorData = {
+    company_name: `Thugir Probe ${stamp}`,
+    vendor_category: "technology",
+    industry: "software",
+    services: "security testing",
+    name: "Probe User",
+    email: `probe_${stamp}@example.com`,
+    phone: "5550100123",
+    tin: "12-3456789",
+    bank_account_number: "123456789",
+    bank_name: "Test Bank",
+    bank_routing_number: "021000021",
+    bank_account_holder_name: "Probe User"
+  };
+  const regDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify(vendorData),
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-Token": bootstrap.csrf,
+      Cookie: bootstrap.cookie
+    },
+    maxBytes: 8192,
+    timeoutMs: 30000
+  });
+  if (regDoc.status < 200 || regDoc.status >= 400) return null;
+  let regData: { success?: boolean; vendor_id?: number };
+  try {
+    regData = JSON.parse(regDoc.body);
+  } catch {
+    return null;
+  }
+  if (!regData.success) return null;
+  const today = new Date();
+  const due = new Date(today);
+  due.setUTCDate(due.getUTCDate() + 30);
+  const fmt = (d: Date) => d.toISOString().slice(0, 10);
+  const invoiceUrl = new URL("/vendor/api/v1/invoices", ctx.origin).toString();
+  const invoiceData = {
+    invoice_number: `INV-${stamp}`,
+    amount: 1500,
+    description: "Thugir scanner agentic invoice probe",
+    invoice_date: fmt(today),
+    due_date: fmt(due),
+    attachments: [] as unknown[]
+  };
+  const invDoc = await ctx.probe.get(invoiceUrl, {
+    method: "POST",
+    body: JSON.stringify(invoiceData),
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-Token": bootstrap.csrf,
+      Cookie: bootstrap.cookie
+    },
+    maxBytes: 8192,
+    timeoutMs: 30000
+  });
+  if (invDoc.status < 200 || invDoc.status >= 400) return null;
+  let invPayload: { success?: boolean; invoice?: { id?: number; invoice_number?: string; status?: string } };
+  try {
+    invPayload = JSON.parse(invDoc.body);
+  } catch {
+    return null;
+  }
+  if (!invPayload.success || !invPayload.invoice?.id) return null;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      registerUrl,
+      invoiceUrl,
+      vendorId: regData.vendor_id,
+      invoiceId: invPayload.invoice.id,
+      invoiceNumber: invPayload.invoice.invoice_number,
+      invoiceStatus: invPayload.invoice.status,
+      snippet: invDoc.body.slice(0, 200).trim(),
+      note: "OWASP FinBot vendor onboarding CSRF bootstrap + POST /vendor/api/v1/vendors/register + POST /vendor/api/v1/invoices creates agent-triggering invoice — FinBot invoice agent oracle"
+    }
+  };
+}
+
+const finbotVendorInvoicesLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotVendorInvoiceAgent(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotVendorInvoicesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vendor\/(?:api\/v1\/)?invoices\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotVendorInvoiceAgent(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OWASP FinBot /vendor/api/v1/invoices route scan — CSRF session bootstrap registers vendor and POST creates agent-triggering invoice"
+    }
+  };
+};
+
 function isIstEduHost(ctx: RuleContext): boolean {
   return /ist-edu-bd/i.test(ctx.origin);
 }
@@ -87488,6 +87597,8 @@ export const RULES: Record<string, Rule> = {
   finbotDarklabSupplyChainRouteLiveOracle,
   finbotCtfStatsLiveOracle,
   finbotCtfStatsRouteLiveOracle,
+  finbotVendorInvoicesLiveOracle,
+  finbotVendorInvoicesRouteLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
