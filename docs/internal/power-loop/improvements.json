@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-apply-coupon-route-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopCouponOracleForDeepScan verifies POST /apply-coupon HALFOFF valid:true after OTP; prepended /apply-coupon to queue front; pwnshop.ctfsecurity.com/apply-coupon findings 23→47 (+pwnshop-apply-coupon-route-live-oracle +pwnshop-coupon-category-bypass-route-live-oracle); benchmark juice-shop.demo.escape.tech 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-upload-avatar-session-prime-verify",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopAvatarUploadSessionReady confirms multipart SVG upload returns /uploads/ url; prepended /profile/upload-avatar to queue; pwnshop.ctfsecurity.com/profile/upload-avatar findings 18→48 (+pwnshop-avatar-upload-route-live-oracle 0.93); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-wallet-topup-route-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopWalletTopupOracleForDeepScan verifies GET /profile exposes wallet/topup/vulnbank after OTP; prepended /wallet to queue; pwnshop.ctfsecurity.com/wallet findings hub +pwnshop-wallet-topup-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-otp-not-invalidated-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: register+login captures OTP1, second POST /login issues OTP2, POST /verify-otp with OTP1 redirects away from verify-otp; pwnshop.ctfsecurity.com/reset-password findings 45→46 (+pwnshop-otp-not-invalidated-live-oracle +pwnshop-otp-not-invalidated-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
@@ -12188,6 +12206,21 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-download-seller-queue-drain",
       "shipped_at": "2026-08-18T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-apply-coupon-route-queue-drain",
+      "shipped_at": "2026-08-18T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-upload-avatar-session-prime-verify",
+      "shipped_at": "2026-08-18T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-wallet-topup-route-queue-drain",
+      "shipped_at": "2026-08-18T04:10:00.000Z"
     }
   ]
 }

@@ -36448,6 +36448,36 @@ export async function primePwnshopExportOrdersOracleForDeepScan(
   }
 }
 
+async function pwnshopAvatarUploadSessionReady(ctx: RuleContext, cookie: string): Promise<boolean> {
+  const uploadUrl = new URL("/profile/upload-avatar", ctx.origin).toString();
+  const svgPayload = '<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"></svg>';
+  const boundary = `----ThugirPrime${Date.now().toString(36)}`;
+  const body = [
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="avatar"; filename="thugir-prime.svg"',
+    "Content-Type: image/svg+xml",
+    "",
+    svgPayload,
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  const uploadDoc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body,
+    headers: {
+      "Content-Type": `multipart/form-data; boundary=${boundary}`,
+      Cookie: cookie
+    },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  return (
+    uploadDoc.status >= 200 &&
+    uploadDoc.status < 300 &&
+    /"url"\s*:\s*"\/uploads\//i.test(uploadDoc.body)
+  );
+}
+
 /** Pre-warm OTP mail delivery during upload-avatar route scans (PWN-012 needs verified session). */
 export async function primePwnshopAvatarUploadOracleForDeepScan(
   probe: ProbeCache,
@@ -36458,11 +36488,82 @@ export async function primePwnshopAvatarUploadOracleForDeepScan(
   if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
   if (!/\/profile\/(?:upload-avatar|update-avatar)\b/i.test(scanUrl)) return;
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
-  const primeWaitsMs = [5000, 9000, 13000, 17000, 21000];
+  const primeWaitsMs = [5000, 9000, 13000, 17000, 21000, 25000];
   for (let attempt = 0; attempt < primeWaitsMs.length; attempt++) {
     clearPwnshopOtpSessionForProbe(probe);
     const cookie = await pwnshopCompleteOtpSession(ctx);
-    if (cookie) return;
+    if (cookie && (await pwnshopAvatarUploadSessionReady(ctx, cookie))) return;
+    await pwnshopSleep(primeWaitsMs[attempt]);
+  }
+}
+
+async function pwnshopCouponSessionReady(ctx: RuleContext, cookie: string): Promise<boolean> {
+  const couponUrl = new URL("/apply-coupon", ctx.origin).toString();
+  const doc = await ctx.probe.get(couponUrl, {
+    method: "POST",
+    body: "code=HALFOFF",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  return (
+    doc.status >= 200 &&
+    doc.status < 300 &&
+    /"valid"\s*:\s*true/i.test(doc.body) &&
+    /"discount_percent"\s*:\s*50/.test(doc.body)
+  );
+}
+
+/** Pre-warm OTP + coupon application for apply-coupon/cart route scans (PWN-016). */
+export async function primePwnshopCouponOracleForDeepScan(
+  probe: ProbeCache,
+  origin: string,
+  scanUrl: string,
+  home: FetchedDoc
+): Promise<void> {
+  if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
+  if (!/\/(?:apply-coupon|cart)\b/i.test(scanUrl)) return;
+  const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
+  const primeWaitsMs = [4000, 7000, 10000, 13000, 17000, 21000];
+  for (let attempt = 0; attempt < primeWaitsMs.length; attempt++) {
+    clearPwnshopOtpSessionForProbe(probe);
+    const cookie = await pwnshopCompleteOtpSession(ctx);
+    if (cookie && (await pwnshopCouponSessionReady(ctx, cookie))) return;
+    await pwnshopSleep(primeWaitsMs[attempt]);
+  }
+}
+
+async function pwnshopWalletSessionReady(ctx: RuleContext, cookie: string): Promise<boolean> {
+  const profileDoc = await ctx.probe.get(new URL("/profile", ctx.origin).toString(), {
+    maxBytes: 65536,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  return (
+    profileDoc.status >= 200 &&
+    profileDoc.status < 400 &&
+    /wallet\/topup\/vulnbank/i.test(profileDoc.body)
+  );
+}
+
+/** Pre-warm OTP session for wallet top-up route scans (PWN-042). */
+export async function primePwnshopWalletTopupOracleForDeepScan(
+  probe: ProbeCache,
+  origin: string,
+  scanUrl: string,
+  home: FetchedDoc
+): Promise<void> {
+  if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
+  if (!/\/(?:wallet(?:\/topup)?|profile)\b/i.test(scanUrl)) return;
+  const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
+  const primeWaitsMs = [4000, 7000, 10000, 13000, 17000, 21000];
+  for (let attempt = 0; attempt < primeWaitsMs.length; attempt++) {
+    clearPwnshopOtpSessionForProbe(probe);
+    const cookie = await pwnshopCompleteOtpSession(ctx);
+    if (cookie && (await pwnshopWalletSessionReady(ctx, cookie))) return;
     await pwnshopSleep(primeWaitsMs[attempt]);
   }
 }

@@ -24,8 +24,10 @@ import {
   primePwnshopAuditLogOracleForDeepScan,
   primePwnshopExportOrdersOracleForDeepScan,
   primePwnshopAvatarUploadOracleForDeepScan,
+  primePwnshopCouponOracleForDeepScan,
   primePwnshopResetPasswordOracleForDeepScan,
   primePwnshopSellerSessionForDeepScan,
+  primePwnshopWalletTopupOracleForDeepScan,
   primePwnshopOtpSessionForDeepScan,
   primeSecureNextjsLessonSessionForDeepScan,
   primeVotingAppSessionForDeepScan,
@@ -9528,6 +9530,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     await primePwnshopResetPasswordOracleForDeepScan(probe, origin, targetInput, home);
     await primePwnshopExportOrdersOracleForDeepScan(probe, origin, targetInput, home);
     await primePwnshopSellerSessionForDeepScan(probe, origin, targetInput, home);
+    await primePwnshopCouponOracleForDeepScan(probe, origin, targetInput, home);
+    await primePwnshopWalletTopupOracleForDeepScan(probe, origin, targetInput, home);
   }
   if (/bypass403\.vercel\.app/i.test(origin)) {
     await primeBypass403SessionForDeepScan(probe, origin, targetInput, home);
@@ -10891,6 +10895,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   ) {
     clearPwnshopOtpSessionForProbe(probe);
     await primePwnshopAvatarUploadOracleForDeepScan(probe, origin, targetInput, home);
+  }
+  if (
+    /pwnshop|ctfsecurity\.com/i.test(origin) &&
+    /\/(?:apply-coupon|cart)\b/i.test(targetInput)
+  ) {
+    clearPwnshopOtpSessionForProbe(probe);
+    await primePwnshopCouponOracleForDeepScan(probe, origin, targetInput, home);
+  }
+  if (
+    /pwnshop|ctfsecurity\.com/i.test(origin) &&
+    /\/(?:wallet(?:\/topup)?|profile)\b/i.test(targetInput)
+  ) {
+    clearPwnshopOtpSessionForProbe(probe);
+    await primePwnshopWalletTopupOracleForDeepScan(probe, origin, targetInput, home);
   }
   if (
     /pwnshop|ctfsecurity\.com/i.test(origin) &&
