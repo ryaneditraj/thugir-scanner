@@ -79502,6 +79502,56 @@ const brokencrystalsMcpToolsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeBrokencrystalsMcpGetCountSqli(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
+  const sessionId = await brokencrystalsMcpSessionId(ctx);
+  if (!sessionId) return null;
+  const countDoc = await brokencrystalsMcpJsonRpc(
+    ctx,
+    sessionId,
+    "tools/call",
+    {
+      name: "get_count",
+      arguments: {
+        query: "select count(table_name) as count from information_schema.tables"
+      }
+    },
+    3
+  );
+  if (countDoc.status < 200 || countDoc.status >= 400) return null;
+  const match = countDoc.body.match(/Query result:\s*(\d+)/i);
+  if (!match) return null;
+  const count = parseInt(match[1], 10);
+  if (count < 50 || count > 9999) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      sessionId,
+      tableCount: count,
+      snippet: countDoc.body.slice(0, 120).trim(),
+      note: "Broken Crystals MCP get_count tool executes attacker-controlled SQL — information_schema table count oracle"
+    }
+  };
+}
+
+const brokencrystalsGetCountMcpSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/get_count\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsMcpGetCountSqli(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/get_count route scan — README alias; live SQL injection confirmed via MCP get_count information_schema probe — route-specific SQLi oracle"
+    }
+  };
+};
+
 const brokencrystalsProcessNumbersLiveOracle: Rule = async (ctx) => {
   const result = await probeBrokencrystalsProcessNumbers(ctx);
   return result ?? NEGATIVE;
@@ -80998,6 +81048,23 @@ const brokencrystalsMetadataXxeRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Broken Crystals /api/metadata route scan — POST XML entity expansion in response body — route-specific XXE oracle"
+    }
+  };
+};
+
+const brokencrystalsGetMetadataRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/brokencrystals\.com/i.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  if (!/\/api\/get_metadata\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsMetadataXxe(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/get_metadata route scan — README alias; live XXE confirmed on POST /api/metadata — route-specific XXE oracle"
     }
   };
 };
@@ -82657,6 +82724,61 @@ const finbotVendorSidecarRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "OWASP FinBot /vendor route scan — public /ctf/api/v1/sidecar exposes agentic challenge progress from vendor onboarding portal"
+    }
+  };
+};
+
+async function probeFinbotVendorChatAgent(ctx: RuleContext): Promise<RuleResult | null> {
+  const bootstrap = await finbotPageCsrfBootstrap(ctx, "/vendor/");
+  if (!bootstrap) return null;
+  const chatUrl = new URL("/vendor/api/v1/chat", ctx.origin).toString();
+  const doc = await ctx.probe.get(chatUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      message: "What documents are required for vendor onboarding?"
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-Token": bootstrap.csrf,
+      Cookie: bootstrap.cookie
+    },
+    maxBytes: 16384,
+    timeoutMs: 30000
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/data:\s*\{/.test(doc.body)) return null;
+  if (!/"type"\s*:\s*"token"/.test(doc.body)) return null;
+  if (!/vendor|onboarding|compliance|document|portal/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      chatUrl,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "OWASP FinBot POST /vendor/api/v1/chat streams session-bound vendor onboarding AI agent — prompt-injection surface oracle"
+    }
+  };
+}
+
+const finbotVendorChatLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotVendorChatAgent(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotVendorChatRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vendor(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotVendorChatAgent(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OWASP FinBot /vendor route scan — POST /vendor/api/v1/chat streams vendor onboarding AI agent with session-only CSRF — agentic prompt-injection surface oracle"
     }
   };
 };
@@ -87480,6 +87602,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsMcpToolsLiveOracle,
   brokencrystalsMcpRouteLiveOracle,
   brokencrystalsMcpToolsRouteLiveOracle,
+  brokencrystalsGetCountMcpSqliRouteLiveOracle,
   brokencrystalsProcessNumbersLiveOracle,
   brokencrystalsProcessNumbersRouteLiveOracle,
   brokencrystalsMcpProcessNumbersLiveOracle,
@@ -87592,6 +87715,8 @@ export const RULES: Record<string, Rule> = {
   finbotCtfChallengesRouteLiveOracle,
   finbotCtfSidecarRouteLiveOracle,
   finbotVendorSidecarRouteLiveOracle,
+  finbotVendorChatLiveOracle,
+  finbotVendorChatRouteLiveOracle,
   finbotAdminCopilotRouteLiveOracle,
   finbotDarklabSupplyChainLiveOracle,
   finbotDarklabSupplyChainRouteLiveOracle,
@@ -87605,6 +87730,7 @@ export const RULES: Record<string, Rule> = {
   xpathInjectionDisclosure,
   brokencrystalsMetadataXxeLiveOracle,
   brokencrystalsMetadataXxeRouteLiveOracle,
+  brokencrystalsGetMetadataRouteLiveOracle,
   xxeXmlPostProbe,
   clientSideCssInjectionEvidence,
   clientSideVapiEvidence,

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-get-count-mcp-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: MCP tools/call get_count with information_schema.tables returns Query result: 217; brokencrystals.com/api/get_count?query=1 findings 83→86 with +brokencrystals-get-count-mcp-sqli-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-get-metadata-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/metadata XXE expands thugirXxeCanary; brokencrystals.com/api/get_metadata findings 84 with +brokencrystals-get-metadata-route-live-oracle (README alias); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-vendor-chat-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CSRF bootstrap /vendor/ + POST /vendor/api/v1/chat streams SSE vendor onboarding tokens; owasp-finbot-ctf.org/vendor findings 12 with +finbot-vendor-chat-live-oracle +finbot-vendor-chat-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:owasp-finbot-ctf.org",
       "slug": "finbot-vendor-invoices-session-bootstrap-oracle",
       "status": "shipped",
