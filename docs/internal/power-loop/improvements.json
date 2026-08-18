@@ -1,6 +1,12 @@
 {
   "candidates": [
     {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-nosql-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login userName[$gt]=&password[$gt]= returns authenticated /dashboard on Heroku 200+set-cookie; nodegoat-websec.herokuapp.com/tutorial/a3 findings 10→12 (+nodegoat-nosql-login-live-oracle +nodegoat-nosql-login-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-apply-coupon-route-queue-drain",
       "status": "shipped",
