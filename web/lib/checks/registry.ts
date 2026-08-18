@@ -50930,6 +50930,59 @@ const duckStoreAuthLoginWeakCredentialsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const duckStoreAuthRegisterOpenLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const username = `thugir_reg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const registerUrl = new URL("/api/v1/auth/register", ctx.origin).toString();
+  const doc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username,
+      email: `${username}@example.com`,
+      password: "ThugirTest123!"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let data: { username?: string; id?: string } | null = null;
+  try {
+    data = JSON.parse(doc.body) as { username?: string; id?: string };
+  } catch {
+    return NEGATIVE;
+  }
+  if (data?.username !== username || !data?.id) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      registerUrl,
+      username,
+      userId: data.id,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store POST /api/v1/auth/register accepts unauthenticated self-registration and returns user id — open registration oracle"
+    }
+  };
+};
+
+const duckStoreAuthRegisterRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/auth\/register/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreAuthRegisterOpenLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/auth/register route scan — unauthenticated self-registration returns user id without invite or CAPTCHA"
+    }
+  };
+};
+
 const duckStoreOpenRedirectLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const bundle = await duckStoreSpaBundleBody(ctx);
@@ -87801,6 +87854,8 @@ export const RULES: Record<string, Rule> = {
   duckStoreTestimonialsGuestRouteLiveOracle,
   duckStoreAuthLoginWeakCredentialsLiveOracle,
   duckStoreAuthLoginWeakCredentialsRouteLiveOracle,
+  duckStoreAuthRegisterOpenLiveOracle,
+  duckStoreAuthRegisterRouteLiveOracle,
   duckStoreOpenRedirectLiveOracle,
   duckStoreOpenRedirectRouteLiveOracle,
   duckStoreReferralCodeAbuseLiveOracle,

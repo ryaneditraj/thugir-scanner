@@ -56420,6 +56420,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-auth-register-open-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Duck Store open registration live oracle",
+    description:
+      "POST /api/v1/auth/register accepts unauthenticated self-registration and returns a user id without invite or CAPTCHA — the Escape Duck Store open-registration training oracle.",
+    impactOneline:
+      "Unrestricted self-registration enables scanner-driven account sprawl and abuse of referral or trial features.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAuthRegisterOpenLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate registration behind invite codes or CAPTCHA on production deployments.",
+      steps: [
+        "Require email verification before activating new accounts.",
+        "Rate-limit /api/v1/auth/register per IP.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Duck Store /api/v1/auth/register accepts open self-registration. Show registration gating and rate-limit remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-auth-register-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Duck Store /api/v1/auth/register open registration route live oracle",
+    description:
+      "When scanning /api/v1/auth/register, unauthenticated POST creates a user and returns id without invite or CAPTCHA — route-specific open registration oracle.",
+    impactOneline:
+      "Route scans on the register API should confirm self-registration is intentionally open on lab hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreAuthRegisterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate registration behind invite codes or CAPTCHA.",
+      steps: [
+        "Require email verification before activating new accounts.",
+        "Rate-limit /api/v1/auth/register per IP.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/auth/register route accepts open self-registration. Show route-specific registration gating.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "duck-store-open-redirect-live-oracle",
     platform: "generic",
     category: "Open redirect",

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-18T19:07:51.176Z",
-  "total": 2490,
-  "uniqueSlugs": 2486,
+  "generatedAt": "2026-08-18T20:42:14.069Z",
+  "total": 2492,
+  "uniqueSlugs": 2488,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2472,
+    "generic": 2474,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2405,
+    "deep": 2407,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 118,
     "Security misconfiguration": 186,
-    "Broken authentication": 153,
+    "Broken authentication": 155,
     "Injection": 375,
     "Cross-site scripting": 701,
     "Open redirect": 21,
@@ -930,6 +930,8 @@
     "duck-store-admin-users-bfla-route-live-oracle",
     "duck-store-auth-login-weak-credentials-live-oracle",
     "duck-store-auth-login-weak-credentials-route-live-oracle",
+    "duck-store-auth-register-open-live-oracle",
+    "duck-store-auth-register-route-live-oracle",
     "duck-store-auth-totp-bypass-live-oracle",
     "duck-store-auth-totp-bypass-route-live-oracle",
     "duck-store-cart-negative-quantity-live-oracle",
