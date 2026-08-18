@@ -24,6 +24,7 @@ import {
   primePwnshopAuditLogOracleForDeepScan,
   primePwnshopExportOrdersOracleForDeepScan,
   primePwnshopAvatarUploadOracleForDeepScan,
+  primePwnshopResetPasswordOracleForDeepScan,
   primePwnshopSellerSessionForDeepScan,
   primePwnshopOtpSessionForDeepScan,
   primeSecureNextjsLessonSessionForDeepScan,
@@ -1991,6 +1992,8 @@ const DEEP_RULES = new Set<string>([
   "pwnshopMassAssignmentAdminLiveOracle",
   "pwnshopOpenRedirectRegisterLiveOracle",
   "pwnshopVerifyOtpBruteforceLiveOracle",
+  "pwnshopOtpNotInvalidatedLiveOracle",
+  "pwnshopOtpNotInvalidatedRouteLiveOracle",
   "pwnshopMailInboxIdorLiveOracle",
   "pwnshopMailIdorRouteLiveOracle",
   "pwnshopProductReviewStoredXssLiveOracle",
@@ -9522,6 +9525,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       await primePwnshopOtpSessionForDeepScan(probe, origin, targetInput, home);
     }
     await primePwnshopAuditLogOracleForDeepScan(probe, origin, targetInput, home);
+    await primePwnshopResetPasswordOracleForDeepScan(probe, origin, targetInput, home);
     await primePwnshopExportOrdersOracleForDeepScan(probe, origin, targetInput, home);
     await primePwnshopSellerSessionForDeepScan(probe, origin, targetInput, home);
   }
@@ -11146,6 +11150,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -4;
       if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/(?:reset-password|forgot-password|verify-otp|login)\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-otp-not-invalidated")
+      )
+        return -4;
+      if (
         /vulnshop\.vercel\.app/i.test(origin) &&
         /\/api\/v1\/users\/\d+(?:\/profile)?\/?$/i.test(targetInput) &&
         p.slug.startsWith("vulnshop-users-profile-bola")
@@ -11462,6 +11472,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-partner-login-xpath")) return -2;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/partners\/partner1\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-partner-login-xpath")
+      )
+        return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?1\b/i.test(targetInput) &&
