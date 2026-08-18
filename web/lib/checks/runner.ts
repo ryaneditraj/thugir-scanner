@@ -2420,6 +2420,10 @@ const DEEP_RULES = new Set<string>([
   "duckStoreTestimonialsUnauthPutRouteLiveOracle",
   "duckStoreAuthTotpBypassLiveOracle",
   "duckStoreAuthTotpBypassRouteLiveOracle",
+  "duckStoreProductsBolaLiveOracle",
+  "duckStoreProductsBolaRouteLiveOracle",
+  "duckStoreAdminStatsLiveOracle",
+  "duckStoreAdminStatsRouteLiveOracle",
   "dvgaRouteLiveOracle",
   "dvgaGraphqlAuditLogLiveOracle",
   "dvgaGraphqlAuditRouteLiveOracle",
@@ -12540,6 +12544,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /duck-store\.escape\.tech/i.test(origin) &&
         /\/api\/v1\/uploads\/fetch-url/i.test(targetInput) &&
         p.slug.startsWith("duck-store-ssrf-fetch-url")
+      )
+        return -3;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/admin\/stats\b/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-admin-stats")
+      )
+        return -3;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/products\/\d+\/?$/i.test(targetInput) &&
+        !/\/filter\/|\/search\//i.test(targetInput) &&
+        p.slug.startsWith("duck-store-products-bola")
       )
         return -3;
       if (/duck-store\.escape\.tech/i.test(origin) && p.slug.startsWith("duck-store-")) return -2;

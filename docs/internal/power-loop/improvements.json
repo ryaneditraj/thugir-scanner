@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-products-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: unauthenticated PUT /api/v1/products/1 with probe price persists on GET; duck-store.escape.tech/api/v1/products/1 findings 25→28 (+duck-store-products-bola-live-oracle +duck-store-products-bola-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-admin-stats-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: admin:admin login + GET /api/v1/admin/stats returns total_users/total_products/total_orders/total_revenue JSON; duck-store.escape.tech/api/v1/admin/stats findings 26→28 (+duck-store-admin-stats-live-oracle +duck-store-admin-stats-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-seller-session-prime-verify",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopSellerSessionForDeepScan verifies GET /download?file=../../package.json returns pwnshop-app package.json before caching seller session; pwnshop.ctfsecurity.com/download findings 40→45 (+pwnshop-download-path-traversal-live-oracle +pwnshop-download-path-traversal-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-seller-download-session-prime",
       "status": "shipped",
