@@ -15,8 +15,8 @@
       ]
     }
   },
-  "total_sites_scanned": 2777,
-  "total_findings": 27625,
+  "total_sites_scanned": 2778,
+  "total_findings": 27673,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
@@ -28,7 +28,7 @@
     "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,7 +48,7 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (48 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
@@ -59,7 +59,7 @@
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
       "owasp-finbot-ctf.org/stats: 6→8 findings — public /ctf/api/v1/stats challenge progress oracle",
       "nodegoat-websec.herokuapp.com/tutorial/a4: 11→12 findings — live IDOR on /allocations/2 via authenticated session",
       "nodegoat-websec.herokuapp.com/tutorial/a8: live CSRF oracle on forged POST /profile (navbar verification)"
@@ -71,7 +71,7 @@
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 48,
     "owasp-finbot-ctf.org/stats": 8,
     "nodegoat-websec.herokuapp.com/tutorial/a4": 12,
     "nodegoat-websec.herokuapp.com/tutorial/a8": 12,
