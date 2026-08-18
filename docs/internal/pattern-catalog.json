@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-18T02:23:55.070Z",
-  "total": 2467,
-  "uniqueSlugs": 2463,
+  "generatedAt": "2026-08-18T03:17:04.134Z",
+  "total": 2469,
+  "uniqueSlugs": 2465,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2449,
+    "generic": 2451,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2382,
+    "deep": 2384,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 118,
     "Security misconfiguration": 186,
-    "Broken authentication": 151,
+    "Broken authentication": 153,
     "Injection": 371,
     "Cross-site scripting": 701,
     "Open redirect": 21,
@@ -1840,6 +1840,8 @@
     "pwnshop-open-redirect-register-live-oracle",
     "pwnshop-order-idor-live-oracle",
     "pwnshop-order-idor-route-live-oracle",
+    "pwnshop-otp-not-invalidated-live-oracle",
+    "pwnshop-otp-not-invalidated-route-live-oracle",
     "pwnshop-product-review-stored-xss-live-oracle",
     "pwnshop-product-review-stored-xss-review-route-live-oracle",
     "pwnshop-product-review-stored-xss-route-live-oracle",

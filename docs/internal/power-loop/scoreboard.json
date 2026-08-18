@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T03:09:28.745Z",
+  "updated_at": "2026-08-18T03:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2859,
-  "total_findings": 29395,
+  "total_sites_scanned": 2862,
+  "total_findings": 29438,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2039,
-  "discovery_findings": 24460,
-  "improvements_shipped": 1202,
-  "last_run": "2026-08-18T03:09:28.745Z",
+  "discovery_findings": 24513,
+  "improvements_shipped": 1211,
+  "last_run": "2026-08-18T03:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
     "benchmark": {
@@ -52,55 +52,36 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 74,
-      "focus": "NodeGoat OWASP tutorial routes a2/a3/a5/a7/a9 + WSL module drain 1776-1778",
-      "new_urls": [
-        "nodegoat-websec.herokuapp.com/tutorial/a2",
-        "nodegoat-websec.herokuapp.com/tutorial/a3",
-        "nodegoat-websec.herokuapp.com/tutorial/a5",
-        "nodegoat-websec.herokuapp.com/tutorial/a7",
-        "nodegoat-websec.herokuapp.com/tutorial/a9"
-      ]
+      "urls_validated": 3,
+      "findings_delta": "reset-password 45→46, logs 22→43, partner1 +xpath-route",
+      "focus": "pwnshop PWN-024 OTP invalidation + audit-log /logs reliability + brokencrystals partner1 xpath route",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "nodegoat-websec.herokuapp.com/tutorial/a2: 10 findings — nodegoat-tutorial-a2-route-live-oracle + weak-credentials + open-registration",
-      "nodegoat-websec.herokuapp.com/tutorial/a3: 10 findings — XSS tutorial route oracles",
-      "nodegoat-websec.herokuapp.com/tutorial/a5: 10 findings — security-misconfiguration tutorial route oracles",
-      "nodegoat-websec.herokuapp.com/tutorial/a7: 10 findings — XSS tutorial route oracles",
-      "nodegoat-websec.herokuapp.com/tutorial/a9: 10 findings — known-vuln-components tutorial route oracles",
-      "web-security-learning-labs.vercel.app/module/1776-1778: 8 findings each — placeholder module route oracles"
+      "pwnshop.ctfsecurity.com/reset-password: 46 findings — pwnshop-otp-not-invalidated-route-live-oracle (PWN-024 prior OTP valid after re-issue)",
+      "pwnshop.ctfsecurity.com/logs: 43 findings — pwnshop-audit-log-plaintext-password-route-live-oracle after prime+extended waits",
+      "brokencrystals.com/api/partners/partner1: 83 findings — brokencrystals-partner-login-xpath-route-live-oracle on partner1 path"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent",
-      "pwnshop.ctfsecurity.com/reset-password: OTP-not-invalidated oracle (PWN-024) still absent",
-      "brokencrystals.com/api/spawn + ginandjuice.shop/login still queued — not drained this run (48h skip on head URLs)"
+      "pwnshop.ctfsecurity.com/api/v1.0/card: PUT /api/v1.0/card BOLA endpoints return 404 on live deploy — card API oracle blocked until route is published",
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent when OTP mail delivery is rate-limited"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.demo.escape.tech": 50,
     "juice-shop.herokuapp.com": 47,
-    "brokencrystals.com/api/partners/partner1": 85,
-    "brokencrystals.com/api/users/one/regular_user/adminpermission": 89,
+    "brokencrystals.com/api/partners/partner1": 83,
+    "pwnshop.ctfsecurity.com/reset-password": 46,
+    "pwnshop.ctfsecurity.com/logs": 43,
     "pwnshop.ctfsecurity.com/register-seller": 47,
-    "pwnshop.ctfsecurity.com/reset-password": 45,
     "pwnshop.ctfsecurity.com/download": 45,
     "pwnshop.ctfsecurity.com/account/delete": 42,
-    "pwnshop.ctfsecurity.com/api/v1.0/card": 43,
-    "ginandjuice.shop/blog/post?postId=1": 38,
     "duck-store.escape.tech/api/v1/products/1": 28,
     "duck-store.escape.tech/api/v1/admin/stats": 28,
     "nodegoat-websec.herokuapp.com/tutorial/a2": 10,
     "nodegoat-websec.herokuapp.com/tutorial/a3": 10,
-    "nodegoat-websec.herokuapp.com/tutorial/a5": 10,
-    "nodegoat-websec.herokuapp.com/tutorial/a7": 10,
-    "nodegoat-websec.herokuapp.com/tutorial/a9": 10,
-    "pwnshop.ctfsecurity.com/seller/preview": 24,
-    "pwnshop.ctfsecurity.com/logs": 22,
     "wrongsecrets.herokuapp.com/challenge/challenge-0": 14,
     "nodegoat-websec.herokuapp.com/signup": 7
   }
