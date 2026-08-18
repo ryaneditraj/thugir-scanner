@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-18T15:05:00.000Z",
+  "updated_at": "2026-08-18T16:05:54.670Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level7.php",
+      "source": "webspoilt/vulnforge-academy — Level 7 IDOR challenge (levels 7-9 IDOR tier, GitHub README Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php",
+      "source": "webspoilt/vulnforge-academy — Level 14 SSRF internal service access (levels 13-15 SSRF tier, GitHub README Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level15.php",
+      "source": "webspoilt/vulnforge-academy — Level 15 SSRF challenge (levels 13-15 SSRF tier, GitHub README Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1896",
+      "source": "FarciarzYT/WebSecurityLearningLabs — catalog extension module 1896 (placeholder CSR oracle drain, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1897",
+      "source": "FarciarzYT/WebSecurityLearningLabs — catalog extension module 1897 (placeholder CSR oracle drain, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/4",
       "source": "OWASP WrongSecrets Heroku — challenge/4 Docker secrets oracle route (README challenge table, Aug 2026 web discovery)",
@@ -13946,5 +13971,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 4
+  "discovery_urls_added": 9
 }
