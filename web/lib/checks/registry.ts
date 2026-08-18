@@ -8465,8 +8465,12 @@ const vulnforgeAcademyLevelSstiRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/levels\/[^/]+\/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
   const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  // Levels 7–9 are IDOR labs — defer to vulnforgeAcademyLevelIdorRouteLiveOracle.
+  if (levelNum !== null && levelNum >= 7 && levelNum <= 9) return NEGATIVE;
   // Levels 10–12 are authentication labs — defer to vulnforgeAcademyLevelAuthRouteLiveOracle.
   if (levelNum !== null && levelNum >= 10 && levelNum <= 12) return NEGATIVE;
+  // Levels 13–15 are SSRF labs — defer to vulnforgeAcademyLevelSsrfRouteLiveOracle.
+  if (levelNum !== null && levelNum >= 13 && levelNum <= 15) return NEGATIVE;
   // Levels 16–18 are file-upload labs — defer to vulnforgeAcademyLevelFileUploadRouteLiveOracle.
   if (levelNum !== null && levelNum >= 16 && levelNum <= 18) return NEGATIVE;
   const sstiHit = await reflexionEscalatedSsti(ctx);
@@ -40429,7 +40433,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1900;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1905;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
