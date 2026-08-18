@@ -2529,6 +2529,8 @@ const DEEP_RULES = new Set<string>([
   "finbotCtfChallengesRouteLiveOracle",
   "finbotCtfSidecarRouteLiveOracle",
   "finbotVendorSidecarRouteLiveOracle",
+  "finbotVendorChatLiveOracle",
+  "finbotVendorChatRouteLiveOracle",
   "finbotAdminCopilotRouteLiveOracle",
   "finbotDarklabSupplyChainLiveOracle",
   "finbotDarklabSupplyChainRouteLiveOracle",
@@ -2925,12 +2927,14 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsDigitalOceanMetadataSsrfLiveOracle",
   "brokencrystalsMetadataXxeLiveOracle",
   "brokencrystalsMetadataXxeRouteLiveOracle",
+  "brokencrystalsGetMetadataRouteLiveOracle",
   "brokencrystalsLdapInjectionLiveOracle",
   "brokencrystalsLdapRouteLiveOracle",
   "brokencrystalsHiddenUploadLiveOracle",
   "brokencrystalsMcpToolsLiveOracle",
   "brokencrystalsMcpRouteLiveOracle",
   "brokencrystalsMcpToolsRouteLiveOracle",
+  "brokencrystalsGetCountMcpSqliRouteLiveOracle",
   "brokencrystalsMcpProcessNumbersLiveOracle",
   "brokencrystalsMcpProcessNumbersRouteLiveOracle",
   "brokencrystalsMcpSpawnProcessLiveOracle",
@@ -12311,6 +12315,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /owasp-finbot-ctf\.org/i.test(origin) &&
         /\/vendor\/(?:api\/v1\/)?invoices\b/i.test(targetInput) &&
         p.slug.startsWith("finbot-vendor-invoices")
+      )
+        return -4;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/vendor(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("finbot-vendor-chat")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/get_count\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-get-count")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/get_metadata\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-get-metadata")
       )
         return -4;
       if (

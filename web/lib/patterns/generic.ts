@@ -36760,6 +36760,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-get-metadata-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/get_metadata XXE route live oracle",
+    description:
+      "When scanning /api/get_metadata, POST /api/metadata XML with external entity expands the canary in the response body — README alias route-specific XXE oracle.",
+    impactOneline:
+      "Route-scoped scans on /api/get_metadata should flag XML external entity expansion via the live /api/metadata endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsGetMetadataRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Set XML parser options to reject DOCTYPE and external entities.",
+        "Use a schema-validated XML parser with entity expansion disabled.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/get_metadata route scan confirms POST XML entity expansion on the live /api/metadata endpoint. Show route-level XXE remediation for NestJS XML parsers.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-jwt-alg-none-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -38784,6 +38810,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/mcp/tools route scan confirms unauthenticated MCP tool registry disclosure. Show MCP gateway hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-get-count-mcp-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/get_count MCP SQLi route live oracle",
+    description:
+      "When scanning /api/get_count, MCP tools/call get_count executes attacker-controlled information_schema SQL — README alias for the Broken Crystals SQL injection oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals MCP get_count SQL injection is reachable when scanning /api/get_count paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsGetCountMcpSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate MCP sessions and restrict SQL tool execution — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication before MCP initialize and tools/call.",
+        "Do not expose raw SQL execution to guest MCP sessions.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/get_count route scan confirms MCP get_count SQL injection via information_schema probe. Show MCP gateway hardening for route-specific scans.",
     version: 1,
     enabled: true
   },
@@ -44905,6 +44957,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our FinBot /vendor/api/v1/invoices route scan confirms agentic invoice submission. Show how to protect invoice agent APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-vendor-chat-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot vendor onboarding chat agent live oracle",
+    description:
+      "CSRF bootstrap from /vendor/, then POST /vendor/api/v1/chat streams a session-bound vendor onboarding AI agent via SSE tokens — the FinBot vendor prompt-injection surface oracle.",
+    impactOneline:
+      "Unauthenticated session plus CSRF token grants access to a streaming vendor onboarding LLM agent — a prompt-injection and data-exfiltration surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotVendorChatLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — gate vendor chat behind completed onboarding and strong session auth.",
+      steps: [
+        "Require authenticated vendor sessions before POST /vendor/api/v1/chat.",
+        "Apply prompt-injection guardrails and tool permission boundaries on vendor agents.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot vendor portal exposes a streaming onboarding chat agent. Show how to protect agentic vendor chat APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-vendor-chat-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot /vendor chat route live oracle",
+    description:
+      "When scanning /vendor, CSRF session bootstrap and POST /vendor/api/v1/chat streams vendor onboarding AI agent tokens — route-specific FinBot prompt-injection surface oracle.",
+    impactOneline:
+      "Route scans on FinBot vendor portal need live agentic chat confirmation, not just sidecar metadata fingerprints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotVendorChatRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — gate vendor chat behind completed onboarding and strong session auth.",
+      steps: [
+        "Require authenticated vendor sessions before POST /vendor/api/v1/chat.",
+        "Apply prompt-injection guardrails and tool permission boundaries on vendor agents.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /vendor route scan confirms streaming vendor onboarding chat agent. Show how to protect agentic vendor chat APIs in production.",
     version: 1,
     enabled: true
   },

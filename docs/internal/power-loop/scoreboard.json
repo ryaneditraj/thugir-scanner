@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T16:08:00.000Z",
+  "updated_at": "2026-08-18T17:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2751,
-  "total_findings": 27159,
+  "total_sites_scanned": 2762,
+  "total_findings": 27411,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1969,
-  "discovery_findings": 22851,
-  "improvements_shipped": 1202,
-  "last_run": "2026-08-18T16:08:00.000Z",
+  "discovery_findings": 23003,
+  "improvements_shipped": 1207,
+  "last_run": "2026-08-18T17:20:00.000Z",
   "last_run_summary": {
-    "hour_utc": "16",
+    "hour_utc": "17",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 587,
+      "probes_run": 618,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,37 +53,33 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 147,
-      "focus": "vulnforge IDOR/SSRF levels 7/14/15 + WSL catalog 1896-1897 + queue drain wrongsecrets/4-5 + brokencrystals get_count",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 5,
+      "findings": 152,
+      "focus": "brokencrystals get_count/get_metadata route aliases + finbot vendor chat agent + dvga2 graphql queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "vulnforge-academy.vercel.app/level7: 6 findings with +vulnforge-academy-level-idor-route-live-oracle + reflexion-escalated-ssti",
-      "vulnforge-academy.vercel.app/level14: 6 findings with +vulnforge-academy-level-ssrf-route-live-oracle",
-      "vulnforge-academy.vercel.app/level15: 6 findings with +vulnforge-academy-level-ssrf-route-live-oracle",
-      "web-security-learning-labs.vercel.app/module/1896-1897: 8 findings each with placeholder-module-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/4-5: 15 findings each with docker-build-arg + configmap oracles",
-      "brokencrystals.com/api/get_count?query=1: 83 findings — full BC corpus oracles"
+      "brokencrystals.com/api/get_count?query=1: 83→86 findings — +brokencrystals-get-count-mcp-sqli-route-live-oracle (MCP information_schema SQLi)",
+      "brokencrystals.com/api/get_metadata: 84 findings — +brokencrystals-get-metadata-route-live-oracle (README alias → POST /api/metadata XXE)",
+      "owasp-finbot-ctf.org/vendor: 12 findings — +finbot-vendor-chat-live-oracle +finbot-vendor-chat-route-live-oracle (SSE vendor onboarding agent)",
+      "dvga2.tools.escape.tech/graphql: 11 findings — existing DVGA introspection/batching oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/api/get_count: route-specific SQLi live oracle for query param still absent",
-      "vulnforge-academy level7: IDOR oracle present but route-specific parameter manipulation oracle still thin",
-      "ginandjuice.shop/my-account/loyalty: loyalty-IDOR oracle still unverified in queue drain",
-      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles exist but queue drain pending"
+      "ginandjuice.shop/my-account/loyalty: loyalty-IDOR oracle still unverified (404 on live instance)",
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles exist but queue drain pending",
+      "vulnforge-academy level7: IDOR oracle present but parameter manipulation oracle still thin"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
-    "brokencrystals.com/api/get_count?query=1": 83,
-    "wrongsecrets.herokuapp.com/challenge/4": 15,
-    "wrongsecrets.herokuapp.com/challenge/5": 15,
-    "web-security-learning-labs.vercel.app/module/1896": 8,
-    "web-security-learning-labs.vercel.app/module/1897": 8,
-    "vulnforge-academy.vercel.app/backend/includes/levels/easy/level7.php": 6,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php": 6
+    "brokencrystals.com/api/get_count?query=1": 86,
+    "brokencrystals.com/api/get_metadata": 84,
+    "owasp-finbot-ctf.org/vendor": 12,
+    "dvga2.tools.escape.tech/graphql": 11,
+    "wrongsecrets.herokuapp.com/challenge/3": 15,
+    "ginandjuice.shop/oauth/callback": 30
   }
 }
