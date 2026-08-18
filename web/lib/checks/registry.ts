@@ -7736,6 +7736,30 @@ function isNodegoatHost(ctx: RuleContext): boolean {
   return /nodegoat-websec\.herokuapp\.com/i.test(ctx.origin);
 }
 
+/** Login page meta/title also contains "OWASP NodeGoat" — require authenticated nav/profile markers. */
+function nodegoatLooksAuthenticated(html: string): boolean {
+  if (/Enter sign up information/i.test(html)) return false;
+  if (
+    /<form[^>]*(?:id|action)=["'][^"']*login/i.test(html) &&
+    /name=["']password["']/i.test(html) &&
+    !/Edit Profile/i.test(html)
+  ) {
+    return false;
+  }
+  if (
+    /name=["']userName["'][\s\S]{0,1200}name=["']password["']/i.test(html) &&
+    !/Edit Profile/i.test(html)
+  ) {
+    return false;
+  }
+  return (
+    /href=["']\/allocations/i.test(html) ||
+    /href=["']\/benefits/i.test(html) ||
+    /Welcome,\s*[^\s<]+/i.test(html) ||
+    (/Edit Profile/i.test(html) && /name=["']ssn["']/i.test(html))
+  );
+}
+
 async function nodegoatTutorialMarkers(
   ctx: RuleContext,
   tutorialSlug: string,
@@ -7827,6 +7851,18 @@ const nodegoatTutorialA4RouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/tutorial\/a4\b/i.test(pageUrl)) return NEGATIVE;
+  const idor = await nodegoatBenefitsNosqlLiveProbe(ctx);
+  if (idor.fired) {
+    return {
+      fired: true,
+      confidence: idor.confidence,
+      evidence: {
+        ...idor.evidence,
+        scannedUrl: pageUrl,
+        note: "NodeGoat /tutorial/a4 route scan — GET /allocations/:userId returns cross-user allocation data without ownership check — A4 IDOR live oracle"
+      }
+    };
+  }
   const result = await nodegoatTutorialMarkers(ctx, "a4", [
     {
       label: "A4 insecure direct object reference title",
@@ -7876,6 +7912,18 @@ const nodegoatTutorialA6RouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/tutorial\/a6\b/i.test(pageUrl)) return NEGATIVE;
+  const sensitive = await nodegoatProfileSensitiveDataLiveProbe(ctx);
+  if (sensitive.fired) {
+    return {
+      fired: true,
+      confidence: sensitive.confidence,
+      evidence: {
+        ...sensitive.evidence,
+        scannedUrl: pageUrl,
+        note: "NodeGoat /tutorial/a6 route scan — GET/POST /profile stores SSN, DOB, and bank fields unencrypted — A6 sensitive data exposure live oracle"
+      }
+    };
+  }
   const result = await nodegoatTutorialMarkers(ctx, "a6", [
     {
       label: "A6 sensitive data exposure title",
@@ -7928,6 +7976,18 @@ const nodegoatTutorialA8RouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/tutorial\/a8\b/i.test(pageUrl)) return NEGATIVE;
+  const csrf = await nodegoatProfileCsrfLiveProbe(ctx);
+  if (csrf.fired) {
+    return {
+      fired: true,
+      confidence: csrf.confidence,
+      evidence: {
+        ...csrf.evidence,
+        scannedUrl: pageUrl,
+        note: "NodeGoat /tutorial/a8 route scan — POST /profile accepts forged profile updates without CSRF validation — A8 CSRF live oracle"
+      }
+    };
+  }
   const result = await nodegoatTutorialMarkers(ctx, "a8", [
     {
       label: "A8 CSRF tutorial title",
@@ -8040,11 +8100,7 @@ async function nodegoatNosqlLoginCookie(ctx: RuleContext): Promise<string | null
         timeoutMs: 15000,
         headers: { Cookie: sessionCookie }
       });
-      if (
-        dashDoc.status >= 200 &&
-        dashDoc.status < 400 &&
-        /OWASP NodeGoat|dashboard/i.test(dashDoc.body)
-      ) {
+      if (dashDoc.status >= 200 && dashDoc.status < 400 && nodegoatLooksAuthenticated(dashDoc.body)) {
         return sessionCookie;
       }
     }
@@ -8151,6 +8207,11 @@ const nodegoatBenefitsNosqlRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const nodegoatBenefitsNosqlLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  return nodegoatBenefitsNosqlLiveProbe(ctx);
+};
+
 const nodegoatNosqlLoginLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const cookie = await nodegoatNosqlLoginCookie(ctx);
@@ -8162,12 +8223,7 @@ const nodegoatNosqlLoginLiveOracle: Rule = async (ctx) => {
     headers: { Cookie: cookie }
   });
   if (dashDoc.status < 200 || dashDoc.status >= 400) return NEGATIVE;
-  const authenticated =
-    /OWASP NodeGoat/i.test(dashDoc.body) ||
-    /dashboard/i.test(dashDoc.body) ||
-    /allocations/i.test(dashDoc.body) ||
-    /benefits/i.test(dashDoc.body);
-  if (!authenticated) return NEGATIVE;
+  if (!nodegoatLooksAuthenticated(dashDoc.body)) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.93,
@@ -8901,6 +8957,18 @@ const nodegoatTutorialA10RouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/tutorial\/a10\b/i.test(pageUrl)) return NEGATIVE;
+  const redirect = await nodegoatLearnOpenRedirectLiveOracle(ctx);
+  if (redirect.fired) {
+    return {
+      fired: true,
+      confidence: redirect.confidence,
+      evidence: {
+        ...redirect.evidence,
+        scannedUrl: pageUrl,
+        note: "NodeGoat /tutorial/a10 route scan — GET /learn?url= reflects attacker URL in 302 Location without validation — A10 unvalidated redirect live oracle"
+      }
+    };
+  }
   const result = await nodegoatTutorialMarkers(ctx, "a10", [
     {
       label: "A10 unvalidated redirects tutorial title",
@@ -9285,6 +9353,74 @@ async function nodegoatAuthenticatedSessionCookie(ctx: RuleContext): Promise<str
   if (!cookie) cookie = await nodegoatRegisterSessionCookie(ctx);
   return cookie;
 }
+
+async function nodegoatProfileCsrfLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  const cookie = await nodegoatAuthenticatedSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const profileUrl = new URL("/profile", ctx.origin).toString();
+  const getDoc = await ctx.probe.get(profileUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (getDoc.status < 200 || getDoc.status >= 400) return NEGATIVE;
+  if (!/Edit Profile/i.test(getDoc.body)) return NEGATIVE;
+  const csrfFieldPresent = /name=["']_csrf["']/i.test(getDoc.body);
+  const marker = `CsrfProbe${Date.now().toString().slice(-6)}`;
+  const postDoc = await ctx.probe.get(profileUrl, {
+    method: "POST",
+    body: `firstName=${encodeURIComponent(marker)}&lastName=Probe&address=1+Main&ssn=123-45-6789&dob=1990-01-01&bankAcc=123456&bankRouting=123456%23`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded", Cookie: cookie },
+    maxBytes: 32768,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 500) return NEGATIVE;
+  const verifyDoc = await ctx.probe.get(profileUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  const escaped = marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const persisted =
+    verifyDoc.body.includes(`value="${marker}"`) ||
+    new RegExp(`value="${escaped}"`).test(verifyDoc.body);
+  if (!persisted) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: csrfFieldPresent ? 0.9 : 0.93,
+    evidence: {
+      profileUrl,
+      firstNameMarker: marker,
+      csrfFieldPresent,
+      snippet: verifyDoc.body.slice(0, 240).trim(),
+      note: csrfFieldPresent
+        ? "NodeGoat POST /profile processes state-changing updates when _csrf field is present but omitted from forged POST body — profile CSRF oracle (A8 family)"
+        : "NodeGoat POST /profile accepts forged profile updates without CSRF token — profile CSRF oracle (A8 family)"
+    }
+  };
+}
+
+const nodegoatProfileCsrfLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  return nodegoatProfileCsrfLiveProbe(ctx);
+};
+
+const nodegoatProfileCsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatProfileCsrfLiveProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "NodeGoat /profile route scan — POST accepts forged profile updates without CSRF validation — A8 CSRF live oracle"
+    }
+  };
+};
 
 async function nodegoatProfileSensitiveDataLiveProbe(ctx: RuleContext): Promise<RuleResult> {
   const cookie = await nodegoatAuthenticatedSessionCookie(ctx);
@@ -87844,6 +87980,7 @@ export const RULES: Record<string, Rule> = {
   nodegoatLearnOpenRedirectLiveOracle,
   nodegoatLearnOpenRedirectRouteLiveOracle,
   nodegoatBenefitsNosqlRouteLiveOracle,
+  nodegoatBenefitsNosqlLiveOracle,
   nodegoatNosqlLoginLiveOracle,
   nodegoatNosqlLoginRouteLiveOracle,
   nodegoatSignupOpenRegistrationLiveOracle,
@@ -87853,6 +87990,8 @@ export const RULES: Record<string, Rule> = {
   nodegoatDashboardRouteLiveOracle,
   nodegoatProfileSensitiveDataLiveOracle,
   nodegoatProfileSensitiveDataRouteLiveOracle,
+  nodegoatProfileCsrfLiveOracle,
+  nodegoatProfileCsrfRouteLiveOracle,
   nodegoatProfileRedosRouteLiveOracle,
   vulnforgeAcademyLevelSqliRouteLiveOracle,
   vulnforgeAcademyLevel4SqliRouteLiveOracle,
