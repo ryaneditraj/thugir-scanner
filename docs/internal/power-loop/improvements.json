@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-not-invalidated-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: register+login captures OTP1, second POST /login issues OTP2, POST /verify-otp with OTP1 redirects away from verify-otp; pwnshop.ctfsecurity.com/reset-password findings 45→46 (+pwnshop-otp-not-invalidated-live-oracle +pwnshop-otp-not-invalidated-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-audit-log-logs-route-reliability",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopAuditLogOracleForDeepScan runs full canary login+events poll; extended waits on /logs route; pwnshop.ctfsecurity.com/logs findings 22→43 (+pwnshop-audit-log-plaintext-password-live-oracle +pwnshop-audit-log-plaintext-password-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-partner1-xpath-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsPartnerLoginXpathRouteLiveOracle matches /api/partners/partner1; GET /api/partners/partnerLogin?password=' or '1'='1 returns multiple <password> elements; brokencrystals.com/api/partners/partner1 gains +brokencrystals-partner-login-xpath-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-products-bola-live-oracle",
       "status": "shipped",
