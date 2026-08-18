@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-18T05:10:00.000Z",
+  "updated_at": "2026-08-18T06:06:34.500Z",
   "discovery_urls": [
+    {
+      "url": "https://dvga.tools.escape.tech/graphql",
+      "source": "DVGA Escape.tech — GraphQL injection/query surface POST /graphql (Dolev Farhi DVGA README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.xplat-demo.threatx.io/graphql",
+      "source": "DVGA ThreatX demo — GraphQL batching/injection oracle POST /graphql (vwad DVGA mirror, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/cart",
+      "source": "ctfsec/pwnshop — cart price-tampering + session oracle GET /cart (Pwnshop OWASP Top 10 2025 route map, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/portals",
+      "source": "OWASP FinBot CTF — agentic AI vendor/admin/CTF portal entry (GenAI-Security-Project README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/stats",
+      "source": "OWASP FinBot CTF — challenge stats/leaderboard oracle GET /stats (HN Kadag/DjanGoat-style agentic lab, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/apply-coupon",
       "source": "Pwnshop OWASP Top 10 2025 — coupon category-bypass route oracle queue drain (PWN-016, Aug 2026)",
