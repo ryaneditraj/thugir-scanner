@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T22:14:00.000Z",
+  "updated_at": "2026-08-18T23:04:00.000Z",
   "discovery_urls": [
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/ssrf",
@@ -14139,7 +14139,32 @@
       "url": "https://web-security-learning-labs.vercel.app/module/1915",
       "source": "FarciarzYT/WebSecurityLearningLabs — catalog extension module 1915 (placeholder CSR oracle drain, Aug 2026)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/users/00000000-0000-0000-0000-000000000001",
+      "source": "Escape Duck Store — IDOR user profile oracle GET /api/v1/users/{uuid} (duck-store.escape.tech/vulnerabilities, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/products/latest?limit=100",
+      "source": "NeuraLegion/brokencrystals — business-constraint bypass oracle GET /api/products/latest?limit= (README limit bypass, Aug 2026 web discovery)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1921",
+      "source": "FarciarzYT/WebSecurityLearningLabs — catalog extension module 1921 (placeholder CSR oracle, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1922",
+      "source": "FarciarzYT/WebSecurityLearningLabs — catalog extension module 1922 (placeholder CSR oracle, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/agents",
+      "source": "GenAI-Security-Project/finbot-ctf — darklab agents API prompt-injection surface (owasp-finbot-ctf.org README, Aug 2026 web discovery)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 2814
+  "discovery_urls_added": 2819
 }
