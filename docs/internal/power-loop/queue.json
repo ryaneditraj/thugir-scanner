@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-18T21:14:00.000Z",
+  "updated_at": "2026-08-18T21:22:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/catalog?category=Gin",
+      "source": "PortSwigger Gin & Juice Shop — SQLi oracle GET /catalog?category= (pentest-2026-ginandjuice FINDING-017 variant, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php",
+      "source": "webspoilt/vulnforge-academy — file upload bypass tier Level 16 (levels 16-18 file upload, GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
+      "source": "webspoilt/vulnforge-academy — file upload tier Level 17 validation bypass (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level18.php",
+      "source": "webspoilt/vulnforge-academy — Level 18 extension blacklist bypass upload (levels 16-18 tier, Aug 2026 queue drain)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level19.php",
+      "source": "webspoilt/vulnforge-academy — hard tier Level 19 command injection RCE challenge (GitHub README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://tryaisoc.com/cases/INC-RT-001?tab=ledger",
       "source": "beenuar/AiSOC — seeded LockBit investigation ledger replay surface (tryaisoc.com live demo, Aug 2026 web discovery)",
@@ -148,17 +173,17 @@
     },
     {
       "url": "https://securebank-blog.vercel.app/login",
-      "source": "FAST-NUCES SecureBank Medium article — Attack 1 SQLi login oracle route drain (Aug 2026)",
+      "source": "FAST-NUCES SecureBank attack lab — SQLi login bypass oracle POST /login (attack mode, semester project README)",
       "auth": "public_demo"
     },
     {
       "url": "https://securebank-blog.vercel.app/messages",
-      "source": "FAST-NUCES SecureBank Medium article — Attack 2 stored XSS messages oracle route drain (Aug 2026)",
+      "source": "FAST-NUCES SecureBank attack lab — stored XSS oracle POST /messages (attack mode raw HTML render)",
       "auth": "public_demo"
     },
     {
       "url": "https://securebank-blog.vercel.app/admin",
-      "source": "FAST-NUCES SecureBank Medium article — RBAC /admin 403 gate oracle route drain (Aug 2026)",
+      "source": "FAST-NUCES SecureBank attack lab — RBAC admin panel bypass oracle GET /admin (session role check)",
       "auth": "public_demo"
     },
     {
@@ -188,7 +213,7 @@
     },
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/a2",
-      "source": "nodegoat-websec Heroku — A2 broken authentication tutorial weak-creds live oracle (Aug 2026)",
+      "source": "nodegoat-websec Heroku — A2 broken auth tutorial route (OWASP NodeGoat README, Aug 2026 web discovery)",
       "auth": "public_demo"
     },
     {
@@ -243,18 +268,18 @@
     },
     {
       "url": "https://pwnshop.ctfsecurity.com/apply-coupon",
-      "source": "Pwnshop OWASP Top 10 2025 — coupon category-bypass route oracle queue drain (PWN-016, Aug 2026)",
+      "source": "ctfsec/pwnshop vulnerabilities — coupon category-restriction bypass oracle POST /apply-coupon (PWN-016)",
       "auth": "public_demo"
     },
     {
       "url": "https://pwnshop.ctfsecurity.com/profile/upload-avatar",
-      "source": "Pwnshop OWASP Top 10 2025 — stored XSS SVG avatar upload route oracle queue drain (PWN-012, Aug 2026)",
+      "source": "ctfsec/pwnshop vulnerabilities — stored XSS via SVG avatar upload POST /profile/upload-avatar (PWN-012)",
       "auth": "public_demo"
     },
     {
       "url": "https://pwnshop.ctfsecurity.com/wallet",
-      "source": "Pwnshop OWASP Top 10 2025 — wallet top-up credited_amount route oracle queue drain (PWN-042, Aug 2026)",
-      "auth": "public_demo"
+      "source": "ctfsec/pwnshop README — wallet top-up / payment-card funding business-logic oracle",
+      "auth": "oss_deploy"
     },
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/a4",
@@ -279,11 +304,6 @@
     {
       "url": "https://ssrf.vulnlab.dev/scheme/",
       "source": "sampsonc/vulnlab.dev — scheme-abuse SSRF lab accepts file:// and gopher:// (GitHub README, Aug 2026 web discovery)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a2",
-      "source": "nodegoat-websec Heroku — A2 broken auth tutorial route (OWASP NodeGoat README, Aug 2026 web discovery)",
       "auth": "public_demo"
     },
     {
@@ -2132,16 +2152,6 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php",
-      "source": "webspoilt/vulnforge-academy — file upload bypass tier Level 16 (levels 16-18 file upload, GitHub README)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
-      "source": "webspoilt/vulnforge-academy — file upload tier Level 17 validation bypass (GitHub README)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level18.php",
       "source": "webspoilt/vulnforge-academy — hard tier Level 18 file upload chain (GitHub README)",
       "auth": "public_demo"
@@ -2197,28 +2207,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://securebank-blog.vercel.app/login",
-      "source": "FAST-NUCES SecureBank attack lab — SQLi login bypass oracle POST /login (attack mode, semester project README)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://securebank-blog.vercel.app/messages",
-      "source": "FAST-NUCES SecureBank attack lab — stored XSS oracle POST /messages (attack mode raw HTML render)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://securebank-blog.vercel.app/admin",
-      "source": "FAST-NUCES SecureBank attack lab — RBAC admin panel bypass oracle GET /admin (session role check)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level13.php",
       "source": "webspoilt/vulnforge-academy — SSRF tier Level 13 internal service access (levels 13-15 SSRF, GitHub README)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level19.php",
-      "source": "webspoilt/vulnforge-academy — hard tier Level 19 command injection RCE challenge (GitHub README)",
       "auth": "public_demo"
     },
     {
@@ -3692,18 +3682,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://pwnshop.ctfsecurity.com/apply-coupon",
-      "source": "ctfsec/pwnshop vulnerabilities — coupon category-restriction bypass oracle POST /apply-coupon (PWN-016)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://pwnshop.ctfsecurity.com/verify-otp",
       "source": "ctfsec/pwnshop vulnerabilities — brute-forceable 6-digit OTP oracle POST /verify-otp (PWN-015)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/profile/upload-avatar",
-      "source": "ctfsec/pwnshop vulnerabilities — stored XSS via SVG avatar upload POST /profile/upload-avatar (PWN-012)",
       "auth": "public_demo"
     },
     {
@@ -3824,11 +3804,6 @@
     {
       "url": "https://pwnshop.ctfsecurity.com/order/1",
       "source": "pwnshop vulnerabilities page — IDOR oracle GET /order/:id (PWN-001)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/wallet",
-      "source": "ctfsec/pwnshop README — wallet top-up / payment-card funding business-logic oracle",
       "auth": "oss_deploy"
     },
     {
@@ -13966,11 +13941,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://ginandjuice.shop/catalog?category=Gin",
-      "source": "PortSwigger Gin & Juice Shop — SQLi oracle GET /catalog?category= (pentest-2026-ginandjuice FINDING-017 variant, Aug 2026 web discovery)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://duck-store.escape.tech/api/v1/orders/shipping",
       "source": "Escape Duck Store — shipping cost manipulation oracle POST /api/v1/orders/shipping (Devroxana writeup #16, Aug 2026 web discovery)",
       "auth": "public_demo"
@@ -14084,7 +14054,32 @@
       "url": "https://vwad.owasp.org/app/zero-bank/",
       "source": "OWASP VWAD — Zero Bank online banking demo directory entry (Micro Focus WebInspect training benchmark, Aug 2026 web discovery)",
       "auth": "benchmark"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1911",
+      "source": "FarciarzYT/WebSecurityLearningLabs — catalog extension module 1911 (placeholder CSR oracle drain, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1912",
+      "source": "FarciarzYT/WebSecurityLearningLabs — catalog extension module 1912 (placeholder CSR oracle drain, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1913",
+      "source": "FarciarzYT/WebSecurityLearningLabs — catalog extension module 1913 (placeholder CSR oracle drain, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1914",
+      "source": "FarciarzYT/WebSecurityLearningLabs — catalog extension module 1914 (placeholder CSR oracle drain, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1915",
+      "source": "FarciarzYT/WebSecurityLearningLabs — catalog extension module 1915 (placeholder CSR oracle drain, Aug 2026)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 29
+  "discovery_urls_added": 2814
 }

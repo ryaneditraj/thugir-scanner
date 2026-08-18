@@ -7442,6 +7442,45 @@ function extractVwadCatalogLiveSeed(html: string, pageUrl: string): string[] {
   }
 }
 
+/** VulnForge Academy (vulnforge-academy.vercel.app) — seed tiered level routes for live oracles. */
+function extractVulnforgeAcademySeeds(html: string, pageUrl: string): string[] {
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname;
+  } catch {
+    return [];
+  }
+  if (
+    !/vulnforge-academy\.vercel\.app/i.test(host) &&
+    !/VulnForge Academy|vulnforge-academy|Levels 16-18|level1[6-9]\.php/i.test(html)
+  ) {
+    return [];
+  }
+  const out = new Set<string>();
+  const pageOrigin = new URL(pageUrl).origin;
+  const levelPaths: Array<{ tier: string; level: number }> = [
+    { tier: "easy", level: 7 },
+    { tier: "easy", level: 10 },
+    { tier: "easy", level: 12 },
+    { tier: "medium", level: 14 },
+    { tier: "medium", level: 15 },
+    { tier: "medium", level: 16 },
+    { tier: "medium", level: 17 },
+    { tier: "medium", level: 18 },
+    { tier: "hard", level: 19 }
+  ];
+  for (const { tier, level } of levelPaths) {
+    try {
+      const u = new URL(`/backend/includes/levels/${tier}/level${level}.php`, pageUrl);
+      if (u.origin !== pageOrigin) continue;
+      out.add(u.toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** VulnForge attack-surface SPA (vulnforge.vercel.app) — seed login routes + main JS bundle. */
 function extractVulnforgeSeeds(html: string, pageUrl: string): string[] {
   if (!/VulnForge|vulnforge-backend|AI-Guided Web Attack Surface Explorer/i.test(html)) return [];
@@ -9704,6 +9743,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const istEduVulnPortalSeeds = extractIstEduVulnPortalSeeds(home.body, home.finalUrl);
   const dvwuVulnPortalSeeds = extractDvwuVulnPortalSeeds(home.body, home.finalUrl);
   const vulnforgeSeeds = extractVulnforgeSeeds(home.body, home.finalUrl);
+  const vulnforgeAcademySeeds = extractVulnforgeAcademySeeds(home.body, home.finalUrl);
   const vulnshopSeeds = extractVulnshopSeeds(home.body, home.finalUrl);
   const vulnerableWebSiteSeeds = extractVulnerableWebSiteSeeds(home.body, home.finalUrl);
   const mindApiSeeds = extractMindApiSeeds(home.body, home.finalUrl);
@@ -9874,6 +9914,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ? [
           "/vulnerabilities",
           "/catalog",
+          "/catalog?category=Gin",
           "/blog",
           "/blog/post?postId=6",
           "/blog/post?postId=7",
@@ -10525,6 +10566,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...istEduVulnPortalSeeds,
       ...dvwuVulnPortalSeeds,
       ...vulnforgeSeeds,
+      ...vulnforgeAcademySeeds,
       ...vulnshopSeeds,
       ...vulnerableWebSiteSeeds,
       ...mindApiSeeds,
@@ -11507,6 +11549,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level1[345]\.php\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level-ssrf")
+      )
+        return -4;
+      if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level19\.php\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level-rce")
+      )
+        return -4;
+      if (
         /security-scanner-dh25\.vercel\.app/i.test(origin) &&
         p.slug === "client-side-security-scanner-dh25-evidence"
       )
@@ -12304,6 +12358,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("vampi-debug-password")
       )
         return -3;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/catalog\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-catalog-category-sqli")
+      )
+        return -4;
       if (/ginandjuice\.shop/i.test(origin) && p.slug.startsWith("ginandjuice")) return -2;
       if (
         /ginandjuice\.shop/i.test(origin) &&
@@ -12446,7 +12506,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8\d|9[0-9])|180\d|181\d|182\d|183\d|184\d|185\d|186\d|187\d|188\d|189\d|190[0-9]|1910|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8\d|9[0-9])|180\d|181\d|182\d|183\d|184\d|185\d|186\d|187\d|188\d|189\d|190[0-9]|191[0-5]|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;

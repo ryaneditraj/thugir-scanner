@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-category-sqli-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog?category=1' returns HTTP 500 vs category=1 baseline 200; runner -4 priority for ginandjuice-catalog-category-sqli-* on /catalog routes + /catalog?category=Gin in ginAndJuicePrioritySeeds; ginandjuice.shop/catalog?category=Gin findings 37 with +ginandjuice-catalog-category-sqli-live-oracle +ginandjuice-catalog-category-sqli-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level16-19-route-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractVulnforgeAcademySeeds adds levels 7-19 tiered paths; runner -4 priority for level-ssrf (13-15) and level-rce (19); vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php findings 5 with +vulnforge-academy-level-file-upload-route-live-oracle (no SSTI false positive); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1911-1915-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1910→1915 + placeholder priority regex extended to 191[0-5]; web-security-learning-labs.vercel.app/module/1911 findings 8 with +web-security-learning-labs-placeholder-module-route-live-oracle; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-auth-register-route-live-oracle",
       "status": "shipped",
@@ -12465,6 +12483,21 @@
       "source": "discovery:vulnforge-academy.vercel.app",
       "slug": "vulnforge-academy-level11-12-auth-oracles",
       "shipped_at": "2026-08-18T13:25:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1911-1915-catalog",
+      "shipped_at": "2026-08-18T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level16-19-route-seeds",
+      "shipped_at": "2026-08-18T21:10:00.000Z"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-category-sqli-route-priority",
+      "shipped_at": "2026-08-18T21:10:00.000Z"
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T21:20:00.000Z",
+  "updated_at": "2026-08-18T21:22:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2905,
-  "total_findings": 29981,
+  "total_sites_scanned": 2918,
+  "total_findings": 30144,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2052,
-  "discovery_findings": 24709,
-  "improvements_shipped": 1202,
-  "last_run": "2026-08-18T21:20:00.000Z",
+  "discovery_urls_added": 2814,
+  "discovery_findings": 24827,
+  "improvements_shipped": 1205,
+  "last_run": "2026-08-18T21:22:00.000Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
@@ -52,38 +52,35 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
+      "urls_added": 8,
       "urls_scanned": 13,
       "findings": 118,
-      "focus": "tryaisoc LockBit ledger + finbot darklab supply-chain/CTF portal + ginandjuice open-redirect back= param + WSL 1908 + WSL 1831-1905 queue drain",
-      "improvements_shipped_this_run": 0
+      "focus": "parallel 21 UTC runs merged: tryaisoc ledger + finbot darklab/CTF + ginandjuice open-redirect + WSL 1908/1831-1905 drain + ginandjuice catalog SQLi + vulnforge level16-19 + WSL 1911-1915",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (45 findings) — no benchmark misses",
-      "ginandjuice.shop/blog/post?postId=1&back=evil-open-redirect-probe.example: 37 findings — client-side-open-redirect-evidence + full ginandjuice oracle suite on back= entry route",
-      "owasp-finbot-ctf.org/darklab/supply-chain: 11 findings — MCP supply-chain tool-poisoning surface mapped",
-      "owasp-finbot-ctf.org/ctf: 12 findings — CTF mission-control challenge browser oracles",
-      "tryaisoc.com/cases/INC-RT-001?tab=ledger: 5 findings — low-signal misconfig/header pass on AiSOC demo case page",
-      "web-security-learning-labs.vercel.app/module/1908: 7 findings — placeholder module route oracle"
+      "ginandjuice.shop/blog/post?postId=1&back=evil-open-redirect-probe.example: 37 findings — client-side-open-redirect-evidence + ginandjuice oracle suite",
+      "ginandjuice.shop/catalog?category=Gin: 37 findings — ginandjuice-catalog-category-sqli-route-live-oracle shipped (parallel run)",
+      "owasp-finbot-ctf.org/darklab/supply-chain: 11 findings — MCP supply-chain tool-poisoning surface",
+      "owasp-finbot-ctf.org/ctf: 12 findings — CTF mission-control challenge browser",
+      "web-security-learning-labs.vercel.app/module/1911: 8 findings — placeholder CSR oracle (parallel run)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "tryaisoc.com/cases/INC-RT-001: no agentic-investigation or SSRF live oracles — header/misconfig only",
-      "owasp-finbot-ctf.org/darklab/supply-chain: UI surface mapped but route-specific tool-poisoning PUT oracle still on separate /darklab/api/v1/* endpoints",
+      "tryaisoc.com/cases/INC-RT-001: no agentic-investigation live oracles — header/misconfig only",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session",
       "damn-vulnerable-startup.fly.dev persistently unreachable — consider removing from queue head"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 45,
     "ginandjuice.shop/blog/post?postId=1&back=https://evil-open-redirect-probe.example": 37,
+    "ginandjuice.shop/catalog?category=Gin": 37,
     "owasp-finbot-ctf.org/ctf": 12,
     "owasp-finbot-ctf.org/darklab/supply-chain": 11,
-    "web-security-learning-labs.vercel.app/module/1908": 7,
-    "tryaisoc.com/cases/INC-RT-001?tab=ledger": 5,
-    "pwnshop.ctfsecurity.com/chat": 44,
-    "brokencrystals.com/api/partners/partner1": 85,
-    "dvga.tools.escape.tech": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-0": 14
+    "web-security-learning-labs.vercel.app/module/1911": 8,
+    "tryaisoc.com/cases/INC-RT-001?tab=ledger": 5
   }
 }
