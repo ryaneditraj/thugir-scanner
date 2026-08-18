@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-seller-download-session-prime",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primePwnshopSellerSessionForDeepScan clears OTP cache and retries pwnshopEnsureSellerSession (OTP + POST /register-seller) on /download, /seller/*, /register-seller routes; pwnshop.ctfsecurity.com/download findings 4→43 (+pwnshop-download-path-traversal-live-oracle +pwnshop-download-path-traversal-route-live-oracle +pwnshop-seller-preview-ssti-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-download-seller-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority on /download + /seller/preview|storefront + /register-seller for pwnshop download/path-traversal/seller/ssti slugs; pwnshop.ctfsecurity.com/seller/preview findings 24 (+pwnshop-seller-preview-ssti-route-live-oracle); register-seller 46 (+pwnshop-register-seller-ssti-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-download-seller-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended pwnshop.ctfsecurity.com/download + /seller/preview + /register-seller to discovery queue front; route scans now surface PWN-038 path traversal and PWN-040 SSTI live oracles instead of client-side-only evidence; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-mcp-tools-enumeration-live-oracle",
       "status": "shipped",
@@ -12119,6 +12137,21 @@
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-adminpermission-queue-drain",
       "shipped_at": "2026-08-17T22:20:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-seller-download-session-prime",
+      "shipped_at": "2026-08-18T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-download-seller-route-priority",
+      "shipped_at": "2026-08-18T01:10:00.000Z"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-download-seller-queue-drain",
+      "shipped_at": "2026-08-18T01:10:00.000Z"
     }
   ]
 }
