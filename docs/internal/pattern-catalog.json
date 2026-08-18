@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-18T14:41:38.690Z",
-  "total": 2483,
-  "uniqueSlugs": 2479,
+  "generatedAt": "2026-08-18T15:08:03.862Z",
+  "total": 2485,
+  "uniqueSlugs": 2481,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2465,
+    "generic": 2467,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2398,
+    "deep": 2400,
     "continuous": 0
   },
   "byCategory": {
@@ -34,7 +34,7 @@
     "SSRF": 14,
     "Server-side request forgery": 81,
     "Sensitive data exposure": 64,
-    "AI security": 73,
+    "AI security": 75,
     "Business logic": 24,
     "Authentication bypass": 3,
     "Cross-site request forgery": 5,
@@ -1046,6 +1046,8 @@
     "finbot-ctf-stats-route-live-oracle",
     "finbot-darklab-supply-chain-live-oracle",
     "finbot-darklab-supply-chain-route-live-oracle",
+    "finbot-vendor-invoices-live-oracle",
+    "finbot-vendor-invoices-route-live-oracle",
     "finbot-vendor-sidecar-route-live-oracle",
     "firebase-config-exposed",
     "firebase-open-firestore-rules",
