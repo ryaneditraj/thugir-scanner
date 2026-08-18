@@ -1,6 +1,26 @@
 {
-  "updated_at": "2026-08-18T12:20:00.000Z",
+  "updated_at": "2026-08-18T13:05:38.619Z",
   "discovery_urls": [
+    {
+      "url": "https://dvga2.tools.escape.tech/graphql",
+      "source": "Escape DVGA2 hosted GraphQL — beginner-mode introspection/batching oracle (Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/3",
+      "source": "OWASP WrongSecrets Heroku — challenge/3 crypto/secrets oracle route drain (Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/oauth/callback",
+      "source": "PortSwigger Gin & Juice Shop — OAuth callback open-redirect oracle (Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/loyalty",
+      "source": "PortSwigger Gin & Juice Shop — loyalty points IDOR oracle GET /my-account/loyalty (Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://securebank-blog.vercel.app/login",
       "source": "FAST-NUCES SecureBank Medium article — Attack 1 SQLi login oracle route drain (Aug 2026)",
@@ -13900,5 +13920,6 @@
       "source": "OWASP FinBot CTF — vendor portal signup /vendor/signup (owasp-finbot-ctf.org how-it-works, Aug 2026 web discovery)",
       "auth": "public_demo"
     }
-  ]
+  ],
+  "discovery_urls_added": 4
 }

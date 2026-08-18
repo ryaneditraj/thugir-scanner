@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T12:25:00.000Z",
+  "updated_at": "2026-08-18T13:08:22.661Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2722,
-  "total_findings": 26508,
+  "total_sites_scanned": 2731,
+  "total_findings": 26662,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1959,
-  "discovery_findings": 22487,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-18T12:25:00.000Z",
+  "discovery_urls_added": 1963,
+  "discovery_findings": 22593,
+  "improvements_shipped": 1202,
+  "last_run": "2026-08-18T13:08:22.661Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,35 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (48 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 8,
-      "focus": "WSL catalog 1881-1885 + securebank-blog route drain + nodegoat A2 weak-creds chain + finbot stats route priority",
-      "improvements_shipped_this_run": 3
+      "urls_added": 4,
+      "urls_scanned": 8,
+      "findings": 106,
+      "focus": "DVGA2 GraphQL + WrongSecrets challenge/3 + Gin&Juice oauth/loyalty routes + securebank-blog login/messages/admin drain + WSL 1881"
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1881: 7→8 findings — WSL placeholder catalog extended to 1885",
-      "nodegoat-websec.herokuapp.com/tutorial/a2: 10→14 findings — A2 broken-auth weak-credentials live oracle chain",
-      "owasp-finbot-ctf.org/stats: finbot-ctf-stats route priority ensures stats live oracles on /stats scans",
-      "securebank-blog.vercel.app/login/messages/admin queued with route-priority for corpus oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "dvga2.tools.escape.tech/graphql: 11 findings — DVGA2 hosted GraphQL introspection + SQLi filter + IDOR oracles (new host)",
+      "wrongsecrets.herokuapp.com/challenge/3: 15 findings — MCP execute_command + Google SA + database URL leak oracles",
+      "ginandjuice.shop/oauth/callback: 30 findings — OAuth callback route fires full Gin&Juice corpus (open-redirect + CSTI)",
+      "ginandjuice.shop/my-account/loyalty: 31 findings — loyalty route hub without route-specific loyalty-IDOR oracle",
+      "securebank-blog.vercel.app/login: 4 findings — SQLi login + SSTI reflexion oracle confirmed",
+      "securebank-blog.vercel.app/messages: 4 findings — stored XSS messages route oracle confirmed",
+      "securebank-blog.vercel.app/admin: 3 findings — RBAC admin gate oracle confirmed",
+      "web-security-learning-labs.vercel.app/module/1881: 8 findings — WSL placeholder catalog 1881-1885 drain started"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "vulnerable-web-site.vercel.app: Vercel FUNCTION_INVOCATION_TIMEOUT blocks live CSRF/XSS session probes",
-      "nodegoat nosql-login live bypass intermittent on Heroku (route corpus oracle still fires)"
+      "ginandjuice.shop/my-account/loyalty: 31-finding hub without loyalty-points IDOR live oracle",
+      "ginandjuice.shop/oauth/callback: no route-specific OAuth state/nonce bypass oracle (corpus oracles only)",
+      "securebank-blog.vercel.app: SSTI reflexion fires but session-gated CSRF transfer oracle still absent on /transfer"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "nodegoat-websec.herokuapp.com/tutorial/a2": 14,
+    "juice-shop.herokuapp.com": 48,
+    "ginandjuice.shop/my-account/loyalty": 31,
+    "ginandjuice.shop/oauth/callback": 30,
+    "wrongsecrets.herokuapp.com/challenge/3": 15,
+    "dvga2.tools.escape.tech/graphql": 11,
     "web-security-learning-labs.vercel.app/module/1881": 8,
-    "owasp-finbot-ctf.org/stats": 8,
-    "pwnshop.ctfsecurity.com/wallet": 45,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "pwnshop.ctfsecurity.com/apply-coupon": 49
+    "securebank-blog.vercel.app/login": 4,
+    "securebank-blog.vercel.app/messages": 4
   }
 }
