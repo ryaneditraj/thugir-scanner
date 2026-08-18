@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-08-18T04:06:00.000Z",
+  "updated_at": "2026-08-18T04:10:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/apply-coupon",
+      "source": "Pwnshop OWASP Top 10 2025 — coupon category-bypass route oracle queue drain (PWN-016, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/profile/upload-avatar",
+      "source": "Pwnshop OWASP Top 10 2025 — stored XSS SVG avatar upload route oracle queue drain (PWN-012, Aug 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/wallet",
+      "source": "Pwnshop OWASP Top 10 2025 — wallet top-up credited_amount route oracle queue drain (PWN-042, Aug 2026)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/a4",
       "source": "nodegoat-websec Heroku — A4 insecure direct object references tutorial route (OWASP NodeGoat README, Aug 2026 web discovery)",
