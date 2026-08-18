@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-18T16:05:54.670Z",
+  "updated_at": "2026-08-18T17:17:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1898",
+      "source": "FarciarzYT/WebSecurityLearningLabs — catalog extension module 1898 (placeholder CSR oracle drain, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1899",
+      "source": "FarciarzYT/WebSecurityLearningLabs — catalog extension module 1899 (placeholder CSR oracle drain, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1900",
+      "source": "FarciarzYT/WebSecurityLearningLabs — catalog extension module 1900 (placeholder CSR oracle drain, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/findrive/tools",
+      "source": "GenAI-Security-Project/finbot-ctf — unauthenticated MCP tool-poisoning write oracle PUT /darklab/api/v1/supply-chain/servers/findrive/tools (issue #544, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers",
+      "source": "GenAI-Security-Project/finbot-ctf — supply-chain MCP server catalog GET /darklab/api/v1/supply-chain/servers (README Dark Lab, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/easy/level7.php",
       "source": "webspoilt/vulnforge-academy — Level 7 IDOR challenge (levels 7-9 IDOR tier, GitHub README Aug 2026 web discovery)",
@@ -13971,5 +13996,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 9
+  "discovery_urls_added": 14
 }
