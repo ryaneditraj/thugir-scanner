@@ -2531,6 +2531,8 @@ const DEEP_RULES = new Set<string>([
   "finbotAdminCopilotRouteLiveOracle",
   "finbotDarklabSupplyChainLiveOracle",
   "finbotDarklabSupplyChainRouteLiveOracle",
+  "finbotCtfStatsLiveOracle",
+  "finbotCtfStatsRouteLiveOracle",
   "istEduSearchXssRouteLiveOracle",
   "istEduNoticesLfiRouteLiveOracle",
   "istEduPortalSqliRouteLiveOracle",
@@ -6581,7 +6583,7 @@ function extractFinbotCtfSeeds(html: string, pageUrl: string): string[] {
   if (!/owasp-finbot-ctf\.org|OWASP FinBot|Juice Shop for Agentic AI/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/portals", "/how-it-works", "/about", "/demo/cineflow/", "/docs"]) {
+  for (const p of ["/portals", "/stats", "/how-it-works", "/about", "/demo/cineflow/", "/docs"]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;

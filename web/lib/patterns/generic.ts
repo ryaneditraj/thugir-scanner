@@ -42968,6 +42968,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-ctf-stats-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP FinBot CTF platform stats live oracle",
+    description:
+      "GET /ctf/api/v1/stats returns public challenge progress, badge counts, and per-category completion breakdown without authentication.",
+    impactOneline:
+      "Unauthenticated CTF stats APIs leak agentic challenge catalog metadata and community progress on FinBot training platforms.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotCtfStatsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — restrict stats APIs to authenticated CTF participants.",
+      steps: [
+        "Require session authentication on /ctf/api/v1/stats.",
+        "Avoid exposing full category breakdown without auth.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /ctf/api/v1/stats endpoint exposes challenge progress without auth. Show how to protect agentic CTF stats APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-ctf-stats-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP FinBot /stats route live oracle",
+    description:
+      "When scanning /stats, GET /ctf/api/v1/stats confirms public agentic challenge progress and category breakdown — route-specific FinBot stats oracle.",
+    impactOneline:
+      "Unauthenticated CTF stats APIs leak agentic challenge catalog metadata and community progress on FinBot training platforms.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotCtfStatsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — restrict stats APIs to authenticated CTF participants.",
+      steps: [
+        "Require session authentication on /ctf/api/v1/stats.",
+        "Avoid exposing full category breakdown without auth.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /stats route scan confirms public /ctf/api/v1/stats metadata. Show how to protect agentic CTF stats APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ist-edu-search-xss-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

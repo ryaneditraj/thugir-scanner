@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-stats-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ctf/api/v1/stats returns challenges_total:19 + category_progress JSON without auth; owasp-finbot-ctf.org/stats findings 6→8 (+finbot-ctf-stats-live-oracle +finbot-ctf-stats-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-benefits-nosql-auth-session",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: nodegoatBenefitsNosqlLiveProbe prefers nodegoatAuthenticatedSessionCookie (admin/User1_123) before NoSQL bypass; nodegoat-websec.herokuapp.com/tutorial/a4 findings 11→12 (+nodegoat-benefits-nosql-live-oracle with live IDOR on /allocations/2); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-profile-csrf-navbar-verify",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: nodegoatProfileCsrfLiveProbe verifies forged firstName in /profile or /dashboard navbar after POST; nodegoat-websec.herokuapp.com/tutorial/a8 route scan fires live CSRF oracle; /profile findings 13 (+nodegoat-profile-csrf-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-create-admin-live-oracle",
       "status": "shipped",
@@ -12269,6 +12287,21 @@
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-wallet-topup-route-queue-drain",
       "shipped_at": "2026-08-18T04:10:00.000Z"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-stats-live-oracle",
+      "shipped_at": "2026-08-18T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-benefits-nosql-auth-session",
+      "shipped_at": "2026-08-18T11:30:00.000Z"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-profile-csrf-navbar-verify",
+      "shipped_at": "2026-08-18T11:30:00.000Z"
     }
   ]
 }
