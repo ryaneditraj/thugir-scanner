@@ -3773,6 +3773,24 @@
       "slug": "xss-game-level6-dom-script-src-xss-exploit-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: headless browser navigates /level6/frame#data:text/javascript,window.__thugirL6=canary and confirms script.src execution via includeGadget(); xss-game.appspot.com/level6/frame findings 11\u219214 (+exploit + route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-contributions-ssjs-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /contributions preTax=ThugirNgContrib* returns ReferenceError is not defined from eval(req.body.preTax); nodegoat-websec.herokuapp.com/contributions findings 15\u219217 (+nodegoat-contributions-ssjs + route oracles); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-labs-guardrails-webhook-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: anonymous temp session PUT /labs/api/v1/guardrails accepts public webhook_url (loopback 422) + POST /labs/api/v1/guardrails/test outcome=error; owasp-finbot-ctf.org/labs findings 14\u219217 (+finbot-labs-guardrails-webhook + route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-catalog-1955",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1954\u21921955; web-security-learning-labs.vercel.app/module/1955 findings 9 with placeholder-module-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
