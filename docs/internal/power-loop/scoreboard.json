@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T10:15:00.000Z",
+  "updated_at": "2026-08-19T10:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,19 +22,19 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1986,
   "discovery_findings": 23162,
-  "improvements_shipped": 1175,
-  "last_run": "2026-08-19T10:15:00.000Z",
+  "improvements_shipped": 1178,
+  "last_run": "2026-08-19T10:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
       "primary_status": "ok — primary reachable (no fallback needed)",
-      "oracle_findings": 48,
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 589,
+      "probes_run": 461,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,41 +50,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings); no benchmark misses"
+      "note": "Stable 6/6 first-pass recall (49 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 112,
-      "focus": "WSL 1953–1955 catalog expansion + nodegoat /contributions + finbot /labs guardrail UI + queue drain (payments, ginandjuice, vulnforge)",
-      "improvements_shipped_this_run": 0
+      "findings": 98,
+      "focus": "xss-game level4/5/6 exploit oracles + WSL catalog 1941-1954 + finbot/ginandjuice/vulnforge queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "nodegoat-websec.herokuapp.com/contributions: 15 findings — reused benefits/profile oracles; no route-specific contributions SQLi oracle",
-      "owasp-finbot-ctf.org/labs: 14 findings — finbot darklab supply-chain + vendor invoice oracles on guardrail lab UI",
-      "web-security-learning-labs.vercel.app/module/1953–1955: 8/8/9 findings — placeholder-only modules (no route-specific exploit oracles)",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark misses",
+      "xss-game.appspot.com/level4/frame: 10→15 findings — level4-js-string-xss-exploit oracles shipped via headless Chrome",
+      "xss-game.appspot.com/level5/frame: 10→15 findings — level5-javascript-protocol-xss-exploit oracles shipped",
+      "xss-game.appspot.com/level6/frame: 11→14 findings — level6-dom-script-src-xss-exploit oracles shipped (data: URI hash bypass)",
+      "web-security-learning-labs.vercel.app/module/1950: 8→9 findings — WSL catalog expanded 1940→1954",
       "ginandjuice.shop/catalog?category=Gin: 39 findings — SQLi oracle on category param (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "nodegoat-websec.herokuapp.com/contributions: route-specific contributions SQLi/IDOR oracle still absent",
-      "WSL modules 1953–1955: placeholder-only — no route-specific exploit oracles yet",
-      "owasp-finbot-ctf.org/labs: guardrail webhook SSRF oracle (PUT /labs/api/v1/guardrails) not exercised from /labs UI scan"
+      "tryaisoc.com/cases/INC-RT-001: 6-finding hub without route-specific ledger replay oracle (client-side SPA)",
+      "owasp-finbot-ctf.org/vendor/api/v1/payments: payments agent endpoint returns 404 — queue URL stale",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
+    "juice-shop.herokuapp.com": 49,
+    "xss-game.appspot.com/level4/frame": 15,
+    "xss-game.appspot.com/level5/frame": 15,
+    "xss-game.appspot.com/level6/frame": 14,
     "ginandjuice.shop/catalog?category=Gin": 39,
-    "nodegoat-websec.herokuapp.com/contributions": 15,
-    "owasp-finbot-ctf.org/vendor/api/v1/payments": 15,
-    "owasp-finbot-ctf.org/labs": 14,
-    "web-security-learning-labs.vercel.app/module/1955": 9,
-    "web-security-learning-labs.vercel.app/module/1953": 8,
-    "web-security-learning-labs.vercel.app/module/1954": 8,
-    "ssrf.vulnlab.dev/gopher": 16,
-    "xss-game.appspot.com/level6/frame": 11
+    "owasp-finbot-ctf.org/darklab/supply-chain": 16,
+    "web-security-learning-labs.vercel.app/module/1950": 9,
+    "ssrf.vulnlab.dev/gopher": 16
   }
 }

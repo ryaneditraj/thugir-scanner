@@ -62458,6 +62458,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "xss-game-level4-js-string-xss-exploit-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game level 4 JavaScript string XSS exploit live oracle",
+    description:
+      "Headless browser navigates /level4/frame with a crafted timer breakout payload and confirms script execution via startTimer() onload — live JavaScript string-context XSS exploit confirmation.",
+    impactOneline:
+      "Live exploit proof that level 4 timer input breaks out of startTimer() inside an onload attribute.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel4JsStringXssExploitLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never embed query parameters inside JavaScript string literals in HTML attributes — XSS game levels are intentional training software.",
+      steps: [
+        "Pass timer values as numeric arguments via data attributes, not inline script strings.",
+        "Validate and coerce timer input to integers server-side before rendering.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level4/frame startTimer() onload sink executes attacker JS from the timer query. Show JavaScript string-context XSS remediation with live exploit proof.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-game-level4-js-string-xss-exploit-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game /level4 JavaScript string XSS exploit route live oracle",
+    description:
+      "When scanning /level4, headless browser confirms JavaScript string-context XSS exploit via startTimer() onload — route-specific live exploit oracle.",
+    impactOneline:
+      "Route scans on /level4 need live JavaScript string XSS exploit confirmation, not just static reflection analysis.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel4JsStringXssExploitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block timer query parameters from reaching inline startTimer() calls on /level4/frame.",
+      steps: [
+        "Pass timer values as numeric arguments via data attributes, not inline script strings.",
+        "Validate and coerce timer input to integers server-side before rendering.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level4 route scan confirms live JavaScript string XSS exploit via startTimer(). Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-game-level5-javascript-protocol-xss-exploit-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game level 5 javascript: protocol XSS exploit live oracle",
+    description:
+      "Headless browser loads /level5/frame/confirm with a javascript: next payload reflected into window.location and confirms attacker JS executes — live javascript: protocol XSS exploit confirmation.",
+    impactOneline:
+      "Live exploit proof that level 5 confirm flow reflects javascript: URLs into a window.location sink.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel5JavascriptProtocolXssExploitLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist next redirect targets and reject javascript: URLs — XSS game levels are intentional training software.",
+      steps: [
+        "Validate next against relative path allowlists before rendering href or redirects.",
+        "Reject javascript:, data:, and other dangerous URL schemes in redirect parameters.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level5/frame/confirm reflects javascript: next into window.location. Show javascript: protocol XSS remediation with live exploit proof.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-game-level5-javascript-protocol-xss-exploit-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game /level5 javascript: protocol XSS exploit route live oracle",
+    description:
+      "When scanning /level5, headless browser confirms javascript: protocol XSS exploit via confirm window.location sink — route-specific live exploit oracle.",
+    impactOneline:
+      "Route scans on /level5 need live javascript: protocol XSS exploit confirmation, not just static href reflection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel5JavascriptProtocolXssExploitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist next redirect targets on /level5/frame signup and confirm pages.",
+      steps: [
+        "Validate next against relative path allowlists before rendering href or redirects.",
+        "Reject javascript:, data:, and other dangerous URL schemes in redirect parameters.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level5 route scan confirms live javascript: protocol XSS exploit via window.location. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-game-level6-dom-script-src-xss-exploit-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game level 6 DOM script.src XSS exploit live oracle",
+    description:
+      "Headless browser navigates /level6/frame with a data:text/javascript location.hash payload and confirms script execution via includeGadget() script.src — live DOM script-src XSS exploit confirmation.",
+    impactOneline:
+      "Live exploit proof that level 6 location.hash reaches script.src through a weak http(s) filter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel6DomScriptSrcXssExploitLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign untrusted URLs to script.src; use strict allowlists — XSS game levels are intentional training software.",
+      steps: [
+        "Load gadgets from fixed relative paths only, not hash-controlled URLs.",
+        "Block javascript:, data:, and protocol-relative URLs before setting script.src.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level6/frame includeGadget() loads attacker data: URIs via location.hash into script.src. Show DOM script-src XSS remediation with live exploit proof.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-game-level6-dom-script-src-xss-exploit-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game /level6 DOM script.src XSS exploit route live oracle",
+    description:
+      "When scanning /level6, headless browser confirms DOM script.src XSS exploit via location.hash → includeGadget() — route-specific live exploit oracle.",
+    impactOneline:
+      "Route scans on /level6 need live DOM script.src XSS exploit confirmation, not just static source analysis.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel6DomScriptSrcXssExploitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block location.hash from reaching script.src on /level6/frame.",
+      steps: [
+        "Load gadgets from fixed relative paths only, not hash-controlled URLs.",
+        "Block javascript:, data:, and protocol-relative URLs before setting script.src.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level6 route scan confirms live DOM script.src XSS exploit via includeGadget(). Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "web-pentest-playground-file-upload-live-oracle",
     platform: "generic",
     category: "Broken access control",
