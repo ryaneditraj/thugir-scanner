@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-19T02:05:13.423Z",
-  "total": 2505,
+  "generatedAt": "2026-08-19T03:19:15.478Z",
+  "total": 2507,
   "uniqueSlugs": 2501,
   "byPlatform": {
     "lovable": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2487,
+    "generic": 2489,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2420,
+    "deep": 2422,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 118,
     "Security misconfiguration": 186,
-    "Broken authentication": 155,
+    "Broken authentication": 157,
     "Injection": 376,
     "Cross-site scripting": 703,
     "Open redirect": 21,

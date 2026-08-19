@@ -37418,6 +37418,133 @@ const pwnshopAccountDeleteCsrfRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const PWNSHOP_OTP_NOT_INVALIDATED_ROUTE_FALLBACK = `
+PWN-024 OTP Not Invalidated on New Request
+Requesting a new login OTP or password reset token does not invalidate previous ones.
+Affects: /login → /verify-otp, /forgot-password
+`;
+
+async function probePwnshopOtpNotInvalidated(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isPwnshopHost(ctx)) return null;
+  const username = `thugir_otp024_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const email = `${username}@probe.local`;
+  const registerDoc = await ctx.probe.get(new URL("/register", ctx.origin).toString(), {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=ThugirTest123!`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status === 429 || /rate limit|too many requests/i.test(registerDoc.body)) return null;
+  let cookie = pwnshopSessionCookieFromDoc(registerDoc);
+  if (!cookie) return null;
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginBody = `username=${encodeURIComponent(username)}&password=ThugirTest123!`;
+  const login1 = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: loginBody,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const login1Location = login1.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(login1.status) || !/verify-otp/i.test(login1Location)) return null;
+  cookie = pwnshopSessionCookieFromDoc(login1) ?? cookie;
+  await pwnshopSleep(4000);
+  const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
+  if (!inboxToken) return null;
+  const firstOtp = await pwnshopOtpFromMailInbox(ctx, cookie, inboxToken);
+  if (!firstOtp) return null;
+  const login2 = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: loginBody,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  cookie = pwnshopSessionCookieFromDoc(login2) ?? cookie;
+  await pwnshopSleep(4000);
+  const mailUrl = new URL(`/mail/${inboxToken}`, ctx.origin).toString();
+  const mailDoc = await fetchDoc(mailUrl, {
+    maxBytes: 65536,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  const allOtps = [...mailDoc.body.matchAll(/one-time verification code is:\s*(\d{6})/gi)].map((m) => m[1]);
+  const uniqueOtps = [...new Set(allOtps)];
+  const secondOtp = uniqueOtps.find((o) => o !== firstOtp);
+  if (!secondOtp) return null;
+  const verifyUrl = new URL("/verify-otp", ctx.origin).toString();
+  const verifyDoc = await ctx.probe.get(verifyUrl, {
+    method: "POST",
+    body: `otp=${firstOtp}`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const verifyLocation = verifyDoc.headers["location"] || "";
+  if (![301, 302, 303, 307, 308].includes(verifyDoc.status)) return null;
+  if (!verifyLocation || /verify-otp/i.test(verifyLocation)) return null;
+  return {
+    fired: true,
+    confidence: uniqueOtps.length >= 2 ? 0.93 : 0.9,
+    evidence: {
+      username,
+      firstOtp,
+      secondOtp,
+      uniqueOtpCount: uniqueOtps.length,
+      verifyRedirect: verifyLocation.slice(0, 120),
+      note: "Pwnshop second POST /login issues a new OTP without invalidating the first — both codes remain valid simultaneously (PWN-024)"
+    }
+  };
+}
+
+const pwnshopOtpNotInvalidatedLiveOracle: Rule = async (ctx) => {
+  const hit = await probePwnshopOtpNotInvalidated(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const pwnshopOtpNotInvalidatedRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:reset-password|forgot-password|login|verify-otp)\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probePwnshopOtpNotInvalidated(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "Pwnshop reset-password/login route scan — prior login OTP remains valid after a second OTP is issued (PWN-024)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PWNSHOP_OTP_NOT_INVALIDATED_ROUTE_FALLBACK}`;
+  if (!/PWN-024|OTP Not Invalidated on New Request/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["PWN-024", "OTP Not Invalidated on New Request"],
+      note: "Pwnshop reset-password/login route scan — PWN-024 corpus fallback when OTP mail dual-code live probe did not complete"
+    }
+  };
+};
+
 const fauxbankProfileSensitiveDataLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
   const cookie = await ensureFauxbankSession(ctx);
@@ -87328,6 +87455,8 @@ export const RULES: Record<string, Rule> = {
   pwnshopWalletTopupRouteLiveOracle,
   pwnshopAccountDeleteCsrfLiveOracle,
   pwnshopAccountDeleteCsrfRouteLiveOracle,
+  pwnshopOtpNotInvalidatedLiveOracle,
+  pwnshopOtpNotInvalidatedRouteLiveOracle,
   pwnshopAuditLogPlaintextPasswordLiveOracle,
   pwnshopAuditLogPlaintextPasswordRouteLiveOracle,
   pwnshopExportOrdersCsvLiveOracle,
