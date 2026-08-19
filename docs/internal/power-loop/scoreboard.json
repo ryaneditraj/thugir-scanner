@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-08-19T07:08:00.000Z",
-=======
   "updated_at": "2026-08-19T08:00:00.000Z",
->>>>>>> 3d3f3e5a (engine: vulnbank Werkzeug console + xss-game live exploit oracles)
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -19,40 +15,24 @@
       ]
     }
   },
-<<<<<<< HEAD
   "total_sites_scanned": 2758,
-  "total_findings": 27223,
-  "critical_findings": 55,
-  "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1971,
-  "discovery_findings": 22881,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-19T07:08:00.000Z",
-=======
-  "total_sites_scanned": 2754,
   "total_findings": 27248,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1966,
-  "discovery_findings": 22858,
+  "discovery_urls_added": 1971,
+  "discovery_findings": 22881,
   "improvements_shipped": 1173,
   "last_run": "2026-08-19T08:00:00.000Z",
->>>>>>> 3d3f3e5a (engine: vulnbank Werkzeug console + xss-game live exploit oracles)
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-<<<<<<< HEAD
-      "oracle_findings": 43,
-=======
       "oracle_findings": 48,
->>>>>>> 3d3f3e5a (engine: vulnbank Werkzeug console + xss-game live exploit oracles)
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 578,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -68,24 +48,6 @@
           ]
         }
       },
-<<<<<<< HEAD
-      "note": "Stable 6/6 recall (43 findings); no benchmark misses"
-    },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-    "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 76,
-      "focus": "WSL catalog expansion 1941–1945 + ssrf.vulnlab gopher/blind queue drain",
-      "improvements_shipped_this_run": 0
-    },
-    "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (43 findings) — no benchmark misses",
-      "web-security-learning-labs.vercel.app/module/1941-1944: 8 findings each — placeholder module route oracles on new catalog expansion",
-      "web-security-learning-labs.vercel.app/module/1945: 6 findings — WSL catalog now spans 1941–1945",
-      "ssrf.vulnlab.dev/gopher: 16 findings — full SSRF oracle suite including gopher-route-live-oracle",
-      "ssrf.vulnlab.dev/blind: 16 findings — blind-route-live-oracle confirmed on queue drain"
-=======
       "note": "Stable 6/6 recall (48 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
@@ -100,38 +62,23 @@
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
       "vulnbank.org/console: 0→30 findings — vulnbank-werkzeug-console-live-oracle shipped (Werkzeug debugger CONSOLE_MODE+EVALEX)",
       "xss-game.appspot.com/level2/frame: 8→11 findings — xss-game-level2-stored-xss-exploit-live-oracle shipped (headless PostDB innerHTML exploit)",
-      "xss-game.appspot.com/level3/frame: 10→12 findings — xss-game-level3-dom-xss-exploit-live-oracle shipped (headless hash→chooseTab exploit)"
->>>>>>> 3d3f3e5a (engine: vulnbank Werkzeug console + xss-game live exploit oracles)
+      "xss-game.appspot.com/level3/frame: 8→12 findings — xss-game-level3-dom-xss-exploit-live-oracle shipped (headless hash→chooseTab exploit)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-<<<<<<< HEAD
       "WSL modules 1941–1945: placeholder-only (6–8 findings each) — no route-specific exploit oracles yet",
-=======
->>>>>>> 3d3f3e5a (engine: vulnbank Werkzeug console + xss-game live exploit oracles)
       "vulnshop Flask backend unreachable on Vercel SPA — template/render EL oracle uses README fallback until Railway deploy restored"
     ]
   },
   "discovery_highlights": {
-<<<<<<< HEAD
-    "juice-shop.herokuapp.com": 43,
-    "ssrf.vulnlab.dev/gopher": 16,
-    "ssrf.vulnlab.dev/blind": 16,
-    "web-security-learning-labs.vercel.app/module/1941": 8,
-    "web-security-learning-labs.vercel.app/module/1942": 8,
-    "web-security-learning-labs.vercel.app/module/1943": 8,
-    "web-security-learning-labs.vercel.app/module/1944": 8,
-    "web-security-learning-labs.vercel.app/module/1945": 6,
-    "brokencrystals.com/api/mcp/spawn_process": 86,
-=======
     "juice-shop.herokuapp.com": 48,
     "vulnbank.org/console": 30,
     "xss-game.appspot.com/level2/frame": 11,
     "xss-game.appspot.com/level3/frame": 12,
-    "ginandjuice.shop/register": 33,
+    "ssrf.vulnlab.dev/gopher": 16,
     "ssrf.vulnlab.dev/blind": 17,
->>>>>>> 3d3f3e5a (engine: vulnbank Werkzeug console + xss-game live exploit oracles)
+    "web-security-learning-labs.vercel.app/module/1945": 6,
     "pwnshop.ctfsecurity.com/wallet": 43
   }
 }
