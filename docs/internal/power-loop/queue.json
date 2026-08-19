@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-19T08:06:00.000Z",
+  "updated_at": "2026-08-19T09:05:39.395Z",
   "discovery_urls": [
+    {
+      "url": "https://xss-game.appspot.com/level5/frame",
+      "source": "Google XSS Game — JavaScript protocol XSS level 5 oracle (xss-game.appspot.com training lab, Aug 2026 power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level6/frame",
+      "source": "Google XSS Game — DOM script-src XSS level 6 oracle (xss-game.appspot.com training lab, Aug 2026 power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1950",
+      "source": "Web Security Learning Labs — module 1950 placeholder route oracle (catalog expansion 1950–1954, Aug 2026 power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1951",
+      "source": "Web Security Learning Labs — module 1951 placeholder route oracle (catalog expansion 1950–1954, Aug 2026 power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1952",
+      "source": "Web Security Learning Labs — module 1952 placeholder route oracle (catalog expansion 1950–1954, Aug 2026 power-loop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://xss-game.appspot.com/level4/frame",
       "source": "Google XSS Game — DOM-based XSS level 4 oracle (xss-game.appspot.com training lab, Aug 2026 power-loop)",
