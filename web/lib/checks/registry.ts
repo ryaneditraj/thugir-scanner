@@ -41205,7 +41205,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1956;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1961;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -66814,6 +66814,98 @@ const ssrfVulnlabBlindRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isSsrfDefensePlatformHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /ssrf-defense-platform\.onrender\.com/i.test(corpus);
+}
+
+function ssrfDefensePlatformProbeOrigin(ctx: RuleContext): string {
+  if (!isSsrfDefensePlatformHost(ctx)) return ctx.origin;
+  return "https://ssrf-defense-platform.onrender.com";
+}
+
+async function ssrfDefensePlatformScanSse(
+  targetUrl: string,
+  origin: string
+): Promise<{ body: string; finalStatus?: string; allowlistBypass?: boolean; pipelineStarted: boolean }> {
+  const probeUrl = new URL("/api/scan", origin);
+  probeUrl.searchParams.set("url", targetUrl);
+  const doc = await fetchDoc(probeUrl.toString(), { maxBytes: 65536, timeoutMs: 45000 });
+  const finalMatch = doc.body.match(/finalStatus":"(BLOCKED|PASS|ALLOWED)"/i);
+  return {
+    body: doc.body,
+    finalStatus: finalMatch?.[1]?.toUpperCase(),
+    allowlistBypass: /NOT in allowlist — proceeding for demo/i.test(doc.body),
+    pipelineStarted: /"type":"start"|Audit & Alert Layer/i.test(doc.body)
+  };
+}
+
+const ssrfDefensePlatformScanLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfDefensePlatformHost(ctx)) return NEGATIVE;
+  const origin = ssrfDefensePlatformProbeOrigin(ctx);
+  const metadataUrl = "http://169.254.169.254/latest/meta-data/";
+  const metadataScan = await ssrfDefensePlatformScanSse(metadataUrl, origin);
+  if (!metadataScan.pipelineStarted) return NEGATIVE;
+  if (metadataScan.finalStatus !== "BLOCKED") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      probeUrl: new URL(`/api/scan?url=${encodeURIComponent(metadataUrl)}`, origin).toString(),
+      targetUrl: metadataUrl,
+      finalStatus: metadataScan.finalStatus,
+      note: "ssrf-defense-platform.onrender.com exposes unauthenticated GET /api/scan SSE that processes attacker-controlled URLs through a defense pipeline (169.254.169.254 correctly BLOCKED)"
+    }
+  };
+};
+
+const ssrfDefensePlatformScanRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfDefensePlatformHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/scan\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfDefensePlatformScanLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const ssrfDefensePlatformAllowlistBypassLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfDefensePlatformHost(ctx)) return NEGATIVE;
+  const origin = ssrfDefensePlatformProbeOrigin(ctx);
+  const bypassUrl = "http://metadata.google.internal/computeMetadata/v1/";
+  const bypassScan = await ssrfDefensePlatformScanSse(bypassUrl, origin);
+  if (!bypassScan.pipelineStarted) return NEGATIVE;
+  if (bypassScan.finalStatus !== "PASS") return NEGATIVE;
+  if (!bypassScan.allowlistBypass) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      probeUrl: new URL(`/api/scan?url=${encodeURIComponent(bypassUrl)}`, origin).toString(),
+      targetUrl: bypassUrl,
+      finalStatus: bypassScan.finalStatus,
+      snippet: bypassScan.body.match(/NOT in allowlist — proceeding for demo/i)?.[0] ?? "allowlist bypass demo",
+      note: "ssrf-defense-platform.onrender.com GET /api/scan accepts metadata.google.internal with allowlist warning and finalStatus PASS — demo SSRF defense bypass oracle"
+    }
+  };
+};
+
+const ssrfDefensePlatformAllowlistBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfDefensePlatformHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/scan\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfDefensePlatformAllowlistBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 function isSqliVulnlabHost(ctx: RuleContext): boolean {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   return /sqli\.vulnlab\.dev/i.test(corpus);
@@ -88623,6 +88715,10 @@ export const RULES: Record<string, Rule> = {
   ssrfVulnlabBlindRouteLiveOracle,
   ssrfVulnlabWebhookLiveOracle,
   ssrfVulnlabWebhookRouteLiveOracle,
+  ssrfDefensePlatformScanLiveOracle,
+  ssrfDefensePlatformScanRouteLiveOracle,
+  ssrfDefensePlatformAllowlistBypassLiveOracle,
+  ssrfDefensePlatformAllowlistBypassRouteLiveOracle,
   sqliVulnlabErrorLiveOracle,
   sqliVulnlabErrorRouteLiveOracle,
   sqliVulnlabSecondOrderLiveOracle,

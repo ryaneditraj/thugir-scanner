@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-19T13:58:58.631Z",
-  "total": 2536,
-  "uniqueSlugs": 2530,
+  "generatedAt": "2026-08-19T14:45:22.689Z",
+  "total": 2540,
+  "uniqueSlugs": 2534,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2518,
+    "generic": 2522,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2451,
+    "deep": 2455,
     "continuous": 0
   },
   "byCategory": {
@@ -32,7 +32,7 @@
     "Open redirect": 23,
     "general": 20,
     "SSRF": 14,
-    "Server-side request forgery": 83,
+    "Server-side request forgery": 87,
     "Sensitive data exposure": 64,
     "AI security": 85,
     "Business logic": 24,
@@ -2003,6 +2003,10 @@
     "sqli-vulnlab-second-order-route-live-oracle",
     "sqli-vulnlab-union-live-oracle",
     "sqli-vulnlab-union-route-live-oracle",
+    "ssrf-defense-platform-allowlist-bypass-live-oracle",
+    "ssrf-defense-platform-allowlist-bypass-route-live-oracle",
+    "ssrf-defense-platform-scan-live-oracle",
+    "ssrf-defense-platform-scan-route-live-oracle",
     "ssrf-endpoint-fetch",
     "ssrf-vulnlab-allowlist-bypass-live-oracle",
     "ssrf-vulnlab-allowlist-route-live-oracle",

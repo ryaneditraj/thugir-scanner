@@ -30527,6 +30527,108 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssrf-defense-platform-scan-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "SSRF Defense Simulator exposed scan endpoint live oracle",
+    description:
+      "GET /api/scan?url= exposes an unauthenticated SSE pipeline that processes attacker-controlled URLs — probing http://169.254.169.254/latest/meta-data/ runs the defense layers and returns finalStatus BLOCKED.",
+    impactOneline:
+      "Public URL-fetch scan endpoints let attackers probe internal networks even when some destinations are blocked.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfDefensePlatformScanLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication before exposing server-side URL fetch or scan APIs.",
+      steps: [
+        "Remove or auth-gate /api/scan on public deployments.",
+        "Never expose URL-fetch debug endpoints without network isolation.",
+        "Log and rate-limit outbound fetch attempts initiated by scan APIs."
+      ]
+    },
+    fixPrompt:
+      "Our /api/scan endpoint accepts attacker-controlled URLs over SSE without authentication. Show SSRF scan API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-defense-platform-scan-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "SSRF Defense Simulator /api/scan route live oracle",
+    description:
+      "When scanning /api/scan, the unauthenticated SSE pipeline processes attacker-controlled URLs — route-specific exposed scan endpoint oracle.",
+    impactOneline:
+      "Route scans on /api/scan confirm a public server-side URL fetch surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfDefensePlatformScanRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication before exposing server-side URL fetch or scan APIs.",
+      steps: [
+        "Remove or auth-gate /api/scan on public deployments.",
+        "Never expose URL-fetch debug endpoints without network isolation."
+      ]
+    },
+    fixPrompt:
+      "Our /api/scan route accepts attacker URLs without authentication. Show route-specific SSRF scan API remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-defense-platform-allowlist-bypass-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "SSRF Defense Simulator allowlist bypass demo live oracle",
+    description:
+      "GET /api/scan?url=http://metadata.google.internal/computeMetadata/v1/ proceeds with NOT in allowlist — proceeding for demo and returns finalStatus PASS — the ssrf-defense-platform demo allowlist bypass oracle.",
+    impactOneline:
+      "Demo-mode allowlist enforcement that proceeds on non-allowlisted cloud metadata hostnames models real SSRF defense bypass risk.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfDefensePlatformAllowlistBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fail closed on non-allowlisted hosts; never proceed for demo on metadata endpoints.",
+      steps: [
+        "Reject requests when hostnames are not on an explicit egress allowlist.",
+        "Block metadata.google.internal and 169.254.169.254 before fetch.",
+        "Do not expose bypassable scan pipelines on public hosts."
+      ]
+    },
+    fixPrompt:
+      "Our /api/scan demo proceeds on metadata.google.internal despite allowlist warnings. Show fail-closed SSRF egress filtering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ssrf-defense-platform-allowlist-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "SSRF Defense Simulator /api/scan allowlist bypass route live oracle",
+    description:
+      "When scanning /api/scan, metadata.google.internal passes with allowlist demo warning and finalStatus PASS — route-specific allowlist bypass oracle.",
+    impactOneline:
+      "Route scans confirm demo allowlist bypass on cloud metadata hostnames.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfDefensePlatformAllowlistBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Fail closed on non-allowlisted hosts; never proceed for demo on metadata endpoints.",
+      steps: [
+        "Reject requests when hostnames are not on an explicit egress allowlist.",
+        "Block metadata.google.internal before fetch."
+      ]
+    },
+    fixPrompt:
+      "Our /api/scan route demo bypasses allowlist on metadata hostnames. Show route-specific fail-closed SSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sqli-vulnlab-error-live-oracle",
     platform: "generic",
     category: "Injection",
