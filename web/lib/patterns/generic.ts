@@ -40371,6 +40371,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-werkzeug-console-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "Vuln Bank exposed Werkzeug debugger console live oracle",
+    description:
+      "GET /console returns the Werkzeug interactive debugger with CONSOLE_MODE and EVALEX enabled — remote code execution risk on the Vuln Bank training app.",
+    impactOneline:
+      "An exposed Werkzeug debugger console lets attackers execute arbitrary Python on the server.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankWerkzeugConsoleLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable Werkzeug debugger in production — Vuln Bank is intentional training software.",
+      steps: [
+        "Set debug=False and never expose /console on internet-facing deployments.",
+        "Block /console at the reverse proxy or WAF layer.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /console endpoint exposes Werkzeug debugger with EVALEX enabled. Show how to disable debug mode and block debugger routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-werkzeug-console-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "Vuln Bank /console Werkzeug debugger route live oracle",
+    description:
+      "When scanning /console, Werkzeug interactive debugger is reachable with CONSOLE_MODE and EVALEX enabled — route-specific debugger exposure oracle.",
+    impactOneline:
+      "Route scans on /console confirm interactive debugger exposure enabling server-side code execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankWerkzeugConsoleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable Werkzeug debugger and block /console on internet-facing deployments.",
+      steps: [
+        "Set debug=False in Flask/Werkzeug configuration.",
+        "Block /console at the reverse proxy or WAF layer.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /console route scan confirms Werkzeug debugger exposure. Show route-specific debugger hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-transfer-negative-amount-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -61990,6 +62042,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "xss-game-level2-stored-xss-exploit-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game level 2 stored XSS exploit live oracle",
+    description:
+      "Headless browser injects a stored post on /level2/frame and confirms script execution via PostDB innerHTML sink — live stored XSS exploit confirmation.",
+    impactOneline:
+      "Live exploit proof that level 2 post storage renders attacker HTML without sanitization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel2StoredXssExploitLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize stored messages before innerHTML rendering — XSS game levels are intentional training software.",
+      steps: [
+        "Use textContent instead of innerHTML for user-generated content.",
+        "Apply a strict HTML sanitizer if markup is required.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level2/frame PostDB displayPosts() executes injected HTML via innerHTML. Show stored XSS remediation with live exploit proof.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-game-level2-stored-xss-exploit-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game /level2 stored XSS exploit route live oracle",
+    description:
+      "When scanning /level2, headless browser confirms stored XSS exploit via PostDB innerHTML sink — route-specific live exploit oracle.",
+    impactOneline:
+      "Route scans on /level2 need live stored XSS exploit confirmation, not just static source analysis.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel2StoredXssExploitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize stored messages before innerHTML rendering on /level2/frame.",
+      steps: [
+        "Use textContent instead of innerHTML for user-generated content.",
+        "Apply a strict HTML sanitizer if markup is required.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level2 route scan confirms live stored XSS exploit via PostDB. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "xss-game-level3-dom-xss-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -62038,6 +62142,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /level3 route scan confirms location.hash reaches jQuery .html() without sanitization. Show route-specific DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-game-level3-dom-xss-exploit-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game level 3 DOM XSS exploit live oracle",
+    description:
+      "Headless browser navigates /level3/frame with a crafted location.hash breakout and confirms script execution via chooseTab() jQuery .html() — live DOM XSS exploit confirmation.",
+    impactOneline:
+      "Live exploit proof that level 3 hash fragments reach jQuery .html() without sanitization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel3DomXssExploitLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass location.hash into .html() sinks — XSS game levels are intentional training software.",
+      steps: [
+        "Validate hash fragments against an allowlist before DOM updates.",
+        "Use textContent or safe DOM APIs instead of .html() for untrusted data.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level3/frame chooseTab() executes attacker HTML from location.hash via jQuery .html(). Show DOM XSS remediation with live exploit proof.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-game-level3-dom-xss-exploit-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Google XSS game /level3 DOM XSS exploit route live oracle",
+    description:
+      "When scanning /level3, headless browser confirms DOM XSS exploit via location.hash → chooseTab() → jQuery .html() — route-specific live exploit oracle.",
+    impactOneline:
+      "Route scans on /level3 need live DOM XSS exploit confirmation, not just static source analysis.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssGameLevel3DomXssExploitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block hash fragments from reaching .html() sinks on /level3/frame.",
+      steps: [
+        "Validate hash fragments against an allowlist before DOM updates.",
+        "Use textContent or safe DOM APIs instead of .html() for untrusted data.",
+        "Run XSS game levels only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /level3 route scan confirms live DOM XSS exploit via location.hash. Show route-specific remediation.",
     version: 1,
     enabled: true
   },
