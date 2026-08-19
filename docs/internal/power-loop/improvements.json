@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-catalog-1962-1970",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1961→1970 + runner placeholder priority regex 196[0-1]→196[0-9]|1970; web-security-learning-labs.vercel.app/module/1962 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1965 and /1970 validated 8 findings; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zero.webappsecurity.com",
+      "slug": "zero-bank-admin-users-plaintext-passwords-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /admin/users.html returns Users table with Leeroy Jenkins password VIZ10AWT8VL without auth; zero.webappsecurity.com/admin/users.html findings 6→8 (+zero-bank-admin-users-plaintext-passwords-live-oracle +zero-bank-admin-users-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zero.webappsecurity.com",
+      "slug": "zero-bank-admin-users-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route scan on /admin/users.html fires zeroBankAdminUsersRouteLiveOracle with scannedUrl evidence; zero.webappsecurity.com/admin/users.html findings 6→8; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-tutorial-redos-live-oracle",
       "status": "shipped",

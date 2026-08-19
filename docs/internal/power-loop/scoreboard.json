@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T15:12:00.000Z",
+  "updated_at": "2026-08-19T16:22:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2745,
-  "total_findings": 26731,
-  "critical_findings": 56,
+  "total_sites_scanned": 2747,
+  "total_findings": 26826,
+  "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1961,
-  "discovery_findings": 22596,
-  "improvements_shipped": 1168,
-  "last_run": "2026-08-19T15:12:00.000Z",
+  "discovery_urls_added": 1964,
+  "discovery_findings": 22602,
+  "improvements_shipped": 1171,
+  "last_run": "2026-08-19T16:22:00.000Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
@@ -52,35 +52,34 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 63,
-      "focus": "WSL modules 1965-1967 catalog expansion + FinBot how-it-works Dark Lab oracles + Zero Bank pay-bills SQLi route",
-      "improvements_shipped_this_run": 0
+      "urls_added": 4,
+      "urls_scanned": 3,
+      "findings": 24,
+      "focus": "WSL catalog 1962-1970 expansion + Zero Bank admin/users plaintext password disclosure",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "owasp-finbot-ctf.org/how-it-works: 15 findings — finbot-darklab-supply-chain + taxcalc MCP tool-poisoning live oracles from walkthrough hub",
-      "web-security-learning-labs.vercel.app/module/1965-1967: 7 findings each — placeholder-only catalog expansion (1965-1967)",
-      "zero.webappsecurity.com/bank/pay-bills.html: 5 findings — client-side-zero-bank-webinspect-evidence; route-specific SQLi live oracle still absent without auth session",
-      "ssrf-defense-platform.onrender.com/api/scan: 9 findings — stable SSRF scan + allowlist-bypass oracles (48h queue rescan)"
+      "web-security-learning-labs.vercel.app/module/1962-1970: 7→8 findings — placeholder-module-route-live-oracle after CATALOG_MAX 1961→1970",
+      "zero.webappsecurity.com/admin/users.html: 6→8 findings — zero-bank-admin-users-plaintext-passwords + route live oracles (Leeroy Jenkins / VIZ10AWT8VL)",
+      "zero.webappsecurity.com/bank/pay-bills.html: route-specific SQLi live oracle still absent without authenticated session",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "web-security-learning-labs modules 1965-1967: placeholder-only (7 findings each); extend catalog max beyond 1967 for route-specific live oracles",
       "zero.webappsecurity.com/bank/pay-bills.html: route-specific SQLi (pay-bills-get-payee-details) live oracle absent without authenticated session",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle absent when OTP-gated login blocks authenticated probes"
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle absent when OTP-gated login blocks authenticated probes",
+      "web-security-learning-labs modules beyond 1970: extend catalog when new placeholder shells appear"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "zero.webappsecurity.com/admin/users.html": 8,
+    "web-security-learning-labs.vercel.app/module/1965": 8,
+    "web-security-learning-labs.vercel.app/module/1970": 8,
     "owasp-finbot-ctf.org/how-it-works": 15,
     "ssrf-defense-platform.onrender.com/api/scan": 9,
-    "web-security-learning-labs.vercel.app/module/1961": 8,
-    "web-security-learning-labs.vercel.app/module/1965": 7,
-    "web-security-learning-labs.vercel.app/module/1966": 7,
-    "web-security-learning-labs.vercel.app/module/1967": 7,
     "zero.webappsecurity.com/bank/pay-bills.html": 5,
     "pwnshop.ctfsecurity.com/apply-coupon": 48
   }
