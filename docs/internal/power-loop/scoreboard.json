@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T09:15:00.000Z",
+  "updated_at": "2026-08-19T09:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2776,
-  "total_findings": 27485,
+  "total_sites_scanned": 2778,
+  "total_findings": 27509,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1981,
-  "discovery_findings": 23026,
-  "improvements_shipped": 1173,
-  "last_run": "2026-08-19T09:15:00.000Z",
+  "discovery_findings": 23050,
+  "improvements_shipped": 1175,
+  "last_run": "2026-08-19T09:25:00.000Z",
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
@@ -50,40 +50,37 @@
           ]
         }
       },
-      "note": "09 UTC primary juice-shop.herokuapp.com 6/6 (49 findings, +6 vs 08 UTC staging fallback 43)"
+      "note": "Stable 6/6 first-pass recall (49 findings); no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 85,
-      "focus": "Google XSS Game level 5/6 dedicated route scans + WSL catalog expansion 1950–1952 + queue drain WSL 1940 + OWASP FinBot DarkLab taxcalc supply-chain routes",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 24,
+      "focus": "nodegoat /admin BAC route oracle + /upload profile stored XSS route oracle",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings) — primary reachable, no Heroku cold-start miss",
-      "xss-game.appspot.com/level5/frame: 10 findings — xss-game-level5-javascript-protocol-xss-route-live-oracle (dedicated level 5 route scan)",
-      "xss-game.appspot.com/level6/frame: 11 findings — xss-game-level6-dom-script-src-xss-route-live-oracle (dedicated level 6 route scan)",
-      "web-security-learning-labs.vercel.app/module/1950-1952: 8–9 findings each — WSL catalog expansion 1950–1952",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/reset-tools: 17 findings — finbot-darklab-taxcalc-server-route-live-oracle",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc: 14 findings — finbot-darklab-supply-chain-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings) — no benchmark misses",
+      "nodegoat-websec.herokuapp.com/upload: 9→12 findings — nodegoat-upload-route-live-oracle + nodegoat-profile-stored-xss-live-oracle (A3 profile XSS; /upload 404 on Heroku)",
+      "nodegoat-websec.herokuapp.com/admin: 9→12 findings — nodegoat-admin-route-live-oracle maps /admin 404 to /benefits BAC (A7)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "WSL modules 1950–1952: placeholder-only (8–9 findings each) — no route-specific exploit oracles yet",
-      "xss-game level5/6: route-specific oracles now confirmed via dedicated /level5 and /level6 frame scans"
+      "WSL modules 1950–1952: placeholder-only — no route-specific exploit oracles yet"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 49,
+    "nodegoat-websec.herokuapp.com/upload": 12,
+    "nodegoat-websec.herokuapp.com/admin": 12,
+    "ssrf.vulnlab.dev/gopher": 16,
     "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/reset-tools": 17,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc": 14,
     "xss-game.appspot.com/level6/frame": 11,
     "xss-game.appspot.com/level5/frame": 10,
-    "web-security-learning-labs.vercel.app/module/1951": 9,
-    "web-security-learning-labs.vercel.app/module/1950": 8,
-    "web-security-learning-labs.vercel.app/module/1952": 8,
-    "web-security-learning-labs.vercel.app/module/1940": 8
+    "web-security-learning-labs.vercel.app/module/1950": 9,
+    "nodegoat-websec.herokuapp.com/memos": 13,
+    "preview.owasp-juice.shop/rest/admin/application-configuration": 49
   }
 }

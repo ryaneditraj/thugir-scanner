@@ -3301,6 +3301,10 @@ const DEEP_RULES = new Set<string>([
   "nodegoatProfileCsrfLiveOracle",
   "nodegoatProfileCsrfRouteLiveOracle",
   "nodegoatProfileRedosRouteLiveOracle",
+  "nodegoatProfileStoredXssLiveOracle",
+  "nodegoatProfileStoredXssRouteLiveOracle",
+  "nodegoatUploadRouteLiveOracle",
+  "nodegoatAdminRouteLiveOracle",
   "vulnforgeAcademyLevelSqliRouteLiveOracle",
   "vulnforgeAcademyLevel4SqliRouteLiveOracle",
   "vulnforgeAcademyLevel6SqliRouteLiveOracle",
@@ -12787,6 +12791,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
         /\/benefits\b/i.test(targetInput) &&
         p.slug.startsWith("nodegoat-benefits-bac")
+      )
+        return -4;
+      if (
+        /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
+        /\/admin\b/i.test(targetInput) &&
+        p.slug.startsWith("nodegoat-admin-")
+      )
+        return -4;
+      if (
+        /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
+        /\/upload\b/i.test(targetInput) &&
+        p.slug.startsWith("nodegoat-upload-")
+      )
+        return -4;
+      if (
+        /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
+        /\/profile\/?$/i.test(targetInput) &&
+        p.slug.startsWith("nodegoat-profile-stored-xss")
       )
         return -4;
       if (

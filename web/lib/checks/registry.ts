@@ -7890,6 +7890,18 @@ const nodegoatTutorialA3RouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/tutorial\/a3\b/i.test(pageUrl)) return NEGATIVE;
+  const xss = await nodegoatProfileStoredXssLiveProbe(ctx);
+  if (xss.fired) {
+    return {
+      fired: true,
+      confidence: xss.confidence,
+      evidence: {
+        ...xss.evidence,
+        scannedUrl: pageUrl,
+        note: "NodeGoat /tutorial/a3 route scan — POST /profile stores unsanitized firstName HTML on /dashboard — A3 profile stored XSS live oracle"
+      }
+    };
+  }
   const result = await nodegoatTutorialMarkers(ctx, "a3", [
     {
       label: "A3 XSS tutorial title",
@@ -9816,6 +9828,146 @@ const nodegoatProfileRedosRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       redosTutorialUrl: redosUrl,
       note: "NodeGoat /profile bankRouting validates via catastrophic backtracking regex documented on /tutorial/redos — ReDoS oracle"
+    }
+  };
+};
+
+async function nodegoatProfileStoredXssLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  const cookie = await nodegoatAuthenticatedSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const profileUrl = new URL("/profile", ctx.origin).toString();
+  const marker = `ThugirProfXss${Date.now().toString().slice(-6)}`;
+  const xssPayload = `<img src=x onerror=${marker}>`;
+  const postDoc = await ctx.probe.get(profileUrl, {
+    method: "POST",
+    body: `firstName=${encodeURIComponent(xssPayload)}&lastName=Probe&address=1+Main&ssn=123-45-6789&dob=1990-01-01&bankAcc=123456&bankRouting=123456%23`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded", Cookie: cookie },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 500) return NEGATIVE;
+  const dashUrl = new URL("/dashboard", ctx.origin).toString();
+  const verifyDoc = await fetchDoc(dashUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (verifyDoc.status < 200 || verifyDoc.status >= 400) return NEGATIVE;
+  if (!new RegExp(marker, "i").test(verifyDoc.body)) return NEGATIVE;
+  const hasOnerror = /onerror\s*=/i.test(verifyDoc.body);
+  return {
+    fired: true,
+    confidence: hasOnerror ? 0.93 : 0.9,
+    evidence: {
+      profileUrl,
+      marker,
+      snippet:
+        verifyDoc.body.match(new RegExp(`[^<]{0,40}${marker}[^>]{0,40}`, "i"))?.[0]?.slice(0, 160) ||
+        verifyDoc.body.slice(0, 160).trim(),
+      note: "NodeGoat POST /profile stores unsanitized firstName HTML that reflects on /dashboard with onerror handler — A3 profile stored XSS oracle"
+    }
+  };
+}
+
+const nodegoatProfileStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  return nodegoatProfileStoredXssLiveProbe(ctx);
+};
+
+const nodegoatProfileStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatProfileStoredXssLiveProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "NodeGoat /profile route scan — POST /profile stores unsanitized firstName HTML on /dashboard — A3 profile stored XSS live oracle"
+    }
+  };
+};
+
+const nodegoatUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/upload\b/i.test(pageUrl)) return NEGATIVE;
+  const uploadUrl = new URL("/upload", ctx.origin).toString();
+  const uploadDoc = await ctx.probe.get(uploadUrl, { maxBytes: 4096, timeoutMs: 10000 });
+  const uploadMissing = uploadDoc.status === 404 || /Cannot GET \/upload/i.test(uploadDoc.body);
+  const live = await nodegoatProfileStoredXssLiveProbe(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        uploadRouteStatus: uploadDoc.status,
+        uploadRouteMissing: uploadMissing,
+        note: uploadMissing
+          ? "NodeGoat /upload route scan — /upload absent on Heroku deploy; live A3 profile stored XSS via POST /profile confirms XSS training oracle (1337skills cheatsheet upload vector maps to profile form)"
+          : "NodeGoat /upload route scan — profile stored XSS probe confirms A3 XSS oracle"
+      }
+    };
+  }
+  if (!uploadMissing) return NEGATIVE;
+  const a3Url = new URL("/tutorial/a3", ctx.origin).toString();
+  const a3Doc = await ctx.probe.get(a3Url, { maxBytes: 65536, timeoutMs: 15000 });
+  if (!/stored XSS attack on profiles form/i.test(a3Doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      uploadUrl,
+      uploadRouteStatus: uploadDoc.status,
+      a3TutorialUrl: a3Url,
+      note: "NodeGoat /upload route scan — /upload 404 on Heroku; /tutorial/a3 documents stored XSS on profiles form when live probe did not complete"
+    }
+  };
+};
+
+const nodegoatAdminRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\b/i.test(pageUrl)) return NEGATIVE;
+  const adminUrl = new URL("/admin", ctx.origin).toString();
+  const adminDoc = await ctx.probe.get(adminUrl, { maxBytes: 4096, timeoutMs: 10000 });
+  const adminMissing = adminDoc.status === 404 || /Cannot GET \/admin/i.test(adminDoc.body);
+  const live = await nodegoatBenefitsBacLiveProbe(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        adminRouteStatus: adminDoc.status,
+        adminRouteMissing: adminMissing,
+        note: adminMissing
+          ? "NodeGoat /admin route scan — /admin absent on Heroku deploy; live /benefits BAC confirms A7 missing function-level access control oracle"
+          : "NodeGoat /admin route scan — /benefits BAC confirms A7 missing function-level access control oracle"
+      }
+    };
+  }
+  if (!adminMissing) return NEGATIVE;
+  const a7Url = new URL("/tutorial/a7", ctx.origin).toString();
+  const a7Doc = await ctx.probe.get(a7Url, { maxBytes: 65536, timeoutMs: 15000 });
+  if (!/benefits module/i.test(a7Doc.body) || !/access functionality without proper authorization/i.test(a7Doc.body))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      adminUrl,
+      adminRouteStatus: adminDoc.status,
+      a7TutorialUrl: a7Url,
+      note: "NodeGoat /admin route scan — /admin 404 on Heroku; /tutorial/a7 documents /benefits admin bypass when live probe did not complete"
     }
   };
 };
@@ -89453,6 +89605,10 @@ export const RULES: Record<string, Rule> = {
   nodegoatProfileCsrfLiveOracle,
   nodegoatProfileCsrfRouteLiveOracle,
   nodegoatProfileRedosRouteLiveOracle,
+  nodegoatProfileStoredXssLiveOracle,
+  nodegoatProfileStoredXssRouteLiveOracle,
+  nodegoatUploadRouteLiveOracle,
+  nodegoatAdminRouteLiveOracle,
   vulnforgeAcademyLevelSqliRouteLiveOracle,
   vulnforgeAcademyLevel4SqliRouteLiveOracle,
   vulnforgeAcademyLevel6SqliRouteLiveOracle,
