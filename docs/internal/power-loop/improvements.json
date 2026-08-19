@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:owasp-demo.vulcanlab.ai",
+      "slug": "owasp-demo-vulcanlab-llm-top10-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: owasp-demo.vulcanlab.ai homepage embeds LLM01–LLM10 challenge cards with critical/high risk ratings; owasp-demo.vulcanlab.ai/ findings 3→5 (+owasp-demo-vulcanlab-llm-top10-live-oracle +owasp-demo-vulcanlab-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-demo.vulcanlab.ai",
+      "slug": "owasp-demo-vulcanlab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges returns 404; route oracle falls back to root homepage LLM01–LLM10 cards; owasp-demo.vulcanlab.ai/challenges findings 3 with +owasp-demo-vulcanlab-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-sqli-search-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/sqli/search?q=test returns Angular <app-root> SPA shell instead of DaniSam-STU/security-lab SQLite SQLi API; seclab.vercel.app/api/sqli/search findings 0→6 (+seclab-sqli-search-route-live-oracle dead-route oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-subscriptions-xss-route-live-oracle",
       "status": "shipped",
