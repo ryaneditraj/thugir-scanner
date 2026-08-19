@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-19T19:56:42.781Z",
-  "total": 2553,
-  "uniqueSlugs": 2546,
+  "generatedAt": "2026-08-19T20:06:55.170Z",
+  "total": 2554,
+  "uniqueSlugs": 2547,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2535,
+    "generic": 2536,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2468,
+    "deep": 2469,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 518,
+    "Broken access control": 519,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -2556,6 +2556,7 @@
     "zen-demo-java-request-route-live-oracle",
     "zen-demo-java-request-ssrf-live-oracle",
     "zero-bank-account-activity-route-live-oracle",
+    "zero-bank-admin-route-live-oracle",
     "zero-bank-admin-users-plaintext-passwords-live-oracle",
     "zero-bank-admin-users-route-live-oracle",
     "zero-bank-feedback-route-live-oracle",

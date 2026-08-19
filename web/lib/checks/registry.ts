@@ -30392,17 +30392,97 @@ const zeroBankAdminUsersRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const zeroBankAdminRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZeroBankHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl) return NEGATIVE;
+  let adminPath = "";
+  try {
+    adminPath = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/^\/admin(?:\/index\.html)?\/?$/i.test(adminPath)) return NEGATIVE;
+  const adminHomeUrl = new URL("/admin/index.html", ctx.origin).toString();
+  const adminDoc = await ctx.probe.get(adminHomeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  const adminHomeOk =
+    adminDoc.status >= 200 &&
+    adminDoc.status < 400 &&
+    /Admin\s*Home|admin\/users\.html|board-header/i.test(adminDoc.body);
+  const usersResult = await zeroBankAdminUsersPlaintextPasswordsLiveOracle(ctx);
+  if (usersResult.fired) {
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        ...usersResult.evidence,
+        scannedUrl: pageUrl,
+        adminHomeUrl,
+        adminHomeOk,
+        note: "Zero Bank /admin/ route scan — unauthenticated admin panel reachable and /admin/users.html exposes plaintext passwords (Leeroy Jenkins / VIZ10AWT8VL) — route-specific admin broken access control oracle"
+      }
+    };
+  }
+  if (!adminHomeOk) return NEGATIVE;
+  const adminMarkers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "admin home header", re: /Admin\s*Home/i },
+    { label: "users nav link", re: /href=["']\/admin\/users\.html/i },
+    { label: "currencies nav link", re: /href=["']\/admin\/currencies\.html/i }
+  ]) {
+    const m = adminDoc.body.match(re);
+    if (m) adminMarkers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (adminMarkers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      adminHomeUrl,
+      adminMarkers: adminMarkers.slice(0, 3),
+      note: "Zero Bank /admin/ route scan — unauthenticated admin panel reachable without login — route-specific admin broken access control oracle"
+    }
+  };
+};
+
+async function zeroBankScrapedAdminCredentials(ctx: RuleContext): Promise<{ user: string; pass: string }[]> {
+  const adminUrl = new URL("/admin/users.html", ctx.origin).toString();
+  const doc = await ctx.probe.get(adminUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return [];
+  const creds: { user: string; pass: string }[] = [];
+  const rowRe =
+    /<tr>\s*<td>\s*([^<]+?)\s*<\/td>\s*<td>\s*([^<]+?)\s*<\/td>\s*<td>\s*[^<]+?\s*<\/td>/gi;
+  for (const match of doc.body.matchAll(rowRe)) {
+    const name = match[1].trim();
+    const pass = match[2].trim();
+    if (!name || !pass || pass.length < 4) continue;
+    creds.push({ user: name, pass });
+    const first = name.split(/\s+/)[0]?.toLowerCase();
+    if (first && first !== name.toLowerCase()) creds.push({ user: first, pass });
+  }
+  return creds;
+}
+
 async function zeroBankLoginSessionCookie(ctx: RuleContext): Promise<string | null> {
   const loginUrl = new URL("/login.html", ctx.origin).toString();
   const loginPage = await ctx.probe.get(loginUrl, { maxBytes: 32768, timeoutMs: 15000 });
   if (loginPage.status < 200 || loginPage.status >= 400) return null;
   const token = loginPage.body.match(/user_token["']\s*value=["']([^"']+)/i)?.[1];
   if (!token) return null;
-  for (const { user, pass } of [
+  const scraped = await zeroBankScrapedAdminCredentials(ctx);
+  const attempts = [
+    ...scraped,
+    { user: "username", pass: "password" },
     { user: "jsmith", pass: "Demo123!" },
     { user: "admin", pass: "admin" },
     { user: "jdoe", pass: "password" }
-  ]) {
+  ];
+  const seen = new Set<string>();
+  for (const { user, pass } of attempts) {
+    const key = `${user}:${pass}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
     const doc = await ctx.probe.get(new URL("/signin.html", ctx.origin).toString(), {
       method: "POST",
       body: `user_login=${encodeURIComponent(user)}&user_password=${encodeURIComponent(pass)}&user_token=${encodeURIComponent(token)}&submit=Sign+in`,
@@ -88732,6 +88812,7 @@ export const RULES: Record<string, Rule> = {
   clientSideZeroBankWebinspectEvidence,
   zeroBankAdminUsersPlaintextPasswordsLiveOracle,
   zeroBankAdminUsersRouteLiveOracle,
+  zeroBankAdminRouteLiveOracle,
   zeroBankFeedbackSendLiveOracle,
   zeroBankFeedbackRouteLiveOracle,
   zeroBankAccountActivityRouteLiveOracle,

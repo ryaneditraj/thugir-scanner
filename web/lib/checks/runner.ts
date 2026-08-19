@@ -1985,6 +1985,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideZeroBankWebinspectEvidence",
   "zeroBankAdminUsersPlaintextPasswordsLiveOracle",
   "zeroBankAdminUsersRouteLiveOracle",
+  "zeroBankAdminRouteLiveOracle",
   "zeroBankFeedbackSendLiveOracle",
   "zeroBankFeedbackRouteLiveOracle",
   "zeroBankAccountActivityRouteLiveOracle",
@@ -12421,7 +12422,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/admin\/security\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-admin-security")
       )
-        return -2;
+        return -3;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-login-sqli")) return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-transfer")) return -2;
       if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;
@@ -12818,6 +12819,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /zero\.webappsecurity\.com/i.test(origin) &&
         /\/admin\/users\.html/i.test(targetInput) &&
         p.slug.startsWith("zero-bank-admin-users")
+      )
+        return -4;
+      if (
+        /zero\.webappsecurity\.com/i.test(origin) &&
+        /\/admin(?:\/index\.html)?\/?$/i.test(targetInput.replace(/\?.*$/, "")) &&
+        p.slug === "zero-bank-admin-route-live-oracle"
       )
         return -4;
       if (
