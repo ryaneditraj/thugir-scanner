@@ -2210,6 +2210,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideHackxorEvidence",
   "clientSidePygoatEvidence",
   "clientSidePygoatChallengeRouteEvidence",
+  "pygoatSqlRouteLiveOracle",
+  "pygoatSsrfLabRouteLiveOracle",
+  "pygoatSstiLabRouteLiveOracle",
   "clientSideDvnaEvidence",
   "clientSideCmdChallengeEvidence",
   "clientSideHackerFriendlyFirebaseEvidence",
@@ -2572,6 +2575,8 @@ const DEEP_RULES = new Set<string>([
   "finbotVendorChatLiveOracle",
   "finbotVendorChatRouteLiveOracle",
   "finbotAdminCopilotRouteLiveOracle",
+  "finbotHowItWorksLiveOracle",
+  "finbotHowItWorksRouteLiveOracle",
   "finbotDarklabSupplyChainLiveOracle",
   "finbotDarklabSupplyChainRouteLiveOracle",
   "finbotDarklabSupplyChainStatsLiveOracle",
@@ -2586,7 +2591,6 @@ const DEEP_RULES = new Set<string>([
   "finbotCtfStatsRouteLiveOracle",
   "finbotVendorInvoicesLiveOracle",
   "finbotVendorInvoicesRouteLiveOracle",
-  "finbotHowItWorksRouteLiveOracle",
   "finbotLabsGuardrailsWebhookLiveOracle",
   "finbotLabsGuardrailsWebhookRouteLiveOracle",
   "tryaisocInvestigationLedgerLiveOracle",
@@ -12957,6 +12961,30 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("finbot-darklab-taxcalc-reset-tools")
       )
         return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/how-it-works\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-how-it-works")
+      )
+        return -4;
+      if (
+        /pygoat(?:-web)?\.herokuapp\.com/i.test(origin) &&
+        /\/sql(?:_lab)?\b/i.test(targetInput) &&
+        p.slug.startsWith("pygoat-sql")
+      )
+        return -4;
+      if (
+        /pygoat(?:-web)?\.herokuapp\.com/i.test(origin) &&
+        /\/ssrf_lab\b/i.test(targetInput) &&
+        p.slug.startsWith("pygoat-ssrf-lab")
+      )
+        return -4;
+      if (
+        /pygoat(?:-web)?\.herokuapp\.com/i.test(origin) &&
+        /\/ssti\/lab\b/i.test(targetInput) &&
+        p.slug.startsWith("pygoat-ssti-lab")
+      )
+        return -4;
       if (
         /tryaisoc\.com/i.test(origin) &&
         (/\/cases\/INC-RT-001\b/i.test(targetInput) || /tab=ledger/i.test(targetInput)) &&

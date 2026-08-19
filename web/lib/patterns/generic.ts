@@ -29383,6 +29383,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pygoat-sql-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PyGoat SQL injection route live oracle",
+    description:
+      "When scanning /sql or /sql_lab on pygoat-web.herokuapp.com, VWAD catalog markers confirm the OWASP Top 10 SQL injection training module even when the Heroku demo is offline.",
+    impactOneline:
+      "PyGoat SQL routes document injection training targets for scanner benchmarking when live labs are unreachable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pygoatSqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "PyGoat is intentional training software — keep installs offline from production.",
+      steps: [
+        "Install PyGoat only in local VMs or isolated containers.",
+        "Use parameterized queries and ORM escaping in production Django code.",
+        "Do not expose PyGoat instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our PyGoat /sql route documents SQL injection labs. Show parameterized query remediation for Django production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pygoat-ssrf-lab-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "PyGoat SSRF lab route live oracle",
+    description:
+      "When scanning /ssrf_lab on pygoat-web.herokuapp.com, VWAD catalog markers confirm the OWASP Top 10 SSRF training module even when the Heroku demo is offline.",
+    impactOneline:
+      "PyGoat SSRF lab routes document server-side request forgery training targets for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pygoatSsrfLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "PyGoat is intentional training software — block outbound SSRF in production.",
+      steps: [
+        "Allowlist outbound fetch destinations and block internal IP ranges.",
+        "Install PyGoat only in local VMs or isolated containers.",
+        "Do not expose PyGoat instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our PyGoat /ssrf_lab route documents SSRF labs. Show outbound URL validation remediation for Django production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pygoat-ssti-lab-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "PyGoat SSTI lab route live oracle",
+    description:
+      "When scanning /ssti/lab on pygoat-web.herokuapp.com, VWAD catalog markers confirm the OWASP Top 10 SSTI training module even when the Heroku demo is offline.",
+    impactOneline:
+      "PyGoat SSTI lab routes document server-side template injection training targets for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pygoatSstiLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "PyGoat is intentional training software — never render user input as templates in production.",
+      steps: [
+        "Use logic-less template engines or strict sandboxing.",
+        "Install PyGoat only in local VMs or isolated containers.",
+        "Do not expose PyGoat instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our PyGoat /ssti/lab route documents SSTI labs. Show safe template rendering remediation for Django production apps.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-dvna-evidence",
     platform: "generic",
     category: "Injection",
@@ -43299,6 +43377,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our FinBot /admin/api/v1/copilot/chat route streams agentic financial copilot capabilities. Show how to protect admin copilot APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-how-it-works-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot how-it-works Dark Lab supply-chain live oracle",
+    description:
+      "GET /how-it-works documents Dark Lab MCP tool-poisoning attack surfaces and GET /darklab/api/v1/supply-chain/servers exposes writable MCP tool definitions — agentic supply-chain training oracle.",
+    impactOneline:
+      "Public FinBot marketing pages link to unauthenticated MCP supply-chain APIs attackers can poison for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotHowItWorksLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — gate Dark Lab supply-chain APIs behind authentication in production.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers.",
+        "Do not expose MCP tool override endpoints on marketing pages.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /how-it-works page documents MCP tool-poisoning labs with public supply-chain APIs. Show how to protect agentic supply-chain surfaces in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-how-it-works-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot how-it-works route live oracle",
+    description:
+      "When scanning /how-it-works, the attacker-hat narrative links to Dark Lab MCP supply-chain poisoning and GET /darklab/api/v1/supply-chain/servers confirms writable tool definitions — route-specific FinBot oracle.",
+    impactOneline:
+      "Public FinBot how-it-works pages document agentic supply-chain attack paths with reachable MCP tool catalogs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotHowItWorksRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — gate Dark Lab supply-chain APIs behind authentication in production.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers.",
+        "Do not expose MCP tool override endpoints on marketing pages.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /how-it-works route documents MCP tool-poisoning with public supply-chain APIs. Show how to protect agentic supply-chain surfaces in production.",
     version: 1,
     enabled: true
   },

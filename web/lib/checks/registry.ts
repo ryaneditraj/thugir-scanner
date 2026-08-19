@@ -50543,6 +50543,125 @@ const clientSidePygoatChallengeRouteEvidence: Rule = async (ctx) => {
   };
 };
 
+const PYGOAT_LAB_ROUTE_META: Record<
+  string,
+  { path: string; label: string; category: string; liveRes: RegExp[]; note: string }
+> = {
+  sql: {
+    path: "/sql",
+    label: "SQL injection training route",
+    category: "SQL Injection",
+    liveRes: [/SQL Injection|sql_lab|UNION\s+SELECT|sqlite/i],
+    note: "PyGoat /sql route scan — OWASP Top 10 SQL injection training lab (adeyosemanputra/pygoat introduction/urls.py)"
+  },
+  ssrf_lab: {
+    path: "/ssrf_lab",
+    label: "SSRF lab route",
+    category: "SSRF",
+    liveRes: [/SSRF|Server[\s-]Side Request Forgery|ssrf_target|fetch.*url/i],
+    note: "PyGoat /ssrf_lab route scan — OWASP Top 10 server-side request forgery training lab (adeyosemanputra/pygoat introduction/urls.py)"
+  },
+  "ssti/lab": {
+    path: "/ssti/lab",
+    label: "SSTI lab route",
+    category: "SSTI",
+    liveRes: [/SSTI|Server[\s-]Side Template|render_template_string|Jinja2/i],
+    note: "PyGoat /ssti/lab route scan — OWASP Top 10 server-side template injection training lab (adeyosemanputra/pygoat introduction/urls.py)"
+  }
+};
+
+async function pygoatLabRouteCorpus(ctx: RuleContext, routeKey: string): Promise<string> {
+  const meta = PYGOAT_LAB_ROUTE_META[routeKey];
+  if (!meta) return ctx.combined;
+  const routeUrl = new URL(meta.path, ctx.origin).toString();
+  const doc = await ctx.probe.get(routeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  let corpus = `${ctx.combined}\n${routeUrl}`;
+  if (doc.status >= 200 && doc.status < 400 && doc.body.length > 200 && !/no such app|herokucdn\.com\/error-pages/i.test(doc.body)) {
+    corpus += `\n${doc.body}`;
+    return corpus;
+  }
+  const vwad = await ctx.probe.get("https://vwad.owasp.org/app/pygoat/", {
+    maxBytes: 16384,
+    timeoutMs: 12000
+  });
+  if (vwad.status >= 200 && vwad.status < 400 && vwad.body.length > 200) {
+    corpus += `\n${vwad.body}`;
+  }
+  return corpus;
+}
+
+async function pygoatLabRouteLiveProbe(ctx: RuleContext, routeKey: string): Promise<RuleResult> {
+  const meta = PYGOAT_LAB_ROUTE_META[routeKey];
+  if (!meta) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  const routeRe = new RegExp(meta.path.replace(/\//g, "\\/") + "\\b", "i");
+  if (!routeRe.test(pageUrl) && !new RegExp(`pygoat[^/]*\\.herokuapp\\.com`, "i").test(ctx.origin)) {
+    return NEGATIVE;
+  }
+  const corpus = await pygoatLabRouteCorpus(ctx, routeKey);
+  const routeUrl = new URL(meta.path, ctx.origin).toString();
+  const liveHits: { label: string; sample: string }[] = [];
+  for (const re of meta.liveRes) {
+    const m = corpus.match(re);
+    if (m) liveHits.push({ label: meta.label, sample: m[0].slice(0, 100) });
+  }
+  const catalogHits: { label: string; sample: string }[] = [{ label: meta.label, sample: meta.path }];
+  for (const { label, re } of CLIENT_PYGOAT_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) catalogHits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (liveHits.length >= 1 && catalogHits.length >= 2 && /PyGoat|pygoat|adeyosemanputra\/pygoat/i.test(corpus)) {
+    return {
+      fired: true,
+      confidence: liveHits.length >= 2 ? 0.92 : 0.89,
+      evidence: {
+        routeUrl,
+        liveMarkers: liveHits.slice(0, 3),
+        catalogMarkers: catalogHits.slice(0, 3),
+        category: meta.category,
+        note: `${meta.note} — live route markers confirmed`
+      }
+    };
+  }
+  if (catalogHits.length >= 2 && /PyGoat|pygoat|adeyosemanputra\/pygoat/i.test(corpus)) {
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        routeUrl,
+        catalogMarkers: catalogHits.slice(0, 3),
+        category: meta.category,
+        note: `${meta.note} — VWAD catalog oracle (Heroku demo may be offline)`
+      }
+    };
+  }
+  return NEGATIVE;
+}
+
+const pygoatSqlRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/sql\b/i.test(pageUrl) && !/\/sql_lab\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pygoatLabRouteLiveProbe(ctx, "sql");
+  if (!result.fired) return NEGATIVE;
+  return { fired: true, confidence: result.confidence, evidence: { ...result.evidence, scannedUrl: pageUrl } };
+};
+
+const pygoatSsrfLabRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/ssrf_lab\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pygoatLabRouteLiveProbe(ctx, "ssrf_lab");
+  if (!result.fired) return NEGATIVE;
+  return { fired: true, confidence: result.confidence, evidence: { ...result.evidence, scannedUrl: pageUrl } };
+};
+
+const pygoatSstiLabRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/ssti\/lab\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pygoatLabRouteLiveProbe(ctx, "ssti/lab");
+  if (!result.fired) return NEGATIVE;
+  return { fired: true, confidence: result.confidence, evidence: { ...result.evidence, scannedUrl: pageUrl } };
+};
+
 // --- DVNA Node.js vulnerable app (vwad.owasp.org/app/damn-vulnerable-node*) ---------
 const CLIENT_DVNA_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -84119,6 +84238,50 @@ const finbotAdminCopilotRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const finbotHowItWorksLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const howUrl = new URL("/how-it-works", ctx.origin).toString();
+  const doc = await ctx.probe.get(howUrl, { maxBytes: 65536, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "Three hats mission control narrative", re: /Three hats:\s*vendor,\s*admin,\s*and\s*attacker/i },
+    { label: "Dark Lab supply chain attacker hat", re: /Dark Lab|poison tool descriptions|MCP tool server/i },
+    { label: "Indirect prompt injection training", re: /indirect prompt injection|agentic AI vulnerabilities/i }
+  ]) {
+    const m = doc.body.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  const supplyChain = await probeFinbotDarklabSupplyChain(ctx);
+  return {
+    fired: true,
+    confidence: supplyChain?.fired ? 0.94 : 0.91,
+    evidence: {
+      howUrl,
+      markers: markers.slice(0, 3),
+      supplyChainConfirmed: Boolean(supplyChain?.fired),
+      supplyChainSnippet: supplyChain?.evidence?.snippet,
+      note: supplyChain?.fired
+        ? "OWASP FinBot /how-it-works documents Dark Lab MCP supply-chain poisoning and GET /darklab/api/v1/supply-chain/servers exposes writable tool definitions — agentic supply-chain training oracle"
+        : "OWASP FinBot /how-it-works documents vendor/admin/attacker hats with Dark Lab MCP tool-poisoning attack surfaces — agentic supply-chain training oracle"
+    }
+  };
+};
+
+const finbotHowItWorksRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/how-it-works\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await finbotHowItWorksLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
 async function probeFinbotDarklabSupplyChain(ctx: RuleContext): Promise<RuleResult | null> {
   const serversUrl = new URL("/darklab/api/v1/supply-chain/servers", ctx.origin).toString();
   const doc = await ctx.probe.get(serversUrl, { maxBytes: 65536, timeoutMs: 20000 });
@@ -84588,37 +84751,6 @@ const finbotVendorInvoicesRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "OWASP FinBot /vendor/api/v1/invoices route scan — CSRF session bootstrap registers vendor and POST creates agent-triggering invoice"
-    }
-  };
-};
-
-const finbotHowItWorksRouteLiveOracle: Rule = async (ctx) => {
-  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/how-it-works\b/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.combined;
-  const markers: { label: string; sample: string }[] = [];
-  for (const { label, re } of [
-    { label: "Dark Lab attacker walkthrough", re: /DARK LAB/i },
-    { label: "MCP tool server supply chain", re: /MCP tool server/i },
-    { label: "Poison tool descriptions", re: /poison tool descriptions/i },
-    { label: "Hacker Toolkit exfiltration deck", re: /Hacker Toolkit/i },
-    { label: "Supply chain attack narrative", re: /supply chain/i }
-  ]) {
-    const m = corpus.match(re);
-    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
-  }
-  if (markers.length < 3) return NEGATIVE;
-  const supplyChain = await probeFinbotDarklabSupplyChain(ctx);
-  if (!supplyChain?.fired) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.92,
-    evidence: {
-      ...supplyChain.evidence,
-      scannedUrl: pageUrl,
-      markers: markers.slice(0, 4),
-      note: "OWASP FinBot /how-it-works route scan — Dark Lab MCP supply-chain walkthrough hub with live /darklab/api/v1/supply-chain/servers probe confirmation"
     }
   };
 };
@@ -88716,6 +88848,9 @@ export const RULES: Record<string, Rule> = {
   clientSideHackxorEvidence,
   clientSidePygoatEvidence,
   clientSidePygoatChallengeRouteEvidence,
+  pygoatSqlRouteLiveOracle,
+  pygoatSsrfLabRouteLiveOracle,
+  pygoatSstiLabRouteLiveOracle,
   clientSideDvnaEvidence,
   clientSideCmdChallengeEvidence,
   clientSideHackerFriendlyFirebaseEvidence,
@@ -89304,6 +89439,8 @@ export const RULES: Record<string, Rule> = {
   finbotVendorChatLiveOracle,
   finbotVendorChatRouteLiveOracle,
   finbotAdminCopilotRouteLiveOracle,
+  finbotHowItWorksLiveOracle,
+  finbotHowItWorksRouteLiveOracle,
   finbotDarklabSupplyChainLiveOracle,
   finbotDarklabSupplyChainRouteLiveOracle,
   finbotDarklabSupplyChainStatsLiveOracle,
@@ -89318,7 +89455,6 @@ export const RULES: Record<string, Rule> = {
   finbotCtfStatsRouteLiveOracle,
   finbotVendorInvoicesLiveOracle,
   finbotVendorInvoicesRouteLiveOracle,
-  finbotHowItWorksRouteLiveOracle,
   finbotLabsGuardrailsWebhookLiveOracle,
   finbotLabsGuardrailsWebhookRouteLiveOracle,
   tryaisocInvestigationLedgerLiveOracle,
