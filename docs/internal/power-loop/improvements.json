@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:tryaisoc.com",
+      "slug": "tryaisoc-investigation-ledger-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cases/INC-RT-001?tab=ledger returns 200 with INC-RT-001 + Investigation nav without login; GET /api/v1/cases/INC-RT-001 returns 401 Not authenticated; tryaisoc.com/cases/INC-RT-001?tab=ledger findings 6→7 (+tryaisoc-investigation-ledger + route oracles, removed vulnshop EL false positive); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:tryaisoc.com",
+      "slug": "vulnshop-el-injection-non-host-guard",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnshopTemplateRenderElInjectionLiveOracle README fallback now requires isVulnshopHost — tryaisoc.com/cases/INC-RT-001?tab=ledger no longer fires vulnshop-template-render-el-injection-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-catalog-1956",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1955→1956; web-security-learning-labs.vercel.app/module/1956 placeholder shell supported; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-admin-route-live-oracle",
       "status": "shipped",

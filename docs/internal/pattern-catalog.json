@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-19T11:13:03.482Z",
-  "total": 2533,
-  "uniqueSlugs": 2527,
+  "generatedAt": "2026-08-19T12:29:52.256Z",
+  "total": 2535,
+  "uniqueSlugs": 2529,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2515,
+    "generic": 2517,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2448,
+    "deep": 2450,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 118,
+    "Information disclosure": 120,
     "Security misconfiguration": 188,
     "Broken authentication": 157,
     "Injection": 380,
@@ -2121,6 +2121,8 @@
     "thugir-dir-discovery",
     "thugir-jwt-weak-claims",
     "thugir-sensitive-js-endpoints",
+    "tryaisoc-investigation-ledger-live-oracle",
+    "tryaisoc-investigation-ledger-route-live-oracle",
     "unauthenticated-admin-endpoint",
     "unprotected-webhook-endpoint",
     "v0-openapi-routes-exposed",
