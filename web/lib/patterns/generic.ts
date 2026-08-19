@@ -45590,6 +45590,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-how-it-works-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot /how-it-works Dark Lab route live oracle",
+    description:
+      "When scanning /how-it-works, the Dark Lab MCP supply-chain walkthrough hub is confirmed with a live /darklab/api/v1/supply-chain/servers probe — route-specific FinBot agentic supply-chain oracle.",
+    impactOneline:
+      "Route scans on FinBot walkthrough hubs should confirm live Dark Lab MCP tool-poisoning surfaces, not just static marketing copy.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotHowItWorksRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — isolate Dark Lab MCP servers from production agent ecosystems.",
+      steps: [
+        "Validate MCP tool descriptions against signed manifests before agent use.",
+        "Monitor supply-chain tool overrides and poisoned-tool counters.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /how-it-works page documents Dark Lab MCP supply-chain attacks. Show how to protect production agentic platforms from tool-poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-vendor-chat-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -46132,6 +46158,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /tutorial/redos route documents ReDoS labs. Show how to isolate NodeGoat training from production regex validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-research-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "NodeGoat /research SSRF live oracle",
+    description:
+      "GET /research?url= fetches attacker-controlled URLs via req.query.url+symbol concatenation passed to needle.get — the NodeGoat SSRF training oracle.",
+    impactOneline:
+      "Unvalidated server-side URL fetch in /research enables SSRF against internal services and cloud metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatResearchSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist outbound fetch destinations — NodeGoat is intentional OWASP training software.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Allowlist outbound fetch URL hosts and block metadata IP ranges.",
+        "Never concatenate user-controlled url and symbol parameters into outbound fetch URLs."
+      ]
+    },
+    fixPrompt:
+      "Our /research route concatenates url+symbol into needle.get fetch targets. Show SSRF remediation for Node.js outbound requests.",
     version: 1,
     enabled: true
   },

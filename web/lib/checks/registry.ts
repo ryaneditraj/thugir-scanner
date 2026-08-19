@@ -9465,6 +9465,12 @@ const nodegoatResearchSsrfRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const nodegoatResearchSsrfLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const result = await nodegoatResearchSsrfLiveProbe(ctx);
+  return result.fired ? result : NEGATIVE;
+};
+
 const nodegoatLearnOpenRedirectLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   let cookie = await nodegoatNosqlLoginCookie(ctx);
@@ -41253,7 +41259,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1970;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1973;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -84586,6 +84592,37 @@ const finbotVendorInvoicesRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const finbotHowItWorksRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/how-it-works\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "Dark Lab attacker walkthrough", re: /DARK LAB/i },
+    { label: "MCP tool server supply chain", re: /MCP tool server/i },
+    { label: "Poison tool descriptions", re: /poison tool descriptions/i },
+    { label: "Hacker Toolkit exfiltration deck", re: /Hacker Toolkit/i },
+    { label: "Supply chain attack narrative", re: /supply chain/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 3) return NEGATIVE;
+  const supplyChain = await probeFinbotDarklabSupplyChain(ctx);
+  if (!supplyChain?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      ...supplyChain.evidence,
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 4),
+      note: "OWASP FinBot /how-it-works route scan — Dark Lab MCP supply-chain walkthrough hub with live /darklab/api/v1/supply-chain/servers probe confirmation"
+    }
+  };
+};
+
 function isIstEduHost(ctx: RuleContext): boolean {
   return /ist-edu-bd/i.test(ctx.origin);
 }
@@ -89281,6 +89318,7 @@ export const RULES: Record<string, Rule> = {
   finbotCtfStatsRouteLiveOracle,
   finbotVendorInvoicesLiveOracle,
   finbotVendorInvoicesRouteLiveOracle,
+  finbotHowItWorksRouteLiveOracle,
   finbotLabsGuardrailsWebhookLiveOracle,
   finbotLabsGuardrailsWebhookRouteLiveOracle,
   tryaisocInvestigationLedgerLiveOracle,
@@ -90185,6 +90223,7 @@ export const RULES: Record<string, Rule> = {
   nodegoatTutorialSsrfRouteLiveOracle,
   nodegoatTutorialRedosLiveOracle,
   nodegoatTutorialRedosRouteLiveOracle,
+  nodegoatResearchSsrfLiveOracle,
   nodegoatResearchSsrfRouteLiveOracle,
   nodegoatLearnOpenRedirectLiveOracle,
   nodegoatLearnOpenRedirectRouteLiveOracle,
