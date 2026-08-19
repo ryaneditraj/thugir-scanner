@@ -79408,7 +79408,10 @@ const brokencrystalsOidcClientSecretRouteLiveOracle: Rule = async (ctx) => {
 const brokencrystalsSubscriptionsXssRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/subscriptions\b/i.test(pageUrl)) return NEGATIVE;
+  const onSubscriptionsRoute =
+    /\/api\/subscriptions\b/i.test(pageUrl) ||
+    /\/subscriptions(?:\/|$|\?|#)/i.test(pageUrl);
+  if (!onSubscriptionsRoute) return NEGATIVE;
   const result = await brokencrystalsSubscriptionsXssLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -79417,7 +79420,9 @@ const brokencrystalsSubscriptionsXssRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Broken Crystals /api/subscriptions route scan — POST echoes email query param unescaped in response body (reflected XSS oracle)"
+      note: /\/api\/subscriptions\b/i.test(pageUrl)
+        ? "Broken Crystals /api/subscriptions route scan — POST echoes email query param unescaped in response body (reflected XSS oracle)"
+        : "Broken Crystals /subscriptions route scan — POST /api/subscriptions?email= echoes email query param unescaped in response body (reflected XSS oracle)"
     }
   };
 };
@@ -80811,6 +80816,40 @@ const brokencrystalsFileAwsRouteLiveOracle: Rule = async (ctx) => {
       url: probeUrl.toString(),
       snippet: doc.body.slice(0, 240).trim(),
       note: "Broken Crystals /api/file/aws route scan — GET with AWS metadata path returns IMDS ami-id/instance-id — cloud SSRF oracle"
+    }
+  };
+};
+
+const brokencrystalsFileAzureRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/file\/azure/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsAzureMetadataSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/file/azure route scan — GET with Azure IMDS path returns compute metadata (azEnvironment, location) — route-specific cloud SSRF oracle"
+    }
+  };
+};
+
+const brokencrystalsFileDigitalOceanRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/file\/digital_ocean/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsDigitalOceanMetadataSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/file/digital_ocean route scan — GET with DigitalOcean metadata path returns droplet hostname/region/interfaces — route-specific cloud SSRF oracle"
     }
   };
 };
@@ -89744,6 +89783,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsAdminpermissionRouteLiveOracle,
   brokencrystalsSearchAdminMassAssignmentRouteLiveOracle,
   brokencrystalsFileAwsRouteLiveOracle,
+  brokencrystalsFileAzureRouteLiveOracle,
+  brokencrystalsFileDigitalOceanRouteLiveOracle,
   brokencrystalsFileLfiRouteLiveOracle,
   brokencrystalsFilesLfiRouteLiveOracle,
   brokencrystalsFileRawLfiRouteLiveOracle,

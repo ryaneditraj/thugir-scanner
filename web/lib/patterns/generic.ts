@@ -38994,9 +38994,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Cross-site scripting",
     severityDefault: "high",
-    title: "Broken Crystals /api/subscriptions route reflected XSS oracle",
+    title: "Broken Crystals /subscriptions route reflected XSS oracle",
     description:
-      "When scanning /api/subscriptions, POST echoes the email query parameter unescaped in the response body — route-specific mailing-list reflected XSS oracle.",
+      "When scanning /subscriptions or /api/subscriptions, POST echoes the email query parameter unescaped in the response body — route-specific mailing-list reflected XSS oracle.",
     impactOneline:
       "Reflected XSS in subscription endpoints can steal session cookies or perform actions as victims.",
     detectorKind: "rule_ref",
@@ -39534,6 +39534,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/file/aws route scan confirms cloud metadata SSRF. Show how to block AWS IMDS fetches from user-controlled path parameters.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-file-azure-route-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/file/azure route SSRF live oracle",
+    description:
+      "When scanning /api/file/azure, GET with path=http://169.254.169.254/metadata/instance returns Azure IMDS compute metadata — route-specific cloud SSRF confirmation.",
+    impactOneline:
+      "Route-specific confirmation that the Azure metadata SSRF endpoint is reachable when scanning Broken Crystals file/azure paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsFileAzureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to Azure IMDS and link-local addresses — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to 169.254.169.254/metadata and other cloud metadata endpoints.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/azure route scan confirms Azure IMDS metadata SSRF. Show how to block cloud metadata fetches from user-controlled path parameters.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-file-digital-ocean-route-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/file/digital_ocean route SSRF live oracle",
+    description:
+      "When scanning /api/file/digital_ocean, GET with path=http://169.254.169.254/metadata/v1/id returns DigitalOcean droplet metadata — route-specific cloud SSRF confirmation.",
+    impactOneline:
+      "Route-specific confirmation that the DigitalOcean metadata SSRF endpoint is reachable when scanning Broken Crystals file/digital_ocean paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsFileDigitalOceanRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to DigitalOcean metadata and link-local addresses — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to 169.254.169.254/metadata and other cloud metadata endpoints.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/digital_ocean route scan confirms DigitalOcean metadata SSRF. Show how to block cloud metadata fetches from user-controlled path parameters.",
     version: 1,
     enabled: true
   },

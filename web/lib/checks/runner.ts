@@ -3101,6 +3101,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsApiFetchLiveOracle",
   "brokencrystalsApiFetchRouteLiveOracle",
   "brokencrystalsFileAwsRouteLiveOracle",
+  "brokencrystalsFileAzureRouteLiveOracle",
+  "brokencrystalsFileDigitalOceanRouteLiveOracle",
   "brokencrystalsFileLfiRouteLiveOracle",
   "brokencrystalsFilesLfiRouteLiveOracle",
   "brokencrystalsFileRawLfiRouteLiveOracle",
@@ -8524,6 +8526,10 @@ function extractBrokencrystalsLabSeeds(html: string, pageUrl: string): string[] 
     "/api/render",
     "/api/spawn",
     "/api/file",
+    "/api/file/aws",
+    "/api/file/azure",
+    "/api/file/digital_ocean",
+    "/subscriptions",
     "/api/metadata",
     "/api/products",
     "/api/products/latest",
@@ -12402,7 +12408,25 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("brokencrystals-testimonials")
       )
         return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/subscriptions(?:\/|$|\?|#)/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-subscriptions-xss-route")
+      )
+        return -3;
       if (/brokencrystals\.com/i.test(origin) && p.slug.startsWith("brokencrystals-subscriptions-xss-route")) return -2;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/file\/azure/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-file-azure-route")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/file\/digital_ocean/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-file-digital-ocean-route")
+      )
+        return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/products\/latest\b/i.test(targetInput) &&
