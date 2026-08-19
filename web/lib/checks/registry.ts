@@ -17,7 +17,7 @@ import {
 import { fetchDoc, isVercelSecurityCheckpoint, looksHtml, type FetchedDoc } from "./http";
 import type { ProbeCache } from "./probe-cache";
 import { extractJuiceShopResendKeys, fetchJuiceShopSocialFeedBodies } from "./juice-shop-social";
-import { probeXssGameLevel2StoredExploit, probeXssGameLevel3DomExploit } from "./xss-game-browser";
+import { probeXssGameLevel2StoredExploit, probeXssGameLevel3DomExploit, probeXssGameLevel4JsStringExploit, probeXssGameLevel5JavascriptProtocolExploit, probeXssGameLevel6DomScriptSrcExploit } from "./xss-game-browser";
 import {
   extractApiPaths,
   extractExternalApiBases,
@@ -7346,6 +7346,105 @@ const xssGameLevel3DomXssExploitRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google XSS game /level3 route scan — live DOM XSS exploit via location.hash → chooseTab() confirmed in headless browser"
+    }
+  };
+};
+
+const xssGameLevel4JsStringXssExploitLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const exploit = await probeXssGameLevel4JsStringExploit(ctx.origin);
+  if (!exploit) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      url: new URL("/level4/frame", ctx.origin).toString(),
+      canary: exploit.canary,
+      timerPayload: `');window.__thugirL4='${exploit.canary}';//`,
+      note: "Google XSS game level 4 — timer query breaks out of startTimer() on onload and executes attacker JS (live browser exploit confirmation)"
+    }
+  };
+};
+
+const xssGameLevel4JsStringXssExploitRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/level4\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssGameLevel4JsStringXssExploitLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google XSS game /level4 route scan — live JavaScript string-context XSS exploit via startTimer() onload sink confirmed in headless browser"
+    }
+  };
+};
+
+const xssGameLevel5JavascriptProtocolXssExploitLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const exploit = await probeXssGameLevel5JavascriptProtocolExploit(ctx.origin);
+  if (!exploit) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: new URL("/level5/frame/confirm", ctx.origin).toString(),
+      canary: exploit.canary,
+      nextPayload: `javascript:window.__thugirL5='${exploit.canary}'`,
+      note: "Google XSS game level 5 — confirm page reflects javascript: next into window.location assignment; attacker JS executes from the sink (live browser exploit confirmation)"
+    }
+  };
+};
+
+const xssGameLevel5JavascriptProtocolXssExploitRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/level5\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssGameLevel5JavascriptProtocolXssExploitLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google XSS game /level5 route scan — live javascript: protocol XSS exploit via confirm window.location sink confirmed in headless browser"
+    }
+  };
+};
+
+const xssGameLevel6DomScriptSrcXssExploitLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const exploit = await probeXssGameLevel6DomScriptSrcExploit(ctx.origin);
+  if (!exploit) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      url: new URL("/level6/frame", ctx.origin).toString(),
+      canary: exploit.canary,
+      hashPayload: `data:text/javascript,window.__thugirL6='${exploit.canary}'`,
+      note: "Google XSS game level 6 — location.hash data: URI loads via includeGadget() script.src bypassing http(s) filter (live browser exploit confirmation)"
+    }
+  };
+};
+
+const xssGameLevel6DomScriptSrcXssExploitRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/level6\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssGameLevel6DomScriptSrcXssExploitLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google XSS game /level6 route scan — live DOM script.src XSS exploit via location.hash → includeGadget() confirmed in headless browser"
     }
   };
 };
@@ -40979,7 +41078,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1940;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1954;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -89563,6 +89662,12 @@ export const RULES: Record<string, Rule> = {
   xssGameLevel3DomXssRouteLiveOracle,
   xssGameLevel3DomXssExploitLiveOracle,
   xssGameLevel3DomXssExploitRouteLiveOracle,
+  xssGameLevel4JsStringXssExploitLiveOracle,
+  xssGameLevel4JsStringXssExploitRouteLiveOracle,
+  xssGameLevel5JavascriptProtocolXssExploitLiveOracle,
+  xssGameLevel5JavascriptProtocolXssExploitRouteLiveOracle,
+  xssGameLevel6DomScriptSrcXssExploitLiveOracle,
+  xssGameLevel6DomScriptSrcXssExploitRouteLiveOracle,
   xssGameLevel4JsStringXssLiveOracle,
   xssGameLevel4JsStringXssRouteLiveOracle,
   xssGameLevel5JavascriptProtocolXssLiveOracle,

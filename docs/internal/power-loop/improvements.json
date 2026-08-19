@@ -3755,6 +3755,24 @@
       "slug": "xss-game-level3-dom-xss-exploit-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: headless browser navigates /level3/frame#hash breakout and confirms onerror canary via chooseTab() jQuery .html(); xss-game.appspot.com/level3/frame findings 10\u219212 (+exploit + route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "xss-game-level4-js-string-xss-exploit-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: headless browser navigates /level4/frame?timer=');window.__thugirL4=canary;// and confirms JS execution via startTimer() onload sink; xss-game.appspot.com/level4/frame findings 10\u219215 (+exploit + route oracles); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "xss-game-level5-javascript-protocol-xss-exploit-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: headless browser loads /level5/frame/confirm?next=javascript: payload reflected into window.location and executes attacker JS; xss-game.appspot.com/level5/frame findings 10\u219215 (+exploit + route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "xss-game-level6-dom-script-src-xss-exploit-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: headless browser navigates /level6/frame#data:text/javascript,window.__thugirL6=canary and confirms script.src execution via includeGadget(); xss-game.appspot.com/level6/frame findings 11\u219214 (+exploit + route oracles); benchmark 6/6 maintained"
     }
   ]
 }

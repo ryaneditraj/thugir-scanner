@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-19T09:22:47.983Z",
-  "total": 2523,
-  "uniqueSlugs": 2517,
+  "generatedAt": "2026-08-19T10:23:30.423Z",
+  "total": 2529,
+  "uniqueSlugs": 2523,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2505,
+    "generic": 2511,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2438,
+    "deep": 2444,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 188,
     "Broken authentication": 157,
     "Injection": 378,
-    "Cross-site scripting": 710,
+    "Cross-site scripting": 716,
     "Open redirect": 23,
     "general": 20,
     "SSRF": 14,
@@ -2507,10 +2507,16 @@
     "xss-game-level3-dom-xss-exploit-route-live-oracle",
     "xss-game-level3-dom-xss-live-oracle",
     "xss-game-level3-dom-xss-route-live-oracle",
+    "xss-game-level4-js-string-xss-exploit-live-oracle",
+    "xss-game-level4-js-string-xss-exploit-route-live-oracle",
     "xss-game-level4-js-string-xss-live-oracle",
     "xss-game-level4-js-string-xss-route-live-oracle",
+    "xss-game-level5-javascript-protocol-xss-exploit-live-oracle",
+    "xss-game-level5-javascript-protocol-xss-exploit-route-live-oracle",
     "xss-game-level5-javascript-protocol-xss-live-oracle",
     "xss-game-level5-javascript-protocol-xss-route-live-oracle",
+    "xss-game-level6-dom-script-src-xss-exploit-live-oracle",
+    "xss-game-level6-dom-script-src-xss-exploit-route-live-oracle",
     "xss-game-level6-dom-script-src-xss-live-oracle",
     "xss-game-level6-dom-script-src-xss-route-live-oracle",
     "xss-vulnlab-csp-bypass-jsonp-live-oracle",
