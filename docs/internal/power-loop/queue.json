@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-19T01:30:00.000Z",
+  "updated_at": "2026-08-19T02:04:40.699Z",
   "discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/upload",
+      "source": "OWASP NodeGoat — file upload XSS oracle POST /upload (1337skills cheatsheet + README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/admin",
+      "source": "OWASP NodeGoat — broken access control admin panel oracle GET /admin (1337skills cheatsheet, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/template/render",
+      "source": "chethan-vinayak/vulnshop — expression-language injection oracle POST /api/v1/template/render (README route #49, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/admin/application-configuration",
+      "source": "OWASP Juice Shop develop preview — unauthenticated admin config oracle GET /rest/admin/application-configuration (preview.owasp-juice.shop, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1924",
+      "source": "Web Security Learning Labs — module 1924 placeholder route oracle (WSL Vercel deploy, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/dashboard",
       "source": "nodegoat-websec Heroku — dashboard weak-credentials route oracle queue drain (OWASP NodeGoat README, Aug 2026)",

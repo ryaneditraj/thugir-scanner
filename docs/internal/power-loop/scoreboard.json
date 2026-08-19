@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T01:30:00.000Z",
+  "updated_at": "2026-08-19T02:10:11.914Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2742,
-  "total_findings": 26992,
+  "total_sites_scanned": 2751,
+  "total_findings": 27157,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2830,
-  "discovery_findings": 22897,
-  "improvements_shipped": 1205,
-  "last_run": "2026-08-19T01:30:00.000Z",
+  "discovery_urls_added": 2835,
+  "discovery_findings": 23015,
+  "improvements_shipped": 1202,
+  "last_run": "2026-08-19T02:10:11.914Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "primary_url_error": "juice-shop.herokuapp.com unreachable (Heroku cold start)",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 587,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,44 +48,44 @@
           ]
         }
       },
-      "note": "Primary Heroku oracle down; staging fallback 6/6 with 47 findings (35 juice-shop live oracles)"
+      "note": "Stable 6/6 first-pass recall (47 findings, 35 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 1,
+      "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 240,
-      "focus": "NodeGoat profile CSRF route probe-cache fix + Duck Store MCP resources oracles + dashboard queue drain; parallel drain: allocations/memos + brokencrystals MCP + WSL 1923",
-      "improvements_shipped_this_run": 3
+      "findings": 118,
+      "focus": "NodeGoat upload/admin routes + vulnshop EL injection + preview.owasp-juice.shop admin config + WSL 1924; queue drain: dashboard/allocations/memos",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (47 findings) — primary oracle unreachable",
-      "nodegoat-websec.herokuapp.com/profile: 13→14 findings — nodegoat-profile-csrf-route-live-oracle after probe-cache fix",
-      "duck-store.escape.tech/mcp/resources: 28→30 findings — duck-store-mcp-resources-live-oracle + route oracle",
-      "nodegoat-websec.herokuapp.com/dashboard: nodegoat-dashboard-route-live-oracle via queue drain",
-      "brokencrystals.com/api/mcp/spawn_process: 84 findings — brokencrystals-mcp-spawn-process-route-live-oracle",
-      "brokencrystals.com/api/mcp/process_numbers: 40 findings — brokencrystals-mcp-process-numbers-live-oracle",
-      "nodegoat-websec.herokuapp.com/allocations: 7 findings — nodegoat-benefits-nosql-live-oracle IDOR",
-      "duck-store.escape.tech/mcp/tools: 31 findings — MCP tools enumeration hub"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "preview.owasp-juice.shop/rest/admin/application-configuration: 49 findings — develop-branch juice-shop live oracles on admin config route",
+      "vulnshop.vercel.app/api/v1/template/render: 17 findings — vulnshop-template-ssti-route-live-oracle (EL injection)",
+      "nodegoat-websec.herokuapp.com/dashboard: 12 findings — nodegoat-dashboard-route-live-oracle",
+      "nodegoat-websec.herokuapp.com/memos: 11 findings — server-side-eval-evidence (no stored-XSS live oracle)",
+      "nodegoat-websec.herokuapp.com/upload: 7 findings — benefits-nosql slug reused (no upload-specific XSS oracle)",
+      "nodegoat-websec.herokuapp.com/admin: 7 findings — benefits-nosql slug reused (no admin BOLA live oracle)",
+      "web-security-learning-labs.vercel.app/module/1924: 8 findings — placeholder module route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com primary oracle unreachable — staging fallback required",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "nodegoat-websec.herokuapp.com/upload: no file-upload XSS live oracle (benefits-nosql slug reused)",
+      "nodegoat-websec.herokuapp.com/admin: no admin-panel broken-access-control live oracle",
       "nodegoat-websec.herokuapp.com/memos: no route-specific stored-XSS live oracle for MemosDAO POST (eval evidence only)",
       "nodegoat-websec.herokuapp.com/allocations: allocations-specific NoSQL injection live oracle absent (benefits-nosql slug reused)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 47,
-    "brokencrystals.com/api/mcp/spawn_process": 84,
-    "brokencrystals.com/api/mcp/process_numbers": 40,
-    "duck-store.escape.tech/mcp/tools": 31,
-    "duck-store.escape.tech/mcp/resources": 30,
-    "duck-store.escape.tech/api/v1/users/me/profile": 30,
-    "nodegoat-websec.herokuapp.com/profile": 14,
+    "preview.owasp-juice.shop/rest/admin/application-configuration": 49,
+    "nodegoat-websec.herokuapp.com/dashboard": 12,
     "nodegoat-websec.herokuapp.com/memos": 11,
-    "nodegoat-websec.herokuapp.com/allocations": 7,
-    "web-security-learning-labs.vercel.app/module/1923": 8
+    "vulnshop.vercel.app/api/v1/template/render": 17,
+    "juice-shop.herokuapp.com": 47,
+    "web-security-learning-labs.vercel.app/module/1924": 8,
+    "nodegoat-websec.herokuapp.com/upload": 7,
+    "nodegoat-websec.herokuapp.com/admin": 7,
+    "nodegoat-websec.herokuapp.com/allocations": 7
   }
 }
