@@ -40720,7 +40720,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1935;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1940;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -64002,6 +64002,55 @@ const ginAndJuiceLoginRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Gin & Juice Shop /login or /my-account route scan — failed login username reflected into inline script without escaping — JS-context XSS training oracle"
+    }
+  };
+};
+
+const ginAndJuiceRegisterAtobRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/register", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  if (!/oops\.\.\.\s*something went wrong|missing-content/i.test(doc.body)) return NEGATIVE;
+  const atobMatch = doc.body.match(/location\s*=\s*atob\s*\(\s*['"]([^'"]+)['"]\s*\)/i);
+  if (!atobMatch) return NEGATIVE;
+  if (
+    !/onmouseenter[\s\S]{0,400}onmouseup[\s\S]{0,200}location\s*=\s*atob/i.test(doc.body)
+  )
+    return NEGATIVE;
+  let decodedPath = "";
+  try {
+    decodedPath = atob(atobMatch[1]!);
+  } catch {
+    /* ignore */
+  }
+  if (decodedPath !== "/vulnerabilities") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: probeUrl,
+      atobPayload: atobMatch[1],
+      decodedPath,
+      snippet: atobMatch[0].slice(0, 160),
+      note: "Gin & Juice Shop GET /register returns a 404 shell with mouse-event gated atob-encoded location redirect to /vulnerabilities — DOM open-redirect training oracle"
+    }
+  };
+};
+
+const ginAndJuiceRegisterRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/register\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceRegisterAtobRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /register route scan — 404 page embeds mouse-event gated atob location redirect to /vulnerabilities without allowlist"
     }
   };
 };
@@ -89027,6 +89076,8 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogCategoryCrlfRouteLiveOracle,
   ginAndJuiceLoginUsernameReflectionLiveOracle,
   ginAndJuiceLoginRouteLiveOracle,
+  ginAndJuiceRegisterAtobRedirectLiveOracle,
+  ginAndJuiceRegisterRouteLiveOracle,
   ginAndJuiceStockXxeLiveOracle,
   ginAndJuiceStockXxeRouteLiveOracle,
   ginAndJuiceOrderDetailsIdorLiveOracle,

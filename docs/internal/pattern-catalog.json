@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-19T05:16:44.791Z",
-  "total": 2511,
-  "uniqueSlugs": 2505,
+  "generatedAt": "2026-08-19T06:06:45.081Z",
+  "total": 2513,
+  "uniqueSlugs": 2507,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2493,
+    "generic": 2495,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2426,
+    "deep": 2428,
     "continuous": 0
   },
   "byCategory": {
@@ -29,7 +29,7 @@
     "Broken authentication": 157,
     "Injection": 378,
     "Cross-site scripting": 703,
-    "Open redirect": 21,
+    "Open redirect": 23,
     "general": 20,
     "SSRF": 14,
     "Server-side request forgery": 81,
@@ -1616,6 +1616,8 @@
     "ginandjuice-my-account-orders-route-live-oracle",
     "ginandjuice-order-details-idor-live-oracle",
     "ginandjuice-order-details-idor-route-live-oracle",
+    "ginandjuice-register-atob-redirect-live-oracle",
+    "ginandjuice-register-route-live-oracle",
     "ginandjuice-stock-xxe-live-oracle",
     "ginandjuice-stock-xxe-route-live-oracle",
     "ginandjuice-vulnerabilities-credentials-live-oracle",

@@ -58350,6 +58350,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-register-atob-redirect-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /register atob DOM open-redirect live oracle",
+    description:
+      "GET /register returns a 404 shell with mouse-event gated location = atob('L3Z1bG5lcmFiaWxpdGllcw==') redirecting to /vulnerabilities — the PortSwigger Gin & Juice phantom registration route DOM open-redirect training oracle.",
+    impactOneline:
+      "DOM-based open redirects on phantom /register let attackers phish users via trusted ginandjuice.shop links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceRegisterAtobRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets against an allowlist; never decode obfuscated location assignments from mouse events.",
+      steps: [
+        "Reject javascript: and data: URL schemes in client-side redirects.",
+        "Use an allowlist of permitted redirect destinations.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /register 404 page uses atob-encoded location redirects. Show DOM open-redirect remediation with allowlists.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-register-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /register route atob DOM open-redirect live oracle",
+    description:
+      "When scanning /register, the 404 shell embeds mouse-event gated atob-encoded location redirect to /vulnerabilities — route-specific DOM open-redirect oracle.",
+    impactOneline:
+      "Route-specific confirmation that phantom registration pages redirect via obfuscated client-side location assignments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceRegisterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets on /register route scans against an allowlist.",
+      steps: [
+        "Reject obfuscated location assignments triggered by mouse events.",
+        "Use an allowlist of permitted redirect destinations.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /register route scan confirms atob DOM open redirect. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-stock-xxe-live-oracle",
     platform: "generic",
     category: "Injection",
