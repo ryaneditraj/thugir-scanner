@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T00:15:00.000Z",
+  "updated_at": "2026-08-19T00:25:05.118Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2725,
-  "total_findings": 26535,
-  "critical_findings": 55,
+  "total_sites_scanned": 2733,
+  "total_findings": 26705,
+  "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1951,
-  "discovery_findings": 22487,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-19T00:15:00.000Z",
+  "discovery_urls_added": 2824,
+  "discovery_findings": 22657,
+  "improvements_shipped": 1202,
+  "last_run": "2026-08-19T00:25:05.118Z",
   "last_run_summary": {
     "hour_utc": "00",
     "benchmark": {
@@ -48,37 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); no benchmark category misses"
+      "note": "Stable 6/6 recall (48 findings); no benchmark category misses; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 40,
-      "focus": "finbot taxcalc tools/reset-tools MCP write oracles + WSL module 1921-1925 catalog",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 170,
+      "focus": "Duck Store auth/cart/checkout API drain + NodeGoat login oracles + prompt-injection-demo-bice queued; finbot taxcalc MCP oracles shipped earlier same hour",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/tools: 9→16 findings — finbot-darklab-taxcalc-tools-oracle shipped (PUT csrf_error proves writable MCP tool catalog)",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/reset-tools: 10→16 findings — finbot-darklab-taxcalc-reset-tools-oracle shipped (POST csrf_error proves writable reset API)",
-      "web-security-learning-labs.vercel.app/module/1923: 8 findings — WSL catalog max 1920→1925 (+placeholder-module-route-live-oracle)"
+      "duck-store.escape.tech/api/v1/testimonials/1: 31 findings — unauthenticated API + MCP surface hub",
+      "duck-store.escape.tech/api/v1/orders/coupons: 30 findings — coupon/checkout API route cluster",
+      "duck-store.escape.tech/api/v1/orders/checkout: 30 findings — checkout BOLA/IDOR probe surface",
+      "nodegoat-websec.herokuapp.com/login: 13 findings — critical weak-credentials + NoSQL login bypass live oracles",
+      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/tools: 16 findings — finbot-darklab-taxcalc-tools-oracle (earlier same hour)",
+      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/reset-tools: 16 findings — finbot-darklab-taxcalc-reset-tools-oracle (earlier same hour)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "prompt-injection-demo-bice.vercel.app + injection-testbench.davidcjw.com queued at tail — not reached in 8-URL queue slice",
+      "duck-store.escape.tech/api/v1/orders/*: high finding counts; route-specific coupon/checkout write oracles may need authenticated session",
       "finbot taxcalc write oracles detect CSRF-gated routes; full tool-poisoning mutation still needs darklab session bootstrap",
-      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles exist but thin discovery hubs may need queue drain",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle needs authenticated OTP session",
-      "brokencrystals.com mass-assignment confirmation oracle absent on direct route URL without signup flow"
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle needs authenticated OTP session"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "duck-store.escape.tech/api/v1/testimonials/1": 31,
+    "duck-store.escape.tech/api/v1/orders/coupons": 30,
+    "duck-store.escape.tech/api/v1/orders/checkout": 30,
+    "duck-store.escape.tech/api/v1/cart/add": 29,
+    "duck-store.escape.tech/api/v1/auth/login": 30,
+    "nodegoat-websec.herokuapp.com/login": 13,
     "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/tools": 16,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/reset-tools": 16,
-    "web-security-learning-labs.vercel.app/module/1923": 8,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "ginandjuice.shop/catalog?category=Gin": 37
+    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/reset-tools": 16
   }
 }
