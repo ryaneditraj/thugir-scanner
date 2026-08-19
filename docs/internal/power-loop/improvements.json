@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-taxcalc-tools-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /darklab/api/v1/supply-chain/servers/taxcalc/tools returns 403 csrf_error (writable MCP tool catalog, issue #544); owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/tools findings 9→16 (+finbot-darklab-taxcalc-tools-live-oracle +finbot-darklab-taxcalc-tools-route-live-oracle); benchmark juice-shop 33 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-taxcalc-reset-tools-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /darklab/api/v1/supply-chain/servers/taxcalc/reset-tools returns 403 csrf_error (writable MCP tool-reset API); owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/reset-tools findings 10→16 (+finbot-darklab-taxcalc-reset-tools-live-oracle +finbot-darklab-taxcalc-reset-tools-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1921-1925-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1920→1925 + placeholder priority regex already covers 192[0-5]; web-security-learning-labs.vercel.app/module/1923 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
       "slug": "finbot-darklab-supply-chain-stats-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /darklab/api/v1/supply-chain/stats returns poisoned_tools + servers_with_overrides counters; owasp-finbot-ctf.org/darklab/api/v1/supply-chain/stats findings 10→12 (+finbot-darklab-supply-chain-stats-live-oracle +finbot-darklab-supply-chain-stats-route-live-oracle); benchmark juice-shop 43 findings 6/6 maintained"
@@ -12533,6 +12551,21 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1886-1890-catalog",
       "shipped_at": "2026-08-18T13:25:00.000Z"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-taxcalc-tools-oracle",
+      "shipped_at": "2026-08-19T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-taxcalc-reset-tools-oracle",
+      "shipped_at": "2026-08-19T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1921-1925-catalog",
+      "shipped_at": "2026-08-19T00:15:00.000Z"
     }
   ]
 }

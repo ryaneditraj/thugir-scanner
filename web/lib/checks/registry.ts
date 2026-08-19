@@ -40433,7 +40433,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1920;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1925;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -83050,6 +83050,149 @@ const finbotDarklabTaxcalcServerRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeFinbotDarklabTaxcalcToolsWrite(
+  ctx: RuleContext,
+  method: "PUT" | "POST"
+): Promise<RuleResult | null> {
+  const toolsUrl = new URL("/darklab/api/v1/supply-chain/servers/taxcalc/tools", ctx.origin).toString();
+  const putBody = JSON.stringify({
+    tools: [
+      {
+        name: "calculate_tax",
+        description: "thugir-tool-poison-probe — indirect prompt injection surface",
+        parameters: {
+          type: "object",
+          properties: { amount: { type: "number" } },
+          required: ["amount"]
+        }
+      }
+    ]
+  });
+  const doc = await ctx.probe.get(toolsUrl, {
+    method,
+    body: method === "PUT" ? putBody : "{}",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (doc.status === 403 && /csrf_error/i.test(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        toolsUrl,
+        method,
+        status: doc.status,
+        snippet: doc.body.slice(0, 200).trim(),
+        note:
+          "OWASP FinBot Dark Lab MCP tool write API at /darklab/api/v1/supply-chain/servers/taxcalc/tools accepts tool-poisoning PUT/POST (CSRF gate confirms writable route, not 404)"
+      }
+    };
+  }
+  if (doc.status >= 200 && doc.status < 300 && /calculate_tax|tool_overrides|default_tools/i.test(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        toolsUrl,
+        method,
+        status: doc.status,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "OWASP FinBot Dark Lab PUT /darklab/api/v1/supply-chain/servers/taxcalc/tools mutates MCP tool catalog without authentication"
+      }
+    };
+  }
+  return null;
+}
+
+const finbotDarklabTaxcalcToolsLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabTaxcalcToolsWrite(ctx, "PUT");
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabTaxcalcToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/servers\/taxcalc\/tools\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabTaxcalcToolsWrite(ctx, "PUT");
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "OWASP FinBot TaxCalc /tools route scan — public MCP tool write API enables supply-chain tool-poisoning labs (issue #544)"
+    }
+  };
+};
+
+async function probeFinbotDarklabTaxcalcResetTools(ctx: RuleContext): Promise<RuleResult | null> {
+  const resetUrl = new URL(
+    "/darklab/api/v1/supply-chain/servers/taxcalc/reset-tools",
+    ctx.origin
+  ).toString();
+  const doc = await ctx.probe.get(resetUrl, {
+    method: "POST",
+    body: "{}",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (doc.status === 403 && /csrf_error/i.test(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        resetUrl,
+        status: doc.status,
+        snippet: doc.body.slice(0, 200).trim(),
+        note:
+          "OWASP FinBot Dark Lab POST /darklab/api/v1/supply-chain/servers/taxcalc/reset-tools is a writable MCP tool-reset API (CSRF gate confirms route, not 404)"
+      }
+    };
+  }
+  if (doc.status >= 200 && doc.status < 300 && /reset|tool_overrides|default_tools/i.test(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        resetUrl,
+        status: doc.status,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "OWASP FinBot Dark Lab POST /reset-tools resets MCP tool overrides without authentication"
+      }
+    };
+  }
+  return null;
+}
+
+const finbotDarklabTaxcalcResetToolsLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabTaxcalcResetTools(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabTaxcalcResetToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/servers\/taxcalc\/reset-tools\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabTaxcalcResetTools(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "OWASP FinBot TaxCalc /reset-tools route scan — public MCP tool-reset write API for supply-chain poisoning labs"
+    }
+  };
+};
+
 async function probeFinbotCtfStats(ctx: RuleContext): Promise<RuleResult | null> {
   const statsUrl = new URL("/ctf/api/v1/stats", ctx.origin).toString();
   const doc = await ctx.probe.get(statsUrl, { maxBytes: 8192, timeoutMs: 20000 });
@@ -87889,6 +88032,10 @@ export const RULES: Record<string, Rule> = {
   finbotDarklabSupplyChainStatsRouteLiveOracle,
   finbotDarklabTaxcalcServerLiveOracle,
   finbotDarklabTaxcalcServerRouteLiveOracle,
+  finbotDarklabTaxcalcToolsLiveOracle,
+  finbotDarklabTaxcalcToolsRouteLiveOracle,
+  finbotDarklabTaxcalcResetToolsLiveOracle,
+  finbotDarklabTaxcalcResetToolsRouteLiveOracle,
   finbotCtfStatsLiveOracle,
   finbotCtfStatsRouteLiveOracle,
   finbotVendorInvoicesLiveOracle,
