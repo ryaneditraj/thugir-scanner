@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T10:05:00.000Z",
+  "updated_at": "2026-08-19T12:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1953",
@@ -14468,6 +14468,31 @@
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-6",
       "source": "OWASP WrongSecrets — challenge-6 secret-in-source oracle (wrongsecrets.com public Heroku deploy, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1956",
+      "source": "Web Security Learning Labs — module 1956 placeholder route oracle (catalog expansion 1956–1960, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1957",
+      "source": "Web Security Learning Labs — module 1957 placeholder route oracle (catalog expansion 1956–1960, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1958",
+      "source": "Web Security Learning Labs — module 1958 placeholder route oracle (catalog expansion 1956–1960, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1959",
+      "source": "Web Security Learning Labs — module 1959 placeholder route oracle (catalog expansion 1956–1960, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1960",
+      "source": "Web Security Learning Labs — module 1960 placeholder route oracle (catalog expansion 1956–1960, Aug 2026 power-loop discovery)",
       "auth": "public_demo"
     }
   ]
