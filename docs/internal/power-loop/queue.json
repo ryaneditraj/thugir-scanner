@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-19T12:05:00.000Z",
+  "updated_at": "2026-08-19T13:20:00.000Z",
   "discovery_urls": [
+    {
+      "url": "http://zero.webappsecurity.com/login.html",
+      "source": "Micro Focus Zero Bank — VWAD online banking login oracle (vwad.owasp.org/app/zero-bank, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://zero.webappsecurity.com/bank/account-activity.html?accountId=18132",
+      "source": "Zero Bank — reflective XSS oracle accountId param (Secure Coding Workshop gist, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://zero.webappsecurity.com/bank/pay-bills-saved-payee.html",
+      "source": "Zero Bank — SQLi payee lookup oracle POST pay-bills-get-payee-details (Secure Coding Workshop gist, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1961",
+      "source": "Web Security Learning Labs — module 1961 placeholder route oracle (catalog expansion 1961–1965, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf-defense-platform.onrender.com/api/scan?url=http://169.254.169.254/latest/meta-data/",
+      "source": "Shashwath800/ssrf — SSRF metadata scan API oracle GET /api/scan?url= (Render live demo README, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1953",
       "source": "Web Security Learning Labs — module 1953 placeholder route oracle (catalog expansion 1953–1955, Aug 2026 power-loop)",
