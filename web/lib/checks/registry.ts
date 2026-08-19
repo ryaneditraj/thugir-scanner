@@ -17,6 +17,7 @@ import {
 import { fetchDoc, isVercelSecurityCheckpoint, looksHtml, type FetchedDoc } from "./http";
 import type { ProbeCache } from "./probe-cache";
 import { extractJuiceShopResendKeys, fetchJuiceShopSocialFeedBodies } from "./juice-shop-social";
+import { probeXssGameLevel2StoredExploit, probeXssGameLevel3DomExploit } from "./xss-game-browser";
 import {
   extractApiPaths,
   extractExternalApiBases,
@@ -7279,6 +7280,72 @@ const xssGameLevel3DomXssRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Google XSS game /level3 route scan — location.hash unescape flows into jQuery #tabContent.html() without sanitization"
+    }
+  };
+};
+
+const xssGameLevel2StoredXssExploitLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const exploit = await probeXssGameLevel2StoredExploit(ctx.origin);
+  if (!exploit) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      url: new URL("/level2/frame", ctx.origin).toString(),
+      canary: exploit.canary,
+      payload: `<img src=x onerror="window.__thugirL2='${exploit.canary}'">`,
+      note: "Google XSS game level 2 — injected stored post executes via PostDB innerHTML sink (live browser exploit confirmation)"
+    }
+  };
+};
+
+const xssGameLevel2StoredXssExploitRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/level2\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssGameLevel2StoredXssExploitLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google XSS game /level2 route scan — live stored XSS exploit via PostDB innerHTML sink confirmed in headless browser"
+    }
+  };
+};
+
+const xssGameLevel3DomXssExploitLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const exploit = await probeXssGameLevel3DomExploit(ctx.origin);
+  if (!exploit) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      url: new URL("/level3/frame", ctx.origin).toString(),
+      canary: exploit.canary,
+      hashPayload: `1'><img src=x onerror="window.__thugirL3='${exploit.canary}'">`,
+      note: "Google XSS game level 3 — location.hash breakout executes via chooseTab() jQuery .html() sink (live browser exploit confirmation)"
+    }
+  };
+};
+
+const xssGameLevel3DomXssExploitRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssGameHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/level3\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssGameLevel3DomXssExploitLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Google XSS game /level3 route scan — live DOM XSS exploit via location.hash → chooseTab() confirmed in headless browser"
     }
   };
 };
@@ -22793,6 +22860,46 @@ const vulnbankVirtualCardsBolaRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Vuln Bank /api/virtual-cards route scan — user B can toggle-freeze user A's virtual card without ownership check — route-specific BOLA virtual-cards oracle"
+    }
+  };
+};
+
+const vulnbankWerkzeugConsoleLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const consoleUrl = new URL("/console", ctx.origin).toString();
+  const doc = await ctx.probe.get(consoleUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const werkzeugOk =
+    /Werkzeug Debugger/i.test(doc.body) &&
+    /CONSOLE_MODE\s*=\s*true/i.test(doc.body) &&
+    /EVALEX\s*=\s*true/i.test(doc.body);
+  if (!werkzeugOk) return NEGATIVE;
+  const secretMatch = doc.body.match(/SECRET\s*=\s*"([^"]+)"/);
+  return {
+    fired: true,
+    confidence: 0.96,
+    evidence: {
+      url: consoleUrl,
+      debuggerSecret: secretMatch?.[1] ? `${secretMatch[1].slice(0, 4)}...` : undefined,
+      snippet: doc.body.match(/<title>[^<]+<\/title>/i)?.[0]?.slice(0, 80),
+      note: "Vuln Bank GET /console exposes Werkzeug interactive debugger with CONSOLE_MODE and EVALEX enabled — remote code execution risk"
+    }
+  };
+};
+
+const vulnbankWerkzeugConsoleRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/console\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankWerkzeugConsoleLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /console route scan — Werkzeug interactive debugger exposed with EVALEX enabled"
     }
   };
 };
@@ -87314,6 +87421,7 @@ export const RULES: Record<string, Rule> = {
   vulnbankVirtualCardsBolaLiveOracle,
   vulnbankVirtualCardsBolaRouteLiveOracle,
   vulnbankUploadProfilePictureUrlSsrfLiveOracle,
+  vulnbankWerkzeugConsoleLiveOracle,
   vulnbankTransferNegativeAmountLiveOracle,
   vulnbankTransferNegativeAmountRouteLiveOracle,
   vulnbankGraphqlIntrospectionLiveOracle,
@@ -89297,8 +89405,12 @@ export const RULES: Record<string, Rule> = {
   xssGameLevel1ReflectedXssRouteLiveOracle,
   xssGameLevel2StoredXssLiveOracle,
   xssGameLevel2StoredXssRouteLiveOracle,
+  xssGameLevel2StoredXssExploitLiveOracle,
+  xssGameLevel2StoredXssExploitRouteLiveOracle,
   xssGameLevel3DomXssLiveOracle,
   xssGameLevel3DomXssRouteLiveOracle,
+  xssGameLevel3DomXssExploitLiveOracle,
+  xssGameLevel3DomXssExploitRouteLiveOracle,
   xssGameLevel4JsStringXssLiveOracle,
   xssGameLevel4JsStringXssRouteLiveOracle,
   xssGameLevel5JavascriptProtocolXssLiveOracle,
@@ -89352,6 +89464,7 @@ export const RULES: Record<string, Rule> = {
   vulnforgeAcademyLevelFileUploadRouteLiveOracle,
   vulnforgeAcademyLevelRceRouteLiveOracle,
   vulnbankUploadProfilePictureUrlRouteLiveOracle,
+  vulnbankWerkzeugConsoleRouteLiveOracle,
   agentpwnAttackRouteLiveOracle,
   agentpwnMcpExploitationRouteLiveOracle,
   agentpwnContextWindowRouteLiveOracle,

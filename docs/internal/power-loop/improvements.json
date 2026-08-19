@@ -3725,6 +3725,24 @@
       "slug": "web-security-learning-labs-module-catalog-1931-1935",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1930\u21921935 + runner module priority regex 1930\u2192193[0-5]; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-werkzeug-console-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET https://vulnbank.org/console returns Werkzeug Debugger with CONSOLE_MODE=true and EVALEX=true; vulnbank.org/console findings 0\u219230 (+vulnbank-werkzeug-console-live-oracle + route); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "xss-game-level2-stored-xss-exploit-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: headless browser injects stored post on /level2/frame and confirms onerror canary via PostDB innerHTML sink; xss-game.appspot.com/level2/frame findings 8\u219211 (+exploit + route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-game.appspot.com",
+      "slug": "xss-game-level3-dom-xss-exploit-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: headless browser navigates /level3/frame#hash breakout and confirms onerror canary via chooseTab() jQuery .html(); xss-game.appspot.com/level3/frame findings 10\u219212 (+exploit + route oracles); benchmark 6/6 maintained"
     }
   ]
 }
