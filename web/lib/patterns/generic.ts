@@ -46030,6 +46030,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-admin-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "NodeGoat /admin broken access control route live oracle",
+    description:
+      "When scanning /admin, live /benefits BAC confirms A7 missing function-level access control even when /admin route is absent on Heroku — route-specific admin panel BAC oracle.",
+    impactOneline:
+      "Queued /admin scans should surface live benefits BAC confirming missing server-side authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — protect admin modules with server-side authorization in production.",
+      steps: [
+        "Apply isAdmin middleware on all admin-only routes including /benefits.",
+        "Do not assume absent /admin routes mean access control is enforced.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /admin route scan maps to /benefits BAC. Show broken access control remediation for admin-only modules.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-profile-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "NodeGoat profile stored XSS live oracle",
+    description:
+      "POST /profile stores unsanitized firstName HTML that reflects on /dashboard with onerror handlers — the NodeGoat A3 profile stored cross-site scripting oracle.",
+    impactOneline:
+      "Unsanitized profile name fields let attackers inject persistent XSS visible in the navigation bar.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatProfileStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — encode or sanitize profile output before rendering in production apps.",
+      steps: [
+        "HTML-encode firstName and lastName before persisting or rendering in templates.",
+        "Use a strict CSP to block inline script execution from stored profile data.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our POST /profile endpoint stores unsanitized firstName HTML on /dashboard. Show profile stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-profile-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "NodeGoat /profile stored XSS route live oracle",
+    description:
+      "When scanning /profile, POST /profile stores unsanitized firstName HTML that reflects on /dashboard — route-specific A3 profile stored XSS oracle.",
+    impactOneline:
+      "Route scans on /profile should confirm live stored XSS via unsanitized name field persistence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatProfileStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — encode profile fields before rendering in production apps.",
+      steps: [
+        "HTML-encode profile name fields before persisting or rendering.",
+        "Use a strict CSP to block inline script execution.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /profile route scan confirms stored XSS via unsanitized firstName. Show route-specific profile XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-upload-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "NodeGoat /upload stored XSS route live oracle",
+    description:
+      "When scanning /upload, live A3 profile stored XSS via POST /profile confirms XSS training oracle when /upload route is absent on Heroku — route-specific upload-to-profile XSS oracle.",
+    impactOneline:
+      "Queued /upload scans should surface live profile stored XSS confirming the NodeGoat A3 XSS training vector.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — sanitize user input before rendering in production apps.",
+      steps: [
+        "HTML-encode profile name fields before persisting or rendering.",
+        "Validate and sanitize any file upload content if upload routes are added.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /upload route scan maps to profile stored XSS. Show XSS remediation for profile and upload surfaces.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "nodegoat-nosql-login-live-oracle",
     platform: "generic",
     category: "Injection",

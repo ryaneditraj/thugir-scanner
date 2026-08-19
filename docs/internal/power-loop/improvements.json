@@ -1,6 +1,18 @@
 {
   "candidates": [
     {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /admin 404 on Heroku; nodegoatAdminRouteLiveOracle maps to nodegoatBenefitsBacLiveProbe on /benefits; nodegoat-websec.herokuapp.com/admin findings 9\u219212 (+nodegoat-admin-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-profile-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /profile firstName=<img src=x onerror=ThugirProfXss*> persists on /dashboard navbar; nodegoatProfileStoredXssLiveProbe + nodegoatUploadRouteLiveOracle maps /upload 404 to A3 profile XSS; nodegoat-websec.herokuapp.com/upload findings 9\u219212 (+nodegoat-upload-route-live-oracle +nodegoat-profile-stored-xss-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-register-atob-redirect-live-oracle",
       "status": "shipped",
