@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-profile-csrf-route-probe-cache-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: nodegoatProfileCsrfLiveProbe uses fetchDoc for POST/verify so probe cache does not serve stale GET profile after live oracle mutates session; nodegoat-websec.herokuapp.com/profile findings 13→14 (+nodegoat-profile-csrf-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-mcp-resources-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /mcp/resources resources/list returns JSON-RPC result.resources without auth; duck-store.escape.tech/mcp/resources findings 28→30 (+duck-store-mcp-resources-live-oracle +duck-store-mcp-resources-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-dashboard-route-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended nodegoat-websec.herokuapp.com/dashboard to discovery queue; route scan fires +nodegoat-dashboard-route-live-oracle (weak default credentials grant dashboard access); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:owasp-finbot-ctf.org",
       "slug": "finbot-darklab-taxcalc-tools-oracle",
       "status": "shipped",
@@ -12566,6 +12584,21 @@
       "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-1921-1925-catalog",
       "shipped_at": "2026-08-19T00:15:00.000Z"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-profile-csrf-route-probe-cache-fix",
+      "shipped_at": "2026-08-19T01:30:00.000Z"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-mcp-resources-oracles",
+      "shipped_at": "2026-08-19T01:30:00.000Z"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-dashboard-route-queue-drain",
+      "shipped_at": "2026-08-19T01:30:00.000Z"
     }
   ]
 }

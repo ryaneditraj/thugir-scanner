@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-19T00:19:11.016Z",
-  "total": 2500,
-  "uniqueSlugs": 2496,
+  "generatedAt": "2026-08-19T01:17:20.392Z",
+  "total": 2502,
+  "uniqueSlugs": 2498,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2482,
+    "generic": 2484,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2415,
+    "deep": 2417,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 510,
+    "Broken access control": 512,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -942,6 +942,8 @@
     "duck-store-coupons-route-live-oracle",
     "duck-store-mcp-coupons-disclosure-live-oracle",
     "duck-store-mcp-coupons-route-live-oracle",
+    "duck-store-mcp-resources-live-oracle",
+    "duck-store-mcp-resources-route-live-oracle",
     "duck-store-mcp-tools-enumeration-live-oracle",
     "duck-store-mcp-tools-route-live-oracle",
     "duck-store-open-redirect-live-oracle",

@@ -2425,6 +2425,8 @@ const DEEP_RULES = new Set<string>([
   "duckStoreMcpCouponsRouteLiveOracle",
   "duckStoreMcpToolsEnumerationLiveOracle",
   "duckStoreMcpToolsRouteLiveOracle",
+  "duckStoreMcpResourcesEnumerationLiveOracle",
+  "duckStoreMcpResourcesRouteLiveOracle",
   "duckStoreProductsFilterSqliLiveOracle",
   "duckStoreProductsFilterSqliRouteLiveOracle",
   "duckStoreCartNegativeQuantityLiveOracle",
@@ -12813,6 +12815,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/mcp\/tools(?:\/|$)/i.test(targetInput) &&
         !/\/mcp\/tools\/list_coupons/i.test(targetInput) &&
         p.slug.startsWith("duck-store-mcp-tools")
+      )
+        return -3;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/mcp\/resources(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-mcp-resources")
       )
         return -3;
       if (

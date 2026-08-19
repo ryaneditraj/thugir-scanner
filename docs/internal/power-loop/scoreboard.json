@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T01:08:55.084Z",
+  "updated_at": "2026-08-19T01:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -20,10 +20,10 @@
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2829,
+  "discovery_urls_added": 2830,
   "discovery_findings": 22897,
-  "improvements_shipped": 1202,
-  "last_run": "2026-08-19T01:08:55.084Z",
+  "improvements_shipped": 1205,
+  "last_run": "2026-08-19T01:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "01",
     "benchmark": {
@@ -53,19 +53,20 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
+      "urls_added": 1,
       "urls_scanned": 8,
       "findings": 240,
-      "focus": "nodegoat allocations/memos + brokencrystals MCP spawn_process/process_numbers sub-routes + WSL module/1923 + duck-store MCP drain",
-      "improvements_shipped_this_run": 0
+      "focus": "NodeGoat profile CSRF route probe-cache fix + Duck Store MCP resources oracles + dashboard queue drain; parallel drain: allocations/memos + brokencrystals MCP + WSL 1923",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (47 findings) — primary oracle unreachable",
-      "brokencrystals.com/api/mcp/spawn_process: 84 findings — brokencrystals-mcp-spawn-process-route-live-oracle + command injection surface",
-      "brokencrystals.com/api/mcp/process_numbers: 40 findings — brokencrystals-mcp-process-numbers-live-oracle SSJI surface",
-      "nodegoat-websec.herokuapp.com/allocations: 7 findings — nodegoat-benefits-nosql-live-oracle IDOR on allocations route",
-      "nodegoat-websec.herokuapp.com/memos: 11 findings — server-side-eval-evidence + client-side-nosql-evidence on memos route",
-      "web-security-learning-labs.vercel.app/module/1923: 8 findings — placeholder module route",
+      "nodegoat-websec.herokuapp.com/profile: 13→14 findings — nodegoat-profile-csrf-route-live-oracle after probe-cache fix",
+      "duck-store.escape.tech/mcp/resources: 28→30 findings — duck-store-mcp-resources-live-oracle + route oracle",
+      "nodegoat-websec.herokuapp.com/dashboard: nodegoat-dashboard-route-live-oracle via queue drain",
+      "brokencrystals.com/api/mcp/spawn_process: 84 findings — brokencrystals-mcp-spawn-process-route-live-oracle",
+      "brokencrystals.com/api/mcp/process_numbers: 40 findings — brokencrystals-mcp-process-numbers-live-oracle",
+      "nodegoat-websec.herokuapp.com/allocations: 7 findings — nodegoat-benefits-nosql-live-oracle IDOR",
       "duck-store.escape.tech/mcp/tools: 31 findings — MCP tools enumeration hub"
     ],
     "learning_gaps": [
@@ -81,8 +82,9 @@
     "brokencrystals.com/api/mcp/spawn_process": 84,
     "brokencrystals.com/api/mcp/process_numbers": 40,
     "duck-store.escape.tech/mcp/tools": 31,
+    "duck-store.escape.tech/mcp/resources": 30,
     "duck-store.escape.tech/api/v1/users/me/profile": 30,
-    "duck-store.escape.tech/mcp/resources": 29,
+    "nodegoat-websec.herokuapp.com/profile": 14,
     "nodegoat-websec.herokuapp.com/memos": 11,
     "nodegoat-websec.herokuapp.com/allocations": 7,
     "web-security-learning-labs.vercel.app/module/1923": 8
