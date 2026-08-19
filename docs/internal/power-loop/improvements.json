@@ -4,6 +4,24 @@
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-tutorial-redos-live-oracle",
       "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /profile bankRouting 28-digit catastrophic pattern returns HTTP 500; nodegoat-websec.herokuapp.com/tutorial/redos route oracle fires with live probe; benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-admin-route-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: oracle already on branch via /benefits BAC — duplicate weak-creds variant rejected"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-upload-route-live-oracle",
+      "status": "rejected",
+      "validation": "SOURCE: discovery:url EVIDENCE: oracle already on branch via profile stored XSS — duplicate memos variant rejected"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-redos-live-oracle",
+      "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /profile bankRouting 28-digit catastrophic pattern returns HTTP 500; nodegoat-websec.herokuapp.com/tutorial/redos route oracle fires with live probe; benchmark juice-shop 48 findings 6/6 maintained"
     },
     {
