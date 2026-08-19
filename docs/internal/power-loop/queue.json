@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-19T21:04:22.913Z",
+  "updated_at": "2026-08-19T22:26:09.857Z",
   "discovery_urls": [
+    {
+      "url": "http://zero.webappsecurity.com/admin/users.html",
+      "source": "Fortify Zero Bank WebInspect — admin users table exposes plaintext passwords without auth (22 UTC learning gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://zero.webappsecurity.com/bank/transfer.html",
+      "source": "Fortify Zero Bank WebInspect — bank transfer CSRF/IDOR training surface (22 UTC queue drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://zero.webappsecurity.com/login.html",
+      "source": "Fortify Zero Bank WebInspect — login/auth-bypass training surface with demo credentials (22 UTC queue drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://api.graphqlbook.org/graphql",
+      "source": "DghostNinja/graphql-bookstore-API — deliberately vulnerable GraphQL BOLA/SQLi/SSRF oracle endpoint (public docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/one/admin_user/info",
+      "source": "NeuraLegion/brokencrystals — mass-assignment privilege escalation PUT target (README; 21 UTC learning gap)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://zero.webappsecurity.com/feedback.html",
       "source": "Watchfire Zero Bank — stored XSS + CSRF feedback form oracle (VWAD zero-bank pen-test reports)",
@@ -9823,31 +9848,6 @@
     {
       "url": "https://vuln-expose.vercel.app/api/search?q=test",
       "source": "JuaniVeltri/vuln-expose — SQLi UNION data-extraction search API oracle (GitHub README)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/users/one/admin_user/info",
-      "source": "NeuraLegion/brokencrystals — mass-assignment privilege escalation PUT target /api/users/one/{email}/info (README)",
-      "auth": "benchmark"
-    },
-    {
-      "url": "http://zero.webappsecurity.com/admin/users.html",
-      "source": "Fortify Zero Bank WebInspect — admin users table exposes plaintext passwords without auth (scoreboard learning gap)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "http://zero.webappsecurity.com/bank/transfer.html",
-      "source": "Fortify Zero Bank WebInspect — bank transfer CSRF/IDOR training surface (web search)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "http://zero.webappsecurity.com/login.html",
-      "source": "Fortify Zero Bank WebInspect — login/auth-bypass training surface with demo credentials (web search)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://api.graphqlbook.org/graphql",
-      "source": "DghostNinja/graphql-bookstore-API — deliberately vulnerable GraphQL BOLA/SQLi/SSRF oracle endpoint (public docs)",
       "auth": "public_demo"
     },
     {

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T21:22:00.000Z",
+  "updated_at": "2026-08-19T23:10:25.868Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2752,
-  "total_findings": 27125,
+  "total_sites_scanned": 2760,
+  "total_findings": 27324,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1966,
-  "discovery_findings": 23000,
+  "discovery_urls_added": 1971,
+  "discovery_findings": 23170,
   "improvements_shipped": 641,
-  "last_run": "2026-08-19T21:22:00.000Z",
+  "last_run": "2026-08-19T23:10:25.869Z",
   "last_run_summary": {
-    "hour_utc": "21",
+    "hour_utc": "22",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 29,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 462,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (29 findings, 20 juice-shop live oracles); thinner pass vs 48-finding baseline; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "Broken Crystals route-specific SSRF/XSS oracles from 21 UTC learning gaps",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 170,
+      "focus": "Zero Bank admin/users+transfer+login, graphqlbook GraphQL BOLA/SSRF, brokencrystals mass-assignment admin_user/info",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "brokencrystals.com/subscriptions: 69→81 findings — brokencrystals-subscriptions-xss-route-live-oracle shipped",
-      "brokencrystals.com/api/file/azure: +brokencrystals-file-azure-route-live-oracle route-specific Azure IMDS SSRF",
-      "brokencrystals.com/api/file/digital_ocean: +brokencrystals-file-digital-ocean-route-live-oracle route-specific DO metadata SSRF",
-      "pwnshop.ctfsecurity.com/apply-coupon: 46 findings — coupon oracles fire (PWN-016)",
-      "ssrf.vulnlab.dev/blocklist: 15 findings — full SSRF oracle suite"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (29 findings) — no benchmark misses",
+      "zero.webappsecurity.com/admin/users.html: 9 findings — zero-bank-admin-users-plaintext-passwords-live-oracle (critical)",
+      "api.graphqlbook.org/graphql: 11 findings — graphqlbook-internal-user-search-bola + fetch-external-resource-ssrf live oracles",
+      "brokencrystals.com/api/users/one/admin_user/info: 80 findings — brokencrystals-mass-assignment-put-route-live-oracle shipped",
+      "pwnshop.ctfsecurity.com/api/chat: 44 findings — pwnshop-chat-prompt-injection-route-live-oracle (PWN-031)",
+      "zero.webappsecurity.com/login.html: 7 findings — login_error blocks authenticated CSRF/IDOR probes"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "zero.webappsecurity.com login returns login_error — live CSRF/IDOR probes still blocked",
+      "zero.webappsecurity.com/login.html: login_error blocks live CSRF/transfer oracles without valid session",
       "testphp.vulnweb.com unreachable from cloud agent",
       "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent without OTP-gated session"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "brokencrystals.com/subscriptions": 81,
-    "brokencrystals.com/api/file/azure": 83,
-    "brokencrystals.com/api/file/digital_ocean": 82,
-    "pwnshop.ctfsecurity.com/admin/security": 48,
-    "pwnshop.ctfsecurity.com/apply-coupon": 46,
-    "ssrf.vulnlab.dev/blocklist": 15,
-    "wrongsecrets.herokuapp.com/challenge/1": 15
+    "juice-shop.herokuapp.com": 29,
+    "zero.webappsecurity.com/admin/users.html": 9,
+    "api.graphqlbook.org/graphql": 11,
+    "brokencrystals.com/api/users/one/admin_user/info": 80,
+    "pwnshop.ctfsecurity.com/api/chat": 44,
+    "zero.webappsecurity.com/bank/transfer.html": 7,
+    "zero.webappsecurity.com/login.html": 7,
+    "demo.owasp-juice.shop/rest/basket/1": 12
   }
 }
