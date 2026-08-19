@@ -2044,6 +2044,8 @@ const DEEP_RULES = new Set<string>([
   "pwnshopDownloadPathTraversalRouteLiveOracle",
   "pwnshopAccountDeleteCsrfLiveOracle",
   "pwnshopAccountDeleteCsrfRouteLiveOracle",
+  "pwnshopOtpNotInvalidatedLiveOracle",
+  "pwnshopOtpNotInvalidatedRouteLiveOracle",
   "pwnshopAuditLogPlaintextPasswordLiveOracle",
   "pwnshopAuditLogPlaintextPasswordRouteLiveOracle",
   "pwnshopExportOrdersCsvLiveOracle",
@@ -5703,7 +5705,9 @@ function extractPwnshopDocSeeds(html: string, pageUrl: string): string[] {
     "/apply-coupon",
     "/profile/upload-avatar",
     "/wallet",
-    "/wallet/topup/vulnbank"
+    "/wallet/topup/vulnbank",
+    "/reset-password",
+    "/forgot-password"
   ]) {
     try {
       const u = new URL(path, pageUrl);
@@ -8419,7 +8423,7 @@ function extractGinAndJuiceVulnSeeds(html: string, pageUrl: string): string[] {
   }
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/vulnerabilities", "/catalog", "/blog"]) {
+  for (const p of ["/vulnerabilities", "/catalog", "/blog", "/login"]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -12232,7 +12236,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/api\/spawn\b/i.test(targetInput) &&
         (p.slug.startsWith("brokencrystals-spawn") || p.slug === "command-injection-form-probe")
       )
-        return -3;
+        return -4;
       if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/render\b/i.test(targetInput) &&
@@ -12408,6 +12412,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("ginandjuice-cart")
       )
         return -3;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-login")
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/(?:reset-password|forgot-password|login|verify-otp)\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-otp-not-invalidated")
+      )
+        return -4;
       if (
         /ginandjuice\.shop/i.test(origin) &&
         /\/catalog\/cart\b/i.test(targetInput) &&

@@ -23508,6 +23508,57 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-otp-not-invalidated-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Pwnshop OTP not invalidated on new request live oracle (PWN-024)",
+    description:
+      "Second POST /login issues a new OTP without invalidating the first — multiple valid login codes coexist for the same user, widening the brute-force window.",
+    impactOneline:
+      "Stale OTPs remain valid after new codes are issued, extending the window for credential attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOtpNotInvalidatedLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Invalidate prior OTPs when issuing new login or reset codes — Pwnshop PWN-024 is intentional lab software.",
+      steps: [
+        "Delete or expire previous OTPs when a new one is generated.",
+        "Limit OTP reuse to a single successful verification.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our login OTP flow keeps prior codes valid after new OTP requests. Show OTP invalidation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-otp-not-invalidated-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Pwnshop OTP not invalidated route live oracle (PWN-024)",
+    description:
+      "When scanning /reset-password, /login, or /verify-otp, prior OTPs remain valid after a second login OTP is issued — route-specific OTP invalidation oracle.",
+    impactOneline:
+      "Route scans on password-reset and OTP flows need live confirmation that old codes are not revoked.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOtpNotInvalidatedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Invalidate prior OTPs on new issuance — Pwnshop is intentional lab software.",
+      steps: [
+        "Expire previous OTPs when generating new login or reset tokens.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /reset-password route scan confirms stale OTPs remain valid. Show route-specific OTP invalidation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-audit-log-plaintext-password-live-oracle",
     platform: "generic",
     category: "Sensitive data exposure",
