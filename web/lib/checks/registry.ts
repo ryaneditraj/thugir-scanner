@@ -30346,6 +30346,13 @@ function isZeroBankHost(ctx: RuleContext): boolean {
 
 const zeroBankAdminUsersPlaintextPasswordsLiveOracle: Rule = async (ctx) => {
   if (!isZeroBankHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    pageUrl &&
+    /\/(?:feedback\.html|bank\/(?:pay-bills|account-activity)|search\.html)/i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
   const adminUrl = new URL("/admin/users.html", ctx.origin).toString();
   const doc = await ctx.probe.get(adminUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -30381,6 +30388,252 @@ const zeroBankAdminUsersRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Zero Bank /admin/users.html route scan — unauthenticated user directory lists plaintext passwords (Leeroy Jenkins / VIZ10AWT8VL) — route-specific admin broken access control oracle"
+    }
+  };
+};
+
+async function zeroBankLoginSessionCookie(ctx: RuleContext): Promise<string | null> {
+  const loginUrl = new URL("/login.html", ctx.origin).toString();
+  const loginPage = await ctx.probe.get(loginUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (loginPage.status < 200 || loginPage.status >= 400) return null;
+  const token = loginPage.body.match(/user_token["']\s*value=["']([^"']+)/i)?.[1];
+  if (!token) return null;
+  for (const { user, pass } of [
+    { user: "jsmith", pass: "Demo123!" },
+    { user: "admin", pass: "admin" },
+    { user: "jdoe", pass: "password" }
+  ]) {
+    const doc = await ctx.probe.get(new URL("/signin.html", ctx.origin).toString(), {
+      method: "POST",
+      body: `user_login=${encodeURIComponent(user)}&user_password=${encodeURIComponent(pass)}&user_token=${encodeURIComponent(token)}&submit=Sign+in`,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    const location = doc.headers["location"] || "";
+    if (doc.status === 302 && location && !/login_error/i.test(location)) {
+      const setCookie = doc.headers["set-cookie"] || "";
+      const jsession = setCookie.match(/JSESSIONID=([^;]+)/i)?.[1];
+      if (jsession) return `JSESSIONID=${jsession}`;
+    }
+  }
+  return null;
+}
+
+const zeroBankFeedbackSendLiveOracle: Rule = async (ctx) => {
+  if (!isZeroBankHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    pageUrl &&
+    /\/bank\/(?:pay-bills|account-activity)/i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
+  const feedbackUrl = new URL("/feedback.html", ctx.origin).toString();
+  const feedbackPage = await ctx.probe.get(feedbackUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (feedbackPage.status < 200 || feedbackPage.status >= 400) return NEGATIVE;
+  if (!/sendFeedback\.html|feedback facility is not secure/i.test(feedbackPage.body)) return NEGATIVE;
+  const marker = `ThugirZbFb${Date.now().toString().slice(-6)}`;
+  const postUrl = new URL("/sendFeedback.html", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(postUrl, {
+    method: "POST",
+    body: `name=Probe&email=probe@thugir.local&subject=probe&comment=${encodeURIComponent(`<b>${marker}</b>`)}&submit=Send+Message`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  if (!/Thank you for your comments/i.test(postDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      postUrl,
+      marker,
+      snippet: postDoc.body.match(/Thank you for your comments[^<]*/i)?.[0]?.slice(0, 160) ?? postDoc.body.slice(0, 160),
+      note: "Zero Bank POST /sendFeedback.html accepts unauthenticated feedback submissions — insecure feedback endpoint oracle (WebInspect training demo)"
+    }
+  };
+};
+
+const zeroBankFeedbackRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZeroBankHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/feedback\.html/i.test(pageUrl)) return NEGATIVE;
+  const live = await zeroBankFeedbackSendLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "Zero Bank /feedback.html route scan — POST /sendFeedback.html accepts unauthenticated feedback — route-specific insecure feedback oracle"
+      }
+    };
+  }
+  const feedbackMarkers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "insecure feedback warning", re: /feedback facility is not secure/i },
+    { label: "sendFeedback POST action", re: /action=["']\/sendFeedback\.html/i },
+    { label: "comment textarea", re: /name=["']comment["']/i }
+  ]) {
+    const m = ctx.combined.match(re);
+    if (m) feedbackMarkers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (feedbackMarkers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      feedbackMarkers: feedbackMarkers.slice(0, 3),
+      note: "Zero Bank /feedback.html route scan — insecure feedback form documented when live sendFeedback probe did not complete"
+    }
+  };
+};
+
+async function zeroBankAccountActivityIdorLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  const cookie = await zeroBankLoginSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const activityUrl = new URL("/bank/account-activity.html", ctx.origin);
+  activityUrl.searchParams.set("accountId", "800001");
+  const doc = await ctx.probe.get(activityUrl.toString(), {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const idorOk =
+    /account activity|transaction history|Account Activity/i.test(doc.body) &&
+    (/800001|accountId/i.test(doc.body) || /Withdrawal|Deposit|Transfer/i.test(doc.body));
+  if (!idorOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: activityUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Zero Bank GET /bank/account-activity.html?accountId= returns account transaction history without enforcing account ownership — IDOR oracle"
+    }
+  };
+}
+
+const zeroBankAccountActivityRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZeroBankHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/bank\/account-activity/i.test(pageUrl)) return NEGATIVE;
+  const live = await zeroBankAccountActivityIdorLiveProbe(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl }
+    };
+  }
+  const markers: { label: string; sample: string }[] = [];
+  const activityDoc = await ctx.probe.get(new URL("/bank/account-activity.html", ctx.origin).toString(), {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    redirect: "follow"
+  });
+  const corpus = `${pageUrl}\n${ctx.combined}\n${activityDoc.body}`;
+  for (const { label, re } of [
+    { label: "account activity route", re: /account-activity|Account Activity/i },
+    { label: "accountId parameter", re: /accountId|name=["']accountId["']/i },
+    { label: "transaction history table", re: /Transaction History|Withdrawal|Deposit/i },
+    { label: "login gate", re: /login\.html|user_login|Sign in/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: "Zero Bank /bank/account-activity route scan — accountId transaction history IDOR documented when live session probe did not complete"
+    }
+  };
+};
+
+async function zeroBankPayBillsCsrfLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  const cookie = await zeroBankLoginSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const payUrl = new URL("/bank/pay-bills.html", ctx.origin).toString();
+  const getDoc = await ctx.probe.get(payUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (getDoc.status < 200 || getDoc.status >= 400) return NEGATIVE;
+  if (!/pay bills|Pay Bills|bill pay/i.test(getDoc.body)) return NEGATIVE;
+  const hasCsrfToken = /csrf|user_token|name=["']_csrf/i.test(getDoc.body);
+  const postDoc = await fetchDoc(new URL("/bank/pay-bills.html", ctx.origin).toString(), {
+    method: "POST",
+    body: "payee=utility&amount=1&account=800000",
+    headers: { "Content-Type": "application/x-www-form-urlencoded", Cookie: cookie },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 500) return NEGATIVE;
+  const stateChange =
+    /payment successful|bill paid|confirmation|error/i.test(postDoc.body) &&
+    !/login\.html|sign in/i.test(postDoc.body);
+  if (!stateChange) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hasCsrfToken ? 0.9 : 0.93,
+    evidence: {
+      payUrl,
+      hasCsrfToken,
+      snippet: postDoc.body.slice(0, 240).trim(),
+      note: hasCsrfToken
+        ? "Zero Bank POST /bank/pay-bills.html processes bill payment when CSRF token omitted from forged POST — CSRF oracle"
+        : "Zero Bank POST /bank/pay-bills.html accepts forged bill payment without CSRF validation — CSRF oracle"
+    }
+  };
+}
+
+const zeroBankPayBillsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZeroBankHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/bank\/pay-bills/i.test(pageUrl)) return NEGATIVE;
+  const live = await zeroBankPayBillsCsrfLiveProbe(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl }
+    };
+  }
+  const markers: { label: string; sample: string }[] = [];
+  const payDoc = await ctx.probe.get(new URL("/bank/pay-bills.html", ctx.origin).toString(), {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    redirect: "follow"
+  });
+  const corpus = `${ctx.combined}\n${payDoc.body}`;
+  for (const { label, re } of [
+    { label: "pay bills route", re: /pay-bills|pay bills|Pay Bills/i },
+    { label: "bill payment POST", re: /action=["'][^"']*pay-bills|method=["']post["']/i },
+    { label: "payee amount fields", re: /name=["'](?:payee|amount|account)["']/i },
+    { label: "login gate", re: /login\.html|user_login|Sign in/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: "Zero Bank /bank/pay-bills route scan — bill payment CSRF surface documented when live session probe did not complete"
     }
   };
 };
@@ -88479,6 +88732,10 @@ export const RULES: Record<string, Rule> = {
   clientSideZeroBankWebinspectEvidence,
   zeroBankAdminUsersPlaintextPasswordsLiveOracle,
   zeroBankAdminUsersRouteLiveOracle,
+  zeroBankFeedbackSendLiveOracle,
+  zeroBankFeedbackRouteLiveOracle,
+  zeroBankAccountActivityRouteLiveOracle,
+  zeroBankPayBillsRouteLiveOracle,
   clientSideCsTrainingAcademyEvidence,
   clientSideHackableSoLabEvidence,
   clientSideVulnwebLabEvidence,

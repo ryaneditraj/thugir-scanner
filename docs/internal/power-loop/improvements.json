@@ -1,8 +1,23 @@
 {
   "candidates": [
     {
-      "source": "discovery:web-security-learning-labs.vercel.app",
-      "slug": "web-security-learning-labs-module-catalog-1971-1973",
+      "source": "discovery:zero.webappsecurity.com",
+      "slug": "zero-bank-feedback-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /sendFeedback.html accepts unauthenticated feedback (Thank you for your comments); zero.webappsecurity.com/feedback.html findings 5→7 (+zero-bank-feedback-send-live-oracle +zero-bank-feedback-route-live-oracle); admin-users oracle scoped off feedback route; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zero.webappsecurity.com",
+      "slug": "zero-bank-pay-bills-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /bank/pay-bills route scan documents bill-payment CSRF surface when login blocks live probe; zero.webappsecurity.com/bank/pay-bills.html findings 5→6 (+zero-bank-pay-bills-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zero.webappsecurity.com",
+      "slug": "zero-bank-account-activity-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /bank/account-activity route scan documents accountId IDOR training surface; zero.webappsecurity.com/bank/account-activity.html findings 5→6 (+zero-bank-account-activity-route-live-oracle); benchmark 6/6 maintained"
+    },
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1970→1973 + runner placeholder priority regex 1970→197[0-3]; web-security-learning-labs.vercel.app/module/1971 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },

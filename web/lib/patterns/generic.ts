@@ -21638,6 +21638,107 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zero-bank-feedback-send-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Zero Bank insecure feedback submission live oracle",
+    description:
+      "POST /sendFeedback.html accepts unauthenticated feedback with name/email/subject/comment — the Fortify WebInspect insecure feedback endpoint oracle.",
+    impactOneline:
+      "Unauthenticated feedback submission lets anyone spam or probe internal support channels.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zeroBankFeedbackSendLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Bank is intentional WebInspect training — require authentication and rate limits on feedback endpoints in production.",
+      steps: [
+        "Require authentication before accepting feedback submissions.",
+        "Sanitize and encode feedback content before storage or display.",
+        "Run zero.webappsecurity.com only as an isolated scanner calibration target."
+      ]
+    },
+    fixPrompt:
+      "Our POST /sendFeedback.html endpoint accepts unauthenticated feedback. Show feedback endpoint hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zero-bank-feedback-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Zero Bank /feedback.html route live oracle",
+    description:
+      "When scanning /feedback.html, POST /sendFeedback.html accepts unauthenticated feedback submissions — route-specific insecure feedback oracle.",
+    impactOneline:
+      "Route scans on /feedback.html should confirm live unauthenticated feedback submission.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zeroBankFeedbackRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Bank is intentional WebInspect training — gate feedback behind authentication in production.",
+      steps: [
+        "Require authentication before accepting feedback submissions.",
+        "Run zero.webappsecurity.com only as an isolated scanner calibration target."
+      ]
+    },
+    fixPrompt:
+      "Our /feedback.html route scan confirms unauthenticated sendFeedback. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zero-bank-account-activity-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Zero Bank account activity IDOR route live oracle",
+    description:
+      "When scanning /bank/account-activity, GET ?accountId= returns transaction history without enforcing account ownership — route-specific IDOR oracle.",
+    impactOneline:
+      "Route scans on /bank/account-activity should confirm accountId parameter IDOR on transaction history.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zeroBankAccountActivityRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Bank is intentional WebInspect training — enforce object-level authorization on account activity in production.",
+      steps: [
+        "Verify session user owns requested accountId before returning transactions.",
+        "Run zero.webappsecurity.com only as an isolated scanner calibration target."
+      ]
+    },
+    fixPrompt:
+      "Our /bank/account-activity route scan confirms accountId IDOR. Show authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zero-bank-pay-bills-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "Zero Bank pay-bills CSRF route live oracle",
+    description:
+      "When scanning /bank/pay-bills, POST processes bill payments without CSRF validation when session cookie is present — route-specific CSRF oracle.",
+    impactOneline:
+      "Route scans on /bank/pay-bills should confirm CSRF on bill payment forms.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zeroBankPayBillsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Bank is intentional WebInspect training — require CSRF tokens on state-changing bill payment forms.",
+      steps: [
+        "Require unpredictable CSRF tokens on POST /bank/pay-bills.html.",
+        "Run zero.webappsecurity.com only as an isolated scanner calibration target."
+      ]
+    },
+    fixPrompt:
+      "Our /bank/pay-bills route scan confirms CSRF on bill payments. Show CSRF token remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-cs-training-academy-evidence",
     platform: "generic",
     category: "Broken access control",

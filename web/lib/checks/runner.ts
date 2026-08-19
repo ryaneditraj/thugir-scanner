@@ -1985,6 +1985,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideZeroBankWebinspectEvidence",
   "zeroBankAdminUsersPlaintextPasswordsLiveOracle",
   "zeroBankAdminUsersRouteLiveOracle",
+  "zeroBankFeedbackSendLiveOracle",
+  "zeroBankFeedbackRouteLiveOracle",
+  "zeroBankAccountActivityRouteLiveOracle",
+  "zeroBankPayBillsRouteLiveOracle",
   "clientSideCsTrainingAcademyEvidence",
   "clientSideHackableSoLabEvidence",
   "clientSideVulnwebLabEvidence",
@@ -12815,7 +12819,25 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/admin\/users\.html/i.test(targetInput) &&
         p.slug.startsWith("zero-bank-admin-users")
       )
-        return -3;
+        return -4;
+      if (
+        /zero\.webappsecurity\.com/i.test(origin) &&
+        /\/feedback\.html/i.test(targetInput) &&
+        p.slug.startsWith("zero-bank-feedback")
+      )
+        return -4;
+      if (
+        /zero\.webappsecurity\.com/i.test(origin) &&
+        /\/bank\/account-activity/i.test(targetInput) &&
+        p.slug.startsWith("zero-bank-account-activity")
+      )
+        return -4;
+      if (
+        /zero\.webappsecurity\.com/i.test(origin) &&
+        /\/bank\/pay-bills/i.test(targetInput) &&
+        p.slug.startsWith("zero-bank-pay-bills")
+      )
+        return -4;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/transactions\b/i.test(targetInput) &&
