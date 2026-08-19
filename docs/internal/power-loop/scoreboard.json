@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T13:50:00.000Z",
+  "updated_at": "2026-08-19T14:05:36.651Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2725,
-  "total_findings": 26517,
+  "total_sites_scanned": 2734,
+  "total_findings": 26611,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1951,
-  "discovery_findings": 22487,
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22533,
   "improvements_shipped": 1165,
-  "last_run": "2026-08-19T13:45:00.000Z",
+  "last_run": "2026-08-19T14:05:36.651Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 459,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); no benchmark misses"
+      "note": "Stable 6/6 recall (48 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 31,
-      "focus": "nodegoat tutorial ReDoS live probe on /profile bankRouting",
-      "improvements_shipped_this_run": 1
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 46,
+      "focus": "Zero Bank transferFunds/main + WSL 1962-1964 + queue drain (login, account-activity XSS, pay-bills SQLi)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "nodegoat-websec.herokuapp.com/tutorial/redos: live POST /profile bankRouting ReDoS probe shipped (nodegoat-tutorial-redos-live-oracle)",
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "nodegoat-websec.herokuapp.com/tutorial/redos: live POST /profile bankRouting ReDoS probe shipped via nodegoat-tutorial-redos-live-oracle",
-      "nodegoat-websec.herokuapp.com/admin: 8→9 findings — nodegoat-admin-route-live-oracle (404 /admin but admin/Admin_123 grants dashboard)",
-      "nodegoat-websec.herokuapp.com/upload: 8→9 findings — nodegoat-upload-route-live-oracle (404 /upload redirects to MemosDAO stored XSS)"
+      "zero.webappsecurity.com/bank/account-activity.html?accountId=18132: reflected-xss-query-param on accountId param (Watchfire Zero Bank)",
+      "zero.webappsecurity.com/login.html: client-side-zero-bank-webinspect-evidence + reflected-xss-query-param",
+      "web-security-learning-labs.vercel.app/module/1962-1964: 7 findings each (placeholder module route evidence, no live oracles yet)",
+      "zero.webappsecurity.com/bank/transferFunds.html: 5 findings — CSRF/SQLi route-specific live oracles still absent without authenticated session"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "owasp-finbot-ctf.org/vendor/api/v1/payments: payments API returns 404 — route stale vs README",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle absent when OTP-gated login blocks authenticated probes"
+      "zero.webappsecurity.com/*: route-specific SQLi (pay-bills) and CSRF (transferFunds) live oracles absent — only client-side WebInspect evidence + generic reflected-xss-query-param",
+      "web-security-learning-labs modules 1962-1964: placeholder-only (7 findings each); catalog max still 1956 — expand WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX for live oracles",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "ssrf-defense-platform.onrender.com: queued but not drained this run (48h skip or queue depth)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
-    "nodegoat-websec.herokuapp.com/tutorial/redos": 13,
-    "nodegoat-websec.herokuapp.com/admin": 9,
-    "nodegoat-websec.herokuapp.com/upload": 9,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "pwnshop.ctfsecurity.com/apply-coupon": 48,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52
+    "web-security-learning-labs.vercel.app/module/1962": 7,
+    "web-security-learning-labs.vercel.app/module/1963": 7,
+    "web-security-learning-labs.vercel.app/module/1964": 7,
+    "zero.webappsecurity.com/bank/account-activity.html?accountId=18132": 5,
+    "zero.webappsecurity.com/login.html": 5,
+    "zero.webappsecurity.com/bank/transferFunds.html": 5,
+    "pwnshop.ctfsecurity.com/apply-coupon": 48
   }
 }
