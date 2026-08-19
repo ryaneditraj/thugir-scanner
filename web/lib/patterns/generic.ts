@@ -21586,6 +21586,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zero-bank-admin-users-plaintext-passwords-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Zero Bank admin users directory exposes plaintext passwords",
+    description:
+      "GET /admin/users.html returns a user table with Name, Password, and SSN columns without authentication — the Fortify WebInspect Zero Bank admin broken access control oracle.",
+    impactOneline:
+      "Unauthenticated admin user listings with plaintext passwords enable full account takeover on training and production-like banking demos.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zeroBankAdminUsersPlaintextPasswordsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect admin user management with authentication and never store or display plaintext passwords — Zero Bank is intentional training software.",
+      steps: [
+        "Require admin authentication before any /admin/* route.",
+        "Store password hashes only; never render credentials in HTML tables.",
+        "Run zero.webappsecurity.com only as an isolated scanner calibration target."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/users.html page lists user passwords in plaintext without login. Show admin route protection and password hash storage.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zero-bank-admin-users-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Zero Bank /admin/users.html route admin disclosure live oracle",
+    description:
+      "When scanning /admin/users.html, GET returns Leeroy Jenkins with plaintext password VIZ10AWT8VL in the Users table without authentication — route-specific Zero Bank admin oracle.",
+    impactOneline:
+      "Route scans on admin user pages need live confirmation that credentials are exposed without access controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zeroBankAdminUsersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect admin user management with authentication — Zero Bank is intentional training software.",
+      steps: [
+        "Require admin authentication before any /admin/* route.",
+        "Store password hashes only; never render credentials in HTML tables.",
+        "Run zero.webappsecurity.com only as an isolated scanner calibration target."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/users.html route exposes plaintext passwords without auth. Show route-specific admin access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-cs-training-academy-evidence",
     platform: "generic",
     category: "Broken access control",
