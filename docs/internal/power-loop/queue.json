@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-08-19T21:04:22.913Z",
+  "updated_at": "2026-08-19T23:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://api.graphqlbook.org/graphql",
+      "source": "DghostNinja/graphql-bookstore-API — deliberately vulnerable GraphQL BOLA/SQLi/SSRF oracle endpoint (public docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://zero.webappsecurity.com/login.html",
+      "source": "Fortify Zero Bank WebInspect — login/auth-bypass training surface with demo credentials (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://zero.webappsecurity.com/bank/transfer-funds.html",
+      "source": "Fortify Zero Bank WebInspect — bank transfer CSRF/IDOR training surface (web search)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://zero.webappsecurity.com/feedback.html",
       "source": "Watchfire Zero Bank — stored XSS + CSRF feedback form oracle (VWAD zero-bank pen-test reports)",

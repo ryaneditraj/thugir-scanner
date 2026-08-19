@@ -3958,6 +3958,24 @@
       "slug": "web-security-learning-labs-module-catalog-1961",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1956→1961 + runner placeholder priority regex 195[0-4]→195[0-9]|196[0-1]; web-security-learning-labs.vercel.app/module/1961 findings 7→8 (+placeholder-module-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:api.graphqlbook.org",
+      "slug": "graphqlbook-queue-drain-23utc",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended api.graphqlbook.org/graphql to discovery queue + runner -4 priority for graphqlbook-* on /graphql routes; POST { _internalUserSearch(username:\"admin\") } returns admin role; POST { _fetchExternalResource(url:\"http://127.0.0.1:8080\") } returns bookstore-api metadata; api.graphqlbook.org/graphql findings 0→11 (+graphqlbook-internal-user-search-bola +graphqlbook-fetch-external-resource-ssrf route oracles); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zero.webappsecurity.com",
+      "slug": "zero-bank-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /login.html route scan confirms user_token form + Login/Password username/password tooltip + /admin/users.html plaintext credential rows (Leeroy Jenkins VIZ10AWT8VL); zero.webappsecurity.com/login.html findings 0→8 (+zero-bank-login-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zero.webappsecurity.com",
+      "slug": "zero-bank-transfer-funds-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /bank/transfer-funds route scan documents transfer_funds_link module + from/to account fields when OTP-gated live CSRF probe blocked; zero.webappsecurity.com/bank/transfer-funds.html findings 0→8 (+zero-bank-transfer-funds-route-live-oracle); benchmark 6/6 maintained"
     }
   ]
 }
