@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-18T23:04:00.000Z",
+  "updated_at": "2026-08-19T00:22:00.000Z",
   "discovery_urls": [
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/ssrf",
@@ -14164,7 +14164,32 @@
       "url": "https://owasp-finbot-ctf.org/darklab/api/v1/agents",
       "source": "GenAI-Security-Project/finbot-ctf — darklab agents API prompt-injection surface (owasp-finbot-ctf.org README, Aug 2026 web discovery)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://prompt-injection-demo-bice.vercel.app/",
+      "source": "hanif-rasyidi/prompt-injection-demo — Acme SaaS four-surface prompt injection teaching app (AIBC 2026, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://injection-testbench.davidcjw.com",
+      "source": "davidcjw/injection-testbench — BYOK prompt-injection attack corpus vs Claude defenses (live demo badge, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://shop-ai-assistants.vercel.app/",
+      "source": "ghulamraza110/shop-ai-assistant — AI shopping supervisor agent with tool-calling modes (README homepage, Aug 2026 web discovery)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://prompt-injection-demo-bice.vercel.app/admin",
+      "source": "hanif-rasyidi/prompt-injection-demo — presenter admin panel /api/* attack surfaces (README env ADMIN_PASSWORD, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/quantity",
+      "source": "Escape Juice Shop demo — quantity manipulation BOLA oracle GET /rest/quantity (juice-shop.demo.escape.tech API surface, Aug 2026 web discovery)",
+      "auth": "benchmark"
     }
   ],
-  "discovery_urls_added": 2819
+  "discovery_urls_added": 2824
 }
