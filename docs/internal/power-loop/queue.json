@@ -1,6 +1,41 @@
 {
-  "updated_at": "2026-08-19T05:06:03.986Z",
+  "updated_at": "2026-08-19T06:06:31.776Z",
   "discovery_urls": [
+    {
+      "url": "https://ssrf.vulnlab.dev/gopher",
+      "source": "ssrf.vulnlab.dev — gopher:// SSRF route oracle queue drain",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/blind",
+      "source": "ssrf.vulnlab.dev — blind SSRF route oracle queue drain",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1936",
+      "source": "Web Security Learning Labs — module 1936 placeholder route oracle (catalog expansion 1936–1940, Aug 2026 power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1937",
+      "source": "Web Security Learning Labs — module 1937 placeholder route oracle (catalog expansion 1936–1940, Aug 2026 power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1938",
+      "source": "Web Security Learning Labs — module 1938 placeholder route oracle (catalog expansion 1936–1940, Aug 2026 power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1939",
+      "source": "Web Security Learning Labs — module 1939 placeholder route oracle (catalog expansion 1936–1940, Aug 2026 power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1940",
+      "source": "Web Security Learning Labs — module 1940 placeholder route oracle (catalog expansion 1936–1940, Aug 2026 power-loop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/register",
       "source": "PortSwigger Gin & Juice Shop — registration route oracle POST /register (vwad.owasp.org + pentest-2026-ginandjuice report, Aug 2026 power-loop)",

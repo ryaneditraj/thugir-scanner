@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-register-atob-redirect-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /register 404 shell embeds mouse-event gated location=atob('L3Z1bG5lcmFiaWxpdGllcw==') → /vulnerabilities; ginandjuice.shop/register findings 30→33 (+ginandjuice-register-atob-redirect-live-oracle +ginandjuice-register-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-queue-drain-aug-2026",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended ssrf.vulnlab.dev/gopher + /blind + /scheme + /parser + /webhook to discovery queue front; ssrf.vulnlab.dev/blind findings 0→17 (+ssrf-vulnlab-blind-route-live-oracle + host SSRF oracles); gopher 16 findings; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-catalog-1936-1940",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1935→1940 + runner placeholder priority regex 193[0-5]→193[0-9]|1940; web-security-learning-labs.vercel.app/module/1936 findings 9 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-benefits-bac-live-oracle",
       "status": "shipped",
