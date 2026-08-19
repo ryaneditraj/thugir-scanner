@@ -45874,6 +45874,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-benefits-bac-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "NodeGoat benefits function-level access control bypass live oracle",
+    description:
+      "Non-admin user1 can GET /benefits and view the RetireEasy benefits enrollment form — the NodeGoat A7 missing function-level access control oracle (isAdmin middleware commented out on benefits routes).",
+    impactOneline:
+      "Regular authenticated users can access admin-only benefits functionality without server-side role checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatBenefitsBacLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — enforce function-level authorization on every sensitive route in production.",
+      steps: [
+        "Apply isAdmin (or equivalent) middleware on benefits GET/POST routes.",
+        "Verify authorization server-side on every privileged action, not only in the UI.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /benefits route is reachable by non-admin users. Show function-level access control remediation for Node.js Express routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-benefits-bac-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "NodeGoat /benefits BAC route live oracle",
+    description:
+      "When scanning /benefits, non-admin user1 can access the RetireEasy benefits module without admin authorization — route-specific A7 function-level access control oracle.",
+    impactOneline:
+      "Route scans on /benefits need live confirmation that non-admin sessions can access privileged benefits functionality.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatBenefitsBacRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — enforce function-level authorization on benefits routes.",
+      steps: [
+        "Apply isAdmin middleware on benefits GET/POST routes.",
+        "Verify authorization server-side on every privileged action.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /benefits route scan confirms non-admin access to RetireEasy benefits. Show route-specific function-level access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "nodegoat-nosql-login-live-oracle",
     platform: "generic",
     category: "Injection",
