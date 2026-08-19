@@ -118,7 +118,12 @@
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-catalog-subscribe-seed-drain",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: /catalog/subscribe added to extractGinAndJuiceVulnSeeds + priority seeds + runner -4 priority; ginandjuice.shop/catalog/subscribe findings 38 (+ginandjuice-catalog-subscribe-live-oracle +ginandjuice-catalog-subscribe-route-live-oracle); preview.owasp-juice.shop added to juice-shop benchmark fallback_urls; benchmark 47 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: /catalog/subscribe added to extractGinAndJuiceVulnSeeds + priority seeds + runner -4 priority; ginandjuice.shop/catalog/subscribe findings 38 (+ginandjuice-catalog-subscribe-live-oracle +ginandjuice-catalog-subscribe-route-live-oracle); preview.owasp-juice.shop added to juice-shop benchmark fallback_urls; benchmark 47 findings 6/6 maintained"},
+    {
+      "source": "discovery:pygoat-web.herokuapp.com",
+      "slug": "pygoat-sql-ssrf-ssti-route-live-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pygoatSqlRouteLiveOracle + pygoatSsrfLabRouteLiveOracle + pygoatSstiLabRouteLiveOracle with VWAD fallback; pygoat-web.herokuapp.com/sql|ssrf_lab|ssti/lab findings 0→2 each (+route oracles); benchmark 6/6 maintained"
     },
     {
       "source": "discovery:pwnshop.ctfsecurity.com",

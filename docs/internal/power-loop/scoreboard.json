@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T18:06:00.000Z",
+  "updated_at": "2026-08-19T18:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1974,
   "discovery_findings": 22718,
-  "improvements_shipped": 1174,
-  "last_run": "2026-08-19T18:06:00.000Z",
+  "improvements_shipped": 1175,
+  "last_run": "2026-08-19T18:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
@@ -55,30 +55,31 @@
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 58,
-      "focus": "WSL catalog 1975-1978 + Zero Bank homepage + queue drain 1971-1973",
-      "improvements_shipped_this_run": 0
+      "focus": "engine evolve: pygoat sql/ssrf/ssti route oracles + finbot-how-it-works live oracle + WSL catalog 1973",
+      "improvements_shipped_this_run": 1
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "zero.webappsecurity.com/index.html: 6 findings — zero-bank-admin-users-plaintext-passwords-live-oracle (critical) + reflected-xss-query-param",
-      "web-security-learning-labs.vercel.app/module/1971-1973: 8 findings each — placeholder-module-route-live-oracle (queue drain)",
-      "web-security-learning-labs.vercel.app/module/1975-1978: 7 findings each — placeholder-only hub without placeholder-module-route-live-oracle (catalog max still 1973)"
+      "owasp-finbot-ctf.org/how-it-works: 16 findings — finbot-how-it-works-live-oracle + route oracle (Dark Lab MCP supply-chain probe)",
+      "pygoat-web.herokuapp.com/sql|ssrf_lab|ssti/lab: 0→2 findings each — pygoat route live oracles shipped (VWAD fallback)",
+      "zero.webappsecurity.com/index.html: 6 findings — zero-bank-admin-users-plaintext-passwords-live-oracle",
+      "web-security-learning-labs.vercel.app/module/1971-1973: 8 findings each — placeholder-module-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "WSL modules 1975-1978: placeholder-module-route-live-oracle absent — extend WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX to 1978+",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "zero.webappsecurity.com/feedback.html + module/1974 still queued — not drained this run (8-URL limit)"
+      "WSL modules 1975-1978: extend WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX beyond 1973",
+      "nodegoat-websec.herokuapp.com/upload|admin: routes return Cannot GET — no valid training endpoints",
+      "ssrf.vulnlab.dev/gopher: gopher oracle exists but route not yet drained from queue",
+      "owasp-demo.vulcanlab.ai/challenges: OWASP LLM Top 10 demo queued but not yet scanned"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "owasp-finbot-ctf.org/how-it-works": 16,
     "zero.webappsecurity.com/index.html": 6,
     "web-security-learning-labs.vercel.app/module/1971": 8,
-    "web-security-learning-labs.vercel.app/module/1972": 8,
     "web-security-learning-labs.vercel.app/module/1973": 8,
-    "web-security-learning-labs.vercel.app/module/1975": 7,
-    "web-security-learning-labs.vercel.app/module/1978": 7,
+    "pygoat-web.herokuapp.com/sql": 2,
     "pwnshop.ctfsecurity.com/apply-coupon": 48
   }
 }
