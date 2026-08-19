@@ -30331,6 +30331,54 @@ const clientSideZeroBankWebinspectEvidence: Rule = async (ctx) => {
   };
 };
 
+function isZeroBankHost(ctx: RuleContext): boolean {
+  return (
+    /zero\.webappsecurity\.com/i.test(ctx.origin) ||
+    /Zero Bank|zero\.webappsecurity/i.test(ctx.combined)
+  );
+}
+
+const zeroBankAdminUsersPlaintextPasswordsLiveOracle: Rule = async (ctx) => {
+  if (!isZeroBankHost(ctx)) return NEGATIVE;
+  const adminUrl = new URL("/admin/users.html", ctx.origin).toString();
+  const doc = await ctx.probe.get(adminUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const adminUsersOk =
+    /Admin\s*-\s*Users/i.test(doc.body) &&
+    /<th>\s*Password\s*<\/th>/i.test(doc.body) &&
+    /Leeroy Jenkins/i.test(doc.body) &&
+    /VIZ10AWT8VL/i.test(doc.body);
+  if (!adminUsersOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: adminUrl,
+      snippet:
+        doc.body.match(/Leeroy Jenkins[\s\S]{0,120}VIZ10AWT8VL/i)?.[0]?.slice(0, 200) ??
+        "Leeroy Jenkins + VIZ10AWT8VL in Users table",
+      note: "Zero Bank GET /admin/users.html without authentication exposes user directory with plaintext passwords — WebInspect admin panel broken access control oracle"
+    }
+  };
+};
+
+const zeroBankAdminUsersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZeroBankHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\/users\.html/i.test(pageUrl)) return NEGATIVE;
+  const result = await zeroBankAdminUsersPlaintextPasswordsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Zero Bank /admin/users.html route scan — unauthenticated user directory lists plaintext passwords (Leeroy Jenkins / VIZ10AWT8VL) — route-specific admin broken access control oracle"
+    }
+  };
+};
+
 // --- Sports Media CS Training Academy vuln-app playbook (computersciencesop2) -------
 const CLIENT_CS_TRAINING_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -41205,7 +41253,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1961;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1970;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -88260,6 +88308,8 @@ export const RULES: Record<string, Rule> = {
   clientSideBwappEvidence,
   clientSideBwappInjectionCatalogEvidence,
   clientSideZeroBankWebinspectEvidence,
+  zeroBankAdminUsersPlaintextPasswordsLiveOracle,
+  zeroBankAdminUsersRouteLiveOracle,
   clientSideCsTrainingAcademyEvidence,
   clientSideHackableSoLabEvidence,
   clientSideVulnwebLabEvidence,
