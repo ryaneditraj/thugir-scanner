@@ -3827,6 +3827,24 @@
       "slug": "web-security-learning-labs-module-catalog-1955",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1954→1955; web-security-learning-labs.vercel.app/module/1955 findings 9 with placeholder-module-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf-defense-platform.onrender.com",
+      "slug": "ssrf-defense-platform-scan-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/scan?url=http://169.254.169.254/latest/meta-data/ SSE pipeline returns finalStatus BLOCKED; ssrf-defense-platform.onrender.com/api/scan findings 5→9 (+scan + route oracles); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf-defense-platform.onrender.com",
+      "slug": "ssrf-defense-platform-allowlist-bypass-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/scan?url=http://metadata.google.internal/computeMetadata/v1/ returns NOT in allowlist — proceeding for demo with finalStatus PASS; ssrf-defense-platform.onrender.com/api/scan (+allowlist-bypass + route oracles); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-catalog-1961",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1956→1961 + runner placeholder priority regex 195[0-4]→195[0-9]|196[0-1]; web-security-learning-labs.vercel.app/module/1961 findings 7→8 (+placeholder-module-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
     }
   ]
 }
