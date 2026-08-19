@@ -7962,6 +7962,18 @@ const nodegoatTutorialA7RouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/tutorial\/a7\b/i.test(pageUrl)) return NEGATIVE;
+  const bac = await nodegoatBenefitsBacLiveProbe(ctx);
+  if (bac.fired) {
+    return {
+      fired: true,
+      confidence: bac.confidence,
+      evidence: {
+        ...bac.evidence,
+        scannedUrl: pageUrl,
+        note: "NodeGoat /tutorial/a7 route scan — non-admin user1 can access /benefits without authorization — A7 missing function-level access control live oracle"
+      }
+    };
+  }
   const result = await nodegoatTutorialMarkers(ctx, "a7", [
     {
       label: "A7 missing function level access control title",
@@ -8223,6 +8235,72 @@ const nodegoatBenefitsNosqlRouteLiveOracle: Rule = async (ctx) => {
 const nodegoatBenefitsNosqlLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   return nodegoatBenefitsNosqlLiveProbe(ctx);
+};
+
+async function nodegoatBenefitsBacLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: "userName=user1&password=User1_123",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const cookie = nodegoatSessionCookieFromDoc(loginDoc);
+  if (!cookie) return NEGATIVE;
+  const redirectLocation = loginDoc.headers["location"] || "";
+  if (
+    [301, 302, 303, 307, 308].includes(loginDoc.status) &&
+    redirectLocation &&
+    /benefits/i.test(redirectLocation)
+  ) {
+    return NEGATIVE;
+  }
+  const benefitsUrl = new URL("/benefits", ctx.origin).toString();
+  const benefitsDoc = await ctx.probe.get(benefitsUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (benefitsDoc.status < 200 || benefitsDoc.status >= 400) return NEGATIVE;
+  const benefitsOk =
+    /Retire[\s\S]{0,12}Easy|benefitsDate|benefitStartDate|name=["']benefitsDate["']/i.test(
+      benefitsDoc.body
+    );
+  if (!benefitsOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      benefitsUrl,
+      userName: "user1",
+      snippet: benefitsDoc.body.slice(0, 200).trim(),
+      note: "NodeGoat non-admin user1 can GET /benefits and view the RetireEasy benefits form — missing function-level access control oracle (A7 benefits module)"
+    }
+  };
+}
+
+const nodegoatBenefitsBacLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  return nodegoatBenefitsBacLiveProbe(ctx);
+};
+
+const nodegoatBenefitsBacRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/benefits\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await nodegoatBenefitsBacLiveProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "NodeGoat /benefits route scan — non-admin user1 can access RetireEasy benefits module without admin authorization — A7 function-level access control oracle"
+    }
+  };
 };
 
 const nodegoatNosqlLoginLiveOracle: Rule = async (ctx) => {
@@ -40557,7 +40635,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1925;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1930;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -89108,6 +89186,8 @@ export const RULES: Record<string, Rule> = {
   nodegoatLearnOpenRedirectRouteLiveOracle,
   nodegoatBenefitsNosqlRouteLiveOracle,
   nodegoatBenefitsNosqlLiveOracle,
+  nodegoatBenefitsBacLiveOracle,
+  nodegoatBenefitsBacRouteLiveOracle,
   nodegoatNosqlLoginLiveOracle,
   nodegoatNosqlLoginRouteLiveOracle,
   nodegoatSignupOpenRegistrationLiveOracle,
