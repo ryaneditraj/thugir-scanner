@@ -9397,7 +9397,7 @@ async function nodegoatProfileCsrfLiveProbe(ctx: RuleContext): Promise<RuleResul
   if (!/Edit Profile/i.test(getDoc.body)) return NEGATIVE;
   const csrfFieldPresent = /name=["']_csrf["']/i.test(getDoc.body);
   const marker = `CsrfProbe${Date.now().toString().slice(-6)}`;
-  const postDoc = await ctx.probe.get(profileUrl, {
+  const postDoc = await fetchDoc(profileUrl, {
     method: "POST",
     body: `firstName=${encodeURIComponent(marker)}&lastName=Probe&address=1+Main&ssn=123-45-6789&dob=1990-01-01&bankAcc=123456&bankRouting=123456%23`,
     headers: { "Content-Type": "application/x-www-form-urlencoded", Cookie: cookie },
@@ -9410,7 +9410,7 @@ async function nodegoatProfileCsrfLiveProbe(ctx: RuleContext): Promise<RuleResul
   let persisted = false;
   let verifySnippet = "";
   for (const verifyUrl of verifyUrls) {
-    const verifyDoc = await ctx.probe.get(verifyUrl, {
+    const verifyDoc = await fetchDoc(verifyUrl, {
       maxBytes: 32768,
       timeoutMs: 15000,
       headers: { Cookie: cookie }
@@ -50364,6 +50364,58 @@ const duckStoreMcpToolsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const duckStoreMcpResourcesEnumerationLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const url = new URL("/mcp/resources", ctx.origin).toString();
+  const payload = JSON.stringify({ jsonrpc: "2.0", id: 1, method: "resources/list" });
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json, text/event-stream"
+    },
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const sseBody = doc.body.replace(/^event:\s*message\s*/m, "").replace(/^data:\s*/m, "");
+  const corpus = `${doc.body}\n${sseBody}`;
+  if (!/"jsonrpc"\s*:\s*"2\.0"/i.test(corpus)) return NEGATIVE;
+  if (!/"result"\s*:\s*\{[^}]*"resources"/i.test(corpus)) return NEGATIVE;
+  const resourceCount = (corpus.match(/"uri"\s*:\s*"/g) ?? []).length;
+  return {
+    fired: true,
+    confidence: resourceCount > 0 ? 0.92 : 0.9,
+    evidence: {
+      url,
+      resourceCount,
+      snippet: corpus.slice(0, 220).trim(),
+      note:
+        resourceCount > 0
+          ? "Duck Store POST /mcp/resources resources/list returns MCP resource catalog without authentication — MCP resources enumeration oracle"
+          : "Duck Store POST /mcp/resources resources/list accepts unauthenticated JSON-RPC without session — empty MCP resource registry still confirms exposed MCP gateway surface"
+    }
+  };
+};
+
+const duckStoreMcpResourcesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/mcp\/resources(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreMcpResourcesEnumerationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /mcp/resources route scan — unauthenticated resources/list JSON-RPC gateway reachable without authentication"
+    }
+  };
+};
+
 const duckStoreRegisterTokenByProbe = new WeakMap<ProbeCache, Map<string, string>>();
 const duckStoreRegisterTokenInFlight = new WeakMap<ProbeCache, Map<string, Promise<string | null>>>();
 
@@ -88098,6 +88150,8 @@ export const RULES: Record<string, Rule> = {
   duckStoreMcpCouponsRouteLiveOracle,
   duckStoreMcpToolsEnumerationLiveOracle,
   duckStoreMcpToolsRouteLiveOracle,
+  duckStoreMcpResourcesEnumerationLiveOracle,
+  duckStoreMcpResourcesRouteLiveOracle,
   duckStoreProductsFilterSqliLiveOracle,
   duckStoreProductsFilterSqliRouteLiveOracle,
   duckStoreCartNegativeQuantityLiveOracle,

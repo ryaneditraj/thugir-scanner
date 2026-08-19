@@ -56242,6 +56242,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-mcp-resources-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store MCP resources enumeration live oracle",
+    description:
+      "POST /mcp/resources resources/list returns an unauthenticated MCP JSON-RPC gateway accepting resources/list without session — the Escape Duck Store MCP resources enumeration oracle.",
+    impactOneline:
+      "Unauthenticated MCP resource endpoints expand attack surface for data exfiltration via MCP clients.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreMcpResourcesEnumerationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on MCP gateway resources/list and restrict resource registry visibility.",
+      steps: [
+        "Gate MCP resources/list behind session or API-key authentication.",
+        "Do not expose MCP resource catalogs on anonymous gateway endpoints.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our MCP resources/list endpoint accepts unauthenticated JSON-RPC. Show MCP gateway access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-mcp-resources-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store MCP resources route live oracle",
+    description:
+      "When scanning /mcp/resources, unauthenticated resources/list JSON-RPC is reachable without authentication — route-specific MCP resources enumeration oracle.",
+    impactOneline:
+      "Route-specific scans should surface exposed MCP resource gateways on /mcp/resources paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreMcpResourcesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict MCP resource enumeration to authenticated clients.",
+      steps: [
+        "Require auth on /mcp/resources resources/list.",
+        "Filter sensitive resources from anonymous MCP registries.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /mcp/resources route scan confirms unauthenticated MCP resources/list. Show route-specific MCP remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "duck-store-products-filter-sqli-live-oracle",
     platform: "generic",
     category: "Injection",

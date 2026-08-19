@@ -1,6 +1,11 @@
 {
-  "updated_at": "2026-08-19T01:04:30.562Z",
+  "updated_at": "2026-08-19T01:30:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/dashboard",
+      "source": "nodegoat-websec Heroku — dashboard weak-credentials route oracle queue drain (OWASP NodeGoat README, Aug 2026)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/allocations",
       "source": "OWASP NodeGoat — allocations IDOR + NoSQL injection oracle GET /allocations (context7 + 1337skills cheatsheet, Aug 2026 web discovery)",
