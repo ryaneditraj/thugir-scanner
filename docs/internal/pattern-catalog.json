@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-19T14:45:22.689Z",
-  "total": 2540,
-  "uniqueSlugs": 2534,
+  "generatedAt": "2026-08-19T16:10:03.427Z",
+  "total": 2542,
+  "uniqueSlugs": 2536,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2522,
+    "generic": 2524,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2455,
+    "deep": 2457,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 515,
+    "Broken access control": 517,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -2549,6 +2549,8 @@
     "zen-demo-java-read-route-live-oracle",
     "zen-demo-java-request-route-live-oracle",
     "zen-demo-java-request-ssrf-live-oracle",
+    "zero-bank-admin-users-plaintext-passwords-live-oracle",
+    "zero-bank-admin-users-route-live-oracle",
     "zerohealth-admin-users-route-live-oracle",
     "zerohealth-ai-chat-sqli-route-live-oracle",
     "zerohealth-auth-login-route-live-oracle",

@@ -1,6 +1,26 @@
 {
-  "updated_at": "2026-08-19T15:05:48.689Z",
+  "updated_at": "2026-08-19T16:08:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1968",
+      "source": "Web Security Learning Labs — module 1968 placeholder route oracle (catalog expansion 1968–1970, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1969",
+      "source": "Web Security Learning Labs — module 1969 placeholder route oracle (catalog expansion 1968–1970, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1970",
+      "source": "Web Security Learning Labs — module 1970 placeholder route oracle (catalog expansion 1968–1970, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://zero.webappsecurity.com/admin/users.html",
+      "source": "Watchfire Zero Bank — admin users plaintext password disclosure oracle GET /admin/users.html (vwad.owasp.org zero-bank, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1965",
       "source": "Web Security Learning Labs — module 1965 placeholder route oracle (catalog expansion 1965–1967, Aug 2026 power-loop discovery)",
