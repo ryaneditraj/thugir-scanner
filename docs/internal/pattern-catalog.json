@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-18T23:05:11.022Z",
-  "total": 2496,
-  "uniqueSlugs": 2492,
+  "generatedAt": "2026-08-19T00:19:11.016Z",
+  "total": 2500,
+  "uniqueSlugs": 2496,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2478,
+    "generic": 2482,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2411,
+    "deep": 2415,
     "continuous": 0
   },
   "byCategory": {
@@ -34,7 +34,7 @@
     "SSRF": 14,
     "Server-side request forgery": 81,
     "Sensitive data exposure": 64,
-    "AI security": 81,
+    "AI security": 85,
     "Business logic": 24,
     "Authentication bypass": 3,
     "Cross-site request forgery": 5,
@@ -1052,8 +1052,12 @@
     "finbot-darklab-supply-chain-route-live-oracle",
     "finbot-darklab-supply-chain-stats-live-oracle",
     "finbot-darklab-supply-chain-stats-route-live-oracle",
+    "finbot-darklab-taxcalc-reset-tools-live-oracle",
+    "finbot-darklab-taxcalc-reset-tools-route-live-oracle",
     "finbot-darklab-taxcalc-server-live-oracle",
     "finbot-darklab-taxcalc-server-route-live-oracle",
+    "finbot-darklab-taxcalc-tools-live-oracle",
+    "finbot-darklab-taxcalc-tools-route-live-oracle",
     "finbot-vendor-chat-live-oracle",
     "finbot-vendor-chat-route-live-oracle",
     "finbot-vendor-invoices-live-oracle",

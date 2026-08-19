@@ -43150,6 +43150,114 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-darklab-taxcalc-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab TaxCalc MCP tools write live oracle",
+    description:
+      "PUT /darklab/api/v1/supply-chain/servers/taxcalc/tools accepts MCP tool definition updates for calculate_tax — supply-chain tool-poisoning write surface.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabTaxcalcToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict TaxCalc MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/taxcalc/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes a writable MCP tool API at /taxcalc/tools. Show how to protect agentic tool catalogs from supply-chain poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-taxcalc-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab TaxCalc /tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/taxcalc/tools, PUT confirms MCP tool-poisoning write API for TaxCalc calculate_tax tool definitions.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabTaxcalcToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict TaxCalc MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/taxcalc/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /taxcalc/tools route scan confirms writable MCP tool definitions. Show remediation for agentic supply-chain tool poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-taxcalc-reset-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab TaxCalc reset-tools write live oracle",
+    description:
+      "POST /darklab/api/v1/supply-chain/servers/taxcalc/reset-tools resets MCP tool overrides — writable supply-chain reset surface.",
+    impactOneline:
+      "Writable MCP tool reset APIs let attackers manipulate agent tool catalogs during supply-chain poisoning labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabTaxcalcResetToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict TaxCalc MCP reset APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/taxcalc/reset-tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes POST /taxcalc/reset-tools for MCP tool resets. Show how to protect agentic tool catalogs from unauthorized resets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-taxcalc-reset-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab TaxCalc /reset-tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/taxcalc/reset-tools, POST confirms writable MCP tool-reset API for supply-chain poisoning labs.",
+    impactOneline:
+      "Writable MCP tool reset APIs let attackers manipulate agent tool catalogs during supply-chain poisoning labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabTaxcalcResetToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict TaxCalc MCP reset APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/taxcalc/reset-tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /taxcalc/reset-tools route scan confirms writable MCP tool reset API. Show remediation for agentic supply-chain labs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-ctf-stats-live-oracle",
     platform: "generic",
     category: "AI security",

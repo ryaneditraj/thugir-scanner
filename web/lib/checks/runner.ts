@@ -2566,6 +2566,10 @@ const DEEP_RULES = new Set<string>([
   "finbotDarklabSupplyChainStatsRouteLiveOracle",
   "finbotDarklabTaxcalcServerLiveOracle",
   "finbotDarklabTaxcalcServerRouteLiveOracle",
+  "finbotDarklabTaxcalcToolsLiveOracle",
+  "finbotDarklabTaxcalcToolsRouteLiveOracle",
+  "finbotDarklabTaxcalcResetToolsLiveOracle",
+  "finbotDarklabTaxcalcResetToolsRouteLiveOracle",
   "finbotCtfStatsLiveOracle",
   "finbotCtfStatsRouteLiveOracle",
   "finbotVendorInvoicesLiveOracle",
@@ -12766,6 +12770,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /owasp-finbot-ctf\.org/i.test(origin) &&
         /\/darklab\/api\/v1\/supply-chain\/servers\/taxcalc\b/i.test(targetInput) &&
         p.slug.startsWith("finbot-darklab-taxcalc-server")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/taxcalc\/tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-taxcalc-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/taxcalc\/reset-tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-taxcalc-reset-tools")
       )
         return -5;
       if (
