@@ -46003,6 +46003,87 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-allocations-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "NodeGoat /allocations NoSQL injection route live oracle",
+    description:
+      "When scanning /allocations, GET /allocations/:userId?threshold= accepts unsanitized $where filters and returns cross-user allocation data — route-specific NodeGoat A4 IDOR and NoSQL injection oracle.",
+    impactOneline:
+      "Route scans on /allocations should confirm live IDOR and MongoDB $where threshold injection on allocation endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatAllocationsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "NodeGoat is intentional OWASP training — enforce object-level authorization and validate MongoDB query inputs in production.",
+      steps: [
+        "Verify the session user owns the requested allocation userId before returning data.",
+        "Cast threshold parameters to numbers and never pass user input into $where expressions.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /allocations route scan confirms IDOR and NoSQL threshold injection. Show allocations API authorization and MongoDB input validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-memos-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "NodeGoat MemosDAO stored XSS live oracle",
+    description:
+      "POST /memos stores unsanitized memo HTML that persists with onerror handlers — the NodeGoat MemosDAO stored cross-site scripting oracle.",
+    impactOneline:
+      "Unsanitized memo storage lets attackers inject persistent XSS payloads visible to other users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatMemosStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "NodeGoat is intentional OWASP training — sanitize or encode user memo content before rendering in production apps.",
+      steps: [
+        "HTML-encode or sanitize memo content before persisting or rendering.",
+        "Use a strict CSP to block inline script execution from stored content.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our POST /memos endpoint stores unsanitized HTML with onerror handlers. Show MemosDAO stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-memos-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "NodeGoat /memos stored XSS route live oracle",
+    description:
+      "When scanning /memos, POST /memos stores unsanitized memo HTML that persists with onerror handlers — route-specific MemosDAO stored XSS oracle.",
+    impactOneline:
+      "Route scans on /memos should confirm live stored XSS via unsanitized memo persistence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatMemosRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "NodeGoat is intentional OWASP training — sanitize or encode user memo content before rendering in production apps.",
+      steps: [
+        "HTML-encode or sanitize memo content before persisting or rendering.",
+        "Use a strict CSP to block inline script execution from stored content.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /memos route scan confirms stored XSS via unsanitized memo HTML. Show route-specific MemosDAO XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "nodegoat-profile-sensitive-data-live-oracle",
     platform: "generic",
     category: "Sensitive data exposure",

@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-allocations-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /allocations/2?threshold=0 returns cross-user stocks/bonds data; nodegoatAllocationsRouteLiveOracle on /allocations route; nodegoat-websec.herokuapp.com/allocations findings 7→9 (+nodegoat-allocations-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-memos-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /memos memo=<img src=x onerror=ThugirMemosXss*> persists on GET /memos with onerror handler; nodegoat-websec.herokuapp.com/memos findings 11→13 (+nodegoat-memos-stored-xss-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-memos-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: nodegoatMemosRouteLiveOracle fires on /memos route scan with live stored XSS probe; nodegoat-websec.herokuapp.com/memos findings 11→13 (+nodegoat-memos-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-profile-csrf-route-probe-cache-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: nodegoatProfileCsrfLiveProbe uses fetchDoc for POST/verify so probe cache does not serve stale GET profile after live oracle mutates session; nodegoat-websec.herokuapp.com/profile findings 13→14 (+nodegoat-profile-csrf-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
@@ -12599,6 +12617,21 @@
       "source": "discovery:nodegoat-websec.herokuapp.com",
       "slug": "nodegoat-dashboard-route-queue-drain",
       "shipped_at": "2026-08-19T01:30:00.000Z"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-allocations-route-live-oracle",
+      "shipped_at": "2026-08-19T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-memos-stored-xss-live-oracle",
+      "shipped_at": "2026-08-19T02:10:00.000Z"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-memos-route-live-oracle",
+      "shipped_at": "2026-08-19T02:10:00.000Z"
     }
   ]
 }
