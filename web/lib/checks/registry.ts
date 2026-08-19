@@ -77318,6 +77318,86 @@ const clientSideOwaspGenaiLabEvidence: Rule = async (ctx) => {
   };
 };
 
+function isOwaspDemoVulcanlabHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /owasp-demo\.vulcanlab\.ai/i.test(corpus);
+}
+
+const OWASP_DEMO_VULCANLAB_LLM_IDS = [
+  "LLM01",
+  "LLM02",
+  "LLM03",
+  "LLM04",
+  "LLM05",
+  "LLM06",
+  "LLM07",
+  "LLM08",
+  "LLM09",
+  "LLM10"
+] as const;
+
+const owaspDemoVulcanlabLlmTop10LiveOracle: Rule = async (ctx) => {
+  if (!isOwaspDemoVulcanlabHost(ctx)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const llmHits = OWASP_DEMO_VULCANLAB_LLM_IDS.filter((id) =>
+    new RegExp(`\\bid:'${id}'|${id}(?:'|[^0-9])`).test(corpus)
+  );
+  if (llmHits.length < 6) return NEGATIVE;
+  if (!/OWASP LLM Top 10|vulcanlab\.ai|genai\.owasp\.org\/llm-top-10/i.test(corpus)) return NEGATIVE;
+  const titleHits = [
+    /Prompt Injection/i,
+    /Sensitive Information Disclosure/i,
+    /Supply Chain/i,
+    /Excessive Agency/i,
+    /System Prompt Leakage/i
+  ].filter((re) => re.test(corpus));
+  return {
+    fired: true,
+    confidence: llmHits.length >= 10 && titleHits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      llmIds: llmHits.slice(0, 10),
+      titleMarkers: titleHits.length,
+      snippet: corpus.match(/title:'Prompt Injection[^']*'/)?.[0]?.slice(0, 120) || llmHits.slice(0, 4).join(", "),
+      note: "owasp-demo.vulcanlab.ai publishes interactive OWASP LLM Top 10 2025/2026 challenge cards (LLM01–LLM10) with critical/high risk ratings — Vulcan Lab GenAI security demo oracle"
+    }
+  };
+};
+
+const owaspDemoVulcanlabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspDemoVulcanlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "/";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/^\/(?:challenges)?\/?$/i.test(pathname)) return NEGATIVE;
+  if (/\/challenges\b/i.test(pathname)) {
+    const doc = await ctx.probe.get(pageUrl, { maxBytes: 4096, timeoutMs: 12000 });
+    if (doc.status === 404 || /404 Not Found/i.test(doc.body)) {
+      const rootUrl = new URL("/", ctx.origin).toString();
+      const rootDoc = await ctx.probe.get(rootUrl, { maxBytes: 65536, timeoutMs: 15000 });
+      if (rootDoc.status >= 200 && rootDoc.status < 400) {
+        ctx = { ...ctx, combined: `${ctx.combined}\n${rootDoc.body}` };
+      }
+    }
+  }
+  const result = await owaspDemoVulcanlabLlmTop10LiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: /\/challenges\b/i.test(pathname)
+        ? "owasp-demo.vulcanlab.ai /challenges route scan — /challenges 404; root homepage confirms LLM01–LLM10 interactive demo cards — Vulcan Lab GenAI security route oracle"
+        : "owasp-demo.vulcanlab.ai route scan — homepage confirms LLM01–LLM10 interactive OWASP LLM Top 10 demo cards — Vulcan Lab GenAI security route oracle"
+    }
+  };
+};
+
 function isOwaspGenaiLabHost(ctx: RuleContext): boolean {
   return /owaspbased-lessons\.vercel\.app/i.test(ctx.origin);
 }
@@ -78020,6 +78100,54 @@ const seclabSqliVulnerableRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
       note: "seclab.vercel.app /api/sqli-vulnerable route serves Angular SPA shell instead of the documented Next.js SQLi training API — dead lab route oracle"
+    }
+  };
+};
+
+const seclabSqliSearchRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/sqli\/search\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL("/api/sqli/search?q=test", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    !isSecLabAngularStubShell(doc.body) &&
+    (/SQLITE|syntax error|SELECT[\s\S]{0,80}FROM/i.test(doc.body) || /"error"\s*:\s*"/i.test(doc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app GET /api/sqli/search?q= returns SQL syntax errors from in-memory SQLite backend — live SQLi search API oracle (DaniSam-STU/security-lab)"
+      }
+    };
+  }
+  const stubDoc =
+    isSecLabAngularStubShell(doc.body) && doc.body.length > 40
+      ? doc
+      : await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /api/sqli/search route serves Angular SPA shell instead of the documented in-memory SQLite SQLi search API — dead lab route oracle (DaniSam-STU/security-lab README)"
     }
   };
 };
@@ -89612,6 +89740,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnCollegeEvidence,
   clientSideReactDomXssLabEvidence,
   clientSideOwaspGenaiLabEvidence,
+  owaspDemoVulcanlabLlmTop10LiveOracle,
+  owaspDemoVulcanlabRouteLiveOracle,
   owaspGenaiPromptInjectionRouteLiveOracle,
   owaspGenaiSensitiveInfoRouteLiveOracle,
   owaspGenaiSupplyChainRouteLiveOracle,
@@ -89644,6 +89774,7 @@ export const RULES: Record<string, Rule> = {
   seclabNextjsLabApiProbe,
   seclabAngularStubRouteLiveOracle,
   seclabSqliVulnerableRouteLiveOracle,
+  seclabSqliSearchRouteLiveOracle,
   seclabCsrfVulnerableRouteLiveOracle,
   seclabJwtVulnerableRouteLiveOracle,
   seclabXssVulnerableRouteLiveOracle,

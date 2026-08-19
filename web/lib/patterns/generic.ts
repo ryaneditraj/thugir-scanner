@@ -36104,6 +36104,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owasp-demo-vulcanlab-llm-top10-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Vulcan Lab OWASP LLM Top 10 demo live oracle",
+    description:
+      "owasp-demo.vulcanlab.ai homepage embeds interactive OWASP LLM Top 10 2025/2026 challenge cards for LLM01–LLM10 with critical/high risk ratings — the Vulcan Lab GenAI security demo oracle.",
+    impactOneline:
+      "Public LLM Top 10 demo pages document prompt injection, excessive agency, and system prompt leakage training surfaces for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspDemoVulcanlabLlmTop10LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "LLM security demos are intentional training — isolate GenAI demo apps from production agent deployments.",
+      steps: [
+        "Require authentication before serving interactive LLM vulnerability demos.",
+        "Do not expose production LLM system prompts in public demo pages.",
+        "Rate-limit unauthenticated GenAI demo enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our owasp-demo.vulcanlab.ai site publishes OWASP LLM Top 10 interactive challenge cards. Show how to isolate GenAI demos from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owasp-demo-vulcanlab-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Vulcan Lab OWASP LLM Top 10 demo route live oracle",
+    description:
+      "When scanning owasp-demo.vulcanlab.ai / or /challenges, homepage LLM01–LLM10 interactive challenge cards confirm the Vulcan Lab GenAI security demo even when /challenges returns 404.",
+    impactOneline:
+      "Route scans on owasp-demo.vulcanlab.ai should confirm LLM Top 10 demo cards without relying on generic security-header findings alone.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspDemoVulcanlabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "LLM security demos are intentional training — isolate GenAI demo apps from production agent deployments.",
+      steps: [
+        "Require authentication before serving interactive LLM vulnerability demos.",
+        "Do not expose production LLM system prompts in public demo pages.",
+        "Rate-limit unauthenticated GenAI demo enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our owasp-demo.vulcanlab.ai route scan confirms OWASP LLM Top 10 demo cards. Show route-specific GenAI demo isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "owasp-genai-prompt-injection-route-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -36646,6 +36698,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our seclab.vercel.app /api/sqli-vulnerable route is a dead Angular stub or exposes live SQLi. Show parameterized query remediation and deploy fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "seclab-sqli-search-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecLab /api/sqli/search route live oracle",
+    description:
+      "When scanning seclab.vercel.app /api/sqli/search, GET ?q= returns SQL syntax errors from the in-memory SQLite backend — or the route serves an Angular SPA shell instead of the documented DaniSam-STU/security-lab SQLi search API.",
+    impactOneline:
+      "Route-specific SQLi search oracle confirms live error-based injection training endpoints or flags dead /api/sqli/search stubs on the public Vercel host.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabSqliSearchRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the SecLab SQLi search API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/sqli/search on production.",
+        "Use parameterized queries in any live SQLi training endpoint.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /api/sqli/search route is a dead Angular stub or exposes live SQLi. Show parameterized query remediation and deploy fixes.",
     version: 1,
     enabled: true
   },
