@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-19T16:08:00.000Z",
+  "updated_at": "2026-08-19T17:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1971",
+      "source": "Web Security Learning Labs — module 1971 placeholder route oracle (catalog expansion 1971–1974, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1972",
+      "source": "Web Security Learning Labs — module 1972 placeholder route oracle (catalog expansion 1971–1974, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1973",
+      "source": "Web Security Learning Labs — module 1973 placeholder route oracle (catalog expansion 1971–1974, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1974",
+      "source": "Web Security Learning Labs — module 1974 placeholder route oracle (catalog expansion 1971–1974, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://zero.webappsecurity.com/feedback.html",
+      "source": "Watchfire Zero Bank — unauthenticated feedback/contact form oracle (vwad.owasp.org zero-bank, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-security-learning-labs.vercel.app/module/1968",
       "source": "Web Security Learning Labs — module 1968 placeholder route oracle (catalog expansion 1968–1970, Aug 2026 power-loop discovery)",
