@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-19T14:04:42.903Z",
+  "updated_at": "2026-08-19T15:05:48.689Z",
   "discovery_urls": [
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1965",
+      "source": "Web Security Learning Labs — module 1965 placeholder route oracle (catalog expansion 1965–1967, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1966",
+      "source": "Web Security Learning Labs — module 1966 placeholder route oracle (catalog expansion 1965–1967, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-security-learning-labs.vercel.app/module/1967",
+      "source": "Web Security Learning Labs — module 1967 placeholder route oracle (catalog expansion 1965–1967, Aug 2026 power-loop discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/how-it-works",
+      "source": "GenAI-Security-Project/finbot-ctf — Dark Lab / Hacker Toolkit walkthrough hub (how-it-works, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://zero.webappsecurity.com/bank/pay-bills.html",
+      "source": "Watchfire Zero Bank — pay-bills SQLi oracle POST pay-bills-get-payee-details (vwad.owasp.org zero-bank, Aug 2026 web discovery)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://zero.webappsecurity.com/bank/transferFunds.html",
       "source": "Watchfire Zero Bank — CSRF transfer-funds oracle POST /bank/transferFunds.jsp (Secure Coding Workshop gist, Aug 2026 web discovery)",
