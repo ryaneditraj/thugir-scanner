@@ -9360,6 +9360,126 @@ const nodegoatDashboardRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const nodegoatAllocationsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/allocations\b/i.test(pageUrl)) return NEGATIVE;
+  const allocationsMarkers: { label: string; sample: string }[] = [];
+  const markerRes: { label: string; re: RegExp }[] = [
+    { label: "allocations threshold filter", re: /threshold|Allocations|stocks|bonds|funds/i },
+    {
+      label: "allocations $where injection",
+      re: /allocations[\s\S]{0,200}\$where|threshold[\s\S]{0,120}\$where/i
+    },
+    { label: "GET /allocations/:userId route", re: /\/allocations\/\d|allocations\/:userId/i }
+  ];
+  for (const { label, re } of markerRes) {
+    const m = ctx.combined.match(re);
+    if (m) allocationsMarkers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const live = await nodegoatBenefitsNosqlLiveProbe(ctx);
+  if (live.fired) {
+    const thresholdBypass = Boolean(live.evidence?.thresholdBypass);
+    return {
+      fired: true,
+      confidence: thresholdBypass ? 0.93 : live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        allocationsMarkers: allocationsMarkers.slice(0, 3),
+        note: thresholdBypass
+          ? "NodeGoat /allocations route scan — GET /allocations/:userId?threshold= accepts unsanitized $where filter — NoSQL injection oracle"
+          : "NodeGoat /allocations route scan — GET /allocations/:userId returns cross-user allocation data — IDOR oracle on allocations API"
+      }
+    };
+  }
+  if (allocationsMarkers.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      allocationsMarkers: allocationsMarkers.slice(0, 3),
+      note: "NodeGoat /allocations route scan — allocations threshold/$where patterns documented when live probe did not complete"
+    }
+  };
+};
+
+async function nodegoatMemosStoredXssLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  const cookie = await nodegoatAuthenticatedSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const memosUrl = new URL("/memos", ctx.origin).toString();
+  const marker = `ThugirMemosXss${Date.now().toString().slice(-6)}`;
+  const xssPayload = `<img src=x onerror=${marker}>`;
+  const postDoc = await ctx.probe.get(memosUrl, {
+    method: "POST",
+    body: `memo=${encodeURIComponent(xssPayload)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded", Cookie: cookie },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 500) return NEGATIVE;
+  const verifyDoc = await fetchDoc(memosUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (verifyDoc.status < 200 || verifyDoc.status >= 400) return NEGATIVE;
+  if (!new RegExp(marker, "i").test(verifyDoc.body)) return NEGATIVE;
+  const hasOnerror = /onerror\s*=/i.test(verifyDoc.body);
+  return {
+    fired: true,
+    confidence: hasOnerror ? 0.93 : 0.9,
+    evidence: {
+      memosUrl,
+      marker,
+      snippet:
+        verifyDoc.body.match(new RegExp(`[^<]{0,40}${marker}[^>]{0,40}`, "i"))?.[0]?.slice(0, 160) ||
+        verifyDoc.body.slice(0, 160).trim(),
+      note: "NodeGoat POST /memos stores unsanitized memo HTML that persists with onerror handler — MemosDAO stored XSS oracle"
+    }
+  };
+}
+
+const nodegoatMemosStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  return nodegoatMemosStoredXssLiveProbe(ctx);
+};
+
+const nodegoatMemosRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/memos\b/i.test(pageUrl)) return NEGATIVE;
+  const memosMarkers: { label: string; sample: string }[] = [];
+  const markerRes: { label: string; re: RegExp }[] = [
+    { label: "MemosDAO memo form", re: /name=["']memo["']|MemosDAO|Share.*memo/i },
+    { label: "memo textarea input", re: /<textarea[^>]*memo|id=["']memo["']/i },
+    { label: "POST /memos endpoint", re: /POST\s*\/memos|action=["']\/memos/i }
+  ];
+  for (const { label, re } of markerRes) {
+    const m = ctx.combined.match(re);
+    if (m) memosMarkers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const live = await nodegoatMemosStoredXssLiveProbe(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl, memosMarkers: memosMarkers.slice(0, 3) }
+    };
+  }
+  if (memosMarkers.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      memosMarkers: memosMarkers.slice(0, 3),
+      note: "NodeGoat /memos route scan — MemosDAO memo form present when live stored XSS probe did not complete"
+    }
+  };
+};
+
 async function nodegoatAuthenticatedSessionCookie(ctx: RuleContext): Promise<string | null> {
   const loginUrl = new URL("/login", ctx.origin).toString();
   for (const { userName, password } of [
@@ -88991,6 +89111,9 @@ export const RULES: Record<string, Rule> = {
   nodegoatLoginWeakCredentialsLiveOracle,
   nodegoatLoginWeakCredentialsRouteLiveOracle,
   nodegoatDashboardRouteLiveOracle,
+  nodegoatAllocationsRouteLiveOracle,
+  nodegoatMemosStoredXssLiveOracle,
+  nodegoatMemosRouteLiveOracle,
   nodegoatProfileSensitiveDataLiveOracle,
   nodegoatProfileSensitiveDataRouteLiveOracle,
   nodegoatProfileCsrfLiveOracle,

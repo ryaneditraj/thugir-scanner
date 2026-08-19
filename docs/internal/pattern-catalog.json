@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-19T01:17:20.392Z",
-  "total": 2502,
-  "uniqueSlugs": 2498,
+  "generatedAt": "2026-08-19T02:05:13.423Z",
+  "total": 2505,
+  "uniqueSlugs": 2501,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2484,
+    "generic": 2487,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2417,
+    "deep": 2420,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 118,
     "Security misconfiguration": 186,
     "Broken authentication": 155,
-    "Injection": 375,
-    "Cross-site scripting": 701,
+    "Injection": 376,
+    "Cross-site scripting": 703,
     "Open redirect": 21,
     "general": 20,
     "SSRF": 14,
@@ -1738,6 +1738,7 @@
     "lovable-client-only-auth",
     "lovable-supabase-storage-public",
     "missing-security-headers",
+    "nodegoat-allocations-route-live-oracle",
     "nodegoat-benefits-nosql-live-oracle",
     "nodegoat-benefits-nosql-route-live-oracle",
     "nodegoat-dashboard-route-live-oracle",
@@ -1745,6 +1746,8 @@
     "nodegoat-learn-open-redirect-route-live-oracle",
     "nodegoat-login-weak-credentials-live-oracle",
     "nodegoat-login-weak-credentials-route-live-oracle",
+    "nodegoat-memos-route-live-oracle",
+    "nodegoat-memos-stored-xss-live-oracle",
     "nodegoat-nosql-login-live-oracle",
     "nodegoat-nosql-login-route-live-oracle",
     "nodegoat-profile-csrf-live-oracle",

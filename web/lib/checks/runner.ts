@@ -3280,6 +3280,9 @@ const DEEP_RULES = new Set<string>([
   "nodegoatLoginWeakCredentialsLiveOracle",
   "nodegoatLoginWeakCredentialsRouteLiveOracle",
   "nodegoatDashboardRouteLiveOracle",
+  "nodegoatAllocationsRouteLiveOracle",
+  "nodegoatMemosStoredXssLiveOracle",
+  "nodegoatMemosRouteLiveOracle",
   "nodegoatProfileSensitiveDataLiveOracle",
   "nodegoatProfileSensitiveDataRouteLiveOracle",
   "nodegoatProfileCsrfLiveOracle",
@@ -12744,6 +12747,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("nodegoat-dashboard-")
       )
         return -3;
+      if (
+        /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
+        /\/allocations\b/i.test(targetInput) &&
+        p.slug.startsWith("nodegoat-allocations-")
+      )
+        return -4;
+      if (
+        /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
+        /\/memos\b/i.test(targetInput) &&
+        p.slug.startsWith("nodegoat-memos-")
+      )
+        return -4;
       if (
         /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
         /\/tutorial\/a[0-9]+|\/login\b/i.test(targetInput) &&
