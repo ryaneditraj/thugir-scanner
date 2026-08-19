@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:zero.webappsecurity.com",
+      "slug": "zero-bank-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /admin/ + /admin/users.html returns Leeroy Jenkins/VIZ10AWT8VL without auth; zero.webappsecurity.com/admin/ findings 6→9 (+zero-bank-admin-route-live-oracle +zero-bank-admin-users-plaintext-passwords-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-admin-security-second-order-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: mass-assignment admin OTP session + GET /admin/security?search=' OR 1=1-- returns full audit log (PWN-014); pwnshop.ctfsecurity.com/admin/security findings 48 (+pwnshop-admin-security-second-order-sqli-live-oracle +route oracle 0.93); runner priority -2→-3; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zero.webappsecurity.com",
+      "slug": "zero-bank-login-admin-credential-scrape",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: zeroBankScrapedAdminCredentials parses /admin/users.html Name+Password rows before static creds in zeroBankLoginSessionCookie; login still returns login_error on live site — pay-bills/account-activity route corpus fallbacks maintained; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zero.webappsecurity.com",
       "slug": "zero-bank-feedback-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /sendFeedback.html accepts unauthenticated feedback (Thank you for your comments); zero.webappsecurity.com/feedback.html findings 5→7 (+zero-bank-feedback-send-live-oracle +zero-bank-feedback-route-live-oracle); admin-users oracle scoped off feedback route; benchmark juice-shop 48 findings 6/6 maintained"
@@ -20,7 +38,7 @@
     },
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
-      "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
+      "slug": "web-security-learning-labs-module-catalog-1971-1973",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1970→1973 + runner placeholder priority regex 1970→197[0-3]; web-security-learning-labs.vercel.app/module/1971 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },
