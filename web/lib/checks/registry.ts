@@ -37674,129 +37674,6 @@ const fauxbankSettingsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-async function pwnshopPollLoginOtp(ctx: RuleContext, cookie: string): Promise<string | null> {
-  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500, 10500];
-  for (const waitMs of OTP_MAIL_WAITS_MS) {
-    await pwnshopSleep(waitMs);
-    const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
-    if (!inboxToken) continue;
-    const otp = await pwnshopOtpFromMailInbox(ctx, cookie, inboxToken);
-    if (otp) return otp;
-  }
-  return null;
-}
-
-const pwnshopOtpNotInvalidatedLiveOracle: Rule = async (ctx) => {
-  if (!isPwnshopHost(ctx)) return NEGATIVE;
-  clearPwnshopOtpSessionForProbe(ctx.probe);
-  const username = `thugir_otpinv_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-  const email = `${username}@probe.local`;
-  const password = "ThugirTest123!";
-  for (let regAttempt = 0; regAttempt < 3; regAttempt++) {
-    const registerDoc = await fetchDoc(new URL("/register", ctx.origin).toString(), {
-      method: "POST",
-      body: `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      maxBytes: 4096,
-      timeoutMs: 15000
-    });
-    if (registerDoc.status === 429 || /rate limit|too many requests/i.test(registerDoc.body)) {
-      await pwnshopSleep(2000 + regAttempt * 2500);
-      continue;
-    }
-    let cookie = pwnshopSessionCookieFromDoc(registerDoc);
-    if (!cookie) return NEGATIVE;
-    const login1 = await fetchDoc(new URL("/login", ctx.origin).toString(), {
-      method: "POST",
-      body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Cookie: cookie
-      },
-      maxBytes: 4096,
-      timeoutMs: 15000,
-      redirect: "manual"
-    });
-    if (login1.status === 429 || /rate limit|too many requests/i.test(login1.body)) {
-      await pwnshopSleep(2000 + regAttempt * 2500);
-      continue;
-    }
-    const login1Location = login1.headers["location"] || "";
-    if (![301, 302, 303, 307, 308].includes(login1.status) || !/verify-otp/i.test(login1Location)) {
-      return NEGATIVE;
-    }
-    cookie = pwnshopSessionCookieFromDoc(login1) ?? cookie;
-    const otp1 = await pwnshopPollLoginOtp(ctx, cookie);
-    if (!otp1) return NEGATIVE;
-    const login2 = await fetchDoc(new URL("/login", ctx.origin).toString(), {
-      method: "POST",
-      body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Cookie: cookie
-      },
-      maxBytes: 4096,
-      timeoutMs: 15000,
-      redirect: "manual"
-    });
-    const login2Location = login2.headers["location"] || "";
-    if (![301, 302, 303, 307, 308].includes(login2.status) || !/verify-otp/i.test(login2Location)) {
-      return NEGATIVE;
-    }
-    cookie = pwnshopSessionCookieFromDoc(login2) ?? cookie;
-    const otp2 = await pwnshopPollLoginOtp(ctx, cookie);
-    if (!otp2) return NEGATIVE;
-    const verifyUrl = new URL("/verify-otp", ctx.origin).toString();
-    const verifyDoc = await fetchDoc(verifyUrl, {
-      method: "POST",
-      body: `otp=${otp1}`,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Cookie: cookie
-      },
-      maxBytes: 4096,
-      timeoutMs: 15000,
-      redirect: "manual"
-    });
-    if (![301, 302, 303, 307, 308].includes(verifyDoc.status)) return NEGATIVE;
-    const verifyLocation = verifyDoc.headers["location"] || "";
-    if (!verifyLocation || /verify-otp/i.test(verifyLocation)) return NEGATIVE;
-    if (/Invalid or expired code/i.test(verifyDoc.body)) return NEGATIVE;
-    return {
-      fired: true,
-      confidence: otp1 !== otp2 ? 0.93 : 0.91,
-      evidence: {
-        verifyUrl,
-        username,
-        firstOtpRedacted: `${otp1.slice(0, 2)}****`,
-        secondOtpIssued: otp1 !== otp2,
-        redirect: verifyLocation,
-        note: "Pwnshop POST /login issues a new OTP but the prior OTP still verifies at POST /verify-otp — OTP not invalidated on new request (PWN-024)"
-      }
-    };
-  }
-  return NEGATIVE;
-};
-
-const pwnshopOtpNotInvalidatedRouteLiveOracle: Rule = async (ctx) => {
-  if (!isPwnshopHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:reset-password|forgot-password|verify-otp|login)\b/i.test(pageUrl)) return NEGATIVE;
-  const result = await pwnshopOtpNotInvalidatedLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: result.confidence,
-    evidence: {
-      ...result.evidence,
-      scannedUrl: pageUrl,
-      note: /\/reset-password\b/i.test(pageUrl)
-        ? "Pwnshop /reset-password route scan — new login OTP requests do not invalidate prior OTPs at POST /verify-otp (PWN-024)"
-        : "Pwnshop OTP/password-reset route scan — prior login OTP still verifies after a second POST /login issues a new code (PWN-024)"
-    }
-  };
-};
-
 const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const cookie = await pwnshopRegisterAndLoginCookie(ctx);
@@ -87455,8 +87332,6 @@ export const RULES: Record<string, Rule> = {
   pwnshopWalletTopupRouteLiveOracle,
   pwnshopAccountDeleteCsrfLiveOracle,
   pwnshopAccountDeleteCsrfRouteLiveOracle,
-  pwnshopOtpNotInvalidatedLiveOracle,
-  pwnshopOtpNotInvalidatedRouteLiveOracle,
   pwnshopAuditLogPlaintextPasswordLiveOracle,
   pwnshopAuditLogPlaintextPasswordRouteLiveOracle,
   pwnshopExportOrdersCsvLiveOracle,
