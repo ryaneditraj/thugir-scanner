@@ -9760,6 +9760,75 @@ async function nodegoatAuthenticatedSessionCookie(ctx: RuleContext): Promise<str
   return cookie;
 }
 
+async function nodegoatContributionsSsjsLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  const cookie = await nodegoatAuthenticatedSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const contributionsUrl = new URL("/contributions", ctx.origin).toString();
+  const probeToken = `ThugirNgContrib${Date.now().toString().slice(-6)}`;
+  const postDoc = await ctx.probe.get(contributionsUrl, {
+    method: "POST",
+    body: `preTax=${encodeURIComponent(probeToken)}&roth=0&afterTax=0`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded", Cookie: cookie },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (!/Internal Error|ReferenceError/i.test(postDoc.body)) return NEGATIVE;
+  if (!new RegExp(`ReferenceError[:\\s]*${probeToken}`, "i").test(postDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      contributionsUrl,
+      probeToken,
+      snippet: postDoc.body.slice(0, 300).trim(),
+      note: "NodeGoat POST /contributions passes preTax to eval() — ReferenceError from attacker-controlled identifier confirms server-side JavaScript injection oracle"
+    }
+  };
+}
+
+const nodegoatContributionsSsjsLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  return nodegoatContributionsSsjsLiveProbe(ctx);
+};
+
+const nodegoatContributionsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/contributions\b/i.test(pageUrl)) return NEGATIVE;
+  const contributionsMarkers: { label: string; sample: string }[] = [];
+  const markerRes: { label: string; re: RegExp }[] = [
+    { label: "contributions preTax form", re: /name=["']preTax["']|Payroll Contribution Percent/i },
+    { label: "POST /contributions action", re: /action=["']\/contributions|method=["']POST["'][^>]*contributions/i },
+    { label: "eval preTax server-side", re: /eval\s*\(\s*req\.body\.preTax|preTax[\s\S]{0,80}eval\(/i }
+  ];
+  for (const { label, re } of markerRes) {
+    const m = ctx.combined.match(re);
+    if (m) contributionsMarkers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const live = await nodegoatContributionsSsjsLiveProbe(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        contributionsMarkers: contributionsMarkers.slice(0, 3)
+      }
+    };
+  }
+  if (contributionsMarkers.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      contributionsMarkers: contributionsMarkers.slice(0, 3),
+      note: "NodeGoat /contributions route scan — preTax contribution form present when live SSJS eval probe did not complete"
+    }
+  };
+};
+
 async function nodegoatProfileCsrfLiveProbe(ctx: RuleContext): Promise<RuleResult> {
   const cookie = await nodegoatAuthenticatedSessionCookie(ctx);
   if (!cookie) return NEGATIVE;
@@ -41078,7 +41147,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1954;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1955;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -83422,6 +83491,166 @@ function isFinbotCtfHost(ctx: RuleContext): boolean {
   return /owasp-finbot-ctf\.org/i.test(ctx.origin);
 }
 
+function finbotSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^finbot_session=/i.test(c))?.split(";")[0] ?? null;
+}
+
+async function finbotSessionBootstrap(ctx: RuleContext): Promise<{
+  cookie: string;
+  csrf: string;
+  isTemporary: boolean;
+} | null> {
+  let cookie = finbotSessionCookieFromDoc(ctx.home);
+  if (!cookie) {
+    const boot = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+      maxBytes: 8192,
+      timeoutMs: 15000
+    });
+    cookie = finbotSessionCookieFromDoc(boot);
+  }
+  if (!cookie) return null;
+  const sessionUrl = new URL("/api/session/status", ctx.origin).toString();
+  const sessionDoc = await ctx.probe.get(sessionUrl, {
+    headers: { Cookie: cookie, Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (sessionDoc.status < 200 || sessionDoc.status >= 400) return null;
+  try {
+    const data = JSON.parse(sessionDoc.body) as {
+      csrf_token?: string;
+      is_temporary?: boolean;
+    };
+    const csrf = data.csrf_token ?? "";
+    if (!csrf) return null;
+    return { cookie, csrf, isTemporary: Boolean(data.is_temporary) };
+  } catch {
+    return null;
+  }
+}
+
+async function probeFinbotLabsGuardrailsWebhook(ctx: RuleContext): Promise<RuleResult | null> {
+  const session = await finbotSessionBootstrap(ctx);
+  if (!session) return null;
+  const { cookie, csrf, isTemporary } = session;
+  const guardrailsUrl = new URL("/labs/api/v1/guardrails", ctx.origin).toString();
+  const jsonHeaders = {
+    Cookie: cookie,
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    "X-CSRF-Token": csrf
+  };
+  const internalBody = JSON.stringify({
+    webhook_url: "http://127.0.0.1:6379/",
+    enabled: true,
+    timeout_seconds: 2
+  });
+  const internalDoc = await ctx.probe.get(guardrailsUrl, {
+    method: "PUT",
+    body: internalBody,
+    headers: jsonHeaders,
+    maxBytes: 8192,
+    timeoutMs: 20000
+  });
+  if (internalDoc.status >= 200 && internalDoc.status < 300) {
+    try {
+      const cfg = JSON.parse(internalDoc.body) as { webhook_url?: string };
+      if (/127\.0\.0\.1|localhost/i.test(cfg.webhook_url ?? "")) {
+        return {
+          fired: true,
+          confidence: 0.94,
+          evidence: {
+            guardrailsUrl,
+            status: internalDoc.status,
+            isTemporary,
+            webhookUrl: cfg.webhook_url,
+            snippet: internalDoc.body.slice(0, 200).trim(),
+            note: "OWASP FinBot PUT /labs/api/v1/guardrails accepts loopback webhook_url from anonymous temp session — guardrail webhook SSRF oracle (issue #535)"
+          }
+        };
+      }
+    } catch {
+      /* fall through */
+    }
+  }
+  if (internalDoc.status !== 422 && internalDoc.status !== 400) return null;
+  const probeSuffix = Date.now().toString().slice(-6);
+  const publicBody = JSON.stringify({
+    webhook_url: `https://example.com/thugir-guardrail-probe-${probeSuffix}`,
+    enabled: true,
+    timeout_seconds: 2
+  });
+  const publicDoc = await ctx.probe.get(guardrailsUrl, {
+    method: "PUT",
+    body: publicBody,
+    headers: jsonHeaders,
+    maxBytes: 8192,
+    timeoutMs: 20000
+  });
+  if (publicDoc.status < 200 || publicDoc.status >= 300) return null;
+  let cfg: { webhook_url?: string; signing_secret?: string } = {};
+  try {
+    cfg = JSON.parse(publicDoc.body);
+  } catch {
+    return null;
+  }
+  if (!cfg.webhook_url || !cfg.signing_secret) return null;
+  const testUrl = new URL("/labs/api/v1/guardrails/test", ctx.origin).toString();
+  const testDoc = await ctx.probe.get(testUrl, {
+    method: "POST",
+    headers: jsonHeaders,
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  let testOutcome = "";
+  try {
+    testOutcome = String(JSON.parse(testDoc.body).outcome ?? "");
+  } catch {
+    return null;
+  }
+  if (!testOutcome || testOutcome === "no_config") return null;
+  return {
+    fired: true,
+    confidence: isTemporary ? 0.92 : 0.9,
+    evidence: {
+      guardrailsUrl,
+      internalBlocked: true,
+      internalStatus: internalDoc.status,
+      isTemporary,
+      testOutcome,
+      webhookUrl: cfg.webhook_url,
+      snippet: publicDoc.body.slice(0, 200).trim(),
+      note: "OWASP FinBot anonymous session registers guardrail webhook_url via PUT /labs/api/v1/guardrails and POST /labs/api/v1/guardrails/test triggers server-side webhook fetch — loopback blocked but unauthenticated guardrail webhook config oracle (issue #535)"
+    }
+  };
+}
+
+const finbotLabsGuardrailsWebhookLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotLabsGuardrailsWebhook(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotLabsGuardrailsWebhookRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs(?:\/api\/v1\/guardrails)?\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotLabsGuardrailsWebhook(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: String(result.evidence?.note ?? "").replace(
+        "OWASP FinBot",
+        "OWASP FinBot /labs route scan —"
+      )
+    }
+  };
+};
+
 const finbotCtfChallengesRouteLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -88789,6 +89018,8 @@ export const RULES: Record<string, Rule> = {
   finbotCtfStatsRouteLiveOracle,
   finbotVendorInvoicesLiveOracle,
   finbotVendorInvoicesRouteLiveOracle,
+  finbotLabsGuardrailsWebhookLiveOracle,
+  finbotLabsGuardrailsWebhookRouteLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
@@ -89705,6 +89936,8 @@ export const RULES: Record<string, Rule> = {
   nodegoatAllocationsRouteLiveOracle,
   nodegoatMemosStoredXssLiveOracle,
   nodegoatMemosRouteLiveOracle,
+  nodegoatContributionsSsjsLiveOracle,
+  nodegoatContributionsRouteLiveOracle,
   nodegoatProfileSensitiveDataLiveOracle,
   nodegoatProfileSensitiveDataRouteLiveOracle,
   nodegoatProfileCsrfLiveOracle,

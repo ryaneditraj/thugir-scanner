@@ -2580,6 +2580,8 @@ const DEEP_RULES = new Set<string>([
   "finbotCtfStatsRouteLiveOracle",
   "finbotVendorInvoicesLiveOracle",
   "finbotVendorInvoicesRouteLiveOracle",
+  "finbotLabsGuardrailsWebhookLiveOracle",
+  "finbotLabsGuardrailsWebhookRouteLiveOracle",
   "istEduSearchXssRouteLiveOracle",
   "istEduNoticesLfiRouteLiveOracle",
   "istEduPortalSqliRouteLiveOracle",
@@ -3302,6 +3304,8 @@ const DEEP_RULES = new Set<string>([
   "nodegoatAllocationsRouteLiveOracle",
   "nodegoatMemosStoredXssLiveOracle",
   "nodegoatMemosRouteLiveOracle",
+  "nodegoatContributionsSsjsLiveOracle",
+  "nodegoatContributionsRouteLiveOracle",
   "nodegoatProfileSensitiveDataLiveOracle",
   "nodegoatProfileSensitiveDataRouteLiveOracle",
   "nodegoatProfileCsrfLiveOracle",
@@ -12495,6 +12499,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/labs(?:\/api\/v1\/guardrails)?\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-labs-guardrails")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
         /\/vendor(?:\/|$)/i.test(targetInput) &&
         p.slug.startsWith("finbot-vendor-chat")
       )
@@ -12845,6 +12855,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
         /\/memos\b/i.test(targetInput) &&
         p.slug.startsWith("nodegoat-memos-")
+      )
+        return -4;
+      if (
+        /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
+        /\/contributions\b/i.test(targetInput) &&
+        p.slug.startsWith("nodegoat-contributions-")
       )
         return -4;
       if (
