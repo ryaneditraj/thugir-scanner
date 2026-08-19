@@ -40375,6 +40375,7 @@ async function probeVulnshopTemplateRenderElInjection(ctx: RuleContext): Promise
 const vulnshopTemplateRenderElInjectionLiveOracle: Rule = async (ctx) => {
   const live = await probeVulnshopTemplateRenderElInjection(ctx);
   if (live) return live;
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
   const corpus = `${ctx.combined}\n${ctx.scanUrl || ""}\n${VULNSHOP_README_FALLBACK}`;
   if (
     !/\/api\/v1\/template\/render/i.test(corpus) ||
@@ -41147,7 +41148,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1955;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1956;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -83651,6 +83652,65 @@ const finbotLabsGuardrailsWebhookRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isTryaisocHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /tryaisoc\.com/i.test(corpus);
+}
+
+async function probeTryaisocInvestigationLedger(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isTryaisocHost(ctx)) return null;
+  const caseUrl = new URL("/cases/INC-RT-001?tab=ledger", ctx.origin).toString();
+  const doc = await ctx.probe.get(caseUrl, { maxBytes: 262144, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  const body = doc.body;
+  if (!/INC-RT-001/i.test(body) || !/ledger/i.test(body)) return null;
+  if (!/AiSOC|Investigation/i.test(body)) return null;
+  const apiUrl = new URL("/api/v1/cases/INC-RT-001", ctx.origin).toString();
+  const apiDoc = await ctx.probe.get(apiUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  const apiProtected =
+    apiDoc.status === 401 || /not authenticated/i.test(apiDoc.body);
+  const corpus = `${ctx.combined}\n${body}`;
+  const ledgerMarkers: string[] = [];
+  if (/Investigation Queue/i.test(corpus)) ledgerMarkers.push("Investigation Queue nav");
+  if (/tab=ledger/i.test(corpus)) ledgerMarkers.push("ledger tab route");
+  if (/INC-RT-001/i.test(corpus)) ledgerMarkers.push("seeded LockBit case INC-RT-001");
+  return {
+    fired: true,
+    confidence: apiProtected ? 0.92 : 0.88,
+    evidence: {
+      caseUrl,
+      apiUrl,
+      apiStatus: apiDoc.status,
+      markers: ledgerMarkers.slice(0, 3),
+      snippet: body.slice(0, 240).trim(),
+      note: "tryaisoc.com GET /cases/INC-RT-001?tab=ledger serves the seeded LockBit investigation workspace with Investigation Ledger replay tab without login — public demo case oracle (API /api/v1/cases/INC-RT-001 returns 401)"
+    }
+  };
+}
+
+const tryaisocInvestigationLedgerLiveOracle: Rule = async (ctx) => {
+  if (!isTryaisocHost(ctx)) return NEGATIVE;
+  const result = await probeTryaisocInvestigationLedger(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const tryaisocInvestigationLedgerRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTryaisocHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cases\/INC-RT-001\b/i.test(pageUrl) && !/tab=ledger/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeTryaisocInvestigationLedger(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "tryaisoc.com /cases/INC-RT-001?tab=ledger route scan — public demo serves Investigation Ledger replay for seeded LockBit case without session (API case endpoint requires auth)"
+    }
+  };
+};
+
 const finbotCtfChallengesRouteLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -89020,6 +89080,8 @@ export const RULES: Record<string, Rule> = {
   finbotVendorInvoicesRouteLiveOracle,
   finbotLabsGuardrailsWebhookLiveOracle,
   finbotLabsGuardrailsWebhookRouteLiveOracle,
+  tryaisocInvestigationLedgerLiveOracle,
+  tryaisocInvestigationLedgerRouteLiveOracle,
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,

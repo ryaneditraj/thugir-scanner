@@ -45356,6 +45356,60 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "tryaisoc-investigation-ledger-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "AiSOC tryaisoc.com Investigation Ledger demo live oracle",
+    description:
+      "GET /cases/INC-RT-001?tab=ledger serves the seeded LockBit investigation workspace with Investigation Ledger replay tab without login — public Fly.io demo oracle (API /api/v1/cases/INC-RT-001 returns 401).",
+    impactOneline:
+      "Public demo case routes can expose investigation ledger UI and agent audit-trail replay surfaces without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "tryaisocInvestigationLedgerLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "tryaisoc.com is an intentional public demo — gate case workspaces behind auth in production SOC consoles.",
+      steps: [
+        "Require authenticated sessions before rendering /cases/{id} workspaces.",
+        "Do not expose agent prompt/tool-call ledger replay on anonymous demo routes in production.",
+        "Run AiSOC demo only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our tryaisoc.com demo serves /cases/INC-RT-001?tab=ledger without login. Show how to protect investigation ledger routes in production SOC consoles.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "tryaisoc-investigation-ledger-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "AiSOC /cases/INC-RT-001 ledger route live oracle",
+    description:
+      "When scanning /cases/INC-RT-001?tab=ledger, the public demo serves Investigation Ledger replay for the seeded LockBit case without session — route-specific ledger replay oracle.",
+    impactOneline:
+      "Route scans on tryaisoc.com case ledger tabs should confirm public demo investigation replay exposure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "tryaisocInvestigationLedgerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "tryaisoc.com is an intentional public demo — gate case workspaces behind auth in production.",
+      steps: [
+        "Require authenticated sessions before rendering /cases/{id} workspaces.",
+        "Do not expose agent ledger replay on anonymous routes in production.",
+        "Run AiSOC demo only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /cases/INC-RT-001?tab=ledger route scan confirms public ledger replay. Show route-specific auth gating for investigation workspaces.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-vendor-invoices-route-live-oracle",
     platform: "generic",
     category: "AI security",

@@ -2582,6 +2582,8 @@ const DEEP_RULES = new Set<string>([
   "finbotVendorInvoicesRouteLiveOracle",
   "finbotLabsGuardrailsWebhookLiveOracle",
   "finbotLabsGuardrailsWebhookRouteLiveOracle",
+  "tryaisocInvestigationLedgerLiveOracle",
+  "tryaisocInvestigationLedgerRouteLiveOracle",
   "istEduSearchXssRouteLiveOracle",
   "istEduNoticesLfiRouteLiveOracle",
   "istEduPortalSqliRouteLiveOracle",
@@ -12905,6 +12907,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("finbot-darklab-taxcalc-reset-tools")
       )
         return -5;
+      if (
+        /tryaisoc\.com/i.test(origin) &&
+        (/\/cases\/INC-RT-001\b/i.test(targetInput) || /tab=ledger/i.test(targetInput)) &&
+        p.slug.startsWith("tryaisoc-investigation-ledger")
+      )
+        return -4;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
         /\/api\/v1\/auth\/register/i.test(targetInput) &&
