@@ -2278,6 +2278,10 @@ const DEEP_RULES = new Set<string>([
   "ssrfVulnlabBlindRouteLiveOracle",
   "ssrfVulnlabWebhookLiveOracle",
   "ssrfVulnlabWebhookRouteLiveOracle",
+  "ssrfDefensePlatformScanLiveOracle",
+  "ssrfDefensePlatformScanRouteLiveOracle",
+  "ssrfDefensePlatformAllowlistBypassLiveOracle",
+  "ssrfDefensePlatformAllowlistBypassRouteLiveOracle",
   "sqliVulnlabErrorLiveOracle",
   "sqliVulnlabErrorRouteLiveOracle",
   "sqliVulnlabSecondOrderLiveOracle",
@@ -10264,6 +10268,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/error-demo/database-connection"
       ]
     : [];
+  const ssrfDefensePlatformPrioritySeeds = /ssrf-defense-platform\.onrender\.com/i.test(home.finalUrl)
+    ? [
+        "https://ssrf-defense-platform.onrender.com/api/scan?url=http://169.254.169.254/latest/meta-data/",
+        "https://ssrf-defense-platform.onrender.com/api/webhook-test",
+        "https://ssrf-defense-platform.onrender.com/api/webhook-config"
+      ]
+    : [];
   const ssrfVulnlabPrioritySeeds = /ssrf\.vulnlab\.dev/i.test(home.finalUrl)
     ? [
         "https://ssrf.vulnlab.dev/basic",
@@ -10506,6 +10517,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vwadCatalogPrioritySeeds,
       ...vwadCatalogLiveSeeds,
       ...wrongSecretsHubPrioritySeeds,
+      ...ssrfDefensePlatformPrioritySeeds,
       ...ssrfVulnlabPrioritySeeds,
       ...bypass403PrioritySeeds,
       ...webSecurityLearningModulePrioritySeeds,
@@ -11093,6 +11105,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
       if (/pentest-ground\.com:81/i.test(origin) && p.slug.startsWith("pentest-ground-guardian-leaks")) return -2;
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
+      if (/ssrf-defense-platform\.onrender\.com/i.test(origin) && p.slug.startsWith("ssrf-defense-platform")) return -2;
+      if (
+        /ssrf-defense-platform\.onrender\.com/i.test(origin) &&
+        /\/api\/scan\b/i.test(targetInput) &&
+        p.slug.startsWith("ssrf-defense-platform-") &&
+        /-route-/.test(p.slug)
+      )
+        return -3;
       if (
         /ssrf\.vulnlab\.dev/i.test(origin) &&
         /\/(basic|metadata(?:-aws|-gcp|-azure)?|blocklist|redirect|allowlist|scheme|gopher|parser|blind|webhook)\b/i.test(
@@ -12596,7 +12616,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /web-security-learning-labs\.vercel\.app/i.test(origin) &&
-        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8\d|9[0-9])|180\d|181\d|182\d|183\d|184\d|185\d|186\d|187\d|188\d|189\d|190[0-9]|191[0-9]|192[0-9]|193[0-9]|194[0-9]|195[0-4]|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
+        /\/module\/(?:10(?:3[7-9]|[4-9]\d)|17(?:0\d|1\d|2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8\d|9[0-9])|180\d|181\d|182\d|183\d|184\d|185\d|186\d|187\d|188\d|189\d|190[0-9]|191[0-9]|192[0-9]|193[0-9]|194[0-9]|195[0-9]|196[0-1]|1(?:1[2-9]\d|2\d\d|3[0-6]\d|37[0-9]|38[0-9]|139[0-9]|140[0-9]|141[0-9]|142[0-9]|143[0-9]|144[0-9]|145[0-9]|146[0-9]|147[0-9]|148[0-9]|149[0-9]|150[0-9]|151[0-9]|152[0-9]|15[3-8][0-9]|15[89]0|160[0-9]|161[0-9]|162[0-9]|163[0-9]|164[0-9]|165[0-9]|166[0-9]|167[0-9]|168[0-9]|169[0-9]))\b/i.test(targetInput) &&
         p.slug === "web-security-learning-labs-placeholder-module-route-live-oracle"
       )
         return -3;
