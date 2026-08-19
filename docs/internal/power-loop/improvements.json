@@ -18,6 +18,9 @@
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /bank/account-activity route scan documents accountId IDOR training surface; zero.webappsecurity.com/bank/account-activity.html findings 5→6 (+zero-bank-account-activity-route-live-oracle); benchmark 6/6 maintained"
     },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-placeholder-module-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1970→1973 + runner placeholder priority regex 1970→197[0-3]; web-security-learning-labs.vercel.app/module/1971 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     },
