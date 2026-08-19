@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-19T16:10:03.427Z",
-  "total": 2542,
-  "uniqueSlugs": 2536,
+  "generatedAt": "2026-08-19T17:12:13.775Z",
+  "total": 2544,
+  "uniqueSlugs": 2538,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2524,
+    "generic": 2526,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2457,
+    "deep": 2459,
     "continuous": 0
   },
   "byCategory": {
@@ -32,9 +32,9 @@
     "Open redirect": 23,
     "general": 20,
     "SSRF": 14,
-    "Server-side request forgery": 87,
+    "Server-side request forgery": 88,
     "Sensitive data exposure": 64,
-    "AI security": 85,
+    "AI security": 86,
     "Business logic": 24,
     "Authentication bypass": 3,
     "Cross-site request forgery": 5,
@@ -1060,6 +1060,7 @@
     "finbot-darklab-taxcalc-server-route-live-oracle",
     "finbot-darklab-taxcalc-tools-live-oracle",
     "finbot-darklab-taxcalc-tools-route-live-oracle",
+    "finbot-how-it-works-route-live-oracle",
     "finbot-labs-guardrails-webhook-live-oracle",
     "finbot-labs-guardrails-webhook-route-live-oracle",
     "finbot-vendor-chat-live-oracle",
@@ -1766,6 +1767,7 @@
     "nodegoat-profile-sensitive-data-route-live-oracle",
     "nodegoat-profile-stored-xss-live-oracle",
     "nodegoat-profile-stored-xss-route-live-oracle",
+    "nodegoat-research-ssrf-live-oracle",
     "nodegoat-research-ssrf-route-live-oracle",
     "nodegoat-signup-open-registration-live-oracle",
     "nodegoat-signup-route-live-oracle",

@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-catalog-1971-1973",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1970→1973 + runner placeholder priority regex 1970→197[0-3]; web-security-learning-labs.vercel.app/module/1971 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-how-it-works-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /how-it-works Dark Lab MCP walkthrough markers + live /darklab/api/v1/supply-chain/servers probe; owasp-finbot-ctf.org/how-it-works findings 15→15 (+finbot-how-it-works-route-live-oracle alongside finbot-darklab-supply-chain-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-research-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /research?url=https://example.com/ fetches via needle.get when NodeGoat session primed; nodegoat-websec.herokuapp.com/research route scan 16 findings (+nodegoat-research-ssrf-route-live-oracle); base live oracle ships for homepage/session-gated discovery; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
       "slug": "web-security-learning-labs-module-catalog-1962-1970",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1961→1970 + runner placeholder priority regex 196[0-1]→196[0-9]|1970; web-security-learning-labs.vercel.app/module/1962 findings 7→8 (+web-security-learning-labs-placeholder-module-route-live-oracle); module/1965 and /1970 validated 8 findings; benchmark juice-shop 48 findings 6/6 maintained"
