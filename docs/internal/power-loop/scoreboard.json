@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T18:10:00.000Z",
+  "updated_at": "2026-08-19T19:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2765,
-  "total_findings": 27038,
-  "critical_findings": 59,
+  "total_sites_scanned": 2730,
+  "total_findings": 26554,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1974,
-  "discovery_findings": 22718,
-  "improvements_shipped": 1175,
-  "last_run": "2026-08-19T18:10:00.000Z",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22521,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-19T19:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 12,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 358,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,46 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); no benchmark misses"
+      "note": "Stable 6/6 first-pass recall (12 findings); jwt-alg-none-accepted + reflexion-escalated-ssti new slugs; secret-resend slug still absent"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 58,
-      "focus": "engine evolve: pygoat sql/ssrf/ssti route oracles + finbot-how-it-works live oracle + WSL catalog 1973",
-      "improvements_shipped_this_run": 1
+      "urls_scanned": 7,
+      "findings": 34,
+      "focus": "Zero Bank feedback/pay-bills/account-activity/admin + testphp search.php (unreachable) + wrongsecrets/ssrf queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "owasp-finbot-ctf.org/how-it-works: 16 findings — finbot-how-it-works-live-oracle + route oracle (Dark Lab MCP supply-chain probe)",
-      "pygoat-web.herokuapp.com/sql|ssrf_lab|ssti/lab: 0→2 findings each — pygoat route live oracles shipped (VWAD fallback)",
-      "zero.webappsecurity.com/index.html: 6 findings — zero-bank-admin-users-plaintext-passwords-live-oracle",
-      "web-security-learning-labs.vercel.app/module/1971-1973: 8 findings each — placeholder-module-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (12 findings) — no benchmark misses",
+      "zero.webappsecurity.com/admin/: 6 findings — thugir-sensitive-js-endpoints + client-side-zero-bank-webinspect-evidence",
+      "zero.webappsecurity.com/feedback.html: 5 findings — reflected-xss-query-param but no route-specific stored-XSS feedback oracle",
+      "zero.webappsecurity.com/bank/pay-bills.html: 5 findings — hub without CSRF bill-payment live oracle",
+      "zero.webappsecurity.com/bank/account-activity.html: 5 findings — hub without IDOR accountId live oracle",
+      "testphp.vulnweb.com/search.php: unreachable (DNS/connect failure) — classic Acunetix demo offline from cloud agent",
+      "wrongsecrets.herokuapp.com/challenge/2: 8 findings with client-side-wrongsecrets-challenge-evidence",
+      "ssrf.vulnlab.dev/basic: 3 findings — unprotected-webhook-endpoint but no route-specific SSRF live oracle",
+      "ssrf.vulnlab.dev/metadata-aws: 2 findings — metadata SSRF oracle still absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "WSL modules 1975-1978: extend WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX beyond 1973",
-      "nodegoat-websec.herokuapp.com/upload|admin: routes return Cannot GET — no valid training endpoints",
-      "ssrf.vulnlab.dev/gopher: gopher oracle exists but route not yet drained from queue",
-      "owasp-demo.vulcanlab.ai/challenges: OWASP LLM Top 10 demo queued but not yet scanned"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "testphp.vulnweb.com unreachable from cloud agent — queue testphp.vulnweb.com/search.php for retry when DNS resolves",
+      "zero.webappsecurity.com/*: route-specific CSRF/IDOR/stored-XSS live oracles absent (feedback, pay-bills, account-activity all 5-finding hubs)",
+      "ssrf.vulnlab.dev/metadata-aws: mock AWS IMDSv1 SSRF oracle still absent (2-finding hub)",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "owasp-finbot-ctf.org/how-it-works": 16,
-    "zero.webappsecurity.com/index.html": 6,
-    "web-security-learning-labs.vercel.app/module/1971": 8,
-    "web-security-learning-labs.vercel.app/module/1973": 8,
-    "pygoat-web.herokuapp.com/sql": 2,
-    "pwnshop.ctfsecurity.com/apply-coupon": 48
+    "juice-shop.herokuapp.com": 12,
+    "zero.webappsecurity.com/admin/": 6,
+    "zero.webappsecurity.com/feedback.html": 5,
+    "zero.webappsecurity.com/bank/pay-bills.html": 5,
+    "zero.webappsecurity.com/bank/account-activity.html": 5,
+    "wrongsecrets.herokuapp.com/challenge/2": 8,
+    "ssrf.vulnlab.dev/basic": 3,
+    "ssrf.vulnlab.dev/metadata-aws": 2,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20
   }
 }
