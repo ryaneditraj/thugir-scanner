@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T19:15:18.530Z",
+  "updated_at": "2026-08-19T21:04:22.913Z",
   "discovery_urls": [
     {
       "url": "http://zero.webappsecurity.com/feedback.html",
@@ -9853,6 +9853,31 @@
     {
       "url": "https://seclab.vercel.app/api/sqli/search?q=test",
       "source": "DaniSam-STU/security-lab — live SQLi API route with in-memory SQLite backend (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-60",
+      "source": "OWASP WrongSecrets — MCP execute_command env leak + prompt injection challenge (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-58",
+      "source": "OWASP WrongSecrets — database connection string credential leak via /error-demo/database-connection",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/xss/reflected",
+      "source": "whgojp/JavaSecLab — reflected XSS route /xss/reflected (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/error-demo/database-connection",
+      "source": "OWASP WrongSecrets — JDBC credential exposure error-demo endpoint (challenge-58 oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/xss/reflect/vul2",
+      "source": "whgojp/JavaSecLab — reflected XSS vul2 route with payload param (GitHub README)",
       "auth": "public_demo"
     }
   ]

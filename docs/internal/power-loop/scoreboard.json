@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T20:38:00.000Z",
+  "updated_at": "2026-08-19T21:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2744,
-  "total_findings": 26879,
+  "total_sites_scanned": 2752,
+  "total_findings": 27125,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1961,
-  "discovery_findings": 22802,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-19T20:38:00.000Z",
+  "discovery_urls_added": 1966,
+  "discovery_findings": 23000,
+  "improvements_shipped": 638,
+  "last_run": "2026-08-19T21:20:00.000Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
@@ -48,40 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings); no benchmark category gaps"
+      "note": "Stable 6/6 first-pass recall (48 findings, 35 juice-shop live oracles); no benchmark category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 9,
-      "findings": 259,
-      "focus": "Zero Bank /admin/ route oracle + Pwnshop admin/security SQLi validation + queue drain (apply-coupon/verify-otp/upload-avatar/ssrf/wrongsecrets)",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 198,
+      "focus": "wrongsecrets MCP/DB-leak challenges + JavaSecLab XSS routes queued; drained pwnshop coupon/OTP/avatar/admin-security + ssrf blocklist/redirect",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "zero.webappsecurity.com/admin/: 6→9 findings — zero-bank-admin-route-live-oracle shipped (Leeroy Jenkins/VIZ10AWT8VL plaintext passwords)",
-      "pwnshop.ctfsecurity.com/admin/security: 48 findings — pwnshop-admin-security-second-order-sqli live+route oracles fire at 0.93 (PWN-014)",
-      "pwnshop.ctfsecurity.com/apply-coupon: 47 findings — coupon hub without authenticated coupon-bypass oracle",
-      "ssrf.vulnlab.dev/redirect: 16 findings — redirect SSRF route oracles",
-      "wrongsecrets.herokuapp.com/challenge/1: 15 findings — client-side challenge evidence"
+      "pwnshop.ctfsecurity.com/apply-coupon: 46 findings — pwnshop-apply-coupon-live-oracle + coupon-category-bypass oracles now fire (PWN-016)",
+      "pwnshop.ctfsecurity.com/admin/security: 48 findings — second-order SQLi live+route oracles at 0.93 (PWN-014)",
+      "ssrf.vulnlab.dev/blocklist: 15 findings — ssrf-vulnlab-blocklist-route-live-oracle + full SSRF oracle suite",
+      "wrongsecrets.herokuapp.com/challenge/1: 15 findings — client-side challenge evidence",
+      "testphp.vulnweb.com/search.php: unreachable from cloud agent (error)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "zero.webappsecurity.com login returns login_error for all scraped/static creds — live CSRF/IDOR probes still blocked",
+      "new queue URLs (wrongsecrets challenge-60/58, whgojp xss routes) not yet drained — behind older queue entries",
       "testphp.vulnweb.com unreachable from cloud agent",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon-bypass oracle still absent without authenticated session"
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent without OTP-gated session"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
-    "zero.webappsecurity.com/admin/": 9,
     "pwnshop.ctfsecurity.com/admin/security": 48,
-    "pwnshop.ctfsecurity.com/apply-coupon": 47,
-    "pwnshop.ctfsecurity.com/verify-otp": 34,
-    "ssrf.vulnlab.dev/redirect": 16,
-    "wrongsecrets.herokuapp.com/challenge/1": 15,
-    "ssrf.vulnlab.dev/metadata-aws": 15
+    "pwnshop.ctfsecurity.com/apply-coupon": 46,
+    "pwnshop.ctfsecurity.com/verify-otp": 33,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 26,
+    "ssrf.vulnlab.dev/blocklist": 15,
+    "ssrf.vulnlab.dev/redirect": 15,
+    "wrongsecrets.herokuapp.com/challenge/1": 15
   }
 }
