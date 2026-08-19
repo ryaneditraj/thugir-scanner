@@ -45302,6 +45302,60 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-labs-guardrails-webhook-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "OWASP FinBot Labs guardrail webhook SSRF live oracle",
+    description:
+      "Anonymous temp sessions can PUT /labs/api/v1/guardrails with attacker-controlled webhook_url and trigger POST /labs/api/v1/guardrails/test server-side fetch — FinBot guardrail webhook SSRF oracle (issue #535).",
+    impactOneline:
+      "Unauthenticated guardrail webhook registration lets attackers aim server-side HTTP requests at internal services.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotLabsGuardrailsWebhookLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot CTF is intentional agentic AI training — validate webhook URLs with is_ssrf_safe() and require authenticated sessions for guardrail config.",
+      steps: [
+        "Block loopback, link-local, and cloud metadata IPs in guardrail webhook_url validation.",
+        "Require authenticated sessions for PUT /labs/api/v1/guardrails.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Labs guardrail webhook accepts internal URLs from anonymous sessions. Show SSRF and broken-access-control remediation for guardrail webhook config.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-labs-guardrails-webhook-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "OWASP FinBot /labs guardrail webhook route live oracle",
+    description:
+      "When scanning /labs or /labs/api/v1/guardrails, anonymous sessions register webhook_url and POST /labs/api/v1/guardrails/test triggers server-side fetch — route-specific guardrail webhook SSRF oracle.",
+    impactOneline:
+      "Route scans on FinBot /labs should confirm unauthenticated guardrail webhook registration and server-side fetch.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotLabsGuardrailsWebhookRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot CTF is intentional agentic AI training — validate webhook URLs and require auth for guardrail config.",
+      steps: [
+        "Block loopback, link-local, and cloud metadata IPs in guardrail webhook_url validation.",
+        "Require authenticated sessions for PUT /labs/api/v1/guardrails.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs route scan confirms guardrail webhook SSRF surface. Show route-specific webhook URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-vendor-invoices-route-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -46391,6 +46445,60 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /memos route scan confirms stored XSS via unsanitized memo HTML. Show route-specific MemosDAO XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-contributions-ssjs-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "NodeGoat contributions server-side JS injection live oracle",
+    description:
+      "POST /contributions passes preTax, roth, and afterTax through eval() — attacker-controlled identifiers trigger ReferenceError confirming server-side JavaScript injection.",
+    impactOneline:
+      "Unsanitized eval() on contribution form inputs enables server-side JavaScript injection and denial-of-service.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatContributionsSsjsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "NodeGoat is intentional OWASP training — never pass user input to eval(); parse numbers with parseInt/parseFloat in production.",
+      steps: [
+        "Replace eval() with safe numeric parsing for contribution percentage fields.",
+        "Validate preTax/roth/afterTax are numbers within allowed ranges server-side.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our POST /contributions endpoint uses eval() on preTax input. Show server-side JavaScript injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nodegoat-contributions-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "NodeGoat /contributions SSJS injection route live oracle",
+    description:
+      "When scanning /contributions, POST preTax with an undefined identifier triggers ReferenceError from eval() — route-specific server-side JavaScript injection oracle.",
+    impactOneline:
+      "Route scans on /contributions should confirm live SSJS injection via eval() on contribution form fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatContributionsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "NodeGoat is intentional OWASP training — never pass user input to eval(); parse numbers safely in production.",
+      steps: [
+        "Replace eval() with safe numeric parsing for contribution percentage fields.",
+        "Validate preTax/roth/afterTax are numbers within allowed ranges server-side.",
+        "Run NodeGoat only on isolated lab hosts or localhost."
+      ]
+    },
+    fixPrompt:
+      "Our /contributions route scan confirms eval() on preTax. Show route-specific SSJS injection remediation.",
     version: 1,
     enabled: true
   },
