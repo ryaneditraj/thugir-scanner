@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-benefits-bac-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: user1/User1_123 GET /benefits returns RetireEasy benefits form without admin role; nodegoatBenefitsBacLiveOracle + route oracle + A7 tutorial hook; nodegoat-websec.herokuapp.com/upload findings 9 (+nodegoat-benefits-bac-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-1926-1930-catalog",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1925→1930 + placeholder priority regex 192[0-9]|1930; web-security-learning-labs.vercel.app/module/1928 findings 8 (+web-security-learning-labs-placeholder-module-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-subscribe-seed-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /catalog/subscribe added to extractGinAndJuiceVulnSeeds + priority seeds + runner -4 priority; ginandjuice.shop/catalog/subscribe findings 38 (+ginandjuice-catalog-subscribe-live-oracle +ginandjuice-catalog-subscribe-route-live-oracle); preview.owasp-juice.shop added to juice-shop benchmark fallback_urls; benchmark 47 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-otp-not-invalidated-live-oracle",
       "status": "shipped",

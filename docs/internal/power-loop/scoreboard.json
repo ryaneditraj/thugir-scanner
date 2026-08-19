@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T04:12:00.000Z",
+  "updated_at": "2026-08-19T04:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2731,
-  "total_findings": 26680,
+  "total_sites_scanned": 2735,
+  "total_findings": 26760,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1956,
-  "discovery_findings": 22612,
-  "improvements_shipped": 1162,
-  "last_run": "2026-08-19T04:12:00.000Z",
+  "discovery_urls_added": 1954,
+  "discovery_findings": 22550,
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-19T04:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 583,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,45 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings); juice-shop-leaked-api-key + wallet-bola oracles active"
+      "note": "Stable 6/6 recall (47 findings); preview.owasp-juice.shop added as cold-start fallback"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 125,
-      "focus": "nodegoat upload/admin/dashboard/allocations/memos queue drain + vulnshop SSTI + preview.owasp-juice.shop admin-config + pygoat/ssrf.vulnlab gopher/owasp-demo LLM routes queued",
-      "improvements_shipped_this_run": 1
+      "urls_added": 3,
+      "urls_scanned": 11,
+      "findings": 262,
+      "focus": "nodegoat benefits A7 BAC + ginandjuice subscribe route + WSL module 1928 catalog expansion",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "preview.owasp-juice.shop/rest/admin/application-configuration: 49 findings — full juice-shop oracle parity on develop preview",
-      "vulnbank.org/sup3r_s3cr3t_admin: 6→20 findings — vulnbank-sup3r-secret-admin-live-oracle shipped (BOPLA is_admin:true + hidden admin panel)",
-      "nodegoat-websec.herokuapp.com/memos: 13 findings — nodegoat-memos-stored-xss-live-oracle + route oracle",
-      "nodegoat-websec.herokuapp.com/dashboard: 13 findings — nodegoat-dashboard-route-live-oracle",
-      "vulnshop.vercel.app/api/v1/template/render: 17 findings — vulnshop-template-ssti-route-live-oracle",
-      "nodegoat-websec.herokuapp.com/upload: 8 findings — no upload-XSS route oracle (generic weak-creds only)",
-      "nodegoat-websec.herokuapp.com/admin: 8 findings — no admin-panel BOLA route oracle"
+      "nodegoat-websec.herokuapp.com/benefits: nodegoat-benefits-bac-live-oracle — non-admin user1 accesses RetireEasy module (A7)",
+      "ginandjuice.shop/catalog/subscribe: 38 findings — subscribe live + route oracles shipped",
+      "web-security-learning-labs.vercel.app/module/1928: 8 findings — catalog expanded to 1930",
+      "preview.owasp-juice.shop/rest/admin/application-configuration: 49 findings — viable Heroku cold-start fallback"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "nodegoat-websec.herokuapp.com/upload: file-upload XSS oracle still absent (1337skills cheatsheet target)",
-      "nodegoat-websec.herokuapp.com/admin: broken-access-control admin panel oracle still absent",
-      "pygoat-web.herokuapp.com/sql|ssrf_lab|ssti/lab: queued but not drained this run (queue depth)",
-      "ssrf.vulnlab.dev/gopher: queued gopher TCP SSRF route not yet scanned",
-      "owasp-demo.vulcanlab.ai/challenges: OWASP LLM Top 10 demo queued but not yet scanned"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "nodegoat-websec.herokuapp.com/upload and /admin return 404 — queue URLs invalid for standard NodeGoat fork",
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles absent when not scanning vulnlab host directly"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
     "preview.owasp-juice.shop/rest/admin/application-configuration": 49,
-    "nodegoat-websec.herokuapp.com/memos": 13,
-    "nodegoat-websec.herokuapp.com/dashboard": 13,
-    "vulnshop.vercel.app/api/v1/template/render": 17,
-    "nodegoat-websec.herokuapp.com/allocations": 9,
-    "nodegoat-websec.herokuapp.com/upload": 8,
-    "nodegoat-websec.herokuapp.com/admin": 8,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20
+    "ginandjuice.shop/catalog/subscribe": 38,
+    "brokencrystals.com/api/mcp/spawn_process": 86,
+    "pwnshop.ctfsecurity.com/wallet": 43,
+    "web-security-learning-labs.vercel.app/module/1928": 8,
+    "nodegoat-websec.herokuapp.com/memos": 14,
+    "nodegoat-websec.herokuapp.com/dashboard": 14
   }
 }

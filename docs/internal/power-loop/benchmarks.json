@@ -7,7 +7,8 @@
       "fallback_url": "https://juice-shop-staging.herokuapp.com",
       "fallback_urls": [
         "https://juice-shop-staging.herokuapp.com",
-        "https://juice-shop.demo.escape.tech"
+        "https://juice-shop.demo.escape.tech",
+        "https://preview.owasp-juice.shop"
       ],
       "auth": "public_benchmark",
       "expected_categories": [
