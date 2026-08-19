@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T02:10:11.914Z",
+  "updated_at": "2026-08-19T03:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2751,
-  "total_findings": 27157,
+  "total_sites_scanned": 2731,
+  "total_findings": 26797,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2835,
-  "discovery_findings": 23015,
-  "improvements_shipped": 1205,
-  "last_run": "2026-08-19T02:10:11.914Z",
+  "discovery_urls_added": 2829,
+  "discovery_findings": 22729,
+  "improvements_shipped": 1202,
+  "last_run": "2026-08-19T03:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
@@ -54,35 +54,34 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 118,
-      "focus": "NodeGoat allocations/memos stored-XSS + upload/admin route gaps; parallel drain continued",
-      "improvements_shipped_this_run": 3
+      "findings": 242,
+      "focus": "WSL catalog extension modules 1925–1929 queued; queue drain hit brokencrystals MCP RCE/SSJI + adminpermission mass-assignment hubs",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "nodegoat-websec.herokuapp.com/allocations: 7→9 findings — nodegoat-allocations-route-live-oracle shipped (IDOR + NoSQL threshold on /allocations route)",
-      "nodegoat-websec.herokuapp.com/memos: 11→13 findings — nodegoat-memos-stored-xss-live-oracle + nodegoat-memos-route-live-oracle",
-      "preview.owasp-juice.shop/rest/admin/application-configuration: 49 findings — develop-branch juice-shop live oracles",
-      "vulnshop.vercel.app/api/v1/template/render: 17 findings — vulnshop-template-ssti-route-live-oracle",
-      "nodegoat-websec.herokuapp.com/dashboard: 12 findings — nodegoat-dashboard-route-live-oracle",
-      "web-security-learning-labs.vercel.app/module/1924: 8 findings — placeholder module route oracle"
+      "brokencrystals.com/api/mcp/spawn_process: 87 findings — MCP spawn_process RCE oracle hub",
+      "brokencrystals.com/api/users/one/regular_user/adminpermission: 88 findings — mass-assignment confirmation still absent on route URL",
+      "brokencrystals.com/api/mcp/process_numbers: 30 findings — MCP process_numbers SSJI oracle",
+      "web-security-learning-labs.vercel.app/module/1876–1879: 5–8 findings each — placeholder CSR module oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "nodegoat-websec.herokuapp.com/upload: no file-upload XSS live oracle (benefits-nosql slug reused)",
-      "nodegoat-websec.herokuapp.com/admin: no admin-panel broken-access-control live oracle"
+      "brokencrystals.com/api/users/one/regular_user/adminpermission: mass-assignment confirmation oracle still absent when scanning route URL without signup flow",
+      "WSL modules 1925–1929 queued but not yet scanned (limit=8 drained earlier queue items first)",
+      "crapi.lab.pentest-forge.com + damn-vulnerable-startup.fly.dev unreachable (502/timeout) during discovery URL validation"
     ]
   },
   "discovery_highlights": {
-    "preview.owasp-juice.shop/rest/admin/application-configuration": 49,
-    "nodegoat-websec.herokuapp.com/dashboard": 12,
-    "nodegoat-websec.herokuapp.com/memos": 13,
-    "vulnshop.vercel.app/api/v1/template/render": 17,
     "juice-shop.herokuapp.com": 47,
-    "nodegoat-websec.herokuapp.com/allocations": 9,
-    "web-security-learning-labs.vercel.app/module/1924": 8,
-    "nodegoat-websec.herokuapp.com/upload": 7,
-    "nodegoat-websec.herokuapp.com/admin": 7
+    "brokencrystals.com/api/mcp/spawn_process": 87,
+    "brokencrystals.com/api/users/one/regular_user/adminpermission": 88,
+    "brokencrystals.com/api/mcp/process_numbers": 30,
+    "web-security-learning-labs.vercel.app/module/1923": 8,
+    "web-security-learning-labs.vercel.app/module/1876": 8,
+    "web-security-learning-labs.vercel.app/module/1877": 8,
+    "web-security-learning-labs.vercel.app/module/1878": 8,
+    "web-security-learning-labs.vercel.app/module/1879": 5
   }
 }
