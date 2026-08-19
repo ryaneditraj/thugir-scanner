@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-19T08:07:17.374Z",
+  "updated_at": "2026-08-19T09:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,26 +15,26 @@
       ]
     }
   },
-  "total_sites_scanned": 2767,
-  "total_findings": 27351,
+  "total_sites_scanned": 2776,
+  "total_findings": 27485,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1976,
-  "discovery_findings": 22941,
+  "discovery_urls_added": 1981,
+  "discovery_findings": 23026,
   "improvements_shipped": 1173,
-  "last_run": "2026-08-19T08:07:17.374Z",
+  "last_run": "2026-08-19T09:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_status": "error — Heroku unreachable (cold start); concurrent 07:55 run hit primary 6/6 with 48 findings",
-      "oracle_findings": 43,
+      "primary_status": "ok — primary reachable (no fallback needed)",
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 578,
+      "probes_run": 587,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,42 +50,40 @@
           ]
         }
       },
-      "note": "08 UTC PRIMARY MISS on juice-shop.herokuapp.com; staging fallback 6/6 (43 findings)"
+      "note": "09 UTC primary juice-shop.herokuapp.com 6/6 (49 findings, +6 vs 08 UTC staging fallback 43)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 60,
-      "focus": "Google XSS Game level 4 + WSL catalog expansion 1946–1949 + queue drain WSL 1937–1939; concurrent run rescanned vulnbank console + xss-game level2/3 with 3 shipped exploit oracles",
-      "improvements_shipped_this_run": 3
+      "findings": 85,
+      "focus": "Google XSS Game level 5/6 dedicated route scans + WSL catalog expansion 1950–1952 + queue drain WSL 1940 + OWASP FinBot DarkLab taxcalc supply-chain routes",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: 08 UTC PRIMARY MISS — staging fallback recall 6/6 (43 findings); 07:55 concurrent run primary 6/6 (48 findings)",
-      "xss-game.appspot.com/level4/frame: 9 findings — NEW xss-game-level4-js-string-xss-live-oracle + route-specific oracle",
-      "vulnbank.org/console: 0→30 findings — vulnbank-werkzeug-console-live-oracle shipped (concurrent engine-evolve run)",
-      "xss-game.appspot.com/level2/frame: 8→11 findings — xss-game-level2-stored-xss-exploit-live-oracle shipped (concurrent run)",
-      "xss-game.appspot.com/level3/frame: 8→12 findings — xss-game-level3-dom-xss-exploit-live-oracle shipped (concurrent run)",
-      "web-security-learning-labs.vercel.app/module/1946-1949: 8–9 findings each — WSL catalog expansion 1946–1949"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings) — primary reachable, no Heroku cold-start miss",
+      "xss-game.appspot.com/level5/frame: 10 findings — xss-game-level5-javascript-protocol-xss-route-live-oracle (dedicated level 5 route scan)",
+      "xss-game.appspot.com/level6/frame: 11 findings — xss-game-level6-dom-script-src-xss-route-live-oracle (dedicated level 6 route scan)",
+      "web-security-learning-labs.vercel.app/module/1950-1952: 8–9 findings each — WSL catalog expansion 1950–1952",
+      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/reset-tools: 17 findings — finbot-darklab-taxcalc-server-route-live-oracle",
+      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc: 14 findings — finbot-darklab-supply-chain-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "PRIMARY MISS juice-shop.herokuapp.com Heroku cold start — staging fallback required for oracle scoring",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "WSL modules 1946–1949: placeholder-only (8–9 findings each) — no route-specific exploit oracles yet",
-      "xss-game level4: route-specific oracles present; level5/6 oracles fire from shared frame bundle without dedicated route scans"
+      "WSL modules 1950–1952: placeholder-only (8–9 findings each) — no route-specific exploit oracles yet",
+      "xss-game level5/6: route-specific oracles now confirmed via dedicated /level5 and /level6 frame scans"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "juice-shop-staging.herokuapp.com": 43,
-    "vulnbank.org/console": 30,
-    "xss-game.appspot.com/level4/frame": 9,
-    "xss-game.appspot.com/level2/frame": 11,
-    "xss-game.appspot.com/level3/frame": 12,
-    "web-security-learning-labs.vercel.app/module/1946": 8,
-    "web-security-learning-labs.vercel.app/module/1947": 8,
-    "web-security-learning-labs.vercel.app/module/1948": 8,
-    "web-security-learning-labs.vercel.app/module/1949": 9
+    "juice-shop.herokuapp.com": 49,
+    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/reset-tools": 17,
+    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc": 14,
+    "xss-game.appspot.com/level6/frame": 11,
+    "xss-game.appspot.com/level5/frame": 10,
+    "web-security-learning-labs.vercel.app/module/1951": 9,
+    "web-security-learning-labs.vercel.app/module/1950": 8,
+    "web-security-learning-labs.vercel.app/module/1952": 8,
+    "web-security-learning-labs.vercel.app/module/1940": 8
   }
 }
