@@ -30718,6 +30718,125 @@ const zeroBankPayBillsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function zeroBankTransferFundsCsrfLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  const cookie = await zeroBankLoginSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const transferUrl = new URL("/bank/transfer-funds.html", ctx.origin).toString();
+  const getDoc = await ctx.probe.get(transferUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (getDoc.status < 200 || getDoc.status >= 400) return NEGATIVE;
+  if (!/transfer funds|Transfer Funds|transfer between/i.test(getDoc.body)) return NEGATIVE;
+  const hasCsrfToken = /csrf|user_token|name=["']_csrf/i.test(getDoc.body);
+  const postDoc = await fetchDoc(transferUrl, {
+    method: "POST",
+    body: "fromAccount=800000&toAccount=800001&amount=1&transfer=Transfer",
+    headers: { "Content-Type": "application/x-www-form-urlencoded", Cookie: cookie },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 500) return NEGATIVE;
+  const stateChange =
+    /transfer successful|confirmation|funds transferred|error/i.test(postDoc.body) &&
+    !/login\.html|sign in/i.test(postDoc.body);
+  if (!stateChange) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hasCsrfToken ? 0.9 : 0.93,
+    evidence: {
+      transferUrl,
+      hasCsrfToken,
+      snippet: postDoc.body.slice(0, 240).trim(),
+      note: hasCsrfToken
+        ? "Zero Bank POST /bank/transfer-funds.html processes inter-account transfer when CSRF token omitted — CSRF oracle"
+        : "Zero Bank POST /bank/transfer-funds.html accepts forged inter-account transfer without CSRF validation — CSRF oracle"
+    }
+  };
+}
+
+const zeroBankTransferFundsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZeroBankHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/bank\/transfer(?:-funds)?(?:\.html)?/i.test(pageUrl)) return NEGATIVE;
+  const live = await zeroBankTransferFundsCsrfLiveProbe(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl }
+    };
+  }
+  const markers: { label: string; sample: string }[] = [];
+  const transferDoc = await ctx.probe.get(new URL("/bank/transfer-funds.html", ctx.origin).toString(), {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    redirect: "follow"
+  });
+  const bankingDoc = await ctx.probe.get(new URL("/online-banking.html", ctx.origin).toString(), {
+    maxBytes: 32768,
+    timeoutMs: 15000
+  });
+  const corpus = `${pageUrl}\n${ctx.combined}\n${transferDoc.body}\n${bankingDoc.body}`;
+  for (const { label, re } of [
+    { label: "transfer funds route", re: /transfer-funds|transfer funds|Transfer Funds/i },
+    { label: "from/to account fields", re: /fromAccount|toAccount|name=["'](?:from|to|amount)["']/i },
+    { label: "online banking module", re: /transfer_funds_link|Safely and securely transfer funds/i },
+    { label: "login gate", re: /login\.html|user_login|Sign in/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: "Zero Bank /bank/transfer-funds route scan — inter-account transfer CSRF/IDOR training surface documented when live session probe did not complete"
+    }
+  };
+};
+
+const zeroBankLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZeroBankHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login(?:\.html)?/i.test(pageUrl)) return NEGATIVE;
+  const loginDoc = await ctx.probe.get(new URL("/login.html", ctx.origin).toString(), {
+    maxBytes: 32768,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 400) return NEGATIVE;
+  const corpus = `${pageUrl}\n${ctx.combined}\n${loginDoc.body}`;
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "login form POST signin", re: /action=["'][^"']*signin\.html|id=["']login_form/i },
+    { label: "user_token anti-CSRF field", re: /user_token["']\s*value=["'][^"']+/i },
+    { label: "demo credential tooltip", re: /Login\/Password\s*-\s*username\/password/i },
+    { label: "WebInspect training banner", re: /Micro Focus Fortify|demonstrating the effectiveness/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  const scraped = await zeroBankScrapedAdminCredentials(ctx);
+  return {
+    fired: true,
+    confidence: scraped.length > 0 ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      adminCredentialRows: scraped.length,
+      note:
+        scraped.length > 0
+          ? "Zero Bank /login.html route scan — login form exposes demo username/password tooltip while /admin/users.html leaks plaintext training credentials — authentication training oracle"
+          : "Zero Bank /login.html route scan — login form with user_token and published demo username/password tooltip — WebInspect authentication training oracle"
+    }
+  };
+};
+
 // --- Sports Media CS Training Academy vuln-app playbook (computersciencesop2) -------
 const CLIENT_CS_TRAINING_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -88984,6 +89103,8 @@ export const RULES: Record<string, Rule> = {
   zeroBankFeedbackRouteLiveOracle,
   zeroBankAccountActivityRouteLiveOracle,
   zeroBankPayBillsRouteLiveOracle,
+  zeroBankTransferFundsRouteLiveOracle,
+  zeroBankLoginRouteLiveOracle,
   clientSideCsTrainingAcademyEvidence,
   clientSideHackableSoLabEvidence,
   clientSideVulnwebLabEvidence,

@@ -1990,6 +1990,8 @@ const DEEP_RULES = new Set<string>([
   "zeroBankFeedbackRouteLiveOracle",
   "zeroBankAccountActivityRouteLiveOracle",
   "zeroBankPayBillsRouteLiveOracle",
+  "zeroBankTransferFundsRouteLiveOracle",
+  "zeroBankLoginRouteLiveOracle",
   "clientSideCsTrainingAcademyEvidence",
   "clientSideHackableSoLabEvidence",
   "clientSideVulnwebLabEvidence",
@@ -5341,6 +5343,7 @@ function extractZeroBankTrainingSeeds(html: string, origin: string): string[] {
     "admin/users.html",
     "bank/account-activity.html",
     "bank/transfer-funds.html",
+    "bank/transfer.html",
     "bank/money-map.html"
   ]) {
     try {
@@ -12870,6 +12873,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /zero\.webappsecurity\.com/i.test(origin) &&
         /\/bank\/pay-bills/i.test(targetInput) &&
         p.slug.startsWith("zero-bank-pay-bills")
+      )
+        return -4;
+      if (
+        /zero\.webappsecurity\.com/i.test(origin) &&
+        /\/bank\/transfer(?:-funds)?/i.test(targetInput) &&
+        p.slug.startsWith("zero-bank-transfer")
+      )
+        return -4;
+      if (
+        /zero\.webappsecurity\.com/i.test(origin) &&
+        /\/login(?:\.html)?/i.test(targetInput) &&
+        p.slug.startsWith("zero-bank-login")
+      )
+        return -4;
+      if (
+        /graphqlbook\.org/i.test(origin) &&
+        /\/graphql\b/i.test(targetInput) &&
+        p.slug.startsWith("graphqlbook-")
       )
         return -4;
       if (

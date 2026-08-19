@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-19T22:18:33.028Z",
-  "total": 2559,
-  "uniqueSlugs": 2552,
+  "generatedAt": "2026-08-19T23:05:15.054Z",
+  "total": 2561,
+  "uniqueSlugs": 2554,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2541,
+    "generic": 2543,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2474,
+    "deep": 2476,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 120,
     "Security misconfiguration": 190,
-    "Broken authentication": 157,
+    "Broken authentication": 158,
     "Injection": 383,
     "Cross-site scripting": 716,
     "Open redirect": 23,
@@ -35,7 +35,7 @@
     "Server-side request forgery": 89,
     "Sensitive data exposure": 64,
     "AI security": 90,
-    "Cross-site request forgery": 6,
+    "Cross-site request forgery": 7,
     "Business logic": 24,
     "Authentication bypass": 3,
     "Insecure file upload": 2,
@@ -2566,7 +2566,9 @@
     "zero-bank-admin-users-route-live-oracle",
     "zero-bank-feedback-route-live-oracle",
     "zero-bank-feedback-send-live-oracle",
+    "zero-bank-login-route-live-oracle",
     "zero-bank-pay-bills-route-live-oracle",
+    "zero-bank-transfer-funds-route-live-oracle",
     "zerohealth-admin-users-route-live-oracle",
     "zerohealth-ai-chat-sqli-route-live-oracle",
     "zerohealth-auth-login-route-live-oracle",

@@ -21765,6 +21765,57 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zero-bank-transfer-funds-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "Zero Bank transfer-funds CSRF route live oracle",
+    description:
+      "When scanning /bank/transfer-funds, POST processes inter-account transfers without CSRF validation when session cookie is present — route-specific CSRF oracle.",
+    impactOneline:
+      "Route scans on /bank/transfer-funds should confirm CSRF on fund transfer forms.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zeroBankTransferFundsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Bank is intentional WebInspect training — require CSRF tokens on state-changing transfer forms.",
+      steps: [
+        "Require unpredictable CSRF tokens on POST /bank/transfer-funds.html.",
+        "Run zero.webappsecurity.com only as an isolated scanner calibration target."
+      ]
+    },
+    fixPrompt:
+      "Our /bank/transfer-funds route scan confirms CSRF on inter-account transfers. Show CSRF token remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zero-bank-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Zero Bank login route live oracle",
+    description:
+      "When scanning /login.html, the form exposes demo username/password tooltip and pairs with plaintext credentials in /admin/users.html — route-specific authentication training oracle.",
+    impactOneline:
+      "Route scans on /login.html should confirm published demo credentials and weak authentication training surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zeroBankLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Bank is intentional WebInspect training — remove demo credential hints and enforce strong authentication in production.",
+      steps: [
+        "Remove published demo username/password tooltips from login forms.",
+        "Never store or display plaintext passwords in admin user tables.",
+        "Run zero.webappsecurity.com only as an isolated scanner calibration target."
+      ]
+    },
+    fixPrompt:
+      "Our /login.html route scan confirms demo credential tooltip and related plaintext password disclosure. Show authentication hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-cs-training-academy-evidence",
     platform: "generic",
     category: "Broken access control",
