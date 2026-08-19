@@ -3288,6 +3288,7 @@ const DEEP_RULES = new Set<string>([
   "nodegoatTutorialA9RouteLiveOracle",
   "nodegoatTutorialA10RouteLiveOracle",
   "nodegoatTutorialSsrfRouteLiveOracle",
+  "nodegoatTutorialRedosLiveOracle",
   "nodegoatTutorialRedosRouteLiveOracle",
   "nodegoatResearchSsrfRouteLiveOracle",
   "nodegoatLearnOpenRedirectLiveOracle",
@@ -3315,8 +3316,8 @@ const DEEP_RULES = new Set<string>([
   "nodegoatProfileRedosRouteLiveOracle",
   "nodegoatProfileStoredXssLiveOracle",
   "nodegoatProfileStoredXssRouteLiveOracle",
-  "nodegoatUploadRouteLiveOracle",
   "nodegoatAdminRouteLiveOracle",
+  "nodegoatUploadRouteLiveOracle",
   "vulnforgeAcademyLevelSqliRouteLiveOracle",
   "vulnforgeAcademyLevel4SqliRouteLiveOracle",
   "vulnforgeAcademyLevel6SqliRouteLiveOracle",
@@ -12813,14 +12814,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
+        /\/tutorial\/redos\b/i.test(targetInput) &&
+        p.slug.startsWith("nodegoat-tutorial-redos")
+      )
+        return -3;
+      if (
+        /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
         /\/admin\b/i.test(targetInput) &&
-        p.slug.startsWith("nodegoat-admin-")
+        p.slug.startsWith("nodegoat-admin")
       )
         return -4;
       if (
         /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
         /\/upload\b/i.test(targetInput) &&
-        p.slug.startsWith("nodegoat-upload-")
+        p.slug.startsWith("nodegoat-upload")
       )
         return -4;
       if (

