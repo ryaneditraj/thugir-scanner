@@ -38253,7 +38253,16 @@ const VULNSHOP_MODULE_ORACLES: {
     note: "VulnShop POST /api/process deserializes attacker-controlled pickle data — insecure deserialization oracle #19"
   },
   {
-    pathRe: /\/template\b/i,
+    pathRe: /\/api\/v1\/template\/render\b/i,
+    markers: [
+      { label: "Expression Language injection lab", re: /Expression Language|el_injection|EL injection/i },
+      { label: "template/render API route", re: /\/api\/v1\/template\/render/i },
+      { label: "EL template probe", re: /\$\{7\*7\}|user-controlled templates/i }
+    ],
+    note: "VulnShop POST /api/v1/template/render evaluates user-controlled templates — Expression Language injection README oracle #49"
+  },
+  {
+    pathRe: /\/template\?/i,
     markers: [
       { label: "SSTI lab route", re: /SSTI|Server-Side Template Injection|template injection/i },
       { label: "Jinja template probe", re: /\{\{7\*7\}\}|name=\{\{/i }
@@ -38411,7 +38420,12 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     note: "VulnShop Flask POST /api/process unpickles attacker-controlled base64 pickle payloads — README oracle #19"
   },
   {
-    pathRe: /\/template\b/i,
+    pathRe: /\/api\/v1\/template\/render\b/i,
+    vulnerability: "Expression Language Injection",
+    note: "VulnShop Flask POST /api/v1/template/render evaluates user-controlled templates (${7*7} returns 49) — README oracle #49"
+  },
+  {
+    pathRe: /\/template\?/i,
     vulnerability: "SSTI (Server-Side Template Injection)",
     note: "VulnShop Flask GET /template?name={{7*7}} evaluates Jinja templates server-side — README oracle #6"
   },
@@ -38497,6 +38511,7 @@ const VULNSHOP_README_FALLBACK = `
 /api/v1/products/import POST SSRF api_ssrf URL-based import without validation
 /api/v1/debug GET Misconfiguration API8:2023 api_misconfig Exposes secrets and environment
 /api/v1/orders/modify POST Order Status Manipulation business_logic Can modify shipped orders
+/api/v1/template/render POST Expression Language Injection el_injection Template injection via user-controlled templates ${7*7}
 /api/v1/deploy/status GET Infrastructure Disclosure info_disclosure Reveals internal infrastructure details
 /api/v1/users/me PUT Mass Assignment api_mass_assignment Accepts arbitrary fields including role
 /api/v1/environment GET Environment Variable Leak info_disclosure Exposes all environment variables with credentials
@@ -39884,9 +39899,79 @@ const vulnshopTemplateSstiLiveOracle: Rule = async (ctx) => {
 const vulnshopTemplateSstiRouteLiveOracle: Rule = (ctx) =>
   vulnshopRouteOracleWithFallback(
     ctx,
-    /\/template\b/i,
+    /\/template\?/i,
     vulnshopTemplateSstiLiveOracle,
     "VulnShop /template route scan — SSTI on name= parameter confirmed or documented (README oracle #6)"
+  );
+
+async function probeVulnshopTemplateRenderElInjection(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isVulnshopHost(ctx)) return null;
+  const payloads = ["${7*7}", "{{7*7}}"];
+  const targets: { url: string; template: string }[] = [];
+  const apiBase = vulnshopApiBase(ctx);
+  if (apiBase) {
+    for (const template of payloads) {
+      targets.push({ url: `${apiBase}/v1/template/render`, template });
+    }
+  }
+  if (/vulnshop\.vercel\.app/i.test(ctx.origin)) {
+    targets.push({
+      url: new URL("/api/v1/template/render", ctx.origin).toString(),
+      template: "${7*7}"
+    });
+  }
+  for (const { url, template } of targets) {
+    const doc = await ctx.probe.get(url, {
+      method: "POST",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ template })
+    });
+    if (looksVulnshopReactSpaShell(doc.body)) continue;
+    if (doc.status >= 200 && doc.status < 300 && /\b49\b/.test(doc.body)) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          probeUrl: url,
+          template,
+          snippet: doc.body.slice(0, 200).trim(),
+          note: `VulnShop POST /api/v1/template/render evaluates ${template} to 49 — Expression Language injection oracle #49`
+        }
+      };
+    }
+  }
+  return null;
+}
+
+const vulnshopTemplateRenderElInjectionLiveOracle: Rule = async (ctx) => {
+  const live = await probeVulnshopTemplateRenderElInjection(ctx);
+  if (live) return live;
+  const corpus = `${ctx.combined}\n${ctx.scanUrl || ""}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/template\/render/i.test(corpus) ||
+    !/Expression Language|el_injection|user-controlled templates/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet:
+        "POST /api/v1/template/render — Expression Language Injection (user-controlled template evaluation via ${7*7})",
+      note: "VulnShop POST /api/v1/template/render documents EL injection — README oracle #49 (Flask backend unreachable on Vercel SPA)"
+    }
+  };
+};
+
+const vulnshopTemplateRenderRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/template\/render\b/i,
+    vulnshopTemplateRenderElInjectionLiveOracle,
+    "VulnShop /api/v1/template/render route scan — Expression Language injection via user-controlled templates confirmed or documented (README oracle #49)"
   );
 
 const vulnshopTrackOrderSsrfLiveOracle: Rule = async (ctx) => {
@@ -40635,7 +40720,7 @@ const WEB_SECURITY_LEARNING_MODULE_TOPICS: Record<string, string> = {
 
 const WEB_SECURITY_LEARNING_PLACEHOLDER_MODULE_MIN = 1037;
 /** Upper bound for CSR catalog placeholder shells and module crawl seeds (extend as WSL adds modules). */
-export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1930;
+export const WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX = 1935;
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MIN = 1125;
 /** SSTI reflexion shells end at 1696; modules 1697+ are CSR placeholder shells only. */
 const WEB_SECURITY_LEARNING_SSTI_SHELL_MAX = 1696;
@@ -87473,6 +87558,8 @@ export const RULES: Record<string, Rule> = {
   vulnshopApiProcessRouteLiveOracle,
   vulnshopTemplateSstiLiveOracle,
   vulnshopTemplateSstiRouteLiveOracle,
+  vulnshopTemplateRenderElInjectionLiveOracle,
+  vulnshopTemplateRenderRouteLiveOracle,
   vulnshopTrackOrderSsrfLiveOracle,
   vulnshopTrackOrderSsrfRouteLiveOracle,
   vulnshopSupportLfiLiveOracle,

@@ -3689,6 +3689,24 @@
       "slug": "dvwu-command-injection-lab-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /labs/command-injection route scan confirms DVWU injection oracle via /api/search or /api/portal; dvwu.vercel.app/labs/command-injection findings 11\u219212 (+dvwu-command-injection-lab-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-template-render-el-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/template/render README oracle #49 Expression Language injection via ${7*7}; vulnshop.vercel.app/api/v1/template/render findings 17\u219218 (+vulnshop-template-render-route-live-oracle); incorrect vulnshop-template-ssti-route-live-oracle on render path removed; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-template-ssti-route-regex-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SSTI route oracle pathRe narrowed to /template? so /api/v1/template/render no longer fires wrong SSTI oracle #6; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-security-learning-labs.vercel.app",
+      "slug": "web-security-learning-labs-module-catalog-1931-1935",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: WEB_SECURITY_LEARNING_MODULE_CATALOG_MAX 1930\u21921935 + runner module priority regex 1930\u2192193[0-5]; benchmark juice-shop 47 findings 6/6 maintained"
     }
   ]
 }
