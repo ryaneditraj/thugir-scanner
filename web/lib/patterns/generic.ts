@@ -25457,6 +25457,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-template-render-el-injection-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnShop Expression Language injection live oracle",
+    description:
+      "POST /api/v1/template/render evaluates user-controlled templates server-side — probing ${7*7} returns 49 when the Flask backend is reachable.",
+    impactOneline:
+      "Expression Language injection lets attackers execute arbitrary expressions in the template evaluation context.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopTemplateRenderElInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never evaluate user input in expression or template engines — VulnShop is intentional training software.",
+      steps: [
+        "Use static templates with strict variable allow-lists.",
+        "Sandbox or disable expression evaluation on user-controlled strings.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/template/render route evaluates user-controlled templates. Show EL injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-template-render-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnShop /api/v1/template/render EL injection route live oracle",
+    description:
+      "When scanning /api/v1/template/render, POST with ${7*7} or README oracle #49 documents Expression Language injection via user-controlled templates.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/template/render documents Expression Language injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopTemplateRenderRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never evaluate user input in expression engines on /api/v1/template/render routes.",
+      steps: [
+        "Use static templates with strict variable allow-lists.",
+        "Sandbox or disable expression evaluation on user-controlled strings.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/template/render route documents EL injection. Show route-specific template hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-track-order-ssrf-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
