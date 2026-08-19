@@ -21638,6 +21638,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zero-bank-admin-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Zero Bank /admin/ route admin panel live oracle",
+    description:
+      "When scanning /admin/ or /admin/index.html, the unauthenticated admin panel is reachable and /admin/users.html exposes plaintext passwords — route-specific Zero Bank admin broken access control oracle.",
+    impactOneline:
+      "Route scans on the admin home need live confirmation that the admin panel and credential tables are exposed without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zeroBankAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect all /admin/* routes with authentication — Zero Bank is intentional training software.",
+      steps: [
+        "Require admin authentication before any /admin/* route.",
+        "Store password hashes only; never render credentials in HTML tables.",
+        "Run zero.webappsecurity.com only as an isolated scanner calibration target."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/ route exposes the admin panel and user passwords without auth. Show route-specific admin access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "zero-bank-feedback-send-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
