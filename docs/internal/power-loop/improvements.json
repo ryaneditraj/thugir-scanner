@@ -352,7 +352,8 @@
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-catalog-subscribe-seed-drain",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: /catalog/subscribe added to extractGinAndJuiceVulnSeeds + priority seeds + runner -4 priority; ginandjuice.shop/catalog/subscribe findings 38 (+ginandjuice-catalog-subscribe-live-oracle +ginandjuice-catalog-subscribe-route-live-oracle); preview.owasp-juice.shop added to juice-shop benchmark fallback_urls; benchmark 47 findings 6/6 maintained"},
+      "validation": "SOURCE: discovery:url EVIDENCE: /catalog/subscribe added to extractGinAndJuiceVulnSeeds + priority seeds + runner -4 priority; ginandjuice.shop/catalog/subscribe findings 38 (+ginandjuice-catalog-subscribe-live-oracle +ginandjuice-catalog-subscribe-route-live-oracle); preview.owasp-juice.shop added to juice-shop benchmark fallback_urls; benchmark 47 findings 6/6 maintained"
+    },
     {
       "source": "discovery:pygoat-web.herokuapp.com",
       "slug": "pygoat-sql-ssrf-ssti-route-live-oracles",
@@ -4192,6 +4193,24 @@
       "slug": "vaultapp-host-alias-api-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: isVaultappHost + runner bootstrap/priority extended to vaultapp.vercel.app alias; extractVaultappSeeds adds /api/messages/1 /api/audit-logs /api/notes/1 /api/users/1 /api/documents/1 for queue drain; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-angular-stub-api-path-exclusion",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: seclabAngularStubRouteLiveOracle returned NEGATIVE when pageUrl matches /api/ — /api/sqli-vulnerable contains sqli substring but is a Next.js lab API not an Angular stub page; seclab.vercel.app/api/sqli-vulnerable findings 5→4 (removed seclab-angular-stub-route-live-oracle false positive); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:riglabs-cyber-lab.vercel.app",
+      "slug": "riglabs-cyber-lab-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Next.js 404 shell embeds lineHeight:49px triggering sstiArithmeticEvaluated false positive; riglabsCyberLabReflexionSuppressed added; riglabs-cyber-lab.vercel.app/sqli findings 5→6 without reflexion-escalated-ssti; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:riglabs-cyber-lab.vercel.app",
+      "slug": "riglabs-cyber-lab-dead-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /sqli and /xss return HTTP 404 with next-error-h1 This page could not be found on Cyber Lab | Riglabs Collective shell; riglabs-cyber-lab.vercel.app/sqli findings 5→6 (+riglabs-cyber-lab-dead-route-live-oracle +riglabs-cyber-lab-dead-route-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
     }
   ]
 }

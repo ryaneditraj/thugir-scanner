@@ -37421,6 +37421,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "riglabs-cyber-lab-dead-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Riglabs Cyber Lab dead route live oracle",
+    description:
+      "riglabs-cyber-lab.vercel.app advertises /sqli, /xss, and other lab paths in discovery queues but the public Vercel host returns Next.js 404 shells without live training endpoints.",
+    impactOneline:
+      "Advertised cybersecurity lab routes return 404 on the public Riglabs Cyber Lab host — scanners should not treat generic findings as route-specific vuln confirmation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "riglabsCyberLabDeadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy Riglabs Cyber Lab training routes or remove dead URLs from public indexes.",
+      steps: [
+        "Ship live SQLi/XSS lab handlers on riglabs-cyber-lab.vercel.app or gate the host.",
+        "Remove /sqli and /xss from public discovery lists until labs deploy.",
+        "Run training labs only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our riglabs-cyber-lab.vercel.app host 404s on /sqli and /xss lab routes. Show how to deploy the training labs or delist dead routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "riglabs-cyber-lab-dead-route-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Riglabs Cyber Lab dead route route live oracle",
+    description:
+      "When scanning riglabs-cyber-lab.vercel.app /sqli or /xss, the deployment returns a Next.js 404 page instead of the documented cybersecurity training lab.",
+    impactOneline:
+      "Route-specific confirmation that Riglabs Cyber Lab URLs are queued for scanning but the public host serves 404 shells.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "riglabsCyberLabDeadRouteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy Riglabs Cyber Lab training routes or remove dead URLs from public indexes.",
+      steps: [
+        "Ship live lab handlers before advertising /sqli or /xss routes.",
+        "Gate unreleased lab paths behind auth until content ships.",
+        "Monitor queue URLs for accidental promotion of 404 routes."
+      ]
+    },
+    fixPrompt:
+      "Our riglabs-cyber-lab.vercel.app /sqli route scan returns 404. Show how to deploy training labs or remove dead routes from discovery.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-chat-init-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",

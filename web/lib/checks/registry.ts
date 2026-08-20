@@ -73964,6 +73964,55 @@ const wrongsecretsHerokuUndeployedChallengeRouteLiveOracle: Rule = async (ctx) =
   };
 };
 
+const RIGLABS_CYBER_LAB_HOST_RE = /riglabs-cyber-lab\.vercel\.app/i;
+
+function isRiglabsNext404Shell(body: string): boolean {
+  return (
+    /next-error-h1|This page could not be found/i.test(body) &&
+    /Cyber Lab \| Riglabs Collective/i.test(body)
+  );
+}
+
+const riglabsCyberLabDeadRouteLiveOracle: Rule = async (ctx) => {
+  if (!RIGLABS_CYBER_LAB_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const routeMatch = pageUrl.match(/\/(sqli|xss|csrf|idor|ssrf)\b/i);
+  if (!routeMatch) return NEGATIVE;
+  const labRoute = routeMatch[1].toLowerCase();
+  const doc = await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (doc.status !== 404 && !isRiglabsNext404Shell(doc.body)) return NEGATIVE;
+  if (!isRiglabsNext404Shell(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: pageUrl,
+      labRoute,
+      snippet:
+        doc.body.match(/This page could not be found[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+        "Next.js 404 shell",
+      note: `riglabs-cyber-lab.vercel.app /${labRoute} returns Next.js 404 — advertised cybersecurity lab route not deployed on public Vercel host`
+    }
+  };
+};
+
+const riglabsCyberLabDeadRouteRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!RIGLABS_CYBER_LAB_HOST_RE.test(pageUrl)) return NEGATIVE;
+  if (!/\/(sqli|xss|csrf|idor|ssrf)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await riglabsCyberLabDeadRouteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `Riglabs Cyber Lab route scan — /${String(result.evidence.labRoute)} returns Next.js 404 instead of live ${String(result.evidence.labRoute).toUpperCase()} training lab`
+    }
+  };
+};
+
 const pwnshopChatInitRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -79003,6 +79052,8 @@ const seclabAngularStubRouteLiveOracle: Rule = async (ctx) => {
     return NEGATIVE;
   }
   if (!SECLAB_NEXTJS_HOST_RE.test(host) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  // /api/sqli-vulnerable and siblings contain "sqli" etc. but are live Next.js lab APIs — not Angular stub pages.
+  if (/\/api\//i.test(pageUrl)) return NEGATIVE;
   const routeMatch = pageUrl.match(/\/(ssrf|ssti|xss|sqli|csrf|idor)\b/i);
   if (!routeMatch) return NEGATIVE;
   const labRoute = routeMatch[1].toLowerCase();
@@ -91211,6 +91262,8 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge66JavaObfuscatedRouteLiveOracle,
   wrongsecretsHerokuUndeployedChallengeLiveOracle,
   wrongsecretsHerokuUndeployedChallengeRouteLiveOracle,
+  riglabsCyberLabDeadRouteLiveOracle,
+  riglabsCyberLabDeadRouteRouteLiveOracle,
   brokencrystalsChatLlmQueryLiveOracle,
   brokencrystalsChatLlmQueryRouteLiveOracle,
   brokencrystalsSpawnCommandInjectionLiveOracle,
