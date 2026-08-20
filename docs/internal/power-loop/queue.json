@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-20T16:07:09.717Z",
+  "updated_at": "2026-08-20T17:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://playground.fabraix.com/challenges/data-exfiltration-001",
+      "source": "fabraix/playground — Show HN next challenge: AI agent data exfiltration with hardened guardrails (GitHub challenges/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/prompt-injection",
+      "source": "AI Security Platform — OWASP LLM01 prompt-injection hands-on challenge module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/broken-auth",
+      "source": "AI Security Platform — broken authentication challenge module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/csrf",
+      "source": "DaniSam-STU/security-lab — interactive CSRF lab page with live exploit UI (seclab.vercel.app/labs/csrf)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/ssrf",
+      "source": "AI Security Platform — SSRF challenge module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://vulnerable-bounty-site.vercel.app/",
       "source": "deonmenezes/mantishack — intentionally vulnerable bounty training site (Vercel public demo)",
