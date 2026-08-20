@@ -59408,6 +59408,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "graphqlbook-forgot-password-takeover-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "GraphQL Bookstore forgotPassword account takeover live oracle",
+    description:
+      "POST /graphql forgotPassword(username, newPassword) on api.graphqlbook.org resets another user's password without email verification or reset token — broken authentication oracle (API2).",
+    impactOneline:
+      "Unauthenticated password reset mutations let attackers take over any account by username alone.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlBookForgotPasswordTakeoverLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require verified reset tokens before password changes — GraphQL Bookstore is intentional training software.",
+      steps: [
+        "Never accept forgotPassword without email OTP or signed reset tokens.",
+        "Bind password changes to verified account ownership.",
+        "Run GraphQL Bookstore only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql forgotPassword mutation resets passwords without verification. Show secure password reset flow remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graphqlbook-forgot-password-takeover-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "GraphQL Bookstore /graphql forgotPassword route live oracle",
+    description:
+      "When scanning /graphql on api.graphqlbook.org, forgotPassword resets another user's password without ownership verification — route-specific broken authentication oracle.",
+    impactOneline:
+      "Route scans confirm unauthenticated account takeover via GraphQL forgotPassword mutation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlBookForgotPasswordTakeoverRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Auth-gate and verify forgotPassword mutations on public /graphql routes.",
+      steps: [
+        "Require email verification or OTP before password reset.",
+        "Rate-limit and audit password reset mutations.",
+        "Run GraphQL Bookstore only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql route scan confirms forgotPassword account takeover. Show route-specific password reset hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graphqlbook-register-admin-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "GraphQL Bookstore register admin mass-assignment live oracle",
+    description:
+      "POST /graphql register(..., role:\"admin\") on api.graphqlbook.org creates accounts with admin role from client-supplied input — mass-assignment privilege escalation oracle (API3/API6).",
+    impactOneline:
+      "Registration mutations that bind client role fields let attackers self-provision admin accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlBookRegisterAdminMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never bind client-supplied role fields during registration — GraphQL Bookstore is intentional training software.",
+      steps: [
+        "Whitelist allowed registration fields and ignore role from client input.",
+        "Assign default user role server-side only.",
+        "Run GraphQL Bookstore only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql register mutation accepts role:admin from clients. Show mass-assignment remediation for GraphQL registration.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graphqlbook-register-admin-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "GraphQL Bookstore /graphql register admin route live oracle",
+    description:
+      "When scanning /graphql on api.graphqlbook.org, register(role:\"admin\") creates admin accounts from client input — route-specific mass-assignment privilege escalation oracle.",
+    impactOneline:
+      "Route scans confirm self-service admin registration via client-controlled role fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlBookRegisterAdminMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip role from client registration payloads on public /graphql routes.",
+      steps: [
+        "Use server-side role defaults for all new accounts.",
+        "Validate registration input against a strict allowlist.",
+        "Run GraphQL Bookstore only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql route scan confirms register mass-assignment to admin. Show route-specific registration hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "graphql-lab-hasura-admin-live-oracle",
     platform: "generic",
     category: "Exposed secret",

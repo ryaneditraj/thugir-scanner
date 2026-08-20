@@ -1,6 +1,18 @@
 {
   "candidates": [
     {
+      "source": "discovery:api.graphqlbook.org",
+      "slug": "graphqlbook-forgot-password-takeover-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql mutation forgotPassword(username:\"staff\", newPassword:...) returns success:true Password reset successful without verification; api.graphqlbook.org/graphql findings 15→19 (+forgot-password +register-admin oracles); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:api.graphqlbook.org",
+      "slug": "graphqlbook-register-admin-mass-assignment-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql register(..., role:\"admin\") returns user.role=admin from client-supplied mass assignment; api.graphqlbook.org/graphql findings 15→19; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-csrf-route-live-oracle",
       "status": "shipped",
