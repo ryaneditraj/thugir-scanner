@@ -2624,6 +2624,9 @@ const DEEP_RULES = new Set<string>([
   "istEduAdminRouteLiveOracle",
   "istEduIdorRouteLiveOracle",
   "istEduDashboardIdorRouteLiveOracle",
+  "dvwuSqliRouteLiveOracle",
+  "dvwuAdminRouteLiveOracle",
+  "dvwuIdorRouteLiveOracle",
   "dvwuDashboardIdorRouteLiveOracle",
   "istEduNewsletterCrlfRouteLiveOracle",
   "istEduCsrfStateChangeLiveOracle",
@@ -11540,7 +11543,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
-        /\/(?:register|login|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|crlf)|newsletter)\b/i.test(
+        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|crlf)|newsletter)\b/i.test(
           targetInput
         ) &&
         p.slug.startsWith("dvwu-")
