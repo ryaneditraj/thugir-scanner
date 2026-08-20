@@ -66350,5 +66350,83 @@ export const genericPatterns: Pattern[] = [
       "Our prompt-shield1.vercel.app route scan confirms live LLM01 defense on Railway /chat. Show multi-layer prompt-injection defenses for React + FastAPI LLM proxies.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "ratdo-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "RatTasks stored XSS live oracle",
+    description:
+      "POST ratdo.thexssrat.com/ stores task titles rendered with |safe — probing <img src=x onerror=alert(1)> persists unsanitized in the authenticated task list.",
+    impactOneline:
+      "Stored XSS in task titles lets attackers execute JavaScript in every user who views the task list.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ratdoStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RatTasks is intentional training software — auto-escape all user HTML in templates.",
+      steps: [
+        "Remove |safe from task title rendering in Jinja/Flask templates.",
+        "Apply context-aware output encoding for all user-controlled fields.",
+        "Run RatTasks only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our RatTasks app renders task titles with |safe causing stored XSS. Show output encoding remediation for Flask/Jinja task lists.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ratdo-idor-edit-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "RatTasks task edit IDOR live oracle",
+    description:
+      "POST ratdo.thexssrat.com/edit/:id accepts title changes from a different authenticated user without verifying task ownership — IDOR/BAC oracle.",
+    impactOneline:
+      "Missing object-level authorization on /edit/:id lets any logged-in user modify another user's tasks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ratdoIdorEditLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RatTasks is intentional training software — enforce task ownership on all state-changing routes.",
+      steps: [
+        "Verify task.user_id matches session user before edit/delete/toggle.",
+        "Use server-side authorization checks, not hidden form fields.",
+        "Run RatTasks only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our RatTasks /edit/:id route lacks ownership checks. Show object-level authorization remediation for Flask task apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ratdo-csrf-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "medium",
+    title: "RatTasks CSRF live oracle",
+    description:
+      "Authenticated RatTasks task forms lack CSRF tokens and expose state-changing GET /delete/:id and /toggle/:id endpoints — CSRF oracle.",
+    impactOneline:
+      "Missing CSRF protection lets attackers forge task add/edit/delete requests using a victim's session cookie.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ratdoCsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RatTasks is intentional training software — add CSRF tokens and reject state-changing GET requests.",
+      steps: [
+        "Add Flask-WTF or double-submit CSRF tokens to all POST forms.",
+        "Change delete/toggle to POST-only with CSRF validation.",
+        "Set SameSite=Strict on session cookies."
+      ]
+    },
+    fixPrompt:
+      "Our RatTasks app has no CSRF protection on task forms and uses GET /delete/:id. Show CSRF remediation for Flask session apps.",
+    version: 1,
+    enabled: true
   }
 ];
