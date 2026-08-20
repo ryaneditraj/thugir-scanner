@@ -85,6 +85,12 @@ function riglabsCyberLabReflexionSuppressed(ctx: PowerCtx): boolean {
   return RIGLABS_CYBER_LAB_HOST_RE.test(pageUrl);
 }
 
+/** mantishack / International Bank demo embeds lineHeight:49px in Next.js 404 shells — suppress reflexion SSTI FPs. */
+function vulnerableBountySiteReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /vulnerable-bounty-site\.vercel\.app/i.test(pageUrl);
+}
+
 /** Pwnshop /wishlist/:id currently serves a styled 404 shell — suppress generic reflexion probes on that route. */
 function pwnshopWishlistReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
@@ -277,6 +283,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (vulnforgeAcademySsrfReflexionSuppressed(ctx)) return NEGATIVE;
   if (vulnforgeAcademyRceReflexionSuppressed(ctx)) return NEGATIVE;
   if (riglabsCyberLabReflexionSuppressed(ctx)) return NEGATIVE;
+  if (vulnerableBountySiteReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 
