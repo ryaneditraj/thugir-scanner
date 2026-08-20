@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-20T17:06:00.000Z",
+  "updated_at": "2026-08-20T18:06:22.782Z",
   "discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/open-redirect",
+      "source": "AI Security Platform — OWASP open-redirect hands-on challenge module (CWE-601, Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/leaked-secrets",
+      "source": "AI Security Platform — leaked secrets / env exposure challenge module (CWE-200, Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://prompt-shield1.vercel.app/",
+      "source": "Dhwanit2501/PromptShield — intentionally exposed system prompt + KB for LLM prompt-injection defense demo (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://playground.fabraix.com/challenges/indirect-prompt-injection-001",
+      "source": "fabraix/playground — indirect prompt-injection challenge with hardened guardrails (GitHub challenges/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/xss",
+      "source": "DaniSam-STU/security-lab — interactive XSS lab page with live exploit UI (seclab.vercel.app/labs/xss)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://playground.fabraix.com/challenges/data-exfiltration-001",
       "source": "fabraix/playground — Show HN next challenge: AI agent data exfiltration with hardened guardrails (GitHub challenges/)",
