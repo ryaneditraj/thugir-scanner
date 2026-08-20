@@ -2620,6 +2620,9 @@ const DEEP_RULES = new Set<string>([
   "istEduNoticesLfiRouteLiveOracle",
   "istEduPortalSqliRouteLiveOracle",
   "istEduRegisterAuthSqliRouteLiveOracle",
+  "istEduSqliRouteLiveOracle",
+  "istEduAdminRouteLiveOracle",
+  "istEduIdorRouteLiveOracle",
   "istEduDashboardIdorRouteLiveOracle",
   "dvwuDashboardIdorRouteLiveOracle",
   "istEduNewsletterCrlfRouteLiveOracle",
@@ -11529,7 +11532,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ist-edu-bd\.vercel\.app/i.test(origin) &&
-        /\/(?:register|login|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|open-redirect|ssti|graphql|deserialization|file-upload)|files|newsletter)\b/i.test(
+        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|open-redirect|ssti|graphql|deserialization|file-upload)|files|newsletter)\b/i.test(
           targetInput
         ) &&
         p.slug.startsWith("ist-edu-")

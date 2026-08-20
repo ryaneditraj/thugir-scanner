@@ -86517,6 +86517,131 @@ async function probeAllSeeingEyeHelloXxe(ctx: RuleContext): Promise<RuleResult |
   };
 }
 
+async function probeIstEduSearchSqli(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isIstEduHost(ctx)) return null;
+  const searchUrl = new URL("/api/search", ctx.origin);
+  searchUrl.searchParams.set("q", "'");
+  const doc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/SQL Syntax Error|Vulnerable Query:/i.test(doc.body)) return null;
+  if (!/Database Leak \(SQL Injection Successful\)|admin@ist\.edu\.bd/i.test(doc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: searchUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "IST Edu GET /api/search?q=' triggers SQL syntax error and leaks admin credentials — SQL injection search oracle"
+    }
+  };
+}
+
+const istEduSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/sqli|sqli)\/?$/i.test(pathname)) return NEGATIVE;
+  const portal = await probeIstEduLabRouteInjection(ctx);
+  if (portal?.fired) {
+    return {
+      fired: true,
+      confidence: portal.confidence,
+      evidence: {
+        ...portal.evidence,
+        scannedUrl: pageUrl,
+        note: "IST Edu /sqli route scan — POST /api/portal with admin' OR '1'='1 bypasses authentication — route-specific SQL injection login oracle"
+      }
+    };
+  }
+  const search = await probeIstEduSearchSqli(ctx);
+  if (!search?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: search.confidence,
+    evidence: {
+      ...search.evidence,
+      scannedUrl: pageUrl,
+      note: "IST Edu /sqli route scan — GET /api/search?q=' triggers SQL error and leaks admin row — route-specific SQL injection search oracle"
+    }
+  };
+};
+
+const istEduAdminRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/admin\/?$/i.test(pathname)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (
+    bundle &&
+    (/admin panel via SQL Injection/i.test(bundle) ||
+      (/Administrator \(via SQLi\)/i.test(bundle) && /Security Alert/i.test(bundle)))
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        scannedUrl: pageUrl,
+        markers: ["admin panel via SQL Injection", "Administrator (via SQLi)"],
+        snippet: bundle.match(/admin panel via SQL Injection[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+        note: "IST Edu /admin route scan — SPA documents unauthenticated admin panel access via SQL injection authentication bypass"
+      }
+    };
+  }
+  const portal = await probeIstEduLabRouteInjection(ctx);
+  if (!portal?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      ...portal.evidence,
+      scannedUrl: pageUrl,
+      note: "IST Edu /admin route scan — POST /api/portal SQLi bypass confirms admin panel training surface reachable without valid credentials"
+    }
+  };
+};
+
+const istEduIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/idor|idor)\/?$/i.test(pathname)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (
+    !/localStorage\.setItem\(["']student["']/i.test(bundle) ||
+    !/Grade Upload/i.test(bundle) ||
+    !/student records/i.test(bundle)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["localStorage student_id", "Grade Upload", "student records"],
+      snippet: bundle.match(/Grade Upload[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "IST Edu /idor route scan — SPA stores student session in localStorage and exposes grade-upload IDOR lab without server-side object authorization"
+    }
+  };
+};
+
 const istEduDashboardIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -91361,6 +91486,9 @@ export const RULES: Record<string, Rule> = {
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
   istEduRegisterAuthSqliRouteLiveOracle,
+  istEduSqliRouteLiveOracle,
+  istEduAdminRouteLiveOracle,
+  istEduIdorRouteLiveOracle,
   istEduDashboardIdorRouteLiveOracle,
   dvwuDashboardIdorRouteLiveOracle,
   dvwuFileUploadLabRouteLiveOracle,

@@ -44673,6 +44673,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ist-edu-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "IST Edu /sqli route SQL injection live oracle",
+    description:
+      "When scanning /sqli on ist-edu-bd.vercel.app, POST /api/portal with admin' OR '1'='1 bypasses authentication or GET /api/search?q=' leaks admin credentials — route-specific SQL injection training oracle.",
+    impactOneline:
+      "Route-specific confirmation that IST Edu exposes SQL injection training on the top-level /sqli discovery queue URL without relying on /labs/sqli path alone.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — use parameterized queries for all authentication and search lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic error messages without SQL syntax details.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our ist-edu-bd.vercel.app /sqli route documents SQL injection via /api/portal and /api/search. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-admin-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "IST Edu unauthenticated admin panel route live oracle",
+    description:
+      "When scanning /admin on ist-edu-bd.vercel.app, the SPA documents admin panel access via SQL injection authentication bypass — route-specific unauthenticated admin training oracle.",
+    impactOneline:
+      "Unauthenticated admin panels reachable after SQLi bypass expose sensitive university data and administrative functions on training portals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — require authentication and authorization before exposing admin panels.",
+      steps: [
+        "Use parameterized queries to prevent SQL injection authentication bypass.",
+        "Enforce role-based access control on all admin routes server-side.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our ist-edu-bd.vercel.app /admin route is reachable via SQL injection auth bypass. Show admin panel access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "IST Edu /idor route IDOR live oracle",
+    description:
+      "When scanning /idor on ist-edu-bd.vercel.app, the SPA stores student_id in localStorage and exposes grade-upload panels without server-side object authorization — route-specific IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that IST Edu exposes client-side IDOR training on the top-level /idor discovery queue URL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — enforce server-side authorization on every grade and student-record access.",
+      steps: [
+        "Bind student records to authenticated session IDs on the server, not client localStorage.",
+        "Reject cross-user object access even when student_id is supplied in requests.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our ist-edu-bd.vercel.app /idor route exposes grade-upload IDOR via client-side student_id. Show server-side object authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvwu-dashboard-idor-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
