@@ -66244,5 +66244,111 @@ export const genericPatterns: Pattern[] = [
       "Our /api/users route leaks cleartext passwords and API keys. Show route-specific API hardening for the mantishack bounty demo.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "fabraix-data-exfiltration-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix data-exfiltration-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/data-exfiltration-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the data-exfil challenge (Iris + SentinelID verify_identity) — route-specific exfil oracle.",
+    impactOneline:
+      "Route-scoped Fabraix data-exfiltration-001 scans should confirm unauthenticated agent sessions targeting verify_identity outbound exfiltration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixDataExfil001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — restrict verify_identity outbound hosts in production agent deployments.",
+      steps: [
+        "Allowlist verify_identity outbound destinations to trusted partner hosts only.",
+        "Require authenticated users before starting agent red-team sessions.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/data-exfiltration-001 route scan confirms unauthenticated exfil challenge sessions. Show verify_identity outbound host allowlisting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-indirect-prompt-injection-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix indirect prompt-injection challenge route live oracle",
+    description:
+      "When scanning /challenges/indirect-prompt-injection-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the indirect prompt-injection challenge route — maps to access-code-001 Gatekeeper backend.",
+    impactOneline:
+      "Route-scoped Fabraix indirect prompt-injection scans should confirm unauthenticated agent red-team sessions on the discovery queue challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixIndirectPromptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/indirect-prompt-injection-001 route scan confirms unauthenticated agent sessions. Show indirect prompt-injection defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "prompt-shield-prompt-injection-defense-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "PromptShield LLM01 defense live oracle",
+    description:
+      "POST promptshield-production.up.railway.app/chat blocks jailbreak extraction (blocked:true risk_score>=60) while benign SecureBank RAG FAQ succeeds — PromptShield multi-layer prompt-injection defense demo oracle.",
+    impactOneline:
+      "Confirms PromptShield multi-layer detection pipeline blocks prompt-injection while allowing grounded FAQ responses on the public demo.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "promptShieldPromptInjectionDefenseLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "PromptShield is intentional defense demo software — replicate multi-layer static + semantic + context-aware scoring for production LLM proxies.",
+      steps: [
+        "Apply input sanitization and semantic classifiers before forwarding prompts to LLM providers.",
+        "Reset sessions on threat detection and enforce rate limits on /chat endpoints.",
+        "Never embed confidential data in system prompts without output validation."
+      ]
+    },
+    fixPrompt:
+      "Our PromptShield demo blocks jailbreak extraction while serving RAG-grounded FAQ answers. Show multi-layer LLM01 defenses for FastAPI + OpenAI chat proxies.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "prompt-shield-prompt-injection-defense-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "PromptShield LLM01 defense route live oracle",
+    description:
+      "When scanning prompt-shield1.vercel.app, POST Railway /chat confirms jailbreak blocked and benign SecureBank FAQ succeeds — route-specific PromptShield defense demo oracle.",
+    impactOneline:
+      "Route-scoped PromptShield scans should confirm the public Vercel frontend proxies to a live multi-layer prompt-injection defense backend.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "promptShieldPromptInjectionDefenseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "PromptShield is intentional defense demo software — replicate multi-layer static + semantic + context-aware scoring for production LLM proxies.",
+      steps: [
+        "Apply input sanitization and semantic classifiers before forwarding prompts to LLM providers.",
+        "Reset sessions on threat detection and enforce rate limits on /chat endpoints.",
+        "Never embed confidential data in system prompts without output validation."
+      ]
+    },
+    fixPrompt:
+      "Our prompt-shield1.vercel.app route scan confirms live LLM01 defense on Railway /chat. Show multi-layer prompt-injection defenses for React + FastAPI LLM proxies.",
+    version: 1,
+    enabled: true
   }
 ];

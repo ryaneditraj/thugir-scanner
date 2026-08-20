@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-20T18:10:22.589Z",
-  "total": 2606,
-  "uniqueSlugs": 2598,
+  "generatedAt": "2026-08-20T19:12:06.988Z",
+  "total": 2610,
+  "uniqueSlugs": 2602,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2588,
+    "generic": 2592,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2521,
+    "deep": 2525,
     "continuous": 0
   },
   "byCategory": {
@@ -34,7 +34,7 @@
     "SSRF": 16,
     "Server-side request forgery": 90,
     "Sensitive data exposure": 65,
-    "AI security": 91,
+    "AI security": 95,
     "Cross-site request forgery": 7,
     "Business logic": 24,
     "Authentication bypass": 3,
@@ -1039,6 +1039,8 @@
     "exposed-infra-artifacts",
     "exposed-source-maps",
     "fabraix-data-exfil-002-route-live-oracle",
+    "fabraix-data-exfiltration-001-route-live-oracle",
+    "fabraix-indirect-prompt-injection-route-live-oracle",
     "fabraix-playground-session-live-oracle",
     "fabraix-playground-session-route-live-oracle",
     "fauxbank-accounts-route-live-oracle",
@@ -1873,6 +1875,8 @@
     "phpmyadmin-exposed",
     "post-login-sql-bypass",
     "postmessage-dom-xss-evidence",
+    "prompt-shield-prompt-injection-defense-live-oracle",
+    "prompt-shield-prompt-injection-defense-route-live-oracle",
     "pwnshop-account-delete-csrf-live-oracle",
     "pwnshop-account-delete-csrf-route-live-oracle",
     "pwnshop-admin-login-sqli-live-oracle",
