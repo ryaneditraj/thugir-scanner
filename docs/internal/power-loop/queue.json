@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-20T06:05:35.927Z",
+  "updated_at": "2026-08-20T07:06:00.443Z",
   "discovery_urls": [
+    {
+      "url": "https://ist-edu-bd.vercel.app/comments",
+      "source": "zahidoverflow/damn-vulnerable-web-university — stored XSS comments route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/search",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQL injection search route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/notices",
+      "source": "zahidoverflow/damn-vulnerable-web-university — LFI notices route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/newsletter",
+      "source": "zahidoverflow/damn-vulnerable-web-university — CRLF newsletter route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/portal",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQLi authentication portal route (Vercel live demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://riglabs-cyber-lab.vercel.app/sqli",
       "source": "Riglabs Collective Cyber Lab — SQL injection module route (Vercel public demo)",
@@ -10020,5 +10045,6 @@
       "source": "AI Security Platform — login brute-force / rate-limit bypass challenge (Vercel public demo)",
       "auth": "public_demo"
     }
-  ]
+  ],
+  "discovery_urls_added": 5
 }
