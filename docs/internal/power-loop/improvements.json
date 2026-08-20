@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /admin SPA bundle documents admin panel via SQL Injection + POST /api/portal admin' OR '1'='1 Authentication Bypass Successful; ist-edu-bd.vercel.app/admin findings 8→9 (+ist-edu-admin-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal SQLi bypass + GET /api/search?q=' leaks admin@ist.edu.bd on /sqli route scan; ist-edu-bd.vercel.app/sqli findings 8→9 (+ist-edu-sqli-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle localStorage student_id + Grade Upload + student records markers on /idor route scan; ist-edu-bd.vercel.app/idor findings 8→9 (+ist-edu-idor-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "vulnlab-sqli-error-route-live-oracle",
       "status": "shipped",
