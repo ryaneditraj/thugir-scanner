@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-20T18:06:22.782Z",
+  "updated_at": "2026-08-20T19:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ratdo.thexssrat.com/",
+      "source": "The-XSS-Rat/RatDo — RatTasks intentionally vulnerable TODO app (XSS/IDOR/CSRF/clickjacking; RatCTF LinkedIn 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/idor",
+      "source": "DaniSam-STU/security-lab — interactive IDOR lab page with live exploit UI (seclab.vercel.app/labs/idor)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dockerworkshop.vercel.app/lab8/projects/devboard/",
+      "source": "Docker workshop DevBoard — FastAPI+Next.js issue tracker with 5 intentional bugs (dockerworkshop.vercel.app lab8)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/ssrf",
+      "source": "zahidoverflow/dvwu — SSRF training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/broken-auth",
+      "source": "zahidoverflow/dvwu — broken authentication training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/open-redirect",
       "source": "AI Security Platform — OWASP open-redirect hands-on challenge module (CWE-601, Vercel OSS deploy)",
