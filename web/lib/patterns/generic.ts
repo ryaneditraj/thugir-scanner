@@ -22778,6 +22778,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-wishlist-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwnshop wishlist IDOR live oracle (PWN-003)",
+    description:
+      "GET /wishlist/:user_id returns any user's wishlist with no auth or ownership check — the Pwnshop wishlist IDOR oracle.",
+    impactOneline:
+      "Unauthenticated wishlist access reveals product preferences and shopping behaviour for any sequential user ID.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopWishlistIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and verify wishlist ownership before returning saved items — Pwnshop is intentional lab software.",
+      steps: [
+        "Bind wishlist reads to authenticated sessions and verify the requested user_id matches the current user.",
+        "Reject GET /wishlist/:user_id without a valid session or signed access token.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our GET /wishlist/:user_id endpoint returns any user's wishlist without auth. Show IDOR remediation for wishlist endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-wishlist-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwnshop /wishlist/:user_id route IDOR live oracle (PWN-003)",
+    description:
+      "When scanning /wishlist/:user_id, GET returns another user's saved products without authentication — route-specific wishlist IDOR oracle.",
+    impactOneline:
+      "Route scans on /wishlist/:user_id expose cross-user wishlist data when ownership checks are absent.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopWishlistIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and verify wishlist ownership before returning saved items — Pwnshop is intentional lab software.",
+      steps: [
+        "Bind wishlist reads to authenticated sessions and verify the requested user_id matches the current user.",
+        "Reject GET /wishlist/:user_id without a valid session or signed access token.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /wishlist/:user_id route scan confirms wishlist IDOR. Show route-specific ownership remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-product-search-sqli-live-oracle",
     platform: "generic",
     category: "Injection",

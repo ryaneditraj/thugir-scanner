@@ -36690,6 +36690,80 @@ const pwnshopTrackIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const PWNSHOP_WISHLIST_IDOR_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "PWN-003 registry ID", re: /PWN-003/i },
+  { label: "GET /wishlist/:user_id endpoint", re: /GET \/wishlist\/:user_id/i },
+  { label: "IDOR Wishlist title", re: /IDOR\s*[-–—]\s*Wishlist/i },
+  {
+    label: "wishlist ownership gap",
+    re: /wishlist with no auth or ownership check|changing the ID in the URL/i
+  }
+];
+
+const clientSidePwnshopWishlistIdorOracle: Rule = async (ctx) =>
+  pwnshopRouteOracle(
+    ctx,
+    /\/wishlist(?:\/|$)/i,
+    PWNSHOP_WISHLIST_IDOR_MARKERS,
+    "Pwnshop GET /wishlist/:user_id returns any user's wishlist without auth or ownership check — wishlist IDOR (PWN-003)"
+  );
+
+const pwnshopWishlistIdorLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  for (const userId of ["1", "2", "3"]) {
+    const url = new URL(`/wishlist/${userId}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(url, { maxBytes: 65536, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (/404\s*-\s*Page Not Found|This page could not be found/i.test(doc.body)) continue;
+    const hasWishlistSurface =
+      /Wishlist|My Wishlist|Saved Items/i.test(doc.body) &&
+      (/product-card|wishlist-item|Add to Cart|Remove from Wishlist/i.test(doc.body) ||
+        /user_id|wishlist/i.test(doc.body));
+    if (!hasWishlistSurface) continue;
+    const itemMatch = doc.body.match(/wishlist-item|product-card|Saved Items[\s\S]{0,120}/i);
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url,
+        userId,
+        snippet: itemMatch?.[0]?.slice(0, 160) ?? doc.body.slice(0, 160).trim(),
+        note: "Pwnshop GET /wishlist/:user_id returns another user's wishlist without authentication or ownership check — wishlist IDOR (PWN-003)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const pwnshopWishlistIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/wishlist\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopWishlistIdorLiveOracle(ctx);
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Pwnshop /wishlist/:user_id route scan — GET returns another user's wishlist without authentication (PWN-003)"
+      }
+    };
+  }
+  const bundleFallback = await clientSidePwnshopWishlistIdorOracle(ctx);
+  if (!bundleFallback.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.89,
+    evidence: {
+      ...bundleFallback.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /wishlist/:user_id route scan — vulnerability registry documents GET /wishlist/:user_id IDOR (PWN-003) when live wishlist probe returned 404"
+    }
+  };
+};
+
 const pwnshopProductSearchSqliLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const url = new URL("/search", ctx.origin);
@@ -90585,6 +90659,9 @@ export const RULES: Record<string, Rule> = {
   pwnshopForgotPasswordEmailEnumerationLiveOracle,
   pwnshopTrackIdorLiveOracle,
   pwnshopTrackIdorRouteLiveOracle,
+  clientSidePwnshopWishlistIdorOracle,
+  pwnshopWishlistIdorLiveOracle,
+  pwnshopWishlistIdorRouteLiveOracle,
   pwnshopProductSearchSqliLiveOracle,
   pwnshopProductSearchSqliRouteLiveOracle,
   pwnshopAdminLoginSqliLiveOracle,

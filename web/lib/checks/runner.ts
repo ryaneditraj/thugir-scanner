@@ -2018,6 +2018,9 @@ const DEEP_RULES = new Set<string>([
   "pwnshopForgotPasswordEmailEnumerationLiveOracle",
   "pwnshopTrackIdorLiveOracle",
   "pwnshopTrackIdorRouteLiveOracle",
+  "clientSidePwnshopWishlistIdorOracle",
+  "pwnshopWishlistIdorLiveOracle",
+  "pwnshopWishlistIdorRouteLiveOracle",
   "pwnshopProductSearchSqliLiveOracle",
   "pwnshopProductSearchSqliRouteLiveOracle",
   "pwnshopAdminLoginSqliLiveOracle",
@@ -11325,6 +11328,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/wallet\/topup\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-") &&
         /wallet-topup/.test(p.slug)
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/wishlist(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-") &&
+        /wishlist/.test(p.slug)
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/wishlist(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("client-side-pwnshop-") &&
+        /wishlist/.test(p.slug)
       )
         return -3;
       if (
