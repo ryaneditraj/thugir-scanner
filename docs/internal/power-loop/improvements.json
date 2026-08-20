@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-sqli-error-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/sqli-error.html route scan corpus fallback for A03-001 + /api/sql probe when Vercel checkpoint blocks /api/validate/sqli-error; hack-this-site-eta.vercel.app/labs/sqli-error.html findings 3→4 (+vulnlab-sqli-error-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-xss-reflected-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/xss-reflected.html route scan corpus fallback for A03-006 innerHTML sink when /api/validate/xss-reflected blocked; hack-this-site-eta.vercel.app/labs/xss-reflected.html findings 3→4 (+vulnlab-xss-reflected-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/idor.html route scan corpus fallback for A01-001 unauthenticated /api/orders fetch when /api/validate/idor blocked; hack-this-site-eta.vercel.app/labs/idor.html findings 3→4 (+vulnlab-idor-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "vulnlab-clickjacking-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /labs/clickjacking.html route scan corpus fallback when Vercel checkpoint blocks live header probe; hack-this-site-eta.vercel.app/labs/clickjacking.html findings 3→4 (+vulnlab-clickjacking-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
