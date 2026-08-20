@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-clickjacking-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/clickjacking.html route scan corpus fallback when Vercel checkpoint blocks live header probe; hack-this-site-eta.vercel.app/labs/clickjacking.html findings 3→4 (+vulnlab-clickjacking-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-env-file-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/env-file.html route scan probes /backup/config.old + /backup/db.sql with corpus fallback for VULN-008; hack-this-site-eta.vercel.app/labs/env-file.html findings 3→4 (+vulnlab-env-file-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnlabValidateUploadLiveOracle + /labs/upload.html route corpus fallback for VULN-004; hack-this-site-eta.vercel.app/labs/upload.html findings 3→4 (+vulnlab-upload-route-live-oracle +vulnlab-validate-upload-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:owasp-demo.vulcanlab.ai",
       "slug": "owasp-demo-vulcanlab-llm-top10-live-oracle",
       "status": "shipped",
