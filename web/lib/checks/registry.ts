@@ -88352,7 +88352,7 @@ const vulnExposeXssPlaygroundRouteLiveOracle: Rule = async (ctx) => {
 };
 
 function isVaultappHost(ctx: RuleContext): boolean {
-  return /vaultapp-omega\.vercel\.app/i.test(ctx.origin);
+  return /vaultapp(?:-omega)?\.vercel\.app/i.test(ctx.origin);
 }
 
 const VAULTAPP_LAB_GUIDE_MARKERS: { label: string; re: RegExp }[] = [
@@ -88535,7 +88535,7 @@ const vaultappAdminAuditLogsIdorLiveOracle: Rule = async (ctx) => {
 const vaultappAdminAuditLogsIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isVaultappHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/admin\/audit-logs/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/(?:admin\/)?audit-logs/i.test(pageUrl)) return NEGATIVE;
   const hit = await probeVaultappAdminAuditLogsIdor(ctx);
   if (!hit?.fired) return NEGATIVE;
   return {
@@ -88544,7 +88544,7 @@ const vaultappAdminAuditLogsIdorRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...hit.evidence,
       scannedUrl: pageUrl,
-      note: "VaultApp /api/admin/audit-logs route scan — any authenticated user queries audit logs for arbitrary user_id without admin role — IDOR oracle"
+      note: "VaultApp /api/audit-logs route scan — any authenticated user queries audit logs for arbitrary user_id without admin role — IDOR oracle"
     }
   };
 };
@@ -88619,7 +88619,7 @@ const vaultappMessagesReadIdorLiveOracle: Rule = async (ctx) => {
 const vaultappMessagesReadIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isVaultappHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/messages\/read/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/messages(?:\/read|\/\d+)?(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
   const hit = await probeVaultappMessagesReadIdor(ctx);
   if (!hit?.fired) return NEGATIVE;
   return {
@@ -88628,7 +88628,7 @@ const vaultappMessagesReadIdorRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...hit.evidence,
       scannedUrl: pageUrl,
-      note: "VaultApp /api/messages/read route scan — POST message_id reads another user's private message without ownership check — IDOR oracle"
+      note: "VaultApp /api/messages/:id route scan — POST /api/messages/read message_id reads another user's private message without ownership check — IDOR oracle"
     }
   };
 };
