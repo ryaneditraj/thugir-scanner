@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-20T07:06:00.443Z",
+  "updated_at": "2026-08-20T08:10:18.940Z",
   "discovery_urls": [
+    {
+      "url": "https://ist-edu-bd.vercel.app/redirect",
+      "source": "zahidoverflow/damn-vulnerable-web-university — open redirect /api/redirect route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/redirect",
+      "source": "zahidoverflow/dvwu — open redirect training route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp.vercel.app/api/messages/1",
+      "source": "MRMcyber/vaultapp — private message IDOR oracle GET /api/messages/:id",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp.vercel.app/api/notes/1",
+      "source": "MRMcyber/vaultapp — private note IDOR oracle GET /api/notes/:id",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp.vercel.app/api/audit-logs",
+      "source": "MRMcyber/vaultapp — admin audit log exposure oracle GET /api/audit-logs",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ist-edu-bd.vercel.app/comments",
       "source": "zahidoverflow/damn-vulnerable-web-university — stored XSS comments route (Vercel live demo)",
