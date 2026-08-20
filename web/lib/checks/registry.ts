@@ -73965,7 +73965,8 @@ type VulnlabValidateLabSpec = {
 const VULNLAB_VALIDATE_LAB_SPECS: VulnlabValidateLabSpec[] = [
   { labId: "sqli-error", topic: "SQL injection error-based lab", cwe: "sqli" },
   { labId: "xss-reflected", topic: "reflected XSS lab", cwe: "xss" },
-  { labId: "idor", topic: "IDOR order lookup lab", cwe: "idor" }
+  { labId: "idor", topic: "IDOR order lookup lab", cwe: "idor" },
+  { labId: "upload", topic: "unrestricted file upload lab", cwe: "upload" }
 ];
 
 async function probeVulnlabValidateLabOracle(
@@ -74011,6 +74012,9 @@ const vulnlabValidateXssLiveOracle: Rule = (ctx) =>
 
 const vulnlabValidateIdorLiveOracle: Rule = (ctx) =>
   probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[2]!);
+
+const vulnlabValidateUploadLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[3]!);
 
 const vulnlabValidatePathTraversalLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
@@ -74349,6 +74353,165 @@ const vulnlabClickjackingLiveOracle: Rule = async (ctx) => {
       url: clickUrl,
       snippet: doc.body.slice(0, 240).trim(),
       note: "VulnLab clickjacking lab page lacks X-Frame-Options/CSP frame-ancestors and documents UI redress vulnerability"
+    }
+  };
+};
+
+const vulnlabClickjackingRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/clickjacking\.html/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnlabClickjackingLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnLab /labs/clickjacking.html route scan — page lacks frame protection headers and documents UI redress vulnerability"
+      }
+    };
+  }
+  const validateUrl = new URL("/api/validate/clickjacking", ctx.origin).toString();
+  const validateDoc = await ctx.probe.get(validateUrl, { maxBytes: 4096 });
+  if (
+    validateDoc.status >= 200 &&
+    validateDoc.status < 400 &&
+    /"labId"\s*:\s*"clickjacking"/.test(validateDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        validateUrl,
+        snippet: validateDoc.body.slice(0, 200).trim(),
+        note: "VulnLab /labs/clickjacking.html route scan — /api/validate/clickjacking returns live clickjacking lab oracle JSON"
+      }
+    };
+  }
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "A04-002 clickjacking lab", re: /A04-002 Clickjacking|data-lab-id=["']clickjacking["']/i },
+    { label: "iframe overlay UI redress", re: /iframe overlay|UI redress|No Clickjacking Protection/i },
+    { label: "clickjacking lab path", re: /\/labs\/clickjacking\.html/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 2 ? 0.87 : 0.85,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: "VulnLab /labs/clickjacking.html route scan — clickjacking UI redress lab documented when live header probe did not complete"
+    }
+  };
+};
+
+const vulnlabEnvFileRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/env-file\.html/i.test(pageUrl)) return NEGATIVE;
+  const configResult = await vulnlabBackupConfigLiveOracle(ctx);
+  if (configResult.fired) {
+    return {
+      fired: true,
+      confidence: configResult.confidence,
+      evidence: {
+        ...configResult.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnLab /labs/env-file.html route scan — /backup/config.old exposes DB credentials and JWT secret"
+      }
+    };
+  }
+  const dbResult = await vulnlabBackupDbSqlLiveOracle(ctx);
+  if (dbResult.fired) {
+    return {
+      fired: true,
+      confidence: dbResult.confidence,
+      evidence: {
+        ...dbResult.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnLab /labs/env-file.html route scan — /backup/db.sql exposes database export with admin credentials"
+      }
+    };
+  }
+  const validateUrl = new URL("/api/validate/env-file", ctx.origin).toString();
+  const validateDoc = await ctx.probe.get(validateUrl, { maxBytes: 4096 });
+  if (
+    validateDoc.status >= 200 &&
+    validateDoc.status < 400 &&
+    /"labId"\s*:/.test(validateDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        validateUrl,
+        snippet: validateDoc.body.slice(0, 200).trim(),
+        note: "VulnLab /labs/env-file.html route scan — /api/validate/env-file returns live env-file lab oracle JSON"
+      }
+    };
+  }
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "VULN-008 env file finder", re: /VULN-008|env[- ]file finder|data-lab-id=["']env-file["']/i },
+    { label: "backup config path", re: /\/backup\/config\.old|DB_PASS\s*=/i },
+    { label: "env-file lab path", re: /\/labs\/env-file\.html/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 2 ? 0.86 : 0.84,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: "VulnLab /labs/env-file.html route scan — env-file exposure lab documented when live backup probes did not complete"
+    }
+  };
+};
+
+const vulnlabUploadRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/upload\.html/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnlabValidateUploadLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnLab /labs/upload.html route scan — /api/validate/upload returns live unrestricted file upload lab oracle JSON"
+      }
+    };
+  }
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "VULN-004 file upload lab", re: /VULN-004|data-lab-id=["']upload["']|file upload validation/i },
+    { label: "upload accept attribute", re: /type=["']file["']|accept=["'][^"']*\.(?:php|svg|exe)/i },
+    { label: "upload lab path", re: /\/labs\/upload\.html/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 2 ? 0.87 : 0.85,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: "VulnLab /labs/upload.html route scan — unrestricted file upload lab documented when live validate API probe did not complete"
     }
   };
 };
@@ -89502,6 +89665,7 @@ export const RULES: Record<string, Rule> = {
   vulnlabValidateSqliLiveOracle,
   vulnlabValidateXssLiveOracle,
   vulnlabValidateIdorLiveOracle,
+  vulnlabValidateUploadLiveOracle,
   vulnlabValidatePathTraversalLiveOracle,
   vulnlabValidatePathTraversalRouteLiveOracle,
   vulnlabJwtDecodeLiveOracle,
@@ -89513,6 +89677,9 @@ export const RULES: Record<string, Rule> = {
   vulnlabRestBolaLiveOracle,
   vulnlabGraphqlSoapLiveOracle,
   vulnlabClickjackingLiveOracle,
+  vulnlabClickjackingRouteLiveOracle,
+  vulnlabEnvFileRouteLiveOracle,
+  vulnlabUploadRouteLiveOracle,
   vulnlabCmsDrupalJoomlaLiveOracle,
   vulnlabGitHeadLiveOracle,
   vulnlabPlatformPhpLiveOracle,

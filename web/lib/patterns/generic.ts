@@ -27949,6 +27949,106 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-clickjacking-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "VulnLab /labs/clickjacking.html route live oracle",
+    description:
+      "When scanning /labs/clickjacking.html, confirms missing X-Frame-Options/CSP frame-ancestors via live header probe, /api/validate/clickjacking, or corpus fallback.",
+    impactOneline:
+      "Route-specific clickjacking lab oracle distinct from generic missing-security-headers on VulnLab hub pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabClickjackingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Set X-Frame-Options or CSP frame-ancestors on all pages that should not be framed.",
+      steps: [
+        "Add Content-Security-Policy frame-ancestors 'self' or X-Frame-Options: DENY.",
+        "Gate clickjacking training labs behind authenticated sessions."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/clickjacking.html route scan confirms missing frame protection. Show UI redress remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-env-file-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "VulnLab /labs/env-file.html route live oracle",
+    description:
+      "When scanning /labs/env-file.html, probes /backup/config.old and /backup/db.sql for exposed credentials — route-specific env-file exposure oracle.",
+    impactOneline:
+      "Route-specific env-file lab oracle confirms backup credential disclosure distinct from generic VulnLab hub fingerprint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabEnvFileRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove backup files from web roots and gate lab artifacts behind authentication.",
+      steps: [
+        "Delete /backup/config.old and /backup/db.sql from public paths.",
+        "Require authentication before serving lab backup artifacts."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/env-file.html route scan confirms exposed backup config. Show env-file exposure remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-validate-upload-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnLab file upload validate API live oracle",
+    description:
+      "GET /api/validate/upload returns JSON with labId upload and a hint describing unrestricted file upload payload expectations.",
+    impactOneline:
+      "Live validation API confirms file upload lab oracle without relying on shared SPA bundle markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidateUploadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab validation APIs behind authenticated sessions.",
+      steps: [
+        "Require lab login before /api/validate/upload responds.",
+        "Enforce extension and content-type allow-lists on upload endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/upload endpoint leaks file upload lab hints. Show upload validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-upload-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnLab /labs/upload.html route live oracle",
+    description:
+      "When scanning /labs/upload.html, GET /api/validate/upload returns labId upload hint JSON — route-specific unrestricted file upload oracle.",
+    impactOneline:
+      "Route-specific upload lab oracle confirms VULN-004 file upload validation bypass training surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate file uploads with extension and content allow-lists.",
+      steps: [
+        "Reject executable and script extensions on upload endpoints.",
+        "Store uploads outside the web root with randomized filenames."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/upload.html route scan confirms unrestricted file upload lab. Show upload hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnlab-cms-drupal-joomla-live-oracle",
     platform: "generic",
     category: "Information disclosure",

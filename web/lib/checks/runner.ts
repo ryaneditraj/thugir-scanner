@@ -2246,6 +2246,7 @@ const DEEP_RULES = new Set<string>([
   "vulnlabValidateSqliLiveOracle",
   "vulnlabValidateXssLiveOracle",
   "vulnlabValidateIdorLiveOracle",
+  "vulnlabValidateUploadLiveOracle",
   "vulnlabValidatePathTraversalLiveOracle",
   "vulnlabValidatePathTraversalRouteLiveOracle",
   "vulnlabJwtDecodeLiveOracle",
@@ -2257,6 +2258,9 @@ const DEEP_RULES = new Set<string>([
   "vulnlabRestBolaLiveOracle",
   "vulnlabGraphqlSoapLiveOracle",
   "vulnlabClickjackingLiveOracle",
+  "vulnlabClickjackingRouteLiveOracle",
+  "vulnlabEnvFileRouteLiveOracle",
+  "vulnlabUploadRouteLiveOracle",
   "vulnlabCmsDrupalJoomlaLiveOracle",
   "vulnlabGitHeadLiveOracle",
   "vulnlabPlatformPhpLiveOracle",
@@ -6599,6 +6603,8 @@ function extractVulnLabAcademySeeds(html: string, pageUrl: string): string[] {
     "/labs/security-headers.html",
     "/labs/clickjacking.html",
     "/labs/cors.html",
+    "/labs/env-file.html",
+    "/labs/upload.html",
     "/backup/",
     "/admin/"
   ]) {
@@ -12885,6 +12891,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /zero\.webappsecurity\.com/i.test(origin) &&
         /\/login(?:\.html)?/i.test(targetInput) &&
         p.slug.startsWith("zero-bank-login")
+      )
+        return -4;
+      if (
+        /hack-this-site-eta\.vercel\.app/i.test(origin) &&
+        /\/labs\/clickjacking\.html/i.test(targetInput) &&
+        p.slug.startsWith("vulnlab-clickjacking")
+      )
+        return -4;
+      if (
+        /hack-this-site-eta\.vercel\.app/i.test(origin) &&
+        /\/labs\/env-file\.html/i.test(targetInput) &&
+        (p.slug.startsWith("vulnlab-env-file") || p.slug.startsWith("vulnlab-backup"))
+      )
+        return -4;
+      if (
+        /hack-this-site-eta\.vercel\.app/i.test(origin) &&
+        /\/labs\/upload\.html/i.test(targetInput) &&
+        (p.slug.startsWith("vulnlab-upload") || p.slug === "vulnlab-validate-upload-live-oracle")
       )
         return -4;
       if (
