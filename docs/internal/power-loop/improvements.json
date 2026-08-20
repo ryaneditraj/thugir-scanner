@@ -4211,6 +4211,24 @@
       "slug": "riglabs-cyber-lab-dead-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /sqli and /xss return HTTP 404 with next-error-h1 This page could not be found on Cyber Lab | Riglabs Collective shell; riglabs-cyber-lab.vercel.app/sqli findings 5→6 (+riglabs-cyber-lab-dead-route-live-oracle +riglabs-cyber-lab-dead-route-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-wishlist-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /wishlist/1 returns HTTP 404 on live deploy; pwnshopWishlistIdorLiveOracle probes /wishlist/1-3 for unauthenticated wishlist disclosure (PWN-003); pwnshop.ctfsecurity.com/wishlist/1 route scan fires pwnshop-wishlist-idor-route-live-oracle via vulnerability-registry fallback; benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-wishlist-idor-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for pwnshop-wishlist-idor-* on /wishlist/:user_id routes; pwnshop.ctfsecurity.com/wishlist/1 findings 9→11 (+pwnshop-wishlist-idor-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-wishlist-reflexion-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopWishlistReflexionSuppressed skips reflexionEscalatedSqli/Xss on /wishlist/:id styled 404 shell; pwnshop.ctfsecurity.com/wishlist/1 findings 20→11 (-reflexion-escalated-sqli -reflexion-escalated-xss, +pwnshop-wishlist-idor-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
     }
   ]
 }
