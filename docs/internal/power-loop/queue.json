@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-20T04:05:43.264Z",
+  "updated_at": "2026-08-20T05:07:06.317Z",
   "discovery_urls": [
+    {
+      "url": "https://dvwu.vercel.app/sqli",
+      "source": "DVWU Damn Vulnerable Web University — SQLi training route (Vercel deploy; web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/idor",
+      "source": "DVWU — IDOR/BOLA training route with sequential object access (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/admin",
+      "source": "DVWU — unauthenticated admin panel route oracle (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/xss",
+      "source": "DVWU — reflected/stored XSS training route (Vercel deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/csrf",
+      "source": "DVWU — CSRF token bypass training route (Vercel deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crapi.apisec.ai/identity/api/auth/signup",
       "source": "OWASP crAPI APIsec hosted — mass-assignment signup oracle POST /identity/api/auth/signup (OWASP crAPI challenges)",
