@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-messages-read-idor-probe-range-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultappMessagesProbeIds extends POST /api/messages/read sweep to seeded ID 217 + range 100-350 (omega DB seeds above prior 179 cap); vaultapp-omega.vercel.app/api/messages/1 findings 11→13 (+vaultapp-messages-read-idor-live-oracle +vaultapp-messages-read-idor-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-ssrf-upstream-status-tolerance",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreSsrfResponseConfirmed accepts server-side fetch when httpbin returns status_code 503 with echoed preview; multi-target fallback (httpbin/postman-echo/example.com); duck-store.escape.tech/api/v1/uploads/fetch-url + import-from-url route scans both fire live+route SSRF oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-ssrf-import-fresh-token-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreSsrfImportFromUrlLiveOracle falls back to duckStoreRegisterFreshLoginToken when cached register token missing; duck-store.escape.tech/api/v1/uploads/import-from-url findings 29→31 (+duck-store-ssrf-import-from-url-live-oracle +duck-store-ssrf-import-from-url-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:api.graphqlbook.org",
       "slug": "graphqlbook-forgot-password-takeover-live-oracle",
       "status": "shipped",
