@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T19:14:00.000Z",
+  "updated_at": "2026-08-20T20:14:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2935,
-  "total_findings": 31150,
+  "total_sites_scanned": 2943,
+  "total_findings": 31312,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2023,
-  "discovery_findings": 25152,
+  "discovery_urls_added": 2028,
+  "discovery_findings": 25268,
   "improvements_shipped": 1212,
-  "last_run": "2026-08-20T19:14:00.000Z",
+  "last_run": "2026-08-20T20:14:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_findings": 46,
       "oracle_recall": "6/6",
       "gap": [],
-      "pages_crawled": 6,
-      "probes_run": 576,
+      "pages_crawled": 1,
+      "probes_run": 575,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,52 +48,46 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings); no benchmark category gaps"
+      "note": "Primary heroku 503 — staging fallback 6/6 recall (46 findings, 36 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 10,
-      "findings": 127,
-      "focus": "PromptShield LLM01 defense demo, Fabraix route oracles, RatTasks TODO lab, SecLab IDOR, Docker DevBoard, DVWU /labs/*",
-      "improvements_shipped_this_run": 4
+      "urls_scanned": 7,
+      "findings": 116,
+      "focus": "DVWU /labs/sqli+lfi+xss route oracles, AI Security Platform command-injection+path-traversal challenges, vulnbank queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "prompt-shield1.vercel.app: 4→4 findings with +prompt-shield-prompt-injection-defense-live-oracle (Railway /chat blocks jailbreak risk_score>=60, benign FAQ 4.5% APY) and -reflexion-escalated-ssti FP",
-      "playground.fabraix.com/challenges/data-exfiltration-001: 5→6 findings with +fabraix-data-exfiltration-001-route-live-oracle (data-exfil-001 Iris backend)",
-      "playground.fabraix.com/challenges/indirect-prompt-injection-001: 5→6 findings with +fabraix-indirect-prompt-injection-route-live-oracle (access-code-001 Gatekeeper backend)",
-      "dvwu.vercel.app/labs/ssrf: 13 findings with dvwu-ssrf-redirect-live-oracle + portal sqli/lfi oracles",
-      "dvwu.vercel.app/labs/broken-auth: 12 findings with dvwu-ssrf-redirect-live-oracle + auth/sqli oracles",
-      "pwnshop.ctfsecurity.com/admin/login: 47 findings (queue drain)",
-      "vulnbank.org/api/v1/forgot-password: 29 findings (queue drain)"
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (46 findings, 36 live oracles) — primary heroku dyno 503 unavailable",
+      "dvwu.vercel.app/labs/sqli: 15 findings with dvwu-sqli-route-live-oracle + portal/search SQLi oracles",
+      "dvwu.vercel.app/labs/lfi: 13 findings with dvwu-notices-lfi-route-live-oracle + notices-file-lfi-probe",
+      "dvwu.vercel.app/labs/xss: 15 findings with XSS route oracles + dangerous-html-sinks",
+      "ai-security-platform-iota.vercel.app/challenges/command-injection: 6 findings (client-side-ai-security-platform-evidence, no route-specific command-injection live oracle)",
+      "ai-security-platform-iota.vercel.app/challenges/path-traversal: 6 findings (catalog evidence, no route-specific path-traversal live oracle)",
+      "vulnbank.org/check_balance/3518655174: 30 findings with vulnbank-check-balance-idor-route-live-oracle (queue drain)",
+      "vulnbank.org/request_loan: 31 findings (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "juice-shop.herokuapp.com primary oracle 503 (Heroku dyno unavailable) — staging fallback used",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "prompt-shield1.vercel.app: defense demo oracle shipped; successful jailbreak extraction oracle still absent (defense blocks all tested payloads)",
-      "seclab.vercel.app/labs/xss: Angular stub only — live XSS training API not deployed on Vercel host",
-      "ratdo.thexssrat.com: 1 finding (misconfig only) — no XSS/IDOR/CSRF live oracles for RatTasks TODO app yet",
-      "seclab.vercel.app/labs/idor: 5 findings but seclab-labs-dead-route-live-oracle — no IDOR exploit live oracle on /labs/idor page",
-      "dockerworkshop.vercel.app/lab8/projects/devboard: 4 findings (misconfig/source-maps) — no DevBoard pagination/auth bug live oracles",
+      "ai-security-platform command-injection/path-traversal: challenge catalog detected but route-specific live oracles absent",
       "testphp.vulnweb.com/search.php unreachable from cloud agent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "pwnshop.ctfsecurity.com/track": 45,
-    "pwnshop.ctfsecurity.com/wishlist/1": 44,
-    "pwnshop.ctfsecurity.com/admin/login": 47,
-    "pwnshop.ctfsecurity.com/search/filters": 47,
-    "pwnshop.ctfsecurity.com/export-orders": 48,
-    "prompt-shield1.vercel.app": 4,
-    "playground.fabraix.com/challenges/data-exfiltration-001": 6,
-    "playground.fabraix.com/challenges/indirect-prompt-injection-001": 6,
+    "juice-shop-staging.herokuapp.com": 46,
+    "dvwu.vercel.app/labs/sqli": 15,
+    "dvwu.vercel.app/labs/lfi": 13,
+    "dvwu.vercel.app/labs/xss": 15,
     "dvwu.vercel.app/labs/ssrf": 13,
     "dvwu.vercel.app/labs/broken-auth": 12,
-    "vulnbank.org/api/v1/forgot-password": 29,
-    "ai-security-platform-iota.vercel.app/challenges/open-redirect": 7,
-    "ai-security-platform-iota.vercel.app/challenges/prompt-injection": 3,
-    "seclab.vercel.app/labs/xss": 5
+    "ai-security-platform-iota.vercel.app/challenges/command-injection": 6,
+    "ai-security-platform-iota.vercel.app/challenges/path-traversal": 6,
+    "vulnbank.org/check_balance/3518655174": 30,
+    "vulnbank.org/request_loan": 31,
+    "pwnshop.ctfsecurity.com/admin/login": 47,
+    "prompt-shield1.vercel.app": 4
   }
 }

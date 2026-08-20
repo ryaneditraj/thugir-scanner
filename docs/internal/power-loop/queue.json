@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-20T19:06:00.000Z",
+  "updated_at": "2026-08-20T20:08:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://dvwu.vercel.app/labs/sqli",
+      "source": "zahidoverflow/dvwu — SQL injection training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/lfi",
+      "source": "zahidoverflow/dvwu — local file inclusion training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/xss",
+      "source": "zahidoverflow/dvwu — cross-site scripting training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/command-injection",
+      "source": "AI Security Platform — OWASP command-injection hands-on challenge module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/path-traversal",
+      "source": "AI Security Platform — OWASP path-traversal hands-on challenge module (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://ratdo.thexssrat.com/",
       "source": "The-XSS-Rat/RatDo — RatTasks intentionally vulnerable TODO app (XSS/IDOR/CSRF/clickjacking; RatCTF LinkedIn 2026)",
