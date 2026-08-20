@@ -74516,6 +74516,171 @@ const vulnlabUploadRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnlabSqliErrorRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/sqli-error\.html/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnlabValidateSqliLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnLab /labs/sqli-error.html route scan — /api/validate/sqli-error returns live SQL injection lab oracle JSON"
+      }
+    };
+  }
+  const validateUrl = new URL("/api/validate/sqli-error", ctx.origin).toString();
+  const validateDoc = await ctx.probe.get(validateUrl, { maxBytes: 4096 });
+  if (
+    validateDoc.status >= 200 &&
+    validateDoc.status < 400 &&
+    /"labId"\s*:\s*"sqli-error"/.test(validateDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        validateUrl,
+        snippet: validateDoc.body.slice(0, 200).trim(),
+        note: "VulnLab /labs/sqli-error.html route scan — /api/validate/sqli-error returns live SQLi lab oracle JSON"
+      }
+    };
+  }
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "A03-001 SQL injection error lab", re: /A03-001 SQL Injection \(Error\)|data-lab-id=["']sqli-error["']/i },
+    { label: "simulated /api/sql id probe", re: /fetch\(["']\/api\/sql\?id=|\/api\/sql\?id=/i },
+    { label: "sqli-error lab path", re: /\/labs\/sqli-error\.html/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 2 ? 0.87 : 0.85,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: "VulnLab /labs/sqli-error.html route scan — error-based SQLi lab documented when live validate API probe did not complete"
+    }
+  };
+};
+
+const vulnlabXssReflectedRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/xss-reflected\.html/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnlabValidateXssLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnLab /labs/xss-reflected.html route scan — /api/validate/xss-reflected returns live reflected XSS lab oracle JSON"
+      }
+    };
+  }
+  const validateUrl = new URL("/api/validate/xss-reflected", ctx.origin).toString();
+  const validateDoc = await ctx.probe.get(validateUrl, { maxBytes: 4096 });
+  if (
+    validateDoc.status >= 200 &&
+    validateDoc.status < 400 &&
+    /"labId"\s*:\s*"xss-reflected"/.test(validateDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        validateUrl,
+        snippet: validateDoc.body.slice(0, 200).trim(),
+        note: "VulnLab /labs/xss-reflected.html route scan — /api/validate/xss-reflected returns live XSS lab oracle JSON"
+      }
+    };
+  }
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "A03-006 reflected XSS lab", re: /A03-006 Reflected XSS|data-lab-id=["']xss-reflected["']/i },
+    { label: "innerHTML DOM sink", re: /xss-output["']\)\.innerHTML|\.innerHTML\s*=\s*[^;]+searchParams/i },
+    { label: "xss-reflected lab path", re: /\/labs\/xss-reflected\.html/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 2 ? 0.87 : 0.85,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: "VulnLab /labs/xss-reflected.html route scan — reflected XSS lab documented when live validate API probe did not complete"
+    }
+  };
+};
+
+const vulnlabIdorRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/idor\.html/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnlabValidateIdorLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnLab /labs/idor.html route scan — /api/validate/idor returns live IDOR lab oracle JSON"
+      }
+    };
+  }
+  const validateUrl = new URL("/api/validate/idor", ctx.origin).toString();
+  const validateDoc = await ctx.probe.get(validateUrl, { maxBytes: 4096 });
+  if (
+    validateDoc.status >= 200 &&
+    validateDoc.status < 400 &&
+    /"labId"\s*:\s*"idor"/.test(validateDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        validateUrl,
+        snippet: validateDoc.body.slice(0, 200).trim(),
+        note: "VulnLab /labs/idor.html route scan — /api/validate/idor returns live IDOR lab oracle JSON"
+      }
+    };
+  }
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "A01-001 IDOR order lookup lab", re: /A01-001 IDOR Scanner|data-lab-id=["']idor["']/i },
+    { label: "unauthenticated /api/orders fetch", re: /fetch\(\s*["']\/api\/orders\/["']\s*\+|\/api\/validate\/idor/i },
+    { label: "idor lab path", re: /\/labs\/idor\.html/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 2 ? 0.87 : 0.85,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: "VulnLab /labs/idor.html route scan — IDOR order lookup lab documented when live validate API probe did not complete"
+    }
+  };
+};
+
 const vulnlabCmsDrupalJoomlaLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
@@ -89680,6 +89845,9 @@ export const RULES: Record<string, Rule> = {
   vulnlabClickjackingRouteLiveOracle,
   vulnlabEnvFileRouteLiveOracle,
   vulnlabUploadRouteLiveOracle,
+  vulnlabSqliErrorRouteLiveOracle,
+  vulnlabXssReflectedRouteLiveOracle,
+  vulnlabIdorRouteLiveOracle,
   vulnlabCmsDrupalJoomlaLiveOracle,
   vulnlabGitHeadLiveOracle,
   vulnlabPlatformPhpLiveOracle,
