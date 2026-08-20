@@ -2247,9 +2247,12 @@ const DEEP_RULES = new Set<string>([
   "vulnlabValidateXssLiveOracle",
   "vulnlabValidateIdorLiveOracle",
   "vulnlabValidateUploadLiveOracle",
+  "vulnlabValidateCorsLiveOracle",
+  "vulnlabValidateInputValidationLiveOracle",
   "vulnlabValidatePathTraversalLiveOracle",
   "vulnlabValidatePathTraversalRouteLiveOracle",
   "vulnlabJwtDecodeLiveOracle",
+  "vulnlabJwtRouteLiveOracle",
   "vulnlabAuthSessionLiveOracle",
   "vulnlabAuthLoginEnumerationLiveOracle",
   "vulnlabBackupConfigLiveOracle",
@@ -2264,6 +2267,10 @@ const DEEP_RULES = new Set<string>([
   "vulnlabSqliErrorRouteLiveOracle",
   "vulnlabXssReflectedRouteLiveOracle",
   "vulnlabIdorRouteLiveOracle",
+  "vulnlabCorsLiveOracle",
+  "vulnlabCorsRouteLiveOracle",
+  "vulnlabInputValidationLiveOracle",
+  "vulnlabInputValidationRouteLiveOracle",
   "vulnlabCmsDrupalJoomlaLiveOracle",
   "vulnlabGitHeadLiveOracle",
   "vulnlabPlatformPhpLiveOracle",
@@ -12930,6 +12937,25 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /hack-this-site-eta\.vercel\.app/i.test(origin) &&
         /\/labs\/idor\.html/i.test(targetInput) &&
         (p.slug.startsWith("vulnlab-idor") || p.slug === "vulnlab-validate-idor-live-oracle")
+      )
+        return -4;
+      if (
+        /hack-this-site-eta\.vercel\.app/i.test(origin) &&
+        /\/labs\/cors\.html/i.test(targetInput) &&
+        (p.slug.startsWith("vulnlab-cors") || p.slug === "vulnlab-validate-cors-live-oracle")
+      )
+        return -4;
+      if (
+        /hack-this-site-eta\.vercel\.app/i.test(origin) &&
+        /\/labs\/input-validation\.html/i.test(targetInput) &&
+        (p.slug.startsWith("vulnlab-input-validation") ||
+          p.slug === "vulnlab-validate-input-validation-live-oracle")
+      )
+        return -4;
+      if (
+        /hack-this-site-eta\.vercel\.app/i.test(origin) &&
+        /\/auth\/jwt\.html/i.test(targetInput) &&
+        (p.slug.startsWith("vulnlab-jwt") || p.slug === "vulnlab-jwt-decode-live-oracle")
       )
         return -4;
       if (

@@ -73966,7 +73966,9 @@ const VULNLAB_VALIDATE_LAB_SPECS: VulnlabValidateLabSpec[] = [
   { labId: "sqli-error", topic: "SQL injection error-based lab", cwe: "sqli" },
   { labId: "xss-reflected", topic: "reflected XSS lab", cwe: "xss" },
   { labId: "idor", topic: "IDOR order lookup lab", cwe: "idor" },
-  { labId: "upload", topic: "unrestricted file upload lab", cwe: "upload" }
+  { labId: "upload", topic: "unrestricted file upload lab", cwe: "upload" },
+  { labId: "cors", topic: "CORS misconfiguration lab", cwe: "cors" },
+  { labId: "input-validation", topic: "missing input validation lab", cwe: "injection" }
 ];
 
 async function probeVulnlabValidateLabOracle(
@@ -74015,6 +74017,12 @@ const vulnlabValidateIdorLiveOracle: Rule = (ctx) =>
 
 const vulnlabValidateUploadLiveOracle: Rule = (ctx) =>
   probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[3]!);
+
+const vulnlabValidateCorsLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[4]!);
+
+const vulnlabValidateInputValidationLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[5]!);
 
 const vulnlabValidatePathTraversalLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
@@ -74677,6 +74685,237 @@ const vulnlabIdorRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       markers: markers.slice(0, 3),
       note: "VulnLab /labs/idor.html route scan — IDOR order lookup lab documented when live validate API probe did not complete"
+    }
+  };
+};
+
+const vulnlabCorsLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/api\/cors/i.test(urlHint) &&
+    !/\/labs\/cors\.html/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const corsUrl = new URL("/api/cors", ctx.origin).toString();
+  const doc = await ctx.probe.get(corsUrl, {
+    maxBytes: 4096,
+    headers: { Origin: "https://evil-cors-probe.example" }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const acao = (doc.headers["access-control-allow-origin"] || "").trim();
+  const creds = (doc.headers["access-control-allow-credentials"] || "").toLowerCase() === "true";
+  if (acao !== "*" || !creds) return NEGATIVE;
+  if (!/"audit"\s*:\s*"CORS Misconfiguration"/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: corsUrl,
+      allowOrigin: acao,
+      allowCredentials: creds,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "VulnLab GET /api/cors returns Allow-Origin * with Allow-Credentials true — insecure CORS misconfiguration oracle"
+    }
+  };
+};
+
+const vulnlabCorsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/cors\.html/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnlabCorsLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnLab /labs/cors.html route scan — GET /api/cors returns Allow-Origin * with Allow-Credentials true"
+      }
+    };
+  }
+  const liveValidate = await vulnlabValidateCorsLiveOracle(ctx);
+  if (liveValidate.fired) {
+    return {
+      fired: true,
+      confidence: liveValidate.confidence,
+      evidence: {
+        ...liveValidate.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnLab /labs/cors.html route scan — /api/validate/cors returns live CORS lab oracle JSON"
+      }
+    };
+  }
+  const validateUrl = new URL("/api/validate/cors", ctx.origin).toString();
+  const validateDoc = await ctx.probe.get(validateUrl, { maxBytes: 4096 });
+  if (
+    validateDoc.status >= 200 &&
+    validateDoc.status < 400 &&
+    /"labId"\s*:\s*"cors"/.test(validateDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        validateUrl,
+        snippet: validateDoc.body.slice(0, 200).trim(),
+        note: "VulnLab /labs/cors.html route scan — /api/validate/cors returns live CORS lab oracle JSON"
+      }
+    };
+  }
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "A05-006 CORS misconfiguration lab", re: /A05-006 CORS Misconfiguration|data-lab-id=["']cors["']/i },
+    { label: "wildcard origin with credentials", re: /Allow-Origin \* with credentials|wildcard origin with credentials/i },
+    { label: "cors lab path", re: /\/labs\/cors\.html|\/api\/cors/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 2 ? 0.87 : 0.85,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: "VulnLab /labs/cors.html route scan — CORS misconfiguration lab documented when live /api/cors probe did not complete"
+    }
+  };
+};
+
+const vulnlabInputValidationLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const urlHint = `${ctx.scanUrl || ""}\n${pageUrl}`;
+  if (
+    !/hack-this-site-eta\.vercel\.app/i.test(urlHint) &&
+    !/\/api\/validate\?/i.test(urlHint) &&
+    !/\/labs\/input-validation\.html/i.test(urlHint)
+  ) {
+    return NEGATIVE;
+  }
+  const probeUrl = new URL("/api/validate?input=test", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"audit"\s*:\s*"Input Validation"/.test(doc.body) || !/"input"\s*:/.test(doc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "VulnLab GET /api/validate?input= returns Input Validation audit JSON — weak validation simulator oracle"
+    }
+  };
+};
+
+const vulnlabInputValidationRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/input-validation\.html/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnlabInputValidationLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnLab /labs/input-validation.html route scan — GET /api/validate?input= returns Input Validation audit JSON"
+      }
+    };
+  }
+  const liveValidate = await vulnlabValidateInputValidationLiveOracle(ctx);
+  if (liveValidate.fired) {
+    return {
+      fired: true,
+      confidence: liveValidate.confidence,
+      evidence: {
+        ...liveValidate.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnLab /labs/input-validation.html route scan — /api/validate/input-validation returns live input-validation lab oracle JSON"
+      }
+    };
+  }
+  const validateUrl = new URL("/api/validate/input-validation", ctx.origin).toString();
+  const validateDoc = await ctx.probe.get(validateUrl, { maxBytes: 4096 });
+  if (
+    validateDoc.status >= 200 &&
+    validateDoc.status < 400 &&
+    /"labId"\s*:\s*"input-validation"/.test(validateDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        validateUrl,
+        snippet: validateDoc.body.slice(0, 200).trim(),
+        note: "VulnLab /labs/input-validation.html route scan — /api/validate/input-validation returns live input-validation lab oracle JSON"
+      }
+    };
+  }
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "input validation lab", re: /data-lab-id=["']input-validation["']|Validation Simulator/i },
+    { label: "weak validation simulator", re: /\/api\/validate\?input=|bypasses validation filters/i },
+    { label: "input-validation lab path", re: /\/labs\/input-validation\.html/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 2 ? 0.87 : 0.85,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: "VulnLab /labs/input-validation.html route scan — input validation lab documented when live validate API probe did not complete"
+    }
+  };
+};
+
+const vulnlabJwtRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/auth\/jwt\.html/i.test(pageUrl)) return NEGATIVE;
+  const live = await vulnlabJwtDecodeLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "VulnLab /auth/jwt.html route scan — /api/jwt/decode accepts alg=none JWT without signature validation"
+      }
+    };
+  }
+  const corpus = vulnlabOwaspModuleCorpus(ctx);
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "JWT-001 decoder lab", re: /JWT-001 Decoder|decodeJwt\(\)|\/api\/jwt\/decode/i },
+    { label: "alg=none token disclosure", re: /alg.*none|No signature validation/i },
+    { label: "jwt lab path", re: /\/auth\/jwt\.html/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 2 ? 0.87 : 0.85,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: "VulnLab /auth/jwt.html route scan — JWT alg=none decoder lab documented when live /api/jwt/decode probe did not complete"
     }
   };
 };
@@ -89831,9 +90070,12 @@ export const RULES: Record<string, Rule> = {
   vulnlabValidateXssLiveOracle,
   vulnlabValidateIdorLiveOracle,
   vulnlabValidateUploadLiveOracle,
+  vulnlabValidateCorsLiveOracle,
+  vulnlabValidateInputValidationLiveOracle,
   vulnlabValidatePathTraversalLiveOracle,
   vulnlabValidatePathTraversalRouteLiveOracle,
   vulnlabJwtDecodeLiveOracle,
+  vulnlabJwtRouteLiveOracle,
   vulnlabAuthSessionLiveOracle,
   vulnlabAuthLoginEnumerationLiveOracle,
   vulnlabBackupConfigLiveOracle,
@@ -89848,6 +90090,10 @@ export const RULES: Record<string, Rule> = {
   vulnlabSqliErrorRouteLiveOracle,
   vulnlabXssReflectedRouteLiveOracle,
   vulnlabIdorRouteLiveOracle,
+  vulnlabCorsLiveOracle,
+  vulnlabCorsRouteLiveOracle,
+  vulnlabInputValidationLiveOracle,
+  vulnlabInputValidationRouteLiveOracle,
   vulnlabCmsDrupalJoomlaLiveOracle,
   vulnlabGitHeadLiveOracle,
   vulnlabPlatformPhpLiveOracle,

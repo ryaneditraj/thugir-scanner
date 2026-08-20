@@ -28127,6 +28127,184 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-cors-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnLab CORS misconfiguration live oracle",
+    description:
+      "GET /api/cors returns Access-Control-Allow-Origin * with Access-Control-Allow-Credentials true — the insecure wildcard-with-credentials CORS training oracle.",
+    impactOneline:
+      "Live CORS probe confirms wildcard origin combined with credentials on hack-this-site-eta.vercel.app.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabCorsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never combine Access-Control-Allow-Origin * with Allow-Credentials true.",
+      steps: [
+        "Use an explicit origin allow-list instead of wildcard when credentials are enabled.",
+        "Reject credentialed cross-origin requests from untrusted origins.",
+        "Gate CORS training labs behind authenticated sessions."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/cors endpoint returns Allow-Origin * with Allow-Credentials true. Show CORS hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-validate-cors-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnLab /api/validate/cors live oracle",
+    description:
+      "GET /api/validate/cors returns labId cors with a hint to examine Access-Control-Allow-Origin headers — the CORS validation checker API oracle.",
+    impactOneline:
+      "Live validate API confirms CORS misconfiguration lab checker is reachable on VulnLab Academy.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidateCorsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict lab validate APIs to authenticated training sessions.",
+      steps: [
+        "Require lab login before /api/validate/cors responds.",
+        "Fix wildcard origin combined with credentials on /api/cors."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/cors checker API exposes CORS lab validation. Show CORS and API access remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-cors-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnLab /labs/cors.html route live oracle",
+    description:
+      "When scanning /labs/cors.html, confirms insecure CORS via live /api/cors probe, /api/validate/cors, or corpus fallback for A05-006 wildcard-with-credentials lab.",
+    impactOneline:
+      "Route-specific CORS lab oracle distinct from generic VulnLab hub fingerprint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabCorsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never combine Access-Control-Allow-Origin * with Allow-Credentials true.",
+      steps: [
+        "Use an explicit origin allow-list instead of wildcard when credentials are enabled.",
+        "Gate CORS training labs behind authenticated sessions."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/cors.html route scan confirms CORS misconfiguration lab. Show CORS hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-input-validation-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "VulnLab input validation simulator live oracle",
+    description:
+      "GET /api/validate?input= returns Input Validation audit JSON — the weak validation simulator training oracle.",
+    impactOneline:
+      "Live input validation probe confirms filter-bypass training surface on VulnLab Academy.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabInputValidationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and sanitize all user input server-side with strict allow-lists.",
+      steps: [
+        "Reject dangerous characters at the server boundary.",
+        "Use parameterized queries and output encoding.",
+        "Gate lab validate APIs behind authentication."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate?input= endpoint exposes a weak validation simulator. Show input validation hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-validate-input-validation-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "VulnLab /api/validate/input-validation live oracle",
+    description:
+      "GET /api/validate/input-validation returns labId input-validation with filter-bypass hints — the input validation checker API oracle.",
+    impactOneline:
+      "Live validate API confirms missing input validation lab checker is reachable on VulnLab Academy.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidateInputValidationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict lab validate APIs to authenticated training sessions.",
+      steps: [
+        "Require lab login before /api/validate/input-validation responds.",
+        "Enforce strict server-side input validation on all user-controlled fields."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/input-validation checker API exposes input validation lab. Show validation hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-input-validation-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "VulnLab /labs/input-validation.html route live oracle",
+    description:
+      "When scanning /labs/input-validation.html, confirms weak validation via /api/validate?input=, /api/validate/input-validation, or corpus fallback.",
+    impactOneline:
+      "Route-specific input validation lab oracle distinct from generic VulnLab hub fingerprint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabInputValidationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and sanitize all user input server-side with strict allow-lists.",
+      steps: [
+        "Reject dangerous characters at the server boundary.",
+        "Gate lab validate APIs behind authentication."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/input-validation.html route scan confirms weak validation lab. Show input validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-jwt-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "VulnLab /auth/jwt.html route live oracle",
+    description:
+      "When scanning /auth/jwt.html, confirms alg=none JWT decode via /api/jwt/decode or corpus fallback for JWT-001 decoder lab.",
+    impactOneline:
+      "Route-specific JWT alg=none lab oracle distinct from generic VulnLab hub fingerprint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabJwtRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject alg=none JWTs and enforce signature verification.",
+      steps: [
+        "Whitelist allowed JWT algorithms and reject 'none'.",
+        "Verify signatures with a trusted secret or public key.",
+        "Gate JWT decoder labs behind authenticated sessions."
+      ]
+    },
+    fixPrompt:
+      "Our /auth/jwt.html route scan confirms alg=none JWT decoder lab. Show JWT verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnlab-cms-drupal-joomla-live-oracle",
     platform: "generic",
     category: "Information disclosure",
