@@ -62,6 +62,22 @@ function vulnforgeAcademyFileUploadReflexionSuppressed(ctx: PowerCtx): boolean {
   return levelMatch !== null;
 }
 
+/** VulnForge SSRF tiers (levels 13–15) — generic reflexion SSTI false-positives alongside SSRF route oracle. */
+function vulnforgeAcademySsrfReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!VULNFORGE_ACADEMY_HOST_RE.test(pageUrl)) return false;
+  const levelMatch = pageUrl.match(/level(1[3-5])\.php/i);
+  return levelMatch !== null;
+}
+
+/** VulnForge RCE tiers (levels 19–20) — generic reflexion SSTI duplicates level-ssti-route oracle. */
+function vulnforgeAcademyRceReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!VULNFORGE_ACADEMY_HOST_RE.test(pageUrl)) return false;
+  const levelMatch = pageUrl.match(/level(19|20)\.php/i);
+  return levelMatch !== null;
+}
+
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
 
 // --- Directory wordlist (compact subset) ------------------------------------
@@ -242,6 +258,8 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (vulnforgeAcademyFileUploadReflexionSuppressed(ctx)) return NEGATIVE;
+  if (vulnforgeAcademySsrfReflexionSuppressed(ctx)) return NEGATIVE;
+  if (vulnforgeAcademyRceReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 
