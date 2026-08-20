@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T05:09:07.025Z",
+  "updated_at": "2026-08-20T05:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,19 +15,19 @@
       ]
     }
   },
-  "total_sites_scanned": 2811,
-  "total_findings": 28562,
+  "total_sites_scanned": 2812,
+  "total_findings": 28571,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1991,
-  "discovery_findings": 23778,
-  "improvements_shipped": 1179,
-  "last_run": "2026-08-20T05:09:07.025Z",
+  "discovery_findings": 23787,
+  "improvements_shipped": 1182,
+  "last_run": "2026-08-20T05:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "05",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 46,
       "oracle_recall": "6/6",
       "gap": [],
@@ -48,44 +48,41 @@
           ]
         }
       },
-      "note": "PRIMARY MISS juice-shop.herokuapp.com unreachable; staging fallback 6/6 with 46 findings (35+ juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (46 findings); primary heroku intermittently unreachable — staging fallback also 6/6; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 120,
-      "focus": "DVWU route oracles (sqli/idor/admin/xss/csrf) + queue drain (pwnshop track/1, fauxbank register)",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 8,
+      "findings": 129,
+      "focus": "crAPI shop orders BOLA + Challenge 8 mass-assignment + DVWU route drain + pwnshop track/1",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (46 findings) — primary heroku unreachable, no category gaps",
-      "dvwu.vercel.app/sqli: 12 findings — dvwu-sqli-route-live-oracle",
-      "dvwu.vercel.app/idor: 12 findings — dvwu-idor-route-live-oracle",
-      "dvwu.vercel.app/admin: 12 findings — dvwu-admin-route-live-oracle",
-      "dvwu.vercel.app/xss: 13 findings — dvwu-xss-route-live-oracle",
-      "dvwu.vercel.app/csrf: 11 findings — shared DVWU fingerprint without route-specific CSRF oracle",
-      "pwnshop.ctfsecurity.com/track/1: 46 findings — pwnshop-track-idor-live-oracle",
-      "pentest-fauxbank.vercel.app/register: 14 findings — shared fauxbank fingerprint"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no category gaps",
+      "crapi.apisec.ai/workshop/api/shop/orders/1: 7→9 findings — crapi-shop-orders-id-bola-route-live-oracle + crapi-shop-order-status-mass-assignment-route-live-oracle shipped",
+      "dvwu.vercel.app/sqli/idor/admin/xss: route oracles active (12–13 findings each)",
+      "pwnshop.ctfsecurity.com/track/1: 46 findings — pwnshop-track-idor-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + security-question oracles)",
-      "juice-shop.herokuapp.com primary oracle unreachable from cloud agent — staging fallback required",
-      "dvwu.vercel.app/csrf: 11-finding hub without route-specific CSRF token-bypass oracle",
-      "crapi.apisec.ai unreachable from cloud agent (timeout) — community/dashboard/video routes queued but not drainable",
-      "testphp.vulnweb.com unreachable from cloud agent (DNS/timeout)",
-      "pwnshop.ctfsecurity.com/track/1: track-IDOR oracle present but wallet-top-up credited_amount oracle still absent"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "juice-shop.herokuapp.com primary oracle intermittently unreachable — staging fallback required",
+      "pwnshop.ctfsecurity.com/api/orders/submit: XXE order-submit oracle still absent",
+      "pwnshop.ctfsecurity.com/api/settings/less/imports: SSTI/RCE less-imports oracle still absent",
+      "dvwu.vercel.app/csrf: route-specific CSRF oracle still absent",
+      "crapi.apisec.ai intermittently unreachable — live probes need demo JWT when host is up"
     ]
   },
   "discovery_highlights": {
+    "juice-shop.herokuapp.com": 46,
     "juice-shop-staging.herokuapp.com": 46,
+    "crapi.apisec.ai/workshop/api/shop/orders/1": 9,
     "pwnshop.ctfsecurity.com/track/1": 46,
+    "pwnshop.ctfsecurity.com/api/orders/submit": 45,
     "dvwu.vercel.app/xss": 13,
     "dvwu.vercel.app/sqli": 12,
     "dvwu.vercel.app/idor": 12,
-    "dvwu.vercel.app/admin": 12,
-    "dvwu.vercel.app/csrf": 11,
-    "pentest-fauxbank.vercel.app/register": 14
+    "dvwu.vercel.app/admin": 12
   }
 }

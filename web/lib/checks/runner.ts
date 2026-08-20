@@ -2573,7 +2573,10 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceLoggerRouteLiveOracle",
   "crapi2ShopOrdersAllRouteLiveOracle",
   "crapi2ShopOrdersIdBolaRouteLiveOracle",
+  "crapiShopOrdersIdBolaLiveOracle",
   "crapiShopOrdersIdBolaRouteLiveOracle",
+  "crapiShopOrderStatusMassAssignmentLiveOracle",
+  "crapiShopOrderStatusMassAssignmentRouteLiveOracle",
   "crapiMechanicReportBolaLiveOracle",
   "crapiMechanicReportRouteLiveOracle",
   "crapiVehicleBolaLiveOracle",
@@ -12244,6 +12247,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("crapi-community-posts")
       )
         return -3;
+      if (
+        /crapi2?\.apisec\.ai/i.test(origin) &&
+        /\/shop\/orders\b/i.test(targetInput) &&
+        (p.slug.startsWith("crapi-shop-orders") || p.slug.startsWith("crapi2-shop-orders"))
+      )
+        return -4;
       if (
         /crapi2?\.apisec\.ai/i.test(origin) &&
         /\/mechanic_report/i.test(targetInput) &&
