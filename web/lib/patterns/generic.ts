@@ -62690,7 +62690,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "VaultApp admin audit-log route IDOR live oracle",
     description:
-      "When scanning /api/admin/audit-logs, any authenticated user queries audit logs for arbitrary user_id without admin role — route-specific VaultApp IDOR oracle.",
+      "When scanning /api/audit-logs or /api/admin/audit-logs, any authenticated user queries audit logs for arbitrary user_id without admin role — route-specific VaultApp IDOR oracle.",
     impactOneline:
       "Route scans on admin audit-log endpoints should confirm missing function-level authorization.",
     detectorKind: "rule_ref",
@@ -62742,7 +62742,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "VaultApp message-read route IDOR live oracle",
     description:
-      "When scanning /api/messages/read, POST message_id reads another user's private message without ownership check — route-specific VaultApp IDOR oracle.",
+      "When scanning /api/messages/:id or /api/messages/read, POST message_id reads another user's private message without ownership check — route-specific VaultApp IDOR oracle.",
     impactOneline:
       "Route scans on message-read endpoints should confirm broken object-level authorization.",
     detectorKind: "rule_ref",

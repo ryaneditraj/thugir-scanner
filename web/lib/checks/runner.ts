@@ -8351,9 +8351,18 @@ function extractVaultappSeeds(html: string, pageUrl: string): string[] {
   } catch {
     /* ignore */
   }
-  if (!/vaultapp-omega\.vercel\.app/i.test(host) && !/VaultApp|Security Training Lab/i.test(html)) return [];
+  if (!/vaultapp(?:-omega)?\.vercel\.app/i.test(host) && !/VaultApp|Security Training Lab/i.test(html)) return [];
   const out = new Set<string>();
-  for (const p of ["/login", "/lab-guide", "/dashboard"]) {
+  for (const p of [
+    "/login",
+    "/lab-guide",
+    "/dashboard",
+    "/api/messages/1",
+    "/api/audit-logs",
+    "/api/notes/1",
+    "/api/users/1",
+    "/api/documents/1"
+  ]) {
     try {
       out.add(new URL(p, pageUrl).toString());
     } catch {
@@ -11020,7 +11029,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
 
   let vaultappBootstrap = "";
-  if (/vaultapp-omega\.vercel\.app/i.test(origin) && /\/api\//i.test(targetInput)) {
+  if (/vaultapp(?:-omega)?\.vercel\.app/i.test(origin) && /\/api\//i.test(targetInput)) {
     const bootUrls = [
       new URL("/lab-guide", origin).toString(),
       new URL("/login", origin).toString()
@@ -12645,8 +12654,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/vapi\.tools\.escape\.tech/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
       if (/web-pentest-playground\.onrender\.com/i.test(origin) && p.slug.startsWith("web-pentest-playground-")) return -2;
       if (/whoopspay\.onrender\.com/i.test(origin) && p.slug.startsWith("whoopspay-")) return -2;
-      if (/vaultapp-omega\.vercel\.app/i.test(origin) && p.slug.startsWith("vaultapp-")) return -2;
-      if (/vaultapp-omega\.vercel\.app/i.test(origin) && /\/api\//i.test(targetInput) && p.slug.startsWith("vaultapp-")) return -3;
+      if (/vaultapp(?:-omega)?\.vercel\.app/i.test(origin) && p.slug.startsWith("vaultapp-")) return -2;
+      if (/vaultapp(?:-omega)?\.vercel\.app/i.test(origin) && /\/api\//i.test(targetInput) && p.slug.startsWith("vaultapp-")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && p.slug.startsWith("bypass403-")) return -2;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/waf\b/i.test(targetInput) && p.slug.startsWith("bypass403-waf")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/internal\b/i.test(targetInput) && p.slug.startsWith("bypass403-internal")) return -3;
