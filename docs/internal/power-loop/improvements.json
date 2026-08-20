@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal SQLi bypass + GET /api/search?q=' leaks admin@ist.edu.bd on /sqli route scan; dvwu.vercel.app/sqli findings 11→12 (+dvwu-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle localStorage student_id + Grade Upload + student records markers on /idor route scan; dvwu.vercel.app/idor findings 11→12 (+dvwu-idor-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /admin SPA bundle documents admin panel via SQL Injection + POST /api/portal admin' OR '1'='1 Authentication Bypass Successful; dvwu.vercel.app/admin findings 11→12 (+dvwu-admin-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ist-edu-bd.vercel.app",
       "slug": "ist-edu-admin-route-live-oracle",
       "status": "shipped",

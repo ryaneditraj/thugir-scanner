@@ -86995,6 +86995,112 @@ const dvwuXxeLabRouteLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+const dvwuSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/sqli|sqli)\/?$/i.test(pathname)) return NEGATIVE;
+  const portal = await probeDvwuPortalSqli(ctx);
+  if (portal?.fired) {
+    return {
+      fired: true,
+      confidence: portal.confidence,
+      evidence: {
+        ...portal.evidence,
+        scannedUrl: pageUrl,
+        note: "DVWU /sqli route scan — POST /api/portal with admin' OR '1'='1 bypasses authentication — route-specific SQL injection login oracle"
+      }
+    };
+  }
+  const search = await probeDvwuSearchSqli(ctx);
+  if (!search?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: search.confidence,
+    evidence: {
+      ...search.evidence,
+      scannedUrl: pageUrl,
+      note: "DVWU /sqli route scan — GET /api/search?q=' triggers SQL error and leaks admin row — route-specific SQL injection search oracle"
+    }
+  };
+};
+
+const dvwuAdminRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/admin\/?$/i.test(pathname)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (
+    bundle &&
+    (/admin panel via SQL Injection/i.test(bundle) ||
+      (/Administrator \(via SQLi\)/i.test(bundle) && /Security Alert/i.test(bundle)))
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        scannedUrl: pageUrl,
+        markers: ["admin panel via SQL Injection", "Administrator (via SQLi)"],
+        snippet: bundle.match(/admin panel via SQL Injection[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+        note: "DVWU /admin route scan — SPA documents unauthenticated admin panel access via SQL injection authentication bypass"
+      }
+    };
+  }
+  const portal = await probeDvwuPortalSqli(ctx);
+  if (!portal?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      ...portal.evidence,
+      scannedUrl: pageUrl,
+      note: "DVWU /admin route scan — POST /api/portal SQLi bypass confirms admin panel training surface reachable without valid credentials"
+    }
+  };
+};
+
+const dvwuIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvwuHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/idor|idor)\/?$/i.test(pathname)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (
+    !/localStorage\.setItem\(["']student["']/i.test(bundle) ||
+    !/Grade Upload/i.test(bundle) ||
+    !/student records/i.test(bundle)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["localStorage student_id", "Grade Upload", "student records"],
+      snippet: bundle.match(/Grade Upload[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "DVWU /idor route scan — SPA stores student session in localStorage and exposes grade-upload IDOR lab without server-side object authorization"
+    }
+  };
+};
+
 const dvwuDashboardIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -91490,6 +91596,9 @@ export const RULES: Record<string, Rule> = {
   istEduAdminRouteLiveOracle,
   istEduIdorRouteLiveOracle,
   istEduDashboardIdorRouteLiveOracle,
+  dvwuSqliRouteLiveOracle,
+  dvwuAdminRouteLiveOracle,
+  dvwuIdorRouteLiveOracle,
   dvwuDashboardIdorRouteLiveOracle,
   dvwuFileUploadLabRouteLiveOracle,
   istEduNewsletterCrlfRouteLiveOracle,

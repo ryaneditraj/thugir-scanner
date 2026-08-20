@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T04:11:51.975Z",
+  "updated_at": "2026-08-20T04:22:06.096Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2802,
-  "total_findings": 28263,
+  "total_sites_scanned": 2803,
+  "total_findings": 28396,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1986,
-  "discovery_findings": 23573,
-  "improvements_shipped": 1176,
-  "last_run": "2026-08-20T04:11:51.975Z",
+  "discovery_findings": 23658,
+  "improvements_shipped": 1179,
+  "last_run": "2026-08-20T04:22:06.096Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -54,17 +54,18 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 109,
-      "focus": "crAPI signup/mechanic_report/shop-orders BOLA + ssrf.vulnlab.dev/parser + vulnerable-web-site SSRF + pwnshop orders/submit + less/imports queue drain",
-      "improvements_shipped_this_run": 0
+      "findings": 194,
+      "focus": "crAPI signup/mechanic_report BOLA + ssrf.vulnlab parser + dvwu top-level route oracles (admin/sqli/idor) + queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "crapi.apisec.ai/identity/api/auth/signup: 7 findings — crapi-signup-open-registration-live-oracle + crapi-otp-bruteforce-live-oracle",
-      "crapi.apisec.ai/workshop/api/mechanic/mechanic_report: 9 findings — crapi-mechanic-report-bola-live-oracle shipped",
+      "dvwu.vercel.app/sqli: 11→12 findings — dvwu-sqli-route-live-oracle shipped (top-level /sqli route oracle)",
+      "dvwu.vercel.app/idor: 11→12 findings — dvwu-idor-route-live-oracle shipped (top-level /idor route oracle)",
+      "dvwu.vercel.app/admin: 11→12 findings — dvwu-admin-route-live-oracle shipped (top-level /admin route oracle)",
+      "crapi.apisec.ai/workshop/api/mechanic/mechanic_report: 9 findings — crapi-mechanic-report-bola-live-oracle",
       "ssrf.vulnlab.dev/parser: 15 findings — ssrf-vulnlab-parser-discrepancy-live-oracle + full SSRF oracle set",
-      "vulnerable-web-site.vercel.app/ssrf: 6 findings — vulnerable-web-site-ssrf-route-live-oracle shipped",
-      "pwnshop.ctfsecurity.com/api/orders/submit: 43 findings — XXE oracle still absent (PWN-013)",
+      "pwnshop.ctfsecurity.com/api/orders/submit: 45 findings — XXE oracle still absent (PWN-013)",
       "pwnshop.ctfsecurity.com/api/settings/less/imports: 22 findings — SSTI/RCE less-imports oracle still absent (PWN-040)"
     ],
     "learning_gaps": [
@@ -73,17 +74,20 @@
       "crapi.apisec.ai/workshop/api/shop/orders/1: 7-finding hub without route-specific order BOLA oracle (challenge #6)",
       "pwnshop.ctfsecurity.com/api/orders/submit: XXE order-submit oracle still absent without authenticated session",
       "pwnshop.ctfsecurity.com/api/settings/less/imports: SSTI/RCE less-imports oracle still absent",
-      "testphp.vulnweb.com unreachable from cloud agent (DNS/timeout)"
+      "testphp.vulnweb.com unreachable from cloud agent (DNS/timeout)",
+      "vaultapp.vercel.app canonicalized to vaultapp-omega.vercel.app — base64-encoded document ID bypass (challenge #5) not isolated as separate slug"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
-    "pwnshop.ctfsecurity.com/api/orders/submit": 43,
-    "pwnshop.ctfsecurity.com/api/settings/less/imports": 22,
+    "pwnshop.ctfsecurity.com/api/orders/submit": 45,
+    "pwnshop.ctfsecurity.com/track/1": 45,
     "ssrf.vulnlab.dev/parser": 15,
+    "pwnshop.ctfsecurity.com/api/settings/less/imports": 22,
     "crapi.apisec.ai/workshop/api/mechanic/mechanic_report": 9,
-    "crapi.apisec.ai/identity/api/auth/signup": 7,
-    "crapi.apisec.ai/workshop/api/shop/orders/1": 7,
-    "vulnerable-web-site.vercel.app/ssrf": 6
+    "dvwu.vercel.app/sqli": 12,
+    "dvwu.vercel.app/idor": 12,
+    "dvwu.vercel.app/admin": 12,
+    "pentest-fauxbank.vercel.app/register": 14
   }
 }
