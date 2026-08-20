@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T15:10:00.000Z",
+  "updated_at": "2026-08-20T15:08:36.769Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2888,
-  "total_findings": 30270,
-  "critical_findings": 60,
+  "total_sites_scanned": 2895,
+  "total_findings": 30335,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1999,
-  "discovery_findings": 24633,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 2003,
+  "discovery_findings": 24684,
   "improvements_shipped": 1202,
-  "last_run": "2026-08-20T15:10:00.000Z",
+  "last_run": "2026-08-20T15:08:36.769Z",
   "last_run_summary": {
     "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 14,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 579,
+      "probes_run": 445,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,44 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (14 findings); secret-resend slug still absent"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 20,
-      "focus": "seclab angular-stub API false-positive fix + riglabs dead-route oracle + reflexion SSTI suppression",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 51,
+      "focus": "pwnshop register-seller + demo.owasp-juice recycles + seclab API routes + ai-security IDOR + queue drain (wrongsecrets/ssrf.vulnlab)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "seclab.vercel.app/api/sqli-vulnerable: 5→4 findings — seclab-angular-stub-route-live-oracle false positive removed on /api/* paths",
-      "seclab.vercel.app/api/xss-vulnerable: 5→4 findings — angular-stub oracle no longer duplicates route-specific XSS oracle",
-      "riglabs-cyber-lab.vercel.app/sqli: 5→6 findings — reflexion-escalated-ssti suppressed; +riglabs-cyber-lab-dead-route oracles (Next.js 404 lab shell)",
-      "riglabs-cyber-lab.vercel.app/xss: 5→6 findings — dead-route oracles confirm /xss not deployed on public Vercel host"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (14 findings) — no benchmark misses",
+      "pwnshop.ctfsecurity.com/register-seller: 18 findings — pwnshop-open-redirect-register-live-oracle + pwnshop-admin-login-sqli-live-oracle + client-side-pwnshop-ssti-oracle",
+      "demo.owasp-juice.shop/rest/recycles/1: 14 findings — idor-sequential-ids + unauthenticated-admin-endpoint (juice-shop BOLA hub)",
+      "ai-security-platform-iota.vercel.app/challenges/idor: 6 findings — client-side-ai-security-platform-evidence; no route-specific IDOR live oracle",
+      "seclab.vercel.app/api/sqli-vulnerable + /api/xss-vulnerable: scan error Invalid URL (JSON-only API routes)",
+      "wrongsecrets.herokuapp.com/challenge/2: 8 findings with client-side-wrongsecrets-challenge-evidence",
+      "ssrf.vulnlab.dev/basic: 3 findings; ssrf.vulnlab.dev/metadata-aws: 2 findings — no route-specific SSRF live oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "testphp.vulnweb.com/search.php unreachable from cloud agent (DNS/timeout)",
-      "wrongsecrets.herokuapp.com/challenge/* returns 404 — Heroku demo appears offline"
-    ],
-    "improvements_shipped_this_run": 3
+      "seclab.vercel.app/api/*-vulnerable: scanner rejects JSON-only API endpoints (Invalid URL error)",
+      "ai-security-platform-iota.vercel.app/challenges/idor: challenge-specific IDOR live oracle absent",
+      "demo.owasp-juice.shop/rest/recycles/1: juice-shop-recycles-bola-live-oracle slug absent despite idor-sequential-ids",
+      "ssrf.vulnlab.dev/*: route-specific SSRF live oracles still absent"
+    ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "seclab.vercel.app/api/sqli-vulnerable": 4,
-    "seclab.vercel.app/api/xss-vulnerable": 4,
-    "riglabs-cyber-lab.vercel.app/sqli": 6,
-    "riglabs-cyber-lab.vercel.app/xss": 6,
-    "vaultapp.vercel.app/api/messages/1": 9,
-    "demo.owasp-juice.shop/rest/recycles/1": 48,
-    "brokencrystals.com/userlogin?logobgcolor=red": 69,
-    "owasp-finbot-ctf.org/admin": 17,
-    "vulnbank.org/api/profile/upload": 30
+    "juice-shop.herokuapp.com": 14,
+    "pwnshop.ctfsecurity.com/register-seller": 18,
+    "demo.owasp-juice.shop/rest/recycles/1": 14,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "pwnshop.ctfsecurity.com/apply-coupon": 23,
+    "pwnshop.ctfsecurity.com/profile/upload-avatar": 18,
+    "wrongsecrets.herokuapp.com/challenge/2": 8,
+    "ssrf.vulnlab.dev/basic": 3,
+    "ai-security-platform-iota.vercel.app/challenges/idor": 6
   }
 }

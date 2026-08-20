@@ -1,6 +1,26 @@
 {
-  "updated_at": "2026-08-20T12:05:53.515Z",
+  "updated_at": "2026-08-20T15:10:07.522Z",
   "discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/register-seller",
+      "source": "ctfsec/pwnshop — seller registration + POST role=admin mass-assignment oracle PWN-021 (GitHub README Key URLs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/sqli-vulnerable",
+      "source": "DaniSam-STU/security-lab — live SQLi API route oracle /api/sqli-vulnerable (seclab.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/xss-vulnerable",
+      "source": "DaniSam-STU/security-lab — live XSS API route oracle /api/xss-vulnerable (seclab.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/idor",
+      "source": "AI Security Platform — OWASP IDOR hands-on challenge module (Vercel OSS deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://seclab.vercel.app/api/sqli-vulnerable?q=test",
       "source": "DaniSam-STU/security-lab README — SQLi vulnerable API route (string concat, CWE-89)",
