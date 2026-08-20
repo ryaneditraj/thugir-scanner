@@ -4229,6 +4229,24 @@
       "slug": "pwnshop-wishlist-reflexion-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: pwnshopWishlistReflexionSuppressed skips reflexionEscalatedSqli/Xss on /wishlist/:id styled 404 shell; pwnshop.ctfsecurity.com/wishlist/1 findings 20→11 (-reflexion-escalated-sqli -reflexion-escalated-xss, +pwnshop-wishlist-idor-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-labs-dead-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: seclabAngularStubRouteLiveOracle skips /labs/* paths; seclabLabsDeadRouteLiveOracle fires on /labs/sqli Angular SPA stub; seclab.vercel.app/labs/sqli findings 5→5 (-seclab-angular-stub-route-live-oracle +seclab-labs-dead-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-bounty-site.vercel.app",
+      "slug": "vulnerable-bounty-site-search-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /search?q=<b>canary</b> reflects via dangerouslySetInnerHTML (HTTP probe confirmed before Vercel checkpoint); vulnerable-bounty-site.vercel.app/search route scan gains +vulnerable-bounty-site-search-xss-live-oracle +vulnerable-bounty-site-search-xss-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-bounty-site.vercel.app",
+      "slug": "vulnerable-bounty-site-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnerableBountySiteReflexionSuppressed skips reflexionEscalatedSsti on Next.js 404 lineHeight:49px shells; vulnerable-bounty-site.vercel.app/ findings 9→8 (-reflexion-escalated-ssti when site reachable); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
