@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-19T23:05:00.000Z",
+  "updated_at": "2026-08-20T03:26:09.297Z",
   "discovery_urls": [
+    {
+      "url": "https://crapi.apisec.ai/workshop/api/merchant/contact_mechanic",
+      "source": "OWASP crAPI APIsec hosted — SSRF/BOLA oracle POST contact_mechanic mechanic_api param (writeups)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/login",
+      "source": "SecureBank FAST-NUCES attack lab — SQLi login bypass toggle attack mode (securebank-blog.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/messages",
+      "source": "SecureBank attack lab — stored XSS messages page attack mode (web search)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp.vercel.app/api/users/1",
+      "source": "MRMcyber/vaultapp — sequential IDOR oracle GET /api/users/{id} (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp.vercel.app/api/documents/1",
+      "source": "MRMcyber/vaultapp — document IDOR oracle GET /api/documents/{id} (10-challenge lab)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://api.graphqlbook.org/graphql",
       "source": "DghostNinja/graphql-bookstore-API — deliberately vulnerable GraphQL BOLA/SQLi/SSRF oracle endpoint (public docs)",
