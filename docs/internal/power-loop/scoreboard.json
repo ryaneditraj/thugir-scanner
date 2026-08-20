@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T19:12:00.000Z",
+  "updated_at": "2026-08-20T19:14:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -17,18 +17,18 @@
   },
   "total_sites_scanned": 2935,
   "total_findings": 31150,
-  "critical_findings": 55,
+  "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2023,
   "discovery_findings": 25152,
-  "improvements_shipped": 1208,
-  "last_run": "2026-08-20T19:12:00.000Z",
+  "improvements_shipped": 1212,
+  "last_run": "2026-08-20T19:14:00.000Z",
   "last_run_summary": {
     "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 45,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,18 +48,21 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (45 findings); no benchmark category gaps"
+      "note": "Stable 6/6 first-pass recall (47 findings); no benchmark category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 111,
-      "focus": "RatTasks TODO lab, SecLab IDOR page, Docker DevBoard, DVWU /labs/* SSRF+broken-auth",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 10,
+      "findings": 127,
+      "focus": "PromptShield LLM01 defense demo, Fabraix route oracles, RatTasks TODO lab, SecLab IDOR, Docker DevBoard, DVWU /labs/*",
+      "improvements_shipped_this_run": 4
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (45 findings) — no benchmark misses",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "prompt-shield1.vercel.app: 4→4 findings with +prompt-shield-prompt-injection-defense-live-oracle (Railway /chat blocks jailbreak risk_score>=60, benign FAQ 4.5% APY) and -reflexion-escalated-ssti FP",
+      "playground.fabraix.com/challenges/data-exfiltration-001: 5→6 findings with +fabraix-data-exfiltration-001-route-live-oracle (data-exfil-001 Iris backend)",
+      "playground.fabraix.com/challenges/indirect-prompt-injection-001: 5→6 findings with +fabraix-indirect-prompt-injection-route-live-oracle (access-code-001 Gatekeeper backend)",
       "dvwu.vercel.app/labs/ssrf: 13 findings with dvwu-ssrf-redirect-live-oracle + portal sqli/lfi oracles",
       "dvwu.vercel.app/labs/broken-auth: 12 findings with dvwu-ssrf-redirect-live-oracle + auth/sqli oracles",
       "pwnshop.ctfsecurity.com/admin/login: 47 findings (queue drain)",
@@ -68,6 +71,8 @@
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "prompt-shield1.vercel.app: defense demo oracle shipped; successful jailbreak extraction oracle still absent (defense blocks all tested payloads)",
+      "seclab.vercel.app/labs/xss: Angular stub only — live XSS training API not deployed on Vercel host",
       "ratdo.thexssrat.com: 1 finding (misconfig only) — no XSS/IDOR/CSRF live oracles for RatTasks TODO app yet",
       "seclab.vercel.app/labs/idor: 5 findings but seclab-labs-dead-route-live-oracle — no IDOR exploit live oracle on /labs/idor page",
       "dockerworkshop.vercel.app/lab8/projects/devboard: 4 findings (misconfig/source-maps) — no DevBoard pagination/auth bug live oracles",
@@ -75,19 +80,20 @@
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 45,
+    "juice-shop.herokuapp.com": 47,
     "pwnshop.ctfsecurity.com/track": 45,
     "pwnshop.ctfsecurity.com/wishlist/1": 44,
     "pwnshop.ctfsecurity.com/admin/login": 47,
     "pwnshop.ctfsecurity.com/search/filters": 47,
     "pwnshop.ctfsecurity.com/export-orders": 48,
+    "prompt-shield1.vercel.app": 4,
+    "playground.fabraix.com/challenges/data-exfiltration-001": 6,
+    "playground.fabraix.com/challenges/indirect-prompt-injection-001": 6,
     "dvwu.vercel.app/labs/ssrf": 13,
     "dvwu.vercel.app/labs/broken-auth": 12,
     "vulnbank.org/api/v1/forgot-password": 29,
     "ai-security-platform-iota.vercel.app/challenges/open-redirect": 7,
     "ai-security-platform-iota.vercel.app/challenges/prompt-injection": 3,
-    "ai-security-platform-iota.vercel.app/challenges/broken-auth": 3,
-    "ai-security-platform-iota.vercel.app/challenges/ssrf": 3,
-    "seclab.vercel.app/labs/csrf": 5
+    "seclab.vercel.app/labs/xss": 5
   }
 }
