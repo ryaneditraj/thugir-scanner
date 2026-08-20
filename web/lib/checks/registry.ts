@@ -74087,6 +74087,130 @@ const riglabsCyberLabDeadRouteRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const seclabLabsDeadRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let host = "";
+  try {
+    host = new URL(pageUrl).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(host) && !SECLAB_NEXTJS_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  const routeMatch = pageUrl.match(/\/labs\/(sqli|xss|csrf|idor|ssrf|ssti)\b/i);
+  if (!routeMatch) return NEGATIVE;
+  const labRoute = routeMatch[1].toLowerCase();
+  const doc = await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 500) return NEGATIVE;
+  if (!isSecLabAngularStubShell(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: pageUrl,
+      labRoute,
+      snippet: doc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: `seclab.vercel.app /labs/${labRoute} serves Angular SPA stub without live SQLi/XSS lab UI — live training APIs are on /api/${labRoute}-vulnerable and /api/sqli/search instead`
+    }
+  };
+};
+
+const seclabLabsDeadRouteRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageUrl) && !SECLAB_NEXTJS_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  if (!/\/labs\/(sqli|xss|csrf|idor|ssrf|ssti)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await seclabLabsDeadRouteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `SecLab route scan — /labs/${String(result.evidence.labRoute)} is an Angular SPA stub; live ${String(result.evidence.labRoute).toUpperCase()} training APIs are on /api/*-vulnerable routes (DaniSam-STU/security-lab README)`
+    }
+  };
+};
+
+const VULNERABLE_BOUNTY_SITE_HOST_RE = /vulnerable-bounty-site\.vercel\.app/i;
+
+function isVulnerableBountySiteHost(ctx: RuleContext): boolean {
+  return VULNERABLE_BOUNTY_SITE_HOST_RE.test(ctx.origin);
+}
+
+const vulnerableBountySiteSearchXssLiveOracle: Rule = async (ctx) => {
+  if (!isVulnerableBountySiteHost(ctx)) return NEGATIVE;
+  const canary = `thugirXSS${Date.now().toString(36)}`;
+  for (const payload of [`<b>${canary}</b>`, canary]) {
+    const searchUrl = new URL("/search", ctx.origin);
+    searchUrl.searchParams.set("q", payload);
+    const doc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (!isReflectedXssCanary(doc.body, canary)) continue;
+    if (!/Showing results for|dangerouslySetInnerHTML|<b[^>]*>/i.test(doc.body)) continue;
+    return {
+      fired: true,
+      confidence: payload.includes("<") ? 0.93 : 0.91,
+      evidence: {
+        url: searchUrl.toString(),
+        canary,
+        payload,
+        snippet:
+          doc.body.match(new RegExp(canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "[\\s\\S]{0,80}"))?.[0]?.slice(0, 120) ??
+          canary,
+        note: "vulnerable-bounty-site.vercel.app GET /search?q= reflects query via dangerouslySetInnerHTML without encoding — mantishack International Bank reflected XSS oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const vulnerableBountySiteSearchXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnerableBountySiteHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/search\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnerableBountySiteSearchXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vulnerable-bounty-site.vercel.app /search route scan — GET ?q= reflects attacker HTML via dangerouslySetInnerHTML — route-specific reflected XSS oracle"
+    }
+  };
+};
+
+const vulnerableBountySiteUsersApiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnerableBountySiteHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let isUsersRoute = false;
+  let isHomeScan = false;
+  try {
+    const u = new URL(pageUrl);
+    isUsersRoute = /\/api\/users\b/i.test(u.pathname);
+    isHomeScan = u.pathname === "/" || u.pathname === "";
+  } catch {
+    return NEGATIVE;
+  }
+  if (!isUsersRoute && !isHomeScan) return NEGATIVE;
+  const usersUrl = new URL("/api/users", ctx.origin).toString();
+  const doc = await ctx.probe.get(usersUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"password"\s*:\s*"/i.test(doc.body)) return NEGATIVE;
+  if (!/"ssn"\s*:\s*"/i.test(doc.body) && !/"apiKey"\s*:/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: usersUrl,
+      scannedUrl: pageUrl,
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "vulnerable-bounty-site.vercel.app GET /api/users returns cleartext passwords, SSNs, and API keys without authentication — mantishack bounty training oracle"
+    }
+  };
+};
+
 const pwnshopChatInitRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -79128,6 +79252,8 @@ const seclabAngularStubRouteLiveOracle: Rule = async (ctx) => {
   if (!SECLAB_NEXTJS_HOST_RE.test(host) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
   // /api/sqli-vulnerable and siblings contain "sqli" etc. but are live Next.js lab APIs — not Angular stub pages.
   if (/\/api\//i.test(pageUrl)) return NEGATIVE;
+  // /labs/sqli navigation pages are Angular stubs — covered by seclabLabsDeadRouteLiveOracle instead.
+  if (/\/labs\//i.test(pageUrl)) return NEGATIVE;
   const routeMatch = pageUrl.match(/\/(ssrf|ssti|xss|sqli|csrf|idor)\b/i);
   if (!routeMatch) return NEGATIVE;
   const labRoute = routeMatch[1].toLowerCase();
@@ -91341,6 +91467,11 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsHerokuUndeployedChallengeRouteLiveOracle,
   riglabsCyberLabDeadRouteLiveOracle,
   riglabsCyberLabDeadRouteRouteLiveOracle,
+  seclabLabsDeadRouteLiveOracle,
+  seclabLabsDeadRouteRouteLiveOracle,
+  vulnerableBountySiteSearchXssLiveOracle,
+  vulnerableBountySiteSearchXssRouteLiveOracle,
+  vulnerableBountySiteUsersApiRouteLiveOracle,
   brokencrystalsChatLlmQueryLiveOracle,
   brokencrystalsChatLlmQueryRouteLiveOracle,
   brokencrystalsSpawnCommandInjectionLiveOracle,

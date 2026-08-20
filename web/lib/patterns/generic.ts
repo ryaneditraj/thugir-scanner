@@ -66036,5 +66036,135 @@ export const genericPatterns: Pattern[] = [
       "Our /druid/basic.json endpoint is publicly reachable on JavaSecLab. Show route-specific Druid lockdown.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "seclab-labs-dead-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "SecLab /labs/* dead route live oracle",
+    description:
+      "seclab.vercel.app /labs/sqli and sibling navigation routes serve Angular SPA stubs without live SQLi/XSS lab UI — live training APIs are on /api/sqli-vulnerable and /api/sqli/search instead.",
+    impactOneline:
+      "Advertised /labs/* training pages are Angular stubs — scanners should probe /api/*-vulnerable routes for live SQLi/XSS confirmation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabLabsDeadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy live lab UI on /labs/* routes or redirect to working /api/* training endpoints.",
+      steps: [
+        "Wire /labs/sqli to the in-memory SQLite search API documented in DaniSam-STU/security-lab README.",
+        "Remove /labs/* from discovery queues until live UI deploys.",
+        "Run training labs only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/sqli route is an Angular stub without live SQLi UI. Show how to deploy the documented training APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "seclab-labs-dead-route-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "SecLab /labs/* route scan dead route live oracle",
+    description:
+      "When scanning /labs/sqli or sibling lab navigation routes, confirms Angular SPA stub without live vulnerability lab UI — route-specific dead-route oracle.",
+    impactOneline:
+      "Route scans on /labs/* should confirm stub pages and point scanners to /api/*-vulnerable live endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabLabsDeadRouteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy live lab UI on /labs/* routes or redirect to working /api/* training endpoints.",
+      steps: [
+        "Wire /labs/sqli to the in-memory SQLite search API documented in DaniSam-STU/security-lab README.",
+        "Remove /labs/* from discovery queues until live UI deploys.",
+        "Run training labs only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/sqli route scan hits an Angular stub. Show route-specific deployment fixes for the SQLi lab UI.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnerable-bounty-site-search-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "mantishack International Bank search reflected XSS live oracle",
+    description:
+      "GET /search?q= on vulnerable-bounty-site.vercel.app reflects attacker HTML via dangerouslySetInnerHTML without encoding — the deonmenezes/mantishack bounty training reflected XSS oracle.",
+    impactOneline:
+      "Reflected XSS on the bank search page can hijack sessions or phish clients when they click crafted search links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableBountySiteSearchXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode search output and avoid dangerouslySetInnerHTML for user queries.",
+      steps: [
+        "Render search terms as text nodes instead of raw HTML.",
+        "Add Content-Security-Policy to mitigate inline script execution.",
+        "Run bounty training sites only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /search endpoint reflects q via dangerouslySetInnerHTML. Show reflected XSS remediation for the mantishack bounty demo.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnerable-bounty-site-search-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "mantishack /search route reflected XSS live oracle",
+    description:
+      "When scanning /search on vulnerable-bounty-site.vercel.app, GET ?q= reflects attacker HTML via dangerouslySetInnerHTML — route-specific reflected XSS oracle.",
+    impactOneline:
+      "Route scans on /search need live reflected XSS confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableBountySiteSearchXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode search output and avoid dangerouslySetInnerHTML for user queries.",
+      steps: [
+        "Render search terms as text nodes instead of raw HTML.",
+        "Add Content-Security-Policy to mitigate inline script execution.",
+        "Run bounty training sites only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /search route scan confirms reflected XSS via dangerouslySetInnerHTML. Show route-specific XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnerable-bounty-site-users-api-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "mantishack /api/users cleartext credential leak route oracle",
+    description:
+      "GET /api/users on vulnerable-bounty-site.vercel.app returns cleartext passwords, SSNs, and API keys without authentication — route-specific mantishack bounty training oracle.",
+    impactOneline:
+      "Unauthenticated user dumps expose credentials and PII suitable for bounty report reproduction.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableBountySiteUsersApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and never return cleartext passwords from JSON APIs.",
+      steps: [
+        "Remove password fields from API responses.",
+        "Gate /api/users behind authenticated admin roles.",
+        "Run bounty training sites only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users route leaks cleartext passwords and API keys. Show route-specific API hardening for the mantishack bounty demo.",
+    version: 1,
+    enabled: true
   }
 ];
