@@ -85,6 +85,13 @@ function riglabsCyberLabReflexionSuppressed(ctx: PowerCtx): boolean {
   return RIGLABS_CYBER_LAB_HOST_RE.test(pageUrl);
 }
 
+/** Pwnshop /wishlist/:id currently serves a styled 404 shell — suppress generic reflexion probes on that route. */
+function pwnshopWishlistReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/pwnshop|ctfsecurity\.com/i.test(pageUrl)) return false;
+  return /\/wishlist(?:\/|$)/i.test(pageUrl);
+}
+
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
 
 // --- Directory wordlist (compact subset) ------------------------------------
@@ -185,6 +192,7 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
   if (wslModuleRouteReflexionSuppressed(ctx)) return NEGATIVE;
   if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
   const suffix = "pwr";
   const base = xssCanary(suffix);
   const params = ["q", "search", "query", "name", "id", "term"];
@@ -225,6 +233,7 @@ export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
   if (wslModuleRouteReflexionSuppressed(ctx)) return NEGATIVE;
   if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["id", "user", "name", "q", "search"];
   const paths = ["/", "/api/users", "/search"];
   const sqlErrors =
