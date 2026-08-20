@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T05:20:00.000Z",
+  "updated_at": "2026-08-20T06:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2812,
-  "total_findings": 28571,
+  "total_sites_scanned": 2820,
+  "total_findings": 28687,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1991,
-  "discovery_findings": 23787,
+  "discovery_urls_added": 1956,
+  "discovery_findings": 23856,
   "improvements_shipped": 1182,
-  "last_run": "2026-08-20T05:20:00.000Z",
+  "last_run": "2026-08-20T06:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 46,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 584,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (46 findings); primary heroku intermittently unreachable — staging fallback also 6/6; secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (47 findings, 35+ juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 129,
-      "focus": "crAPI shop orders BOLA + Challenge 8 mass-assignment + DVWU route drain + pwnshop track/1",
-      "improvements_shipped_this_run": 3
+      "findings": 69,
+      "focus": "riglabs sqli/xss modules + ist-edu admin/sqli + ai-security rate-limiting + fauxbank loans/profile queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings) — no category gaps",
-      "crapi.apisec.ai/workshop/api/shop/orders/1: 7→9 findings — crapi-shop-orders-id-bola-route-live-oracle + crapi-shop-order-status-mass-assignment-route-live-oracle shipped",
-      "dvwu.vercel.app/sqli/idor/admin/xss: route oracles active (12–13 findings each)",
-      "pwnshop.ctfsecurity.com/track/1: 46 findings — pwnshop-track-idor-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no category gaps",
+      "ai-security-platform-iota.vercel.app/challenges/rate-limiting: 9 findings — ai-security-rate-limiting-bruteforce-live-oracle + ai-security-api-security-route-live-oracle",
+      "ist-edu-bd.vercel.app/admin: 9 findings — ist-edu-admin-route-live-oracle (SQLi auth bypass oracle)",
+      "ist-edu-bd.vercel.app/sqli: 9 findings — ist-edu-sqli-route-live-oracle",
+      "pentest-fauxbank.vercel.app/loans: 16 findings — fauxbank-loans-negative-amount-live-oracle hub",
+      "pentest-fauxbank.vercel.app/profile: 16 findings — fauxbank-profile-sensitive-data-live-oracle hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "juice-shop.herokuapp.com primary oracle intermittently unreachable — staging fallback required",
-      "pwnshop.ctfsecurity.com/api/orders/submit: XXE order-submit oracle still absent",
-      "pwnshop.ctfsecurity.com/api/settings/less/imports: SSTI/RCE less-imports oracle still absent",
-      "dvwu.vercel.app/csrf: route-specific CSRF oracle still absent",
-      "crapi.apisec.ai intermittently unreachable — live probes need demo JWT when host is up"
+      "riglabs-cyber-lab.vercel.app/sqli+xss: 5-finding generic hubs without module-specific SQLi/XSS live oracles",
+      "http://testphp.vulnweb.com/search.php: unreachable (HTTP-only host)",
+      "vaultapp.vercel.app/api/users/1 + documents/1: queued next drain pending",
+      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 46,
-    "juice-shop-staging.herokuapp.com": 46,
-    "crapi.apisec.ai/workshop/api/shop/orders/1": 9,
-    "pwnshop.ctfsecurity.com/track/1": 46,
-    "pwnshop.ctfsecurity.com/api/orders/submit": 45,
-    "dvwu.vercel.app/xss": 13,
-    "dvwu.vercel.app/sqli": 12,
-    "dvwu.vercel.app/idor": 12,
-    "dvwu.vercel.app/admin": 12
+    "juice-shop.herokuapp.com": 47,
+    "ai-security-platform-iota.vercel.app/challenges/rate-limiting": 9,
+    "ist-edu-bd.vercel.app/admin": 9,
+    "ist-edu-bd.vercel.app/sqli": 9,
+    "pentest-fauxbank.vercel.app/loans": 16,
+    "pentest-fauxbank.vercel.app/profile": 16,
+    "riglabs-cyber-lab.vercel.app/sqli": 5,
+    "riglabs-cyber-lab.vercel.app/xss": 5
   }
 }
