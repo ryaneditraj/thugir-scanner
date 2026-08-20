@@ -2808,6 +2808,8 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge66JavaObfuscatedRouteLiveOracle",
   "wrongsecretsHerokuUndeployedChallengeLiveOracle",
   "wrongsecretsHerokuUndeployedChallengeRouteLiveOracle",
+  "riglabsCyberLabDeadRouteLiveOracle",
+  "riglabsCyberLabDeadRouteRouteLiveOracle",
   "brokencrystalsChatLlmQueryLiveOracle",
   "brokencrystalsChatLlmQueryRouteLiveOracle",
   "brokencrystalsSpawnCommandInjectionLiveOracle",
@@ -11957,8 +11959,15 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /riglabs-cyber-lab\.vercel\.app/i.test(origin) &&
+        /\/(sqli|xss|csrf|idor|ssrf)\b/i.test(targetInput) &&
+        p.slug.startsWith("riglabs-cyber-lab-dead-route")
+      )
+        return -3;
+      if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/(ssrf|ssti|csrf|idor|xss|sqli)\b/i.test(targetInput) &&
+        !/\/api\//i.test(targetInput) &&
         p.slug.startsWith("seclab-angular-stub")
       )
         return -3;

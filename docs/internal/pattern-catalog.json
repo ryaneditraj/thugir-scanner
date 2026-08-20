@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-20T12:08:10.681Z",
-  "total": 2594,
-  "uniqueSlugs": 2586,
+  "generatedAt": "2026-08-20T15:05:16.678Z",
+  "total": 2596,
+  "uniqueSlugs": 2588,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2576,
+    "generic": 2578,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2509,
+    "deep": 2511,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 121,
-    "Security misconfiguration": 194,
+    "Security misconfiguration": 196,
     "Broken authentication": 161,
     "Injection": 393,
     "Cross-site scripting": 717,
@@ -1947,6 +1947,8 @@
     "rest-vulnweb-posts-bola-route-live-oracle",
     "rest-vulnweb-users-bola-live-oracle",
     "rest-vulnweb-users-bola-route-live-oracle",
+    "riglabs-cyber-lab-dead-route-live-oracle",
+    "riglabs-cyber-lab-dead-route-route-live-oracle",
     "robots-sensitive-paths",
     "sanitize-web-relaxed-bypass-live-oracle",
     "sanitize-web-relaxed-bypass-route-live-oracle",

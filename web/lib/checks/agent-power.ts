@@ -35,6 +35,7 @@ const WSL_HOST_RE = /web-security-learning-labs\.vercel\.app/i;
 const SECRESEARCHLAB_HOST_RE = /secresearchlab\.web\.app/i;
 const SUPPORT_RELIABILITY_LAB_HOST_RE = /support-reliability-lab\.vercel\.app/i;
 const VULNFORGE_ACADEMY_HOST_RE = /vulnforge-academy\.vercel\.app/i;
+const RIGLABS_CYBER_LAB_HOST_RE = /riglabs-cyber-lab\.vercel\.app/i;
 
 /** Route scans on WSL /module/{id} shells — generic reflexion probes hit homepage, not the lab route. */
 function wslModuleRouteReflexionSuppressed(ctx: PowerCtx): boolean {
@@ -76,6 +77,12 @@ function vulnforgeAcademyRceReflexionSuppressed(ctx: PowerCtx): boolean {
   if (!VULNFORGE_ACADEMY_HOST_RE.test(pageUrl)) return false;
   const levelMatch = pageUrl.match(/level(19|20)\.php/i);
   return levelMatch !== null;
+}
+
+/** Riglabs Cyber Lab Next.js shells embed lineHeight:49px in 404 pages — suppress reflexion SSTI FPs. */
+function riglabsCyberLabReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return RIGLABS_CYBER_LAB_HOST_RE.test(pageUrl);
 }
 
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
@@ -260,6 +267,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (vulnforgeAcademyFileUploadReflexionSuppressed(ctx)) return NEGATIVE;
   if (vulnforgeAcademySsrfReflexionSuppressed(ctx)) return NEGATIVE;
   if (vulnforgeAcademyRceReflexionSuppressed(ctx)) return NEGATIVE;
+  if (riglabsCyberLabReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 
