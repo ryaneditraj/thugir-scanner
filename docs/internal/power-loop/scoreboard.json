@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T08:12:00.000Z",
+  "updated_at": "2026-08-20T08:26:31.675Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2847,
-  "total_findings": 29082,
-  "critical_findings": 57,
+  "total_sites_scanned": 2848,
+  "total_findings": 29130,
+  "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1961,
-  "discovery_findings": 24026,
-  "improvements_shipped": 1185,
-  "last_run": "2026-08-20T08:12:00.000Z",
+  "discovery_findings": 24030,
+  "improvements_shipped": 1187,
+  "last_run": "2026-08-20T08:26:31.675Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
@@ -57,10 +57,11 @@
       "urls_ok": 7,
       "findings": 83,
       "focus": "DVWU redirect SSRF routes + VaultApp messages/notes/audit-logs IDOR oracles + ist-edu /sqli route + ai-security rate-limiting brute-force",
-      "improvements_shipped_this_run": 5
+      "improvements_shipped_this_run": 7
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "api.graphqlbook.org/graphql: 15→19 findings — graphqlbook-forgot-password-takeover + graphqlbook-register-admin-mass-assignment live oracles shipped",
       "ist-edu-bd.vercel.app/redirect: 10 findings — ist-edu-ssrf-redirect-route-live-oracle shipped",
       "dvwu.vercel.app/redirect: 12 findings — dvwu-ssrf-redirect-route-live-oracle shipped",
       "vaultapp-omega.vercel.app/api/notes/1: 14 findings — vaultapp-notes-idor-route-live-oracle shipped",
@@ -84,6 +85,7 @@
     "vaultapp-omega.vercel.app/api/audit-logs": 14,
     "ist-edu-bd.vercel.app/redirect": 10,
     "ist-edu-bd.vercel.app/sqli": 10,
-    "ai-security-platform-iota.vercel.app/challenges/rate-limiting": 9
+    "ai-security-platform-iota.vercel.app/challenges/rate-limiting": 9,
+    "api.graphqlbook.org/graphql": 19
   }
 }
