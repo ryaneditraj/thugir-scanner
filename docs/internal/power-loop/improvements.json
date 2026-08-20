@@ -54,7 +54,6 @@
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: PwnMe 2025 writeup POST /api/settings/less/imports addImportDirectory Less.php import_dirs datauri RCE chain; pwnshop.ctfsecurity.com/api/settings/less/imports findings 21→46 (+pwnshop-less-imports-ssti-route-live-oracle corpus fallback on OSS 404); benchmark 6/6 maintained"
     },
-    },
     {
       "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-sqli-route-live-oracle",
