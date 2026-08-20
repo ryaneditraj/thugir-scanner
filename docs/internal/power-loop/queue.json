@@ -9894,6 +9894,31 @@
       "url": "http://whgojp.top/xss/reflect/vul2",
       "source": "whgojp/JavaSecLab — reflected XSS vul2 route with payload param (GitHub README)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/admin",
+      "source": "zahidoverflow/damn-vulnerable-web-university — unauthenticated admin panel oracle (VWAD live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/xss",
+      "source": "zahidoverflow/damn-vulnerable-web-university — reflected XSS training route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/sqli",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQL injection training route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/idor",
+      "source": "zahidoverflow/damn-vulnerable-web-university — IDOR training route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/rate-limiting",
+      "source": "AI Security Platform — login brute-force / rate-limit bypass challenge (Vercel public demo)",
+      "auth": "public_demo"
     }
   ]
 }
