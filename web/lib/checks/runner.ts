@@ -2933,6 +2933,9 @@ const DEEP_RULES = new Set<string>([
   "aiSecurityInsecurePasswordsRouteLiveOracle",
   "aiSecurityAiPhishingRouteLiveOracle",
   "aiSecuritySqliRouteLiveOracle",
+  "aiSecurityPromptInjectionRouteLiveOracle",
+  "aiSecurityBrokenAuthRouteLiveOracle",
+  "aiSecuritySsrfRouteLiveOracle",
   "aiSecurityRateLimitingBruteforceLiveOracle",
   "aiSecurityLoginRouteLiveOracle",
   "juiceShopForgottenBackupDisclosure",
@@ -11622,6 +11625,15 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /code-breaking\.fly\.dev/i.test(origin) &&
         /\/puzzle\/\d+/i.test(targetInput) &&
         p.slug.startsWith("code-breaking-puzzle")
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/(?:sqli|prompt-injection|broken-auth|ssrf)\b/i.test(targetInput) &&
+        (p.slug === "ai-security-sqli-route-live-oracle" ||
+          p.slug === "ai-security-prompt-injection-route-live-oracle" ||
+          p.slug === "ai-security-broken-auth-route-live-oracle" ||
+          p.slug === "ai-security-ssrf-route-live-oracle")
       )
         return -3;
       if (

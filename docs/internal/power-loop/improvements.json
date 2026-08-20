@@ -4247,6 +4247,24 @@
       "slug": "vulnerable-bounty-site-reflexion-ssti-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: vulnerableBountySiteReflexionSuppressed skips reflexionEscalatedSsti on Next.js 404 lineHeight:49px shells; vulnerable-bounty-site.vercel.app/ findings 9→8 (-reflexion-escalated-ssti when site reachable); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-prompt-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/prompt-injection returns HTTP 307 Location /login?next=%2Fchallenges%2Fprompt-injection; ai-security-platform-iota.vercel.app/challenges/prompt-injection findings 6→3 (+ai-security-prompt-injection-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-broken-auth-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/broken-auth returns HTTP 307 Location /login?next=%2Fchallenges%2Fbroken-auth; ai-security-platform-iota.vercel.app/challenges/broken-auth findings 6→3 (+ai-security-broken-auth-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/ssrf returns HTTP 307 Location /login?next=%2Fchallenges%2Fssrf; ai-security-platform-iota.vercel.app/challenges/ssrf findings 5→3 (+ai-security-ssrf-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
     }
   ]
 }
