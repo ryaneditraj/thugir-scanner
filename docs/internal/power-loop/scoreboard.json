@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T07:25:00.000Z",
+  "updated_at": "2026-08-20T08:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2831,
-  "total_findings": 28822,
+  "total_sites_scanned": 2847,
+  "total_findings": 29082,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1956,
-  "discovery_findings": 23943,
+  "discovery_urls_added": 1961,
+  "discovery_findings": 24026,
   "improvements_shipped": 1185,
-  "last_run": "2026-08-20T07:25:00.000Z",
+  "last_run": "2026-08-20T08:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,40 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (47 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 22,
-      "focus": "IST Edu /search SQLi route oracles + /newsletter CSRF state-change path extension",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "urls_ok": 7,
+      "findings": 83,
+      "focus": "DVWU redirect SSRF routes + VaultApp messages/notes/audit-logs IDOR oracles + ist-edu /sqli route + ai-security rate-limiting brute-force",
+      "improvements_shipped_this_run": 5
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "ist-edu-bd.vercel.app/search: 9→11 findings — ist-edu-search-sqli-live-oracle + ist-edu-search-sqli-route-live-oracle shipped",
-      "ist-edu-bd.vercel.app/newsletter: 9→11 findings — ist-edu-csrf-state-change-live-oracle extended to /newsletter route",
-      "dvwu.vercel.app/csrf: 13 findings — dvwu-csrf-route + newsletter-crlf oracles (shipped prior commit eb2cb473)",
-      "pwnshop.ctfsecurity.com/api/orders/submit: XXE oracle blocked — endpoint returns 404 on live deployment"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "ist-edu-bd.vercel.app/redirect: 10 findings — ist-edu-ssrf-redirect-route-live-oracle shipped",
+      "dvwu.vercel.app/redirect: 12 findings — dvwu-ssrf-redirect-route-live-oracle shipped",
+      "vaultapp-omega.vercel.app/api/notes/1: 14 findings — vaultapp-notes-idor-route-live-oracle shipped",
+      "ist-edu-bd.vercel.app/sqli: 10 findings — ist-edu-sqli-route-live-oracle shipped",
+      "ai-security-platform rate-limiting: 9 findings — rate-limiting-bruteforce live oracle shipped",
+      "vaultapp messages/1: 14-finding hub without route-specific messages IDOR oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "pwnshop.ctfsecurity.com/api/orders/submit + /api/settings/less/imports: XXE/SSTI oracles blocked — endpoints return 404 HTML on live pwnshop.ctfsecurity.com",
-      "riglabs-cyber-lab.vercel.app/sqli+xss: module routes return 404 — lab not deployed at queued URLs",
-      "testphp.vulnweb.com unreachable from cloud agent (DNS/timeout)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "vaultapp-omega.vercel.app/api/messages/1: route-specific private-message IDOR oracle still absent",
+      "testphp.vulnweb.com/search.php unreachable from cloud agent",
+      "ist-edu-bd.vercel.app/redirect: open-redirect category oracle absent (SSRF route oracle present)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "dvwu.vercel.app/csrf": 13,
-    "ist-edu-bd.vercel.app/search": 11,
-    "ist-edu-bd.vercel.app/newsletter": 11,
-    "ist-edu-bd.vercel.app/notices": 10,
-    "ist-edu-bd.vercel.app/comments": 9,
-    "ist-edu-bd.vercel.app/portal": 9,
-    "pwnshop.ctfsecurity.com/api/orders/submit": 45,
-    "ssrf.vulnlab.dev/parser": 15
+    "juice-shop.herokuapp.com": 47,
+    "dvwu.vercel.app/redirect": 12,
+    "vaultapp-omega.vercel.app/api/messages/1": 14,
+    "vaultapp-omega.vercel.app/api/notes/1": 14,
+    "vaultapp-omega.vercel.app/api/audit-logs": 14,
+    "ist-edu-bd.vercel.app/redirect": 10,
+    "ist-edu-bd.vercel.app/sqli": 10,
+    "ai-security-platform-iota.vercel.app/challenges/rate-limiting": 9
   }
 }
