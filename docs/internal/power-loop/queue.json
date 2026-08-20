@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-20T08:10:18.940Z",
+  "updated_at": "2026-08-20T09:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/products/filter/by-color",
+      "source": "Escape Duck Store — SQLi via color filter param (improvements.json duck-store-products-filter-sqli oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/feedbacks",
+      "source": "Official demo.owasp-juice.shop — BOLA on product feedbacks REST route (Pwning Juice Shop companion)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/wallet/balance",
+      "source": "Official demo.owasp-juice.shop — wallet balance BOLA oracle (escape.tech mirror fallback)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/complaints",
+      "source": "Official demo.owasp-juice.shop — complaints BOLA oracle with alg:none JWT (improvements.json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/track-order/1",
+      "source": "Official demo.owasp-juice.shop — track-order IDOR oracle GET /rest/track-order/:id (Pwning Juice Shop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ist-edu-bd.vercel.app/redirect",
       "source": "zahidoverflow/damn-vulnerable-web-university — open redirect /api/redirect route (Vercel live demo)",
