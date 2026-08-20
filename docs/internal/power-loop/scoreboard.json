@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T16:31:57.061Z",
+  "updated_at": "2026-08-20T17:14:43.833Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2903,
-  "total_findings": 30499,
+  "total_sites_scanned": 2911,
+  "total_findings": 30660,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2008,
-  "discovery_findings": 24803,
+  "discovery_urls_added": 2013,
+  "discovery_findings": 24919,
   "improvements_shipped": 1205,
-  "last_run": "2026-08-20T16:31:57.061Z",
+  "last_run": "2026-08-20T17:14:43.833Z",
   "last_run_summary": {
-    "hour_utc": "16",
+    "hour_utc": "17",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 45,
@@ -52,34 +52,36 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
+      "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 177,
-      "focus": "pwnshop wishlist IDOR PWN-003 + seclab API dead-route oracles + pwnshop admin/export/search route drain",
-      "improvements_shipped_this_run": 3
+      "findings": 116,
+      "focus": "fabraix data-exfiltration-001 + AI Security Platform prompt-injection/broken-auth/ssrf + seclab CSRF lab + pwnshop track/wishlist queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (45 findings) — no benchmark misses",
-      "pwnshop.ctfsecurity.com/wishlist/1: 9→11 findings — pwnshop-wishlist-idor-route-live-oracle shipped (PWN-003 registry fallback; live /wishlist/:id returns 404 on current deploy)",
-      "pwnshop.ctfsecurity.com/wishlist/1: reflexion-escalated-sqli/xss suppressed on styled 404 shell",
-      "seclab.vercel.app/api/sqli-vulnerable + /api/xss-vulnerable: 4 findings each with seclab-*-route-live-oracle dead Angular stub oracles",
-      "pwnshop.ctfsecurity.com/admin/login: 49 findings with pwnshop-admin-login-sqli-live-oracle"
+      "playground.fabraix.com/challenges/data-exfiltration-001: 5 findings — fabraix-playground-session-live-oracle (Show HN next challenge)",
+      "ai-security-platform-iota.vercel.app/challenges/prompt-injection: 6 findings — client-side-ai-security-platform-evidence + dangerous-html-sinks",
+      "ai-security-platform-iota.vercel.app/challenges/broken-auth: 6 findings — challenge catalog disclosed, no route-specific broken-auth live oracle",
+      "seclab.vercel.app/labs/csrf: 5 findings — seclab-angular-stub-route-live-oracle (no CSRF live exploit oracle)",
+      "pwnshop.ctfsecurity.com/track: 45 findings — pwnshop-track-order-idor-live-oracle",
+      "pwnshop.ctfsecurity.com/wishlist/1: 44 findings — pwnshop-wishlist-idor-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "pwnshop GET /wishlist/:user_id live probe returns 404 — route oracle uses PWN-003 vulnerability-registry fallback until endpoint is redeployed",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "demo.owasp-juice.shop/*: Heroku Application Error — juice-shop.herokuapp.com primary oracle stable at 6/6"
+      "ai-security-platform challenge routes: catalog/evidence only — no LLM01 prompt-injection or broken-auth live oracles",
+      "seclab.vercel.app/labs/csrf: Angular SPA stub only — no route-specific CSRF token bypass live oracle",
+      "testphp.vulnweb.com/search.php unreachable from cloud agent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 45,
-    "pwnshop.ctfsecurity.com/wishlist/1": 11,
-    "pwnshop.ctfsecurity.com/admin/login": 49,
-    "pwnshop.ctfsecurity.com/search/filters": 46,
     "pwnshop.ctfsecurity.com/track": 45,
-    "seclab.vercel.app/api/sqli-vulnerable": 4,
-    "seclab.vercel.app/api/xss-vulnerable": 4,
-    "pwnshop.ctfsecurity.com/export-orders": 20
+    "pwnshop.ctfsecurity.com/wishlist/1": 44,
+    "pwnshop.ctfsecurity.com/admin/login": 49,
+    "playground.fabraix.com/challenges/data-exfiltration-001": 5,
+    "ai-security-platform-iota.vercel.app/challenges/prompt-injection": 6,
+    "seclab.vercel.app/labs/csrf": 5
   }
 }
