@@ -2641,6 +2641,7 @@ const DEEP_RULES = new Set<string>([
   "dvwuCommentsXssRouteLiveOracle",
   "dvwuSearchXssRouteLiveOracle",
   "dvwuNoticesLfiRouteLiveOracle",
+  "dvwuCsrfRouteLiveOracle",
   "dvwuCsrfNewsletterCrlfRouteLiveOracle",
   "dvwuCrlfClientRouteLiveOracle",
   "allSeeingEyeReadRouteLiveOracle",
@@ -11538,7 +11539,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ist-edu-bd\.vercel\.app/i.test(origin) &&
-        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|open-redirect|ssti|graphql|deserialization|file-upload)|files|newsletter)\b/i.test(
+        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|csrf|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|open-redirect|ssti|graphql|deserialization|file-upload)|files|newsletter)\b/i.test(
           targetInput
         ) &&
         p.slug.startsWith("ist-edu-")
@@ -11546,7 +11547,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
-        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|crlf)|newsletter)\b/i.test(
+        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|csrf|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|crlf)|newsletter)\b/i.test(
           targetInput
         ) &&
         p.slug.startsWith("dvwu-")
@@ -12140,7 +12141,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
-        /\/labs\/(?:csrf|crlf)|\/newsletter\b/i.test(targetInput) &&
+        /\/(?:labs\/(?:csrf|crlf)|csrf|crlf|newsletter)\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-") &&
         /csrf|crlf|newsletter/.test(p.slug)
       )

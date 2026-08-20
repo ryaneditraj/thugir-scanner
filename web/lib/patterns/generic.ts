@@ -62066,7 +62066,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu newsletter CRLF injection route live oracle",
     description:
-      "When scanning /labs/csrf or /newsletter, POST /api/newsletter with CRLF in the email field triggers HTTP response splitting — IST Edu header injection training oracle.",
+      "When scanning /csrf, /labs/csrf, or /newsletter, POST /api/newsletter with CRLF in the email field triggers HTTP response splitting — IST Edu header injection training oracle.",
     impactOneline:
       "CRLF injection in newsletter subscriptions lets attackers inject forged email headers or poison HTTP responses.",
     detectorKind: "rule_ref",
@@ -62092,7 +62092,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu CSRF state-change route live oracle",
     description:
-      "When scanning /labs/csrf, POST /api/newsletter subscribes an email without anti-CSRF token or session — IST Edu cross-site request forgery state-change oracle.",
+      "When scanning /csrf, /labs/csrf, or /newsletter, POST /api/newsletter subscribes an email without anti-CSRF token or session — IST Edu cross-site request forgery state-change oracle.",
     impactOneline:
       "Missing CSRF protections let attackers trick visitors into performing unwanted newsletter subscriptions or other state changes.",
     detectorKind: "rule_ref",
@@ -62118,7 +62118,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "DVWU CSRF newsletter CRLF route live oracle",
     description:
-      "When scanning /labs/csrf, /labs/crlf, or /newsletter, POST /api/newsletter with CRLF in email confirms HTTP response splitting — Damn Vulnerable Web University CSRF/header injection route oracle.",
+      "When scanning /csrf, /labs/csrf, /labs/crlf, or /newsletter, POST /api/newsletter with CRLF in email confirms HTTP response splitting — Damn Vulnerable Web University CSRF/header injection route oracle.",
     impactOneline:
       "Unsanitized newsletter email input enables CRLF injection that can forge headers or split HTTP responses.",
     detectorKind: "rule_ref",
@@ -62134,6 +62134,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our dvwu.vercel.app /labs/csrf route documents POST /api/newsletter CRLF injection. Show HTTP response splitting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "DVWU CSRF state-change route live oracle",
+    description:
+      "When scanning /csrf on dvwu.vercel.app, POST /api/newsletter subscribes an email without anti-CSRF token or session — Damn Vulnerable Web University cross-site request forgery state-change route oracle.",
+    impactOneline:
+      "Missing CSRF protections let attackers trick visitors into performing unwanted newsletter subscriptions or other state changes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — require anti-CSRF tokens on all state-changing POST requests.",
+      steps: [
+        "Issue and validate CSRF tokens on every state-changing form and API call.",
+        "Use SameSite cookies and verify Origin/Referer headers.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /csrf route documents POST /api/newsletter without CSRF protection. Show anti-CSRF token and SameSite cookie remediation.",
     version: 1,
     enabled: true
   },
@@ -63252,6 +63278,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /createdb route scan confirms unauthenticated database repopulation. Show remediation for destructive debug endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvwu-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "DVWU CSRF state-change route live oracle",
+    description:
+      "When scanning /csrf on dvwu.vercel.app, POST /api/newsletter subscribes an email without anti-CSRF token or session — Damn Vulnerable Web University cross-site request forgery state-change route oracle.",
+    impactOneline:
+      "Missing CSRF protections let attackers trick visitors into performing unwanted newsletter subscriptions or other state changes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvwuCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWU is intentional security training — require anti-CSRF tokens on all state-changing POST requests.",
+      steps: [
+        "Issue and validate CSRF tokens on every state-changing form and API call.",
+        "Use SameSite cookies and verify Origin/Referer headers.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our dvwu.vercel.app /csrf route documents POST /api/newsletter without CSRF protection. Show anti-CSRF token and SameSite cookie remediation.",
     version: 1,
     enabled: true
   },

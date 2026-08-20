@@ -1,10 +1,22 @@
 {
   "candidates": [
     {
-      "source": "discovery:crapi.apisec.ai",
-      "slug": "crapi-shop-orders-id-bola-live-oracle",
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-csrf-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: tryCrapiAuthJwt prefers test@test.com demo JWT + probes sequential order IDs; crapi.apisec.ai/workshop/api/shop/orders/1 findings 7→9 (+crapi-shop-orders-id-bola-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/newsletter JSON subscribes test@example.com without CSRF token — Subscribed! + Thank you for subscribing; dvwu.vercel.app/csrf findings 11→13 (+dvwu-csrf-route-live-oracle + dvwu-csrf-newsletter-crlf-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-csrf-state-change-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended /csrf short-path route matcher — POST /api/newsletter subscribes without anti-CSRF token; ist-edu-bd.vercel.app/csrf findings 8→10 (+ist-edu-csrf-state-change-live-oracle + ist-edu-newsletter-crlf-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-csrf-newsletter-crlf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/newsletter email=test%0d%0aBcc:thugir-crlf-probe@evil.example returns CRLF Injection Detected; /csrf route path now matches alongside /labs/csrf; dvwu.vercel.app/csrf 11→13 findings; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:crapi.apisec.ai",

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-20T05:13:52.571Z",
-  "total": 2584,
-  "uniqueSlugs": 2577,
+  "generatedAt": "2026-08-20T06:29:50.378Z",
+  "total": 2586,
+  "uniqueSlugs": 2578,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2566,
+    "generic": 2568,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2499,
+    "deep": 2501,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 529,
+    "Broken access control": 531,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1003,6 +1003,7 @@
     "dvwu-comments-xss-route-live-oracle",
     "dvwu-crlf-client-route-live-oracle",
     "dvwu-csrf-newsletter-crlf-route-live-oracle",
+    "dvwu-csrf-route-live-oracle",
     "dvwu-dashboard-idor-route-live-oracle",
     "dvwu-deserialization-lab-route-live-oracle",
     "dvwu-file-upload-lab-route-live-oracle",
