@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T01:15:00.000Z",
+  "updated_at": "2026-08-20T01:49:42.792Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2766,
-  "total_findings": 27348,
+  "total_sites_scanned": 2775,
+  "total_findings": 27599,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1971,
-  "discovery_findings": 23194,
+  "discovery_urls_added": 1976,
+  "discovery_findings": 23307,
   "improvements_shipped": 1170,
-  "last_run": "2026-08-20T01:15:00.000Z",
+  "last_run": "2026-08-20T01:49:42.792Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,37 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (47 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings, 35 juice-shop live oracles); secret-resend slug still absent"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 12,
-      "focus": "VulnLab sqli-error/xss-reflected/idor route oracles when Vercel checkpoint blocks /api/validate/* live probes",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 7,
+      "findings": 115,
+      "focus": "DVWU ist-edu-bd admin/xss/sqli/idor routes + ai-security rate-limiting queued; queue drain vulnbank loans, fauxbank admin/transactions, demo.owasp-juice REST oracles",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "hack-this-site-eta.vercel.app/labs/sqli-error.html: 3→4 findings — vulnlab-sqli-error-route-live-oracle",
-      "hack-this-site-eta.vercel.app/labs/xss-reflected.html: 3→4 findings — vulnlab-xss-reflected-route-live-oracle",
-      "hack-this-site-eta.vercel.app/labs/idor.html: 3→4 findings — vulnlab-idor-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) \u2014 no benchmark misses",
+      "vulnbank.org/api/v1/loans/apply: 31 findings \u2014 vulnbank-loans-negative-amount + vulnbank-loans-apply-live-oracle",
+      "pentest-fauxbank.vercel.app/admin: 16 findings \u2014 fauxbank-admin-panel-live-oracle",
+      "demo.owasp-juice.shop/rest/user/login: 18 findings \u2014 juice-shop-login-sqli-live-oracle on demo instance",
+      "demo.owasp-juice.shop/rest/products/search?q=test: 18 findings \u2014 sql-error-disclosure + juice-shop live oracles",
+      "pentest-fauxbank.vercel.app/transactions: 15 findings \u2014 fauxbank-transactions-idor-live-oracle"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "hack-this-site-eta.vercel.app/labs/cors.html: route-specific CORS lab oracle still absent (3-finding hub)",
-      "hack-this-site-eta.vercel.app: Vercel Security Checkpoint blocks live /backup/* and /api/validate/* probes from curl — route corpus fallbacks used"
+      "testphp.vulnweb.com unreachable from cloud agent (DNS/timeout)",
+      "ist-edu-bd.vercel.app/{admin,xss,sqli,idor}: queued at end \u2014 not yet drained",
+      "ai-security-platform-iota.vercel.app/challenges/rate-limiting: queued at end \u2014 not yet drained",
+      "ai-security-platform-iota.vercel.app/challenges/sqli: 7 findings \u2014 route-specific SQLi oracle still absent (login redirect hub)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "hack-this-site-eta.vercel.app/labs/sqli-error.html": 4,
-    "hack-this-site-eta.vercel.app/labs/xss-reflected.html": 4,
-    "hack-this-site-eta.vercel.app/labs/idor.html": 4,
-    "hack-this-site-eta.vercel.app/labs/clickjacking.html": 4,
-    "hack-this-site-eta.vercel.app/labs/env-file.html": 4,
-    "hack-this-site-eta.vercel.app/labs/upload.html": 4,
-    "api.graphqlbook.org/graphql": 11
+    "juice-shop.herokuapp.com": 48,
+    "vulnbank.org/api/v1/loans/apply": 31,
+    "demo.owasp-juice.shop/rest/products/search?q=test": 18,
+    "demo.owasp-juice.shop/rest/user/login": 18,
+    "pentest-fauxbank.vercel.app/admin": 16,
+    "pentest-fauxbank.vercel.app/transactions": 15,
+    "demo.owasp-juice.shop/rest/user/whoami": 10,
+    "ai-security-platform-iota.vercel.app/challenges/sqli": 7
   }
 }
