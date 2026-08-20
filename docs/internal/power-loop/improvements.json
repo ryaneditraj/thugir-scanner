@@ -4265,6 +4265,30 @@
       "slug": "ai-security-ssrf-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/ssrf returns HTTP 307 Location /login?next=%2Fchallenges%2Fssrf; ai-security-platform-iota.vercel.app/challenges/ssrf findings 5→3 (+ai-security-ssrf-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:prompt-shield1.vercel.app",
+      "slug": "prompt-shield-prompt-injection-defense-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST promptshield-production-858a.up.railway.app/chat benign FAQ returns 4.5% APY (blocked:false) and jailbreak returns blocked:true risk_score>=60; prompt-shield1.vercel.app findings 4→4 (+prompt-shield-prompt-injection-defense-live-oracle +route, -reflexion-escalated-ssti FP); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:prompt-shield1.vercel.app",
+      "slug": "prompt-shield-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PromptShield React SPA has no server-side template engine; promptShieldReflexionSuppressed added in agent-power.ts; prompt-shield1.vercel.app findings 4→4 without reflexion-escalated-ssti false positive; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-data-exfiltration-001-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST api.fabraix.com/v1/playground/sessions/start challenge_id=data-exfil-001 from /challenges/data-exfiltration-001 route; playground.fabraix.com/challenges/data-exfiltration-001 findings 5→6 (+fabraix-data-exfiltration-001-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-indirect-prompt-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST api.fabraix.com/v1/playground/sessions/start maps indirect-prompt-injection-001 route to access-code-001 Gatekeeper backend; playground.fabraix.com/challenges/indirect-prompt-injection-001 findings 5→6 (+fabraix-indirect-prompt-injection-route-live-oracle); benchmark 6/6 maintained"
     }
   ]
 }
