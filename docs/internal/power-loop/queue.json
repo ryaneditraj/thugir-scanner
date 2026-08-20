@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-20T20:08:00.000Z",
+  "updated_at": "2026-08-20T21:16:25.022Z",
   "discovery_urls": [
+    {
+      "url": "https://pc-parts-store.vercel.app/login.php",
+      "source": "jgpython/pc-parts-store-lab — SQLi auth-bypass oracle POST login.php (GitHub README OWASP A1/A2)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pc-parts-store.vercel.app/product.php?id=1",
+      "source": "jgpython/pc-parts-store-lab — IDOR + stored XSS reviews oracle product.php?id= (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pc-parts-store.vercel.app/products.php?search=test",
+      "source": "jgpython/pc-parts-store-lab — UNION SQLi search oracle products.php?search= (GitHub README A1)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pc-parts-store.vercel.app/api/login.php",
+      "source": "jgpython/pc-parts-store-lab — insecure base64 JSON token API oracle api/login.php (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pc-parts-store.vercel.app/checkout.php",
+      "source": "jgpython/pc-parts-store-lab — CC capture + IDOR checkout oracle checkout.php (GitHub README A3/A5)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://dvwu.vercel.app/labs/sqli",
       "source": "zahidoverflow/dvwu — SQL injection training lab route (Vercel live demo; /labs/* portal)",

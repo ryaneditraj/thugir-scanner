@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T20:21:30.145Z",
+  "updated_at": "2026-08-20T21:18:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2944,
-  "total_findings": 31316,
+  "total_sites_scanned": 2953,
+  "total_findings": 31410,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2028,
-  "discovery_findings": 25272,
+  "discovery_urls_added": 2033,
+  "discovery_findings": 25318,
   "improvements_shipped": 1215,
-  "last_run": "2026-08-20T20:21:30.145Z",
+  "last_run": "2026-08-20T21:18:00.000Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 576,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings); no benchmark category gaps"
+      "note": "Stable 6/6 first-pass recall (48 findings, probes=582); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 4,
-      "focus": "RatTasks (ratdo.thexssrat.com) stored XSS + IDOR edit + CSRF live oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 46,
+      "focus": "pc-parts-store route oracles (login/product/products/api-login/checkout) + zero.webappsecurity queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "ratdo.thexssrat.com: 1→4 findings with +ratdo-stored-xss-live-oracle (POST / |safe XSS), +ratdo-idor-edit-live-oracle (cross-user /edit/:id), +ratdo-csrf-live-oracle (no CSRF token + GET delete/toggle)",
-      "dvwu.vercel.app/labs/sqli: 15 findings with dvwu-sqli-route-live-oracle + portal/search SQLi oracles (concurrent 20 UTC queue drain)",
-      "ai-security-platform-iota.vercel.app/challenges/command-injection: 6 findings — route-specific command-injection live oracle still absent"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark category gaps",
+      "pc-parts-store.vercel.app/login.php: 6 findings with client-side-pc-parts-store-lab-evidence + dangerous-html-sinks — no SQLi auth-bypass live oracle",
+      "pc-parts-store.vercel.app/product.php?id=1: 6 findings — client-side XSS/IDOR evidence without route-specific live oracles",
+      "pc-parts-store.vercel.app/products.php?search=test: 6 findings — search SQLi oracle still absent",
+      "pc-parts-store.vercel.app/api/login.php: 3 findings (misconfig only) — insecure-token API oracle absent",
+      "zero.webappsecurity.com/bank/*: 19 findings across feedback + pay-bills + account-activity queue drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "seclab.vercel.app/labs/idor: Angular stub only — seclab-labs-dead-route-live-oracle; no live IDOR exploit API",
-      "dockerworkshop.vercel.app/lab8/projects/devboard: documentation only — DevBoard app runs locally, no live deploy URL",
-      "prompt-shield1.vercel.app: defense demo oracle shipped; successful jailbreak extraction oracle still absent",
-      "ratdo.thexssrat.com: clickjacking oracle still absent (missing X-Frame-Options confirmed via misconfig but no route-specific clickjacking live oracle)",
-      "ai-security-platform command-injection/path-traversal: challenge catalog detected but route-specific live oracles absent"
+      "pc-parts-store.vercel.app/login.php: POST SQLi auth-bypass live oracle absent (client-side evidence only)",
+      "pc-parts-store.vercel.app/products.php?search=: UNION SQLi search live oracle absent",
+      "pc-parts-store.vercel.app/api/login.php: base64 JSON token oracle absent (dir-discovery + CORS only)",
+      "pc-parts-store.vercel.app/checkout.php: CC-capture / IDOR checkout live oracle absent",
+      "zero.webappsecurity.com: legacy demo bank routes surface generic misconfig findings without route-specific CSRF/XSS live oracles"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
-    "ratdo.thexssrat.com": 4,
+    "pc-parts-store.vercel.app/login.php": 6,
+    "pc-parts-store.vercel.app/product.php?id=1": 6,
+    "pc-parts-store.vercel.app/products.php?search=test": 6,
+    "pc-parts-store.vercel.app/checkout.php": 6,
+    "zero.webappsecurity.com/bank/pay-bills.html": 6,
     "dvwu.vercel.app/labs/sqli": 15,
-    "dvwu.vercel.app/labs/lfi": 13,
-    "dvwu.vercel.app/labs/xss": 15,
-    "dvwu.vercel.app/labs/ssrf": 13,
     "pwnshop.ctfsecurity.com/admin/login": 47,
-    "prompt-shield1.vercel.app": 4,
-    "playground.fabraix.com/challenges/data-exfiltration-001": 6,
     "vulnbank.org/check_balance/3518655174": 30
   }
 }
