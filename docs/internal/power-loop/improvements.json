@@ -4096,6 +4096,24 @@
       "slug": "vulnlab-jwt-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/jwt/decode accepts alg=none JWT without signature validation; hack-this-site-eta.vercel.app/auth/jwt.html findings 2→3 (+vulnlab-jwt-route-live-oracle alongside vulnlab-jwt-decode-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search?q=' triggers SQL Syntax Error + Database Leak with admin@ist.edu.bd; ist-edu-bd.vercel.app/search findings 9→11 (+ist-edu-search-sqli-live-oracle + ist-edu-search-sqli-route-live-oracle alongside ist-edu-search-xss-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-search-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search?q=' returns Vulnerable Query + admin row leak on ist-edu-bd host; ist-edu-bd.vercel.app/search findings 9→11; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-csrf-state-change-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extended istEduCsrfStateChangeLiveOracle to match top-level /newsletter; POST /api/newsletter JSON subscribes without CSRF token; ist-edu-bd.vercel.app/newsletter findings 9→11 (+ist-edu-csrf-state-change-live-oracle alongside ist-edu-newsletter-crlf-route-live-oracle); benchmark 6/6 maintained"
     }
   ]
 }

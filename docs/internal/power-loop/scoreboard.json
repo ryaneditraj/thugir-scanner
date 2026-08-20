@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T07:10:00.000Z",
+  "updated_at": "2026-08-20T07:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2829,
-  "total_findings": 28800,
+  "total_sites_scanned": 2831,
+  "total_findings": 28822,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1956,
-  "discovery_findings": 23921,
-  "improvements_shipped": 1182,
-  "last_run": "2026-08-20T07:10:00.000Z",
+  "discovery_findings": 23943,
+  "improvements_shipped": 1185,
+  "last_run": "2026-08-20T07:25:00.000Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
@@ -48,41 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings, 35+ juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 65,
-      "focus": "DVWU ist-edu-bd comments/search/notices/newsletter/portal routes + riglabs sqli/xss + ist-edu admin queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 22,
+      "focus": "IST Edu /search SQLi route oracles + /newsletter CSRF state-change path extension",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no category gaps",
-      "ist-edu-bd.vercel.app/comments: 9 findings — ist-edu-comments-xss-route-live-oracle (stored XSS)",
-      "ist-edu-bd.vercel.app/notices: 10 findings — ist-edu-notices-lfi-route-live-oracle + ist-edu-files-client-lfi-route-live-oracle",
-      "ist-edu-bd.vercel.app/newsletter: 9 findings — ist-edu-newsletter-crlf-route-live-oracle",
-      "ist-edu-bd.vercel.app/portal: 9 findings — ist-edu-register-auth-sqli-route-live-oracle",
-      "ist-edu-bd.vercel.app/search: 9 findings — ist-edu-search-xss-route-live-oracle (reflected XSS; no dedicated SQLi search oracle)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "ist-edu-bd.vercel.app/search: 9→11 findings — ist-edu-search-sqli-live-oracle + ist-edu-search-sqli-route-live-oracle shipped",
+      "ist-edu-bd.vercel.app/newsletter: 9→11 findings — ist-edu-csrf-state-change-live-oracle extended to /newsletter route",
+      "dvwu.vercel.app/csrf: 13 findings — dvwu-csrf-route + newsletter-crlf oracles (shipped prior commit eb2cb473)",
+      "pwnshop.ctfsecurity.com/api/orders/submit: XXE oracle blocked — endpoint returns 404 on live deployment"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "ist-edu-bd.vercel.app/search: reflected XSS oracle present but ist-edu-search-sqli-route-live-oracle still absent",
-      "riglabs-cyber-lab.vercel.app/sqli+xss: 5-finding generic hubs without module-specific live oracles",
-      "dvwu.vercel.app/sqli/idor/admin/xss/csrf: queued next drain (48h skip cleared on new prepends)"
+      "pwnshop.ctfsecurity.com/api/orders/submit + /api/settings/less/imports: XXE/SSTI oracles blocked — endpoints return 404 HTML on live pwnshop.ctfsecurity.com",
+      "riglabs-cyber-lab.vercel.app/sqli+xss: module routes return 404 — lab not deployed at queued URLs",
+      "testphp.vulnweb.com unreachable from cloud agent (DNS/timeout)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "dvwu.vercel.app/csrf": 13,
+    "ist-edu-bd.vercel.app/search": 11,
+    "ist-edu-bd.vercel.app/newsletter": 11,
     "ist-edu-bd.vercel.app/notices": 10,
     "ist-edu-bd.vercel.app/comments": 9,
-    "ist-edu-bd.vercel.app/search": 9,
-    "ist-edu-bd.vercel.app/newsletter": 9,
     "ist-edu-bd.vercel.app/portal": 9,
-    "ist-edu-bd.vercel.app/admin": 9,
-    "riglabs-cyber-lab.vercel.app/sqli": 5,
-    "riglabs-cyber-lab.vercel.app/xss": 5
+    "pwnshop.ctfsecurity.com/api/orders/submit": 45,
+    "ssrf.vulnlab.dev/parser": 15
   }
 }

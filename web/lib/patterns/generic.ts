@@ -44517,6 +44517,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ist-edu-search-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "IST Edu search SQL injection live oracle",
+    description:
+      "GET /api/search?q=' triggers SQL syntax error and leaks admin credentials from the courses table on ist-edu-bd.vercel.app — IST Edu search SQLi oracle.",
+    impactOneline:
+      "String-concatenated SQL in search queries lets attackers extract database rows without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduSearchSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — use parameterized queries for all search lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic search errors without SQL syntax details or row dumps.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our ist-edu-bd.vercel.app /api/search route leaks admin rows via SQL injection on a single-quote probe. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "IST Edu search SQL injection route live oracle",
+    description:
+      "When scanning /search or /labs/sqli, GET /api/search?q=' triggers SQL error and leaks admin@ist.edu.bd from the courses table — route-specific IST Edu SQLi oracle.",
+    impactOneline:
+      "Route scans on IST Edu search labs should confirm search-parameter SQL injection with database row disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — use parameterized queries for all search lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Return generic search errors without SQL syntax details or row dumps.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our ist-edu-bd.vercel.app /search route scan confirms search SQLi with admin row leak. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ist-edu-comments-xss-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
