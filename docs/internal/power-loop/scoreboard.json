@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T03:48:30.672Z",
+  "updated_at": "2026-08-20T04:11:51.975Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2794,
-  "total_findings": 28106,
+  "total_sites_scanned": 2802,
+  "total_findings": 28263,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1981,
-  "discovery_findings": 23464,
+  "discovery_urls_added": 1986,
+  "discovery_findings": 23573,
   "improvements_shipped": 1176,
-  "last_run": "2026-08-20T03:48:30.672Z",
+  "last_run": "2026-08-20T04:11:51.975Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 18,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
-      "pages_crawled": 1,
-      "probes_run": 489,
+      "pages_crawled": 6,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (18 findings, thin Heroku wake pages_crawled=1); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings, 35 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 146,
-      "focus": "crAPI contact_mechanic SSRF + SecureBank login/messages + vaultapp IDOR routes + queue drain (brokencrystals signup, demo.owasp-juice chatbot)",
+      "urls_scanned": 8,
+      "findings": 109,
+      "focus": "crAPI signup/mechanic_report/shop-orders BOLA + ssrf.vulnlab.dev/parser + vulnerable-web-site SSRF + pwnshop orders/submit + less/imports queue drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (18 findings, thin pass) — no benchmark misses",
-      "crapi.apisec.ai/workshop/api/merchant/contact_mechanic: 9 findings — crapi-contact-mechanic-ssrf-live-oracle + crapi-mechanic-report-bola-live-oracle + crapi-otp-bruteforce-live-oracle",
-      "securebank-blog.vercel.app/login: 3 findings — securebank-blog-login-sqli-route-live-oracle",
-      "securebank-blog.vercel.app/messages: 3 findings — securebank-blog-messages-xss-route-live-oracle",
-      "vaultapp-omega.vercel.app/api/users/1: 15 findings — vaultapp-users-idor-route-live-oracle + vaultapp-account-export-apikey-live-oracle",
-      "brokencrystals.com/api/auth/signup: 80 findings — mass-assignment signup oracle (queue drain)",
-      "demo.owasp-juice.shop/#/chatbot: 21 findings — juice-shop-chatbot-api-live-oracle + prompt-injection oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "crapi.apisec.ai/identity/api/auth/signup: 7 findings — crapi-signup-open-registration-live-oracle + crapi-otp-bruteforce-live-oracle",
+      "crapi.apisec.ai/workshop/api/mechanic/mechanic_report: 9 findings — crapi-mechanic-report-bola-live-oracle shipped",
+      "ssrf.vulnlab.dev/parser: 15 findings — ssrf-vulnlab-parser-discrepancy-live-oracle + full SSRF oracle set",
+      "vulnerable-web-site.vercel.app/ssrf: 6 findings — vulnerable-web-site-ssrf-route-live-oracle shipped",
+      "pwnshop.ctfsecurity.com/api/orders/submit: 43 findings — XXE oracle still absent (PWN-013)",
+      "pwnshop.ctfsecurity.com/api/settings/less/imports: 22 findings — SSTI/RCE less-imports oracle still absent (PWN-040)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "juice-shop.herokuapp.com benchmark thin pass (18 findings, pages_crawled=1) vs 48-finding baseline — Heroku cold-start",
-      "testphp.vulnweb.com unreachable from cloud agent (DNS/timeout)",
-      "vaultapp.vercel.app canonicalized to vaultapp-omega.vercel.app — route-specific document IDOR oracle present but base64-encoded ID bypass (challenge #5) not isolated"
+      "crapi.apisec.ai/workshop/api/shop/orders/1: 7-finding hub without route-specific order BOLA oracle (challenge #6)",
+      "pwnshop.ctfsecurity.com/api/orders/submit: XXE order-submit oracle still absent without authenticated session",
+      "pwnshop.ctfsecurity.com/api/settings/less/imports: SSTI/RCE less-imports oracle still absent",
+      "testphp.vulnweb.com unreachable from cloud agent (DNS/timeout)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 18,
-    "brokencrystals.com/api/auth/signup": 80,
-    "demo.owasp-juice.shop/#/chatbot": 21,
-    "vaultapp-omega.vercel.app/api/users/1": 15,
-    "vaultapp-omega.vercel.app/api/documents/1": 15,
-    "crapi.apisec.ai/workshop/api/merchant/contact_mechanic": 9,
-    "securebank-blog.vercel.app/login": 3,
-    "securebank-blog.vercel.app/messages": 3
+    "juice-shop.herokuapp.com": 48,
+    "pwnshop.ctfsecurity.com/api/orders/submit": 43,
+    "pwnshop.ctfsecurity.com/api/settings/less/imports": 22,
+    "ssrf.vulnlab.dev/parser": 15,
+    "crapi.apisec.ai/workshop/api/mechanic/mechanic_report": 9,
+    "crapi.apisec.ai/identity/api/auth/signup": 7,
+    "crapi.apisec.ai/workshop/api/shop/orders/1": 7,
+    "vulnerable-web-site.vercel.app/ssrf": 6
   }
 }

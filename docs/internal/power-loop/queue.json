@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-20T03:26:09.297Z",
+  "updated_at": "2026-08-20T04:05:43.264Z",
   "discovery_urls": [
+    {
+      "url": "https://crapi.apisec.ai/identity/api/auth/signup",
+      "source": "OWASP crAPI APIsec hosted — mass-assignment signup oracle POST /identity/api/auth/signup (OWASP crAPI challenges)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.apisec.ai/workshop/api/mechanic/mechanic_report",
+      "source": "OWASP crAPI APIsec hosted — hidden mechanic report BOLA oracle GET /workshop/api/mechanic/mechanic_report (challenge #2)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.apisec.ai/workshop/api/shop/orders/1",
+      "source": "OWASP crAPI APIsec hosted — REST BOLA order shadow-API oracle GET /workshop/api/shop/orders/{id} (challenge #6)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/parser",
+      "source": "sampsonc/vulnlab.dev — SSRF parser-discrepancy lab /parser variant (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-web-site.vercel.app/ssrf",
+      "source": "megmogmog1965/vulnerable-web-site — SSRF fetch lab module (Vercel README ENABLE_SSRF)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crapi.apisec.ai/workshop/api/merchant/contact_mechanic",
       "source": "OWASP crAPI APIsec hosted — SSRF/BOLA oracle POST contact_mechanic mechanic_api param (writeups)",
