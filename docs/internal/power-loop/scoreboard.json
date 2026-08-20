@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T10:35:00.000Z",
+  "updated_at": "2026-08-20T11:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2868,
-  "total_findings": 29843,
+  "total_sites_scanned": 2876,
+  "total_findings": 30090,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1991,
+  "discovery_urls_added": 1994,
   "discovery_findings": 24501,
   "improvements_shipped": 1193,
-  "last_run": "2026-08-20T10:35:00.000Z",
+  "last_run": "2026-08-20T11:35:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 45,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 450,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,45 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings, 35+ juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (45 findings, 33 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
+      "urls_added": 3,
       "urls_scanned": 7,
-      "findings": 226,
-      "focus": "Escape Duck Store SSRF/IDOR/mass-assignment routes + demo.owasp-juice memories BOLA; merged vaultapp messages/audit-logs route oracle path fixes",
-      "improvements_shipped_this_run": 4
+      "findings": 202,
+      "focus": "OWASP FinBot admin portal + VulnForge SSRF/RCE levels + queue drain (brokencrystals CSS injection hub, pwnshop order/wallet, vulnbank openapi)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "duck-store.escape.tech/api/v1/uploads/fetch-url: 30 findings — duck-store-ssrf-fetch-url-route-live-oracle confirmed on route scan",
-      "duck-store.escape.tech/api/v1/orders/1: 29 findings — duck-store-orders-route-live-oracle confirmed",
-      "duck-store.escape.tech/api/v1/users/me/profile: 29 findings — duck-store-profile-mass-assignment-route-live-oracle confirmed",
-      "demo.owasp-juice.shop/rest/memories: 47 findings — juice-shop-memories-bola-route-live-oracle + full Juice Shop oracle suite",
-      "duck-store.escape.tech/api/v1/uploads/import-from-url: 30 findings — generic SSRF oracle only; route-specific import-from-url oracle still absent",
-      "vaultapp-omega.vercel.app/api/messages/1: route oracle URL match extended to /api/messages/:id — vaultapp-messages-read-idor-route-live-oracle",
-      "vaultapp-omega.vercel.app/api/audit-logs: route oracle URL match extended to /api/audit-logs — vaultapp-admin-audit-logs-idor-route-live-oracle",
-      "vulnbank.org/api/v2/forgot-password: 30 findings — queue drain",
-      "vulnbank.org/merchant/register: 31 findings — merchant registration oracle hub"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (45 findings) — no benchmark misses",
+      "owasp-finbot-ctf.org/admin: 17 findings — finbot-admin-copilot-route + Dark Lab supply-chain oracles on first admin portal scan",
+      "vulnforge-academy.vercel.app/.../level13.php: 5 findings — vulnforge-academy-level-ssrf-route-live-oracle confirmed",
+      "vulnforge-academy.vercel.app/.../level19.php: 6 findings — vulnforge-academy-level-rce-route-live-oracle + SSTI route oracle",
+      "brokencrystals.com/userlogin?logobgcolor=red: 69 findings — full Broken Crystals oracle suite (CSS injection, BFLA, SSRF, XPATH, config disclosure)",
+      "pwnshop.ctfsecurity.com/order/1: 48 findings — order IDOR + Pwnshop lab oracle hub",
+      "pwnshop.ctfsecurity.com/wallet: 25 findings — pwnshop-wallet-topup-route-live-oracle + debug/events oracles",
+      "vulnbank.org/static/openapi.json: 32 findings — vulnbank-transactions-bola + BOPLA register oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "duck-store.escape.tech/api/v1/uploads/import-from-url: route-specific SSRF import-from-url live oracle absent (fetch-url route oracle fires on wrong endpoint)",
-      "vaultapp.vercel.app — Vercel checkpoint intermittently blocks live IDOR probes from cloud agent",
+      "vulnforge level13.php: reflexion-escalated-ssti false positive alongside SSRF route oracle — suppress SSTI on SSRF tiers",
+      "pwnshop.ctfsecurity.com/checkout: queued but not drained this run (48h skip or queue position)",
       "testphp.vulnweb.com/search.php unreachable from cloud agent (DNS/timeout)",
-      "duck-store MCP + testimonial oracles fire on all route scans — narrow route-specific matchers still needed for import-from-url POST SSRF"
+      "brokencrystals.com/api/chat: queued but not drained — LLM XSS oracle pending route scan"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "demo.owasp-juice.shop/rest/memories": 47,
-    "vulnbank.org/merchant/register": 31,
-    "duck-store.escape.tech/api/v1/uploads/import-from-url": 30,
-    "duck-store.escape.tech/api/v1/uploads/fetch-url": 30,
-    "vulnbank.org/api/v2/forgot-password": 30,
-    "duck-store.escape.tech/api/v1/orders/1": 29,
-    "duck-store.escape.tech/api/v1/users/me/profile": 29
+    "juice-shop.herokuapp.com": 45,
+    "brokencrystals.com/userlogin?logobgcolor=red": 69,
+    "pwnshop.ctfsecurity.com/order/1": 48,
+    "vulnbank.org/static/openapi.json": 32,
+    "pwnshop.ctfsecurity.com/wallet": 25,
+    "owasp-finbot-ctf.org/admin": 17,
+    "vulnforge-academy.vercel.app/backend/includes/levels/hard/level19.php": 6,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level13.php": 5
   }
 }
