@@ -86152,6 +86152,32 @@ const istEduSearchXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const istEduSearchSqliLiveOracle: Rule = async (ctx) =>
+  (await probeIstEduSearchSqli(ctx)) ?? NEGATIVE;
+
+const istEduSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/sqli|api\/search|search)\/?$/i.test(pathname)) return NEGATIVE;
+  const search = await probeIstEduSearchSqli(ctx);
+  if (!search?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: search.confidence,
+    evidence: {
+      ...search.evidence,
+      scannedUrl: pageUrl,
+      note: "IST Edu /search route scan — GET /api/search?q=' triggers SQL error and leaks admin row — route-specific SQL injection search oracle"
+    }
+  };
+};
+
 const istEduNoticesLfiRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -86265,7 +86291,7 @@ const istEduCsrfStateChangeLiveOracle: Rule = async (ctx) => {
   } catch {
     return NEGATIVE;
   }
-  if (!/\/(?:labs\/)?csrf\/?$/i.test(pathname)) return NEGATIVE;
+  if (!/\/(?:labs\/)?(?:csrf|newsletter)\/?$/i.test(pathname)) return NEGATIVE;
   const result = await probeNewsletterCsrfStateChange(ctx);
   if (!result?.fired) return NEGATIVE;
   return {
@@ -86274,7 +86300,7 @@ const istEduCsrfStateChangeLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "IST Edu /csrf or /labs/csrf route scan — POST /api/newsletter subscribes without anti-CSRF token — cross-site request forgery state-change oracle"
+      note: "IST Edu /csrf, /labs/csrf, or /newsletter route scan — POST /api/newsletter subscribes without anti-CSRF token — cross-site request forgery state-change oracle"
     }
   };
 };
@@ -91799,6 +91825,8 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceLoggerOastLiveOracle,
   ginAndJuiceLoggerRouteLiveOracle,
   istEduSearchXssRouteLiveOracle,
+  istEduSearchSqliLiveOracle,
+  istEduSearchSqliRouteLiveOracle,
   istEduNoticesLfiRouteLiveOracle,
   istEduPortalSqliRouteLiveOracle,
   istEduRegisterAuthSqliRouteLiveOracle,
