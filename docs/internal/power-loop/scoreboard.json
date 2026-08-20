@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T07:03:53.629Z",
+  "updated_at": "2026-08-20T07:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2821,
-  "total_findings": 28735,
+  "total_sites_scanned": 2829,
+  "total_findings": 28800,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1956,
-  "discovery_findings": 23856,
+  "discovery_findings": 23921,
   "improvements_shipped": 1182,
-  "last_run": "2026-08-20T07:03:53.629Z",
+  "last_run": "2026-08-20T07:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,40 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings, 35+ juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings, 35+ juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 69,
-      "focus": "riglabs sqli/xss modules + ist-edu admin/sqli + ai-security rate-limiting + fauxbank loans/profile queue drain",
+      "findings": 65,
+      "focus": "DVWU ist-edu-bd comments/search/notices/newsletter/portal routes + riglabs sqli/xss + ist-edu admin queue drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no category gaps",
-      "ai-security-platform-iota.vercel.app/challenges/rate-limiting: 9 findings — ai-security-rate-limiting-bruteforce-live-oracle + ai-security-api-security-route-live-oracle",
-      "ist-edu-bd.vercel.app/admin: 9 findings — ist-edu-admin-route-live-oracle (SQLi auth bypass oracle)",
-      "ist-edu-bd.vercel.app/sqli: 9 findings — ist-edu-sqli-route-live-oracle",
-      "pentest-fauxbank.vercel.app/loans: 16 findings — fauxbank-loans-negative-amount-live-oracle hub",
-      "pentest-fauxbank.vercel.app/profile: 16 findings — fauxbank-profile-sensitive-data-live-oracle hub"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no category gaps",
+      "ist-edu-bd.vercel.app/comments: 9 findings — ist-edu-comments-xss-route-live-oracle (stored XSS)",
+      "ist-edu-bd.vercel.app/notices: 10 findings — ist-edu-notices-lfi-route-live-oracle + ist-edu-files-client-lfi-route-live-oracle",
+      "ist-edu-bd.vercel.app/newsletter: 9 findings — ist-edu-newsletter-crlf-route-live-oracle",
+      "ist-edu-bd.vercel.app/portal: 9 findings — ist-edu-register-auth-sqli-route-live-oracle",
+      "ist-edu-bd.vercel.app/search: 9 findings — ist-edu-search-xss-route-live-oracle (reflected XSS; no dedicated SQLi search oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "riglabs-cyber-lab.vercel.app/sqli+xss: 5-finding generic hubs without module-specific SQLi/XSS live oracles",
-      "http://testphp.vulnweb.com/search.php: unreachable (HTTP-only host)",
-      "vaultapp.vercel.app/api/users/1 + documents/1: queued next drain pending",
-      "pwnshop.ctfsecurity.com/wallet: wallet-top-up credited_amount oracle still absent (OTP-gated)"
+      "ist-edu-bd.vercel.app/search: reflected XSS oracle present but ist-edu-search-sqli-route-live-oracle still absent",
+      "riglabs-cyber-lab.vercel.app/sqli+xss: 5-finding generic hubs without module-specific live oracles",
+      "dvwu.vercel.app/sqli/idor/admin/xss/csrf: queued next drain (48h skip cleared on new prepends)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "ai-security-platform-iota.vercel.app/challenges/rate-limiting": 9,
+    "juice-shop.herokuapp.com": 48,
+    "ist-edu-bd.vercel.app/notices": 10,
+    "ist-edu-bd.vercel.app/comments": 9,
+    "ist-edu-bd.vercel.app/search": 9,
+    "ist-edu-bd.vercel.app/newsletter": 9,
+    "ist-edu-bd.vercel.app/portal": 9,
     "ist-edu-bd.vercel.app/admin": 9,
-    "ist-edu-bd.vercel.app/sqli": 9,
-    "pentest-fauxbank.vercel.app/loans": 16,
-    "pentest-fauxbank.vercel.app/profile": 16,
     "riglabs-cyber-lab.vercel.app/sqli": 5,
     "riglabs-cyber-lab.vercel.app/xss": 5
   }
