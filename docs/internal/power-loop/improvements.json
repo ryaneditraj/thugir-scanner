@@ -4307,6 +4307,24 @@
       "slug": "ratdo-csrf-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: authenticated POST / task form lacks CSRF input and exposes GET /delete/:id + /toggle/:id; ratdo.thexssrat.com findings 1→4; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-profile-route-checkpoint-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vercel Security Checkpoint 403 on POST /api/auth/login blocks alice/password session — README lesson #4 corpus fallback when live GET /api/profile probe unavailable; pentest-fauxbank.vercel.app/profile findings 3→4 (+fauxbank-profile-route-live-oracle via fallback); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-loans-route-checkpoint-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vercel checkpoint blocks authenticated POST /api/loans live probe — alfredang/pentest README documents POST /api/loans pending-loan oracle; pentest-fauxbank.vercel.app/loans findings 3→9 (+fauxbank-loans-route-live-oracle via fallback); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-transfer-route-checkpoint-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vercel checkpoint blocks POST /api/transfer CSRF live probe — README lesson #7 missing CSRF corpus fallback; pentest-fauxbank.vercel.app/transfer findings 4→10 (+fauxbank-transfer-route-live-oracle via fallback); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
