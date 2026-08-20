@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-20T15:05:16.678Z",
-  "total": 2596,
-  "uniqueSlugs": 2588,
+  "generatedAt": "2026-08-20T16:29:42.198Z",
+  "total": 2598,
+  "uniqueSlugs": 2590,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2578,
+    "generic": 2580,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2511,
+    "deep": 2513,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 533,
+    "Broken access control": 535,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1928,6 +1928,8 @@
     "pwnshop-verify-otp-bruteforce-live-oracle",
     "pwnshop-wallet-topup-route-live-oracle",
     "pwnshop-wallet-topup-vulnbank-live-oracle",
+    "pwnshop-wishlist-idor-live-oracle",
+    "pwnshop-wishlist-idor-route-live-oracle",
     "pygoat-sql-route-live-oracle",
     "pygoat-ssrf-lab-route-live-oracle",
     "pygoat-ssti-lab-route-live-oracle",
