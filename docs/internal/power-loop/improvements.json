@@ -4012,6 +4012,24 @@
       "slug": "zero-bank-transfer-funds-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /bank/transfer-funds route scan documents transfer_funds_link module + from/to account fields when OTP-gated live CSRF probe blocked; zero.webappsecurity.com/bank/transfer-funds.html findings 0→8 (+zero-bank-transfer-funds-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-cors-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/cors returns ACAO:* + ACAC:true (curl); Vercel checkpoint blocks scanner live probe — corpus fallback + /api/validate/cors labId=cors; hack-this-site-eta.vercel.app/labs/cors.html findings 3→4 (+vulnlab-cors-route-live-oracle +vulnlab-cors-live-oracle +vulnlab-validate-cors-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-input-validation-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/validate?input=test returns audit Input Validation JSON; /api/validate/input-validation labId=input-validation; hack-this-site-eta.vercel.app/labs/input-validation.html findings 3→4 (+vulnlab-input-validation-route-live-oracle +vulnlab-input-validation-live-oracle +vulnlab-validate-input-validation-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-jwt-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/jwt/decode accepts alg=none JWT without signature validation; hack-this-site-eta.vercel.app/auth/jwt.html findings 2→3 (+vulnlab-jwt-route-live-oracle alongside vulnlab-jwt-decode-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
     }
   ]
 }
