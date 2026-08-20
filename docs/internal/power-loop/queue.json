@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-20T09:06:00.000Z",
+  "updated_at": "2026-08-20T10:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/uploads/import-from-url",
+      "source": "Escape Duck Store vulnerabilities page — SSRF via image import POST (escape.tech blog 2025)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/uploads/fetch-url",
+      "source": "Escape Duck Store vulnerabilities page — SSRF link preview GET fetch-url param",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/1",
+      "source": "Escape Duck Store vulnerabilities page — IDOR on orders GET /api/v1/orders/{id}",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/users/me/profile",
+      "source": "Escape Duck Store vulnerabilities page — mass assignment PUT profile (referral/credit abuse)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/memories",
+      "source": "Official demo.owasp-juice.shop — photo memories BOLA oracle GET /rest/memories (Pwning Juice Shop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/api/v1/products/filter/by-color",
       "source": "Escape Duck Store — SQLi via color filter param (improvements.json duck-store-products-filter-sqli oracle)",
