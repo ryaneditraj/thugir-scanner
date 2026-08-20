@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-ssrf-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnforgeAcademySsrfReflexionSuppressed skips reflexionEscalatedSsti on level13-15.php SSRF tiers; vulnforge-academy.vercel.app/backend/includes/levels/medium/level13.php findings 5→4 (-reflexion-escalated-ssti false positive, +vulnforge-academy-level-ssrf-route-live-oracle retained); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-rce-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnforgeAcademyRceReflexionSuppressed skips reflexionEscalatedSsti on level19-20.php RCE tiers; vulnforge-academy.vercel.app/backend/includes/levels/hard/level19.php findings 6→4 (-reflexion-escalated-ssti + duplicate level-ssti-route, +vulnforge-academy-level-rce-route-live-oracle retained); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp.vercel.app",
+      "slug": "vaultapp-omega-checkpoint-login-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultappLogin falls back to vaultapp-omega.vercel.app when vaultapp.vercel.app login hits Vercel Security Checkpoint; all live IDOR probes use auth.apiOrigin; vaultapp.vercel.app/api/messages/1 findings 0→9 (+vaultapp-messages-read-idor-live-oracle +vaultapp-messages-read-idor-route-live-oracle + admin/users/documents IDOR oracles); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vaultapp-omega.vercel.app",
       "slug": "vaultapp-messages-read-idor-probe-range-fix",
       "status": "shipped",
