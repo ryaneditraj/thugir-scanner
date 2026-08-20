@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-shop-orders-id-bola-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: tryCrapiAuthJwt prefers test@test.com demo JWT + probes sequential order IDs; crapi.apisec.ai/workshop/api/shop/orders/1 findings 7→9 (+crapi-shop-orders-id-bola-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-shop-order-status-mass-assignment-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /workshop/api/shop/orders/{id} status=returned refunds delivered orders (Challenge 8); crapi.apisec.ai/workshop/api/shop/orders/1 findings 7→9 (+crapi-shop-order-status-mass-assignment-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-shop-order-status-mass-assignment-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route corpus fallback when JWT chain unreachable; crapi.apisec.ai/workshop/api/shop/orders/1 route scan confirms Challenge 8 mass-assignment surface; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-sqli-route-live-oracle",
       "status": "shipped",

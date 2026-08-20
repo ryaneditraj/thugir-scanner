@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-20T04:13:05.785Z",
-  "total": 2581,
-  "uniqueSlugs": 2574,
+  "generatedAt": "2026-08-20T05:13:52.571Z",
+  "total": 2584,
+  "uniqueSlugs": 2577,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2563,
+    "generic": 2566,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2496,
+    "deep": 2499,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 526,
+    "Broken access control": 529,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -894,6 +894,9 @@
     "crapi-mechanic-report-bola-live-oracle",
     "crapi-mechanic-report-route-live-oracle",
     "crapi-otp-bruteforce-live-oracle",
+    "crapi-shop-order-status-mass-assignment-live-oracle",
+    "crapi-shop-order-status-mass-assignment-route-live-oracle",
+    "crapi-shop-orders-id-bola-live-oracle",
     "crapi-shop-orders-id-bola-route-live-oracle",
     "crapi-signup-open-registration-live-oracle",
     "crapi-signup-route-live-oracle",
