@@ -2261,6 +2261,9 @@ const DEEP_RULES = new Set<string>([
   "vulnlabClickjackingRouteLiveOracle",
   "vulnlabEnvFileRouteLiveOracle",
   "vulnlabUploadRouteLiveOracle",
+  "vulnlabSqliErrorRouteLiveOracle",
+  "vulnlabXssReflectedRouteLiveOracle",
+  "vulnlabIdorRouteLiveOracle",
   "vulnlabCmsDrupalJoomlaLiveOracle",
   "vulnlabGitHeadLiveOracle",
   "vulnlabPlatformPhpLiveOracle",
@@ -12909,6 +12912,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /hack-this-site-eta\.vercel\.app/i.test(origin) &&
         /\/labs\/upload\.html/i.test(targetInput) &&
         (p.slug.startsWith("vulnlab-upload") || p.slug === "vulnlab-validate-upload-live-oracle")
+      )
+        return -4;
+      if (
+        /hack-this-site-eta\.vercel\.app/i.test(origin) &&
+        /\/labs\/sqli-error\.html/i.test(targetInput) &&
+        (p.slug.startsWith("vulnlab-sqli-error") || p.slug === "vulnlab-validate-sqli-live-oracle")
+      )
+        return -4;
+      if (
+        /hack-this-site-eta\.vercel\.app/i.test(origin) &&
+        /\/labs\/xss-reflected\.html/i.test(targetInput) &&
+        (p.slug.startsWith("vulnlab-xss-reflected") || p.slug === "vulnlab-validate-xss-live-oracle")
+      )
+        return -4;
+      if (
+        /hack-this-site-eta\.vercel\.app/i.test(origin) &&
+        /\/labs\/idor\.html/i.test(targetInput) &&
+        (p.slug.startsWith("vulnlab-idor") || p.slug === "vulnlab-validate-idor-live-oracle")
       )
         return -4;
       if (

@@ -28049,6 +28049,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-sqli-error-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnLab /labs/sqli-error.html route live oracle",
+    description:
+      "When scanning /labs/sqli-error.html, confirms error-based SQLi via /api/validate/sqli-error or corpus fallback for A03-001 simulated /api/sql probe.",
+    impactOneline:
+      "Route-specific SQLi lab oracle distinct from generic VulnLab hub fingerprint on hack-this-site-eta.vercel.app.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabSqliErrorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries; gate lab validate APIs behind authentication.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Require lab login before /api/validate/sqli-error responds.",
+        "Do not expose /api/sql error messages to anonymous users."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/sqli-error.html route scan confirms error-based SQLi lab. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-xss-reflected-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "VulnLab /labs/xss-reflected.html route live oracle",
+    description:
+      "When scanning /labs/xss-reflected.html, confirms reflected XSS via /api/validate/xss-reflected or corpus fallback for A03-006 innerHTML sink.",
+    impactOneline:
+      "Route-specific reflected XSS lab oracle distinct from generic VulnLab hub fingerprint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabXssReflectedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode output contextually; gate lab validate APIs behind authentication.",
+      steps: [
+        "Avoid innerHTML with URL/query parameters — use textContent or DOMPurify.",
+        "Require lab login before /api/validate/xss-reflected responds.",
+        "Set Content-Security-Policy to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/xss-reflected.html route scan confirms reflected XSS lab. Show output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnLab /labs/idor.html route live oracle",
+    description:
+      "When scanning /labs/idor.html, confirms IDOR order lookup via /api/validate/idor or corpus fallback for A01-001 unauthenticated /api/orders fetch.",
+    impactOneline:
+      "Route-specific IDOR lab oracle distinct from generic VulnLab hub fingerprint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize every object access; gate lab validate APIs behind authentication.",
+      steps: [
+        "Verify the session user owns the requested order ID before returning data.",
+        "Require lab login before /api/validate/idor responds.",
+        "Use unpredictable object identifiers instead of sequential IDs."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/idor.html route scan confirms IDOR order lookup lab. Show authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnlab-cms-drupal-joomla-live-oracle",
     platform: "generic",
     category: "Information disclosure",
