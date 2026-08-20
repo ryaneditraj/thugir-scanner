@@ -77571,49 +77571,118 @@ const aiSecurityInsecurePasswordsRouteLiveOracle: Rule = (ctx) =>
 const aiSecurityAiPhishingRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "ai-phishing");
 
-const aiSecuritySqliRouteLiveOracle: Rule = async (ctx) => {
+type AiSecurityAuthGatedChallengeMeta = {
+  routeSegment: string;
+  cweLabel: string;
+  topicLabel: string;
+  platformContextRe: RegExp;
+  redirectNote: string;
+};
+
+const AI_SECURITY_AUTH_GATED_CHALLENGE_META: Record<string, AiSecurityAuthGatedChallengeMeta> = {
+  sqli: {
+    routeSegment: "sqli",
+    cweLabel: "CWE-89",
+    topicLabel: "SQL injection",
+    platformContextRe: /SQL[\s-]?Injection|CWE-89|OWASP Top 10|14 challenges/i,
+    redirectNote:
+      "AI Security Platform /challenges/sqli route redirects to /login?next=/challenges/sqli — auth-gated SQL injection CWE-89 challenge route on discovery queue (14-challenge catalog; sqli route preserved for route-specific scanner oracle)"
+  },
+  "prompt-injection": {
+    routeSegment: "prompt-injection",
+    cweLabel: "LLM01",
+    topicLabel: "Prompt Injection",
+    platformContextRe: /Prompt Injection|LLM01|OWASP Top 10|14 challenges|AI Security Platform/i,
+    redirectNote:
+      "AI Security Platform /challenges/prompt-injection route redirects to /login?next=/challenges/prompt-injection — auth-gated LLM01 prompt-injection challenge route on discovery queue (not in public 14-challenge catalog)"
+  },
+  "broken-auth": {
+    routeSegment: "broken-auth",
+    cweLabel: "CWE-287",
+    topicLabel: "Broken Authentication",
+    platformContextRe: /Broken Authentication|CWE-287|Auth\s*&\s*API|14 challenges|AI Security Platform/i,
+    redirectNote:
+      "AI Security Platform /challenges/broken-auth route redirects to /login?next=/challenges/broken-auth — auth-gated broken authentication challenge route on discovery queue (not in public 14-challenge catalog)"
+  },
+  ssrf: {
+    routeSegment: "ssrf",
+    cweLabel: "CWE-918",
+    topicLabel: "Server-Side Request Forgery",
+    platformContextRe: /SSRF|Server-Side Request Forgery|CWE-918|OWASP Top 10|14 challenges|AI Security Platform/i,
+    redirectNote:
+      "AI Security Platform /challenges/ssrf route redirects to /login?next=/challenges/ssrf — auth-gated SSRF CWE-918 challenge route on discovery queue (not in public 14-challenge catalog)"
+  }
+};
+
+function aiSecurityAuthGatedNextPatterns(routeSegment: string): RegExp[] {
+  const encoded = encodeURIComponent(`/challenges/${routeSegment}`);
+  return [
+    new RegExp(`next=${encoded.replace(/\//g, "%2F")}`, "i"),
+    new RegExp(`next=/challenges/${routeSegment}`, "i")
+  ];
+}
+
+async function aiSecurityAuthGatedChallengeRouteLiveOracle(
+  ctx: RuleContext,
+  challengeKey: string
+): Promise<RuleResult> {
+  const meta = AI_SECURITY_AUTH_GATED_CHALLENGE_META[challengeKey];
+  if (!meta) return NEGATIVE;
   if (!isAiSecurityPlatformHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/challenges\/sqli\b/i.test(pageUrl)) return NEGATIVE;
+  const routeRe = new RegExp(`/challenges/${meta.routeSegment}\\b`, "i");
+  if (!routeRe.test(pageUrl)) return NEGATIVE;
 
-  const sqliUrl = new URL("/challenges/sqli", AI_SECURITY_PLATFORM_HOME).toString();
-  const sqliDoc = await ctx.probe.get(sqliUrl, {
+  const challengeUrl = new URL(`/challenges/${meta.routeSegment}`, AI_SECURITY_PLATFORM_HOME).toString();
+  const challengeDoc = await ctx.probe.get(challengeUrl, {
     maxBytes: 4096,
     timeoutMs: 12000,
     redirect: "manual"
   });
-  const location = sqliDoc.headers["location"] || "";
+  const location = challengeDoc.headers["location"] || "";
+  const nextPatterns = aiSecurityAuthGatedNextPatterns(meta.routeSegment);
+  const routeInRedirect =
+    nextPatterns.some((re) => re.test(location)) || nextPatterns.some((re) => re.test(pageUrl));
   const loginRedirect =
     /\/login\b/i.test(ctx.home.finalUrl || "") ||
     /\/login\b/i.test(pageUrl) ||
-    ([301, 302, 303, 307, 308].includes(sqliDoc.status) &&
-      (/\/login\b/i.test(location) ||
-        /next=%2Fchallenges%2Fsqli|next=\/challenges\/sqli/i.test(location)));
+    ([301, 302, 303, 307, 308].includes(challengeDoc.status) &&
+      (/\/login\b/i.test(location) || routeInRedirect));
+  const authGatedStatus = challengeDoc.status === 401 || challengeDoc.status === 403;
 
   const catalog = await aiSecurityPlatformFetchCatalog(ctx);
   const corpus = `${ctx.combined}\n${pageUrl}\n${catalog}\n${location}`;
-  const sqliInRedirect =
-    /next=%2Fchallenges%2Fsqli|next=\/challenges\/sqli/i.test(location) ||
-    /next=%2Fchallenges%2Fsqli|next=\/challenges\/sqli/i.test(pageUrl);
-  const platformContext =
-    /SQL[\s-]?Injection|CWE-89|OWASP Top 10|14 challenges/i.test(corpus);
+  const platformContext = meta.platformContextRe.test(corpus);
 
-  if (!loginRedirect && !sqliInRedirect) return NEGATIVE;
-  if (!platformContext && !sqliInRedirect) return NEGATIVE;
+  if (!loginRedirect && !routeInRedirect && !authGatedStatus) return NEGATIVE;
+  if (!platformContext && !routeInRedirect && !loginRedirect && !authGatedStatus) return NEGATIVE;
 
   return {
     fired: true,
-    confidence: sqliInRedirect ? 0.9 : 0.87,
+    confidence: routeInRedirect || loginRedirect ? 0.9 : 0.87,
     evidence: {
       scannedUrl: pageUrl,
-      sqliStatus: sqliDoc.status,
+      challengeStatus: challengeDoc.status,
       location,
-      note: loginRedirect
-        ? "AI Security Platform /challenges/sqli route redirects to /login?next=/challenges/sqli — auth-gated SQL injection CWE-89 challenge route on discovery queue (14-challenge catalog; sqli route preserved for route-specific scanner oracle)"
-        : "AI Security Platform documents SQL injection CWE-89 challenge route /challenges/sqli in platform training context"
+      note:
+        loginRedirect || routeInRedirect
+          ? meta.redirectNote
+          : `AI Security Platform documents ${meta.topicLabel} ${meta.cweLabel} challenge route /challenges/${meta.routeSegment} in platform training context`
     }
   };
-};
+}
+
+const aiSecuritySqliRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityAuthGatedChallengeRouteLiveOracle(ctx, "sqli");
+
+const aiSecurityPromptInjectionRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityAuthGatedChallengeRouteLiveOracle(ctx, "prompt-injection");
+
+const aiSecurityBrokenAuthRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityAuthGatedChallengeRouteLiveOracle(ctx, "broken-auth");
+
+const aiSecuritySsrfRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityAuthGatedChallengeRouteLiveOracle(ctx, "ssrf");
 
 async function aiSecurityExtractSignInActionId(ctx: RuleContext): Promise<string | null> {
   const loginUrl = new URL("/login", AI_SECURITY_PLATFORM_HOME).toString();
@@ -91504,6 +91573,9 @@ export const RULES: Record<string, Rule> = {
   aiSecurityInsecurePasswordsRouteLiveOracle,
   aiSecurityAiPhishingRouteLiveOracle,
   aiSecuritySqliRouteLiveOracle,
+  aiSecurityPromptInjectionRouteLiveOracle,
+  aiSecurityBrokenAuthRouteLiveOracle,
+  aiSecuritySsrfRouteLiveOracle,
   aiSecurityRateLimitingBruteforceLiveOracle,
   aiSecurityLoginRouteLiveOracle,
   juiceShopForgottenBackupDisclosure,

@@ -35809,6 +35809,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-prompt-injection-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "AI Security Platform prompt-injection challenge route live oracle",
+    description:
+      "When scanning /challenges/prompt-injection on ai-security-platform-iota.vercel.app, the route redirects to /login?next=/challenges/prompt-injection confirming an auth-gated LLM01 prompt-injection challenge route on the discovery queue.",
+    impactOneline:
+      "Route-specific confirmation that AI Security Platform preserves a prompt-injection challenge route for scanner calibration even when the 14-challenge public catalog omits LLM01 labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityPromptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — treat LLM inputs as untrusted and enforce output validation.",
+      steps: [
+        "Separate system instructions from user-controlled content.",
+        "Validate and sanitize model outputs before executing tools or rendering HTML.",
+        "Require authentication before exposing prompt-injection lab panels."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/prompt-injection route redirects to login preserving an LLM01 prompt-injection challenge URL. Show prompt-injection defenses for Next.js + LLM integrations.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-broken-auth-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "AI Security Platform broken-auth challenge route live oracle",
+    description:
+      "When scanning /challenges/broken-auth on ai-security-platform-iota.vercel.app, the route redirects to /login?next=/challenges/broken-auth confirming an auth-gated broken authentication CWE-287 challenge route on the discovery queue.",
+    impactOneline:
+      "Route-specific confirmation that AI Security Platform preserves a broken-auth challenge route for scanner calibration even when the 14-challenge public catalog omits this module.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityBrokenAuthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — enforce secure session management and authentication checks.",
+      steps: [
+        "Use server-side session validation on every protected route.",
+        "Apply rate limiting and lockout on failed login attempts.",
+        "Require authentication before exposing broken-auth lab panels."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/broken-auth route redirects to login preserving a CWE-287 broken authentication challenge URL. Show secure session and auth remediation for Next.js + Supabase.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "AI Security Platform SSRF challenge route live oracle",
+    description:
+      "When scanning /challenges/ssrf on ai-security-platform-iota.vercel.app, the route redirects to /login?next=/challenges/ssrf confirming an auth-gated SSRF CWE-918 challenge route on the discovery queue.",
+    impactOneline:
+      "Route-specific confirmation that AI Security Platform preserves an SSRF challenge route for scanner calibration even when the 14-challenge public catalog omits SSRF labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecuritySsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — allowlist outbound fetch destinations and block internal IP ranges.",
+      steps: [
+        "Deny RFC1918, link-local, and cloud metadata addresses at the egress layer.",
+        "Use an allowlist of permitted fetch hosts instead of accepting arbitrary URLs.",
+        "Require authentication before exposing SSRF lab panels."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/ssrf route redirects to login preserving a CWE-918 SSRF challenge URL. Show SSRF egress filtering remediation for Next.js server actions.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-login-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
