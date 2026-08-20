@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-20T15:10:07.522Z",
+  "updated_at": "2026-08-20T16:07:09.717Z",
   "discovery_urls": [
+    {
+      "url": "https://vulnerable-bounty-site.vercel.app/",
+      "source": "deonmenezes/mantishack — intentionally vulnerable bounty training site (Vercel public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://playground.fabraix.com/challenges/tool-poisoning-001",
+      "source": "fabraix/playground — Show HN AI agent tool-poisoning challenge (GitHub challenges/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/sqli",
+      "source": "DaniSam-STU/security-lab — interactive SQLi lab page with live exploit UI (seclab.vercel.app/labs/sqli)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.herokuapp.com/rest/privacy-requests",
+      "source": "OWASP Juice Shop — GDPR privacy-request BOLA oracle GET /rest/privacy-requests (benchmark live oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.herokuapp.com/rest/order-history",
+      "source": "OWASP Juice Shop — order-history BOLA oracle GET /rest/order-history (benchmark live oracle)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/register-seller",
       "source": "ctfsec/pwnshop — seller registration + POST role=admin mass-assignment oracle PWN-021 (GitHub README Key URLs)",
