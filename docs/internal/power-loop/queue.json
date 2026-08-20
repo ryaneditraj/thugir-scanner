@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-20T11:21:54.516Z",
+  "updated_at": "2026-08-20T12:05:53.515Z",
   "discovery_urls": [
+    {
+      "url": "https://seclab.vercel.app/api/sqli-vulnerable?q=test",
+      "source": "DaniSam-STU/security-lab README — SQLi vulnerable API route (string concat, CWE-89)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/xss-vulnerable?q=test",
+      "source": "DaniSam-STU/security-lab README — XSS vulnerable API route (raw innerHTML, CWE-79)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/csrf-vulnerable",
+      "source": "DaniSam-STU/security-lab README — CSRF vulnerable API route (no token check, CWE-352)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/users-vulnerable/1",
+      "source": "DaniSam-STU/security-lab README — IDOR users API route (no ownership check, CWE-639)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/recycles/1",
+      "source": "Official demo.owasp-juice.shop — recycles BOLA oracle GET /rest/recycles/:id (Pwning Juice Shop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owasp-finbot-ctf.org/admin",
       "source": "OWASP FinBot CTF — admin portal agentic AI policy bypass / tool poisoning (owasp-finbot-ctf.org)",
