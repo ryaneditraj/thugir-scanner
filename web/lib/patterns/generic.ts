@@ -23686,6 +23686,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-order-submit-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pwnshop order-submit XXE route live oracle (PwnMe 2025)",
+    description:
+      "When scanning /api/orders/submit, POST xml parameter resolves external entities in order submission — route-specific XXE+IDOR oracle from PwnMe 2025 writeup.",
+    impactOneline:
+      "XXE in order submission can exfiltrate signing secrets and enable account takeover chains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOrderSubmitXxeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers — PwnMe PwnShop chain is intentional CTF software.",
+      steps: [
+        "Use defused XML parsers that reject DOCTYPE and external entities.",
+        "Authorize order submission against session ownership before parsing XML.",
+        "Run Pwnshop CTF endpoints only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/orders/submit route accepts attacker XML with external entities. Show XXE remediation for order submission handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-less-imports-ssti-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Pwnshop less/imports SSTI→RCE route live oracle (PwnMe 2025)",
+    description:
+      "When scanning /api/settings/less/imports, POST addImportDirectory manipulates Less.php import_dirs for CSS datauri: RCE — route-specific SSTI chain oracle (PWN-040 family).",
+    impactOneline:
+      "Less.php import directory manipulation enables remote code execution via crafted CSS import paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopLessImportsSstiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose Less.php import_dirs to user input — PwnMe PwnShop chain is intentional CTF software.",
+      steps: [
+        "Allowlist import directories instead of user-controlled addImportDirectory calls.",
+        "Sandbox Less.php rendering without shell execution primitives.",
+        "Run Pwnshop CTF endpoints only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/settings/less/imports route enables Less.php import_dir SSTI→RCE. Show remediation for CSS preprocessor import handling.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-account-delete-csrf-live-oracle",
     platform: "generic",
     category: "Cross-site request forgery",

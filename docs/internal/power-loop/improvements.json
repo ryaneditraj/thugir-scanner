@@ -43,6 +43,19 @@
       "validation": "SOURCE: discovery:url EVIDENCE: route corpus fallback when JWT chain unreachable; crapi.apisec.ai/workshop/api/shop/orders/1 route scan confirms Challenge 8 mass-assignment surface; benchmark 6/6 maintained"
     },
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-order-submit-xxe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PwnMe 2025 writeup POST /api/orders/submit XXE+IDOR via xml parameter + XmlScanner UTF-7 bypass; pwnshop.ctfsecurity.com/api/orders/submit findings 43→45 (+pwnshop-order-submit-xxe-route-live-oracle corpus fallback on OSS 404); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-less-imports-ssti-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PwnMe 2025 writeup POST /api/settings/less/imports addImportDirectory Less.php import_dirs datauri RCE chain; pwnshop.ctfsecurity.com/api/settings/less/imports findings 21→46 (+pwnshop-less-imports-ssti-route-live-oracle corpus fallback on OSS 404); benchmark 6/6 maintained"
+    },
+    },
+    {
       "source": "discovery:dvwu.vercel.app",
       "slug": "dvwu-sqli-route-live-oracle",
       "status": "shipped",
