@@ -91,6 +91,12 @@ function vulnerableBountySiteReflexionSuppressed(ctx: PowerCtx): boolean {
   return /vulnerable-bounty-site\.vercel\.app/i.test(pageUrl);
 }
 
+/** PromptShield React SPA has no server-side template engine — suppress reflexion SSTI FPs. */
+function promptShieldReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /prompt-shield1\.vercel\.app|promptshield-production[-a-z0-9]*\.up\.railway\.app/i.test(pageUrl);
+}
+
 /** Pwnshop /wishlist/:id currently serves a styled 404 shell — suppress generic reflexion probes on that route. */
 function pwnshopWishlistReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
@@ -284,6 +290,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (vulnforgeAcademyRceReflexionSuppressed(ctx)) return NEGATIVE;
   if (riglabsCyberLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (vulnerableBountySiteReflexionSuppressed(ctx)) return NEGATIVE;
+  if (promptShieldReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 

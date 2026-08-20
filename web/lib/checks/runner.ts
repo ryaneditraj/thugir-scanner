@@ -3551,6 +3551,10 @@ const DEEP_RULES = new Set<string>([
   "fabraixPlaygroundSessionLiveOracle",
   "fabraixPlaygroundSessionRouteLiveOracle",
   "fabraixDataExfil002RouteLiveOracle",
+  "fabraixDataExfil001RouteLiveOracle",
+  "fabraixIndirectPromptInjectionRouteLiveOracle",
+  "promptShieldPromptInjectionDefenseLiveOracle",
+  "promptShieldPromptInjectionDefenseRouteLiveOracle",
   "clientSideBugzapPromptDefenseEvidence",
   "clientSideRedlockxPromptFirewallEvidence",
   "clientSideHaoziXssChallengeEvidence",
@@ -12482,6 +12486,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("fabraix-data-exfil")
       )
         return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/data-exfiltration-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-data-exfil")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/indirect-prompt-injection-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-indirect")
+      )
+        return -4;
+      if (/prompt-shield1\.vercel\.app/i.test(origin) && p.slug.startsWith("prompt-shield")) return -4;
       if (
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
         /\/level(?:1[6-8])\b/i.test(targetInput) &&
