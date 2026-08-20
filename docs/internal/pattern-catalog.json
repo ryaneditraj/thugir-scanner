@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-20T08:25:11.706Z",
-  "total": 2592,
-  "uniqueSlugs": 2584,
+  "generatedAt": "2026-08-20T09:33:54.932Z",
+  "total": 2594,
+  "uniqueSlugs": 2586,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2574,
+    "generic": 2576,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2507,
+    "deep": 2509,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 121,
     "Security misconfiguration": 194,
     "Broken authentication": 161,
-    "Injection": 391,
+    "Injection": 393,
     "Cross-site scripting": 717,
     "Open redirect": 23,
     "general": 20,
@@ -1901,12 +1901,14 @@
     "pwnshop-export-orders-csv-live-oracle",
     "pwnshop-export-orders-csv-route-live-oracle",
     "pwnshop-forgot-password-email-enumeration-live-oracle",
+    "pwnshop-less-imports-ssti-route-live-oracle",
     "pwnshop-mail-idor-route-live-oracle",
     "pwnshop-mail-inbox-idor-live-oracle",
     "pwnshop-mass-assignment-admin-live-oracle",
     "pwnshop-open-redirect-register-live-oracle",
     "pwnshop-order-idor-live-oracle",
     "pwnshop-order-idor-route-live-oracle",
+    "pwnshop-order-submit-xxe-route-live-oracle",
     "pwnshop-otp-not-invalidated-live-oracle",
     "pwnshop-otp-not-invalidated-route-live-oracle",
     "pwnshop-product-review-stored-xss-live-oracle",

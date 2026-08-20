@@ -2068,6 +2068,8 @@ const DEEP_RULES = new Set<string>([
   "pwnshopUpdateAvatarRouteLiveOracle",
   "pwnshopOrderIdorLiveOracle",
   "pwnshopOrderIdorRouteLiveOracle",
+  "pwnshopOrderSubmitXxeRouteLiveOracle",
+  "pwnshopLessImportsSstiRouteLiveOracle",
   "pwnshopWalletTopupVulnbankLiveOracle",
   "pwnshopWalletTopupRouteLiveOracle",
   "fauxbankLoansRouteLiveOracle",

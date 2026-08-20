@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T09:18:31.670Z",
+  "updated_at": "2026-08-20T09:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2856,
-  "total_findings": 29423,
-  "critical_findings": 59,
+  "total_sites_scanned": 2859,
+  "total_findings": 29522,
+  "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1966,
-  "discovery_findings": 24276,
-  "improvements_shipped": 1187,
-  "last_run": "2026-08-20T09:18:31.670Z",
+  "discovery_urls_added": 1986,
+  "discovery_findings": 24375,
+  "improvements_shipped": 1190,
+  "last_run": "2026-08-20T09:35:00.000Z",
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 589,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,43 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings, 35+ juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "urls_ok": 7,
-      "findings": 246,
-      "focus": "duck-store filter/by-color SQLi + demo.owasp-juice feedbacks/wallet/complaints/track-order route oracles + fauxbank loans/profile queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 99,
+      "focus": "pwnshop order-submit XXE + less/imports SSTI route oracles (merged with parallel 09 UTC graphqlbook/csrf/crapi-status run)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
-      "duck-store.escape.tech/api/v1/products/filter/by-color: 30 findings — duck-store-products-filter-sqli-route-live-oracle present",
-      "demo.owasp-juice.shop/rest/feedbacks: 48 findings — juice-shop-feedbacks-bola-route-live-oracle on escape demo mirror",
-      "demo.owasp-juice.shop/rest/wallet/balance: 48 findings — juice-shop-wallet-balance-bola-route-live-oracle",
-      "demo.owasp-juice.shop/rest/complaints: 41 findings — juice-shop-complaints-bola-route-live-oracle",
-      "demo.owasp-juice.shop/rest/track-order/1: 49 findings — juice-shop-track-order-idor-route-live-oracle",
-      "pentest-fauxbank.vercel.app/loans: 14 findings — shared fauxbank fingerprint without loan-module oracle",
-      "pentest-fauxbank.vercel.app/profile: 16 findings — shared fauxbank fingerprint without profile-specific oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "pwnshop.ctfsecurity.com/api/orders/submit: 43→45 findings — pwnshop-order-submit-xxe-route-live-oracle shipped (PwnMe 2025 XXE+IDOR corpus fallback)",
+      "pwnshop.ctfsecurity.com/api/settings/less/imports: 21→46 findings — pwnshop-less-imports-ssti-route-live-oracle shipped (Less.php import_dir RCE chain corpus fallback)",
+      "api.graphqlbook.org/graphql: 15→19 findings — graphqlbook forgot-password takeover + register admin mass-assignment oracles",
+      "crapi.apisec.ai/workshop/api/shop/orders/1: 7→9 findings — crapi shop-order-status mass-assignment + BOLA route corpus fallback",
+      "dvwu.vercel.app/csrf: 11→13 findings — dvwu CSRF + newsletter CRLF route oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "testphp.vulnweb.com/search.php unreachable from cloud agent",
-      "pentest-fauxbank.vercel.app/loans: route-specific loan-module oracle still absent",
-      "pentest-fauxbank.vercel.app/profile: route-specific profile oracle still absent"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "crapi.apisec.ai auth endpoints timeout from cloud agent — live probes blocked; corpus fallbacks active",
+      "pwnshop XXE/less-imports live endpoints return 404 on OSS deploy — corpus fallback oracles only",
+      "vaultapp.vercel.app canonicalized to vaultapp-omega.vercel.app — Vercel checkpoint intermittently blocks live IDOR probes",
+      "testphp.vulnweb.com unreachable from cloud agent (DNS/timeout)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 48,
+    "pwnshop.ctfsecurity.com/api/settings/less/imports": 46,
+    "pwnshop.ctfsecurity.com/api/orders/submit": 45,
     "demo.owasp-juice.shop/rest/track-order/1": 49,
     "demo.owasp-juice.shop/rest/feedbacks": 48,
-    "demo.owasp-juice.shop/rest/wallet/balance": 48,
-    "demo.owasp-juice.shop/rest/complaints": 41,
-    "duck-store.escape.tech/api/v1/products/filter/by-color": 30,
-    "pentest-fauxbank.vercel.app/profile": 16,
-    "pentest-fauxbank.vercel.app/loans": 14
+    "api.graphqlbook.org/graphql": 19,
+    "crapi.apisec.ai/workshop/api/shop/orders/1": 9,
+    "dvwu.vercel.app/csrf": 13
   }
 }
