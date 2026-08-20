@@ -4289,6 +4289,24 @@
       "slug": "fabraix-indirect-prompt-injection-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST api.fabraix.com/v1/playground/sessions/start maps indirect-prompt-injection-001 route to access-code-001 Gatekeeper backend; playground.fabraix.com/challenges/indirect-prompt-injection-001 findings 5→6 (+fabraix-indirect-prompt-injection-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ratdo.thexssrat.com",
+      "slug": "ratdo-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: register+login then POST / title=<img src=x onerror=alert(1)> renders unsanitized in task list (|safe filter); ratdo.thexssrat.com findings 1→4 (+stored-xss +idor +csrf oracles); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ratdo.thexssrat.com",
+      "slug": "ratdo-idor-edit-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: victim POST / creates task; attacker POST /edit/:id changes title without ownership check; victim GET / confirms attackerMarker; ratdo.thexssrat.com findings 1→4; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ratdo.thexssrat.com",
+      "slug": "ratdo-csrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: authenticated POST / task form lacks CSRF input and exposes GET /delete/:id + /toggle/:id; ratdo.thexssrat.com findings 1→4; benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
