@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-24T20:13:37.674Z",
-  "total": 2616,
-  "uniqueSlugs": 2608,
+  "generatedAt": "2026-08-24T22:09:33.590Z",
+  "total": 2618,
+  "uniqueSlugs": 2610,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2598,
+    "generic": 2600,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2531,
+    "deep": 2533,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 198,
     "Broken authentication": 162,
     "Injection": 394,
-    "Cross-site scripting": 720,
+    "Cross-site scripting": 722,
     "Open redirect": 23,
     "general": 20,
     "SSRF": 16,
@@ -1847,6 +1847,8 @@
     "owasp-genai-system-prompt-leakage-route-live-oracle",
     "owasp-genai-unbounded-consumption-route-live-oracle",
     "owasp-genai-vector-embedding-route-live-oracle",
+    "pc-parts-store-stored-xss-live-oracle",
+    "pc-parts-store-stored-xss-route-live-oracle",
     "pentest-forge-dvwa-sqli-route-live-oracle",
     "pentest-forge-linked-lab-probe",
     "pentest-ground-dvwa-csp-bypass-route-live-oracle",
