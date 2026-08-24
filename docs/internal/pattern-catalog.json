@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-24T22:09:33.590Z",
-  "total": 2618,
-  "uniqueSlugs": 2610,
+  "generatedAt": "2026-08-24T23:13:33.889Z",
+  "total": 2623,
+  "uniqueSlugs": 2615,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2600,
+    "generic": 2605,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2533,
+    "deep": 2538,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 121,
     "Security misconfiguration": 198,
     "Broken authentication": 162,
-    "Injection": 394,
+    "Injection": 399,
     "Cross-site scripting": 722,
     "Open redirect": 23,
     "general": 20,
@@ -2033,6 +2033,11 @@
     "securebank-blog-messages-xss-route-live-oracle",
     "securebank-blog-transfer-csrf-route-live-oracle",
     "security-question-disclosure",
+    "sekumart-openapi-sqli-route-live-oracle",
+    "sekumart-product-sqli-live-oracle",
+    "sekumart-product-sqli-route-live-oracle",
+    "sekumart-search-sqli-live-oracle",
+    "sekumart-search-sqli-route-live-oracle",
     "sensitive-api-password-leakage",
     "sensitive-api-token-leakage",
     "server-side-eval-evidence",
