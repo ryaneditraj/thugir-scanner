@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-24T21:04:00.000Z",
+  "updated_at": "2026-08-24T22:05:45.843Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-5",
+      "source": "OWASP WrongSecrets — Challenge 5 K8s ConfigMap secret oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
+      "source": "OWASP WrongSecrets — Challenge 57 AI prompt-injection secret oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-59",
+      "source": "OWASP WrongSecrets — Challenge 59 CI/CD pipeline secret oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-61",
+      "source": "OWASP WrongSecrets — Challenge 61 secrets-management oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-62",
+      "source": "OWASP WrongSecrets — Challenge 62 AI secret-extraction oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sekumart.sekuripy.hr/product.php?id=1",
       "source": "SekuriPy SekuMart — sqlmap playground SQLi oracle GET product.php?id= (official sqlmap docs)",
