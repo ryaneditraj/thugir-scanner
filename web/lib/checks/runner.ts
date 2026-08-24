@@ -2936,6 +2936,8 @@ const DEEP_RULES = new Set<string>([
   "aiSecurityPromptInjectionRouteLiveOracle",
   "aiSecurityBrokenAuthRouteLiveOracle",
   "aiSecuritySsrfRouteLiveOracle",
+  "aiSecurityCommandInjectionRouteLiveOracle",
+  "aiSecurityPathTraversalRouteLiveOracle",
   "aiSecurityRateLimitingBruteforceLiveOracle",
   "aiSecurityLoginRouteLiveOracle",
   "juiceShopForgottenBackupDisclosure",
@@ -2997,6 +2999,7 @@ const DEEP_RULES = new Set<string>([
   "seclabJwtVulnerableRouteLiveOracle",
   "seclabXssVulnerableRouteLiveOracle",
   "seclabUsersVulnerableRouteLiveOracle",
+  "seclabIdorLabsRouteLiveOracle",
   "seclabIdorVulnerableRouteLiveOracle",
   "seclabPathTraversalRouteLiveOracle",
   "seclabSsrfVulnerableRouteLiveOracle",
@@ -11636,11 +11639,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/(?:sqli|prompt-injection|broken-auth|ssrf)\b/i.test(targetInput) &&
+        /\/challenges\/(?:sqli|prompt-injection|broken-auth|ssrf|command-injection|path-traversal)\b/i.test(targetInput) &&
         (p.slug === "ai-security-sqli-route-live-oracle" ||
           p.slug === "ai-security-prompt-injection-route-live-oracle" ||
           p.slug === "ai-security-broken-auth-route-live-oracle" ||
-          p.slug === "ai-security-ssrf-route-live-oracle")
+          p.slug === "ai-security-ssrf-route-live-oracle" ||
+          p.slug === "ai-security-command-injection-route-live-oracle" ||
+          p.slug === "ai-security-path-traversal-route-live-oracle")
       )
         return -3;
       if (
@@ -12040,6 +12045,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/api\/users-vulnerable\b/i.test(targetInput) &&
         p.slug.startsWith("seclab-users-vulnerable")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/idor\b/i.test(targetInput) &&
+        p.slug === "seclab-idor-labs-route-live-oracle"
       )
         return -3;
       if (

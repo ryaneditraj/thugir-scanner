@@ -35887,6 +35887,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-command-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "AI Security Platform command-injection challenge route live oracle",
+    description:
+      "When scanning /challenges/command-injection on ai-security-platform-iota.vercel.app, the route redirects to /login?next=/challenges/command-injection confirming an auth-gated command injection CWE-78 challenge route on the discovery queue.",
+    impactOneline:
+      "Route-specific confirmation that AI Security Platform preserves a command-injection challenge route for scanner calibration even when the 14-challenge public catalog omits OS command injection labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityCommandInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — never pass user input to shell commands.",
+      steps: [
+        "Use parameterized APIs instead of shelling out to system commands.",
+        "Allowlist permitted arguments when subprocess execution is unavoidable.",
+        "Require authentication before exposing command-injection lab panels."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/command-injection route redirects to login preserving a CWE-78 command injection challenge URL. Show OS command injection remediation for Next.js server actions.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-path-traversal-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "AI Security Platform path-traversal challenge route live oracle",
+    description:
+      "When scanning /challenges/path-traversal on ai-security-platform-iota.vercel.app, the route redirects to /login?next=/challenges/path-traversal confirming an auth-gated path traversal CWE-22 challenge route on the discovery queue.",
+    impactOneline:
+      "Route-specific confirmation that AI Security Platform preserves a path-traversal challenge route for scanner calibration even when the 14-challenge public catalog omits directory traversal labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityPathTraversalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — validate file paths and deny parent-directory traversal.",
+      steps: [
+        "Resolve paths against a trusted base directory and reject .. segments.",
+        "Use opaque IDs instead of filesystem paths in user-facing parameters.",
+        "Require authentication before exposing path-traversal lab panels."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/path-traversal route redirects to login preserving a CWE-22 path traversal challenge URL. Show directory traversal remediation for Next.js file-serving routes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-login-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -37443,6 +37495,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our seclab.vercel.app /api/idor-vulnerable route is a dead Angular stub or exposes live IDOR. Show object-level authorization remediation and deploy fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "seclab-idor-labs-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "SecLab /labs/idor route live oracle",
+    description:
+      "When scanning seclab.vercel.app /labs/idor, GET /api/idor-vulnerable/1 returns user passwords without authentication — or the API route serves an Angular SPA shell instead of the documented Next.js IDOR training API.",
+    impactOneline:
+      "Route-specific IDOR lab oracle on the /labs/idor discovery queue URL confirms live unauthenticated user record access or flags dead API stubs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabIdorLabsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab IDOR API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/idor-vulnerable on production.",
+        "Enforce authentication and object-level authorization on user record APIs.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/idor route scan confirms /api/idor-vulnerable is a dead Angular stub or exposes live IDOR. Show object-level authorization remediation.",
     version: 1,
     enabled: true
   },
