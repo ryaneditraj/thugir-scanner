@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-20T21:16:25.022Z",
+  "updated_at": "2026-08-24T20:30:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/v2/community/posts/recent",
+      "source": "APIsec crAPI guide Challenge 1 — community forum leaks other users' vehicle UUIDs for BOLA (OWASPLA 2025)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/workshop/api/mechanic/mechanic_report?report_id=1",
+      "source": "APIsec crAPI guide Challenge 2 — sequential mechanic report BOLA oracle GET /workshop/api/mechanic/mechanic_report",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.apisec.ai/vapi",
+      "source": "roottusk/vapi — OWASP API Top 10 exercise hub with broken auth/BOLA/injection labs (APIsec hosted)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-3",
+      "source": "OWASP WrongSecrets — Challenge 3 Docker secrets oracle on official Heroku demo (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/put.raw",
+      "source": "NeuraLegion/brokencrystals — HTTP method fuzzer /put.raw file upload oracle (README)",
+      "auth": "public_benchmark"
+    },
     {
       "url": "https://pc-parts-store.vercel.app/login.php",
       "source": "jgpython/pc-parts-store-lab — SQLi auth-bypass oracle POST login.php (GitHub README OWASP A1/A2)",
