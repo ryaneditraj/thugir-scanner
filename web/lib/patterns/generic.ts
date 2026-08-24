@@ -51977,6 +51977,136 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sekumart-product-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart product.php integer SQLi live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/product.php?id=1' triggers mysqli_sql_exception in product_low.php — the SekuriPy sqlmap playground integer SQLi training oracle.",
+    impactOneline:
+      "Unsanitized integer id parameter in product.php enables error-based SQL injection on the SekuMart demo shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartProductSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — use parameterized queries for all SQL.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements for product lookups.",
+        "Validate id as integer before querying.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart product.php concatenates id into SQL causing mysqli errors. Show parameterized query remediation for PHP/MySQL.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-product-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /product.php route SQLi live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/product.php, GET ?id=1' returns mysqli_sql_exception — route-specific integer SQLi sqlmap training oracle.",
+    impactOneline:
+      "Route scans on /product.php should confirm live mysqli SQL injection for sqlmap --openapi practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartProductSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — use parameterized queries.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Validate id as integer before querying.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /product.php route has integer SQLi on the id parameter. Show prepared statement remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-search-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart search.php string SQLi live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/search.php?q=test' triggers mysqli_sql_exception in search_low.php — the SekuriPy sqlmap playground string SQLi training oracle.",
+    impactOneline:
+      "Unsanitized string q parameter in search.php enables error-based SQL injection on the SekuMart demo shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartSearchSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — use parameterized queries for search.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements for product search.",
+        "Apply input validation and output encoding for search terms.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart search.php concatenates q into SQL causing mysqli errors. Show parameterized query remediation for PHP search.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /search.php route SQLi live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/search.php, GET ?q=test' returns mysqli_sql_exception — route-specific string SQLi sqlmap training oracle.",
+    impactOneline:
+      "Route scans on /search.php should confirm live mysqli SQL injection alongside reflected XSS training surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — use parameterized queries.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Encode search output to prevent XSS.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /search.php route has string SQLi on the q parameter. Show prepared statement remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-openapi-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /openapi.json sqlmap route live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/openapi.json, the spec documents sqlmap --openapi training endpoints and live product.php?id= probe confirms mysqli SQLi.",
+    impactOneline:
+      "OpenAPI spec exposes deliberately vulnerable SQLi endpoints for sqlmap practice — route scan confirms live injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartOpenapiSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — do not expose vulnerable OpenAPI specs in production.",
+      steps: [
+        "Remove public OpenAPI specs listing injection-prone endpoints from production.",
+        "Use parameterized queries on all documented endpoints.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart OpenAPI spec documents sqlmap-vulnerable endpoints. Show how to secure API specs and SQL queries.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pc-parts-store-stored-xss-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

@@ -4361,6 +4361,24 @@
       "slug": "pc-parts-store-stored-xss-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: live fetch of main.*.chunk.js confirms pk_* Commerce.js key + dangerouslySetInnerHTML:{__html:a.description}; pc-parts-store.vercel.app/product.php?id=1 findings 6→8 (+pc-parts-store-stored-xss-live-oracle +route); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-product-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /product.php?id=1' returns mysqli_sql_exception in product_low.php; sekumart.sekuripy.hr/product.php?id=1 findings 9→12 (+sekumart-product-sqli-live-oracle +route +search host oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-search-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /search.php?q=test' returns mysqli_sql_exception in search_low.php; sekumart.sekuripy.hr/search.php findings 9→12 (+sekumart-search-sqli-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-openapi-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /openapi.json spec documents sqlmap --openapi + integer/string SQLi endpoints and live product.php probe confirms mysqli SQLi; sekumart.sekuripy.hr/openapi.json findings 5→8 (+sekumart-openapi-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }

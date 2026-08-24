@@ -14370,6 +14370,108 @@ const pcPartsStoreStoredXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- SekuriPy SekuMart sqlmap playground (sekumart.sekuripy.hr)
+function isSekumartHost(ctx: RuleContext): boolean {
+  return /sekumart\.sekuripy\.hr/i.test(ctx.origin);
+}
+
+async function probeSekumartMysqliSqli(
+  ctx: RuleContext,
+  path: string,
+  param: string,
+  payload: string
+): Promise<RuleResult | null> {
+  const probeUrl = new URL(path, ctx.origin);
+  probeUrl.searchParams.set(param, payload);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 500) return null;
+  if (!/mysqli_sql_exception|You have an error in your SQL syntax/i.test(doc.body)) return null;
+  const match = doc.body.match(/mysqli_sql_exception:[^<]{0,120}/i);
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      sqlError: match?.[0]?.slice(0, 120) ?? "mysqli SQL syntax error",
+      snippet: doc.body.slice(0, 240).trim(),
+      note: `SekuMart ${path}?${param}= returns mysqli_sql_exception — integer/string SQLi training oracle`
+    }
+  };
+}
+
+const sekumartProductSqliLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  return (await probeSekumartMysqliSqli(ctx, "/product.php", "id", "1'")) ?? NEGATIVE;
+};
+
+const sekumartProductSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/product\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartProductSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "SekuMart /product.php route scan — GET ?id=1' triggers mysqli_sql_exception in product_low.php — sqlmap integer SQLi training oracle"
+    }
+  };
+};
+
+const sekumartSearchSqliLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  return (await probeSekumartMysqliSqli(ctx, "/search.php", "q", "test'")) ?? NEGATIVE;
+};
+
+const sekumartSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/search\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartSearchSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "SekuMart /search.php route scan — GET ?q=test' triggers mysqli_sql_exception in search_low.php — string SQLi + XSS training oracle"
+    }
+  };
+};
+
+const sekumartOpenapiSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/openapi\.json/i.test(pageUrl)) return NEGATIVE;
+  const specUrl = new URL("/openapi.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(specUrl, { maxBytes: 16384, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (
+    !/sqlmap\s+--openapi/i.test(doc.body) ||
+    !/\/product\.php/i.test(doc.body) ||
+    !/integer SQLi|string SQLi/i.test(doc.body)
+  ) {
+    return NEGATIVE;
+  }
+  const productProbe = await probeSekumartMysqliSqli(ctx, "/product.php", "id", "1'");
+  if (!productProbe?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      ...productProbe.evidence,
+      scannedUrl: pageUrl,
+      openapiMarkers: ["sqlmap --openapi", "/product.php integer SQLi", "/search.php string SQLi"],
+      snippet: doc.body.match(/"description":\s*"Deliberately vulnerable[^"]{0,80}/)?.[0]?.slice(0, 100),
+      note: "SekuMart /openapi.json route scan — OpenAPI spec documents sqlmap --openapi training endpoints and live product.php?id= probe confirms mysqli SQLi"
+    }
+  };
+};
+
 // --- BreakTheFlask vulnerable Flask writeup labs (dghostninja.github.io)
 const CLIENT_BREAK_THE_FLASK_RES: { label: string; re: RegExp }[] = [
   {
@@ -93590,6 +93692,11 @@ export const RULES: Record<string, Rule> = {
   clientSidePcPartsStoreLabEvidence,
   pcPartsStoreStoredXssLiveOracle,
   pcPartsStoreStoredXssRouteLiveOracle,
+  sekumartProductSqliLiveOracle,
+  sekumartProductSqliRouteLiveOracle,
+  sekumartSearchSqliLiveOracle,
+  sekumartSearchSqliRouteLiveOracle,
+  sekumartOpenapiSqliRouteLiveOracle,
   clientSideBreakTheFlaskEvidence,
   clientSideFlaskVulnappEvidence,
   clientSideFlaskVulnappStoredXssEvidence,
