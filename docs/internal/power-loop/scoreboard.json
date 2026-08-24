@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-20T21:35:00.000Z",
+  "updated_at": "2026-08-24T20:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2953,
-  "total_findings": 31410,
+  "total_sites_scanned": 2956,
+  "total_findings": 31419,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2033,
-  "discovery_findings": 25318,
-  "improvements_shipped": 1218,
-  "last_run": "2026-08-20T21:35:00.000Z",
+  "discovery_findings": 25327,
+  "improvements_shipped": 1221,
+  "last_run": "2026-08-24T20:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "21",
+    "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
@@ -48,40 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings, probes=582); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "FauxBank Vercel checkpoint corpus fallbacks for /profile /loans /transfer route oracles",
+      "urls_scanned": 3,
+      "findings": 12,
+      "focus": "AI Security Platform command-injection + path-traversal auth-gated route oracles; SecLab /labs/idor IDOR API probe",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark category gaps",
-      "pentest-fauxbank.vercel.app/profile: 3→4 findings — fauxbank-profile-route-checkpoint-fallback shipped (README lesson #4 ssnFake corpus when login 403)",
-      "pentest-fauxbank.vercel.app/loans: 3→9 findings — fauxbank-loans-route-checkpoint-fallback shipped (POST /api/loans README corpus when Vercel blocks session)",
-      "pentest-fauxbank.vercel.app/transfer: 4→10 findings — fauxbank-transfer-route-checkpoint-fallback shipped (lesson #7 CSRF corpus fallback)"
+      "ai-security-platform-iota.vercel.app/challenges/command-injection: 2→3 findings — ai-security-command-injection-route-live-oracle shipped (307 /login?next= CWE-78)",
+      "ai-security-platform-iota.vercel.app/challenges/path-traversal: 2→3 findings — ai-security-path-traversal-route-live-oracle shipped (307 /login?next= CWE-22)",
+      "seclab.vercel.app/labs/idor: 5→6 findings — seclab-idor-labs-route-live-oracle shipped (probes /api/idor-vulnerable/1 Angular stub)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
       "crapi.apisec.ai unreachable from cloud agent (connection reset) — shop-orders BOLA live oracle blocked",
       "pwnshop.ctfsecurity.com/api/orders/submit + /api/settings/less/imports return 404 on public deploy — PwnMe 2025 XXE/less-imports chain not on ctfsecurity.com",
-      "pc-parts-store.vercel.app/login.php: POST SQLi auth-bypass live oracle absent (client-side evidence only)",
-      "pc-parts-store.vercel.app/products.php?search=: UNION SQLi search live oracle absent",
+      "pc-parts-store.vercel.app is React/Commerce.js SPA — queue PHP SQLi oracles not applicable to live deploy",
       "testphp.vulnweb.com unreachable from cloud agent (DNS/timeout)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "seclab.vercel.app/labs/idor": 6,
+    "ai-security-platform-iota.vercel.app/challenges/command-injection": 3,
+    "ai-security-platform-iota.vercel.app/challenges/path-traversal": 3,
     "pentest-fauxbank.vercel.app/transfer": 10,
     "pentest-fauxbank.vercel.app/loans": 9,
     "pwnshop.ctfsecurity.com/admin/login": 47,
-    "pwnshop.ctfsecurity.com/track/1": 47,
-    "pentest-fauxbank.vercel.app/profile": 4,
-    "vulnbank.org/check_balance/3518655174": 30,
-    "pc-parts-store.vercel.app/login.php": 6
+    "pentest-fauxbank.vercel.app/profile": 4
   }
 }

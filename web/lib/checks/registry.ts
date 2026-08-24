@@ -78140,6 +78140,24 @@ const AI_SECURITY_AUTH_GATED_CHALLENGE_META: Record<string, AiSecurityAuthGatedC
     platformContextRe: /SSRF|Server-Side Request Forgery|CWE-918|OWASP Top 10|14 challenges|AI Security Platform/i,
     redirectNote:
       "AI Security Platform /challenges/ssrf route redirects to /login?next=/challenges/ssrf — auth-gated SSRF CWE-918 challenge route on discovery queue (not in public 14-challenge catalog)"
+  },
+  "command-injection": {
+    routeSegment: "command-injection",
+    cweLabel: "CWE-78",
+    topicLabel: "Command injection",
+    platformContextRe:
+      /Command injection|OS command|CWE-78|OWASP Top 10|14 challenges|AI Security Platform/i,
+    redirectNote:
+      "AI Security Platform /challenges/command-injection route redirects to /login?next=/challenges/command-injection — auth-gated command injection CWE-78 challenge route on discovery queue (not in public 14-challenge catalog)"
+  },
+  "path-traversal": {
+    routeSegment: "path-traversal",
+    cweLabel: "CWE-22",
+    topicLabel: "Path traversal",
+    platformContextRe:
+      /Path traversal|directory traversal|CWE-22|OWASP Top 10|14 challenges|AI Security Platform/i,
+    redirectNote:
+      "AI Security Platform /challenges/path-traversal route redirects to /login?next=/challenges/path-traversal — auth-gated path traversal CWE-22 challenge route on discovery queue (not in public 14-challenge catalog)"
   }
 };
 
@@ -78212,6 +78230,12 @@ const aiSecurityBrokenAuthRouteLiveOracle: Rule = (ctx) =>
 
 const aiSecuritySsrfRouteLiveOracle: Rule = (ctx) =>
   aiSecurityAuthGatedChallengeRouteLiveOracle(ctx, "ssrf");
+
+const aiSecurityCommandInjectionRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityAuthGatedChallengeRouteLiveOracle(ctx, "command-injection");
+
+const aiSecurityPathTraversalRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityAuthGatedChallengeRouteLiveOracle(ctx, "path-traversal");
 
 async function aiSecurityExtractSignInActionId(ctx: RuleContext): Promise<string | null> {
   const loginUrl = new URL("/login", AI_SECURITY_PLATFORM_HOME).toString();
@@ -80036,6 +80060,52 @@ const seclabUsersVulnerableRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
       note: "seclab.vercel.app /api/users-vulnerable route serves Angular SPA shell instead of the documented Next.js IDOR training API — dead lab route oracle"
+    }
+  };
+};
+
+const seclabIdorLabsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/idor\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL("/api/idor-vulnerable/1", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 300 &&
+    /"safe"\s*:\s*false/.test(doc.body) &&
+    /"password"\s*:/.test(doc.body) &&
+    /No authentication or authorization/i.test(doc.body) &&
+    !isSecLabAngularStubShell(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app /labs/idor route scan — GET /api/idor-vulnerable/1 returns user password without auth — live IDOR training API oracle"
+      }
+    };
+  }
+  if (!isSecLabAngularStubShell(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: doc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /labs/idor route scan — /api/idor-vulnerable/1 serves Angular SPA shell instead of documented Next.js IDOR training API — dead lab route oracle"
     }
   };
 };
@@ -92105,6 +92175,8 @@ export const RULES: Record<string, Rule> = {
   aiSecurityPromptInjectionRouteLiveOracle,
   aiSecurityBrokenAuthRouteLiveOracle,
   aiSecuritySsrfRouteLiveOracle,
+  aiSecurityCommandInjectionRouteLiveOracle,
+  aiSecurityPathTraversalRouteLiveOracle,
   aiSecurityRateLimitingBruteforceLiveOracle,
   aiSecurityLoginRouteLiveOracle,
   juiceShopForgottenBackupDisclosure,
@@ -92167,6 +92239,7 @@ export const RULES: Record<string, Rule> = {
   seclabJwtVulnerableRouteLiveOracle,
   seclabXssVulnerableRouteLiveOracle,
   seclabUsersVulnerableRouteLiveOracle,
+  seclabIdorLabsRouteLiveOracle,
   seclabIdorVulnerableRouteLiveOracle,
   seclabPathTraversalRouteLiveOracle,
   seclabSsrfVulnerableRouteLiveOracle,

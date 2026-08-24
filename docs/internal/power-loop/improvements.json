@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-command-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/command-injection returns HTTP 307 Location /login?next=%2Fchallenges%2Fcommand-injection; ai-security-platform-iota.vercel.app/challenges/command-injection findings 2→3 (+ai-security-command-injection-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-path-traversal-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/path-traversal returns HTTP 307 Location /login?next=%2Fchallenges%2Fpath-traversal; ai-security-platform-iota.vercel.app/challenges/path-traversal findings 2→3 (+ai-security-path-traversal-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-idor-labs-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/idor-vulnerable/1 from /labs/idor route scan returns Angular <app-root> SPA shell (HTTP 200) instead of Next.js IDOR API; seclab.vercel.app/labs/idor findings 5→6 (+seclab-idor-labs-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnforge-academy.vercel.app",
       "slug": "vulnforge-academy-ssrf-reflexion-ssti-suppression",
       "status": "shipped",
