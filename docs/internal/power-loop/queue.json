@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-24T20:30:00.000Z",
+  "updated_at": "2026-08-24T21:04:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://sekumart.sekuripy.hr/product.php?id=1",
+      "source": "SekuriPy SekuMart — sqlmap playground SQLi oracle GET product.php?id= (official sqlmap docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sekumart.sekuripy.hr/openapi.json",
+      "source": "SekuriPy SekuMart — OpenAPI spec surface for multi-context injection (sqlmap --openapi)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/wallet/balance",
+      "source": "Official preview.owasp-juice.shop — wallet balance BOLA oracle on develop-preview Heroku instance",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-4",
+      "source": "OWASP WrongSecrets — Challenge 4 Docker build-arg secret oracle (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/workshop/api/merchant/contact_mechanic",
+      "source": "APIsec crAPI guide Challenge 3 — SSRF oracle POST contact_mechanic mechanic_api param (OWASPLA 2025)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crapi2.apisec.ai/identity/api/v2/community/posts/recent",
       "source": "APIsec crAPI guide Challenge 1 — community forum leaks other users' vehicle UUIDs for BOLA (OWASPLA 2025)",

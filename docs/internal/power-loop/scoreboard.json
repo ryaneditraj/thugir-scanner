@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-24T20:32:18.736Z",
+  "updated_at": "2026-08-24T21:09:27.472Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2965,
-  "total_findings": 31631,
+  "total_sites_scanned": 2974,
+  "total_findings": 31793,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2038,
-  "discovery_findings": 25482,
+  "discovery_urls_added": 2043,
+  "discovery_findings": 25596,
   "improvements_shipped": 1221,
-  "last_run": "2026-08-24T20:32:18.736Z",
+  "last_run": "2026-08-24T21:09:27.472Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 590,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,47 +48,44 @@
           ]
         }
       },
-      "note": "Pass1 degraded 29 findings gap=xss (Heroku wake); 12s retry restored 6/6 with 48 findings; secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings, 35 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 164,
-      "focus": "crapi2 BOLA routes, vAPI /vapi hub, WrongSecrets challenge-3, brokencrystals /put.raw + pc-parts-store drain; prior 20 UTC pass shipped ai-security command-injection/path-traversal + seclab IDOR route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 114,
+      "focus": "SekuMart sqlmap playground, preview.owasp-juice wallet BOLA, WrongSecrets challenge-4, crAPI2 SSRF contact_mechanic + queue drain (pc-parts-store api-login/checkout, dvwu sqli)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — pass1 missed xss category before retry",
-      "vapi.apisec.ai/vapi: 16 findings — full vAPI API1-API10 live oracle set",
-      "brokencrystals.com/put.raw: 85 findings — brokencrystals-* live oracles (BFLA, SSRF, XPATH, OIDC, SSTI, XXE)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-3: 15 findings — challenge-3 Docker ENV + MCP env-leak oracles",
-      "ai-security-platform-iota.vercel.app/challenges/command-injection: 3 findings — ai-security-command-injection-route-live-oracle shipped",
-      "ai-security-platform-iota.vercel.app/challenges/path-traversal: 3 findings — ai-security-path-traversal-route-live-oracle shipped",
-      "seclab.vercel.app/labs/idor: 6 findings — seclab-idor-labs-route-live-oracle shipped",
-      "crapi2.apisec.ai routes: 9 findings each — shared crapi fingerprint without route-specific mechanic_report BOLA oracle",
-      "pc-parts-store.vercel.app/*: 6 findings each — client-side evidence only, no SQLi/auth live oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "preview.owasp-juice.shop/rest/wallet/balance: 51 findings — juice-shop-wallet-balance-bola-route-live-oracle on develop-preview instance",
+      "sekumart.sekuripy.hr/product.php?id=1: 9 findings — sql-error-disclosure + reflected-xss-query-param on sqlmap playground",
+      "wrongsecrets.herokuapp.com/challenge/challenge-4: 15 findings — wrongsecrets-challenge-4-docker-build-arg-route-live-oracle",
+      "crapi2.apisec.ai/workshop/api/merchant/contact_mechanic: 10 findings — crapi-contact-mechanic-ssrf-route-live-oracle (route-specific, not shared fingerprint)",
+      "sekumart.sekuripy.hr/openapi.json: 5 findings — vibe-openapi-docs-exposed + vibe-hardcoded-demo-credentials",
+      "pc-parts-store.vercel.app/api/login.php: 3 findings — client-side evidence only",
+      "dvwu.vercel.app/labs/sqli: 15 findings — dvwu-sqli-labs-route-live-oracle on queue drain"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "juice-shop pass1 Heroku wake: xss category gap on 29-finding pass before retry",
-      "crapi2.apisec.ai/workshop/api/mechanic/mechanic_report: shared 9-finding crapi fingerprint without mechanic_report BOLA live oracle",
-      "crapi2.apisec.ai/identity/api/v2/community/posts/recent: no community-forum vehicle-UUID leak oracle",
-      "pc-parts-store.vercel.app: client-side evidence only — POST SQLi auth-bypass and UNION search live oracles absent",
-      "crapi.apisec.ai unreachable from cloud agent (connection reset)",
-      "testphp.vulnweb.com unreachable from cloud agent (DNS/timeout)"
+      "pc-parts-store.vercel.app/api/login.php: 3 findings client-side only — POST SQLi auth-bypass live oracle still absent",
+      "pc-parts-store.vercel.app/checkout.php: 6 findings client-side only — CC capture/IDOR checkout live oracle still absent",
+      "crapi2.apisec.ai/identity/api/v2/community/posts/recent: shared 9-finding crapi fingerprint without community vehicle-UUID leak oracle",
+      "crapi2.apisec.ai/workshop/api/mechanic/mechanic_report: shared 9-finding crapi fingerprint without mechanic_report BOLA live oracle"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "preview.owasp-juice.shop/rest/wallet/balance": 51,
     "brokencrystals.com/put.raw": 85,
     "vapi.apisec.ai/vapi": 16,
-    "wrongsecrets.herokuapp.com/challenge/challenge-3": 15,
-    "seclab.vercel.app/labs/idor": 6,
-    "crapi2.apisec.ai/identity/api/v2/community/posts/recent": 9,
-    "pc-parts-store.vercel.app/login.php": 6,
-    "ai-security-platform-iota.vercel.app/challenges/command-injection": 3,
+    "wrongsecrets.herokuapp.com/challenge/challenge-4": 15,
+    "dvwu.vercel.app/labs/sqli": 15,
+    "sekumart.sekuripy.hr/product.php?id=1": 9,
+    "crapi2.apisec.ai/workshop/api/merchant/contact_mechanic": 10,
     "pwnshop.ctfsecurity.com/admin/login": 47
   }
 }
