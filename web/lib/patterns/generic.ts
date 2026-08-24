@@ -43947,7 +43947,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "crAPI community posts route BOLA live oracle",
     description:
-      "When scanning /community/api/v2/community/posts/recent, vehicleid UUIDs in author objects enable cross-user GPS reads via /identity/api/v2/vehicle/{uuid}/location — route-specific crAPI BOLA oracle.",
+      "When scanning /identity/api/v2/community/posts/recent (or legacy /community/api/v2/community/posts/recent), vehicleid UUIDs in author objects enable cross-user GPS reads via /identity/api/v2/vehicle/{uuid}/location — route-specific crAPI BOLA oracle.",
     impactOneline:
       "Route scans on community post feeds should confirm excessive data exposure that enables vehicle location BOLA.",
     detectorKind: "rule_ref",
@@ -43962,7 +43962,7 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our /community/api/v2/community/posts/recent route scan confirms vehicleid leaks enabling location BOLA. Show API data-minimization and object-level authorization remediation.",
+      "Our /identity/api/v2/community/posts/recent route scan confirms vehicleid leaks enabling location BOLA. Show API data-minimization and object-level authorization remediation.",
     version: 1,
     enabled: true
   },
@@ -51947,6 +51947,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our React e-commerce app uses dangerouslySetInnerHTML for product descriptions. Show the safe alternative and how to sanitize Commerce.js catalog HTML.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pc-parts-store-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PC Parts Store Commerce.js stored XSS live oracle",
+    description:
+      "Live fetch of pc-parts-store.vercel.app main.js confirms Commerce.js public key exposure and dangerouslySetInnerHTML rendering of product descriptions — stored XSS when catalog HTML is unsanitized.",
+    impactOneline:
+      "Commerce.js product descriptions rendered via dangerouslySetInnerHTML enable stored XSS on /details pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pcPartsStoreStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never render Commerce.js product descriptions with dangerouslySetInnerHTML.",
+      steps: [
+        "Replace dangerouslySetInnerHTML with textContent or DOMPurify sanitization.",
+        "Validate and strip HTML from product descriptions at import time.",
+        "Rotate Commerce.js keys if exposed in client bundles."
+      ]
+    },
+    fixPrompt:
+      "Our PC Parts Store React app exposes a Commerce.js key and renders descriptions with dangerouslySetInnerHTML. Show safe rendering and key handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pc-parts-store-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PC Parts Store stored XSS route live oracle",
+    description:
+      "When scanning pc-parts-store.vercel.app PHP-style routes (login.php, checkout.php, product.php), live bundle probe confirms dangerouslySetInnerHTML XSS sink with Commerce.js catalog.",
+    impactOneline:
+      "Route scans on PC Parts Store lab URLs should confirm stored XSS via unsanitized Commerce.js product HTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pcPartsStoreStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "PC Parts Store is intentional training software — sanitize product HTML before rendering.",
+      steps: [
+        "Replace dangerouslySetInnerHTML with textContent or DOMPurify.",
+        "Validate product descriptions at catalog import.",
+        "Run PC Parts Store labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /product.php route scan on PC Parts Store confirms dangerouslySetInnerHTML XSS. Show Commerce.js-safe rendering.",
     version: 1,
     enabled: true
   },

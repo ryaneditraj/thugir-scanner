@@ -14315,6 +14315,61 @@ const clientSidePcPartsStoreLabEvidence: Rule = async (ctx) => {
   };
 };
 
+function isPcPartsStoreHost(ctx: RuleContext): boolean {
+  return /pc-parts-store\.vercel\.app/i.test(ctx.origin);
+}
+
+const PC_PARTS_XSS_SINK_RE = /dangerouslySetInnerHTML\s*:\s*\{__html:\s*a\.description\}/;
+const COMMERCE_PUBLIC_KEY_RE = /pk_[a-f0-9]{32,}/i;
+
+async function fetchPcPartsStoreMainBundle(ctx: RuleContext): Promise<string | null> {
+  const homeUrl = new URL("/", ctx.origin).toString();
+  const homeDoc = await ctx.probe.get(homeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (homeDoc.status < 200 || homeDoc.status >= 400) return null;
+  const chunkMatch = homeDoc.body.match(/static\/js\/main\.[a-f0-9]+\.chunk\.js/);
+  if (!chunkMatch) return null;
+  const bundleUrl = new URL(`/${chunkMatch[0]}`, ctx.origin).toString();
+  const bundleDoc = await ctx.probe.get(bundleUrl, { maxBytes: 131072, timeoutMs: 15000 });
+  if (bundleDoc.status < 200 || bundleDoc.status >= 400) return null;
+  return bundleDoc.body;
+}
+
+const pcPartsStoreStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isPcPartsStoreHost(ctx)) return NEGATIVE;
+  const bundle = await fetchPcPartsStoreMainBundle(ctx);
+  if (!bundle) return NEGATIVE;
+  const sinkMatch = bundle.match(PC_PARTS_XSS_SINK_RE);
+  if (!sinkMatch) return NEGATIVE;
+  const keyMatch = bundle.match(COMMERCE_PUBLIC_KEY_RE);
+  if (!keyMatch) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      snippet: sinkMatch[0],
+      commercePublicKey: `${keyMatch[0].slice(0, 12)}…`,
+      note: "PC Parts Store main.js bundle exposes Commerce.js public key and renders product descriptions via dangerouslySetInnerHTML — stored XSS oracle when catalog HTML is unsanitized"
+    }
+  };
+};
+
+const pcPartsStoreStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPcPartsStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:login|checkout|product|products|api\/login)\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await pcPartsStoreStoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "PC Parts Store route scan — live bundle probe confirms dangerouslySetInnerHTML XSS sink with Commerce.js catalog (Vercel React deploy; PHP routes are SPA fallbacks)"
+    }
+  };
+};
+
 // --- BreakTheFlask vulnerable Flask writeup labs (dghostninja.github.io)
 const CLIENT_BREAK_THE_FLASK_RES: { label: string; re: RegExp }[] = [
   {
@@ -81781,12 +81836,33 @@ async function probeCrapiShopOrdersIdBola(
   };
 }
 
+async function fetchCrapiMechanicReport(
+  ctx: RuleContext,
+  reportId: string,
+  headers?: Record<string, string>
+): Promise<Awaited<ReturnType<typeof fetchDoc>>> {
+  const reportUrl = new URL("/workshop/api/mechanic/mechanic_report", ctx.origin);
+  reportUrl.searchParams.set("report_id", reportId);
+  return ctx.probe.get(reportUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers
+  });
+}
+
 const crapiMechanicReportBolaLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
   if (isCrapiShopOrdersRoute(ctx) || isCrapiAuthRoute(ctx)) return NEGATIVE;
+  let authHeaders: Record<string, string> | undefined;
+  let doc = await fetchCrapiMechanicReport(ctx, "1");
+  if (doc.status < 200 || doc.status >= 400) {
+    const jwt = await tryCrapiLabJwt(ctx);
+    if (!jwt) return NEGATIVE;
+    authHeaders = { Authorization: `Bearer ${jwt}` };
+    doc = await fetchCrapiMechanicReport(ctx, "1", authHeaders);
+  }
   const reportUrl = new URL("/workshop/api/mechanic/mechanic_report", ctx.origin);
   reportUrl.searchParams.set("report_id", "1");
-  const doc = await ctx.probe.get(reportUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   try {
     const data = JSON.parse(doc.body) as {
@@ -81797,9 +81873,7 @@ const crapiMechanicReportBolaLiveOracle: Rule = async (ctx) => {
     };
     const ownerEmail = data.vehicle?.owner?.email;
     if (!data.id || !ownerEmail || !data.problem_details) return NEGATIVE;
-    const report2Url = new URL("/workshop/api/mechanic/mechanic_report", ctx.origin);
-    report2Url.searchParams.set("report_id", "2");
-    const doc2 = await ctx.probe.get(report2Url.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+    const doc2 = await fetchCrapiMechanicReport(ctx, "2", authHeaders);
     if (doc2.status >= 200 && doc2.status < 400) {
       try {
         const data2 = JSON.parse(doc2.body) as { vehicle?: { owner?: { email?: string } } };
@@ -81844,6 +81918,10 @@ const crapiMechanicReportRouteLiveOracle: Rule = async (ctx) => {
 
 const CRAPI_VEHICLE_UUID_RE =
   /"vehicleid"\s*:\s*"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"/gi;
+
+function extractCrapiVehicleUuids(body: string): string[] {
+  return [...body.matchAll(CRAPI_VEHICLE_UUID_RE)].map((m) => m[1]!).filter((id) => id.length > 0);
+}
 
 async function tryCrapiOtpToken(
   ctx: RuleContext,
@@ -81922,16 +82000,29 @@ const crapiVehicleBolaLiveOracle: Rule = async (ctx) => {
   const jwt = await tryCrapiLabJwt(ctx);
   if (!jwt) return NEGATIVE;
   const authHeaders = { Authorization: `Bearer ${jwt}` };
-  const postsUrl = new URL("/community/api/v2/community/posts/recent", ctx.origin).toString();
-  const postsDoc = await ctx.probe.get(postsUrl, {
-    maxBytes: 32768,
-    timeoutMs: 20000,
-    headers: authHeaders
-  });
-  if (postsDoc.status < 200 || postsDoc.status >= 400) return NEGATIVE;
-  const leakedUuids = [...postsDoc.body.matchAll(CRAPI_VEHICLE_UUID_RE)]
-    .map((m) => m[1]!)
-    .filter((id) => id.length > 0);
+  const postsPaths = [
+    "/identity/api/v2/community/posts/recent",
+    "/community/api/v2/community/posts/recent"
+  ];
+  let postsDoc: Awaited<ReturnType<typeof fetchDoc>> | null = null;
+  let postsUrl = "";
+  for (const path of postsPaths) {
+    postsUrl = new URL(path, ctx.origin).toString();
+    const candidate = await ctx.probe.get(postsUrl, {
+      maxBytes: 32768,
+      timeoutMs: 20000,
+      headers: authHeaders
+    });
+    if (candidate.status >= 200 && candidate.status < 400 && extractCrapiVehicleUuids(candidate.body).length > 0) {
+      postsDoc = candidate;
+      break;
+    }
+    if (!postsDoc && candidate.status >= 200 && candidate.status < 400) {
+      postsDoc = candidate;
+    }
+  }
+  if (!postsDoc || postsDoc.status < 200 || postsDoc.status >= 400) return NEGATIVE;
+  const leakedUuids = extractCrapiVehicleUuids(postsDoc.body);
   if (leakedUuids.length === 0) return NEGATIVE;
   const ownUrl = new URL("/identity/api/v2/vehicle/vehicles", ctx.origin).toString();
   const ownDoc = await ctx.probe.get(ownUrl, {
@@ -82187,7 +82278,7 @@ const crapiUserVideosBolaRouteLiveOracle: Rule = async (ctx) => {
 const crapiCommunityPostsRouteLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/community\/api\/v2\/community\/posts/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:identity|community)\/api\/v2\/community\/posts/i.test(pageUrl)) return NEGATIVE;
   const result = await crapiVehicleBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -93497,6 +93588,8 @@ export const RULES: Record<string, Rule> = {
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,
   clientSidePcPartsStoreLabEvidence,
+  pcPartsStoreStoredXssLiveOracle,
+  pcPartsStoreStoredXssRouteLiveOracle,
   clientSideBreakTheFlaskEvidence,
   clientSideFlaskVulnappEvidence,
   clientSideFlaskVulnappStoredXssEvidence,

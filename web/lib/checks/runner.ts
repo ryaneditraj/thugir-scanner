@@ -3512,6 +3512,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideArtemisKitEvidence",
   "clientSideRailsgoatEvidence",
   "clientSidePcPartsStoreLabEvidence",
+  "pcPartsStoreStoredXssLiveOracle",
+  "pcPartsStoreStoredXssRouteLiveOracle",
   "clientSideBreakTheFlaskEvidence",
   "clientSideFlaskVulnappEvidence",
   "clientSideFlaskVulnappStoredXssEvidence",
@@ -11214,6 +11216,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /-route-/.test(p.slug)
       )
         return -3;
+      if (
+        /pc-parts-store\.vercel\.app/i.test(origin) &&
+        /\/(?:login|checkout|product|products|api\/login)\.php/i.test(targetInput) &&
+        p.slug.startsWith("pc-parts-store-stored-xss")
+      )
+        return -3;
       if (/compass-demo\.com/i.test(origin) && p.slug.startsWith("compass-demo-")) return -2;
       if (
         /compass-demo\.com/i.test(origin) &&
@@ -12322,7 +12330,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /crapi2?\.apisec\.ai/i.test(origin) &&
-        /\/community\/api\/v2\/community\/posts/i.test(targetInput) &&
+        /\/(?:identity|community)\/api\/v2\/community\/posts/i.test(targetInput) &&
         p.slug.startsWith("crapi-community-posts")
       )
         return -3;

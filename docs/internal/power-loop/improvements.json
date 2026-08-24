@@ -4343,6 +4343,24 @@
       "slug": "fauxbank-transfer-route-checkpoint-fallback",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Vercel checkpoint blocks POST /api/transfer CSRF live probe — README lesson #7 missing CSRF corpus fallback; pentest-fauxbank.vercel.app/transfer findings 4→10 (+fauxbank-transfer-route-live-oracle via fallback); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-community-posts-identity-path-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: crapiVehicleBolaLiveOracle now probes /identity/api/v2/community/posts/recent before legacy /community/ path; crapiCommunityPostsRouteLiveOracle route matcher accepts identity path used by crapi2.apisec.ai queue URL; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-mechanic-report-jwt-auth-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: crapiMechanicReportBolaLiveOracle retries GET /workshop/api/mechanic/mechanic_report?report_id=N with JWT from tryCrapiLabJwt when unauthenticated probe fails — enables crapi2 mechanic_report BOLA on auth-gated deploys; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pc-parts-store.vercel.app",
+      "slug": "pc-parts-store-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: live fetch of main.*.chunk.js confirms pk_* Commerce.js key + dangerouslySetInnerHTML:{__html:a.description}; pc-parts-store.vercel.app/product.php?id=1 findings 6→8 (+pc-parts-store-stored-xss-live-oracle +route); benchmark juice-shop 47 findings 6/6 maintained"
     }
   ]
 }
