@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-24T22:05:45.843Z",
+  "updated_at": "2026-08-24T23:33:48.442Z",
   "discovery_urls": [
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-5",
@@ -10404,7 +10404,32 @@
       "url": "https://ai-security-platform-iota.vercel.app/challenges/rate-limiting",
       "source": "AI Security Platform — login brute-force / rate-limit bypass challenge (Vercel public demo)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/csrf",
+      "source": "zahidoverflow/dvwu — CSRF training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/idor",
+      "source": "zahidoverflow/dvwu — IDOR training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-6",
+      "source": "OWASP WrongSecrets — Challenge 6 K8s secrets oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-8",
+      "source": "OWASP WrongSecrets — Challenge 8 logging secret oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+      "source": "OWASP WrongSecrets — Challenge 63 secrets oracle (official Heroku demo)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 5
+  "discovery_urls_added": 10
 }
