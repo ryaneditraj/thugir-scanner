@@ -80382,6 +80382,19 @@ function isSecLabAngularStubShell(body: string): boolean {
   return /<app-root>\s*<\/app-root>/i.test(body) && !/__NEXT_DATA__|Next\.js/i.test(body);
 }
 
+/** Hub crawl seeds /api/sqli while live labs live on /api/sqli-vulnerable (and /api/sqli/search has its own oracle). */
+function seclabApiLabShorthandRouteMatch(pageUrl: string, lab: string): boolean {
+  if (new RegExp(`/api/${lab}-vulnerable\\b`, "i").test(pageUrl)) return true;
+  if (lab === "sqli") {
+    if (/\/api\/sqli\/search\b/i.test(pageUrl)) return false;
+    return /\/api\/sqli(?:[/?#]|$)/i.test(pageUrl);
+  }
+  if (lab === "users") {
+    return /\/api\/users(?:\/\d+)?(?:[/?#]|$)/i.test(pageUrl) && !/\/api\/users-vulnerable\b/i.test(pageUrl);
+  }
+  return new RegExp(`/api/${lab}(?:[/?#]|$)`, "i").test(pageUrl);
+}
+
 const seclabNextjsLabApiProbe: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   let host = "";
@@ -80511,7 +80524,7 @@ const seclabAngularStubRouteLiveOracle: Rule = async (ctx) => {
 
 const seclabSqliVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/sqli-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  if (!seclabApiLabShorthandRouteMatch(pageUrl, "sqli")) return NEGATIVE;
   let pageHost = "";
   let originHost = "";
   try {
@@ -80614,7 +80627,7 @@ const seclabSqliSearchRouteLiveOracle: Rule = async (ctx) => {
 
 const seclabUsersVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/users-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  if (!seclabApiLabShorthandRouteMatch(pageUrl, "users")) return NEGATIVE;
   let pageHost = "";
   let originHost = "";
   try {
@@ -80710,7 +80723,7 @@ const seclabIdorLabsRouteLiveOracle: Rule = async (ctx) => {
 
 const seclabIdorVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/idor-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  if (!seclabApiLabShorthandRouteMatch(pageUrl, "idor")) return NEGATIVE;
   let pageHost = "";
   let originHost = "";
   try {
@@ -80810,7 +80823,7 @@ const seclabPathTraversalRouteLiveOracle: Rule = async (ctx) => {
 
 const seclabSsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/ssrf-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  if (!seclabApiLabShorthandRouteMatch(pageUrl, "ssrf")) return NEGATIVE;
   let pageHost = "";
   let originHost = "";
   try {
@@ -80859,7 +80872,7 @@ const seclabSsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
 
 const seclabCsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/csrf-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  if (!seclabApiLabShorthandRouteMatch(pageUrl, "csrf")) return NEGATIVE;
   let pageHost = "";
   let originHost = "";
   try {
@@ -80913,7 +80926,7 @@ const seclabCsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
 
 const seclabJwtVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/jwt-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  if (!seclabApiLabShorthandRouteMatch(pageUrl, "jwt")) return NEGATIVE;
   let pageHost = "";
   let originHost = "";
   try {
@@ -80992,7 +81005,7 @@ const seclabJwtVulnerableRouteLiveOracle: Rule = async (ctx) => {
 
 const seclabXssVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/xss-vulnerable\b/i.test(pageUrl)) return NEGATIVE;
+  if (!seclabApiLabShorthandRouteMatch(pageUrl, "xss")) return NEGATIVE;
   let pageHost = "";
   let originHost = "";
   try {
@@ -83520,7 +83533,7 @@ const brokencrystalsFileAzureRouteLiveOracle: Rule = async (ctx) => {
 const brokencrystalsFileDigitalOceanRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/file\/digital_ocean/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/file\/digital_ocean|\/digital_ocean\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsDigitalOceanMetadataSsrfLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
