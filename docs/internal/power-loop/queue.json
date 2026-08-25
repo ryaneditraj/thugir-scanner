@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-25T12:05:00.000Z",
+  "updated_at": "2026-08-25T13:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-60",
+      "source": "OWASP WrongSecrets — Challenge 60 insecure MCP server prompt-injection oracle on official Heroku demo (README v1.13)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-61",
+      "source": "OWASP WrongSecrets — Challenge 61 Telegram channel secrets oracle on official Heroku demo (README v1.13)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-62",
+      "source": "OWASP WrongSecrets — Challenge 62 secrets oracle on official Heroku demo (README challenge list)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+      "source": "OWASP WrongSecrets — Challenge 63 secrets oracle on official Heroku demo (README challenge list)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/api/notices?file=README.md",
+      "source": "zahidoverflow/damn-vulnerable-web-university — LFI/path traversal oracle GET /api/notices (GitHub VULNERABILITY_REPORT)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
       "source": "OWASP WrongSecrets — Challenge 57 AI prompt-injection oracle on official Heroku demo (README)",
