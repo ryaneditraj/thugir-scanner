@@ -14069,8 +14069,8 @@ const burpbountyFortiosRemoteLoginLiveOracle: Rule = async (ctx) => {
 };
 
 const BURPBOUNTY_WEBLOGIC_PATHS = [
-  "/cve/weblogic/console/login/LoginForm.jsp",
   "/console/login/LoginForm.jsp",
+  "/cve/weblogic/console/login/LoginForm.jsp",
   "/cve/weblogic/"
 ] as const;
 

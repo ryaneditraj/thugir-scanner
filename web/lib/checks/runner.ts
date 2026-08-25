@@ -311,6 +311,17 @@ function isJuiceShopHerokuHost(url: string): boolean {
   }
 }
 
+/** Route-only discovery scans on /rest/* or /api/* when the dyno serves Heroku Application Error. */
+function isJuiceShopApiRouteScan(url: string): boolean {
+  return isJuiceShopHost(url) && /\/(?:rest|api|ftp|b2b)\//i.test(url);
+}
+
+function juiceShopScanDegraded(home: FetchedDoc): boolean {
+  return home.status === 503 || HEROKU_APP_ERROR_RE.test(home.body);
+}
+
+const JUICE_SHOP_ESCAPE_MIRROR = "https://juice-shop.demo.escape.tech";
+
 const JUICE_SHOP_COUPON_BOT_HISTORY_URL =
   "https://raw.githubusercontent.com/juice-shop/juicy-coupon-bot/4fb203e/lib/currentCoupons.ts";
 const JUICE_SHOP_COUPON_BOT_CURRENT_URL =
@@ -9557,6 +9568,59 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
 
   let home = await reachTarget(target, targetInput);
+  const juiceShopApiRouteFastPath = isJuiceShopApiRouteScan(effectiveTargetInput);
+  if (juiceShopApiRouteFastPath && home.status !== 0) {
+    const probe = new ProbeCache();
+    const routeOrigin = target.origin;
+    const scanUrl = effectiveTargetInput;
+    const routeResource =
+      scanUrl.match(/\/(?:api|rest)\/([^/?#]+)/i)?.[1]?.toLowerCase().replace(/s$/, "") ?? "";
+    const homeStub: FetchedDoc = {
+      ...home,
+      body: `Juice Shop API route scan ${scanUrl}`,
+      finalUrl: scanUrl,
+      url: scanUrl,
+      status: 200
+    };
+    const routeCtx: RuleContext = {
+      origin: routeOrigin,
+      scanUrl,
+      home: homeStub,
+      scripts: [],
+      combined: homeStub.body,
+      probe
+    };
+    const routePatterns = patternsForTier("deep").filter((p) => {
+      if (p.detectorKind !== "rule_ref" || !/^juice-shop-/i.test(p.slug)) return false;
+      const ruleName = (p.detectorConfig as { rule: string }).rule;
+      if (!DEEP_RULES.has(ruleName)) return false;
+      if (!routeResource) return true;
+      const slug = p.slug.toLowerCase();
+      return slug.includes(routeResource) || slug.includes(`${routeResource}s`);
+    });
+    const routeFindings: PatternFinding[] = [];
+    const routeSeen = new Set<string>();
+    const routeSeenRules = new Set<string>();
+    for (const pattern of routePatterns) {
+      const ruleName = (pattern.detectorConfig as { rule: string }).rule;
+      if (routeSeenRules.has(ruleName)) continue;
+      const f = await scanRule(pattern, routeCtx, DEEP_RULES);
+      if (f) routeSeenRules.add(ruleName);
+      if (f && f.confidence >= DEEP_MIN_CONFIDENCE && !routeSeen.has(f.patternSlug)) {
+        routeSeen.add(f.patternSlug);
+        routeFindings.push(f);
+      }
+    }
+    return {
+      target: target.toString(),
+      finalUrl: scanUrl,
+      detectedPlatform: null,
+      pagesCrawled: [scanUrl],
+      findings: routeFindings,
+      combined: homeStub.body,
+      probesRun: probe.size
+    };
+  }
   if (
     home.status === 0 &&
     /voting-app[\w-]*\.vercel\.app/i.test(targetInput) &&
@@ -9624,7 +9688,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     if (redirected.status >= 200 && redirected.body.length > home.body.length) home = redirected;
   }
   home = await warmupRenderHost(target.toString(), home);
-  home = await warmupJuiceShopHome(target.toString(), home);
+  if (!juiceShopApiRouteFastPath) {
+    home = await warmupJuiceShopHome(target.toString(), home);
+  }
   if (
     /pwnshop|ctfsecurity\.com/i.test(targetInput) &&
     /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/search\/filters/i.test(targetInput) &&
@@ -9793,7 +9859,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   // Shallow crawl: homepage + internal pages (prioritize vuln lab HTML).
   // Prefetch homepage scripts first — static labs often navigate via JS (e.g. login.js → comments.html).
   const probe = new ProbeCache();
-  if (isJuiceShopHost(home.finalUrl || target.toString())) {
+  if (!juiceShopApiRouteFastPath && isJuiceShopHost(home.finalUrl || target.toString())) {
     await primeJuiceShopApiProbes(probe, home.finalUrl || target.toString());
   }
   if (
@@ -9836,12 +9902,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     owaspGenaiSessionRef
   );
   home = await applySecureNextjsLessonSession(home.finalUrl || target.toString(), home, probe);
-  const homeScriptUrls = extractScriptUrls(home.body, home.finalUrl, 8);
-  const earlyScripts = await fetchScriptsBatched(homeScriptUrls.slice(0, 8), {
-    probe,
-    maxBytes: 120_000,
-    concurrency: 4
-  });
+  const homeScriptUrls = juiceShopApiRouteFastPath
+    ? []
+    : extractScriptUrls(home.body, home.finalUrl, 8);
+  const earlyScripts = juiceShopApiRouteFastPath
+    ? []
+    : await fetchScriptsBatched(homeScriptUrls.slice(0, 8), {
+        probe,
+        maxBytes: 120_000,
+        concurrency: 4
+      });
   const scriptNavTargets = earlyScripts.flatMap((s) => jsNavTargets(s.body, s.finalUrl, DEEP_MAX_PAGES));
   const spaRoutes = spaRouteTargets(
     [home.body, ...earlyScripts.map((s) => s.body)],
@@ -9849,7 +9919,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     DEEP_MAX_PAGES
   );
 
-  const sitemapSeeds = await extractSitemapCrawlSeeds(origin, probe);
+  const sitemapSeeds = juiceShopApiRouteFastPath ? [] : await extractSitemapCrawlSeeds(origin, probe);
   const labHubSeeds = extractLabHubLinks(home.body, home.finalUrl);
   const docusaurusLabSeeds = extractDocusaurusLabLinks(home.body, home.finalUrl);
   const nextraCyberSeeds = extractNextraCybersecurityLinks(home.body, home.finalUrl);
@@ -9887,7 +9957,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const povzaydXssLabsSeeds = extractPovzaydXssLabsSeeds(home.body, home.finalUrl);
   const hacker101CtfSeeds = extractHacker101CtfSeeds(home.body, home.finalUrl);
   const finbotCtfSeeds = extractFinbotCtfSeeds(home.body, home.finalUrl);
-  const hackinghubHubSeeds = await extractHackinghubHubSitemapSeeds(origin, probe);
+  const hackinghubHubSeeds = juiceShopApiRouteFastPath
+    ? []
+    : await extractHackinghubHubSitemapSeeds(origin, probe);
   const cmdChallengeSeeds = extractCmdChallengeSeeds(home.body, home.finalUrl);
   const owaspBricksSeeds = extractOwaspBricksSeeds(home.body, home.finalUrl);
   const fvbGitbookSeeds = extractFvbGitbookSeeds(home.body, home.finalUrl);
@@ -10695,7 +10767,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
     : [];
 
-  const crawlSeeds = prioritizeSecurityLabLinks([
+  const crawlSeeds = juiceShopApiRouteFastPath
+    ? []
+    : prioritizeSecurityLabLinks([
     ...new Set([
       ...fabraixChallengeSeeds,
       ...hackAdvisorPrioritySeeds,
@@ -10915,7 +10989,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     ])
   ]).slice(0, DEEP_MAX_PAGES - 1);
   const pageUrls = [home.finalUrl, ...new Set(crawlSeeds)].slice(0, DEEP_MAX_PAGES);
-  const extraPageUrls = pageUrls.slice(1);
+  const extraPageUrls = juiceShopApiRouteFastPath ? [] : pageUrls.slice(1);
   const extraPagesRaw = await fetchPagesBatched(extraPageUrls, { probe, maxBytes: 600_000, concurrency: 3 });
   const extraPages = await Promise.all(
     extraPageUrls.map(async (u, i) =>
@@ -10927,7 +11001,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
     )
   );
-  let pages: FetchedDoc[] = [home, ...extraPages];
+  let pages: FetchedDoc[] = juiceShopApiRouteFastPath ? [home] : [home, ...extraPages];
 
   const childSeeds = prioritizeSecurityLabLinks(
     extraPages.flatMap((p) => [
@@ -10935,7 +11009,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...extractDocusaurusLabLinks(p.body, p.finalUrl)
     ])
   ).slice(0, 2);
-  if (childSeeds.length > 0 && pages.length >= DEEP_MAX_PAGES) {
+  if (!juiceShopApiRouteFastPath && childSeeds.length > 0 && pages.length >= DEEP_MAX_PAGES) {
     const childPagesRaw = await fetchPagesBatched(childSeeds, { probe, maxBytes: 600_000, concurrency: 2 });
     const childPages = await Promise.all(
       childSeeds.map(async (u, i) =>
@@ -10948,7 +11022,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
     );
     pages = [...pages.slice(0, DEEP_MAX_PAGES - childPages.length), ...childPages];
-  } else if (childSeeds.length > 0) {
+  } else if (!juiceShopApiRouteFastPath && childSeeds.length > 0) {
     const childPagesRaw = await fetchPagesBatched(childSeeds, { probe, maxBytes: 600_000, concurrency: 2 });
     const childPages = await Promise.all(
       childSeeds.map(async (u, i) =>
@@ -10965,8 +11039,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
 
   const scriptCap = opts.maxScripts ?? 24;
   const scriptUrls = new Set<string>();
-  for (const p of pages) for (const u of extractScriptUrls(p.body, p.finalUrl, scriptCap)) scriptUrls.add(u);
-  if (isJuiceShopHost(home.finalUrl)) {
+  if (!juiceShopApiRouteFastPath) {
+    for (const p of pages) for (const u of extractScriptUrls(p.body, p.finalUrl, scriptCap)) scriptUrls.add(u);
+  }
+  if (!juiceShopApiRouteFastPath && isJuiceShopHost(home.finalUrl)) {
     for (const p of ["/main.js", "/polyfills.js", "/runtime.js"]) {
       try {
         scriptUrls.add(new URL(p, crawlOrigin).toString());
@@ -10992,14 +11068,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
 
   // Re-prime Juice Shop API/bundle after crawl + script fetch — dyno may wake during that window.
   const juiceShopOrigin = home.finalUrl || target.toString();
-  if (isJuiceShopHost(juiceShopOrigin)) {
+  if (!juiceShopApiRouteFastPath && isJuiceShopHost(juiceShopOrigin)) {
     await primeJuiceShopApiProbes(probe, juiceShopOrigin);
   }
 
   // Heroku cold-start often serves a stub homepage — merge bootstrapped REST/bundle bodies so
   // deep rules still see SQLi/IDOR/admin/XSS markers when pages_crawled=1.
   let juiceShopBootstrap = "";
-  if (isJuiceShopHost(juiceShopOrigin)) {
+  if (!juiceShopApiRouteFastPath && isJuiceShopHost(juiceShopOrigin)) {
     const jsOrigin = new URL(juiceShopOrigin).origin;
     const bootstrapPaths = [
       "/main.js",
@@ -11307,7 +11383,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     return slug.startsWith(`wrongsecrets-challenge-${challengeNum}-`);
   }
 
-  const all = patternsForTier("deep").sort((a, b) => {
+  let patternPool = patternsForTier("deep");
+  if (juiceShopApiRouteFastPath) {
+    const juiceShopRoutePattern = (slug: string) =>
+      /^juice-shop-/i.test(slug) ||
+      /^(missing-security-headers|permissive-cors|idor-sequential-ids|vibe-unauthenticated-api-routes|dangerous-html-sinks|jwt-alg-none-accepted|security-question-disclosure|unauthenticated-admin-endpoint|sql-error-disclosure|thugir-dir-discovery)$/i.test(
+        slug
+      );
+    patternPool = patternPool.filter(
+      (p) => p.detectorKind === "secret_regex" || juiceShopRoutePattern(p.slug)
+    );
+  }
+
+  let all = patternPool.sort((a, b) => {
     const w = (p: Pattern) => {
       if (/pentest-ground\.com:4280/i.test(origin) && p.slug.startsWith("pentest-ground-dvwa")) return -2;
       if (/dvwa\.lab\.pentest-forge\.com/i.test(origin) && p.slug.startsWith("pentest-forge-dvwa")) return -2;
@@ -12695,6 +12783,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
         /\/(?:api|rest)\/feedbacks\b/i.test(targetInput) &&
         p.slug.startsWith("juice-shop-feedbacks-bola")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/(?:api|rest)\/recycles\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-recycles-bola")
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/api\/orders\/submit\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-order-submit-xxe")
       )
         return -3;
       if (

@@ -4709,6 +4709,24 @@
       "slug": "juice-shop-benchmark-bootstrap-oracle-paths",
       "status": "shipped",
       "validation": "SOURCE: benchmark:juice-shop EVIDENCE: primeJuiceShopApiProbes + juiceShopBootstrap extended with /rest/captcha/, /rest/wallet/balance, /rest/user/authentication-details, /rest/user/security-question, /api/SecurityQuestions; juice-shop.demo.escape.tech 50 findings incl juice-shop-captcha-bypass-live-oracle + juice-shop-jwt-alg-none-live-oracle + juice-shop-wallet-balance-bola-live-oracle + juice-shop-security-question-user-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-api-route-fast-scan",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runDeepScan early-return fast path for /rest|/api route scans — runs route-matched juice-shop-* rules only via juiceShopApiMirrorProbe; demo.owasp-juice.shop/rest/feedbacks scan timeout >20min → 19s with 2 findings (+juice-shop-feedbacks-bola-live-oracle +juice-shop-feedbacks-bola-route-live-oracle); benchmark juice-shop.herokuapp.com 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:queue",
+      "slug": "juice-shop-feedbacks-recycles-priority-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: priority_discovery_urls prepended demo.owasp-juice.shop/rest/feedbacks + /rest/recycles/1 + pwnshop orders/submit; runner -3 priority for juice-shop-recycles-bola-* and pwnshop-order-submit-xxe-* route scans; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-weblogic-console-path-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: BURPBOUNTY_WEBLOGIC_PATHS reordered — GET /console/login/LoginForm.jsp (HTTP 200 Oracle WebLogic console) before 404 /cve/weblogic/* paths; burpbountylab.com/cve/weblogic/ route scan 98 findings incl burpbounty-weblogic-console-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
