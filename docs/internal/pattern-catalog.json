@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-25T16:03:50.909Z",
-  "total": 2642,
-  "uniqueSlugs": 2634,
+  "generatedAt": "2026-08-25T17:57:00.177Z",
+  "total": 2643,
+  "uniqueSlugs": 2635,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2624,
+    "generic": 2625,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2557,
+    "deep": 2558,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 122,
     "Security misconfiguration": 198,
     "Broken authentication": 163,
-    "Injection": 403,
+    "Injection": 404,
     "Cross-site scripting": 722,
     "Open redirect": 23,
     "general": 20,
@@ -2301,6 +2301,7 @@
     "vuln-expose-sqli-blind-route-live-oracle",
     "vuln-expose-sqli-search-api-live-oracle",
     "vuln-expose-sqli-search-route-live-oracle",
+    "vuln-expose-sqli-users-route-live-oracle",
     "vuln-expose-users-api-live-oracle",
     "vuln-expose-users-api-route-live-oracle",
     "vuln-expose-xss-comments-route-live-oracle",

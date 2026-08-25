@@ -40932,6 +40932,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vuln-expose-sqli-users-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnSite /sqli/users route user-enumeration SQLi oracle",
+    description:
+      "When scanning /sqli/users, the user-enumeration lab exposes UNION SELECT privilege-escalation payloads in filter panels and GET /api/users returns plaintext passwords with echoed SQL — route-specific enumeration oracle.",
+    impactOneline:
+      "SQL injection in user filters lets attackers enumerate accounts and extract credentials from the database.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeSqliUsersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and never echo SQL — VulnSite is intentional training software.",
+      steps: [
+        "Replace dynamic SQL concatenation with prepared statements.",
+        "Remove query echoing from API responses.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/users route scan confirms a user-enumeration SQLi lab with UNION SELECT payloads and /api/users credential disclosure. Show SQL injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vuln-expose-xss-csp-bypass-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

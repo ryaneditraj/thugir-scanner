@@ -23345,6 +23345,27 @@ const vulnExposeSqliBlindRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnExposeSqliUsersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnExposeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/sqli\/users(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const spec = VULN_EXPOSE_MODULE_SPECS.find((s) => s.pathRe.test("/sqli/users"));
+  if (!spec) return NEGATIVE;
+  const pageResult = await vulnExposeModulePageMarkers(ctx, "/sqli/users", spec);
+  if (!pageResult.fired) return NEGATIVE;
+  const apiResult = await vulnExposeUsersApiLiveOracle(ctx);
+  return {
+    fired: true,
+    confidence: apiResult.fired ? 0.94 : pageResult.confidence,
+    evidence: {
+      ...pageResult.evidence,
+      ...(apiResult.fired ? { api: apiResult.evidence } : {}),
+      scannedUrl: pageUrl,
+      note: "VulnSite /sqli/users route scan — user enumeration lab with UNION SELECT privilege-escalation payloads and /api/users plaintext-password disclosure oracle"
+    }
+  };
+};
+
 const vulnExposeXssCspBypassRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnExposeHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -25248,7 +25269,11 @@ const VULN_EXPOSE_MODULE_SPECS: {
       },
       {
         label: "Inline UNION SELECT extraction payloads",
-        re: /UNION SELECT username,password FROM users|admin'\s*UNION SELECT|' UNION SELECT id, username, password/i
+        re: /UNION SELECT username,password FROM users|admin(?:'|&#x27;|&apos;)\s*UNION SELECT|' UNION SELECT id, username, password/i
+      },
+      {
+        label: "User enumeration filter panel",
+        re: /Filtros de Usuario Vulnerables|Parameter Injection|Advanced Enumeration/i
       }
     ],
     note: "VulnSite SQLi module documents authentication-bypass or data-extraction lab with inline UNION payloads"
@@ -92213,6 +92238,7 @@ export const RULES: Record<string, Rule> = {
   vulnExposeUsersApiRouteLiveOracle,
   vulnExposeCommentsApiRouteLiveOracle,
   vulnExposeSqliBlindRouteLiveOracle,
+  vulnExposeSqliUsersRouteLiveOracle,
   vulnExposeXssCspBypassRouteLiveOracle,
   vulnExposeNetworkToolsRouteLiveOracle,
   vulnExposeBlogStoredXssRouteLiveOracle,
