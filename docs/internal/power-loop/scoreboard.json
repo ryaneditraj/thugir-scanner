@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T10:06:50.208Z",
+  "updated_at": "2026-08-25T10:13:33.972Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2767,
-  "total_findings": 27194,
+  "total_sites_scanned": 2775,
+  "total_findings": 27364,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1969,
-  "discovery_findings": 22975,
+  "discovery_urls_added": 1974,
+  "discovery_findings": 23145,
   "improvements_shipped": 1174,
-  "last_run": "2026-08-25T10:06:50.208Z",
+  "last_run": "2026-08-25T10:13:33.972Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 590,
+      "probes_run": 591,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,46 +48,44 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings, 35 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 4,
-      "urls_scanned": 10,
-      "findings": 143,
-      "focus": "supplemental wrongsecrets challenge-50/51/52/54 + CTF demo (concurrent 09 UTC run drained dvwu+challenge-6/8/63)",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 170,
+      "focus": "wrongsecrets challenge-55/56/64/65/66 (Heroku 54-66 tail) + duck-store.escape.tech SSRF API routes",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark category gaps",
-      "dvwu.vercel.app/labs/csrf: 14 findings — dvwu-csrf-route-live-oracle + dvwu-csrf-newsletter-crlf-route-live-oracle shipped via priority queue drain",
-      "dvwu.vercel.app/labs/idor: 14 findings — dvwu-idor-route-live-oracle + dvwu-dashboard-idor-route-live-oracle shipped via priority queue drain",
-      "wrongsecrets challenge-6: 15 findings — wrongsecrets-challenge-6-k8s-secret-route-live-oracle",
-      "wrongsecrets challenge-8: 15 findings — wrongsecrets-challenge-8-logging-route-live-oracle",
-      "wrongsecrets challenge-63: 15 findings — wrongsecrets-challenge-63-hardcoded-aes-key-route-live-oracle",
-      "wrongsecrets challenge-50: route-specific .NET binary live oracle @15 findings",
-      "wrongsecrets challenge-51/52/54: challenge route live oracles @15 each",
-      "wrongsecrets-ctf.herokuapp.com: 10 findings with CTF platform evidence"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark category gaps",
+      "wrongsecrets challenge-55: 15 findings — wrongsecrets-challenge-55-ssh-bastion-route-live-oracle",
+      "wrongsecrets challenge-56: 15 findings — wrongsecrets-challenge-56-project-spec-route-live-oracle",
+      "wrongsecrets challenge-64: 15 findings — wrongsecrets-challenge-64-swift-binary-route-live-oracle",
+      "wrongsecrets challenge-65: 15 findings — wrongsecrets-challenge-65-java-plain-cli-route-live-oracle",
+      "wrongsecrets challenge-66: 15 findings — wrongsecrets-challenge-66-java-obfuscated-route-live-oracle",
+      "duck-store.escape.tech/api/v1/uploads/import-from-url: 32 findings — SSRF + BOLA + MCP oracles",
+      "duck-store.escape.tech/api/v1/uploads/fetch-url: 32 findings — SSRF route oracles",
+      "duck-store.escape.tech/api/v1/orders/1: 31 findings — orders BOLA route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
       "wrongsecrets challenge-44/45 disabled (Vault/K8s cloud-only challenges)",
       "dvwu labs/file-upload/xxe/deserialization/jwt/ssti still in discovery queue tail",
-      "wrongsecrets-ctf: CTF-specific challenge oracles may need route-level tuning"
+      "juice-shop finding count variance (48 vs 47-29 prior runs) — recall stable at 6/6"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "dvwu.vercel.app/labs/csrf": 14,
-    "dvwu.vercel.app/labs/idor": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-6": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-8": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-63": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-50": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-51": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-52": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-54": 15,
-    "wrongsecrets-ctf.herokuapp.com/": 10
+    "juice-shop.herokuapp.com": 48,
+    "wrongsecrets.herokuapp.com/challenge/challenge-55": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-56": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-64": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-65": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-66": 15,
+    "duck-store.escape.tech/api/v1/uploads/import-from-url": 32,
+    "duck-store.escape.tech/api/v1/uploads/fetch-url": 32,
+    "duck-store.escape.tech/api/v1/orders/1": 31
   }
 }
