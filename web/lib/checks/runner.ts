@@ -11223,6 +11223,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
   const ctx: RuleContext = { origin, scanUrl: effectiveTargetInput, home, scripts, combined, probe };
 
+  /** Trailing hyphen prevents challenge-6 priority from matching challenge-60..69 slugs. */
+  function wrongsecretsChallengeSlugMatches(challengeNum: number, slug: string): boolean {
+    return slug.startsWith(`wrongsecrets-challenge-${challengeNum}-`);
+  }
+
   const all = patternsForTier("deep").sort((a, b) => {
     const w = (p: Pattern) => {
       if (/pentest-ground\.com:4280/i.test(origin) && p.slug.startsWith("pentest-ground-dvwa")) return -2;
@@ -11887,223 +11892,223 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?1\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-1")
+        wrongsecretsChallengeSlugMatches(1, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?2\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-2")
+        wrongsecretsChallengeSlugMatches(2, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?3\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-3")
+        wrongsecretsChallengeSlugMatches(3, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?4\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-4")
+        wrongsecretsChallengeSlugMatches(4, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?5\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-5")
+        wrongsecretsChallengeSlugMatches(5, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?6\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-6")
+        wrongsecretsChallengeSlugMatches(6, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?7\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-7")
+        wrongsecretsChallengeSlugMatches(7, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?8\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-8")
+        wrongsecretsChallengeSlugMatches(8, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?9\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-9")
+        wrongsecretsChallengeSlugMatches(9, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?10\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-10")
+        wrongsecretsChallengeSlugMatches(10, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?11\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-11")
+        wrongsecretsChallengeSlugMatches(11, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?12\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-12")
+        wrongsecretsChallengeSlugMatches(12, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?13\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-13")
+        wrongsecretsChallengeSlugMatches(13, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?14\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-14")
+        wrongsecretsChallengeSlugMatches(14, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?15\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-15")
+        wrongsecretsChallengeSlugMatches(15, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?60\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-60")
+        wrongsecretsChallengeSlugMatches(60, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?61\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-61")
+        wrongsecretsChallengeSlugMatches(61, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?62\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-62")
+        wrongsecretsChallengeSlugMatches(62, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?63\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-63")
+        wrongsecretsChallengeSlugMatches(63, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?64\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-64")
+        wrongsecretsChallengeSlugMatches(64, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?58\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-58")
+        wrongsecretsChallengeSlugMatches(58, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?59\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-59")
+        wrongsecretsChallengeSlugMatches(59, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?65\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-65")
+        wrongsecretsChallengeSlugMatches(65, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?31\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-31")
+        wrongsecretsChallengeSlugMatches(31, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?32\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-32")
+        wrongsecretsChallengeSlugMatches(32, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?34\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-34")
+        wrongsecretsChallengeSlugMatches(34, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?33\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-33")
+        wrongsecretsChallengeSlugMatches(33, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?35\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-35")
+        wrongsecretsChallengeSlugMatches(35, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?36\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-36")
+        wrongsecretsChallengeSlugMatches(36, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?37\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-37")
+        wrongsecretsChallengeSlugMatches(37, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?38\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-38")
+        wrongsecretsChallengeSlugMatches(38, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?39\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-39")
+        wrongsecretsChallengeSlugMatches(39, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?40\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-40")
+        wrongsecretsChallengeSlugMatches(40, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?41\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-41")
+        wrongsecretsChallengeSlugMatches(41, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?42\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-42")
+        wrongsecretsChallengeSlugMatches(42, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?43\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-43")
+        wrongsecretsChallengeSlugMatches(43, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?66\b/i.test(targetInput) &&
-        p.slug.startsWith("wrongsecrets-challenge-66")
+        wrongsecretsChallengeSlugMatches(66, p.slug)
       )
         return -3;
       if (
