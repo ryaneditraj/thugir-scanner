@@ -311,11 +311,18 @@ async function main() {
   if (useQueue) {
     const resultsPath = resolve(LOOP, "results.json");
     const priorRuns = loadJson<{ runs: ScanRunResult[] }>(resultsPath, { runs: [] }).runs;
-    const queue = loadJson<{ discovery_urls: ScanEntry[] }>(resolve(LOOP, "queue.json"), {
+    const queue = loadJson<{
+      discovery_urls: ScanEntry[];
+      priority_discovery_urls?: ScanEntry[];
+    }>(resolve(LOOP, "queue.json"), {
       discovery_urls: []
     });
-    for (const u of queue.discovery_urls) {
+    const seenQueueKeys = new Set<string>();
+    for (const u of [...(queue.priority_discovery_urls ?? []), ...queue.discovery_urls]) {
       const canonicalUrl = canonicalDiscoveryUrl(u.url);
+      const key = discoveryScanKey(canonicalUrl);
+      if (!key || seenQueueKeys.has(key)) continue;
+      seenQueueKeys.add(key);
       if (recentlyScanned(canonicalUrl, priorRuns)) continue;
       targets.push({ entry: { ...u, url: canonicalUrl }, kind: "discovery" });
     }
