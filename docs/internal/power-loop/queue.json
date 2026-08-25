@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-25T14:15:00.000Z",
+  "updated_at": "2026-08-25T15:05:10.502Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages",
+      "source": "AI & Security Platform — CWE-1104 supply chain npm attack oracle (2025-2026 CVEs)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/privacy-policy",
+      "source": "AI & Security Platform — CWE-1021 deceptive privacy policy dark patterns oracle",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/rate-limiting",
+      "source": "AI & Security Platform — CWE-307 brute-force / missing rate limit login oracle",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supabase-data",
+      "source": "AI & Security Platform — CWE-732 weak Supabase RLS bypass training route (catalog)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/leaked-config",
+      "source": "AI & Security Platform — CWE-200 leaked secrets in client bundle (14-challenge catalog, web search 15 UTC)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
       "source": "OWASP WrongSecrets — Challenge 57 AI prompt-injection oracle (priority drain)",
@@ -43,6 +68,31 @@
     }
   ],
   "discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages",
+      "source": "AI & Security Platform — CWE-1104 supply chain npm attack oracle (2025-2026 CVEs)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/privacy-policy",
+      "source": "AI & Security Platform — CWE-1021 deceptive privacy policy dark patterns oracle",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/rate-limiting",
+      "source": "AI & Security Platform — CWE-307 brute-force / missing rate limit login oracle",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supabase-data",
+      "source": "AI & Security Platform — CWE-732 weak Supabase RLS bypass training route (catalog)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/leaked-config",
+      "source": "AI & Security Platform — CWE-200 leaked secrets in client bundle (14-challenge catalog, web search 15 UTC)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
       "source": "OWASP WrongSecrets — Challenge 57 AI prompt-injection oracle on official Heroku demo (README)",
