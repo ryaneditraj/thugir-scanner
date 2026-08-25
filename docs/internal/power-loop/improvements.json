@@ -4691,6 +4691,24 @@
       "slug": "duck-store-color-filter-query-priority-drain",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: prepended duck-store.escape.tech/api/v1/products/filter/by-color?color=Yellow&sort=name to priority_discovery_urls; route scan findings 31 (+duck-store-products-filter-sqli-live-oracle +duck-store-products-filter-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-csrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/csrf returns HTTP 307 location /login?next=%2Fchallenges%2Fcsrf; ai-security-csrf-route-live-oracle via aiSecurityAuthGatedChallengeRouteLiveOracle; ai-security-platform-iota.vercel.app/challenges/csrf findings 6→7 (+ai-security-csrf-route-live-oracle); benchmark juice-shop.demo.escape.tech 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-xxe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/xxe returns HTTP 307 location /login?next=%2Fchallenges%2Fxxe; ai-security-xxe-route-live-oracle via aiSecurityAuthGatedChallengeRouteLiveOracle; ai-security-platform-iota.vercel.app/challenges/xxe findings 6→7 (+ai-security-xxe-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-benchmark-bootstrap-oracle-paths",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: primeJuiceShopApiProbes + juiceShopBootstrap extended with /rest/captcha/, /rest/wallet/balance, /rest/user/authentication-details, /rest/user/security-question, /api/SecurityQuestions; juice-shop.demo.escape.tech 50 findings incl juice-shop-captcha-bypass-live-oracle + juice-shop-jwt-alg-none-live-oracle + juice-shop-wallet-balance-bola-live-oracle + juice-shop-security-question-user-live-oracle; benchmark 6/6 maintained"
     }
   ]
 }

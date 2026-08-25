@@ -35990,6 +35990,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "AI Security Platform CSRF challenge route live oracle",
+    description:
+      "When scanning /challenges/csrf on ai-security-platform-iota.vercel.app, the route redirects to /login?next=/challenges/csrf confirming an auth-gated CSRF CWE-352 challenge route on the discovery queue.",
+    impactOneline:
+      "Route-specific confirmation that AI Security Platform preserves a CSRF challenge route for scanner calibration even when the 14-challenge public catalog omits cross-site request forgery labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — enforce CSRF tokens and SameSite cookies on state-changing requests.",
+      steps: [
+        "Require anti-CSRF tokens on every state-changing form and API mutation.",
+        "Set SameSite=Strict or Lax on session cookies.",
+        "Require authentication before exposing CSRF lab panels."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/csrf route redirects to login preserving a CWE-352 CSRF challenge URL. Show CSRF token and SameSite cookie remediation for Next.js + Supabase.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "AI Security Platform XXE challenge route live oracle",
+    description:
+      "When scanning /challenges/xxe on ai-security-platform-iota.vercel.app, the route redirects to /login?next=/challenges/xxe confirming an auth-gated XXE CWE-611 challenge route on the discovery queue.",
+    impactOneline:
+      "Route-specific confirmation that AI Security Platform preserves an XXE challenge route for scanner calibration even when the 14-challenge public catalog omits XML external entity labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityXxeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — disable external entity resolution in XML parsers.",
+      steps: [
+        "Disable DTD processing and external entity expansion in XML parsers.",
+        "Use JSON or a safe subset of XML when user input is required.",
+        "Require authentication before exposing XXE lab panels."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/xxe route redirects to login preserving a CWE-611 XXE challenge URL. Show XML parser hardening remediation for Next.js API routes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-login-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",

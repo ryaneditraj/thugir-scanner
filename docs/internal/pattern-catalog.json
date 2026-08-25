@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-25T20:26:41.820Z",
-  "total": 2650,
-  "uniqueSlugs": 2642,
+  "generatedAt": "2026-08-25T21:04:43.083Z",
+  "total": 2652,
+  "uniqueSlugs": 2644,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2632,
+    "generic": 2634,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2565,
+    "deep": 2567,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 544,
+    "Broken access control": 545,
     "Exposed secret": 107,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 124,
     "Security misconfiguration": 202,
     "Broken authentication": 163,
-    "Injection": 404,
+    "Injection": 405,
     "Cross-site scripting": 722,
     "Open redirect": 23,
     "general": 20,
@@ -61,6 +61,7 @@
     "ai-security-api-security-route-live-oracle",
     "ai-security-broken-auth-route-live-oracle",
     "ai-security-command-injection-route-live-oracle",
+    "ai-security-csrf-route-live-oracle",
     "ai-security-hacked-npm-packages-route-live-oracle",
     "ai-security-idor-route-live-oracle",
     "ai-security-insecure-passwords-route-live-oracle",
@@ -79,6 +80,7 @@
     "ai-security-supply-chain-route-live-oracle",
     "ai-security-vulnerable-deps-route-live-oracle",
     "ai-security-xss-route-live-oracle",
+    "ai-security-xxe-route-live-oracle",
     "alf-nu-serviceworker-live-oracle",
     "alf-nu-serviceworker-route-live-oracle",
     "all-seeing-eye-hello-route-live-oracle",

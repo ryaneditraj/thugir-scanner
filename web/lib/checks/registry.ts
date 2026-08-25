@@ -79100,6 +79100,24 @@ const AI_SECURITY_AUTH_GATED_CHALLENGE_META: Record<string, AiSecurityAuthGatedC
       /Path traversal|directory traversal|CWE-22|OWASP Top 10|14 challenges|AI Security Platform/i,
     redirectNote:
       "AI Security Platform /challenges/path-traversal route redirects to /login?next=/challenges/path-traversal — auth-gated path traversal CWE-22 challenge route on discovery queue (not in public 14-challenge catalog)"
+  },
+  csrf: {
+    routeSegment: "csrf",
+    cweLabel: "CWE-352",
+    topicLabel: "Cross-Site Request Forgery",
+    platformContextRe:
+      /Cross-Site Request Forgery|CSRF|CWE-352|OWASP Top 10|14 challenges|AI Security Platform/i,
+    redirectNote:
+      "AI Security Platform /challenges/csrf route redirects to /login?next=/challenges/csrf — auth-gated CSRF CWE-352 challenge route on discovery queue (not in public 14-challenge catalog)"
+  },
+  xxe: {
+    routeSegment: "xxe",
+    cweLabel: "CWE-611",
+    topicLabel: "XML External Entity",
+    platformContextRe:
+      /XML External Entity|XXE|CWE-611|OWASP Top 10|14 challenges|AI Security Platform/i,
+    redirectNote:
+      "AI Security Platform /challenges/xxe route redirects to /login?next=/challenges/xxe — auth-gated XXE CWE-611 challenge route on discovery queue (not in public 14-challenge catalog)"
   }
 };
 
@@ -79223,6 +79241,12 @@ const aiSecurityCommandInjectionRouteLiveOracle: Rule = (ctx) =>
 
 const aiSecurityPathTraversalRouteLiveOracle: Rule = (ctx) =>
   aiSecurityAuthGatedChallengeRouteLiveOracle(ctx, "path-traversal");
+
+const aiSecurityCsrfRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityAuthGatedChallengeRouteLiveOracle(ctx, "csrf");
+
+const aiSecurityXxeRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityAuthGatedChallengeRouteLiveOracle(ctx, "xxe");
 
 async function aiSecurityExtractSignInActionId(ctx: RuleContext): Promise<string | null> {
   const loginUrl = new URL("/login", AI_SECURITY_PLATFORM_HOME).toString();
@@ -93308,6 +93332,8 @@ export const RULES: Record<string, Rule> = {
   aiSecuritySsrfRouteLiveOracle,
   aiSecurityCommandInjectionRouteLiveOracle,
   aiSecurityPathTraversalRouteLiveOracle,
+  aiSecurityCsrfRouteLiveOracle,
+  aiSecurityXxeRouteLiveOracle,
   aiSecurityRateLimitingBruteforceLiveOracle,
   aiSecurityLoginRouteLiveOracle,
   juiceShopForgottenBackupDisclosure,
