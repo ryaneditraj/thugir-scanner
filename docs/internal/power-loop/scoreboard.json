@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T04:08:00.000Z",
+  "updated_at": "2026-08-25T04:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3051,
-  "total_findings": 33039,
+  "total_sites_scanned": 3052,
+  "total_findings": 33086,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2073,
-  "discovery_findings": 26363,
-  "improvements_shipped": 1232,
-  "last_run": "2026-08-25T04:08:00.000Z",
+  "discovery_findings": 26381,
+  "improvements_shipped": 1234,
+  "last_run": "2026-08-25T04:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -48,26 +48,24 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings, 34 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (47 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 123,
-      "focus": "pwnshop register-seller full live-oracle suite + juice-shop order-history route + seclab /api/* route oracles + dvwu advanced labs queued",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 18,
+      "focus": "PC Parts Store SQLi route corpus fallbacks for login.php and products.php on Vercel React SPA deploy",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings, 34 live oracles) — no benchmark category gaps",
-      "juice-shop.herokuapp.com/rest/order-history: 49 findings — juice-shop-order-history-bola-route-live-oracle + privacy-requests BOLA",
-      "pwnshop.ctfsecurity.com/register-seller: 47 findings — full Pwnshop live-oracle suite (SSTI PWN-040, coupon-bypass PWN-016, wallet-topup PWN-019, avatar SSRF/XSS, export orders)",
-      "seclab.vercel.app/api/sqli-vulnerable + /api/xss-vulnerable + /api/csrf-vulnerable: 4 findings each — route-specific live oracles (labs/* still dead)",
-      "ai-security-platform-iota.vercel.app/challenges/idor: 7 findings — ai-security-idor-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark category gaps",
+      "pc-parts-store.vercel.app/login.php: 8→9 findings — pc-parts-store-login-sqli-route-live-oracle shipped (README corpus fallback; Vercel SPA not PHP backend)",
+      "pc-parts-store.vercel.app/products.php?search=test: 8→9 findings — pc-parts-store-products-sqli-route-live-oracle shipped (README corpus fallback for search SQLi)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + security-question oracles)",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
       "seclab.vercel.app/labs/* routes still dead on live Vercel deploy — /api/* route oracles work",
       "dvwu.vercel.app/labs/file-upload, xxe, deserialization, jwt, ssti queued but not yet drained",
       "wrongsecrets challenge-23–32, 34–43 still pending queue drain"
@@ -75,12 +73,12 @@
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
+    "pc-parts-store.vercel.app/login.php": 9,
+    "pc-parts-store.vercel.app/products.php?search=test": 9,
     "juice-shop.herokuapp.com/rest/order-history": 49,
     "pwnshop.ctfsecurity.com/register-seller": 47,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "ai-security-platform-iota.vercel.app/challenges/idor": 7,
-    "seclab.vercel.app/api/sqli-vulnerable": 4,
-    "dvwu.vercel.app/labs/path-traversal": 14
+    "seclab.vercel.app/api/sqli-vulnerable": 4
   }
 }
