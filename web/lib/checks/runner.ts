@@ -459,7 +459,10 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
     "/rest/products/search?q=''))",
     "/rest/products/search?q=warmup",
     "/rest/products/search?q=apple",
-    "/ftp/package.json.bak%2500.md"
+    "/ftp/package.json.bak%2500.md",
+    "/rest/captcha/",
+    "/rest/wallet/balance",
+    "/rest/user/authentication-details"
   ];
   const bundlePaths = ["/main.js", "/polyfills.js", "/runtime.js"];
   const probeOpts = { maxBytes: 800_000, timeoutMs: 18000 };
@@ -2947,6 +2950,8 @@ const DEEP_RULES = new Set<string>([
   "aiSecuritySsrfRouteLiveOracle",
   "aiSecurityCommandInjectionRouteLiveOracle",
   "aiSecurityPathTraversalRouteLiveOracle",
+  "aiSecurityCsrfRouteLiveOracle",
+  "aiSecurityXxeRouteLiveOracle",
   "aiSecurityRateLimitingBruteforceLiveOracle",
   "aiSecurityLoginRouteLiveOracle",
   "juiceShopForgottenBackupDisclosure",
@@ -8802,7 +8807,9 @@ function extractAiSecurityPlatformChallengeSeeds(html: string, pageUrl: string):
     "/challenges/security-headers",
     "/challenges/supply-chain",
     "/challenges/vulnerable-deps",
-    "/challenges/hacked-npm-packages"
+    "/challenges/hacked-npm-packages",
+    "/challenges/csrf",
+    "/challenges/xxe"
   ]) {
     try {
       out.add(new URL(p, pageUrl).toString());
@@ -10999,10 +11006,15 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       "/rest/admin/application-configuration",
       "/rest/track-order/1",
       "/rest/products/search?q='))",
-      "/rest/products/search?q=apple",
-      "/ftp/package.json.bak%2500.md",
-      "/ftp/acquisitions.md"
-    ];
+    "/rest/products/search?q=apple",
+    "/ftp/package.json.bak%2500.md",
+    "/ftp/acquisitions.md",
+    "/rest/captcha/",
+    "/rest/wallet/balance",
+    "/rest/user/security-question?email=admin@juice-sh.op",
+    "/api/SecurityQuestions",
+    "/rest/user/authentication-details"
+  ];
     const bootstrapUrls = bootstrapPaths.map((p) => new URL(p, jsOrigin).toString());
     const mainJsUrl = new URL("/main.js", jsOrigin).toString();
     let bootDocs = await probe.getMany(
@@ -11808,13 +11820,15 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/(?:sqli|prompt-injection|broken-auth|ssrf|command-injection|path-traversal|leaked-(?:config|secrets))\b/i.test(targetInput) &&
+        /\/challenges\/(?:sqli|prompt-injection|broken-auth|ssrf|command-injection|path-traversal|csrf|xxe|leaked-(?:config|secrets))\b/i.test(targetInput) &&
         (p.slug === "ai-security-sqli-route-live-oracle" ||
           p.slug === "ai-security-prompt-injection-route-live-oracle" ||
           p.slug === "ai-security-broken-auth-route-live-oracle" ||
           p.slug === "ai-security-ssrf-route-live-oracle" ||
           p.slug === "ai-security-command-injection-route-live-oracle" ||
           p.slug === "ai-security-path-traversal-route-live-oracle" ||
+          p.slug === "ai-security-csrf-route-live-oracle" ||
+          p.slug === "ai-security-xxe-route-live-oracle" ||
           p.slug === "ai-security-leaked-config-route-live-oracle")
       )
         return -3;
