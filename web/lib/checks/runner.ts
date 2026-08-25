@@ -3186,6 +3186,7 @@ const DEEP_RULES = new Set<string>([
   "vulnExposeUsersApiRouteLiveOracle",
   "vulnExposeCommentsApiRouteLiveOracle",
   "vulnExposeSqliBlindRouteLiveOracle",
+  "vulnExposeSqliUsersRouteLiveOracle",
   "vulnExposeXssCspBypassRouteLiveOracle",
   "vulnExposeXssPlaygroundRouteLiveOracle",
   "vulnExposeNetworkToolsRouteLiveOracle",
@@ -12312,6 +12313,30 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
         /\/sqli\/blind\b/i.test(targetInput) &&
         p.slug.startsWith("vuln-expose-sqli-blind")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/sqli\/users\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-sqli-users")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/xss\/playground\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-xss-playground")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/xss\/profile\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-idor-profile")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/xss\/comments\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-xss-comments")
       )
         return -3;
       if (
