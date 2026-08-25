@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-57-58-hub-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with challenge-57/58 short+long URLs; runner -3 priority for wrongsecrets-challenge-57; wrongsecrets.herokuapp.com/challenge/challenge-57 findings 8→15 (+wrongsecrets-challenge-57-browser-llm-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-api-search-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractDvwuVulnPortalSeeds + /api/search added; runner -4 priority for dvwu-search-sqli-route-live-oracle + dvwu-search-xss-route-live-oracle on /api/search; dvwu.vercel.app/api/search findings 5→14; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-priority-queue-drain-13utc",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: priority_discovery_urls prepended ssrf.vulnlab.dev/basic + metadata-aws + blocklist; runner ssrf-vulnlab route oracle priority -3→-4; ssrf.vulnlab.dev/basic findings 3→15 (+ssrf-vulnlab-basic-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vuln-demo.vercel.app",
       "slug": "vuln-demo-jwt-secret-leak-live-oracle",
       "status": "shipped",
