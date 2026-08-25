@@ -15192,6 +15192,42 @@ const clientSideAlfServiceworkerEvidence: Rule = async (ctx) => {
   };
 };
 
+const alfNuServiceworkerLiveOracle: Rule = async (ctx) => {
+  if (!/alf\.nu/i.test(ctx.origin)) return NEGATIVE;
+  const testJsUrl = new URL("/ServiceWorker/test.js", ctx.origin).toString();
+  const doc = await fetchDoc(testJsUrl, { maxBytes: 4096, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const fetchListener =
+    /addEventListener\s*\(\s*['"]fetch['"]/i.test(doc.body) &&
+    /respondWith\s*\(/i.test(doc.body);
+  if (!fetchListener) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: testJsUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "alf.nu GET /ServiceWorker/test.js registers a fetch listener with respondWith(Response) — persistent ServiceWorker interception rootkit demo oracle"
+    }
+  };
+};
+
+const alfNuServiceworkerRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/alf\.nu/i.test(pageUrl) || !/\/ServiceWorker\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await alfNuServiceworkerLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "alf.nu /ServiceWorker route scan — test.js fetch listener with respondWith(Response) confirms persistent interception rootkit demo"
+    }
+  };
+};
+
 // --- Try2Hack security challenge platform (try2hack.nl) -------------------------
 const CLIENT_TRY2HACK_RES: { label: string; re: RegExp }[] = [
   {
@@ -71588,6 +71624,27 @@ function wrongsecretsChallengeIdFromUrl(url: string): string | null {
   return m?.[1] ?? null;
 }
 
+const wrongsecretsCtfHubLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets-ctf\.herokuapp\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (/\/challenge\//i.test(pageUrl)) return NEGATIVE;
+  const body = ctx.home.body;
+  if (!/WrongSecrets/i.test(body)) return NEGATIVE;
+  const challengeLinks = body.match(/href=["']\/challenge\/challenge-\d+["']/gi) ?? [];
+  if (challengeLinks.length < 5) return NEGATIVE;
+  if (!/challenge-0["']/i.test(body) || !/challenge-8["']/i.test(body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: ctx.origin,
+      challengeLinks: challengeLinks.length,
+      snippet: body.match(/Challenge 0[\s\S]{0,40}/i)?.[0]?.slice(0, 80) ?? "challenge-0 through challenge-8",
+      note: "OWASP WrongSecrets CTF hub exposes challenge-0 through challenge-8 walkthrough routes — condensed CTF training instance oracle"
+    }
+  };
+};
+
 const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
   if (!/wrongsecrets/i.test(pageUrl)) return NEGATIVE;
@@ -92856,6 +92913,7 @@ export const RULES: Record<string, Rule> = {
   juiceShopOpenRedirectRouteLiveOracle,
   juiceShopFileUploadLiveOracle,
   juiceShopFileUploadRouteLiveOracle,
+  wrongsecretsCtfHubLiveOracle,
   wrongsecretsChallengeLiveOracle,
   wrongsecretsChallengeRouteLiveOracle,
   wrongsecretsChallenge1GitHardcodedLiveOracle,
@@ -94266,6 +94324,8 @@ export const RULES: Record<string, Rule> = {
   clientSideRogueloopXxsCourseEvidence,
   clientSideEpicdetectEvidence,
   clientSideAlfServiceworkerEvidence,
+  alfNuServiceworkerLiveOracle,
+  alfNuServiceworkerRouteLiveOracle,
   clientSideBurpBountyLabEvidence,
   burpbountyXssReflectLiveOracle,
   burpbountySqliLoginLiveOracle,

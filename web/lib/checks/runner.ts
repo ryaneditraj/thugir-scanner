@@ -2703,6 +2703,7 @@ const DEEP_RULES = new Set<string>([
   "vaultappNotesIdorRouteLiveOracle",
   "vaultappDocumentsIdorLiveOracle",
   "vaultappDocumentsIdorRouteLiveOracle",
+  "wrongsecretsCtfHubLiveOracle",
   "wrongsecretsChallengeLiveOracle",
   "wrongsecretsChallengeRouteLiveOracle",
   "wrongsecretsChallenge1GitHardcodedRouteLiveOracle",
@@ -3420,6 +3421,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideRogueloopXxsCourseEvidence",
   "clientSideEpicdetectEvidence",
   "clientSideAlfServiceworkerEvidence",
+  "alfNuServiceworkerLiveOracle",
+  "alfNuServiceworkerRouteLiveOracle",
   "clientSideBurpBountyLabEvidence",
   "burpbountyXssReflectLiveOracle",
   "burpbountySqliLoginLiveOracle",
@@ -10293,8 +10296,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     }
     return out;
   })();
-  const wrongSecretsHubPrioritySeeds = /wrongsecrets\.herokuapp\.com/i.test(home.finalUrl)
-    ? [
+  const wrongSecretsHubPrioritySeeds = /wrongsecrets(?:-ctf)?\.herokuapp\.com/i.test(home.finalUrl)
+    ? /wrongsecrets-ctf\.herokuapp\.com/i.test(home.finalUrl)
+      ? [
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-0",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-1",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-2",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-3",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-4",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-5",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-6",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-7",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-8"
+        ]
+      : [
         "https://wrongsecrets.herokuapp.com/challenge/challenge-0",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-1",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-2",
@@ -10420,6 +10435,34 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://ssrf.vulnlab.dev/parser",
         "https://ssrf.vulnlab.dev/blind",
         "https://ssrf.vulnlab.dev/webhook"
+      ]
+    : [];
+  const sstiVulnlabPrioritySeeds = /ssti\.vulnlab\.dev/i.test(home.finalUrl)
+    ? [
+        "https://ssti.vulnlab.dev/basic/",
+        "https://ssti.vulnlab.dev/format/",
+        "https://ssti.vulnlab.dev/filtered/",
+        "https://ssti.vulnlab.dev/sandboxed/",
+        "https://ssti.vulnlab.dev/second-order/",
+        "https://ssti.vulnlab.dev/meta/"
+      ]
+    : [];
+  const sqliVulnlabPrioritySeeds = /sqli\.vulnlab\.dev/i.test(home.finalUrl)
+    ? [
+        "https://sqli.vulnlab.dev/error/",
+        "https://sqli.vulnlab.dev/union/",
+        "https://sqli.vulnlab.dev/blind-bool/",
+        "https://sqli.vulnlab.dev/blind-time/",
+        "https://sqli.vulnlab.dev/second-order/"
+      ]
+    : [];
+  const xssVulnlabPrioritySeeds = /xss\.vulnlab\.dev/i.test(home.finalUrl)
+    ? [
+        "https://xss.vulnlab.dev/reflected/",
+        "https://xss.vulnlab.dev/dom/",
+        "https://xss.vulnlab.dev/stored/",
+        "https://xss.vulnlab.dev/mxss/",
+        "https://xss.vulnlab.dev/csp-bypass/jsonp/"
       ]
     : [];
   const bypass403PrioritySeeds = /bypass403\.vercel\.app/i.test(home.finalUrl)
@@ -10650,6 +10693,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...wrongSecretsHubPrioritySeeds,
       ...ssrfDefensePlatformPrioritySeeds,
       ...ssrfVulnlabPrioritySeeds,
+      ...sstiVulnlabPrioritySeeds,
+      ...sqliVulnlabPrioritySeeds,
+      ...xssVulnlabPrioritySeeds,
       ...bypass403PrioritySeeds,
       ...webSecurityLearningModulePrioritySeeds,
       ...owaspTop10LabsPrioritySeeds,
@@ -11241,6 +11287,23 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
       if (/pentest-ground\.com:81/i.test(origin) && p.slug.startsWith("pentest-ground-guardian-leaks")) return -2;
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
+      if (/ssti\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssti-vulnlab")) return -2;
+      if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
+      if (/xss\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("xss-vulnlab")) return -2;
+      if (/alf\.nu/i.test(origin) && p.slug.startsWith("alf-nu-serviceworker")) return -2;
+      if (
+        /alf\.nu/i.test(origin) &&
+        /\/ServiceWorker\b/i.test(targetInput) &&
+        p.slug.startsWith("alf-nu-serviceworker")
+      )
+        return -3;
+      if (/wrongsecrets-ctf\.herokuapp\.com/i.test(origin) && p.slug.startsWith("wrongsecrets-ctf")) return -2;
+      if (
+        /wrongsecrets-ctf\.herokuapp\.com/i.test(origin) &&
+        (targetInput === origin || targetInput === `${origin}/` || /\/challenge\//i.test(targetInput)) &&
+        p.slug.startsWith("wrongsecrets-")
+      )
+        return -3;
       if (/ssrf-defense-platform\.onrender\.com/i.test(origin) && p.slug.startsWith("ssrf-defense-platform")) return -2;
       if (
         /ssrf-defense-platform\.onrender\.com/i.test(origin) &&

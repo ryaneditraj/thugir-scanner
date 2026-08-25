@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-25T09:07:27.635Z",
-  "total": 2636,
-  "uniqueSlugs": 2628,
+  "generatedAt": "2026-08-25T10:35:25.679Z",
+  "total": 2639,
+  "uniqueSlugs": 2631,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2618,
+    "generic": 2621,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2551,
+    "deep": 2554,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 541,
-    "Exposed secret": 106,
+    "Broken access control": 543,
+    "Exposed secret": 107,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -79,6 +79,8 @@
     "ai-security-supply-chain-route-live-oracle",
     "ai-security-vulnerable-deps-route-live-oracle",
     "ai-security-xss-route-live-oracle",
+    "alf-nu-serviceworker-live-oracle",
+    "alf-nu-serviceworker-route-live-oracle",
     "all-seeing-eye-hello-route-live-oracle",
     "all-seeing-eye-read-route-live-oracle",
     "appsec-ci-django-admin-live-oracle",
@@ -2585,6 +2587,7 @@
     "wrongsecrets-challenge-9-terraform-route-live-oracle",
     "wrongsecrets-challenge-live-oracle",
     "wrongsecrets-challenge-route-live-oracle",
+    "wrongsecrets-ctf-hub-live-oracle",
     "wrongsecrets-error-demo-database-connection-live-oracle",
     "wrongsecrets-error-demo-database-connection-route-live-oracle",
     "wrongsecrets-heroku-undeployed-challenge-live-oracle",

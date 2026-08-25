@@ -10499,6 +10499,31 @@
   "discovery_urls_added": 24,
   "priority_discovery_urls": [
     {
+      "url": "https://alf.nu/ServiceWorker",
+      "source": "Erling Ellingsen alf.nu — ServiceWorker fetch interception rootkit demo (live test.js oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/",
+      "source": "OWASP WrongSecrets CTF — condensed challenge-0..8 hub instance",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/basic/",
+      "source": "sampsonc/vulnlab.dev — Jinja2 SSTI basic lab (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sqli.vulnlab.dev/error/",
+      "source": "sampsonc/vulnlab.dev — error-based SQLi login lab",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/reflected/",
+      "source": "sampsonc/vulnlab.dev — reflected XSS lab",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://dvwu.vercel.app/labs/csrf",
       "source": "zahidoverflow/dvwu — CSRF training lab route (Vercel live demo; /labs/* portal)",
       "auth": "public_demo"

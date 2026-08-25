@@ -32231,6 +32231,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-ctf-hub-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets CTF hub live oracle",
+    description:
+      "wrongsecrets-ctf.herokuapp.com hub lists challenge-0 through challenge-8 walkthrough routes — condensed CTF training instance oracle.",
+    impactOneline:
+      "Public WrongSecrets CTF deployments expose multiple secret-hiding challenge walkthroughs without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsCtfHubLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets CTF is intentional training software — isolate it from production secret stores.",
+      steps: [
+        "Run CTF instances only on isolated scanner evaluation infrastructure.",
+        "Never reuse CTF challenge secrets or patterns in production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets CTF hub exposes challenge-0 through challenge-8 walkthroughs. Show how to isolate training CTF instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -49477,6 +49502,57 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host user files on sandbox subdomains. Show how to block ServiceWorker registration and prevent persistent fetch interception after XSS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "alf-nu-serviceworker-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "alf.nu ServiceWorker fetch interception live oracle",
+    description:
+      "GET alf.nu/ServiceWorker/test.js registers addEventListener('fetch') with respondWith(Response) — confirms the persistent ServiceWorker rootkit interception demo.",
+    impactOneline:
+      "ServiceWorker fetch handlers on sandbox origins let attackers persistently intercept secret file URLs after a single XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "alfNuServiceworkerLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block Service-Worker registration on sandbox file-serving origins.",
+      steps: [
+        "Reject requests with Service-Worker: script header on user-content subdomains.",
+        "Serve untrusted uploads from a separate origin without ServiceWorker scope.",
+        "Use per-file signed URLs instead of obscurity for secret file names on shared domains."
+      ]
+    },
+    fixPrompt:
+      "Our sandbox subdomain allows ServiceWorker registration with fetch interception. Show how to block Service-Worker headers and isolate user content.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "alf-nu-serviceworker-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "alf.nu ServiceWorker route live oracle",
+    description:
+      "When scanning /ServiceWorker, GET test.js confirms fetch listener with respondWith(Response) — route-specific ServiceWorker interception oracle.",
+    impactOneline:
+      "ServiceWorker fetch handlers on sandbox origins let attackers persistently intercept secret file URLs after a single XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "alfNuServiceworkerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block Service-Worker registration on sandbox file-serving origins.",
+      steps: [
+        "Reject Service-Worker: script on user-content subdomains.",
+        "Isolate untrusted uploads on origins without ServiceWorker scope."
+      ]
+    },
+    fixPrompt:
+      "Our /ServiceWorker route exposes a fetch interception demo via test.js. Show ServiceWorker hardening for sandbox domains.",
     version: 1,
     enabled: true
   },
