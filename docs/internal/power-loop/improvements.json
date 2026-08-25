@@ -4727,6 +4727,24 @@
       "slug": "burpbounty-weblogic-console-path-priority",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: BURPBOUNTY_WEBLOGIC_PATHS reordered — GET /console/login/LoginForm.jsp (HTTP 200 Oracle WebLogic console) before 404 /cve/weblogic/* paths; burpbountylab.com/cve/weblogic/ route scan 98 findings incl burpbounty-weblogic-console-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-oracle-escape-mirror-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: juiceShopMirrorProbeDoc + probeJuiceShopJwtAlgNone mirror fallback for track-order, wallet/balance, captcha, security-question, jwt-alg-none live oracles when Heroku/demo.owasp-juice.shop returns 503; demo.owasp-juice.shop/rest/wallet/balance findings 0→2 (+juice-shop-wallet-balance-bola-route-live-oracle); /rest/track-order/1 findings 0→2 (+juice-shop-track-order-idor-route-live-oracle); benchmark juice-shop.herokuapp.com 48 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-bootstrap-oracle-thin-readiness",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: juiceShopBootstrap post-loop retries for /rest/captcha/, /rest/wallet/balance, /rest/user/security-question, /rest/user/authentication-details after core REST wake — addresses thin-pass gap for captcha-bypass, wallet-balance, jwt-alg-none, security-question-user oracles; benchmark 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-demo-route-priority-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: priority_discovery_urls prepended demo.owasp-juice.shop/rest/wallet/balance + /rest/track-order/1 + wrongsecrets challenge-58; route scans fire mirror-backed wallet BOLA + track-order IDOR oracles on 503 Heroku demo host; benchmark 6/6 maintained"
     }
   ]
 }

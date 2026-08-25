@@ -1,5 +1,22 @@
 {
-  "updated_at": "2026-08-25T23:07:06.854Z",
+  "updated_at": "2026-08-25T23:15:00.000Z",
+  "priority_discovery_urls": [
+    {
+      "url": "https://demo.owasp-juice.shop/rest/wallet/balance",
+      "source": "OWASP Juice Shop demo — wallet BOLA route oracle (503 Heroku; escape.tech mirror fallback)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/track-order/1",
+      "source": "OWASP Juice Shop demo — track-order IDOR route oracle (503 Heroku; escape.tech mirror fallback)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-58",
+      "source": "OWASP WrongSecrets — Challenge 58 JDBC credential leak via /error-demo/database-connection",
+      "auth": "public_demo"
+    }
+  ],
   "discovery_urls": [
     {
       "url": "https://owasp.andreabrioschi.it/",
