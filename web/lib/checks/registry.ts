@@ -70656,7 +70656,7 @@ const juiceShopRecyclesBolaLiveOracle: Rule = async (ctx) => {
   let sampleSnippet = "";
   for (const id of [1, 2, 3]) {
     const url = new URL(`/api/Recycles/${id}`, ctx.origin).toString();
-    const doc = await ctx.probe.get(url, { maxBytes: 4096 });
+    const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 12000 });
     if (doc.status < 200 || doc.status >= 400) continue;
     if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"UserId"\s*:\s*\d+/.test(doc.body)) continue;
     const userIdMatch = doc.body.match(/"UserId"\s*:\s*(\d+)/);

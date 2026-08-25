@@ -42,6 +42,26 @@ const BENCHMARK_MIN_FINDINGS = 5;
 const BENCHMARK_JUICE_SHOP_RICH_FINDINGS = 15;
 const BENCHMARK_RETRY_DELAY_MS = 12000;
 const BENCHMARK_FINAL_RETRY_DELAY_MS = 25000;
+/** demo.owasp-juice.shop/rest/recycles/* and similar routes can hang >25min on deep crawl. */
+const DISCOVERY_SCAN_TIMEOUT_MS = Number(process.env.POWER_SCAN_TIMEOUT_MS || "1200000");
+
+async function runDeepScanWithTimeout(
+  url: string,
+  opts?: { maxScripts?: number }
+): Promise<Awaited<ReturnType<typeof runDeepScan>>> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(
+      () => reject(new Error(`scan timeout after ${DISCOVERY_SCAN_TIMEOUT_MS}ms`)),
+      DISCOVERY_SCAN_TIMEOUT_MS
+    );
+  });
+  try {
+    return await Promise.race([runDeepScan(url, opts), timeout]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
 
 /** vaultapp.vercel.app hosts Clutch-It — MRMcyber VaultApp lab lives on vaultapp-omega.vercel.app */
 function canonicalDiscoveryUrl(url: string): string {
@@ -192,7 +212,7 @@ async function scanOne(
   };
 
   try {
-    const deep = await runDeepScan(entry.url, { maxScripts: 24 });
+    const deep = await runDeepScanWithTimeout(entry.url, { maxScripts: 24 });
     let findings = [...deep.findings];
 
     // AI deep probe (requires API keys in env — skips gracefully if disabled)
