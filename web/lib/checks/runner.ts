@@ -10336,6 +10336,22 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-34",
         "https://wrongsecrets.herokuapp.com/challenge/35",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-35",
+        "https://wrongsecrets.herokuapp.com/challenge/36",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-36",
+        "https://wrongsecrets.herokuapp.com/challenge/37",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-37",
+        "https://wrongsecrets.herokuapp.com/challenge/38",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-38",
+        "https://wrongsecrets.herokuapp.com/challenge/39",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-39",
+        "https://wrongsecrets.herokuapp.com/challenge/40",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-40",
+        "https://wrongsecrets.herokuapp.com/challenge/41",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-41",
+        "https://wrongsecrets.herokuapp.com/challenge/42",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-42",
+        "https://wrongsecrets.herokuapp.com/challenge/43",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-43",
         "https://wrongsecrets.herokuapp.com/challenge/8",
         "https://wrongsecrets.herokuapp.com/challenge/59",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-59",
@@ -12028,6 +12044,60 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?33\b/i.test(targetInput) &&
         p.slug.startsWith("wrongsecrets-challenge-33")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?35\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-35")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?36\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-36")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?37\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-37")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?38\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-38")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?39\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-39")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?40\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-40")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?41\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-41")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?42\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-42")
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?43\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-challenge-43")
       )
         return -3;
       if (
