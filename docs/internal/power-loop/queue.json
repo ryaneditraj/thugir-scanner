@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T03:06:00.000Z",
+  "updated_at": "2026-08-25T04:06:00.000Z",
   "discovery_urls": [
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-20",
@@ -10529,7 +10529,32 @@
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
       "source": "OWASP WrongSecrets — Challenge 63 secrets oracle (official Heroku demo)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/file-upload",
+      "source": "zahidoverflow/dvwu — file upload training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/xxe",
+      "source": "zahidoverflow/dvwu — XXE training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/deserialization",
+      "source": "zahidoverflow/dvwu — insecure deserialization training lab route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/jwt",
+      "source": "zahidoverflow/dvwu — JWT attacks training lab route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/ssti",
+      "source": "zahidoverflow/dvwu — SSTI training lab route (Vercel live demo)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 15
+  "discovery_urls_added": 20
 }
