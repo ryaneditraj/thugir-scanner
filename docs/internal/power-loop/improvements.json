@@ -4493,6 +4493,24 @@
       "slug": "juice-shop-recycles-probe-timeout",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: juiceShopRecyclesBolaLiveOracle probes now use 12s timeoutMs; power-scan wraps runDeepScan in 20min DISCOVERY_SCAN_TIMEOUT_MS guard for hung demo.owasp-juice.shop/recycles routes; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:queue",
+      "slug": "power-scan-priority-discovery-urls",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: power-scan.ts merges queue.priority_discovery_urls before discovery_urls with dedupe; POWER_SCAN_LIMIT=5 drained all 5 priority targets first; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-wrongsecrets-pending-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: moved dvwu.vercel.app/labs/csrf + /labs/idor + wrongsecrets challenge-6/8/63 to priority_discovery_urls; csrf 0→14 (+dvwu-csrf-route-live-oracle +dvwu-csrf-newsletter-crlf-route-live-oracle); idor 0→14 (+dvwu-idor-route-live-oracle +dvwu-dashboard-idor-route-live-oracle); challenge-6/8/63 each 0→15 with route-specific live oracles; benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-slug-priority-boundary",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsChallengeSlugMatches(N, slug) uses trailing hyphen so challenge-6 priority no longer matches challenge-60..69 slugs; challenge-6 route scan fires only wrongsecrets-challenge-6-k8s-secret-route-live-oracle; benchmark 6/6 maintained"
     }
   ]
 }
