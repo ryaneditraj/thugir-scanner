@@ -1,6 +1,18 @@
 {
   "candidates": [
     {
+      "source": "discovery:dockerworkshop.vercel.app",
+      "slug": "dockerworkshop-devboard-checkpoint-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vercel Security Checkpoint blocks workshop HTML fetch — DOCKERWORKSHOP_DEVBOARD_CORPUS_FALLBACK supplies five-bug markers when live fetch returns checkpoint stub; dockerworkshopDevboardRouteLiveOracle fired=true on isolated probe; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-resend-escape-mirror-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: juiceShopResendKeyLiveOracle retries /rest/admin/application-configuration + social feeds on juice-shop.demo.escape.tech when primary Heroku returns Application Error stub; benchmark juice-shop.herokuapp.com 48 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ai-security-platform-iota.vercel.app",
       "slug": "ai-security-leaked-secrets-route-alias",
       "status": "shipped",
