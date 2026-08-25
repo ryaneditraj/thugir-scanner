@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-25T15:35:00.000Z",
+  "updated_at": "2026-08-25T16:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/users/one/admin_user/info",
+      "source": "NeuraLegion/brokencrystals — mass-assignment PUT /api/users/one/{email}/info oracle (priority drain)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/open-redirect",
+      "source": "AI & Security Platform — CWE-601 open redirect challenge oracle (priority drain)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/admin-console",
+      "source": "AI & Security Platform — cookie auth bypass challenge oracle (priority drain)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/insecure-passwords",
+      "source": "AI & Security Platform — CWE-521 insecure password storage oracle (priority drain)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/api/users",
+      "source": "JuaniVeltri/vuln-expose — plaintext password + SQL echo API oracle (priority drain)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*))",
       "source": "NeuraLegion/brokencrystals — LDAP injection via /api/users/ldap query param (priority drain)",

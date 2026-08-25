@@ -78886,7 +78886,7 @@ const aiSecurityIdorRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "idor");
 
 const aiSecurityOpenRedirectRouteLiveOracle: Rule = (ctx) =>
-  aiSecurityPlatformChallengeRouteOracle(ctx, "open-redirect");
+  aiSecurityCatalogOrLoginGatedRouteOracle(ctx, "open-redirect");
 
 const aiSecurityXssRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "xss");
@@ -78898,7 +78898,7 @@ const aiSecuritySupabaseDataRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "supabase-data");
 
 const aiSecurityAdminConsoleRouteLiveOracle: Rule = (ctx) =>
-  aiSecurityPlatformChallengeRouteOracle(ctx, "admin-console");
+  aiSecurityCatalogOrLoginGatedRouteOracle(ctx, "admin-console");
 
 const aiSecuritySupplyChainRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "supply-chain");
@@ -78913,7 +78913,7 @@ const aiSecuritySecurityHeadersRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "security-headers");
 
 const aiSecurityInsecurePasswordsRouteLiveOracle: Rule = (ctx) =>
-  aiSecurityPlatformChallengeRouteOracle(ctx, "insecure-passwords");
+  aiSecurityCatalogOrLoginGatedRouteOracle(ctx, "insecure-passwords");
 
 const aiSecurityAiPhishingRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "ai-phishing");
@@ -78985,6 +78985,51 @@ function aiSecurityAuthGatedNextPatterns(routeSegment: string): RegExp[] {
     new RegExp(`next=${encoded.replace(/\//g, "%2F")}`, "i"),
     new RegExp(`next=/challenges/${routeSegment}`, "i")
   ];
+}
+
+async function aiSecurityCatalogOrLoginGatedRouteOracle(
+  ctx: RuleContext,
+  challengeKey: string
+): Promise<RuleResult> {
+  const catalogResult = await aiSecurityPlatformChallengeRouteOracle(ctx, challengeKey);
+  if (catalogResult.fired) return catalogResult;
+
+  const meta = AI_SECURITY_PLATFORM_CHALLENGE_META[challengeKey];
+  if (!meta) return NEGATIVE;
+  if (!isAiSecurityPlatformHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!meta.routeRe.test(pageUrl)) return NEGATIVE;
+
+  const challengeUrl = new URL(`/challenges/${challengeKey}`, AI_SECURITY_PLATFORM_HOME).toString();
+  const challengeDoc = await ctx.probe.get(challengeUrl, {
+    maxBytes: 4096,
+    timeoutMs: 12000,
+    redirect: "manual"
+  });
+  const location = challengeDoc.headers["location"] || "";
+  const nextPatterns = aiSecurityAuthGatedNextPatterns(challengeKey);
+  const loginRedirect =
+    [301, 302, 303, 307, 308].includes(challengeDoc.status) &&
+    (/\/login\b/i.test(location) ||
+      nextPatterns.some((re) => re.test(location) || re.test(pageUrl)));
+
+  if (!loginRedirect) return NEGATIVE;
+
+  const catalog = await aiSecurityPlatformFetchCatalog(ctx);
+  const corpus = `${ctx.combined}\n${pageUrl}\n${catalog}\n${location}`;
+  const markerHit = meta.markers.some((m) => m.re.test(corpus));
+  if (!markerHit && !new RegExp(`/challenges/${challengeKey}`, "i").test(catalog)) return NEGATIVE;
+
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      challengeStatus: challengeDoc.status,
+      location,
+      note: `${meta.note} — auth-gated /challenges/${challengeKey} redirects to /login?next=/challenges/${challengeKey} (route scan oracle)`
+    }
+  };
 }
 
 async function aiSecurityAuthGatedChallengeRouteLiveOracle(

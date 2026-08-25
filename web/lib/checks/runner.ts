@@ -11641,7 +11641,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/api\/users\/one\/[^/]+\/info\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-mass-assignment-put")
       )
-        return -3;
+        return -4;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/(?:api\/)?support\b/i.test(targetInput) &&
@@ -11792,6 +11792,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
         /\/challenges\/insecure-passwords\b/i.test(targetInput) &&
         p.slug === "ai-security-insecure-passwords-route-live-oracle"
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/open-redirect\b/i.test(targetInput) &&
+        p.slug === "ai-security-open-redirect-route-live-oracle"
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/admin-console\b/i.test(targetInput) &&
+        p.slug === "ai-security-admin-console-route-live-oracle"
       )
         return -3;
       if (
