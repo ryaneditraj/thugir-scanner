@@ -14042,6 +14042,105 @@ const burpbountyRubyCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const BURPBOUNTY_FORTIOS_PATHS = [
+  "/cve/fortios/remote/login",
+  "/fortios/remote/login",
+  "/cve/forti/"
+] as const;
+
+const burpbountyFortiosRemoteLoginLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  for (const path of BURPBOUNTY_FORTIOS_PATHS) {
+    const probeUrl = new URL(path, ctx.origin).toString();
+    const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (!/<h1>\s*FortiOS\s*<\/h1>/i.test(doc.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url: probeUrl,
+        snippet: doc.body.slice(0, 160).trim(),
+        note: "Burp Bounty Lab FortiOS SSL VPN login fingerprint — FortiOS CVE profile oracle distinct from generic hub fingerprinting"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const BURPBOUNTY_WEBLOGIC_PATHS = [
+  "/cve/weblogic/console/login/LoginForm.jsp",
+  "/console/login/LoginForm.jsp",
+  "/cve/weblogic/"
+] as const;
+
+const burpbountyWeblogicConsoleLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  for (const path of BURPBOUNTY_WEBLOGIC_PATHS) {
+    const probeUrl = new URL(path, ctx.origin).toString();
+    const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (!/Oracle WebLogic Server Administration Console/i.test(doc.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        url: probeUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "Burp Bounty Lab WebLogic administration console fingerprint — WebLogic CVE profile oracle distinct from generic hub fingerprinting"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const burpbountyGraphqlQueryLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/graphql", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: "{ __typename }" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: { data?: { __typename?: string } } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as { data?: { __typename?: string } };
+  } catch {
+    return NEGATIVE;
+  }
+  if (parsed?.data?.__typename !== "Query") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      typename: parsed.data.__typename,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab POST /graphql with { __typename } returns Query typename JSON — GraphQL endpoint profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyFortiosRemoteLoginRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/(?:cve\/)?forti(?:os)?(?:\/remote\/login)?\/?$/i,
+  burpbountyFortiosRemoteLoginLiveOracle,
+  "Burp Bounty Lab FortiOS route scan — SSL VPN login fingerprint confirms FortiOS CVE profile oracle"
+);
+
+const burpbountyWeblogicConsoleRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/(?:cve\/)?weblogic(?:\/console\/login\/LoginForm\.jsp)?\/?$/i,
+  burpbountyWeblogicConsoleLiveOracle,
+  "Burp Bounty Lab WebLogic route scan — administration console fingerprint confirms WebLogic CVE profile oracle"
+);
+
+const burpbountyGraphqlQueryRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/graphql(?:\/query)?\/?$/i,
+  burpbountyGraphqlQueryLiveOracle,
+  "Burp Bounty Lab /graphql route scan — POST { __typename } returns Query typename JSON — GraphQL endpoint profile oracle"
+);
+
 const burpbountyWpLfiCveLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/cve/wp/local-file-inclusion", ctx.origin);
@@ -94472,6 +94571,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyCrlfSetRouteLiveOracle,
   burpbountyRceEvalRouteLiveOracle,
   burpbountyAiCompletionsRouteLiveOracle,
+  burpbountyFortiosRemoteLoginRouteLiveOracle,
+  burpbountyWeblogicConsoleRouteLiveOracle,
+  burpbountyGraphqlQueryRouteLiveOracle,
   burpbountyXssEncodedLiveOracle,
   burpbountySsrfImgLiveOracle,
   burpbountySsrfImgRouteLiveOracle,
@@ -94508,6 +94610,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyNetsweeperCveLiveOracle,
   burpbountyZohoCveLiveOracle,
   burpbountyRubyCveLiveOracle,
+  burpbountyFortiosRemoteLoginLiveOracle,
+  burpbountyWeblogicConsoleLiveOracle,
+  burpbountyGraphqlQueryLiveOracle,
   burpbountyWpLfiCveLiveOracle,
   burpbountySharefileCveLiveOracle,
   burpbountyArticaCveLiveOracle,

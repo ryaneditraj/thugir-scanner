@@ -3485,6 +3485,9 @@ const DEEP_RULES = new Set<string>([
   "burpbountyCrlfSetRouteLiveOracle",
   "burpbountyRceEvalRouteLiveOracle",
   "burpbountyAiCompletionsRouteLiveOracle",
+  "burpbountyFortiosRemoteLoginRouteLiveOracle",
+  "burpbountyWeblogicConsoleRouteLiveOracle",
+  "burpbountyGraphqlQueryRouteLiveOracle",
   "burpbountySqliUserRouteLiveOracle",
   "burpbountySstiPreviewLiveOracle",
   "burpbountyXssUrlLiveOracle",
@@ -3518,6 +3521,9 @@ const DEEP_RULES = new Set<string>([
   "burpbountyNetsweeperCveLiveOracle",
   "burpbountyZohoCveLiveOracle",
   "burpbountyRubyCveLiveOracle",
+  "burpbountyFortiosRemoteLoginLiveOracle",
+  "burpbountyWeblogicConsoleLiveOracle",
+  "burpbountyGraphqlQueryLiveOracle",
   "burpbountyWpLfiCveLiveOracle",
   "burpbountySharefileCveLiveOracle",
   "burpbountyArticaCveLiveOracle",
@@ -10373,6 +10379,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-42",
         "https://wrongsecrets.herokuapp.com/challenge/43",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-43",
+        "https://wrongsecrets.herokuapp.com/challenge/55",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-55",
+        "https://wrongsecrets.herokuapp.com/challenge/56",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-56",
         "https://wrongsecrets.herokuapp.com/challenge/57",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
         "https://wrongsecrets.herokuapp.com/challenge/58",
@@ -12099,8 +12109,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
-        /\/challenge\/(?:challenge-)?64\b/i.test(targetInput) &&
-        wrongsecretsChallengeSlugMatches(64, p.slug)
+        /\/challenge\/(?:challenge-)?55\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(55, p.slug)
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?56\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(56, p.slug)
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?57\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(57, p.slug)
       )
         return -3;
       if (
@@ -12113,6 +12135,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?58\b/i.test(targetInput) &&
         wrongsecretsChallengeSlugMatches(58, p.slug)
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?64\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(64, p.slug)
       )
         return -3;
       if (
@@ -13091,6 +13119,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/burpbountylab\.com/i.test(origin) && /\/crlf\/set\b/i.test(targetInput) && p.slug === "burpbounty-crlf-set-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/rce\/eval\b/i.test(targetInput) && p.slug === "burpbounty-rce-eval-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/ai\/v1\/completions\b/i.test(targetInput) && p.slug === "burpbounty-ai-completions-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?forti(?:os)?(?:\/remote\/login)?\/?$/i.test(targetInput) && p.slug === "burpbounty-fortios-remote-login-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?weblogic(?:\/console\/login\/LoginForm\.jsp)?\/?$/i.test(targetInput) && p.slug === "burpbounty-weblogic-console-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/graphql(?:\/query)?\/?$/i.test(targetInput) && p.slug === "burpbounty-graphql-query-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/command-injection\/?$/i.test(targetInput) && p.slug === "sec-research-lab-command-injection-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/jwt-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-jwt-lab-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/prototype-pollution\/?$/i.test(targetInput) && p.slug === "sec-research-lab-prototype-pollution-route-live-oracle") return -3;

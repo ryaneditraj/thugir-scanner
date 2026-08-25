@@ -52079,6 +52079,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-fortios-remote-login-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab FortiOS SSL VPN login live oracle",
+    description:
+      "GET /cve/fortios/remote/login returns FortiOS SSL VPN login fingerprint — the Burp Bounty FortiOS CVE profile oracle.",
+    impactOneline:
+      "Live FortiOS VPN fingerprint probe confirms route-specific FortiOS CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyFortiosRemoteLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch FortiOS appliances and restrict SSL VPN interfaces to trusted networks.",
+      steps: [
+        "Apply Fortinet security advisories for FortiOS CVEs promptly.",
+        "Disable unused VPN interfaces and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our FortiOS SSL VPN login endpoint is publicly reachable. Show FortiOS hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-fortios-remote-login-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab FortiOS route live oracle",
+    description:
+      "When scanning /cve/fortios/remote/login or /cve/forti/, GET confirms FortiOS SSL VPN login fingerprint — route-specific FortiOS CVE profile oracle.",
+    impactOneline:
+      "Route-specific FortiOS oracle confirms SSL VPN login fingerprint when scanning Burp Bounty Lab FortiOS CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyFortiosRemoteLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch FortiOS appliances and restrict SSL VPN interfaces to trusted networks.",
+      steps: [
+        "Apply Fortinet security advisories for FortiOS CVEs promptly.",
+        "Disable unused VPN interfaces and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our FortiOS route scan confirms an SSL VPN login fingerprint. Show FortiOS hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-weblogic-console-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab WebLogic console live oracle",
+    description:
+      "GET /console/login/LoginForm.jsp returns Oracle WebLogic Server Administration Console fingerprint — the Burp Bounty WebLogic CVE profile oracle.",
+    impactOneline:
+      "Live WebLogic console fingerprint probe confirms route-specific WebLogic CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWeblogicConsoleLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch WebLogic and restrict administration consoles to trusted management networks.",
+      steps: [
+        "Apply Oracle WebLogic security advisories promptly.",
+        "Block public access to /console/ management paths.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our WebLogic administration console is publicly reachable. Show WebLogic hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-weblogic-console-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab WebLogic route live oracle",
+    description:
+      "When scanning /cve/weblogic/ or /console/login/LoginForm.jsp, GET confirms Oracle WebLogic Server Administration Console fingerprint — route-specific WebLogic CVE profile oracle.",
+    impactOneline:
+      "Route-specific WebLogic oracle confirms administration console fingerprint when scanning Burp Bounty Lab WebLogic CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWeblogicConsoleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch WebLogic and restrict administration consoles to trusted management networks.",
+      steps: [
+        "Apply Oracle WebLogic security advisories promptly.",
+        "Block public access to /console/ management paths.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our WebLogic route scan confirms an administration console fingerprint. Show WebLogic hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-graphql-query-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab GraphQL endpoint live oracle",
+    description:
+      "POST /graphql with { __typename } returns Query typename JSON — the Burp Bounty GraphQL endpoint profile oracle.",
+    impactOneline:
+      "Live GraphQL typename probe confirms route-specific GraphQL endpoint oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyGraphqlQueryLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production and restrict GraphQL endpoints to authenticated clients.",
+      steps: [
+        "Reject unauthenticated GraphQL queries on public endpoints.",
+        "Disable introspection and limit query depth/complexity.",
+        "Isolate Burp Bounty Lab GraphQL routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql endpoint responds to typename probes. Show GraphQL hardening and introspection controls.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-graphql-query-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab GraphQL route live oracle",
+    description:
+      "When scanning /graphql or /graphql/query, POST { __typename } returns Query typename JSON — route-specific GraphQL endpoint profile oracle.",
+    impactOneline:
+      "Route-specific GraphQL oracle confirms typename JSON response when scanning Burp Bounty Lab GraphQL routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyGraphqlQueryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production and restrict GraphQL endpoints to authenticated clients.",
+      steps: [
+        "Reject unauthenticated GraphQL queries on public endpoints.",
+        "Disable introspection and limit query depth/complexity.",
+        "Isolate Burp Bounty Lab GraphQL routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql route scan confirms typename JSON responses. Show GraphQL hardening and introspection controls.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-artemiskit-evidence",
     platform: "generic",
     category: "AI security",
