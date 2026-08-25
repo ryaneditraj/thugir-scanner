@@ -1,6 +1,26 @@
 {
-  "updated_at": "2026-08-25T07:08:00.000Z",
+  "updated_at": "2026-08-25T08:06:06.689Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-40",
+      "source": "OWASP WrongSecrets — Challenge 40 AES key-in-JSON cryptography oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-41",
+      "source": "OWASP WrongSecrets — Challenge 41 password shucking MD5→bcrypt oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-42",
+      "source": "OWASP WrongSecrets — Challenge 42 Spring Boot Actuator audit-event API key leak oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-43",
+      "source": "OWASP WrongSecrets — Challenge 43 documentation/subreddit secret leak oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-35",
       "source": "OWASP WrongSecrets — Challenge 35 documentation secret oracle (official Heroku demo README)",
