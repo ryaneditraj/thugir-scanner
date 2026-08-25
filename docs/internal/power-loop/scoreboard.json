@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T00:20:00.000Z",
+  "updated_at": "2026-08-25T01:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,27 @@
       ]
     }
   },
-  "total_sites_scanned": 3006,
-  "total_findings": 32272,
+  "total_sites_scanned": 3015,
+  "total_findings": 32442,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2053,
-  "discovery_findings": 25832,
+  "discovery_urls_added": 2058,
+  "discovery_findings": 25952,
   "improvements_shipped": 1227,
-  "last_run": "2026-08-25T00:20:00.000Z",
+  "last_run": "2026-08-25T01:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_url": "https://juice-shop.demo.escape.tech",
+      "primary_url": "https://juice-shop.herokuapp.com",
+      "primary_status": "503 — Heroku dyno unavailable; staging also 503",
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 575,
+      "probes_run": 597,
+      "juice_shop_live_oracles": 39,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +51,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings); secret-resend slug still absent"
+      "note": "6/6 recall on Escape.tech fallback (50 findings, 39 juice-shop live oracles); Heroku+staging 503; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 22,
-      "focus": "ai-security leaked-secrets alias + dockerworkshop DevBoard route oracle + dvwu /labs/csrf pathname fix",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 120,
+      "focus": "wrongsecrets challenge-10/11/12/13/14 new route oracles + queue drain challenge-7/9/33",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "ai-security-platform-iota.vercel.app/challenges/leaked-secrets: 2→3 findings — ai-security-leaked-config-route-live-oracle now fires on leaked-secrets URL alias",
-      "dockerworkshop.vercel.app/lab8/projects/devboard/: 4→5 findings — dockerworkshop-devboard-route-live-oracle shipped (FastAPI+Next.js 5-bug DevBoard lab)",
-      "dvwu.vercel.app/labs/csrf: 14 findings — dvwu-csrf-route-live-oracle explicit /labs/csrf pathname match"
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (50 findings, 39 live oracles) — Heroku primary 503",
+      "wrongsecrets challenge-10: wrongsecrets-challenge-10-csi-driver-route-live-oracle (15 findings)",
+      "wrongsecrets challenge-11: wrongsecrets-challenge-11-iam-escalation-route-live-oracle (15 findings)",
+      "wrongsecrets challenge-12: wrongsecrets-challenge-12-docker-route-live-oracle (15 findings)",
+      "wrongsecrets challenge-13: wrongsecrets-challenge-13-cicd-route-live-oracle (15 findings)",
+      "wrongsecrets challenge-14: wrongsecrets-challenge-14-password-manager-route-live-oracle (15 findings)",
+      "wrongsecrets challenge-7: wrongsecrets-challenge-7-vault-route-live-oracle (15 findings)",
+      "wrongsecrets challenge-9/33: terraform + k8s-stringdata route oracles (15 findings each)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "dvwu /labs/idor + wrongsecrets challenge-6/8/63 queued at end — pending drain",
-      "wrongsecrets challenge-6/7 require K8s cluster — Heroku demo may not expose K8s-specific secrets"
+      "juice-shop.herokuapp.com Heroku 503 — benchmark oracle fell back to juice-shop.demo.escape.tech",
+      "wrongsecrets challenge-48/49 + dvwu /labs/idor queued — pending drain",
+      "wrongsecrets challenge-6/8/63 at queue tail — K8s cluster may limit Heroku demo oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "ai-security-platform-iota.vercel.app/challenges/leaked-secrets": 3,
-    "dockerworkshop.vercel.app/lab8/projects/devboard/": 5,
-    "dvwu.vercel.app/labs/csrf": 14,
-    "dvwu.vercel.app/labs/ssrf": 13,
-    "dvwu.vercel.app/labs/broken-auth": 12,
-    "wrongsecrets.herokuapp.com/challenge/challenge-5": 15
+    "juice-shop.demo.escape.tech": 50,
+    "wrongsecrets.herokuapp.com/challenge/challenge-10": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-11": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-12": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-13": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-14": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-7": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-9": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-33": 15
   }
 }

@@ -1,2264 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-07-26T02:07:23.288Z",
-      "url": "https://brokencrystals.com/api/chat",
-      "auth": "benchmark",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 51,
-      "findings": [
-        {
-          "slug": "exposed-env-file",
-          "title": "Environment file reachable over HTTP",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "exposed-config-backup",
-          "title": "Config or backup file reachable over HTTP",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "exposed-git-dir",
-          "title": "Exposed .git directory",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "exposed-source-maps",
-          "title": "Source maps published to production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphiql-ui-exposed",
-          "title": "GraphiQL interactive IDE exposed in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "sqli-query-param-injection",
-          "title": "SQL injection via raw query parameter",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "xpath-injection-disclosure",
-          "title": "XPATH injection leaks credentials in XML response",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "weak-api-default-credentials",
-          "title": "JSON login API accepts common default credentials",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "command-injection-form-probe",
-          "title": "OS command injection via form POST parameter",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "ssti-template-injection",
-          "title": "Server-side template injection (SSTI) confirmed via arithmetic probe",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "server-side-eval-evidence",
-          "title": "Server handler passes request body to eval()",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-xxe-evidence",
-          "title": "Client bundle documents XXE via external entity expansion",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "xxe-xml-post-probe",
-          "title": "XXE confirmed via POST XML entity expansion",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "sqli-header-error-disclosure",
-          "title": "SQL injection via HTTP request header",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF — server fetches attacker-controlled URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "client-side-brokencrystals-evidence",
-          "title": "Broken Crystals intentionally vulnerable API lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "brokencrystals-goto-open-redirect-live-oracle",
-          "title": "Broken Crystals /api/goto open redirect oracle",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Open redirect"
-        },
-        {
-          "slug": "brokencrystals-aws-metadata-ssrf-live-oracle",
-          "title": "Broken Crystals AWS metadata SSRF oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "SSRF"
-        },
-        {
-          "slug": "brokencrystals-azure-metadata-ssrf-live-oracle",
-          "title": "Broken Crystals Azure metadata SSRF oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "SSRF"
-        },
-        {
-          "slug": "brokencrystals-hidden-upload-live-oracle",
-          "title": "Broken Crystals unrestricted file upload oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "brokencrystals-ldap-injection-live-oracle",
-          "title": "Broken Crystals LDAP injection oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "brokencrystals-secrets-live-oracle",
-          "title": "Broken Crystals /api/secrets token exposure oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "brokencrystals-safe-files-rfi-live-oracle",
-          "title": "Broken Crystals /api/safe-files remote file inclusion oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "brokencrystals-users-search-exposure-live-oracle",
-          "title": "Broken Crystals /api/users/search excessive data exposure oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Sensitive data exposure"
-        },
-        {
-          "slug": "brokencrystals-testimonials-sqli-live-oracle",
-          "title": "Broken Crystals /api/testimonials/count SQL injection oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "brokencrystals-testimonials-xss-live-oracle",
-          "title": "Broken Crystals /api/testimonials/count reflected XSS oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "brokencrystals-subscriptions-xss-live-oracle",
-          "title": "Broken Crystals /api/subscriptions mailing-list reflected XSS oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "brokencrystals-partner-login-xpath-live-oracle",
-          "title": "Broken Crystals /api/partners/partnerLogin XPATH injection oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "brokencrystals-file-raw-lfi-live-oracle",
-          "title": "Broken Crystals /api/file/raw local file inclusion oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Sensitive data exposure"
-        },
-        {
-          "slug": "brokencrystals-file-lfi-live-oracle",
-          "title": "Broken Crystals /api/file local file inclusion oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Sensitive data exposure"
-        },
-        {
-          "slug": "brokencrystals-mass-assignment-live-oracle",
-          "title": "Broken Crystals mass-assignment privilege escalation oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "brokencrystals-mass-assignment-put-live-oracle",
-          "title": "Broken Crystals PUT profile mass-assignment oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-brokencrystals-dom-xss-evidence",
-          "title": "Broken Crystals homepage DOM XSS via maptitle and search reflection",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "brokencrystals-marketplace-prototype-pollution-live-oracle",
-          "title": "Broken Crystals marketplace prototype pollution DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "exposed-api-config",
-          "title": "Unauthenticated API config exposes database credentials",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Sensitive data exposure"
-        },
-        {
-          "slug": "client-side-css-injection-evidence",
-          "title": "Client bundle reflects URL param into inline CSS",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-brokencrystals-prototype-pollution-evidence",
-          "title": "Broken Crystals marketplace prototype pollution DOM XSS disclosed",
-          "severity": "high",
-          "confidence": 0.89,
-          "category": "Injection"
-        },
-        {
-          "slug": "jwt-alg-none-accepted",
-          "title": "JWT \"none\" algorithm accepted on API route",
-          "severity": "critical",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-sitemap-sensitive-paths",
-          "title": "sitemap.xml lists sensitive routes",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vibe-public-cloud-storage-bucket",
-          "title": "Public cloud storage bucket lists objects without auth",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "stack-database-url-in-bundle",
-          "title": "Database connection string in client bundle",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "firebase-config-exposed",
-          "title": "Firebase web config present in bundle",
-          "severity": "info",
-          "confidence": 0.9,
-          "category": "Information exposure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 507,
-      "status": "ok",
-      "scanned_at": "2026-07-26T02:07:23.288Z"
-    },
-    {
-      "run_id": "2026-07-26T02:07:28.622Z",
-      "url": "https://vulnbank.org/internal/secret",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 9,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "cors-reflect-origin",
-          "title": "CORS reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vulnbank-ai-anonymous-chat-live-oracle",
-          "title": "Vuln Bank unauthenticated AI customer-support chat oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vulnbank-bopla-register-live-oracle",
-          "title": "Vuln Bank registration BOPLA privilege escalation oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vulnbank-merchant-register-live-oracle",
-          "title": "Vuln Bank merchant registration sensitive-data oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Sensitive data exposure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 547,
-      "status": "ok",
-      "scanned_at": "2026-07-26T02:07:28.622Z"
-    },
-    {
-      "run_id": "2026-07-26T02:08:55.470Z",
-      "url": "https://brokencrystals.com/api/goto",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-26T02:08:55.470Z",
-      "error": "We couldn't reach brokencrystals.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-07-26T02:08:55.693Z",
-      "url": "http://burpbountylab.com/wp/xmlrpc.php",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 91,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-dwr-util-live-oracle",
-          "title": "Burp Bounty Lab DWR util.js exposure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xss-reflect-live-oracle",
-          "title": "Burp Bounty Lab reflected XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-login-live-oracle",
-          "title": "Burp Bounty Lab SQLi login live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssti-render-live-oracle",
-          "title": "Burp Bounty Lab SSTI render live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssrf-fetch-live-oracle",
-          "title": "Burp Bounty Lab SSRF fetch live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-dom-xss-live-oracle",
-          "title": "Burp Bounty Lab DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-rce-ping-live-oracle",
-          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-parse-live-oracle",
-          "title": "Burp Bounty Lab XXE parser resolves external entities",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-cors-live-oracle",
-          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-pt-read-live-oracle",
-          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-crlf-set-live-oracle",
-          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-js-live-oracle",
-          "title": "Burp Bounty Lab JavaScript-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-search-live-oracle",
-          "title": "Burp Bounty Lab error-based SQLi search live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-disclosure-live-oracle",
-          "title": "Burp Bounty Lab AI/LLM gateway headers disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-completions-live-oracle",
-          "title": "Burp Bounty Lab legacy OpenAI completions endpoint disclosed",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-rce-eval-live-oracle",
-          "title": "Burp Bounty Lab RCE eval endpoint executes attacker code",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-drupal-user-disclosure-live-oracle",
-          "title": "Burp Bounty Lab Drupal user profile exposed without auth",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-passive-secrets-live-oracle",
-          "title": "Burp Bounty Lab passive secrets page leaks API keys",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "burpbounty-ssrf-proxy-live-oracle",
-          "title": "Burp Bounty Lab SSRF proxy fetches attacker URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-xss-attribute-live-oracle",
-          "title": "Burp Bounty Lab attribute-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-redirect-login-live-oracle",
-          "title": "Burp Bounty Lab login form open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-sqli-oob-live-oracle",
-          "title": "Burp Bounty Lab blind/OOB SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-time-live-oracle",
-          "title": "Burp Bounty Lab time-based blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-redirect-goto-live-oracle",
-          "title": "Burp Bounty Lab HTTP open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-rce-log4j-live-oracle",
-          "title": "Burp Bounty Lab Log4j JNDI lookup live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-upload-live-oracle",
-          "title": "Burp Bounty Lab XXE file-upload live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-soap-live-oracle",
-          "title": "Burp Bounty Lab SOAP XXE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-blind-live-oracle",
-          "title": "Burp Bounty Lab blind/stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-pt-readwin-live-oracle",
-          "title": "Burp Bounty Lab Windows path traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-tag-live-oracle",
-          "title": "Burp Bounty Lab tag-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-xss-comment-live-oracle",
-          "title": "Burp Bounty Lab HTML-comment XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-scheme-live-oracle",
-          "title": "Burp Bounty Lab scheme-bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-redirect-out-live-oracle",
-          "title": "Burp Bounty Lab outbound open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-pp-live-oracle",
-          "title": "Burp Bounty Lab post-payment redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-git-config-live-oracle",
-          "title": "Burp Bounty Lab .git/config source exposure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "burpbounty-collab-forgot-live-oracle",
-          "title": "Burp Bounty Lab password-reset token disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-rce-expect-live-oracle",
-          "title": "Burp Bounty Lab expect RCE executes shell commands",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-rce-echo-live-oracle",
-          "title": "Burp Bounty Lab echo RCE reflects command output",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-source-disclosure-live-oracle",
-          "title": "Burp Bounty Lab backup file exposes PHP source code",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-sqli-status-live-oracle",
-          "title": "Burp Bounty Lab status-code SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-length-live-oracle",
-          "title": "Burp Bounty Lab content-length blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pt-include-live-oracle",
-          "title": "Burp Bounty Lab PHP include reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-meta-live-oracle",
-          "title": "Burp Bounty Lab meta-refresh open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-encoded-live-oracle",
-          "title": "Burp Bounty Lab URL-encoded XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-img-live-oracle",
-          "title": "Burp Bounty Lab image-proxy SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-ssti-preview-live-oracle",
-          "title": "Burp Bounty Lab SSTI content-preview live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-url-live-oracle",
-          "title": "Burp Bounty Lab URL-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-user-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-profile live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-health-live-oracle",
-          "title": "Burp Bounty Lab AI health endpoint live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-metrics-live-oracle",
-          "title": "Burp Bounty Lab AI Prometheus metrics live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-app-backup-live-oracle",
-          "title": "Burp Bounty Lab app.py backup source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xmlrpc-live-oracle",
-          "title": "Burp Bounty Lab WordPress XML-RPC live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-sqli-user-enum-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-enumeration live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-tomcat-cve-live-oracle",
-          "title": "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-wp-login-live-oracle",
-          "title": "Burp Bounty Lab WordPress login live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-grafana-cve-live-oracle",
-          "title": "Burp Bounty Lab Grafana CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-passive-api-path-live-oracle",
-          "title": "Burp Bounty Lab API path passive-detection live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-dwr-interface-live-oracle",
-          "title": "Burp Bounty Lab DWR interface JavaScript live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-gateway-live-oracle",
-          "title": "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-backup-listing-live-oracle",
-          "title": "Burp Bounty Lab backup directory listing live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-mcp-tools-live-oracle",
-          "title": "Burp Bounty Lab AI MCP tools registry live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-api-docs-live-oracle",
-          "title": "Burp Bounty Lab OpenAPI spec live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-config-bak-live-oracle",
-          "title": "Burp Bounty Lab config.bak source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-react2shell-live-oracle",
-          "title": "Burp Bounty Lab react2shell RSC live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-spring-cloud-config-live-oracle",
-          "title": "Burp Bounty Lab Spring Cloud Config live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-text4shell-live-oracle",
-          "title": "Burp Bounty Lab Text4Shell live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pulse-cve-live-oracle",
-          "title": "Burp Bounty Lab Pulse Secure CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-cisco-cve-live-oracle",
-          "title": "Burp Bounty Lab Cisco CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-n8n-settings-cve-live-oracle",
-          "title": "Burp Bounty Lab n8n settings CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-couchdb-all-dbs-live-oracle",
-          "title": "Burp Bounty Lab CouchDB _all_dbs CVE live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-kubernetes-api-live-oracle",
-          "title": "Burp Bounty Lab Kubernetes API CVE live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-citrix-cve-live-oracle",
-          "title": "Burp Bounty Lab Citrix CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-crowd-cve-live-oracle",
-          "title": "Burp Bounty Lab Atlassian Crowd CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-firebase-cve-live-oracle",
-          "title": "Burp Bounty Lab Firebase realtime DB CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Sensitive data exposure"
-        },
-        {
-          "slug": "burpbounty-netsweeper-cve-live-oracle",
-          "title": "Burp Bounty Lab Netsweeper CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-zoho-cve-live-oracle",
-          "title": "Burp Bounty Lab Zoho ManageEngine CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-ruby-cve-live-oracle",
-          "title": "Burp Bounty Lab Ruby on Rails CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-wp-lfi-cve-live-oracle",
-          "title": "Burp Bounty Lab WordPress LFI CVE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Path traversal"
-        },
-        {
-          "slug": "burpbounty-sharefile-cve-live-oracle",
-          "title": "Burp Bounty Lab Citrix ShareFile path-traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Path traversal"
-        },
-        {
-          "slug": "burpbounty-artica-cve-live-oracle",
-          "title": "Burp Bounty Lab Artica Web Proxy CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-magmi-cve-live-oracle",
-          "title": "Burp Bounty Lab Magento MAGMI CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-f5-bash-cve-live-oracle",
-          "title": "Burp Bounty Lab F5 BIG-IP bash RCE CVE live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-netsweeper-systemstatus-cve-live-oracle",
-          "title": "Burp Bounty Lab Netsweeper systemstatus CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "exposed-infra-artifacts",
-          "title": "Infrastructure artifact reachable over HTTP",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 628,
-      "status": "ok",
-      "scanned_at": "2026-07-26T02:08:55.693Z"
-    },
-    {
-      "run_id": "2026-07-26T02:09:43.683Z",
-      "url": "http://burpbountylab.com/sqli/length?q=admin",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 91,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "graphql-introspection-enabled",
-          "title": "GraphQL introspection is enabled in production",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "phpinfo-exposed",
-          "title": "PHP phpinfo() page reachable in production",
-          "severity": "high",
-          "confidence": 0.95,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-dwr-util-live-oracle",
-          "title": "Burp Bounty Lab DWR util.js exposure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xss-reflect-live-oracle",
-          "title": "Burp Bounty Lab reflected XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-login-live-oracle",
-          "title": "Burp Bounty Lab SQLi login live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssti-render-live-oracle",
-          "title": "Burp Bounty Lab SSTI render live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ssrf-fetch-live-oracle",
-          "title": "Burp Bounty Lab SSRF fetch live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-dom-xss-live-oracle",
-          "title": "Burp Bounty Lab DOM XSS live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-rce-ping-live-oracle",
-          "title": "Burp Bounty Lab RCE ping endpoint executes shell commands",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-parse-live-oracle",
-          "title": "Burp Bounty Lab XXE parser resolves external entities",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-cors-live-oracle",
-          "title": "Burp Bounty Lab CORS API reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-pt-read-live-oracle",
-          "title": "Burp Bounty Lab path traversal reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-crlf-set-live-oracle",
-          "title": "Burp Bounty Lab CRLF endpoint reflects input into response headers",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-js-live-oracle",
-          "title": "Burp Bounty Lab JavaScript-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-search-live-oracle",
-          "title": "Burp Bounty Lab error-based SQLi search live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-disclosure-live-oracle",
-          "title": "Burp Bounty Lab AI/LLM gateway headers disclosed",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-completions-live-oracle",
-          "title": "Burp Bounty Lab legacy OpenAI completions endpoint disclosed",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-rce-eval-live-oracle",
-          "title": "Burp Bounty Lab RCE eval endpoint executes attacker code",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-drupal-user-disclosure-live-oracle",
-          "title": "Burp Bounty Lab Drupal user profile exposed without auth",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-passive-secrets-live-oracle",
-          "title": "Burp Bounty Lab passive secrets page leaks API keys",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "burpbounty-ssrf-proxy-live-oracle",
-          "title": "Burp Bounty Lab SSRF proxy fetches attacker URL",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-xss-attribute-live-oracle",
-          "title": "Burp Bounty Lab attribute-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-redirect-login-live-oracle",
-          "title": "Burp Bounty Lab login form open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-sqli-oob-live-oracle",
-          "title": "Burp Bounty Lab blind/OOB SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-time-live-oracle",
-          "title": "Burp Bounty Lab time-based blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-redirect-goto-live-oracle",
-          "title": "Burp Bounty Lab HTTP open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-rce-log4j-live-oracle",
-          "title": "Burp Bounty Lab Log4j JNDI lookup live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-upload-live-oracle",
-          "title": "Burp Bounty Lab XXE file-upload live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xxe-soap-live-oracle",
-          "title": "Burp Bounty Lab SOAP XXE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-blind-live-oracle",
-          "title": "Burp Bounty Lab blind/stored XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-pt-readwin-live-oracle",
-          "title": "Burp Bounty Lab Windows path traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-tag-live-oracle",
-          "title": "Burp Bounty Lab tag-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-xss-comment-live-oracle",
-          "title": "Burp Bounty Lab HTML-comment XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-scheme-live-oracle",
-          "title": "Burp Bounty Lab scheme-bypass SSRF live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-redirect-out-live-oracle",
-          "title": "Burp Bounty Lab outbound open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-pp-live-oracle",
-          "title": "Burp Bounty Lab post-payment redirect live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-git-config-live-oracle",
-          "title": "Burp Bounty Lab .git/config source exposure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Source exposure"
-        },
-        {
-          "slug": "burpbounty-collab-forgot-live-oracle",
-          "title": "Burp Bounty Lab password-reset token disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-rce-expect-live-oracle",
-          "title": "Burp Bounty Lab expect RCE executes shell commands",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-rce-echo-live-oracle",
-          "title": "Burp Bounty Lab echo RCE reflects command output",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-source-disclosure-live-oracle",
-          "title": "Burp Bounty Lab backup file exposes PHP source code",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-sqli-status-live-oracle",
-          "title": "Burp Bounty Lab status-code SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-sqli-length-live-oracle",
-          "title": "Burp Bounty Lab content-length blind SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pt-include-live-oracle",
-          "title": "Burp Bounty Lab PHP include reads /etc/passwd",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-redirect-meta-live-oracle",
-          "title": "Burp Bounty Lab meta-refresh open redirect live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "burpbounty-xss-encoded-live-oracle",
-          "title": "Burp Bounty Lab URL-encoded XSS live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-ssrf-img-live-oracle",
-          "title": "Burp Bounty Lab image-proxy SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "burpbounty-ssti-preview-live-oracle",
-          "title": "Burp Bounty Lab SSTI content-preview live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-xss-url-live-oracle",
-          "title": "Burp Bounty Lab URL-context XSS live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "burpbounty-sqli-user-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-profile live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-ai-health-live-oracle",
-          "title": "Burp Bounty Lab AI health endpoint live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-metrics-live-oracle",
-          "title": "Burp Bounty Lab AI Prometheus metrics live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-app-backup-live-oracle",
-          "title": "Burp Bounty Lab app.py backup source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-xmlrpc-live-oracle",
-          "title": "Burp Bounty Lab WordPress XML-RPC live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-sqli-user-enum-live-oracle",
-          "title": "Burp Bounty Lab SQLi user-enumeration live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-tomcat-cve-live-oracle",
-          "title": "Burp Bounty Lab Tomcat CVE-2020-9484 live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-wp-login-live-oracle",
-          "title": "Burp Bounty Lab WordPress login live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "burpbounty-grafana-cve-live-oracle",
-          "title": "Burp Bounty Lab Grafana CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-passive-api-path-live-oracle",
-          "title": "Burp Bounty Lab API path passive-detection live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-dwr-interface-live-oracle",
-          "title": "Burp Bounty Lab DWR interface JavaScript live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-gateway-live-oracle",
-          "title": "Burp Bounty Lab AI gateway infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-backup-listing-live-oracle",
-          "title": "Burp Bounty Lab backup directory listing live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-ai-mcp-tools-live-oracle",
-          "title": "Burp Bounty Lab AI MCP tools registry live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-api-docs-live-oracle",
-          "title": "Burp Bounty Lab OpenAPI spec live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-source-config-bak-live-oracle",
-          "title": "Burp Bounty Lab config.bak source disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-react2shell-live-oracle",
-          "title": "Burp Bounty Lab react2shell RSC live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-spring-cloud-config-live-oracle",
-          "title": "Burp Bounty Lab Spring Cloud Config live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-text4shell-live-oracle",
-          "title": "Burp Bounty Lab Text4Shell live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-pulse-cve-live-oracle",
-          "title": "Burp Bounty Lab Pulse Secure CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-cisco-cve-live-oracle",
-          "title": "Burp Bounty Lab Cisco CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-n8n-settings-cve-live-oracle",
-          "title": "Burp Bounty Lab n8n settings CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-couchdb-all-dbs-live-oracle",
-          "title": "Burp Bounty Lab CouchDB _all_dbs CVE live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "burpbounty-kubernetes-api-live-oracle",
-          "title": "Burp Bounty Lab Kubernetes API CVE live oracle",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-citrix-cve-live-oracle",
-          "title": "Burp Bounty Lab Citrix CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-crowd-cve-live-oracle",
-          "title": "Burp Bounty Lab Atlassian Crowd CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-firebase-cve-live-oracle",
-          "title": "Burp Bounty Lab Firebase realtime DB CVE live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Sensitive data exposure"
-        },
-        {
-          "slug": "burpbounty-netsweeper-cve-live-oracle",
-          "title": "Burp Bounty Lab Netsweeper CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-zoho-cve-live-oracle",
-          "title": "Burp Bounty Lab Zoho ManageEngine CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-ruby-cve-live-oracle",
-          "title": "Burp Bounty Lab Ruby on Rails CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-wp-lfi-cve-live-oracle",
-          "title": "Burp Bounty Lab WordPress LFI CVE live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Path traversal"
-        },
-        {
-          "slug": "burpbounty-sharefile-cve-live-oracle",
-          "title": "Burp Bounty Lab Citrix ShareFile path-traversal live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Path traversal"
-        },
-        {
-          "slug": "burpbounty-artica-cve-live-oracle",
-          "title": "Burp Bounty Lab Artica Web Proxy CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-magmi-cve-live-oracle",
-          "title": "Burp Bounty Lab Magento MAGMI CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "burpbounty-f5-bash-cve-live-oracle",
-          "title": "Burp Bounty Lab F5 BIG-IP bash RCE CVE live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "burpbounty-netsweeper-systemstatus-cve-live-oracle",
-          "title": "Burp Bounty Lab Netsweeper systemstatus CVE live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "exposed-infra-artifacts",
-          "title": "Infrastructure artifact reachable over HTTP",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 628,
-      "status": "ok",
-      "scanned_at": "2026-07-26T02:09:43.683Z"
-    },
-    {
-      "run_id": "2026-07-26T03:06:37.488Z",
-      "url": "https://pwnshop.ctfsecurity.com/track",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 16,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "cors-reflect-origin",
-          "title": "CORS reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-prototype-pollution-evidence",
-          "title": "Client bundle documents prototype pollution via __proto__ merge",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-prompt-injection-evidence",
-          "title": "Prompt-injection red-team or scanner functionality in client bundle",
-          "severity": "medium",
-          "confidence": 0.84,
-          "category": "AI security"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pwnshop-evidence",
-          "title": "Pwnshop OWASP Top 10 2025 e-commerce lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pwnshop-ssti-oracle",
-          "title": "Pwnshop seller preview SSTI oracle (PWN-040)",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-pwnshop-path-traversal-oracle",
-          "title": "Pwnshop invoice download path traversal oracle (PWN-038)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "pwnshop-events-audit-live-oracle",
-          "title": "Pwnshop events API exposes unauthenticated audit logs (PWN-005)",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
-          "title": "Pwnshop chat init API enables email enumeration (PWN-037)",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
-          "title": "Pwnshop forgot-password form enables email enumeration",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "vibe-hardcoded-demo-credentials",
-          "title": "Hardcoded demo credentials in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 546,
-      "status": "ok",
-      "scanned_at": "2026-07-26T03:06:37.488Z"
-    },
-    {
-      "run_id": "2026-07-26T03:06:55.482Z",
-      "url": "https://pwnshop.ctfsecurity.com/wishlist/1",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 11,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "cors-reflect-origin",
-          "title": "CORS reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-prototype-pollution-evidence",
-          "title": "Client bundle documents prototype pollution via __proto__ merge",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-prompt-injection-evidence",
-          "title": "Prompt-injection red-team or scanner functionality in client bundle",
-          "severity": "medium",
-          "confidence": 0.84,
-          "category": "AI security"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pwnshop-evidence",
-          "title": "Pwnshop OWASP Top 10 2025 e-commerce lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pwnshop-ssti-oracle",
-          "title": "Pwnshop seller preview SSTI oracle (PWN-040)",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-pwnshop-path-traversal-oracle",
-          "title": "Pwnshop invoice download path traversal oracle (PWN-038)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-hardcoded-demo-credentials",
-          "title": "Hardcoded demo credentials in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 570,
-      "status": "ok",
-      "scanned_at": "2026-07-26T03:06:55.482Z"
-    },
-    {
-      "run_id": "2026-07-26T03:07:07.399Z",
-      "url": "https://pwnshop.ctfsecurity.com/search/filters",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 17,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "cors-reflect-origin",
-          "title": "CORS reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-prototype-pollution-evidence",
-          "title": "Client bundle documents prototype pollution via __proto__ merge",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Injection"
-        },
-        {
-          "slug": "reflected-xss-query-param",
-          "title": "Reflected XSS via query parameter",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-prompt-injection-evidence",
-          "title": "Prompt-injection red-team or scanner functionality in client bundle",
-          "severity": "medium",
-          "confidence": 0.84,
-          "category": "AI security"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pwnshop-evidence",
-          "title": "Pwnshop OWASP Top 10 2025 e-commerce lab disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-pwnshop-ssti-oracle",
-          "title": "Pwnshop seller preview SSTI oracle (PWN-040)",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-pwnshop-path-traversal-oracle",
-          "title": "Pwnshop invoice download path traversal oracle (PWN-038)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "pwnshop-debug-info-live-oracle",
-          "title": "Pwnshop debug info endpoint leaks secrets (PWN-018)",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Sensitive data exposure"
-        },
-        {
-          "slug": "pwnshop-events-audit-live-oracle",
-          "title": "Pwnshop events API exposes unauthenticated audit logs (PWN-005)",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
-          "title": "Pwnshop chat init API enables email enumeration (PWN-037)",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
-          "title": "Pwnshop forgot-password form enables email enumeration",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "vibe-hardcoded-demo-credentials",
-          "title": "Hardcoded demo credentials in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 579,
-      "status": "ok",
-      "scanned_at": "2026-07-26T03:07:07.399Z"
-    },
-    {
-      "run_id": "2026-07-26T03:07:24.056Z",
-      "url": "https://pwnshop.ctfsecurity.com/export-orders",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 8,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "insecure-cookies",
-          "title": "Cookies set without the Secure flag",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "cors-reflect-origin",
-          "title": "CORS reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "pwnshop-debug-info-live-oracle",
-          "title": "Pwnshop debug info endpoint leaks secrets (PWN-018)",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Sensitive data exposure"
-        },
-        {
-          "slug": "pwnshop-events-audit-live-oracle",
-          "title": "Pwnshop events API exposes unauthenticated audit logs (PWN-005)",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
-          "title": "Pwnshop chat init API enables email enumeration (PWN-037)",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
-          "title": "Pwnshop forgot-password form enables email enumeration",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Broken authentication"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 548,
-      "status": "ok",
-      "scanned_at": "2026-07-26T03:07:24.056Z"
-    },
-    {
-      "run_id": "2026-07-26T03:07:34.434Z",
-      "url": "https://pwnshop.ctfsecurity.com/admin/login",
-      "auth": "oss_deploy",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "cors-reflect-origin",
-          "title": "CORS reflects arbitrary Origin",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 555,
-      "status": "ok",
-      "scanned_at": "2026-07-26T03:07:34.434Z"
-    },
-    {
-      "run_id": "2026-07-26T03:07:45.053Z",
-      "url": "https://brokencrystals.com/api/goto",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-07-26T03:07:45.053Z",
-      "error": "We couldn't reach brokencrystals.com. Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
       "run_id": "2026-07-26T03:07:45.243Z",
       "url": "http://burpbountylab.com/wp/wp-login.php",
       "auth": "public_demo",
@@ -32055,6 +29797,1364 @@
       "probes_run": 590,
       "status": "ok",
       "scanned_at": "2026-08-25T00:17:48.171Z"
+    },
+    {
+      "run_id": "2026-08-25T01:03:06.186Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-08-25T01:03:06.186Z",
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+    },
+    {
+      "run_id": "2026-08-25T01:03:47.078Z",
+      "url": "https://juice-shop-staging.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 0,
+      "findings": [],
+      "ai_findings_added": 0,
+      "pages_crawled": 0,
+      "probes_run": 0,
+      "status": "error",
+      "scanned_at": "2026-08-25T01:03:47.078Z",
+      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
+    },
+    {
+      "run_id": "2026-08-25T01:04:07.425Z",
+      "url": "https://juice-shop.demo.escape.tech",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 50,
+      "findings": [
+        {
+          "slug": "juice-shop-addresss-bola-live-oracle",
+          "title": "Juice Shop shipping addresses BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-addresss-id-bola-live-oracle",
+          "title": "Juice Shop address-by-ID BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-route-live-oracle",
+          "title": "Juice Shop /ftp forgotten-backup route live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-products-search-sqli-route-live-oracle",
+          "title": "Juice Shop /rest/products/search SQLi route live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-jwt-alg-none-live-oracle",
+          "title": "Juice Shop JWT none-algorithm live oracle",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-captcha-bypass-live-oracle",
+          "title": "Juice Shop captcha bypass live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-image-captcha-bypass-live-oracle",
+          "title": "Juice Shop image captcha bypass live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-save-login-ip-live-oracle",
+          "title": "Juice Shop login IP spoofing live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-whoami-unauth-live-oracle",
+          "title": "Juice Shop unauthenticated whoami live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-products-reviews-exposure-live-oracle",
+          "title": "Juice Shop product reviews disclosure live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-chatbot-api-live-oracle",
+          "title": "Juice Shop chatbot LLM proxy live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-chatbot-route-live-oracle",
+          "title": "Juice Shop chatbot route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-login-sqli-live-oracle",
+          "title": "Juice Shop login SQL injection live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-login-route-live-oracle",
+          "title": "Juice Shop /rest/user/login SQLi route live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-users-idor-live-oracle",
+          "title": "Juice Shop user profile IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-basket-items-bola-live-oracle",
+          "title": "Juice Shop basket items BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-complaints-bola-live-oracle",
+          "title": "Juice Shop complaints BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-security-questions-list-live-oracle",
+          "title": "Juice Shop security-question catalog live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-security-question-user-live-oracle",
+          "title": "Juice Shop user security-question disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-wallet-balance-bola-live-oracle",
+          "title": "Juice Shop wallet balance BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-deluxe-membership-live-oracle",
+          "title": "Juice Shop deluxe membership live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "juice-shop-b2b-orders-deserialization-live-oracle",
+          "title": "Juice Shop B2B orders insecure deserialization live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-recycles-bola-live-oracle",
+          "title": "Juice Shop recycle requests BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-cards-bola-live-oracle",
+          "title": "Juice Shop payment cards BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-basket-idor-live-oracle",
+          "title": "Juice Shop basket IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-memories-bola-live-oracle",
+          "title": "Juice Shop memories BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-admin-config-live-oracle",
+          "title": "Juice Shop admin application-configuration live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "juice-shop-quantitys-exposure-live-oracle",
+          "title": "Juice Shop inventory quantities exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-hints-exposure-live-oracle",
+          "title": "Juice Shop challenge hints exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-challenges-disclosure-live-oracle",
+          "title": "Juice Shop challenge scoreboard exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-deliverys-exposure-live-oracle",
+          "title": "Juice Shop delivery methods exposed live oracle",
+          "severity": "low",
+          "confidence": 0.89,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-feedbacks-bola-live-oracle",
+          "title": "Juice Shop product feedback BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-security-answers-disclosure-live-oracle",
+          "title": "Juice Shop security-answer hashes disclosed live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-track-order-idor-live-oracle",
+          "title": "Juice Shop track-order IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-order-history-bola-live-oracle",
+          "title": "Juice Shop order-history BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-open-redirect-live-oracle",
+          "title": "Juice Shop allowlist-bypass open redirect live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "juice-shop-file-upload-live-oracle",
+          "title": "Juice Shop complaint file-upload live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 597,
+      "status": "ok",
+      "scanned_at": "2026-08-25T01:04:07.425Z"
+    },
+    {
+      "run_id": "2026-08-25T01:06:55.340Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-10",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "wrongsecrets-challenge-10-csi-driver-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge-10 CSI-Driver route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-live-oracle",
+          "title": "OWASP WrongSecrets challenge live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+          "title": "OWASP WrongSecrets database connection error live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
+          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 573,
+      "status": "ok",
+      "scanned_at": "2026-08-25T01:06:55.340Z"
+    },
+    {
+      "run_id": "2026-08-25T01:07:27.607Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-11",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "wrongsecrets-challenge-11-iam-escalation-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge-11 IAM escalation route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-live-oracle",
+          "title": "OWASP WrongSecrets challenge live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+          "title": "OWASP WrongSecrets database connection error live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
+          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 573,
+      "status": "ok",
+      "scanned_at": "2026-08-25T01:07:27.607Z"
+    },
+    {
+      "run_id": "2026-08-25T01:07:59.133Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-12",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "wrongsecrets-challenge-12-docker-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge-12 Docker route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-live-oracle",
+          "title": "OWASP WrongSecrets challenge live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+          "title": "OWASP WrongSecrets database connection error live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
+          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 573,
+      "status": "ok",
+      "scanned_at": "2026-08-25T01:07:59.133Z"
+    },
+    {
+      "run_id": "2026-08-25T01:08:30.409Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-13",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "wrongsecrets-challenge-13-cicd-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge-13 CI/CD route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-live-oracle",
+          "title": "OWASP WrongSecrets challenge live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+          "title": "OWASP WrongSecrets database connection error live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
+          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 573,
+      "status": "ok",
+      "scanned_at": "2026-08-25T01:08:30.409Z"
+    },
+    {
+      "run_id": "2026-08-25T01:09:01.712Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-14",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "wrongsecrets-challenge-14-password-manager-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge-14 Password Manager route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-live-oracle",
+          "title": "OWASP WrongSecrets challenge live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+          "title": "OWASP WrongSecrets database connection error live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
+          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 573,
+      "status": "ok",
+      "scanned_at": "2026-08-25T01:09:01.712Z"
+    },
+    {
+      "run_id": "2026-08-25T01:09:33.861Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-7",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "wrongsecrets-challenge-7-vault-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge-7 Vault route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-live-oracle",
+          "title": "OWASP WrongSecrets challenge live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+          "title": "OWASP WrongSecrets database connection error live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
+          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 573,
+      "status": "ok",
+      "scanned_at": "2026-08-25T01:09:33.861Z"
+    },
+    {
+      "run_id": "2026-08-25T01:10:05.296Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-9",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "wrongsecrets-challenge-9-terraform-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge-9 Terraform route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-live-oracle",
+          "title": "OWASP WrongSecrets challenge live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+          "title": "OWASP WrongSecrets database connection error live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
+          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 573,
+      "status": "ok",
+      "scanned_at": "2026-08-25T01:10:05.296Z"
+    },
+    {
+      "run_id": "2026-08-25T01:10:37.146Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-33",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "wrongsecrets-challenge-33-k8s-stringdata-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge-33 K8s StringData route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-live-oracle",
+          "title": "OWASP WrongSecrets challenge live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+          "title": "OWASP WrongSecrets database connection error live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
+          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 573,
+      "status": "ok",
+      "scanned_at": "2026-08-25T01:10:37.146Z"
     }
   ],
   "teacher_delta_runs": [
@@ -32804,6 +31904,32 @@
       },
       "notes": "No teacher tools available. 23 UTC run: pass1 degraded 17 findings gap=xss before 12s retry; merged retry restored 6/6 with 47 findings (juice-shop live oracles); secret-resend slug still absent. Discovery: +5 URLs (dvwu labs/csrf+idor, wrongsecrets challenge-6/8/63) + drained wrongsecrets 5/57/59/61/62, dvwu lfi/xss, ai-security command-injection → 110 findings across 8 URLs.",
       "scanned_at": "2026-08-24T23:37:33.299Z"
+    },
+    {
+      "run_id": "2026-08-25T01:12:00.000Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.demo.escape.tech",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on Escape.tech fallback (Heroku+staging 503; pages_crawled=6 probes_run=597; gap=[]; 39 juice-shop live oracles)",
+      "teacher_delta": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "notes": "No teacher tools available. 01 UTC run: Heroku primary 503, staging 503; Escape.tech fallback 6/6 with 50 findings. Discovery: +5 URLs (wrongsecrets challenge-10/11/12/13/14) + drained challenge-7/9/33 → 120 findings across 8 URLs with route-specific live oracles.",
+      "scanned_at": "2026-08-25T01:12:00.000Z"
     }
   ]
 }
