@@ -52029,6 +52029,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pc-parts-store-api-login-token-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "PC Parts Store api/login.php insecure token route live oracle",
+    description:
+      "When scanning /api/login.php, live probe tests unsigned base64 JSON token response or falls back to README corpus on Vercel SPA deploy.",
+    impactOneline:
+      "Route scans on api/login.php need live insecure-token confirmation or documented corpus fallback.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pcPartsStoreApiLoginTokenRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sign API tokens with HMAC or use server-side sessions instead of unsigned base64 JSON.",
+      steps: [
+        "Replace base64 JSON tokens with signed JWTs using a strong secret.",
+        "Store session state server-side with HttpOnly cookies.",
+        "Never trust client-decoded token claims for authorization."
+      ]
+    },
+    fixPrompt:
+      "Our api/login.php returns an unsigned base64 JSON token. Show secure JWT or session-based authentication remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pc-parts-store-checkout-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PC Parts Store checkout IDOR route live oracle",
+    description:
+      "When scanning /checkout.php, README corpus documents IDOR via hidden user_id and raw credit card capture without session checks on Vercel SPA deploy.",
+    impactOneline:
+      "Route scans on checkout.php need IDOR/CC-capture confirmation or documented corpus fallback.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pcPartsStoreCheckoutIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind checkout to authenticated session user_id and never accept CC data without PCI controls.",
+      steps: [
+        "Derive user_id from server session, not hidden form fields.",
+        "Use a PCI-compliant payment processor instead of raw CC capture.",
+        "Enforce ownership checks before displaying or modifying orders."
+      ]
+    },
+    fixPrompt:
+      "Our checkout.php accepts spoofed user_id and captures credit cards without auth. Show session-bound checkout and PCI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pc-parts-store-product-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PC Parts Store product.php IDOR route live oracle",
+    description:
+      "When scanning /product.php?id=, README corpus documents IDOR via sequential product IDs and stored XSS in reviews on Vercel SPA deploy.",
+    impactOneline:
+      "Route scans on product.php need IDOR/review-XSS confirmation or documented corpus fallback.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pcPartsStoreProductIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on product and review endpoints.",
+      steps: [
+        "Verify the authenticated user may access the requested product_id.",
+        "Sanitize review HTML before storage and escape on output.",
+        "Use indirect references instead of sequential integer IDs where possible."
+      ]
+    },
+    fixPrompt:
+      "Our product.php?id= lacks object-level authorization and reviews allow stored XSS. Show IDOR and output-encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sekumart-product-sqli-live-oracle",
     platform: "generic",
     category: "Injection",

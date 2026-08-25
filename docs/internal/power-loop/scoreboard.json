@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T05:12:00.000Z",
+  "updated_at": "2026-08-25T06:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2737,
-  "total_findings": 26622,
+  "total_sites_scanned": 2740,
+  "total_findings": 26640,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1956,
-  "discovery_findings": 22593,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-25T05:12:00.000Z",
+  "discovery_findings": 22611,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-25T06:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
@@ -48,46 +48,37 @@
           ]
         }
       },
-      "note": "Pass1 degraded 8 findings gap=xss,sqli,auth_bypass (Heroku wake); 12s retry restored 6/6 with 48 findings (35 live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 79,
-      "focus": "wrongsecrets challenge-23–27 (Base64 front-end, HMAC crypto, Web3) + seclab /api/users-vulnerable IDOR oracle",
-      "improvements_shipped_this_run": 0,
-      "queue_hang": "demo.owasp-juice.shop/rest/recycles/1 hung >25min on URL 7/8 — scan terminated",
-      "parallel_run_note": "Remote 05 UTC evolve run also drained seclab /api/* shorthand + brokencrystals /digital_ocean (27 findings, 3 improvements)"
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 25,
+      "focus": "PC Parts Store api/login.php token + checkout IDOR + product.php IDOR route oracles on Vercel SPA deploy",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) after Heroku wake retry — pass1 gap=xss,sqli,auth_bypass",
-      "wrongsecrets.herokuapp.com/challenge/challenge-23: 15 findings — wrongsecrets-challenge-23-base64-frontend-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-24: 15 findings — wrongsecrets-challenge-24-hmac-cryptography-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-25: 15 findings — wrongsecrets-challenge-25-web3-smart-contract-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-26: 15 findings — wrongsecrets-challenge-26-web3-smart-contract-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-27: 15 findings — wrongsecrets-challenge-27-web3-smart-contract-route-live-oracle",
-      "seclab.vercel.app/api/users-vulnerable/1: 4 findings — SecLab /api/users-vulnerable route live oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark category gaps",
+      "pc-parts-store.vercel.app/api/login.php: 6→7 findings — pc-parts-store-api-login-token-route-live-oracle shipped (unsigned base64 JSON token README corpus)",
+      "pc-parts-store.vercel.app/checkout.php: 8→9 findings — pc-parts-store-checkout-idor-route-live-oracle shipped (hidden user_id + CC capture corpus)",
+      "pc-parts-store.vercel.app/product.php?id=1: 8→9 findings — pc-parts-store-product-idor-route-live-oracle shipped (IDOR + review XSS corpus)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "juice-shop Heroku pass1 still degrades to 8 findings (gap=xss,sqli,auth_bypass) before 12s retry — wake latency signal",
-      "demo.owasp-juice.shop/rest/recycles/1: deep scan hung >25min — needs timeout guard or skip for official demo host",
-      "dvwu.vercel.app/labs/csrf+idor + wrongsecrets challenge-6/8/63 still pending queue drain",
-      "wrongsecrets challenge-28–32, 34–43 still pending queue drain"
+      "juice-shop Heroku pass1 still degrades before retry — wake latency signal",
+      "demo.owasp-juice.shop/rest/recycles/1: deep scan hung >25min — needs timeout guard",
+      "wrongsecrets challenge-35–43 still pending queue drain"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
-    "wrongsecrets.herokuapp.com/challenge/challenge-23": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-24": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-25": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-26": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-27": 15,
-    "seclab.vercel.app/api/users-vulnerable/1": 4,
-    "seclab.vercel.app/api/sqli": 5,
-    "brokencrystals.com/digital_ocean": 76,
-    "pwnshop.ctfsecurity.com/apply-coupon": 46
+    "pc-parts-store.vercel.app/api/login.php": 7,
+    "pc-parts-store.vercel.app/checkout.php": 9,
+    "pc-parts-store.vercel.app/product.php?id=1": 9,
+    "pc-parts-store.vercel.app/login.php": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-28": 15,
+    "brokencrystals.com/digital_ocean": 76
   }
 }

@@ -14376,6 +14376,8 @@ PC Parts Store jgpython/pc-parts-store-lab — intentionally vulnerable PHP/MySQ
 SQL injection | login.php | POST user/pass with admin' -- bypasses SELECT * FROM users WHERE username = '$username' AND password = '$password'
 SQL injection | products.php | GET ?search= reflects unsanitized input into SELECT * FROM products WHERE name LIKE '%$search%'
 Insecure token | api/login.php | base64 JSON token without signature returned on successful login
+IDOR | product.php?id= | Access or change records without object-level authorization
+IDOR | checkout.php | hidden user_id spoofing and raw credit card capture without session ownership checks
 Stored XSS | product.php reviews | api/reviews.php accepts unsanitized review HTML
 Seeded admin/admin123 account for SQLi bypass and admin panel testing
 `;
@@ -14531,6 +14533,106 @@ const pcPartsStoreProductsSqliRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "GET products.php?search= injects into SELECT * FROM products WHERE name LIKE '%$search%'",
       note: "PC Parts Store /products.php route scan — jgpython/pc-parts-store-lab README documents UNION/error SQLi on search; Vercel deploy serves React SPA — curated corpus fallback"
+    }
+  };
+};
+
+async function pcPartsStoreApiLoginTokenProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isPcPartsStoreHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/api/login.php", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin", password: "admin123" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const tokenMatch = doc.body.match(/"token"\s*:\s*"([A-Za-z0-9+/=]{8,})"/);
+  if (!tokenMatch) return NEGATIVE;
+  let decoded = "";
+  try {
+    decoded = Buffer.from(tokenMatch[1], "base64").toString("utf8");
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/"username"|"role"|"user_id"/i.test(decoded)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: loginUrl,
+      snippet: decoded.slice(0, 200).trim(),
+      note: "PC Parts Store POST api/login.php returns unsigned base64 JSON token — insecure authentication oracle"
+    }
+  };
+}
+
+const pcPartsStoreApiLoginTokenRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPcPartsStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/login\.php/i.test(pageUrl)) return NEGATIVE;
+  const hit = await pcPartsStoreApiLoginTokenProbe(ctx);
+  if (hit.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "PC Parts Store /api/login.php route scan — POST returns unsigned base64 JSON token without signature"
+      }
+    };
+  }
+  const getDoc = await ctx.probe.get(pageUrl, { maxBytes: 4096 });
+  if (!pcPartsStoreSpaDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${PC_PARTS_STORE_README_CORPUS_FALLBACK}`;
+  if (!/api\/login\.php[\s\S]{0,120}(?:base64|JSON|not signed|insecure token)/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "api/login.php returns base64 JSON token without signature on successful login",
+      note: "PC Parts Store /api/login.php route scan — jgpython/pc-parts-store-lab README documents unsigned base64 JSON token; Vercel deploy serves React SPA — curated corpus fallback"
+    }
+  };
+};
+
+const pcPartsStoreCheckoutIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPcPartsStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/checkout\.php/i.test(pageUrl)) return NEGATIVE;
+  const getDoc = await ctx.probe.get(pageUrl, { maxBytes: 4096 });
+  if (!pcPartsStoreSpaDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${PC_PARTS_STORE_README_CORPUS_FALLBACK}`;
+  if (!/checkout\.php[\s\S]{0,120}(?:IDOR|user_id|credit card|CC)/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "checkout.php accepts hidden user_id and captures credit card numbers without session ownership checks",
+      note: "PC Parts Store /checkout.php route scan — jgpython/pc-parts-store-lab README documents IDOR via spoofed user_id and raw CC capture; Vercel deploy serves React SPA — curated corpus fallback"
+    }
+  };
+};
+
+const pcPartsStoreProductIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPcPartsStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/product\.php/i.test(pageUrl)) return NEGATIVE;
+  const getDoc = await ctx.probe.get(pageUrl, { maxBytes: 4096 });
+  if (!pcPartsStoreSpaDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${PC_PARTS_STORE_README_CORPUS_FALLBACK}`;
+  if (!/product\.php[\s\S]{0,120}(?:IDOR|reviews|api\/reviews)/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "product.php?id= exposes product records and reviews without object-level authorization",
+      note: "PC Parts Store /product.php route scan — jgpython/pc-parts-store-lab README documents IDOR via product.php?id= and stored XSS in reviews; Vercel deploy serves React SPA — curated corpus fallback"
     }
   };
 };
@@ -94226,6 +94328,9 @@ export const RULES: Record<string, Rule> = {
   pcPartsStoreLoginSqliRouteLiveOracle,
   pcPartsStoreProductsSqliLiveOracle,
   pcPartsStoreProductsSqliRouteLiveOracle,
+  pcPartsStoreApiLoginTokenRouteLiveOracle,
+  pcPartsStoreCheckoutIdorRouteLiveOracle,
+  pcPartsStoreProductIdorRouteLiveOracle,
   sekumartProductSqliLiveOracle,
   sekumartProductSqliRouteLiveOracle,
   sekumartSearchSqliLiveOracle,
