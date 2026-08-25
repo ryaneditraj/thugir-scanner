@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-24T23:37:33.299Z",
+  "updated_at": "2026-08-25T00:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2993,
-  "total_findings": 32115,
+  "total_sites_scanned": 3002,
+  "total_findings": 32251,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2053,
-  "discovery_findings": 25824,
+  "discovery_urls_added": 2058,
+  "discovery_findings": 25912,
   "improvements_shipped": 1224,
-  "last_run": "2026-08-24T23:37:33.299Z",
+  "last_run": "2026-08-25T00:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 575,
+      "probes_run": 590,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,43 @@
           ]
         }
       },
-      "note": "Pass1 degraded 17 findings gap=xss; 12s retry merged to 47 findings 6/6; secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings, 35 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 110,
-      "focus": "wrongsecrets challenge-5/57/59/61/62 + dvwu LFI/XSS + ai-security command-injection queue drain",
+      "findings": 88,
+      "focus": "wrongsecrets challenge-7/9/33/48/49 + ai-security path-traversal + ratdo XSS/IDOR/CSRF + seclab IDOR queue drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — pass1 missed xss before retry",
-      "wrongsecrets.herokuapp.com/challenge/challenge-5: 15 findings with client-side-wrongsecrets-challenge-evidence",
-      "wrongsecrets.herokuapp.com/challenge/challenge-57: 15 findings — AI prompt-injection challenge oracle surface",
-      "dvwu.vercel.app/labs/xss: 15 findings — XSS training lab route",
-      "dvwu.vercel.app/labs/lfi: 13 findings — LFI training lab route",
-      "ai-security-platform-iota.vercel.app/challenges/command-injection: 7-finding hub without route-specific command-injection live oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — stable first-pass, no category gaps",
+      "wrongsecrets.herokuapp.com/challenge/challenge-7: 15 findings — wrongsecrets-challenge-7-vault-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-9: 15 findings — wrongsecrets-challenge-9-terraform-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-33: 15 findings — wrongsecrets-challenge-33-k8s-stringdata-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-48: 15 findings — wrongsecrets-challenge-48-sealed-secret-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-49: 15 findings — wrongsecrets-challenge-49-aes-weak-md5-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/path-traversal: 3 findings — ai-security-path-traversal-route-live-oracle",
+      "ratdo.thexssrat.com: 4 findings — ratdo-stored-xss + idor-edit + csrf live oracles",
+      "seclab.vercel.app/labs/idor: 6 findings — seclab-idor-labs-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "ai-security-platform command-injection challenge: route-specific live oracle absent (7-finding hub)",
       "dvwu /labs/csrf + /labs/idor + wrongsecrets challenge-6/8/63 queued at end — pending drain",
-      "wrongsecrets challenge-6/7 require K8s cluster — Heroku demo may not expose K8s-specific secrets"
+      "wrongsecrets challenge-6/7 K8s-specific secrets may be thin on Heroku demo despite route oracles firing"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "wrongsecrets.herokuapp.com/challenge/challenge-5": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-57": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-59": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-61": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-62": 15,
-    "dvwu.vercel.app/labs/xss": 15,
-    "dvwu.vercel.app/labs/lfi": 13,
-    "ai-security-platform-iota.vercel.app/challenges/command-injection": 7
+    "juice-shop.herokuapp.com": 48,
+    "wrongsecrets.herokuapp.com/challenge/challenge-7": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-9": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-33": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-48": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-49": 15,
+    "ai-security-platform-iota.vercel.app/challenges/path-traversal": 3,
+    "ratdo.thexssrat.com": 4,
+    "seclab.vercel.app/labs/idor": 6
   }
 }
