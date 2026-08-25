@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T22:50:00.000Z",
+  "updated_at": "2026-08-25T23:14:09.577Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2750,
-  "total_findings": 27058,
+  "total_sites_scanned": 2759,
+  "total_findings": 27136,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1967,
   "discovery_findings": 22983,
   "improvements_shipped": 1167,
-  "last_run": "2026-08-25T22:50:00.000Z",
+  "last_run": "2026-08-25T23:14:09.577Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 591,
+      "probes_run": 594,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings, 37 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings, 35 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 3,
-      "findings": 45,
-      "focus": "juice-shop feedbacks fast-scan + pwnshop order-submit XXE priority drain",
-      "improvements_shipped_this_run": 3
+      "urls_added": 1,
+      "urls_scanned": 8,
+      "findings": 30,
+      "focus": "OWASP Interactive Learning Lab + demo.owasp-juice.shop REST drain (feedbacks/wallet/complaints/track-order) + dvwu redirect + vaultapp BOLA",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings)",
-      "demo.owasp-juice.shop/rest/feedbacks: 2 findings (+juice-shop-feedbacks-bola-live-oracle +route) — fast-scan 19s vs prior >20min timeout",
-      "pwnshop.ctfsecurity.com/api/orders/submit: 43→46 findings (+pwnshop-order-submit-xxe-route-live-oracle)",
-      "duck-store.escape.tech/api/v1/orders/checkout: 31 findings — duck-store-checkout-private-coupon-route-live-oracle (concurrent 22 UTC agent)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 35 live oracles)",
+      "owasp.andreabrioschi.it: 10 findings — client-side OWASP Top 10:2025 lab evidence (SQLi/XXE/CSRF/IDOR) + critical secrets in bundle",
+      "demo.owasp-juice.shop/rest/feedbacks: 2 findings — fast-scan completes (no >20min hang)",
+      "demo.owasp-juice.shop/rest/complaints: 2 findings",
+      "dvwu.vercel.app/redirect: 12 findings — open-redirect oracle",
+      "vaultapp-omega.vercel.app/api/messages/1 + /api/notes/1: 2 findings each — BOLA probes"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "demo.owasp-juice.shop/rest/recycles/* — fast-scan completes but needs mirror probe for live oracle on degraded demo host"
+      "demo.owasp-juice.shop/rest/wallet/balance + /rest/track-order/1: 0 findings — degraded demo host or missing live oracles",
+      "owasp.andreabrioschi.it: client-side catalog evidence only; simulated demos need route-specific live oracles",
+      "pwnshop seller/preview + brokencrystals graphql/hidden-upload still queued — not reached in 8-URL drain limit"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "owasp.andreabrioschi.it": 10,
+    "dvwu.vercel.app/redirect": 12,
     "demo.owasp-juice.shop/rest/feedbacks": 2,
-    "pwnshop.ctfsecurity.com/api/orders/submit": 46,
-    "duck-store.escape.tech/api/v1/orders/checkout": 31,
-    "duck-store.escape.tech/api/v1/orders/coupons": 31,
-    "ai-security-platform-iota.vercel.app/challenges/csrf": 7,
-    "ai-security-platform-iota.vercel.app/challenges/xxe": 7,
+    "demo.owasp-juice.shop/rest/complaints": 2,
+    "vaultapp-omega.vercel.app/api/messages/1": 2,
+    "vaultapp-omega.vercel.app/api/notes/1": 2,
     "duck-store.escape.tech/api/v1/testimonials/1": 34,
     "brokencrystals.com/userlogin?logobgcolor=red": 52
   }

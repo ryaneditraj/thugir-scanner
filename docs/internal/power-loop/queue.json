@@ -1,6 +1,11 @@
 {
-  "updated_at": "2026-08-25T21:08:19.334Z",
+  "updated_at": "2026-08-25T23:07:06.854Z",
   "discovery_urls": [
+    {
+      "url": "https://owasp.andreabrioschi.it/",
+      "source": "OWASP Interactive Learning Lab — Top 10:2025 visual demos (andreabrioschi.it public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
       "source": "Escape Duck Store vulnerabilities — 100% discount coupon + shipping cost bypass POST /api/v1/orders/checkout",
