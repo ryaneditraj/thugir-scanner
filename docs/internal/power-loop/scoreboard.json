@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T23:14:09.577Z",
+  "updated_at": "2026-08-25T23:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1967,
   "discovery_findings": 22983,
-  "improvements_shipped": 1167,
-  "last_run": "2026-08-25T23:14:09.577Z",
+  "improvements_shipped": 1170,
+  "last_run": "2026-08-25T23:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
@@ -48,41 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings, 35 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings); juice-shop oracle escape-mirror fallback shipped for thin-pass routes on 503 Heroku hosts"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 1,
+      "urls_added": 3,
       "urls_scanned": 8,
-      "findings": 30,
-      "focus": "OWASP Interactive Learning Lab + demo.owasp-juice.shop REST drain (feedbacks/wallet/complaints/track-order) + dvwu redirect + vaultapp BOLA",
-      "improvements_shipped_this_run": 0
+      "findings": 50,
+      "focus": "demo.owasp-juice.shop wallet/track-order mirror oracles + wrongsecrets challenge-58 + vaultapp/dvwu queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 35 live oracles)",
-      "owasp.andreabrioschi.it: 10 findings — client-side OWASP Top 10:2025 lab evidence (SQLi/XXE/CSRF/IDOR) + critical secrets in bundle",
-      "demo.owasp-juice.shop/rest/feedbacks: 2 findings — fast-scan completes (no >20min hang)",
-      "demo.owasp-juice.shop/rest/complaints: 2 findings",
-      "dvwu.vercel.app/redirect: 12 findings — open-redirect oracle",
-      "vaultapp-omega.vercel.app/api/messages/1 + /api/notes/1: 2 findings each — BOLA probes"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — oracle mirror fallback + bootstrap thin-readiness shipped",
+      "demo.owasp-juice.shop/rest/wallet/balance: 0→2 findings via escape.tech mirror (+juice-shop-wallet-balance-bola-route-live-oracle)",
+      "demo.owasp-juice.shop/rest/track-order/1: 0→2 findings via escape.tech mirror (+juice-shop-track-order-idor-route-live-oracle)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-58: 15 findings — challenge-58 + error-demo database-connection oracles confirmed",
+      "duck-store.escape.tech/api/v1/testimonials/1: 34 findings — PUT BOLA + unauth PUT oracles confirmed",
+      "owasp.andreabrioschi.it: 10 findings — client-side OWASP Top 10:2025 lab evidence",
+      "dvwu.vercel.app/redirect: 12 findings — open-redirect oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "demo.owasp-juice.shop/rest/wallet/balance + /rest/track-order/1: 0 findings — degraded demo host or missing live oracles",
-      "owasp.andreabrioschi.it: client-side catalog evidence only; simulated demos need route-specific live oracles",
-      "pwnshop seller/preview + brokencrystals graphql/hidden-upload still queued — not reached in 8-URL drain limit"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key; Resend key revoked from social feeds)",
+      "demo.owasp-juice.shop Heroku 503 — wallet/track-order now covered via escape.tech mirror fallback",
+      "owasp.andreabrioschi.it: client-side catalog evidence only; simulated demos need route-specific live oracles"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "demo.owasp-juice.shop/rest/wallet/balance": 2,
+    "demo.owasp-juice.shop/rest/track-order/1": 2,
+    "wrongsecrets.herokuapp.com/challenge/challenge-58": 15,
     "owasp.andreabrioschi.it": 10,
-    "dvwu.vercel.app/redirect": 12,
-    "demo.owasp-juice.shop/rest/feedbacks": 2,
-    "demo.owasp-juice.shop/rest/complaints": 2,
-    "vaultapp-omega.vercel.app/api/messages/1": 2,
-    "vaultapp-omega.vercel.app/api/notes/1": 2,
     "duck-store.escape.tech/api/v1/testimonials/1": 34,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52
+    "vaultapp-omega.vercel.app/api/messages/1": 12,
+    "dvwu.vercel.app/redirect": 12
   }
 }

