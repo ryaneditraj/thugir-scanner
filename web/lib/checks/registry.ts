@@ -78078,9 +78078,9 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform xss challenge — reflected/stored script injection into pages viewed by other users (CWE-79)"
   },
   "leaked-config": {
-    routeRe: /\/challenges\/leaked-config\b/i,
+    routeRe: /\/challenges\/leaked-(?:config|secrets)\b/i,
     markers: [
-      { label: "Leaked Secrets challenge route", re: /\/challenges\/leaked-config/i },
+      { label: "Leaked Secrets challenge route", re: /\/challenges\/leaked-(?:config|secrets)/i },
       { label: "Leaked Secrets CWE-200 training module", re: /Leaked Secrets[\s\S]{0,48}CWE-200/i },
       {
         label: "environment variables and API keys exposed",
@@ -78088,7 +78088,7 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
       },
       { label: "Backend & Config challenge category", re: /Backend\s*&\s*Config/i }
     ],
-    note: "AI Security Platform leaked-config challenge — environment variables and API keys exposed in client bundles (CWE-200)"
+    note: "AI Security Platform leaked-config/leaked-secrets challenge — environment variables and API keys exposed in client bundles (CWE-200)"
   },
   "supabase-data": {
     routeRe: /\/challenges\/supabase-data\b/i,
@@ -87848,7 +87848,7 @@ const dvwuCsrfRouteLiveOracle: Rule = async (ctx) => {
   } catch {
     return NEGATIVE;
   }
-  if (!/\/csrf\/?$/i.test(pathname)) return NEGATIVE;
+  if (!/\/(?:labs\/)?csrf\/?$/i.test(pathname)) return NEGATIVE;
   const result = await probeNewsletterCsrfStateChange(ctx);
   if (!result?.fired) return NEGATIVE;
   return {
@@ -87857,7 +87857,7 @@ const dvwuCsrfRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "DVWU /csrf route scan — POST /api/newsletter subscribes without anti-CSRF token — cross-site request forgery state-change oracle"
+      note: "DVWU /csrf or /labs/csrf route scan — POST /api/newsletter subscribes without anti-CSRF token — cross-site request forgery state-change oracle"
     }
   };
 };
@@ -90609,6 +90609,53 @@ const clientSideMcpSherpaWorkshopEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Microsoft Sherpa workshop documents intentionally vulnerable MCP servers, prompt-injection defense, and OWASP MCP Azure security camps"
+    }
+  };
+};
+
+// --- Docker workshop DevBoard lab (dockerworkshop.vercel.app/lab8/projects/devboard) ---
+const DOCKERWORKSHOP_DEVBOARD_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "DevBoard FastAPI + Next.js", re: /DevBoard.*FastAPI \+ Next\.js/i },
+  { label: "Five intentional bugs", re: /five documented intentional bugs|five intentional issues/i },
+  {
+    label: "Pagination off-by-one list_issues",
+    re: /Pagination off-by-one.*list_issues.*page \* page_size/i
+  },
+  { label: "Missing authorization on issue update", re: /Missing authorization on issue update/i },
+  { label: "Search returns 501", re: /issues\/search.*returns.*501/i },
+  { label: "sbx-quickstart repo", re: /dockersamples\/sbx-quickstart/i }
+];
+
+const dockerworkshopDevboardRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/dockerworkshop\.vercel\.app/i.test(pageUrl) && !/dockerworkshop\.vercel\.app/i.test(ctx.origin)) {
+    return NEGATIVE;
+  }
+  if (!/\/lab8\/projects\/devboard\b/i.test(pageUrl)) return NEGATIVE;
+
+  let corpus = ctx.combined;
+  if (!/DevBoard/i.test(corpus)) {
+    const probeUrl =
+      pageUrl || new URL("/lab8/projects/devboard/", ctx.origin || "https://dockerworkshop.vercel.app").toString();
+    const doc = await fetchDoc(probeUrl, { maxBytes: 196608, timeoutMs: 15000 });
+    if (doc.status >= 200 && doc.status < 400) corpus += `\n${doc.body}`;
+  }
+
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of DOCKERWORKSHOP_DEVBOARD_MARKERS) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/dockerworkshop\.vercel\.app|ajeetraina\/docker-workshop/i.test(corpus)) return NEGATIVE;
+
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: hits.slice(0, 4),
+      note: "Docker workshop DevBoard lab documents FastAPI+Next.js issue tracker with 5 intentional bugs (pagination off-by-one, missing authorization, search 501) in dockersamples/sbx-quickstart — route-specific training oracle"
     }
   };
 };
@@ -93402,6 +93449,7 @@ export const RULES: Record<string, Rule> = {
   clientSideOverthewireNarniaEvidence,
   clientSideOverthewireBehemothEvidence,
   clientSideMcpSherpaWorkshopEvidence,
+  dockerworkshopDevboardRouteLiveOracle,
   htmlCommentCredentialDisclosure,
   openApiDebugPasswordExposure,
   vampiUserBolaLiveOracle,

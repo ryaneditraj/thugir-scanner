@@ -3235,6 +3235,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideArchonApiSecurityCurriculumEvidence",
   "clientSideOverthewireBanditEvidence",
   "clientSideMcpSherpaWorkshopEvidence",
+  "dockerworkshopDevboardRouteLiveOracle",
   "htmlCommentCredentialDisclosure",
   "openApiDebugPasswordExposure",
   "vampiUserBolaLiveOracle",
@@ -11652,13 +11653,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/(?:sqli|prompt-injection|broken-auth|ssrf|command-injection|path-traversal)\b/i.test(targetInput) &&
+        /\/challenges\/(?:sqli|prompt-injection|broken-auth|ssrf|command-injection|path-traversal|leaked-(?:config|secrets))\b/i.test(targetInput) &&
         (p.slug === "ai-security-sqli-route-live-oracle" ||
           p.slug === "ai-security-prompt-injection-route-live-oracle" ||
           p.slug === "ai-security-broken-auth-route-live-oracle" ||
           p.slug === "ai-security-ssrf-route-live-oracle" ||
           p.slug === "ai-security-command-injection-route-live-oracle" ||
-          p.slug === "ai-security-path-traversal-route-live-oracle")
+          p.slug === "ai-security-path-traversal-route-live-oracle" ||
+          p.slug === "ai-security-leaked-config-route-live-oracle")
       )
         return -3;
       if (
@@ -12253,6 +12255,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/open-redirect\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-open-redirect")
+      )
+        return -3;
+      if (
+        /dockerworkshop\.vercel\.app/i.test(origin) &&
+        /\/lab8\/projects\/devboard\b/i.test(targetInput) &&
+        p.slug === "dockerworkshop-devboard-route-live-oracle"
       )
         return -3;
       if (

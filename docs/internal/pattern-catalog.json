@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-24T23:13:33.889Z",
-  "total": 2623,
-  "uniqueSlugs": 2615,
+  "generatedAt": "2026-08-25T00:17:41.035Z",
+  "total": 2624,
+  "uniqueSlugs": 2616,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2605,
+    "generic": 2606,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2538,
+    "deep": 2539,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 538,
+    "Broken access control": 539,
     "Exposed secret": 105,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -916,6 +916,7 @@
     "cursor-next-public-secret",
     "dangerous-html-sinks",
     "directory-listing-enabled",
+    "dockerworkshop-devboard-route-live-oracle",
     "dom-eval-xss",
     "domgo-ajax-dom-xss-evidence",
     "domgo-hash-dom-xss-evidence",
