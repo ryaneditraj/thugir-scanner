@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-25T13:30:00.000Z",
+  "updated_at": "2026-08-25T14:06:07.106Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-64",
+      "source": "OWASP WrongSecrets — Challenge 64 Swift binary secrets oracle on official Heroku demo (README challenge list 54-66)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-65",
+      "source": "OWASP WrongSecrets — Challenge 65 plain Java CLI JAR binary oracle on official Heroku demo (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-66",
+      "source": "OWASP WrongSecrets — Challenge 66 obfuscated Java CLI JAR binary oracle on official Heroku demo (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/uploads/import-from-url",
+      "source": "Escape Duck Store vulnerabilities — SSRF image import oracle POST /api/v1/uploads/import-from-url (duck-store.escape.tech/vulnerabilities)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/idor",
+      "source": "AI & Security Platform — IDOR live demo challenge (14-challenge OWASP training app, Vercel deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
       "source": "OWASP WrongSecrets — Challenge 57 in-browser LLM prompt-injection oracle (README)",
@@ -43,6 +68,31 @@
     }
   ],
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-64",
+      "source": "OWASP WrongSecrets — Challenge 64 Swift binary secrets oracle on official Heroku demo (README challenge list 54-66)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-65",
+      "source": "OWASP WrongSecrets — Challenge 65 plain Java CLI JAR binary oracle on official Heroku demo (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-66",
+      "source": "OWASP WrongSecrets — Challenge 66 obfuscated Java CLI JAR binary oracle on official Heroku demo (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/uploads/import-from-url",
+      "source": "Escape Duck Store vulnerabilities — SSRF image import oracle POST /api/v1/uploads/import-from-url (duck-store.escape.tech/vulnerabilities)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/idor",
+      "source": "AI & Security Platform — IDOR live demo challenge (14-challenge OWASP training app, Vercel deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-60",
       "source": "OWASP WrongSecrets — Challenge 60 insecure MCP server prompt-injection oracle on official Heroku demo (README v1.13)",
