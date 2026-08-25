@@ -4475,6 +4475,24 @@
       "slug": "pc-parts-store-product-idor-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET product.php?id=1 serves React SPA — README corpus fallback documents IDOR via product.php?id= and stored XSS in reviews; pc-parts-store.vercel.app/product.php?id=1 findings 8→9 (+pc-parts-store-product-idor-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-hub-seeds-36-43",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with challenge 36-43 short+long URLs; runner -3 priority for wrongsecrets-challenge-35 through 43 route oracles; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-40-aes-json-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-40 documents AES secrchallenge.json + aes-128-ecb walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-40 findings 15 (+wrongsecrets-challenge-40-aes-json-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "juice-shop-recycles-probe-timeout",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopRecyclesBolaLiveOracle probes now use 12s timeoutMs; power-scan wraps runDeepScan in 20min DISCOVERY_SCAN_TIMEOUT_MS guard for hung demo.owasp-juice.shop/recycles routes; benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
