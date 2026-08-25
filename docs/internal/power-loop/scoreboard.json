@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T10:40:00.000Z",
+  "updated_at": "2026-08-25T11:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2780,
-  "total_findings": 27444,
+  "total_sites_scanned": 2789,
+  "total_findings": 27577,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1979,
-  "discovery_findings": 23225,
-  "improvements_shipped": 1177,
-  "last_run": "2026-08-25T10:40:00.000Z",
+  "discovery_findings": 23311,
+  "improvements_shipped": 1180,
+  "last_run": "2026-08-25T11:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 591,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,45 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (48 findings); secret-resend slug still absent — Resend key no longer in social feeds"
+      "note": "Stable 6/6 recall (47 findings); secret-resend slug still absent — Resend key no longer in social feeds"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 80,
-      "focus": "alf.nu ServiceWorker live oracle + vulnlab ssti/sqli/xss hub seeds + wrongsecrets-ctf hub",
+      "urls_added": 0,
+      "urls_scanned": 8,
+      "findings": 86,
+      "focus": "dvwu file-upload/xxe/deserialization/jwt/ssti queue drain + vulnlab union/format/dom extended hub + challenge-35 documentation oracle",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
-      "alf.nu/ServiceWorker: 4→6 findings — alf-nu-serviceworker-live-oracle shipped (test.js fetch interception)",
-      "wrongsecrets-ctf.herokuapp.com: 10→11 findings — wrongsecrets-ctf-hub-live-oracle shipped",
-      "ssti.vulnlab.dev/basic/: 9 findings with ssti-vulnlab-basic-route-live-oracle (first hub scan)",
-      "sqli.vulnlab.dev/error/: 8 findings; xss.vulnlab.dev/reflected/: 9 findings — vulnlab hub seeds shipped",
-      "wrongsecrets challenge-55/56/64/65/66: route oracles from concurrent 10 UTC run",
-      "duck-store.escape.tech SSRF API routes: 32 findings from concurrent run"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark misses",
+      "dvwu.vercel.app/labs/file-upload: 0→12 findings — dvwu-file-upload-lab-route-live-oracle first scan",
+      "dvwu.vercel.app/labs/xxe: 0→14 findings — dvwu-xxe-lab-route-live-oracle first scan",
+      "dvwu.vercel.app/labs/deserialization: 0→12 findings — dvwu-deserialization-lab-route-live-oracle first scan",
+      "dvwu.vercel.app/labs/jwt: 0→12 findings — dvwu-jwt-lab-route-live-oracle first scan",
+      "dvwu.vercel.app/labs/ssti: 0→12 findings — dvwu-ssti-lab-route-live-oracle first scan",
+      "wrongsecrets.herokuapp.com/challenge/challenge-35: 14→15 findings — wrongsecrets-challenge-35-documentation-route-live-oracle",
+      "sqli.vulnlab.dev/union/: 0→7 findings — sqli-vulnlab-union-route-live-oracle first scan",
+      "ssti.vulnlab.dev/format/: 0→9 findings — ssti-vulnlab-format-route-live-oracle first scan",
+      "xss.vulnlab.dev/dom/: 0→8 findings — xss-vulnlab-dom-route-live-oracle first scan"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (Resend API key removed from Bluesky/Mastodon feeds; sensitive_data covered via juice-shop-leaked-api-key)",
       "wrongsecrets challenge-44/45 disabled (Vault/K8s cloud-only challenges)",
-      "dvwu labs/file-upload/xxe/deserialization/jwt/ssti still in discovery queue tail"
+      "dvwu labs/race-condition + labs/cmdi still in discovery queue tail"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "alf.nu/ServiceWorker": 6,
-    "wrongsecrets-ctf.herokuapp.com": 11,
-    "ssti.vulnlab.dev/basic/": 9,
-    "sqli.vulnlab.dev/error/": 8,
-    "xss.vulnlab.dev/reflected/": 9,
-    "wrongsecrets.herokuapp.com/challenge/challenge-55": 15,
-    "duck-store.escape.tech/api/v1/uploads/import-from-url": 32,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "juice-shop.herokuapp.com": 47,
+    "dvwu.vercel.app/labs/xxe": 14,
+    "dvwu.vercel.app/labs/file-upload": 12,
+    "dvwu.vercel.app/labs/deserialization": 12,
+    "dvwu.vercel.app/labs/jwt": 12,
+    "dvwu.vercel.app/labs/ssti": 12,
+    "wrongsecrets.herokuapp.com/challenge/challenge-35": 15,
+    "ssti.vulnlab.dev/format/": 9,
+    "xss.vulnlab.dev/dom/": 8,
+    "sqli.vulnlab.dev/union/": 7
   }
 }
