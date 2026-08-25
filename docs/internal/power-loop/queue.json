@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-25T01:08:00.000Z",
+  "updated_at": "2026-08-25T02:44:10.862Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-15",
+      "source": "OWASP WrongSecrets — Challenge 15 git history / trufflehog secret oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-16",
+      "source": "OWASP WrongSecrets — Challenge 16 front-end OAuth client_secret oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-17",
+      "source": "OWASP WrongSecrets — Challenge 17 Docker bash history secret oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-18",
+      "source": "OWASP WrongSecrets — Challenge 18 cryptography secret oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-19",
+      "source": "OWASP WrongSecrets — Challenge 19 binary reverse-engineering secret oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-10",
       "source": "OWASP WrongSecrets — Challenge 10 AES/crypto secret oracle (official Heroku demo README)",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T02:47:30.913Z",
+  "updated_at": "2026-08-25T02:50:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3017,
-  "total_findings": 32538,
+  "total_sites_scanned": 3025,
+  "total_findings": 32647,
   "critical_findings": 54,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2058,
-  "discovery_findings": 25952,
+  "discovery_urls_added": 2063,
+  "discovery_findings": 26061,
   "improvements_shipped": 1229,
-  "last_run": "2026-08-25T02:47:30.913Z",
+  "last_run": "2026-08-25T02:50:00.000Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
@@ -52,31 +52,42 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 5,
-      "focus": "dockerworkshop DevBoard Vercel checkpoint corpus fallback",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 109,
+      "focus": "wrongsecrets challenge-15/16/17/18/19 route oracles + queue drain challenge-48/49 + prompt-shield1",
       "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no category gaps",
-      "dockerworkshop.vercel.app/lab8/projects/devboard/: dockerworkshop-devboard-checkpoint-corpus-fallback — oracle fires when Vercel checkpoint blocks workshop HTML",
-      "juice-shop-resend-escape-mirror-fallback: Resend key probe retries juice-shop.demo.escape.tech config when Heroku 503"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — resend mirror fallback shipped",
+      "dockerworkshop.vercel.app/lab8/projects/devboard/: dockerworkshop-devboard-checkpoint-corpus-fallback (5 findings)",
+      "wrongsecrets challenge-15: wrongsecrets-challenge-15-git-history-route-live-oracle (15 findings)",
+      "wrongsecrets challenge-16: wrongsecrets-challenge-16-frontend-route-live-oracle (15 findings)",
+      "wrongsecrets challenge-17: wrongsecrets-challenge-17-bash-history-route-live-oracle (15 findings)",
+      "wrongsecrets challenge-18: wrongsecrets-challenge-18-bad-hashing-route-live-oracle (15 findings)",
+      "wrongsecrets challenge-19: wrongsecrets-challenge-19-c-binary-route-live-oracle (15 findings)",
+      "wrongsecrets challenge-48/49: sealed-secret + aes-weak-md5 route oracles (15 findings each)",
+      "prompt-shield1.vercel.app: prompt-shield-prompt-injection-defense-live-oracle (4 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent when api.resend.com validation fails (juice-shop-resend-key-live-oracle)",
       "juice-shop.herokuapp.com Heroku 503 intermittent — Escape.tech mirror used for API oracles",
-      "wrongsecrets challenge-6/8/63 at queue tail — oracles exist, pending queue drain",
-      "ai-security-platform path-traversal auth-gated route oracle queued"
+      "dvwu /labs/idor + /labs/csrf + wrongsecrets challenge-6/8/63 at queue tail — pending drain",
+      "playground.fabraix.com + ai-security-platform-iota challenges queued — LLM oracle coverage TBD"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
     "juice-shop.demo.escape.tech": 50,
     "dockerworkshop.vercel.app/lab8/projects/devboard/": 5,
+    "wrongsecrets.herokuapp.com/challenge/challenge-15": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-16": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-17": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-18": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-19": 15,
     "wrongsecrets.herokuapp.com/challenge/challenge-48": 15,
     "wrongsecrets.herokuapp.com/challenge/challenge-49": 15,
-    "sekumart.sekuripy.hr/product.php?id=1": 12
+    "prompt-shield1.vercel.app": 4
   }
 }
