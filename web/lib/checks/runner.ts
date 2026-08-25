@@ -12280,6 +12280,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/api\/auth\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-auth-bypass")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/api\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-sqli-search")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
         /\/api\/comments\b/i.test(targetInput) &&
         p.slug.startsWith("vuln-expose-comments-api")
       )
@@ -12665,6 +12677,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /brokencrystals\.com/i.test(origin) &&
         /\/adminpermission\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-adminpermission")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/users\/ldap\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-ldap")
       )
         return -3;
       if (

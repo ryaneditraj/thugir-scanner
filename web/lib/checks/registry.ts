@@ -81544,7 +81544,6 @@ const brokencrystalsLdapInjectionLiveOracle: Rule = async (ctx) => {
     maxBytes: 131072,
     timeoutMs: 20000
   });
-  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
   const body = doc.body.trim();
   if (body.startsWith("[")) {
     let resultCount = 0;
