@@ -12052,31 +12052,32 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
-        /\/api\/sqli-vulnerable\b/i.test(targetInput) &&
+        /\/api\/sqli(?:-vulnerable|(?:[/?#]|$))/i.test(targetInput) &&
+        !/\/api\/sqli\/search/i.test(targetInput) &&
         p.slug.startsWith("seclab-sqli-vulnerable")
       )
         return -3;
       if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
-        /\/api\/csrf-vulnerable\b/i.test(targetInput) &&
+        /\/api\/csrf(?:-vulnerable|(?:[/?#]|$))/i.test(targetInput) &&
         p.slug.startsWith("seclab-csrf-vulnerable")
       )
         return -3;
       if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
-        /\/api\/jwt-vulnerable\b/i.test(targetInput) &&
+        /\/api\/jwt(?:-vulnerable|(?:[/?#]|$))/i.test(targetInput) &&
         p.slug.startsWith("seclab-jwt-vulnerable")
       )
         return -3;
       if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
-        /\/api\/xss-vulnerable\b/i.test(targetInput) &&
+        /\/api\/xss(?:-vulnerable|(?:[/?#]|$))/i.test(targetInput) &&
         p.slug.startsWith("seclab-xss-vulnerable")
       )
         return -3;
       if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
-        /\/api\/users-vulnerable\b/i.test(targetInput) &&
+        /\/api\/users(?:-vulnerable(?:\/\d+)?|(?:\/\d+)?(?:[/?#]|$))/i.test(targetInput) &&
         p.slug.startsWith("seclab-users-vulnerable")
       )
         return -3;
@@ -12088,7 +12089,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
-        /\/api\/idor-vulnerable\b/i.test(targetInput) &&
+        /\/api\/idor(?:-vulnerable|(?:[/?#]|$))/i.test(targetInput) &&
         p.slug.startsWith("seclab-idor-vulnerable")
       )
         return -3;
@@ -12100,7 +12101,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
-        /\/api\/ssrf-vulnerable\b/i.test(targetInput) &&
+        /\/api\/ssrf(?:-vulnerable|(?:[/?#]|$))/i.test(targetInput) &&
         p.slug.startsWith("seclab-ssrf-vulnerable")
       )
         return -3;
@@ -12591,7 +12592,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
-        /\/api\/file\/digital_ocean/i.test(targetInput) &&
+        /\/api\/file\/digital_ocean|\/digital_ocean\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-file-digital-ocean-route")
       )
         return -3;
