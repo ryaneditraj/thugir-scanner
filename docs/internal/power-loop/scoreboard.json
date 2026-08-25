@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T22:40:33.023Z",
+  "updated_at": "2026-08-25T22:41:39.625Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1964,
   "discovery_findings": 22881,
-  "improvements_shipped": 1161,
-  "last_run": "2026-08-25T22:40:33.023Z",
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-25T22:41:39.625Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
@@ -55,14 +55,16 @@
       "urls_added": 3,
       "urls_scanned": 8,
       "findings": 102,
-      "focus": "duck-store checkout/cart-add/coupons business-logic + queue drain demo.owasp-juice routes",
-      "improvements_shipped_this_run": 0
+      "focus": "duck-store checkout/cart-add/coupons business-logic + ai-security CSRF/XXE route oracles + queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.demo.escape.tech: benchmark recall 6/6 (49 findings, 38 live oracles) — Heroku fallback after 503",
       "duck-store.escape.tech/api/v1/orders/checkout: 31 findings — duck-store-checkout-private-coupon-route-live-oracle",
       "duck-store.escape.tech/api/v1/cart/add: 30 findings — duck-store-cart-negative-quantity-live-oracle",
       "duck-store.escape.tech/api/v1/orders/coupons: 31 findings — duck-store-coupons-disclosure-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/csrf: 7 findings — ai-security-csrf-route-live-oracle (engine ship)",
+      "ai-security-platform-iota.vercel.app/challenges/xxe: 7 findings — ai-security-xxe-route-live-oracle (engine ship)",
       "ist-edu-bd.vercel.app/redirect: 10 findings — open redirect oracle"
     ],
     "learning_gaps": [
@@ -79,6 +81,8 @@
     "duck-store.escape.tech/api/v1/orders/coupons": 31,
     "duck-store.escape.tech/api/v1/cart/add": 30,
     "duck-store.escape.tech/api/v1/testimonials/1": 34,
+    "ai-security-platform-iota.vercel.app/challenges/csrf": 7,
+    "ai-security-platform-iota.vercel.app/challenges/xxe": 7,
     "duck-store.escape.tech/api/v1/users/me/profile": 33,
     "duck-store.escape.tech/api/v1/products/filter/by-color": 31,
     "ist-edu-bd.vercel.app/redirect": 10
