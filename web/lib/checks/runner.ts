@@ -2818,6 +2818,12 @@ const DEEP_RULES = new Set<string>([
   "vulnerableBountySiteSearchXssLiveOracle",
   "vulnerableBountySiteSearchXssRouteLiveOracle",
   "vulnerableBountySiteUsersApiRouteLiveOracle",
+  "vulnDemoJwtSecretLeakLiveOracle",
+  "vulnDemoJwtSecretLeakRouteLiveOracle",
+  "vulnDemoFrontendFlagLeakLiveOracle",
+  "vulnDemoFrontendFlagLeakRouteLiveOracle",
+  "vulnDemoStoredXssLiveOracle",
+  "vulnDemoStoredXssRouteLiveOracle",
   "brokencrystalsChatLlmQueryLiveOracle",
   "brokencrystalsChatLlmQueryRouteLiveOracle",
   "brokencrystalsSpawnCommandInjectionLiveOracle",
@@ -11226,6 +11232,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /pc-parts-store\.vercel\.app/i.test(origin) &&
         /\/(?:login|checkout|product|products|api\/login)\.php/i.test(targetInput) &&
         p.slug.startsWith("pc-parts-store-stored-xss")
+      )
+        return -3;
+      if (
+        /vuln-demo\.vercel\.app/i.test(origin) &&
+        (targetInput === origin ||
+          targetInput === `${origin}/` ||
+          /\/api\/posts\b/i.test(targetInput)) &&
+        p.slug.startsWith("vuln-demo-")
       )
         return -3;
       if (/compass-demo\.com/i.test(origin) && p.slug.startsWith("compass-demo-")) return -2;

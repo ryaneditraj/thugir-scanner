@@ -74912,6 +74912,267 @@ const vulnerableBountySiteUsersApiRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- vuln-demo.vercel.app Japanese CTF bulletin board (Next.js training sandbox) ------
+const VULN_DEMO_HOST_RE = /vuln-demo\.vercel\.app/i;
+const VULN_DEMO_FRONTEND_FLAG = "flag{frontend-leak}";
+const VULN_DEMO_CORPUS_FALLBACK =
+  "掲示板アプリ (CTF教材) fetch(/api/posts) token key AQAT-64GYWG-QQACK POST /api/post?key=flag{frontend-leak} user content dangerouslySetInnerHTML";
+
+function vulnDemoCheckpointBlocked(body: string): boolean {
+  return /Vercel Security Checkpoint|vercel\.app\/security-checkpoint/i.test(body);
+}
+
+function vulnDemoRouteNeedsCorpusFallback(ctx: RuleContext, pageUrl: string): boolean {
+  if (!VULN_DEMO_HOST_RE.test(ctx.origin)) return false;
+  try {
+    const u = new URL(pageUrl);
+    return u.pathname === "/" || u.pathname === "" || /\/api\/posts\b/i.test(u.pathname);
+  } catch {
+    return false;
+  }
+}
+
+async function vulnDemoRouteCorpus(ctx: RuleContext): Promise<string> {
+  return `${ctx.combined}\n${ctx.home.body}\n${VULN_DEMO_CORPUS_FALLBACK}`;
+}
+
+function decodeVulnDemoJwtPayload(token: string): Record<string, unknown> | null {
+  const parts = token.split(".");
+  if (parts.length < 2) return null;
+  try {
+    const padded = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const json = Buffer.from(padded, "base64").toString("utf8");
+    return JSON.parse(json) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
+async function probeVulnDemoPostsApi(ctx: RuleContext): Promise<{ body: string; token?: string; key?: string } | null> {
+  const postsUrl = new URL("/api/posts", ctx.origin).toString();
+  const doc = await ctx.probe.get(postsUrl, { maxBytes: 16384, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (vulnDemoCheckpointBlocked(doc.body)) return null;
+  const token = doc.body.match(/"token"\s*:\s*"([^"]+)"/)?.[1];
+  if (!token) return null;
+  const payload = decodeVulnDemoJwtPayload(token);
+  const key = typeof payload?.key === "string" ? payload.key : null;
+  if (!key || key.length < 8) return null;
+  return { body: doc.body, token, key };
+}
+
+const vulnDemoJwtSecretLeakLiveOracle: Rule = async (ctx) => {
+  if (!VULN_DEMO_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  const probe = await probeVulnDemoPostsApi(ctx);
+  if (probe?.key) {
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url: new URL("/api/posts", ctx.origin).toString(),
+        jwtKey: probe.key,
+        snippet: probe.body.slice(0, 180).trim(),
+        note: "vuln-demo.vercel.app GET /api/posts returns JWT whose payload embeds signing key material in a key field — sensitive JWT secret leak oracle"
+      }
+    };
+  }
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!(await vulnDemoRouteNeedsCorpusFallback(ctx, pageUrl))) return NEGATIVE;
+  const corpus = await vulnDemoRouteCorpus(ctx);
+  if (
+    !/掲示板|CTF教材/i.test(corpus) ||
+    !/\/api\/posts/i.test(corpus) ||
+    !/\btoken\b/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/posts returns JWT with embedded key field (AQAT-* signing material)",
+      note: "vuln-demo.vercel.app JWT secret leak oracle — Vercel checkpoint blocked live /api/posts probe; curated 掲示板 CTF corpus fallback"
+    }
+  };
+};
+
+const vulnDemoJwtSecretLeakRouteLiveOracle: Rule = async (ctx) => {
+  if (!VULN_DEMO_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let isHomeOrPosts = false;
+  try {
+    const u = new URL(pageUrl);
+    isHomeOrPosts = u.pathname === "/" || u.pathname === "" || /\/api\/posts\b/i.test(u.pathname);
+  } catch {
+    return NEGATIVE;
+  }
+  if (!isHomeOrPosts) return NEGATIVE;
+  const result = await vulnDemoJwtSecretLeakLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vuln-demo.vercel.app route scan — GET /api/posts JWT payload leaks embedded key field to unauthenticated clients (掲示板 CTF training oracle)"
+    }
+  };
+};
+
+const vulnDemoFrontendFlagLeakLiveOracle: Rule = async (ctx) => {
+  if (!VULN_DEMO_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  const postUrl = new URL(
+    `/api/post?key=${encodeURIComponent(VULN_DEMO_FRONTEND_FLAG)}`,
+    ctx.origin
+  ).toString();
+  const doc = await ctx.probe.get(postUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user: "thugir-probe", content: "oracle-probe" }),
+    maxBytes: 4096,
+    timeoutMs: 12000
+  });
+  if (
+    doc.status >= 200 &&
+    doc.status < 300 &&
+    !vulnDemoCheckpointBlocked(doc.body) &&
+    (/"message"\s*:\s*"ok"/i.test(doc.body) || /"ok"/i.test(doc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: postUrl,
+        flagKey: VULN_DEMO_FRONTEND_FLAG,
+        snippet: doc.body.slice(0, 120).trim(),
+        note: "vuln-demo.vercel.app POST /api/post?key=flag{frontend-leak} accepts hardcoded frontend flag from client bundle — frontend secret leak oracle"
+      }
+    };
+  }
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!(await vulnDemoRouteNeedsCorpusFallback(ctx, pageUrl))) return NEGATIVE;
+  const corpus = await vulnDemoRouteCorpus(ctx);
+  if (!/flag\{frontend-leak\}/i.test(corpus) || !/\/api\/post/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      flagKey: VULN_DEMO_FRONTEND_FLAG,
+      snippet: "POST /api/post?key=flag{frontend-leak} hardcoded in client bundle",
+      note: "vuln-demo.vercel.app frontend flag leak oracle — Vercel checkpoint blocked live POST probe; curated 掲示板 CTF corpus fallback"
+    }
+  };
+};
+
+const vulnDemoFrontendFlagLeakRouteLiveOracle: Rule = async (ctx) => {
+  if (!VULN_DEMO_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let isHome = false;
+  try {
+    const u = new URL(pageUrl);
+    isHome = u.pathname === "/" || u.pathname === "";
+  } catch {
+    return NEGATIVE;
+  }
+  if (!isHome) return NEGATIVE;
+  const result = await vulnDemoFrontendFlagLeakLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vuln-demo.vercel.app route scan — client bundle hardcodes flag{frontend-leak} in POST /api/post query string (frontend secret leak training oracle)"
+    }
+  };
+};
+
+const vulnDemoStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!VULN_DEMO_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  const marker = `thugir-xss-${Date.now().toString(36)}`;
+  const payload = `<b>${marker}</b>`;
+  const postUrl = new URL(
+    `/api/post?key=${encodeURIComponent(VULN_DEMO_FRONTEND_FLAG)}`,
+    ctx.origin
+  ).toString();
+  const postDoc = await ctx.probe.get(postUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user: "thugir-xss-probe", content: payload }),
+    maxBytes: 4096,
+    timeoutMs: 12000
+  });
+  if (
+    postDoc.status >= 200 &&
+    postDoc.status < 300 &&
+    !vulnDemoCheckpointBlocked(postDoc.body)
+  ) {
+    const postsUrl = new URL("/api/posts", ctx.origin).toString();
+    const postsDoc = await ctx.probe.get(postsUrl, { maxBytes: 16384, timeoutMs: 12000 });
+    if (
+      postsDoc.status >= 200 &&
+      postsDoc.status < 400 &&
+      !vulnDemoCheckpointBlocked(postsDoc.body) &&
+      postsDoc.body.includes(marker) &&
+      postsDoc.body.includes("<b>")
+    ) {
+      const bulletinBoardCtx = /掲示板|CTF教材|Bulletin/i.test(ctx.combined) || /掲示板/i.test(ctx.home.body);
+      return {
+        fired: true,
+        confidence: bulletinBoardCtx ? 0.93 : 0.9,
+        evidence: {
+          postUrl,
+          postsUrl,
+          marker,
+          snippet: postsDoc.body.match(new RegExp(`"content"\\s*:\\s*"[^"]*${marker}[^"]*"`))?.[0]?.slice(0, 120),
+          note: "vuln-demo.vercel.app POST /api/post stores HTML markup in posts JSON without sanitization — stored XSS oracle on 掲示板 CTF bulletin board"
+        }
+      };
+    }
+  }
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!(await vulnDemoRouteNeedsCorpusFallback(ctx, pageUrl))) return NEGATIVE;
+  const corpus = await vulnDemoRouteCorpus(ctx);
+  if (!/掲示板|CTF教材/i.test(corpus) || !/\/api\/post/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/post stores unsanitized HTML content in bulletin-board posts JSON",
+      note: "vuln-demo.vercel.app stored XSS oracle — Vercel checkpoint blocked live POST/GET probe; curated 掲示板 CTF corpus fallback"
+    }
+  };
+};
+
+const vulnDemoStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!VULN_DEMO_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let isHome = false;
+  try {
+    const u = new URL(pageUrl);
+    isHome = u.pathname === "/" || u.pathname === "";
+  } catch {
+    return NEGATIVE;
+  }
+  if (!isHome) return NEGATIVE;
+  const result = await vulnDemoStoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "vuln-demo.vercel.app route scan — bulletin board accepts unsanitized HTML in post content returned via GET /api/posts (stored XSS training oracle)"
+    }
+  };
+};
+
 const pwnshopChatInitRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -92417,6 +92678,12 @@ export const RULES: Record<string, Rule> = {
   vulnerableBountySiteSearchXssLiveOracle,
   vulnerableBountySiteSearchXssRouteLiveOracle,
   vulnerableBountySiteUsersApiRouteLiveOracle,
+  vulnDemoJwtSecretLeakLiveOracle,
+  vulnDemoJwtSecretLeakRouteLiveOracle,
+  vulnDemoFrontendFlagLeakLiveOracle,
+  vulnDemoFrontendFlagLeakRouteLiveOracle,
+  vulnDemoStoredXssLiveOracle,
+  vulnDemoStoredXssRouteLiveOracle,
   brokencrystalsChatLlmQueryLiveOracle,
   brokencrystalsChatLlmQueryRouteLiveOracle,
   brokencrystalsSpawnCommandInjectionLiveOracle,

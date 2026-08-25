@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T03:12:00.000Z",
+  "updated_at": "2026-08-25T03:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3034,
-  "total_findings": 32780,
-  "critical_findings": 54,
+  "total_sites_scanned": 3042,
+  "total_findings": 32869,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2068,
-  "discovery_findings": 26149,
-  "improvements_shipped": 1229,
-  "last_run": "2026-08-25T03:12:00.000Z",
+  "discovery_findings": 26240,
+  "improvements_shipped": 1232,
+  "last_run": "2026-08-25T03:35:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
     "benchmark": {
@@ -48,44 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (45 findings, 34 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (45 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
+      "urls_added": 0,
       "urls_scanned": 8,
-      "findings": 88,
-      "focus": "wrongsecrets challenge-20/21/22 binary oracles + dvwu path-traversal/command-injection + fabraix LLM challenges + seclab/labs/xss",
-      "improvements_shipped_this_run": 0
+      "findings": 91,
+      "focus": "vuln-demo JWT secret leak + frontend flag leak + stored XSS oracles with Vercel checkpoint corpus fallback",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (45 findings, 34 live oracles) — no benchmark misses",
-      "wrongsecrets challenge-20: wrongsecrets-challenge-20-cplus-binary-route-live-oracle (15 findings)",
-      "wrongsecrets challenge-21: wrongsecrets-challenge-21-golang-binary-route-live-oracle (15 findings)",
-      "wrongsecrets challenge-22: wrongsecrets-challenge-22-rust-binary-route-live-oracle (15 findings)",
-      "dvwu.vercel.app/labs/path-traversal: dvwu-path-traversal-client-route-live-oracle (14 findings)",
-      "dvwu.vercel.app/labs/command-injection: dvwu-command-injection-lab-route-live-oracle (12 findings)",
-      "playground.fabraix.com indirect-prompt-injection-001: fabraix-indirect-prompt-injection-route-live-oracle (6 findings)",
-      "playground.fabraix.com data-exfiltration-001: fabraix-data-exfiltration-001-route-live-oracle (6 findings)",
-      "seclab.vercel.app/labs/xss: seclab-labs-dead-route-live-oracle only — /labs/* routes not deployed on live demo (5 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (45 findings) — no benchmark category gaps",
+      "vuln-demo.vercel.app/: 6→8 findings — vuln-demo-jwt-secret-leak + frontend-flag-leak + stored-xss live/route oracles (Vercel checkpoint corpus fallback when /api/posts blocked)",
+      "ai-security-platform-iota.vercel.app/challenges/prompt-injection: 7 findings — auth-gated LLM01 route oracle maintained",
+      "ai-security-platform-iota.vercel.app/challenges/broken-auth: 7 findings — CWE-287 auth-gated route oracle maintained"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
       "seclab.vercel.app/labs/* routes dead on live Vercel deploy — only root /xss /sqli /csrf /idor work",
-      "dvwu /labs/idor + /labs/csrf + wrongsecrets challenge-6/8/63 at queue tail — pending drain",
-      "ai-security-platform-iota challenges (prompt-injection/broken-auth/ssrf) queued next — LLM oracle coverage TBD"
+      "vuln-demo.vercel.app: Vercel Security Checkpoint intermittently blocks /api/posts live probes — corpus fallback covers JWT/flag/XSS oracles",
+      "testphp.vulnweb.com unreachable from cloud agent (DNS/timeout)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 45,
+    "vuln-demo.vercel.app": 8,
+    "ai-security-platform-iota.vercel.app/challenges/prompt-injection": 7,
+    "ai-security-platform-iota.vercel.app/challenges/broken-auth": 7,
+    "vulnerable-bounty-site.vercel.app": 10,
+    "juice-shop.herokuapp.com/rest/privacy-requests": 49,
     "wrongsecrets.herokuapp.com/challenge/challenge-20": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-21": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-22": 15,
-    "dvwu.vercel.app/labs/path-traversal": 14,
-    "dvwu.vercel.app/labs/command-injection": 12,
-    "playground.fabraix.com/challenges/indirect-prompt-injection-001": 6,
-    "playground.fabraix.com/challenges/data-exfiltration-001": 6,
-    "seclab.vercel.app/labs/xss": 5
+    "dvwu.vercel.app/labs/path-traversal": 14
   }
 }
