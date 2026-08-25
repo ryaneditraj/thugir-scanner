@@ -4529,6 +4529,24 @@
       "slug": "vulnlab-ssti-sqli-xss-hub-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: sstiVulnlabPrioritySeeds + sqliVulnlabPrioritySeeds + xssVulnlabPrioritySeeds hub crawl seeds; ssti.vulnlab.dev/basic/ findings 9 (+ssti-vulnlab-basic-route-live-oracle); sqli.vulnlab.dev/error/ 8; xss.vulnlab.dev/reflected/ 9; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-labs-pending-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended dvwu.vercel.app/labs/file-upload + /labs/xxe + /labs/deserialization + /labs/jwt + /labs/ssti to priority_discovery_urls front; file-upload 0→12 (+dvwu-file-upload-lab-route-live-oracle); xxe 0→14 (+dvwu-xxe-lab-route-live-oracle); deserialization 0→12 (+dvwu-deserialization-lab-route-live-oracle); jwt 0→12 (+dvwu-jwt-lab-route-live-oracle); ssti 0→12 (+dvwu-ssti-lab-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-35-priority-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended wrongsecrets.herokuapp.com/challenge/challenge-35 to priority_discovery_urls; GET /challenge/challenge-35 documents GHSA-vv4g-7gjw-fvqw GitHub advisory walkthrough; findings 14→15 (+wrongsecrets-challenge-35-documentation-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnlab.dev",
+      "slug": "vulnlab-extended-hub-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended sqli.vulnlab.dev/union + ssti.vulnlab.dev/format + xss.vulnlab.dev/dom to priority_discovery_urls; union/ 0→7 (+sqli-vulnlab-union-route-live-oracle); format/ 0→9 (+ssti-vulnlab-format-route-live-oracle); dom/ 0→8 (+xss-vulnlab-dom-route-live-oracle); benchmark 6/6 maintained"
     }
   ]
 }

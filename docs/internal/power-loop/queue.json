@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T10:08:00.000Z",
+  "updated_at": "2026-08-25T11:10:00.000Z",
   "discovery_urls": [
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-55",
@@ -10523,6 +10523,51 @@
   ],
   "discovery_urls_added": 24,
   "priority_discovery_urls": [
+    {
+      "url": "https://dvwu.vercel.app/labs/file-upload",
+      "source": "zahidoverflow/dvwu — file upload training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/xxe",
+      "source": "zahidoverflow/dvwu — XXE training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/deserialization",
+      "source": "zahidoverflow/dvwu — insecure deserialization training lab route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/jwt",
+      "source": "zahidoverflow/dvwu — JWT attacks training lab route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/ssti",
+      "source": "zahidoverflow/dvwu — SSTI training lab route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-35",
+      "source": "OWASP WrongSecrets — Challenge 35 documentation secret oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sqli.vulnlab.dev/union/",
+      "source": "sampsonc/vulnlab.dev — UNION-based SQLi lab",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/format/",
+      "source": "sampsonc/vulnlab.dev — Jinja2 format-string SSTI lab",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/dom/",
+      "source": "sampsonc/vulnlab.dev — DOM XSS lab",
+      "auth": "public_demo"
+    },
     {
       "url": "https://alf.nu/ServiceWorker",
       "source": "Erling Ellingsen alf.nu — ServiceWorker fetch interception rootkit demo (live test.js oracle)",
