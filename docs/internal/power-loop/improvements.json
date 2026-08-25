@@ -4547,6 +4547,24 @@
       "slug": "vulnlab-extended-hub-priority-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: prepended sqli.vulnlab.dev/union + ssti.vulnlab.dev/format + xss.vulnlab.dev/dom to priority_discovery_urls; union/ 0→7 (+sqli-vulnlab-union-route-live-oracle); format/ 0→9 (+ssti-vulnlab-format-route-live-oracle); dom/ 0→8 (+xss-vulnlab-dom-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-rce-eval-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /rce/eval?code=7*7 returns 49; burpbountylab.com/rce/eval findings 94→95 (+burpbounty-rce-eval-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-crlf-set-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /crlf/set?lang= reflects canary into Set-Cookie and X-Custom-Lang; burpbountylab.com/crlf/set findings 94→95 (+burpbounty-crlf-set-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-completions-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ai/v1/completions returns text_completion JSON + LLM gateway headers; burpbountylab.com/ai/v1/completions findings 94→95 (+burpbounty-ai-completions-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
