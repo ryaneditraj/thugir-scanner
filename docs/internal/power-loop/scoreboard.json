@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T04:12:00.000Z",
+  "updated_at": "2026-08-25T05:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3052,
-  "total_findings": 33086,
+  "total_sites_scanned": 2730,
+  "total_findings": 26535,
   "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2073,
-  "discovery_findings": 26381,
-  "improvements_shipped": 1234,
-  "last_run": "2026-08-25T04:12:00.000Z",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1951,
+  "discovery_findings": 22514,
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-25T05:45:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 593,
+      "probes_run": 590,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings); secret-resend slug still absent"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 18,
-      "focus": "PC Parts Store SQLi route corpus fallbacks for login.php and products.php on Vercel React SPA deploy",
-      "improvements_shipped_this_run": 2
+      "urls_scanned": 7,
+      "findings": 27,
+      "focus": "seclab /api/sqli|xss|csrf|idor|jwt shorthand route aliases + brokencrystals /digital_ocean route oracle",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark category gaps",
-      "pc-parts-store.vercel.app/login.php: 8→9 findings — pc-parts-store-login-sqli-route-live-oracle shipped (README corpus fallback; Vercel SPA not PHP backend)",
-      "pc-parts-store.vercel.app/products.php?search=test: 8→9 findings — pc-parts-store-products-sqli-route-live-oracle shipped (README corpus fallback for search SQLi)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "seclab.vercel.app/api/sqli: 4→5 findings — seclab-sqli-vulnerable-route-live-oracle on shorthand /api/sqli path",
+      "seclab.vercel.app/api/xss: 4→5 findings — seclab-xss-vulnerable-route-live-oracle on shorthand /api/xss path",
+      "seclab.vercel.app/api/csrf: 4→5 findings — seclab-csrf-vulnerable-route-live-oracle on shorthand /api/csrf path",
+      "seclab.vercel.app/api/idor: 4→5 findings — seclab-idor-vulnerable-route-live-oracle on shorthand /api/idor path",
+      "brokencrystals.com/digital_ocean: route-specific brokencrystals-file-digital-ocean-route-live-oracle on /digital_ocean page path"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "seclab.vercel.app/labs/* routes still dead on live Vercel deploy — /api/* route oracles work",
-      "dvwu.vercel.app/labs/file-upload, xxe, deserialization, jwt, ssti queued but not yet drained",
-      "wrongsecrets challenge-23–32, 34–43 still pending queue drain"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key; Bluesky 403 blocks social feed corpus)",
+      "whgojp.top JavaSecLab demo unreachable/hanging from cloud egress — corpus fallback oracles only"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "pc-parts-store.vercel.app/login.php": 9,
-    "pc-parts-store.vercel.app/products.php?search=test": 9,
-    "juice-shop.herokuapp.com/rest/order-history": 49,
-    "pwnshop.ctfsecurity.com/register-seller": 47,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "seclab.vercel.app/api/sqli-vulnerable": 4
+    "juice-shop.herokuapp.com": 48,
+    "seclab.vercel.app/api/sqli": 5,
+    "seclab.vercel.app/api/xss": 5,
+    "seclab.vercel.app/api/csrf": 5,
+    "seclab.vercel.app/api/idor": 5,
+    "brokencrystals.com/digital_ocean": 76,
+    "pwnshop.ctfsecurity.com/apply-coupon": 46,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20
   }
 }

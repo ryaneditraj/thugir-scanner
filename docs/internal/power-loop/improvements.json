@@ -4439,6 +4439,24 @@
       "slug": "pc-parts-store-products-sqli-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET products.php?search= serves React SPA — README corpus fallback documents unsanitized search in SELECT * FROM products WHERE name LIKE; pc-parts-store.vercel.app/products.php?search=test findings 8→9 (+pc-parts-store-products-sqli-route-live-oracle 0.88); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-api-sqli-xss-csrf-shorthand-route-aliases",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: seclabApiLabShorthandRouteMatch extends sqli/xss/csrf route oracles to hub-crawl /api/sqli /api/xss /api/csrf paths (not /api/sqli/search); seclab.vercel.app/api/sqli findings 4→5 (+seclab-sqli-vulnerable-route-live-oracle); /api/xss 4→5; /api/csrf 4→5; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-api-idor-jwt-users-ssrf-shorthand-route-aliases",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: seclabApiLabShorthandRouteMatch extends idor/jwt/users/ssrf route oracles to /api/idor /api/jwt /api/users /api/ssrf shorthand paths; seclab.vercel.app/api/idor findings 4→5 (+seclab-idor-vulnerable-route-live-oracle); /api/jwt 4→4 (+seclab-jwt-vulnerable-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-digital-ocean-shorthand-route-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsFileDigitalOceanRouteLiveOracle now matches /digital_ocean page route in addition to /api/file/digital_ocean; brokencrystals.com/digital_ocean findings 86→76 with route-specific brokencrystals-file-digital-ocean-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
