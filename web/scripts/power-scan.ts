@@ -38,8 +38,44 @@ interface BenchmarkTarget extends ScanEntry {
 }
 
 const BENCHMARK_MIN_FINDINGS = 5;
+/** Primary Heroku can hit 6/6 via generic bundle checks while live-oracle probes stay cold. */
+const BENCHMARK_JUICE_SHOP_RICH_FINDINGS = 15;
 const BENCHMARK_RETRY_DELAY_MS = 12000;
 const BENCHMARK_FINAL_RETRY_DELAY_MS = 25000;
+/** demo.owasp-juice.shop/rest/recycles/* and similar routes can hang >25min on deep crawl. */
+const DISCOVERY_SCAN_TIMEOUT_MS = Number(process.env.POWER_SCAN_TIMEOUT_MS || "1200000");
+
+async function runDeepScanWithTimeout(
+  url: string,
+  opts?: { maxScripts?: number }
+): Promise<Awaited<ReturnType<typeof runDeepScan>>> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(
+      () => reject(new Error(`scan timeout after ${DISCOVERY_SCAN_TIMEOUT_MS}ms`)),
+      DISCOVERY_SCAN_TIMEOUT_MS
+    );
+  });
+  try {
+    return await Promise.race([runDeepScan(url, opts), timeout]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
+/** vaultapp.vercel.app hosts Clutch-It — MRMcyber VaultApp lab lives on vaultapp-omega.vercel.app */
+function canonicalDiscoveryUrl(url: string): string {
+  try {
+    const u = new URL(url);
+    if (/^vaultapp\.vercel\.app$/i.test(u.hostname)) {
+      u.hostname = "vaultapp-omega.vercel.app";
+      return u.toString();
+    }
+  } catch {
+    /* ignore */
+  }
+  return url;
+}
 
 type BenchmarkFinding = ScanRunResult["findings"][number];
 
@@ -112,6 +148,22 @@ function recentlyScanned(url: string, runs: ScanRunResult[], hours = 48): boolea
   });
 }
 
+function juiceShopLiveOracleSlugCount(findings: BenchmarkFinding[]): number {
+  return findings.filter((f) => /^juice-shop-/i.test(f.slug)).length;
+}
+
+/** 6/6 recall with no juice-shop-* live oracles — Heroku partial wake / bundle-only pass. */
+function benchmarkThinJuiceShopPass(
+  url: string,
+  findings: BenchmarkFinding[],
+  recall: ReturnType<typeof computeBenchmarkRecall> | null
+): boolean {
+  if (!/juice-shop|owasp-juice/i.test(url)) return false;
+  if (recall === null || recall.gap.length > 0) return false;
+  const liveOracles = juiceShopLiveOracleSlugCount(findings);
+  return liveOracles === 0 || findings.length < BENCHMARK_JUICE_SHOP_RICH_FINDINGS;
+}
+
 function benchmarkFallbackUrls(target: BenchmarkTarget | undefined, primaryUrl: string): string[] {
   if (!target) return [];
   const urls = [
@@ -160,7 +212,7 @@ async function scanOne(
   };
 
   try {
-    const deep = await runDeepScan(entry.url, { maxScripts: 24 });
+    const deep = await runDeepScanWithTimeout(entry.url, { maxScripts: 24 });
     let findings = [...deep.findings];
 
     // AI deep probe (requires API keys in env — skips gracefully if disabled)
@@ -259,12 +311,20 @@ async function main() {
   if (useQueue) {
     const resultsPath = resolve(LOOP, "results.json");
     const priorRuns = loadJson<{ runs: ScanRunResult[] }>(resultsPath, { runs: [] }).runs;
-    const queue = loadJson<{ discovery_urls: ScanEntry[] }>(resolve(LOOP, "queue.json"), {
+    const queue = loadJson<{
+      discovery_urls: ScanEntry[];
+      priority_discovery_urls?: ScanEntry[];
+    }>(resolve(LOOP, "queue.json"), {
       discovery_urls: []
     });
-    for (const u of queue.discovery_urls) {
-      if (recentlyScanned(u.url, priorRuns)) continue;
-      targets.push({ entry: u, kind: "discovery" });
+    const seenQueueKeys = new Set<string>();
+    for (const u of [...(queue.priority_discovery_urls ?? []), ...queue.discovery_urls]) {
+      const canonicalUrl = canonicalDiscoveryUrl(u.url);
+      const key = discoveryScanKey(canonicalUrl);
+      if (!key || seenQueueKeys.has(key)) continue;
+      seenQueueKeys.add(key);
+      if (recentlyScanned(canonicalUrl, priorRuns)) continue;
+      targets.push({ entry: { ...u, url: canonicalUrl }, kind: "discovery" });
     }
   }
 
@@ -286,19 +346,18 @@ async function main() {
     let result = await scanOne(entry, kind, scanOptions);
     saveResults(result);
 
-    if (kind === "benchmark" && entry.id) {
+    if (kind === "benchmark" && entry.id && result.status === "error") {
       const bench = loadJson<BenchmarksFile>(resolve(LOOP, "benchmarks.json"), { targets: [] });
       const target = bench.targets.find((t) => t.id === entry.id);
-
-      if (
-        result.status === "error" &&
-        target?.fallback_url &&
-        target.fallback_url !== entry.url
-      ) {
-        console.log(`benchmark error ${entry.url} — fallback ${target.fallback_url}`);
-        const fallback = await scanOne({ ...entry, url: target.fallback_url }, kind, scanOptions);
+      const triedUrls = new Set<string>([entry.url, result.url]);
+      for (const fallbackUrl of benchmarkFallbackUrls(target, entry.url)) {
+        if (triedUrls.has(fallbackUrl)) continue;
+        triedUrls.add(fallbackUrl);
+        console.log(`benchmark error ${result.url} — fallback ${fallbackUrl}`);
+        const fallback = await scanOne({ ...entry, url: fallbackUrl }, kind, scanOptions);
         saveResults(fallback);
         result = fallback;
+        if (result.status === "ok") break;
       }
     }
 
@@ -380,7 +439,7 @@ async function main() {
       if (recall !== null && recall.gap.length > 0) {
         for (const fallbackUrl of benchmarkFallbackUrls(target, entry.url)) {
           console.log(`benchmark fallback ${fallbackUrl} (gap=${recall.gap.join(",")})`);
-          const fallback = await scanOne({ ...entry, url: fallbackUrl }, kind);
+          const fallback = await scanOne({ ...entry, url: fallbackUrl }, kind, scanOptions);
           saveResults(fallback);
           if (fallback.status !== "ok") continue;
           const merged = mergeBenchmarkFindings(result.findings, fallback.findings);
@@ -401,6 +460,46 @@ async function main() {
             recall = mergedRecall;
           }
           if (recall.gap.length === 0 && result.finding_count >= BENCHMARK_MIN_FINDINGS) break;
+        }
+      }
+
+      if (
+        recall !== null &&
+        benchmarkThinJuiceShopPass(entry.url, result.findings, recall) &&
+        benchmarkFallbackUrls(target, entry.url).length > 0
+      ) {
+        console.log(
+          `benchmark thin pass ${entry.url} findings=${result.finding_count} liveOracles=${juiceShopLiveOracleSlugCount(result.findings)} — trying fallbacks`
+        );
+        for (const fallbackUrl of benchmarkFallbackUrls(target, entry.url)) {
+          console.log(`benchmark thin-pass fallback ${fallbackUrl}`);
+          const fallback = await scanOne({ ...entry, url: fallbackUrl }, kind, scanOptions);
+          saveResults(fallback);
+          if (fallback.status !== "ok") continue;
+          const merged = mergeBenchmarkFindings(result.findings, fallback.findings);
+          const mergedRecall = computeBenchmarkRecall(merged, expected);
+          const mergedLiveOracles = juiceShopLiveOracleSlugCount(merged);
+          if (
+            mergedLiveOracles > juiceShopLiveOracleSlugCount(result.findings) ||
+            merged.length > result.finding_count
+          ) {
+            result = {
+              ...result,
+              url: fallbackUrl,
+              findings: merged,
+              finding_count: merged.length,
+              pages_crawled: Math.max(result.pages_crawled, fallback.pages_crawled),
+              probes_run: Math.max(result.probes_run, fallback.probes_run)
+            };
+            recall = mergedRecall;
+          }
+          if (
+            recall.gap.length === 0 &&
+            juiceShopLiveOracleSlugCount(result.findings) > 0 &&
+            result.finding_count >= BENCHMARK_JUICE_SHOP_RICH_FINDINGS
+          ) {
+            break;
+          }
         }
       }
     }

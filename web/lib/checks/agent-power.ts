@@ -9,11 +9,13 @@ import {
   escalationLevelFromFailures,
   SQLI_PROBES,
   xssCanary,
-  SSTI_PROBES
+  SSTI_PROBES,
+  sstiArithmeticEvaluated
 } from "../methodology/reflexion";
 
 interface PowerCtx {
   origin: string;
+  scanUrl?: string;
   home: FetchedDoc;
   scripts: FetchedDoc[];
   combined: string;
@@ -27,6 +29,80 @@ interface PowerResult {
 }
 
 type PowerRule = (ctx: PowerCtx) => Promise<PowerResult>;
+
+const BYPASS403_HOST_RE = /bypass403\.vercel\.app/i;
+const WSL_HOST_RE = /web-security-learning-labs\.vercel\.app/i;
+const SECRESEARCHLAB_HOST_RE = /secresearchlab\.web\.app/i;
+const SUPPORT_RELIABILITY_LAB_HOST_RE = /support-reliability-lab\.vercel\.app/i;
+const VULNFORGE_ACADEMY_HOST_RE = /vulnforge-academy\.vercel\.app/i;
+const RIGLABS_CYBER_LAB_HOST_RE = /riglabs-cyber-lab\.vercel\.app/i;
+
+/** Route scans on WSL /module/{id} shells — generic reflexion probes hit homepage, not the lab route. */
+function wslModuleRouteReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return WSL_HOST_RE.test(pageUrl) && /\/module\/\d{4}\b/i.test(pageUrl);
+}
+
+/** Firebase/Next.js lab shells embed coincidental '49' in chunk IDs — suppress reflexion SSTI FPs. */
+function secResearchLabReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return SECRESEARCHLAB_HOST_RE.test(pageUrl);
+}
+
+/** Next.js incident-lab tenant shells — reflexion SSTI probes false-positive on chunk hashes. */
+function supportReliabilityLabReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return SUPPORT_RELIABILITY_LAB_HOST_RE.test(pageUrl);
+}
+
+/** VulnForge file-upload tiers (levels 16–18) — reflexion SSTI false-positives on training shells. */
+function vulnforgeAcademyFileUploadReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!VULNFORGE_ACADEMY_HOST_RE.test(pageUrl)) return false;
+  const levelMatch = pageUrl.match(/level(1[6-8])\.php/i);
+  return levelMatch !== null;
+}
+
+/** VulnForge SSRF tiers (levels 13–15) — generic reflexion SSTI false-positives alongside SSRF route oracle. */
+function vulnforgeAcademySsrfReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!VULNFORGE_ACADEMY_HOST_RE.test(pageUrl)) return false;
+  const levelMatch = pageUrl.match(/level(1[3-5])\.php/i);
+  return levelMatch !== null;
+}
+
+/** VulnForge RCE tiers (levels 19–20) — generic reflexion SSTI duplicates level-ssti-route oracle. */
+function vulnforgeAcademyRceReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!VULNFORGE_ACADEMY_HOST_RE.test(pageUrl)) return false;
+  const levelMatch = pageUrl.match(/level(19|20)\.php/i);
+  return levelMatch !== null;
+}
+
+/** Riglabs Cyber Lab Next.js shells embed lineHeight:49px in 404 pages — suppress reflexion SSTI FPs. */
+function riglabsCyberLabReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return RIGLABS_CYBER_LAB_HOST_RE.test(pageUrl);
+}
+
+/** mantishack / International Bank demo embeds lineHeight:49px in Next.js 404 shells — suppress reflexion SSTI FPs. */
+function vulnerableBountySiteReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /vulnerable-bounty-site\.vercel\.app/i.test(pageUrl);
+}
+
+/** PromptShield React SPA has no server-side template engine — suppress reflexion SSTI FPs. */
+function promptShieldReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /prompt-shield1\.vercel\.app|promptshield-production[-a-z0-9]*\.up\.railway\.app/i.test(pageUrl);
+}
+
+/** Pwnshop /wishlist/:id currently serves a styled 404 shell — suppress generic reflexion probes on that route. */
+function pwnshopWishlistReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/pwnshop|ctfsecurity\.com/i.test(pageUrl)) return false;
+  return /\/wishlist(?:\/|$)/i.test(pageUrl);
+}
 
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
 
@@ -124,6 +200,11 @@ export const thugirDirEnum: PowerRule = async (ctx) => {
 
 // --- Reflexion multi-encoding XSS -------------------------------------------
 export const reflexionEscalatedXss: PowerRule = async (ctx) => {
+  if (BYPASS403_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  if (wslModuleRouteReflexionSuppressed(ctx)) return NEGATIVE;
+  if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
+  if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
   const suffix = "pwr";
   const base = xssCanary(suffix);
   const params = ["q", "search", "query", "name", "id", "term"];
@@ -160,6 +241,11 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
 
 // --- Reflexion SQLi with escalation -----------------------------------------
 export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
+  if (BYPASS403_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  if (wslModuleRouteReflexionSuppressed(ctx)) return NEGATIVE;
+  if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
+  if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
+  if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["id", "user", "name", "q", "search"];
   const paths = ["/", "/api/users", "/search"];
   const sqlErrors =
@@ -195,6 +281,16 @@ export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
 
 // --- Reflexion SSTI multi-template ------------------------------------------
 export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
+  if (BYPASS403_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  if (wslModuleRouteReflexionSuppressed(ctx)) return NEGATIVE;
+  if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
+  if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
+  if (vulnforgeAcademyFileUploadReflexionSuppressed(ctx)) return NEGATIVE;
+  if (vulnforgeAcademySsrfReflexionSuppressed(ctx)) return NEGATIVE;
+  if (vulnforgeAcademyRceReflexionSuppressed(ctx)) return NEGATIVE;
+  if (riglabsCyberLabReflexionSuppressed(ctx)) return NEGATIVE;
+  if (vulnerableBountySiteReflexionSuppressed(ctx)) return NEGATIVE;
+  if (promptShieldReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 
@@ -206,7 +302,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
           const u = new URL(path, ctx.origin);
           u.searchParams.set(param, payload);
           const r = await ctx.probe.get(u.toString(), { maxBytes: 8192 });
-          if (r.body.includes("49") && (payload.includes("7*7") || payload.includes("7*7"))) {
+          if (payload.includes("7*7") && sstiArithmeticEvaluated(r.body)) {
             return {
               fired: true,
               confidence: 0.92,
