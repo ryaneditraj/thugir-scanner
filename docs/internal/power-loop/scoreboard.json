@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T14:25:00.000Z",
+  "updated_at": "2026-08-25T14:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2752,
-  "total_findings": 27015,
+  "total_sites_scanned": 2741,
+  "total_findings": 26817,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1961,
-  "discovery_findings": 22888,
-  "improvements_shipped": 1183,
-  "last_run": "2026-08-25T14:25:00.000Z",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22585,
+  "improvements_shipped": 1180,
+  "last_run": "2026-08-25T14:35:00.000Z",
   "last_run_summary": {
     "hour_utc": "14",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 592,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings, 32+ live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (47 findings); secret-resend slug still absent — sensitive_data covered via juice-shop-leaked-api-key"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 199,
-      "focus": "wrongsecrets challenge-64/65/66 binary oracles + duck-store SSRF import-from-url + ai-security IDOR + pwnshop verify-otp/upload-avatar/admin-security drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 8,
+      "urls_scanned": 7,
+      "findings": 101,
+      "focus": "wrongsecrets 57-58 hub seeds + challenge-57 priority + dvwu /api/search route priority + priority_discovery_urls queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings, 32+ live oracles) — no category misses",
-      "wrongsecrets.herokuapp.com/challenge/challenge-64: 15 findings — wrongsecrets-challenge-64-swift-binary-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-65: 15 findings — wrongsecrets-challenge-65-java-plain-cli-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-66: 15 findings — wrongsecrets-challenge-66-java-obfuscated-route-live-oracle",
-      "duck-store.escape.tech/api/v1/uploads/import-from-url: 31 findings — duck-store-ssrf-import-from-url-live-oracle + SSRF hub",
-      "ai-security-platform-iota.vercel.app/challenges/idor: 7 findings — ai-security-idor-route-live-oracle",
-      "pwnshop.ctfsecurity.com/verify-otp: 43 findings — pwnshop-verify-otp-bruteforce-live-oracle",
-      "pwnshop.ctfsecurity.com/admin/security: 47 findings — pwnshop-admin-security-second-order-sqli-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no category misses",
+      "ssrf.vulnlab.dev/basic: 3→15 findings — ssrf-vulnlab-basic-route-live-oracle + host SSRF oracles",
+      "ssrf.vulnlab.dev/metadata-aws: 2→15 findings — ssrf-vulnlab-metadata-aws-route-live-oracle",
+      "dvwu.vercel.app/api/search?q=test: 5→14 findings — dvwu-search-sqli-route-live-oracle + dvwu-search-xss-route-live-oracle",
+      "dvwu.vercel.app/api/comments: 4→12 findings — dvwu-comments-xss-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-57: 8→15 findings — wrongsecrets-challenge-57-browser-llm-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-58: 9→15 findings — wrongsecrets-challenge-58-database-connection-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/2: 8→15 findings — wrongsecrets-challenge-2-application-properties-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "pwnshop.ctfsecurity.com/profile/upload-avatar: avatar-upload route oracle present but stored-XSS SVG confirmation oracle may need authenticated session",
-      "ai-security-platform IDOR challenge: 7-finding hub — other 13 challenges (brute-force, weak-rls, supply-chain) not yet queued"
+      "Resend API key no longer present in Juice Shop social feeds (likely revoked post-GitHub secret scanner)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "wrongsecrets.herokuapp.com/challenge/challenge-64": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-65": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-66": 15,
-    "duck-store.escape.tech/api/v1/uploads/import-from-url": 31,
-    "ai-security-platform-iota.vercel.app/challenges/idor": 7,
-    "pwnshop.ctfsecurity.com/verify-otp": 43,
-    "pwnshop.ctfsecurity.com/admin/security?search=test": 47
+    "ssrf.vulnlab.dev/basic": 15,
+    "ssrf.vulnlab.dev/metadata-aws": 15,
+    "dvwu.vercel.app/api/search?q=test": 14,
+    "dvwu.vercel.app/api/comments": 12,
+    "wrongsecrets.herokuapp.com/challenge/challenge-57": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-58": 15,
+    "wrongsecrets.herokuapp.com/challenge/2": 15,
+    "burpbountylab.com/rce/eval": 95,
+    "burpbountylab.com/crlf/set": 95,
+    "burpbountylab.com/ai/v1/completions": 95
   }
 }

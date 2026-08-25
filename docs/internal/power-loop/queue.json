@@ -1,123 +1,48 @@
 {
-  "updated_at": "2026-08-25T14:06:07.106Z",
+  "updated_at": "2026-08-25T14:15:00.000Z",
   "priority_discovery_urls": [
     {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-64",
-      "source": "OWASP WrongSecrets — Challenge 64 Swift binary secrets oracle on official Heroku demo (README challenge list 54-66)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-65",
-      "source": "OWASP WrongSecrets — Challenge 65 plain Java CLI JAR binary oracle on official Heroku demo (README)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-66",
-      "source": "OWASP WrongSecrets — Challenge 66 obfuscated Java CLI JAR binary oracle on official Heroku demo (README)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/uploads/import-from-url",
-      "source": "Escape Duck Store vulnerabilities — SSRF image import oracle POST /api/v1/uploads/import-from-url (duck-store.escape.tech/vulnerabilities)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/idor",
-      "source": "AI & Security Platform — IDOR live demo challenge (14-challenge OWASP training app, Vercel deploy)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
-      "source": "OWASP WrongSecrets — Challenge 57 in-browser LLM prompt-injection oracle (README)",
+      "source": "OWASP WrongSecrets — Challenge 57 AI prompt-injection oracle (priority drain)",
       "auth": "public_demo"
     },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-58",
-      "source": "OWASP WrongSecrets — Challenge 58 database connection string exposure oracle (README)",
+      "source": "OWASP WrongSecrets — Challenge 58 database connection oracle (priority drain)",
       "auth": "public_demo"
     },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-59",
-      "source": "OWASP WrongSecrets — Challenge 59 CI/CD Slack webhook oracle (README)",
+      "source": "OWASP WrongSecrets — Challenge 59 Slack webhook oracle (priority drain)",
       "auth": "public_demo"
     },
     {
       "url": "https://dvwu.vercel.app/api/search?q=test",
-      "source": "zahidoverflow/damn-vulnerable-web-university — SQL injection search oracle GET /api/search",
+      "source": "DVWU — SQLi/XSS search API oracle (priority drain)",
       "auth": "public_demo"
     },
     {
       "url": "https://dvwu.vercel.app/api/comments",
-      "source": "zahidoverflow/damn-vulnerable-web-university — stored/reflected XSS comments oracle /api/comments",
+      "source": "DVWU — stored/reflected XSS comments oracle (priority drain)",
       "auth": "public_demo"
     },
     {
       "url": "https://ssrf.vulnlab.dev/basic",
-      "source": "sampsonc/vulnlab.dev — unfiltered SSRF lab basic route oracle",
+      "source": "ssrf.vulnlab.dev — basic SSRF route oracle (priority drain)",
       "auth": "public_demo"
     },
     {
       "url": "https://ssrf.vulnlab.dev/metadata-aws",
-      "source": "sampsonc/vulnlab.dev — AWS IMDS metadata SSRF route oracle",
+      "source": "ssrf.vulnlab.dev — AWS metadata SSRF route oracle (priority drain)",
       "auth": "public_demo"
     },
     {
-      "url": "https://ssrf.vulnlab.dev/blocklist",
-      "source": "sampsonc/vulnlab.dev — SSRF blocklist bypass route oracle",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/2",
+      "source": "OWASP WrongSecrets — Challenge 2 application.properties oracle (priority drain)",
       "auth": "public_demo"
     }
   ],
   "discovery_urls": [
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-64",
-      "source": "OWASP WrongSecrets — Challenge 64 Swift binary secrets oracle on official Heroku demo (README challenge list 54-66)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-65",
-      "source": "OWASP WrongSecrets — Challenge 65 plain Java CLI JAR binary oracle on official Heroku demo (README)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-66",
-      "source": "OWASP WrongSecrets — Challenge 66 obfuscated Java CLI JAR binary oracle on official Heroku demo (README)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/uploads/import-from-url",
-      "source": "Escape Duck Store vulnerabilities — SSRF image import oracle POST /api/v1/uploads/import-from-url (duck-store.escape.tech/vulnerabilities)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/idor",
-      "source": "AI & Security Platform — IDOR live demo challenge (14-challenge OWASP training app, Vercel deploy)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-60",
-      "source": "OWASP WrongSecrets — Challenge 60 insecure MCP server prompt-injection oracle on official Heroku demo (README v1.13)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-61",
-      "source": "OWASP WrongSecrets — Challenge 61 Telegram channel secrets oracle on official Heroku demo (README v1.13)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-62",
-      "source": "OWASP WrongSecrets — Challenge 62 secrets oracle on official Heroku demo (README challenge list)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
-      "source": "OWASP WrongSecrets — Challenge 63 secrets oracle on official Heroku demo (README challenge list)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/api/notices?file=README.md",
-      "source": "zahidoverflow/damn-vulnerable-web-university — LFI/path traversal oracle GET /api/notices (GitHub VULNERABILITY_REPORT)",
-      "auth": "public_demo"
-    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
       "source": "OWASP WrongSecrets — Challenge 57 AI prompt-injection oracle on official Heroku demo (README)",

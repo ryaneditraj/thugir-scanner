@@ -4583,6 +4583,24 @@
       "slug": "burpbounty-ai-completions-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /ai/v1/completions returns text_completion JSON + LLM gateway headers; burpbountylab.com/ai/v1/completions findings 94→95 (+burpbounty-ai-completions-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-hub-seeds-57-58",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with challenge 57-58 short+long URLs plus /challenge/2 alias; wrongsecrets.herokuapp.com/challenge/challenge-57 findings 8→15 (+wrongsecrets-challenge-57-browser-llm-route-live-oracle); challenge-58 9→15 (+wrongsecrets-challenge-58-database-connection-route-live-oracle); challenge/2 8→15 (+wrongsecrets-challenge-2-application-properties-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-57-priority-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for wrongsecrets-challenge-57-* slugs when scanning /challenge/57 or /challenge/challenge-57; wrongsecrets.herokuapp.com/challenge/challenge-57 route oracle fires before generic bundle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-api-search-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvwu route-oracle priority regex extended with api/search; dvwu.vercel.app/api/search?q=test findings 5→14 (+dvwu-search-sqli-route-live-oracle +dvwu-search-xss-route-live-oracle); dvwu.vercel.app/api/comments findings 4→12 (+dvwu-comments-xss-route-live-oracle); ssrf.vulnlab.dev/basic 3→15 (+ssrf-vulnlab-basic-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
     }
   ]
 }
