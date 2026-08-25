@@ -66506,6 +66506,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vuln-demo-jwt-secret-leak-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "vuln-demo JWT signing key leak live oracle",
+    description:
+      "GET /api/posts on vuln-demo.vercel.app returns a JWT whose decoded payload embeds signing key material in a key field — the 掲示板 CTF JWT secret leak oracle.",
+    impactOneline:
+      "Unauthenticated clients receive JWTs containing embedded signing secrets suitable for token forgery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnDemoJwtSecretLeakLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never embed signing keys inside JWT payloads returned to clients.",
+      steps: [
+        "Keep JWT signing secrets server-side only.",
+        "Return opaque session tokens without embedded key material.",
+        "Run CTF bulletin-board labs only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/posts endpoint returns JWTs with embedded signing keys. Show secure JWT issuance for the vuln-demo CTF bulletin board.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-demo-jwt-secret-leak-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "vuln-demo JWT signing key leak route live oracle",
+    description:
+      "When scanning vuln-demo.vercel.app/, GET /api/posts confirms JWT payload key field leak — route-specific 掲示板 CTF sensitive-data oracle.",
+    impactOneline:
+      "Route-specific confirmation that the bulletin-board homepage exposes JWT signing material via /api/posts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnDemoJwtSecretLeakRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never embed signing keys inside JWT payloads on route-specific scans.",
+      steps: [
+        "Keep JWT signing secrets server-side only.",
+        "Gate /api/posts behind authentication when returning session tokens.",
+        "Isolate vuln-demo CTF deploys from production auth flows."
+      ]
+    },
+    fixPrompt:
+      "Our vuln-demo homepage route leaks JWT signing keys via /api/posts. Show route-specific JWT hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-demo-frontend-flag-leak-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "vuln-demo frontend flag leak live oracle",
+    description:
+      "POST /api/post?key=flag{frontend-leak} on vuln-demo.vercel.app accepts the hardcoded frontend flag from the client bundle — frontend secret leak oracle.",
+    impactOneline:
+      "Hardcoded CTF flags in client JavaScript allow unauthenticated post creation when the key query parameter matches.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnDemoFrontendFlagLeakLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never hardcode CTF flags or API keys in client-side JavaScript.",
+      steps: [
+        "Move post authorization to server-side session validation.",
+        "Remove flag{frontend-leak} and similar secrets from bundled client code.",
+        "Run CTF bulletin-board labs only on isolated staging."
+      ]
+    },
+    fixPrompt:
+      "Our vuln-demo client bundle hardcodes flag{frontend-leak} in POST /api/post. Show frontend secret removal and server-side authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-demo-frontend-flag-leak-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "vuln-demo frontend flag leak route live oracle",
+    description:
+      "When scanning vuln-demo.vercel.app/, POST /api/post?key=flag{frontend-leak} succeeds — route-specific frontend secret leak oracle on the 掲示板 CTF homepage.",
+    impactOneline:
+      "Route-specific confirmation that the bulletin-board homepage relies on a client-hardcoded flag for post authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnDemoFrontendFlagLeakRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove hardcoded flags from client bundles on route-specific scans.",
+      steps: [
+        "Authorize posts with server-side sessions instead of query-string flags.",
+        "Strip CTF flags from Next.js client chunks before production builds.",
+        "Isolate vuln-demo training deploys."
+      ]
+    },
+    fixPrompt:
+      "Our vuln-demo homepage route uses a hardcoded frontend flag for POST /api/post. Show route-specific authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-demo-stored-xss-live-oracle",
+    platform: "generic",
+    category: "XSS",
+    severityDefault: "high",
+    title: "vuln-demo stored XSS live oracle",
+    description:
+      "POST /api/post on vuln-demo.vercel.app stores HTML markup in post content returned verbatim by GET /api/posts — stored XSS oracle on the 掲示板 CTF bulletin board.",
+    impactOneline:
+      "Attacker-controlled HTML in post content persists unsanitized in the bulletin-board API responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnDemoStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize or encode user HTML before storing and rendering bulletin-board posts.",
+      steps: [
+        "HTML-encode post content at storage and render time.",
+        "Use a strict sanitizer if rich text is required.",
+        "Run CTF bulletin-board labs only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vuln-demo bulletin board stores unsanitized HTML in /api/posts. Show stored XSS remediation for Next.js API routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vuln-demo-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "XSS",
+    severityDefault: "high",
+    title: "vuln-demo stored XSS route live oracle",
+    description:
+      "When scanning vuln-demo.vercel.app/, POST then GET /api/posts confirms unsanitized HTML in post content — route-specific stored XSS oracle on the 掲示板 CTF homepage.",
+    impactOneline:
+      "Route-specific confirmation that the bulletin-board accepts and returns attacker HTML without sanitization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnDemoStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize bulletin-board post HTML on route-specific scans.",
+      steps: [
+        "HTML-encode user content before persisting posts.",
+        "Avoid dangerouslySetInnerHTML when rendering bulletin-board entries.",
+        "Isolate vuln-demo CTF deploys from production apps."
+      ]
+    },
+    fixPrompt:
+      "Our vuln-demo homepage route stores unsanitized HTML via /api/post. Show route-specific stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "fabraix-data-exfiltration-001-route-live-oracle",
     platform: "generic",
     category: "AI security",

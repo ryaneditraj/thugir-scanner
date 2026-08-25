@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-25T02:24:50.156Z",
-  "total": 2624,
-  "uniqueSlugs": 2616,
+  "generatedAt": "2026-08-25T03:29:04.502Z",
+  "total": 2630,
+  "uniqueSlugs": 2622,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2606,
+    "generic": 2612,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2539,
+    "deep": 2545,
     "continuous": 0
   },
   "byCategory": {
@@ -33,7 +33,7 @@
     "general": 20,
     "SSRF": 16,
     "Server-side request forgery": 90,
-    "Sensitive data exposure": 65,
+    "Sensitive data exposure": 69,
     "AI security": 95,
     "Cross-site request forgery": 8,
     "Business logic": 24,
@@ -45,7 +45,7 @@
     "Path traversal": 3,
     "Denial of service": 5,
     "Prompt injection": 5,
-    "XSS": 1,
+    "XSS": 3,
     "Session management": 2
   },
   "slugs": [
@@ -2273,6 +2273,12 @@
     "voting-app-user-polls-idor-route-live-oracle",
     "voting-app-vote-stuffing-live-oracle",
     "voting-app-vote-stuffing-route-live-oracle",
+    "vuln-demo-frontend-flag-leak-live-oracle",
+    "vuln-demo-frontend-flag-leak-route-live-oracle",
+    "vuln-demo-jwt-secret-leak-live-oracle",
+    "vuln-demo-jwt-secret-leak-route-live-oracle",
+    "vuln-demo-stored-xss-live-oracle",
+    "vuln-demo-stored-xss-route-live-oracle",
     "vuln-expose-auth-bypass-api-live-oracle",
     "vuln-expose-auth-bypass-route-live-oracle",
     "vuln-expose-blind-sqli-api-live-oracle",

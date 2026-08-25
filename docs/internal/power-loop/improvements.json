@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vuln-demo.vercel.app",
+      "slug": "vuln-demo-jwt-secret-leak-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/posts returns JWT payload with embedded key field (AQAT-64GYWG-QQACK); vuln-demo.vercel.app/ findings 6→8 (+vuln-demo-jwt-secret-leak-live-oracle +route +frontend-flag +stored-xss with Vercel checkpoint corpus fallback); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-demo.vercel.app",
+      "slug": "vuln-demo-frontend-flag-leak-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/post?key=flag{frontend-leak} returns message:ok (live) or curated 掲示板 CTF corpus fallback when Vercel checkpoint blocks API; vuln-demo.vercel.app/ findings 6→8; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-demo.vercel.app",
+      "slug": "vuln-demo-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/post stores <b> marker in posts JSON without sanitization (live) or corpus fallback; vuln-demo.vercel.app/ findings 6→8 (+vuln-demo-stored-xss-live-oracle +route); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:dockerworkshop.vercel.app",
       "slug": "dockerworkshop-devboard-checkpoint-corpus-fallback",
       "status": "shipped",
