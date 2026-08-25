@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1965,
   "discovery_findings": 22832,
-  "improvements_shipped": 1168,
+  "improvements_shipped": 1171,
   "last_run": "2026-08-25T08:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "08",
