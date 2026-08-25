@@ -1,6 +1,26 @@
 {
-  "updated_at": "2026-08-25T17:54:10.683Z",
+  "updated_at": "2026-08-25T18:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vuln-expose.vercel.app/sqli/blind",
+      "source": "JuaniVeltri/vuln-expose — blind SQLi lab module (priority drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/xss/playground",
+      "source": "JuaniVeltri/vuln-expose — interactive XSS playground lab (priority drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/sqli/users",
+      "source": "JuaniVeltri/vuln-expose — SQLi user enumeration lab (priority drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/xss/profile",
+      "source": "JuaniVeltri/vuln-expose — stored/reflected XSS profile lab (priority drain)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vampi-production.up.railway.app/users/v1/_debug",
       "source": "erev0s/VAmPI debug endpoint",

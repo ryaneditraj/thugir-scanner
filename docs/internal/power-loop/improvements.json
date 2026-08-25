@@ -4637,6 +4637,24 @@
       "slug": "vuln-expose-users-api-priority-drain",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: prepended vuln-expose.vercel.app/api/users to priority_discovery_urls with ai-security open-redirect/admin-console/insecure-passwords; vuln-expose.vercel.app/api/users findings 0→16 (+vuln-expose-users-api-route-live-oracle +vuln-expose-users-api-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-sqli-users-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /sqli/users exposes LABORATORIO DE ENUMERACIÓN DE USUARIOS + UNION SELECT payloads + /api/users plaintext passwords; vuln-expose.vercel.app/sqli/users findings 0→15 (+vuln-expose-sqli-users-route-live-oracle); HTML-entity-tolerant UNION markers fix; benchmark juice-shop.demo.escape.tech 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-lab-routes-priority-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended vuln-expose.vercel.app/sqli/blind + /xss/playground + /sqli/users + /xss/profile to priority_discovery_urls; runner -3 priority for vuln-expose-sqli-blind/sqli-users/xss-playground/idor-profile/xss-comments route oracles; sqli/blind 16 (+vuln-expose-sqli-blind-route-live-oracle); xss/playground 15 (+vuln-expose-xss-playground-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-supply-chain-privacy-priority-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages to priority_discovery_urls; hacked-npm-packages 7 (+ai-security-hacked-npm-packages-route-live-oracle); privacy-policy 6 (+ai-security-privacy-policy-route-live-oracle); benchmark juice-shop.demo.escape.tech 50 findings 6/6 maintained"
     }
   ]
 }

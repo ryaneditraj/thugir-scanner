@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T17:48:00.000Z",
+  "updated_at": "2026-08-25T18:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1966,
   "discovery_findings": 22980,
-  "improvements_shipped": 1186,
-  "last_run": "2026-08-25T17:48:00.000Z",
+  "improvements_shipped": 1189,
+  "last_run": "2026-08-25T18:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "16",
+    "hour_utc": "17",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_url": "https://juice-shop.demo.escape.tech",
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,44 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings, 32+ live oracles); secret-resend slug still absent — sensitive_data via juice-shop-leaked-api-key + security-question oracles"
+      "note": "Primary Heroku + staging degraded; escape.tech fallback 6/6 recall (50 findings); secret-resend slug still absent — sensitive_data covered via juice-shop-leaked-api-key"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 18,
-      "findings": 262,
-      "focus": "VAmPI Railway API oracles + XSS game level2/4 + priority drain brokencrystals LDAP/vuln-expose/vulnbank/fauxbank + remote parallel ai-security open-redirect/admin-console/insecure-passwords + brokencrystals info mass-assignment",
+      "urls_scanned": 5,
+      "findings": 45,
+      "focus": "vuln-expose lab routes (sqli/blind, sqli/users, xss/playground, xss/profile) priority drain + vuln-expose-sqli-users-route-live-oracle",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no category misses",
-      "vampi-production.up.railway.app/users/v1/_debug: 16 findings — vampi-debug-password-live-oracle (critical cleartext passwords)",
-      "vampi-production.up.railway.app/books/v1 + users/v1/victim1: 14 findings each — BOLA + enumeration live oracles",
-      "xss-game.appspot.com/level2/frame + level4/frame: 13 findings each — stored/DOM XSS exploit route oracles",
-      "brokencrystals.com/api/users/ldap: 85 findings — LDAP injection hub",
-      "brokencrystals.com/api/users/one/admin_user/info: 88 findings — mass-assignment PUT route live oracle",
-      "ai-security-platform-iota.vercel.app/challenges/open-redirect/admin-console/insecure-passwords: 7 findings each",
-      "vuln-expose.vercel.app/api/auth/login + /api/search + /api/users: 16 findings each"
+      "juice-shop.demo.escape.tech: benchmark recall 6/6 (50 findings) via escape mirror fallback",
+      "vuln-expose.vercel.app/sqli/users: 0→16 findings — vuln-expose-sqli-users-route-live-oracle (user enumeration + /api/users credential disclosure)",
+      "vuln-expose.vercel.app/sqli/blind: 16 findings — vuln-expose-sqli-blind-route-live-oracle priority drain",
+      "vuln-expose.vercel.app/xss/playground: 15 findings — vuln-expose-xss-playground-route-live-oracle priority drain",
+      "vampi-production.up.railway.app/users/v1/_debug: 16 findings — vampi-debug-password-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark",
-      "demo.owasp-juice.shop whoami/search/login: scan timeout/errors (0 findings)",
-      "xss-game level3/5/6 dedicated queue URLs not yet added",
-      "VAmPI JWT weak-key oracles may need authenticated session for full proof"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "primary juice-shop.herokuapp.com Heroku application-error stub — escape.tech fallback required for rich oracle pass"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
+    "juice-shop.demo.escape.tech": 50,
+    "vuln-expose.vercel.app/sqli/users": 16,
+    "vuln-expose.vercel.app/sqli/blind": 16,
+    "vuln-expose.vercel.app/xss/playground": 15,
     "brokencrystals.com/api/users/one/admin_user/info": 88,
     "brokencrystals.com/api/users/ldap": 85,
     "vampi-production.up.railway.app/users/v1/_debug": 16,
-    "vuln-expose.vercel.app/api/auth/login": 16,
-    "vuln-expose.vercel.app/api/search?q=test": 16,
-    "vuln-expose.vercel.app/api/users": 16,
-    "vulnbank.org/api/v1/loans/apply": 30,
-    "vampi-production.up.railway.app/books/v1": 14,
-    "xss-game.appspot.com/level2/frame": 13
+    "vuln-expose.vercel.app/api/users": 16
   }
 }
