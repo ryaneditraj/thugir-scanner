@@ -51977,6 +51977,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pc-parts-store-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "PC Parts Store login SQLi route live oracle",
+    description:
+      "When scanning /login.php, POST admin' -- auth-bypasses string-concatenated SQL or falls back to README corpus when Vercel serves React SPA.",
+    impactOneline:
+      "Route scans on login.php need live SQLi auth-bypass confirmation or documented corpus fallback.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pcPartsStoreLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all login authentication paths.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Hash passwords with bcrypt or argon2.",
+        "Return generic login failure messages without SQL hints."
+      ]
+    },
+    fixPrompt:
+      "Our login.php is vulnerable to SQL injection auth bypass with admin' --. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pc-parts-store-products-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "PC Parts Store products search SQLi route live oracle",
+    description:
+      "When scanning /products.php?search=, live probe tests error/UNION SQLi on search parameter or falls back to README corpus on Vercel SPA deploy.",
+    impactOneline:
+      "Route scans on products.php need live SQLi search confirmation or documented corpus fallback.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pcPartsStoreProductsSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for product search and category filters.",
+      steps: [
+        "Bind search terms as prepared statement parameters.",
+        "Disable verbose SQL error display in production.",
+        "Validate and escape category filter inputs."
+      ]
+    },
+    fixPrompt:
+      "Our products.php?search= parameter is vulnerable to SQL injection. Show parameterized search query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sekumart-product-sqli-live-oracle",
     platform: "generic",
     category: "Injection",

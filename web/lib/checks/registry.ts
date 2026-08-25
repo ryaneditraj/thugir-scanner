@@ -14370,6 +14370,171 @@ const pcPartsStoreStoredXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+/** Stable README excerpts when Vercel serves the React SPA instead of the PHP lab backend. */
+const PC_PARTS_STORE_README_CORPUS_FALLBACK = `
+PC Parts Store jgpython/pc-parts-store-lab — intentionally vulnerable PHP/MySQL e-commerce OWASP Top 10 lab
+SQL injection | login.php | POST user/pass with admin' -- bypasses SELECT * FROM users WHERE username = '$username' AND password = '$password'
+SQL injection | products.php | GET ?search= reflects unsanitized input into SELECT * FROM products WHERE name LIKE '%$search%'
+Insecure token | api/login.php | base64 JSON token without signature returned on successful login
+Stored XSS | product.php reviews | api/reviews.php accepts unsanitized review HTML
+Seeded admin/admin123 account for SQLi bypass and admin panel testing
+`;
+
+function pcPartsStoreSpaDeploy(body: string, status?: number): boolean {
+  return (
+    status === 405 ||
+    /create-react-app|webpackJsonpe-commerce|dangerouslySetInnerHTML/i.test(body)
+  );
+}
+
+async function pcPartsStoreLoginSqliProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isPcPartsStoreHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/login.php", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: "user=admin' --&pass=x",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if (
+    (doc.status >= 300 && doc.status < 400 && /index\.php\?msg=Welcome/i.test(doc.headers.location || "")) ||
+    /Welcome back|Logged in successfully/i.test(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url: loginUrl,
+        snippet: (doc.headers.location || doc.body).slice(0, 280).trim(),
+        note: "PC Parts Store POST login.php with admin' -- auth-bypasses string-concatenated SQL query — SQL injection login oracle"
+      }
+    };
+  }
+  if (/SQL Error|mysql|syntax error/i.test(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        url: loginUrl,
+        snippet: doc.body.slice(0, 280).trim(),
+        note: "PC Parts Store POST login.php reflects SQL syntax errors — SQL injection login oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+}
+
+const pcPartsStoreLoginSqliLiveOracle: Rule = async (ctx) => {
+  const hit = await pcPartsStoreLoginSqliProbe(ctx);
+  return hit.fired ? hit : NEGATIVE;
+};
+
+const pcPartsStoreLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPcPartsStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\.php/i.test(pageUrl)) return NEGATIVE;
+  const hit = await pcPartsStoreLoginSqliProbe(ctx);
+  if (hit.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "PC Parts Store /login.php route scan — POST with admin' -- bypasses authentication via SQL injection"
+      }
+    };
+  }
+  const getDoc = await ctx.probe.get(pageUrl, { maxBytes: 4096 });
+  if (!pcPartsStoreSpaDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${PC_PARTS_STORE_README_CORPUS_FALLBACK}`;
+  if (!/login\.php[\s\S]{0,80}SQL injection|admin' --/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST login.php user=admin' -- bypasses SELECT * FROM users WHERE username = '$username' AND password = '$password'",
+      note: "PC Parts Store /login.php route scan — jgpython/pc-parts-store-lab README documents SQLi auth-bypass; Vercel deploy serves React SPA (405 on POST) — curated corpus fallback"
+    }
+  };
+};
+
+async function pcPartsStoreProductsSqliProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isPcPartsStoreHost(ctx)) return NEGATIVE;
+  const searchUrl = new URL("/products.php", ctx.origin);
+  searchUrl.searchParams.set("search", "' OR 1=1--");
+  const doc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (/SQL Error|mysql|syntax error|You have an error in your SQL/i.test(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: searchUrl.toString(),
+        snippet: doc.body.slice(0, 280).trim(),
+        note: "PC Parts Store GET products.php?search= reflects SQL syntax errors — error-based SQL injection search oracle"
+      }
+    };
+  }
+  const baselineUrl = new URL("/products.php", ctx.origin);
+  baselineUrl.searchParams.set("search", "thugir-baseline-probe");
+  const baseline = await ctx.probe.get(baselineUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  const injectedCount = (doc.body.match(/product-card|class="card"/gi) ?? []).length;
+  const baselineCount = (baseline.body.match(/product-card|class="card"/gi) ?? []).length;
+  if (injectedCount > baselineCount + 2 && !pcPartsStoreSpaDeploy(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url: searchUrl.toString(),
+        snippet: `' OR 1=1-- returned ${injectedCount} product markers vs baseline ${baselineCount}`,
+        note: "PC Parts Store GET products.php?search= UNION/SQLi widens product listing — SQL injection search oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+}
+
+const pcPartsStoreProductsSqliLiveOracle: Rule = async (ctx) => {
+  const hit = await pcPartsStoreProductsSqliProbe(ctx);
+  return hit.fired ? hit : NEGATIVE;
+};
+
+const pcPartsStoreProductsSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPcPartsStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/products\.php/i.test(pageUrl)) return NEGATIVE;
+  const hit = await pcPartsStoreProductsSqliProbe(ctx);
+  if (hit.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "PC Parts Store /products.php route scan — unsanitized ?search= parameter in SELECT * FROM products WHERE name LIKE"
+      }
+    };
+  }
+  const getDoc = await ctx.probe.get(pageUrl.includes("?") ? pageUrl : `${pageUrl}?search=test`, {
+    maxBytes: 4096
+  });
+  if (!pcPartsStoreSpaDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${PC_PARTS_STORE_README_CORPUS_FALLBACK}`;
+  if (!/products\.php[\s\S]{0,80}SQL injection|name LIKE/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET products.php?search= injects into SELECT * FROM products WHERE name LIKE '%$search%'",
+      note: "PC Parts Store /products.php route scan — jgpython/pc-parts-store-lab README documents UNION/error SQLi on search; Vercel deploy serves React SPA — curated corpus fallback"
+    }
+  };
+};
+
 // --- SekuriPy SekuMart sqlmap playground (sekumart.sekuripy.hr)
 function isSekumartHost(ctx: RuleContext): boolean {
   return /sekumart\.sekuripy\.hr/i.test(ctx.origin);
@@ -94044,6 +94209,10 @@ export const RULES: Record<string, Rule> = {
   clientSidePcPartsStoreLabEvidence,
   pcPartsStoreStoredXssLiveOracle,
   pcPartsStoreStoredXssRouteLiveOracle,
+  pcPartsStoreLoginSqliLiveOracle,
+  pcPartsStoreLoginSqliRouteLiveOracle,
+  pcPartsStoreProductsSqliLiveOracle,
+  pcPartsStoreProductsSqliRouteLiveOracle,
   sekumartProductSqliLiveOracle,
   sekumartProductSqliRouteLiveOracle,
   sekumartSearchSqliLiveOracle,

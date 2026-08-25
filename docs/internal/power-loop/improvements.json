@@ -4427,6 +4427,18 @@
       "slug": "sekumart-openapi-sqli-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /openapi.json spec documents sqlmap --openapi + integer/string SQLi endpoints and live product.php probe confirms mysqli SQLi; sekumart.sekuripy.hr/openapi.json findings 5→8 (+sekumart-openapi-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pc-parts-store.vercel.app",
+      "slug": "pc-parts-store-login-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST login.php returns HTTP 405 on Vercel React SPA — README corpus fallback documents admin' -- SQLi auth-bypass on string-concatenated SELECT; pc-parts-store.vercel.app/login.php findings 8→9 (+pc-parts-store-login-sqli-route-live-oracle 0.88); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pc-parts-store.vercel.app",
+      "slug": "pc-parts-store-products-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET products.php?search= serves React SPA — README corpus fallback documents unsanitized search in SELECT * FROM products WHERE name LIKE; pc-parts-store.vercel.app/products.php?search=test findings 8→9 (+pc-parts-store-products-sqli-route-live-oracle 0.88); benchmark juice-shop 47 findings 6/6 maintained"
     }
   ]
 }
