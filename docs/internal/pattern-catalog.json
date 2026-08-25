@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-25T06:31:25.583Z",
-  "total": 2635,
-  "uniqueSlugs": 2627,
+  "generatedAt": "2026-08-25T07:16:45.378Z",
+  "total": 2636,
+  "uniqueSlugs": 2628,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2617,
+    "generic": 2618,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2550,
+    "deep": 2551,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 541,
-    "Exposed secret": 105,
+    "Exposed secret": 106,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -2545,6 +2545,7 @@
     "wrongsecrets-challenge-32-llm-prompt-leak-route-live-oracle",
     "wrongsecrets-challenge-33-k8s-stringdata-route-live-oracle",
     "wrongsecrets-challenge-34-pbkdf2-key-generation-route-live-oracle",
+    "wrongsecrets-challenge-35-documentation-route-live-oracle",
     "wrongsecrets-challenge-36-advanced-c-route-live-oracle",
     "wrongsecrets-challenge-37-cicd-route-live-oracle",
     "wrongsecrets-challenge-38-git-notes-route-live-oracle",
