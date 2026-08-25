@@ -39968,6 +39968,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-mass-assignment-basic-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/users/basic mass-assignment route live oracle",
+    description:
+      "When scanning /api/users/basic, POST with isAdmin:true and GET /api/users/one/{email}/adminpermission confirms privilege escalation — route-specific mass-assignment oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals /api/users/basic accepts hidden isAdmin during signup and escalates privileges.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMassAssignmentBasicRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Whitelist assignable user attributes and reject unknown fields — Broken Crystals is intentional lab software.",
+      steps: [
+        "Use DTOs or strong-parameter filtering to block isAdmin and other privileged fields on create/update.",
+        "Enforce role changes only through authenticated admin workflows.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/basic route scan confirms isAdmin:true mass-assignment during signup. Show NestJS strong-parameter remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-adminpermission-route-live-oracle",
     platform: "generic",
     category: "Broken access control",

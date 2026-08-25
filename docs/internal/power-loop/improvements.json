@@ -4673,6 +4673,24 @@
       "slug": "burpbounty-weblogic-console-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: BurpBountyLab GET /console/login/LoginForm.jsp returns Oracle WebLogic Server Administration Console (modules/cves.py CVE-2020-2551); burpbounty-weblogic-console-route-live-oracle + burpbounty-graphql-query-route-live-oracle (POST /graphql { __typename }→Query); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mass-assignment-basic-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/users/basic isAdmin:true + GET adminpermission returns isAdmin:true; brokencrystals.com/api/users/basic findings 81→85 (+brokencrystals-mass-assignment-basic-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-file-basic-priority-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended brokencrystals.com/api/testimonials + /api/file?path=/etc/hosts + /api/users/basic to priority_discovery_urls; runner -4 priority for testimonials/file/users-basic route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-color-filter-query-priority-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended duck-store.escape.tech/api/v1/products/filter/by-color?color=Yellow&sort=name to priority_discovery_urls; route scan findings 31 (+duck-store-products-filter-sqli-live-oracle +duck-store-products-filter-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }

@@ -3154,6 +3154,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsMassAssignmentPutLiveOracle",
   "brokencrystalsMassAssignmentPutRouteLiveOracle",
   "brokencrystalsSignupRouteLiveOracle",
+  "brokencrystalsMassAssignmentBasicRouteLiveOracle",
   "brokencrystalsAdminpermissionRouteLiveOracle",
   "brokencrystalsSearchAdminMassAssignmentRouteLiveOracle",
   "brokencrystalsProcessNumbersLiveOracle",
@@ -11651,6 +11652,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/users\/one\/[^/]+\/info\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-mass-assignment-put")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/users\/basic\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-mass-assignment")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/testimonials\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-testimonials")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/file(?:\/raw)?\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-file") || p.slug.startsWith("brokencrystals-api-file"))
       )
         return -4;
       if (

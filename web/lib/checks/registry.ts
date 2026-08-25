@@ -83969,6 +83969,23 @@ const brokencrystalsSignupRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsMassAssignmentBasicRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/users\/basic\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsMassAssignmentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/users/basic route scan — POST isAdmin:true then GET adminpermission confirms mass-assignment privilege escalation"
+    }
+  };
+};
+
 const brokencrystalsAdminpermissionRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -93486,6 +93503,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsMassAssignmentPutLiveOracle,
   brokencrystalsMassAssignmentPutRouteLiveOracle,
   brokencrystalsSignupRouteLiveOracle,
+  brokencrystalsMassAssignmentBasicRouteLiveOracle,
   brokencrystalsAdminpermissionRouteLiveOracle,
   brokencrystalsSearchAdminMassAssignmentRouteLiveOracle,
   brokencrystalsFileAwsRouteLiveOracle,
