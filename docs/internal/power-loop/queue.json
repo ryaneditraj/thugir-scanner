@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-25T02:44:10.862Z",
+  "updated_at": "2026-08-25T03:06:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-20",
+      "source": "OWASP WrongSecrets — Challenge 20 binary reverse-engineering secret oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-21",
+      "source": "OWASP WrongSecrets — Challenge 21 binary reverse-engineering secret oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-22",
+      "source": "OWASP WrongSecrets — Challenge 22 binary reverse-engineering secret oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/path-traversal",
+      "source": "zahidoverflow/dvwu — path traversal training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/command-injection",
+      "source": "zahidoverflow/dvwu — command injection training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-15",
       "source": "OWASP WrongSecrets — Challenge 15 git history / trufflehog secret oracle (official Heroku demo)",
