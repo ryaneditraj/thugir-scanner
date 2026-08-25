@@ -15,14 +15,14 @@
       ]
     }
   },
-  "total_sites_scanned": 2727,
-  "total_findings": 26588,
+  "total_sites_scanned": 2780,
+  "total_findings": 27444,
   "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1956,
-  "discovery_findings": 22567,
-  "improvements_shipped": 1164,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1979,
+  "discovery_findings": 23225,
+  "improvements_shipped": 1177,
   "last_run": "2026-08-25T10:40:00.000Z",
   "last_run_summary": {
     "hour_utc": "10",
@@ -63,13 +63,15 @@
       "alf.nu/ServiceWorker: 4→6 findings — alf-nu-serviceworker-live-oracle shipped (test.js fetch interception)",
       "wrongsecrets-ctf.herokuapp.com: 10→11 findings — wrongsecrets-ctf-hub-live-oracle shipped",
       "ssti.vulnlab.dev/basic/: 9 findings with ssti-vulnlab-basic-route-live-oracle (first hub scan)",
-      "sqli.vulnlab.dev/error/: 8 findings; xss.vulnlab.dev/reflected/: 9 findings — vulnlab hub seeds shipped"
+      "sqli.vulnlab.dev/error/: 8 findings; xss.vulnlab.dev/reflected/: 9 findings — vulnlab hub seeds shipped",
+      "wrongsecrets challenge-55/56/64/65/66: route oracles from concurrent 10 UTC run",
+      "duck-store.escape.tech SSRF API routes: 32 findings from concurrent run"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop (Resend API key removed from Bluesky/Mastodon feeds; sensitive_data covered via juice-shop-leaked-api-key)",
-      "wrongsecrets-ctf challenge routes 0-8 fire route oracles when scanned directly; hub now covered",
-      "pwnshop.ctfsecurity.com/apply-coupon: coupon oracles fire when OTP session succeeds (45 findings on probe)"
+      "wrongsecrets challenge-44/45 disabled (Vault/K8s cloud-only challenges)",
+      "dvwu labs/file-upload/xxe/deserialization/jwt/ssti still in discovery queue tail"
     ]
   },
   "discovery_highlights": {
@@ -79,8 +81,8 @@
     "ssti.vulnlab.dev/basic/": 9,
     "sqli.vulnlab.dev/error/": 8,
     "xss.vulnlab.dev/reflected/": 9,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52
+    "wrongsecrets.herokuapp.com/challenge/challenge-55": 15,
+    "duck-store.escape.tech/api/v1/uploads/import-from-url": 32,
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }

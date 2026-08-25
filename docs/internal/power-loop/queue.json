@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-25T09:22:00.000Z",
+  "updated_at": "2026-08-25T10:08:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-55",
+      "source": "OWASP WrongSecrets — Challenge 55 SSH private key in .ssh/wrongsecrets.keys oracle (Heroku demo README: challenges 54-66 available)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-56",
+      "source": "OWASP WrongSecrets — Challenge 56 secrets oracle (Heroku demo README: challenges 54-66 available)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-64",
+      "source": "OWASP WrongSecrets — Challenge 64 secrets oracle (Heroku demo README: challenges 54-66 available)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-65",
+      "source": "OWASP WrongSecrets — Challenge 65 secrets oracle (Heroku demo README: challenges 54-66 available)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-66",
+      "source": "OWASP WrongSecrets — Challenge 66 obfuscated Java CLI JAR binary oracle (Heroku demo README: challenges 54-66 available)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-50",
       "source": "OWASP WrongSecrets — Challenge 50 secrets oracle (Heroku demo README: challenges 49-52 available)",
