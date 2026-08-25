@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T09:22:00.000Z",
+  "updated_at": "2026-08-25T10:40:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2766,
-  "total_findings": 27146,
+  "total_sites_scanned": 2727,
+  "total_findings": 26588,
   "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1969,
-  "discovery_findings": 22975,
-  "improvements_shipped": 1174,
-  "last_run": "2026-08-25T09:12:00.000Z",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1956,
+  "discovery_findings": 22567,
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-25T10:40:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 590,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,46 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (48 findings); secret-resend slug still absent — Resend key no longer in social feeds"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 4,
-      "urls_scanned": 10,
-      "findings": 143,
-      "focus": "supplemental wrongsecrets challenge-50/51/52/54 + CTF demo (concurrent 09 UTC run drained dvwu+challenge-6/8/63)",
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 80,
+      "focus": "alf.nu ServiceWorker live oracle + vulnlab ssti/sqli/xss hub seeds + wrongsecrets-ctf hub",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no benchmark category gaps",
-      "dvwu.vercel.app/labs/csrf: 14 findings — dvwu-csrf-route-live-oracle + dvwu-csrf-newsletter-crlf-route-live-oracle shipped via priority queue drain",
-      "dvwu.vercel.app/labs/idor: 14 findings — dvwu-idor-route-live-oracle + dvwu-dashboard-idor-route-live-oracle shipped via priority queue drain",
-      "wrongsecrets challenge-6: 15 findings — wrongsecrets-challenge-6-k8s-secret-route-live-oracle",
-      "wrongsecrets challenge-8: 15 findings — wrongsecrets-challenge-8-logging-route-live-oracle",
-      "wrongsecrets challenge-63: 15 findings — wrongsecrets-challenge-63-hardcoded-aes-key-route-live-oracle",
-      "wrongsecrets challenge-50: route-specific .NET binary live oracle @15 findings",
-      "wrongsecrets challenge-51/52/54: challenge route live oracles @15 each",
-      "wrongsecrets-ctf.herokuapp.com: 10 findings with CTF platform evidence"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "alf.nu/ServiceWorker: 4→6 findings — alf-nu-serviceworker-live-oracle shipped (test.js fetch interception)",
+      "wrongsecrets-ctf.herokuapp.com: 10→11 findings — wrongsecrets-ctf-hub-live-oracle shipped",
+      "ssti.vulnlab.dev/basic/: 9 findings with ssti-vulnlab-basic-route-live-oracle (first hub scan)",
+      "sqli.vulnlab.dev/error/: 8 findings; xss.vulnlab.dev/reflected/: 9 findings — vulnlab hub seeds shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "wrongsecrets challenge-44/45 disabled (Vault/K8s cloud-only challenges)",
-      "dvwu labs/file-upload/xxe/deserialization/jwt/ssti still in discovery queue tail",
-      "wrongsecrets-ctf: CTF-specific challenge oracles may need route-level tuning"
+      "secret-resend slug still absent on juice-shop (Resend API key removed from Bluesky/Mastodon feeds; sensitive_data covered via juice-shop-leaked-api-key)",
+      "wrongsecrets-ctf challenge routes 0-8 fire route oracles when scanned directly; hub now covered",
+      "pwnshop.ctfsecurity.com/apply-coupon: coupon oracles fire when OTP session succeeds (45 findings on probe)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
-    "dvwu.vercel.app/labs/csrf": 14,
-    "dvwu.vercel.app/labs/idor": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-6": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-8": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-63": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-50": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-51": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-52": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-54": 15,
-    "wrongsecrets-ctf.herokuapp.com/": 10
+    "juice-shop.herokuapp.com": 48,
+    "alf.nu/ServiceWorker": 6,
+    "wrongsecrets-ctf.herokuapp.com": 11,
+    "ssti.vulnlab.dev/basic/": 9,
+    "sqli.vulnlab.dev/error/": 8,
+    "xss.vulnlab.dev/reflected/": 9,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "brokencrystals.com/userlogin?logobgcolor=red": 52
   }
 }

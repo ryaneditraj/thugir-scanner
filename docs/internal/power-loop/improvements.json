@@ -4511,6 +4511,24 @@
       "slug": "wrongsecrets-challenge-slug-priority-boundary",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsChallengeSlugMatches(N, slug) uses trailing hyphen so challenge-6 priority no longer matches challenge-60..69 slugs; challenge-6 route scan fires only wrongsecrets-challenge-6-k8s-secret-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:alf.nu",
+      "slug": "alf-nu-serviceworker-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET alf.nu/ServiceWorker/test.js returns addEventListener('fetch') with respondWith(Response); alf.nu/ServiceWorker findings 4→6 (+alf-nu-serviceworker-live-oracle +alf-nu-serviceworker-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets-ctf.herokuapp.com",
+      "slug": "wrongsecrets-ctf-hub-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecrets-ctf.herokuapp.com hub lists challenge-0 through challenge-8 dropdown routes; wrongsecrets-ctf.herokuapp.com findings 10→11 (+wrongsecrets-ctf-hub-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnlab.dev",
+      "slug": "vulnlab-ssti-sqli-xss-hub-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sstiVulnlabPrioritySeeds + sqliVulnlabPrioritySeeds + xssVulnlabPrioritySeeds hub crawl seeds; ssti.vulnlab.dev/basic/ findings 9 (+ssti-vulnlab-basic-route-live-oracle); sqli.vulnlab.dev/error/ 8; xss.vulnlab.dev/reflected/ 9; benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
