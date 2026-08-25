@@ -4619,6 +4619,24 @@
       "slug": "wrongsecrets-challenge-59-priority-drain",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: prepended wrongsecrets.herokuapp.com/challenge/challenge-59 to priority_discovery_urls front; wrongsecrets.herokuapp.com/challenge/challenge-59 findings 9→15 (+wrongsecrets-challenge-59-slack-webhook-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-login-gated-route-oracle-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: aiSecurityCatalogOrLoginGatedRouteOracle probes HTTP 307 Location /login?next=/challenges/{key} when catalog markers thin; open-redirect 0→7 (+ai-security-open-redirect-route-live-oracle); admin-console 0→7 (+ai-security-admin-console-route-live-oracle); insecure-passwords 0→7 (+ai-security-insecure-passwords-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-info-route-priority-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended brokencrystals.com/api/users/one/admin_user/info to priority_discovery_urls; runner -4 priority for brokencrystals-mass-assignment-put-* on /info routes; route scan 0→88 findings (+brokencrystals-mass-assignment-put-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vuln-expose.vercel.app",
+      "slug": "vuln-expose-users-api-priority-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended vuln-expose.vercel.app/api/users to priority_discovery_urls with ai-security open-redirect/admin-console/insecure-passwords; vuln-expose.vercel.app/api/users findings 0→16 (+vuln-expose-users-api-route-live-oracle +vuln-expose-users-api-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
