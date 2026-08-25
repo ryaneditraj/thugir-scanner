@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-25T04:06:00.000Z",
+  "updated_at": "2026-08-25T05:12:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-23",
+      "source": "OWASP WrongSecrets — Challenge 23 front-end Base64 secret oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-24",
+      "source": "OWASP WrongSecrets — Challenge 24 cryptography HMAC-key oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-25",
+      "source": "OWASP WrongSecrets — Challenge 25 Web3 smart-contract secret oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-26",
+      "source": "OWASP WrongSecrets — Challenge 26 cryptography secret oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-27",
+      "source": "OWASP WrongSecrets — Challenge 27 front-end secret oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-20",
       "source": "OWASP WrongSecrets — Challenge 20 binary reverse-engineering secret oracle (official Heroku demo)",
