@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-08-25T20:05:00.000Z",
+  "updated_at": "2026-08-25T21:08:19.334Z",
   "discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
+      "source": "Escape Duck Store vulnerabilities — 100% discount coupon + shipping cost bypass POST /api/v1/orders/checkout",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/cart/add",
+      "source": "Escape Duck Store vulnerabilities — negative quantity business logic POST /api/v1/cart/add",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/coupons",
+      "source": "Escape Duck Store vulnerabilities — coupon information disclosure GET /api/v1/orders/coupons",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/csrf",
       "source": "ai-security-platform — CSRF challenge route (OWASP API Top 10 lab; Vercel public demo)",
