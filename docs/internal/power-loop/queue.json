@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T10:08:00.000Z",
+  "updated_at": "2026-08-25T11:14:00.000Z",
   "discovery_urls": [
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-55",
@@ -10571,6 +10571,31 @@
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
       "source": "OWASP WrongSecrets — Challenge 63 secrets oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-44",
+      "source": "OWASP WrongSecrets — Challenge 44 Vault metadata oracle (Heroku demo README: K8s/Vault challenges 44-47)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-45",
+      "source": "OWASP WrongSecrets — Challenge 45 Vault subkey oracle (Heroku demo README: K8s/Vault challenges 44-47)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-46",
+      "source": "OWASP WrongSecrets — Challenge 46 Vault Agent template injection oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-47",
+      "source": "OWASP WrongSecrets — Challenge 47 hardcoded secrets in Vault Agent templates oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-53",
+      "source": "OWASP WrongSecrets — Challenge 53 debugging container leak oracle (Heroku demo README: K8s challenge53 gdb binary)",
       "auth": "public_demo"
     }
   ]
