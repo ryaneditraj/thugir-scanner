@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T18:10:00.000Z",
+  "updated_at": "2026-08-25T18:08:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://vuln-expose.vercel.app/sqli/blind",
@@ -153,6 +153,31 @@
     }
   ],
   "discovery_urls": [
+    {
+      "url": "https://riglabs-cyber-lab.vercel.app/cryptography",
+      "source": "RigLabs CYBERLAB — Module 3 cryptography training lab (Vercel interactive security training portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://riglabs-cyber-lab.vercel.app/brute-force",
+      "source": "RigLabs CYBERLAB — Module 7 brute-force attack training lab (Vercel interactive security training portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://riglabs-cyber-lab.vercel.app/phishing",
+      "source": "RigLabs CYBERLAB — Module 12 phishing detective training lab (Vercel interactive security training portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/csrf",
+      "source": "AI & Security Platform — CSRF challenge route (browser-based OWASP Top 10 lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/xxe",
+      "source": "AI & Security Platform — XXE challenge route (browser-based OWASP Top 10 lab)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
       "source": "OWASP WrongSecrets — Challenge 57 AI prompt-injection oracle on official Heroku demo (README)",
