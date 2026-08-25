@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-leaked-secrets-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: AI_SECURITY_PLATFORM_CHALLENGE_META leaked-config routeRe accepts /challenges/leaked-secrets alias; ai-security-platform-iota.vercel.app/challenges/leaked-secrets findings 2→3 (+ai-security-leaked-config-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dockerworkshop.vercel.app",
+      "slug": "dockerworkshop-devboard-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dockerworkshopDevboardRouteLiveOracle matches DevBoard FastAPI+Next.js 5-bug workshop docs at /lab8/projects/devboard; dockerworkshop.vercel.app/lab8/projects/devboard/ findings 4→5 (+dockerworkshop-devboard-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-csrf-labs-pathname-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvwuCsrfRouteLiveOracle pathname matcher tightened to /(?:labs/)?csrf; dvwu.vercel.app/labs/csrf findings 14 maintained (+dvwu-csrf-route-live-oracle DVWU CSRF state-change); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
       "slug": "ai-security-command-injection-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/command-injection returns HTTP 307 Location /login?next=%2Fchallenges%2Fcommand-injection; ai-security-platform-iota.vercel.app/challenges/command-injection findings 2→3 (+ai-security-command-injection-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"

@@ -35607,7 +35607,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "AI Security Platform leaked-config challenge route live oracle",
     description:
-      "When scanning /challenges/leaked-config, the platform catalog documents CWE-200 environment variables and API keys exposed in client bundles — route-specific leaked secrets training oracle.",
+      "When scanning /challenges/leaked-config or /challenges/leaked-secrets, the platform catalog documents CWE-200 environment variables and API keys exposed in client bundles — route-specific leaked secrets training oracle.",
     impactOneline:
       "Route-specific oracle confirms leaked secrets training module without relying on shared AI Security Platform hub fingerprinting.",
     detectorKind: "rule_ref",
@@ -62794,7 +62794,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "DVWU CSRF state-change route live oracle",
     description:
-      "When scanning /csrf on dvwu.vercel.app, POST /api/newsletter subscribes an email without anti-CSRF token or session — Damn Vulnerable Web University cross-site request forgery state-change route oracle.",
+      "When scanning /csrf or /labs/csrf on dvwu.vercel.app, POST /api/newsletter subscribes an email without anti-CSRF token or session — Damn Vulnerable Web University cross-site request forgery state-change route oracle.",
     impactOneline:
       "Missing CSRF protections let attackers trick visitors into performing unwanted newsletter subscriptions or other state changes.",
     detectorKind: "rule_ref",
@@ -63938,7 +63938,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "DVWU CSRF state-change route live oracle",
     description:
-      "When scanning /csrf on dvwu.vercel.app, POST /api/newsletter subscribes an email without anti-CSRF token or session — Damn Vulnerable Web University cross-site request forgery state-change route oracle.",
+      "When scanning /csrf or /labs/csrf on dvwu.vercel.app, POST /api/newsletter subscribes an email without anti-CSRF token or session — Damn Vulnerable Web University cross-site request forgery state-change route oracle.",
     impactOneline:
       "Missing CSRF protections let attackers trick visitors into performing unwanted newsletter subscriptions or other state changes.",
     detectorKind: "rule_ref",
@@ -66686,6 +66686,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our RatTasks app has no CSRF protection on task forms and uses GET /delete/:id. Show CSRF remediation for Flask session apps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dockerworkshop-devboard-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Docker workshop DevBoard route live oracle",
+    description:
+      "When scanning /lab8/projects/devboard on dockerworkshop.vercel.app, the workshop documents DevBoard — a FastAPI+Next.js issue tracker in dockersamples/sbx-quickstart with 5 intentional bugs (pagination off-by-one, missing authorization, search 501).",
+    impactOneline:
+      "Training labs that document authorization and pagination flaws help calibrate scanners against realistic API bug patterns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dockerworkshopDevboardRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DevBoard is intentional Docker sandbox training software — fix pagination math, enforce object-level authorization, and never ship stub notification handlers to production.",
+      steps: [
+        "Use (page - 1) * page_size for SQL OFFSET pagination.",
+        "Verify the authenticated user owns the issue before allowing updates.",
+        "Implement server-side authorization checks instead of trusting project membership alone."
+      ]
+    },
+    fixPrompt:
+      "Our dockerworkshop.vercel.app DevBoard lab documents pagination and authorization bugs in FastAPI issue routes. Show secure pagination and object-level authorization remediation.",
     version: 1,
     enabled: true
   }
