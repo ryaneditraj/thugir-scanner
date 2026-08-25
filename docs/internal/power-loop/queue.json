@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T08:15:00.000Z",
+  "updated_at": "2026-08-25T09:07:06.642Z",
   "discovery_urls": [
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-40",
@@ -10576,31 +10576,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://dvwu.vercel.app/labs/csrf",
-      "source": "zahidoverflow/dvwu — CSRF training lab route (Vercel live demo; /labs/* portal)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/idor",
-      "source": "zahidoverflow/dvwu — IDOR training lab route (Vercel live demo; /labs/* portal)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-6",
-      "source": "OWASP WrongSecrets — Challenge 6 K8s secrets oracle (official Heroku demo)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-8",
-      "source": "OWASP WrongSecrets — Challenge 8 logging secret oracle (official Heroku demo)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
-      "source": "OWASP WrongSecrets — Challenge 63 secrets oracle (official Heroku demo)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://dvwu.vercel.app/labs/file-upload",
       "source": "zahidoverflow/dvwu — file upload training lab route (Vercel live demo; /labs/* portal)",
       "auth": "public_demo"
@@ -10626,5 +10601,32 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 20
+  "discovery_urls_added": 20,
+  "priority_discovery_urls": [
+    {
+      "url": "https://dvwu.vercel.app/labs/csrf",
+      "source": "zahidoverflow/dvwu — CSRF training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/idor",
+      "source": "zahidoverflow/dvwu — IDOR training lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-6",
+      "source": "OWASP WrongSecrets — Challenge 6 K8s secrets oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-8",
+      "source": "OWASP WrongSecrets — Challenge 8 logging secret oracle (official Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+      "source": "OWASP WrongSecrets — Challenge 63 secrets oracle (official Heroku demo)",
+      "auth": "public_demo"
+    }
+  ]
 }
