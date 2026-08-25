@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-25T00:06:00.000Z",
+  "updated_at": "2026-08-25T01:08:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-10",
+      "source": "OWASP WrongSecrets — Challenge 10 AES/crypto secret oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-11",
+      "source": "OWASP WrongSecrets — Challenge 11 cloud secret oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-12",
+      "source": "OWASP WrongSecrets — Challenge 12 Vault integration secret oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-13",
+      "source": "OWASP WrongSecrets — Challenge 13 K8s secret oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-14",
+      "source": "OWASP WrongSecrets — Challenge 14 Terraform secret oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-7",
       "source": "OWASP WrongSecrets — Challenge 7 Vault K8s secret oracle (official Heroku demo)",
