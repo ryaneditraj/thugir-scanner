@@ -13206,6 +13206,24 @@ const burpbountyXxeParseRouteLiveOracle = burpBountyRouteLiveOracle(
   "Burp Bounty Lab /xxe/parse route scan — POST external entity resolves /etc/passwd — XXE profile oracle"
 );
 
+const burpbountyCrlfSetRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/crlf\/set\b/i,
+  burpbountyCrlfSetLiveOracle,
+  "Burp Bounty Lab /crlf/set route scan — ?lang= reflects unsanitized input into Set-Cookie and X-Custom-Lang — CRLF/header injection profile oracle"
+);
+
+const burpbountyRceEvalRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/rce\/eval\b/i,
+  burpbountyRceEvalLiveOracle,
+  "Burp Bounty Lab /rce/eval route scan — ?code= evaluates attacker-supplied expressions (7*7→49) — code injection/RCE profile oracle"
+);
+
+const burpbountyAiCompletionsRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/ai\/v1\/completions\b/i,
+  burpbountyAiCompletionsLiveOracle,
+  "Burp Bounty Lab /ai/v1/completions route scan — legacy text_completion JSON plus LLM gateway headers — OpenAI completions disclosure profile oracle"
+);
+
 const burpbountySstiPreviewLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/ssti/preview", ctx.origin);
@@ -94381,6 +94399,9 @@ export const RULES: Record<string, Rule> = {
   burpbountySstiPreviewRouteLiveOracle,
   burpbountySsrfSchemeRouteLiveOracle,
   burpbountyXxeParseRouteLiveOracle,
+  burpbountyCrlfSetRouteLiveOracle,
+  burpbountyRceEvalRouteLiveOracle,
+  burpbountyAiCompletionsRouteLiveOracle,
   burpbountyXssEncodedLiveOracle,
   burpbountySsrfImgLiveOracle,
   burpbountySsrfImgRouteLiveOracle,
