@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-25T15:35:00.000Z",
+  "updated_at": "2026-08-25T17:41:57.141Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vampi-production.up.railway.app/users/v1/_debug",
+      "source": "erev0s/VAmPI debug endpoint",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vampi-production.up.railway.app/books/v1",
+      "source": "erev0s/VAmPI books BOLA",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vampi-production.up.railway.app/users/v1/victim1",
+      "source": "erev0s/VAmPI user BOLA",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level2/frame",
+      "source": "Google XSS Game level 2",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level4/frame",
+      "source": "Google XSS Game level 4",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*))",
       "source": "NeuraLegion/brokencrystals — LDAP injection via /api/users/ldap query param (priority drain)",
@@ -9911,6 +9936,31 @@
       "url": "https://brokencrystals.com/api/users/one/admin_user/info",
       "source": "NeuraLegion/brokencrystals — mass-assignment privilege escalation PUT target /api/users/one/{email}/info (README)",
       "auth": "benchmark"
+    },
+    {
+      "url": "https://vampi-production.up.railway.app/users/v1/_debug",
+      "source": "erev0s/VAmPI — excessive data exposure debug endpoint (Railway public deploy README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vampi-production.up.railway.app/books/v1",
+      "source": "erev0s/VAmPI — BOLA books API oracle (Railway public deploy README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vampi-production.up.railway.app/users/v1/victim1",
+      "source": "erev0s/VAmPI — user enumeration / BOLA by username oracle (Railway README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level2/frame",
+      "source": "Google XSS Game — level 2 persistent XSS lab (awesome-vulnerable-apps)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-game.appspot.com/level4/frame",
+      "source": "Google XSS Game — level 4 DOM XSS lab (awesome-vulnerable-apps)",
+      "auth": "public_demo"
     }
   ]
 }
