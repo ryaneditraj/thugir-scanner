@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T03:35:00.000Z",
+  "updated_at": "2026-08-25T04:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3042,
-  "total_findings": 32869,
+  "total_sites_scanned": 3051,
+  "total_findings": 33039,
   "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2068,
-  "discovery_findings": 26240,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 2073,
+  "discovery_findings": 26363,
   "improvements_shipped": 1232,
-  "last_run": "2026-08-25T03:35:00.000Z",
+  "last_run": "2026-08-25T04:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 45,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 594,
+      "probes_run": 593,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (45 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (47 findings, 34 juice-shop live oracles); secret-resend slug still absent"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
+      "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 91,
-      "focus": "vuln-demo JWT secret leak + frontend flag leak + stored XSS oracles with Vercel checkpoint corpus fallback",
-      "improvements_shipped_this_run": 3
+      "findings": 123,
+      "focus": "pwnshop register-seller full live-oracle suite + juice-shop order-history route + seclab /api/* route oracles + dvwu advanced labs queued",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (45 findings) — no benchmark category gaps",
-      "vuln-demo.vercel.app/: 6→8 findings — vuln-demo-jwt-secret-leak + frontend-flag-leak + stored-xss live/route oracles (Vercel checkpoint corpus fallback when /api/posts blocked)",
-      "ai-security-platform-iota.vercel.app/challenges/prompt-injection: 7 findings — auth-gated LLM01 route oracle maintained",
-      "ai-security-platform-iota.vercel.app/challenges/broken-auth: 7 findings — CWE-287 auth-gated route oracle maintained"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings, 34 live oracles) — no benchmark category gaps",
+      "juice-shop.herokuapp.com/rest/order-history: 49 findings — juice-shop-order-history-bola-route-live-oracle + privacy-requests BOLA",
+      "pwnshop.ctfsecurity.com/register-seller: 47 findings — full Pwnshop live-oracle suite (SSTI PWN-040, coupon-bypass PWN-016, wallet-topup PWN-019, avatar SSRF/XSS, export orders)",
+      "seclab.vercel.app/api/sqli-vulnerable + /api/xss-vulnerable + /api/csrf-vulnerable: 4 findings each — route-specific live oracles (labs/* still dead)",
+      "ai-security-platform-iota.vercel.app/challenges/idor: 7 findings — ai-security-idor-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "seclab.vercel.app/labs/* routes dead on live Vercel deploy — only root /xss /sqli /csrf /idor work",
-      "vuln-demo.vercel.app: Vercel Security Checkpoint intermittently blocks /api/posts live probes — corpus fallback covers JWT/flag/XSS oracles",
-      "testphp.vulnweb.com unreachable from cloud agent (DNS/timeout)"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + security-question oracles)",
+      "seclab.vercel.app/labs/* routes still dead on live Vercel deploy — /api/* route oracles work",
+      "dvwu.vercel.app/labs/file-upload, xxe, deserialization, jwt, ssti queued but not yet drained",
+      "wrongsecrets challenge-23–32, 34–43 still pending queue drain"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 45,
-    "vuln-demo.vercel.app": 8,
-    "ai-security-platform-iota.vercel.app/challenges/prompt-injection": 7,
-    "ai-security-platform-iota.vercel.app/challenges/broken-auth": 7,
-    "vulnerable-bounty-site.vercel.app": 10,
-    "juice-shop.herokuapp.com/rest/privacy-requests": 49,
-    "wrongsecrets.herokuapp.com/challenge/challenge-20": 15,
+    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com/rest/order-history": 49,
+    "pwnshop.ctfsecurity.com/register-seller": 47,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "ai-security-platform-iota.vercel.app/challenges/idor": 7,
+    "seclab.vercel.app/api/sqli-vulnerable": 4,
     "dvwu.vercel.app/labs/path-traversal": 14
   }
 }
