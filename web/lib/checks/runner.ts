@@ -3481,6 +3481,9 @@ const DEEP_RULES = new Set<string>([
   "burpbountySstiPreviewRouteLiveOracle",
   "burpbountySsrfSchemeRouteLiveOracle",
   "burpbountyXxeParseRouteLiveOracle",
+  "burpbountyCrlfSetRouteLiveOracle",
+  "burpbountyRceEvalRouteLiveOracle",
+  "burpbountyAiCompletionsRouteLiveOracle",
   "burpbountySqliUserRouteLiveOracle",
   "burpbountySstiPreviewLiveOracle",
   "burpbountyXssUrlLiveOracle",
@@ -13008,6 +13011,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/burpbountylab\.com/i.test(origin) && /\/ssti\/preview\b/i.test(targetInput) && p.slug === "burpbounty-ssti-preview-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/ssrf\/scheme\b/i.test(targetInput) && p.slug === "burpbounty-ssrf-scheme-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/xxe\/parse\b/i.test(targetInput) && p.slug === "burpbounty-xxe-parse-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/crlf\/set\b/i.test(targetInput) && p.slug === "burpbounty-crlf-set-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/rce\/eval\b/i.test(targetInput) && p.slug === "burpbounty-rce-eval-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/ai\/v1\/completions\b/i.test(targetInput) && p.slug === "burpbounty-ai-completions-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/command-injection\/?$/i.test(targetInput) && p.slug === "sec-research-lab-command-injection-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/jwt-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-jwt-lab-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/prototype-pollution\/?$/i.test(targetInput) && p.slug === "sec-research-lab-prototype-pollution-route-live-oracle") return -3;

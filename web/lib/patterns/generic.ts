@@ -49895,6 +49895,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-crlf-set-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /crlf/set route CRLF live oracle",
+    description:
+      "When scanning /crlf/set, GET ?lang= copies the query parameter unsanitized into Set-Cookie and X-Custom-Lang response headers — route-specific CRLF/header injection profile oracle.",
+    impactOneline:
+      "Route-specific CRLF oracle confirms response-header injection when scanning the Burp Bounty Lab /crlf/set practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCrlfSetRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip CR/LF characters from values placed in HTTP response headers.",
+      steps: [
+        "Reject or encode newline characters in header values.",
+        "Use framework APIs that sanitize header injection by default.",
+        "Isolate Burp Bounty Lab CRLF routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /crlf/set route scan confirms lang reflects into Set-Cookie without CRLF sanitization. Show HTTP response splitting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-xss-js-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -49999,6 +50025,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-ai-completions-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab /ai/v1/completions route live oracle",
+    description:
+      "When scanning /ai/v1/completions, GET returns legacy text_completion JSON plus X-AI-Backend, X-LLM-Provider, and X-MCP-Enabled headers — route-specific OpenAI completions disclosure profile oracle.",
+    impactOneline:
+      "Route-specific legacy completions oracle confirms LLM gateway header leakage when scanning the Burp Bounty Lab /ai/v1/completions practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAiCompletionsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip internal LLM gateway headers from public API responses.",
+      steps: [
+        "Remove X-AI-Backend, X-LLM-Provider, and X-MCP-Enabled from outward-facing responses.",
+        "Disable legacy /v1/completions routes on production gateways.",
+        "Isolate Burp Bounty Lab AI disclosure routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ai/v1/completions route scan leaks LLM gateway headers and legacy completion JSON. Show how to strip internal AI metadata from API responses.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-rce-eval-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -50021,6 +50073,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /rce/eval endpoint evaluates user code (code=7*7 returns 49). Show how to remove unsafe eval endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-rce-eval-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /rce/eval route RCE live oracle",
+    description:
+      "When scanning /rce/eval, GET ?code= evaluates attacker-supplied expressions server-side and returns the computed result (e.g. 7*7→49) — route-specific code injection/RCE profile oracle.",
+    impactOneline:
+      "Route-specific RCE eval oracle confirms code execution when scanning the Burp Bounty Lab /rce/eval practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRceEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never evaluate user-supplied code — remove eval/exec endpoints from production.",
+      steps: [
+        "Delete or sandbox any endpoint that evaluates attacker-controlled expressions.",
+        "Use safe expression parsers with strict allow-lists if computation is required.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /rce/eval route scan confirms code=7*7 evaluates to 49. Show how to remove unsafe eval endpoints.",
     version: 1,
     enabled: true
   },
