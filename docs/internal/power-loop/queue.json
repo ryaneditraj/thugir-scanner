@@ -1,6 +1,26 @@
 {
-  "updated_at": "2026-08-25T18:08:00.000Z",
+  "updated_at": "2026-08-25T20:25:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/testimonials",
+      "source": "NeuraLegion/brokencrystals — persistent XSS + SQLi testimonials oracle (priority drain)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file?path=/etc/hosts",
+      "source": "NeuraLegion/brokencrystals — LFI /api/file path oracle (priority drain)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/basic",
+      "source": "NeuraLegion/brokencrystals — mass-assignment POST /api/users/basic isAdmin oracle (priority drain)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/products/filter/by-color?color=Yellow&sort=name",
+      "source": "Escape Duck Store — SQLi via sort parameter on color filter API (priority drain)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vuln-expose.vercel.app/sqli/blind",
       "source": "JuaniVeltri/vuln-expose — blind SQLi lab module (priority drain)",
