@@ -74019,6 +74019,49 @@ const wrongsecretsChallenge59SlackWebhookRouteLiveOracle: Rule = async (ctx) => 
 
 const WRONGSECRETS_CHALLENGE37_BASIC_AUTH = "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==";
 
+const wrongsecretsChallenge35DocumentationLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-35", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/challenge focuses on.*Documentation<\/strong>/i.test(body) ||
+    !/GHSA-vv4g-7gjw-fvqw/i.test(body) ||
+    !/Github security advisory|GitHub security advisory/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/GHSA-vv4g-7gjw-fvqw[\s\S]{0,80}/i)?.[0]?.slice(0, 100) ??
+        "GitHub security advisory GHSA-vv4g-7gjw-fvqw",
+      note: "OWASP WrongSecrets challenge-35 documents a Google API key leaked via published GitHub security advisory GHSA-vv4g-7gjw-fvqw — documentation challenge oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge35DocumentationRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?35\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge35DocumentationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-35 route scan — documentation challenge confirms GitHub security advisory GHSA-vv4g-7gjw-fvqw walkthrough for leaked Google API key"
+    }
+  };
+};
+
 const wrongsecretsChallenge36AdvancedCLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-36", ctx.origin).toString();
@@ -92911,6 +92954,8 @@ export const RULES: Record<string, Rule> = {
   wrongsecretsChallenge57BrowserLlmRouteLiveOracle,
   wrongsecretsChallenge59SlackWebhookLiveOracle,
   wrongsecretsChallenge59SlackWebhookRouteLiveOracle,
+  wrongsecretsChallenge35DocumentationLiveOracle,
+  wrongsecretsChallenge35DocumentationRouteLiveOracle,
   wrongsecretsChallenge36AdvancedCLiveOracle,
   wrongsecretsChallenge36AdvancedCRouteLiveOracle,
   wrongsecretsChallenge37CiCdLiveOracle,

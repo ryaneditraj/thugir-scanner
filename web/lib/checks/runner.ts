@@ -2774,6 +2774,8 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge57BrowserLlmRouteLiveOracle",
   "wrongsecretsChallenge59SlackWebhookLiveOracle",
   "wrongsecretsChallenge59SlackWebhookRouteLiveOracle",
+  "wrongsecretsChallenge35DocumentationLiveOracle",
+  "wrongsecretsChallenge35DocumentationRouteLiveOracle",
   "wrongsecretsChallenge36AdvancedCLiveOracle",
   "wrongsecretsChallenge36AdvancedCRouteLiveOracle",
   "wrongsecretsChallenge37CiCdLiveOracle",

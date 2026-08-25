@@ -33573,6 +33573,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-35-documentation-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-35 documentation route live oracle",
+    description:
+      "When scanning /challenge/35 or /challenge/challenge-35, the walkthrough documents a Google API key leaked via published GitHub security advisory GHSA-vv4g-7gjw-fvqw — route-specific documentation challenge oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-35 documentation walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge35DocumentationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-35 is intentional — never publish exact secret values in security advisories or CVE reports.",
+      steps: [
+        "Redact or rotate secrets before publishing GitHub security advisories.",
+        "Use placeholder values in public vulnerability disclosures.",
+        "Run documentation secret training only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-35 route documents a Google API key in a published GitHub advisory. Show secure disclosure practices for security advisories.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-36-advanced-c-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
