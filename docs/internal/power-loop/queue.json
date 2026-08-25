@@ -1,5 +1,47 @@
 {
-  "updated_at": "2026-08-25T13:06:00.000Z",
+  "updated_at": "2026-08-25T13:30:00.000Z",
+  "priority_discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
+      "source": "OWASP WrongSecrets — Challenge 57 in-browser LLM prompt-injection oracle (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-58",
+      "source": "OWASP WrongSecrets — Challenge 58 database connection string exposure oracle (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-59",
+      "source": "OWASP WrongSecrets — Challenge 59 CI/CD Slack webhook oracle (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/api/search?q=test",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQL injection search oracle GET /api/search",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/api/comments",
+      "source": "zahidoverflow/damn-vulnerable-web-university — stored/reflected XSS comments oracle /api/comments",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/basic",
+      "source": "sampsonc/vulnlab.dev — unfiltered SSRF lab basic route oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata-aws",
+      "source": "sampsonc/vulnlab.dev — AWS IMDS metadata SSRF route oracle",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/blocklist",
+      "source": "sampsonc/vulnlab.dev — SSRF blocklist bypass route oracle",
+      "auth": "public_demo"
+    }
+  ],
   "discovery_urls": [
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-60",

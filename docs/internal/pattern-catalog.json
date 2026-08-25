@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-25T12:22:10.255Z",
-  "total": 2639,
-  "uniqueSlugs": 2631,
+  "generatedAt": "2026-08-25T13:27:51.463Z",
+  "total": 2642,
+  "uniqueSlugs": 2634,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2621,
+    "generic": 2624,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2554,
+    "deep": 2557,
     "continuous": 0
   },
   "byCategory": {

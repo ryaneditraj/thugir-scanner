@@ -7958,6 +7958,7 @@ function extractDvwuVulnPortalSeeds(html: string, pageUrl: string): string[] {
     "/labs/open-redirect",
     "/labs/file-upload",
     "/api/comments",
+    "/api/search",
     "/newsletter"
   ]) {
     try {
@@ -10371,6 +10372,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/43",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-43",
         "https://wrongsecrets.herokuapp.com/challenge/8",
+        "https://wrongsecrets.herokuapp.com/challenge/57",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
+        "https://wrongsecrets.herokuapp.com/challenge/58",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-58",
         "https://wrongsecrets.herokuapp.com/challenge/59",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-59",
         "https://wrongsecrets.herokuapp.com/challenge/60",
@@ -11323,7 +11328,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("ssrf-vulnlab-") &&
         /-route-/.test(p.slug)
       )
-        return -3;
+        return -4;
       if (
         /pc-parts-store\.vercel\.app/i.test(origin) &&
         /\/(?:login|checkout|product|products|api\/login)\.php/i.test(targetInput) &&
@@ -11581,7 +11586,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:reset-password|forgot-password|verify-otp|login)\b/i.test(targetInput) &&
-        p.slug.startsWith("pwnshop-otp-not-invalidated")
+        (p.slug.startsWith("pwnshop-otp-not-invalidated") ||
+          p.slug === "pwnshop-verify-otp-bruteforce-live-oracle")
       )
         return -4;
       if (
@@ -11725,7 +11731,15 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
-        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|csrf|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|crlf)|newsletter)\b/i.test(
+        /\/api\/(?:search|comments)\b/i.test(targetInput) &&
+        (p.slug === "dvwu-search-sqli-route-live-oracle" ||
+          p.slug === "dvwu-search-xss-route-live-oracle" ||
+          p.slug === "dvwu-comments-xss-route-live-oracle")
+      )
+        return -4;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|csrf|api\/(?:comments|search)|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|crlf)|newsletter)\b/i.test(
           targetInput
         ) &&
         p.slug.startsWith("dvwu-")
@@ -12073,6 +12087,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?64\b/i.test(targetInput) &&
         wrongsecretsChallengeSlugMatches(64, p.slug)
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?57\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(57, p.slug)
       )
         return -3;
       if (
@@ -12849,7 +12869,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:reset-password|forgot-password|login|verify-otp)\b/i.test(targetInput) &&
-        p.slug.startsWith("pwnshop-otp-not-invalidated")
+        (p.slug.startsWith("pwnshop-otp-not-invalidated") ||
+          p.slug === "pwnshop-verify-otp-bruteforce-live-oracle")
       )
         return -4;
       if (
@@ -13116,7 +13137,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:reset-password|verify-otp|forgot-password)\b/i.test(targetInput) &&
-        p.slug.startsWith("pwnshop-otp-not-invalidated")
+        (p.slug.startsWith("pwnshop-otp-not-invalidated") ||
+          p.slug === "pwnshop-verify-otp-bruteforce-live-oracle")
       )
         return -4;
       if (
