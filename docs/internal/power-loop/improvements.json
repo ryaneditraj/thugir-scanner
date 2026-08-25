@@ -4457,6 +4457,24 @@
       "slug": "brokencrystals-digital-ocean-shorthand-route-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsFileDigitalOceanRouteLiveOracle now matches /digital_ocean page route in addition to /api/file/digital_ocean; brokencrystals.com/digital_ocean findings 86→76 with route-specific brokencrystals-file-digital-ocean-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pc-parts-store.vercel.app",
+      "slug": "pc-parts-store-api-login-token-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET api/login.php serves React SPA — README corpus fallback documents unsigned base64 JSON token at api/login.php; pc-parts-store.vercel.app/api/login.php findings 6→7 (+pc-parts-store-api-login-token-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pc-parts-store.vercel.app",
+      "slug": "pc-parts-store-checkout-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET checkout.php serves React SPA — README corpus fallback documents hidden user_id spoofing and raw CC capture; pc-parts-store.vercel.app/checkout.php findings 8→9 (+pc-parts-store-checkout-idor-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pc-parts-store.vercel.app",
+      "slug": "pc-parts-store-product-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET product.php?id=1 serves React SPA — README corpus fallback documents IDOR via product.php?id= and stored XSS in reviews; pc-parts-store.vercel.app/product.php?id=1 findings 8→9 (+pc-parts-store-product-idor-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
