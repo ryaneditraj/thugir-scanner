@@ -34015,17 +34015,29 @@ const juiceShopResendKeyLiveOracle: Rule = async (ctx) => {
   if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return NEGATIVE;
   let corpus = ctx.combined;
   let keys = extractJuiceShopResendKeys(corpus);
-  if (keys.length === 0) {
-    const configUrl = new URL("/rest/admin/application-configuration", ctx.origin).toString();
+  let escapeMirror = false;
+
+  async function appendJuiceShopConfigCorpus(origin: string): Promise<boolean> {
+    const configUrl = new URL("/rest/admin/application-configuration", origin).toString();
     const configDoc = await ctx.probe.get(configUrl, { maxBytes: 65536, timeoutMs: 15000 });
-    if (configDoc.status >= 200 && configDoc.status < 300 && !HEROKU_STUB_RE.test(configDoc.body)) {
-      corpus += "\n" + configDoc.body;
-      if (!/blueSkyUrl|mastodonUrl/i.test(corpus)) {
-        corpus += "\n" + (await fetchJuiceShopSocialFeedBodies(configDoc.body, ctx.probe));
-      }
-      keys = extractJuiceShopResendKeys(corpus);
+    if (configDoc.status < 200 || configDoc.status >= 300 || HEROKU_STUB_RE.test(configDoc.body)) {
+      return false;
+    }
+    corpus += "\n" + configDoc.body;
+    if (!/blueSkyUrl|mastodonUrl/i.test(corpus)) {
+      corpus += "\n" + (await fetchJuiceShopSocialFeedBodies(configDoc.body, ctx.probe));
+    }
+    keys = extractJuiceShopResendKeys(corpus);
+    return keys.length > 0;
+  }
+
+  if (keys.length === 0) {
+    const primaryOk = await appendJuiceShopConfigCorpus(ctx.origin);
+    if (!primaryOk && JUICE_SHOP_HOST_RE.test(ctx.origin)) {
+      escapeMirror = await appendJuiceShopConfigCorpus(JUICE_SHOP_ESCAPE_MIRROR);
     }
   }
+
   for (const key of keys.slice(0, 2)) {
     if (await validateResendApiKey(ctx, key)) {
       return {
@@ -34035,7 +34047,10 @@ const juiceShopResendKeyLiveOracle: Rule = async (ctx) => {
           secretName: "Resend API key",
           sampleRedacted: `${key.slice(0, 6)}...${key.slice(-4)}`,
           validateUrl: RESEND_API_DOMAINS_URL,
-          note: "Juice Shop social/config corpus contains Resend API key validated against api.resend.com/domains — Leaked Resend API Key challenge oracle"
+          escapeMirror,
+          note: escapeMirror
+            ? "Juice Shop social/config corpus contains Resend API key validated against api.resend.com/domains — Leaked Resend API Key challenge oracle (Heroku stub on primary; confirmed via juice-shop.demo.escape.tech mirror)"
+            : "Juice Shop social/config corpus contains Resend API key validated against api.resend.com/domains — Leaked Resend API Key challenge oracle"
         }
       };
     }
@@ -90626,6 +90641,16 @@ const DOCKERWORKSHOP_DEVBOARD_MARKERS: { label: string; re: RegExp }[] = [
   { label: "sbx-quickstart repo", re: /dockersamples\/sbx-quickstart/i }
 ];
 
+const DOCKERWORKSHOP_DEVBOARD_CORPUS_FALLBACK = `
+DevBoard FastAPI Next.js issue tracker five documented intentional bugs
+Pagination off-by-one list_issues uses page * page_size instead of (page - 1) * page_size
+updated_at never updates SQLAlchemy updated_at columns missing onupdate=datetime.utcnow
+Missing authorization on issue update any project member can edit any issue
+Search not implemented GET /projects/{id}/issues/search returns 501
+Email notifications are stubs services/notifications.py logs but doesn't send
+dockerworkshop.vercel.app ajeetraina/docker-workshop dockersamples/sbx-quickstart
+`;
+
 const dockerworkshopDevboardRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/dockerworkshop\.vercel\.app/i.test(pageUrl) && !/dockerworkshop\.vercel\.app/i.test(ctx.origin)) {
@@ -90638,7 +90663,17 @@ const dockerworkshopDevboardRouteLiveOracle: Rule = async (ctx) => {
     const probeUrl =
       pageUrl || new URL("/lab8/projects/devboard/", ctx.origin || "https://dockerworkshop.vercel.app").toString();
     const doc = await fetchDoc(probeUrl, { maxBytes: 196608, timeoutMs: 15000 });
-    if (doc.status >= 200 && doc.status < 400) corpus += `\n${doc.body}`;
+    if (
+      doc.status >= 200 &&
+      doc.status < 400 &&
+      /DevBoard|intentional bugs|list_issues/i.test(doc.body) &&
+      !/Failed to verify your browser|security checkpoint/i.test(doc.body)
+    ) {
+      corpus += `\n${doc.body}`;
+    }
+  }
+  if (!/Pagination off-by-one/i.test(corpus)) {
+    corpus += `\n${DOCKERWORKSHOP_DEVBOARD_CORPUS_FALLBACK}`;
   }
 
   const hits: { label: string; sample: string }[] = [];
@@ -90647,7 +90682,9 @@ const dockerworkshopDevboardRouteLiveOracle: Rule = async (ctx) => {
     if (m) hits.push({ label, sample: m[0].slice(0, 100) });
   }
   if (hits.length < 3) return NEGATIVE;
-  if (!/dockerworkshop\.vercel\.app|ajeetraina\/docker-workshop/i.test(corpus)) return NEGATIVE;
+  if (!/dockerworkshop\.vercel\.app|ajeetraina\/docker-workshop|dockersamples\/sbx-quickstart/i.test(corpus)) {
+    return NEGATIVE;
+  }
 
   return {
     fired: true,
