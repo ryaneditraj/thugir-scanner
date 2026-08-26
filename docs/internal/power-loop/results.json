@@ -31113,13 +31113,13 @@
       "scanned_at": "2026-08-26T09:08:46.710Z"
     },
     {
-      "run_id": "2026-08-26T10:02:34.997Z",
+      "run_id": "2026-08-26T10:26:13.822Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
       "scan_kind": "benchmark",
       "platform": null,
-      "finding_count": 43,
+      "finding_count": 44,
       "findings": [
         {
           "slug": "juice-shop-addresss-bola-live-oracle",
@@ -31162,20 +31162,6 @@
           "severity": "high",
           "confidence": 0.94,
           "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-image-captcha-bypass-live-oracle",
-          "title": "Juice Shop image captcha bypass live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-save-login-ip-live-oracle",
-          "title": "Juice Shop login IP spoofing live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Cross-site scripting"
         },
         {
           "slug": "juice-shop-whoami-unauth-live-oracle",
@@ -31267,13 +31253,6 @@
           "severity": "medium",
           "confidence": 0.93,
           "category": "Business logic"
-        },
-        {
-          "slug": "juice-shop-b2b-orders-deserialization-live-oracle",
-          "title": "Juice Shop B2B orders insecure deserialization live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Injection"
         },
         {
           "slug": "juice-shop-recycles-bola-live-oracle",
@@ -31409,11 +31388,39 @@
           "category": "Broken authentication"
         },
         {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
           "slug": "thugir-sensitive-js-endpoints",
           "title": "Sensitive admin/API endpoints referenced in client JavaScript",
           "severity": "medium",
           "confidence": 0.82,
           "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
         },
         {
           "slug": "vibe-unauthenticated-api-routes",
@@ -31425,9 +31432,9 @@
       ],
       "ai_findings_added": 0,
       "pages_crawled": 6,
-      "probes_run": 415,
+      "probes_run": 588,
       "status": "ok",
-      "scanned_at": "2026-08-26T10:02:34.997Z"
+      "scanned_at": "2026-08-26T10:26:13.822Z"
     }
   ]
 }

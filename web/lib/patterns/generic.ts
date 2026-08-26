@@ -16096,6 +16096,33 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "websec-level21-aes-session-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "WebSec.fr level21 AES session forgery route live oracle",
+    description:
+      "When scanning /level21/, GET source1.php + source2.php confirm mcrypt AES session cookies with weak admin registration filter and SQLi in verify_credentials — route-specific session forgery oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level21 exposes forgeable mcrypt session cookies and SQL injection in credential verification.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel21AesSessionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host AES session labs offline; use signed server-side sessions and parameterized queries in production.",
+      steps: [
+        "Move WebSec-style crypto labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Replace mcrypt cookie sessions with HMAC-signed tokens or server-side session stores.",
+        "Use prepared statements — never concatenate usernames into SQL."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level21 route exposes mcrypt AES session cookies and SQL concatenation in verify_credentials. Show secure session and parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-php-unserialize-cookie-challenge-evidence",
     platform: "generic",
     category: "Injection",

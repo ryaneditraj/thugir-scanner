@@ -4883,6 +4883,18 @@
       "slug": "websec-level20-php-unserialize-filter-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /level20/source.php confirms sanitize() preg_match filters before unserialize($_COOKIE['data']) with Flag __destruct POP chain; websec.fr/level20/ findings 7→8 (+websec-level20-php-unserialize-filter-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level21-aes-session-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level21/source1.php + source2.php confirm mcrypt_encrypt/mcrypt_decrypt AES session cookies, preg_match (a|d|m|i|n) admin filter, and verify_credentials SQL concat; websec.fr/level21/ findings 7→8 (+websec-level21-aes-session-route-live-oracle); benchmark juice-shop 44 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-photo-bfla-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: DELETE /api/users/one/{id}/photo?isAdmin=true succeeds for non-admin JWT after user registration; brokencrystals.com/api/users/one/admin/photo findings 73→75 (+brokencrystals-photo-bfla-live-oracle +brokencrystals-photo-bfla-route-live-oracle); benchmark juice-shop 44 findings 6/6 maintained"
     }
   ]
 }
