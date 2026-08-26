@@ -4997,6 +4997,24 @@
       "slug": "brokencrystals-products-dateStart-param-alias",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: probeBrokencrystalsProductsDateManipulation now tries dateStart/dateEnd ISO aliases in addition to date_from/date_to; brokencrystals.com/api/products?dateStart=2020-01-01&dateEnd=2099-12-31 findings 79→80 (+date-manipulation live/route oracles via ISO params); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-search-patients-type-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js interpolates q into ILIKE for type=patients (first_name/last_name/email); zerohealth.aliyu.dev/api/search?q=test&type=patients findings 5→6 (+zerohealth-search-patients-type-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-search-prescriptions-type-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pharmacist role search interpolates q into medication_name ILIKE for type=prescriptions; zerohealth.aliyu.dev/api/search?q=test&type=prescriptions findings 5→6 (+zerohealth-search-prescriptions-type-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level20-final-boss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/levels returns id:20 Final Boss nightmare chain metadata; vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php findings 3→4 (+vulnforge-academy-level20-final-boss-route-live-oracle via README corpus fallback when Vercel checkpoint blocks API); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
