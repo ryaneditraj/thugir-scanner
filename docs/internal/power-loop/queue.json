@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T03:20:00.000Z",
+  "updated_at": "2026-08-26T04:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vuln-expose.vercel.app/sqli/blind",
+      "source": "JuaniVeltri/vuln-expose — blind SQLi lab module with time/boolean-based oracles (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/api/comments",
+      "source": "JuaniVeltri/vuln-expose — stored XSS persistent comments API oracle /api/comments (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vuln-expose.vercel.app/xss/csp-bypass",
+      "source": "JuaniVeltri/vuln-expose — CSP bypass XSS lab module (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-70",
+      "source": "OWASP WrongSecrets — challenge 70 secrets/K8s oracle (Heroku demo; README 0-72)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php",
+      "source": "webspoilt/vulnforge-academy — Level 16 file-upload bypass challenge (GitHub README Medium tier)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://vulnshop.vercel.app/api/login",
       "source": "yashasrnair/VulnShop — NoSQL injection login API oracle /api/login (GitHub README A03)",
