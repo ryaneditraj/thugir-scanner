@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T20:05:00.000Z",
+  "updated_at": "2026-08-26T21:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ssti.vulnlab.dev/filtered/",
+      "source": "sampsonc/vulnlab.dev — Jinja2 SSTI substring blocklist bypass lab (ssti.vulnlab.dev catalog /meta/filtered)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/sandboxed/",
+      "source": "sampsonc/vulnlab.dev — Jinja2 SandboxedEnvironment SSTI bypass via over-privileged global (ssti.vulnlab.dev catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/second-order/",
+      "source": "sampsonc/vulnlab.dev — second-order SSTI stored draft rendered later (ssti.vulnlab.dev catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/gopher/",
+      "source": "sampsonc/vulnlab.dev — gopher:// SSRF to local TCP via libcurl (ssrf.vulnlab.dev catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/csrf",
+      "source": "AI Security Platform iota — public CSRF challenge lab on Vercel (web search ai-security-platform-iota.vercel.app)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://zen-demo-java.fly.dev/pages/create",
       "source": "Aikido Zen live demo — SQL injection training page (zen-demo-java.fly.dev injection labs)",
