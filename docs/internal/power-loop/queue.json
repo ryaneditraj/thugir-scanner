@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T01:08:00.000Z",
+  "updated_at": "2026-08-26T02:06:06.081Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/graphql",
+      "source": "NeuraLegion/brokencrystals — GraphQL SSTI getCommandResult RCE oracle (README + Context7)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/spawn",
+      "source": "NeuraLegion/brokencrystals — OS command injection spawn endpoint ?command= (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/seller/preview",
+      "source": "ctfsec/pwnshop — seller preview SSTI oracle GET /seller/preview (PWN-021 companion)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/hidden-upload",
+      "source": "NeuraLegion/brokencrystals — DOM XSS + unrestricted SVG upload /hidden-upload (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/oopssec-store/",
+      "source": "OWASP VWAD — OSS OopsSec Store CTF e-commerce directory + deploy links (kOaDT/oss-oopssec-store)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-67",
       "source": "OWASP WrongSecrets — challenge-67 hub seed (GitHub main branch; undeployed-challenge oracle)",
