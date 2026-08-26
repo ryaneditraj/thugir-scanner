@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T09:30:00.000Z",
+  "updated_at": "2026-08-26T09:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2856,
-  "total_findings": 29162,
-  "critical_findings": 59,
+  "total_sites_scanned": 2864,
+  "total_findings": 29358,
+  "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2012,
-  "discovery_findings": 24504,
+  "discovery_urls_added": 2017,
+  "discovery_findings": 24676,
   "improvements_shipped": 1193,
-  "last_run": "2026-08-26T09:30:00.000Z",
+  "last_run": "2026-08-26T09:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,46 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings, 36 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (47 findings, 36 live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 25,
-      "focus": "websec level17 timing-attack + level18 unserialize-cookie + level20 unserialize-filter route oracles",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 172,
+      "focus": "wrongsecrets challenge-71..74 hub seeds + brokencrystals admin photo BFLA oracle; parallel run also shipped websec level17/18/20 route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no category misses",
-      "websec.fr/level17/: 7→8 findings — websec-level17-timing-attack-route-live-oracle shipped",
-      "websec.fr/level18/: 8→9 findings — websec-level18-php-unserialize-cookie-route-live-oracle shipped",
-      "websec.fr/level20/: 7→8 findings — websec-level20-php-unserialize-filter-route-live-oracle shipped"
+      "brokencrystals.com/api/users/one/admin/photo: 75 findings — NEW brokencrystals-photo-bfla-live-oracle + route oracle (README IDOR/BFLA)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-71..74: 14 findings each — undeployed-challenge shell + MCP oracle bundle",
+      "dvwu.vercel.app/labs/path-traversal: 14 + command-injection: 12 findings",
+      "websec.fr/level17/: 8 findings — websec-level17-timing-attack-route-live-oracle shipped (parallel run)",
+      "websec.fr/level18/: 9 findings — websec-level18-php-unserialize-cookie-route-live-oracle shipped (parallel run)",
+      "websec.fr/level20/: 8 findings — websec-level20-php-unserialize-filter-route-live-oracle shipped (parallel run)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "websec level21+ challenges still lack route-specific live oracles"
+      "wrongsecrets challenge-71..74: Heroku undeployed shells — route oracles confirm walkthrough text but cloud K8s/Vault execution not testable on Heroku",
+      "brokencrystals admin photo BFLA: new live+route oracles need improvements.json shipment next run",
+      "websec.fr/level21: client-side challenge corpus — route live oracle still needed"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
+    "brokencrystals.com/api/users/one/admin/photo": 75,
+    "wrongsecrets.herokuapp.com/challenge/challenge-71": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-72": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-73": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-74": 14,
+    "dvwu.vercel.app/labs/path-traversal": 14,
+    "dvwu.vercel.app/labs/command-injection": 12,
     "websec.fr/level17": 8,
     "websec.fr/level18": 9,
-    "websec.fr/level19": 9,
     "websec.fr/level20": 8,
-    "vault-notes-frontend-gules.vercel.app": 8,
-    "brokencrystals.com/testimonials": 86,
-    "pwnshop.ctfsecurity.com/wishlist/1": 41,
-    "duck-store.escape.tech/api/v1/users/me/profile": 33
+    "brokencrystals.com/api/file": 79,
+    "pwnshop.ctfsecurity.com/wishlist/1": 41
   }
 }

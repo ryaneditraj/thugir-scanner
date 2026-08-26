@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T08:04:52.042Z",
+  "updated_at": "2026-08-26T09:06:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-71",
+      "source": "OWASP WrongSecrets — challenge-71 hub seed (Juice Shop companion secrets lab; HN/OWASP training corpus)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-72",
+      "source": "OWASP WrongSecrets — challenge-72 hub seed (cloud/K8s secrets walkthrough corpus)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-73",
+      "source": "OWASP WrongSecrets — challenge-73 hub seed (Vault/K8s challenge series extension)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-74",
+      "source": "OWASP WrongSecrets — challenge-74 hub seed (secrets-in-code training oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/one/admin/photo",
+      "source": "NeuraLegion/brokencrystals — unauthenticated admin photo IDOR GET /api/users/one/admin/photo (README broken access control)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/file?path=https://httpbin.org/get",
       "source": "NeuraLegion/brokencrystals — SSRF via GET /api/file path param (README oracle)",
