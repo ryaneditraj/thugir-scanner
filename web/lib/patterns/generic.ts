@@ -40260,9 +40260,9 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Broken Crystals /api/get_count MCP SQLi route live oracle",
     description:
-      "When scanning /api/get_count, MCP tools/call get_count executes attacker-controlled information_schema SQL — README alias for the Broken Crystals SQL injection oracle.",
+      "When scanning /api/get_count or /api/mcp, MCP tools/call get_count executes attacker-controlled information_schema SQL — route-specific Broken Crystals SQL injection oracle.",
     impactOneline:
-      "Route-specific confirmation that Broken Crystals MCP get_count SQL injection is reachable when scanning /api/get_count paths.",
+      "Route-specific confirmation that Broken Crystals MCP get_count SQL injection is reachable when scanning /api/get_count or /api/mcp gateway paths.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "brokencrystalsGetCountMcpSqliRouteLiveOracle" },
     tierRequired: "deep",
