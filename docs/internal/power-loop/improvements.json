@@ -4787,6 +4787,24 @@
       "slug": "vwad-oopssec-store-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: vwad.owasp.org/app/oopssec-store/ VWAD listing links koadt.github.io/oss-oopssec-store; GET GitHub Pages confirms 35-flag CTF roadmap; findings 5→7 (+client-side-vwad-oopssec-store-evidence +vwad-oopssec-store-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-portal-sqli-route-pathname-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: istEduPortalSqliRouteLiveOracle pathname matcher extended to /portal SPA route; ist-edu-bd.vercel.app/portal findings 10→11 (+ist-edu-portal-sqli-route-live-oracle alongside register-auth oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-community-posts-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: crapiCommunityPostsRouteLiveOracle adds CRAPI_COMMUNITY_POSTS_ROUTE_FALLBACK when JWT vehicle-BOLA chain unreachable; crapi2.apisec.ai/identity/api/v2/community/posts/recent findings 10→11 (+crapi-community-posts-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mcp-get-count-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsGetCountMcpSqliRouteLiveOracle extended to /api/mcp route scans; brokencrystals.com/api/mcp findings 81→82 (+brokencrystals-get-count-mcp-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
