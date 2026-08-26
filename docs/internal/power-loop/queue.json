@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T18:26:00.000Z",
+  "updated_at": "2026-08-26T19:16:47.435Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ssrf.vulnlab.dev/blind",
+      "source": "sampsonc/vulnlab.dev — blind SSRF lab OOB callback required (ssrf.vulnlab.dev catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/webhook",
+      "source": "sampsonc/vulnlab.dev — semi-blind SSRF webhook POST leaks status/headers (ssrf.vulnlab.dev catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata-azure",
+      "source": "sampsonc/vulnlab.dev — mock Azure metadata SSRF oracle Metadata: true header injection (ssrf.vulnlab.dev catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/idor-vulnerable/1",
+      "source": "DaniSam-STU/security-lab — live IDOR API route oracle GET /api/idor-vulnerable/:id (seclab.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/records",
+      "source": "aligorithm/Zero-Health — medical records BOLA oracle GET /api/records (live demo HIPAA non-compliant)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crapi2.apisec.ai/identity/api/v2/user/vehicles",
       "source": "OWASP crAPI2 — BOLA oracle GET /identity/api/v2/user/vehicles (Challenge 1 vehicle IDOR; APIsec hosted demo)",
