@@ -4925,6 +4925,24 @@
       "slug": "pwnshop-checkout-route-path-extension",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: pwnshopCartCheckoutRouteLiveOracle + pwnshopApplyCouponRouteLiveOracle + pwnshopCouponCategoryBypassRouteLiveOracle now match /checkout in addition to /cart; pwnshop.ctfsecurity.com/checkout findings 51 (+pwnshop-cart-checkout-route-live-oracle +pwnshop-checkout-hpp-coupon-live-oracle +pwnshop-checkout-hpp-coupon-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level23-maze-filter-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level23/source1.php + source2.php confirm checkCode() whitelist/blacklist preg filters and eval-wrapped Player class on maze solver; websec.fr/level23/ findings 6→7 (+websec-level23-maze-filter-bypass-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-coupons-validate-apply-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/orders/coupons/validate?code=INTERNAL100 returns is_valid:true 100% discount without auth; duck-store.escape.tech/api/v1/coupons/apply findings 30→33 (+duck-store-coupons-validate-live-oracle +duck-store-coupons-apply-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-api-v1-rest-route-oracle-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopEventsAuditRouteLiveOracle now matches any /api/v1/* REST path; pwnshop.ctfsecurity.com/api/v1/products/1 findings 41→47 (+pwnshop-events-audit-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
     }
   ]
 }
