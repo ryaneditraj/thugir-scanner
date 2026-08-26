@@ -1703,6 +1703,8 @@ const DEEP_RULES = new Set<string>([
   "chimeraLoginVulnerableSqliRouteLiveOracle",
   "chimeraPatientsSearchSqliRouteLiveOracle",
   "chimeraVulnerabilityMatrixRouteLiveOracle",
+  "chimeraVulnerabilityInventoryRouteLiveOracle",
+  "chimeraHipaaEvidenceEndpointsRouteLiveOracle",
   "chimeraSwaggerRouteLiveOracle",
   "clientSideHackHealthLabEvidence",
   "hackHealthA03SqlInjectionRouteLiveOracle",
@@ -11637,6 +11639,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("chimera-vulnerability-matrix")
       )
         return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/vulnerability-inventory\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-vulnerability-inventory")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/hipaa-evidence-endpoints\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-hipaa-evidence-endpoints")
+      )
+        return -3;
+      if (
+        /zerohealth\.aliyu\.dev/i.test(origin) &&
+        /\/api\/(?:records|medical-records)\b/i.test(targetInput) &&
+        p.slug.startsWith("zerohealth-medical-records")
+      )
+        return -4;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
         /\/api\/v1\/(?:orders\/)?coupons(?:\/apply|\/validate)?/i.test(targetInput) &&

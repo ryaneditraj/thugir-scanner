@@ -5033,6 +5033,24 @@
       "slug": "vulnforge-academy-level17-content-type-upload-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Vercel checkpoint blocks live upload API — README + level-17 oracle note corpus fallback documents Content-Type spoofing bypass; vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php findings 4 (+vulnforge-academy-level17-content-type-upload-route-live-oracle alongside file-upload oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-medical-records-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: route matcher now accepts /api/records alias for /api/medical-records; server.js documents GET /api/medical-records PHI behind forgeable JWT; zerohealth.aliyu.dev/api/records findings 4→5 (+zerohealth-medical-records-bola-route-live-oracle corpus fallback); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-vulnerability-inventory-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vulnerability-inventory returns Registered CHM-ID catalog with reconciliation notes and CHM-BANK-001 entries; chimera.atlascrew.dev/vulnerability-inventory findings 8→9 (+chimera-vulnerability-inventory-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-hipaa-evidence-endpoints-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /hipaa-evidence-endpoints documents /api/v1/healthcare/records/export with X-Skip-Audit audit suppression; chimera.atlascrew.dev/hipaa-evidence-endpoints findings 10→11 (+chimera-hipaa-evidence-endpoints-route-live-oracle); benchmark 6/6 maintained"
     }
   ]
 }

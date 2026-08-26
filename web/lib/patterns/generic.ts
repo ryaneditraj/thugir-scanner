@@ -14796,6 +14796,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-vulnerability-inventory-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Chimera vulnerability inventory route live oracle",
+    description:
+      "When scanning /vulnerability-inventory on chimera.atlascrew.dev, the Registered CHM-ID catalog with reconciliation notes documents intentional API flaws — route-specific honeypot inventory oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera /vulnerability-inventory documents an unauthenticated CHM-ID vulnerability registry for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraVulnerabilityInventoryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict vulnerability inventory pages to internal red-team networks.",
+      steps: [
+        "Require authentication before exposing CHM-ID vulnerability registries.",
+        "Do not publish honeypot vulnerability inventories on public hosts.",
+        "Keep Chimera vuln-api instances on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /vulnerability-inventory route exposes a Registered CHM-ID vulnerability catalog. Show how to restrict vulnerability inventories to internal networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-hipaa-evidence-endpoints-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Chimera HIPAA evidence endpoints route live oracle",
+    description:
+      "When scanning /hipaa-evidence-endpoints on chimera.atlascrew.dev, healthcare routes document unauthenticated patient record export and X-Skip-Audit audit suppression — route-specific HIPAA compliance training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera /hipaa-evidence-endpoints documents healthcare PHI export and audit-log suppression training routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHipaaEvidenceEndpointsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict HIPAA evidence endpoint catalogs to internal red-team networks.",
+      steps: [
+        "Require authentication and role checks before exporting patient records.",
+        "Reject X-Skip-Audit headers and always log PHI access.",
+        "Keep Chimera healthcare training routes on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /hipaa-evidence-endpoints route documents unauthenticated patient export and audit suppression. Show HIPAA-compliant access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-swagger-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -35377,7 +35429,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Zero Health medical-records BOLA route live oracle",
     description:
-      "When scanning /api/medical-records, GET returns PHI scoped only by forgeable JWT user id from /api/debug/token — route-specific medical-records BOLA oracle.",
+      "When scanning /api/medical-records or /api/records, GET returns PHI scoped only by forgeable JWT user id from /api/debug/token — route-specific medical-records BOLA oracle.",
     impactOneline:
       "Route-specific oracle confirms medical-records broken object-level authorization without relying on shared Zero Health hub fingerprinting.",
     detectorKind: "rule_ref",
@@ -35392,7 +35444,7 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our GET /api/medical-records endpoint trusts forgeable JWT user ids. Show BOLA remediation for healthcare PHI APIs.",
+      "Our GET /api/medical-records or /api/records endpoint trusts forgeable JWT user ids. Show BOLA remediation for healthcare PHI APIs.",
     version: 1,
     enabled: true
   },
