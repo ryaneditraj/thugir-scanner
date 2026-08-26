@@ -67474,7 +67474,7 @@ const dvgaMyPastesIdorLiveOracle: Rule = async (ctx) => {
 const dvgaMyPastesIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/my_pastes\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:my_pastes|graphql)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await dvgaMyPastesIdorLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -67521,7 +67521,7 @@ const dvgaImportPasteSsrfLiveOracle: Rule = async (ctx) => {
 const dvgaImportPasteSsrfRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/import_paste\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:import_paste|graphql)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await dvgaImportPasteSsrfLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -67570,7 +67570,7 @@ const dvgaCreatePasteStoredXssLiveOracle: Rule = async (ctx) => {
 const dvgaCreatePasteStoredXssRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/create_paste\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:create_paste|graphql)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await dvgaCreatePasteStoredXssLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {

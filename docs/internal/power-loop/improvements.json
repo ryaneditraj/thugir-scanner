@@ -5051,6 +5051,12 @@
       "slug": "chimera-hipaa-evidence-endpoints-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /hipaa-evidence-endpoints documents /api/v1/healthcare/records/export with X-Skip-Audit audit suppression; chimera.atlascrew.dev/hipaa-evidence-endpoints findings 10→11 (+chimera-hipaa-evidence-endpoints-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga2.tools.escape.tech",
+      "slug": "dvga-graphql-mutation-route-aliases",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvgaImportPasteSsrfRouteLiveOracle + dvgaCreatePasteStoredXssRouteLiveOracle + dvgaMyPastesIdorRouteLiveOracle extended to match /graphql route scans; dvga2.tools.escape.tech/graphql findings 11→16 (+dvga-import-paste-ssrf-route-live-oracle +dvga-create-paste-stored-xss-route-live-oracle +dvga-my-pastes-idor-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
