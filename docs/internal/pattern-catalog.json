@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-26T03:20:48.903Z",
-  "total": 2657,
-  "uniqueSlugs": 2649,
+  "generatedAt": "2026-08-26T05:10:30.951Z",
+  "total": 2659,
+  "uniqueSlugs": 2651,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2639,
+    "generic": 2641,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2572,
+    "deep": 2574,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 124,
     "Security misconfiguration": 202,
     "Broken authentication": 163,
-    "Injection": 407,
+    "Injection": 409,
     "Cross-site scripting": 722,
     "Open redirect": 24,
     "general": 20,
@@ -2459,6 +2459,8 @@
     "vulnshop-orders-modify-route-live-oracle",
     "vulnshop-payment-process-route-live-oracle",
     "vulnshop-payment-process-unsafe-api-live-oracle",
+    "vulnshop-ping-cmd-injection-live-oracle",
+    "vulnshop-ping-cmd-injection-route-live-oracle",
     "vulnshop-product-sqli-live-oracle",
     "vulnshop-product-sqli-route-live-oracle",
     "vulnshop-products-import-ssrf-live-oracle",

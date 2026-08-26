@@ -2901,6 +2901,8 @@ const DEEP_RULES = new Set<string>([
   "vulnshopTemplateRenderRouteLiveOracle",
   "vulnshopTrackOrderSsrfLiveOracle",
   "vulnshopTrackOrderSsrfRouteLiveOracle",
+  "vulnshopPingCmdInjectionLiveOracle",
+  "vulnshopPingCmdInjectionRouteLiveOracle",
   "vulnshopSupportLfiLiveOracle",
   "vulnshopSupportLfiRouteLiveOracle",
   "vulnshopRunDiagnosticCmdiLiveOracle",
@@ -12552,6 +12554,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
         /\/xss\/csp-bypass\b/i.test(targetInput) &&
         p.slug.startsWith("vuln-expose-xss-csp")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/ping\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-ping")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/(?:v1\/)?users\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-users-profile")
       )
         return -3;
       if (
