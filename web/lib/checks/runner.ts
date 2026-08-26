@@ -1799,6 +1799,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecPhpUnserializeCookieChallengeEvidence",
   "clientSideWebsecPhpUnserializeFilterChallengeEvidence",
   "clientSideWebsecPhpAesSessionChallengeEvidence",
+  "websecLevel21AesSessionRouteLiveOracle",
   "clientSideWebsecOopRestrictedEvalChallengeEvidence",
   "clientSideWebsecShellExecChallengeEvidence",
   "clientSideWebsecAspectInstrumentationChallengeEvidence",
@@ -11564,6 +11565,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/level20\/?$/i.test(targetInput) &&
         (p.slug.startsWith("websec-level20-") ||
           p.slug === "client-side-websec-php-unserialize-filter-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level21\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level21-") ||
+          p.slug === "client-side-websec-php-aes-session-challenge-evidence")
       )
         return -3;
       if (/compass-demo\.com/i.test(origin) && p.slug.startsWith("compass-demo-")) return -2;

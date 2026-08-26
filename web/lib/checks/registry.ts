@@ -19560,6 +19560,47 @@ const clientSideWebsecPhpAesSessionChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+const websecLevel21AesSessionRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level21\/?$/i.test(pathname)) return NEGATIVE;
+  const markers: string[] = [];
+  if (/LevelTwentyOne[\s\S]{0,80}PatPat|not allowed to register[\s\S]{0,120}\[admin\]/i.test(ctx.combined))
+    markers.push("level21-admin-filter-title");
+  if (/source1\.php[\s\S]{0,120}session|source2\.php[\s\S]{0,120}crypto/i.test(ctx.combined))
+    markers.push("session-crypto-source-links");
+  const source1Url = new URL("/level21/source1.php", ctx.origin).toString();
+  const source2Url = new URL("/level21/source2.php", ctx.origin).toString();
+  const [source1, source2] = await Promise.all([
+    fetchDoc(source1Url, { maxBytes: 65536, timeoutMs: 15000 }),
+    fetchDoc(source2Url, { maxBytes: 65536, timeoutMs: 15000 })
+  ]);
+  const sourceCorpus = `${source1.body}\n${source2.body}`;
+  if (/mcrypt_encrypt[\s\S]{0,240}MCRYPT_RIJNDAEL_128|mcrypt_decrypt[\s\S]{0,240}\$aes_key/i.test(sourceCorpus))
+    markers.push("mcrypt-aes-session-cookie");
+  if (/verify_credentials[\s\S]{0,400}SELECT[\s\S]{0,120}username='[\s\S]{0,40}\$username/i.test(sourceCorpus))
+    markers.push("sqli-verify-credentials-concat");
+  if (/preg_match[\s\S]{0,120}\(a\|d\|m\|i\|n\)/i.test(sourceCorpus)) markers.push("weak-admin-letter-filter");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      source1Url,
+      source2Url,
+      markers,
+      note: "WebSec.fr /level21 route scan — mcrypt AES session cookies with weak admin registration filter and SQLi in verify_credentials — forgeable session escalation oracle"
+    }
+  };
+};
+
 // --- WebSec.fr OOP restricted PHP eval (level22) --------------------------------------
 const CLIENT_WEBSEC_OOP_RESTRICTED_EVAL_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
@@ -93029,6 +93070,7 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecPhpUnserializeCookieChallengeEvidence,
   clientSideWebsecPhpUnserializeFilterChallengeEvidence,
   clientSideWebsecPhpAesSessionChallengeEvidence,
+  websecLevel21AesSessionRouteLiveOracle,
   clientSideWebsecOopRestrictedEvalChallengeEvidence,
   clientSideWebsecShellExecChallengeEvidence,
   clientSideWebsecAspectInstrumentationChallengeEvidence,
