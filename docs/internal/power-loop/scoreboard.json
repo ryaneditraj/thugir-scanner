@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T12:11:24.120Z",
+  "updated_at": "2026-08-26T12:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2902,
-  "total_findings": 30457,
+  "total_sites_scanned": 2904,
+  "total_findings": 30502,
   "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2032,
   "discovery_findings": 25404,
-  "improvements_shipped": 1199,
-  "last_run": "2026-08-26T12:11:24.120Z",
+  "improvements_shipped": 1201,
+  "last_run": "2026-08-26T12:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings, 34+ live oracles; gap=[])"
+      "note": "Stable 6/6 first-pass recall (49 findings, 38 juice-shop live oracles); secret-resend slug still absent when resend key revoked"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 227,
-      "focus": "Duck Store vuln catalog + DVGA2 GraphQL + Chimera matrix + brokencrystals products/latest BOLA + users/id IDOR + azure/digital_ocean SSRF gap drain + websec level22",
-      "improvements_shipped_this_run": 4
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 60,
+      "focus": "websec.fr level24 cloud-storage sandbox oracle + pwnshop checkout route path extension",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 34+ live oracles)",
-      "brokencrystals.com/api/products/latest: 77 findings — brokencrystals-products-latest-limit-bypass-live-oracle shipped",
-      "brokencrystals.com/api/users/id/1: 29 findings — brokencrystals-users-id-bola-live-oracle + route oracle shipped",
-      "brokencrystals.com/api/file/azure: 27 findings — brokencrystals-azure-metadata-ssrf-live-oracle (prior Azure IMDS gap closed)",
-      "brokencrystals.com/api/file/digital_ocean: 34 findings — brokencrystals-digital-ocean-metadata-ssrf-live-oracle",
-      "duck-store.escape.tech/vulnerabilities: 34 findings — duck-store vuln catalog hub",
-      "dvga2.tools.escape.tech/: 14 findings — GraphQL introspection + DVGA training surface",
-      "websec.fr/level22/: 7 findings — websec-level22-oop-eval-route-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 38 juice-shop live oracles)",
+      "websec.fr/level24/: 9 findings — websec-level24-cloud-storage-route-live-oracle + client-side evidence",
+      "pwnshop.ctfsecurity.com/checkout: 51 findings — cart-checkout + checkout HPP route oracles on /checkout path",
+      "brokencrystals.com/api/products/latest: 77 findings — brokencrystals-products-latest-limit-bypass-live-oracle",
+      "brokencrystals.com/api/file/azure: 27 findings — azure metadata SSRF oracle",
+      "websec.fr/level22/: 7 findings — websec-level22-oop-eval-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "chimera.atlascrew.dev/vulnerability-matrix: docs-only (5 findings) — live vuln-api not on docs host",
-      "dvga2.tools.escape.tech/: GraphQL-specific oracles may need dedicated introspection/batching probes"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "websec.fr/level23 returns 404 — skipped",
+      "chimera.atlascrew.dev/vulnerability-matrix: docs-only — live vuln-api not on docs host"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
+    "juice-shop.herokuapp.com": 49,
+    "websec.fr/level24/": 9,
+    "pwnshop.ctfsecurity.com/checkout": 51,
     "brokencrystals.com/api/products/latest": 77,
     "brokencrystals.com/api/file/digital_ocean": 34,
-    "duck-store.escape.tech/vulnerabilities": 34,
     "brokencrystals.com/api/users/id/1": 29,
     "brokencrystals.com/api/file/azure": 27,
-    "dvga2.tools.escape.tech/": 14,
     "websec.fr/level22/": 7,
-    "chimera.atlascrew.dev/vulnerability-matrix": 5
+    "duck-store.escape.tech/api/v1/products/filter/by-color": 31
   }
 }

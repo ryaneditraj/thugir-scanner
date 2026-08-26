@@ -16150,6 +16150,60 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "websec-level24-cloud-storage-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level24 cloud storage route live oracle",
+    description:
+      "When scanning /level24/, GET source.php confirms session-scoped open_basedir sandbox with chdir plus file_put_contents on attacker-controlled filename/data — weak <? and script filters only — route-specific sandboxed file-write oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level24 exposes sandboxed arbitrary file write with bypassable PHP tag filters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel24CloudStorageRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host file-write labs offline; never expose writable upload directories with weak content filters in production.",
+      steps: [
+        "Move WebSec-style file-write labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Reject user-controlled filenames and validate file contents with strict allowlists.",
+        "Disable open_basedir bypass via chdir and never write attacker-controlled paths."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level24 route exposes open_basedir sandbox bypass via chdir and file_put_contents with weak <?/script filters. Show secure file upload remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-cloud-storage-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr cloud storage sandbox file-write lab disclosed",
+    description:
+      "WebSec.fr level24 chdirs into a session-scoped upload directory with open_basedir('.') then file_put_contents on attacker-controlled filename/data — only blocks literal <? and script substrings.",
+    impactOneline:
+      "Public challenge source documents sandboxed arbitrary file write with bypassable PHP tag filters inside a per-session upload directory.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecCloudStorageChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host file-write labs offline; never expose writable directories with weak content filters in production.",
+      steps: [
+        "Move WebSec-style file-write labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Reject user-controlled filenames and validate file contents with strict allowlists.",
+        "Disable open_basedir bypass via chdir and never write attacker-controlled paths."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level24 lab exposes chdir plus file_put_contents with weak <?/script filters inside a session upload sandbox. Show how to retire public labs and secure file uploads.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-php-unserialize-cookie-challenge-evidence",
     platform: "generic",
     category: "Injection",

@@ -4913,6 +4913,18 @@
       "slug": "websec-level22-oop-eval-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /level22/index.php + source.php confirm 21-char eval restriction, OOP class A flag parts, and strcmp unset from function blacklist; websec.fr/level22/ findings 6→7 (+websec-level22-oop-eval-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level24-cloud-storage-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level24/source.php confirms session-scoped open_basedir sandbox with chdir, file_put_contents on attacker filename/data, and weak <?/script filters only; websec.fr/level24/ findings 7→9 (+websec-level24-cloud-storage-route-live-oracle +client-side-websec-cloud-storage-challenge-evidence); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-checkout-route-path-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopCartCheckoutRouteLiveOracle + pwnshopApplyCouponRouteLiveOracle + pwnshopCouponCategoryBypassRouteLiveOracle now match /checkout in addition to /cart; pwnshop.ctfsecurity.com/checkout findings 51 (+pwnshop-cart-checkout-route-live-oracle +pwnshop-checkout-hpp-coupon-live-oracle +pwnshop-checkout-hpp-coupon-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
     }
   ]
 }
