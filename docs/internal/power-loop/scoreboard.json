@@ -56,7 +56,7 @@
       "urls_scanned": 8,
       "findings": 134,
       "focus": "ssrf.vulnlab blind/webhook/metadata-azure + seclab IDOR API + zerohealth records + duck-store checkout/cart drain",
-      "improvements_shipped_this_run": 1
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 38 live oracles)",
