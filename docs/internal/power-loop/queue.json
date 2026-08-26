@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T13:08:00.000Z",
+  "updated_at": "2026-08-26T16:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://zerohealth.aliyu.dev/api/appointments?id=1",
+      "source": "aligorithm/Zero-Health — BOLA oracle GET /api/appointments?id={id} (Medium pentest writeup; OWASP API BOLA)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zerohealth.aliyu.dev/api/prescriptions?id=1",
+      "source": "aligorithm/Zero-Health — BOLA oracle GET /api/prescriptions?id={id} (Medium pentest writeup; prescription fraud training)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/products?dateStart=2020-01-01&dateEnd=2099-12-31",
+      "source": "NeuraLegion/brokencrystals — date-range manipulation bypass GET /api/products (README business constraint)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
+      "source": "webspoilt/vulnforge-academy — Level 17 file-upload bypass challenge (GitHub README Medium tier 16-18)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-75",
+      "source": "OWASP WrongSecrets — challenge-75 hub seed (secrets-in-code training corpus extension 74-78)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/users/one/admin_user/photo",
       "source": "NeuraLegion/brokencrystals — BFLA photo endpoint GET /api/users/one/admin_user/photo (README broken authz)",
