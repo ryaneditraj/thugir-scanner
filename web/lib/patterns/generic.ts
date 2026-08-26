@@ -38309,6 +38309,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-chat-order-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwnshop AI chat order lookup IDOR live oracle (PWN-035)",
+    description:
+      "POST /chat trusts client-supplied email without session validation; the AI order lookup tool returns any order ID's status, total, shipping address, and username — PWN-035 IDOR oracle.",
+    impactOneline:
+      "Client-controlled email on /chat enables cross-user order disclosure via the AI order lookup tool.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopChatOrderIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind chat order lookups to authenticated session user — PWN-035 is intentional lab software.",
+      steps: [
+        "Validate order ownership against the session user_id before returning order details.",
+        "Do not trust client-supplied email for identity on /chat.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our Pwnshop POST /chat endpoint exposes cross-user order details via the AI order lookup tool. Show PWN-035 IDOR remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-chat-order-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwnshop /chat order IDOR route live oracle (PWN-035)",
+    description:
+      "When scanning /chat, POST with client-controlled email can retrieve any user's order details via the AI order lookup tool — route-specific PWN-035 IDOR oracle with vulnerabilities corpus fallback when LLM backend is unavailable.",
+    impactOneline:
+      "Route-specific confirmation that Pwnshop /chat exposes cross-user order disclosure via AI tool calls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopChatOrderIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind chat order lookups to authenticated session user — PWN-035 is intentional lab software.",
+      steps: [
+        "Validate order ownership against the session user_id before returning order details.",
+        "Do not trust client-supplied email for identity on /chat.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /chat route scan confirms PWN-035 IDOR via AI order lookup tool. Show route-specific authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-seclab-playground-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -41037,6 +41089,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/file/azure route scan confirms Azure IMDS metadata SSRF. Show how to block cloud metadata fetches from user-controlled path parameters.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-products-views-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/products/views header SQLi route live oracle",
+    description:
+      "When scanning /api/products/views (or /api/views/* alias paths), GET with x-product-name: Opal' triggers SQL syntax error with server file path disclosure — route-specific header SQLi oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals product view counter builds SQL from the x-product-name header without parameterization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsProductsViewsSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never interpolate HTTP headers into SQL; use parameterized queries — Broken Crystals is intentional lab software.",
+      steps: [
+        "Bind x-product-name via prepared statements instead of string concatenation.",
+        "Return generic database errors without location or query fragments.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/products/views route scan confirms header-based SQL injection via x-product-name. Show parameterized query remediation.",
     version: 1,
     enabled: true
   },
