@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-26T20:07:50.504Z",
-  "total": 2697,
-  "uniqueSlugs": 2689,
+  "generatedAt": "2026-08-26T22:03:39.812Z",
+  "total": 2699,
+  "uniqueSlugs": 2691,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2679,
+    "generic": 2681,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2612,
+    "deep": 2614,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 124,
-    "Security misconfiguration": 205,
+    "Security misconfiguration": 207,
     "Broken authentication": 168,
     "Injection": 422,
     "Cross-site scripting": 724,
@@ -342,6 +342,8 @@
     "bypass403-secure-bearer-invalid-token-route-live-oracle",
     "bypass403-waf-live-oracle",
     "bypass403-waf-route-live-oracle",
+    "chimera-api-reference-route-live-oracle",
+    "chimera-fedramp-openapi-extensions-route-live-oracle",
     "chimera-hipaa-evidence-endpoints-route-live-oracle",
     "chimera-login-vulnerable-sqli-route-live-oracle",
     "chimera-patients-search-sqli-route-live-oracle",
