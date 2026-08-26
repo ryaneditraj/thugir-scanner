@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T16:05:00.000Z",
+  "updated_at": "2026-08-26T17:06:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://zerohealth.aliyu.dev/api/patients",
+      "source": "aligorithm/Zero-Health — BOLA oracle GET /api/patients doctor PHI roster (GitHub server.js + Medium pentest writeup)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level18.php",
+      "source": "webspoilt/vulnforge-academy — Level 18 file-upload bypass challenge (GitHub README Medium tier 16-18)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php",
+      "source": "webspoilt/vulnforge-academy — Level 20 nightmare multi-vector chain challenge (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/reflected/",
+      "source": "sampsonc/vulnlab.dev — reflected XSS lab with /meta detection hints (xss.vulnlab.dev catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sqli.vulnlab.dev/error/",
+      "source": "sampsonc/vulnlab.dev — error-based SQLi lab (sqli.vulnlab.dev catalog; web search vulnlab.dev)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://zerohealth.aliyu.dev/api/appointments?id=1",
       "source": "aligorithm/Zero-Health — BOLA oracle GET /api/appointments?id={id} (Medium pentest writeup; OWASP API BOLA)",
