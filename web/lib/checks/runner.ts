@@ -2679,6 +2679,7 @@ const DEEP_RULES = new Set<string>([
   "vulnwebCsrfRouteLiveOracle",
   "istEduSsrfRedirectRouteLiveOracle",
   "istEduOpenRedirectRouteLiveOracle",
+  "istEduRedirectRouteLiveOracle",
   "istEduFilesClientLfiRouteLiveOracle",
   "istEduPathTraversalClientRouteLiveOracle",
   "istEduDeserializationLabRouteLiveOracle",

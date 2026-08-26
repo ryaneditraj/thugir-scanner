@@ -36126,7 +36126,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "AI Security Platform hacked-npm-packages challenge route live oracle",
     description:
-      "When scanning /challenges/hacked-npm-packages, the platform catalog documents malicious postinstall scripts and compromised npm typosquats — route-specific hacked-npm-packages oracle.",
+      "When scanning /challenges/hacked-npm-packages or /challenges/hacked-npm, the platform catalog documents malicious postinstall scripts and compromised npm typosquats — route-specific hacked-npm-packages oracle.",
     impactOneline:
       "Route-specific oracle confirms hacked-npm-packages training module without relying on shared supply-chain hub fingerprinting.",
     detectorKind: "rule_ref",
@@ -36152,7 +36152,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "AI Security Platform ai-phishing challenge route live oracle",
     description:
-      "When scanning /challenges/ai-phishing, the platform catalog documents AI-generated cloned login pages and email spoofing attacks (CWE-1021) — route-specific phishing clone oracle.",
+      "When scanning /challenges/ai-phishing or /challenges/phishing, the platform catalog documents AI-generated cloned login pages and email spoofing attacks (CWE-1021) — route-specific phishing clone oracle.",
     impactOneline:
       "Route-specific oracle confirms AI-assisted phishing training module without relying on shared AI Security Platform hub fingerprinting.",
     detectorKind: "rule_ref",
@@ -63484,6 +63484,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /labs/open-redirect route documents unvalidated /redirect?url= phishing chains. Show redirect allow-list hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "high",
+    title: "IST Edu /redirect route live oracle",
+    description:
+      "When scanning /redirect on ist-edu-bd.vercel.app, the SPA implements a countdown redirect UI with approved-domain allowlist training for /redirect?url= open redirect chains.",
+    impactOneline:
+      "Route-specific oracle confirms open redirect training surface on the live /redirect page without relying on /labs/open-redirect catalog alone.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — validate redirect targets against a strict hostname allowlist.",
+      steps: [
+        "Parse redirect URLs with a strict URL library and compare hostnames exactly.",
+        "Reject protocol-relative and external redirect targets on logout/login flows.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /redirect route implements countdown open redirects via /redirect?url=. Show redirect allow-list hardening.",
     version: 1,
     enabled: true
   },

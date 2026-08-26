@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-26T00:25:08.516Z",
-  "total": 2654,
-  "uniqueSlugs": 2646,
+  "generatedAt": "2026-08-26T01:06:48.780Z",
+  "total": 2655,
+  "uniqueSlugs": 2647,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2636,
+    "generic": 2637,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2569,
+    "deep": 2570,
     "continuous": 0
   },
   "byCategory": {
@@ -29,7 +29,7 @@
     "Broken authentication": 163,
     "Injection": 407,
     "Cross-site scripting": 722,
-    "Open redirect": 23,
+    "Open redirect": 24,
     "general": 20,
     "SSRF": 16,
     "Server-side request forgery": 90,
@@ -1695,6 +1695,7 @@
     "ist-edu-open-redirect-route-live-oracle",
     "ist-edu-path-traversal-client-route-live-oracle",
     "ist-edu-portal-sqli-route-live-oracle",
+    "ist-edu-redirect-route-live-oracle",
     "ist-edu-register-auth-sqli-route-live-oracle",
     "ist-edu-search-sqli-live-oracle",
     "ist-edu-search-sqli-route-live-oracle",
