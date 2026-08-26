@@ -5057,6 +5057,24 @@
       "slug": "dvga-graphql-mutation-route-aliases",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: dvgaImportPasteSsrfRouteLiveOracle + dvgaCreatePasteStoredXssRouteLiveOracle + dvgaMyPastesIdorRouteLiveOracle extended to match /graphql route scans; dvga2.tools.escape.tech/graphql findings 11→16 (+dvga-import-paste-ssrf-route-live-oracle +dvga-create-paste-stored-xss-route-live-oracle +dvga-my-pastes-idor-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-api-reference-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api-reference documents /openapi.yaml + Swagger UI + FedRAMP annotation slice with x-fedramp-controls; chimera.atlascrew.dev/api-reference findings 9→10 (+chimera-api-reference-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-fedramp-openapi-extensions-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /fedramp-openapi-extensions documents FedRAMP Rev. 5 x-fedramp-controls + x-vulnerability-class + x-expected-defense + x-evidence-types producer contract; chimera.atlascrew.dev/fedramp-openapi-extensions findings 9→10 (+chimera-fedramp-openapi-extensions-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssti.vulnlab.dev",
+      "slug": "ssti-vulnlab-sandboxed-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for ssti-vulnlab-sandboxed* on /sandboxed/ route scans prevents thin 4-finding passes; ssti.vulnlab.dev/sandboxed/ findings 4→9 (+ssti-vulnlab-sandboxed-live-oracle +ssti-vulnlab-sandboxed-route-live-oracle +meta-catalog); benchmark juice-shop 49 findings 6/6 maintained"
     }
   ]
 }

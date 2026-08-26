@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T21:18:12.794Z",
+  "updated_at": "2026-08-26T22:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2817,
-  "total_findings": 28459,
+  "total_sites_scanned": 2818,
+  "total_findings": 28508,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1994,
   "discovery_findings": 23976,
-  "improvements_shipped": 1183,
-  "last_run": "2026-08-26T21:18:12.794Z",
+  "improvements_shipped": 1186,
+  "last_run": "2026-08-26T22:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "21",
+    "hour_utc": "22",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,39 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings, 35 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (49 findings, 35 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 195,
-      "focus": "ssti.vulnlab.dev filtered/sandboxed/second-order + ssrf.vulnlab gopher + AI Security Platform CSRF + queue drain brokencrystals MCP/process_numbers + wrongsecrets challenge-67",
-      "improvements_shipped_this_run": 1
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 29,
+      "focus": "chimera.atlascrew.dev api-reference + fedramp-openapi-extensions route oracles; ssti.vulnlab.dev sandboxed route priority fix",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings)",
-      "dvga2.tools.escape.tech/graphql: 16 findings — +dvga-import-paste-ssrf-route-live-oracle +dvga-create-paste-stored-xss-route-live-oracle +dvga-my-pastes-idor-route-live-oracle (11→16)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings)",
+      "chimera.atlascrew.dev/api-reference: 9→10 (+chimera-api-reference-route-live-oracle)",
+      "chimera.atlascrew.dev/fedramp-openapi-extensions: 9→10 (+chimera-fedramp-openapi-extensions-route-live-oracle)",
+      "ssti.vulnlab.dev/sandboxed/: 4→9 (+ssti-vulnlab-sandboxed-live-oracle +route +meta-catalog via route priority)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
       "pwnshop /api/v1/products/1: REST endpoint not deployed — dedicated product-IDOR route oracle deferred",
-      "dvga2 GraphQL: audit-log live oracle intermittent when audits table empty at scan time"
+      "chimera.atlascrew.dev/endpoints-catalog: GitHub Pages 404 — page not deployed"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
+    "juice-shop.herokuapp.com": 49,
+    "chimera.atlascrew.dev/api-reference": 10,
+    "chimera.atlascrew.dev/fedramp-openapi-extensions": 10,
+    "ssti.vulnlab.dev/sandboxed/": 9,
     "dvga2.tools.escape.tech/graphql": 16,
     "ssti.vulnlab.dev/filtered/": 9,
-    "ssti.vulnlab.dev/sandboxed/": 4,
     "ssti.vulnlab.dev/second-order/": 6,
     "ssrf.vulnlab.dev/gopher/": 15,
     "ai-security-platform-iota.vercel.app/challenges/csrf": 7,
     "wrongsecrets.herokuapp.com/challenge/challenge-67": 14,
     "brokencrystals.com/api/mcp": 82,
-    "brokencrystals.com/api/process_numbers": 58,
-    "zen-demo-java.fly.dev/pages/create": 9,
-    "duck-store.escape.tech/api/v1/orders/coupons": 34
+    "brokencrystals.com/api/process_numbers": 58
   }
 }
