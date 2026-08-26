@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T02:06:06.081Z",
+  "updated_at": "2026-08-26T03:20:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vulnshop.vercel.app/api/login",
+      "source": "yashasrnair/VulnShop — NoSQL injection login API oracle /api/login (GitHub README A03)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/search",
+      "source": "yashasrnair/VulnShop — reflected XSS + NoSQL search API oracle /api/search (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/users/1",
+      "source": "yashasrnair/VulnShop — IDOR user profile API oracle /api/users/:id (GitHub README A01)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/ping",
+      "source": "yashasrnair/VulnShop — SSRF command-injection API oracle /api/ping?host= (GitHub README A10)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+      "source": "OWASP WrongSecrets — challenge 63 AI/secrets oracle (Heroku demo; README 0-66)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/graphql",
       "source": "NeuraLegion/brokencrystals — GraphQL SSTI getCommandResult RCE oracle (README + Context7)",
@@ -10660,6 +10685,31 @@
     {
       "url": "https://dvwu.vercel.app/labs/ssti",
       "source": "zahidoverflow/dvwu — SSTI training lab route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/login",
+      "source": "yashasrnair/VulnShop — NoSQL injection login API oracle /api/login (GitHub README A03)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/search",
+      "source": "yashasrnair/VulnShop — reflected XSS + NoSQL search API oracle /api/search (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/users/1",
+      "source": "yashasrnair/VulnShop — IDOR user profile API oracle /api/users/:id (GitHub README A01)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/ping",
+      "source": "yashasrnair/VulnShop — SSRF command-injection API oracle /api/ping?host= (GitHub README A10)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+      "source": "OWASP WrongSecrets — challenge 63 AI/secrets oracle (Heroku demo; README 0-66)",
       "auth": "public_demo"
     }
   ]
