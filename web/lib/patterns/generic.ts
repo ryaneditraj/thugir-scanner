@@ -16150,6 +16150,33 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "websec-level23-maze-filter-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level23 maze filter-bypass route live oracle",
+    description:
+      "When scanning /level23/, GET source1.php + source2.php confirm checkCode() whitelist/blacklist preg filters on maze solver PHP with Maze class move/is_wall/solve gadgets — route-specific PHP filter-bypass oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level23 exposes bypassable PHP keyword filters on attacker-controlled maze solver code.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel23MazeFilterBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host code-filter labs offline; never evaluate attacker-controlled code in production.",
+      steps: [
+        "Move WebSec-style filter-bypass labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Never eval or include attacker-controlled PHP fragments.",
+        "Use safe interpreters with hard sandbox boundaries instead of regex filters."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level23 route exposes bypassable preg whitelist/blacklist filters on maze solver code. Show secure alternatives to dynamic code execution.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "websec-level24-cloud-storage-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -59488,6 +59515,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-coupons-validate-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store coupon validate live oracle",
+    description:
+      "GET /api/v1/orders/coupons/validate?code=INTERNAL100 returns is_valid:true with 100% discount without authentication — private coupon validation business-logic oracle.",
+    impactOneline:
+      "Unauthenticated coupon validation exposes private promotion codes and enables unauthorized discounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreCouponsValidateLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication before validating private coupon codes.",
+      steps: [
+        "Reject is_public:false coupon validation for anonymous callers.",
+        "Rate-limit coupon validation endpoints to prevent brute-force scanning.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/orders/coupons/validate endpoint confirms private INTERNAL100 without auth. Show coupon validation access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-coupons-apply-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store coupons apply/validate route live oracle",
+    description:
+      "When scanning /api/v1/coupons/apply or /api/v1/orders/coupons/validate, unauthenticated probes confirm private INTERNAL100 coupon validates with 100% discount — route-specific coupon business-logic oracle.",
+    impactOneline:
+      "Route-specific scans should surface unauthorized private coupon validation on Duck Store coupon APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreCouponsApplyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate coupon apply/validate routes behind authenticated checkout flows.",
+      steps: [
+        "Reject private coupon validation for anonymous callers.",
+        "Map /api/v1/coupons/apply aliases to authenticated checkout handlers only.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our coupons apply/validate route confirms private INTERNAL100 without auth. Show route-specific coupon business-logic remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "duck-store-ssrf-fetch-url-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -63368,7 +63447,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Pwnshop /api/v1/events audit-log route live oracle",
     description:
-      "When scanning /api/v1/events, GET returns unauthenticated security audit logs with action and detail fields — route-specific PWN-005 events API oracle.",
+      "When scanning any /api/v1/* REST path (including /api/v1/events or /api/v1/products/:id), GET /api/v1/events returns unauthenticated security audit logs with action and detail fields — route-specific PWN-005 events API oracle.",
     impactOneline:
       "Route-specific scans should confirm audit logs are exposed without authentication.",
     detectorKind: "rule_ref",

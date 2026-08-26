@@ -19643,6 +19643,54 @@ const clientSideWebsecOopRestrictedEvalChallengeEvidence: Rule = async (ctx) => 
   };
 };
 
+const websecLevel23MazeFilterBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level23\/?$/i.test(pathname)) return NEGATIVE;
+  const markers: string[] = [];
+  const indexUrl = new URL("/level23/index.php", ctx.origin).toString();
+  const source1Url = new URL("/level23/source1.php", ctx.origin).toString();
+  const source2Url = new URL("/level23/source2.php", ctx.origin).toString();
+  const [indexDoc, source1, source2] = await Promise.all([
+    fetchDoc(indexUrl, { maxBytes: 65536, timeoutMs: 15000 }),
+    fetchDoc(source1Url, { maxBytes: 65536, timeoutMs: 15000 }),
+    fetchDoc(source2Url, { maxBytes: 65536, timeoutMs: 15000 })
+  ]);
+  const pageCorpus = `${ctx.combined}\n${indexDoc.body}`;
+  if (/Level(?:&nbsp;|\s)+Twentythree|#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+23/i.test(pageCorpus))
+    markers.push("level23-maze-title");
+  const sourceCorpus = `${source1.body}\n${source2.body}`;
+  if (/checkCode/i.test(sourceCorpus) && /\$whitelist/i.test(sourceCorpus) && /\$blacklist/i.test(sourceCorpus))
+    markers.push("checkcode-whitelist-blacklist");
+  if (/preg_replace/i.test(sourceCorpus) && /preg_match_all/i.test(sourceCorpus))
+    markers.push("preg-filter-function-extraction");
+  if (/class(?:&nbsp;|\s)+Maze/i.test(sourceCorpus) && /(move|is_wall|print_maze|solve)/i.test(sourceCorpus))
+    markers.push("maze-class-solve-move");
+  if (/eval\s*\(/i.test(sourceCorpus) && /class(?:&nbsp;|\s)+Player/i.test(sourceCorpus))
+    markers.push("eval-player-class-wrap");
+  if (/source1\.php[\s\S]{0,120}source2\.php|flag\.php/i.test(pageCorpus + sourceCorpus))
+    markers.push("dual-source-maze-walkthrough");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      indexUrl,
+      source1Url,
+      source2Url,
+      markers,
+      note: "WebSec.fr /level23 route scan — checkCode() whitelist/blacklist preg filter on maze solver code with Maze class move/is_wall/solve gadgets — route-specific PHP filter-bypass oracle"
+    }
+  };
+};
+
 const websecLevel22OopEvalRouteLiveOracle: Rule = async (ctx) => {
   if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -38121,16 +38169,22 @@ const pwnshopEventsAuditLiveOracle: Rule = async (ctx) => {
 const pwnshopEventsAuditRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/events\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/v1\//i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopEventsAuditLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
+  const onEventsPath = /\/api\/v1\/events\b/i.test(pageUrl);
+  const onProductsPath = /\/api\/v1\/products\b/i.test(pageUrl);
   return {
     fired: true,
     confidence: result.confidence,
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /api/v1/events route scan — unauthenticated JSON audit log with action/detail fields exposed (PWN-005)"
+      note: onEventsPath
+        ? "Pwnshop /api/v1/events route scan — unauthenticated JSON audit log with action/detail fields exposed (PWN-005)"
+        : onProductsPath
+          ? "Pwnshop /api/v1/products route scan — no product REST IDOR surface; GET /api/v1/events still returns unauthenticated audit logs (PWN-005)"
+          : "Pwnshop /api/v1/* route scan — unauthenticated JSON audit log with action/detail fields exposed (PWN-005)"
     }
   };
 };
@@ -53447,6 +53501,45 @@ const duckStoreCouponsRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Duck Store coupons route scan — private coupon codes exposed via unauthenticated /api/v1/orders/coupons"
+    }
+  };
+};
+
+const duckStoreCouponsValidateLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const validateUrl = new URL("/api/v1/orders/coupons/validate", ctx.origin);
+  validateUrl.searchParams.set("code", "INTERNAL100");
+  const url = validateUrl.toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"is_valid"\s*:\s*true/i.test(doc.body) || !/INTERNAL100/i.test(doc.body)) return NEGATIVE;
+  if (!/"discount_percent"\s*:\s*100/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/orders/coupons/validate accepts private INTERNAL100 coupon without authentication and returns is_valid:true with 100% discount — coupon validation business-logic oracle"
+    }
+  };
+};
+
+const duckStoreCouponsApplyRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/(?:orders\/)?coupons(?:\/apply|\/validate)?/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreCouponsValidateLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: /\/coupons\/apply\b/i.test(pageUrl)
+        ? "Duck Store /api/v1/coupons/apply route scan — canonical validate path /api/v1/orders/coupons/validate confirms private INTERNAL100 coupon without auth"
+        : "Duck Store coupons validate/apply route scan — private INTERNAL100 coupon validates without authentication"
     }
   };
 };
@@ -93291,6 +93384,7 @@ export const RULES: Record<string, Rule> = {
   websecLevel21AesSessionRouteLiveOracle,
   clientSideWebsecOopRestrictedEvalChallengeEvidence,
   websecLevel22OopEvalRouteLiveOracle,
+  websecLevel23MazeFilterBypassRouteLiveOracle,
   clientSideWebsecCloudStorageChallengeEvidence,
   websecLevel24CloudStorageRouteLiveOracle,
   clientSideWebsecShellExecChallengeEvidence,
@@ -94669,6 +94763,8 @@ export const RULES: Record<string, Rule> = {
   duckStoreOrdersRouteLiveOracle,
   duckStoreCouponsDisclosureLiveOracle,
   duckStoreCouponsRouteLiveOracle,
+  duckStoreCouponsValidateLiveOracle,
+  duckStoreCouponsApplyRouteLiveOracle,
   duckStoreSsrfFetchUrlLiveOracle,
   duckStoreSsrfFetchUrlRouteLiveOracle,
   duckStoreSsrfImportFromUrlLiveOracle,

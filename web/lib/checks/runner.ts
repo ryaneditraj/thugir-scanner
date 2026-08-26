@@ -1802,6 +1802,7 @@ const DEEP_RULES = new Set<string>([
   "websecLevel21AesSessionRouteLiveOracle",
   "clientSideWebsecOopRestrictedEvalChallengeEvidence",
   "websecLevel22OopEvalRouteLiveOracle",
+  "websecLevel23MazeFilterBypassRouteLiveOracle",
   "clientSideWebsecCloudStorageChallengeEvidence",
   "websecLevel24CloudStorageRouteLiveOracle",
   "clientSideWebsecShellExecChallengeEvidence",
@@ -2480,6 +2481,8 @@ const DEEP_RULES = new Set<string>([
   "duckStoreOrdersRouteLiveOracle",
   "duckStoreCouponsDisclosureLiveOracle",
   "duckStoreCouponsRouteLiveOracle",
+  "duckStoreCouponsValidateLiveOracle",
+  "duckStoreCouponsApplyRouteLiveOracle",
   "duckStoreSsrfFetchUrlLiveOracle",
   "duckStoreSsrfFetchUrlRouteLiveOracle",
   "duckStoreSsrfImportFromUrlLiveOracle",
@@ -11588,6 +11591,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           p.slug === "client-side-websec-oop-restricted-eval-challenge-evidence")
       )
         return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level23\/?$/i.test(targetInput) &&
+        p.slug.startsWith("websec-level23-")
+      )
+        return -3;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/(?:orders\/)?coupons(?:\/apply|\/validate)?/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-coupons")
+      )
+        return -4;
+      if (
+        /pwnshop\.ctfsecurity\.com/i.test(origin) &&
+        /\/api\/v1\//i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-events-audit")
+      )
+        return -4;
       if (
         /websec\.fr/i.test(origin) &&
         /\/level24\/?$/i.test(targetInput) &&
