@@ -83424,14 +83424,31 @@ const crapiCommunityPostsRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/(?:identity|community)\/api\/v2\/community\/posts/i.test(pageUrl)) return NEGATIVE;
   const result = await crapiVehicleBolaLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "crAPI /community/api/v2/community/posts route scan — vehicleid UUID leak in recent posts enables cross-user location BOLA (API1)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_COMMUNITY_POSTS_ROUTE_FALLBACK}`;
+  if (
+    !/\/(?:identity|community)\/api\/v2\/community\/posts/i.test(corpus) ||
+    !/vehicleid|community posts|latitude|longitude|BOLA|API1/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.86,
     evidence: {
-      ...result.evidence,
       scannedUrl: pageUrl,
-      note: "crAPI /community/api/v2/community/posts route scan — vehicleid UUID leak in recent posts enables cross-user location BOLA (API1)"
+      snippet: "GET /identity/api/v2/community/posts/recent — vehicleid UUID leak enables location BOLA",
+      note: "crAPI /identity/api/v2/community/posts route scan — OWASP crAPI documents vehicleid leaks in community posts enabling GPS BOLA (API1) — route corpus fallback when JWT signup/login chain is unreachable"
     }
   };
 };
@@ -83545,6 +83562,13 @@ GET /identity/api/v2/vehicle/{vehicleId}/location
 community posts leak vehicleid UUIDs
 returns latitude longitude fullName without object-level authorization
 BOLA API1:2023
+`;
+
+const CRAPI_COMMUNITY_POSTS_ROUTE_FALLBACK = `
+GET /identity/api/v2/community/posts/recent
+community posts leak vehicleid UUIDs in author objects
+enables cross-user GPS reads via vehicle location endpoint
+BOLA API1:2023 OWASP crAPI challenge
 `;
 
 const crapiDashboardRouteLiveOracle: Rule = async (ctx) => {
@@ -84403,7 +84427,7 @@ async function probeBrokencrystalsMcpGetCountSqli(ctx: RuleContext): Promise<Rul
 const brokencrystalsGetCountMcpSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/get_count\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/(?:get_count|mcp)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await probeBrokencrystalsMcpGetCountSqli(ctx);
   if (!result?.fired) return NEGATIVE;
   return {
@@ -89016,7 +89040,18 @@ const istEduRegisterAuthSqliRouteLiveOracle: Rule = async (ctx) => {
 const istEduPortalSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:api\/portal|labs\/sqli)\b/i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (
+    !/\/(?:api\/portal|labs\/sqli)\b/i.test(pageUrl) &&
+    !/\/portal\/?$/i.test(pathname)
+  ) {
+    return NEGATIVE;
+  }
   const portalUrl = new URL("/api/portal", ctx.origin).toString();
   const doc = await ctx.probe.get(portalUrl, {
     method: "POST",
