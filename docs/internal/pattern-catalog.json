@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-26T11:34:25.701Z",
-  "total": 2677,
-  "uniqueSlugs": 2669,
+  "generatedAt": "2026-08-26T12:06:29.360Z",
+  "total": 2679,
+  "uniqueSlugs": 2671,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2659,
+    "generic": 2661,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2592,
+    "deep": 2594,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 124,
     "Security misconfiguration": 202,
     "Broken authentication": 168,
-    "Injection": 413,
+    "Injection": 415,
     "Cross-site scripting": 723,
     "Open redirect": 24,
     "general": 20,
@@ -838,6 +838,7 @@
     "client-side-websec-blacklist-sqli-challenge-evidence",
     "client-side-websec-challenge-evidence",
     "client-side-websec-class-instantiation-challenge-evidence",
+    "client-side-websec-cloud-storage-challenge-evidence",
     "client-side-websec-create-function-challenge-evidence",
     "client-side-websec-crypto-challenge-evidence",
     "client-side-websec-dynamic-function-call-challenge-evidence",
@@ -2535,6 +2536,7 @@
     "websec-level20-php-unserialize-filter-route-live-oracle",
     "websec-level21-aes-session-route-live-oracle",
     "websec-level22-oop-eval-route-live-oracle",
+    "websec-level24-cloud-storage-route-live-oracle",
     "whoopspay-admin-database-execute-live-oracle",
     "whoopspay-admin-database-execute-route-live-oracle",
     "whoopspay-admin-express-logs-disclosure-live-oracle",

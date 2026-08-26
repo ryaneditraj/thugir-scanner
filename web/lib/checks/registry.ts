@@ -19686,6 +19686,93 @@ const websecLevel22OopEvalRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- WebSec.fr open_basedir sandboxed file write (level24) ----------------------------
+const CLIENT_WEBSEC_CLOUD_STORAGE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level24 cloud storage title",
+    re: /#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+24|Level(?:&nbsp;|\s)+TwentyFour(?:&nbsp;|\s)*<small>(?:&nbsp;|\s)*-[\s\S]{0,60}Cloud-based(?:&nbsp;|\s)+plain-text(?:&nbsp;|\s)+storage/i
+  },
+  {
+    label: "Session-scoped upload directory",
+    re: /uploads\/%s|uploads\/|session_id|upload_dir/i
+  },
+  {
+    label: "open_basedir chdir sandbox",
+    re: /chdir|open_basedir/i
+  },
+  {
+    label: "file_put_contents filename data sink",
+    re: /file_put_contents|file_get_contents/i
+  },
+  {
+    label: "Weak PHP tag and script filters",
+    re: /strpos|stripos|<\?|script/i
+  },
+  {
+    label: "clean_up.php periodic cleanup include",
+    re: /clean_up\.php|glob[\s\S]{0,300}uploads/i
+  }
+];
+
+const clientSideWebsecCloudStorageChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_CLOUD_STORAGE_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level24|TwentyFour|Cloud-based|open_basedir/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level24 documents session-scoped open_basedir sandbox with chdir and file_put_contents on attacker-controlled filename/data — weak <? and script filters only"
+    }
+  };
+};
+
+const websecLevel24CloudStorageRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level24\/?$/i.test(pathname)) return NEGATIVE;
+  const markers: string[] = [];
+  const indexUrl = new URL("/level24/index.php", ctx.origin).toString();
+  const sourceUrl = new URL("/level24/source.php", ctx.origin).toString();
+  const [indexDoc, source] = await Promise.all([
+    fetchDoc(indexUrl, { maxBytes: 65536, timeoutMs: 15000 }),
+    fetchDoc(sourceUrl, { maxBytes: 65536, timeoutMs: 15000 })
+  ]);
+  const pageCorpus = `${ctx.combined}\n${indexDoc.body}`;
+  if (/Level24|TwentyFour|Cloud-based(?:&nbsp;|\s)+plain-text(?:&nbsp;|\s)+storage/i.test(pageCorpus))
+    markers.push("level24-cloud-storage-title");
+  const sourceCorpus = source.body;
+  if (/uploads\/%s|session_id|upload_dir/i.test(sourceCorpus))
+    markers.push("session-scoped-upload-dir");
+  if (/chdir|open_basedir/i.test(sourceCorpus)) markers.push("open-basedir-chdir-sandbox");
+  if (/file_put_contents|file_get_contents/i.test(sourceCorpus)) markers.push("file-put-contents-sink");
+  if (/strpos|stripos|<\?|script/i.test(sourceCorpus)) markers.push("weak-php-tag-script-filter");
+  if (/clean_up\.php|glob[\s\S]{0,300}uploads/i.test(sourceCorpus)) markers.push("upload-cleanup-include");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      indexUrl,
+      sourceUrl,
+      markers,
+      note: "WebSec.fr /level24 route scan — session-scoped open_basedir sandbox with chdir and file_put_contents on attacker-controlled filename/data — weak <? and script filters only — route-specific sandboxed file-write oracle"
+    }
+  };
+};
+
 // --- WebSec.fr shell_exec blacklist bypass (level26) ----------------------------------
 const CLIENT_WEBSEC_SHELL_EXEC_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
@@ -38957,19 +39044,21 @@ const pwnshopAvatarUploadRouteLiveOracle: Rule = async (ctx) => {
 const pwnshopCartCheckoutRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/cart\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/cart\b|\/checkout\b/i.test(pageUrl)) return NEGATIVE;
   return pwnshopRouteOracle(
     ctx,
-    /\/cart\b/i,
+    /\/cart\b|\/checkout\b/i,
     PWNSHOP_CART_CHECKOUT_MARKERS,
-    "Pwnshop /cart route scan — checkout accepts coupon_code without re-validating category restrictions at settlement (PWN-016 cart/checkout business-logic oracle)"
+    /\/checkout\b/i.test(pageUrl)
+      ? "Pwnshop /checkout route scan — checkout accepts coupon_code without re-validating category restrictions at settlement (PWN-016 cart/checkout business-logic oracle)"
+      : "Pwnshop /cart route scan — checkout accepts coupon_code without re-validating category restrictions at settlement (PWN-016 cart/checkout business-logic oracle)"
   );
 };
 
 const pwnshopApplyCouponRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/apply-coupon|\/cart\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/apply-coupon|\/cart\b|\/checkout\b/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopApplyCouponLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -38978,9 +39067,11 @@ const pwnshopApplyCouponRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: /\/cart\b/i.test(pageUrl)
-        ? "Pwnshop /cart route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
-        : "Pwnshop /apply-coupon route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
+      note: /\/checkout\b/i.test(pageUrl)
+        ? "Pwnshop /checkout route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
+        : /\/cart\b/i.test(pageUrl)
+          ? "Pwnshop /cart route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
+          : "Pwnshop /apply-coupon route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
     }
   };
 };
@@ -38988,7 +39079,7 @@ const pwnshopApplyCouponRouteLiveOracle: Rule = async (ctx) => {
 const pwnshopCouponCategoryBypassRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/apply-coupon|\/cart\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/apply-coupon|\/cart\b|\/checkout\b/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopCouponCategoryBypassLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -38997,9 +39088,11 @@ const pwnshopCouponCategoryBypassRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: /\/cart\b/i.test(pageUrl)
-        ? "Pwnshop /cart route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
-        : "Pwnshop /apply-coupon route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
+      note: /\/checkout\b/i.test(pageUrl)
+        ? "Pwnshop /checkout route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
+        : /\/cart\b/i.test(pageUrl)
+          ? "Pwnshop /cart route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
+          : "Pwnshop /apply-coupon route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
     }
   };
 };
@@ -39089,7 +39182,9 @@ const pwnshopCheckoutHppCouponRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /cart route scan — duplicate coupon_code at checkout silently drops HALFOFF discount via express array coercion — route-specific HPP coupon bypass oracle (PWN-039)"
+      note: /\/checkout\b/i.test(pageUrl)
+        ? "Pwnshop /checkout route scan — duplicate coupon_code at checkout silently drops HALFOFF discount via express array coercion — route-specific HPP coupon bypass oracle (PWN-039)"
+        : "Pwnshop /cart route scan — duplicate coupon_code at checkout silently drops HALFOFF discount via express array coercion — route-specific HPP coupon bypass oracle (PWN-039)"
     }
   };
 };
@@ -93196,6 +93291,8 @@ export const RULES: Record<string, Rule> = {
   websecLevel21AesSessionRouteLiveOracle,
   clientSideWebsecOopRestrictedEvalChallengeEvidence,
   websecLevel22OopEvalRouteLiveOracle,
+  clientSideWebsecCloudStorageChallengeEvidence,
+  websecLevel24CloudStorageRouteLiveOracle,
   clientSideWebsecShellExecChallengeEvidence,
   clientSideWebsecAspectInstrumentationChallengeEvidence,
   clientSideWebsecUploadIncludeChallengeEvidence,
