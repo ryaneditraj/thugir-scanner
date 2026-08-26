@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T22:10:00.000Z",
+  "updated_at": "2026-08-26T23:07:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2826,
-  "total_findings": 28642,
+  "total_sites_scanned": 2835,
+  "total_findings": 28870,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1999,
-  "discovery_findings": 24110,
+  "discovery_urls_added": 2004,
+  "discovery_findings": 24290,
   "improvements_shipped": 1186,
-  "last_run": "2026-08-26T22:10:00.000Z",
+  "last_run": "2026-08-26T23:07:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,52 +48,48 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (49 findings, 36 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings, 35 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 134,
-      "focus": "sqli.vulnlab union/blind-bool + xss.vulnlab dom + ssti.vulnlab basic/format + queue drain brokencrystals graphql + wrongsecrets 68/69",
-      "improvements_shipped_this_run": 0,
-      "parallel_run_note": "Concurrent 22:30 run shipped chimera route oracles + ssti sandboxed fixes (3 improvements)"
+      "findings": 180,
+      "focus": "vulnlab catalog gaps (sqli blind-time/second-order, xss csp-bypass/mutation, ssrf metadata) + queue drain vulnshop login, brokencrystals spawn, pwnshop seller/preview SSTI",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 36 live oracles)",
-      "sqli.vulnlab.dev/union/: 7 findings — union + blind-bool/time oracles via hub crawl",
-      "xss.vulnlab.dev/dom/: 8 findings — +xss-vulnlab-dom-route-live-oracle",
-      "ssti.vulnlab.dev/basic/: 9 findings — +ssti-vulnlab-basic-route-live-oracle",
-      "brokencrystals.com/graphql: 77 findings — rich GraphQL hub pass",
-      "wrongsecrets.herokuapp.com/challenge/challenge-68: 14 findings — undeployed Heroku oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-69: 14 findings — undeployed Heroku oracle",
-      "chimera.atlascrew.dev/api-reference: 10 (+route oracle, parallel run)",
-      "ssti.vulnlab.dev/sandboxed/: 9 (+sandboxed-route oracle, parallel run)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 35 live oracles)",
+      "sqli.vulnlab.dev/blind-time/: 6 findings — blind-time oracle via hub crawl (union/blind-bool siblings)",
+      "sqli.vulnlab.dev/second-order/: 3 findings — +sqli-vulnlab-second-order-route-live-oracle",
+      "xss.vulnlab.dev/csp-bypass/: 9 findings — csp-bypass + sibling XSS oracles",
+      "ssrf.vulnlab.dev/metadata/: 15 findings — +ssrf-vulnlab-metadata-aws-live-oracle",
+      "brokencrystals.com/api/spawn: 84 findings — spawn command-injection hub pass",
+      "pwnshop.ctfsecurity.com/seller/preview: 42 findings — seller-preview SSTI route oracle",
+      "vulnshop.vercel.app/api/login: 19 findings — login JWT route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "sqli.vulnlab.dev/blind-bool/: direct scan thin (2 findings) — blind-bool live oracle only via sqli hub crawl on /union/",
-      "ssti.vulnlab.dev/format/: direct scan thin (3 findings) — format SSTI oracle only via /basic/ hub crawl",
-      "wrongsecrets challenge-68/69: undeployed on Heroku (WHOOOOPS oracles only)",
-      "pwnshop /api/v1/products/1: REST endpoint not deployed — dedicated product-IDOR route oracle deferred",
-      "chimera.atlascrew.dev/endpoints-catalog: GitHub Pages 404 — page not deployed"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + juice-shop-iac-terraform-tls-key-live-oracle)",
+      "xss.vulnlab.dev/mutation/: thin pass (2 findings, 0 live oracles) — needs mutation-route live oracle",
+      "sqli.vulnlab.dev/blind-time/: no dedicated blind-time slug — oracles only via sqli hub crawl siblings",
+      "sqli.vulnlab.dev/second-order/: thin direct pass (3 findings) — route oracle present but hub siblings dominate"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 49,
+    "juice-shop.herokuapp.com": 48,
+    "sqli.vulnlab.dev/blind-time/": 6,
+    "sqli.vulnlab.dev/second-order/": 3,
+    "xss.vulnlab.dev/csp-bypass/": 9,
+    "xss.vulnlab.dev/mutation/": 2,
+    "ssrf.vulnlab.dev/metadata/": 15,
+    "brokencrystals.com/api/spawn": 84,
+    "pwnshop.ctfsecurity.com/seller/preview": 42,
+    "vulnshop.vercel.app/api/login": 19,
     "sqli.vulnlab.dev/union/": 7,
-    "sqli.vulnlab.dev/blind-bool/": 2,
     "xss.vulnlab.dev/dom/": 8,
     "ssti.vulnlab.dev/basic/": 9,
-    "ssti.vulnlab.dev/format/": 3,
     "brokencrystals.com/graphql": 77,
-    "wrongsecrets.herokuapp.com/challenge/challenge-68": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-69": 14,
-    "chimera.atlascrew.dev/api-reference": 10,
-    "ssti.vulnlab.dev/sandboxed/": 9,
-    "ssti.vulnlab.dev/filtered/": 9,
-    "ssrf.vulnlab.dev/gopher/": 15,
-    "duck-store.escape.tech/api/v1/orders/coupons": 34
+    "ssrf.vulnlab.dev/gopher/": 15
   }
 }

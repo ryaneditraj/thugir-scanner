@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T22:05:00.000Z",
+  "updated_at": "2026-08-26T23:03:37.823Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://sqli.vulnlab.dev/blind-time/",
+      "source": "sampsonc/vulnlab.dev — blind time-based SQLi lab (sqli.vulnlab.dev catalog /meta/blind-time)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sqli.vulnlab.dev/second-order/",
+      "source": "sampsonc/vulnlab.dev — second-order SQLi stored payload lab (sqli.vulnlab.dev catalog /meta/second-order)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/csp-bypass/",
+      "source": "sampsonc/vulnlab.dev — CSP bypass JSONP gadget XSS lab (xss.vulnlab.dev catalog /meta/csp-bypass)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/mutation/",
+      "source": "sampsonc/vulnlab.dev — mutation XSS / mXSS lab (xss.vulnlab.dev catalog /meta/mutation)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata/",
+      "source": "sampsonc/vulnlab.dev — AWS IMDSv1 metadata SSRF lab (ssrf.vulnlab.dev catalog /meta/metadata)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sqli.vulnlab.dev/union/",
       "source": "sampsonc/vulnlab.dev — in-band UNION-based SQLi lab (sqli.vulnlab.dev catalog /meta/union)",
