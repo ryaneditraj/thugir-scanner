@@ -4805,6 +4805,12 @@
       "slug": "brokencrystals-mcp-get-count-route-alias",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsGetCountMcpSqliRouteLiveOracle extended to /api/mcp route scans; brokencrystals.com/api/mcp findings 81→82 (+brokencrystals-get-count-mcp-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-mcp-session-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsMcpSessionId retries MCP initialize up to 3× with 800ms backoff; brokencrystals.com/api/get_count?query=1 thin pass 56→86 findings (+brokencrystals-get-count-mcp-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
