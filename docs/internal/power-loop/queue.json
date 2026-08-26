@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T19:16:47.435Z",
+  "updated_at": "2026-08-26T20:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/create",
+      "source": "Aikido Zen live demo — SQL injection training page (zen-demo-java.fly.dev injection labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/execute",
+      "source": "Aikido Zen live demo — shell/command injection training page (zen-demo-java.fly.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/request",
+      "source": "Aikido Zen live demo — SSRF fetch training page (zen-demo-java.fly.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/read",
+      "source": "Aikido Zen live demo — path traversal file-read training page (zen-demo-java.fly.dev)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/stored/",
+      "source": "sampsonc/vulnlab.dev — stored XSS lab (xss.vulnlab.dev catalog; complements reflected/)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ssrf.vulnlab.dev/blind",
       "source": "sampsonc/vulnlab.dev — blind SSRF lab OOB callback required (ssrf.vulnlab.dev catalog)",
