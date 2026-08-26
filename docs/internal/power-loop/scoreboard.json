@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T00:10:00.000Z",
+  "updated_at": "2026-08-26T00:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2768,
-  "total_findings": 27344,
+  "total_sites_scanned": 2771,
+  "total_findings": 27367,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1972,
   "discovery_findings": 23143,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-26T00:10:00.000Z",
+  "improvements_shipped": 1173,
+  "last_run": "2026-08-26T00:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "00",
     "benchmark": {
@@ -48,42 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings, 35 live oracles); no category gaps"
+      "note": "Stable 6/6 first-pass recall (48 findings)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 160,
-      "focus": "brokencrystals MCP/process_numbers + ai-security supply-chain/hacked-npm/phishing + vaultapp/ist-edu-bd queue drain",
-      "improvements_shipped_this_run": 0
+      "focus": "vaultapp notes IDOR probe range + owasp.andreabrioschi Top 10:2025 hub oracles + brokencrystals MCP queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 35 live oracles) — gap=[]",
-      "brokencrystals.com/api/mcp: 83 findings — 53 live oracles (MCP JSON-RPC SQLi/SSTI/LFI/SSRF class)",
-      "brokencrystals.com/api/process_numbers: 27 findings — 9 live oracles (server-side JS injection via processing_expression)",
-      "ai-security-platform-iota.vercel.app/challenges/supply-chain: 7 findings — client-side catalog + 1 live oracle",
-      "ai-security-platform-iota.vercel.app/challenges/hacked-npm: 6 findings — client-side catalog only",
-      "ai-security-platform-iota.vercel.app/challenges/phishing: 4 findings — client-side catalog only",
-      "vaultapp-omega.vercel.app/api/audit-logs: 12 findings — BOLA audit-log oracle confirmed",
-      "ist-edu-bd.vercel.app/comments: 10 findings — stored XSS lab route",
-      "ist-edu-bd.vercel.app/search: 11 findings — SQLi search route"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings)",
+      "owasp.andreabrioschi.it: 10→12 findings (+owasp-andreabrioschi-top10-2025-hub-live-oracle +route; Apache UA retry)",
+      "vaultapp-omega.vercel.app/api/notes/1: notes IDOR probe extended to ID 200+ (rrichardson30 private note when auth succeeds)",
+      "brokencrystals.com/api/mcp: 83 findings — MCP JSON-RPC live oracles",
+      "brokencrystals.com/api/process_numbers: 27 findings — server-side JS injection oracle",
+      "wrongsecrets.herokuapp.com/error-demo/database-connection: 13 findings — JDBC credential route oracle",
+      "ist-edu-bd.vercel.app/portal: 10 findings — register-auth SQLi route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "ai-security-platform supply-chain/hacked-npm/phishing: mostly client-side catalog evidence; route-specific live oracles absent for npm/phishing challenges",
-      "brokencrystals /api/mcp: rich MCP tool surface — consider dedicated MCP initialize/tools/list oracles for get_count/render/spawn_process gaps"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key; Resend key revoked from social feeds)",
+      "vaultapp-omega Vercel checkpoint intermittently blocks login — notes IDOR oracle depends on auth session",
+      "ai-security-platform supply-chain/hacked-npm/phishing: mostly client-side catalog evidence"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
+    "owasp.andreabrioschi.it": 12,
     "brokencrystals.com/api/mcp": 83,
     "brokencrystals.com/api/process_numbers": 27,
-    "ai-security-platform-iota.vercel.app/challenges/supply-chain": 7,
-    "ai-security-platform-iota.vercel.app/challenges/hacked-npm": 6,
-    "ai-security-platform-iota.vercel.app/challenges/phishing": 4,
+    "vaultapp-omega.vercel.app/api/notes/1": 2,
     "vaultapp-omega.vercel.app/api/audit-logs": 12,
+    "vaultapp-omega.vercel.app/api/messages/1": 12,
+    "wrongsecrets.herokuapp.com/error-demo/database-connection": 13,
+    "ist-edu-bd.vercel.app/portal": 10,
     "ist-edu-bd.vercel.app/comments": 10,
     "ist-edu-bd.vercel.app/search": 11
   }

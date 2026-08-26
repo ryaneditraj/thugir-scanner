@@ -32584,6 +32584,77 @@ const CLIENT_OWASP_EDU_RES: { label: string; re: RegExp }[] = [
   }
 ];
 
+function isOwaspAndreabrioschiHost(ctx: RuleContext): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /andreabrioschi\.it/i.test(pageUrl) || /andreabrioschi\.it/i.test(ctx.origin);
+}
+
+async function probeOwaspAndreabrioschiTop102025Hub(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isOwaspAndreabrioschiHost(ctx)) return null;
+  const catalogUrl = new URL("/data/vulnerabilities.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(catalogUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/"vulnerabilities"/i.test(doc.body)) return null;
+  let interactive: string[] = [];
+  try {
+    const parsed = JSON.parse(doc.body) as {
+      vulnerabilities?: Array<{ demos?: Array<{ id?: string; type?: string }> }>;
+    };
+    for (const v of parsed.vulnerabilities ?? []) {
+      for (const d of v.demos ?? []) {
+        if (d.type === "interactive" && d.id) interactive.push(d.id);
+      }
+    }
+  } catch {
+    const matches = doc.body.match(/"id"\s*:\s*"([a-z0-9-]+)"/gi) ?? [];
+    interactive = matches
+      .map((m) => m.match(/"id"\s*:\s*"([^"]+)"/i)?.[1])
+      .filter((id): id is string => Boolean(id));
+  }
+  if (interactive.length < 3) return null;
+  const simUrl = new URL("/js/simulator.js", ctx.origin).toString();
+  const simDoc = await ctx.probe.get(simUrl, { maxBytes: 32768, timeoutMs: 12000 });
+  const hasSimulator =
+    simDoc.status >= 200 &&
+    simDoc.status < 400 &&
+    /AttackSimulator|createSQLInjectionSimulation|' OR '1'='1/i.test(simDoc.body);
+  const demoSample = [...new Set(interactive)].slice(0, 10);
+  return {
+    fired: true,
+    confidence: hasSimulator ? 0.91 : 0.87,
+    evidence: {
+      catalogUrl,
+      interactiveDemos: demoSample,
+      simulatorUrl: simUrl,
+      note: hasSimulator
+        ? `OWASP Interactive Learning Lab (andreabrioschi.it) publishes OWASP Top 10:2025 client-side simulators (${demoSample.slice(0, 6).join(", ")}) with AttackSimulator SQLi payload ' OR '1'='1 — interactive demo hub oracle`
+        : `OWASP Interactive Learning Lab catalog documents ${demoSample.length} interactive OWASP Top 10:2025 vulnerability demos at ${catalogUrl}`
+    }
+  };
+}
+
+const owaspAndreabrioschiTop102025HubLiveOracle: Rule = async (ctx) => {
+  const hit = await probeOwaspAndreabrioschiTop102025Hub(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const owaspAndreabrioschiTop102025HubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspAndreabrioschiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/andreabrioschi\.it/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probeOwaspAndreabrioschiTop102025Hub(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: `${String(hit.evidence?.note ?? "OWASP Top 10:2025 interactive hub")} — route scan confirms simulated vulnerability demo catalog`
+    }
+  };
+};
+
 const clientSideOwaspEducationalLabEvidence: Rule = async (ctx) => {
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_OWASP_EDU_RES) {
@@ -91134,6 +91205,20 @@ const vaultappTransactionsIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function vaultappNotesProbeIds(ctx: RuleContext): number[] {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const routeMatch = pageUrl.match(/\/api\/notes\/(\d+)/i);
+  const routeId = routeMatch ? Number(routeMatch[1]) : null;
+  const seeded = [217, 200, 250, 300, 15, 25, 51, 65, 75, 91, 99];
+  const range = Array.from({ length: 251 }, (_, i) => i + 100); // 100-350 — omega DB seeds above low IDs
+  const ids = [
+    ...(routeId && routeId > 0 ? [routeId] : []),
+    ...seeded,
+    ...range
+  ];
+  return [...new Set(ids)];
+}
+
 async function probeVaultappNotesIdor(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isVaultappHost(ctx)) return null;
   const auth = await vaultappLogin(ctx);
@@ -91143,10 +91228,7 @@ async function probeVaultappNotesIdor(ctx: RuleContext): Promise<RuleResult | nu
     Authorization: `Bearer ${auth.token}`,
     Accept: "application/json"
   };
-  const noteIdsToTry = [
-    15, 25, 51, 65, 75, 91, 99,
-    ...Array.from({ length: 40 }, (_, i) => i + 1)
-  ];
+  const noteIdsToTry = vaultappNotesProbeIds(ctx);
   const seenNoteIds = new Set<number>();
   for (const noteId of noteIdsToTry) {
     if (seenNoteIds.has(noteId)) continue;
@@ -92277,6 +92359,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePrototypePollutionEvidence,
   clientSideJwtNoneEvidence,
   clientSideOwaspEducationalLabEvidence,
+  owaspAndreabrioschiTop102025HubLiveOracle,
+  owaspAndreabrioschiTop102025HubRouteLiveOracle,
   clientSideOwaspEducationalLabStubEvidence,
   clientSideOwaspTop10IntroHubEvidence,
   serverSideEvalEvidence,

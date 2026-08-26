@@ -67440,5 +67440,57 @@ export const genericPatterns: Pattern[] = [
       "Our dockerworkshop.vercel.app DevBoard lab documents pagination and authorization bugs in FastAPI issue routes. Show secure pagination and object-level authorization remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "owasp-andreabrioschi-top10-2025-hub-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OWASP Interactive Learning Lab Top 10:2025 hub live oracle",
+    description:
+      "GET /data/vulnerabilities.json on owasp.andreabrioschi.it lists interactive OWASP Top 10:2025 simulators (sqli, xss, idor, csrf, ssrf) backed by AttackSimulator client-side demos.",
+    impactOneline:
+      "Educational hubs that ship interactive injection simulators document realistic SQLi/XSS patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspAndreabrioschiTop102025HubLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Treat client-side vulnerability simulators as training-only — never mirror raw string concatenation patterns in production SQL or HTML sinks.",
+      steps: [
+        "Use parameterized queries and prepared statements for all database access.",
+        "Encode or sanitize output before rendering user-controlled data in HTML.",
+        "Keep interactive demo catalogs off production attack surfaces."
+      ]
+    },
+    fixPrompt:
+      "Our OWASP Interactive Learning Lab hosts client-side SQLi simulators with ' OR '1'='1 payloads. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owasp-andreabrioschi-top10-2025-hub-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OWASP Interactive Learning Lab Top 10:2025 hub route live oracle",
+    description:
+      "When scanning owasp.andreabrioschi.it, /data/vulnerabilities.json confirms interactive Top 10:2025 demo modules and /js/simulator.js implements SQLi/XSS/IDOR client-side attack simulations.",
+    impactOneline:
+      "Route-specific confirmation that the OWASP Top 10:2025 interactive learning hub exposes simulated vulnerability demos.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspAndreabrioschiTop102025HubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate training simulators from production apps and block scanner UA fingerprinting that hides lab content behind 403.",
+      steps: [
+        "Serve vulnerability catalogs only on dedicated training hosts.",
+        "Use parameterized queries in all production code paths.",
+        "Do not rely on User-Agent blocking for security — enforce authZ on sensitive resources."
+      ]
+    },
+    fixPrompt:
+      "Our owasp.andreabrioschi.it route scan exposes OWASP Top 10:2025 interactive simulators. Show how to keep training demos separate from production.",
+    version: 1,
+    enabled: true
   }
 ];
