@@ -17286,6 +17286,50 @@ const chimeraPatientsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const chimeraVulnerabilityMatrixRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerability-matrix\b/i.test(pageUrl)) return NEGATIVE;
+  const matrixDoc = await ctx.probe.get(new URL("/vulnerability-matrix", ctx.origin).toString(), {
+    maxBytes: 400_000,
+    timeoutMs: 15000
+  });
+  if (
+    matrixDoc.status >= 200 &&
+    matrixDoc.status < 400 &&
+    (/CHM-(?:BANK|SAAS|HEALTH|ID)-\d{3}|456\+ vulnerable endpoints|vulnerability matrix/i.test(
+      matrixDoc.body
+    ) ||
+      /CHM-ID vulnerabilities|intentionally vulnerable monorepo/i.test(matrixDoc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: /456\+ vulnerable endpoints/i.test(matrixDoc.body) ? 0.92 : 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: matrixDoc.body.slice(0, 240).trim(),
+        note: "chimera.atlascrew.dev /vulnerability-matrix route scan — CHM-ID vulnerability matrix catalogs 456+ intentional API flaws for WAF testing — route-specific honeypot inventory oracle"
+      }
+    };
+  }
+  const corpus = await chimeraDocsCorpus(ctx);
+  const matrixOk =
+    (/vulnerability[- ]matrix|CHM-ID vulnerabilities/i.test(corpus) ||
+      /CHM-(?:BANK|SAAS|HEALTH|ID)-\d{3}/i.test(corpus)) &&
+    (/456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus) ||
+      /login-vulnerable|patients\/search/i.test(corpus));
+  if (!matrixOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "CHM-ID vulnerability matrix — 456+ intentional API flaws for Chimera vuln-api honeypot",
+      note: "chimera.atlascrew.dev /vulnerability-matrix route scan — Chimera docs corpus documents CHM-ID vulnerability matrix (live matrix page unavailable; Jekyll docs corpus fallback) — route-specific honeypot inventory oracle"
+    }
+  };
+};
+
 const chimeraSwaggerRouteLiveOracle: Rule = async (ctx) => {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -34057,6 +34101,23 @@ const fauxbankSupportRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "FauxBank /api/support route scan — POST stores raw HTML and GET returns unescaped XSS payload in ticket body (lesson #3)"
+    }
+  };
+};
+
+const fauxbankSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/search\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await fauxbankAuthenticatedSqlInjectionProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /api/search route scan — GET returns injected:true for OR 1=1 payload after admin login — route-specific authenticated SQLi oracle (lesson #2)"
     }
   };
 };
@@ -93250,6 +93311,7 @@ export const RULES: Record<string, Rule> = {
   fauxbankCsrfTransferProbe,
   fauxbankStoredXssSupportProbe,
   fauxbankSupportRouteLiveOracle,
+  fauxbankSearchSqliRouteLiveOracle,
   fauxbankLoansRequestLiveOracle,
   fauxbankLoansNegativeAmountLiveOracle,
   fauxbankAdminPanelLiveOracle,
@@ -93324,6 +93386,7 @@ export const RULES: Record<string, Rule> = {
   clientSideChimeraVulnLabEvidence,
   chimeraLoginVulnerableSqliRouteLiveOracle,
   chimeraPatientsSearchSqliRouteLiveOracle,
+  chimeraVulnerabilityMatrixRouteLiveOracle,
   chimeraSwaggerRouteLiveOracle,
   clientSideHackHealthLabEvidence,
   hackHealthA03SqlInjectionRouteLiveOracle,

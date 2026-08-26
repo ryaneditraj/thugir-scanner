@@ -4943,6 +4943,24 @@
       "slug": "pwnshop-api-v1-rest-route-oracle-extension",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: pwnshopEventsAuditRouteLiveOracle now matches any /api/v1/* REST path; pwnshop.ctfsecurity.com/api/v1/products/1 findings 41→47 (+pwnshop-events-audit-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-vulnerability-matrix-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vulnerability-matrix + chimeraDocsCorpus fallback confirms CHM-ID vulnerability matrix with 456+ intentional API flaws; chimera.atlascrew.dev/vulnerability-matrix findings 5→5 (+chimera-vulnerability-matrix-route-live-oracle, -reflexion-escalated-ssti false positive); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chimeraAtlascrewReflexionSuppressed skips reflexionEscalatedSsti on chimera.atlascrew.dev Jekyll docs (no server-side template engine); chimera.atlascrew.dev/vulnerability-matrix findings 5→5 (-reflexion-escalated-ssti, +chimera-vulnerability-matrix-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search returns injected:true for OR 1=1 after admin login; pentest-fauxbank.vercel.app/api/search findings 14→15 (+fauxbank-search-sqli-route-live-oracle with scannedUrl); benchmark juice-shop 49 findings 6/6 maintained"
     }
   ]
 }
