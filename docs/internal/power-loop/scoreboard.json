@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T17:09:16.867Z",
+  "updated_at": "2026-08-26T17:09:42.432Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2768,
-  "total_findings": 27421,
+  "total_sites_scanned": 2771,
+  "total_findings": 27432,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1974,
-  "discovery_findings": 23155,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-26T17:09:16.867Z",
+  "discovery_findings": 23166,
+  "improvements_shipped": 1173,
+  "last_run": "2026-08-26T17:09:42.432Z",
   "last_run_summary": {
     "hour_utc": "17",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 593,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (49 findings, 36 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 recall (49 findings); secret-resend slug still absent — no canonical re_ key in Bluesky/Mastodon corpus"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 74,
-      "focus": "zerohealth patients BOLA + vulnforge level18/20 + vulnlab xss/sqli error labs + wrongsecrets 55/56/64 queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 11,
+      "focus": "zerohealth appointments + search appointments SQLi + brokencrystals dateStart ISO alias",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 36 live oracles) — secret-resend still absent",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings)",
+      "zerohealth.aliyu.dev/api/appointments?id=1: 5 findings (+zerohealth-appointments-route-live-oracle)",
+      "zerohealth.aliyu.dev/api/search?q=test&type=appointments: 6 findings (+zerohealth-search-appointments-type-route-live-oracle)",
+      "brokencrystals.com/api/products?dateStart=2020-01-01&dateEnd=2099-12-31: 80 findings (dateStart/dateEnd ISO alias probe)",
       "zerohealth.aliyu.dev/api/patients: 5 findings (+zerohealth-patients-route-live-oracle)",
-      "xss.vulnlab.dev/reflected/: 9 findings (+xss-vulnlab-reflected-route-live-oracle)",
-      "sqli.vulnlab.dev/error/: 8 findings (+sqli-vulnlab-error-route-live-oracle)",
-      "vulnforge-academy level18: 4 findings (+vulnforge-academy-level-file-upload-route-live-oracle)",
-      "wrongsecrets challenge-55/56/64: 15 findings each (SSH bastion / project-spec / Swift binary route oracles)"
+      "xss.vulnlab.dev/reflected/: 9 findings (+xss-vulnlab-reflected-route-live-oracle)"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "vulnforge level20.php returns 403 on direct fetch — 3 findings corpus-only (no dedicated level-20 route oracle yet)",
-      "zerohealth appointments BOLA still corpus-only (prescriptions + patients route oracles now confirmed)"
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "zerohealth.aliyu.dev OSS API returns SPA HTML — route oracles rely on server.js corpus fallback"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 49,
+    "zerohealth.aliyu.dev/api/appointments?id=1": 5,
+    "zerohealth.aliyu.dev/api/search?q=test&type=appointments": 6,
+    "brokencrystals.com/api/products?dateStart=2020-01-01&dateEnd=2099-12-31": 80,
+    "zerohealth.aliyu.dev/api/patients": 5,
     "xss.vulnlab.dev/reflected/": 9,
     "sqli.vulnlab.dev/error/": 8,
-    "zerohealth.aliyu.dev/api/patients": 5,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level18.php": 4,
-    "wrongsecrets.herokuapp.com/challenge/challenge-55": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-56": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-64": 15,
-    "brokencrystals.com/api/products?dateStart=2020-01-01&dateEnd=2099-12-31": 79,
-    "pwnshop.ctfsecurity.com/checkout": 51
+    "brokencrystals.com/api/products/views": 78,
+    "pwnshop.ctfsecurity.com/chat": 47
   }
 }

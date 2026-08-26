@@ -4979,6 +4979,24 @@
       "slug": "juice-shop-api-route-fast-path-timeout-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: isJuiceShopApiRouteScan now always fast-paths with 15s reachTarget race; demo.owasp-juice.shop/rest/wallet/balance scan 1200000ms timeout→1.5s (2 findings); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-appointments-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/appointments stores unsanitized reason per Challenge 6 server.js; zerohealth.aliyu.dev/api/appointments?id=1 findings 4→5 (+zerohealth-appointments-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-search-appointments-type-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: server.js interpolates q into ILIKE for type=appointments; zerohealth.aliyu.dev/api/search?q=test&type=appointments findings 5→6 (+zerohealth-search-appointments-type-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-products-dateStart-param-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeBrokencrystalsProductsDateManipulation now tries dateStart/dateEnd ISO aliases in addition to date_from/date_to; brokencrystals.com/api/products?dateStart=2020-01-01&dateEnd=2099-12-31 findings 79→80 (+date-manipulation live/route oracles via ISO params); benchmark 6/6 maintained"
     }
   ]
 }

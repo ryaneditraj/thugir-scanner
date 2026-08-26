@@ -35917,6 +35917,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-appointments-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Zero Health appointments stored XSS route live oracle",
+    description:
+      "When scanning /api/appointments, POST stores unsanitized appointment reason HTML that doctors retrieve via GET — route-specific stored XSS via appointment booking oracle (Challenge 6).",
+    impactOneline:
+      "Route-specific oracle confirms appointment-booking stored XSS training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthAppointmentsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — sanitize appointment reason fields server-side in production.",
+      steps: [
+        "Encode or sanitize appointment reason HTML before storage and rendering.",
+        "Use CSP and strict output encoding in doctor appointment dashboards.",
+        "Validate appointment text fields with an allowlist of safe characters."
+      ]
+    },
+    fixPrompt:
+      "Our /api/appointments route stores unsanitized reason HTML visible to doctors. Show stored XSS remediation for healthcare appointment fields.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-search-appointments-type-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Zero Health appointments search SQLi route live oracle",
+    description:
+      "When scanning /api/search?type=appointments, the q parameter is interpolated into ILIKE SQL for appointment reasons — route-specific error-based SQLi oracle.",
+    impactOneline:
+      "Route-specific oracle confirms appointments search SQL injection training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthSearchAppointmentsTypeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — use parameterized queries for all search filters.",
+      steps: [
+        "Replace string-interpolated ILIKE filters with parameterized queries.",
+        "Bind search type and query parameters separately from SQL structure.",
+        "Add input validation and SQL error masking on search endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /api/search?type=appointments route interpolates q into ILIKE SQL. Show parameterized search query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "zerohealth-debug-token-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
