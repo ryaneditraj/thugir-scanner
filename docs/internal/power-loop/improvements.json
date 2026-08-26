@@ -4865,6 +4865,24 @@
       "slug": "websec-level19-password-reset-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /level19/ sources confirm send_flag_by_email + srand(microtime) + check_and_refresh_token anti-CSRF; websec.fr/level19/ findings 7→9 (+client-side-websec-password-reset-prng-challenge-evidence +websec-level19-password-reset-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level17-timing-attack-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /level17/source.php confirms strcasecmp($_POST['flag'], $flag) with sleep_rand() jitter and UTF-16 charset misdirection; websec.fr/level17/ findings 7→8 (+websec-level17-timing-attack-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level18-php-unserialize-cookie-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /level18/source.php confirms unserialize($_COOKIE['obj']) with hash_equals flag oracle; websec.fr/level18/ findings 8→9 (+websec-level18-php-unserialize-cookie-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level20-php-unserialize-filter-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /level20/source.php confirms sanitize() preg_match filters before unserialize($_COOKIE['data']) with Flag __destruct POP chain; websec.fr/level20/ findings 7→8 (+websec-level20-php-unserialize-filter-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
     }
   ]
 }

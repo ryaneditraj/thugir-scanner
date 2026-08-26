@@ -16018,6 +16018,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "websec-level17-timing-attack-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "WebSec.fr level17 timing-attack route live oracle",
+    description:
+      "When scanning /level17/, disclosed sources confirm strcasecmp($_POST['flag'], $flag) with sleep_rand() jitter and UTF-16 charset misdirection — timing side-channel flag oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level17 documents a timing-attack flag-guessing challenge.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel17TimingAttackRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate training labs from production; use constant-time comparisons for secrets.",
+      steps: [
+        "Serve WebSec challenge sources only on isolated lab infrastructure.",
+        "Replace strcasecmp/== secret checks with hash_equals or constant-time MAC verification.",
+        "Remove misleading charset tricks that do not mitigate timing leaks."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level17 route scan exposes strcasecmp flag checks with sleep_rand() jitter. Show constant-time comparison remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level18-php-unserialize-cookie-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level18 PHP unserialize cookie route live oracle",
+    description:
+      "When scanning /level18/, disclosed sources confirm unserialize($_COOKIE['obj']) with hash_equals flag oracle — attacker-controlled serialized cookie gadget.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level18 documents a PHP unserialize cookie injection challenge.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel18PhpUnserializeCookieRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate training labs from production; never unserialize untrusted cookie data.",
+      steps: [
+        "Serve WebSec challenge sources only on isolated lab infrastructure.",
+        "Replace unserialize() on cookies with signed JSON or server-side session storage.",
+        "Use hash_equals only after validating object type and structure."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level18 route scan exposes unserialize($_COOKIE['obj']) with hash_equals flag oracle. Show secure session handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level20-php-unserialize-filter-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level20 PHP unserialize filter route live oracle",
+    description:
+      "When scanning /level20/, disclosed sources confirm sanitize() preg_match filters before unserialize($_COOKIE['data']) — Flag __destruct POP chain bypass.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level20 documents a PHP unserialize filter-bypass challenge.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel20PhpUnserializeFilterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate training labs from production; never unserialize untrusted data with regex filters.",
+      steps: [
+        "Serve WebSec challenge sources only on isolated lab infrastructure.",
+        "Avoid unserialize() on user-controlled input; use json_decode with strict schemas.",
+        "Remove __destruct gadgets and POP chains from production object graphs."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level20 route scan exposes sanitize() preg_match before unserialize($_COOKIE['data']). Show secure deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-php-unserialize-cookie-challenge-evidence",
     platform: "generic",
     category: "Injection",

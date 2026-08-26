@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T08:30:00.000Z",
+  "updated_at": "2026-08-26T09:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2853,
-  "total_findings": 29115,
+  "total_sites_scanned": 2856,
+  "total_findings": 29162,
   "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2012,
   "discovery_findings": 24504,
-  "improvements_shipped": 1190,
-  "last_run": "2026-08-26T08:30:00.000Z",
+  "improvements_shipped": 1193,
+  "last_run": "2026-08-26T09:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 47,
@@ -53,34 +53,32 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 17,
-      "focus": "vault-notes JWT secret + notes IDOR oracles; websec level19 password-reset PRNG/CSRF route oracle",
+      "urls_scanned": 3,
+      "findings": 25,
+      "focus": "websec level17 timing-attack + level18 unserialize-cookie + level20 unserialize-filter route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no category misses",
-      "vault-notes-frontend-gules.vercel.app/: 4→8 findings — vault-notes-jwt-secret-leak + notes-idor live+route oracles shipped",
-      "websec.fr/level19/: 7→9 findings — client-side-websec-password-reset-prng + websec-level19-password-reset-route-live-oracle shipped",
-      "brokencrystals.com/api/file?path=https://httpbin.org/get: 79 findings — brokencrystals-file-lfi-route-live-oracle confirmed",
-      "pwnshop.ctfsecurity.com/wishlist/1: 41 findings — pwnshop-wishlist-idor-route-live-oracle (PWN-003) confirmed"
+      "websec.fr/level17/: 7→8 findings — websec-level17-timing-attack-route-live-oracle shipped",
+      "websec.fr/level18/: 8→9 findings — websec-level18-php-unserialize-cookie-route-live-oracle shipped",
+      "websec.fr/level20/: 7→8 findings — websec-level20-php-unserialize-filter-route-live-oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "websec level17/18 have client-side evidence but no route-specific live oracles yet",
-      "websec.fr/level20: client-side challenge corpus only (7 findings) — no dedicated route live oracle yet"
+      "websec level21+ challenges still lack route-specific live oracles"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 47,
-    "vault-notes-frontend-gules.vercel.app": 8,
+    "websec.fr/level17": 8,
+    "websec.fr/level18": 9,
     "websec.fr/level19": 9,
-    "brokencrystals.com/api/file": 79,
-    "brokencrystals.com/api/render": 81,
+    "websec.fr/level20": 8,
+    "vault-notes-frontend-gules.vercel.app": 8,
     "brokencrystals.com/testimonials": 86,
     "pwnshop.ctfsecurity.com/wishlist/1": 41,
-    "pwnshop.ctfsecurity.com/download": 40,
     "duck-store.escape.tech/api/v1/users/me/profile": 33
   }
 }
