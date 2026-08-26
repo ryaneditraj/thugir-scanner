@@ -2056,6 +2056,8 @@ const DEEP_RULES = new Set<string>([
   "clientSidePwnshopWishlistIdorOracle",
   "pwnshopWishlistIdorLiveOracle",
   "pwnshopWishlistIdorRouteLiveOracle",
+  "pwnshopProductApiIdorLiveOracle",
+  "pwnshopProductApiIdorRouteLiveOracle",
   "pwnshopProductSearchSqliLiveOracle",
   "pwnshopProductSearchSqliRouteLiveOracle",
   "pwnshopAdminLoginSqliLiveOracle",
@@ -2566,6 +2568,8 @@ const DEEP_RULES = new Set<string>([
   "dvgaImportPasteSsrfRouteLiveOracle",
   "dvgaCreatePasteStoredXssLiveOracle",
   "dvgaCreatePasteStoredXssRouteLiveOracle",
+  "dvgaGraphqlDosResourceExhaustionLiveOracle",
+  "dvgaGraphqlDosResourceExhaustionRouteLiveOracle",
   "ginAndJuiceAngularCstiLiveOracle",
   "ginAndJuiceAngularCstiRouteLiveOracle",
   "ginAndJuiceCatalogSearchXssLiveOracle",
@@ -5911,6 +5915,7 @@ function extractPwnshopDocSeeds(html: string, pageUrl: string): string[] {
     "/download",
     "/debug/info",
     "/api/v1/events",
+    "/api/v1/products/1",
     "/apply-coupon",
     "/profile/upload-avatar",
     "/wallet",
@@ -11631,7 +11636,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /websec\.fr/i.test(origin) &&
-        /\/level23\/?$/i.test(targetInput) &&
+        /\/level23(?:\/index\.php)?\/?$/i.test(targetInput) &&
         p.slug.startsWith("websec-level23-")
       )
         return -3;
@@ -11970,6 +11975,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("pwnshop-product-search-sqli")
       )
         return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/api\/v1\/products\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-product-api-idor")
+      )
+        return -4;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/product\/\d+/i.test(targetInput) &&
@@ -14154,7 +14165,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (
         /dvga2?\.tools\.escape\.tech/i.test(origin) &&
         /\/graphql\b/i.test(targetInput) &&
-        /dvga-(?:import-paste-ssrf|create-paste-stored-xss|my-pastes-idor)-.*-route-live-oracle/.test(
+        /dvga-(?:import-paste-ssrf|create-paste-stored-xss|my-pastes-idor|graphql-dos-resource-exhaustion)-.*-route-live-oracle/.test(
           p.slug
         )
       )

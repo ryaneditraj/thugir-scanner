@@ -23329,6 +23329,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-product-api-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop REST product API IDOR live oracle",
+    description:
+      "GET /api/v1/products/:id returns product catalog JSON without authentication or ownership validation — the Pwnshop REST product IDOR/BOLA oracle.",
+    impactOneline:
+      "Unauthenticated product API access can expose catalog pricing and seller metadata across sequential product IDs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopProductApiIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and verify product ownership on REST catalog APIs — Pwnshop is intentional lab software.",
+      steps: [
+        "Bind product reads to authenticated sessions when data is user-specific.",
+        "Reject unauthenticated GET /api/v1/products/:id for non-public catalog fields.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/v1/products/:id endpoint returns product JSON without auth. Show BOLA remediation for REST product APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-product-api-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop /api/v1/products/:id REST product IDOR route live oracle",
+    description:
+      "When scanning /api/v1/products/:id, live JSON probe or vulnerability registry corpus confirms REST product catalog IDOR/BOLA training surface.",
+    impactOneline:
+      "Route scans on /api/v1/products/:id confirm missing authorization on product catalog JSON endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopProductApiIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate product catalog APIs behind authentication and ownership checks.",
+      steps: [
+        "Require auth for GET /api/v1/products/:id when responses include seller or cost fields.",
+        "Return 404 for cross-tenant product IDs instead of leaking catalog JSON.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/products/:id route scan confirms REST product IDOR/BOLA. Show route-specific authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-product-search-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -61825,6 +61877,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our DVGA /create_paste route scan confirms stored XSS. Show route-specific content sanitization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-graphql-dos-resource-exhaustion-live-oracle",
+    platform: "generic",
+    category: "Denial of service",
+    severityDefault: "high",
+    title: "DVGA GraphQL resource exhaustion live oracle",
+    description:
+      "POST /graphql { systemUpdate } or { systemHealth } stalls or times out while benign pastes queries return promptly — the DVGA GraphQL DoS oracle.",
+    impactOneline:
+      "Expensive GraphQL queries can exhaust server resources and deny service to legitimate users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaGraphqlDosResourceExhaustionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce query depth/complexity limits and timeouts on GraphQL endpoints.",
+      steps: [
+        "Add query cost analysis and reject expensive system* resolver chains.",
+        "Set per-request timeouts and rate limits on /graphql.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphql endpoint allows expensive systemUpdate queries that stall the server. Show GraphQL DoS defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-graphql-dos-resource-exhaustion-route-live-oracle",
+    platform: "generic",
+    category: "Denial of service",
+    severityDefault: "high",
+    title: "DVGA /graphql DoS resource exhaustion route live oracle",
+    description:
+      "When scanning /graphql on DVGA hosts, systemUpdate/systemHealth queries stall while benign queries complete — route-specific GraphQL DoS oracle.",
+    impactOneline:
+      "Route scans on DVGA /graphql confirm resource exhaustion via expensive system resolver queries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaGraphqlDosResourceExhaustionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply query cost limits on DVGA /graphql route scans.",
+      steps: [
+        "Reject or timeout expensive system* GraphQL fields.",
+        "Add depth limiting and per-IP rate limits.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphql route scan confirms DoS via systemUpdate. Show route-specific GraphQL query cost controls.",
     version: 1,
     enabled: true
   },

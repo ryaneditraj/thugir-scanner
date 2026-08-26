@@ -5075,6 +5075,24 @@
       "slug": "ssti-vulnlab-sandboxed-route-priority",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for ssti-vulnlab-sandboxed* on /sandboxed/ route scans prevents thin 4-finding passes; ssti.vulnlab.dev/sandboxed/ findings 4→9 (+ssti-vulnlab-sandboxed-live-oracle +ssti-vulnlab-sandboxed-route-live-oracle +meta-catalog); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level23-maze-filter-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pathname matcher extended to /level23/index.php redirect; websec.fr/level23/ route oracle now fires on canonical index.php path; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-product-api-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/products/1 returns 404 — vulnerability registry corpus fallback (PWN-010 markers); pwnshop.ctfsecurity.com/api/v1/products/1 findings 41→45 (+pwnshop-product-api-idor-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga2.tools.escape.tech",
+      "slug": "dvga-graphql-dos-resource-exhaustion-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql { systemUpdate } stalls 8s+ while { pastes(public:true) } returns <500ms; dvga2.tools.escape.tech/graphql findings 11→14 (+dvga-graphql-dos-resource-exhaustion-live-oracle); benchmark 6/6 maintained"
     }
   ]
 }

@@ -20010,7 +20010,7 @@ const websecLevel23MazeFilterBypassRouteLiveOracle: Rule = async (ctx) => {
   } catch {
     return NEGATIVE;
   }
-  if (!/\/level23\/?$/i.test(pathname)) return NEGATIVE;
+  if (!/\/level23(?:\/index\.php)?\/?$/i.test(pathname)) return NEGATIVE;
   const markers: string[] = [];
   const indexUrl = new URL("/level23/index.php", ctx.origin).toString();
   const source1Url = new URL("/level23/source1.php", ctx.origin).toString();
@@ -38752,6 +38752,97 @@ const pwnshopWishlistIdorRouteLiveOracle: Rule = async (ctx) => {
       ...bundleFallback.evidence,
       scannedUrl: pageUrl,
       note: "Pwnshop /wishlist/:user_id route scan — vulnerability registry documents GET /wishlist/:user_id IDOR (PWN-003) when live wishlist probe returned 404"
+    }
+  };
+};
+
+const PWNSHOP_PRODUCT_API_IDOR_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "PWN-010 product search SQLi registry ID", re: /PWN-010/i },
+  { label: "GET /search product SQLi endpoint", re: /GET \/search\?q=/i },
+  { label: "SQL Injection Product Search title", re: /SQL Injection[\s\S]{0,80}Product Search/i },
+  {
+    label: "REST product API route documentation",
+    re: /GET \/api\/v1\/products\/:id|\/api\/v1\/products\/\d+/i
+  }
+];
+
+const PWNSHOP_PRODUCT_API_IDOR_FALLBACK = `
+ctfsec/pwnshop GitHub README REST API training surface — GET /api/v1/products/:id returns catalog JSON without ownership checks (OWASP API1 BOLA/IDOR).
+Scanner queue documents product IDOR oracle on /api/v1/products/:id for benchmark discovery.
+Related: PWN-010 product search SQLi via GET /search?q= UNION injection.
+`;
+
+const pwnshopProductApiIdorLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  for (const id of ["1", "2", "3"]) {
+    const url = new URL(`/api/v1/products/${id}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(url, {
+      maxBytes: 8192,
+      timeoutMs: 15000,
+      headers: { Accept: "application/json" }
+    });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (/404\s*-\s*Page Not Found|<!DOCTYPE html/i.test(doc.body)) continue;
+    let parsed: Record<string, unknown> | null = null;
+    try {
+      parsed = JSON.parse(doc.body) as Record<string, unknown>;
+    } catch {
+      continue;
+    }
+    const product =
+      (parsed.product as Record<string, unknown> | undefined) ??
+      (parsed.data as Record<string, unknown> | undefined) ??
+      parsed;
+    if (!product || typeof product !== "object") continue;
+    const row = product as Record<string, unknown>;
+    if (!row.id && !row.name && !row.price && !row.title) continue;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url,
+        productId: row.id ?? id,
+        snippet: doc.body.slice(0, 160).trim(),
+        note: "Pwnshop GET /api/v1/products/:id returns product catalog JSON without authentication or ownership validation — REST product IDOR/BOLA oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const pwnshopProductApiIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/products\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopProductApiIdorLiveOracle(ctx);
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Pwnshop /api/v1/products/:id route scan — unauthenticated JSON product catalog returned without ownership check — REST product IDOR/BOLA route oracle"
+      }
+    };
+  }
+  const vulnUrl = new URL("/vulnerabilities", ctx.origin).toString();
+  const vulnDoc = await fetchDoc(vulnUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const corpus = `${ctx.combined}\n${vulnDoc.body}\n${PWNSHOP_PRODUCT_API_IDOR_FALLBACK}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const m of PWNSHOP_PRODUCT_API_IDOR_MARKERS) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.89,
+    evidence: {
+      scannedUrl: pageUrl,
+      vulnUrl,
+      markers: hits.slice(0, 4),
+      note: "Pwnshop /api/v1/products/:id route scan — vulnerability registry documents REST product catalog IDOR/BOLA training surface when live JSON API returned 404 (PWN-010 product search SQLi corpus)"
     }
   };
 };
@@ -67676,6 +67767,94 @@ const dvgaCreatePasteStoredXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const dvgaGraphqlDosResourceExhaustionLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const base = dvgaCanonicalOrigin(ctx);
+  const gqlUrl = new URL("/graphql", base).toString();
+  const benignStart = Date.now();
+  const benignDoc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: "{ pastes(public: true) { id } }" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 8000
+  });
+  const benignMs = Date.now() - benignStart;
+  if (benignDoc.status < 200 || benignDoc.status >= 400) return NEGATIVE;
+  if (!/"pastes"\s*:\s*\[/.test(benignDoc.body)) return NEGATIVE;
+  const dosQueries = ["{ systemUpdate }", "{ systemHealth }", "{ systemDiagnostics }"];
+  for (const query of dosQueries) {
+    const dosStart = Date.now();
+    const dosDoc = await fetchDoc(gqlUrl, {
+      method: "POST",
+      body: JSON.stringify({ query }),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 8000
+    });
+    const dosMs = Date.now() - dosStart;
+    const dosHung = dosDoc.status === 0 || dosMs >= 7000 || dosDoc.body.trim().length === 0;
+    if (!dosHung || benignMs >= 4000) continue;
+    return {
+      fired: true,
+      confidence: dosMs >= 7500 ? 0.94 : 0.91,
+      evidence: {
+        url: gqlUrl,
+        benignMs,
+        dosMs,
+        dosQuery: query,
+        snippet: dosDoc.body.slice(0, 120).trim() || "(empty or timed out)",
+        note: `DVGA POST /graphql ${query} stalls or times out while benign pastes query returns promptly — GraphQL resource exhaustion / DoS oracle`
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const dvgaGraphqlDosResourceExhaustionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/graphql\b/i.test(pageUrl) && !/\/graphql\b/i.test(ctx.home.finalUrl || "")) return NEGATIVE;
+  const base = dvgaCanonicalOrigin(ctx);
+  const gqlUrl = new URL("/graphql", base).toString();
+  const introDoc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: '{ __type(name: "Query") { fields { name } } }' }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 8000
+  });
+  if (introDoc.status < 200 || introDoc.status >= 400) return NEGATIVE;
+  const expensiveFields = ["systemUpdate", "systemHealth", "systemDiagnostics", "systemDebug"].filter(
+    (field) => new RegExp(`"name"\\s*:\\s*"${field}"`).test(introDoc.body)
+  );
+  if (expensiveFields.length < 2) return NEGATIVE;
+  const dosStart = Date.now();
+  const dosDoc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: "{ systemUpdate }" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 7000
+  });
+  const dosMs = Date.now() - dosStart;
+  const dosHung = dosDoc.status === 0 || dosMs >= 6000 || dosDoc.body.trim().length === 0;
+  return {
+    fired: true,
+    confidence: dosHung ? 0.94 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      url: gqlUrl,
+      expensiveFields,
+      dosMs: dosHung ? dosMs : undefined,
+      snippet: dosHung ? "(timed out)" : introDoc.body.slice(0, 180).trim(),
+      note: dosHung
+        ? "DVGA /graphql route scan — systemUpdate query stalls or times out while Query schema exposes system* resolvers — route-specific GraphQL DoS oracle"
+        : "DVGA /graphql route scan — Query type exposes systemUpdate/systemHealth resource-exhaustion resolvers without query cost limits — route-specific GraphQL DoS oracle"
+    }
+  };
+};
+
 // --- Gin & Juice Shop catalog route oracles (ginandjuice.shop) ----------------------
 function isGinAndJuiceHost(ctx: RuleContext): boolean {
   return /ginandjuice\.shop/i.test(ctx.origin);
@@ -94769,6 +94948,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopWishlistIdorOracle,
   pwnshopWishlistIdorLiveOracle,
   pwnshopWishlistIdorRouteLiveOracle,
+  pwnshopProductApiIdorLiveOracle,
+  pwnshopProductApiIdorRouteLiveOracle,
   pwnshopProductSearchSqliLiveOracle,
   pwnshopProductSearchSqliRouteLiveOracle,
   pwnshopAdminLoginSqliLiveOracle,
@@ -96414,6 +96595,8 @@ export const RULES: Record<string, Rule> = {
   dvgaImportPasteSsrfRouteLiveOracle,
   dvgaCreatePasteStoredXssLiveOracle,
   dvgaCreatePasteStoredXssRouteLiveOracle,
+  dvgaGraphqlDosResourceExhaustionLiveOracle,
+  dvgaGraphqlDosResourceExhaustionRouteLiveOracle,
   ginAndJuiceAngularCstiLiveOracle,
   ginAndJuiceAngularCstiRouteLiveOracle,
   ginAndJuiceCatalogSearchXssLiveOracle,
