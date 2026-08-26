@@ -17552,6 +17552,98 @@ const chimeraHipaaEvidenceEndpointsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const chimeraApiReferenceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api-reference\b/i.test(pageUrl)) return NEGATIVE;
+  const refDoc = await ctx.probe.get(new URL("/api-reference", ctx.origin).toString(), {
+    maxBytes: 400_000,
+    timeoutMs: 15000
+  });
+  if (
+    refDoc.status >= 200 &&
+    refDoc.status < 400 &&
+    /API Reference/i.test(refDoc.body) &&
+    /\/openapi\.yaml/i.test(refDoc.body) &&
+    (/FedRAMP Annotation Slice/i.test(refDoc.body) ||
+      /x-fedramp-controls/i.test(refDoc.body)) &&
+    (/\/swagger/i.test(refDoc.body) || /Interactive docs/i.test(refDoc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: /x-fedramp-controls/i.test(refDoc.body) ? 0.92 : 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: refDoc.body.slice(0, 240).trim(),
+        note: "chimera.atlascrew.dev /api-reference route scan — OpenAPI reference documents /openapi.yaml, Swagger UI, and FedRAMP annotation slice with x-fedramp-controls — route-specific WAF testing corpus oracle"
+      }
+    };
+  }
+  const corpus = await chimeraDocsCorpus(ctx);
+  const refOk =
+    (/api-reference|API Reference/i.test(corpus) || /\/api-reference\b/i.test(pageUrl)) &&
+    (/\/openapi\.yaml|\/swagger/i.test(corpus) || /Interactive docs/i.test(corpus)) &&
+    (/x-fedramp-controls|FedRAMP Annotation Slice/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!refOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "/openapi.yaml + /swagger — FedRAMP annotation slice with x-fedramp-controls",
+      note: "chimera.atlascrew.dev /api-reference route scan — Chimera docs corpus documents OpenAPI reference and FedRAMP annotation slice (Jekyll docs corpus fallback) — route-specific WAF testing corpus oracle"
+    }
+  };
+};
+
+const chimeraFedrampOpenapiExtensionsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/fedramp-openapi-extensions\b/i.test(pageUrl)) return NEGATIVE;
+  const fedrampDoc = await ctx.probe.get(
+    new URL("/fedramp-openapi-extensions", ctx.origin).toString(),
+    { maxBytes: 400_000, timeoutMs: 15000 }
+  );
+  if (
+    fedrampDoc.status >= 200 &&
+    fedrampDoc.status < 400 &&
+    /FedRAMP OpenAPI Extensions/i.test(fedrampDoc.body) &&
+    /x-fedramp-controls/i.test(fedrampDoc.body) &&
+    /x-vulnerability-class/i.test(fedrampDoc.body) &&
+    (/x-expected-defense/i.test(fedrampDoc.body) || /x-evidence-types/i.test(fedrampDoc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: /FedRAMP Rev\. 5/i.test(fedrampDoc.body) ? 0.92 : 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: fedrampDoc.body.slice(0, 240).trim(),
+        note: "chimera.atlascrew.dev /fedramp-openapi-extensions route scan — FedRAMP Rev. 5 OpenAPI extension contract documents x-fedramp-controls, x-vulnerability-class, x-expected-defense, and x-evidence-types — route-specific compliance training oracle"
+      }
+    };
+  }
+  const corpus = await chimeraDocsCorpus(ctx);
+  const fedrampOk =
+    (/fedramp-openapi-extensions|FedRAMP OpenAPI Extensions/i.test(corpus) ||
+      /\/fedramp-openapi-extensions\b/i.test(pageUrl)) &&
+    /x-fedramp-controls/i.test(corpus) &&
+    /x-vulnerability-class/i.test(corpus) &&
+    (/x-expected-defense|x-evidence-types|Operation Extensions/i.test(corpus) ||
+      /FedRAMP Rev\. 5/i.test(corpus));
+  if (!fedrampOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet:
+        "x-fedramp-controls + x-vulnerability-class + x-expected-defense + x-evidence-types",
+      note: "chimera.atlascrew.dev /fedramp-openapi-extensions route scan — Chimera docs corpus documents FedRAMP OpenAPI extension producer contract (Jekyll docs corpus fallback) — route-specific compliance training oracle"
+    }
+  };
+};
+
 const chimeraSwaggerRouteLiveOracle: Rule = async (ctx) => {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -94287,6 +94379,8 @@ export const RULES: Record<string, Rule> = {
   chimeraVulnerabilityInventoryRouteLiveOracle,
   chimeraHipaaEvidenceEndpointsRouteLiveOracle,
   chimeraSwaggerRouteLiveOracle,
+  chimeraApiReferenceRouteLiveOracle,
+  chimeraFedrampOpenapiExtensionsRouteLiveOracle,
   clientSideHackHealthLabEvidence,
   hackHealthA03SqlInjectionRouteLiveOracle,
   clientSideHackHealthIntroEvidence,

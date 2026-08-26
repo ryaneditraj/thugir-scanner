@@ -1706,6 +1706,8 @@ const DEEP_RULES = new Set<string>([
   "chimeraVulnerabilityInventoryRouteLiveOracle",
   "chimeraHipaaEvidenceEndpointsRouteLiveOracle",
   "chimeraSwaggerRouteLiveOracle",
+  "chimeraApiReferenceRouteLiveOracle",
+  "chimeraFedrampOpenapiExtensionsRouteLiveOracle",
   "clientSideHackHealthLabEvidence",
   "hackHealthA03SqlInjectionRouteLiveOracle",
   "clientSideDomGoatLabEvidence",
@@ -11651,6 +11653,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("chimera-hipaa-evidence-endpoints")
       )
         return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api-reference\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-api-reference")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/fedramp-openapi-extensions\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-fedramp-openapi-extensions")
+      )
+        return -3;
+      if (
+        /ssti\.vulnlab\.dev/i.test(origin) &&
+        /\/sandboxed\b/i.test(targetInput) &&
+        p.slug.startsWith("ssti-vulnlab-sandboxed")
+      )
+        return -4;
       if (
         /zerohealth\.aliyu\.dev/i.test(origin) &&
         /\/api\/(?:records|medical-records)\b/i.test(targetInput) &&

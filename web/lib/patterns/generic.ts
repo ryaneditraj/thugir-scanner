@@ -14874,6 +14874,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-api-reference-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Chimera OpenAPI reference route live oracle",
+    description:
+      "When scanning /api-reference on chimera.atlascrew.dev, the OpenAPI reference documents /openapi.yaml, Swagger UI, and FedRAMP annotation slice with x-fedramp-controls — route-specific WAF testing corpus oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera /api-reference documents machine-readable FedRAMP OpenAPI extensions for vulnerability assessment tooling.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraApiReferenceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict OpenAPI reference pages and FedRAMP annotation slices to internal red-team networks.",
+      steps: [
+        "Require authentication before exposing OpenAPI reference documentation.",
+        "Do not publish FedRAMP control-mapping extensions on public hosts.",
+        "Keep Chimera vuln-api instances on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api-reference route exposes OpenAPI specs with FedRAMP annotation slices. Show how to restrict API reference docs to internal networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-fedramp-openapi-extensions-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Chimera FedRAMP OpenAPI extensions route live oracle",
+    description:
+      "When scanning /fedramp-openapi-extensions on chimera.atlascrew.dev, FedRAMP Rev. 5 extension contract documents x-fedramp-controls, x-vulnerability-class, x-expected-defense, and x-evidence-types — route-specific compliance training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera /fedramp-openapi-extensions documents machine-readable FedRAMP OpenAPI producer contract for assessment tooling.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraFedrampOpenapiExtensionsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict FedRAMP OpenAPI extension documentation to internal red-team networks.",
+      steps: [
+        "Require authentication before exposing FedRAMP control-mapping contracts.",
+        "Do not publish x-fedramp-controls extension schemas on public hosts.",
+        "Keep Chimera compliance training routes on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /fedramp-openapi-extensions route exposes FedRAMP Rev. 5 OpenAPI extension contract. Show how to restrict compliance training docs to internal networks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hack-health-lab-evidence",
     platform: "generic",
     category: "Injection",
