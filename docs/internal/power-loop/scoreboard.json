@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2004,
   "discovery_findings": 24290,
-  "improvements_shipped": 1186,
-  "last_run": "2026-08-26T23:07:00.000Z",
+  "improvements_shipped": 1189,
+  "last_run": "2026-08-26T23:35:00.000Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
@@ -56,24 +56,19 @@
       "urls_scanned": 8,
       "findings": 180,
       "focus": "vulnlab catalog gaps (sqli blind-time/second-order, xss csp-bypass/mutation, ssrf metadata) + queue drain vulnshop login, brokencrystals spawn, pwnshop seller/preview SSTI",
-      "improvements_shipped_this_run": 0
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 35 live oracles)",
-      "sqli.vulnlab.dev/blind-time/: 6 findings — blind-time oracle via hub crawl (union/blind-bool siblings)",
-      "sqli.vulnlab.dev/second-order/: 3 findings — +sqli-vulnlab-second-order-route-live-oracle",
-      "xss.vulnlab.dev/csp-bypass/: 9 findings — csp-bypass + sibling XSS oracles",
-      "ssrf.vulnlab.dev/metadata/: 15 findings — +ssrf-vulnlab-metadata-aws-live-oracle",
-      "brokencrystals.com/api/spawn: 84 findings — spawn command-injection hub pass",
-      "pwnshop.ctfsecurity.com/seller/preview: 42 findings — seller-preview SSTI route oracle",
-      "vulnshop.vercel.app/api/login: 19 findings — login JWT route oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings)",
+      "websec.fr/level23/: 7 findings — websec-level23-maze-filter-bypass-route-live-oracle (index.php path fix)",
+      "pwnshop.ctfsecurity.com/api/v1/products/1: 45 findings — pwnshop-product-api-idor-route-live-oracle",
+      "dvga2.tools.escape.tech/graphql: 14 findings — dvga-graphql-dos-resource-exhaustion-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + juice-shop-iac-terraform-tls-key-live-oracle)",
-      "xss.vulnlab.dev/mutation/: thin pass (2 findings, 0 live oracles) — needs mutation-route live oracle",
-      "sqli.vulnlab.dev/blind-time/: no dedicated blind-time slug — oracles only via sqli hub crawl siblings",
-      "sqli.vulnlab.dev/second-order/: thin direct pass (3 findings) — route oracle present but hub siblings dominate"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "pwnshop /api/v1/products/1: live JSON API still 404 — route oracle uses vulnerability-registry corpus fallback",
+      "dvga2 GraphQL: live DoS oracle shipped; deep mutation injection oracles still thin"
     ]
   },
   "discovery_highlights": {

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-26T22:03:39.812Z",
-  "total": 2699,
-  "uniqueSlugs": 2691,
+  "generatedAt": "2026-08-26T23:37:03.908Z",
+  "total": 2703,
+  "uniqueSlugs": 2695,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2681,
+    "generic": 2685,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2614,
+    "deep": 2618,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 554,
+    "Broken access control": 556,
     "Exposed secret": 111,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -43,7 +43,7 @@
     "XML external entity injection": 1,
     "API security": 3,
     "Path traversal": 3,
-    "Denial of service": 5,
+    "Denial of service": 7,
     "Prompt injection": 5,
     "XSS": 3,
     "Session management": 2
@@ -1022,6 +1022,8 @@
     "dvga-graphql-audit-route-live-oracle",
     "dvga-graphql-batching-live-oracle",
     "dvga-graphql-batching-route-live-oracle",
+    "dvga-graphql-dos-resource-exhaustion-live-oracle",
+    "dvga-graphql-dos-resource-exhaustion-route-live-oracle",
     "dvga-graphql-introspection-live-oracle",
     "dvga-graphql-introspection-route-live-oracle",
     "dvga-graphql-sqli-filter-live-oracle",
@@ -1967,6 +1969,8 @@
     "pwnshop-order-submit-xxe-route-live-oracle",
     "pwnshop-otp-not-invalidated-live-oracle",
     "pwnshop-otp-not-invalidated-route-live-oracle",
+    "pwnshop-product-api-idor-live-oracle",
+    "pwnshop-product-api-idor-route-live-oracle",
     "pwnshop-product-review-stored-xss-live-oracle",
     "pwnshop-product-review-stored-xss-review-route-live-oracle",
     "pwnshop-product-review-stored-xss-route-live-oracle",
