@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-26T08:08:19.526Z",
-  "total": 2668,
-  "uniqueSlugs": 2660,
+  "generatedAt": "2026-08-26T09:04:13.370Z",
+  "total": 2671,
+  "uniqueSlugs": 2663,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2650,
+    "generic": 2653,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2583,
+    "deep": 2586,
     "continuous": 0
   },
   "byCategory": {
@@ -26,8 +26,8 @@
     "Information exposure": 1,
     "Information disclosure": 124,
     "Security misconfiguration": 202,
-    "Broken authentication": 166,
-    "Injection": 410,
+    "Broken authentication": 167,
+    "Injection": 412,
     "Cross-site scripting": 723,
     "Open redirect": 24,
     "general": 20,
@@ -2525,7 +2525,10 @@
     "web-security-learning-labs-ssti-module-route-live-oracle",
     "webexp05-c3-stored-xss-live-oracle",
     "webexp05-c3-stored-xss-route-live-oracle",
+    "websec-level17-timing-attack-route-live-oracle",
+    "websec-level18-php-unserialize-cookie-route-live-oracle",
     "websec-level19-password-reset-route-live-oracle",
+    "websec-level20-php-unserialize-filter-route-live-oracle",
     "whoopspay-admin-database-execute-live-oracle",
     "whoopspay-admin-database-execute-route-live-oracle",
     "whoopspay-admin-express-logs-disclosure-live-oracle",

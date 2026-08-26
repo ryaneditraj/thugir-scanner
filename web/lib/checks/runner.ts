@@ -1793,6 +1793,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecTimingAttackChallengeEvidence",
   "clientSideWebsecPasswordResetPrngChallengeEvidence",
   "websecLevel19PasswordResetRouteLiveOracle",
+  "websecLevel17TimingAttackRouteLiveOracle",
+  "websecLevel18PhpUnserializeCookieRouteLiveOracle",
+  "websecLevel20PhpUnserializeFilterRouteLiveOracle",
   "clientSideWebsecPhpUnserializeCookieChallengeEvidence",
   "clientSideWebsecPhpUnserializeFilterChallengeEvidence",
   "clientSideWebsecPhpAesSessionChallengeEvidence",
@@ -11540,6 +11543,27 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/level19\/?$/i.test(targetInput) &&
         (p.slug.startsWith("websec-level19-") ||
           p.slug === "client-side-websec-password-reset-prng-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level17\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level17-") ||
+          p.slug === "client-side-websec-timing-attack-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level18\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level18-") ||
+          p.slug === "client-side-websec-php-unserialize-cookie-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level20\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level20-") ||
+          p.slug === "client-side-websec-php-unserialize-filter-challenge-evidence")
       )
         return -3;
       if (/compass-demo\.com/i.test(origin) && p.slug.startsWith("compass-demo-")) return -2;

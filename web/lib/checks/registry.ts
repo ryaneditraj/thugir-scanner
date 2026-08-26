@@ -19329,6 +19329,98 @@ const websecLevel19PasswordResetRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const websecLevel17TimingAttackRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level17\/?$/i.test(pathname)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const markers: string[] = [];
+  if (/Level\s+Seventeen[\s\S]{0,80}Guessing is fun/i.test(corpus)) markers.push("level17-timing-title");
+  if (/sleep_rand\s*\(|timing-attack impractical|openssl_random_pseudo_bytes/i.test(corpus))
+    markers.push("sleep-rand-jitter");
+  if (/strcasecmp\s*\(\s*\$_POST\s*\[\s*['"]flag['"]\s*\]\s*,\s*\$flag\s*\)/i.test(corpus))
+    markers.push("strcasecmp-flag-sink");
+  if (/charset=UTF-16|Can you guess the flag/i.test(corpus)) markers.push("utf16-charset-misdirection");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers,
+      note: "WebSec.fr /level17 route scan — strcasecmp($_POST['flag'], $flag) with sleep_rand() jitter and UTF-16 charset misdirection — timing side-channel oracle"
+    }
+  };
+};
+
+const websecLevel18PhpUnserializeCookieRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level18\/?$/i.test(pathname)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const markers: string[] = [];
+  if (/Level\s+Eighteen|json_decode(?:&nbsp;|\s)+is(?:&nbsp;|\s)+for(?:&nbsp;|\s)+the(?:&nbsp;|\s)+weak/i.test(corpus))
+    markers.push("level18-unserialize-title");
+  if (/serialized(?:&nbsp;|\s)+object|give(?:&nbsp;|\s)+it(?:&nbsp;|\s)+back(?:&nbsp;|\s)+please/i.test(corpus))
+    markers.push("serialized-object-cookie-prompt");
+  if (/\$_COOKIE[\s\S]{0,80}['"]obj['"]|unserialize[\s\S]{0,120}\$obj/i.test(corpus))
+    markers.push("cookie-unserialize-sink");
+  if (/hash_equals[\s\S]{0,160}\$unserialized_obj/i.test(corpus)) markers.push("hash-equals-flag-oracle");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers,
+      note: "WebSec.fr /level18 route scan — unserialize($_COOKIE['obj']) with hash_equals flag oracle — attacker-controlled serialized cookie gadget"
+    }
+  };
+};
+
+const websecLevel20PhpUnserializeFilterRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level20\/?$/i.test(pathname)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const markers: string[] = [];
+  if (/Level\s+Twenty|Call me maybe|bullet-proof/i.test(corpus)) markers.push("level20-unserialize-filter-title");
+  if (/sanitize[\s\S]{0,900}preg_match[\s\S]{0,900}unserialize/i.test(corpus))
+    markers.push("sanitize-preg-match-filter");
+  if (/\$_COOKIE[\s\S]{0,80}['"]data['"]|unserialize[\s\S]{0,120}\$data/i.test(corpus))
+    markers.push("data-cookie-unserialize-sink");
+  if (/class[\s\S]{0,120}Flag[\s\S]{0,320}__destruct|i0n1c(?:&nbsp;|\s)*'s(?:&nbsp;|\s)+bypass/i.test(corpus))
+    markers.push("flag-destruct-pop-chain");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers,
+      note: "WebSec.fr /level20 route scan — sanitize() preg_match filters before unserialize($_COOKIE['data']) — Flag __destruct POP chain bypass oracle"
+    }
+  };
+};
+
 // --- WebSec.fr PHP unserialize cookie gadget (level18) ----------------------------------
 const CLIENT_WEBSEC_PHP_UNSERIALIZE_COOKIE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
@@ -92931,6 +93023,9 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecTimingAttackChallengeEvidence,
   clientSideWebsecPasswordResetPrngChallengeEvidence,
   websecLevel19PasswordResetRouteLiveOracle,
+  websecLevel17TimingAttackRouteLiveOracle,
+  websecLevel18PhpUnserializeCookieRouteLiveOracle,
+  websecLevel20PhpUnserializeFilterRouteLiveOracle,
   clientSideWebsecPhpUnserializeCookieChallengeEvidence,
   clientSideWebsecPhpUnserializeFilterChallengeEvidence,
   clientSideWebsecPhpAesSessionChallengeEvidence,
