@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T10:30:00.000Z",
+  "updated_at": "2026-08-26T10:49:39.786Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2867,
-  "total_findings": 29436,
+  "total_sites_scanned": 2875,
+  "total_findings": 29616,
   "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2017,
-  "discovery_findings": 24754,
+  "discovery_urls_added": 2022,
+  "discovery_findings": 24934,
   "improvements_shipped": 1195,
-  "last_run": "2026-08-26T10:30:00.000Z",
+  "last_run": "2026-08-26T10:49:39.786Z",
   "last_run_summary": {
     "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 44,
+      "oracle_findings": 43,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 582,
+      "probes_run": 415,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,46 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (44 findings, thinner pass); secret-resend slug still absent; teacher_delta skipped"
+      "note": "Stable 6/6 first-pass recall (43 findings); thinner than typical 46-48 pass; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 83,
-      "focus": "websec.fr level21 AES session route oracle + brokencrystals photo BFLA improvements.json shipment",
-      "improvements_shipped_this_run": 2
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 180,
+      "focus": "ssrf.vulnlab.dev allowlist/scheme/metadata-gcp + brokencrystals Google Cloud SSRF + websec level21; queue drain also wrongsecrets-7/9/14",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (44 findings) — no category misses",
-      "websec.fr/level21/: 7→8 findings — websec-level21-aes-session-route-live-oracle shipped",
-      "brokencrystals.com/api/users/one/admin/photo: 75 findings — brokencrystals-photo-bfla-live-oracle + route oracle logged"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (43 findings, pages=6 probes=415) — no category misses",
+      "ssrf.vulnlab.dev/allowlist: 15 findings — ssrf-vulnlab-allowlist-route-live-oracle + full vulnlab SSRF oracle bundle",
+      "ssrf.vulnlab.dev/scheme: 15 findings — ssrf-vulnlab-scheme-route-live-oracle (file:// local read)",
+      "ssrf.vulnlab.dev/metadata-gcp: 16 findings — ssrf-vulnlab-metadata-gcp-live-oracle confirmed",
+      "brokencrystals.com/api/file/google: 81 findings — generic /api/file SSRF oracles; no dedicated GCP metadata live oracle yet",
+      "websec.fr/level21/: 8 findings — websec-level21-aes-session-route-live-oracle (shipped parallel run aa243801)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-7/9/14: 15 findings each — route oracles for Vault/K8s/Terraform challenges"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "benchmark thin pass — 43 findings vs typical 46-48; missing live oracles for captcha-bypass, wallet-balance on this pass",
+      "brokencrystals /api/file/google: needs dedicated GCP metadata SSRF live+route oracle (generic /api/file oracles only)",
+      "brokencrystals /api/file/azure still queued",
+      "ssrf.vulnlab.dev: strong SSRF oracle coverage — candidate for benchmark enrollment",
       "wrongsecrets challenge-71..74: undeployed Heroku shells — route-specific oracles still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 44,
+    "juice-shop.herokuapp.com": 43,
+    "ssrf.vulnlab.dev/allowlist": 15,
+    "ssrf.vulnlab.dev/scheme": 15,
+    "ssrf.vulnlab.dev/metadata-gcp": 16,
+    "brokencrystals.com/api/file/google": 81,
     "websec.fr/level21": 8,
-    "brokencrystals.com/api/users/one/admin/photo": 75,
-    "websec.fr/level17": 8,
-    "websec.fr/level18": 9,
-    "websec.fr/level20": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-71": 14,
-    "duck-store.escape.tech/api/v1/users/me/profile": 33
+    "wrongsecrets.herokuapp.com/challenge/challenge-7": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-9": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-14": 15,
+    "brokencrystals.com/api/file": 79,
+    "brokencrystals.com/api/users/one/admin/photo": 75
   }
 }
