@@ -19643,6 +19643,49 @@ const clientSideWebsecOopRestrictedEvalChallengeEvidence: Rule = async (ctx) => 
   };
 };
 
+const websecLevel22OopEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level22\/?$/i.test(pathname)) return NEGATIVE;
+  const markers: string[] = [];
+  const indexUrl = new URL("/level22/index.php", ctx.origin).toString();
+  const sourceUrl = new URL("/level22/source.php", ctx.origin).toString();
+  const [indexDoc, source] = await Promise.all([
+    fetchDoc(indexUrl, { maxBytes: 65536, timeoutMs: 15000 }),
+    fetchDoc(sourceUrl, { maxBytes: 65536, timeoutMs: 15000 })
+  ]);
+  const pageCorpus = `${ctx.combined}\n${indexDoc.body}`;
+  if (/Level22|TwentyTwo|OOP-FTW|only(?:&nbsp;|\s)+<code>21<\/code>(?:&nbsp;|\s)+chars/i.test(pageCorpus))
+    markers.push("level22-oop-eval-title");
+  const sourceCorpus = source.body;
+  if (/substr[\s\S]{0,120}21|only(?:&nbsp;|\s)+<code>21<\/code>[\s\S]{0,120}chars/i.test(sourceCorpus))
+    markers.push("21-char-code-restriction");
+  if (/class[\s\S]{0,40}A[\s\S]{0,200}__construct[\s\S]{0,200}\$pub|file_containing_the_flag_parts/i.test(sourceCorpus))
+    markers.push("oop-class-a-flag-parts");
+  if (/get_defined_functions[\s\S]{0,400}unset[\s\S]{0,120}strcmp|funcs_extra[\s\S]{0,120}eval/i.test(sourceCorpus))
+    markers.push("strcmp-strncmp-blacklist-bypass");
+  if (/preg_match[\s\S]{0,200}\$blacklisted[\s\S]{0,200}\$code[\s\S]{0,200}eval|blacklisted[\s\S]{0,120}eval[\s\S]{0,80}\$code/i.test(sourceCorpus))
+    markers.push("preg-match-before-eval");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      indexUrl,
+      sourceUrl,
+      markers,
+      note: "WebSec.fr /level22 route scan — 21-char restricted PHP eval with OOP class A flag parts and strcmp/strncmp removed from function blacklist — route-specific OOP eval oracle"
+    }
+  };
+};
+
 // --- WebSec.fr shell_exec blacklist bypass (level26) ----------------------------------
 const CLIENT_WEBSEC_SHELL_EXEC_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
@@ -34781,6 +34824,44 @@ const juiceShopResendKeyLiveOracle: Rule = async (ctx) => {
     }
   }
   return NEGATIVE;
+};
+
+const juiceShopIacTerraformTlsKeyLiveOracle: Rule = async (ctx) => {
+  if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/infrastructure/terraform/networking.tf", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300 || HEROKU_STUB_RE.test(doc.body)) return NEGATIVE;
+  const tlsKeyOk =
+    /aws_iam_server_certificate/i.test(doc.body) &&
+    /private_key\s*=\s*"/i.test(doc.body) &&
+    /-----BEGIN RSA PRIVATE KEY-----/i.test(doc.body);
+  if (!tlsKeyOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.match(/private_key[\s\S]{0,120}/i)?.[0]?.slice(0, 120).trim() ?? doc.body.slice(0, 120).trim(),
+      note: "Juice Shop /infrastructure/terraform/networking.tf exposes RSA TLS private_key inline — IaC leaked key challenge oracle (v20.2+)"
+    }
+  };
+};
+
+const juiceShopIacTerraformTlsKeyRouteLiveOracle: Rule = async (ctx) => {
+  if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/infrastructure\/terraform\//i.test(pageUrl)) return NEGATIVE;
+  const result = await juiceShopIacTerraformTlsKeyLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /infrastructure/terraform route scan — networking.tf exposes inline RSA TLS private_key — route-specific IaC leaked key oracle"
+    }
+  };
 };
 
 async function probeJuiceShopProductsSearchApi(ctx: RuleContext): Promise<RuleResult | null> {
@@ -82326,6 +82407,31 @@ const brokencrystalsDigitalOceanMetadataSsrfLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const BROKENCRYSTALS_GOOGLE_METADATA_BASE =
+  "http://metadata.google.internal/computeMetadata/v1/";
+
+const brokencrystalsGoogleMetadataSsrfLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/api/file/google", ctx.origin);
+  probeUrl.searchParams.set("path", `${BROKENCRYSTALS_GOOGLE_METADATA_BASE}instance/`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const metadataOk =
+    /instance\//i.test(doc.body) &&
+    /oslogin\//i.test(doc.body) &&
+    /project\//i.test(doc.body);
+  if (!metadataOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Broken Crystals GET /api/file/google?path=http://metadata.google.internal/computeMetadata/v1/instance/ returns GCP metadata tree — cloud SSRF oracle"
+    }
+  };
+};
+
 const brokencrystalsLdapInjectionLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const ldapUrl = new URL("/api/users/ldap", ctx.origin);
@@ -84611,6 +84717,23 @@ const brokencrystalsFileDigitalOceanRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Broken Crystals /api/file/digital_ocean route scan — GET with DigitalOcean metadata path returns droplet hostname/region/interfaces — route-specific cloud SSRF oracle"
+    }
+  };
+};
+
+const brokencrystalsFileGoogleRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/file\/google/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsGoogleMetadataSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/file/google route scan — GET with GCP metadata path returns instance/oslogin/project tree — route-specific cloud SSRF oracle"
     }
   };
 };
@@ -93072,6 +93195,7 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecPhpAesSessionChallengeEvidence,
   websecLevel21AesSessionRouteLiveOracle,
   clientSideWebsecOopRestrictedEvalChallengeEvidence,
+  websecLevel22OopEvalRouteLiveOracle,
   clientSideWebsecShellExecChallengeEvidence,
   clientSideWebsecAspectInstrumentationChallengeEvidence,
   clientSideWebsecUploadIncludeChallengeEvidence,
@@ -94140,6 +94264,8 @@ export const RULES: Record<string, Rule> = {
   juiceShopForgottenBackupRouteLiveOracle,
   juiceShopProductsSearchSqliRouteLiveOracle,
   juiceShopLeakedApiKeyOracle,
+  juiceShopIacTerraformTlsKeyLiveOracle,
+  juiceShopIacTerraformTlsKeyRouteLiveOracle,
   juiceShopResendKeyLiveOracle,
   clientSideEksGoatEvidence,
   clientSideCtflearnEvidence,
@@ -94245,6 +94371,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsAwsMetadataSsrfRouteLiveOracle,
   brokencrystalsAzureMetadataSsrfLiveOracle,
   brokencrystalsDigitalOceanMetadataSsrfLiveOracle,
+  brokencrystalsGoogleMetadataSsrfLiveOracle,
   brokencrystalsLdapInjectionLiveOracle,
   brokencrystalsLdapRouteLiveOracle,
   brokencrystalsHiddenUploadLiveOracle,
@@ -94338,6 +94465,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsFileAwsRouteLiveOracle,
   brokencrystalsFileAzureRouteLiveOracle,
   brokencrystalsFileDigitalOceanRouteLiveOracle,
+  brokencrystalsFileGoogleRouteLiveOracle,
   brokencrystalsFileLfiRouteLiveOracle,
   brokencrystalsFilesLfiRouteLiveOracle,
   brokencrystalsFileRawLfiRouteLiveOracle,

@@ -16,10 +16,11 @@ export async function fetchJuiceShopSocialFeedBodies(
     if (bskyUrl) {
       const handle = bskyUrl.match(/profile\/([^/?#]+)/i)?.[1];
       if (handle) {
+        const bskyHeaders = { "User-Agent": "Mozilla/5.0 (compatible; ThugirScanner/1.0)" };
         let cursor: string | undefined;
         for (let page = 0; page < 5; page++) {
           const feedUrl = `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${encodeURIComponent(handle)}&limit=50${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`;
-          const doc = await probe.get(feedUrl, { maxBytes: 96_000, timeoutMs: 12000 });
+          const doc = await probe.get(feedUrl, { maxBytes: 96_000, timeoutMs: 12000, headers: bskyHeaders });
           if (doc.status < 200 || doc.status >= 400) break;
           chunks.push(doc.body);
           try {
@@ -31,11 +32,11 @@ export async function fetchJuiceShopSocialFeedBodies(
           }
         }
         const searchUrl = `https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?q=${encodeURIComponent(`from:${handle}`)}&limit=50`;
-        const searchDoc = await probe.get(searchUrl, { maxBytes: 96_000, timeoutMs: 12000 });
+        const searchDoc = await probe.get(searchUrl, { maxBytes: 96_000, timeoutMs: 12000, headers: bskyHeaders });
         if (searchDoc.status >= 200 && searchDoc.status < 400) chunks.push(searchDoc.body);
         for (const term of ["resend", "apikey", "re_"]) {
           const scopedSearchUrl = `https://public.api.bsky.app/xrpc/app.bsky.feed.searchPosts?q=${encodeURIComponent(`from:${handle} ${term}`)}&limit=50`;
-          const scopedDoc = await probe.get(scopedSearchUrl, { maxBytes: 96_000, timeoutMs: 12000 });
+          const scopedDoc = await probe.get(scopedSearchUrl, { maxBytes: 96_000, timeoutMs: 12000, headers: bskyHeaders });
           if (scopedDoc.status >= 200 && scopedDoc.status < 400) chunks.push(scopedDoc.body);
         }
       }

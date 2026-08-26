@@ -16123,6 +16123,33 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "websec-level22-oop-eval-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level22 OOP eval route live oracle",
+    description:
+      "When scanning /level22/, GET source.php confirms 21-char restricted PHP eval with OOP class A flag parts and strcmp/strncmp removed from function blacklist — route-specific OOP eval oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level22 exposes restricted eval with OOP gadget chains and blacklist bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel22OopEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host eval labs offline; never expose eval() on user-controlled input in production.",
+      steps: [
+        "Move WebSec-style eval labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Ban eval() and dynamic function invocation on attacker-controlled strings.",
+        "Use safe interpreters or sandboxed runtimes instead of PHP eval sinks."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level22 route exposes 21-char eval with OOP class A and strcmp removed from blacklist. Show secure alternatives to eval sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-php-unserialize-cookie-challenge-evidence",
     platform: "generic",
     category: "Injection",
@@ -28748,6 +28775,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-iac-terraform-tls-key-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Juice Shop IaC Terraform TLS private key live oracle",
+    description:
+      "GET /infrastructure/terraform/networking.tf exposes an inline RSA TLS private_key in aws_iam_server_certificate — the Juice Shop v20.2+ IaC leaked key challenge oracle.",
+    impactOneline:
+      "Hardcoded TLS private keys in committed Terraform enable impersonation and decrypt traffic protected by the leaked certificate.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopIacTerraformTlsKeyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove private keys from Terraform; load TLS material from a secrets manager.",
+      steps: [
+        "Store TLS private keys in AWS Secrets Manager or ACM — never inline in .tf files.",
+        "Add infrastructure/terraform/*.tf to deployment review gates.",
+        "Rotate any TLS keys that were committed to version control."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /infrastructure/terraform/networking.tf exposes an RSA private_key inline. Show IaC secret management remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-iac-terraform-tls-key-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Juice Shop /infrastructure/terraform route IaC TLS key live oracle",
+    description:
+      "When scanning /infrastructure/terraform/networking.tf, the exposed networking.tf contains inline RSA TLS private_key in aws_iam_server_certificate — route-specific IaC leaked key oracle.",
+    impactOneline:
+      "Route-specific confirmation that Juice Shop Terraform networking config leaks TLS private key material.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopIacTerraformTlsKeyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove private keys from Terraform; load TLS material from a secrets manager.",
+      steps: [
+        "Store TLS private keys in AWS Secrets Manager or ACM — never inline in .tf files.",
+        "Add infrastructure/terraform/*.tf to deployment review gates.",
+        "Rotate any TLS keys that were committed to version control."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /infrastructure/terraform route scan exposes inline RSA TLS private_key. Show IaC secret management remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "juice-shop-resend-key-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -38357,6 +38436,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-google-metadata-ssrf-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "critical",
+    title: "Broken Crystals Google metadata SSRF oracle",
+    description:
+      "GET /api/file/google?path=http://metadata.google.internal/computeMetadata/v1/instance/ returns GCP metadata tree (instance/, oslogin/, project/) — the Broken Crystals Google cloud SSRF oracle.",
+    impactOneline:
+      "Server-side request forgery to GCP metadata can expose service account tokens and compromise the hosting project.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsGoogleMetadataSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to metadata.google.internal and link-local addresses — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to metadata.google.internal/computeMetadata and other cloud metadata endpoints.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/google endpoint fetches GCP metadata via the path parameter. Show how to block Google cloud metadata SSRF.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-metadata-xxe-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -40825,6 +40930,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/file/digital_ocean route scan confirms DigitalOcean metadata SSRF. Show how to block cloud metadata fetches from user-controlled path parameters.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-file-google-route-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/file/google route SSRF live oracle",
+    description:
+      "When scanning /api/file/google, GET with path=http://metadata.google.internal/computeMetadata/v1/instance/ returns GCP metadata tree — route-specific cloud SSRF confirmation.",
+    impactOneline:
+      "Route-specific confirmation that the Google metadata SSRF endpoint is reachable when scanning Broken Crystals file/google paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsFileGoogleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to metadata.google.internal and link-local addresses — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to metadata.google.internal/computeMetadata and other cloud metadata endpoints.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/google route scan confirms GCP metadata SSRF. Show how to block Google cloud metadata fetches from user-controlled path parameters.",
     version: 1,
     enabled: true
   },
