@@ -22778,6 +22778,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-forgot-password-email-enumeration-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Pwnshop /forgot-password email enumeration route live oracle",
+    description:
+      "When scanning /forgot-password, POST returns distinct success vs no-account HTML messages for registered vs unknown emails — route-specific password-reset enumeration oracle.",
+    impactOneline:
+      "Route-specific confirmation that Pwnshop /forgot-password leaks whether an email is registered via distinct reset responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopForgotPasswordEmailEnumerationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic responses for forgot-password lookups — Pwnshop is intentional lab software.",
+      steps: [
+        "Use identical success messages for registered and unregistered emails on /forgot-password.",
+        "Never echo the submitted email address in success responses.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /forgot-password route scan confirms distinct messages for known vs unknown emails. Show route-specific username enumeration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-track-idor-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -39812,6 +39838,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-testimonials-iframe-injection-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals /testimonials iframe injection route live oracle",
+    description:
+      "When scanning /testimonials, the JS bundle reads videosrc from the URL and sets testimonials-video outerHTML to an iframe — route-specific DOM iframe injection oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals /testimonials exposes a videosrc→outerHTML iframe injection sink.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsTestimonialsIframeInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate videosrc against a strict embed URL allowlist — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never pass raw query parameters into iframe src or outerHTML assignments.",
+        "Allowlist trusted video embed origins such as youtube-nocookie.com.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /testimonials route scan confirms videosrc flows into an iframe outerHTML sink. Show route-specific embed URL validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-subscriptions-xss-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -52231,6 +52283,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/f5/ endpoint fingerprints F5 BIG-IP and /mgmt/tm/util/bash exposes bash RCE. Show BIG-IP hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-f5-bash-cve-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /mgmt/tm/util/bash route F5 CVE live oracle",
+    description:
+      "When scanning /mgmt/tm/util/bash, POST returns Unauthorized confirming the F5 BIG-IP tm.util.bash management API after /cve/f5/ fingerprint — route-specific F5 bash RCE CVE profile oracle.",
+    impactOneline:
+      "Route-specific F5 bash CVE oracle confirms management API exposure when scanning the Burp Bounty Lab /mgmt/tm/util/bash practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyF5BashCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch F5 BIG-IP appliances and restrict /mgmt/tm/util/bash to trusted management networks.",
+      steps: [
+        "Apply F5 security advisories for tm.util.bash RCE CVEs.",
+        "Block public access to BIG-IP management interfaces.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /mgmt/tm/util/bash route scan confirms F5 BIG-IP tm.util.bash management API exposure. Show BIG-IP hardening for route-specific scans.",
     version: 1,
     enabled: true
   },

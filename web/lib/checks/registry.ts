@@ -14255,6 +14255,12 @@ const burpbountyF5BashCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyF5BashCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/mgmt\/tm\/util\/bash\b/i,
+  burpbountyF5BashCveLiveOracle,
+  "Burp Bounty Lab /mgmt/tm/util/bash route scan — POST returns Unauthorized confirming F5 BIG-IP tm.util.bash management API — F5 bash RCE CVE profile oracle"
+);
+
 const burpbountyNetsweeperSystemstatusCveLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/webadmin/tools/systemstatus_remote.php", ctx.origin).toString();
@@ -37822,6 +37828,23 @@ const pwnshopForgotPasswordEmailEnumerationLiveOracle: Rule = async (ctx) => {
       missingSnippet: missingDoc.body.match(/alert-err[^<]*<\/i>\s*([^<]+)/i)?.[1]?.trim() ?? "",
       knownSnippet: knownDoc.body.match(/alert-ok[^<]*<\/i>\s*([^<]+)/i)?.[1]?.trim() ?? "",
       note: "Pwnshop POST /forgot-password returns distinct success vs no-account messages for registered vs unknown emails — password-reset enumeration oracle"
+    }
+  };
+};
+
+const pwnshopForgotPasswordEmailEnumerationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/forgot-password\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopForgotPasswordEmailEnumerationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /forgot-password route scan — POST returns distinct success vs no-account messages for registered vs unknown emails — password-reset enumeration oracle"
     }
   };
 };
@@ -82566,6 +82589,23 @@ const brokencrystalsTestimonialsIframeInjectionLiveOracle: Rule = async (ctx) =>
   };
 };
 
+const brokencrystalsTestimonialsIframeInjectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/testimonials\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsTestimonialsIframeInjectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /testimonials route scan — videosrc query param flows into testimonials-video outerHTML iframe sink — DOM iframe injection oracle"
+    }
+  };
+};
+
 const brokencrystalsTestimonialsXssLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const canary = `thugirXSS${Date.now().toString(36)}`;
@@ -92997,6 +93037,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopChatInitEmailEnumerationLiveOracle,
   pwnshopChatInitRouteLiveOracle,
   pwnshopForgotPasswordEmailEnumerationLiveOracle,
+  pwnshopForgotPasswordEmailEnumerationRouteLiveOracle,
   pwnshopTrackIdorLiveOracle,
   pwnshopTrackIdorRouteLiveOracle,
   clientSidePwnshopWishlistIdorOracle,
@@ -93918,6 +93959,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsV1UserinfoDisclosureRouteLiveOracle,
   brokencrystalsTestimonialsSqliLiveOracle,
   brokencrystalsTestimonialsIframeInjectionLiveOracle,
+  brokencrystalsTestimonialsIframeInjectionRouteLiveOracle,
   brokencrystalsTestimonialsXssLiveOracle,
   brokencrystalsSubscriptionsXssLiveOracle,
   brokencrystalsPartnerLoginXpathLiveOracle,
@@ -95023,6 +95065,7 @@ export const RULES: Record<string, Rule> = {
   burpbountyFortiosRemoteLoginRouteLiveOracle,
   burpbountyWeblogicConsoleRouteLiveOracle,
   burpbountyGraphqlQueryRouteLiveOracle,
+  burpbountyF5BashCveRouteLiveOracle,
   burpbountyXssEncodedLiveOracle,
   burpbountySsrfImgLiveOracle,
   burpbountySsrfImgRouteLiveOracle,
