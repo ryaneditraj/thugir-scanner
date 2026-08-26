@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T11:11:08.324Z",
+  "updated_at": "2026-08-26T12:07:36.804Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/vulnerabilities",
+      "source": "Escape Duck Store — published vulnerability catalog (escape.tech blog 2026; public_demo training corpus)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga2.tools.escape.tech/",
+      "source": "Escape DVGA2 — Damn Vulnerable GraphQL Application public demo (dvga2.tools.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/vulnerability-matrix",
+      "source": "atlas-crew/Chimera — 200+ intentional flaws matrix docs (chimera.atlascrew.dev catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/products/latest",
+      "source": "NeuraLegion/brokencrystals — business constraint bypass GET /api/products/latest (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/id/1",
+      "source": "NeuraLegion/brokencrystals — user ID enumeration GET /api/users/id/:id (README IDOR)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/file/azure?path=https://httpbin.org/get",
       "source": "NeuraLegion/brokencrystals — Azure metadata SSRF oracle /api/file/azure (11 UTC gap drain)",
