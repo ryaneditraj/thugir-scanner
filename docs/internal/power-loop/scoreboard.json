@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T00:30:00.000Z",
+  "updated_at": "2026-08-26T01:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2771,
-  "total_findings": 27367,
+  "total_sites_scanned": 2780,
+  "total_findings": 27496,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1972,
-  "discovery_findings": 23143,
+  "discovery_urls_added": 1977,
+  "discovery_findings": 23224,
   "improvements_shipped": 1173,
-  "last_run": "2026-08-26T00:30:00.000Z",
+  "last_run": "2026-08-26T01:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 594,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,43 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings)"
+      "note": "Stable 6/6 first-pass recall (48 findings, 35 juice-shop live oracles)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 160,
-      "focus": "vaultapp notes IDOR probe range + owasp.andreabrioschi Top 10:2025 hub oracles + brokencrystals MCP queue drain",
-      "improvements_shipped_this_run": 3
+      "findings": 81,
+      "focus": "wrongsecrets challenge-67/68/69 hub seeds + vulnforge level14/15 SSRF + crapi2.apisec.ai first scans",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings)",
-      "owasp.andreabrioschi.it: 10→12 findings (+owasp-andreabrioschi-top10-2025-hub-live-oracle +route; Apache UA retry)",
-      "vaultapp-omega.vercel.app/api/notes/1: notes IDOR probe extended to ID 200+ (rrichardson30 private note when auth succeeds)",
-      "brokencrystals.com/api/mcp: 83 findings — MCP JSON-RPC live oracles",
-      "brokencrystals.com/api/process_numbers: 27 findings — server-side JS injection oracle",
-      "wrongsecrets.herokuapp.com/error-demo/database-connection: 13 findings — JDBC credential route oracle",
-      "ist-edu-bd.vercel.app/portal: 10 findings — register-auth SQLi route oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 35 live oracles)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-67: 14 findings — undeployed-challenge + MCP oracles",
+      "wrongsecrets.herokuapp.com/challenge/challenge-68: 14 findings — undeployed-challenge oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-69: 14 findings — undeployed-challenge oracle",
+      "vulnforge-academy level14/15: 4 findings each — vulnforge-academy-level-ssrf-route-live-oracle",
+      "crapi2.apisec.ai/identity/api/v2/community/posts/recent: 10 findings — crAPI signup/OTP/SSRF/BOLA suite",
+      "crapi2.apisec.ai/workshop/api/mechanic/mechanic_report: 11 findings — mechanic-report-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key; Resend key revoked from social feeds)",
-      "vaultapp-omega Vercel checkpoint intermittently blocks login — notes IDOR oracle depends on auth session",
-      "ai-security-platform supply-chain/hacked-npm/phishing: mostly client-side catalog evidence"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "wrongsecrets challenge-67..69 fire undeployed-challenge oracles — Heroku catalog ends at challenge-66",
+      "vulnforge level14/15 share generic SSRF route oracle — level-specific challenge oracles may gap",
+      "brokencrystals graphql/spawn + pwnshop seller/preview still queued for next drain"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 48,
-    "owasp.andreabrioschi.it": 12,
-    "brokencrystals.com/api/mcp": 83,
-    "brokencrystals.com/api/process_numbers": 27,
-    "vaultapp-omega.vercel.app/api/notes/1": 2,
-    "vaultapp-omega.vercel.app/api/audit-logs": 12,
-    "vaultapp-omega.vercel.app/api/messages/1": 12,
-    "wrongsecrets.herokuapp.com/error-demo/database-connection": 13,
-    "ist-edu-bd.vercel.app/portal": 10,
-    "ist-edu-bd.vercel.app/comments": 10,
-    "ist-edu-bd.vercel.app/search": 11
+    "wrongsecrets.herokuapp.com/challenge/challenge-67": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-68": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-69": 14,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php": 4,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level15.php": 4,
+    "crapi2.apisec.ai/identity/api/v2/community/posts/recent": 10,
+    "crapi2.apisec.ai/workshop/api/mechanic/mechanic_report": 11,
+    "ist-edu-bd.vercel.app/portal": 10
   }
 }
