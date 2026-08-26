@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-25T23:18:34.728Z",
-  "total": 2652,
-  "uniqueSlugs": 2644,
+  "generatedAt": "2026-08-26T00:25:08.516Z",
+  "total": 2654,
+  "uniqueSlugs": 2646,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2634,
+    "generic": 2636,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2567,
+    "deep": 2569,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 124,
     "Security misconfiguration": 202,
     "Broken authentication": 163,
-    "Injection": 405,
+    "Injection": 407,
     "Cross-site scripting": 722,
     "Open redirect": 23,
     "general": 20,
@@ -1850,6 +1850,8 @@
     "oopssec-xff-sqli-route-live-oracle",
     "open-redirect-query-param",
     "openapi-debug-password-exposure",
+    "owasp-andreabrioschi-top10-2025-hub-live-oracle",
+    "owasp-andreabrioschi-top10-2025-hub-route-live-oracle",
     "owasp-demo-vulcanlab-llm-top10-live-oracle",
     "owasp-demo-vulcanlab-route-live-oracle",
     "owasp-genai-data-poisoning-route-live-oracle",

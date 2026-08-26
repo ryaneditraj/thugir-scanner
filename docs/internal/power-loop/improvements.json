@@ -4745,6 +4745,24 @@
       "slug": "juice-shop-demo-route-priority-drain",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: priority_discovery_urls prepended demo.owasp-juice.shop/rest/wallet/balance + /rest/track-order/1 + wrongsecrets challenge-58; route scans fire mirror-backed wallet BOLA + track-order IDOR oracles on 503 Heroku demo host; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-notes-idor-probe-range-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultappNotesProbeIds extends GET /api/notes/:id sweep to seeded ID 200/217 + range 100-350 (parity with messages oracle); manual GET /api/notes/200 as rootadmin returns private note owned by rrichardson30; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp.andreabrioschi.it",
+      "slug": "owasp-andreabrioschi-top10-2025-hub-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /data/vulnerabilities.json lists interactive sqli/xss/idor/csrf demos + /js/simulator.js AttackSimulator with ' OR '1'='1; owasp.andreabrioschi.it/ findings 10→12 (+owasp-andreabrioschi-top10-2025-hub-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp.andreabrioschi.it",
+      "slug": "owasp-andreabrioschi-scanner-ua-retry",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: fetchDoc retries with plain BROWSER_UA when andreabrioschi.it returns Apache 403 Forbidden for ThugirScanner UA suffix — enables full SPA crawl of vulnerability module bundles; benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }

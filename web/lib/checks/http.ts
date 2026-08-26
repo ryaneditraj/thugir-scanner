@@ -41,6 +41,17 @@ export function isVercelSecurityCheckpoint(doc: FetchedDoc): boolean {
   );
 }
 
+/** Some Apache hosts (e.g. owasp.andreabrioschi.it) return 403 only for the ThugirScanner UA suffix. */
+function isBlockedScannerUserAgent(doc: FetchedDoc, url: string): boolean {
+  if (doc.status !== 403) return false;
+  if (!/Forbidden|don't have permission to access/i.test(doc.body)) return false;
+  try {
+    return /andreabrioschi\.it$/i.test(new URL(url).hostname);
+  } catch {
+    return false;
+  }
+}
+
 // Map a thrown fetch error to a short, user-facing reason.
 function describeFetchError(e: unknown): string {
   const err = e as { name?: string; code?: string; cause?: { code?: string; message?: string } };
@@ -306,9 +317,20 @@ export async function fetchDoc(
   } = {}
 ): Promise<FetchedDoc> {
   const first = await fetchDocOnce(url, UA, opts);
-  if (!isVercelSecurityCheckpoint(first)) return first;
+  if (
+    !isVercelSecurityCheckpoint(first) &&
+    !isBlockedScannerUserAgent(first, url)
+  ) {
+    return first;
+  }
   const retry = await fetchDocOnce(url, BROWSER_UA, opts);
-  if (retry.status > 0 && !isVercelSecurityCheckpoint(retry)) return retry;
+  if (
+    retry.status > 0 &&
+    !isVercelSecurityCheckpoint(retry) &&
+    !isBlockedScannerUserAgent(retry, url)
+  ) {
+    return retry;
+  }
   return first;
 }
 

@@ -1565,6 +1565,8 @@ const DEEP_RULES = new Set<string>([
   "clientSidePrototypePollutionEvidence",
   "clientSideJwtNoneEvidence",
   "clientSideOwaspEducationalLabEvidence",
+  "owaspAndreabrioschiTop102025HubLiveOracle",
+  "owaspAndreabrioschiTop102025HubRouteLiveOracle",
   "clientSideOwaspEducationalLabStubEvidence",
   "clientSideOwaspTop10IntroHubEvidence",
   "serverSideEvalEvidence",
