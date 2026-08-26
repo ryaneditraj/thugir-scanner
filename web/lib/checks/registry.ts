@@ -47037,6 +47037,95 @@ async function zerohealthSearchReflectedXssRouteLiveOracle(
   };
 }
 
+async function zerohealthSearchAppointmentsTypeRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/search\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/(?:\?|&)type=appointments\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const doctorToken = await zeroHealthLogin(ctx, origin, "doctor@test.com");
+    if (doctorToken) {
+      const sqliUrl = `${origin}/api/search?q=${encodeURIComponent("' OR '1'='1")}&type=appointments`;
+      const doc = await ctx.probe.get(sqliUrl, {
+        headers: { Authorization: `Bearer ${doctorToken}` },
+        maxBytes: 8192,
+        timeoutMs: 15000
+      });
+      if (isZeroHealthJsonBody(doc.body)) {
+        if (
+          /syntax error|unterminated quoted string|SQL/i.test(doc.body) &&
+          doc.status >= 400
+        ) {
+          return {
+            fired: true,
+            confidence: 0.93,
+            evidence: {
+              url: sqliUrl,
+              snippet: doc.body.slice(0, 280).trim(),
+              scannedUrl: pageUrl,
+              note: "Zero Health GET /api/search?type=appointments embeds q into ILIKE SQL — error-based SQLi oracle"
+            }
+          };
+        }
+        if (
+          doc.status >= 200 &&
+          doc.status < 300 &&
+          /results/i.test(doc.body) &&
+          (doc.body.match(/\{/g)?.length ?? 0) > 4
+        ) {
+          return {
+            fired: true,
+            confidence: 0.91,
+            evidence: {
+              url: sqliUrl,
+              snippet: doc.body.slice(0, 280).trim(),
+              scannedUrl: pageUrl,
+              note: "Zero Health /api/search?type=appointments OR injection returns expanded appointment rows — SQLi oracle"
+            }
+          };
+        }
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "search appointments type", sample: "type=appointments" }
+  ];
+  const markers = [
+    {
+      label: "appointments search SQL interpolation",
+      re: /type === 'appointments'[\s\S]{0,180}reason ILIKE '%\$\{q\}%'/i
+    },
+    { label: "search appointments join query", re: /FROM appointments a JOIN users p ON a\.patient_id/i },
+    { label: "search endpoint", re: /app\.get\('\/api\/search'/i },
+    { label: "SQL injection in search query", re: /ILIKE '%\$\{q\}%'|searchQuery.*\$\{q\}/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/search?type=appointments interpolates q into ILIKE SQL — appointments search SQLi oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
 async function zerohealthAiChatSqliRouteLiveOracle(
   ctx: RuleContext
 ): Promise<RuleResult> {
@@ -47687,6 +47776,116 @@ async function zerohealthVerifyTokenRouteLiveOracle(
       markers: hits.slice(0, 4),
       scannedUrl: pageUrl,
       note: "Zero Health /api/auth/verify-token accepts user-controlled algorithm:none — JWT insecure deserialization oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthAppointmentsRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/appointments\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const patientToken = await zeroHealthLogin(ctx, origin, "patient@test.com");
+    if (patientToken) {
+      const marker = `thugirZhAppt${Date.now().toString(36)}`;
+      const postUrl = `${origin}/api/appointments`;
+      const postDoc = await ctx.probe.get(postUrl, {
+        method: "POST",
+        body: JSON.stringify({
+          doctor_id: 1,
+          appointment_date: new Date(Date.now() + 86400000).toISOString(),
+          reason: `<img src=x onerror=${marker}>`,
+          notes: ""
+        }),
+        headers: {
+          Authorization: `Bearer ${patientToken}`,
+          "Content-Type": "application/json"
+        },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      });
+      if (
+        isZeroHealthJsonBody(postDoc.body) &&
+        postDoc.status >= 200 &&
+        postDoc.status < 300 &&
+        /reason|appointment_date|doctor_id/i.test(postDoc.body)
+      ) {
+        const doctorToken = await zeroHealthLogin(ctx, origin, "doctor@test.com");
+        if (doctorToken) {
+          const listDoc = await ctx.probe.get(postUrl, {
+            headers: { Authorization: `Bearer ${doctorToken}` },
+            maxBytes: 8192,
+            timeoutMs: 15000
+          });
+          if (
+            isZeroHealthJsonBody(listDoc.body) &&
+            listDoc.status >= 200 &&
+            listDoc.status < 300 &&
+            new RegExp(marker, "i").test(listDoc.body)
+          ) {
+            return {
+              fired: true,
+              confidence: 0.94,
+              evidence: {
+                url: postUrl,
+                snippet: listDoc.body.slice(0, 280).trim(),
+                scannedUrl: pageUrl,
+                note: "Zero Health POST /api/appointments stores unsanitized reason HTML and GET returns it to doctors — stored XSS via appointment booking oracle"
+              }
+            };
+          }
+        }
+        return {
+          fired: true,
+          confidence: 0.91,
+          evidence: {
+            url: postUrl,
+            snippet: postDoc.body.slice(0, 240).trim(),
+            scannedUrl: pageUrl,
+            note: "Zero Health POST /api/appointments accepts appointment reason without sanitization — stored XSS training oracle"
+          }
+        };
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "appointments API route", sample: "/api/appointments" }
+  ];
+  const markers = [
+    { label: "appointments GET endpoint", re: /app\.get\('\/api\/appointments'|\/api\/appointments/i },
+    {
+      label: "stored XSS via appointment booking",
+      re: /Stored XSS via Appointment Booking|reason for visit/i
+    },
+    {
+      label: "appointment reason unsanitized",
+      re: /Stored XSS vulnerability[\s\S]{0,120}notes are stored without sanitization/i
+    },
+    { label: "appointment notes update route", re: /\/api\/appointments\/:id\/notes/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/appointments stores appointment reason without sanitization — stored XSS oracle (server.js when OSS API is not deployed on scanned host)"
     }
   };
 }
@@ -84822,6 +85021,40 @@ function brokencrystalsFormatDdMmYyyy(d: Date): string {
   return `${dd}-${mm}-${yyyy}`;
 }
 
+function brokencrystalsProductsDateParamSets(
+  origin: string,
+  shortFrom: Date,
+  shortTo: Date
+): { shortUrl: string; longUrl: string; paramStyle: string }[] {
+  const sets: { shortUrl: string; longUrl: string; paramStyle: string }[] = [];
+  const ddMm = (from: string, to: string) => {
+    const shortUrl = new URL("/api/products", origin);
+    shortUrl.searchParams.set("date_from", from);
+    shortUrl.searchParams.set("date_to", to);
+    const longUrl = new URL("/api/products", origin);
+    longUrl.searchParams.set("date_from", "01-01-2000");
+    longUrl.searchParams.set("date_to", "31-12-2099");
+    return { shortUrl: shortUrl.toString(), longUrl: longUrl.toString(), paramStyle: "date_from/date_to" };
+  };
+  sets.push(
+    ddMm(brokencrystalsFormatDdMmYyyy(shortFrom), brokencrystalsFormatDdMmYyyy(shortTo))
+  );
+  const isoShortFrom = shortFrom.toISOString().slice(0, 10);
+  const isoShortTo = shortTo.toISOString().slice(0, 10);
+  const isoShortUrl = new URL("/api/products", origin);
+  isoShortUrl.searchParams.set("dateStart", isoShortFrom);
+  isoShortUrl.searchParams.set("dateEnd", isoShortTo);
+  const isoLongUrl = new URL("/api/products", origin);
+  isoLongUrl.searchParams.set("dateStart", "2000-01-01");
+  isoLongUrl.searchParams.set("dateEnd", "2099-12-31");
+  sets.push({
+    shortUrl: isoShortUrl.toString(),
+    longUrl: isoLongUrl.toString(),
+    paramStyle: "dateStart/dateEnd"
+  });
+  return sets;
+}
+
 async function probeBrokencrystalsProductsDateManipulation(
   ctx: RuleContext
 ): Promise<RuleResult | null> {
@@ -84832,55 +85065,60 @@ async function probeBrokencrystalsProductsDateManipulation(
   const shortTo = new Date(now);
   const shortFrom = new Date(now);
   shortFrom.setMonth(shortFrom.getMonth() - 6);
-  const shortUrl = new URL("/api/products", ctx.origin);
-  shortUrl.searchParams.set("date_from", brokencrystalsFormatDdMmYyyy(shortFrom));
-  shortUrl.searchParams.set("date_to", brokencrystalsFormatDdMmYyyy(shortTo));
-  const longUrl = new URL("/api/products", ctx.origin);
-  longUrl.searchParams.set("date_from", "01-01-2000");
-  longUrl.searchParams.set("date_to", "31-12-2099");
-  const shortStart = Date.now();
-  const shortDoc = await ctx.probe.get(shortUrl.toString(), {
-    headers: { authorization: token },
-    maxBytes: 65536,
-    timeoutMs: 20000
-  });
-  const shortElapsedMs = Date.now() - shortStart;
-  const longStart = Date.now();
-  const longDoc = await ctx.probe.get(longUrl.toString(), {
-    headers: { authorization: token },
-    maxBytes: 65536,
-    timeoutMs: 20000
-  });
-  const longElapsedMs = Date.now() - longStart;
-  if (shortDoc.status < 200 || shortDoc.status >= 400) return null;
-  if (longDoc.status < 200 || longDoc.status >= 400) return null;
-  let shortCount = 0;
-  let longCount = 0;
-  try {
-    const shortItems = JSON.parse(shortDoc.body);
-    const longItems = JSON.parse(longDoc.body);
-    if (!Array.isArray(shortItems) || !Array.isArray(longItems)) return null;
-    shortCount = shortItems.length;
-    longCount = longItems.length;
-  } catch {
-    return null;
-  }
-  const performanceImpact = longElapsedMs >= 1200 && longElapsedMs > shortElapsedMs + 800;
-  const dataExpansion = longCount > shortCount && longCount >= 3;
-  if (!performanceImpact && !dataExpansion) return null;
-  return {
-    fired: true,
-    confidence: performanceImpact && dataExpansion ? 0.94 : 0.92,
-    evidence: {
-      shortUrl: shortUrl.toString(),
-      longUrl: longUrl.toString(),
-      shortCount,
-      longCount,
-      shortElapsedMs,
-      longElapsedMs,
-      note: "Broken Crystals GET /api/products accepts unbounded date_from/date_to (DD-MM-YYYY) without server-side range limits — wide ranges return more catalog rows and significant query latency (README date-manipulation oracle)"
+  for (const { shortUrl, longUrl, paramStyle } of brokencrystalsProductsDateParamSets(
+    ctx.origin,
+    shortFrom,
+    shortTo
+  )) {
+    const shortStart = Date.now();
+    const shortDoc = await ctx.probe.get(shortUrl, {
+      headers: { authorization: token },
+      maxBytes: 65536,
+      timeoutMs: 20000
+    });
+    const shortElapsedMs = Date.now() - shortStart;
+    const longStart = Date.now();
+    const longDoc = await ctx.probe.get(longUrl, {
+      headers: { authorization: token },
+      maxBytes: 65536,
+      timeoutMs: 20000
+    });
+    const longElapsedMs = Date.now() - longStart;
+    if (shortDoc.status < 200 || shortDoc.status >= 400) continue;
+    if (longDoc.status < 200 || longDoc.status >= 400) continue;
+    let shortCount = 0;
+    let longCount = 0;
+    try {
+      const shortItems = JSON.parse(shortDoc.body);
+      const longItems = JSON.parse(longDoc.body);
+      if (!Array.isArray(shortItems) || !Array.isArray(longItems)) continue;
+      shortCount = shortItems.length;
+      longCount = longItems.length;
+    } catch {
+      continue;
     }
-  };
+    const performanceImpact = longElapsedMs >= 1200 && longElapsedMs > shortElapsedMs + 800;
+    const dataExpansion = longCount > shortCount && longCount >= 3;
+    if (!performanceImpact && !dataExpansion) continue;
+    return {
+      fired: true,
+      confidence: performanceImpact && dataExpansion ? 0.94 : 0.92,
+      evidence: {
+        shortUrl,
+        longUrl,
+        shortCount,
+        longCount,
+        shortElapsedMs,
+        longElapsedMs,
+        paramStyle,
+        note:
+          paramStyle === "dateStart/dateEnd"
+            ? "Broken Crystals GET /api/products accepts unbounded dateStart/dateEnd (ISO) without server-side range limits — wide ranges return more catalog rows and significant query latency (date-manipulation oracle)"
+            : "Broken Crystals GET /api/products accepts unbounded date_from/date_to (DD-MM-YYYY) without server-side range limits — wide ranges return more catalog rows and significant query latency (README date-manipulation oracle)"
+      }
+    };
+  }
+  return null;
 }
 
 const brokencrystalsProductsDateManipulationLiveOracle: Rule = async (ctx) => {
@@ -94089,6 +94327,8 @@ export const RULES: Record<string, Rule> = {
   zerohealthAuthLoginRouteLiveOracle,
   zerohealthVerifyTokenRouteLiveOracle,
   zerohealthPrescriptionsRouteLiveOracle,
+  zerohealthAppointmentsRouteLiveOracle,
+  zerohealthSearchAppointmentsTypeRouteLiveOracle,
   zerohealthDebugTokenRouteLiveOracle,
   zerohealthDebugConnectionRouteLiveOracle,
   zerohealthInfoRouteLiveOracle,

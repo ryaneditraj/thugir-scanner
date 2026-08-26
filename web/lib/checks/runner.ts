@@ -2223,6 +2223,8 @@ const DEEP_RULES = new Set<string>([
   "zerohealthAuthLoginRouteLiveOracle",
   "zerohealthVerifyTokenRouteLiveOracle",
   "zerohealthPrescriptionsRouteLiveOracle",
+  "zerohealthAppointmentsRouteLiveOracle",
+  "zerohealthSearchAppointmentsTypeRouteLiveOracle",
   "zerohealthDebugTokenRouteLiveOracle",
   "zerohealthDebugConnectionRouteLiveOracle",
   "zerohealthInfoRouteLiveOracle",
@@ -11668,6 +11670,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /zerohealth\.aliyu\.dev|zero-health\.vercel\.app/i.test(origin) &&
         /\/api\/patients\b/i.test(targetInput) &&
         p.slug === "zerohealth-patients-route-live-oracle"
+      )
+        return -4;
+      if (
+        /zerohealth\.aliyu\.dev|zero-health\.vercel\.app/i.test(origin) &&
+        /\/api\/appointments\b/i.test(targetInput) &&
+        p.slug === "zerohealth-appointments-route-live-oracle"
+      )
+        return -4;
+      if (
+        /zerohealth\.aliyu\.dev|zero-health\.vercel\.app/i.test(origin) &&
+        /\/api\/search\b/i.test(targetInput) &&
+        /(?:\?|&)type=appointments\b/i.test(targetInput) &&
+        p.slug === "zerohealth-search-appointments-type-route-live-oracle"
       )
         return -4;
       if (/public-firing-range\.appspot\.com/i.test(origin) && p.slug.startsWith("firing-range-")) return -2;

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-26T16:20:12.906Z",
-  "total": 2687,
-  "uniqueSlugs": 2679,
+  "generatedAt": "2026-08-26T17:09:40.785Z",
+  "total": 2689,
+  "uniqueSlugs": 2681,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2669,
+    "generic": 2671,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2602,
+    "deep": 2604,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 124,
     "Security misconfiguration": 203,
     "Broken authentication": 168,
-    "Injection": 418,
-    "Cross-site scripting": 723,
+    "Injection": 419,
+    "Cross-site scripting": 724,
     "Open redirect": 24,
     "general": 20,
     "SSRF": 18,
@@ -2696,6 +2696,7 @@
     "zero-bank-transfer-funds-route-live-oracle",
     "zerohealth-admin-users-route-live-oracle",
     "zerohealth-ai-chat-sqli-route-live-oracle",
+    "zerohealth-appointments-route-live-oracle",
     "zerohealth-auth-login-route-live-oracle",
     "zerohealth-chatbot-chat-route-live-oracle",
     "zerohealth-chatbot-history-route-live-oracle",
@@ -2721,6 +2722,7 @@
     "zerohealth-rate-limiting-route-live-oracle",
     "zerohealth-reports-generate-route-live-oracle",
     "zerohealth-reset-password-reflected-xss-route-live-oracle",
+    "zerohealth-search-appointments-type-route-live-oracle",
     "zerohealth-search-reflected-xss-route-live-oracle",
     "zerohealth-stored-xss-route-live-oracle",
     "zerohealth-upload-advanced-route-live-oracle",
