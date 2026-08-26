@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-25T23:15:00.000Z",
+  "updated_at": "2026-08-26T00:06:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://demo.owasp-juice.shop/rest/wallet/balance",
@@ -18,6 +18,31 @@
     }
   ],
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/mcp",
+      "source": "NeuraLegion/brokencrystals — MCP JSON-RPC endpoint with SQLi/SSTI/LFI/RCE tool oracles (Bright Security MCP blog 2025)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/process_numbers",
+      "source": "NeuraLegion/brokencrystals — server-side JS injection via processing_expression (MCP spawn_process/process_numbers class)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supply-chain",
+      "source": "ai-security-platform — Challenge 08 supply-chain typosquat/postinstall lab (14-challenge OWASP Top 10 Vercel demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/hacked-npm",
+      "source": "ai-security-platform — Challenge 13 hacked npm packages lab (axios RAT/React RCE/Shai-Hulud 2025-2026 supply chain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/phishing",
+      "source": "ai-security-platform — Challenge 10 AI-assisted phishing clone lab (OWASP Top 10 legal/social category)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owasp.andreabrioschi.it/",
       "source": "OWASP Interactive Learning Lab — Top 10:2025 visual demos (andreabrioschi.it public demo)",
