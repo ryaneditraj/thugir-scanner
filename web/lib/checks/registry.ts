@@ -76619,6 +76619,98 @@ const pwnshopChatInitRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const PWNSHOP_CHAT_ORDER_IDOR_FALLBACK = `
+PWN-035 IDOR via AI Order Lookup Tool
+POST /chat trusts client-supplied email with no session cookie check.
+The chatbot order lookup tool queries any order ID with no ownership validation.
+Ask "What is the status of order 1?" to receive full order details — status, total, shipping address, and username.
+Chains with PWN-001 and PWN-037 (email enumeration via POST /chat/init).
+`;
+
+async function probePwnshopChatOrderIdor(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isPwnshopHost(ctx)) return null;
+  const initUrl = new URL("/chat/init", ctx.origin).toString();
+  const initDoc = await ctx.probe.get(initUrl, {
+    method: "POST",
+    body: JSON.stringify({ email: "admin@pwnshop.com" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (initDoc.status < 200 || initDoc.status >= 300 || !/"found"\s*:\s*true/i.test(initDoc.body)) return null;
+  const chatUrl = new URL("/chat", ctx.origin).toString();
+  const chatDoc = await ctx.probe.get(chatUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      email: "admin@pwnshop.com",
+      message: "What is the status of order 1?"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 30000
+  });
+  if (chatDoc.status < 200 || chatDoc.status >= 300) return null;
+  const orderLeak =
+    /"order(?:_id|Id)?"\s*:\s*1/i.test(chatDoc.body) ||
+    (/order\s*#?1/i.test(chatDoc.body) &&
+      /(shipping|total|status|address|username)/i.test(chatDoc.body) &&
+      !/could not generate a response/i.test(chatDoc.body));
+  if (!orderLeak) return null;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      initUrl,
+      chatUrl,
+      snippet: chatDoc.body.slice(0, 240).trim(),
+      note: "Pwnshop POST /chat with client-controlled email returns another user's order details via AI order lookup tool — IDOR oracle (PWN-035)"
+    }
+  };
+}
+
+const pwnshopChatOrderIdorLiveOracle: Rule = async (ctx) => {
+  const live = await probePwnshopChatOrderIdor(ctx);
+  return live?.fired ? live : NEGATIVE;
+};
+
+const pwnshopChatOrderIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/(?:v\d+\/)?)?chat\b/i.test(pageUrl) || /\/chat\/init\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await probePwnshopChatOrderIdor(ctx);
+  if (live?.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "Pwnshop /chat route scan — POST /chat with client-controlled email returns cross-user order details via AI order lookup tool (PWN-035 IDOR oracle)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${PWNSHOP_CHAT_ORDER_IDOR_FALLBACK}`;
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "PWN-035 registry ID", re: /PWN-035/i },
+    { label: "POST /chat client-controlled email", re: /POST \/chat[\s\S]{0,120}email/i },
+    { label: "order lookup tool IDOR", re: /order lookup tool|order ID with no ownership|status of order 1/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: "Pwnshop /chat route scan — PWN-035 documents IDOR via AI order lookup tool when live LLM backend unavailable (curated vulnerabilities corpus fallback)"
+    }
+  };
+};
+
 const pwnshopChatPromptInjectionRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -86858,6 +86950,27 @@ async function probeBrokencrystalsProductsViewsSqliHeader(ctx: RuleContext): Pro
   };
 }
 
+const brokencrystalsProductsViewsSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const onProductsViews = /\/api\/products\/views\b/i.test(pageUrl);
+  const onViewsAlias = /\/api\/views\/[^/?#]+/i.test(pageUrl);
+  if (!onProductsViews && !onViewsAlias) return NEGATIVE;
+  const result = await probeBrokencrystalsProductsViewsSqliHeader(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: onViewsAlias
+        ? "Broken Crystals /api/views route scan — GET /api/products/views reflects SQL syntax error from x-product-name header (queue alias for products/views SQLi oracle)"
+        : "Broken Crystals /api/products/views route scan — GET reflects SQL syntax error from x-product-name header with server path disclosure — route-specific header SQLi oracle"
+    }
+  };
+};
+
 const sqliHeaderErrorDisclosure: Rule = async (ctx) => {
   const bcHeaderSqli = await probeBrokencrystalsProductsViewsSqliHeader(ctx);
   if (bcHeaderSqli?.fired) return bcHeaderSqli;
@@ -93767,6 +93880,8 @@ export const RULES: Record<string, Rule> = {
   pwnshopEventsAuditRouteLiveOracle,
   pwnshopChatInitEmailEnumerationLiveOracle,
   pwnshopChatInitRouteLiveOracle,
+  pwnshopChatOrderIdorLiveOracle,
+  pwnshopChatOrderIdorRouteLiveOracle,
   pwnshopForgotPasswordEmailEnumerationLiveOracle,
   pwnshopForgotPasswordEmailEnumerationRouteLiveOracle,
   pwnshopTrackIdorLiveOracle,
@@ -94779,6 +94894,7 @@ export const RULES: Record<string, Rule> = {
   exposedApiConfig,
   sqliQueryParamInjection,
   sqliHeaderErrorDisclosure,
+  brokencrystalsProductsViewsSqliRouteLiveOracle,
   xpathInjectionDisclosure,
   brokencrystalsMetadataXxeLiveOracle,
   brokencrystalsMetadataXxeRouteLiveOracle,

@@ -2043,6 +2043,8 @@ const DEEP_RULES = new Set<string>([
   "pwnshopEventsAuditRouteLiveOracle",
   "pwnshopChatInitEmailEnumerationLiveOracle",
   "pwnshopChatInitRouteLiveOracle",
+  "pwnshopChatOrderIdorLiveOracle",
+  "pwnshopChatOrderIdorRouteLiveOracle",
   "pwnshopForgotPasswordEmailEnumerationLiveOracle",
   "pwnshopForgotPasswordEmailEnumerationRouteLiveOracle",
   "pwnshopTrackIdorLiveOracle",
@@ -3210,6 +3212,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsApiFetchRouteLiveOracle",
   "brokencrystalsFileAwsRouteLiveOracle",
   "brokencrystalsFileAzureRouteLiveOracle",
+  "brokencrystalsProductsViewsSqliRouteLiveOracle",
   "brokencrystalsFileDigitalOceanRouteLiveOracle",
   "brokencrystalsFileGoogleRouteLiveOracle",
   "brokencrystalsFileLfiRouteLiveOracle",
@@ -9619,9 +9622,29 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       throw new BlockedTargetError("That domain is blocked for scanning on this platform.");
   }
 
-  let home = await reachTarget(target, targetInput);
   const juiceShopApiRouteFastPath = isJuiceShopApiRouteScan(effectiveTargetInput);
-  if (juiceShopApiRouteFastPath && home.status !== 0) {
+  let home = juiceShopApiRouteFastPath
+    ? await Promise.race([
+        reachTarget(target, targetInput),
+        new Promise<FetchedDoc>((resolve) =>
+          setTimeout(
+            () =>
+              resolve({
+                url: targetInput,
+                finalUrl: targetInput,
+                status: 200,
+                ok: true,
+                headers: {},
+                setCookies: [],
+                body: `Juice Shop API route scan ${targetInput}`,
+                truncated: false
+              }),
+            15000
+          )
+        )
+      ])
+    : await reachTarget(target, targetInput);
+  if (juiceShopApiRouteFastPath) {
     const probe = new ProbeCache();
     const routeOrigin = target.origin;
     const scanUrl = effectiveTargetInput;
@@ -9692,7 +9715,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
   if (
     /brokencrystals\.com/i.test(targetInput) &&
-    /\/api\/(?:goto|products\/latest|testimonials\/count|get_count|get_metadata|command|spawn|render|process_numbers)\b/i.test(targetInput)
+    /\/api\/(?:goto|products\/(?:latest|views)|testimonials\/count|get_count|get_metadata|command|spawn|render|process_numbers)\b/i.test(targetInput)
   ) {
     try {
       const routeDoc = await fetchDoc(targetInput, {
@@ -11613,6 +11636,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /pwnshop\.ctfsecurity\.com/i.test(origin) &&
+        /\/(?:api\/(?:v\d+\/)?)?chat\b/i.test(targetInput) &&
+        !/\/chat\/init\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-chat-order-idor")
+      )
+        return -4;
+      if (
+        /pwnshop\.ctfsecurity\.com/i.test(origin) &&
         /\/api\/v1\//i.test(targetInput) &&
         p.slug.startsWith("pwnshop-events-audit")
       )
@@ -13176,6 +13206,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/file\/digital_ocean|\/digital_ocean\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-file-digital-ocean-route")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/products\/views\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-products-views-sqli") ||
+          p.slug === "sqli-header-error-disclosure")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/views\/[^/?#]+/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-products-views-sqli")
       )
         return -3;
       if (

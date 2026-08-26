@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-26T15:07:26.699Z",
-  "total": 2684,
-  "uniqueSlugs": 2676,
+  "generatedAt": "2026-08-26T16:20:12.906Z",
+  "total": 2687,
+  "uniqueSlugs": 2679,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2666,
+    "generic": 2669,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2599,
+    "deep": 2602,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 551,
+    "Broken access control": 553,
     "Exposed secret": 111,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 124,
     "Security misconfiguration": 203,
     "Broken authentication": 168,
-    "Injection": 417,
+    "Injection": 418,
     "Cross-site scripting": 723,
     "Open redirect": 24,
     "general": 20,
@@ -188,6 +188,7 @@
     "brokencrystals-products-date-manipulation-live-oracle",
     "brokencrystals-products-date-manipulation-route-live-oracle",
     "brokencrystals-products-latest-limit-bypass-live-oracle",
+    "brokencrystals-products-views-sqli-route-live-oracle",
     "brokencrystals-render-dot-ssti-live-oracle",
     "brokencrystals-render-dot-ssti-route-live-oracle",
     "brokencrystals-safe-files-rfi-live-oracle",
@@ -1933,6 +1934,8 @@
     "pwnshop-cart-checkout-route-live-oracle",
     "pwnshop-chat-init-email-enumeration-live-oracle",
     "pwnshop-chat-init-route-live-oracle",
+    "pwnshop-chat-order-idor-live-oracle",
+    "pwnshop-chat-order-idor-route-live-oracle",
     "pwnshop-chat-prompt-injection-live-oracle",
     "pwnshop-chat-prompt-injection-route-live-oracle",
     "pwnshop-checkout-hpp-coupon-live-oracle",

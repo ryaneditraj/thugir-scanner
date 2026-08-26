@@ -4961,6 +4961,24 @@
       "slug": "fauxbank-search-sqli-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/search returns injected:true for OR 1=1 after admin login; pentest-fauxbank.vercel.app/api/search findings 14→15 (+fauxbank-search-sqli-route-live-oracle with scannedUrl); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-products-views-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/products/views x-product-name:Opal' returns unterminated quoted string + products.controller.js path; brokencrystals.com/api/products/views findings 77→78 (+brokencrystals-products-views-sqli-route-live-oracle); brokencrystals.com/api/views/test-product findings 16→22 (+route alias); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-order-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /chat trusts client email; PWN-035 vulnerabilities corpus documents AI order lookup IDOR when LLM backend unavailable; pwnshop.ctfsecurity.com/chat findings 46→47 (+pwnshop-chat-order-idor-route-live-oracle corpus fallback); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-api-route-fast-path-timeout-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isJuiceShopApiRouteScan now always fast-paths with 15s reachTarget race; demo.owasp-juice.shop/rest/wallet/balance scan 1200000ms timeout→1.5s (2 findings); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
