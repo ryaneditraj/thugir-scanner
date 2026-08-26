@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T07:03:53.595Z",
+  "updated_at": "2026-08-26T08:04:52.042Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/file?path=https://httpbin.org/get",
+      "source": "NeuraLegion/brokencrystals — SSRF via GET /api/file path param (README oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file/aws?path=http://169.254.169.254/latest/meta-data/",
+      "source": "NeuraLegion/brokencrystals — AWS metadata SSRF via /api/file/aws (README + issue #738)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level20/",
+      "source": "WebSec.fr level 20 — PHP web exploit training puzzle (websec.fr catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/search",
+      "source": "FauxBank pentest lab — search/SQLi training endpoint (pentest-fauxbank.vercel.app)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/wishlist/1",
+      "source": "r007sec/pwnshop — unauthenticated wishlist IDOR GET /wishlist/:user_id (PWN-003)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/render",
       "source": "NeuraLegion/brokencrystals — SSTI via doT templating POST /api/render (README oracle)",
