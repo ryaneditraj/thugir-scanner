@@ -4895,6 +4895,24 @@
       "slug": "brokencrystals-photo-bfla-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: DELETE /api/users/one/{id}/photo?isAdmin=true succeeds for non-admin JWT after user registration; brokencrystals.com/api/users/one/admin/photo findings 73→75 (+brokencrystals-photo-bfla-live-oracle +brokencrystals-photo-bfla-route-live-oracle); benchmark juice-shop 44 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-google-metadata-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/file/google?path=http://metadata.google.internal/computeMetadata/v1/instance/ returns instance/oslogin/project metadata tree (NeuraLegion cloud.providers.metadata.ts); brokencrystals.com/api/file/google findings 76→77 (+brokencrystals-google-metadata-ssrf-live-oracle +brokencrystals-file-google-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-iac-terraform-tls-key-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: GET /infrastructure/terraform/networking.tf exposes inline RSA private_key in aws_iam_server_certificate (v20.2 iacLeakedKeyChallenge); juice-shop.herokuapp.com/infrastructure/terraform/networking.tf findings 49→51 (+juice-shop-iac-terraform-tls-key-live-oracle +juice-shop-iac-terraform-tls-key-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level22-oop-eval-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level22/index.php + source.php confirm 21-char eval restriction, OOP class A flag parts, and strcmp unset from function blacklist; websec.fr/level22/ findings 6→7 (+websec-level22-oop-eval-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
     }
   ]
 }
