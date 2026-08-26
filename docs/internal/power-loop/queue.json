@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T06:06:00.000Z",
+  "updated_at": "2026-08-26T07:03:53.595Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/render",
+      "source": "NeuraLegion/brokencrystals — SSTI via doT templating POST /api/render (README oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/metadata",
+      "source": "NeuraLegion/brokencrystals — XXE on POST /api/metadata (README + issue #756)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/download",
+      "source": "r007sec/pwnshop — PWN-038 path traversal entry ?file= (GitHub README Key URLs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/chat",
+      "source": "r007sec/pwnshop — LLM chatbot prompt-injection entry (GitHub README Key URLs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level19/",
+      "source": "WebSec.fr level 19 — PHP rand() seed / CSRF token oracle (websec.fr catalog)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vault-notes-frontend-gules.vercel.app/",
       "source": "Raghavtripathii/vault-notes-vapt — SQLi/IDOR/XSS/plaintext-password JWT-leak training app (GitHub README live demo)",
