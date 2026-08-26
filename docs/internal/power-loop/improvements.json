@@ -4763,6 +4763,24 @@
       "slug": "owasp-andreabrioschi-scanner-ua-retry",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: fetchDoc retries with plain BROWSER_UA when andreabrioschi.it returns Apache 403 Forbidden for ThugirScanner UA suffix — enables full SPA crawl of vulnerability module bundles; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-hacked-npm-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/hacked-npm returns HTTP 307 Location /login?next=%2Fchallenges%2Fhacked-npm; routeRe alias + aiSecurityCatalogOrLoginGatedRouteOracle with pageUrl route segment; ai-security-platform-iota.vercel.app/challenges/hacked-npm findings 6→7 (+ai-security-hacked-npm-packages-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-phishing-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/phishing returns HTTP 307 Location /login?next=%2Fchallenges%2Fphishing; routeRe alias /challenges/(?:ai-phishing|phishing) + auth-gated catalog oracle; ai-security-platform-iota.vercel.app/challenges/phishing findings 6→7 (+ai-security-ai-phishing-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /redirect SPA bundle documents approved IST domain allowlist + countdown /redirect?url= open redirect training; ist-edu-bd.vercel.app/redirect findings 10→11 (+ist-edu-redirect-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
