@@ -92184,6 +92184,78 @@ const clientSideOwaspVwadEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- VWAD OopsSec Store offline CTF e-commerce lab listing --------------------------------
+const clientSideVwadOopssecStoreEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/oopssec-store/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "OopsSec Store VWAD listing",
+      re: /OopsSec Store[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "Offline deploy availability",
+      re: /available offline|listed in the OWASP Vulnerable Web Applications Directory/i
+    },
+    {
+      label: "GitHub Pages live demo URL",
+      re: /koadt\.github\.io\/oss-oopssec-store/i
+    },
+    {
+      label: "GitHub source repository",
+      re: /github\.com\/kOaDT\/oss-oopssec-store/i
+    },
+    {
+      label: "Next.js TypeScript stack tags",
+      re: /JavaScript,\s*TypeScript,\s*Node\.js/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store VWAD listing links koadt.github.io/oss-oopssec-store GitHub Pages CTF with 35 flags across 11 OWASP Top 10 chapters"
+    }
+  };
+};
+
+const vwadOopssecStoreRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/vwad\.owasp\.org\/app\/oopssec-store/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideVwadOopssecStoreEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  const githubPages = await ctx.probe.get("https://koadt.github.io/oss-oopssec-store/", {
+    maxBytes: 65536,
+    timeoutMs: 15000
+  });
+  let roadmapConfirmed = false;
+  if (githubPages.status >= 200 && githubPages.status < 400) {
+    roadmapConfirmed =
+      /35 flags across 11 chapters|intentionally vulnerable e-commerce/i.test(githubPages.body);
+  }
+  return {
+    fired: true,
+    confidence: roadmapConfirmed ? 0.93 : result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      githubPagesUrl: "https://koadt.github.io/oss-oopssec-store/",
+      roadmapConfirmed,
+      note: roadmapConfirmed
+        ? "VWAD /app/oopssec-store route scan — listing links koadt.github.io/oss-oopssec-store with live 35-flag CTF roadmap confirmed"
+        : "VWAD /app/oopssec-store route scan — OopsSec Store listing documents offline GitHub Pages CTF deploy at koadt.github.io/oss-oopssec-store"
+    }
+  };
+};
+
 // --- VWAD OWASP VulnerableApp scanner-evaluation oracle listing -------------------------
 const clientSideVwadVulnerableappEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -93602,6 +93674,8 @@ export const RULES: Record<string, Rule> = {
   clientSideVwadNodegoatEvidence,
   clientSideVwadMcpServersLabEvidence,
   clientSideVwadVulnerableappEvidence,
+  clientSideVwadOopssecStoreEvidence,
+  vwadOopssecStoreRouteLiveOracle,
   clientSideVulnerableappDomXssEvidence,
   seclabNextjsLabApiProbe,
   seclabAngularStubRouteLiveOracle,

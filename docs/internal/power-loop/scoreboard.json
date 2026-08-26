@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T02:10:00.000Z",
+  "updated_at": "2026-08-26T02:28:12.201Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2789,
-  "total_findings": 27798,
+  "total_sites_scanned": 2791,
+  "total_findings": 27853,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1982,
-  "discovery_findings": 23479,
-  "improvements_shipped": 1176,
-  "last_run": "2026-08-26T02:10:00.000Z",
+  "discovery_findings": 23486,
+  "improvements_shipped": 1177,
+  "last_run": "2026-08-26T02:28:12.201Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 591,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,43 +48,36 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings, 36 juice-shop live oracles) — secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings, 36 juice-shop live oracles); secret-resend slug still absent — Resend key no longer in social feeds"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 255,
-      "focus": "brokencrystals graphql/spawn/hidden-upload + pwnshop seller/preview SSTI + vwad oopssec-store directory; queue also drained sekumart + preview.owasp-juice.shop wallet balance",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 7,
+      "focus": "vwad oopssec-store route oracle linking VWAD catalog to koadt.github.io CTF",
+      "improvements_shipped_this_run": 1
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings, 36 live oracles)",
-      "brokencrystals.com/graphql: 82 findings — GraphQL SSTI/command oracle suite",
-      "brokencrystals.com/hidden-upload: 81 findings — unrestricted upload + DOM XSS oracle",
-      "pwnshop.ctfsecurity.com/seller/preview: 45 findings — seller preview SSTI route oracle",
-      "brokencrystals.com/api/spawn: 20 findings — OS command injection spawn endpoint",
-      "vwad.owasp.org/app/oopssec-store/: 5 findings — VWAD directory/catalog only (no live app deploy)",
-      "sekumart.sekuripy.hr/product.php?id=1: 12 findings — Sekuripy training lab SQLi route",
-      "preview.owasp-juice.shop/rest/wallet/balance: 2 findings — thin wallet BOLA pass"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no category misses",
+      "vwad.owasp.org/app/oopssec-store/: 5→7 findings — vwad-oopssec-store-route-live-oracle shipped",
+      "brokencrystals.com/graphql: 82 findings — GraphQL SSTI/command oracle suite (prior run)",
+      "pwnshop.ctfsecurity.com/seller/preview: 45 findings — seller preview SSTI route oracle (prior run)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "vwad oopssec-store: directory page only — no hosted live instance linked from VWAD entry",
-      "preview.owasp-juice.shop wallet balance: 2 findings — needs authenticated session for full BOLA proof",
-      "ctf-xss-challenge.herokuapp.com + sql-truncation-challenge.herokuapp.com: Heroku demos 404 — skipped"
+      "Resend API key no longer present in Juice Shop social feeds (likely revoked post-GitHub secret scanner)",
+      "preview.owasp-juice.shop wallet balance: 2 findings — alg:none JWT oracle fires but thin vs full shop crawl"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "vwad.owasp.org/app/oopssec-store/": 7,
+    "juice-shop.herokuapp.com": 48,
     "brokencrystals.com/graphql": 82,
     "brokencrystals.com/hidden-upload": 81,
     "pwnshop.ctfsecurity.com/seller/preview": 45,
-    "brokencrystals.com/api/spawn": 20,
-    "brokencrystals.com/api/mcp": 83,
-    "vwad.owasp.org/app/oopssec-store/": 5,
-    "sekumart.sekuripy.hr/product.php?id=1": 12,
-    "preview.owasp-juice.shop/rest/wallet/balance": 2
+    "ai-security-platform-iota.vercel.app/challenges/phishing": 3,
+    "ist-edu-bd.vercel.app/redirect": 11
   }
 }
