@@ -3017,7 +3017,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideVwadMutillidaeEvidence",
   "clientSideVwadNodegoatEvidence",
   "clientSideVwadMcpServersLabEvidence",
-  "clientSideVwadVulnerableappEvidence",
+  "clientSideVwadOopssecStoreEvidence",
+  "vwadOopssecStoreRouteLiveOracle",
   "clientSideVulnerableappDomXssEvidence",
   "seclabNextjsLabApiProbe",
   "seclabAngularStubRouteLiveOracle",
@@ -7605,6 +7606,27 @@ function extractVwadGinJuiceLiveSeed(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** VWAD OopsSec Store listing links offline GitHub Pages CTF at koadt.github.io. */
+function extractVwadOopssecLiveSeed(html: string, pageUrl: string): string[] {
+  if (!/vwad\.owasp\.org\/app\/oopssec-store|OopsSec Store/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const raw of [
+    html.match(/"(https:\/\/koadt\.github\.io\/oss-oopssec-store\/?)"/i)?.[1],
+    html.match(/href=["'](https:\/\/koadt\.github\.io\/oss-oopssec-store\/?)["']/i)?.[1]
+  ]) {
+    if (!raw) continue;
+    try {
+      out.add(new URL(raw).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  if (out.size === 0) {
+    out.add("https://koadt.github.io/oss-oopssec-store/");
+  }
+  return [...out];
+}
+
 /** VWAD catalog slugs whose /app/{slug}/ listing 404s — seed known live demo instances. */
 function extractVwadCatalogLiveSeed(html: string, pageUrl: string): string[] {
   const slug = pageUrl.match(/vwad\.owasp\.org\/app\/([^/?#]+)/i)?.[1]?.toLowerCase();
@@ -10016,6 +10038,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const securedAiSeeds = extractSecuredAiSeeds(home.body, home.finalUrl);
   const vwadWrongsecretsLiveSeeds = extractVwadWrongsecretsLiveSeed(home.body, home.finalUrl);
   const vwadGinJuiceLiveSeeds = extractVwadGinJuiceLiveSeed(home.body, home.finalUrl);
+  const vwadOopssecLiveSeeds = extractVwadOopssecLiveSeed(home.body, home.finalUrl);
   const vwadHackxorLiveSeeds = extractVwadHackxorLiveSeed(home.body, home.finalUrl);
   const vwadCatalogLiveSeeds = extractVwadCatalogLiveSeed(home.body, home.finalUrl);
   const mcpSherpaWorkshopSeeds = extractMcpSherpaWorkshopSeeds(home.body, home.finalUrl);
@@ -10725,6 +10748,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /vwad\.owasp\.org\/app\/gin-juice-shop/i.test(home.finalUrl)
       ? ["https://ginandjuice.shop/"]
       : [];
+  const vwadOopssecPrioritySeeds =
+    /vwad\.owasp\.org\/app\/oopssec-store/i.test(home.finalUrl)
+      ? ["https://koadt.github.io/oss-oopssec-store/"]
+      : [];
   const ginAndJuiceLoginPrioritySeeds = /ginandjuice\.shop/i.test(home.finalUrl)
     ? [new URL("/login", home.finalUrl).toString()]
     : [];
@@ -10789,8 +10816,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vwadWrongsecretsPrioritySeeds,
       ...vwadWrongsecretsLiveSeeds,
       ...vwadGinJuicePrioritySeeds,
+      ...vwadOopssecPrioritySeeds,
       ...ginAndJuiceLoginPrioritySeeds,
       ...vwadGinJuiceLiveSeeds,
+      ...vwadOopssecLiveSeeds,
       ...vwadHackxorPrioritySeeds,
       ...vwadHackxorLiveSeeds,
       ...vwadCatalogPrioritySeeds,
@@ -12894,6 +12923,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/auth\/jwt\/x5c\/validate\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-jwt-x5c")
+      )
+        return -3;
+      if (
+        /vwad\.owasp\.org/i.test(origin) &&
+        /\/app\/oopssec-store\b/i.test(targetInput) &&
+        (p.slug.startsWith("vwad-oopssec-store") || p.slug.startsWith("client-side-vwad-oopssec"))
       )
         return -3;
       if (

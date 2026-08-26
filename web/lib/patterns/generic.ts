@@ -15264,6 +15264,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vwad-oopssec-store-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP VWAD OopsSec Store offline CTF listing disclosed",
+    description:
+      "OopsSec Store VWAD listing links koadt.github.io/oss-oopssec-store GitHub Pages CTF with 35 flags across 11 OWASP Top 10 chapters in a Next.js e-commerce SPA.",
+    impactOneline:
+      "Public VWAD registry advertises offline-deployable CTF labs with live GitHub Pages demo URLs for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadOopssecStoreEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — isolate lab instances from production networks.",
+      steps: [
+        "Deploy OopsSec Store only on isolated lab networks.",
+        "Require authentication when exposing CTF challenge catalogs publicly.",
+        "Monitor VWAD-linked GitHub Pages instances for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our OopsSec Store instance is listed in OWASP VWAD with a public GitHub Pages demo. Show how to isolate CTF training labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vwad-oopssec-store-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP VWAD OopsSec Store route live oracle",
+    description:
+      "When scanning vwad.owasp.org/app/oopssec-store/, the VWAD listing links koadt.github.io/oss-oopssec-store and confirms the live 35-flag CTF roadmap — route-specific OopsSec Store training oracle.",
+    impactOneline:
+      "VWAD OopsSec Store listing exposes offline-deploy CTF scope and live GitHub Pages demo URL to unauthenticated visitors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vwadOopssecStoreRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — limit public disclosure of challenge scope on VWAD-linked hosts.",
+      steps: [
+        "Gate challenge catalog details behind authenticated lab enrollment.",
+        "Run OopsSec Store only on isolated training infrastructure.",
+        "Avoid publishing full CTF scope on VWAD listings without access controls."
+      ]
+    },
+    fixPrompt:
+      "Our VWAD OopsSec Store listing links a public GitHub Pages CTF with 35 flags. Show route-specific training-platform access control.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sensitive-api-password-leakage",
     platform: "generic",
     category: "Sensitive data exposure",

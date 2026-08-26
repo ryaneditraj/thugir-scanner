@@ -4781,6 +4781,12 @@
       "slug": "ist-edu-redirect-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /redirect SPA bundle documents approved IST domain allowlist + countdown /redirect?url= open redirect training; ist-edu-bd.vercel.app/redirect findings 10→11 (+ist-edu-redirect-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "vwad-oopssec-store-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vwad.owasp.org/app/oopssec-store/ VWAD listing links koadt.github.io/oss-oopssec-store; GET GitHub Pages confirms 35-flag CTF roadmap; findings 5→7 (+client-side-vwad-oopssec-store-evidence +vwad-oopssec-store-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }

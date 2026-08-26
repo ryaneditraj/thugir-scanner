@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-26T01:06:48.780Z",
-  "total": 2655,
-  "uniqueSlugs": 2647,
+  "generatedAt": "2026-08-26T02:26:45.696Z",
+  "total": 2657,
+  "uniqueSlugs": 2649,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2637,
+    "generic": 2639,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2570,
+    "deep": 2572,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 545,
+    "Broken access control": 547,
     "Exposed secret": 107,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -819,6 +819,7 @@
     "client-side-vwad-mcp-servers-lab-evidence",
     "client-side-vwad-mutillidae-evidence",
     "client-side-vwad-nodegoat-evidence",
+    "client-side-vwad-oopssec-store-evidence",
     "client-side-vwad-pixi-evidence",
     "client-side-vwad-security-shepherd-evidence",
     "client-side-vwad-vulnerableapp-evidence",
@@ -2493,6 +2494,7 @@
     "vulnweb-csrf-route-live-oracle",
     "vulnweb-profile-idor-route-live-oracle",
     "vulnweb-search-sqli-route-live-oracle",
+    "vwad-oopssec-store-route-live-oracle",
     "weak-api-default-credentials",
     "web-pentest-playground-admin-dashboard-route-live-oracle",
     "web-pentest-playground-admin-sqli-live-oracle",
