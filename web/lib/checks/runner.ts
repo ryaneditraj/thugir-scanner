@@ -2208,6 +2208,7 @@ const DEEP_RULES = new Set<string>([
   "zerohealthInformationDisclosureRouteLiveOracle",
   "zerohealthMedicalRecordsBolaRouteLiveOracle",
   "zerohealthPatientsRouteLiveOracle",
+  "zerohealthDoctorsRouteLiveOracle",
   "zerohealthResetPasswordReflectedXssRouteLiveOracle",
   "zerohealthSearchReflectedXssRouteLiveOracle",
   "zerohealthAiChatSqliRouteLiveOracle",
@@ -2630,6 +2631,7 @@ const DEEP_RULES = new Set<string>([
   "crapiVehicleLocationRouteLiveOracle",
   "crapiUserVideosBolaLiveOracle",
   "crapiUserVideosBolaRouteLiveOracle",
+  "crapiUserVehiclesRouteLiveOracle",
   "crapiCommunityPostsRouteLiveOracle",
   "crapiContactMechanicSsrfLiveOracle",
   "crapiContactMechanicSsrfRouteLiveOracle",
@@ -3464,6 +3466,7 @@ const DEEP_RULES = new Set<string>([
   "vulnforgeAcademyLevelIdorRouteLiveOracle",
   "vulnforgeAcademyLevelAuthRouteLiveOracle",
   "vulnforgeAcademyLevelFileUploadRouteLiveOracle",
+  "vulnforgeAcademyLevel17ContentTypeRouteLiveOracle",
   "vulnforgeAcademyLevelRceRouteLiveOracle",
   "vulnforgeAcademyLevelFinalBossRouteLiveOracle",
   "vulnbankUploadProfilePictureUrlRouteLiveOracle",
@@ -11678,6 +11681,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /zerohealth\.aliyu\.dev|zero-health\.vercel\.app/i.test(origin) &&
+        /\/api\/doctors\b/i.test(targetInput) &&
+        p.slug === "zerohealth-doctors-route-live-oracle"
+      )
+        return -4;
+      if (
+        /zerohealth\.aliyu\.dev|zero-health\.vercel\.app/i.test(origin) &&
         /\/api\/appointments\b/i.test(targetInput) &&
         p.slug === "zerohealth-appointments-route-live-oracle"
       )
@@ -13031,6 +13040,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/user\/vehicles\b/i.test(targetInput) &&
+        p.slug === "crapi-user-vehicles-route-live-oracle"
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
         /\/auth\/signup/i.test(targetInput) &&
         p.slug.startsWith("crapi-signup")
       )
@@ -13202,6 +13217,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
         /\/level(?:s)?\/20\b|level20\.php|final-boss/i.test(targetInput) &&
         p.slug.startsWith("vulnforge-academy-level20-final-boss")
+      )
+        return -4;
+      if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level(?:s)?\/17\b|level17\.php/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level17-content-type")
       )
         return -4;
       if (

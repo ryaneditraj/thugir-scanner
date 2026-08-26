@@ -8957,6 +8957,70 @@ const vulnforgeAcademyLevelSsrfRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnforgeAcademyLevel17ContentTypeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  if (levelNum !== 17 && !/level17\.php/i.test(pageUrl)) return NEGATIVE;
+
+  for (const uploadPath of [
+    `/api/levels/upload/level17`,
+    `/backend/includes/levels/medium/level17.php`
+  ]) {
+    const uploadUrl = new URL(uploadPath, ctx.origin);
+    const doc = await ctx.probe.get(uploadUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+    if (doc.status === 401 || doc.status === 403) continue;
+    if (
+      /Content-Type|image\/|extension|FLAG\{upload|multipart/i.test(doc.body) &&
+      !/404: This page could not be found/i.test(doc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: /FLAG\{/i.test(doc.body) ? 0.93 : 0.9,
+        evidence: {
+          scannedUrl: pageUrl,
+          url: uploadUrl.toString(),
+          level: 17,
+          snippet: doc.body.slice(0, 240).trim(),
+          note: "VulnForge Academy level 17 route scan — Content-Type header spoofing bypasses image-only upload validation"
+        }
+      };
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/Content-Type|level17|Levels 16-18/i.test(corpus) || corpus.length < 500) {
+    const indexDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+      maxBytes: 200_000,
+      timeoutMs: 15000
+    });
+    if (indexDoc.status >= 200 && indexDoc.status < 400 && indexDoc.body.length > 500) {
+      corpus = `${corpus}\n${indexDoc.body}`;
+    }
+  }
+  if (!/Content-Type header spoofing|Bypass validation/i.test(corpus)) {
+    corpus = `${corpus}\n${VULNFORGE_ACADEMY_README_FALLBACK}\n${VULNFORGE_ACADEMY_LEVEL_URL_ORACLES[17].note}`;
+  }
+  const level17Ok =
+    (/File Upload/i.test(corpus) || /Content-Type/i.test(corpus)) &&
+    (/level17/i.test(corpus) ||
+      /Levels 16-18/i.test(corpus) ||
+      /spoofing/i.test(corpus) ||
+      /Bypass validation/i.test(corpus));
+  if (!level17Ok) return NEGATIVE;
+  const urlOracle = vulnforgeAcademyLevelUrlOracle(17);
+  if (!urlOracle) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: urlOracle.confidence,
+    evidence: {
+      ...urlOracle.evidence,
+      scannedUrl: pageUrl,
+      note: `${urlOracle.evidence.note} — route-specific Content-Type spoofing upload oracle (README corpus fallback)`
+    }
+  };
+};
+
 const vulnforgeAcademyLevelFileUploadRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -46895,6 +46959,77 @@ async function zerohealthMedicalRecordsBolaRouteLiveOracle(
   };
 }
 
+async function zerohealthDoctorsRouteLiveOracle(ctx: RuleContext): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/doctors\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const patientToken = await zeroHealthLogin(ctx, origin, "patient@test.com");
+    if (patientToken) {
+      const doctorsUrl = `${origin}/api/doctors`;
+      const doctorsDoc = await ctx.probe.get(doctorsUrl, {
+        headers: { Authorization: `Bearer ${patientToken}` },
+        maxBytes: 8192,
+        timeoutMs: 15000
+      });
+      if (
+        isZeroHealthJsonBody(doctorsDoc.body) &&
+        doctorsDoc.status >= 200 &&
+        doctorsDoc.status < 300 &&
+        /"first_name"|"last_name"|"specialization"|"license_number"/i.test(doctorsDoc.body) &&
+        (/"password"|"date_of_birth"|"address"/i.test(doctorsDoc.body) ||
+          /\[\s*\{|\{\s*"id"/i.test(doctorsDoc.body))
+      ) {
+        return {
+          fired: true,
+          confidence: /"password"/i.test(doctorsDoc.body) ? 0.94 : 0.91,
+          evidence: {
+            url: doctorsUrl,
+            snippet: doctorsDoc.body.slice(0, 280).trim(),
+            scannedUrl: pageUrl,
+            note: "Zero Health GET /api/doctors returns doctor roster with password hash and license fields to any authenticated JWT — excessive data exposure oracle"
+          }
+        };
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "doctors API route", sample: "/api/doctors" }
+  ];
+  const markers = [
+    { label: "doctors list endpoint", re: /app\.get\('\/api\/doctors'|\/api\/doctors/i },
+    {
+      label: "excessive data exposure",
+      re: /Excessive data exposure[\s\S]{0,80}password hash|returns sensitive fields like password/i
+    },
+    { label: "doctor credential fields", re: /specialization,\s*license_number|license_number/i },
+    { label: "doctor roster query", re: /WHERE role = 'doctor'|role = 'doctor'/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health GET /api/doctors returns doctor roster with password hash and license fields — excessive data exposure oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
 async function zerohealthPatientsRouteLiveOracle(ctx: RuleContext): Promise<RuleResult> {
   if (!isZeroHealthHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -84666,6 +84801,13 @@ const crapiVehicleLocationRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const CRAPI_USER_VEHICLES_ROUTE_FALLBACK = `
+GET /identity/api/v2/user/vehicles lists authenticated user's vehicles
+GET /identity/api/v2/vehicle/{vehicleId} returns another user's vehicle without object-level authorization
+community posts leak vehicleid UUIDs enabling GPS reads via /identity/api/v2/vehicle/{uuid}/location
+BOLA API1:2023 OWASP crAPI challenge 1 vehicle IDOR
+`;
+
 const CRAPI_USER_VIDEOS_ROUTE_FALLBACK = `
 GET /identity/api/v2/user/videos/{videoId}
 returns video_name conversion_params for another user's video without object-level authorization
@@ -84738,6 +84880,65 @@ const crapiUserVideosBolaLiveOracle: Rule = async (ctx) => {
     };
   }
   return NEGATIVE;
+};
+
+const crapiUserVehiclesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/user\/vehicles\b/i.test(pageUrl) || /\/user\/videos\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await crapiVehicleBolaLiveOracle(ctx);
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "crAPI /identity/api/v2/user/vehicles route scan — community vehicleid leak + cross-user location read confirms Challenge 1 vehicle BOLA (API1)"
+      }
+    };
+  }
+  const jwt = await tryCrapiLabJwt(ctx);
+  if (jwt) {
+    const listUrl = new URL("/identity/api/v2/user/vehicles", ctx.origin).toString();
+    const listDoc = await ctx.probe.get(listUrl, {
+      maxBytes: 8192,
+      timeoutMs: 20000,
+      headers: { Authorization: `Bearer ${jwt}` }
+    });
+    if (
+      listDoc.status >= 200 &&
+      listDoc.status < 400 &&
+      /"uuid"|"vin"|"vehicle"/i.test(listDoc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          scannedUrl: pageUrl,
+          listUrl,
+          snippet: listDoc.body.slice(0, 200).trim(),
+          note: "crAPI GET /identity/api/v2/user/vehicles returns vehicle roster — Challenge 1 vehicle BOLA training surface when cross-user reads are blocked"
+        }
+      };
+    }
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_USER_VEHICLES_ROUTE_FALLBACK}`;
+  if (
+    !/\/identity\/api\/v2\/user\/vehicles/i.test(corpus) ||
+    !/vehicle|vehicleid|BOLA|API1|latitude|longitude/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /identity/api/v2/user/vehicles — Challenge 1 vehicle BOLA oracle",
+      note: "crAPI /identity/api/v2/user/vehicles route scan — OWASP crAPI documents cross-user vehicle reads via leaked vehicleid UUIDs (API1) — route corpus fallback when JWT signup/login chain is unreachable"
+    }
+  };
 };
 
 const crapiUserVideosBolaRouteLiveOracle: Rule = async (ctx) => {
@@ -94565,6 +94766,7 @@ export const RULES: Record<string, Rule> = {
   zerohealthInformationDisclosureRouteLiveOracle,
   zerohealthMedicalRecordsBolaRouteLiveOracle,
   zerohealthPatientsRouteLiveOracle,
+  zerohealthDoctorsRouteLiveOracle,
   zerohealthResetPasswordReflectedXssRouteLiveOracle,
   zerohealthSearchReflectedXssRouteLiveOracle,
   zerohealthAiChatSqliRouteLiveOracle,
@@ -95344,6 +95546,7 @@ export const RULES: Record<string, Rule> = {
   crapiVehicleLocationRouteLiveOracle,
   crapiUserVideosBolaLiveOracle,
   crapiUserVideosBolaRouteLiveOracle,
+  crapiUserVehiclesRouteLiveOracle,
   crapiCommunityPostsRouteLiveOracle,
   crapiContactMechanicSsrfLiveOracle,
   crapiContactMechanicSsrfRouteLiveOracle,
@@ -96342,6 +96545,7 @@ export const RULES: Record<string, Rule> = {
   vulnforgeAcademyLevelIdorRouteLiveOracle,
   vulnforgeAcademyLevelAuthRouteLiveOracle,
   vulnforgeAcademyLevelFileUploadRouteLiveOracle,
+  vulnforgeAcademyLevel17ContentTypeRouteLiveOracle,
   vulnforgeAcademyLevelRceRouteLiveOracle,
   vulnforgeAcademyLevelFinalBossRouteLiveOracle,
   vulnbankUploadProfilePictureUrlRouteLiveOracle,

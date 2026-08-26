@@ -35423,6 +35423,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-doctors-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Zero Health doctors excessive-data route live oracle",
+    description:
+      "When scanning /api/doctors, GET returns doctor roster with password hash, license_number, and address fields to any authenticated JWT — route-specific excessive data exposure oracle.",
+    impactOneline:
+      "Route-specific oracle confirms doctor roster credential disclosure training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthDoctorsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — never return password hashes or license numbers in list APIs.",
+      steps: [
+        "Strip password and credential fields from doctor roster responses.",
+        "Scope doctor directory APIs to minimum necessary profile fields.",
+        "Audit bulk doctor exports with break-glass logging."
+      ]
+    },
+    fixPrompt:
+      "Our /api/doctors route returns password hashes in doctor roster JSON. Show response-field allowlisting and credential stripping remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "zerohealth-parameter-pollution-route-live-oracle",
     platform: "generic",
     category: "API security",
@@ -44751,6 +44777,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "crapi-user-vehicles-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI user vehicles route BOLA live oracle",
+    description:
+      "When scanning /identity/api/v2/user/vehicles, community vehicleid leaks confirm cross-user location reads — route-specific crAPI Challenge 1 vehicle BOLA oracle.",
+    impactOneline:
+      "Route scans on user vehicle list endpoints should confirm object-level authorization failures when community posts expose other users' vehicle UUIDs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiUserVehiclesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — enforce object-level authorization on vehicle endpoints in production.",
+      steps: [
+        "Verify the authenticated user owns the vehicle before returning location or roster data.",
+        "Strip vehicleid from community post author objects or use opaque non-guessable IDs.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI /identity/api/v2/user/vehicles route scan confirms Challenge 1 vehicle BOLA via leaked UUIDs. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi-vehicle-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -49533,6 +49585,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnForge Academy level 16–18 routes document file upload bypass techniques. Show secure upload validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level17-content-type-upload-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnForge Academy level 17 Content-Type upload route live oracle",
+    description:
+      "When scanning level17.php routes, VulnForge Academy documents Content-Type header spoofing to bypass image-only upload validation — route-specific file upload training oracle (README corpus fallback).",
+    impactOneline:
+      "VulnForge Academy level 17 exposes intentional Content-Type spoofing bypass patterns for unrestricted file upload labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevel17ContentTypeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — validate uploads with magic bytes, not client Content-Type headers.",
+      steps: [
+        "Verify file magic bytes server-side instead of trusting Content-Type.",
+        "Allowlist permitted extensions and store uploads outside the web root.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 17 route documents Content-Type spoofing upload bypass. Show secure upload validation remediation.",
     version: 1,
     enabled: true
   },
