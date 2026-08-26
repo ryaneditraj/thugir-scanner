@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T05:13:00.000Z",
+  "updated_at": "2026-08-26T06:06:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vault-notes-frontend-gules.vercel.app/",
+      "source": "Raghavtripathii/vault-notes-vapt — SQLi/IDOR/XSS/plaintext-password JWT-leak training app (GitHub README live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level17/",
+      "source": "WebSec.fr level 17 — PHP web exploit training puzzle (websec.fr catalog; not yet scanned)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level18/",
+      "source": "WebSec.fr level 18 — PHP web exploit training puzzle (websec.fr catalog; not yet scanned)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
+      "source": "r007sec/pwnshop — PWN-005 unauthenticated audit-log JSON API (GitHub README Key URLs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/debug/info",
+      "source": "r007sec/pwnshop — PWN-018 intentionally public debug endpoint (GitHub README Key URLs)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://dvwu.vercel.app/labs/rce",
       "source": "zahidoverflow/dvwu — RCE command-injection training lab route (Vercel live demo)",
