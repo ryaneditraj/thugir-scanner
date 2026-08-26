@@ -1791,6 +1791,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecCreateFunctionChallengeEvidence",
   "clientSideWebsecFibonacciEvalChallengeEvidence",
   "clientSideWebsecTimingAttackChallengeEvidence",
+  "clientSideWebsecPasswordResetPrngChallengeEvidence",
+  "websecLevel19PasswordResetRouteLiveOracle",
   "clientSideWebsecPhpUnserializeCookieChallengeEvidence",
   "clientSideWebsecPhpUnserializeFilterChallengeEvidence",
   "clientSideWebsecPhpAesSessionChallengeEvidence",
@@ -2841,6 +2843,10 @@ const DEEP_RULES = new Set<string>([
   "vulnerableBountySiteUsersApiRouteLiveOracle",
   "vulnDemoJwtSecretLeakLiveOracle",
   "vulnDemoJwtSecretLeakRouteLiveOracle",
+  "vaultNotesJwtSecretLeakLiveOracle",
+  "vaultNotesJwtSecretLeakRouteLiveOracle",
+  "vaultNotesNotesIdorLiveOracle",
+  "vaultNotesNotesIdorRouteLiveOracle",
   "vulnDemoFrontendFlagLeakLiveOracle",
   "vulnDemoFrontendFlagLeakRouteLiveOracle",
   "vulnDemoStoredXssLiveOracle",
@@ -10321,6 +10327,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         new URL(`/${slug}/source.php`, home.finalUrl).toString(),
         new URL(`/${slug}/source1.php`, home.finalUrl).toString(),
         new URL(`/${slug}/source2.php`, home.finalUrl).toString(),
+        new URL(`/${slug}/source3.php`, home.finalUrl).toString(),
+        new URL(`/${slug}/source4.php`, home.finalUrl).toString(),
         new URL(`/${slug}/`, home.finalUrl).toString()
       ];
     } catch {
@@ -11519,6 +11527,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           targetInput === `${origin}/` ||
           /\/api\/posts\b/i.test(targetInput)) &&
         p.slug.startsWith("vuln-demo-")
+      )
+        return -3;
+      if (
+        /vault-notes-frontend-gules\.vercel\.app/i.test(origin) &&
+        (targetInput === origin || targetInput === `${origin}/`) &&
+        p.slug.startsWith("vault-notes-")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level19\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level19-") ||
+          p.slug === "client-side-websec-password-reset-prng-challenge-evidence")
       )
         return -3;
       if (/compass-demo\.com/i.test(origin) && p.slug.startsWith("compass-demo-")) return -2;

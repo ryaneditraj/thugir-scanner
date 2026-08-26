@@ -4847,6 +4847,24 @@
       "slug": "pwnshop-forgot-password-email-enumeration-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /forgot-password returns distinct success vs no-account messages for admin@pwnshop.com vs probe email; pwnshop.ctfsecurity.com/forgot-password findings 48→49 (+pwnshop-forgot-password-email-enumeration-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vault-notes-frontend-gules.vercel.app",
+      "slug": "vault-notes-jwt-secret-leak-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: window.__leakedJwtSecret=`this_is_a_super_secret_key_change_it_later` in SPA bundle + vault-notes-backend.onrender.com API origin; vault-notes-frontend-gules.vercel.app/ findings 4→8 (+vault-notes-jwt-secret-leak-live-oracle +route +notes-idor live+route); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vault-notes-frontend-gules.vercel.app",
+      "slug": "vault-notes-notes-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: forged JWT from leaked __leakedJwtSecret reads GET /notes/1 owned by user_id=2 without ownership check; vault-notes-frontend-gules.vercel.app/ findings 4→8 (+vault-notes-notes-idor-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level19-password-reset-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /level19/ sources confirm send_flag_by_email + srand(microtime) + check_and_refresh_token anti-CSRF; websec.fr/level19/ findings 7→9 (+client-side-websec-password-reset-prng-challenge-evidence +websec-level19-password-reset-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
     }
   ]
 }

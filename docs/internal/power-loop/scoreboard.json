@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T08:09:00.000Z",
+  "updated_at": "2026-08-26T08:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2851,
-  "total_findings": 29098,
-  "critical_findings": 57,
+  "total_sites_scanned": 2853,
+  "total_findings": 29115,
+  "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2012,
-  "discovery_findings": 24487,
-  "improvements_shipped": 1187,
-  "last_run": "2026-08-26T08:09:00.000Z",
+  "discovery_findings": 24504,
+  "improvements_shipped": 1190,
+  "last_run": "2026-08-26T08:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,36 +52,35 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 244,
-      "focus": "brokencrystals /api/file SSRF+LFI route oracles, AWS metadata SSRF, websec level20, FauxBank search/SQLi, pwnshop wishlist IDOR + wrongsecrets 20-22 binary challenges",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 17,
+      "focus": "vault-notes JWT secret + notes IDOR oracles; websec level19 password-reset PRNG/CSRF route oracle",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings, 36 live oracles) — no category misses",
-      "brokencrystals.com/api/file?path=https://httpbin.org/get: 79 findings — brokencrystals-file-lfi-route-live-oracle + brokencrystals-api-file-route-live-oracle fired",
-      "brokencrystals.com/api/file/aws?path=169.254.169.254: 58 findings — brokencrystals-aws-metadata-ssrf-live-oracle confirmed",
-      "pentest-fauxbank.vercel.app/api/search: 14 findings — fauxbank-authenticated-sqli-search + full FauxBank probe suite",
-      "pwnshop.ctfsecurity.com/wishlist/1: 41 findings — pwnshop-wishlist-idor-route-live-oracle (PWN-003) confirmed",
-      "wrongsecrets.herokuapp.com/challenge/challenge-20/21/22: 15 findings each — C++/Go/Rust binary route live oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings) — no category misses",
+      "vault-notes-frontend-gules.vercel.app/: 4→8 findings — vault-notes-jwt-secret-leak + notes-idor live+route oracles shipped",
+      "websec.fr/level19/: 7→9 findings — client-side-websec-password-reset-prng + websec-level19-password-reset-route-live-oracle shipped",
+      "brokencrystals.com/api/file?path=https://httpbin.org/get: 79 findings — brokencrystals-file-lfi-route-live-oracle confirmed",
+      "pwnshop.ctfsecurity.com/wishlist/1: 41 findings — pwnshop-wishlist-idor-route-live-oracle (PWN-003) confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "websec.fr/level20: client-side challenge corpus only (7 findings) — no dedicated route live oracle yet",
-      "brokencrystals cloud-provider SSRF variants (/api/file/google, /api/file/azure) still queued for dedicated scans"
+      "websec level17/18 have client-side evidence but no route-specific live oracles yet",
+      "websec.fr/level20: client-side challenge corpus only (7 findings) — no dedicated route live oracle yet"
     ]
   },
   "discovery_highlights": {
-    "brokencrystals.com/api/file": 79,
-    "brokencrystals.com/api/file/aws": 58,
-    "pwnshop.ctfsecurity.com/wishlist/1": 41,
     "juice-shop.herokuapp.com": 47,
-    "pentest-fauxbank.vercel.app/api/search": 14,
-    "websec.fr/level20": 7,
+    "vault-notes-frontend-gules.vercel.app": 8,
+    "websec.fr/level19": 9,
+    "brokencrystals.com/api/file": 79,
     "brokencrystals.com/api/render": 81,
     "brokencrystals.com/testimonials": 86,
-    "pwnshop.ctfsecurity.com/download": 40
+    "pwnshop.ctfsecurity.com/wishlist/1": 41,
+    "pwnshop.ctfsecurity.com/download": 40,
+    "duck-store.escape.tech/api/v1/users/me/profile": 33
   }
 }

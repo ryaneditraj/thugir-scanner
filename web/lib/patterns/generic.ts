@@ -15966,6 +15966,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-websec-password-reset-prng-challenge-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "WebSec.fr password-reset PRNG/CSRF lab disclosed",
+    description:
+      "WebSec.fr level19 emails the flag on password recovery after captcha validation; anti-CSRF tokens and captcha strings come from generate_random_text() backed by PHP rand() seeded with microtime().",
+    impactOneline:
+      "Public challenge source documents predictable PRNG seeding and CSRF-token generation in a password-reset flow.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecPasswordResetPrngChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host password-reset labs offline; use cryptographically secure random and proper CSRF defenses in production.",
+      steps: [
+        "Move WebSec-style password-reset labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Use random_bytes() for tokens and CSPRNG for captcha; enforce CSRF on all state-changing POSTs."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level19 lab exposes microtime-seeded PHP rand() captcha and generate_random_text() CSRF tokens in a password-reset flow. Show secure token generation and CSRF defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level19-password-reset-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "WebSec.fr level19 password-reset route live oracle",
+    description:
+      "When scanning /level19/, disclosed sources confirm password recovery emails the flag after captcha validation using microtime-seeded PHP rand() and generate_random_text() anti-CSRF tokens.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level19 documents a predictable PRNG password-reset challenge.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel19PasswordResetRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate training labs from production; use CSPRNG and CSRF tokens in real password-reset flows.",
+      steps: [
+        "Serve WebSec challenge sources only on isolated lab infrastructure.",
+        "Replace rand()/microtime() seeding with random_bytes() for captcha and CSRF tokens.",
+        "Require authenticated sessions before password-reset state changes."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level19 route scan exposes password-reset captcha and CSRF tokens from predictable PHP rand(). Show CSPRNG and CSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-php-unserialize-cookie-challenge-evidence",
     platform: "generic",
     category: "Injection",
@@ -67698,6 +67750,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our owasp.andreabrioschi.it route scan exposes OWASP Top 10:2025 interactive simulators. Show how to keep training demos separate from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-jwt-secret-leak-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Vault Notes JWT signing secret leaked in frontend bundle",
+    description:
+      "Vault Notes VAPT training app assigns window.__leakedJwtSecret in the React SPA bundle and points API calls at vault-notes-backend.onrender.com — hardcoded JWT secret oracle.",
+    impactOneline:
+      "Hardcoded JWT signing secrets in client bundles let attackers forge arbitrary session tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesJwtSecretLeakLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never embed JWT signing secrets in frontend code; rotate compromised keys immediately.",
+      steps: [
+        "Store JWT secrets only in server-side environment variables.",
+        "Remove window.__leakedJwtSecret and any client-side secret assignments.",
+        "Rotate the JWT secret and invalidate all outstanding tokens."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes frontend exposes window.__leakedJwtSecret in the SPA bundle. Show how to move JWT secrets server-side and rotate keys.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-jwt-secret-leak-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Vault Notes JWT secret leak route live oracle",
+    description:
+      "When scanning vault-notes-frontend-gules.vercel.app, the SPA bundle exposes window.__leakedJwtSecret used to sign API JWTs against vault-notes-backend.onrender.com.",
+    impactOneline:
+      "Route-specific confirmation that the Vault Notes training frontend leaks its JWT signing secret.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesJwtSecretLeakRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove hardcoded secrets from client bundles on training and production apps alike.",
+      steps: [
+        "Delete window.__leakedJwtSecret from the frontend build.",
+        "Load JWT secrets from server environment only.",
+        "Rotate signing keys after removal."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes frontend route scan exposes window.__leakedJwtSecret. Show client-bundle secret removal and key rotation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-notes-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vault Notes note-by-ID IDOR live oracle",
+    description:
+      "Vault Notes GET /notes/:id omits the user_id ownership check; JWT forged with the leaked __leakedJwtSecret reads another user's private notes.",
+    impactOneline:
+      "Missing object-level authorization lets attackers read any note by sequential ID.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesNotesIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce per-user ownership on every note read; never trust client-supplied IDs alone.",
+      steps: [
+        "Add AND user_id = ? to GET /notes/:id queries.",
+        "Bind note access to the authenticated user's ID from the JWT.",
+        "Audit all ID-based endpoints for similar BOLA gaps."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes GET /notes/:id returns notes without checking user_id ownership. Show BOLA fixes with parameterized ownership checks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-notes-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vault Notes notes IDOR route live oracle",
+    description:
+      "When scanning vault-notes-frontend-gules.vercel.app, forged JWT from leaked __leakedJwtSecret accesses GET /notes/:id without ownership validation on vault-notes-backend.onrender.com.",
+    impactOneline:
+      "Route-specific confirmation that Vault Notes note reads lack object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesNotesIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require ownership checks on all note-by-ID API routes.",
+      steps: [
+        "Filter note queries by authenticated user_id.",
+        "Remove public note IDs from responses for unauthorized callers.",
+        "Add integration tests for cross-user note access attempts."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes route scan confirms IDOR on GET /notes/:id via forged JWT. Show ownership enforcement remediation.",
     version: 1,
     enabled: true
   }

