@@ -40817,6 +40817,15 @@ const VULNSHOP_MODULE_ORACLES: {
       { label: "Admin orders list", re: /List all orders|admin orders/i }
     ],
     note: "VulnShop GET /api/v1/admin/orders — admin order roster without function-level authorization (BFLA / API5:2023)"
+  },
+  {
+    pathRe: /\/api\/ping\b/i,
+    markers: [
+      { label: "Command injection ping route", re: /\/api\/ping|command injection|api_cmd_injection/i },
+      { label: "host parameter shell ping", re: /host=|shell ping|;\s*cat\s+\/etc\/passwd/i },
+      { label: "A10 SSRF injection lab", re: /\[A10\]|Server-Side Request Forgery|SSRF/i }
+    ],
+    note: "VulnShop GET /api/ping?host= passes attacker input into shell ping — command injection and SSRF oracle (README A10)"
   }
 ];
 
@@ -40874,6 +40883,11 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     pathRe: /\/track-order\b/i,
     vulnerability: "SSRF (Server-Side Request Forgery)",
     note: "VulnShop Flask GET /track-order?url= fetches attacker-controlled URLs including cloud metadata — README oracle #5"
+  },
+  {
+    pathRe: /\/api\/ping\b/i,
+    vulnerability: "Command Injection / SSRF",
+    note: "VulnShop Flask GET /api/ping?host= passes host into shell ping command — command injection and SSRF oracle (README A10)"
   },
   {
     pathRe: /\/support\b/i,
@@ -40963,6 +40977,8 @@ const VULNSHOP_README_FALLBACK = `
 /api/admin/users GET Broken Function Level Authorization api_bfla List all users without role check
 /api/v1/admin/orders GET Function Auth API5:2023 api_bfla Admin orders list without function-level authorization
 /api/admin/orders GET Broken Function Level Authorization api_bfla List all orders without role check
+/api/ping GET Command Injection api_cmd_injection host= parameter passed to shell ping — SSRF/command injection (README A10)
+/api/v1/users/{id}/profile GET Broken Object Level Authorization api_bola Unauthenticated user profile disclosure (README #22)
 `;
 
 function looksVulnshopReactSpaShell(body: string): boolean {
@@ -41569,7 +41585,7 @@ const vulnshopUsersProfileBolaLiveOracle: Rule = async (ctx) => {
 };
 
 function isVulnshopUsersProfileBolaRoute(pageUrl: string): boolean {
-  return /\/api\/v1\/users\/\d+(?:\/profile)?\/?$/i.test(pageUrl);
+  return /\/api\/(?:v1\/)?users\/\d+(?:\/profile)?\/?$/i.test(pageUrl);
 }
 
 const vulnshopUsersProfileBolaRouteLiveOracle: Rule = async (ctx) => {
@@ -42445,6 +42461,41 @@ const vulnshopTrackOrderSsrfRouteLiveOracle: Rule = (ctx) =>
     /\/track-order\b/i,
     vulnshopTrackOrderSsrfLiveOracle,
     "VulnShop /track-order route scan — SSRF on url= parameter confirmed or documented (README oracle #5)"
+  );
+
+const vulnshopPingCmdInjectionLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const apiBase = vulnshopApiBase(ctx);
+  const probePaths = apiBase
+    ? [`${apiBase}/ping?host=127.0.0.1`, `${apiBase}/ping?host=127.0.0.1;id`]
+    : [new URL("/api/ping?host=127.0.0.1", ctx.origin).toString()];
+  for (const probeUrl of probePaths) {
+    const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
+    if (looksVulnshopReactSpaShell(doc.body)) continue;
+    if (doc.status < 200 || doc.status >= 500) continue;
+    const cmdOk =
+      /PING\s+127\.0\.0\.1|64 bytes from|ttl=/i.test(doc.body) ||
+      /uid=\d+|command injection|ping.*host/i.test(doc.body);
+    if (!cmdOk) continue;
+    return {
+      fired: true,
+      confidence: /uid=\d+|64 bytes from/i.test(doc.body) ? 0.93 : 0.88,
+      evidence: {
+        probeUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "VulnShop GET /api/ping?host= passes attacker input into shell ping — command injection / SSRF oracle (README A10)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const vulnshopPingCmdInjectionRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/ping\b/i,
+    vulnshopPingCmdInjectionLiveOracle,
+    "VulnShop /api/ping route scan — host= parameter command injection confirmed or documented (README A10)"
   );
 
 const vulnshopSupportLfiLiveOracle: Rule = async (ctx) => {
@@ -83061,10 +83112,11 @@ const crapiMechanicReportRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const CRAPI_VEHICLE_UUID_RE =
-  /"vehicleid"\s*:\s*"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"/gi;
+  /"vehicle[Ii]d"\s*:\s*"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"/gi;
 
 function extractCrapiVehicleUuids(body: string): string[] {
-  return [...body.matchAll(CRAPI_VEHICLE_UUID_RE)].map((m) => m[1]!).filter((id) => id.length > 0);
+  const ids = [...body.matchAll(CRAPI_VEHICLE_UUID_RE)].map((m) => m[1]!).filter((id) => id.length > 0);
+  return [...new Set(ids)];
 }
 
 async function tryCrapiOtpToken(
@@ -83106,8 +83158,8 @@ async function tryCrapiOtpToken(
 async function tryCrapiLabJwt(ctx: RuleContext): Promise<string | null> {
   const existing = await tryApiLabJwt(ctx);
   if (existing) return existing;
-  const apisecHosted = /crapi\.apisec\.ai/i.test(ctx.origin);
-  const authTimeoutMs = apisecHosted ? 8000 : 15000;
+  const apisecHosted = /crapi2?\.apisec\.ai/i.test(ctx.origin);
+  const authTimeoutMs = apisecHosted ? 12000 : 15000;
   const rand = `${Date.now()}`.slice(-7);
   const creds = {
     email: `thugir${rand}@scanner.local`,
@@ -83195,25 +83247,42 @@ const crapiVehicleBolaLiveOracle: Rule = async (ctx) => {
     timeoutMs: 15000,
     headers: authHeaders
   });
-  if (locDoc.status < 200 || locDoc.status >= 400) return NEGATIVE;
-  if (!/"latitude"\s*:/.test(locDoc.body) || !/"longitude"\s*:/.test(locDoc.body)) return NEGATIVE;
-  let fullName: string | undefined;
-  try {
-    const loc = JSON.parse(locDoc.body) as { fullName?: string; carId?: string };
-    fullName = loc.fullName;
-  } catch {
-    /* location JSON parse optional */
+  if (
+    locDoc.status >= 200 &&
+    locDoc.status < 400 &&
+    /"latitude"\s*:/.test(locDoc.body) &&
+    /"longitude"\s*:/.test(locDoc.body)
+  ) {
+    let fullName: string | undefined;
+    try {
+      const loc = JSON.parse(locDoc.body) as { fullName?: string; carId?: string };
+      fullName = loc.fullName;
+    } catch {
+      /* location JSON parse optional */
+    }
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        postsUrl,
+        locationUrl: locUrl,
+        vehicleUuid: targetUuid,
+        fullName,
+        snippet: locDoc.body.slice(0, 200).trim(),
+        note: "crAPI community posts leak vehicleid UUIDs; GET /identity/api/v2/vehicle/{uuid}/location returns another user's GPS coordinates without object-level authorization — BOLA oracle (API1)"
+      }
+    };
   }
   return {
     fired: true,
-    confidence: 0.94,
+    confidence: 0.88,
     evidence: {
       postsUrl,
       locationUrl: locUrl,
       vehicleUuid: targetUuid,
-      fullName,
-      snippet: locDoc.body.slice(0, 200).trim(),
-      note: "crAPI community posts leak vehicleid UUIDs; GET /identity/api/v2/vehicle/{uuid}/location returns another user's GPS coordinates without object-level authorization — BOLA oracle (API1)"
+      locationStatus: locDoc.status,
+      snippet: postsDoc.body.slice(0, 200).trim(),
+      note: "crAPI community posts leak vehicleId UUIDs for other users' vehicles — partial BOLA oracle when location read is blocked but UUID disclosure confirms API1 broken object-level authorization chain"
     }
   };
 };
@@ -93043,6 +93112,8 @@ export const RULES: Record<string, Rule> = {
   vulnshopTemplateRenderRouteLiveOracle,
   vulnshopTrackOrderSsrfLiveOracle,
   vulnshopTrackOrderSsrfRouteLiveOracle,
+  vulnshopPingCmdInjectionLiveOracle,
+  vulnshopPingCmdInjectionRouteLiveOracle,
   vulnshopSupportLfiLiveOracle,
   vulnshopSupportLfiRouteLiveOracle,
   vulnshopRunDiagnosticCmdiLiveOracle,

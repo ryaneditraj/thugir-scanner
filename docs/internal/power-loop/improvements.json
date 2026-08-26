@@ -4811,6 +4811,24 @@
       "slug": "brokencrystals-mcp-session-retry",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsMcpSessionId retries MCP initialize up to 3× with 800ms backoff; brokencrystals.com/api/get_count?query=1 thin pass 56→86 findings (+brokencrystals-get-count-mcp-sqli-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-vehicle-bola-vehicleid-partial-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: extractCrapiVehicleUuids matches vehicleId camelCase; crapiVehicleBolaLiveOracle fires partial UUID-leak oracle (0.88) when location read blocked; crapi2.apisec.ai/identity/api/v2/community/posts/recent findings 10→11 (+crapi-community-posts-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-users-profile-api-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isVulnshopUsersProfileBolaRoute accepts /api/users/{id} alias (not only /api/v1/users/); vulnshop.vercel.app/api/users/1 findings 19→20 (+vulnshop-users-profile-bola-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-ping-cmd-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnshopPingCmdInjectionRouteLiveOracle + VULNSHOP_MODULE_ORACLES /api/ping entry; vulnshop.vercel.app/api/ping findings 17→19 (+vulnshop-ping-cmd-injection-route-live-oracle via README corpus fallback when Railway backend down); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }

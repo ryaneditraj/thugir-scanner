@@ -25791,6 +25791,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-ping-cmd-injection-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnShop /api/ping command injection live oracle",
+    description:
+      "GET /api/ping?host= passes attacker input into shell ping — command injection and SSRF training oracle when the Railway backend is reachable.",
+    impactOneline:
+      "Unsanitized host parameters in ping utilities enable command injection and internal network probing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopPingCmdInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands — use strict host allow-lists or disable ping utilities.",
+      steps: [
+        "Validate host against an allow-list of IP addresses or hostnames.",
+        "Use parameterized APIs instead of shelling out to ping.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop GET /api/ping?host= endpoint shells out to ping with user input. Show command injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-ping-cmd-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnShop /api/ping command injection route live oracle",
+    description:
+      "When scanning /api/ping, host= query parameter is passed into shell ping — route-specific command injection / SSRF oracle (README A10).",
+    impactOneline:
+      "Route-specific confirmation that VulnShop documents command injection via the ping API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopPingCmdInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands on API route handlers.",
+      steps: [
+        "Validate host against an allow-list on the /api/ping route.",
+        "Use parameterized APIs instead of shelling out to ping.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/ping route shells out to ping with user input. Show route-specific command injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-template-ssti-live-oracle",
     platform: "generic",
     category: "Injection",
