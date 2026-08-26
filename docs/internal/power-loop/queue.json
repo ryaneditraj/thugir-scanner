@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T09:06:00.000Z",
+  "updated_at": "2026-08-26T10:17:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ssrf.vulnlab.dev/allowlist",
+      "source": "sampsonc/vulnlab.dev — SSRF substring allowlist bypass lab (host-allowlist wrong-way check; ssrf.vulnlab.dev catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/scheme",
+      "source": "sampsonc/vulnlab.dev — unrestricted URL scheme SSRF lab file:// local read (ssrf.vulnlab.dev catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata-gcp",
+      "source": "sampsonc/vulnlab.dev — mock GCP metadata SSRF oracle Metadata-Flavor: Google (ssrf.vulnlab.dev catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file/google?path=https://httpbin.org/get",
+      "source": "NeuraLegion/brokencrystals — Google Cloud SSRF oracle /api/file/google (README cloud endpoints; queued gap from prior runs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level21/",
+      "source": "WebSec.fr level 21 — PHP unserialize gadget chain training puzzle (websec.fr catalog; route oracle gap)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-71",
       "source": "OWASP WrongSecrets — challenge-71 hub seed (Juice Shop companion secrets lab; HN/OWASP training corpus)",
