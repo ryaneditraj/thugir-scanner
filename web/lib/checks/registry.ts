@@ -84254,7 +84254,7 @@ const brokencrystalsAdminpermissionRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-async function brokencrystalsMcpSessionId(ctx: RuleContext): Promise<string | null> {
+async function brokencrystalsMcpSessionIdOnce(ctx: RuleContext): Promise<string | null> {
   const mcpUrl = new URL("/api/mcp", ctx.origin).toString();
   const initPayload = JSON.stringify({
     jsonrpc: "2.0",
@@ -84287,6 +84287,15 @@ async function brokencrystalsMcpSessionId(ctx: RuleContext): Promise<string | nu
   } catch {
     return null;
   }
+}
+
+async function brokencrystalsMcpSessionId(ctx: RuleContext): Promise<string | null> {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (attempt > 0) await new Promise((resolve) => setTimeout(resolve, 800));
+    const sessionId = await brokencrystalsMcpSessionIdOnce(ctx);
+    if (sessionId) return sessionId;
+  }
+  return null;
 }
 
 async function brokencrystalsMcpJsonRpc(
