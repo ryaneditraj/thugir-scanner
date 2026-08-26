@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T21:05:00.000Z",
+  "updated_at": "2026-08-26T22:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://sqli.vulnlab.dev/union/",
+      "source": "sampsonc/vulnlab.dev — in-band UNION-based SQLi lab (sqli.vulnlab.dev catalog /meta/union)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sqli.vulnlab.dev/blind-bool/",
+      "source": "sampsonc/vulnlab.dev — blind boolean SQLi oracle lab (sqli.vulnlab.dev catalog /meta/blind-bool)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/dom/",
+      "source": "sampsonc/vulnlab.dev — DOM XSS location.hash→innerHTML lab (xss.vulnlab.dev catalog /meta/dom)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/basic/",
+      "source": "sampsonc/vulnlab.dev — Jinja2 render_template_string SSTI lab (ssti.vulnlab.dev catalog /meta/basic)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssti.vulnlab.dev/format/",
+      "source": "sampsonc/vulnlab.dev — str.format() attribute-walk SSTI lab (ssti.vulnlab.dev catalog /meta/format)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ssti.vulnlab.dev/filtered/",
       "source": "sampsonc/vulnlab.dev — Jinja2 SSTI substring blocklist bypass lab (ssti.vulnlab.dev catalog /meta/filtered)",
