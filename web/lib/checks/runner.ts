@@ -2032,6 +2032,7 @@ const DEEP_RULES = new Set<string>([
   "pwnshopChatInitEmailEnumerationLiveOracle",
   "pwnshopChatInitRouteLiveOracle",
   "pwnshopForgotPasswordEmailEnumerationLiveOracle",
+  "pwnshopForgotPasswordEmailEnumerationRouteLiveOracle",
   "pwnshopTrackIdorLiveOracle",
   "pwnshopTrackIdorRouteLiveOracle",
   "clientSidePwnshopWishlistIdorOracle",
@@ -3161,6 +3162,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsV1UserinfoDisclosureRouteLiveOracle",
   "brokencrystalsTestimonialsSqliLiveOracle",
   "brokencrystalsTestimonialsIframeInjectionLiveOracle",
+  "brokencrystalsTestimonialsIframeInjectionRouteLiveOracle",
   "brokencrystalsTestimonialsXssLiveOracle",
   "brokencrystalsSubscriptionsXssLiveOracle",
   "brokencrystalsPartnerLoginXpathLiveOracle",
@@ -3552,6 +3554,7 @@ const DEEP_RULES = new Set<string>([
   "burpbountyArticaCveLiveOracle",
   "burpbountyMagmiCveLiveOracle",
   "burpbountyF5BashCveLiveOracle",
+  "burpbountyF5BashCveRouteLiveOracle",
   "burpbountyNetsweeperSystemstatusCveLiveOracle",
   "clientSideBugbaitEvidence",
   "clientSideArtemisKitEvidence",
@@ -13030,6 +13033,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
+        /\/testimonials\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-testimonials-iframe-injection-route")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
         /\/api\/testimonials\/count\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-testimonials-count")
       )
@@ -13163,6 +13172,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("ginandjuice-login")
       )
         return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/forgot-password\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-forgot-password-email-enumeration-route")
+      )
+        return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:reset-password|forgot-password|login|verify-otp)\b/i.test(targetInput) &&
@@ -13335,6 +13350,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?forti(?:os)?(?:\/remote\/login)?\/?$/i.test(targetInput) && p.slug === "burpbounty-fortios-remote-login-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?weblogic(?:\/console\/login\/LoginForm\.jsp)?\/?$/i.test(targetInput) && p.slug === "burpbounty-weblogic-console-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/graphql(?:\/query)?\/?$/i.test(targetInput) && p.slug === "burpbounty-graphql-query-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/mgmt\/tm\/util\/bash\b/i.test(targetInput) && p.slug === "burpbounty-f5-bash-cve-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/command-injection\/?$/i.test(targetInput) && p.slug === "sec-research-lab-command-injection-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/jwt-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-jwt-lab-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/prototype-pollution\/?$/i.test(targetInput) && p.slug === "sec-research-lab-prototype-pollution-route-live-oracle") return -3;
