@@ -364,6 +364,21 @@
   ],
   "discovery_urls": [
     {
+      "url": "https://brokencrystals.com/api/products?name=test",
+      "source": "NeuraLegion/brokencrystals — SQLi/date-range DoS oracle GET /api/products?name (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/views/test-product",
+      "source": "NeuraLegion/brokencrystals — product views API oracle GET /api/views/:product (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/one/admin_user/photo?isAdmin=true",
+      "source": "NeuraLegion/brokencrystals — BFLA photo delete oracle DELETE /users/one/:id/photo?isAdmin= (README)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://brokencrystals.com/api/mcp",
       "source": "NeuraLegion/brokencrystals — MCP JSON-RPC endpoint with SQLi/SSTI/LFI/RCE tool oracles (Bright Security MCP blog 2025)",
       "auth": "public_demo"
