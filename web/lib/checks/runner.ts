@@ -2225,6 +2225,8 @@ const DEEP_RULES = new Set<string>([
   "zerohealthPrescriptionsRouteLiveOracle",
   "zerohealthAppointmentsRouteLiveOracle",
   "zerohealthSearchAppointmentsTypeRouteLiveOracle",
+  "zerohealthSearchPatientsTypeRouteLiveOracle",
+  "zerohealthSearchPrescriptionsTypeRouteLiveOracle",
   "zerohealthDebugTokenRouteLiveOracle",
   "zerohealthDebugConnectionRouteLiveOracle",
   "zerohealthInfoRouteLiveOracle",
@@ -3463,6 +3465,7 @@ const DEEP_RULES = new Set<string>([
   "vulnforgeAcademyLevelAuthRouteLiveOracle",
   "vulnforgeAcademyLevelFileUploadRouteLiveOracle",
   "vulnforgeAcademyLevelRceRouteLiveOracle",
+  "vulnforgeAcademyLevelFinalBossRouteLiveOracle",
   "vulnbankUploadProfilePictureUrlRouteLiveOracle",
   "vulnbankWerkzeugConsoleRouteLiveOracle",
   "agentpwnAttackRouteLiveOracle",
@@ -7706,7 +7709,8 @@ function extractVulnforgeAcademySeeds(html: string, pageUrl: string): string[] {
     { tier: "medium", level: 16 },
     { tier: "medium", level: 17 },
     { tier: "medium", level: 18 },
-    { tier: "hard", level: 19 }
+    { tier: "hard", level: 19 },
+    { tier: "hard", level: 20 }
   ];
   for (const { tier, level } of levelPaths) {
     try {
@@ -11685,6 +11689,26 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug === "zerohealth-search-appointments-type-route-live-oracle"
       )
         return -4;
+      if (
+        /zerohealth\.aliyu\.dev|zero-health\.vercel\.app/i.test(origin) &&
+        /\/api\/search\b/i.test(targetInput) &&
+        /(?:\?|&)type=patients\b/i.test(targetInput) &&
+        p.slug === "zerohealth-search-patients-type-route-live-oracle"
+      )
+        return -4;
+      if (
+        /zerohealth\.aliyu\.dev|zero-health\.vercel\.app/i.test(origin) &&
+        /\/api\/search\b/i.test(targetInput) &&
+        /(?:\?|&)type=prescriptions\b/i.test(targetInput) &&
+        p.slug === "zerohealth-search-prescriptions-type-route-live-oracle"
+      )
+        return -4;
+      if (
+        /zerohealth\.aliyu\.dev|zero-health\.vercel\.app/i.test(origin) &&
+        /\/api\/prescriptions\b/i.test(targetInput) &&
+        p.slug === "zerohealth-prescriptions-route-live-oracle"
+      )
+        return -4;
       if (/public-firing-range\.appspot\.com/i.test(origin) && p.slug.startsWith("firing-range-")) return -2;
       if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) && /juice-shop-addresss/.test(p.slug)) return -3;
       if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) && p.slug.startsWith("juice-shop-")) return -2;
@@ -13174,6 +13198,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -4;
       if (/prompt-shield1\.vercel\.app/i.test(origin) && p.slug.startsWith("prompt-shield")) return -4;
+      if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level(?:s)?\/20\b|level20\.php|final-boss/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level20-final-boss")
+      )
+        return -4;
       if (
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
         /\/level(?:1[6-8])\b/i.test(targetInput) &&
