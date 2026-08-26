@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-26T17:09:40.785Z",
-  "total": 2689,
-  "uniqueSlugs": 2681,
+  "generatedAt": "2026-08-26T18:28:07.748Z",
+  "total": 2692,
+  "uniqueSlugs": 2684,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2671,
+    "generic": 2674,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2604,
+    "deep": 2607,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 124,
     "Security misconfiguration": 203,
     "Broken authentication": 168,
-    "Injection": 419,
+    "Injection": 422,
     "Cross-site scripting": 724,
     "Open redirect": 24,
     "general": 20,
@@ -2408,6 +2408,7 @@
     "vulnforge-academy-level-ssrf-route-live-oracle",
     "vulnforge-academy-level-ssti-route-live-oracle",
     "vulnforge-academy-level-xss-route-live-oracle",
+    "vulnforge-academy-level20-final-boss-route-live-oracle",
     "vulnforge-academy-level4-sqli-route-live-oracle",
     "vulnforge-academy-level6-sqli-route-live-oracle",
     "vulnlab-admin-secrets-live-oracle",
@@ -2723,6 +2724,8 @@
     "zerohealth-reports-generate-route-live-oracle",
     "zerohealth-reset-password-reflected-xss-route-live-oracle",
     "zerohealth-search-appointments-type-route-live-oracle",
+    "zerohealth-search-patients-type-route-live-oracle",
+    "zerohealth-search-prescriptions-type-route-live-oracle",
     "zerohealth-search-reflected-xss-route-live-oracle",
     "zerohealth-stored-xss-route-live-oracle",
     "zerohealth-upload-advanced-route-live-oracle",

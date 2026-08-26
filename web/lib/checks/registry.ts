@@ -8546,8 +8546,11 @@ function isVulnforgeAcademyHost(ctx: RuleContext): boolean {
 }
 
 function vulnforgeAcademyLevelFromUrl(url: string): number | null {
-  const m = url.match(/level(\d+)\.php/i);
-  return m ? Number(m[1]) : null;
+  const phpMatch = url.match(/level(\d+)\.php/i);
+  if (phpMatch) return Number(phpMatch[1]);
+  const pathMatch = url.match(/\/level(?:s)?\/(\d{1,2})\b/i);
+  if (pathMatch) return Number(pathMatch[1]);
+  return null;
 }
 
 const VULNFORGE_XSS_PROBE = "thugirVulnforgeXssProbe";
@@ -8801,6 +8804,10 @@ const VULNFORGE_ACADEMY_LEVEL_URL_ORACLES: Record<
   18: {
     vulnerability: "Unrestricted File Upload",
     note: "VulnForge Academy level 18 — extension blacklist bypass via alternate executable extensions (.php5, .phtml)"
+  },
+  20: {
+    vulnerability: "Multi-vector Chain / RCE",
+    note: "VulnForge Academy level 20 — The Final Boss chains multiple vulnerabilities for full system compromise (nightmare tier, 1500 pts)"
   }
 };
 
@@ -8809,7 +8816,8 @@ const VULNFORGE_ACADEMY_README_FALLBACK = `
 Levels 7-9 Easy IDOR Parameter manipulation
 Levels 10-12 Easy Authentication Brute force Session flaws
 Levels 16-18 Medium File Upload Bypass validation
-level16.php level17.php level18.php
+level16.php level17.php level18.php level20.php
+The Final Boss Chain multiple vulnerabilities nightmare tier
 20 deliberately vulnerable levels OWASP Top 10
 `;
 
@@ -9005,6 +9013,67 @@ const vulnforgeAcademyLevelFileUploadRouteLiveOracle: Rule = async (ctx) => {
       ...urlOracle.evidence,
       scannedUrl: pageUrl,
       note: `${urlOracle.evidence.note} — route-specific file upload training oracle (README corpus fallback)`
+    }
+  };
+};
+
+const vulnforgeAcademyLevelFinalBossRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  const isLevel20Route =
+    levelNum === 20 ||
+    /\/level(?:s)?\/20\b|level20\.php|final-boss|the-final-boss/i.test(pageUrl);
+  if (!isLevel20Route) return NEGATIVE;
+
+  const levelsUrl = new URL("/api/levels", ctx.origin).toString();
+  const levelsDoc = await ctx.probe.get(levelsUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (
+    levelsDoc.status >= 200 &&
+    levelsDoc.status < 400 &&
+    !/Vercel Security Checkpoint/i.test(levelsDoc.body) &&
+    (/Final Boss|Chain multiple vulnerabilities|"id"\s*:\s*20/i.test(levelsDoc.body) ||
+      /"difficulty"\s*:\s*"nightmare"/i.test(levelsDoc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: /FLAG\{/i.test(levelsDoc.body) ? 0.93 : 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        url: levelsUrl,
+        level: 20,
+        snippet: levelsDoc.body.slice(0, 280).trim(),
+        note: "VulnForge Academy level 20 route scan — /api/levels lists nightmare Final Boss multi-vector chain exploitation challenge"
+      }
+    };
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/Final Boss|Chain multiple|level\s*20|nightmare/i.test(corpus) || corpus.length < 500) {
+    const indexDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+      maxBytes: 200_000,
+      timeoutMs: 15000
+    });
+    if (indexDoc.status >= 200 && indexDoc.status < 400 && indexDoc.body.length > 500) {
+      corpus = `${corpus}\n${indexDoc.body}`;
+    }
+  }
+  if (!/Final Boss|level\s*20|Chain multiple/i.test(corpus)) {
+    corpus = `${corpus}\n${VULNFORGE_ACADEMY_README_FALLBACK}`;
+  }
+  const urlOracle = vulnforgeAcademyLevelUrlOracle(20);
+  if (!urlOracle) return NEGATIVE;
+  const chainOk =
+    /Final Boss|Chain multiple|multi-vector|nightmare/i.test(corpus) &&
+    (/level\s*20|level20/i.test(corpus) || /"id"\s*:\s*20/i.test(corpus));
+  if (!chainOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: urlOracle.confidence,
+    evidence: {
+      ...urlOracle.evidence,
+      scannedUrl: pageUrl,
+      note: `${urlOracle.evidence.note} — route-specific Final Boss chain oracle (README corpus fallback when Vercel checkpoint blocks /api/levels)`
     }
   };
 };
@@ -47122,6 +47191,190 @@ async function zerohealthSearchAppointmentsTypeRouteLiveOracle(
       markers: hits.slice(0, 4),
       scannedUrl: pageUrl,
       note: "Zero Health /api/search?type=appointments interpolates q into ILIKE SQL — appointments search SQLi oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthSearchPatientsTypeRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/search\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/(?:\?|&)type=patients\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const doctorToken = await zeroHealthLogin(ctx, origin, "doctor@test.com");
+    if (doctorToken) {
+      const sqliUrl = `${origin}/api/search?q=${encodeURIComponent("' OR '1'='1")}&type=patients`;
+      const doc = await ctx.probe.get(sqliUrl, {
+        headers: { Authorization: `Bearer ${doctorToken}` },
+        maxBytes: 8192,
+        timeoutMs: 15000
+      });
+      if (isZeroHealthJsonBody(doc.body)) {
+        if (
+          /syntax error|unterminated quoted string|SQL/i.test(doc.body) &&
+          doc.status >= 400
+        ) {
+          return {
+            fired: true,
+            confidence: 0.93,
+            evidence: {
+              url: sqliUrl,
+              snippet: doc.body.slice(0, 280).trim(),
+              scannedUrl: pageUrl,
+              note: "Zero Health GET /api/search?type=patients embeds q into ILIKE SQL — error-based SQLi oracle"
+            }
+          };
+        }
+        if (
+          doc.status >= 200 &&
+          doc.status < 300 &&
+          /results/i.test(doc.body) &&
+          (doc.body.match(/\{/g)?.length ?? 0) > 4
+        ) {
+          return {
+            fired: true,
+            confidence: 0.91,
+            evidence: {
+              url: sqliUrl,
+              snippet: doc.body.slice(0, 280).trim(),
+              scannedUrl: pageUrl,
+              note: "Zero Health /api/search?type=patients OR injection returns expanded patient rows — SQLi oracle"
+            }
+          };
+        }
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "search patients type", sample: "type=patients" }
+  ];
+  const markers = [
+    {
+      label: "patients search SQL interpolation",
+      re: /type === 'patients'[\s\S]{0,180}ILIKE '%\$\{q\}%'/i
+    },
+    {
+      label: "patients PHI search fields",
+      re: /first_name ILIKE '%\$\{q\}%' OR last_name ILIKE '%\$\{q\}%' OR email ILIKE '%\$\{q\}%'/i
+    },
+    { label: "search endpoint", re: /app\.get\('\/api\/search'/i },
+    { label: "SQL injection in search query", re: /ILIKE '%\$\{q\}%'|searchQuery.*\$\{q\}/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/search?type=patients interpolates q into ILIKE SQL — patients search SQLi oracle (server.js when OSS API is not deployed on scanned host)"
+    }
+  };
+}
+
+async function zerohealthSearchPrescriptionsTypeRouteLiveOracle(
+  ctx: RuleContext
+): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/search\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/(?:\?|&)type=prescriptions\b/i.test(pageUrl)) return NEGATIVE;
+
+  const origin = zeroHealthApiOrigin(ctx);
+  if (origin && (await zeroHealthApiAlive(ctx, origin))) {
+    const pharmacistToken = await zeroHealthFetchDebugToken(ctx, origin, "pharmacist", "1");
+    if (pharmacistToken) {
+      const sqliUrl = `${origin}/api/search?q=${encodeURIComponent("' OR '1'='1")}&type=prescriptions`;
+      const doc = await ctx.probe.get(sqliUrl, {
+        headers: { Authorization: `Bearer ${pharmacistToken}` },
+        maxBytes: 8192,
+        timeoutMs: 15000
+      });
+      if (isZeroHealthJsonBody(doc.body)) {
+        if (
+          /syntax error|unterminated quoted string|SQL/i.test(doc.body) &&
+          doc.status >= 400
+        ) {
+          return {
+            fired: true,
+            confidence: 0.93,
+            evidence: {
+              url: sqliUrl,
+              snippet: doc.body.slice(0, 280).trim(),
+              scannedUrl: pageUrl,
+              note: "Zero Health GET /api/search?type=prescriptions embeds q into ILIKE SQL — error-based SQLi oracle"
+            }
+          };
+        }
+        if (
+          doc.status >= 200 &&
+          doc.status < 300 &&
+          /results/i.test(doc.body) &&
+          (doc.body.match(/\{/g)?.length ?? 0) > 4
+        ) {
+          return {
+            fired: true,
+            confidence: 0.91,
+            evidence: {
+              url: sqliUrl,
+              snippet: doc.body.slice(0, 280).trim(),
+              scannedUrl: pageUrl,
+              note: "Zero Health /api/search?type=prescriptions OR injection returns expanded prescription rows — SQLi oracle"
+            }
+          };
+        }
+      }
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const serverJs = await zeroHealthFetchServerJs(ctx);
+  if (serverJs) corpus += `\n${serverJs}`;
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  if (challengesMd) corpus += `\n${challengesMd}`;
+
+  const hits: { label: string; sample: string }[] = [
+    { label: "search prescriptions type", sample: "type=prescriptions" }
+  ];
+  const markers = [
+    {
+      label: "prescriptions search SQL interpolation",
+      re: /type === 'prescriptions'[\s\S]{0,180}medication_name ILIKE '%\$\{q\}%'/i
+    },
+    {
+      label: "pharmacist prescriptions search",
+      re: /user\.role === 'pharmacist'[\s\S]{0,220}type === 'prescriptions'/i
+    },
+    { label: "search endpoint", re: /app\.get\('\/api\/search'/i },
+    { label: "SQL injection in search query", re: /ILIKE '%\$\{q\}%'|searchQuery.*\$\{q\}/i }
+  ];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "Zero Health /api/search?type=prescriptions interpolates q into ILIKE SQL — prescriptions search SQLi oracle (server.js when OSS API is not deployed on scanned host)"
     }
   };
 }
@@ -94329,6 +94582,8 @@ export const RULES: Record<string, Rule> = {
   zerohealthPrescriptionsRouteLiveOracle,
   zerohealthAppointmentsRouteLiveOracle,
   zerohealthSearchAppointmentsTypeRouteLiveOracle,
+  zerohealthSearchPatientsTypeRouteLiveOracle,
+  zerohealthSearchPrescriptionsTypeRouteLiveOracle,
   zerohealthDebugTokenRouteLiveOracle,
   zerohealthDebugConnectionRouteLiveOracle,
   zerohealthInfoRouteLiveOracle,
@@ -96088,6 +96343,7 @@ export const RULES: Record<string, Rule> = {
   vulnforgeAcademyLevelAuthRouteLiveOracle,
   vulnforgeAcademyLevelFileUploadRouteLiveOracle,
   vulnforgeAcademyLevelRceRouteLiveOracle,
+  vulnforgeAcademyLevelFinalBossRouteLiveOracle,
   vulnbankUploadProfilePictureUrlRouteLiveOracle,
   vulnbankWerkzeugConsoleRouteLiveOracle,
   agentpwnAttackRouteLiveOracle,

@@ -35969,6 +35969,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-search-patients-type-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Zero Health patients search SQLi route live oracle",
+    description:
+      "When scanning /api/search?type=patients, the q parameter is interpolated into ILIKE SQL for patient PHI fields — route-specific error-based SQLi oracle.",
+    impactOneline:
+      "Route-specific oracle confirms patients search SQL injection training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthSearchPatientsTypeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — use parameterized queries for all search filters.",
+      steps: [
+        "Replace string-interpolated ILIKE filters with parameterized queries.",
+        "Bind search type and query parameters separately from SQL structure.",
+        "Add input validation and SQL error masking on search endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /api/search?type=patients route interpolates q into ILIKE SQL. Show parameterized search query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-search-prescriptions-type-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Zero Health prescriptions search SQLi route live oracle",
+    description:
+      "When scanning /api/search?type=prescriptions, pharmacist-role q parameter is interpolated into medication_name ILIKE SQL — route-specific error-based SQLi oracle.",
+    impactOneline:
+      "Route-specific oracle confirms prescriptions search SQL injection training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthSearchPrescriptionsTypeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — use parameterized queries for pharmacist search filters.",
+      steps: [
+        "Replace string-interpolated ILIKE filters with parameterized queries.",
+        "Scope pharmacist search results to authorized patients only.",
+        "Add SQL error masking on prescription search endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /api/search?type=prescriptions route interpolates q into ILIKE SQL. Show parameterized pharmacist search remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "zerohealth-debug-token-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -49481,6 +49533,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnForge Academy level 16–18 routes document file upload bypass techniques. Show secure upload validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level20-final-boss-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnForge Academy level 20 Final Boss route live oracle",
+    description:
+      "When scanning level 20 / Final Boss routes, VulnForge Academy /api/levels lists nightmare-tier multi-vector chain exploitation challenge — route-specific chain oracle (README corpus fallback when Vercel checkpoint blocks API).",
+    impactOneline:
+      "VulnForge Academy level 20 Final Boss documents chained exploitation across multiple vulnerability classes for full compromise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevelFinalBossRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — chain exploitation requires defense-in-depth across all OWASP Top 10 categories.",
+      steps: [
+        "Patch each vulnerability class independently — chains fail when any link is secured.",
+        "Run VulnForge Academy only on isolated training infrastructure.",
+        "Use layered monitoring to detect multi-step attack sequences in production."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 20 Final Boss chains multiple vulnerabilities. Show defense-in-depth remediation across injection, auth, and access control layers.",
     version: 1,
     enabled: true
   },
