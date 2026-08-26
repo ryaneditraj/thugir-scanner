@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T20:12:30.000Z",
+  "updated_at": "2026-08-26T21:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2807,
-  "total_findings": 28168,
+  "total_sites_scanned": 2816,
+  "total_findings": 28411,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1989,
-  "discovery_findings": 23781,
+  "discovery_urls_added": 1994,
+  "discovery_findings": 23976,
   "improvements_shipped": 1182,
-  "last_run": "2026-08-26T20:12:30.000Z",
+  "last_run": "2026-08-26T21:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 593,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,48 +48,45 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (49 findings, 38 juice-shop live oracles); juice-shop-iac-terraform-tls-key-live-oracle new; secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings, 35 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 101,
-      "focus": "zen-demo-java injection labs (SQLi/shell/SSRF/path-traversal pages) + xss.vulnlab stored XSS + queue drain vaultapp-omega notes + owasp.andreabrioschi.it + duck-store orders/coupons",
+      "findings": 195,
+      "focus": "ssti.vulnlab.dev filtered/sandboxed/second-order + ssrf.vulnlab gopher + AI Security Platform CSRF + queue drain brokencrystals MCP/process_numbers + wrongsecrets challenge-67",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 38 live oracles)",
-      "zen-demo-java.fly.dev/pages/create: 9 findings — zen-demo-java-create-sqli-live-oracle + route oracle",
-      "zen-demo-java.fly.dev/pages/execute: 9 findings — zen-demo-java-execute-shell-injection-live-oracle + route oracle",
-      "zen-demo-java.fly.dev/pages/request: 9 findings — zen-demo-java-request-ssrf-live-oracle + route oracle",
-      "zen-demo-java.fly.dev/pages/read: 9 findings — zen-demo-java-read-path-traversal-live-oracle + route oracle",
-      "xss.vulnlab.dev/stored/: 7 findings — xss-vulnlab-stored-live-oracle",
-      "vaultapp-omega.vercel.app/api/notes/1: 12 findings — vault-notes BOLA hub",
-      "owasp.andreabrioschi.it/: 12 findings — owasp-andreabrioschi-top10-2025-hub-live-oracle",
-      "duck-store.escape.tech/api/v1/orders/coupons: 34 findings — coupon business-logic hub"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 35 live oracles)",
+      "ssti.vulnlab.dev/filtered/: 9 findings — ssti-vulnlab-filtered-route-live-oracle new this pass",
+      "ssti.vulnlab.dev/sandboxed/: 4 findings — corpus-only basic oracle; no sandboxed route oracle yet",
+      "ssti.vulnlab.dev/second-order/: 6 findings — ssti-vulnlab-second-order-live-oracle via hub crawl",
+      "ssrf.vulnlab.dev/gopher/: 15 findings — ssrf-vulnlab-gopher-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/csrf: 7 findings — ai-security-csrf-route-live-oracle",
+      "brokencrystals.com/api/mcp: 82 findings — brokencrystals-mcp-tools-live-oracle hub",
+      "brokencrystals.com/api/process_numbers: 58 findings — brokencrystals-mcp-process-numbers-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + juice-shop-iac-terraform-tls-key-live-oracle)",
-      "zen-demo-java pages share cross-page live oracles (all 4 injection types detected on each page via corpus)",
-      "vaultapp-omega notes/1 — IDOR oracle may need authenticated session for full exploitation proof"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "ssti.vulnlab.dev/sandboxed/: thin pass (4 findings) — missing sandboxed-route live oracle for SandboxedEnvironment bypass",
+      "wrongsecrets.herokuapp.com/challenge/challenge-67: undeployed on Heroku (WHOOOOPS oracles only)",
+      "brokencrystals MCP endpoints: high corpus recall but need live MCP session for full RCE proof"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 49,
+    "juice-shop.herokuapp.com": 48,
+    "ssti.vulnlab.dev/filtered/": 9,
+    "ssti.vulnlab.dev/sandboxed/": 4,
+    "ssti.vulnlab.dev/second-order/": 6,
+    "ssrf.vulnlab.dev/gopher/": 15,
+    "ai-security-platform-iota.vercel.app/challenges/csrf": 7,
+    "wrongsecrets.herokuapp.com/challenge/challenge-67": 14,
+    "brokencrystals.com/api/mcp": 82,
+    "brokencrystals.com/api/process_numbers": 58,
     "zen-demo-java.fly.dev/pages/create": 9,
-    "zen-demo-java.fly.dev/pages/execute": 9,
-    "zen-demo-java.fly.dev/pages/request": 9,
-    "zen-demo-java.fly.dev/pages/read": 9,
-    "xss.vulnlab.dev/stored/": 7,
-    "vaultapp-omega.vercel.app/api/notes/1": 12,
-    "owasp.andreabrioschi.it/": 12,
-    "duck-store.escape.tech/api/v1/orders/coupons": 34,
-    "zerohealth.aliyu.dev/api/records": 5,
-    "chimera.atlascrew.dev/vulnerability-inventory": 9,
-    "chimera.atlascrew.dev/hipaa-evidence-endpoints": 11,
-    "brokencrystals.com/api/users/search/admin": 83,
-    "pwnshop.ctfsecurity.com/api/v1/orders": 41
+    "duck-store.escape.tech/api/v1/orders/coupons": 34
   }
 }
