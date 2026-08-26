@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T04:05:00.000Z",
+  "updated_at": "2026-08-26T05:13:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://dvwu.vercel.app/labs/rce",
+      "source": "zahidoverflow/dvwu — RCE command-injection training lab route (Vercel live demo)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/open-redirect",
+      "source": "zahidoverflow/dvwu — open-redirect training lab route (Vercel live demo)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/products/search",
+      "source": "OWASP Juice Shop demo — product search SQLi oracle /rest/products/search?q=",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/products",
+      "source": "Escape Duck Store — unauthenticated product catalog API oracle (Escape.tech demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/race-condition",
+      "source": "zahidoverflow/dvwu — race-condition / TOCTOU training lab route (Vercel live demo)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://vuln-expose.vercel.app/sqli/blind",
       "source": "JuaniVeltri/vuln-expose — blind SQLi lab module with time/boolean-based oracles (GitHub README)",
