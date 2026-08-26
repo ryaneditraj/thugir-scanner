@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-26T19:25:56.324Z",
-  "total": 2695,
-  "uniqueSlugs": 2687,
+  "generatedAt": "2026-08-26T20:07:50.504Z",
+  "total": 2697,
+  "uniqueSlugs": 2689,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2677,
+    "generic": 2679,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2610,
+    "deep": 2612,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 124,
-    "Security misconfiguration": 204,
+    "Security misconfiguration": 205,
     "Broken authentication": 168,
     "Injection": 422,
     "Cross-site scripting": 724,
@@ -33,7 +33,7 @@
     "general": 20,
     "SSRF": 18,
     "Server-side request forgery": 90,
-    "Sensitive data exposure": 70,
+    "Sensitive data exposure": 71,
     "AI security": 95,
     "Cross-site request forgery": 8,
     "Business logic": 24,
@@ -342,9 +342,11 @@
     "bypass403-secure-bearer-invalid-token-route-live-oracle",
     "bypass403-waf-live-oracle",
     "bypass403-waf-route-live-oracle",
+    "chimera-hipaa-evidence-endpoints-route-live-oracle",
     "chimera-login-vulnerable-sqli-route-live-oracle",
     "chimera-patients-search-sqli-route-live-oracle",
     "chimera-swagger-route-live-oracle",
+    "chimera-vulnerability-inventory-route-live-oracle",
     "chimera-vulnerability-matrix-route-live-oracle",
     "client-side-aevum-agent-consent-demo-evidence",
     "client-side-agentic-ai-ctf-evidence",
