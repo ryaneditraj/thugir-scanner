@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T12:07:36.804Z",
+  "updated_at": "2026-08-26T13:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/users/one/admin_user/photo",
+      "source": "NeuraLegion/brokencrystals — BFLA photo endpoint GET /api/users/one/admin_user/photo (README broken authz)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/one/regular_user/photo",
+      "source": "NeuraLegion/brokencrystals — user photo BOLA comparison GET /api/users/one/regular_user/photo (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/products/1",
+      "source": "ctfsec/pwnshop — REST product IDOR oracle GET /api/v1/products/:id (GitHub README API routes)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/coupons/apply",
+      "source": "Escape Duck Store — coupon business-logic oracle POST /api/v1/coupons/apply (escape.tech vuln catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga2.tools.escape.tech/graphql",
+      "source": "Escape DVGA2 — GraphQL introspection/batching training endpoint (dvga2.tools.escape.tech)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/vulnerabilities",
       "source": "Escape Duck Store — published vulnerability catalog (escape.tech blog 2026; public_demo training corpus)",
