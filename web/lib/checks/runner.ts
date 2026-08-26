@@ -1702,6 +1702,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideChimeraVulnLabEvidence",
   "chimeraLoginVulnerableSqliRouteLiveOracle",
   "chimeraPatientsSearchSqliRouteLiveOracle",
+  "chimeraVulnerabilityMatrixRouteLiveOracle",
   "chimeraSwaggerRouteLiveOracle",
   "clientSideHackHealthLabEvidence",
   "hackHealthA03SqlInjectionRouteLiveOracle",
@@ -1732,6 +1733,7 @@ const DEEP_RULES = new Set<string>([
   "fauxbankCsrfTransferProbe",
   "fauxbankStoredXssSupportProbe",
   "fauxbankSupportRouteLiveOracle",
+  "fauxbankSearchSqliRouteLiveOracle",
   "fauxbankLoansRequestLiveOracle",
   "fauxbankLoansNegativeAmountLiveOracle",
   "fauxbankAdminPanelLiveOracle",
@@ -11598,6 +11600,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/vulnerability-matrix\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-vulnerability-matrix")
+      )
+        return -3;
+      if (
         /duck-store\.escape\.tech/i.test(origin) &&
         /\/api\/v1\/(?:orders\/)?coupons(?:\/apply|\/validate)?/i.test(targetInput) &&
         p.slug.startsWith("duck-store-coupons")
@@ -11932,6 +11940,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         (p.slug.startsWith("brokencrystals-file") || p.slug.startsWith("brokencrystals-api-file"))
       )
         return -4;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/api\/search\b/i.test(targetInput) &&
+        (p.slug === "fauxbank-search-sqli-route-live-oracle" ||
+          p.slug === "fauxbank-authenticated-sqli-search")
+      )
+        return -3;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/(?:api\/)?support\b/i.test(targetInput) &&

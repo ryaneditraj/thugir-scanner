@@ -14770,6 +14770,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-vulnerability-matrix-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Chimera vulnerability matrix route live oracle",
+    description:
+      "When scanning /vulnerability-matrix on chimera.atlascrew.dev, the CHM-ID vulnerability matrix catalogs 456+ intentional API flaws — route-specific honeypot inventory oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera /vulnerability-matrix documents an unauthenticated CHM-ID vulnerability inventory for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraVulnerabilityMatrixRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict vulnerability matrix pages to internal red-team networks.",
+      steps: [
+        "Require authentication before exposing CHM-ID vulnerability registries.",
+        "Do not publish honeypot vulnerability inventories on public hosts.",
+        "Keep Chimera vuln-api instances on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /vulnerability-matrix route exposes 456+ intentional API vulnerabilities. Show how to restrict vulnerability inventories to internal networks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-swagger-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -15494,6 +15520,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "GET /api/support returns ticket bodies with raw <img onerror=...> HTML we posted earlier. Show output encoding fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "FauxBank /api/search authenticated SQLi route live oracle",
+    description:
+      "When scanning /api/search on pentest-fauxbank.vercel.app, GET returns injected:true for OR 1=1 payload after admin login — route-specific authenticated SQLi oracle.",
+    impactOneline:
+      "Route-specific scans on FauxBank search APIs need live SQLi confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all search endpoints.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Validate and escape search terms server-side.",
+        "Add integration tests that reject injection payloads."
+      ]
+    },
+    fixPrompt:
+      "Our FauxBank /api/search route returns injected:true for OR 1=1 payloads after login. Show route-specific parameterized query fixes.",
     version: 1,
     enabled: true
   },
