@@ -79088,9 +79088,9 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform vulnerable-deps challenge — known CVE dependencies and typosquatting in npm supply chain"
   },
   "hacked-npm-packages": {
-    routeRe: /\/challenges\/hacked-npm-packages\b/i,
+    routeRe: /\/challenges\/(?:hacked-npm-packages|hacked-npm)\b/i,
     markers: [
-      { label: "Hacked npm packages challenge route", re: /\/challenges\/hacked-npm-packages/i },
+      { label: "Hacked npm packages challenge route", re: /\/challenges\/(?:hacked-npm-packages|hacked-npm)/i },
       {
         label: "Hacked npm Packages training module",
         re: /Hacked npm Packages|malicious package|compromised npm|postinstall/i
@@ -79118,9 +79118,9 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform insecure-passwords challenge — plaintext or weak password storage in the Next.js workshop"
   },
   "ai-phishing": {
-    routeRe: /\/challenges\/ai-phishing\b/i,
+    routeRe: /\/challenges\/(?:ai-phishing|phishing)\b/i,
     markers: [
-      { label: "AI-Assisted Phishing challenge route", re: /\/challenges\/ai-phishing/i },
+      { label: "AI-Assisted Phishing challenge route", re: /\/challenges\/(?:ai-phishing|phishing)/i },
       { label: "AI-Assisted Phishing training module", re: /AI-Assisted Phishing/i },
       {
         label: "cloned login pages and email spoofing",
@@ -79200,7 +79200,7 @@ const aiSecurityVulnerableDepsRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "vulnerable-deps");
 
 const aiSecurityHackedNpmPackagesRouteLiveOracle: Rule = (ctx) =>
-  aiSecurityPlatformChallengeRouteOracle(ctx, "hacked-npm-packages");
+  aiSecurityCatalogOrLoginGatedRouteOracle(ctx, "hacked-npm-packages");
 
 const aiSecuritySecurityHeadersRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "security-headers");
@@ -79209,7 +79209,7 @@ const aiSecurityInsecurePasswordsRouteLiveOracle: Rule = (ctx) =>
   aiSecurityCatalogOrLoginGatedRouteOracle(ctx, "insecure-passwords");
 
 const aiSecurityAiPhishingRouteLiveOracle: Rule = (ctx) =>
-  aiSecurityPlatformChallengeRouteOracle(ctx, "ai-phishing");
+  aiSecurityCatalogOrLoginGatedRouteOracle(ctx, "ai-phishing");
 
 type AiSecurityAuthGatedChallengeMeta = {
   routeSegment: string;
@@ -79311,14 +79311,16 @@ async function aiSecurityCatalogOrLoginGatedRouteOracle(
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!meta.routeRe.test(pageUrl)) return NEGATIVE;
 
-  const challengeUrl = new URL(`/challenges/${challengeKey}`, AI_SECURITY_PLATFORM_HOME).toString();
+  const routeMatch = pageUrl.match(/\/challenges\/([^/?#]+)/i);
+  const routeSegment = routeMatch?.[1] ?? challengeKey;
+  const challengeUrl = new URL(`/challenges/${routeSegment}`, AI_SECURITY_PLATFORM_HOME).toString();
   const challengeDoc = await ctx.probe.get(challengeUrl, {
     maxBytes: 4096,
     timeoutMs: 12000,
     redirect: "manual"
   });
   const location = challengeDoc.headers["location"] || "";
-  const nextPatterns = aiSecurityAuthGatedNextPatterns(challengeKey);
+  const nextPatterns = aiSecurityAuthGatedNextPatterns(routeSegment);
   const loginRedirect =
     [301, 302, 303, 307, 308].includes(challengeDoc.status) &&
     (/\/login\b/i.test(location) ||
@@ -79329,7 +79331,12 @@ async function aiSecurityCatalogOrLoginGatedRouteOracle(
   const catalog = await aiSecurityPlatformFetchCatalog(ctx);
   const corpus = `${ctx.combined}\n${pageUrl}\n${catalog}\n${location}`;
   const markerHit = meta.markers.some((m) => m.re.test(corpus));
-  if (!markerHit && !new RegExp(`/challenges/${challengeKey}`, "i").test(catalog)) return NEGATIVE;
+  if (
+    !markerHit &&
+    !new RegExp(`/challenges/${challengeKey}|/challenges/${routeSegment}`, "i").test(catalog)
+  ) {
+    return NEGATIVE;
+  }
 
   return {
     fired: true,
@@ -89962,6 +89969,32 @@ const istEduOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const istEduRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/^\/redirect\/?$/i.test(pathname)) return NEGATIVE;
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (!bundle) return NEGATIVE;
+  if (!/approved IST domains|External Redirect Blocked|Redirecting in/i.test(bundle)) return NEGATIVE;
+  if (!/\/redirect\?url=|Open redirect via Location header/i.test(bundle)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["approved IST domains", "Redirecting in", "/redirect?url="],
+      snippet: bundle.match(/approved IST domains[\s\S]{0,80}/i)?.[0]?.slice(0, 100),
+      note: "IST Edu /redirect route scan — SPA implements countdown redirect UI with approved-domain allowlist bypass training for /redirect?url= open redirect"
+    }
+  };
+};
+
 const dvwuSsrfRedirectLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
   const result = await probeRedirectWhitelistBypass(ctx);
@@ -94495,6 +94528,7 @@ export const RULES: Record<string, Rule> = {
   allSeeingEyeHelloRouteLiveOracle,
   istEduSsrfRedirectRouteLiveOracle,
   istEduOpenRedirectRouteLiveOracle,
+  istEduRedirectRouteLiveOracle,
   istEduFilesClientLfiRouteLiveOracle,
   istEduPathTraversalClientRouteLiveOracle,
   istEduDeserializationLabRouteLiveOracle,
