@@ -4829,6 +4829,24 @@
       "slug": "vulnshop-ping-cmd-injection-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: vulnshopPingCmdInjectionRouteLiveOracle + VULNSHOP_MODULE_ORACLES /api/ping entry; vulnshop.vercel.app/api/ping findings 17→19 (+vulnshop-ping-cmd-injection-route-live-oracle via README corpus fallback when Railway backend down); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-testimonials-iframe-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /testimonials bundle confirms get('videosrc')→testimonials-video.outerHTML iframe sink; brokencrystals.com/testimonials findings 81→86 (+brokencrystals-testimonials-iframe-injection-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-f5-bash-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /mgmt/tm/util/bash returns Unauthorized after /cve/f5/ F5 BIG-IP fingerprint; burpbountylab.com/mgmt/tm/util/bash findings 94→95 (+burpbounty-f5-bash-cve-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-forgot-password-email-enumeration-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /forgot-password returns distinct success vs no-account messages for admin@pwnshop.com vs probe email; pwnshop.ctfsecurity.com/forgot-password findings 48→49 (+pwnshop-forgot-password-email-enumeration-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }

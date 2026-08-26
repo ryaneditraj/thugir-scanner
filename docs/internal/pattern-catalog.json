@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-26T05:10:30.951Z",
-  "total": 2659,
-  "uniqueSlugs": 2651,
+  "generatedAt": "2026-08-26T07:22:53.236Z",
+  "total": 2662,
+  "uniqueSlugs": 2654,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2641,
+    "generic": 2644,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2574,
+    "deep": 2577,
     "continuous": 0
   },
   "byCategory": {
@@ -26,9 +26,9 @@
     "Information exposure": 1,
     "Information disclosure": 124,
     "Security misconfiguration": 202,
-    "Broken authentication": 163,
-    "Injection": 409,
-    "Cross-site scripting": 722,
+    "Broken authentication": 164,
+    "Injection": 410,
+    "Cross-site scripting": 723,
     "Open redirect": 24,
     "general": 20,
     "SSRF": 16,
@@ -203,6 +203,7 @@
     "brokencrystals-subscriptions-xss-route-live-oracle",
     "brokencrystals-testimonials-count-sqli-route-live-oracle",
     "brokencrystals-testimonials-iframe-injection-live-oracle",
+    "brokencrystals-testimonials-iframe-injection-route-live-oracle",
     "brokencrystals-testimonials-route-live-oracle",
     "brokencrystals-testimonials-sqli-live-oracle",
     "brokencrystals-testimonials-xss-live-oracle",
@@ -240,6 +241,7 @@
     "burpbounty-dwr-interface-live-oracle",
     "burpbounty-dwr-util-live-oracle",
     "burpbounty-f5-bash-cve-live-oracle",
+    "burpbounty-f5-bash-cve-route-live-oracle",
     "burpbounty-firebase-cve-live-oracle",
     "burpbounty-fortios-remote-login-live-oracle",
     "burpbounty-fortios-remote-login-route-live-oracle",
@@ -1936,6 +1938,7 @@
     "pwnshop-export-orders-csv-live-oracle",
     "pwnshop-export-orders-csv-route-live-oracle",
     "pwnshop-forgot-password-email-enumeration-live-oracle",
+    "pwnshop-forgot-password-email-enumeration-route-live-oracle",
     "pwnshop-less-imports-ssti-route-live-oracle",
     "pwnshop-mail-idor-route-live-oracle",
     "pwnshop-mail-inbox-idor-live-oracle",

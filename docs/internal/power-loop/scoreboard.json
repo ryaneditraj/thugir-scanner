@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-26T07:10:42.227Z",
+  "updated_at": "2026-08-26T07:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2841,
-  "total_findings": 28803,
-  "critical_findings": 55,
+  "total_sites_scanned": 2842,
+  "total_findings": 28807,
+  "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2007,
-  "discovery_findings": 24239,
-  "improvements_shipped": 1184,
-  "last_run": "2026-08-26T07:10:42.227Z",
+  "discovery_findings": 24243,
+  "improvements_shipped": 1187,
+  "last_run": "2026-08-26T07:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 47,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
+      "probes_run": 591,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,44 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (47 findings, 36 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings, 34 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 239,
-      "focus": "brokencrystals /api/render SSTI + /api/metadata XXE; pwnshop download path-traversal + chat prompt-injection; websec level19; queue drain wrongsecrets-16/17/18",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 229,
+      "focus": "route-specific oracles for brokencrystals /testimonials iframe injection, burpbounty F5 bash CVE, pwnshop forgot-password enumeration",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings, 36 live oracles) — no category misses",
-      "brokencrystals.com/api/render: 81 findings — brokencrystals-render-dot-ssti-live-oracle + full BC API hub",
-      "brokencrystals.com/api/metadata: 43 findings — brokencrystals-metadata-xxe-route-live-oracle + AWS SSRF oracles",
-      "pwnshop.ctfsecurity.com/download: 40 findings — pwnshop-download-path-traversal-live-oracle + seller-preview SSTI",
-      "pwnshop.ctfsecurity.com/chat: 23 findings — pwnshop-chat-prompt-injection-route-live-oracle",
-      "websec.fr/level19/: 7 findings — PHP rand seed / CSRF challenge evidence (client-side corpus)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-16: 15 findings",
-      "wrongsecrets.herokuapp.com/challenge/challenge-17: 15 findings",
-      "wrongsecrets.herokuapp.com/challenge/challenge-18: 15 findings"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings) — no benchmark misses",
+      "brokencrystals.com/testimonials: 81→86 findings — brokencrystals-testimonials-iframe-injection-route-live-oracle shipped",
+      "burpbountylab.com/mgmt/tm/util/bash: 94→95 findings — burpbounty-f5-bash-cve-route-live-oracle shipped",
+      "pwnshop.ctfsecurity.com/forgot-password: 48→49 findings — pwnshop-forgot-password-email-enumeration-route-live-oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
       "websec.fr/level19: client-side challenge corpus only — no dedicated route live oracle yet",
-      "pwnshop.ctfsecurity.com/chat: 23 findings vs 40+ on download — thinner LLM oracle pass",
       "brokencrystals.com/api/file SSRF family still queued for dedicated route scans"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "brokencrystals.com/testimonials": 86,
+    "burpbountylab.com/mgmt/tm/util/bash": 95,
+    "pwnshop.ctfsecurity.com/forgot-password": 49,
+    "juice-shop.herokuapp.com": 48,
     "brokencrystals.com/api/render": 81,
     "brokencrystals.com/api/metadata": 43,
     "pwnshop.ctfsecurity.com/download": 40,
-    "pwnshop.ctfsecurity.com/chat": 23,
-    "websec.fr/level19": 7,
     "wrongsecrets.herokuapp.com/challenge/challenge-16": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-17": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-18": 15
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
