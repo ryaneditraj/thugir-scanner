@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-27T07:04:44.761Z",
+  "updated_at": "2026-08-27T08:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/accounts/1",
+      "source": "alfredang/pentest FauxBank — IDOR training endpoint GET /api/accounts/[id] (README lesson 1)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/profile",
+      "source": "alfredang/pentest FauxBank — sensitive data exposure training endpoint GET /api/profile (README lesson 4)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/transfer",
+      "source": "alfredang/pentest FauxBank — missing CSRF on transfer POST /api/transfer (README lesson 7)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/transactions/1",
+      "source": "MRMcyber/vaultapp — IDOR transaction access oracle GET /api/transactions/:id (VaultApp 10-challenge lab)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/documents/1",
+      "source": "MRMcyber/vaultapp — IDOR document access oracle GET /api/documents/:id (VaultApp 10-challenge lab)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://vulnshop.vercel.app/api/v1/debug",
       "source": "chethan-vinayak/vulnshop — API8 misconfig debug endpoint exposes secrets/env (README /api/v1/debug)",
