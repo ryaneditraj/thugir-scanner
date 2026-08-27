@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-27T08:05:00.000Z",
+  "updated_at": "2026-08-27T09:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/users",
+      "source": "Escape Duck Store vulnerabilities page — BFLA oracle GET /api/v1/admin/users (broken access control; duck-store.escape.tech/vulnerabilities)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/login",
+      "source": "Escape Duck Store vulnerabilities page — weak admin credentials + no rate limit POST /api/v1/auth/login",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/messages/1",
+      "source": "MRMcyber/vaultapp GitHub — IDOR message access oracle GET /api/messages/:id (challenge 3 POST body reference hub)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/audit-logs",
+      "source": "MRMcyber/vaultapp GitHub — admin audit log exposure oracle GET /api/audit-logs (challenge 10)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/users/1",
+      "source": "MRMcyber/vaultapp GitHub — sequential ID enumeration oracle GET /api/users/:id (challenge 1)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://pentest-fauxbank.vercel.app/api/accounts/1",
       "source": "alfredang/pentest FauxBank — IDOR training endpoint GET /api/accounts/[id] (README lesson 1)",
