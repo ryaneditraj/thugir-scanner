@@ -5237,6 +5237,12 @@
       "slug": "pwnshop-verify-otp-bruteforce-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: pwnshopVerifyOtpBruteforceRouteLiveOracle fires on /reset-password when POST /verify-otp accepts rapid guesses without HTTP 429 (PWN-015); pwnshop.ctfsecurity.com/reset-password findings 48→49 (+pwnshop-verify-otp-bruteforce-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-api-transfer-hub-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for fauxbank-* slugs when scanning /api/transfer — hub CSRF/IDOR/SQLi/loans oracles fire on API-only URL; pentest-fauxbank.vercel.app/api/transfer findings 6→14 (+fauxbank-transfer-route-live-oracle +fauxbank-csrf-transfer-probe +fauxbank-idor-accounts-probe +fauxbank-loans-*); benchmark juice-shop 49 findings 6/6 maintained"
     }
   ]
 }

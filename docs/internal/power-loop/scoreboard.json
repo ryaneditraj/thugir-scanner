@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T08:12:00.000Z",
+  "updated_at": "2026-08-27T08:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2935,
-  "total_findings": 31185,
+  "total_sites_scanned": 2940,
+  "total_findings": 31273,
   "critical_findings": 64,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2047,
   "discovery_findings": 25894,
-  "improvements_shipped": 1213,
-  "last_run": "2026-08-27T08:12:00.000Z",
+  "improvements_shipped": 1214,
+  "last_run": "2026-08-27T08:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,39 +48,35 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings, 37 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (49 findings, 38 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 115,
-      "focus": "FauxBank IDOR/profile/transfer API routes + VaultApp transactions/documents IDOR + vulnshop debug/orders/template drain",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 5,
+      "findings": 88,
+      "focus": "vulnshop track-order SSRF + xml-import XXE + websec level36/37 404 probes + fauxbank transfer hub priority",
+      "improvements_shipped_this_run": 1
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 37 live oracles)",
-      "pentest-fauxbank.vercel.app/api/accounts/1: 15 findings — fauxbank-accounts-route-live-oracle + IDOR hub",
-      "pentest-fauxbank.vercel.app/api/profile: 15 findings — fauxbank-profile-route-live-oracle + PII exposure",
-      "pentest-fauxbank.vercel.app/api/transfer: 6 findings — fauxbank-transfer-route-live-oracle (CSRF hub)",
-      "vaultapp-omega.vercel.app/api/transactions/1: 12 findings — vaultapp IDOR hub (5 live oracles)",
-      "vaultapp-omega.vercel.app/api/documents/1: 12 findings — vaultapp-documents-idor-route-live-oracle",
-      "vulnshop.vercel.app/api/v1/debug: 18 findings — vulnshop-debug-api-route-live-oracle",
-      "vulnshop.vercel.app/api/v1/orders/1: 19 findings — BOLA/IDOR route oracle",
-      "vulnshop.vercel.app/api/v1/template/render: 18 findings — template injection hub"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 38 live oracles)",
+      "vulnshop.vercel.app/track-order?url=https://example.com: 18 findings — vulnshop-track-order-ssrf-route-live-oracle",
+      "vulnshop.vercel.app/api/xml-import: 19 findings — vulnshop-xml-import-xxe-route-live-oracle",
+      "pentest-fauxbank.vercel.app/api/transfer: 14 findings after fauxbank-api-transfer-hub-priority (was 6 thin pass)",
+      "websec.fr/level36/: 1 finding — 404 nginx stub (route oracle deferred)",
+      "websec.fr/level37/: 1 finding — 404 nginx stub (route oracle deferred)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + other slugs)",
-      "websec.fr level36-39 return 404 — route oracles deferred until levels go live",
-      "fauxbank transfer endpoint thin pass (6 findings) — CSRF oracle fires but hub crawl limited on API-only URL"
+      "websec.fr level36-39 return 404 — route oracles deferred until levels go live"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "pentest-fauxbank.vercel.app/api/accounts/1": 15,
-    "pentest-fauxbank.vercel.app/api/profile": 15,
-    "pentest-fauxbank.vercel.app/api/transfer": 6,
+    "juice-shop.herokuapp.com": 49,
+    "vulnshop.vercel.app/track-order?url=https://example.com": 18,
+    "vulnshop.vercel.app/api/xml-import": 19,
+    "pentest-fauxbank.vercel.app/api/transfer": 14,
     "vaultapp-omega.vercel.app/api/transactions/1": 12,
     "vaultapp-omega.vercel.app/api/documents/1": 12,
     "vulnshop.vercel.app/api/v1/debug": 18,
