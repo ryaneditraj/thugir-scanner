@@ -36857,6 +36857,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-cookie-auth-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "AI Security Platform cookie-auth challenge route live oracle",
+    description:
+      "When scanning /challenges/cookie-auth, the platform catalog documents client-writable admin cookie bypass (CWE-784) — route-specific cookie auth bypass training oracle.",
+    impactOneline:
+      "Route-specific oracle confirms cookie-auth training module without relying on shared AI Security Platform hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityCookieAuthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — use server-side sessions with signed HttpOnly cookies.",
+      steps: [
+        "Never trust client-set admin flags in cookies without server-side validation.",
+        "Use signed, HttpOnly, Secure session cookies.",
+        "Enforce role checks on every admin route server-side."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/cookie-auth route documents client-writable admin cookie bypass. Show secure session-based admin authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-insecure-passwords-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",

@@ -3007,6 +3007,7 @@ const DEEP_RULES = new Set<string>([
   "aiSecurityLeakedConfigRouteLiveOracle",
   "aiSecuritySupabaseDataRouteLiveOracle",
   "aiSecurityAdminConsoleRouteLiveOracle",
+  "aiSecurityCookieAuthRouteLiveOracle",
   "aiSecuritySupplyChainRouteLiveOracle",
   "aiSecurityVulnerableDepsRouteLiveOracle",
   "aiSecurityHackedNpmPackagesRouteLiveOracle",
@@ -12420,8 +12421,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/(?:admin-console|cookie-auth)\b/i.test(targetInput) &&
+        /\/challenges\/admin-console\b/i.test(targetInput) &&
         p.slug === "ai-security-admin-console-route-live-oracle"
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/cookie-auth\b/i.test(targetInput) &&
+        p.slug === "ai-security-cookie-auth-route-live-oracle"
       )
         return -3;
       if (
