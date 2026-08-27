@@ -78213,7 +78213,11 @@ const vulnDemoStoredXssRouteLiveOracle: Rule = async (ctx) => {
 const pwnshopChatInitRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:api\/)?chat(?:\/init)?\b/i.test(pageUrl) || /\/chat\/order\b/i.test(pageUrl)) return NEGATIVE;
+  if (
+    !/\/(?:api\/(?:v\d+\/)?)?chat(?:\/init)?\b/i.test(pageUrl) ||
+    /\/chat\/order\b/i.test(pageUrl)
+  )
+    return NEGATIVE;
   const result = await pwnshopChatInitEmailEnumerationLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
