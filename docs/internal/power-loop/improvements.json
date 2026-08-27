@@ -5165,6 +5165,24 @@
       "slug": "websec-level30-unserialize-destruct-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /level30/source.php confirms class B __destruct + unserialize($_POST['payload']) tragic exception flow; websec.fr/level30/index.php findings 4→5 (+websec-level30-unserialize-destruct-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-mcp-info-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /mcp/info initialize returns serverInfo.name duck-store v1.28.1 via SSE JSON-RPC without auth; duck-store.escape.tech/mcp/info findings 32→33 (+duck-store-mcp-info-live-oracle +duck-store-mcp-info-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-checkout-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnshopCheckoutRouteLiveOracle + VULNSHOP_FLASK_ROUTE_URL_ORACLES /api/checkout maps to README oracle #33 payment manipulation; vulnshop.vercel.app/api/checkout findings 17→18 (+vulnshop-checkout-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-filter-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: catalog queues /filter/ (404) but live regex-sanitizer bypass lab at /mxss/; xssVulnlabFilterRouteLiveOracle delegates to mxss innerHTML round-trip probe; xss.vulnlab.dev/filter/ findings 8→9 (+xss-vulnlab-filter-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
     }
   ]
 }
