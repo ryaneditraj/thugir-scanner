@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-27T13:12:00.000Z",
+  "updated_at": "2026-08-27T14:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/users",
+      "source": "Escape Duck Store — unauthenticated admin user directory oracle GET /api/v1/admin/users (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/mcp",
+      "source": "Escape Duck Store — MCP unauthenticated access root oracle /mcp/* (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v2/reset-password",
+      "source": "VulnBank — broken authentication oracle POST /api/v2/reset-password (Medium pentest reports 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/admin/create_admin",
+      "source": "VulnBank — unauthenticated admin creation oracle POST /admin/create_admin (GitHub README + Medium mobile pentest)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/workshop/api/mechanic",
+      "source": "OWASP vAPI — broken function level authorization oracle GET /workshop/api/mechanic (vapi.tools.escape.tech)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/testimonials",
       "source": "Escape Duck Store — stored XSS oracle POST /testimonials (vulnerabilities catalog)",
