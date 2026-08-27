@@ -60303,7 +60303,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Duck Store /api/v1/users route BOLA live oracle",
     description:
-      "When scanning /api/v1/users, unauthenticated list+detail probes return admin email and role — route-specific BOLA oracle.",
+      "When scanning /api/v1/users/, unauthenticated list+detail probes return admin email and role — route-specific user enumeration BOLA oracle.",
     impactOneline:
       "Route-specific scans should surface broken object-level authorization on user APIs.",
     detectorKind: "rule_ref",
@@ -61161,7 +61161,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Duck Store testimonials stored XSS route live oracle",
     description:
-      "When scanning /api/v1/testimonials, POST stores unsanitized HTML testimonial content served back without encoding — route-specific stored XSS oracle.",
+      "When scanning /api/v1/testimonials or /testimonials SPA route, POST stores unsanitized HTML testimonial content served back without encoding — route-specific stored XSS oracle.",
     impactOneline:
       "Route-specific scans should confirm testimonial APIs do not persist executable HTML.",
     detectorKind: "rule_ref",
@@ -61577,7 +61577,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Duck Store testimonials PUT BOLA route live oracle",
     description:
-      "When scanning /api/v1/testimonials/{id}, PUT by a different user overwrites another account's testimonial — route-specific BOLA oracle.",
+      "When scanning /api/v1/testimonials/{id} or /testimonials SPA route, PUT by a different user overwrites another account's testimonial — route-specific BOLA oracle.",
     impactOneline:
       "Route-specific scans should confirm testimonial update endpoints enforce object ownership.",
     detectorKind: "rule_ref",
@@ -61629,7 +61629,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Duck Store testimonials unauthenticated PUT route live oracle",
     description:
-      "When scanning /api/v1/testimonials/{id}, PUT without Authorization header overwrites testimonial content — route-specific unauthenticated write oracle.",
+      "When scanning /api/v1/testimonials/{id} or /testimonials SPA route, PUT without Authorization header overwrites testimonial content — route-specific unauthenticated write oracle.",
     impactOneline:
       "Route-specific scans should confirm testimonial update endpoints require authentication.",
     detectorKind: "rule_ref",

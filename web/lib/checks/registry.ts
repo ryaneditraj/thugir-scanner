@@ -54749,6 +54749,10 @@ const DUCK_STORE_SEEDED_USERNAMES = /^(sarah_j|david_j|emma_n|michael_r|patricia
 const DUCK_STORE_ADMIN_ROSTER_MARKERS =
   /admin@duck-store\.escape|sarah\.johnson@email\.com|escape\.security@email\.com/i;
 
+function isDuckStoreTestimonialsPageRoute(pageUrl: string): boolean {
+  return /\/(?:api\/v1\/)?testimonials(?:\/?$|\/\d+|\/guest\b)/i.test(pageUrl);
+}
+
 const duckStoreUsersBolaLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const listUrl = new URL("/api/v1/users/", ctx.origin).toString();
@@ -54879,7 +54883,7 @@ const duckStoreTestimonialsBolaLiveOracle: Rule = async (ctx) => {
 const duckStoreTestimonialsRouteLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/testimonials/i.test(pageUrl)) return NEGATIVE;
+  if (!isDuckStoreTestimonialsPageRoute(pageUrl)) return NEGATIVE;
   const result = await duckStoreTestimonialsBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -55846,7 +55850,7 @@ const duckStoreTestimonialsStoredXssLiveOracle: Rule = async (ctx) => {
 const duckStoreTestimonialsStoredXssRouteLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/testimonials(?:\/?$|\/\d+)/i.test(pageUrl)) return NEGATIVE;
+  if (!isDuckStoreTestimonialsPageRoute(pageUrl)) return NEGATIVE;
   const result = await duckStoreTestimonialsStoredXssLiveProbe(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -56407,7 +56411,7 @@ const duckStoreTestimonialsPutBolaLiveOracle: Rule = async (ctx) => {
 const duckStoreTestimonialsPutBolaRouteLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/testimonials(?:\/\d+)?/i.test(pageUrl)) return NEGATIVE;
+  if (!isDuckStoreTestimonialsPageRoute(pageUrl)) return NEGATIVE;
   const result = await duckStoreTestimonialsPutBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -56458,7 +56462,7 @@ const duckStoreTestimonialsUnauthPutLiveOracle: Rule = async (ctx) => {
 const duckStoreTestimonialsUnauthPutRouteLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/testimonials\/\d+/i.test(pageUrl)) return NEGATIVE;
+  if (!isDuckStoreTestimonialsPageRoute(pageUrl)) return NEGATIVE;
   const result = await duckStoreTestimonialsUnauthPutLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
