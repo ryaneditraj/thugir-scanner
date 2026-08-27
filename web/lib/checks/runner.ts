@@ -1814,6 +1814,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecShellExecChallengeEvidence",
   "websecLevel26ShellExecRouteLiveOracle",
   "clientSideWebsecAspectInstrumentationChallengeEvidence",
+  "websecLevel27AspectBackdoorRouteLiveOracle",
+  "websecLevel25LfiRouteLiveOracle",
   "clientSideWebsecUploadIncludeChallengeEvidence",
   "websecLevel28UploadIncludeRouteLiveOracle",
   "clientSideWebsecPhpUnserializeDestructChallengeEvidence",
@@ -11792,9 +11794,22 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /websec\.fr/i.test(origin) &&
+        /\/level25(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        p.slug.startsWith("websec-level25-")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
         /\/level26(?:\/index\.php)?\/?$/i.test(targetInput) &&
         (p.slug.startsWith("websec-level26-") ||
           p.slug === "client-side-websec-shell-exec-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level27(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level27-") ||
+          p.slug === "client-side-websec-aspect-instrumentation-challenge-evidence")
       )
         return -3;
       if (

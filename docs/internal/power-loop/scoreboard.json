@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T05:18:04.268Z",
+  "updated_at": "2026-08-27T05:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2905,
-  "total_findings": 30420,
-  "critical_findings": 55,
+  "total_sites_scanned": 2914,
+  "total_findings": 30879,
+  "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2034,
-  "discovery_findings": 25394,
-  "improvements_shipped": 1204,
-  "last_run": "2026-08-27T05:18:04.268Z",
+  "discovery_urls_added": 2037,
+  "discovery_findings": 25683,
+  "improvements_shipped": 1207,
+  "last_run": "2026-08-27T05:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "05",
     "benchmark": {
@@ -33,7 +33,6 @@
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 596,
-      "live_oracles": 38,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,46 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (49 findings, 38 juice-shop live oracles); gap=[]"
+      "note": "Stable 6/6 recall (49 findings); no category gaps; teacher_delta skipped"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 270,
-      "focus": "vulnbank internal SSRF config + merchant dashboard + pwnshop coupons/search SQLi + zen-demo-python SSRF + brokencrystals file SSRF chain + websec level20 unserialize",
-      "new_queue_urls": [
-        "vulnbank.org/internal/config.json",
-        "vulnbank.org/merchant/dashboard",
-        "pwnshop.ctfsecurity.com/api/v1/coupons",
-        "pwnshop.ctfsecurity.com/api/v1/products/search",
-        "zen-demo-python.fly.dev/pages/request"
-      ]
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 18,
+      "focus": "websec.fr level25 LFI + level27 aspect backdoor route oracles; zen-demo-python probe tolerance",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 38 live oracles)",
-      "vulnbank.org/internal/config.json: 29 findings — vulnbank-internal-config-ssrf-demo-live-oracle (loopback SSRF demo endpoint)",
-      "vulnbank.org/merchant/dashboard: 29 findings — merchant payment dashboard BFLA/JWT weak-secret oracles",
-      "pwnshop.ctfsecurity.com/api/v1/coupons: 45 findings — pwnshop-coupon-category-bypass-live-oracle (PWN-016)",
-      "pwnshop.ctfsecurity.com/api/v1/products/search: 23 findings — pwnshop-product-search-sqli-live-oracle",
-      "brokencrystals.com/api/file?path=https://httpbin.org/get: 83 findings — brokencrystals-file-ssrf-live-oracle",
-      "websec.fr/level20/: 4 findings — websec-level20-php-unserialize-filter-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings)",
+      "websec.fr/level27/: 4→6 (+websec-level27-aspect-backdoor-route-live-oracle)",
+      "zen-demo-python.fly.dev/pages/execute: 5→9 (+zen-demo-java-execute-route-live-oracle via python /bin/sh probe)",
+      "websec.fr/level25/: 4→3 (+websec-level25-lfi-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + juice-shop-iac-terraform-tls-key-live-oracle)",
-      "zen-demo-python.fly.dev/pages/request: reuses zen-demo-java-* oracle slugs (Python variant confirmed via route oracle)",
-      "vulnbank.org/internal/config.json: loopback-only — SSRF oracle confirms endpoint exists but cloud egress cannot reach internal secrets"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "websec.fr level29 still 502 — route oracle deferred",
+      "queue URLs (wrongsecrets/mcp, vapi.tools, zen-demo-python pages) partially drained"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 49,
-    "brokencrystals.com/api/file?path=https://httpbin.org/get": 83,
-    "pwnshop.ctfsecurity.com/api/v1/coupons": 45,
-    "brokencrystals.com/api/file/aws?path=http://169.254.169.254/latest/meta-data/": 51,
-    "vulnbank.org/internal/config.json": 29,
-    "vulnbank.org/merchant/dashboard": 29,
-    "pwnshop.ctfsecurity.com/api/v1/products/search": 23,
-    "websec.fr/level20/": 4
+    "zen-demo-python.fly.dev/pages/execute": 9,
+    "websec.fr/level27/": 6,
+    "websec.fr/level26/": 9,
+    "websec.fr/level28/": 8,
+    "websec.fr/level25/": 3,
+    "brokencrystals.com/api/render": 82,
+    "pwnshop.ctfsecurity.com/api/v1/events": 48,
+    "duck-store.escape.tech/api/v1/coupons/apply": 30
   }
 }
