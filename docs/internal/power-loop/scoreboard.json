@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T22:14:00.000Z",
+  "updated_at": "2026-08-27T22:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1981,
   "discovery_findings": 23784,
-  "improvements_shipped": 1234,
-  "last_run": "2026-08-27T22:14:00.000Z",
+  "improvements_shipped": 1237,
+  "last_run": "2026-08-27T22:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,42 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 36 juice-shop live oracles); secret-resend + juice-shop-resend-key-live-oracle now present"
+      "note": "Stable 6/6 recall (51 findings); no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 261,
-      "focus": "ginandjuice cart/checkout/register business-logic routes + brokencrystals render.dot SSTI + duck-store testimonials PUT BOLA",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 109,
+      "focus": "ginandjuice /transactions IDOR route oracle + duck-store products/reviews misroute + wishlist phantom API",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 36 live oracles) — secret-resend slug restored",
-      "brokencrystals.com/render.dot: 83 findings — brokencrystals-render-dot-ssti-live-oracle + hub oracles",
-      "duck-store.escape.tech/api/v1/testimonials/1: 38 findings — duck-store-testimonials-unauth-put-live-oracle + PUT BOLA route oracles",
-      "ginandjuice.shop/register: 33 findings — registration/account route hub oracles",
-      "ginandjuice.shop/cart: 31 findings — cart business-logic route hub",
-      "ginandjuice.shop/checkout: 31 findings — checkout/coupon route hub",
-      "wrongsecrets.herokuapp.com/challenge/challenge-50: 15 findings — route oracle confirmed",
-      "wrongsecrets.herokuapp.com/challenge/challenge-65: 15 findings — route oracle confirmed",
-      "wrongsecrets.herokuapp.com/challenge/challenge-66: 15 findings — obfuscated Java CLI route oracle confirmed"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings)",
+      "ginandjuice.shop/transactions: 31→33 findings (+ginandjuice-transactions-route-live-oracle links phantom /transactions 404 to /order/details IDOR)",
+      "duck-store.escape.tech/api/v1/products/reviews: 28→39 findings (+duck-store-products-reviews-misroute-route-live-oracle +duck-store-reviews route oracles)",
+      "duck-store.escape.tech/api/v1/wishlist: 29→37 findings (+duck-store-wishlist-phantom-api-route-live-oracle documents 404 API vs SPA /wishlist)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "ginandjuice cart/checkout/register: generic hub oracles fire; no route-specific cart/checkout/register live oracles yet",
-      "brokencrystals render.dot: SSTI oracle fires but 83-finding pass dominated by existing brokencrystals hub fingerprints"
+      "ginandjuice cart/checkout/register: generic hub oracles fire; no route-specific cart/checkout/register live oracles yet"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
+    "juice-shop.herokuapp.com": 51,
     "brokencrystals.com/render.dot": 83,
+    "duck-store.escape.tech/api/v1/products/reviews": 39,
+    "duck-store.escape.tech/api/v1/reviews": 38,
+    "duck-store.escape.tech/api/v1/wishlist": 37,
     "duck-store.escape.tech/api/v1/testimonials/1": 38,
+    "ginandjuice.shop/transactions": 33,
     "ginandjuice.shop/register": 33,
     "ginandjuice.shop/cart": 31,
-    "ginandjuice.shop/checkout": 31,
-    "wrongsecrets.herokuapp.com/challenge/challenge-50": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-65": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-66": 15
+    "ginandjuice.shop/checkout": 31
   }
 }

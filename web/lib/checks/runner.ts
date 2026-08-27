@@ -2540,6 +2540,10 @@ const DEEP_RULES = new Set<string>([
   "duckStoreReviewsStoredXssRouteLiveOracle",
   "duckStoreReviewsUnauthReadLiveOracle",
   "duckStoreReviewsRouteLiveOracle",
+  "duckStoreProductsReviewsMisrouteLiveOracle",
+  "duckStoreProductsReviewsMisrouteRouteLiveOracle",
+  "duckStoreWishlistPhantomApiLiveOracle",
+  "duckStoreWishlistPhantomApiRouteLiveOracle",
   "duckStoreAuthLoginWeakCredentialsLiveOracle",
   "duckStoreAuthLoginWeakCredentialsRouteLiveOracle",
   "duckStoreAuthRegisterOpenLiveOracle",
@@ -2636,6 +2640,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceChangePasswordRouteLiveOracle",
   "ginAndJuiceChangeAddressRouteLiveOracle",
   "ginAndJuiceMyAccountOrdersRouteLiveOracle",
+  "ginAndJuiceTransactionsRouteLiveOracle",
   "ginAndJuiceDeleteRouteLiveOracle",
   "ginAndJuiceCatalogLinkManipulationLiveOracle",
   "ginAndJuiceCatalogLinkManipulationRouteLiveOracle",
@@ -13626,6 +13631,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ginandjuice\.shop/i.test(origin) &&
+        /\/transactions\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-transactions")
+      )
+        return -3;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
         /\/logger\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-logger")
       )
@@ -14322,6 +14333,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /duck-store\.escape\.tech/i.test(origin) &&
         /\/api\/v1\/reviews\b/i.test(targetInput) &&
         p.slug.startsWith("duck-store-reviews")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/products\/reviews\b/i.test(targetInput) &&
+        (p.slug.startsWith("duck-store-reviews") ||
+          p.slug.startsWith("duck-store-products-reviews"))
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/(?:api\/v1\/)?wishlist\b/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-wishlist")
       )
         return -4;
       if (

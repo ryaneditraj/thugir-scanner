@@ -61363,6 +61363,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-products-reviews-misroute-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Duck Store /api/v1/products/reviews misroute live oracle",
+    description:
+      "GET /api/v1/products/reviews hits /products/{product_id} with product_id='reviews' (422 int_parsing) instead of GET /api/v1/reviews/product/{id} which returns unauthenticated customer review data — the Escape Duck Store product reviews API misroute oracle.",
+    impactOneline:
+      "API route ambiguity hides the real reviews endpoint from scanners probing /products/reviews while review data remains publicly readable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreProductsReviewsMisrouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use distinct URL namespaces for product resources and review collections.",
+      steps: [
+        "Reserve /api/v1/reviews/product/{id} for review list endpoints.",
+        "Reject or redirect /api/v1/products/reviews to the canonical reviews route.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/v1/products/reviews returns 422 while /api/v1/reviews/product/{id} leaks review data. Show API route design remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-products-reviews-misroute-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Duck Store /api/v1/products/reviews misroute route live oracle",
+    description:
+      "When scanning /api/v1/products/reviews, FastAPI misroutes 'reviews' as product_id (422) while /api/v1/reviews/product/{id} exposes customer review data without authentication — route-specific misroute oracle.",
+    impactOneline:
+      "Route-specific scans on /products/reviews should detect the 422 misroute and pivot to the unauthenticated reviews API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreProductsReviewsMisrouteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Normalize review API paths and block ambiguous /products/reviews lookups.",
+      steps: [
+        "Return 404 or redirect from /api/v1/products/reviews to the canonical reviews endpoint.",
+        "Document review routes in OpenAPI with distinct path segments.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/products/reviews route scan hits a 422 misroute instead of review data. Show route-specific API normalization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-wishlist-phantom-api-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Duck Store wishlist phantom API live oracle",
+    description:
+      "GET /api/v1/wishlist returns 404 while SPA /wishlist route exists but OpenAPI lists no wishlist REST endpoint — the Escape Duck Store phantom wishlist API oracle.",
+    impactOneline:
+      "Undocumented or absent wishlist APIs leave client-side wishlist state untested and may hide BOLA vectors in shadow endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreWishlistPhantomApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Document wishlist APIs in OpenAPI or remove phantom SPA routes.",
+      steps: [
+        "Implement /api/v1/wishlist with authentication and ownership checks if the SPA exposes wishlist features.",
+        "Remove /wishlist SPA routes when no backing API exists.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/wishlist returns 404 while /wishlist SPA exists without OpenAPI docs. Show wishlist API documentation and access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-wishlist-phantom-api-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Duck Store /wishlist phantom API route live oracle",
+    description:
+      "When scanning /wishlist or /api/v1/wishlist, REST wishlist API is absent (404) while SPA route renders without OpenAPI documentation — route-specific phantom wishlist endpoint oracle.",
+    impactOneline:
+      "Route-specific scans should flag undocumented SPA routes that lack backing REST APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreWishlistPhantomApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Align SPA wishlist routes with documented authenticated APIs.",
+      steps: [
+        "Add /api/v1/wishlist to OpenAPI with ownership validation.",
+        "Remove client-side wishlist routes when no server API exists.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /wishlist route scan finds SPA UI without a backing REST API. Show route-specific wishlist API remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "duck-store-auth-login-weak-credentials-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -63855,6 +63959,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /my-account/orders route is login-gated but /order/details?orderId= leaks PII without auth. Show route-specific IDOR remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-transactions-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /transactions route live oracle",
+    description:
+      "When scanning /transactions, the phantom transactions page returns 404 while GET /order/details?orderId= still returns billing and payment metadata without authentication — route-specific order-history IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop transaction history is absent but order detail lookups remain unauthenticated IDOR vectors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceTransactionsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind order and transaction lookups to the authenticated user's session and verify ownership server-side.",
+      steps: [
+        "Reject order detail requests when the session user does not own the order.",
+        "Use unpredictable order identifiers instead of sequential IDs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /transactions route is a 404 shell but /order/details?orderId= leaks PII without auth. Show route-specific IDOR remediation.",
     version: 1,
     enabled: true
   },
