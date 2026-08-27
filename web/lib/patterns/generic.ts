@@ -42809,6 +42809,56 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-merchant-register-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Vuln Bank /merchant/dashboard merchant-registration route live oracle",
+    description:
+      "When scanning /merchant/dashboard on vulnbank.org, POST /api/v1/merchants/register returns a live merchant api_key and echoes debug_info.password — route-specific merchant registration sensitive-data oracle.",
+    impactOneline:
+      "Route-specific scans confirm merchant dashboard pages expose registration APIs that leak passwords and API keys on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantRegisterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never echo passwords or raw API keys in registration responses — Vuln Bank is intentional training software.",
+      steps: [
+        "Return API keys only once via a secure channel and hash stored merchant passwords.",
+        "Remove debug_info blocks from production registration responses."
+      ]
+    },
+    fixPrompt:
+      "Our /merchant/dashboard route scan confirms /api/v1/merchants/register echoes debug_info.password. Show route-specific merchant registration hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-merchant-payment-charge-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank /merchant/dashboard payment-charge route live oracle",
+    description:
+      "When scanning /merchant/dashboard on vulnbank.org, POST /api/v1/payments/charge with a merchant api_key echoes debug_info.submitted_card_number — route-specific merchant payment gateway oracle.",
+    impactOneline:
+      "Route-specific scans confirm merchant dashboard pages expose payment gateway debug disclosure on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantPaymentChargeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove debug_info from payment responses and tokenize card data — Vuln Bank is intentional training software.",
+      steps: [
+        "Never echo raw card numbers in payment API responses.",
+        "Remove debug_info blocks from production payment gateway endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /merchant/dashboard route scan confirms /api/v1/payments/charge echoes debug_info.submitted_card_number. Show route-specific merchant payment gateway hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-virtual-cards-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",
