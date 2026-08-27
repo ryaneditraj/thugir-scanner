@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-27T05:07:12.906Z",
+  "updated_at": "2026-08-27T06:06:30.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://websec.fr/level36/",
+      "source": "WebSec.fr — level36 XSS/filter training challenge (public benchmark gap between level35 and level37)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level37/",
+      "source": "WebSec.fr — level37 challenge (public PHP training benchmark; extends level36–38 series)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level38/",
+      "source": "WebSec.fr — level38 challenge (public filter/XSS training benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level39/",
+      "source": "WebSec.fr — level39 challenge (public WebSec.fr training benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/reset-password",
+      "source": "ctfsec/pwnshop — OTP reset-password brute-force oracle GET/POST /reset-password (PWN-015 companion to /verify-otp)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnbank.org/internal/config.json",
       "source": "Commando-X/vuln-bank — loopback-only SSRF internal config oracle (/internal/config.json in app.py)",
