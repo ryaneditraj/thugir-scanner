@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T07:15:00.000Z",
+  "updated_at": "2026-08-27T08:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2926,
-  "total_findings": 31022,
-  "critical_findings": 62,
+  "total_sites_scanned": 2935,
+  "total_findings": 31185,
+  "critical_findings": 64,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2042,
-  "discovery_findings": 25779,
+  "discovery_urls_added": 2047,
+  "discovery_findings": 25894,
   "improvements_shipped": 1213,
-  "last_run": "2026-08-27T07:15:00.000Z",
+  "last_run": "2026-08-27T08:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (49 findings); no category gaps; teacher_delta skipped"
+      "note": "Stable 6/6 first-pass recall (48 findings, 37 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 56,
-      "focus": "websec.fr level31/33 route live oracles; pwnshop /reset-password PWN-015 route oracle",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 115,
+      "focus": "FauxBank IDOR/profile/transfer API routes + VaultApp transactions/documents IDOR + vulnshop debug/orders/template drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings)",
-      "websec.fr/level31/: +websec-level31-open-basedir-eval-route-live-oracle (3→4 findings)",
-      "websec.fr/level33/: +websec-level33-unserialize-destruct-route-live-oracle (2→3 findings)",
-      "pwnshop.ctfsecurity.com/reset-password: +pwnshop-verify-otp-bruteforce-route-live-oracle (48→49 findings)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 37 live oracles)",
+      "pentest-fauxbank.vercel.app/api/accounts/1: 15 findings — fauxbank-accounts-route-live-oracle + IDOR hub",
+      "pentest-fauxbank.vercel.app/api/profile: 15 findings — fauxbank-profile-route-live-oracle + PII exposure",
+      "pentest-fauxbank.vercel.app/api/transfer: 6 findings — fauxbank-transfer-route-live-oracle (CSRF hub)",
+      "vaultapp-omega.vercel.app/api/transactions/1: 12 findings — vaultapp IDOR hub (5 live oracles)",
+      "vaultapp-omega.vercel.app/api/documents/1: 12 findings — vaultapp-documents-idor-route-live-oracle",
+      "vulnshop.vercel.app/api/v1/debug: 18 findings — vulnshop-debug-api-route-live-oracle",
+      "vulnshop.vercel.app/api/v1/orders/1: 19 findings — BOLA/IDOR route oracle",
+      "vulnshop.vercel.app/api/v1/template/render: 18 findings — template injection hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "websec.fr level29 still 502 — route oracle deferred",
-      "websec.fr level32/35/36-39 return 404 — cannot ship route oracles until levels are live"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + other slugs)",
+      "websec.fr level36-39 return 404 — route oracles deferred until levels go live",
+      "fauxbank transfer endpoint thin pass (6 findings) — CSRF oracle fires but hub crawl limited on API-only URL"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 49,
-    "websec.fr/level31/": 4,
-    "websec.fr/level33/": 3,
-    "pwnshop.ctfsecurity.com/reset-password": 49,
-    "pwnshop.ctfsecurity.com/api/v1/products/search": 24,
-    "pwnshop.ctfsecurity.com/api/v1/coupons": 47,
-    "vulnbank.org/merchant/dashboard": 31,
-    "brokencrystals.com/api/render": 82,
-    "duck-store.escape.tech/api/v1/coupons/apply": 30
+    "juice-shop.herokuapp.com": 48,
+    "pentest-fauxbank.vercel.app/api/accounts/1": 15,
+    "pentest-fauxbank.vercel.app/api/profile": 15,
+    "pentest-fauxbank.vercel.app/api/transfer": 6,
+    "vaultapp-omega.vercel.app/api/transactions/1": 12,
+    "vaultapp-omega.vercel.app/api/documents/1": 12,
+    "vulnshop.vercel.app/api/v1/debug": 18,
+    "vulnshop.vercel.app/api/v1/orders/1": 19,
+    "vulnshop.vercel.app/api/v1/template/render": 18
   }
 }
