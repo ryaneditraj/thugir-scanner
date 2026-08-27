@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T22:15:00.000Z",
+  "updated_at": "2026-08-27T23:27:47.433Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2783,
-  "total_findings": 28293,
+  "total_sites_scanned": 2792,
+  "total_findings": 28620,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1981,
-  "discovery_findings": 23784,
+  "discovery_urls_added": 1986,
+  "discovery_findings": 24063,
   "improvements_shipped": 1237,
-  "last_run": "2026-08-27T22:15:00.000Z",
+  "last_run": "2026-08-27T23:27:47.433Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 448,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (51 findings); no category gaps"
+      "note": "Stable 6/6 first-pass recall (48 findings, 36 juice-shop live oracles); secret-resend + juice-shop-resend-key-live-oracle present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 109,
-      "focus": "ginandjuice /transactions IDOR route oracle + duck-store products/reviews misroute + wishlist phantom API",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 279,
+      "focus": "ginandjuice forgot-password + catalog XSS routes; brokencrystals /api/files LFI + /chat LLM output; wrongsecrets challenge-51/52/54 drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings)",
-      "ginandjuice.shop/transactions: 31→33 findings (+ginandjuice-transactions-route-live-oracle links phantom /transactions 404 to /order/details IDOR)",
-      "duck-store.escape.tech/api/v1/products/reviews: 28→39 findings (+duck-store-products-reviews-misroute-route-live-oracle +duck-store-reviews route oracles)",
-      "duck-store.escape.tech/api/v1/wishlist: 29→37 findings (+duck-store-wishlist-phantom-api-route-live-oracle documents 404 API vs SPA /wishlist)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 36 live oracles)",
+      "brokencrystals.com/api/files: 84 findings — LFI/RFI hub + route oracles",
+      "brokencrystals.com/chat: 39 findings — insecure LLM output handling route",
+      "ginandjuice.shop/forgot-password: 32 findings — password reset hub oracles",
+      "ginandjuice.shop/catalog/search/2: 39 findings — reflected XSS term param route",
+      "ginandjuice.shop/catalog/product-search-results/1: 40 findings — reflected XSS route",
+      "wrongsecrets challenge-51/52/54: 15 findings each — Docker/K8s challenge route oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "ginandjuice cart/checkout/register: generic hub oracles fire; no route-specific cart/checkout/register live oracles yet"
+      "ginandjuice forgot-password: generic hub oracles fire; no route-specific password-reset-broken-logic live oracle yet",
+      "brokencrystals /api/files: high finding count from hub fingerprint — route-specific LFI proof oracle may need path traversal payload confirmation"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
+    "juice-shop.herokuapp.com": 48,
+    "brokencrystals.com/api/files": 84,
+    "ginandjuice.shop/catalog/product-search-results/1?term=test": 40,
+    "brokencrystals.com/chat": 39,
+    "ginandjuice.shop/catalog/search/2?term=test": 39,
+    "ginandjuice.shop/forgot-password": 32,
     "brokencrystals.com/render.dot": 83,
-    "duck-store.escape.tech/api/v1/products/reviews": 39,
-    "duck-store.escape.tech/api/v1/reviews": 38,
-    "duck-store.escape.tech/api/v1/wishlist": 37,
-    "duck-store.escape.tech/api/v1/testimonials/1": 38,
-    "ginandjuice.shop/transactions": 33,
-    "ginandjuice.shop/register": 33,
-    "ginandjuice.shop/cart": 31,
-    "ginandjuice.shop/checkout": 31
+    "ginandjuice.shop/transactions": 33
   }
 }

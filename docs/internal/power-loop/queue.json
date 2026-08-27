@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-27T22:10:00.000Z",
+  "updated_at": "2026-08-27T23:24:13.057Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/forgot-password",
+      "source": "PortSwigger ginandjuice.shop — password reset broken logic / poisoning oracle POST /forgot-password (23:00 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/files",
+      "source": "NeuraLegion/brokencrystals — LFI/RFI oracle GET /api/files path+type params (public benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/chat",
+      "source": "NeuraLegion/brokencrystals — insecure LLM output handling /chat route (public benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog/search/2?term=test",
+      "source": "PortSwigger Burp Scanner sample report — reflected XSS term parameter on catalog/search",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog/product-search-results/1?term=test",
+      "source": "PortSwigger Burp Scanner sample report — reflected XSS term parameter product-search-results",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/cart",
       "source": "PortSwigger ginandjuice.shop — shopping cart business-logic / BOLA route (scanner eval lab; 22:00 UTC power-loop)",
