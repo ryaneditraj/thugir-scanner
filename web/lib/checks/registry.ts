@@ -42010,6 +42010,11 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     pathRe: /\/api\/v1\/deploy\/status\b/i,
     vulnerability: "Infrastructure Disclosure",
     note: "VulnShop GET /api/v1/deploy/status exposes internal infrastructure details (hostname, environment, deployment metadata) without authentication — README oracle #62"
+  },
+  {
+    pathRe: /\/api\/checkout\b/i,
+    vulnerability: "Payment Manipulation",
+    note: "VulnShop React /api/checkout route documents checkout payment manipulation and stacked discount training modules — README oracle #33 family"
   }
 ];
 
@@ -42968,6 +42973,14 @@ const vulnshopApplyDiscountRouteLiveOracle: Rule = (ctx) =>
     /\/api\/v1\/checkout\/apply-discount\b/i,
     vulnshopApplyDiscountPaymentManipulationLiveOracle,
     "VulnShop /api/v1/checkout/apply-discount route scan — payment manipulation via stacked discounts confirmed or documented"
+  );
+
+const vulnshopCheckoutRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/checkout\b/i,
+    vulnshopApplyDiscountPaymentManipulationLiveOracle,
+    "VulnShop /api/checkout route scan — checkout payment manipulation via stacked discounts confirmed or documented (README oracle #33)"
   );
 
 const vulnshopWalletAddFundsRaceLiveOracle: Rule = async (ctx) => {
@@ -54900,6 +54913,64 @@ const duckStoreMcpResourcesRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Duck Store /mcp/resources route scan — unauthenticated resources/list JSON-RPC gateway reachable without authentication"
+    }
+  };
+};
+
+const duckStoreMcpInfoLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const url = new URL("/mcp/info", ctx.origin).toString();
+  const payload = JSON.stringify({
+    jsonrpc: "2.0",
+    id: 1,
+    method: "initialize",
+    params: {
+      protocolVersion: "2024-11-05",
+      capabilities: {},
+      clientInfo: { name: "thugir-scanner", version: "1" }
+    }
+  });
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json, text/event-stream"
+    },
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const sseBody = doc.body.replace(/^event:\s*message\s*/m, "").replace(/^data:\s*/m, "");
+  const corpus = `${doc.body}\n${sseBody}`;
+  if (!/"serverInfo"\s*:\s*\{[^}]*"name"\s*:\s*"duck-store"/i.test(corpus)) return NEGATIVE;
+  if (!/"protocolVersion"\s*:\s*"2024-11-05"/i.test(corpus)) return NEGATIVE;
+  const versionMatch = corpus.match(/"serverInfo"\s*:\s*\{[^}]*"version"\s*:\s*"([^"]+)"/i);
+  return {
+    fired: true,
+    confidence: versionMatch ? 0.93 : 0.91,
+    evidence: {
+      url,
+      serverVersion: versionMatch?.[1],
+      snippet: corpus.slice(0, 220).trim(),
+      note: "Duck Store POST /mcp/info initialize returns unauthenticated MCP server metadata (serverInfo.name duck-store) without session — MCP server info disclosure oracle"
+    }
+  };
+};
+
+const duckStoreMcpInfoRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/mcp\/info(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreMcpInfoLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /mcp/info route scan — unauthenticated MCP initialize exposes server metadata without authentication"
     }
   };
 };
@@ -71297,6 +71368,23 @@ const xssVulnlabMxssRouteLiveOracle: Rule = async (ctx) => {
     fired: true,
     confidence: result.confidence,
     evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const xssVulnlabFilterRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/filter\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await xssVulnlabMxssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "xss.vulnlab.dev /filter/ catalog alias (live lab at /mxss/) — regex sanitizer bypassed by innerHTML round-trip — filter-bypass route oracle"
+    }
   };
 };
 
@@ -95212,6 +95300,7 @@ export const RULES: Record<string, Rule> = {
   vulnshopCartRouteLiveOracle,
   vulnshopApplyDiscountPaymentManipulationLiveOracle,
   vulnshopApplyDiscountRouteLiveOracle,
+  vulnshopCheckoutRouteLiveOracle,
   vulnshopWalletAddFundsRaceLiveOracle,
   vulnshopWalletAddFundsRouteLiveOracle,
   vulnshopUpdatePriceManipulationLiveOracle,
@@ -95596,6 +95685,7 @@ export const RULES: Record<string, Rule> = {
   sqliVulnlabBlindTimeRouteLiveOracle,
   xssVulnlabMxssLiveOracle,
   xssVulnlabMxssRouteLiveOracle,
+  xssVulnlabFilterRouteLiveOracle,
   xssVulnlabCspBypassJsonpLiveOracle,
   xssVulnlabCspBypassJsonpRouteLiveOracle,
   sstiVulnlabSandboxedLiveOracle,
@@ -96196,6 +96286,8 @@ export const RULES: Record<string, Rule> = {
   duckStoreMcpToolsRouteLiveOracle,
   duckStoreMcpResourcesEnumerationLiveOracle,
   duckStoreMcpResourcesRouteLiveOracle,
+  duckStoreMcpInfoLiveOracle,
+  duckStoreMcpInfoRouteLiveOracle,
   duckStoreProductsFilterSqliLiveOracle,
   duckStoreProductsFilterSqliRouteLiveOracle,
   duckStoreCartNegativeQuantityLiveOracle,
