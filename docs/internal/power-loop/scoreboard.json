@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T03:15:00.000Z",
+  "updated_at": "2026-08-27T04:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2887,
-  "total_findings": 29729,
+  "total_sites_scanned": 2888,
+  "total_findings": 29775,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2024,
   "discovery_findings": 24797,
-  "improvements_shipped": 1201,
-  "last_run": "2026-08-27T03:15:00.000Z",
+  "improvements_shipped": 1204,
+  "last_run": "2026-08-27T04:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 46,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 601,
+      "probes_run": 582,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings); gap=[]"
+      "note": "Stable 6/6 first-pass recall (46 findings); gap=[] — no benchmark misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
-      "findings": 16,
-      "focus": "websec.fr level26/28/30 route live oracles + client-side pathname guards for level29 false-positive bleed",
+      "findings": 60,
+      "focus": "duck-store MCP info + vulnshop checkout + xss.vulnlab filter catalog alias route oracles from 03 UTC priority queue drain",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings)",
-      "websec.fr/level26/: 6 findings — websec-level26-shell-exec-route-live-oracle (shell_exec blacklist bypass)",
-      "websec.fr/level28/: 5 findings — websec-level28-upload-include-route-live-oracle (md5_file + crc32 include RCE)",
-      "websec.fr/level30/index.php: 5 findings — websec-level30-unserialize-destruct-route-live-oracle (class B __destruct gadget)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (46 findings)",
+      "duck-store.escape.tech/mcp/info: 33 findings — duck-store-mcp-info-live-oracle + route (unauthenticated MCP initialize serverInfo)",
+      "vulnshop.vercel.app/api/checkout: 18 findings — vulnshop-checkout-route-live-oracle (README #33 payment manipulation)",
+      "xss.vulnlab.dev/filter/: 9 findings — xss-vulnlab-filter-route-live-oracle (catalog alias → /mxss/ regex sanitizer bypass)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + iac-terraform-tls-key)",
-      "websec.fr/level29/ returns 502 — route oracle blocked until host recovers; client-side bleed from bonus seeds suppressed via pathname guards"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "websec.fr/level29/ returns 502 — route oracle blocked until host recovers"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
+    "juice-shop.herokuapp.com": 46,
+    "duck-store.escape.tech/mcp/info": 33,
+    "vulnshop.vercel.app/api/checkout": 18,
+    "xss.vulnlab.dev/filter/": 9,
     "websec.fr/level26/": 6,
     "websec.fr/level28/": 5,
     "websec.fr/level30/index.php": 5,
     "brokencrystals.com/api/email/deleteEmails": 79,
-    "duck-store.escape.tech/mcp/info": 32,
-    "ssrf.vulnlab.dev/parser/redirect": 16,
     "wrongsecrets.herokuapp.com/mcp62": 12
   }
 }
