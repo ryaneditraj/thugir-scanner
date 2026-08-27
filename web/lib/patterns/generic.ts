@@ -61259,6 +61259,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-reviews-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Duck Store product reviews stored XSS live oracle",
+    description:
+      "POST /api/v1/reviews/product/{id} stores unsanitized HTML (e.g. <img onerror>) in content and serves it back via GET /api/v1/reviews/product/{id} without encoding — the Escape Duck Store product review stored XSS training oracle.",
+    impactOneline:
+      "Stored XSS in product review content lets attackers persist script execution for any user viewing product reviews.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreReviewsStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize or encode user-supplied HTML in review content before storage and rendering.",
+      steps: [
+        "Strip HTML tags from review content on input.",
+        "Encode output when rendering reviews in HTML contexts.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/v1/reviews/product/{id} stores raw HTML with onerror handlers. Show stored XSS remediation for product review APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-reviews-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Duck Store product reviews stored XSS route live oracle",
+    description:
+      "When scanning /api/v1/reviews/product/{id}, POST stores unsanitized HTML review content served back without encoding — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm product review APIs do not persist executable HTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreReviewsStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize review content on /api/v1/reviews/product/{id} route handlers.",
+      steps: [
+        "Reject HTML tags in review POST bodies.",
+        "Encode review content in list responses.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/reviews route stores raw HTML XSS payloads. Show route-specific stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-reviews-unauth-read-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Duck Store product reviews unauthenticated read live oracle",
+    description:
+      "GET /api/v1/reviews/product/{id} returns customer reviews with linked usernames and content without authentication — the Escape Duck Store product review disclosure training oracle.",
+    impactOneline:
+      "Unauthenticated review lists expose customer identities and review content on product pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreReviewsUnauthReadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication or redact user metadata from public review list endpoints.",
+      steps: [
+        "Gate review list APIs behind authentication when reviews contain PII.",
+        "Redact linked usernames from unauthenticated product review responses.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/v1/reviews/product/{id} returns customer usernames without auth. Show review disclosure remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-reviews-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Duck Store product reviews route live oracle",
+    description:
+      "When scanning /api/v1/reviews/product/{id}, unauthenticated GET returns customer reviews with linked usernames — route-specific product review disclosure oracle.",
+    impactOneline:
+      "Route-specific scans should confirm product review APIs do not leak customer identities without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreReviewsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact user metadata from unauthenticated /api/v1/reviews route handlers.",
+      steps: [
+        "Require authentication before returning linked user objects in review lists.",
+        "Return anonymous review summaries for public product pages.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/reviews route scan confirms unauthenticated customer review disclosure. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "duck-store-auth-login-weak-credentials-live-oracle",
     platform: "generic",
     category: "Broken authentication",

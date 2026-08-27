@@ -5387,6 +5387,24 @@
       "slug": "securebank-blog-reflexion-ssti-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: securebankBlogReflexionSuppressed skips reflexionEscalatedSsti on securebank-blog.vercel.app Vercel Security Checkpoint obfuscated JS (coincidental '49' in eval bundles); securebank-blog.vercel.app/admin findings 4→3 (-reflexion-escalated-ssti false positive, +securebank-blog-admin-rbac-route-live-oracle retained); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-reviews-stored-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/reviews/product/1 stores <img src=x onerror=canary> unsanitized and GET list echoes payload; duck-store.escape.tech/api/v1/reviews findings 33→38 (+duck-store-reviews-stored-xss-live-oracle +duck-store-reviews-stored-xss-route-live-oracle +duck-store-reviews-unauth-read-live-oracle +duck-store-reviews-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-reviews-unauth-read-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/reviews/product/1 returns linked usernames (sarah_j, patricia_a) without auth; duck-store.escape.tech/api/v1/reviews route scan fires duck-store-reviews-unauth-read-live-oracle +duck-store-reviews-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-api-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceReflexionSuppressed skips reflexionEscalatedSsti on /api/* route scans where Angular/React dev bundles embed coincidental '49'; ginandjuice.shop/api/identity/auth/login findings 33→32 (-reflexion-escalated-ssti false positive, +ginandjuice-login-route-live-oracle retained); benchmark juice-shop 50 findings 6/6 maintained"
     }
   ]
 }
