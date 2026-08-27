@@ -8884,10 +8884,13 @@ function extractAiSecurityPlatformChallengeSeeds(html: string, pageUrl: string):
     "/challenges/xss",
     "/challenges/idor",
     "/challenges/admin-console",
+    "/challenges/cookie-auth",
     "/challenges/leaked-config",
     "/challenges/supabase-data",
+    "/challenges/weak-rls",
     "/challenges/rate-limiting",
     "/challenges/insecure-passwords",
+    "/challenges/password-storage",
     "/challenges/security-headers",
     "/challenges/supply-chain",
     "/challenges/vulnerable-deps",
@@ -12282,8 +12285,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/insecure-passwords\b/i.test(targetInput) &&
+        /\/challenges\/(?:insecure-passwords|password-storage)\b/i.test(targetInput) &&
         p.slug === "ai-security-insecure-passwords-route-live-oracle"
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/(?:supabase-data|weak-rls)\b/i.test(targetInput) &&
+        p.slug === "ai-security-supabase-data-route-live-oracle"
       )
         return -3;
       if (
@@ -12294,7 +12303,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/admin-console\b/i.test(targetInput) &&
+        /\/challenges\/(?:admin-console|cookie-auth)\b/i.test(targetInput) &&
         p.slug === "ai-security-admin-console-route-live-oracle"
       )
         return -3;

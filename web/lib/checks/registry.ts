@@ -80714,12 +80714,12 @@ AI & Security Platform Hands-on Next.js + Supabase security exercises
 Client-side Cross-Site Scripting (XSS) /challenges/xss CWE-79 Injecting malicious scripts into pages viewed by other users
 Client-side Open Redirect /challenges/open-redirect CWE-601 Unvalidated redirects that route users to attacker-controlled URLs
 Auth & API IDOR /challenges/idor CWE-639 Accessing objects by predictable IDs without authorization checks
-Auth & API Cookie Auth Bypass /challenges/admin-console
+Auth & API Cookie Auth Bypass /challenges/admin-console /challenges/cookie-auth client-writable admin cookie
 Auth & API Brute Force /challenges/rate-limiting No rate limiting allows unlimited login attempts
-Auth & API Password Storage /challenges/insecure-passwords CWE-521 plaintext password weak hash storage
+Auth & API Password Storage /challenges/insecure-passwords /challenges/password-storage CWE-521 plaintext password weak hash storage
 Backend & Config Security Headers /challenges/security-headers CWE-200 Missing CSP X-Frame-Options HSTS
 Backend & Config Leaked Secrets /challenges/leaked-config CWE-200 Environment variables and API keys exposed
-Backend & Config Supabase RLS /challenges/supabase-data
+Backend & Config Supabase RLS /challenges/supabase-data /challenges/weak-rls weak RLS misconfiguration
 Legal / Social AI-Assisted Phishing /challenges/ai-phishing Phishing CWE-1021 AI-generated cloned login pages and email spoofing attacks
 Legal / Social Deceptive Privacy Policy /challenges/privacy-policy Dark Patterns CWE-1021 Burying harmful data-sale and plaintext-storage clauses
 Supply Chain /challenges/supply-chain Supply Chain Attack dependency tampering
@@ -80854,22 +80854,22 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform leaked-config/leaked-secrets challenge — environment variables and API keys exposed in client bundles (CWE-200)"
   },
   "supabase-data": {
-    routeRe: /\/challenges\/supabase-data\b/i,
+    routeRe: /\/challenges\/(?:supabase-data|weak-rls)\b/i,
     markers: [
-      { label: "Supabase RLS challenge route", re: /\/challenges\/supabase-data/i },
-      { label: "Supabase RLS training module", re: /Supabase RLS/i },
+      { label: "Supabase RLS challenge route", re: /\/challenges\/(?:supabase-data|weak-rls)/i },
+      { label: "Supabase RLS training module", re: /Supabase RLS|weak RLS|Row Level Security/i },
       { label: "Backend & Config challenge category", re: /Backend\s*&\s*Config/i }
     ],
-    note: "AI Security Platform supabase-data challenge — Supabase Row Level Security bypass exposes data without auth"
+    note: "AI Security Platform supabase-data/weak-rls challenge — Supabase Row Level Security bypass exposes data without auth"
   },
   "admin-console": {
-    routeRe: /\/challenges\/admin-console\b/i,
+    routeRe: /\/challenges\/(?:admin-console|cookie-auth)\b/i,
     markers: [
-      { label: "Cookie Auth Bypass challenge route", re: /\/challenges\/admin-console/i },
-      { label: "Cookie Auth Bypass training module", re: /Cookie Auth Bypass/i },
+      { label: "Cookie Auth Bypass challenge route", re: /\/challenges\/(?:admin-console|cookie-auth)/i },
+      { label: "Cookie Auth Bypass training module", re: /Cookie Auth Bypass|client-writable admin cookie/i },
       { label: "Auth & API challenge category", re: /Auth\s*&\s*API/i }
     ],
-    note: "AI Security Platform admin-console challenge — cookie-based admin authentication bypass without valid credentials"
+    note: "AI Security Platform admin-console/cookie-auth challenge — cookie-based admin authentication bypass without valid credentials"
   },
   "supply-chain": {
     routeRe: /\/challenges\/supply-chain\b/i,
@@ -80918,13 +80918,16 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform security-headers challenge — missing or misconfigured CSP, HSTS, and frame-busting headers"
   },
   "insecure-passwords": {
-    routeRe: /\/challenges\/insecure-passwords\b/i,
+    routeRe: /\/challenges\/(?:insecure-passwords|password-storage)\b/i,
     markers: [
-      { label: "Password Storage challenge route", re: /\/challenges\/insecure-passwords/i },
+      {
+        label: "Password Storage challenge route",
+        re: /\/challenges\/(?:insecure-passwords|password-storage)/i
+      },
       { label: "Password Storage training module", re: /Password Storage|plaintext password|weak hash/i },
       { label: "Auth & API challenge category", re: /Auth\s*&\s*API/i }
     ],
-    note: "AI Security Platform insecure-passwords challenge — plaintext or weak password storage in the Next.js workshop"
+    note: "AI Security Platform insecure-passwords/password-storage challenge — plaintext or weak password storage in the Next.js workshop"
   },
   "ai-phishing": {
     routeRe: /\/challenges\/(?:ai-phishing|phishing)\b/i,
@@ -80997,7 +81000,7 @@ const aiSecurityLeakedConfigRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "leaked-config");
 
 const aiSecuritySupabaseDataRouteLiveOracle: Rule = (ctx) =>
-  aiSecurityPlatformChallengeRouteOracle(ctx, "supabase-data");
+  aiSecurityCatalogOrLoginGatedRouteOracle(ctx, "supabase-data");
 
 const aiSecurityAdminConsoleRouteLiveOracle: Rule = (ctx) =>
   aiSecurityCatalogOrLoginGatedRouteOracle(ctx, "admin-console");
