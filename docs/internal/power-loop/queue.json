@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-27T12:12:00.000Z",
+  "updated_at": "2026-08-27T13:12:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/testimonials",
+      "source": "Escape Duck Store — stored XSS oracle POST /testimonials (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/products/1",
+      "source": "Escape Duck Store — negative product price BOLA oracle PUT /api/v1/admin/products/{id} (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/graphql",
+      "source": "DVGA — Damn Vulnerable GraphQL Application hosted by Escape (dvga.tools.escape.tech/graphql)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/workshop/api/merchant/contact_mechanic",
+      "source": "OWASP vAPI — API8 hidden-parameter / mass-assignment oracle POST /workshop/api/merchant/contact_mechanic (vapi.tools.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/identity/api/auth/login",
+      "source": "OWASP vAPI — broken authentication oracle POST /identity/api/auth/login (vapi.tools.escape.tech)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/api/v1/auth/login",
       "source": "Escape Duck Store — weak admin credentials + no rate limiting oracle POST /api/v1/auth/login (vulnerabilities catalog)",
