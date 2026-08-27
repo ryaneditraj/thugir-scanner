@@ -25808,6 +25808,23 @@ const vulnbankV1ForgotPasswordPinLeakLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankV1ForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/)?v1\/forgot-password\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankV1ForgotPasswordPinLeakLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /api/v1/forgot-password route scan — debug_info.pin exposes 3-digit reset PIN while v2 omits it — route-specific API version confusion oracle"
+    }
+  };
+};
+
 const vulnbankV2ForgotPasswordEnumerationLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const username = `thugir_v2fp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -55595,7 +55612,7 @@ const duckStoreAdminUsersBflaLiveOracle: Rule = async (ctx) => {
 const duckStoreAdminUsersBflaRouteLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/admin\/users/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/v1\/)?admin\/users\b/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreAdminUsersBflaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -56243,7 +56260,7 @@ const duckStoreAdminProductsNegativePriceLiveOracle: Rule = async (ctx) => {
 const duckStoreAdminProductsNegativePriceRouteLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/admin\/products/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/v1\/)?admin\/products\b/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreAdminProductsNegativePriceLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -56297,7 +56314,7 @@ const duckStoreAdminOrdersExposureLiveOracle: Rule = async (ctx) => {
 const duckStoreAdminOrdersExposureRouteLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/admin\/orders/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/v1\/)?admin\/orders\b/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreAdminOrdersExposureLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -56613,7 +56630,7 @@ const duckStoreAdminStatsLiveOracle: Rule = async (ctx) => {
 const duckStoreAdminStatsRouteLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/admin\/stats\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/v1\/)?admin\/stats\b/i.test(pageUrl)) return NEGATIVE;
   const result = await duckStoreAdminStatsLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -78196,7 +78213,7 @@ const vulnDemoStoredXssRouteLiveOracle: Rule = async (ctx) => {
 const pwnshopChatInitRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:api\/)?chat\/init\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/)?chat(?:\/init)?\b/i.test(pageUrl) || /\/chat\/order\b/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopChatInitEmailEnumerationLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -95417,6 +95434,7 @@ export const RULES: Record<string, Rule> = {
   vulnbankTransferNegativeAmountRouteLiveOracle,
   vulnbankGraphqlIntrospectionLiveOracle,
   vulnbankV1ForgotPasswordPinLeakLiveOracle,
+  vulnbankV1ForgotPasswordRouteLiveOracle,
   vulnbankV2ForgotPasswordEnumerationLiveOracle,
   vulnbankV2ForgotPasswordRouteLiveOracle,
   vulnbankV3UserIdorLiveOracle,
