@@ -13682,6 +13682,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/web-pentest-playground\.onrender\.com/i.test(origin) && p.slug.startsWith("web-pentest-playground-")) return -2;
       if (/whoopspay\.onrender\.com/i.test(origin) && p.slug.startsWith("whoopspay-")) return -2;
       if (/vaultapp(?:-omega)?\.vercel\.app/i.test(origin) && p.slug.startsWith("vaultapp-")) return -2;
+      if (
+        /vaultapp(?:-omega)?\.vercel\.app/i.test(origin) &&
+        /\/api\/transactions\b/i.test(targetInput) &&
+        p.slug.startsWith("vaultapp-transactions")
+      )
+        return -4;
       if (/vaultapp(?:-omega)?\.vercel\.app/i.test(origin) && /\/api\//i.test(targetInput) && p.slug.startsWith("vaultapp-")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && p.slug.startsWith("bypass403-")) return -2;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/waf\b/i.test(targetInput) && p.slug.startsWith("bypass403-waf")) return -3;
