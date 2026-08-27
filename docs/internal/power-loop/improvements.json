@@ -5129,6 +5129,24 @@
       "slug": "ai-security-password-storage-insecure-passwords-route-alias",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/password-storage returns HTTP 307 Location /login?next=%2Fchallenges%2Fpassword-storage; insecure-passwords routeRe accepts /password-storage alias; ai-security-platform-iota.vercel.app/challenges/password-storage findings 6→4 with +ai-security-insecure-passwords-route-live-oracle (route oracle now fires on queue slug); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-deceptive-privacy-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/deceptive-privacy returns HTTP 307 Location /login?next=%2Fchallenges%2Fdeceptive-privacy; privacy-policy routeRe accepts /deceptive-privacy alias + aiSecurityCatalogOrLoginGatedRouteOracle fallback; ai-security-platform-iota.vercel.app/challenges/deceptive-privacy findings 6→3 with +ai-security-privacy-policy-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-open-redirector-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /redirect/?url=https://ssrf.vulnlab.dev/r/?to=<internal> chains open redirector into AWS metadata; ssrfVulnlabOpenRedirectorRouteLiveOracle fires on /r/?to= route scans with runner -4 priority; ssrf.vulnlab.dev/r/?to=https://example.com findings 13→14 (+ssrf-vulnlab-open-redirector-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ssrf.vulnlab.dev",
+      "slug": "ssrf-vulnlab-validator-labs-priority-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended ssrf.vulnlab.dev/parser + /basic + /blocklist + /redirect to priority_discovery_urls front; ssrfVulnlabPrioritySeeds adds /r/?to= open redirector; route scans confirm parser/basic/blocklist/redirect each 15 findings with route-specific live oracles; benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
