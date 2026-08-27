@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T03:06:00.000Z",
+  "updated_at": "2026-08-27T04:06:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://duck-store.escape.tech/mcp/info",
@@ -11136,6 +11136,31 @@
       "url": "https://chimera.atlascrew.dev/hipaa-evidence-endpoints",
       "source": "inferno-lab/Chimera — HIPAA evidence endpoint catalog (healthcare vertical oracles)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/mcp",
+      "source": "OWASP WrongSecrets — Challenge 60 insecure MCP execute_command env-leak oracle POST /mcp (Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/",
+      "source": "Escape vAPI — OWASP API Top 10 self-hostable exercise catalog (vapi.tools.escape.tech README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level35/index.php",
+      "source": "WebSec.fr — level35 challenge (public PHP training benchmark; /level35/ redirects here)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-python.fly.dev/pages/create",
+      "source": "Aikido Zen Python live demo — SQL injection training page (zen-demo-python.fly.dev injection labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-python.fly.dev/pages/execute",
+      "source": "Aikido Zen Python live demo — shell/command injection training page (zen-demo-python.fly.dev)",
+      "auth": "public_demo"
     }
   ],
   "discovery_urls_added_this_run": 5
