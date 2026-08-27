@@ -5369,6 +5369,24 @@
       "slug": "duck-store-users-api-hub-priority",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for duck-store-users-* when scanning /api/v1/users/ — GET lists admin+users and GET /api/v1/users/{uuid} returns admin@duck-store.escape role:admin without auth; duck-store.escape.tech/api/v1/users/ findings 30→35 (+duck-store-users-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-resend-social-walkthrough-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: juiceShopResendKeyLiveOracle emits walkthrough oracle when expanded social corpus (719KB+) fetched via escape.tech mirror but canonical re_<8>_<24> key absent post-revocation; juice-shop.herokuapp.com findings 49→51 (+juice-shop-resend-key-live-oracle +secret-resend bridged); benchmark 6/6 recall maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-cookie-auth-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/cookie-auth returns HTTP 307 Location /login?next=%2Fchallenges%2Fcookie-auth; dedicated aiSecurityCookieAuthRouteLiveOracle for /challenges/cookie-auth (admin-console oracle split to route-specific slug); ai-security-platform-iota.vercel.app/challenges/cookie-auth findings +ai-security-cookie-auth-route-live-oracle; benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: securebankBlogReflexionSuppressed skips reflexionEscalatedSsti on securebank-blog.vercel.app Vercel Security Checkpoint obfuscated JS (coincidental '49' in eval bundles); securebank-blog.vercel.app/admin findings 4→3 (-reflexion-escalated-ssti false positive, +securebank-blog-admin-rbac-route-live-oracle retained); benchmark juice-shop 46 findings 6/6 maintained"
     }
   ]
 }
