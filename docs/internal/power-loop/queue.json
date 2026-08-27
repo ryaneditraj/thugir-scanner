@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-27T00:05:00.000Z",
+  "updated_at": "2026-08-27T01:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ssrf.vulnlab.dev/r/?to=https://example.com",
+      "source": "sampsonc/vulnlab.dev — self-hosted open redirector for SSRF allowlist chaining (/r/?to= on ssrf.vulnlab.dev catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/mxss/",
+      "source": "sampsonc/vulnlab.dev — canonical mutation XSS / mXSS lab path (catalog /meta/mutation maps to /mxss/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/vulnerable-deps",
+      "source": "AI Security Platform iota — Challenge 07 outdated npm dependencies with known CVEs lab (canonical /vulnerable-deps slug)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/admin-console",
+      "source": "AI Security Platform iota — Challenge 06 client-writable admin cookie auth bypass (canonical /admin-console slug)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/insecure-passwords",
+      "source": "AI Security Platform iota — Challenge 12 insecure password storage / weak hashing lab (canonical /insecure-passwords slug)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/weak-rls",
       "source": "AI Security Platform iota — Challenge 05 weak Supabase RLS misconfiguration lab (14-challenge OWASP Top 10 Vercel demo)",
