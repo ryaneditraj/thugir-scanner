@@ -2500,6 +2500,8 @@ const DEEP_RULES = new Set<string>([
   "vapiRouteLiveOracle",
   "duckStoreUsersBolaLiveOracle",
   "duckStoreUsersRouteLiveOracle",
+  "duckStoreUsersEnumerationLiveOracle",
+  "duckStoreUsersEnumerationRouteLiveOracle",
   "duckStoreTestimonialsBolaLiveOracle",
   "duckStoreTestimonialsRouteLiveOracle",
   "duckStoreOrdersBolaLiveOracle",
@@ -2533,6 +2535,7 @@ const DEEP_RULES = new Set<string>([
   "duckStoreTestimonialsStoredXssLiveOracle",
   "duckStoreTestimonialsStoredXssRouteLiveOracle",
   "duckStoreTestimonialsGuestRouteLiveOracle",
+  "duckStoreTestimonialsPageStoredXssRouteLiveOracle",
   "duckStoreAuthLoginWeakCredentialsLiveOracle",
   "duckStoreAuthLoginWeakCredentialsRouteLiveOracle",
   "duckStoreAuthRegisterOpenLiveOracle",
@@ -14322,8 +14325,28 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/users\/?(?:\?.*)?$/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-users-enumeration")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/users\/?(?:\?.*)?$/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-users")
+      )
+        return -3;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
         /\/testimonials\/guest\b/i.test(targetInput) &&
         p.slug.startsWith("duck-store-testimonials")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/testimonials(?:\/|$|\?)/i.test(targetInput) &&
+        !/\/api\//i.test(targetInput) &&
+        !/\/testimonials\/guest/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-testimonials-page")
       )
         return -4;
       if (
