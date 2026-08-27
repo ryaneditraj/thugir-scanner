@@ -5405,6 +5405,24 @@
       "slug": "ginandjuice-api-reflexion-ssti-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceReflexionSuppressed skips reflexionEscalatedSsti on /api/* route scans where Angular/React dev bundles embed coincidental '49'; ginandjuice.shop/api/identity/auth/login findings 33→32 (-reflexion-escalated-ssti false positive, +ginandjuice-login-route-live-oracle retained); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-transactions-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /transactions returns 404 missing-content shell while GET /order/details?orderId=0254809 exposes Carlos Montoya billing/payment without auth; ginandjuice.shop/transactions findings 31→33 (+ginandjuice-transactions-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-products-reviews-misroute-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/products/reviews returns 422 int_parsing on product_id='reviews' while GET /api/v1/reviews/product/1 returns linked usernames; duck-store.escape.tech/api/v1/products/reviews findings 28→39 (+duck-store-products-reviews-misroute-route-live-oracle +duck-store-reviews-route-live-oracle +duck-store-reviews-unauth-read-live-oracle +misroute live oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-wishlist-phantom-api-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/wishlist returns 404 {\"detail\":\"Not Found\"} while SPA /wishlist returns HTTP 200 and OpenAPI lists no wishlist paths; duck-store.escape.tech/api/v1/wishlist findings 29→37 (+duck-store-wishlist-phantom-api-route-live-oracle +duck-store-wishlist-phantom-api-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

@@ -55923,7 +55923,9 @@ const duckStoreTestimonialsPageStoredXssRouteLiveOracle: Rule = async (ctx) => {
 };
 
 function isDuckStoreReviewsPageRoute(pageUrl: string): boolean {
-  return /\/(?:api\/v1\/)?reviews(?:\/?$|\/product\/\d+|\/\d+)/i.test(pageUrl);
+  return /\/(?:api\/v1\/)?(?:products\/)?reviews(?:\/?$|\/product\/\d+|\/\d+)/i.test(
+    pageUrl
+  );
 }
 
 const duckStoreReviewsStoredXssByProbe = new WeakMap<object, RuleResult>();
@@ -56041,6 +56043,92 @@ const duckStoreReviewsRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Duck Store /api/v1/reviews route scan — unauthenticated product review list exposes customer usernames and review content"
+    }
+  };
+};
+
+const duckStoreProductsReviewsMisrouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const misrouteUrl = new URL("/api/v1/products/reviews", ctx.origin).toString();
+  const misrouteDoc = await ctx.probe.get(misrouteUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (misrouteDoc.status !== 422) return NEGATIVE;
+  if (!/int_parsing|product_id/i.test(misrouteDoc.body)) return NEGATIVE;
+  const correctUrl = new URL("/api/v1/reviews/product/1", ctx.origin).toString();
+  const correctDoc = await ctx.probe.get(correctUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (correctDoc.status < 200 || correctDoc.status >= 400) return NEGATIVE;
+  if (!/"username"/i.test(correctDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      misrouteUrl,
+      misrouteStatus: misrouteDoc.status,
+      correctUrl,
+      snippet: misrouteDoc.body.slice(0, 200),
+      note: "Duck Store GET /api/v1/products/reviews hits /products/{product_id} with product_id='reviews' (422 int_parsing) instead of GET /api/v1/reviews/product/{id} which returns unauthenticated review data"
+    }
+  };
+};
+
+const duckStoreProductsReviewsMisrouteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/products\/reviews\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreProductsReviewsMisrouteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/products/reviews route scan — FastAPI misroutes 'reviews' as product_id (422) while /api/v1/reviews/product/{id} exposes customer review data without authentication"
+    }
+  };
+};
+
+const duckStoreWishlistPhantomApiLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const apiUrl = new URL("/api/v1/wishlist", ctx.origin).toString();
+  const apiDoc = await ctx.probe.get(apiUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (apiDoc.status !== 404 || !/"detail"\s*:\s*"Not Found"/i.test(apiDoc.body)) return NEGATIVE;
+  const spaUrl = new URL("/wishlist", ctx.origin).toString();
+  const spaDoc = await ctx.probe.get(spaUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (spaDoc.status < 200 || spaDoc.status >= 400) return NEGATIVE;
+  if (!/Duck Store/i.test(spaDoc.body)) return NEGATIVE;
+  const openApiDoc = await ctx.probe.get(new URL("/openapi.json", ctx.origin).toString(), {
+    maxBytes: 600000,
+    timeoutMs: 15000
+  });
+  if (openApiDoc.status < 200 || openApiDoc.status >= 400) return NEGATIVE;
+  if (/wishlist/i.test(openApiDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      apiUrl,
+      apiStatus: apiDoc.status,
+      spaUrl,
+      spaStatus: spaDoc.status,
+      snippet: apiDoc.body.slice(0, 120),
+      note: "Duck Store GET /api/v1/wishlist returns 404 while SPA /wishlist route exists but OpenAPI lists no wishlist REST endpoint — phantom API route / undocumented client-side wishlist surface"
+    }
+  };
+};
+
+const duckStoreWishlistPhantomApiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/v1\/)?wishlist\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreWishlistPhantomApiLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /wishlist route scan — REST wishlist API absent (404) while SPA route renders without OpenAPI documentation — phantom wishlist endpoint oracle"
     }
   };
 };
@@ -69854,6 +69942,30 @@ const ginAndJuiceMyAccountOrdersRouteLiveOracle: Rule = async (ctx) => {
       ordersStatus: ordersDoc.status,
       location: ordersDoc.headers["location"] || "",
       note: "Gin & Juice Shop /my-account/orders route scan — orders list gated behind login while GET /order/details?orderId= exposes billing and payment details without authentication (PortSwigger order IDOR training lab)"
+    }
+  };
+};
+
+const ginAndJuiceTransactionsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/transactions\b/i.test(pageUrl)) return NEGATIVE;
+  const transactionsDoc = await ctx.probe.get(pageUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (transactionsDoc.status < 200 || transactionsDoc.status >= 500) return NEGATIVE;
+  if (
+    !/oops\.\.\.\s*something went wrong|missing-content|not-found/i.test(transactionsDoc.body)
+  )
+    return NEGATIVE;
+  const idor = await ginAndJuiceOrderDetailsIdorLiveOracle(ctx);
+  if (!idor.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      ...idor.evidence,
+      scannedUrl: pageUrl,
+      transactionsStatus: transactionsDoc.status,
+      note: "Gin & Juice Shop /transactions route scan — phantom transactions page returns 404 while GET /order/details?orderId= exposes another user's billing and payment details without authentication (PortSwigger order-history IDOR training lab)"
     }
   };
 };
@@ -96988,6 +97100,10 @@ export const RULES: Record<string, Rule> = {
   duckStoreReviewsStoredXssRouteLiveOracle,
   duckStoreReviewsUnauthReadLiveOracle,
   duckStoreReviewsRouteLiveOracle,
+  duckStoreProductsReviewsMisrouteLiveOracle,
+  duckStoreProductsReviewsMisrouteRouteLiveOracle,
+  duckStoreWishlistPhantomApiLiveOracle,
+  duckStoreWishlistPhantomApiRouteLiveOracle,
   duckStoreAuthLoginWeakCredentialsLiveOracle,
   duckStoreAuthLoginWeakCredentialsRouteLiveOracle,
   duckStoreAuthRegisterOpenLiveOracle,
@@ -97598,6 +97714,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceChangePasswordRouteLiveOracle,
   ginAndJuiceChangeAddressRouteLiveOracle,
   ginAndJuiceMyAccountOrdersRouteLiveOracle,
+  ginAndJuiceTransactionsRouteLiveOracle,
   ginAndJuiceDeleteRouteLiveOracle,
   ginAndJuiceCatalogLinkManipulationLiveOracle,
   ginAndJuiceCatalogLinkManipulationRouteLiveOracle,
