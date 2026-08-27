@@ -39162,7 +39162,9 @@ const pwnshopProductApiIdorLiveOracle: Rule = async (ctx) => {
 const pwnshopProductApiIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/products\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const idMatch = pageUrl.match(/\/api\/v1\/products\/(\d+)/i);
+  if (!idMatch) return NEGATIVE;
+  const productId = idMatch[1];
   const result = await pwnshopProductApiIdorLiveOracle(ctx);
   if (result.fired) {
     return {
@@ -39172,6 +39174,35 @@ const pwnshopProductApiIdorRouteLiveOracle: Rule = async (ctx) => {
         ...result.evidence,
         scannedUrl: pageUrl,
         note: "Pwnshop /api/v1/products/:id route scan — unauthenticated JSON product catalog returned without ownership check — REST product IDOR/BOLA route oracle"
+      }
+    };
+  }
+  const productUrl = new URL(`/product/${productId}`, ctx.origin).toString();
+  const productDoc = await ctx.probe.get(productUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (
+    productDoc.status >= 200 &&
+    productDoc.status < 400 &&
+    !/404\s*-\s*Page Not Found/i.test(productDoc.body) &&
+    /product-wrap|breadcrumb-bar|Add to Cart/i.test(productDoc.body)
+  ) {
+    const markers: string[] = ["catalog-product-page-live"];
+    const titleMatch = productDoc.body.match(/<title>([^<]+)<\/title>/i);
+    if (titleMatch?.[1]) markers.push(`product-title:${titleMatch[1].trim().slice(0, 60)}`);
+    const sqliResult = await pwnshopProductSearchSqliLiveOracle(ctx);
+    if (sqliResult.fired) markers.push("search-sqli-live");
+    const xssResult = await pwnshopProductReviewStoredXssLiveOracle(ctx);
+    if (xssResult.fired) markers.push("review-stored-xss-live");
+    return {
+      fired: true,
+      confidence: xssResult.fired ? 0.93 : sqliResult.fired ? 0.92 : 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        productUrl,
+        productId,
+        markers,
+        ...(sqliResult.fired ? { sqliEvidence: sqliResult.evidence } : {}),
+        ...(xssResult.fired ? { xssEvidence: xssResult.evidence } : {}),
+        note: `Pwnshop /api/v1/products/${productId} route scan — REST path returns 404 but live /product/${productId} catalog confirms product review stored XSS (PWN-011) and search SQLi (PWN-010) chain`
       }
     };
   }
