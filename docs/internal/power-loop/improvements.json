@@ -5147,6 +5147,24 @@
       "slug": "ssrf-vulnlab-validator-labs-priority-drain",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: prepended ssrf.vulnlab.dev/parser + /basic + /blocklist + /redirect to priority_discovery_urls front; ssrfVulnlabPrioritySeeds adds /r/?to= open redirector; route scans confirm parser/basic/blocklist/redirect each 15 findings with route-specific live oracles; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level26-shell-exec-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level26/source.php confirms shell_exec($code) after character/word blacklist with maxlength=40; websec.fr/level26/ findings 4→6 (+websec-level26-shell-exec-route-live-oracle +client-side-websec-shell-exec-challenge-evidence); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level28-upload-include-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level28/source.php confirms md5_file + crc32 loose == before include($filename); websec.fr/level28/ findings 4→5 (+websec-level28-upload-include-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level30-unserialize-destruct-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level30/source.php confirms class B __destruct + unserialize($_POST['payload']) tragic exception flow; websec.fr/level30/index.php findings 4→5 (+websec-level30-unserialize-destruct-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }

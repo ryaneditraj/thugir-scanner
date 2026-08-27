@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T03:12:00.000Z",
+  "updated_at": "2026-08-27T03:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2884,
-  "total_findings": 29713,
+  "total_sites_scanned": 2887,
+  "total_findings": 29729,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2024,
-  "discovery_findings": 24781,
-  "improvements_shipped": 1198,
-  "last_run": "2026-08-27T03:12:00.000Z",
+  "discovery_findings": 24797,
+  "improvements_shipped": 1201,
+  "last_run": "2026-08-27T03:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,45 +48,36 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (49 findings, 38 live oracles incl. iac-terraform-tls-key); gap=[]"
+      "note": "Stable 6/6 first-pass recall (48 findings); gap=[]"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 127,
-      "focus": "duck-store MCP unauth info/tools + original DVGA graphql + xss.vulnlab filter bypass + vulnshop checkout business logic",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 16,
+      "focus": "websec.fr level26/28/30 route live oracles + client-side pathname guards for level29 false-positive bleed",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 38 live oracles)",
-      "duck-store.escape.tech/mcp/info: 32 findings — duck-store-mcp-tools-enumeration + mcp-coupons-disclosure + resources live oracles",
-      "duck-store.escape.tech/mcp/tools: 32 findings — MCP hub crawl confirms unauthenticated tool enumeration",
-      "dvga.tools.escape.tech/graphql: 15 findings — dvga-graphql-batching-route-live-oracle (+ introspection on original DVGA instance)",
-      "xss.vulnlab.dev/filter/: 8 findings — reflected + DOM XSS live oracles on filter-bypass slug",
-      "vulnshop.vercel.app/api/checkout: 17 findings — payment manipulation + EL injection hub from checkout entry",
-      "vault-notes-frontend-gules.vercel.app/: 6 findings — vault-notes-jwt-secret-leak-route-live-oracle (queue drain)",
-      "websec.fr/level17/: 8 findings — websec-level17-timing-attack-route-live-oracle",
-      "websec.fr/level18/: 9 findings — websec-level18-php-unserialize-cookie-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings)",
+      "websec.fr/level26/: 6 findings — websec-level26-shell-exec-route-live-oracle (shell_exec blacklist bypass)",
+      "websec.fr/level28/: 5 findings — websec-level28-upload-include-route-live-oracle (md5_file + crc32 include RCE)",
+      "websec.fr/level30/index.php: 5 findings — websec-level30-unserialize-destruct-route-live-oracle (class B __destruct gadget)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + iac-terraform-tls-key)",
-      "duck-store /mcp/info returns 406 without Accept header — scanner still reaches hub via crawl but direct MCP JSON-RPC probes may need content-type tuning",
-      "dvga.tools vs dvga2.tools — original instance adds batching route oracle; intros depth similar to dvga2 pass",
-      "vault-notes live demo passcode-gated — JWT secret leak oracle fires on static bundle but SQLi/IDOR routes need authenticated session"
+      "websec.fr/level29/ returns 502 — route oracle blocked until host recovers; client-side bleed from bonus seeds suppressed via pathname guards"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 49,
+    "juice-shop.herokuapp.com": 48,
+    "websec.fr/level26/": 6,
+    "websec.fr/level28/": 5,
+    "websec.fr/level30/index.php": 5,
+    "brokencrystals.com/api/email/deleteEmails": 79,
     "duck-store.escape.tech/mcp/info": 32,
-    "duck-store.escape.tech/mcp/tools": 32,
-    "vulnshop.vercel.app/api/checkout": 17,
-    "dvga.tools.escape.tech/graphql": 15,
-    "xss.vulnlab.dev/filter/": 8,
-    "websec.fr/level18/": 9,
-    "websec.fr/level17/": 8,
-    "vault-notes-frontend-gules.vercel.app/": 6,
-    "brokencrystals.com/api/email/deleteEmails": 79
+    "ssrf.vulnlab.dev/parser/redirect": 16,
+    "wrongsecrets.herokuapp.com/mcp62": 12
   }
 }
