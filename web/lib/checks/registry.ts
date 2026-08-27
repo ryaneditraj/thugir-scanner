@@ -20203,7 +20203,20 @@ const CLIENT_WEBSEC_SHELL_EXEC_CHALLENGE_RES: { label: string; re: RegExp }[] = 
   }
 ];
 
+function websecScanLevelSlug(ctx: RuleContext): string | null {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const m = /websec\.fr\/(level\d+)/i.exec(pageUrl);
+  return m ? m[1].toLowerCase() : null;
+}
+
+function websecClientSideLevelGuard(ctx: RuleContext, expectedLevel: string): boolean {
+  const slug = websecScanLevelSlug(ctx);
+  if (!slug) return true;
+  return slug === expectedLevel;
+}
+
 const clientSideWebsecShellExecChallengeEvidence: Rule = async (ctx) => {
+  if (!websecClientSideLevelGuard(ctx, "level26")) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_WEBSEC_SHELL_EXEC_CHALLENGE_RES) {
     const m = ctx.combined.match(re);
@@ -20217,6 +20230,47 @@ const clientSideWebsecShellExecChallengeEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "WebSec.fr level26 documents shell_exec on 40-char POST code after blacklist filter — /bin/sh command injection training lab"
+    }
+  };
+};
+
+const websecLevel26ShellExecRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level26(?:\/|$)/i.test(pathname)) return NEGATIVE;
+  const markers: string[] = [];
+  const indexUrl = new URL("/level26/", ctx.origin).toString();
+  const sourceUrl = new URL("/level26/source.php", ctx.origin).toString();
+  const [indexDoc, source] = await Promise.all([
+    fetchDoc(indexUrl, { maxBytes: 65536, timeoutMs: 15000 }),
+    fetchDoc(sourceUrl, { maxBytes: 65536, timeoutMs: 15000 })
+  ]);
+  const pageCorpus = `${ctx.combined}\n${indexDoc.body}`;
+  if (/Level26|TwentySix|\/bin\/sh[\s\S]{0,80}new[\s\S]{0,40}php/i.test(pageCorpus))
+    markers.push("level26-shell-exec-title");
+  const sourceCorpus = source.body;
+  if (/shell_exec[\s\S]{0,120}\$code/i.test(sourceCorpus)) markers.push("shell-exec-code-sink");
+  if (/special_characters[\s\S]{0,240}words_filter/i.test(sourceCorpus))
+    markers.push("character-word-blacklist-filter");
+  if (/maxlength\s*=\s*40|substr[\s\S]{0,80}\$code[\s\S]{0,40}0[\s\S]{0,20}40/i.test(sourceCorpus))
+    markers.push("40-char-command-limit");
+  if (/max_value_length|suhosin/i.test(pageCorpus + sourceCorpus)) markers.push("suhosin-max-value-length");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      indexUrl,
+      sourceUrl,
+      markers,
+      note: "WebSec.fr /level26 route scan — shell_exec on 40-char POST code after character/word/function blacklist filter — /bin/sh command injection training oracle"
     }
   };
 };
@@ -20242,6 +20296,7 @@ const CLIENT_WEBSEC_ASPECT_INSTRUMENTATION_CHALLENGE_RES: { label: string; re: R
 ];
 
 const clientSideWebsecAspectInstrumentationChallengeEvidence: Rule = async (ctx) => {
+  if (!websecClientSideLevelGuard(ctx, "level27")) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_WEBSEC_ASPECT_INSTRUMENTATION_CHALLENGE_RES) {
     const m = ctx.combined.match(re);
@@ -20284,6 +20339,7 @@ const CLIENT_WEBSEC_UPLOAD_INCLUDE_CHALLENGE_RES: { label: string; re: RegExp }[
 ];
 
 const clientSideWebsecUploadIncludeChallengeEvidence: Rule = async (ctx) => {
+  if (!websecClientSideLevelGuard(ctx, "level28")) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_WEBSEC_UPLOAD_INCLUDE_CHALLENGE_RES) {
     const m = ctx.combined.match(re);
@@ -20297,6 +20353,44 @@ const clientSideWebsecUploadIncludeChallengeEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "WebSec.fr level28 documents flag.php upload with md5_file equality and crc32 type-juggling before include($filename) RCE"
+    }
+  };
+};
+
+const websecLevel28UploadIncludeRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level28(?:\/|$)/i.test(pathname)) return NEGATIVE;
+  const markers: string[] = [];
+  const indexUrl = new URL("/level28/", ctx.origin).toString();
+  const sourceUrl = new URL("/level28/source.php", ctx.origin).toString();
+  const [indexDoc, source] = await Promise.all([
+    fetchDoc(indexUrl, { maxBytes: 65536, timeoutMs: 15000 }),
+    fetchDoc(sourceUrl, { maxBytes: 65536, timeoutMs: 15000 })
+  ]);
+  const pageCorpus = `${ctx.combined}\n${indexDoc.body}`;
+  if (/Level28|TwentyEight|Please be our guess/i.test(pageCorpus))
+    markers.push("level28-upload-include-title");
+  const sourceCorpus = source.body;
+  if (/flag_file|md5_file/i.test(sourceCorpus)) markers.push("flag-file-md5-upload");
+  if (/crc32[\s\S]{0,240}checksum/i.test(sourceCorpus)) markers.push("crc32-checksum-type-juggle");
+  if (/include[\s\S]{0,160}\$filename/i.test(sourceCorpus)) markers.push("include-filename-rce-sink");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      indexUrl,
+      sourceUrl,
+      markers,
+      note: "WebSec.fr /level28 route scan — flag_file upload with md5_file equality and crc32 loose == before include($filename) — upload-to-include type-juggling RCE oracle"
     }
   };
 };
@@ -20326,6 +20420,7 @@ const CLIENT_WEBSEC_PHP_UNSERIALIZE_DESTRUCT_CHALLENGE_RES: { label: string; re:
 ];
 
 const clientSideWebsecPhpUnserializeDestructChallengeEvidence: Rule = async (ctx) => {
+  if (!websecClientSideLevelGuard(ctx, "level30")) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
   for (const { label, re } of CLIENT_WEBSEC_PHP_UNSERIALIZE_DESTRUCT_CHALLENGE_RES) {
     const m = ctx.combined.match(re);
@@ -20343,6 +20438,46 @@ const clientSideWebsecPhpUnserializeDestructChallengeEvidence: Rule = async (ctx
     evidence: {
       markers: hits.slice(0, 4),
       note: "WebSec.fr level30 documents unserialize($_POST['payload']) into class B __destruct that echoes $flag after tragic exception"
+    }
+  };
+};
+
+const websecLevel30PhpUnserializeDestructRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level30(?:\/|$)/i.test(pathname)) return NEGATIVE;
+  const markers: string[] = [];
+  const indexUrl = new URL("/level30/index.php", ctx.origin).toString();
+  const sourceUrl = new URL("/level30/source.php", ctx.origin).toString();
+  const [indexDoc, source] = await Promise.all([
+    fetchDoc(indexUrl, { maxBytes: 65536, timeoutMs: 15000 }),
+    fetchDoc(sourceUrl, { maxBytes: 65536, timeoutMs: 15000 })
+  ]);
+  const pageCorpus = `${ctx.combined}\n${indexDoc.body}`;
+  if (/Level30|Level Thirtee|destruct\./i.test(pageCorpus)) markers.push("level30-destruct-title");
+  const sourceCorpus = source.body;
+  if (/class[\s\S]{0,80}B[\s\S]{0,200}__destruct[\s\S]{0,200}\$flag/i.test(sourceCorpus))
+    markers.push("class-b-destruct-flag-gadget");
+  if (/unserialize[\s\S]{0,200}payload/i.test(sourceCorpus))
+    markers.push("unserialize-post-payload-sink");
+  if (/Something(?:&nbsp;|\s)+tragic|throw new Exception/i.test(sourceCorpus + pageCorpus))
+    markers.push("tragic-exception-flow");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      indexUrl,
+      sourceUrl,
+      markers,
+      note: "WebSec.fr /level30 route scan — unserialize($_POST['payload']) into class B __destruct that echoes $flag after tragic exception — PHP destructor gadget training oracle"
     }
   };
 };
@@ -94659,9 +94794,12 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecCloudStorageChallengeEvidence,
   websecLevel24CloudStorageRouteLiveOracle,
   clientSideWebsecShellExecChallengeEvidence,
+  websecLevel26ShellExecRouteLiveOracle,
   clientSideWebsecAspectInstrumentationChallengeEvidence,
   clientSideWebsecUploadIncludeChallengeEvidence,
+  websecLevel28UploadIncludeRouteLiveOracle,
   clientSideWebsecPhpUnserializeDestructChallengeEvidence,
+  websecLevel30PhpUnserializeDestructRouteLiveOracle,
   clientSideWebsecPhpUnserializeBlindDestructChallengeEvidence,
   clientSideWebsecOpenBasedirEvalChallengeEvidence,
   clientSideWebsecDynamicFunctionCallChallengeEvidence,

@@ -1812,9 +1812,12 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecCloudStorageChallengeEvidence",
   "websecLevel24CloudStorageRouteLiveOracle",
   "clientSideWebsecShellExecChallengeEvidence",
+  "websecLevel26ShellExecRouteLiveOracle",
   "clientSideWebsecAspectInstrumentationChallengeEvidence",
   "clientSideWebsecUploadIncludeChallengeEvidence",
+  "websecLevel28UploadIncludeRouteLiveOracle",
   "clientSideWebsecPhpUnserializeDestructChallengeEvidence",
+  "websecLevel30PhpUnserializeDestructRouteLiveOracle",
   "clientSideWebsecPhpUnserializeBlindDestructChallengeEvidence",
   "clientSideWebsecOpenBasedirEvalChallengeEvidence",
   "clientSideWebsecDynamicFunctionCallChallengeEvidence",
@@ -11767,6 +11770,27 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/level24\/?$/i.test(targetInput) &&
         (p.slug.startsWith("websec-level24-") ||
           p.slug === "client-side-websec-cloud-storage-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level26(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level26-") ||
+          p.slug === "client-side-websec-shell-exec-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level28(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level28-") ||
+          p.slug === "client-side-websec-upload-include-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level30(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level30-") ||
+          p.slug === "client-side-websec-php-unserialize-destruct-challenge-evidence")
       )
         return -3;
       if (/compass-demo\.com/i.test(origin) && p.slug.startsWith("compass-demo-")) return -2;

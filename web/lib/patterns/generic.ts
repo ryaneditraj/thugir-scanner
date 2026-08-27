@@ -16360,6 +16360,86 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "websec-level26-shell-exec-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level26 shell_exec blacklist bypass route live oracle",
+    description:
+      "When scanning /level26/, GET source.php confirms shell_exec on 40-char POST code after character/word/function blacklist filtering — route-specific /bin/sh command injection training oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level26 exposes blacklist-bypassable shell_exec on attacker-controlled command input.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel26ShellExecRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host shell injection labs offline; never pass user input to shell_exec in production.",
+      steps: [
+        "Move WebSec-style command-execution labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Eliminate shell_exec/system/passthru on any user-controlled input."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level26 route exposes shell_exec($code) behind a blacklist filter. Show how to retire public labs and ban shell invocation sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level28-upload-include-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level28 upload include type-juggling route live oracle",
+    description:
+      "When scanning /level28/, GET source.php confirms flag_file upload with md5_file equality and crc32 loose == before include($filename) — route-specific upload-to-include RCE oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level28 exposes upload-to-include RCE gated by md5_file and crc32 type confusion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel28UploadIncludeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host upload labs offline; never include user-uploaded files in production.",
+      steps: [
+        "Move WebSec-style upload/include labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Never include uploaded files; validate checksums with strict type-safe comparisons.",
+        "Store uploads outside webroot with content-type allowlists."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level28 route exposes include($filename) after md5_file and crc32 type juggling. Show secure file upload remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level30-unserialize-destruct-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level30 unserialize __destruct route live oracle",
+    description:
+      "When scanning /level30/, GET source.php confirms unserialize($_POST['payload']) into class B __destruct that echoes $flag after tragic exception — route-specific PHP destructor gadget oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level30 exposes unserialize gadget chain via class B __destruct flag oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel30PhpUnserializeDestructRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host unserialize labs offline; never unserialize attacker-controlled data in production.",
+      steps: [
+        "Move WebSec-style deserialization labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Replace PHP serialize/unserialize with JSON and strict schema validation.",
+        "Eliminate __destruct/__wakeup gadgets on attacker-reachable object graphs."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level30 route exposes unserialize($_POST['payload']) with class B __destruct flag oracle. Show secure deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-cloud-storage-challenge-evidence",
     platform: "generic",
     category: "Injection",
