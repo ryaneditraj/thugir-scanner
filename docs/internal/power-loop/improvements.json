@@ -5333,6 +5333,12 @@
       "slug": "pwnshop-chat-init-route-path-extension",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: pwnshopChatInitRouteLiveOracle only matched /chat/init but SPA route is /chat; order-idor and prompt-injection route oracles already matched /chat; pwnshop.ctfsecurity.com/chat findings 45→48 (+pwnshop-chat-init-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-init-api-v1-route-path-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopChatInitRouteLiveOracle matcher extended to /api/v1/chat/init (queue priority URL); prior regex matched /chat and /api/chat/init but not versioned API path; pwnshop.ctfsecurity.com/api/v1/chat/init findings 45→46 (+pwnshop-chat-init-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
     }
   ]
 }

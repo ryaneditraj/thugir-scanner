@@ -38865,7 +38865,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "medium",
     title: "Pwnshop chat init route live oracle (PWN-037)",
     description:
-      "When scanning /chat, /chat/init, or /api/chat/init, POST returns found:true with user profile for registered emails and found:false for unknown addresses — route-specific email enumeration oracle.",
+      "When scanning /chat, /chat/init, /api/chat/init, or /api/v1/chat/init, POST returns found:true with user profile for registered emails and found:false for unknown addresses — route-specific email enumeration oracle.",
     impactOneline:
       "Route-specific confirmation that Pwnshop chat init enables email/username enumeration via differential found responses.",
     detectorKind: "rule_ref",
