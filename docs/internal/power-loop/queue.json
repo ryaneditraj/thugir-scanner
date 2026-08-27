@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-27T21:10:00.000Z",
+  "updated_at": "2026-08-27T22:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/cart",
+      "source": "PortSwigger ginandjuice.shop — shopping cart business-logic / BOLA route (scanner eval lab; 22:00 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/checkout",
+      "source": "PortSwigger ginandjuice.shop — checkout payment/coupon business-logic route (scanner eval lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/register",
+      "source": "PortSwigger ginandjuice.shop — user registration / account takeover route (scanner eval lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/render.dot",
+      "source": "NeuraLegion/brokencrystals — SSTI oracle GET /render.dot (public benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
+      "source": "Escape Duck Store — unauthenticated testimonial PUT BOLA oracle (duck-store.escape.tech/vulnerabilities)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/auth/login",
       "source": "PortSwigger ginandjuice.shop — auth/login route oracle (Patrick Double vuln lab; 20:00 UTC power-loop)",
@@ -10545,6 +10570,31 @@
     {
       "url": "https://dvwu.vercel.app/labs/ssti",
       "source": "zahidoverflow/dvwu — SSTI training lab route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/cart",
+      "source": "PortSwigger ginandjuice.shop — shopping cart business-logic / BOLA route (scanner eval lab; 22:00 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/checkout",
+      "source": "PortSwigger ginandjuice.shop — checkout payment/coupon business-logic route (scanner eval lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/register",
+      "source": "PortSwigger ginandjuice.shop — user registration / account takeover route (scanner eval lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/render.dot",
+      "source": "NeuraLegion/brokencrystals — SSTI oracle GET /render.dot (public benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
+      "source": "Escape Duck Store — unauthenticated testimonial PUT BOLA oracle (duck-store.escape.tech/vulnerabilities)",
       "auth": "public_demo"
     }
   ]
