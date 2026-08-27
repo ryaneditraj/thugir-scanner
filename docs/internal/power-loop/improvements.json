@@ -5243,6 +5243,18 @@
       "slug": "fauxbank-api-transfer-hub-priority",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for fauxbank-* slugs when scanning /api/transfer — hub CSRF/IDOR/SQLi/loans oracles fire on API-only URL; pentest-fauxbank.vercel.app/api/transfer findings 6→14 (+fauxbank-transfer-route-live-oracle +fauxbank-csrf-transfer-probe +fauxbank-idor-accounts-probe +fauxbank-loans-*); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-transactions-victim-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vaultappVictimUserIds() seeds omega DB user IDs 100+ (legacy 15/25/50 removed); VAULTAPP_LAB_CREDENTIALS player→player01; GET /api/transactions?account_id=ACCT-00100 returns victim history; vaultapp-omega.vercel.app/api/transactions/1 findings 12→14 (+vaultapp-transactions-idor-live-oracle +vaultapp-transactions-idor-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vaultapp-omega.vercel.app",
+      "slug": "vaultapp-api-transactions-hub-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for vaultapp-transactions-* slugs when scanning /api/transactions paths — transaction-history IDOR oracle fires on API-only URL; vaultapp-omega.vercel.app/api/transactions/1 findings 12→14; benchmark juice-shop 49 findings 6/6 maintained"
     }
   ]
 }

