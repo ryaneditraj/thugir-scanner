@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T11:12:00.000Z",
+  "updated_at": "2026-08-27T11:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1966,
   "discovery_findings": 23051,
-  "improvements_shipped": 861,
-  "last_run": "2026-08-27T11:12:00.000Z",
+  "improvements_shipped": 1221,
+  "last_run": "2026-08-27T11:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "11",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 588,
+      "probes_run": 591,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,31 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (49 findings, 37 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (49 findings, 38 juice-shop live oracles); secret-resend slug still absent — live Resend key not in current social feeds"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 207,
-      "focus": "duck-store cart/checkout/register/admin-products/mcp-coupons business-logic oracles + wrongsecrets challenge-55/56/64 rescan",
-      "improvements_shipped_this_run": 0
+      "focus": "engine evolve: vapi API8 403 tolerance + juice-shop resend social feed fetch guard; prior duck-store business-logic + wrongsecrets 55/56/64 discovery",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 37 live oracles) — full rich pass",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 38 live oracles) — full rich pass",
+      "vapi.tools.escape.tech/: 18 findings — vapi-api8-sqli-login-live-oracle now fires (HTTP 403 JSON success body accepted)",
       "duck-store.escape.tech/api/v1/cart/add: 32 findings — duck-store-cart-negative-quantity-route-live-oracle",
       "duck-store.escape.tech/api/v1/orders/checkout: 33 findings — duck-store-checkout-private-coupon-route-live-oracle",
-      "duck-store.escape.tech/api/v1/auth/register: 33 findings — duck-store-referral-code-abuse-route-live-oracle",
-      "duck-store.escape.tech/api/v1/admin/products: 32 findings — duck-store-admin-products-negative-price-route-live-oracle",
-      "duck-store.escape.tech/mcp/tools/list_coupons: 32 findings — duck-store-mcp-coupons-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-55: 15 findings — SSH bastion route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-56: 15 findings — project-spec route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-64: 15 findings — Swift binary route oracle"
+      "wrongsecrets.herokuapp.com/challenge/challenge-55: 15 findings — SSH bastion route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + juice-shop-iac-terraform-tls-key-live-oracle)",
-      "scoreboard.json had trailing-comma JSON bug (learning_gaps) — fixed before queue scan could update scoreboard on first benchmark pass",
-      "duck-store business-logic routes (cart/checkout/register/admin-products/mcp-coupons) now have route-specific live oracles — hub crawl confirms all 5 oracles"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + juice-shop-iac-terraform-tls-key-live-oracle; Resend key no longer in Bluesky/Mastodon/Reddit feeds)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 49,
+    "vapi.tools.escape.tech": 18,
     "duck-store.escape.tech/api/v1/orders/checkout": 33,
     "duck-store.escape.tech/api/v1/auth/register": 33,
     "duck-store.escape.tech/api/v1/cart/add": 32,
