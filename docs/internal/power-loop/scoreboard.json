@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T10:45:42.731Z",
+  "updated_at": "2026-08-27T11:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2740,
-  "total_findings": 26961,
+  "total_sites_scanned": 2749,
+  "total_findings": 27217,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1961,
-  "discovery_findings": 22844,
-  "improvements_shipped": 1217,
-  "last_run": "2026-08-27T10:45:42.731Z",
+  "discovery_urls_added": 1966,
+  "discovery_findings": 23051,
+  "improvements_shipped": 861,
+  "last_run": "2026-08-27T11:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 583,
+      "probes_run": 588,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,45 +48,44 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings, 37 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (49 findings, 37 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 191,
-      "focus": "duck-store vuln catalog + orders/coupons + testimonials/1 + vapi.tools + mcp/info + wrongsecrets challenge-50/51/52",
-      "improvements_shipped_this_run": 1
+      "findings": 207,
+      "focus": "duck-store cart/checkout/register/admin-products/mcp-coupons business-logic oracles + wrongsecrets challenge-55/56/64 rescan",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 37 live oracles) — full rich pass",
-      "pwnshop.ctfsecurity.com/api/v1/products/1: 44 findings — pwnshop-product-api-idor-route-live-oracle live /product/:id pivot (PWN-010+PWN-011)",
-      "duck-store.escape.tech/vulnerabilities: 34 findings — full duck-store hub (BOLA, SSRF, MCP, SQLi, XSS oracles)",
-      "duck-store.escape.tech/api/v1/orders/coupons: 32 findings — duck-store-coupons-disclosure-live-oracle hub",
-      "duck-store.escape.tech/api/v1/testimonials/1: 33 findings — duck-store-testimonials-unauth-put-live-oracle hub",
-      "vapi.tools.escape.tech/: 17 findings — vAPI OWASP API Top 10 live oracles (API1–API10 suite)",
-      "duck-store.escape.tech/mcp/info: 30 findings — duck-store MCP enumeration hub",
-      "wrongsecrets.herokuapp.com/challenge/challenge-50: 15 findings — challenge route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-51: 15 findings — challenge route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-52: 15 findings — challenge route oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 37 live oracles) — full rich pass",
+      "duck-store.escape.tech/api/v1/cart/add: 32 findings — duck-store-cart-negative-quantity-route-live-oracle",
+      "duck-store.escape.tech/api/v1/orders/checkout: 33 findings — duck-store-checkout-private-coupon-route-live-oracle",
+      "duck-store.escape.tech/api/v1/auth/register: 33 findings — duck-store-referral-code-abuse-route-live-oracle",
+      "duck-store.escape.tech/api/v1/admin/products: 32 findings — duck-store-admin-products-negative-price-route-live-oracle",
+      "duck-store.escape.tech/mcp/tools/list_coupons: 32 findings — duck-store-mcp-coupons-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-55: 15 findings — SSH bastion route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-56: 15 findings — project-spec route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-64: 15 findings — Swift binary route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + other slugs)",
-      "vapi.tools.escape.tech: API8 SQLi login oracle missed on Escape-hosted vAPI (17 vs 18 on apisec.ai mirror)",
-      "pwnshop /api/v1/products/:id: live /product/:id pivot added before corpus fallback — route oracle now confirms PWN-010+PWN-011 chain",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + juice-shop-iac-terraform-tls-key-live-oracle)",
+      "scoreboard.json had trailing-comma JSON bug (learning_gaps) — fixed before queue scan could update scoreboard on first benchmark pass",
+      "duck-store business-logic routes (cart/checkout/register/admin-products/mcp-coupons) now have route-specific live oracles — hub crawl confirms all 5 oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "duck-store.escape.tech/vulnerabilities": 34,
-    "duck-store.escape.tech/api/v1/testimonials/1": 33,
-    "duck-store.escape.tech/api/v1/orders/coupons": 32,
-    "duck-store.escape.tech/mcp/info": 30,
-    "vapi.tools.escape.tech": 17,
-    "wrongsecrets.herokuapp.com/challenge/challenge-50": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-51": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-52": 15,
+    "juice-shop.herokuapp.com": 49,
+    "duck-store.escape.tech/api/v1/orders/checkout": 33,
+    "duck-store.escape.tech/api/v1/auth/register": 33,
+    "duck-store.escape.tech/api/v1/cart/add": 32,
+    "duck-store.escape.tech/api/v1/admin/products": 32,
+    "duck-store.escape.tech/mcp/tools/list_coupons": 32,
+    "wrongsecrets.herokuapp.com/challenge/challenge-55": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-56": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-64": 15,
     "pwnshop.ctfsecurity.com/api/v1/products/1": 44,
     "brokencrystals.com/userlogin?logobgcolor=red": 52
   }
