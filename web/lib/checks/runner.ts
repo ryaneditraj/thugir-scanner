@@ -3296,6 +3296,7 @@ const DEEP_RULES = new Set<string>([
   "vulnbankTransferNegativeAmountRouteLiveOracle",
   "vulnbankGraphqlIntrospectionLiveOracle",
   "vulnbankV1ForgotPasswordPinLeakLiveOracle",
+  "vulnbankV1ForgotPasswordRouteLiveOracle",
   "vulnbankV2ForgotPasswordEnumerationLiveOracle",
   "vulnbankV2ForgotPasswordRouteLiveOracle",
   "vulnbankV3UserIdorLiveOracle",
@@ -14232,19 +14233,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
-        /\/api\/v1\/admin\/users/i.test(targetInput) &&
+        /\/(?:api\/v1\/)?admin\/users\b/i.test(targetInput) &&
         p.slug.startsWith("duck-store-admin-users")
       )
         return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
-        /\/api\/v1\/admin\/products/i.test(targetInput) &&
+        /\/(?:api\/v1\/)?admin\/products\b/i.test(targetInput) &&
         p.slug.startsWith("duck-store-admin-products")
       )
         return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
-        /\/api\/v1\/admin\/orders/i.test(targetInput) &&
+        /\/(?:api\/v1\/)?admin\/orders\b/i.test(targetInput) &&
         p.slug.startsWith("duck-store-admin-orders")
       )
         return -3;
@@ -14281,7 +14282,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
-        /\/api\/v1\/admin\/stats\b/i.test(targetInput) &&
+        /\/(?:api\/v1\/)?admin\/stats\b/i.test(targetInput) &&
         p.slug.startsWith("duck-store-admin-stats")
       )
         return -3;

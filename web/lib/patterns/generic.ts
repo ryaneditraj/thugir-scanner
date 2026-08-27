@@ -38865,7 +38865,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "medium",
     title: "Pwnshop chat init route live oracle (PWN-037)",
     description:
-      "When scanning /chat/init or /api/chat/init, POST returns found:true with user profile for registered emails and found:false for unknown addresses — route-specific email enumeration oracle.",
+      "When scanning /chat, /chat/init, or /api/chat/init, POST returns found:true with user profile for registered emails and found:false for unknown addresses — route-specific email enumeration oracle.",
     impactOneline:
       "Route-specific confirmation that Pwnshop chat init enables email/username enumeration via differential found responses.",
     detectorKind: "rule_ref",
@@ -43244,6 +43244,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/v1/forgot-password endpoint still returns debug_info.pin while v2 hides it. Show API versioning and secret-handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-v1-forgot-password-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Vuln Bank v1 forgot-password route live oracle",
+    description:
+      "When scanning /v1/forgot-password or /api/v1/forgot-password, POST returns debug_info.pin with the 3-digit password-reset PIN while /api/v2/forgot-password omits it — route-specific API version confusion oracle.",
+    impactOneline:
+      "Route scans on v1 forgot-password need live confirmation that legacy API versions still leak reset PINs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankV1ForgotPasswordRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Retire or harden legacy API versions and never return reset secrets in responses.",
+      steps: [
+        "Remove debug_info.pin from all forgot-password API versions.",
+        "Deprecate /api/v1/forgot-password and block version downgrade.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/forgot-password route scan confirms debug_info.pin leaks reset PINs while v2 hides them. Show route-specific API versioning remediation.",
     version: 1,
     enabled: true
   },
@@ -60901,7 +60927,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Duck Store admin users BFLA route live oracle",
     description:
-      "When scanning /api/v1/admin/users, a freshly registered user JWT lists admin accounts — route-specific BFLA oracle.",
+      "When scanning /admin/users or /api/v1/admin/users, a freshly registered user JWT lists admin accounts — route-specific BFLA oracle.",
     impactOneline:
       "Route-specific scans should confirm broken function-level authorization on admin user listing endpoints.",
     detectorKind: "rule_ref",
@@ -61369,7 +61395,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Duck Store admin products negative price route live oracle",
     description:
-      "When scanning /api/v1/admin/products, POST with price:-99.99 is accepted — route-specific negative price oracle.",
+      "When scanning /admin/products or /api/v1/admin/products, POST with price:-99.99 is accepted — route-specific negative price oracle.",
     impactOneline:
       "Route-specific scans should confirm admin product endpoints reject negative or zero prices.",
     detectorKind: "rule_ref",
@@ -61421,7 +61447,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Duck Store admin orders exposure route live oracle",
     description:
-      "When scanning /api/v1/admin/orders, default admin credentials return orders from multiple distinct user_id values — route-specific admin order exposure oracle.",
+      "When scanning /admin/orders or /api/v1/admin/orders, default admin credentials return orders from multiple distinct user_id values — route-specific admin order exposure oracle.",
     impactOneline:
       "Route-specific scans should confirm admin order endpoints leak cross-customer order data when protected only by weak credentials.",
     detectorKind: "rule_ref",
@@ -61679,9 +61705,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Information disclosure",
     severityDefault: "high",
-    title: "Duck Store /api/v1/admin/stats route live oracle",
+    title: "Duck Store admin stats route live oracle",
     description:
-      "When scanning /api/v1/admin/stats, weak admin:admin login returns full dashboard metrics JSON — route-specific admin stats oracle.",
+      "When scanning /admin/stats or /api/v1/admin/stats, weak admin:admin login returns full dashboard metrics JSON — route-specific admin stats oracle.",
     impactOneline:
       "Route scans on admin stats endpoints should confirm strong authentication before exposing operational metrics.",
     detectorKind: "rule_ref",

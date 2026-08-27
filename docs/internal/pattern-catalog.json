@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-27T15:19:32.622Z",
-  "total": 2721,
-  "uniqueSlugs": 2713,
+  "generatedAt": "2026-08-27T16:42:11.225Z",
+  "total": 2722,
+  "uniqueSlugs": 2714,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2703,
+    "generic": 2704,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2636,
+    "deep": 2637,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 124,
     "Security misconfiguration": 208,
-    "Broken authentication": 169,
+    "Broken authentication": 170,
     "Injection": 428,
     "Cross-site scripting": 726,
     "Open redirect": 24,
@@ -2395,6 +2395,7 @@
     "vulnbank-upload-profile-picture-url-route-live-oracle",
     "vulnbank-upload-profile-picture-url-ssrf-live-oracle",
     "vulnbank-v1-forgot-password-pin-leak-live-oracle",
+    "vulnbank-v1-forgot-password-route-live-oracle",
     "vulnbank-v2-forgot-password-enumeration-live-oracle",
     "vulnbank-v2-forgot-password-route-live-oracle",
     "vulnbank-v3-reset-password-versioning-live-oracle",
