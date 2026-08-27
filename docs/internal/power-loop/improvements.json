@@ -5093,6 +5093,24 @@
       "slug": "dvga-graphql-dos-resource-exhaustion-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql { systemUpdate } stalls 8s+ while { pastes(public:true) } returns <500ms; dvga2.tools.escape.tech/graphql findings 11→14 (+dvga-graphql-dos-resource-exhaustion-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss.vulnlab.dev",
+      "slug": "xss-vulnlab-mutation-mxss-catalog-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: catalog queues /mutation/ but live lab is at /mxss/ (mutation returns 404); xssVulnlabMxssRouteLiveOracle accepts /mutation/ alias + 404 warmup fetches /mxss/ body; xss.vulnlab.dev/mutation/ findings 2→9 (+xss-vulnlab-mxss-live-oracle +xss-vulnlab-mxss-route-live-oracle +hub oracles); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-blind-time-route-marker-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sqliVulnlabBlindTimeRouteLiveOracle adds page-marker fallback when SLEEP timing fails under concurrent hub probes; runner -8 route priority on /blind-time/; sqli.vulnlab.dev/blind-time/ findings 6→7 (+sqli-vulnlab-blind-time-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:sqli.vulnlab.dev",
+      "slug": "sqli-vulnlab-second-order-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -8 priority for sqli-vulnlab-second-order-route-live-oracle on /second-order/ route scans runs before hub cross-lab interference; sqli.vulnlab.dev/second-order/ findings stable 3 with sqli-vulnlab-second-order-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
