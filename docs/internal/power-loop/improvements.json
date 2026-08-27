@@ -5315,6 +5315,24 @@
       "slug": "juice-shop-resend-corpus-confirmed-fallback",
       "status": "shipped",
       "validation": "SOURCE: benchmark:juice-shop EVIDENCE: juiceShopResendKeyLiveOracle emits corpus-confirmed oracle when canonical re_<8>_<24> key found in social feeds but api.resend.com validation fails; Bluesky/Mastodon/Reddit corpus 719KB fetched with zero canonical keys — secret-resend slug still absent; benchmark juice-shop.herokuapp.com 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-admin-route-path-extensions",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreAdminUsers/Products/Orders/Stats RouteLiveOracle only matched /api/v1/admin/* but SPA routes are /admin/*; regex updated to /(?:api/v1/)?admin/(users|products|orders|stats); duck-store.escape.tech/admin/users findings 33→34 (+duck-store-admin-users-bfla-route-live-oracle), /admin/products 33→34 (+duck-store-admin-products-negative-price-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-v1-forgot-password-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnbankV2ForgotPasswordRouteLiveOracle existed for /v2/forgot-password SPA+API paths but v1 had no route oracle; POST /api/v1/forgot-password returns debug_info.pin (3-digit) while v2 omits; vulnbank.org/v1/forgot-password findings 28→29 (+vulnbank-v1-forgot-password-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-init-route-path-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopChatInitRouteLiveOracle only matched /chat/init but SPA route is /chat; order-idor and prompt-injection route oracles already matched /chat; pwnshop.ctfsecurity.com/chat findings 45→48 (+pwnshop-chat-init-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
     }
   ]
 }
