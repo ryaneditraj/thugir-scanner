@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-27T02:10:00.000Z",
+  "updated_at": "2026-08-27T03:06:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/mcp/info",
+      "source": "Escape Duck Store — unauthenticated MCP server metadata GET /mcp/info (vulnerabilities page + devroxana writeup + Escape MCP unauth docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/mcp/tools",
+      "source": "Escape Duck Store — MCP tool enumeration without auth GET /mcp/tools (Escape ASM MCP discovery blog + Duck Store vuln matrix)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/graphql",
+      "source": "Escape DVGA — original Damn Vulnerable GraphQL Application introspection/batching endpoint (dvga.tools.escape.tech catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss.vulnlab.dev/filter/",
+      "source": "sampsonc/vulnlab.dev — XSS filter bypass training lab canonical /filter/ slug (xss.vulnlab.dev catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/checkout",
+      "source": "vulnshop.vercel.app OSS deploy — checkout business-logic / payment manipulation oracle (vulnshop demo README)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://ssrf.vulnlab.dev/parser/redirect",
       "source": "sampsonc/vulnlab.dev — SSRF redirect-chase on trusted host after parser userinfo disagreement (ssrf.vulnlab.dev catalog /redirect + /parser)",
