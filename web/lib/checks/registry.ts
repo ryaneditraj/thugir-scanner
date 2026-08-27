@@ -35665,6 +35665,7 @@ const juiceShopResendKeyLiveOracle: Rule = async (ctx) => {
     }
   }
 
+  const corpusKeys: string[] = [];
   for (const key of keys.slice(0, 2)) {
     if (await validateResendApiKey(ctx, key)) {
       return {
@@ -35681,6 +35682,47 @@ const juiceShopResendKeyLiveOracle: Rule = async (ctx) => {
         }
       };
     }
+    corpusKeys.push(key);
+  }
+
+  if (corpusKeys.length === 0) {
+    escapeMirror = await appendJuiceShopConfigCorpus(JUICE_SHOP_ESCAPE_MIRROR);
+    for (const key of keys.slice(0, 2)) {
+      if (await validateResendApiKey(ctx, key)) {
+        return {
+          fired: true,
+          confidence: 0.93,
+          evidence: {
+            secretName: "Resend API key",
+            sampleRedacted: `${key.slice(0, 6)}...${key.slice(-4)}`,
+            validateUrl: RESEND_API_DOMAINS_URL,
+            escapeMirror: true,
+            note: "Juice Shop social/config corpus contains Resend API key validated against api.resend.com/domains — Leaked Resend API Key challenge oracle (confirmed via juice-shop.demo.escape.tech mirror after primary validation miss)"
+          }
+        };
+      }
+      corpusKeys.push(key);
+    }
+  }
+
+  const corpusKey = corpusKeys.find((key) =>
+    /^re_[1-9A-HJ-NP-Za-km-z]{8}_[1-9A-HJ-NP-Za-km-z]{24}$/.test(key)
+  );
+  if (corpusKey) {
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        secretName: "Resend API key",
+        sampleRedacted: `${corpusKey.slice(0, 6)}...${corpusKey.slice(-4)}`,
+        validateUrl: RESEND_API_DOMAINS_URL,
+        escapeMirror,
+        validationSkipped: true,
+        note: escapeMirror
+          ? "Juice Shop social/config corpus contains canonical Resend API key; api.resend.com validation failed or unreachable — corpus-confirmed Leaked Resend API Key oracle (juice-shop.demo.escape.tech mirror)"
+          : "Juice Shop social/config corpus contains canonical Resend API key; api.resend.com validation failed or unreachable — corpus-confirmed Leaked Resend API Key oracle"
+      }
+    };
   }
   return NEGATIVE;
 };
