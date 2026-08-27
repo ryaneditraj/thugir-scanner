@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-27T06:06:30.000Z",
+  "updated_at": "2026-08-27T07:04:44.761Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/debug",
+      "source": "chethan-vinayak/vulnshop — API8 misconfig debug endpoint exposes secrets/env (README /api/v1/debug)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/orders/1",
+      "source": "chethan-vinayak/vulnshop — BOLA/IDOR oracle GET /api/v1/orders/<id> (README API1:2023)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/template/render",
+      "source": "chethan-vinayak/vulnshop — expression-language/template injection POST /api/v1/template/render (README el_injection)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/track-order?url=https://example.com",
+      "source": "chethan-vinayak/vulnshop — SSRF oracle GET /track-order?url= (README ssrf)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/xml-import",
+      "source": "chethan-vinayak/vulnshop — XXE oracle POST /api/xml-import (README xxe)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://websec.fr/level36/",
       "source": "WebSec.fr — level36 XSS/filter training challenge (public benchmark gap between level35 and level37)",
