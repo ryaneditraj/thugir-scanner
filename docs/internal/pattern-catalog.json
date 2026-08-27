@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-27T13:08:58.495Z",
-  "total": 2718,
-  "uniqueSlugs": 2710,
+  "generatedAt": "2026-08-27T14:15:56.995Z",
+  "total": 2721,
+  "uniqueSlugs": 2713,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2700,
+    "generic": 2703,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2633,
+    "deep": 2636,
     "continuous": 0
   },
   "byCategory": {
@@ -28,12 +28,12 @@
     "Security misconfiguration": 208,
     "Broken authentication": 169,
     "Injection": 428,
-    "Cross-site scripting": 725,
+    "Cross-site scripting": 726,
     "Open redirect": 24,
     "general": 20,
     "SSRF": 18,
     "Server-side request forgery": 91,
-    "Sensitive data exposure": 72,
+    "Sensitive data exposure": 74,
     "AI security": 95,
     "Cross-site request forgery": 8,
     "Business logic": 24,
@@ -1007,6 +1007,7 @@
     "duck-store-ssrf-import-from-url-route-live-oracle",
     "duck-store-testimonials-bola-live-oracle",
     "duck-store-testimonials-guest-route-live-oracle",
+    "duck-store-testimonials-page-stored-xss-route-live-oracle",
     "duck-store-testimonials-put-bola-live-oracle",
     "duck-store-testimonials-put-bola-route-live-oracle",
     "duck-store-testimonials-stored-xss-live-oracle",
@@ -1014,6 +1015,8 @@
     "duck-store-testimonials-unauth-put-live-oracle",
     "duck-store-testimonials-unauth-put-route-live-oracle",
     "duck-store-users-bola-live-oracle",
+    "duck-store-users-enumeration-live-oracle",
+    "duck-store-users-enumeration-route-live-oracle",
     "duck-store-users-route-live-oracle",
     "dvaib-login-route-live-oracle",
     "dvaib-prompt-injection-live-oracle",
