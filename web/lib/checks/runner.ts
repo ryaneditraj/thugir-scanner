@@ -2646,6 +2646,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCatalogLinkManipulationRouteLiveOracle",
   "ginAndJuiceCartCheckoutAuthLiveOracle",
   "ginAndJuiceCartRouteLiveOracle",
+  "ginAndJuiceCheckoutRouteLiveOracle",
   "ginAndJuiceAngularVulnerableDependencyLiveOracle",
   "ginAndJuiceAngularVulnerableDependencyRouteLiveOracle",
   "ginAndJuiceLoggerOastLiveOracle",
@@ -13382,10 +13383,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /brokencrystals\.com/i.test(origin) &&
-        /\/api\/render\b/i.test(targetInput) &&
+        (/\/api\/render\b/i.test(targetInput) || /\/render\.dot\b/i.test(targetInput)) &&
         (p.slug.startsWith("brokencrystals-render") || p.slug === "ssti-template-injection")
       )
-        return -3;
+        return -4;
       if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/auth\/jwt\/x5c\/validate\b/i.test(targetInput) &&
@@ -13643,10 +13644,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ginandjuice\.shop/i.test(origin) &&
-        /\/catalog\/cart\b/i.test(targetInput) &&
+        /\/(?:catalog\/cart|cart)\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-cart")
       )
-        return -3;
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/checkout\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-checkout")
+      )
+        return -4;
       if (
         /ginandjuice\.shop/i.test(origin) &&
         /\/login\b/i.test(targetInput) &&
