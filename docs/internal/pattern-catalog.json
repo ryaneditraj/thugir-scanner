@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-27T04:07:20.555Z",
-  "total": 2711,
-  "uniqueSlugs": 2703,
+  "generatedAt": "2026-08-27T05:25:19.705Z",
+  "total": 2713,
+  "uniqueSlugs": 2705,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2693,
+    "generic": 2695,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2626,
+    "deep": 2628,
     "continuous": 0
   },
   "byCategory": {
@@ -25,9 +25,9 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 124,
-    "Security misconfiguration": 207,
+    "Security misconfiguration": 208,
     "Broken authentication": 168,
-    "Injection": 425,
+    "Injection": 426,
     "Cross-site scripting": 725,
     "Open redirect": 24,
     "general": 20,
@@ -2560,7 +2560,9 @@
     "websec-level22-oop-eval-route-live-oracle",
     "websec-level23-maze-filter-bypass-route-live-oracle",
     "websec-level24-cloud-storage-route-live-oracle",
+    "websec-level25-lfi-route-live-oracle",
     "websec-level26-shell-exec-route-live-oracle",
+    "websec-level27-aspect-backdoor-route-live-oracle",
     "websec-level28-upload-include-route-live-oracle",
     "websec-level30-unserialize-destruct-route-live-oracle",
     "whoopspay-admin-database-execute-live-oracle",

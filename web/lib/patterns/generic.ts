@@ -16360,6 +16360,59 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "websec-level25-lfi-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level25 LFI route live oracle",
+    description:
+      "When scanning /level25/, GET source.php confirms include($_GET['page'].'.txt') with stripos flag substring filter — route-specific local file inclusion oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level25 exposes page-parameter LFI with bypassable flag filter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel25LfiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host LFI labs offline; never include user-controlled paths in production.",
+      steps: [
+        "Move WebSec-style file inclusion labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Never concatenate user input into include/require paths; use strict allowlists."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level25 route exposes include($_GET['page'].'.txt') with stripos flag filter. Show secure file inclusion remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level27-aspect-backdoor-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "WebSec.fr level27 Acunetix aspect backdoor route live oracle",
+    description:
+      "When scanning /level27/, GET source2.php confirms acu_phpaspect.php instrumentation gated by HTTP_ACUNETIX_ASPECT headers — route-specific hidden backdoor oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level27 exposes Acunetix-style aspect instrumentation backdoor in production code.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel27AspectBackdoorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host instrumentation backdoor labs offline; remove scanner instrumentation from production deploys.",
+      steps: [
+        "Move WebSec-style instrumentation labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Audit for acu_phpaspect.php or similar scanner hooks before production release.",
+        "Strip HTTP_ACUNETIX_ASPECT header gates from application code."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level27 route exposes acu_phpaspect.php with HTTP_ACUNETIX_ASPECT header gate. Show how to remove instrumentation backdoors from production deploys.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "websec-level26-shell-exec-route-live-oracle",
     platform: "generic",
     category: "Injection",

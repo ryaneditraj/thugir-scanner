@@ -5183,6 +5183,24 @@
       "slug": "xss-vulnlab-filter-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: catalog queues /filter/ (404) but live regex-sanitizer bypass lab at /mxss/; xssVulnlabFilterRouteLiveOracle delegates to mxss innerHTML round-trip probe; xss.vulnlab.dev/filter/ findings 8→9 (+xss-vulnlab-filter-route-live-oracle); benchmark juice-shop 46 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level25-lfi-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level25/source.php confirms include($_GET['page'].'.txt') with stripos flag substring filter; websec.fr/level25/ findings 4→3 (+websec-level25-lfi-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level27-aspect-backdoor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level27/index.php + source2.php confirm acu_phpaspect instrumentation gated by HTTP_ACUNETIX_ASPECT headers; websec.fr/level27/ findings 4→6 (+websec-level27-aspect-backdoor-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zen-demo-python.fly.dev",
+      "slug": "zen-demo-python-probe-tolerance",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeZenDemoExecute/Request/Create/Read accept python /bin/sh not-found, AikidoSSRF, and HTTP 500 block responses; zen-demo-python.fly.dev/pages/execute 5→9 (+zen-demo-java-execute-route-live-oracle +create +request); benchmark juice-shop 49 findings 6/6 maintained"
     }
   ]
 }
