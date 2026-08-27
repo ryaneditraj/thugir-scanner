@@ -116,6 +116,13 @@ function pwnshopWishlistReflexionSuppressed(ctx: PowerCtx): boolean {
   return /\/wishlist(?:\/|$)/i.test(pageUrl);
 }
 
+/** Gin & Juice Shop API 404 pages serve Angular/React dev bundles with coincidental '49' in eval probes — suppress reflexion SSTI FPs on /api/* route scans. */
+function ginAndJuiceReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/ginandjuice\.shop/i.test(pageUrl)) return false;
+  return /\/api(?:\/|$)/i.test(pageUrl);
+}
+
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
 
 // --- Directory wordlist (compact subset) ------------------------------------
@@ -305,6 +312,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (promptShieldReflexionSuppressed(ctx)) return NEGATIVE;
   if (chimeraAtlascrewReflexionSuppressed(ctx)) return NEGATIVE;
   if (securebankBlogReflexionSuppressed(ctx)) return NEGATIVE;
+  if (ginAndJuiceReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 

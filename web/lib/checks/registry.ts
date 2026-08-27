@@ -55922,6 +55922,129 @@ const duckStoreTestimonialsPageStoredXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isDuckStoreReviewsPageRoute(pageUrl: string): boolean {
+  return /\/(?:api\/v1\/)?reviews(?:\/?$|\/product\/\d+|\/\d+)/i.test(pageUrl);
+}
+
+const duckStoreReviewsStoredXssByProbe = new WeakMap<object, RuleResult>();
+
+async function duckStoreReviewsStoredXssLiveProbe(ctx: RuleContext): Promise<RuleResult> {
+  const cached = duckStoreReviewsStoredXssByProbe.get(ctx.probe);
+  if (cached) return cached;
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const token = await duckStoreRegisterAndLoginToken(ctx);
+  if (!token) {
+    duckStoreReviewsStoredXssByProbe.set(ctx.probe, NEGATIVE);
+    return NEGATIVE;
+  }
+  const canary = `thugirReviewXss${Date.now().toString(36)}`;
+  const payload = `<img src=x onerror=${canary}>`;
+  const postUrl = new URL("/api/v1/reviews/product/1", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(postUrl, {
+    method: "POST",
+    body: JSON.stringify({ rating: 5, title: "review", content: payload }),
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) {
+    duckStoreReviewsStoredXssByProbe.set(ctx.probe, NEGATIVE);
+    return NEGATIVE;
+  }
+  if (!postDoc.body.includes(canary) || !/<img\s+src=x\s+onerror=/i.test(postDoc.body)) {
+    duckStoreReviewsStoredXssByProbe.set(ctx.probe, NEGATIVE);
+    return NEGATIVE;
+  }
+  const listUrl = new URL("/api/v1/reviews/product/1", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (listDoc.status < 200 || listDoc.status >= 400) {
+    duckStoreReviewsStoredXssByProbe.set(ctx.probe, NEGATIVE);
+    return NEGATIVE;
+  }
+  if (!listDoc.body.includes(canary) || !/<img\s+src=x\s+onerror=/i.test(listDoc.body)) {
+    duckStoreReviewsStoredXssByProbe.set(ctx.probe, NEGATIVE);
+    return NEGATIVE;
+  }
+  const result: RuleResult = {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      postUrl,
+      listUrl,
+      canary,
+      snippet: listDoc.body.match(new RegExp(`.{0,60}${canary}.{0,60}`))?.[0]?.slice(0, 160),
+      note: "Duck Store POST /api/v1/reviews/product/{id} stores unsanitized HTML in content and returns it via GET /api/v1/reviews/product/{id} — stored XSS oracle"
+    }
+  };
+  duckStoreReviewsStoredXssByProbe.set(ctx.probe, result);
+  return result;
+}
+
+const duckStoreReviewsStoredXssLiveOracle: Rule = async (ctx) => {
+  return duckStoreReviewsStoredXssLiveProbe(ctx);
+};
+
+const duckStoreReviewsStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!isDuckStoreReviewsPageRoute(pageUrl)) return NEGATIVE;
+  const result = await duckStoreReviewsStoredXssLiveProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/reviews route scan — POST stores unsanitized HTML review content served back without encoding"
+    }
+  };
+};
+
+const duckStoreReviewsUnauthReadLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const listUrl = new URL("/api/v1/reviews/product/1", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
+  let rows: Array<{ id?: number; user?: { username?: string }; content?: string }>;
+  try {
+    rows = JSON.parse(listDoc.body) as Array<{ id?: number; user?: { username?: string }; content?: string }>;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(rows) || rows.length === 0) return NEGATIVE;
+  const withUser = rows.find((r) => r.user?.username && typeof r.id === "number");
+  if (!withUser?.user?.username) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      listUrl,
+      reviewCount: rows.length,
+      sampleUsername: withUser.user.username,
+      snippet: listDoc.body.slice(0, 200),
+      note: "Duck Store GET /api/v1/reviews/product/{id} returns customer reviews with linked usernames without authentication — product review disclosure oracle"
+    }
+  };
+};
+
+const duckStoreReviewsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!isDuckStoreReviewsPageRoute(pageUrl)) return NEGATIVE;
+  const result = await duckStoreReviewsUnauthReadLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/reviews route scan — unauthenticated product review list exposes customer usernames and review content"
+    }
+  };
+};
+
 async function duckStoreSpaBundleBody(ctx: RuleContext): Promise<string> {
   const homeUrl = new URL("/", ctx.origin).toString();
   const homeDoc = await ctx.probe.get(homeUrl, { maxBytes: 32768, timeoutMs: 15000 });
@@ -96861,6 +96984,10 @@ export const RULES: Record<string, Rule> = {
   duckStoreTestimonialsStoredXssRouteLiveOracle,
   duckStoreTestimonialsGuestRouteLiveOracle,
   duckStoreTestimonialsPageStoredXssRouteLiveOracle,
+  duckStoreReviewsStoredXssLiveOracle,
+  duckStoreReviewsStoredXssRouteLiveOracle,
+  duckStoreReviewsUnauthReadLiveOracle,
+  duckStoreReviewsRouteLiveOracle,
   duckStoreAuthLoginWeakCredentialsLiveOracle,
   duckStoreAuthLoginWeakCredentialsRouteLiveOracle,
   duckStoreAuthRegisterOpenLiveOracle,

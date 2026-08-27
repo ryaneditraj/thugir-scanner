@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-27T20:15:56.642Z",
-  "total": 2726,
-  "uniqueSlugs": 2718,
+  "generatedAt": "2026-08-27T21:14:11.966Z",
+  "total": 2730,
+  "uniqueSlugs": 2722,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2708,
+    "generic": 2712,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2641,
+    "deep": 2645,
     "continuous": 0
   },
   "byCategory": {
@@ -24,11 +24,11 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 124,
+    "Information disclosure": 126,
     "Security misconfiguration": 208,
     "Broken authentication": 172,
     "Injection": 428,
-    "Cross-site scripting": 726,
+    "Cross-site scripting": 728,
     "Open redirect": 24,
     "general": 20,
     "SSRF": 18,
@@ -1004,6 +1004,10 @@
     "duck-store-profile-mass-assignment-route-live-oracle",
     "duck-store-referral-code-abuse-live-oracle",
     "duck-store-referral-code-abuse-route-live-oracle",
+    "duck-store-reviews-route-live-oracle",
+    "duck-store-reviews-stored-xss-live-oracle",
+    "duck-store-reviews-stored-xss-route-live-oracle",
+    "duck-store-reviews-unauth-read-live-oracle",
     "duck-store-ssrf-fetch-url-live-oracle",
     "duck-store-ssrf-fetch-url-route-live-oracle",
     "duck-store-ssrf-import-from-url-live-oracle",
