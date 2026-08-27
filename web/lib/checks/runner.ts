@@ -13314,9 +13314,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
-        /vapi\.apisec\.ai/i.test(origin) &&
+        (/vapi\.apisec\.ai/i.test(origin) || /vapi\.tools\.escape\.tech/i.test(origin)) &&
         /\/api8\/user\/login\b/i.test(targetInput) &&
         p.slug.startsWith("vapi-api8")
+      )
+        return -3;
+      if (
+        /vapi\.tools\.escape\.tech/i.test(origin) &&
+        /\/api8\/user\b/i.test(targetInput) &&
+        !/\/api8\/user\/(?:login|secret)\b/i.test(targetInput) &&
+        p.slug.startsWith("vapi-api8-user-route")
       )
         return -3;
       if (
