@@ -1,24 +1,29 @@
 {
-  "updated_at": "2026-08-27T01:10:00.000Z",
+  "updated_at": "2026-08-27T02:10:00.000Z",
   "priority_discovery_urls": [
     {
-      "url": "https://ssrf.vulnlab.dev/parser",
-      "source": "sampsonc/vulnlab.dev — URL parser SSRF validator bypass lab (queued unscanned; route oracle ssrf-vulnlab-parser-route-live-oracle)",
+      "url": "https://ssrf.vulnlab.dev/parser/redirect",
+      "source": "sampsonc/vulnlab.dev — SSRF redirect-chase on trusted host after parser userinfo disagreement (ssrf.vulnlab.dev catalog /redirect + /parser)",
       "auth": "public_demo"
     },
     {
-      "url": "https://ssrf.vulnlab.dev/basic",
-      "source": "sampsonc/vulnlab.dev — basic SSRF lab (queued unscanned; route oracle ssrf-vulnlab-basic-route-live-oracle)",
+      "url": "https://websec.fr/level29/",
+      "source": "WebSec.fr — level29 challenge gap between level28 and level30 (public XSS/filter training benchmark)",
       "auth": "public_demo"
     },
     {
-      "url": "https://ssrf.vulnlab.dev/blocklist",
-      "source": "sampsonc/vulnlab.dev — blocklist bypass SSRF lab (queued unscanned; route oracle ssrf-vulnlab-blocklist-route-live-oracle)",
+      "url": "https://wrongsecrets.herokuapp.com/mcp62",
+      "source": "OWASP WrongSecrets — Challenge 62 MCP JSON-RPC endpoint read_google_drive_document over-privileged SA (Heroku demo /mcp62)",
       "auth": "public_demo"
     },
     {
-      "url": "https://ssrf.vulnlab.dev/redirect",
-      "source": "sampsonc/vulnlab.dev — follow-redirect SSRF lab (queued unscanned; route oracle ssrf-vulnlab-redirect-route-live-oracle)",
+      "url": "https://brokencrystals.com/api/email/deleteEmails",
+      "source": "NeuraLegion/brokencrystals — mass-assignment email deletion BFLA oracle POST /api/email/deleteEmails (README Swagger)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/email/getEmails",
+      "source": "NeuraLegion/brokencrystals — unauthenticated email inbox disclosure GET /api/email/getEmails (README Swagger)",
       "auth": "public_demo"
     },
     {

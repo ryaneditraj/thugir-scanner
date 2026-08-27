@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T02:15:00.000Z",
+  "updated_at": "2026-08-27T02:11:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2857,
-  "total_findings": 29146,
+  "total_sites_scanned": 2875,
+  "total_findings": 29537,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2014,
-  "discovery_findings": 24467,
+  "discovery_urls_added": 2019,
+  "discovery_findings": 24654,
   "improvements_shipped": 1198,
-  "last_run": "2026-08-27T02:15:00.000Z",
+  "last_run": "2026-08-27T02:11:00.000Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 48,
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 591,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,44 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings, 35 live oracles); no category gaps"
+      "note": "Stable 6/6 first-pass recall (49 findings, 36 live oracles incl. iac-terraform-tls-key); gap=[]"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 32,
-      "focus": "AI Security deceptive-privacy login-gated route alias + SSRF vulnlab open-redirector route oracle + validator lab priority drain",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 155,
+      "focus": "ssrf.vulnlab parser/redirect chain + websec level29 gap + wrongsecrets mcp62 direct endpoint + brokencrystals email delete/get BFLA",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 35 live oracles)",
-      "ai-security-platform-iota.vercel.app/challenges/deceptive-privacy: +ai-security-privacy-policy-route-live-oracle on login-gated /deceptive-privacy queue slug",
-      "ssrf.vulnlab.dev/r/?to=https://example.com: 13→14 (+ssrf-vulnlab-open-redirector-route-live-oracle)",
-      "ssrf.vulnlab.dev/parser: 15 findings with ssrf-vulnlab-parser-route-live-oracle — priority queue drain"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 36 live oracles)",
+      "ssrf.vulnlab.dev/parser/redirect: 16 findings — full SSRF hub crawl (+parser-route + redirect-route oracles)",
+      "websec.fr/level29/: 5 findings — shell_exec blacklist bypass + PHP unserialize __destruct lab evidence",
+      "wrongsecrets.herokuapp.com/mcp62: 12 findings — wrongsecrets-mcp62-google-sa-live-oracle + MCP execute_command env leak",
+      "brokencrystals.com/api/email/deleteEmails: 79 findings — brokencrystals-delete-emails-route-live-oracle (BFLA mass deletion)",
+      "brokencrystals.com/api/email/getEmails: 18 findings — brokencrystals-email-smtp-proxy-live-oracle (SMTP SSRF)",
+      "dvwu.vercel.app/labs/rce: 11 findings — queue drain",
+      "dvwu.vercel.app/labs/open-redirect: 12 findings — dvwu-open-redirect-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
-      "ssrf.vulnlab.dev allowlist/scheme/gopher/blind/webhook labs still in discovery queue backlog"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + iac-terraform-tls-key)",
+      "ssrf.vulnlab.dev/basic/blocklist/parser/redirect standalone slugs scanned by parallel 02:15 run — parser/redirect combo now covered",
+      "websec.fr level29 thin pass (5 findings, client-side evidence only) — may need route-specific oracle for shell_exec bypass",
+      "brokencrystals email endpoints fire rich hub crawl (79 findings) — deleteEmails route oracle is high-signal new coverage"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 48,
-    "ai-security-platform-iota.vercel.app/challenges/deceptive-privacy": 3,
-    "ssrf.vulnlab.dev/r/?to=https://example.com": 14,
+    "juice-shop.herokuapp.com": 49,
+    "brokencrystals.com/api/email/deleteEmails": 79,
+    "ssrf.vulnlab.dev/parser/redirect": 16,
+    "brokencrystals.com/api/email/getEmails": 18,
+    "wrongsecrets.herokuapp.com/mcp62": 12,
+    "dvwu.vercel.app/labs/open-redirect": 12,
+    "dvwu.vercel.app/labs/rce": 11,
+    "websec.fr/level29/": 5,
     "ssrf.vulnlab.dev/parser": 15,
-    "ssrf.vulnlab.dev/basic": 15,
-    "ssrf.vulnlab.dev/blocklist": 15,
-    "ssrf.vulnlab.dev/redirect": 15,
-    "ai-security-platform-iota.vercel.app/challenges/security-headers": 7,
-    "vuln-expose.vercel.app/sqli/blind": 18
+    "ssrf.vulnlab.dev/r/?to=https://example.com": 14
   }
 }
