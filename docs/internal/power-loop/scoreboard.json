@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T17:25:00.000Z",
+  "updated_at": "2026-08-27T18:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2806,
-  "total_findings": 28542,
+  "total_sites_scanned": 2816,
+  "total_findings": 28719,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1991,
-  "discovery_findings": 23885,
+  "discovery_urls_added": 1996,
+  "discovery_findings": 23964,
   "improvements_shipped": 1231,
-  "last_run": "2026-08-27T17:25:00.000Z",
+  "last_run": "2026-08-27T18:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 593,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,31 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (49 findings); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (49 findings, 38 juice-shop live oracles); juice-shop-iac-terraform-tls-key-live-oracle new; secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 46,
-      "focus": "pwnshop /api/v1/chat/init versioned API route-path extension for PWN-037 chat-init oracle",
-      "improvements_shipped_this_run": 1
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 79,
+      "focus": "SecureBank CSRF/RBAC blog routes + AI Security cookie-auth/password-storage + VaultApp transactions IDOR route",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings) — no category misses",
-      "pwnshop.ctfsecurity.com/api/v1/chat/init: 46 findings — pwnshop-chat-init-api-v1-route-path-extension shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 38 live oracles) — no category misses",
+      "securebank-blog.vercel.app/transfer: 3 findings — securebank-blog-transfer-csrf-route-live-oracle",
+      "securebank-blog.vercel.app/admin: 4 findings — securebank-blog-admin-rbac-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/cookie-auth: 7 findings — ai-security-admin-console-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/password-storage: 6 findings — ai-security-insecure-passwords-route-live-oracle",
+      "vaultapp-omega.vercel.app/api/transactions/1: 14 findings — vaultapp-transactions-idor-route-live-oracle + full IDOR suite",
+      "wrongsecrets.herokuapp.com/challenge/challenge-43: 15 findings — route oracle on AES-JSON challenge",
+      "wrongsecrets.herokuapp.com/challenge/challenge-35: 15 findings — route oracle on password-shucking challenge",
+      "wrongsecrets.herokuapp.com/challenge/challenge-36: 15 findings — route oracle on actuator-audit challenge"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "hacked-npm-packages + security-headers: thin 3-finding hubs — login-gated challenge demos may need authenticated session for full exploit proof"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs incl juice-shop-iac-terraform-tls-key-live-oracle)",
+      "securebank-blog routes 404 on live Heroku — oracles fire via curated Medium blog corpus fallback only"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 49,
-    "pwnshop.ctfsecurity.com/api/v1/chat/init": 46,
-    "ai-security-platform-iota.vercel.app/challenges/ai-phishing": 7,
-    "ai-security-platform-iota.vercel.app/challenges/vulnerable-deps": 7,
-    "wrongsecrets.herokuapp.com/challenge/challenge-40": 15
+    "vaultapp-omega.vercel.app/api/transactions/1": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-43": 15,
+    "ai-security-platform-iota.vercel.app/challenges/cookie-auth": 7,
+    "securebank-blog.vercel.app/admin": 4
   }
 }

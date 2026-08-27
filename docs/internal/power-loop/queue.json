@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-27T17:06:50.000Z",
+  "updated_at": "2026-08-27T18:06:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://securebank-blog.vercel.app/transfer",
+      "source": "SecureBank FAST-NUCES attack lab — CSRF bank-transfer oracle via fake voucher page (Medium blog Attack 3)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/admin",
+      "source": "SecureBank FAST-NUCES attack lab — admin RBAC bypass / privilege escalation oracle (Medium blog)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/cookie-auth",
+      "source": "AI & Security Platform — client-writable cookie admin bypass challenge (CWE-784, Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/password-storage",
+      "source": "AI & Security Platform — insecure password storage / weak hashing challenge (login-gated, Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/transactions/1",
+      "source": "MRMcyber/vaultapp — IDOR oracle GET /api/transactions/{id} (VaultApp omega Vercel deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/ai-phishing",
       "source": "AI & Security Platform \u2014 AI-assisted phishing / cloned login pages challenge (Vercel OSS deploy; Show HN adjacent)",
