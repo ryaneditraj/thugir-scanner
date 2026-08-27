@@ -3277,9 +3277,11 @@ const DEEP_RULES = new Set<string>([
   "vulnbankSqliLoginLiveOracle",
   "vulnbankSqliLoginRouteLiveOracle",
   "vulnbankMerchantRegisterLiveOracle",
+  "vulnbankMerchantRegisterRouteLiveOracle",
   "vulnbankBillPaymentsNegativeAmountLiveOracle",
   "vulnbankBillPaymentsNegativeAmountRouteLiveOracle",
   "vulnbankMerchantPaymentChargeLiveOracle",
+  "vulnbankMerchantPaymentChargeRouteLiveOracle",
   "vulnbankVirtualCardsBolaLiveOracle",
   "vulnbankVirtualCardsBolaRouteLiveOracle",
   "vulnbankUploadProfilePictureUrlSsrfLiveOracle",
@@ -12089,7 +12091,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
-        /\/product\/\d+/i.test(targetInput) &&
+        (/\/product\/\d+/i.test(targetInput) || /\/api\/v1\/products\/search\b/i.test(targetInput)) &&
         p.slug.startsWith("pwnshop-product-search-sqli")
       )
         return -3;
@@ -12109,6 +12111,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:logs|api\/v1\/events)\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-audit-log")
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/api\/v1\/coupons\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-") &&
+        /coupon|apply-coupon|checkout-hpp/.test(p.slug)
       )
         return -4;
       if (
@@ -12272,6 +12281,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /vulnbank\.org/i.test(origin) &&
         /\/internal\/config\.json\b/i.test(targetInput) &&
         p.slug.startsWith("vulnbank-internal-config")
+      )
+        return -3;
+      if (
+        /vulnbank\.org/i.test(origin) &&
+        /\/merchant\/dashboard\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnbank-merchant-")
       )
         return -3;
       if (

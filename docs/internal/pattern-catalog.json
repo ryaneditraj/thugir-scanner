@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-27T05:25:19.705Z",
-  "total": 2713,
-  "uniqueSlugs": 2705,
+  "generatedAt": "2026-08-27T06:08:15.211Z",
+  "total": 2715,
+  "uniqueSlugs": 2707,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2695,
+    "generic": 2697,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2628,
+    "deep": 2630,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 559,
+    "Broken access control": 560,
     "Exposed secret": 111,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -33,7 +33,7 @@
     "general": 20,
     "SSRF": 18,
     "Server-side request forgery": 91,
-    "Sensitive data exposure": 71,
+    "Sensitive data exposure": 72,
     "AI security": 95,
     "Cross-site request forgery": 8,
     "Business logic": 24,
@@ -2373,7 +2373,9 @@
     "vulnbank-internal-config-route-live-oracle",
     "vulnbank-internal-config-ssrf-demo-live-oracle",
     "vulnbank-merchant-payment-charge-live-oracle",
+    "vulnbank-merchant-payment-charge-route-live-oracle",
     "vulnbank-merchant-register-live-oracle",
+    "vulnbank-merchant-register-route-live-oracle",
     "vulnbank-request-loan-live-oracle",
     "vulnbank-request-loan-negative-amount-live-oracle",
     "vulnbank-request-loan-negative-amount-route-live-oracle",

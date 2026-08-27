@@ -25133,6 +25133,40 @@ const vulnbankMerchantPaymentChargeLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankMerchantRegisterRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/merchant\/dashboard\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankMerchantRegisterLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /merchant/dashboard route scan — POST /api/v1/merchants/register returns live merchant api_key and echoes debug_info.password — route-specific merchant registration sensitive-data oracle"
+    }
+  };
+};
+
+const vulnbankMerchantPaymentChargeRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/merchant\/dashboard\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankMerchantPaymentChargeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /merchant/dashboard route scan — POST /api/v1/payments/charge with merchant api_key echoes debug_info.submitted_card_number — route-specific merchant payment gateway oracle"
+    }
+  };
+};
+
 const vulnbankVirtualCardsBolaLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const password = "ThugirProbe1!";
@@ -39105,7 +39139,9 @@ const pwnshopProductSearchSqliLiveOracle: Rule = async (ctx) => {
 const pwnshopProductSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/product\/\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const isProductPage = /\/product\/\d+\b/i.test(pageUrl);
+  const isSearchApi = /\/api\/v1\/products\/search\b/i.test(pageUrl);
+  if (!isProductPage && !isSearchApi) return NEGATIVE;
   const result = await pwnshopProductSearchSqliLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -39114,7 +39150,9 @@ const pwnshopProductSearchSqliRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /product/<id> route scan — product catalog page confirms GET /search SQL injection oracle (PWN-010)"
+      note: isSearchApi
+        ? "Pwnshop /api/v1/products/search route scan — GET /search?q=test' returns MySQL syntax error — route-specific product search SQL injection oracle (PWN-010)"
+        : "Pwnshop /product/<id> route scan — product catalog page confirms GET /search SQL injection oracle (PWN-010)"
     }
   };
 };
@@ -39808,7 +39846,7 @@ const pwnshopCartCheckoutRouteLiveOracle: Rule = async (ctx) => {
 const pwnshopApplyCouponRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/apply-coupon|\/cart\b|\/checkout\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/apply-coupon|\/cart\b|\/checkout\b|\/api\/v1\/coupons\b/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopApplyCouponLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -39817,11 +39855,13 @@ const pwnshopApplyCouponRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: /\/checkout\b/i.test(pageUrl)
-        ? "Pwnshop /checkout route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
-        : /\/cart\b/i.test(pageUrl)
-          ? "Pwnshop /cart route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
-          : "Pwnshop /apply-coupon route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
+      note: /\/api\/v1\/coupons\b/i.test(pageUrl)
+        ? "Pwnshop /api/v1/coupons route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
+        : /\/checkout\b/i.test(pageUrl)
+          ? "Pwnshop /checkout route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
+          : /\/cart\b/i.test(pageUrl)
+            ? "Pwnshop /cart route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
+            : "Pwnshop /apply-coupon route scan — POST accepts HALFOFF after OTP login with valid:true and 50% discount (PWN-016 family)"
     }
   };
 };
@@ -39829,7 +39869,7 @@ const pwnshopApplyCouponRouteLiveOracle: Rule = async (ctx) => {
 const pwnshopCouponCategoryBypassRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/apply-coupon|\/cart\b|\/checkout\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/apply-coupon|\/cart\b|\/checkout\b|\/api\/v1\/coupons\b/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopCouponCategoryBypassLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -39838,11 +39878,13 @@ const pwnshopCouponCategoryBypassRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: /\/checkout\b/i.test(pageUrl)
-        ? "Pwnshop /checkout route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
-        : /\/cart\b/i.test(pageUrl)
-          ? "Pwnshop /cart route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
-          : "Pwnshop /apply-coupon route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
+      note: /\/api\/v1\/coupons\b/i.test(pageUrl)
+        ? "Pwnshop /api/v1/coupons route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
+        : /\/checkout\b/i.test(pageUrl)
+          ? "Pwnshop /checkout route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
+          : /\/cart\b/i.test(pageUrl)
+            ? "Pwnshop /cart route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
+            : "Pwnshop /apply-coupon route scan — PHONE20 rejected at /apply-coupon for fashion cart but checkout accepts coupon_code=PHONE20 without category re-validation (PWN-016)"
     }
   };
 };
@@ -95096,9 +95138,11 @@ export const RULES: Record<string, Rule> = {
   vulnbankSqliLoginLiveOracle,
   vulnbankSqliLoginRouteLiveOracle,
   vulnbankMerchantRegisterLiveOracle,
+  vulnbankMerchantRegisterRouteLiveOracle,
   vulnbankBillPaymentsNegativeAmountLiveOracle,
   vulnbankBillPaymentsNegativeAmountRouteLiveOracle,
   vulnbankMerchantPaymentChargeLiveOracle,
+  vulnbankMerchantPaymentChargeRouteLiveOracle,
   vulnbankVirtualCardsBolaLiveOracle,
   vulnbankVirtualCardsBolaRouteLiveOracle,
   vulnbankUploadProfilePictureUrlSsrfLiveOracle,

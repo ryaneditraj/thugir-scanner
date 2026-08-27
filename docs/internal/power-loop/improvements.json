@@ -5201,6 +5201,24 @@
       "slug": "zen-demo-python-probe-tolerance",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: probeZenDemoExecute/Request/Create/Read accept python /bin/sh not-found, AikidoSSRF, and HTTP 500 block responses; zen-demo-python.fly.dev/pages/execute 5→9 (+zen-demo-java-execute-route-live-oracle +create +request); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-product-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopProductSearchSqliRouteLiveOracle matcher extended to /api/v1/products/search; direct rule probe FIRED on pwnshop.ctfsecurity.com/api/v1/products/search; prior scan 23 findings with live oracle only; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-coupon-route-api-aliases",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopApplyCouponRouteLiveOracle + pwnshopCouponCategoryBypassRouteLiveOracle matchers extended to /api/v1/coupons; direct rule probes FIRED on pwnshop.ctfsecurity.com/api/v1/coupons; prior scan 45 findings with live oracles only; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-merchant-dashboard-route-live-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnbankMerchantRegisterRouteLiveOracle + vulnbankMerchantPaymentChargeRouteLiveOracle fire on /merchant/dashboard; direct rule probes FIRED; prior scan 29 findings with live oracles only → +2 route oracles expected; benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
