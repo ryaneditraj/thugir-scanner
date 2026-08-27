@@ -1,249 +1,29 @@
 {
-  "updated_at": "2026-08-27T20:08:24.793Z",
+  "updated_at": "2026-08-27T21:10:00.000Z",
   "priority_discovery_urls": [
     {
-      "url": "https://ginandjuice.shop/api/identity/auth/login",
-      "source": "PortSwigger Gin & Juice Shop benchmark — JWT/auth login oracle (escape.tech DAST benchmark blog)",
+      "url": "https://ginandjuice.shop/auth/login",
+      "source": "PortSwigger ginandjuice.shop — auth/login route oracle (Patrick Double vuln lab; 20:00 UTC power-loop)",
       "auth": "public_demo"
     },
     {
-      "url": "https://ginandjuice.shop/api/user/transactions",
-      "source": "PortSwigger Gin & Juice Shop benchmark — user transactions BOLA oracle",
+      "url": "https://ginandjuice.shop/transactions",
+      "source": "PortSwigger ginandjuice.shop — transactions BOLA/IDOR route (Patrick Double vuln lab)",
       "auth": "public_demo"
     },
     {
-      "url": "https://duck-store.escape.tech/api/v1/reviews",
-      "source": "Escape Duck Store — product reviews API hub (escape.tech blog vulnerable app)",
+      "url": "https://duck-store.escape.tech/api/v1/products/reviews",
+      "source": "Escape Duck Store — product reviews BOLA API (422 on GET; improvements.json duck-store hub)",
       "auth": "public_demo"
     },
     {
       "url": "https://duck-store.escape.tech/api/v1/wishlist",
-      "source": "Escape Duck Store — wishlist BOLA/API oracle (escape.tech blog)",
+      "source": "Escape Duck Store — wishlist BOLA API route (Escape.tech intentionally vulnerable store)",
       "auth": "public_demo"
     },
     {
       "url": "https://wrongsecrets.herokuapp.com/mcp",
-      "source": "OWASP WrongSecrets — insecure MCP server prompt-injection + execute_command oracle (challenge-60 docs)",
-      "auth": "public_benchmark"
-    },
-    {
-      "url": "https://securebank-blog.vercel.app/transfer",
-      "source": "SecureBank FAST-NUCES attack lab — CSRF bank-transfer oracle via fake voucher page (Medium blog Attack 3)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://securebank-blog.vercel.app/admin",
-      "source": "SecureBank FAST-NUCES attack lab — admin RBAC bypass / privilege escalation oracle (Medium blog)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/cookie-auth",
-      "source": "AI & Security Platform — client-writable cookie admin bypass challenge (CWE-784, Vercel OSS deploy)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/password-storage",
-      "source": "AI & Security Platform — insecure password storage / weak hashing challenge (login-gated, Vercel OSS deploy)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://vaultapp-omega.vercel.app/api/transactions/1",
-      "source": "MRMcyber/vaultapp — IDOR oracle GET /api/transactions/{id} (VaultApp omega Vercel deploy)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/ai-phishing",
-      "source": "AI & Security Platform — AI-assisted phishing / cloned login pages challenge (Vercel OSS deploy; Show HN adjacent)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/privacy-policy",
-      "source": "AI & Security Platform — deceptive privacy policy / dark patterns challenge (Vercel OSS deploy)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/vulnerable-deps",
-      "source": "AI & Security Platform — outdated npm CVE dependency challenge (Vercel OSS deploy)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages",
-      "source": "AI & Security Platform — real 2025-2026 npm supply-chain attacks challenge (axios RCE, Shai-Hulud)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/security-headers",
-      "source": "AI & Security Platform — missing CSP/HSTS/X-Frame-Options headers challenge (Vercel OSS deploy)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
-      "source": "OWASP WrongSecrets — challenge-63 hardcoded AES key oracle (Heroku public benchmark)",
-      "auth": "public_benchmark"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/products/filter/by-name",
-      "source": "Escape Duck Store — SQLi via product name filter param (vulnerabilities catalog; sibling to by-color)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/supply-chain-attack",
-      "source": "AI & Security Platform — typosquat/npm postinstall supply-chain challenge (Vercel OSS deploy)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/weak-supabase-rls",
-      "source": "AI & Security Platform — misconfigured Supabase RLS / excessive data exposure challenge (Vercel OSS deploy)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://bingoctf.vercel.app/",
-      "source": "Puskar-Roy/bingoCTF — beginner CTF platform with web challenges (Vercel homepage)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/workshop/api/user/videos",
-      "source": "OWASP vAPI — API1 BOLA oracle GET /workshop/api/user/videos (vapi.tools.escape.tech)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/admin/users",
-      "source": "Escape Duck Store — admin users BFLA oracle GET /api/v1/admin/users (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/chat",
-      "source": "ctfsec/pwnshop — AI chatbot prompt-injection / agent command injection oracle (PWN-037+)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/users/ldap?query=(&(objectClass=person)(objectClass=user)(email=*)",
-      "source": "NeuraLegion/brokencrystals — LDAP injection via /api/users/ldap query param (README/Docker docs)",
-      "auth": "public_benchmark"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-60",
-      "source": "OWASP WrongSecrets — challenge-60 secrets-in-source walkthrough (Heroku public benchmark)",
-      "auth": "public_benchmark"
-    },
-    {
-      "url": "https://duck-store.escape.tech/mcp",
-      "source": "Escape Duck Store — MCP unauthenticated access root oracle /mcp/* (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vulnbank.org/api/v2/reset-password",
-      "source": "VulnBank — broken authentication oracle POST /api/v2/reset-password (Medium pentest reports 2026)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vulnbank.org/admin/create_admin",
-      "source": "VulnBank — unauthenticated admin creation oracle POST /admin/create_admin (GitHub README + Medium mobile pentest)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/workshop/api/mechanic",
-      "source": "OWASP vAPI — broken function level authorization oracle GET /workshop/api/mechanic (vapi.tools.escape.tech)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/testimonials",
-      "source": "Escape Duck Store — stored XSS oracle POST /testimonials (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/admin/products/1",
-      "source": "Escape Duck Store — negative product price BOLA oracle PUT /api/v1/admin/products/{id} (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvga.tools.escape.tech/graphql",
-      "source": "DVGA — Damn Vulnerable GraphQL Application hosted by Escape (dvga.tools.escape.tech/graphql)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/workshop/api/merchant/contact_mechanic",
-      "source": "OWASP vAPI — API8 hidden-parameter / mass-assignment oracle POST /workshop/api/merchant/contact_mechanic (vapi.tools.escape.tech)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/identity/api/auth/login",
-      "source": "OWASP vAPI — broken authentication oracle POST /identity/api/auth/login (vapi.tools.escape.tech)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/auth/login",
-      "source": "Escape Duck Store — weak admin credentials + no rate limiting oracle POST /api/v1/auth/login (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/auth/login/totp",
-      "source": "Escape Duck Store — 2FA bypass oracle POST /api/v1/auth/login/totp (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/users/",
-      "source": "Escape Duck Store — user enumeration oracle GET /api/v1/users/ (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/nonexistent?redirect=https://example.com",
-      "source": "Escape Duck Store — open redirect oracle GET /nonexistent?redirect=URL (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvga2.tools.escape.tech/graphql",
-      "source": "DVGA2 — Damn Vulnerable GraphQL Application hosted by Escape (dvga2.tools.escape.tech/graphql)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/cart/add",
-      "source": "Escape Duck Store — negative quantity business-logic oracle POST /api/v1/cart/add (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
-      "source": "Escape Duck Store — 100% discount coupon + shipping bypass oracle POST /api/v1/orders/checkout (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/auth/register",
-      "source": "Escape Duck Store — referral code abuse oracle POST /api/v1/auth/register (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/admin/products",
-      "source": "Escape Duck Store — negative product price BFLA oracle /api/v1/admin/products (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/mcp/tools/list_coupons",
-      "source": "Escape Duck Store — MCP coupon disclosure oracle POST /mcp/tools/list_coupons (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/vulnerabilities",
-      "source": "Escape Duck Store — public vulnerability index catalog (23 intentional flaws; escape.tech blog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/orders/coupons",
-      "source": "Escape Duck Store — coupon information disclosure oracle GET /api/v1/orders/coupons (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
-      "source": "Escape Duck Store — unauthenticated PUT BOLA oracle /api/v1/testimonials/{id} (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/",
-      "source": "OWASP vAPI — Escape-hosted vulnerable API Top 10 training interface (vapi.tools.escape.tech)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/mcp/info",
-      "source": "Escape Duck Store — MCP unauthenticated access oracle /mcp/info (406 without Accept; hub crawl)",
+      "source": "OWASP WrongSecrets — MCP execute_command env leak endpoint (challenge-60 oracle; POST-only)",
       "auth": "public_demo"
     }
   ],
@@ -10766,31 +10546,6 @@
       "url": "https://dvwu.vercel.app/labs/ssti",
       "source": "zahidoverflow/dvwu — SSTI training lab route (Vercel live demo)",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/mass-assignment",
-      "source": "zahidoverflow/dvwu — mass-assignment privilege escalation lab route (Vercel live demo; /labs/* portal)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/race-condition",
-      "source": "zahidoverflow/dvwu — race-condition TOCTOU lab route (Vercel live demo)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/graphql",
-      "source": "zahidoverflow/dvwu — GraphQL injection/introspection lab route (Vercel live demo)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://owaspbased-lessons.vercel.app/lesson/prompt-injection",
-      "source": "OWASP GenAI Security Lab — LLM01 prompt injection interactive lesson (Vercel OSS deploy)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://owaspbased-lessons.vercel.app/lesson/supply-chain",
-      "source": "OWASP GenAI Security Lab — LLM05 supply-chain vulnerability lesson (Vercel OSS deploy)",
-      "auth": "oss_deploy"
     }
   ]
 }
