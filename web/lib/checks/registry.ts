@@ -25133,7 +25133,7 @@ const vulnbankBillPaymentsNegativeAmountLiveOracle: Rule = async (ctx) => {
 const vulnbankBillPaymentsNegativeAmountRouteLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/bill-payments/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/)?bill-payments/i.test(pageUrl)) return NEGATIVE;
   const result = await vulnbankBillPaymentsNegativeAmountLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -25352,7 +25352,7 @@ const vulnbankVirtualCardsBolaLiveOracle: Rule = async (ctx) => {
 const vulnbankVirtualCardsBolaRouteLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/virtual-cards/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/)?virtual-cards/i.test(pageUrl)) return NEGATIVE;
   const result = await vulnbankVirtualCardsBolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -25876,7 +25876,7 @@ const vulnbankV2ForgotPasswordEnumerationLiveOracle: Rule = async (ctx) => {
 const vulnbankV2ForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v2\/forgot-password\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:api\/)?v2\/forgot-password\b/i.test(pageUrl)) return NEGATIVE;
   const result = await vulnbankV2ForgotPasswordEnumerationLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
