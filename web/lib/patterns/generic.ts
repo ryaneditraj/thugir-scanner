@@ -33201,6 +33201,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "bingoctf-auth-gated-ctf-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "bingoCTF NextAuth-gated CTF platform live oracle",
+    description:
+      "bingoctf.vercel.app is a beginner CTF platform where /problems and GET /api/problems require NextAuth session — unauthenticated API calls return {\"error\":{}} while /authentication exposes Sign in/Sign up.",
+    impactOneline:
+      "Public bingoCTF deployments gate challenge listings behind authentication but expose the auth-gated API contract to unauthenticated scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bingoctfAuthGatedCtfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "bingoCTF is intentional training software — run CTF instances on isolated infrastructure with rate-limited auth endpoints.",
+      steps: [
+        "Require authentication before listing challenge metadata.",
+        "Rate-limit /api/problems and flag-submission endpoints.",
+        "Never reuse CTF challenge secrets in production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our bingoCTF platform gates /api/problems behind NextAuth but returns {\"error\":{}} to unauthenticated callers. Show session-gated API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bingoctf-auth-gated-ctf-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "bingoCTF auth-gated CTF route live oracle",
+    description:
+      "When scanning bingoctf.vercel.app /, /problems, or /authentication, the platform confirms a NextAuth-gated beginner CTF hub with session-protected /api/problems challenge listing.",
+    impactOneline:
+      "Route-specific bingoCTF scans should confirm auth-gated challenge APIs without relying on generic header misconfig findings alone.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bingoctfAuthGatedCtfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "bingoCTF is intentional training software — run CTF instances on isolated infrastructure with rate-limited auth endpoints.",
+      steps: [
+        "Require authentication before listing challenge metadata.",
+        "Rate-limit /api/problems and flag-submission endpoints.",
+        "Never reuse CTF challenge secrets in production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our bingoCTF /problems route scan confirms NextAuth-gated challenge APIs. Show session enforcement for CTF platforms.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -36759,7 +36811,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "AI Security Platform supabase-data challenge route live oracle",
     description:
-      "When scanning /challenges/supabase-data, the platform catalog documents Supabase Row Level Security bypass exposing data without authentication — route-specific RLS training oracle.",
+      "When scanning /challenges/supabase-data or /challenges/weak-supabase-rls, the platform catalog documents Supabase Row Level Security bypass exposing data without authentication — route-specific RLS training oracle.",
     impactOneline:
       "Route-specific oracle confirms Supabase RLS training module without relying on shared AI Security Platform hub fingerprinting.",
     detectorKind: "rule_ref",
@@ -36774,7 +36826,7 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our /challenges/supabase-data route documents unauthenticated PostgREST access. Show Supabase RLS policy hardening.",
+      "Our /challenges/supabase-data or /challenges/weak-supabase-rls route documents unauthenticated PostgREST access. Show Supabase RLS policy hardening.",
     version: 1,
     enabled: true
   },
@@ -43426,6 +43478,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/v3/reset-password route scan confirms v1 PIN leaks reset accounts on v3. Show API versioning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-v2-reset-password-versioning-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Vuln Bank v2 reset-password route API versioning oracle",
+    description:
+      "When scanning /api/v2/reset-password, v1 forgot-password PIN leaks reset the account on the v2 endpoint — route-specific API version confusion oracle.",
+    impactOneline:
+      "Route scans on v2 reset-password should confirm legacy PIN leaks remain exploitable across API versions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankV2ResetPasswordVersioningRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Retire legacy forgot-password versions and isolate reset PIN handling per API version — Vuln Bank is intentional training software.",
+      steps: [
+        "Remove debug_info.pin from all forgot-password API versions.",
+        "Block cross-version reset flows or use version-specific PIN stores.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v2/reset-password route scan confirms v1 PIN leaks reset accounts on v2. Show API versioning remediation.",
     version: 1,
     enabled: true
   },

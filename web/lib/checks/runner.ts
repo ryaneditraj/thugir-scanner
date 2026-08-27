@@ -2767,6 +2767,8 @@ const DEEP_RULES = new Set<string>([
   "vaultappDocumentsIdorLiveOracle",
   "vaultappDocumentsIdorRouteLiveOracle",
   "wrongsecretsCtfHubLiveOracle",
+  "bingoctfAuthGatedCtfLiveOracle",
+  "bingoctfAuthGatedCtfRouteLiveOracle",
   "wrongsecretsChallengeLiveOracle",
   "wrongsecretsChallengeRouteLiveOracle",
   "wrongsecretsChallenge1GitHardcodedRouteLiveOracle",
@@ -3303,6 +3305,7 @@ const DEEP_RULES = new Set<string>([
   "vulnbankV3UserIdorRouteLiveOracle",
   "vulnbankV3ResetPasswordVersioningLiveOracle",
   "vulnbankV3ResetPasswordVersioningRouteLiveOracle",
+  "vulnbankV2ResetPasswordVersioningRouteLiveOracle",
   "vulnbankSup3rSecretAdminLiveOracle",
   "vulnbankSup3rSecretAdminRouteLiveOracle",
   "vulnbankCreateAdminLiveOracle",
@@ -12307,6 +12310,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /vulnbank\.org/i.test(origin) &&
+        /\/api\/v2\/reset-password/i.test(targetInput) &&
+        p.slug.startsWith("vulnbank-v2-reset-password")
+      )
+        return -3;
+      if (
+        /bingoctf\.vercel\.app/i.test(origin) &&
+        /^\/(?:|problems|authentication)\/?$/i.test(new URL(targetInput, origin).pathname) &&
+        p.slug.startsWith("bingoctf-auth-gated-ctf")
+      )
+        return -3;
+      if (
+        /vulnbank\.org/i.test(origin) &&
         /\/internal\/config\.json\b/i.test(targetInput) &&
         p.slug.startsWith("vulnbank-internal-config")
       )
@@ -12393,7 +12408,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/(?:supabase-data|weak-rls)\b/i.test(targetInput) &&
+        /\/challenges\/(?:supabase-data|weak-rls|weak-supabase-rls)\b/i.test(targetInput) &&
         p.slug === "ai-security-supabase-data-route-live-oracle"
       )
         return -3;

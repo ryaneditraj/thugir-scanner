@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T18:10:00.000Z",
+  "updated_at": "2026-08-27T18:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2816,
-  "total_findings": 28719,
+  "total_sites_scanned": 2819,
+  "total_findings": 28758,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1996,
-  "discovery_findings": 23964,
-  "improvements_shipped": 1231,
-  "last_run": "2026-08-27T18:10:00.000Z",
+  "discovery_findings": 24003,
+  "improvements_shipped": 1234,
+  "last_run": "2026-08-27T18:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
@@ -48,38 +48,33 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (49 findings, 38 juice-shop live oracles); juice-shop-iac-terraform-tls-key-live-oracle new; secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (49 findings, 38 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 79,
-      "focus": "SecureBank CSRF/RBAC blog routes + AI Security cookie-auth/password-storage + VaultApp transactions IDOR route",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 41,
+      "focus": "weak-supabase-rls route alias + vulnbank v2 reset-password route oracle + bingoCTF NextAuth-gated CTF hub",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 38 live oracles) — no category misses",
-      "securebank-blog.vercel.app/transfer: 3 findings — securebank-blog-transfer-csrf-route-live-oracle",
-      "securebank-blog.vercel.app/admin: 4 findings — securebank-blog-admin-rbac-route-live-oracle",
-      "ai-security-platform-iota.vercel.app/challenges/cookie-auth: 7 findings — ai-security-admin-console-route-live-oracle",
-      "ai-security-platform-iota.vercel.app/challenges/password-storage: 6 findings — ai-security-insecure-passwords-route-live-oracle",
-      "vaultapp-omega.vercel.app/api/transactions/1: 14 findings — vaultapp-transactions-idor-route-live-oracle + full IDOR suite",
-      "wrongsecrets.herokuapp.com/challenge/challenge-43: 15 findings — route oracle on AES-JSON challenge",
-      "wrongsecrets.herokuapp.com/challenge/challenge-35: 15 findings — route oracle on password-shucking challenge",
-      "wrongsecrets.herokuapp.com/challenge/challenge-36: 15 findings — route oracle on actuator-audit challenge"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings) — no category misses",
+      "ai-security-platform-iota.vercel.app/challenges/weak-supabase-rls: 7 findings (+ai-security-supabase-data-route-live-oracle)",
+      "vulnbank.org/api/v2/reset-password: 29 findings (+vulnbank-v2-reset-password-versioning-route-live-oracle)",
+      "bingoctf.vercel.app/: 5 findings (+bingoctf-auth-gated-ctf-live-oracle +bingoctf-auth-gated-ctf-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs incl juice-shop-iac-terraform-tls-key-live-oracle)",
-      "securebank-blog routes 404 on live Heroku — oracles fire via curated Medium blog corpus fallback only"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "bingoCTF /problems challenge content requires authenticated NextAuth session for full challenge enumeration"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 49,
-    "vaultapp-omega.vercel.app/api/transactions/1": 14,
-    "wrongsecrets.herokuapp.com/challenge/challenge-43": 15,
-    "ai-security-platform-iota.vercel.app/challenges/cookie-auth": 7,
-    "securebank-blog.vercel.app/admin": 4
+    "ai-security-platform-iota.vercel.app/challenges/weak-supabase-rls": 7,
+    "vulnbank.org/api/v2/reset-password": 29,
+    "bingoctf.vercel.app": 5,
+    "vaultapp-omega.vercel.app/api/transactions/1": 14
   }
 }
