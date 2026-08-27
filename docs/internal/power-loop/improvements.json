@@ -5339,6 +5339,24 @@
       "slug": "pwnshop-chat-init-api-v1-route-path-extension",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: pwnshopChatInitRouteLiveOracle matcher extended to /api/v1/chat/init (queue priority URL); prior regex matched /chat and /api/chat/init but not versioned API path; pwnshop.ctfsecurity.com/api/v1/chat/init findings 45→46 (+pwnshop-chat-init-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-weak-supabase-rls-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/weak-supabase-rls returns HTTP 307 Location /login?next=%2Fchallenges%2Fweak-supabase-rls; AI_SECURITY_PLATFORM_CHALLENGE_META supabase-data routeRe now accepts /weak-supabase-rls alias; ai-security-platform-iota.vercel.app/challenges/weak-supabase-rls findings 6→7 (+ai-security-supabase-data-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-v2-reset-password-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/forgot-password leaks debug_info.pin and POST /api/v2/reset-password accepts same PIN (status:success Password has been reset successfully); vulnbankV2ResetPasswordVersioningRouteLiveOracle added for queue /api/v2/reset-password; vulnbank.org/api/v2/reset-password findings 28→29 (+vulnbank-v2-reset-password-versioning-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bingoctf.vercel.app",
+      "slug": "bingoctf-auth-gated-ctf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bingoctf.vercel.app homepage documents Capture The Flag playground; unauthenticated GET /api/problems?page=1 returns {\"error\":{}}; /authentication exposes Sign in/Sign up; bingoctf.vercel.app/ findings 3→5 (+bingoctf-auth-gated-ctf-live-oracle +bingoctf-auth-gated-ctf-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
     }
   ]
 }

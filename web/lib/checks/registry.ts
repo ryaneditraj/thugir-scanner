@@ -25650,7 +25650,10 @@ const vulnbankV3UserIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const vulnbankV3ResetPasswordVersioningLiveOracle: Rule = async (ctx) => {
+async function vulnbankResetPasswordVersioningProbe(
+  ctx: RuleContext,
+  version: "v2" | "v3"
+): Promise<RuleResult> {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const username = `thugir_v3rp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const registerUrl = new URL("/register", ctx.origin).toString();
@@ -25688,8 +25691,8 @@ const vulnbankV3ResetPasswordVersioningLiveOracle: Rule = async (ctx) => {
   } catch {
     return NEGATIVE;
   }
-  const v3ResetUrl = new URL("/api/v3/reset-password", ctx.origin).toString();
-  const resetDoc = await ctx.probe.get(v3ResetUrl, {
+  const resetUrl = new URL(`/api/${version}/reset-password`, ctx.origin).toString();
+  const resetDoc = await ctx.probe.get(resetUrl, {
     method: "POST",
     body: JSON.stringify({
       username,
@@ -25713,12 +25716,16 @@ const vulnbankV3ResetPasswordVersioningLiveOracle: Rule = async (ctx) => {
     confidence: 0.94,
     evidence: {
       v1Url,
-      v3ResetUrl,
+      resetUrl,
       pin,
       snippet: `${v1Doc.body.slice(0, 160).trim()} → ${resetDoc.body.slice(0, 120).trim()}`,
-      note: "Vuln Bank POST /api/v1/forgot-password leaks debug_info.pin and the same PIN resets via POST /api/v3/reset-password — API version confusion password-reset oracle"
+      note: `Vuln Bank POST /api/v1/forgot-password leaks debug_info.pin and the same PIN resets via POST /api/${version}/reset-password — API version confusion password-reset oracle`
     }
   };
+}
+
+const vulnbankV3ResetPasswordVersioningLiveOracle: Rule = async (ctx) => {
+  return vulnbankResetPasswordVersioningProbe(ctx, "v3");
 };
 
 const vulnbankV3ResetPasswordVersioningRouteLiveOracle: Rule = async (ctx) => {
@@ -25734,6 +25741,23 @@ const vulnbankV3ResetPasswordVersioningRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Vuln Bank /api/v3/reset-password route scan — v1 forgot-password PIN leak resets password on v3 endpoint — API version confusion route oracle"
+    }
+  };
+};
+
+const vulnbankV2ResetPasswordVersioningRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v2\/reset-password/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankResetPasswordVersioningProbe(ctx, "v2");
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /api/v2/reset-password route scan — v1 forgot-password PIN leak resets password on v2 endpoint — API version confusion route oracle"
     }
   };
 };
@@ -74171,6 +74195,64 @@ const wrongsecretsCtfHubLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const bingoctfAuthGatedCtfLiveOracle: Rule = async (ctx) => {
+  if (!/bingoctf\.vercel\.app/i.test(ctx.origin)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${ctx.home.body}`;
+  if (!/bingoCTF|bingO CTF/i.test(corpus)) return NEGATIVE;
+  if (!/Capture The Flag|web exploitation|cybersecurity/i.test(corpus)) return NEGATIVE;
+
+  const apiUrl = new URL("/api/problems?page=1", ctx.origin).toString();
+  const apiDoc = await ctx.probe.get(apiUrl, {
+    maxBytes: 512,
+    timeoutMs: 12000
+  });
+  if (apiDoc.status < 200 || apiDoc.status >= 500) return NEGATIVE;
+  let apiError = false;
+  try {
+    const parsed = JSON.parse(apiDoc.body) as Record<string, unknown>;
+    apiError = parsed.error !== undefined;
+  } catch {
+    apiError = /"error"\s*:/i.test(apiDoc.body);
+  }
+  if (!apiError) return NEGATIVE;
+
+  const authUrl = new URL("/authentication", ctx.origin).toString();
+  const authDoc = await ctx.probe.get(authUrl, {
+    maxBytes: 8192,
+    timeoutMs: 12000
+  });
+  if (authDoc.status < 200 || authDoc.status >= 400) return NEGATIVE;
+  if (!/Sign\s+in|Sign\s+up|authentication/i.test(authDoc.body)) return NEGATIVE;
+
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      apiUrl,
+      authUrl,
+      apiBody: apiDoc.body.slice(0, 80),
+      note: "bingoCTF Next.js CTF platform gates /problems behind NextAuth — unauthenticated GET /api/problems returns {\"error\":{}} while /authentication exposes Sign in/Sign up"
+    }
+  };
+};
+
+const bingoctfAuthGatedCtfRouteLiveOracle: Rule = async (ctx) => {
+  if (!/bingoctf\.vercel\.app/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/^\/(?:|problems|authentication)\/?$/i.test(new URL(pageUrl, ctx.origin).pathname)) return NEGATIVE;
+  const result = await bingoctfAuthGatedCtfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "bingoCTF route scan — NextAuth-gated beginner CTF platform with session-protected /api/problems challenge listing"
+    }
+  };
+};
+
 const wrongsecretsChallengeLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
   if (!/wrongsecrets/i.test(pageUrl)) return NEGATIVE;
@@ -81365,7 +81447,7 @@ Auth & API Brute Force /challenges/rate-limiting No rate limiting allows unlimit
 Auth & API Password Storage /challenges/insecure-passwords /challenges/password-storage CWE-521 plaintext password weak hash storage
 Backend & Config Security Headers /challenges/security-headers CWE-200 Missing CSP X-Frame-Options HSTS
 Backend & Config Leaked Secrets /challenges/leaked-config CWE-200 Environment variables and API keys exposed
-Backend & Config Supabase RLS /challenges/supabase-data /challenges/weak-rls weak RLS misconfiguration
+Backend & Config Supabase RLS /challenges/supabase-data /challenges/weak-rls /challenges/weak-supabase-rls weak RLS misconfiguration
 Legal / Social AI-Assisted Phishing /challenges/ai-phishing Phishing CWE-1021 AI-generated cloned login pages and email spoofing attacks
 Legal / Social Deceptive Privacy Policy /challenges/privacy-policy /challenges/deceptive-privacy Dark Patterns CWE-1021 Burying harmful data-sale and plaintext-storage clauses
 Supply Chain /challenges/supply-chain Supply Chain Attack dependency tampering
@@ -81500,9 +81582,12 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform leaked-config/leaked-secrets challenge — environment variables and API keys exposed in client bundles (CWE-200)"
   },
   "supabase-data": {
-    routeRe: /\/challenges\/(?:supabase-data|weak-rls)\b/i,
+    routeRe: /\/challenges\/(?:supabase-data|weak-rls|weak-supabase-rls)\b/i,
     markers: [
-      { label: "Supabase RLS challenge route", re: /\/challenges\/(?:supabase-data|weak-rls)/i },
+      {
+        label: "Supabase RLS challenge route",
+        re: /\/challenges\/(?:supabase-data|weak-rls|weak-supabase-rls)/i
+      },
       { label: "Supabase RLS training module", re: /Supabase RLS|weak RLS|Row Level Security/i },
       { label: "Backend & Config challenge category", re: /Backend\s*&\s*Config/i }
     ],
@@ -95445,6 +95530,7 @@ export const RULES: Record<string, Rule> = {
   vulnbankV3UserIdorRouteLiveOracle,
   vulnbankV3ResetPasswordVersioningLiveOracle,
   vulnbankV3ResetPasswordVersioningRouteLiveOracle,
+  vulnbankV2ResetPasswordVersioningRouteLiveOracle,
   vulnbankSup3rSecretAdminLiveOracle,
   vulnbankSup3rSecretAdminRouteLiveOracle,
   vulnbankCreateAdminLiveOracle,
@@ -96192,6 +96278,8 @@ export const RULES: Record<string, Rule> = {
   juiceShopFileUploadLiveOracle,
   juiceShopFileUploadRouteLiveOracle,
   wrongsecretsCtfHubLiveOracle,
+  bingoctfAuthGatedCtfLiveOracle,
+  bingoctfAuthGatedCtfRouteLiveOracle,
   wrongsecretsChallengeLiveOracle,
   wrongsecretsChallengeRouteLiveOracle,
   wrongsecretsChallenge1GitHardcodedLiveOracle,
