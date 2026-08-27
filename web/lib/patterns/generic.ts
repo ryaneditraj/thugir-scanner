@@ -32710,7 +32710,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "xss.vulnlab.dev /mxss route XSS live oracle",
     description:
-      "When scanning /mxss/, innerHTML round-trip after regex sanitizer confirms mutation XSS sink — route-specific mXSS oracle.",
+      "When scanning /mxss/ or catalog alias /mutation/, innerHTML round-trip after regex sanitizer confirms mutation XSS sink — route-specific mXSS oracle.",
     impactOneline:
       "Route-specific mXSS oracle confirms parser-mode escape without relying on shared vulnlab hub fingerprinting.",
     detectorKind: "rule_ref",

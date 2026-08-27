@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T00:08:00.000Z",
+  "updated_at": "2026-08-27T00:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2009,
   "discovery_findings": 24371,
-  "improvements_shipped": 1189,
-  "last_run": "2026-08-27T00:08:00.000Z",
+  "improvements_shipped": 1192,
+  "last_run": "2026-08-27T00:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,39 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (49 findings, 36 juice-shop live oracles incl. iac-terraform-tls-key); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 81,
-      "focus": "AI Security Platform gaps (weak-rls, cookie-auth, password-storage, security-headers, deceptive-privacy) + vulnshop API drain (search, users/1, ping)",
-      "improvements_shipped_this_run": 1
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 19,
+      "focus": "vulnlab catalog path aliases (xss mutation→mxss) + sqli blind-time/second-order route oracle priority",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 36 live oracles)",
-      "ai-security-platform-iota.vercel.app/challenges/security-headers: 3 findings — ai-security-security-headers-route-live-oracle",
-      "vulnshop.vercel.app/api/search: 19 findings — EL injection + SSRF + payment manipulation oracles",
-      "vulnshop.vercel.app/api/users/1: 20 findings — product SQLi + admin BFLA oracles",
-      "vulnshop.vercel.app/api/ping: 19 findings — deploy-status + template EL injection hub"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings)",
+      "xss.vulnlab.dev/mutation/: 9 findings — xss-vulnlab-mutation-mxss-catalog-alias (was 2 on 404 catalog path)",
+      "sqli.vulnlab.dev/blind-time/: 7 findings — sqli-vulnlab-blind-time-route-marker-fallback (was 6)",
+      "sqli.vulnlab.dev/second-order/: 3 findings — sqli-vulnlab-second-order-route-priority stable"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via leaked-api-key + iac-terraform-tls-key)",
-      "ai-security weak-rls/cookie-auth/password-storage: login-gated demos yield generic header/XSS findings only — need challenge-specific live oracles",
-      "ai-security deceptive-privacy: thin pass (2 findings); no dark-pattern route oracle",
-      "ssrf.vulnlab.dev/parser/redirect/blocklist/basic still queued but unscanned — high-value SSRF validator bypass labs"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key)",
+      "xss.vulnlab.dev catalog /meta/mutation maps to /mxss/ not /mutation/ — queue URL kept for alias regression testing"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 49,
+    "juice-shop.herokuapp.com": 48,
+    "xss.vulnlab.dev/mutation/": 9,
+    "sqli.vulnlab.dev/blind-time/": 7,
+    "sqli.vulnlab.dev/second-order/": 3,
+    "xss.vulnlab.dev/csp-bypass/": 9,
+    "ssrf.vulnlab.dev/metadata/": 15,
+    "brokencrystals.com/api/spawn": 84,
+    "pwnshop.ctfsecurity.com/seller/preview": 42,
+    "vulnshop.vercel.app/api/login": 19,
+    "dvga2.tools.escape.tech/graphql": 14,
     "ai-security-platform-iota.vercel.app/challenges/security-headers": 3,
-    "ai-security-platform-iota.vercel.app/challenges/weak-rls": 6,
-    "ai-security-platform-iota.vercel.app/challenges/cookie-auth": 6,
-    "ai-security-platform-iota.vercel.app/challenges/password-storage": 6,
-    "vulnshop.vercel.app/api/search": 19,
-    "vulnshop.vercel.app/api/users/1": 20,
-    "vulnshop.vercel.app/api/ping": 19
+    "vulnshop.vercel.app/api/search": 19
   }
 }

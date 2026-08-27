@@ -9819,6 +9819,23 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     }
   }
   if (
+    /xss\.vulnlab\.dev/i.test(targetInput) &&
+    /\/mutation\b/i.test(targetInput) &&
+    (home.status === 404 || home.body.length < 512)
+  ) {
+    try {
+      const mxssHome = await fetchDoc(new URL("/mxss/", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      if (mxssHome.status >= 200 && mxssHome.body.length > home.body.length) {
+        home = { ...mxssHome, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  if (
     /juicesec\.mrdinesh\.workers\.dev/i.test(targetInput) &&
     /\/challenge\/(?:sqli|xss-reflected|broken-auth|idor|robots|sensitive-data|jwt|cmdi|ssrf|xss-stored|xss)\b/i.test(
       targetInput
@@ -11674,6 +11691,45 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /ssti\.vulnlab\.dev/i.test(origin) &&
         /\/sandboxed\b/i.test(targetInput) &&
         p.slug.startsWith("ssti-vulnlab-sandboxed")
+      )
+        return -4;
+      if (
+        /sqli\.vulnlab\.dev/i.test(origin) &&
+        /\/blind-time\b/i.test(targetInput) &&
+        p.slug.startsWith("sqli-vulnlab-blind-time") &&
+        /-route-/.test(p.slug)
+      )
+        return -8;
+      if (
+        /sqli\.vulnlab\.dev/i.test(origin) &&
+        /\/blind-time\b/i.test(targetInput) &&
+        p.slug.startsWith("sqli-vulnlab-blind-time")
+      )
+        return -4;
+      if (
+        /sqli\.vulnlab\.dev/i.test(origin) &&
+        /\/second-order\b/i.test(targetInput) &&
+        p.slug.startsWith("sqli-vulnlab-second-order") &&
+        /-route-/.test(p.slug)
+      )
+        return -8;
+      if (
+        /sqli\.vulnlab\.dev/i.test(origin) &&
+        /\/second-order\b/i.test(targetInput) &&
+        p.slug.startsWith("sqli-vulnlab-second-order")
+      )
+        return -4;
+      if (
+        /xss\.vulnlab\.dev/i.test(origin) &&
+        /\/(?:mxss|mutation)\b/i.test(targetInput) &&
+        p.slug.startsWith("xss-vulnlab-mxss") &&
+        /-route-/.test(p.slug)
+      )
+        return -8;
+      if (
+        /xss\.vulnlab\.dev/i.test(origin) &&
+        /\/(?:mxss|mutation)\b/i.test(targetInput) &&
+        p.slug.startsWith("xss-vulnlab-mxss")
       )
         return -4;
       if (
