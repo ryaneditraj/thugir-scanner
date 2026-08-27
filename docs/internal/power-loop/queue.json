@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-27T04:06:00.000Z",
+  "updated_at": "2026-08-27T05:07:12.906Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vulnbank.org/internal/config.json",
+      "source": "Commando-X/vuln-bank — loopback-only SSRF internal config oracle (/internal/config.json in app.py)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/merchant/dashboard",
+      "source": "Commando-X/vuln-bank — merchant payment dashboard BFLA/JWT weak-secret oracle (README merchant flow)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/coupons",
+      "source": "ctfsec/pwnshop — coupon enumeration/business-logic REST oracle GET /api/v1/coupons (PWN-016)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/products/search",
+      "source": "ctfsec/pwnshop — product search SQLi oracle GET /api/v1/products/search (GitHub README API routes)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-python.fly.dev/pages/request",
+      "source": "Aikido Zen Python live demo — SSRF fetch training page (zen-demo-python.fly.dev injection labs)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/mcp/info",
       "source": "Escape Duck Store — unauthenticated MCP server metadata GET /mcp/info (vulnerabilities page + devroxana writeup + Escape MCP unauth docs)",
