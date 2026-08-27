@@ -103,6 +103,12 @@ function chimeraAtlascrewReflexionSuppressed(ctx: PowerCtx): boolean {
   return /chimera\.atlascrew\.dev/i.test(pageUrl);
 }
 
+/** Vercel Security Checkpoint obfuscated JS embeds coincidental '49' — suppress reflexion SSTI FPs on blog corpus routes. */
+function securebankBlogReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /securebank-blog\.vercel\.app/i.test(pageUrl);
+}
+
 /** Pwnshop /wishlist/:id currently serves a styled 404 shell — suppress generic reflexion probes on that route. */
 function pwnshopWishlistReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
@@ -298,6 +304,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (vulnerableBountySiteReflexionSuppressed(ctx)) return NEGATIVE;
   if (promptShieldReflexionSuppressed(ctx)) return NEGATIVE;
   if (chimeraAtlascrewReflexionSuppressed(ctx)) return NEGATIVE;
+  if (securebankBlogReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 

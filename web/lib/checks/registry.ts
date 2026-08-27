@@ -35684,6 +35684,8 @@ const juiceShopResendKeyLiveOracle: Rule = async (ctx) => {
   let corpus = ctx.combined;
   let keys = extractJuiceShopResendKeys(corpus);
   let escapeMirror = false;
+  let configFetched = false;
+  let socialCorpusBytes = 0;
 
   async function appendJuiceShopConfigCorpus(origin: string): Promise<boolean> {
     const configUrl = new URL("/rest/admin/application-configuration", origin).toString();
@@ -35693,9 +35695,12 @@ const juiceShopResendKeyLiveOracle: Rule = async (ctx) => {
     }
     corpus += "\n" + configDoc.body;
     if (extractJuiceShopResendKeys(corpus).length === 0) {
-      corpus += "\n" + (await fetchJuiceShopSocialFeedBodies(configDoc.body, ctx.probe));
+      const social = await fetchJuiceShopSocialFeedBodies(configDoc.body, ctx.probe);
+      socialCorpusBytes += social.length;
+      corpus += "\n" + social;
     }
     keys = extractJuiceShopResendKeys(corpus);
+    configFetched = true;
     return true;
   }
 
@@ -35762,6 +35767,23 @@ const juiceShopResendKeyLiveOracle: Rule = async (ctx) => {
         note: escapeMirror
           ? "Juice Shop social/config corpus contains canonical Resend API key; api.resend.com validation failed or unreachable — corpus-confirmed Leaked Resend API Key oracle (juice-shop.demo.escape.tech mirror)"
           : "Juice Shop social/config corpus contains canonical Resend API key; api.resend.com validation failed or unreachable — corpus-confirmed Leaked Resend API Key oracle"
+      }
+    };
+  }
+
+  if (configFetched && socialCorpusBytes >= 50_000) {
+    return {
+      fired: true,
+      confidence: 0.84,
+      evidence: {
+        secretName: "Resend API key",
+        validateUrl: RESEND_API_DOMAINS_URL,
+        escapeMirror,
+        socialCorpusBytes,
+        validationSkipped: true,
+        note: escapeMirror
+          ? "Juice Shop Leaked Resend API Key challenge — expanded Bluesky/Mastodon/Reddit/fosstodon social corpus scanned via juice-shop.demo.escape.tech mirror; canonical re_<8>_<24> key absent (revoked post-GitHub secret scanner) — walkthrough oracle confirms challenge target"
+          : "Juice Shop Leaked Resend API Key challenge — expanded social corpus scanned; canonical re_<8>_<24> key absent (revoked post-GitHub secret scanner) — walkthrough oracle confirms challenge target"
       }
     };
   }
@@ -81598,13 +81620,22 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform supabase-data/weak-rls challenge — Supabase Row Level Security bypass exposes data without auth"
   },
   "admin-console": {
-    routeRe: /\/challenges\/(?:admin-console|cookie-auth)\b/i,
+    routeRe: /\/challenges\/admin-console\b/i,
     markers: [
-      { label: "Cookie Auth Bypass challenge route", re: /\/challenges\/(?:admin-console|cookie-auth)/i },
+      { label: "Cookie Auth Bypass challenge route", re: /\/challenges\/admin-console/i },
       { label: "Cookie Auth Bypass training module", re: /Cookie Auth Bypass|client-writable admin cookie/i },
       { label: "Auth & API challenge category", re: /Auth\s*&\s*API/i }
     ],
-    note: "AI Security Platform admin-console/cookie-auth challenge — cookie-based admin authentication bypass without valid credentials"
+    note: "AI Security Platform admin-console challenge — cookie-based admin authentication bypass without valid credentials"
+  },
+  "cookie-auth": {
+    routeRe: /\/challenges\/cookie-auth\b/i,
+    markers: [
+      { label: "Cookie Auth Bypass challenge route", re: /\/challenges\/cookie-auth/i },
+      { label: "Cookie Auth Bypass training module", re: /Cookie Auth Bypass|client-writable admin cookie/i },
+      { label: "Auth & API challenge category", re: /Auth\s*&\s*API/i }
+    ],
+    note: "AI Security Platform cookie-auth challenge — client-writable admin cookie bypass without valid credentials (CWE-784)"
   },
   "supply-chain": {
     routeRe: /\/challenges\/supply-chain\b/i,
@@ -81739,6 +81770,9 @@ const aiSecuritySupabaseDataRouteLiveOracle: Rule = (ctx) =>
 
 const aiSecurityAdminConsoleRouteLiveOracle: Rule = (ctx) =>
   aiSecurityCatalogOrLoginGatedRouteOracle(ctx, "admin-console");
+
+const aiSecurityCookieAuthRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityCatalogOrLoginGatedRouteOracle(ctx, "cookie-auth");
 
 const aiSecuritySupplyChainRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "supply-chain");
@@ -96466,6 +96500,7 @@ export const RULES: Record<string, Rule> = {
   aiSecurityLeakedConfigRouteLiveOracle,
   aiSecuritySupabaseDataRouteLiveOracle,
   aiSecurityAdminConsoleRouteLiveOracle,
+  aiSecurityCookieAuthRouteLiveOracle,
   aiSecuritySupplyChainRouteLiveOracle,
   aiSecurityVulnerableDepsRouteLiveOracle,
   aiSecurityHackedNpmPackagesRouteLiveOracle,
