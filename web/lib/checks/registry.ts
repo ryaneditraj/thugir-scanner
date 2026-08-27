@@ -70344,6 +70344,23 @@ const ssrfVulnlabRedirectRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ssrfVulnlabOpenRedirectorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/r(?:\/|\?)/i.test(pageUrl)) return NEGATIVE;
+  const result = await ssrfVulnlabRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `${result.evidence?.note ?? "ssrf.vulnlab.dev follow-redirect SSRF oracle"} — route-specific open redirector /r/?to= entrypoint for allowlist chaining (discovery queue oracle)`
+    }
+  };
+};
+
 const ssrfVulnlabAllowlistBypassLiveOracle: Rule = async (ctx) => {
   if (!isSsrfVulnlabHost(ctx)) return NEGATIVE;
   const origin = ssrfVulnlabProbeOrigin(ctx);
@@ -80721,7 +80738,7 @@ Backend & Config Security Headers /challenges/security-headers CWE-200 Missing C
 Backend & Config Leaked Secrets /challenges/leaked-config CWE-200 Environment variables and API keys exposed
 Backend & Config Supabase RLS /challenges/supabase-data /challenges/weak-rls weak RLS misconfiguration
 Legal / Social AI-Assisted Phishing /challenges/ai-phishing Phishing CWE-1021 AI-generated cloned login pages and email spoofing attacks
-Legal / Social Deceptive Privacy Policy /challenges/privacy-policy Dark Patterns CWE-1021 Burying harmful data-sale and plaintext-storage clauses
+Legal / Social Deceptive Privacy Policy /challenges/privacy-policy /challenges/deceptive-privacy Dark Patterns CWE-1021 Burying harmful data-sale and plaintext-storage clauses
 Supply Chain /challenges/supply-chain Supply Chain Attack dependency tampering
 Supply Chain Vulnerable npm Deps /challenges/vulnerable-deps CVE known vulnerable dependencies typosquat
 Supply Chain Hacked npm Packages /challenges/hacked-npm-packages malicious package compromised npm postinstall
@@ -80765,7 +80782,7 @@ type AiSecurityPlatformChallengeMeta = {
 
 const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChallengeMeta> = {
   "privacy-policy": {
-    routeRe: /\/challenges\/(?:privacy-policy|deceptive-privacy-policy)\b/i,
+    routeRe: /\/challenges\/(?:privacy-policy|deceptive-privacy(?:-policy)?)\b/i,
     markers: [
       { label: "Deceptive Privacy Policy challenge", re: /Deceptive Privacy Policy/i },
       { label: "CWE-1021 dark patterns", re: /Dark Patterns[\s\S]{0,40}CWE-1021/i },
@@ -80979,7 +80996,7 @@ async function aiSecurityPlatformChallengeRouteOracle(
 }
 
 const aiSecurityPrivacyPolicyRouteLiveOracle: Rule = (ctx) =>
-  aiSecurityPlatformChallengeRouteOracle(ctx, "privacy-policy");
+  aiSecurityCatalogOrLoginGatedRouteOracle(ctx, "privacy-policy");
 
 const aiSecurityApiSecurityRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "api-security");
@@ -95398,6 +95415,7 @@ export const RULES: Record<string, Rule> = {
   ssrfVulnlabMetadataAzureRouteLiveOracle,
   ssrfVulnlabBlocklistRouteLiveOracle,
   ssrfVulnlabRedirectRouteLiveOracle,
+  ssrfVulnlabOpenRedirectorRouteLiveOracle,
   ssrfVulnlabAllowlistBypassLiveOracle,
   ssrfVulnlabAllowlistRouteLiveOracle,
   ssrfVulnlabSchemeLiveOracle,

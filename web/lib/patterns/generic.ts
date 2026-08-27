@@ -31664,6 +31664,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssrf-vulnlab-open-redirector-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev /r open redirector route SSRF live oracle",
+    description:
+      "When scanning /r/?to=, the self-hosted open redirector chains into /redirect/?url= allowlist bypass and returns AWS metadata — route-specific follow-redirect SSRF oracle for discovery queue entrypoints.",
+    impactOneline:
+      "Same-site open redirectors on allowlisted hosts enable SSRF redirect chains to internal and cloud metadata endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabOpenRedirectorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate final fetch destinations after redirects — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Resolve URLs after all redirects and reject private/link-local/metadata ranges.",
+        "Do not treat same-site redirectors as inherently trusted fetch targets.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /r/?to= open redirector chains into SSRF allowlist bypass. Show redirect-chain SSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ssrf-vulnlab-allowlist-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
