@@ -2,6 +2,26 @@
   "updated_at": "2026-08-27T01:10:00.000Z",
   "priority_discovery_urls": [
     {
+      "url": "https://ssrf.vulnlab.dev/parser",
+      "source": "sampsonc/vulnlab.dev — URL parser SSRF validator bypass lab (queued unscanned; route oracle ssrf-vulnlab-parser-route-live-oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/basic",
+      "source": "sampsonc/vulnlab.dev — basic SSRF lab (queued unscanned; route oracle ssrf-vulnlab-basic-route-live-oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/blocklist",
+      "source": "sampsonc/vulnlab.dev — blocklist bypass SSRF lab (queued unscanned; route oracle ssrf-vulnlab-blocklist-route-live-oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/redirect",
+      "source": "sampsonc/vulnlab.dev — follow-redirect SSRF lab (queued unscanned; route oracle ssrf-vulnlab-redirect-route-live-oracle)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://ssrf.vulnlab.dev/r/?to=https://example.com",
       "source": "sampsonc/vulnlab.dev — self-hosted open redirector for SSRF allowlist chaining (/r/?to= on ssrf.vulnlab.dev catalog)",
       "auth": "public_demo"
