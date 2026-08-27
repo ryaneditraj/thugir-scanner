@@ -5111,6 +5111,24 @@
       "slug": "sqli-vulnlab-second-order-route-priority",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: runner -8 priority for sqli-vulnlab-second-order-route-live-oracle on /second-order/ route scans runs before hub cross-lab interference; sqli.vulnlab.dev/second-order/ findings stable 3 with sqli-vulnlab-second-order-route-live-oracle; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-weak-rls-supabase-data-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/weak-rls returns HTTP 307 Location /login?next=%2Fchallenges%2Fweak-rls; AI_SECURITY_PLATFORM_CHALLENGE_META supabase-data routeRe accepts /weak-rls alias + catalogOrLoginGated fallback; ai-security-platform-iota.vercel.app/challenges/weak-rls findings 6→7 (+ai-security-supabase-data-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-cookie-auth-admin-console-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/cookie-auth returns HTTP 307 Location /login?next=%2Fchallenges%2Fcookie-auth; admin-console routeRe accepts /cookie-auth alias; ai-security-platform-iota.vercel.app/challenges/cookie-auth findings 6→7 (+ai-security-admin-console-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-password-storage-insecure-passwords-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/password-storage returns HTTP 307 Location /login?next=%2Fchallenges%2Fpassword-storage; insecure-passwords routeRe accepts /password-storage alias; ai-security-platform-iota.vercel.app/challenges/password-storage findings 6→4 with +ai-security-insecure-passwords-route-live-oracle (route oracle now fires on queue slug); benchmark juice-shop 47 findings 6/6 maintained"
     }
   ]
 }
