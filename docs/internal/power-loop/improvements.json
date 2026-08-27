@@ -5423,6 +5423,24 @@
       "slug": "duck-store-wishlist-phantom-api-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/wishlist returns 404 {\"detail\":\"Not Found\"} while SPA /wishlist returns HTTP 200 and OpenAPI lists no wishlist paths; duck-store.escape.tech/api/v1/wishlist findings 29→37 (+duck-store-wishlist-phantom-api-route-live-oracle +duck-store-wishlist-phantom-api-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-cart-phantom-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cart returns 404 missing-content shell while POST /catalog/cart adds items and checkout redirects unauthenticated users to /login?redirect=cart; ginandjuice.shop/cart findings 31→32 (+ginandjuice-cart-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-checkout-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /checkout returns 404 missing-content shell while POST /catalog/cart/checkout redirects unauthenticated sessions to /login?redirect=cart; ginandjuice.shop/checkout findings 31→32 (+ginandjuice-checkout-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-render-dot-page-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/render Hello {{=7*7}} evaluates doT template to Hello 49; brokencrystals.com/render.dot findings 84 (+brokencrystals-render-dot-ssti-route-live-oracle with /render.dot SPA matcher); benchmark juice-shop 50 findings 6/6 maintained"
     }
   ]
 }

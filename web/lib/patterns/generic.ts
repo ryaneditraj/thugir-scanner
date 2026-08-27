@@ -35353,9 +35353,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Injection",
     severityDefault: "critical",
-    title: "Broken Crystals /api/render route doT SSTI oracle",
+    title: "Broken Crystals render doT SSTI route oracle",
     description:
-      "When scanning /api/render, POST Hello {{=7*7}} evaluates doT template to Hello 49 — route-specific SSTI oracle with scannedUrl evidence.",
+      "When scanning /api/render or /render.dot, POST Hello {{=7*7}} evaluates doT template to Hello 49 — route-specific SSTI oracle with scannedUrl evidence.",
     impactOneline:
       "Route-scoped scans of /api/render should confirm doT SSTI with scannedUrl evidence.",
     detectorKind: "rule_ref",
@@ -64149,9 +64149,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Broken access control",
     severityDefault: "medium",
-    title: "Gin & Juice Shop /catalog/cart route live oracle",
+    title: "Gin & Juice Shop cart route live oracle",
     description:
-      "When scanning /catalog/cart, add-to-cart POST populates coupon and checkout forms and unauthenticated checkout redirects to /login?redirect=cart — route-specific cart business-logic oracle.",
+      "When scanning /cart or /catalog/cart, phantom /cart returns 404 while POST /catalog/cart populates coupon and checkout forms and unauthenticated checkout redirects to /login?redirect=cart — route-specific cart business-logic oracle.",
     impactOneline:
       "Route-specific confirmation that Gin & Juice Shop cart exposes coupon application and checkout business-logic surfaces.",
     detectorKind: "rule_ref",
@@ -64167,6 +64167,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /catalog/cart route scan confirms coupon/checkout business-logic surfaces. Show route-specific cart remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-checkout-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /checkout route live oracle",
+    description:
+      "When scanning /checkout, phantom checkout page returns 404 while POST /catalog/cart/checkout redirects unauthenticated sessions to /login?redirect=cart — route-specific checkout business-logic oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop checkout settlement is gated behind login after cart manipulation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCheckoutRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate cart totals server-side and require authentication before checkout settlement.",
+      steps: [
+        "Recompute cart totals server-side on checkout; never trust client-submitted prices.",
+        "Require authenticated sessions before order placement.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /checkout route scan confirms unauthenticated checkout redirects to login after cart manipulation. Show route-specific checkout remediation.",
     version: 1,
     enabled: true
   },

@@ -18795,7 +18795,9 @@ const brokencrystalsRenderDotSstiLiveOracle: Rule = async (ctx) => {
 const brokencrystalsRenderDotSstiRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/render\b/i.test(pageUrl)) return NEGATIVE;
+  const isApiRender = /\/api\/render\b/i.test(pageUrl);
+  const isRenderDotPage = /\/render\.dot\b/i.test(pageUrl);
+  if (!isApiRender && !isRenderDotPage) return NEGATIVE;
   const result = await probeBrokencrystalsDotSsti(ctx);
   if (!result?.fired) return NEGATIVE;
   return {
@@ -18804,7 +18806,9 @@ const brokencrystalsRenderDotSstiRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Broken Crystals /api/render route scan — POST Hello {{=7*7}} evaluates doT template to Hello 49 — route-specific SSTI oracle"
+      note: isRenderDotPage
+        ? "Broken Crystals /render.dot route scan — SPA page links doT SSTI at POST /api/render (Hello {{=7*7}} → Hello 49) — route-specific SSTI oracle"
+        : "Broken Crystals /api/render route scan — POST Hello {{=7*7}} evaluates doT template to Hello 49 — route-specific SSTI oracle"
     }
   };
 };
@@ -70113,7 +70117,17 @@ const ginAndJuiceCartCheckoutAuthLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceCartRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/catalog\/cart\b/i.test(pageUrl)) return NEGATIVE;
+  const isCatalogCart = /\/catalog\/cart\b/i.test(pageUrl);
+  const isPhantomCart = /\/cart\b/i.test(pageUrl) && !/\/catalog\/cart\b/i.test(pageUrl);
+  if (!isCatalogCart && !isPhantomCart) return NEGATIVE;
+  if (isPhantomCart) {
+    const phantomDoc = await ctx.probe.get(pageUrl, { maxBytes: 32768, timeoutMs: 15000 });
+    if (phantomDoc.status < 200 || phantomDoc.status >= 500) return NEGATIVE;
+    if (
+      !/oops\.\.\.\s*something went wrong|missing-content|not-found/i.test(phantomDoc.body)
+    )
+      return NEGATIVE;
+  }
   const result = await probeGinAndJuiceCartCheckoutAuth(ctx);
   if (!result?.fired) return NEGATIVE;
   return {
@@ -70122,7 +70136,31 @@ const ginAndJuiceCartRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Gin & Juice Shop /catalog/cart route scan — add-to-cart, coupon, and checkout forms with unauthenticated checkout redirect to login — cart business-logic training oracle"
+      note: isPhantomCart
+        ? "Gin & Juice Shop /cart route scan — phantom cart page returns 404 while POST /catalog/cart adds items and unauthenticated checkout redirects to /login?redirect=cart — cart business-logic training oracle"
+        : "Gin & Juice Shop /catalog/cart route scan — add-to-cart, coupon, and checkout forms with unauthenticated checkout redirect to login — cart business-logic training oracle"
+    }
+  };
+};
+
+const ginAndJuiceCheckoutRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/checkout\b/i.test(pageUrl) || /\/catalog\/cart\/checkout\b/i.test(pageUrl)) return NEGATIVE;
+  const phantomDoc = await ctx.probe.get(pageUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (phantomDoc.status < 200 || phantomDoc.status >= 500) return NEGATIVE;
+  if (!/oops\.\.\.\s*something went wrong|missing-content|not-found/i.test(phantomDoc.body))
+    return NEGATIVE;
+  const result = await probeGinAndJuiceCartCheckoutAuth(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      checkoutStatus: phantomDoc.status,
+      note: "Gin & Juice Shop /checkout route scan — phantom checkout page returns 404 while POST /catalog/cart/checkout redirects unauthenticated users to /login?redirect=cart — checkout business-logic training oracle"
     }
   };
 };
@@ -97720,6 +97758,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogLinkManipulationRouteLiveOracle,
   ginAndJuiceCartCheckoutAuthLiveOracle,
   ginAndJuiceCartRouteLiveOracle,
+  ginAndJuiceCheckoutRouteLiveOracle,
   ginAndJuiceAngularVulnerableDependencyLiveOracle,
   ginAndJuiceAngularVulnerableDependencyRouteLiveOracle,
   ginAndJuiceLoggerOastLiveOracle,

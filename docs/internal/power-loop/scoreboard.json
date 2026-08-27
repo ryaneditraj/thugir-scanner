@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T22:15:00.000Z",
+  "updated_at": "2026-08-27T23:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2783,
-  "total_findings": 28293,
+  "total_sites_scanned": 2786,
+  "total_findings": 28337,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1981,
-  "discovery_findings": 23784,
-  "improvements_shipped": 1237,
-  "last_run": "2026-08-27T22:15:00.000Z",
+  "discovery_findings": 23828,
+  "improvements_shipped": 1240,
+  "last_run": "2026-08-27T23:20:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,37 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (51 findings); no category gaps"
+      "note": "Stable 6/6 recall (50 findings); no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
-      "findings": 109,
-      "focus": "ginandjuice /transactions IDOR route oracle + duck-store products/reviews misroute + wishlist phantom API",
+      "findings": 148,
+      "focus": "ginandjuice phantom /cart + /checkout route oracles + brokencrystals /render.dot SSTI route oracle",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings)",
-      "ginandjuice.shop/transactions: 31→33 findings (+ginandjuice-transactions-route-live-oracle links phantom /transactions 404 to /order/details IDOR)",
-      "duck-store.escape.tech/api/v1/products/reviews: 28→39 findings (+duck-store-products-reviews-misroute-route-live-oracle +duck-store-reviews route oracles)",
-      "duck-store.escape.tech/api/v1/wishlist: 29→37 findings (+duck-store-wishlist-phantom-api-route-live-oracle documents 404 API vs SPA /wishlist)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings)",
+      "ginandjuice.shop/cart: 31→32 findings (+ginandjuice-cart-route-live-oracle links phantom /cart 404 to /catalog/cart checkout auth gate)",
+      "ginandjuice.shop/checkout: 31→32 findings (+ginandjuice-checkout-route-live-oracle links phantom /checkout 404 to checkout auth redirect)",
+      "brokencrystals.com/render.dot: 84 findings (+brokencrystals-render-dot-ssti-route-live-oracle with /render.dot SPA matcher)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "ginandjuice cart/checkout/register: generic hub oracles fire; no route-specific cart/checkout/register live oracles yet"
+      "ginandjuice /register route oracle already ships; cart/checkout phantom routes now covered"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
-    "brokencrystals.com/render.dot": 83,
+    "juice-shop.herokuapp.com": 50,
+    "brokencrystals.com/render.dot": 84,
     "duck-store.escape.tech/api/v1/products/reviews": 39,
     "duck-store.escape.tech/api/v1/reviews": 38,
     "duck-store.escape.tech/api/v1/wishlist": 37,
     "duck-store.escape.tech/api/v1/testimonials/1": 38,
+    "ginandjuice.shop/cart": 32,
+    "ginandjuice.shop/checkout": 32,
     "ginandjuice.shop/transactions": 33,
-    "ginandjuice.shop/register": 33,
-    "ginandjuice.shop/cart": 31,
-    "ginandjuice.shop/checkout": 31
+    "ginandjuice.shop/register": 33
   }
 }
