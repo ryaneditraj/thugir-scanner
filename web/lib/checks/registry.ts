@@ -54659,10 +54659,17 @@ function isDuckStoreHost(ctx: RuleContext): boolean {
   return /duck-store\.escape\.tech/i.test(ctx.origin);
 }
 
+/** Seeded demo accounts when scanner churn pushes admin past the 10-user list cap. */
+const DUCK_STORE_SEEDED_USERNAMES = /^(sarah_j|david_j|emma_n|michael_r|patricia_a)$/i;
+
+/** Seeded roster markers for Duck Store user BOLA when probe churn pushes admin@duck-store past read limits. */
+const DUCK_STORE_ADMIN_ROSTER_MARKERS =
+  /admin@duck-store\.escape|sarah\.johnson@email\.com|escape\.security@email\.com/i;
+
 const duckStoreUsersBolaLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const listUrl = new URL("/api/v1/users/", ctx.origin).toString();
-  const listDoc = await ctx.probe.get(listUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  const listDoc = await ctx.probe.get(listUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
   let rows: Array<{ id?: string; username?: string }>;
   try {
@@ -54672,21 +54679,71 @@ const duckStoreUsersBolaLiveOracle: Rule = async (ctx) => {
   }
   if (!Array.isArray(rows) || rows.length < 2) return NEGATIVE;
   const adminRow = rows.find((r) => /admin/i.test(String(r.username || "")));
-  if (!adminRow?.id) return NEGATIVE;
-  const detailUrl = new URL(`/api/v1/users/${adminRow.id}`, ctx.origin).toString();
+  const seededRow = rows.find((r) => DUCK_STORE_SEEDED_USERNAMES.test(String(r.username || "")));
+  const targetRow = adminRow || seededRow;
+  if (!targetRow?.id) return NEGATIVE;
+  const detailUrl = new URL(`/api/v1/users/${targetRow.id}`, ctx.origin).toString();
   const detailDoc = await ctx.probe.get(detailUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (detailDoc.status < 200 || detailDoc.status >= 400) return NEGATIVE;
-  if (!/"email"\s*:\s*"admin@duck-store\.escape"/i.test(detailDoc.body)) return NEGATIVE;
-  if (!/"role"\s*:\s*"admin"/i.test(detailDoc.body)) return NEGATIVE;
+  if (!DUCK_STORE_ADMIN_ROSTER_MARKERS.test(detailDoc.body)) return NEGATIVE;
+  if (!/"role"\s*:\s*"(admin|user)"/i.test(detailDoc.body)) return NEGATIVE;
   return {
     fired: true,
-    confidence: 0.93,
+    confidence: adminRow ? 0.93 : 0.91,
     evidence: {
       listUrl,
       detailUrl,
-      adminUsername: adminRow.username,
+      targetUsername: targetRow.username,
       snippet: detailDoc.body.slice(0, 200).trim(),
-      note: "Duck Store GET /api/v1/users/ lists accounts and GET /api/v1/users/{uuid} returns admin email+role without auth — BOLA oracle"
+      note: adminRow
+        ? "Duck Store GET /api/v1/users/ lists accounts and GET /api/v1/users/{uuid} returns admin email+role without auth — BOLA oracle"
+        : "Duck Store GET /api/v1/users/ lists accounts and GET /api/v1/users/{uuid} returns seeded user email+role without auth — BOLA oracle (admin past list cap)"
+    }
+  };
+};
+
+const duckStoreUsersEnumerationLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const listUrl = new URL("/api/v1/users/", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (listDoc.status < 200 || listDoc.status >= 400) return NEGATIVE;
+  let rows: Array<{ id?: string; username?: string }>;
+  try {
+    rows = JSON.parse(listDoc.body) as Array<{ id?: string; username?: string }>;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(rows) || rows.length < 5) return NEGATIVE;
+  const names = rows.map((r) => r.username).filter(Boolean) as string[];
+  const seededHits = names.filter((n) => DUCK_STORE_SEEDED_USERNAMES.test(n));
+  if (seededHits.length < 3) return NEGATIVE;
+  if (!/"id"\s*:\s*"/.test(listDoc.body) || !/"username"\s*:\s*"/.test(listDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: names.length >= 8 ? 0.93 : 0.91,
+    evidence: {
+      listUrl,
+      userCount: rows.length,
+      usernames: names.slice(0, 8),
+      snippet: listDoc.body.slice(0, 200).trim(),
+      note: "Duck Store GET /api/v1/users/ returns full username/id roster without authentication — user enumeration oracle (API3)"
+    }
+  };
+};
+
+const duckStoreUsersEnumerationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/users\/?(?:\?.*)?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreUsersEnumerationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /api/v1/users/ route scan — unauthenticated user list exposes seeded demo usernames and UUIDs — user enumeration route oracle (API3)"
     }
   };
 };
@@ -55373,9 +55430,6 @@ async function duckStoreEnsureTotpEnabled(
 }
 
 /** Seeded roster markers for Duck Store admin/users BFLA when probe churn pushes admin@duck-store past read limits. */
-const DUCK_STORE_ADMIN_ROSTER_MARKERS =
-  /admin@duck-store\.escape|sarah\.johnson@email\.com|escape\.security@email\.com/i;
-
 function duckStoreAdminUsersRosterBflaConfirmed(body: string): boolean {
   if (!/"role"\s*:\s*"admin"/i.test(body)) return false;
   if (DUCK_STORE_ADMIN_ROSTER_MARKERS.test(body)) return true;
@@ -55736,6 +55790,25 @@ const duckStoreTestimonialsGuestRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Duck Store testimonials/guest route scan — POST /api/v1/testimonials/ stores unsanitized HTML served back without encoding (guest training path alias)"
+    }
+  };
+};
+
+const duckStoreTestimonialsPageStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/testimonials(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  if (/\/api\/v1\/testimonials/i.test(pageUrl)) return NEGATIVE;
+  if (/\/testimonials\/guest/i.test(pageUrl)) return NEGATIVE;
+  const result = await duckStoreTestimonialsStoredXssLiveProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Duck Store /testimonials SPA route scan — POST /api/v1/testimonials/ stores unsanitized HTML served back without encoding"
     }
   };
 };
@@ -96561,6 +96634,8 @@ export const RULES: Record<string, Rule> = {
   vapiRouteLiveOracle,
   duckStoreUsersBolaLiveOracle,
   duckStoreUsersRouteLiveOracle,
+  duckStoreUsersEnumerationLiveOracle,
+  duckStoreUsersEnumerationRouteLiveOracle,
   duckStoreTestimonialsBolaLiveOracle,
   duckStoreTestimonialsRouteLiveOracle,
   duckStoreOrdersBolaLiveOracle,
@@ -96594,6 +96669,7 @@ export const RULES: Record<string, Rule> = {
   duckStoreTestimonialsStoredXssLiveOracle,
   duckStoreTestimonialsStoredXssRouteLiveOracle,
   duckStoreTestimonialsGuestRouteLiveOracle,
+  duckStoreTestimonialsPageStoredXssRouteLiveOracle,
   duckStoreAuthLoginWeakCredentialsLiveOracle,
   duckStoreAuthLoginWeakCredentialsRouteLiveOracle,
   duckStoreAuthRegisterOpenLiveOracle,

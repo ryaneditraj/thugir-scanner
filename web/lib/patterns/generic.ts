@@ -60219,6 +60219,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-users-enumeration-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Duck Store user enumeration live oracle",
+    description:
+      "GET /api/v1/users/ returns a full username and UUID roster without authentication — the Escape Duck Store user enumeration oracle (API3).",
+    impactOneline:
+      "Public user directory endpoints help attackers harvest valid accounts for credential stuffing and targeted attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreUsersEnumerationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose full user directories without authentication in production.",
+      steps: [
+        "Require authentication before listing user accounts.",
+        "Return only the caller's own profile unless the caller is an admin.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/v1/users/ returns all usernames and UUIDs without auth. Show user enumeration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-users-enumeration-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Duck Store /api/v1/users user enumeration route live oracle",
+    description:
+      "When scanning /api/v1/users/, the API returns seeded demo usernames and UUIDs without authentication — route-specific user enumeration oracle (API3).",
+    impactOneline:
+      "Route scans on user list endpoints should confirm excessive data exposure and enumeration risk.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreUsersEnumerationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict user list endpoints to authenticated admins in production.",
+      steps: [
+        "Return 401 for unauthenticated GET /api/v1/users/ requests.",
+        "Paginate and scope user lists to authorized callers only.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/users/ route scan confirms unauthenticated user enumeration. Show access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "duck-store-testimonials-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -61047,6 +61099,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our testimonials/guest route stores raw HTML XSS payloads via POST /api/v1/testimonials/. Show route-specific stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-testimonials-page-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Duck Store /testimonials SPA stored XSS route live oracle",
+    description:
+      "When scanning /testimonials, POST /api/v1/testimonials/ stores unsanitized HTML testimonial content served back without encoding — SPA route-specific stored XSS oracle.",
+    impactOneline:
+      "Route-specific SPA testimonial page scans should confirm APIs do not persist executable HTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreTestimonialsPageStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize testimonial content on the /testimonials SPA route handlers.",
+      steps: [
+        "Reject HTML tags in testimonial POST bodies.",
+        "Encode testimonial content in list responses.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /testimonials SPA route stores raw HTML XSS payloads via POST /api/v1/testimonials/. Show route-specific stored XSS remediation.",
     version: 1,
     enabled: true
   },
