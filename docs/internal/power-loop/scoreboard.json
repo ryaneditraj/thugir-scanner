@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T09:16:24.555Z",
+  "updated_at": "2026-08-27T10:18:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2949,
-  "total_findings": 31465,
-  "critical_findings": 64,
+  "total_sites_scanned": 2739,
+  "total_findings": 26913,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2052,
-  "discovery_findings": 26086,
-  "improvements_shipped": 1216,
-  "last_run": "2026-08-27T09:16:24.555Z",
+  "discovery_urls_added": 1961,
+  "discovery_findings": 22844,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-27T10:18:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 588,
+      "probes_run": 583,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,45 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (49 findings, 38 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings, 37 juice-shop live oracles); secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 143,
-      "focus": "duck-store admin/users BFLA + auth/login weak-creds hub, vaultapp messages/audit-logs/users IDOR oracles, queue drain websec level38-39 + pwnshop reset-password",
+      "findings": 191,
+      "focus": "duck-store vuln catalog + orders/coupons + testimonials/1 + vapi.tools + mcp/info + wrongsecrets challenge-50/51/52",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 38 live oracles)",
-      "duck-store.escape.tech/api/v1/admin/users: 33 findings — duck-store-admin-users-bfla-live-oracle + route oracle",
-      "duck-store.escape.tech/api/v1/auth/login: 33 findings — weak-admin + no-rate-limit hub",
-      "vaultapp-omega.vercel.app/api/messages/1: 12 findings — vaultapp-messages-read-idor-route-live-oracle",
-      "vaultapp-omega.vercel.app/api/audit-logs: 12 findings — vaultapp-admin-audit-logs-idor-live-oracle",
-      "vaultapp-omega.vercel.app/api/transactions/1: 14 findings (+vaultapp-transactions-idor-route-live-oracle) from parallel engine commit",
-      "pwnshop.ctfsecurity.com/reset-password: 49 findings — OTP brute-force hub (PWN-015/024)",
-      "websec.fr/level38/: 1 finding — 404 nginx stub (route oracle deferred)",
-      "websec.fr/level39/: 1 finding — 404 nginx stub (route oracle deferred)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 37 live oracles) — full rich pass",
+      "duck-store.escape.tech/vulnerabilities: 34 findings — full duck-store hub (BOLA, SSRF, MCP, SQLi, XSS oracles)",
+      "duck-store.escape.tech/api/v1/orders/coupons: 32 findings — duck-store-coupons-disclosure-live-oracle hub",
+      "duck-store.escape.tech/api/v1/testimonials/1: 33 findings — duck-store-testimonials-unauth-put-live-oracle hub",
+      "vapi.tools.escape.tech/: 17 findings — vAPI OWASP API Top 10 live oracles (API1–API10 suite)",
+      "duck-store.escape.tech/mcp/info: 30 findings — duck-store MCP enumeration hub",
+      "wrongsecrets.herokuapp.com/challenge/challenge-50: 15 findings — challenge route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-51: 15 findings — challenge route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-52: 15 findings — challenge route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + other slugs)",
-      "vaultapp-omega.vercel.app/api/users/1: thin pass (2 findings, headers-only) — sequential IDOR oracle missed on direct /api/users/:id route",
-      "websec.fr level38-39 return 404 — route oracles deferred until levels go live"
+      "vapi.tools.escape.tech: API8 SQLi login oracle missed on Escape-hosted vAPI (17 vs 18 on apisec.ai mirror)",
+      "duck-store MCP /mcp/info returns 406 without Accept header — hub crawl still hits MCP oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 49,
-    "duck-store.escape.tech/api/v1/admin/users": 33,
-    "duck-store.escape.tech/api/v1/auth/login": 33,
-    "pwnshop.ctfsecurity.com/reset-password": 49,
-    "vaultapp-omega.vercel.app/api/messages/1": 12,
-    "vaultapp-omega.vercel.app/api/audit-logs": 12,
-    "vaultapp-omega.vercel.app/api/transactions/1": 14,
-    "vaultapp-omega.vercel.app/api/documents/1": 12
+    "juice-shop.herokuapp.com": 48,
+    "duck-store.escape.tech/vulnerabilities": 34,
+    "duck-store.escape.tech/api/v1/testimonials/1": 33,
+    "duck-store.escape.tech/api/v1/orders/coupons": 32,
+    "duck-store.escape.tech/mcp/info": 30,
+    "vapi.tools.escape.tech": 17,
+    "wrongsecrets.herokuapp.com/challenge/challenge-50": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-51": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-52": 15,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "brokencrystals.com/userlogin?logobgcolor=red": 52
   }
 }
