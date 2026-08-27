@@ -5255,6 +5255,12 @@
       "slug": "vaultapp-api-transactions-hub-priority",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for vaultapp-transactions-* slugs when scanning /api/transactions paths — transaction-history IDOR oracle fires on API-only URL; vaultapp-omega.vercel.app/api/transactions/1 findings 12→14; benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-product-api-live-catalog-pivot",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopProductApiIdorRouteLiveOracle pivots /api/v1/products/:id 404 to live GET /product/:id with review XSS (PWN-011) + search SQLi (PWN-010) before corpus fallback; pwnshop.ctfsecurity.com/api/v1/products/1 route note upgraded from registry corpus to live chain; benchmark juice-shop 48 findings 6/6 maintained"
     }
   ]
 }
