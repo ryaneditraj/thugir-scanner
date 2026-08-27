@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-27T06:08:15.211Z",
-  "total": 2715,
-  "uniqueSlugs": 2707,
+  "generatedAt": "2026-08-27T07:14:10.313Z",
+  "total": 2718,
+  "uniqueSlugs": 2710,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2697,
+    "generic": 2700,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2630,
+    "deep": 2633,
     "continuous": 0
   },
   "byCategory": {
@@ -26,8 +26,8 @@
     "Information exposure": 1,
     "Information disclosure": 124,
     "Security misconfiguration": 208,
-    "Broken authentication": 168,
-    "Injection": 426,
+    "Broken authentication": 169,
+    "Injection": 428,
     "Cross-site scripting": 725,
     "Open redirect": 24,
     "general": 20,
@@ -1988,6 +1988,7 @@
     "pwnshop-track-idor-route-live-oracle",
     "pwnshop-update-avatar-route-live-oracle",
     "pwnshop-verify-otp-bruteforce-live-oracle",
+    "pwnshop-verify-otp-bruteforce-route-live-oracle",
     "pwnshop-wallet-topup-route-live-oracle",
     "pwnshop-wallet-topup-vulnbank-live-oracle",
     "pwnshop-wishlist-idor-live-oracle",
@@ -2567,6 +2568,8 @@
     "websec-level27-aspect-backdoor-route-live-oracle",
     "websec-level28-upload-include-route-live-oracle",
     "websec-level30-unserialize-destruct-route-live-oracle",
+    "websec-level31-open-basedir-eval-route-live-oracle",
+    "websec-level33-unserialize-destruct-route-live-oracle",
     "whoopspay-admin-database-execute-live-oracle",
     "whoopspay-admin-database-execute-route-live-oracle",
     "whoopspay-admin-express-logs-disclosure-live-oracle",

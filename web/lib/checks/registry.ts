@@ -20628,6 +20628,46 @@ const clientSideWebsecPhpUnserializeBlindDestructChallengeEvidence: Rule = async
   };
 };
 
+const websecLevel33UnserializeDestructRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level33(?:\/|$)/i.test(pathname)) return NEGATIVE;
+  const markers: string[] = [];
+  const indexUrl = new URL("/level33/", ctx.origin).toString();
+  const sourceUrl = new URL("/level33/source.php", ctx.origin).toString();
+  const [indexDoc, source] = await Promise.all([
+    fetchDoc(indexUrl, { maxBytes: 65536, timeoutMs: 15000 }),
+    fetchDoc(sourceUrl, { maxBytes: 65536, timeoutMs: 15000 })
+  ]);
+  const pageCorpus = `${ctx.combined}\n${indexDoc.body}\n${source.body}`;
+  if (/Level(?:&nbsp;|\s)+Thirtee-three|#WebSec(?:&nbsp;|\s)+Level33|Level33/i.test(pageCorpus))
+    markers.push("level33-unserialize-destruct-title");
+  if (/Almost(?:&nbsp;|\s)+there\?|going\s+dark/i.test(pageCorpus)) markers.push("destruct-subtitle-hint");
+  const sourceCorpus = source.body;
+  if (/unserialize[\s\S]{0,120}\$_POST/i.test(sourceCorpus)) markers.push("unserialize-post-payload");
+  if (/class(?:&nbsp;|\s)+B[\s\S]{0,120}__destruct/i.test(sourceCorpus))
+    markers.push("class-b-destruct-gadget");
+  if (/include[\s\S]{0,40}flag\.php/i.test(sourceCorpus)) markers.push("flag-php-include");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      indexUrl,
+      sourceUrl,
+      markers,
+      note: "WebSec.fr /level33 route scan — unserialize($_POST[...]) into class B __destruct with hidden Almost there? comment — blind destructor gadget oracle"
+    }
+  };
+};
+
 // --- WebSec.fr open_basedir sandbox eval (level31) ------------------------------------
 const CLIENT_WEBSEC_OPEN_BASEDIR_EVAL_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
@@ -20662,6 +20702,51 @@ const clientSideWebsecOpenBasedirEvalChallengeEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "WebSec.fr level31 documents open_basedir=/sandbox with eval($_GET['c']) sandbox-escape training to read ./flag.php"
+    }
+  };
+};
+
+const websecLevel31OpenBasedirEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level31(?:\/|$)/i.test(pathname)) return NEGATIVE;
+  const markers: string[] = [];
+  const indexUrl = new URL("/level31/", ctx.origin).toString();
+  const sourceUrl = new URL("/level31/source.php", ctx.origin).toString();
+  const [indexDoc, source] = await Promise.all([
+    fetchDoc(indexUrl, { maxBytes: 65536, timeoutMs: 15000 }),
+    fetchDoc(sourceUrl, { maxBytes: 65536, timeoutMs: 15000 })
+  ]);
+  const pageCorpus = `${ctx.combined}\n${indexDoc.body}\n${source.body}`;
+  if (
+    /Level(?:&nbsp;|\s)+Thirty-one|#WebSec(?:&nbsp;|\s)+Level(?:&nbsp;|\s)+Thirty-one|web browsers have sandboxes/i.test(
+      pageCorpus
+    )
+  )
+    markers.push("level31-open-basedir-eval-title");
+  const sourceCorpus = source.body;
+  if (/open_basedir[\s\S]{0,120}\/sandbox/i.test(sourceCorpus)) markers.push("open-basedir-sandbox");
+  if (/chdir[\s\S]{0,120}\/sandbox/i.test(sourceCorpus)) markers.push("chdir-sandbox-bypass");
+  if (/eval[\s\S]{0,200}\$_GET[\s\S]{0,120}['"]c['"]/i.test(sourceCorpus))
+    markers.push("eval-get-c-parameter");
+  if (/read[\s\S]{0,120}flag\.php|Can you read the[\s\S]{0,120}flag\.php/i.test(pageCorpus))
+    markers.push("read-flag-php-challenge");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      indexUrl,
+      sourceUrl,
+      markers,
+      note: "WebSec.fr /level31 route scan — open_basedir=/sandbox with eval($_GET['c']) sandbox-escape training oracle"
     }
   };
 };
@@ -41423,6 +41508,23 @@ const pwnshopVerifyOtpBruteforceLiveOracle: Rule = async (ctx) => {
       url: otpUrl,
       attempts: otps.length,
       note: "Pwnshop POST /verify-otp accepts rapid OTP guesses without HTTP 429 or lockout — brute-forceable 2FA oracle (PWN-015)"
+    }
+  };
+};
+
+const pwnshopVerifyOtpBruteforceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:reset-password|forgot-password|verify-otp|login)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopVerifyOtpBruteforceLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop reset-password/verify-otp route scan — POST /verify-otp accepts rapid OTP guesses without HTTP 429 or lockout (PWN-015)"
     }
   };
 };
@@ -95028,7 +95130,9 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecPhpUnserializeDestructChallengeEvidence,
   websecLevel30PhpUnserializeDestructRouteLiveOracle,
   clientSideWebsecPhpUnserializeBlindDestructChallengeEvidence,
+  websecLevel33UnserializeDestructRouteLiveOracle,
   clientSideWebsecOpenBasedirEvalChallengeEvidence,
+  websecLevel31OpenBasedirEvalRouteLiveOracle,
   clientSideWebsecDynamicFunctionCallChallengeEvidence,
   clientSideSixHackCtfLabEvidence,
   clientSideRootMeChallengeEvidence,
@@ -95361,6 +95465,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopMassAssignmentAdminLiveOracle,
   pwnshopOpenRedirectRegisterLiveOracle,
   pwnshopVerifyOtpBruteforceLiveOracle,
+  pwnshopVerifyOtpBruteforceRouteLiveOracle,
   pwnshopOtpNotInvalidatedLiveOracle,
   pwnshopOtpNotInvalidatedRouteLiveOracle,
   pwnshopMailInboxIdorLiveOracle,

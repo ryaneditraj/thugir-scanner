@@ -16493,6 +16493,59 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "websec-level31-open-basedir-eval-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level31 open_basedir eval route live oracle",
+    description:
+      "When scanning /level31/, GET source.php confirms open_basedir=/sandbox with chdir('/sandbox') then eval($_GET['c']) — route-specific PHP sandbox-escape code execution oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level31 exposes eval on user input inside open_basedir-restricted PHP sandbox.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel31OpenBasedirEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host PHP eval labs offline; never eval user-controlled code even behind open_basedir.",
+      steps: [
+        "Move WebSec-style sandbox-escape labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Eliminate eval/create_function on any user input; open_basedir is not a sandbox boundary."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level31 route exposes eval($_GET['c']) with open_basedir=/sandbox. Show secure sandbox and eval remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level33-unserialize-destruct-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level33 blind unserialize __destruct route live oracle",
+    description:
+      "When scanning /level33/, GET source.php confirms unserialize($_POST[...]) into class B __destruct that emits hidden Almost there? comment — route-specific blind destructor gadget oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level33 exposes blind PHP unserialize gadget via class B __destruct.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel33UnserializeDestructRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host unserialize labs offline; never unserialize attacker-controlled data in production.",
+      steps: [
+        "Move WebSec-style deserialization labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Replace PHP serialize/unserialize with JSON and strict schema validation.",
+        "Eliminate __destruct/__wakeup gadgets on attacker-reachable object graphs."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level33 route exposes unserialize($_POST[...]) with class B __destruct hidden output. Show secure deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-cloud-storage-challenge-evidence",
     platform: "generic",
     category: "Injection",
@@ -23796,6 +23849,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our POST /verify-otp endpoint has no rate limiting. Show OTP brute-force protection with lockouts and backoff.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-verify-otp-bruteforce-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Pwnshop OTP brute-force route live oracle (PWN-015)",
+    description:
+      "When scanning /reset-password, /verify-otp, or /login, POST /verify-otp accepts rapid sequential OTP guesses without HTTP 429 or lockout — route-specific PWN-015 brute-force oracle.",
+    impactOneline:
+      "Route scans on reset-password and verify-otp should confirm missing OTP rate limits enable 2FA bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopVerifyOtpBruteforceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rate-limit OTP verification and lock accounts after repeated failures — Pwnshop PWN-015 is intentional lab software.",
+      steps: [
+        "Return HTTP 429 after a small number of failed OTP attempts per session.",
+        "Use exponential backoff and temporary lockouts on repeated failures.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /reset-password route scan confirms POST /verify-otp has no rate limiting. Show route-specific OTP brute-force protection.",
     version: 1,
     enabled: true
   },
