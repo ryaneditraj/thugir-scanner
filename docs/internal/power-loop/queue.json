@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T18:06:00.000Z",
+  "updated_at": "2026-08-27T19:06:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://securebank-blog.vercel.app/transfer",
@@ -10741,6 +10741,31 @@
       "url": "https://dvwu.vercel.app/labs/ssti",
       "source": "zahidoverflow/dvwu \u2014 SSTI training lab route (Vercel live demo)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/mass-assignment",
+      "source": "zahidoverflow/dvwu \u2014 mass-assignment privilege escalation lab route (Vercel live demo; /labs/* portal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/race-condition",
+      "source": "zahidoverflow/dvwu \u2014 race-condition TOCTOU lab route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/graphql",
+      "source": "zahidoverflow/dvwu \u2014 GraphQL injection/introspection lab route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/prompt-injection",
+      "source": "OWASP GenAI Security Lab \u2014 LLM01 prompt injection interactive lesson (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/supply-chain",
+      "source": "OWASP GenAI Security Lab \u2014 LLM05 supply-chain vulnerability lesson (Vercel OSS deploy)",
+      "auth": "oss_deploy"
     }
   ]
 }
