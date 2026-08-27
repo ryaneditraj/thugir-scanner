@@ -12273,13 +12273,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -2;
       if (
         /vulnbank\.org/i.test(origin) &&
-        /\/api\/bill-payments/i.test(targetInput) &&
+        /\/(?:api\/)?bill-payments/i.test(targetInput) &&
         p.slug.startsWith("vulnbank-bill-payments")
       )
         return -2;
       if (
         /vulnbank\.org/i.test(origin) &&
-        /\/api\/virtual-cards/i.test(targetInput) &&
+        /\/(?:api\/)?virtual-cards/i.test(targetInput) &&
         p.slug.startsWith("vulnbank-virtual-cards")
       )
         return -2;
@@ -14073,7 +14073,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /vulnbank\.org/i.test(origin) &&
-        /\/api\/v2\/forgot-password\b/i.test(targetInput) &&
+        /\/(?:api\/)?v2\/forgot-password\b/i.test(targetInput) &&
         p.slug.startsWith("vulnbank-v2-forgot-password")
       )
         return -3;
