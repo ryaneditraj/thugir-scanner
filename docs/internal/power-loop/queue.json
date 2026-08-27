@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-27T15:15:00.000Z",
+  "updated_at": "2026-08-27T16:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+      "source": "OWASP WrongSecrets — challenge-63 hardcoded AES key oracle (Heroku public benchmark)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/products/filter/by-name",
+      "source": "Escape Duck Store — SQLi via product name filter param (vulnerabilities catalog; sibling to by-color)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supply-chain-attack",
+      "source": "AI & Security Platform — typosquat/npm postinstall supply-chain challenge (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/weak-supabase-rls",
+      "source": "AI & Security Platform — misconfigured Supabase RLS / excessive data exposure challenge (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://bingoctf.vercel.app/",
+      "source": "Puskar-Roy/bingoCTF — beginner CTF platform with web challenges (Vercel homepage)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vapi.tools.escape.tech/workshop/api/user/videos",
       "source": "OWASP vAPI — API1 BOLA oracle GET /workshop/api/user/videos (vapi.tools.escape.tech)",
