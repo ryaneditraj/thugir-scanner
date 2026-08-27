@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T05:30:00.000Z",
+  "updated_at": "2026-08-27T06:14:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2914,
-  "total_findings": 30879,
+  "total_sites_scanned": 2923,
+  "total_findings": 31016,
   "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2037,
-  "discovery_findings": 25683,
+  "discovery_urls_added": 2042,
+  "discovery_findings": 25773,
   "improvements_shipped": 1207,
-  "last_run": "2026-08-27T05:30:00.000Z",
+  "last_run": "2026-08-27T06:14:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_findings": 47,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (49 findings); no category gaps; teacher_delta skipped"
+      "note": "Stable 6/6 first-pass recall (47 findings); secret-resend slug still absent; teacher_delta skipped"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 18,
-      "focus": "websec.fr level25 LFI + level27 aspect backdoor route oracles; zen-demo-python probe tolerance",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 90,
+      "focus": "websec.fr level36–39 XSS/filter gap + pwnshop reset-password OTP hub; queue also drained wrongsecrets challenge-71/72/73",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings)",
-      "websec.fr/level27/: 4→6 (+websec-level27-aspect-backdoor-route-live-oracle)",
-      "zen-demo-python.fly.dev/pages/execute: 5→9 (+zen-demo-java-execute-route-live-oracle via python /bin/sh probe)",
-      "websec.fr/level25/: 4→3 (+websec-level25-lfi-route-live-oracle)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (47 findings, probes=595)",
+      "pwnshop.ctfsecurity.com/reset-password: 44 findings — OTP reset-password hub (+pwnshop-otp-not-invalidated-route-live-oracle)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-71: 14 findings",
+      "wrongsecrets.herokuapp.com/challenge/challenge-72: 14 findings",
+      "wrongsecrets.herokuapp.com/challenge/challenge-73: 14 findings",
+      "websec.fr/level36–39: 1 finding each — headers-only thin pass (no route oracle yet)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "websec.fr level29 still 502 — route oracle deferred",
-      "queue URLs (wrongsecrets/mcp, vapi.tools, zen-demo-python pages) partially drained"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + iac-terraform-tls-key)",
+      "websec.fr level36–39: only missing-security-headers — need websec-level36–39 route live oracles for filter/XSS challenges",
+      "benchmark 47 findings vs typical 49 — slightly thin but full category recall"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 49,
-    "zen-demo-python.fly.dev/pages/execute": 9,
-    "websec.fr/level27/": 6,
-    "websec.fr/level26/": 9,
-    "websec.fr/level28/": 8,
-    "websec.fr/level25/": 3,
+    "juice-shop.herokuapp.com": 47,
+    "pwnshop.ctfsecurity.com/reset-password": 44,
+    "wrongsecrets.herokuapp.com/challenge/challenge-71": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-72": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-73": 14,
+    "websec.fr/level36/": 1,
+    "websec.fr/level37/": 1,
+    "websec.fr/level38/": 1,
+    "websec.fr/level39/": 1,
     "brokencrystals.com/api/render": 82,
-    "pwnshop.ctfsecurity.com/api/v1/events": 48,
     "duck-store.escape.tech/api/v1/coupons/apply": 30
   }
 }
