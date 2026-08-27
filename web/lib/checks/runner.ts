@@ -2339,6 +2339,7 @@ const DEEP_RULES = new Set<string>([
   "ssrfVulnlabMetadataAzureRouteLiveOracle",
   "ssrfVulnlabBlocklistRouteLiveOracle",
   "ssrfVulnlabRedirectRouteLiveOracle",
+  "ssrfVulnlabOpenRedirectorRouteLiveOracle",
   "ssrfVulnlabAllowlistBypassLiveOracle",
   "ssrfVulnlabAllowlistRouteLiveOracle",
   "ssrfVulnlabSchemeLiveOracle",
@@ -10639,6 +10640,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     : [];
   const ssrfVulnlabPrioritySeeds = /ssrf\.vulnlab\.dev/i.test(home.finalUrl)
     ? [
+        "https://ssrf.vulnlab.dev/r/?to=https://example.com",
         "https://ssrf.vulnlab.dev/basic",
         "https://ssrf.vulnlab.dev/metadata",
         "https://ssrf.vulnlab.dev/blocklist",
@@ -11585,7 +11587,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ssrf\.vulnlab\.dev/i.test(origin) &&
-        /\/(basic|metadata(?:-aws|-gcp|-azure)?|blocklist|redirect|allowlist|scheme|gopher|parser|blind|webhook)\b/i.test(
+        /\/(?:r(?:\/|\?)|basic|metadata(?:-aws|-gcp|-azure)?|blocklist|redirect|allowlist|scheme|gopher|parser|blind|webhook)\b/i.test(
           targetInput
         ) &&
         p.slug.startsWith("ssrf-vulnlab-") &&

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-27T01:06:40.252Z",
-  "total": 2703,
-  "uniqueSlugs": 2695,
+  "generatedAt": "2026-08-27T02:11:28.780Z",
+  "total": 2704,
+  "uniqueSlugs": 2696,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2685,
+    "generic": 2686,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2618,
+    "deep": 2619,
     "continuous": 0
   },
   "byCategory": {
@@ -32,7 +32,7 @@
     "Open redirect": 24,
     "general": 20,
     "SSRF": 18,
-    "Server-side request forgery": 90,
+    "Server-side request forgery": 91,
     "Sensitive data exposure": 71,
     "AI security": 95,
     "Cross-site request forgery": 8,
@@ -2128,6 +2128,7 @@
     "ssrf-vulnlab-metadata-azure-route-live-oracle",
     "ssrf-vulnlab-metadata-gcp-live-oracle",
     "ssrf-vulnlab-metadata-gcp-route-live-oracle",
+    "ssrf-vulnlab-open-redirector-route-live-oracle",
     "ssrf-vulnlab-parser-live-oracle",
     "ssrf-vulnlab-parser-route-live-oracle",
     "ssrf-vulnlab-redirect-live-oracle",
