@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-26T23:03:37.823Z",
+  "updated_at": "2026-08-27T00:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/weak-rls",
+      "source": "AI Security Platform iota — Challenge 05 weak Supabase RLS misconfiguration lab (14-challenge OWASP Top 10 Vercel demo)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/cookie-auth",
+      "source": "AI Security Platform iota — Challenge 06 client-writable admin cookie auth bypass lab (Vercel public demo)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/password-storage",
+      "source": "AI Security Platform iota — Challenge 12 insecure password storage / weak hashing lab (Vercel public demo)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/security-headers",
+      "source": "AI Security Platform iota — Challenge 09 missing CSP/HSTS/X-Frame-Options headers lab (Vercel public demo)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/deceptive-privacy",
+      "source": "AI Security Platform iota — Challenge 14 deceptive privacy policy / dark patterns lab (Vercel public demo)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://sqli.vulnlab.dev/blind-time/",
       "source": "sampsonc/vulnlab.dev — blind time-based SQLi lab (sqli.vulnlab.dev catalog /meta/blind-time)",
