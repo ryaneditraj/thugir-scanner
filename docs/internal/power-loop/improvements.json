@@ -5219,6 +5219,24 @@
       "slug": "vulnbank-merchant-dashboard-route-live-oracles",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: vulnbankMerchantRegisterRouteLiveOracle + vulnbankMerchantPaymentChargeRouteLiveOracle fire on /merchant/dashboard; direct rule probes FIRED; prior scan 29 findings with live oracles only → +2 route oracles expected; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level31-open-basedir-eval-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level31/source.php confirms open_basedir=/sandbox + chdir('/sandbox') + eval($_GET['c']); websec.fr/level31/ findings 3→4 (+websec-level31-open-basedir-eval-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level33-unserialize-destruct-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level33/source.php confirms unserialize($_POST[...]) into class B __destruct with Almost there? comment; websec.fr/level33/ findings 2→3 (+websec-level33-unserialize-destruct-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-verify-otp-bruteforce-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopVerifyOtpBruteforceRouteLiveOracle fires on /reset-password when POST /verify-otp accepts rapid guesses without HTTP 429 (PWN-015); pwnshop.ctfsecurity.com/reset-password findings 48→49 (+pwnshop-verify-otp-bruteforce-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
     }
   ]
 }

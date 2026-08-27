@@ -1821,7 +1821,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecPhpUnserializeDestructChallengeEvidence",
   "websecLevel30PhpUnserializeDestructRouteLiveOracle",
   "clientSideWebsecPhpUnserializeBlindDestructChallengeEvidence",
+  "websecLevel33UnserializeDestructRouteLiveOracle",
   "clientSideWebsecOpenBasedirEvalChallengeEvidence",
+  "websecLevel31OpenBasedirEvalRouteLiveOracle",
   "clientSideWebsecDynamicFunctionCallChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
   "clientSideRootMeChallengeEvidence",
@@ -2074,6 +2076,7 @@ const DEEP_RULES = new Set<string>([
   "pwnshopMassAssignmentAdminLiveOracle",
   "pwnshopOpenRedirectRegisterLiveOracle",
   "pwnshopVerifyOtpBruteforceLiveOracle",
+  "pwnshopVerifyOtpBruteforceRouteLiveOracle",
   "pwnshopOtpNotInvalidatedLiveOracle",
   "pwnshopOtpNotInvalidatedRouteLiveOracle",
   "pwnshopMailInboxIdorLiveOracle",
@@ -11828,6 +11831,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           p.slug === "client-side-websec-php-unserialize-destruct-challenge-evidence")
       )
         return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level31(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level31-") ||
+          p.slug === "client-side-websec-open-basedir-eval-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level33(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level33-") ||
+          p.slug === "client-side-websec-php-unserialize-blind-destruct-challenge-evidence")
+      )
+        return -3;
       if (/compass-demo\.com/i.test(origin) && p.slug.startsWith("compass-demo-")) return -2;
       if (
         /compass-demo\.com/i.test(origin) &&
@@ -12124,6 +12141,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:reset-password|forgot-password|verify-otp|login)\b/i.test(targetInput) &&
         (p.slug.startsWith("pwnshop-otp-not-invalidated") ||
+          p.slug.startsWith("pwnshop-verify-otp-bruteforce") ||
           p.slug === "pwnshop-verify-otp-bruteforce-live-oracle")
       )
         return -4;
@@ -13591,6 +13609,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:reset-password|forgot-password|login|verify-otp)\b/i.test(targetInput) &&
         (p.slug.startsWith("pwnshop-otp-not-invalidated") ||
+          p.slug.startsWith("pwnshop-verify-otp-bruteforce") ||
           p.slug === "pwnshop-verify-otp-bruteforce-live-oracle")
       )
         return -4;
@@ -13863,6 +13882,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:reset-password|verify-otp|forgot-password)\b/i.test(targetInput) &&
         (p.slug.startsWith("pwnshop-otp-not-invalidated") ||
+          p.slug.startsWith("pwnshop-verify-otp-bruteforce") ||
           p.slug === "pwnshop-verify-otp-bruteforce-live-oracle")
       )
         return -4;
