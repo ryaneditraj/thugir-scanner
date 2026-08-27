@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-27T15:15:00.000Z",
+  "updated_at": "2026-08-27T15:20:46.668Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2777,
-  "total_findings": 28024,
+  "total_sites_scanned": 2778,
+  "total_findings": 28073,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1981,
   "discovery_findings": 23712,
-  "improvements_shipped": 1227,
-  "last_run": "2026-08-27T15:15:00.000Z",
+  "improvements_shipped": 1228,
+  "last_run": "2026-08-27T15:20:46.668Z",
   "last_run_summary": {
     "hour_utc": "15",
     "benchmark": {
@@ -48,7 +48,7 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (48 findings, 37 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (48 findings, 37 juice-shop live oracles); juiceShopResendKeyLiveOracle corpus-confirmed fallback added — secret-resend slug still absent (canonical re_ key removed from social feeds)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
@@ -56,7 +56,7 @@
       "urls_scanned": 8,
       "findings": 232,
       "focus": "vAPI user/videos BOLA + duck-store admin/users BFLA + pwnshop chat prompt-injection + brokencrystals LDAP + wrongsecrets challenge-60",
-      "improvements_shipped_this_run": 0
+      "improvements_shipped_this_run": 1
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 37 live oracles) — full rich pass",
@@ -68,9 +68,8 @@
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via juice-shop-leaked-api-key + juice-shop-iac-terraform-tls-key-live-oracle)",
-      "duck-store.escape.tech/testimonials: stored-xss-route-live-oracle absent on direct /testimonials page",
-      "duck-store.escape.tech/api/v1/users/: user enumeration route oracle still absent on direct GET /api/v1/users/"
+      "secret-resend slug still absent — no canonical re_<8>_<24> key in current Juice Shop social corpus (719KB Bluesky/Mastodon/Reddit fetched; key likely revoked post-GitHub secret scanner)",
+      "juice-shop-resend-key-live-oracle corpus-confirmed fallback ships when feeds contain canonical keys but api.resend.com validation fails"
     ]
   },
   "discovery_highlights": {

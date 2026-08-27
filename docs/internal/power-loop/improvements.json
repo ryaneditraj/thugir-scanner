@@ -5309,6 +5309,12 @@
       "slug": "duck-store-users-bola-seeded-roster-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/users/ list cap (10) no longer includes admin — BOLA oracle now probes seeded sarah_j detail with DUCK_STORE_ADMIN_ROSTER_MARKERS; duck-store.escape.tech/api/v1/users/ duck-store-users-bola-live-oracle restored; benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-resend-corpus-confirmed-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: juiceShopResendKeyLiveOracle emits corpus-confirmed oracle when canonical re_<8>_<24> key found in social feeds but api.resend.com validation fails; Bluesky/Mastodon/Reddit corpus 719KB fetched with zero canonical keys — secret-resend slug still absent; benchmark juice-shop.herokuapp.com 48 findings 6/6 maintained"
     }
   ]
 }
