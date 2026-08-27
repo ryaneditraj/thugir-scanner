@@ -12228,6 +12228,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/api\/transfer\b/i.test(targetInput) &&
+        p.slug.startsWith("fauxbank-")
+      )
+        return -3;
+      if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/auth\/admin\/login\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-admin-login")
