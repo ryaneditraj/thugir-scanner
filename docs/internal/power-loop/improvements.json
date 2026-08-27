@@ -5291,6 +5291,24 @@
       "slug": "vulnbank-virtual-cards-route-path-extension",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: vulnbankVirtualCardsBolaRouteLiveOracle only matched /api/virtual-cards but SPA route is /virtual-cards; user B can toggle-freeze user A's card without ownership check; vulnbank.org/virtual-cards findings 27→29 (+vulnbank-virtual-cards-bola-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-users-enumeration-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/users/ returns 10 username+UUID rows without auth (sarah_j,david_j,emma_n,…); duck-store.escape.tech/api/v1/users/ findings 35 (+duck-store-users-enumeration-live-oracle +duck-store-users-enumeration-route-live-oracle +duck-store-users-bola-live-oracle +duck-store-users-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-page-stored-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/testimonials/ stores <img onerror> canary served back via GET list; duck-store.escape.tech/testimonials findings 37 (+duck-store-testimonials-page-stored-xss-route-live-oracle +duck-store-testimonials-stored-xss-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-users-bola-seeded-roster-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/users/ list cap (10) no longer includes admin — BOLA oracle now probes seeded sarah_j detail with DUCK_STORE_ADMIN_ROSTER_MARKERS; duck-store.escape.tech/api/v1/users/ duck-store-users-bola-live-oracle restored; benchmark juice-shop 49 findings 6/6 maintained"
     }
   ]
 }
