@@ -5357,6 +5357,18 @@
       "slug": "bingoctf-auth-gated-ctf-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bingoctf.vercel.app homepage documents Capture The Flag playground; unauthenticated GET /api/problems?page=1 returns {\"error\":{}}; /authentication exposes Sign in/Sign up; bingoctf.vercel.app/ findings 3→5 (+bingoctf-auth-gated-ctf-live-oracle +bingoctf-auth-gated-ctf-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-spa-route-extensions",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isDuckStoreTestimonialsPageRoute() extends stored-xss/put-bola/unauth-put/bola route matchers to /testimonials SPA path (previously only /api/v1/testimonials/*); duck-store.escape.tech/testimonials findings 36→38 (+duck-store-testimonials-put-bola-route-live-oracle +unauth-put-route); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-users-api-hub-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for duck-store-users-* when scanning /api/v1/users/ — GET lists admin+users and GET /api/v1/users/{uuid} returns admin@duck-store.escape role:admin without auth; duck-store.escape.tech/api/v1/users/ findings 30→35 (+duck-store-users-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
     }
   ]
 }
