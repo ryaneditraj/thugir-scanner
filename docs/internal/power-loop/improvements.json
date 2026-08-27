@@ -5261,6 +5261,18 @@
       "slug": "pwnshop-product-api-live-catalog-pivot",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: pwnshopProductApiIdorRouteLiveOracle pivots /api/v1/products/:id 404 to live GET /product/:id with review XSS (PWN-011) + search SQLi (PWN-010) before corpus fallback; pwnshop.ctfsecurity.com/api/v1/products/1 route note upgraded from registry corpus to live chain; benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api8-sqli-login-403-tolerance",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://vapi.tools.escape.tech/vapi/api8/user/login returns HTTP 403 with {\"success\":\"true\",\"authkey\":\"oWsZ8vWN...\"} then /api8/user/secret dumps flag{api8_*}; prior oracle rejected status>=400; vapi.tools.escape.tech/ findings 17→18 (+vapi-api8-sqli-login-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-resend-social-feed-fetch-when-empty",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: appendJuiceShopConfigCorpus skipped Bluesky/Mastodon/Reddit feed fetch when config JSON contained blueSkyUrl/mastodonUrl field names without embedded keys; now fetches feeds when extractJuiceShopResendKeys(corpus).length===0; benchmark juice-shop.herokuapp.com 49 findings 6/6 maintained (secret-resend slug still absent — live Resend key not present in current social feeds)"
     }
   ]
 }
