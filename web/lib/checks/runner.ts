@@ -14297,6 +14297,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/users\/?$/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-users")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/testimonials\/?$/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-testimonials")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
         /\/(?:api\/v1\/)?admin\/stats\b/i.test(targetInput) &&
         p.slug.startsWith("duck-store-admin-stats")
       )
