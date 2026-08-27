@@ -2385,6 +2385,7 @@ const DEEP_RULES = new Set<string>([
   "sqliVulnlabBlindTimeRouteLiveOracle",
   "xssVulnlabMxssLiveOracle",
   "xssVulnlabMxssRouteLiveOracle",
+  "xssVulnlabFilterRouteLiveOracle",
   "xssVulnlabCspBypassJsonpLiveOracle",
   "xssVulnlabCspBypassJsonpRouteLiveOracle",
   "sstiVulnlabSandboxedLiveOracle",
@@ -2512,6 +2513,8 @@ const DEEP_RULES = new Set<string>([
   "duckStoreMcpToolsRouteLiveOracle",
   "duckStoreMcpResourcesEnumerationLiveOracle",
   "duckStoreMcpResourcesRouteLiveOracle",
+  "duckStoreMcpInfoLiveOracle",
+  "duckStoreMcpInfoRouteLiveOracle",
   "duckStoreProductsFilterSqliLiveOracle",
   "duckStoreProductsFilterSqliRouteLiveOracle",
   "duckStoreCartNegativeQuantityLiveOracle",
@@ -2918,6 +2921,7 @@ const DEEP_RULES = new Set<string>([
   "vulnshopCartRouteLiveOracle",
   "vulnshopApplyDiscountPaymentManipulationLiveOracle",
   "vulnshopApplyDiscountRouteLiveOracle",
+  "vulnshopCheckoutRouteLiveOracle",
   "vulnshopWalletAddFundsRaceLiveOracle",
   "vulnshopWalletAddFundsRouteLiveOracle",
   "vulnshopUpdatePriceManipulationLiveOracle",
@@ -10683,6 +10687,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://xss.vulnlab.dev/dom/",
         "https://xss.vulnlab.dev/stored/",
         "https://xss.vulnlab.dev/mxss/",
+        "https://xss.vulnlab.dev/filter/",
         "https://xss.vulnlab.dev/csp-bypass/jsonp/"
       ]
     : [];
@@ -11729,15 +11734,28 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /xss\.vulnlab\.dev/i.test(origin) &&
-        /\/(?:mxss|mutation)\b/i.test(targetInput) &&
+        /\/(?:mxss|mutation|filter)\b/i.test(targetInput) &&
         p.slug.startsWith("xss-vulnlab-mxss") &&
         /-route-/.test(p.slug)
       )
         return -8;
       if (
         /xss\.vulnlab\.dev/i.test(origin) &&
-        /\/(?:mxss|mutation)\b/i.test(targetInput) &&
+        /\/(?:mxss|mutation|filter)\b/i.test(targetInput) &&
         p.slug.startsWith("xss-vulnlab-mxss")
+      )
+        return -4;
+      if (
+        /xss\.vulnlab\.dev/i.test(origin) &&
+        /\/filter\b/i.test(targetInput) &&
+        p.slug.startsWith("xss-vulnlab-filter") &&
+        /-route-/.test(p.slug)
+      )
+        return -8;
+      if (
+        /xss\.vulnlab\.dev/i.test(origin) &&
+        /\/filter\b/i.test(targetInput) &&
+        p.slug.startsWith("xss-vulnlab-filter")
       )
         return -4;
       if (
@@ -14163,6 +14181,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/mcp\/tools(?:\/|$)/i.test(targetInput) &&
         !/\/mcp\/tools\/list_coupons/i.test(targetInput) &&
         p.slug.startsWith("duck-store-mcp-tools")
+      )
+        return -3;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/mcp\/info(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-mcp-info")
       )
         return -3;
       if (

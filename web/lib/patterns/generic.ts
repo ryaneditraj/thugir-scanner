@@ -25382,6 +25382,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-checkout-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /api/checkout payment manipulation route live oracle",
+    description:
+      "When scanning /api/checkout, live Railway backend probe or README oracle #33 documents checkout payment manipulation via stacked discounts on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/checkout documents checkout payment manipulation training modules.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopCheckoutRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Re-validate checkout totals server-side on VulnShop — intentional training software.",
+      steps: [
+        "Reject stacked discount codes that exceed 100% off.",
+        "Recalculate checkout totals server-side on every discount application.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/checkout route documents payment manipulation. Show route-specific checkout validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-wallet-add-funds-race-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -32832,6 +32858,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /mxss route reparses regex-sanitized markup via innerHTML. Show route-specific mXSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-vulnlab-filter-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "xss.vulnlab.dev /filter route XSS filter-bypass live oracle",
+    description:
+      "When scanning catalog alias /filter/, the live mutation XSS lab at /mxss/ confirms regex sanitizer bypass via innerHTML round-trip — route-specific filter-bypass oracle.",
+    impactOneline:
+      "Route-specific filter-bypass oracle confirms sanitizer defeat without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssVulnlabFilterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Avoid innerHTML round-trips after sanitization — xss.vulnlab.dev is intentional training software.",
+      steps: [
+        "Use DOMParser or trusted Types instead of regex HTML sanitizers.",
+        "Never reassign sanitized markup through innerHTML on a live DOM node.",
+        "Run XSS training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /filter route alias maps to the /mxss regex-sanitizer bypass lab. Show route-specific mXSS remediation.",
     version: 1,
     enabled: true
   },
@@ -60423,6 +60475,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /mcp/resources route scan confirms unauthenticated MCP resources/list. Show route-specific MCP remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-mcp-info-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store MCP server info live oracle",
+    description:
+      "POST /mcp/info initialize returns unauthenticated MCP server metadata (serverInfo.name duck-store) without session — the Escape Duck Store MCP gateway info disclosure oracle.",
+    impactOneline:
+      "Unauthenticated MCP initialize responses expose server identity and protocol capabilities to anonymous clients.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreMcpInfoLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on MCP gateway initialize and restrict server metadata visibility.",
+      steps: [
+        "Gate MCP initialize behind session or API-key authentication.",
+        "Do not expose MCP serverInfo on anonymous gateway endpoints.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our MCP /mcp/info initialize endpoint exposes server metadata without auth. Show MCP gateway access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-mcp-info-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store MCP info route live oracle",
+    description:
+      "When scanning /mcp/info, unauthenticated MCP initialize JSON-RPC returns duck-store serverInfo without authentication — route-specific MCP info disclosure oracle.",
+    impactOneline:
+      "Route-specific scans should surface exposed MCP server metadata on /mcp/info paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreMcpInfoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict MCP initialize to authenticated clients.",
+      steps: [
+        "Require auth on /mcp/info initialize.",
+        "Filter sensitive server metadata from anonymous MCP responses.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /mcp/info route scan confirms unauthenticated MCP server metadata. Show route-specific MCP remediation.",
     version: 1,
     enabled: true
   },
