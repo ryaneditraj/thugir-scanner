@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T01:20:00.000Z",
+  "updated_at": "2026-08-28T02:12:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/weak-key/login",
+      "source": "NeuraLegion/brokencrystals swagger — JWT weak-secret brute-force oracle POST /api/auth/jwt/weak-key/login (02 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/kid-sql/login",
+      "source": "NeuraLegion/brokencrystals swagger — JWT KID SQL injection oracle POST /api/auth/jwt/kid-sql/login (02 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/coupons/validate?code=INTERNAL100",
+      "source": "Escape Duck Store — 100% discount coupon validation oracle GET /api/v1/coupons/validate (improvements.json duck-store-coupons-validate; 02 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/coupons/apply",
+      "source": "Escape Duck Store — coupon apply business-logic oracle POST /api/v1/coupons/apply (duck-store.escape.tech/vulnerabilities; 02 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/orders",
+      "source": "PortSwigger ginandjuice.shop — order history BOLA/IDOR route oracle GET /my-account/orders (02 UTC power-loop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/mcp",
       "source": "NeuraLegion/brokencrystals — MCP JSON-RPC tool-calling oracle with XXE/search_users/metadata leaks (README /api/mcp; 01 UTC power-loop)",
