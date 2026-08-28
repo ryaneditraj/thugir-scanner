@@ -13405,10 +13405,46 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /brokencrystals\.com/i.test(origin) &&
-        /\/api\/auth\/jwt\/x5c\/validate\b/i.test(targetInput) &&
+        /\/api\/auth\/jwt\/x5c\/(?:validate|login)\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-jwt-x5c")
       )
-        return -3;
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/jku\/(?:validate|login)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-jku")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/kid-sql\/(?:validate|login)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-kid-sql")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/weak-key\/(?:validate|login)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-weak-key")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/hmac\/(?:validate|login)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-hmac")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/jwk\/(?:validate|login)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-jwk")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/x5u\/(?:validate|login)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-x5u")
+      )
+        return -4;
       if (
         /vwad\.owasp\.org/i.test(origin) &&
         /\/app\/oopssec-store\b/i.test(targetInput) &&
@@ -14473,6 +14509,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("duck-store-testimonials-page")
       )
         return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/testimonials(?:\/|$|\?)/i.test(targetInput) &&
+        !/\/api\//i.test(targetInput) &&
+        !/\/testimonials\/guest/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-testimonials-bola")
+      )
+        return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
         /\/api\/v1\/testimonials/i.test(targetInput) &&

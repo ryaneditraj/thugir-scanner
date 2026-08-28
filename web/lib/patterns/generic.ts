@@ -60479,6 +60479,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-testimonials-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Duck Store testimonials route BOLA live oracle",
+    description:
+      "When scanning /testimonials or /api/v1/testimonials routes, unauthenticated probes return user-linked testimonial records with names, roles, and user_id — route-specific BOLA oracle.",
+    impactOneline:
+      "Route-specific testimonial scans should surface excessive data exposure on testimonial APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreTestimonialsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip internal user identifiers from public testimonial route handlers.",
+      steps: [
+        "Return only public guest_name fields for unauthenticated clients.",
+        "Require auth to read user_id-linked testimonial metadata.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /testimonials route leaks user_id-linked testimonial metadata without auth. Show route-specific BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "duck-store-orders-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",

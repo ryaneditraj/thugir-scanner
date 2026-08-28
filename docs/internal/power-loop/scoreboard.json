@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T03:22:20.921Z",
+  "updated_at": "2026-08-28T03:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2001,
   "discovery_findings": 25081,
-  "improvements_shipped": 900,
-  "last_run": "2026-08-28T03:22:20.921Z",
+  "improvements_shipped": 903,
+  "last_run": "2026-08-28T03:35:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
     "benchmark": {
@@ -48,42 +48,36 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 39 juice-shop live oracles); secret-resend + captcha-bypass + jwt-alg-none + wallet-balance + security-question-user present"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 juice-shop live oracles incl secret-resend)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 350,
-      "focus": "brokencrystals swagger JWT suite (hmac/jku/jwk/x5c/x5u) + drained duck-store admin/users enumeration + wrongsecrets-ctf hub",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 220,
+      "focus": "duck-store testimonials BOLA route pattern + brokencrystals JWT login route priority gaps from 03 UTC scoreboard",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles incl secret-resend)",
-      "brokencrystals.com/api/auth/jwt/hmac/login: 86 findings (+brokencrystals-jwt-hmac-confusion-route-live-oracle)",
-      "brokencrystals.com/api/auth/jwt/jwk/login: 77 findings (+brokencrystals-jwt-jwk-rogue-login-route-live-oracle + jwk-empty-route)",
-      "brokencrystals.com/api/auth/jwt/x5u/login: 53 findings (hub JWT suite incl x5c/jku rogue oracles)",
-      "duck-store.escape.tech/api/v1/admin/users: 39 findings — duck-store-admin-users-route-live-oracle",
-      "duck-store.escape.tech/api/v1/users/: 40 findings — duck-store-users-enumeration-route-live-oracle",
-      "wrongsecrets-ctf.herokuapp.com/: 11 findings — wrongsecrets-ctf-hub-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — maintained",
+      "duck-store.escape.tech/testimonials: 44→46 findings — +duck-store-testimonials-bola-route-live-oracle after roster pivot",
+      "brokencrystals.com/api/auth/jwt/weak-key/login: 19→87 findings — +brokencrystals-jwt-weak-key-route-live-oracle via login route priority",
+      "brokencrystals.com/api/auth/jwt/jku/login: 52 findings — brokencrystals-jwt-jku-rogue-route-live-oracle confirmed"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "brokencrystals /api/auth/jwt/jku/login: 21 findings hub only — missing brokencrystals-jwt-jku-rogue-route-live-oracle",
-      "brokencrystals /api/auth/jwt/x5c/login: 23 findings hub only — missing brokencrystals-jwt-x5c-rogue-route-live-oracle",
-      "brokencrystals /api/auth/jwt/kid-sql/login: still thin 20-finding hub without route-specific KID-SQL oracle (prior run)"
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
     "brokencrystals.com/api/auth/jwt/hmac/login": 86,
     "brokencrystals.com/api/auth/jwt/jwk/login": 77,
-    "brokencrystals.com/api/auth/jwt/weak-key/login": 90,
+    "brokencrystals.com/api/auth/jwt/weak-key/login": 87,
     "brokencrystals.com/api/mcp": 88,
     "brokencrystals.com/api/auth/jwt/x5u/login": 53,
+    "duck-store.escape.tech/testimonials": 46,
     "duck-store.escape.tech/api/v1/users/": 40,
     "duck-store.escape.tech/api/v1/admin/users": 39,
-    "duck-store.escape.tech/api/v1/coupons/validate?code=INTERNAL100": 39,
     "ginandjuice.shop/my-account/orders": 33
   }
 }

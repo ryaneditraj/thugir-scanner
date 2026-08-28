@@ -54982,16 +54982,16 @@ const duckStoreTestimonialsBolaLiveOracle: Rule = async (ctx) => {
     return NEGATIVE;
   }
   if (!Array.isArray(rows) || rows.length < 2) return NEGATIVE;
-  const featured = rows.find((r) => /CISO|DevOps|patricia/i.test(`${r.role || ""} ${r.name || ""}`));
-  if (!featured?.user?.username && !featured?.name) return NEGATIVE;
+  const linked = rows.find((r) => (r.user?.username || r.name) && r.content);
+  if (!linked?.user?.username && !linked?.name) return NEGATIVE;
   if (!/"user_id"\s*:/.test(doc.body) || !/"content"\s*:/.test(doc.body)) return NEGATIVE;
   return {
     fired: true,
-    confidence: featured.user?.username ? 0.92 : 0.9,
+    confidence: linked.user?.username ? 0.92 : 0.9,
     evidence: {
       url,
       rowCount: rows.length,
-      sampleUser: featured.user?.username || featured.name,
+      sampleUser: linked.user?.username || linked.name,
       snippet: doc.body.slice(0, 200).trim(),
       note: "Duck Store GET /api/v1/testimonials returns user-linked testimonial records with names and roles without auth — BOLA/information disclosure oracle"
     }
