@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T11:15:00.000Z",
+  "updated_at": "2026-08-28T12:17:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vulnbank.org/upload_profile_picture_url",
+      "source": "Commando-X/vuln-bank README — SSRF oracle POST upload_profile_picture_url image_url param chains to /internal/secret (web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/files?path=test",
+      "source": "NeuraLegion/brokencrystals README — LFI oracle GET /api/files path param (web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/email",
+      "source": "NeuraLegion/brokencrystals README — email header injection oracle POST /api/email (web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/community/api/v2/community/posts/recent",
+      "source": "APIsec crAPI OWASPLA 2025 guide — community posts excessive data exposure oracle GET /community/api/v2/community/posts/recent (web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/api/feedback/submit",
+      "source": "PortSwigger ginandjuice.shop vulnerabilities catalog — stored XSS / feedback submission oracle POST /api/feedback/submit (web search 12 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/logger",
       "source": "PortSwigger ginandjuice.shop vulnerabilities catalog — blind OAST interaction oracle POST /logger (searchLogger.js telemetry sink; web search 11 UTC)",
