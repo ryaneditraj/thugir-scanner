@@ -45870,6 +45870,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "crapi-convert-video-command-injection-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "crAPI convert_video command injection live oracle",
+    description:
+      "PUT /identity/api/v2/user/videos/{id} accepts conversion_params mass assignment and GET /identity/api/v2/user/videos/convert_video?video_id={id} reflects shell output or discloses the internal convert endpoint — crAPI command injection chain oracle (Challenge 7).",
+    impactOneline:
+      "User-controlled conversion_params passed to ffmpeg-style shell commands enable remote code execution when the convert endpoint is triggered.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiConvertVideoCommandInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — never pass user input to shell commands and block internal endpoints from external access.",
+      steps: [
+        "Use allow-listed codec parameters instead of shell string concatenation.",
+        "Restrict convert_video to internal service mesh only.",
+        "Strip conversion_params from user-writable video properties."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI convert_video endpoint chains conversion_params mass assignment to OS command execution. Show safe parameterization and internal-only endpoint hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-convert-video-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "crAPI /user/videos/convert_video command injection route live oracle",
+    description:
+      "When scanning /identity/api/v2/user/videos/convert_video, conversion_params mass assignment enables command injection or discloses internal endpoint_url — route-specific crAPI Challenge 7 oracle.",
+    impactOneline:
+      "Route scans on convert_video should confirm conversion_params command injection chain or internal endpoint disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiConvertVideoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — never pass user input to shell commands and block internal endpoints from external access.",
+      steps: [
+        "Use allow-listed codec parameters instead of shell string concatenation.",
+        "Restrict convert_video to internal service mesh only.",
+        "Strip conversion_params from user-writable video properties."
+      ]
+    },
+    fixPrompt:
+      "Our /identity/api/v2/user/videos/convert_video route scan confirms conversion_params command injection chain. Show route-specific shell hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-admin-videos-bfla-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "crAPI admin videos BFLA live oracle",
+    description:
+      "DELETE /identity/api/v2/admin/videos/{id} succeeds for a regular user JWT — crAPI broken function level authorization oracle (API5 / Challenge 7).",
+    impactOneline:
+      "Admin-only video deletion reachable by non-admin users lets attackers delete other users' content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiAdminVideosBflaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — enforce admin role checks on all /admin/* endpoints.",
+      steps: [
+        "Require admin role claim on DELETE /identity/api/v2/admin/videos/{id}.",
+        "Return 403 for non-admin JWTs before processing delete.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI DELETE /identity/api/v2/admin/videos/{id} succeeds for regular users. Show BFLA remediation for admin video endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-admin-videos-bfla-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "crAPI /admin/videos BFLA route live oracle",
+    description:
+      "When scanning /identity/api/v2/admin/videos/{id}, DELETE succeeds for regular user JWT — route-specific crAPI BFLA oracle (API5 / Challenge 7).",
+    impactOneline:
+      "Route scans on admin video endpoints should confirm non-admin users cannot delete videos.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiAdminVideosBflaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — enforce admin role checks on all /admin/* endpoints.",
+      steps: [
+        "Require admin role claim on DELETE /identity/api/v2/admin/videos/{id}.",
+        "Return 403 for non-admin JWTs before processing delete.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /identity/api/v2/admin/videos route scan confirms BFLA via admin video delete. Show route-specific authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi-signup-open-registration-live-oracle",
     platform: "generic",
     category: "Broken authentication",
