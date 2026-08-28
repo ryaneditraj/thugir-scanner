@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-convert-video-command-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeCrapiConvertVideoCommandInjection PUT conversion_params then GET /identity/api/v2/user/videos/convert_video?video_id= reflects shell output or internal endpoint_url; crapi2.apisec.ai/identity/api/v2/user/videos/convert_video findings 10→12 (+crapi-convert-video-command-injection-live-oracle +crapi-convert-video-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-admin-videos-bfla-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeCrapiAdminVideosBfla DELETE /identity/api/v2/admin/videos/{id} succeeds for regular user JWT; crapi2.apisec.ai/identity/api/v2/admin/videos/1 findings 9→11 (+crapi-admin-videos-bfla-route-live-oracle +crapi-convert-video-command-injection-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-convert-video-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for crapi-convert-video* on /convert_video and crapi-admin-videos* on /admin/videos routes; benchmark juice-shop 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com",
       "slug": "brokencrystals-search-users-route-live-oracle",
       "status": "shipped",

@@ -2702,6 +2702,10 @@ const DEEP_RULES = new Set<string>([
   "crapiVehicleLocationRouteLiveOracle",
   "crapiUserVideosBolaLiveOracle",
   "crapiUserVideosBolaRouteLiveOracle",
+  "crapiConvertVideoCommandInjectionLiveOracle",
+  "crapiConvertVideoRouteLiveOracle",
+  "crapiAdminVideosBflaLiveOracle",
+  "crapiAdminVideosBflaRouteLiveOracle",
   "crapiUserVehiclesRouteLiveOracle",
   "crapiCommunityPostsRouteLiveOracle",
   "crapiContactMechanicSsrfLiveOracle",
@@ -13448,6 +13452,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
         /\/user\/videos\b/i.test(targetInput) &&
         p.slug.startsWith("crapi-user-videos")
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/convert_video\b/i.test(targetInput) &&
+        p.slug.startsWith("crapi-convert-video")
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/admin\/videos\b/i.test(targetInput) &&
+        p.slug.startsWith("crapi-admin-videos")
       )
         return -3;
       if (

