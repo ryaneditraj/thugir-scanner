@@ -5531,6 +5531,24 @@
       "slug": "juice-shop-demo-host-escape-mirror-warmup",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: warmupJuiceShopHome falls back to juice-shop.demo.escape.tech SPA when demo.owasp-juice.shop returns Heroku Application Error 503; demo.owasp-juice.shop/rest/chatbot/respond findings 0→3 (+juice-shop-chatbot-respond-route-live-oracle via mirror); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-alg-none-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsJwtAlgNoneRouteLiveOracle matches /api/auth/jwt/rsa/signature/validate; GET with alg:none JWT returns {\"secret\":\"this is our secret\"}; brokencrystals.com/api/auth/jwt/rsa/signature/validate findings 86→16 thin hub-only pass → +brokencrystals-jwt-alg-none-route-live-oracle on validate path; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-oracle-signing-key-prime",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: primeBrokencrystalsJwtSigningKeys prefetches NeuraLegion jwk.key.pem before x5u/jku/x5c rogue JWT builders; brokencrystals.com/api/auth/jwt/x5u/validate findings 17→77 (+brokencrystals-jwt-x5u-rogue-route-live-oracle first route hit); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-api-crawl-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsJwtApiSeeds adds JWT validate hub paths + /render.dot + /api/mcp when scanning API-only /api/auth/jwt/* routes; restores hub JWT oracles on thin API-only discovery scans; benchmark juice-shop 50 findings 6/6 maintained"
     }
   ]
 }

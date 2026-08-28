@@ -37,6 +37,7 @@ import {
   type RuleContext
 } from "./registry";
 import { ProbeCache } from "./probe-cache";
+import { primeBrokencrystalsJwtSigningKeys } from "./helpers";
 import { fetchJuiceShopSocialFeedBodies } from "./juice-shop-social";
 import { fetchScriptsBatched, fetchPagesBatched, expandGithackModuleImports } from "./fetch-scripts";
 
@@ -569,6 +570,10 @@ async function primeBrokencrystalsRouteOracleProbes(
     if (action === "login") {
       paths.push(`/api/auth/jwt/${kind}/validate`);
     }
+    await primeBrokencrystalsJwtSigningKeys();
+  }
+  if (/\/api\/auth\/jwt\/rsa\/signature\/validate\b/i.test(scanUrl)) {
+    paths.push("/api/auth/jwt/rsa/signature/validate");
   }
   if (/\/api\/(?:get_count|get_metadata)\b/i.test(scanUrl)) {
     paths.push("/api/mcp");
@@ -3188,6 +3193,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsMcpGetConfigRouteLiveOracle",
   "brokencrystalsJwtAlgNoneLiveOracle",
   "brokencrystalsJwtRouteLiveOracle",
+  "brokencrystalsJwtAlgNoneRouteLiveOracle",
   "brokencrystalsJwtWeakKeyLiveOracle",
   "brokencrystalsJwtWeakKeyRouteLiveOracle",
   "brokencrystalsJwtKidSqlLiveOracle",
@@ -8812,6 +8818,35 @@ function extractBrokencrystalsLabSeeds(html: string, pageUrl: string): string[] 
   return [...out];
 }
 
+/** Seed JWT lab validate/login paths when deep-scanning a Broken Crystals API-only JWT route. */
+function brokencrystalsJwtApiSeeds(pageUrl: string): string[] {
+  if (!/brokencrystals\.com/i.test(pageUrl) || !/\/api\/auth\/jwt\//i.test(pageUrl)) {
+    return [];
+  }
+  const pageOrigin = new URL(pageUrl).origin;
+  const paths = [
+    "/api/auth/jwt/rsa/signature/validate",
+    "/api/auth/jwt/x5u/validate",
+    "/api/auth/jwt/jku/validate",
+    "/api/auth/jwt/x5c/validate",
+    "/api/auth/jwt/jwk/validate",
+    "/api/auth/jwt/hmac/validate",
+    "/api/auth/jwt/kid-sql/validate",
+    "/api/auth/jwt/weak-key/validate",
+    "/render.dot",
+    "/api/mcp"
+  ];
+  const out = new Set<string>();
+  for (const p of paths) {
+    try {
+      out.add(new URL(p, pageOrigin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** FauxBank OWASP banking pentest training lab — seed disclaimer + API oracle paths. */
 function extractFauxbankLabSeeds(html: string, pageUrl: string): string[] {
   let host = "";
@@ -10207,6 +10242,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ginAndJuiceVulnSeeds = extractGinAndJuiceVulnSeeds(home.body, home.finalUrl);
   const ginAndJuiceBlogPostSeeds = extractGinAndJuiceBlogPostSeeds(home.body, home.finalUrl);
   const brokencrystalsLabSeeds = extractBrokencrystalsLabSeeds(home.body, home.finalUrl);
+  const brokencrystalsJwtSeeds = brokencrystalsJwtApiSeeds(home.finalUrl || effectiveTargetInput);
   const fauxbankLabSeeds = extractFauxbankLabSeeds(home.body, home.finalUrl);
   const jwtArsenalExploitSeeds = extractJwtArsenalExploitSeeds(home.body, home.finalUrl);
   const shieldDarkPatternSeeds = extractShieldDarkPatternSeeds(home.body, home.finalUrl);
@@ -11144,6 +11180,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ginAndJuiceVulnSeeds,
       ...ginAndJuiceBlogPostSeeds,
       ...brokencrystalsLabSeeds,
+      ...brokencrystalsJwtSeeds,
       ...fauxbankLabSeeds,
       ...jwtArsenalExploitSeeds,
       ...shieldDarkPatternSeeds,
@@ -13444,6 +13481,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/auth\/jwt\/jku\/(?:validate|login)\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-jwt-jku")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/rsa\/signature\/validate\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-jwt-alg-none") ||
+          p.slug.startsWith("brokencrystals-jwt-route"))
       )
         return -4;
       if (
