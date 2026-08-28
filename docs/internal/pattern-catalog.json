@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-28T20:20:40.068Z",
-  "total": 2792,
-  "uniqueSlugs": 2784,
+  "generatedAt": "2026-08-28T21:38:50.764Z",
+  "total": 2796,
+  "uniqueSlugs": 2788,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2774,
+    "generic": 2778,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2707,
+    "deep": 2711,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 580,
+    "Broken access control": 582,
     "Exposed secret": 115,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -35,7 +35,7 @@
     "Server-side request forgery": 93,
     "Sensitive data exposure": 76,
     "AI security": 95,
-    "Cross-site request forgery": 8,
+    "Cross-site request forgery": 10,
     "Business logic": 26,
     "Authentication bypass": 3,
     "Insecure file upload": 2,
@@ -1770,6 +1770,8 @@
     "ist-edu-sqli-route-live-oracle",
     "ist-edu-ssrf-redirect-route-live-oracle",
     "ist-edu-ssti-lab-route-live-oracle",
+    "javaseclab-csrf-vul-live-oracle",
+    "javaseclab-csrf-vul-route-live-oracle",
     "javaseclab-druid-basic-json-route-live-oracle",
     "javaseclab-horizontal-idor-live-oracle",
     "javaseclab-horizontal-idor-route-live-oracle",
@@ -1783,6 +1785,8 @@
     "javaseclab-ssrf-vul-route-live-oracle",
     "javaseclab-ssti-vul1-live-oracle",
     "javaseclab-ssti-vul1-route-live-oracle",
+    "javaseclab-xff-vul2-live-oracle",
+    "javaseclab-xff-vul2-route-live-oracle",
     "javaseclab-xpath-vul-live-oracle",
     "javaseclab-xpath-vul-route-live-oracle",
     "javaseclab-xxe-vul1-live-oracle",

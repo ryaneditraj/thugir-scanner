@@ -123,6 +123,12 @@ function ginAndJuiceReflexionSuppressed(ctx: PowerCtx): boolean {
   return /\/api(?:\/|$)/i.test(pageUrl);
 }
 
+/** OopsSec Store GitHub Pages walkthroughs are static HTML — no server-side template engine. */
+function oopssecGitHubPagesReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /koadt\.github\.io\/oss-oopssec-store/i.test(pageUrl);
+}
+
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
 
 // --- Directory wordlist (compact subset) ------------------------------------
@@ -313,6 +319,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (chimeraAtlascrewReflexionSuppressed(ctx)) return NEGATIVE;
   if (securebankBlogReflexionSuppressed(ctx)) return NEGATIVE;
   if (ginAndJuiceReflexionSuppressed(ctx)) return NEGATIVE;
+  if (oopssecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 

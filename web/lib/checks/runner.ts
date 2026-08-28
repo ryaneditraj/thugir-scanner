@@ -2058,6 +2058,10 @@ const DEEP_RULES = new Set<string>([
   "javaSecLabXPathVulRouteLiveOracle",
   "javaSecLabHorizontalIdorLiveOracle",
   "javaSecLabHorizontalIdorRouteLiveOracle",
+  "javaSecLabCsrfVulLiveOracle",
+  "javaSecLabCsrfVulRouteLiveOracle",
+  "javaSecLabXffVul2LiveOracle",
+  "javaSecLabXffVul2RouteLiveOracle",
   "javaSecLabDruidBasicJsonRouteLiveOracle",
   "clientSidePwnedlabsEvidence",
   "clientSidePwnedlabsGitSecretsEvidence",
@@ -4602,7 +4606,9 @@ function extractJavaSecLabSeeds(html: string, pageUrl: string): string[] {
     "/spel/vul",
     "/ssti/vul1",
     "/other/xpath/vul",
-    "/logic/idor/horizontal/getUserInfo"
+    "/logic/idor/horizontal/getUserInfo",
+    "/csrf/vul",
+    "/other/xff/vul2"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -14261,6 +14267,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /whgojp\.top/i.test(origin) &&
         /\/logic\/idor\/horizontal\/getUserInfo\b/i.test(targetInput) &&
         p.slug.startsWith("javaseclab-horizontal-idor")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/csrf\/vul\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-csrf-vul")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/other\/xff\/vul2\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-xff-vul2")
       )
         return -3;
       if (

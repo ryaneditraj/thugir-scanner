@@ -23977,6 +23977,8 @@ GET /spel/vul?ex=100-1 — Spring Expression Language arithmetic evaluation
 GET /ssti/vul1?para=__${7*7}__::.x — Thymeleaf return-controlled SSTI
 GET /other/xpath/vul?username=admin&password=' or '1'='1 — XPath authentication bypass injection
 GET /logic/idor/horizontal/getUserInfo?username=123 — horizontal IDOR on user profile API
+GET /csrf/vul?receiver=zhangsan&amount=100 — GET state-changing CSRF transfer without anti-CSRF token
+GET /other/xff/vul2?xff=true — trusts X-Forwarded-For header for IP-based access control bypass
 `;
 
 const JAVASECLAB_XSS_REFLECTION_PROBE = "thugir-javaseclab-xss-reflect-probe";
@@ -24396,6 +24398,125 @@ const javaSecLabHorizontalIdorRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "GET /logic/idor/horizontal/getUserInfo?username=123 — horizontal IDOR on user profile API",
       note: "JavaSecLab /logic/idor/horizontal/getUserInfo route scan — horizontal IDOR training module documented in wiki (auth-gated public demo)"
+    }
+  };
+};
+
+const javaSecLabCsrfVulLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/csrf/vul?receiver=zhangsan&amount=100", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 16384, timeoutMs: 15000, redirect: "manual" });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /zhangsan|receiver|amount|转账|transfer/i.test(doc.body) &&
+    !/JavaSeclab平台登录|layui\.layer/i.test(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        probeUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "JavaSecLab GET /csrf/vul?receiver=zhangsan&amount=100 performs state-changing transfer relying only on session cookie — CSRF training oracle"
+      }
+    };
+  }
+  if (doc.status === 302 && /\/login/i.test(doc.headers?.location || "")) {
+    return {
+      fired: true,
+      confidence: 0.88,
+      evidence: {
+        probeUrl,
+        snippet: `HTTP 302 Location: ${doc.headers?.location || "/login"}`,
+        note: "JavaSecLab GET /csrf/vul redirects unauthenticated users to login — auth-gated CSRF transfer module documented in wiki"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabCsrfVulRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/csrf\/vul\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabCsrfVulLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "JavaSecLab /csrf/vul route scan — GET state-changing transfer without anti-CSRF token — route-specific CSRF training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/csrf\/vul|CSRF|cross-site request forgery/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /csrf/vul?receiver=zhangsan&amount=100 — GET state-changing CSRF transfer",
+      note: "JavaSecLab /csrf/vul route scan — CSRF training module documented in wiki (auth-gated public demo)"
+    }
+  };
+};
+
+const javaSecLabXffVul2LiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/other/xff/vul2?xff=true", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { "X-Forwarded-For": "8.8.8.8" }
+  });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /8\.8\.8\.8/i.test(doc.body) &&
+    /username|password|admin|敏感|only For 8\.8\.8\.8/i.test(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        probeUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "JavaSecLab GET /other/xff/vul2?xff=true trusts X-Forwarded-For: 8.8.8.8 and leaks credentials — XFF IP spoofing training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabXffVul2RouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/other\/xff\/vul2\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabXffVul2LiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "JavaSecLab /other/xff/vul2 route scan — X-Forwarded-For header spoofing bypasses IP access control — route-specific XFF training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/other\/xff\/vul2|X-Forwarded-For|XFF/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /other/xff/vul2?xff=true with X-Forwarded-For: 8.8.8.8 — IP spoofing access control bypass",
+      note: "JavaSecLab /other/xff/vul2 route scan — XFF spoofing training module documented in wiki (auth-gated public demo)"
     }
   };
 };
@@ -97460,6 +97581,10 @@ export const RULES: Record<string, Rule> = {
   javaSecLabXPathVulRouteLiveOracle,
   javaSecLabHorizontalIdorLiveOracle,
   javaSecLabHorizontalIdorRouteLiveOracle,
+  javaSecLabCsrfVulLiveOracle,
+  javaSecLabCsrfVulRouteLiveOracle,
+  javaSecLabXffVul2LiveOracle,
+  javaSecLabXffVul2RouteLiveOracle,
   clientSidePwnedlabsEvidence,
   clientSidePwnedlabsGitSecretsEvidence,
   clientSideRedtigerHackitEvidence,
