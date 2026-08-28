@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T21:15:00.000Z",
+  "updated_at": "2026-08-28T22:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/api2/user/1",
+      "source": "roottusk/vAPI Escape-hosted — API2 broken authentication BOLA oracle GET /vapi/api2/user/{id} (OWASP API Top 10; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/api8/user/login",
+      "source": "roottusk/vAPI Escape-hosted — API8 SQLi login oracle POST /vapi/api8/user/login (improvements.json vapi-api8-sqli-login-live-oracle; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/workshop/api/shop/orders/1",
+      "source": "roottusk/vAPI Escape-hosted — workshop BOLA order oracle GET /workshop/api/shop/orders/{id} (vapi.tools not crAPI path; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.lab.pentest-forge.com/workshop/api/shop/orders/1",
+      "source": "PentestForge Lab — crAPI BOLA order shadow-API oracle GET /workshop/api/shop/orders/{id} (lab.pentest-forge.com; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/vulnerabilities",
+      "source": "DVGA Escape-hosted — GraphQL vulnerability catalog / challenge index page (dvga.tools.escape.tech; web search 22 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/profile/update-avatar",
       "source": "ctfsec/pwnshop vulnerabilities — SSRF avatar update oracle POST /profile/update-avatar targets localhost/debug (PWN-019; web search 21 UTC)",
@@ -11243,5 +11268,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 1961
+  "discovery_urls_added": 1966
 }
