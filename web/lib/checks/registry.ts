@@ -39557,6 +39557,8 @@ const pwnshopMassAssignmentAdminLiveOracle: Rule = async (ctx) => {
 
 const PWNSHOP_REGISTER_REDIRECT_PROBE =
   "https://evil-open-redirect-probe.example/thugir-pwnshop-register-redirect";
+const PWNSHOP_LOGIN_REDIRECT_PROBE =
+  "https://evil-open-redirect-probe.example/thugir-pwnshop-login-redirect";
 
 const pwnshopOpenRedirectRegisterLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
@@ -39581,6 +39583,102 @@ const pwnshopOpenRedirectRegisterLiveOracle: Rule = async (ctx) => {
       location,
       probe: PWNSHOP_REGISTER_REDIRECT_PROBE,
       note: "Pwnshop POST /register with next= reflects attacker URL in 302 Location — open redirect on registration (PWN-017)"
+    }
+  };
+};
+
+async function pwnshopRegisterLoginCookieForRedirectProbe(
+  ctx: RuleContext,
+  nextProbe: string
+): Promise<string | null> {
+  const username = `thugir_or_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const email = `${username}@probe.local`;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const registerDoc = await ctx.probe.get(new URL("/register", ctx.origin).toString(), {
+      method: "POST",
+      body: `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=ThugirTest123!`,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (registerDoc.status === 429 || /rate limit|too many requests/i.test(registerDoc.body)) {
+      await pwnshopSleep(2000 + attempt * 2500);
+      continue;
+    }
+    const registerCookie = pwnshopSessionCookieFromDoc(registerDoc);
+    if (!registerCookie) return null;
+    const loginDoc = await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
+      method: "POST",
+      body: `username=${encodeURIComponent(username)}&password=ThugirTest123!&next=${encodeURIComponent(nextProbe)}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: registerCookie
+      },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    const location = loginDoc.headers["location"] || "";
+    if (![301, 302, 303, 307, 308].includes(loginDoc.status) || !/verify-otp/i.test(location)) {
+      return null;
+    }
+    return pwnshopSessionCookieFromDoc(loginDoc) ?? registerCookie;
+  }
+  return null;
+}
+
+const pwnshopOpenRedirectLoginLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500, 10500, 12500];
+  for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
+    const cookie = await pwnshopRegisterLoginCookieForRedirectProbe(ctx, PWNSHOP_LOGIN_REDIRECT_PROBE);
+    if (!cookie) continue;
+    await pwnshopSleep(OTP_MAIL_WAITS_MS[attempt]);
+    const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
+    if (!inboxToken) continue;
+    const otp = await pwnshopOtpFromMailInbox(ctx, cookie, inboxToken);
+    if (!otp) continue;
+    const verifyDoc = await ctx.probe.get(new URL("/verify-otp", ctx.origin).toString(), {
+      method: "POST",
+      body: `otp=${otp}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: cookie
+      },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    const location = verifyDoc.headers["location"] || "";
+    if (![301, 302, 303, 307, 308].includes(verifyDoc.status)) continue;
+    if (!resolvesToOpenRedirectProbe(location, ctx.origin)) continue;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: new URL("/login", ctx.origin).toString(),
+        location,
+        probe: PWNSHOP_LOGIN_REDIRECT_PROBE,
+        note: "Pwnshop POST /login with next= stores attacker URL through OTP verification and reflects it in 302 Location — open redirect on login (PWN-017)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const pwnshopOpenRedirectLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopOpenRedirectLoginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /login?next= route scan — POST /login with next= reflects attacker URL in 302 Location after OTP verification (PWN-017)"
     }
   };
 };
@@ -69314,6 +69412,38 @@ const ginAndJuiceLoginRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function ginAndJuiceExternalNextParamFromUrl(pageUrl: string): string | null {
+  try {
+    const nextParam = new URL(pageUrl).searchParams.get("next");
+    if (!nextParam?.trim()) return null;
+    const parsed = new URL(nextParam, "https://ginandjuice.shop");
+    if (parsed.hostname === "ginandjuice.shop") return null;
+    return nextParam;
+  } catch {
+    return null;
+  }
+}
+
+const ginAndJuiceLoginNextOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const nextParam = ginAndJuiceExternalNextParamFromUrl(pageUrl);
+  if (!nextParam) return NEGATIVE;
+  const result = await clientSideOpenRedirectEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      nextParam,
+      note: "Gin & Juice Shop /login?next= route scan — client bundle documents post-login redirect validation that can be abused via next query parameter (FINDING-020 chain)"
+    }
+  };
+};
+
 const ginAndJuiceRegisterAtobRedirectLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/register", ctx.origin).toString();
@@ -97020,6 +97150,8 @@ export const RULES: Record<string, Rule> = {
   pwnshopChatPromptInjectionRouteLiveOracle,
   pwnshopMassAssignmentAdminLiveOracle,
   pwnshopOpenRedirectRegisterLiveOracle,
+  pwnshopOpenRedirectLoginLiveOracle,
+  pwnshopOpenRedirectLoginRouteLiveOracle,
   pwnshopVerifyOtpBruteforceLiveOracle,
   pwnshopVerifyOtpBruteforceRouteLiveOracle,
   pwnshopOtpNotInvalidatedLiveOracle,
@@ -98713,6 +98845,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogCategoryCrlfRouteLiveOracle,
   ginAndJuiceLoginUsernameReflectionLiveOracle,
   ginAndJuiceLoginRouteLiveOracle,
+  ginAndJuiceLoginNextOpenRedirectRouteLiveOracle,
   ginAndJuiceRegisterAtobRedirectLiveOracle,
   ginAndJuiceRegisterRouteLiveOracle,
   ginAndJuiceStockXxeLiveOracle,

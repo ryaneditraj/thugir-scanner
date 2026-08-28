@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-28T13:35:04.874Z",
-  "total": 2764,
-  "uniqueSlugs": 2756,
+  "generatedAt": "2026-08-28T14:26:47.300Z",
+  "total": 2767,
+  "uniqueSlugs": 2759,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2746,
+    "generic": 2749,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2679,
+    "deep": 2682,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 575,
+    "Broken access control": 577,
     "Exposed secret": 112,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -29,7 +29,7 @@
     "Broken authentication": 174,
     "Injection": 434,
     "Cross-site scripting": 732,
-    "Open redirect": 24,
+    "Open redirect": 25,
     "general": 20,
     "SSRF": 18,
     "Server-side request forgery": 91,
@@ -1701,6 +1701,7 @@
     "ginandjuice-identity-auth-login-route-live-oracle",
     "ginandjuice-logger-oast-live-oracle",
     "ginandjuice-logger-route-live-oracle",
+    "ginandjuice-login-next-open-redirect-route-live-oracle",
     "ginandjuice-login-route-live-oracle",
     "ginandjuice-login-username-reflection-live-oracle",
     "ginandjuice-logout-route-live-oracle",
@@ -2008,6 +2009,8 @@
     "pwnshop-mail-idor-route-live-oracle",
     "pwnshop-mail-inbox-idor-live-oracle",
     "pwnshop-mass-assignment-admin-live-oracle",
+    "pwnshop-open-redirect-login-live-oracle",
+    "pwnshop-open-redirect-login-route-live-oracle",
     "pwnshop-open-redirect-register-live-oracle",
     "pwnshop-order-idor-live-oracle",
     "pwnshop-order-idor-route-live-oracle",
