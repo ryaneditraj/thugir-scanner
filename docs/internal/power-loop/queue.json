@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T13:10:00.000Z",
+  "updated_at": "2026-08-28T14:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-31",
+      "source": "OWASP WrongSecrets Heroku demo — challenge-31 front-end secret-in-webpage oracle (GitHub README; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-32",
+      "source": "OWASP WrongSecrets Heroku demo — challenge-32 AI/LLM prompt-extraction oracle (GitHub README; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-34",
+      "source": "OWASP WrongSecrets Heroku demo — challenge-34 secrets-management oracle (gap fill 31-34; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/login?next=https://example.com",
+      "source": "ctfsec/pwnshop vulnerabilities — open redirect oracle GET /login?next= (PWN-017; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/login?next=https://example.com",
+      "source": "PortSwigger ginandjuice.shop — post-auth open redirect oracle GET /login?next= (autopentest-2026 FINDING-020 chain; web search 14 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/my-account/change-email",
       "source": "PortSwigger Web Security Academy — race-condition email takeover oracle POST /my-account/change-email (web search 13 UTC)",
