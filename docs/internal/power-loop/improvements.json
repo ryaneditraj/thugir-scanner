@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-feedback-submit-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceFeedbackSubmitRouteLiveOracle delegates GET /catalog?searchTerm= searchText reflection on /api/feedback/submit alias scans; ginandjuice.shop/api/feedback/submit findings 33→35 (+ginandjuice-feedback-submit-route-live-oracle +ginandjuice-logger-route-live-oracle on /api/feedback alias); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-identity-auth-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceIdentityAuthLoginRouteLiveOracle delegates POST /login username reflection on /api/identity/auth/login alias scans; ginandjuice.shop/api/identity/auth/login findings 34→35 (+ginandjuice-identity-auth-login-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-logger-route-feedback-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceLoggerRouteLiveOracle extended to match /api/feedback paths; ginandjuice.shop/api/feedback/submit findings 33→35 (+ginandjuice-logger-route-live-oracle on feedback alias); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-internal-secret-ssrf-chain",
       "status": "shipped",
