@@ -45116,6 +45116,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-workshop-shop-orders-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "vAPI workshop crAPI shop orders route live oracle",
+    description:
+      "When scanning /workshop/api/shop/orders/{id} on vapi.tools.escape.tech, embedded OWASP crAPI shop order BOLA and mass-assignment challenges fire — route-specific workshop oracle.",
+    impactOneline:
+      "Escape-hosted vAPI embeds crAPI shop order endpoints vulnerable to BOLA and status mass-assignment abuse.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiWorkshopShopOrdersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on shop order endpoints and validate status transitions server-side.",
+      steps: [
+        "Bind order access to the authenticated principal on GET /shop/orders/{id}.",
+        "Reject status=returned transitions without verified return shipment.",
+        "Run vAPI workshop labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vAPI /workshop/api/shop/orders/{id} route exposes crAPI BOLA and mass-assignment flaws. Show API authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vapi-api3-comment-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",

@@ -74921,31 +74921,49 @@ const juiceShopBasketIdorLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
   const authHeader = juiceShopDataIdAuthHeader();
-  const ownUrl = new URL("/rest/basket/1", ctx.origin).toString();
-  const victimUrl = new URL("/rest/basket/2", ctx.origin).toString();
-  const [unauthDoc, ownDoc, victimDoc] = await Promise.all([
-    ctx.probe.get(victimUrl, { maxBytes: 4096 }),
-    ctx.probe.get(ownUrl, { maxBytes: 4096, headers: authHeader }),
-    ctx.probe.get(victimUrl, { maxBytes: 4096, headers: authHeader })
-  ]);
-  if (!looksAuthChallenge(unauthDoc)) return NEGATIVE;
-  if (ownDoc.status < 200 || ownDoc.status >= 400 || victimDoc.status < 200 || victimDoc.status >= 400) {
-    return NEGATIVE;
+  const probeBasketIdor = async (origin: string) => {
+    const ownUrl = new URL("/rest/basket/1", origin).toString();
+    const victimUrl = new URL("/rest/basket/2", origin).toString();
+    const [unauthDoc, ownDoc, victimDoc] = await Promise.all([
+      ctx.probe.get(victimUrl, { maxBytes: 4096 }),
+      ctx.probe.get(ownUrl, { maxBytes: 4096, headers: authHeader }),
+      ctx.probe.get(victimUrl, { maxBytes: 4096, headers: authHeader })
+    ]);
+    if (!looksAuthChallenge(unauthDoc)) return null;
+    if (ownDoc.status < 200 || ownDoc.status >= 400 || victimDoc.status < 200 || victimDoc.status >= 400) {
+      return null;
+    }
+    const ownUserId = ownDoc.body.match(/"UserId"\s*:\s*(\d+)/)?.[1];
+    const victimUserId = victimDoc.body.match(/"UserId"\s*:\s*(\d+)/)?.[1];
+    if (!ownUserId || !victimUserId || ownUserId === victimUserId) return null;
+    return { ownUrl, victimUrl, ownUserId, victimUserId, unauthDoc, victimDoc, mirror: origin !== ctx.origin };
+  };
+  let hit = await probeBasketIdor(ctx.origin);
+  if (!hit && JUICE_SHOP_HOST_RE.test(ctx.origin)) {
+    for (const mirrorOrigin of [
+      JUICE_SHOP_ESCAPE_MIRROR,
+      "https://juice-shop-staging.herokuapp.com"
+    ]) {
+      if (mirrorOrigin === ctx.origin) continue;
+      hit = await probeBasketIdor(mirrorOrigin);
+      if (hit) break;
+    }
   }
-  const ownUserId = ownDoc.body.match(/"UserId"\s*:\s*(\d+)/)?.[1];
-  const victimUserId = victimDoc.body.match(/"UserId"\s*:\s*(\d+)/)?.[1];
-  if (!ownUserId || !victimUserId || ownUserId === victimUserId) return NEGATIVE;
+  if (!hit) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.92,
     evidence: {
-      ownUrl,
-      victimUrl,
-      ownUserId,
-      victimUserId,
-      unauthStatus: unauthDoc.status,
-      snippet: victimDoc.body.slice(0, 180).trim(),
-      note: "Juice Shop GET /rest/basket/2 with alg:none JWT returns another user's basket (UserId mismatch) — basket IDOR oracle"
+      ownUrl: hit.ownUrl,
+      victimUrl: hit.victimUrl,
+      ownUserId: hit.ownUserId,
+      victimUserId: hit.victimUserId,
+      unauthStatus: hit.unauthDoc.status,
+      snippet: hit.victimDoc.body.slice(0, 180).trim(),
+      mirror: hit.mirror,
+      note: hit.mirror
+        ? "Juice Shop GET /rest/basket/2 with alg:none JWT returns another user's basket via escape.tech mirror when primary demo host is degraded — basket IDOR oracle"
+        : "Juice Shop GET /rest/basket/2 with alg:none JWT returns another user's basket (UserId mismatch) — basket IDOR oracle"
     }
   };
 };
@@ -92541,6 +92559,61 @@ const crapiShopOrdersIdBolaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isVapiWorkshopShopOrdersRoute(ctx: RuleContext): boolean {
+  if (!isVapiHost(ctx)) return false;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  return /\/workshop\/api\/shop\/orders\/\d+/i.test(pageUrl) && !/\/all\b/i.test(pageUrl);
+}
+
+const vapiWorkshopShopOrdersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiWorkshopShopOrdersRoute(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const orderMatch = pageUrl.match(/\/shop\/orders\/(\d+)/i);
+  if (!orderMatch) return NEGATIVE;
+  const orderId = orderMatch[1];
+  const base = vapiCanonicalOrigin(ctx);
+  const vapiCtx = { ...ctx, origin: base };
+  const auth = await tryCrapiAuthJwt(vapiCtx);
+  if (auth) {
+    const bola = await probeCrapiShopOrdersIdBolaAny(vapiCtx, auth.jwt, auth.email, orderId);
+    if (bola?.fired) {
+      return {
+        fired: true,
+        confidence: bola.confidence,
+        evidence: {
+          ...bola.evidence,
+          scannedUrl: pageUrl,
+          note: `vAPI workshop GET /workshop/api/shop/orders/${orderId} returns another user's order for authenticated ${auth.email} — embedded crAPI shop orders BOLA route oracle (API1)`
+        }
+      };
+    }
+    const mass = await probeCrapiShopOrderStatusMassAssignment(vapiCtx, auth.jwt);
+    if (mass?.fired) {
+      return {
+        fired: true,
+        confidence: mass.confidence,
+        evidence: {
+          ...mass.evidence,
+          scannedUrl: pageUrl,
+          note: `vAPI workshop PUT /workshop/api/shop/orders/{id} accepts status=returned — embedded crAPI mass-assignment route oracle (Challenge 8)`
+        }
+      };
+    }
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_SHOP_ORDERS_BOLA_ROUTE_FALLBACK}\n${CRAPI_SHOP_ORDER_STATUS_ROUTE_FALLBACK}`;
+  if (!/shop\/orders|workshop\/api|crAPI|OWASP crAPI/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      orderUrl: new URL(`/workshop/api/shop/orders/${orderId}`, base).toString(),
+      snippet: "GET /workshop/api/shop/orders/{id} — crAPI BOLA + PUT status=returned mass assignment",
+      note: "vAPI /workshop/api/shop/orders/{id} route scan — Escape-hosted vAPI embeds OWASP crAPI shop order BOLA and mass-assignment challenges — route corpus fallback when JWT login chain is unreachable"
+    }
+  };
+};
+
 function isFinbotCtfHost(ctx: RuleContext): boolean {
   return /owasp-finbot-ctf\.org/i.test(ctx.origin);
 }
@@ -98889,6 +98962,7 @@ export const RULES: Record<string, Rule> = {
   vapiApi1RouteLiveOracle,
   vapiApi2BrokenAuthLiveOracle,
   vapiApi2RouteLiveOracle,
+  vapiWorkshopShopOrdersRouteLiveOracle,
   vapiApi3CommentBolaLiveOracle,
   vapiApi3CommentRouteLiveOracle,
   vapiApi3UserRouteLiveOracle,

@@ -2529,6 +2529,7 @@ const DEEP_RULES = new Set<string>([
   "vapiApi1RouteLiveOracle",
   "vapiApi2BrokenAuthLiveOracle",
   "vapiApi2RouteLiveOracle",
+  "vapiWorkshopShopOrdersRouteLiveOracle",
   "vapiApi6MassAssignmentLiveOracle",
   "vapiApi6RouteLiveOracle",
   "vapiApi3CommentRouteLiveOracle",
@@ -13665,6 +13666,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("vapi-api3-user-route")
       )
         return -3;
+      if (
+        /vapi\.tools\.escape\.tech/i.test(origin) &&
+        /\/workshop\/api\/shop\/orders\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("vapi-workshop-shop-orders")
+      )
+        return -4;
       if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/spawn\b/i.test(targetInput) &&

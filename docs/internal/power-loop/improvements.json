@@ -5837,6 +5837,18 @@
       "slug": "oopssec-github-pages-reflexion-ssti-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: oopssecGitHubPagesReflexionSuppressed skips reflexionEscalatedSsti on koadt.github.io/oss-oopssec-store static walkthrough pages; koadt.github.io/.../product-search-sql-injection findings 7→6 (-reflexion-escalated-ssti false positive, +oopssec-product-search-sqli-route-live-oracle retained); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-workshop-shop-orders-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vapiWorkshopShopOrdersRouteLiveOracle delegates crAPI shop order BOLA + mass-assignment probes on /workshop/api/shop/orders/{id} with wiki corpus fallback; vapi.tools.escape.tech/workshop/api/shop/orders/1 findings 13→14 (+vapi-workshop-shop-orders-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-basket-idor-mirror-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopBasketIdorLiveOracle retries escape.tech + staging mirrors when primary demo.owasp-juice.shop basket probes fail; demo.owasp-juice.shop/rest/basket/1 findings maintain juice-shop-basket-idor-live-oracle +route oracle; benchmark 6/6 maintained"
     }
   ]
 }
