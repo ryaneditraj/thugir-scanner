@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T04:18:00.000Z",
+  "updated_at": "2026-08-28T05:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/kid-sql/validate",
+      "source": "NeuraLegion/brokencrystals Swagger — KID SQL-injection JWT validate oracle GET /api/auth/jwt/kid-sql/validate (05 UTC power-loop; route-specific gap vs /login hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5u/validate",
+      "source": "NeuraLegion/brokencrystals Swagger — X5U rogue-certificate JWT validate oracle GET /api/auth/jwt/x5u/validate (05 UTC power-loop; route-specific gap vs /login hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/forgot-password",
+      "source": "PortSwigger ginandjuice.shop — authenticated password-reset broken-logic oracle GET /my-account/forgot-password (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/rsa/signature/validate",
+      "source": "NeuraLegion/brokencrystals Swagger — invalid RSA JWT signature oracle GET /api/auth/jwt/rsa/signature/validate",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/workshop/api/shop/orders/1",
+      "source": "OWASP vAPI Escape-hosted — BOLA/order IDOR oracle GET /workshop/api/shop/orders/{id} (vapi.tools.escape.tech)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/jku/login",
       "source": "NeuraLegion/brokencrystals Swagger — JKU rogue-key JWT auth bypass oracle POST /api/auth/jwt/jku/login",
