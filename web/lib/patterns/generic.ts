@@ -40886,6 +40886,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-send-support-email-header-injection-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals sendSupportEmail header injection live oracle",
+    description:
+      "GET /api/email/sendSupportEmail accepts CRLF-injected Cc: headers in the to query parameter (%0aCc:) and attempts SMTP delivery — the Broken Crystals email header injection oracle.",
+    impactOneline:
+      "Unsanitized email recipient fields let attackers inject Cc/Bcc headers and send mail to arbitrary recipients.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSendSupportEmailHeaderInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject CRLF characters in email recipient fields and use structured mail APIs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Strip %0a/%0d from to, cc, and bcc parameters before building raw messages.",
+        "Use a mail library API that does not concatenate raw SMTP headers from user input.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/email/sendSupportEmail endpoint accepts %0aCc: injection in the to parameter. Show email header injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-email-hub-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/email hub route live oracle",
+    description:
+      "When scanning /api/email, sendSupportEmail header injection and internal SMTP SSRF probes fire — route-specific Broken Crystals email hub oracle.",
+    impactOneline:
+      "Route scans on the /api/email hub should confirm email header injection and internal SMTP misconfiguration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsEmailHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden all email sub-endpoints reachable from the /api/email hub — Broken Crystals is intentional lab software.",
+      steps: [
+        "Reject CRLF in recipient fields on sendSupportEmail.",
+        "Block outbound SMTP connections to loopback addresses.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/email route scan confirms email header injection and internal SMTP SSRF. Show route-specific email API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-admin-login-bfla-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -43332,7 +43384,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Vuln Bank profile-picture URL SSRF live oracle",
     description:
-      "POST /upload_profile_picture_url fetches attacker-controlled image_url server-side with no allowlist and saves the response as the user's profile picture — the Vuln Bank profile-picture SSRF oracle.",
+      "POST /upload_profile_picture_url fetches attacker-controlled image_url server-side with no allowlist and saves the response as the user's profile picture — including loopback http://127.0.0.1:5000/internal/secret JSON exfiltration to a public static path.",
     impactOneline:
       "Server-side URL fetch on profile uploads enables SSRF against internal services and cloud metadata endpoints.",
     detectorKind: "rule_ref",
@@ -45788,6 +45840,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /identity/api/v2/user/videos route scan confirms BOLA via cross-user video metadata reads. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-community-posts-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI community posts BOLA live oracle",
+    description:
+      "GET /identity/api/v2/community/posts/recent leaks vehicleid UUIDs in author objects enabling cross-user GPS reads via /identity/api/v2/vehicle/{uuid}/location — the crAPI community posts BOLA oracle (API1).",
+    impactOneline:
+      "Community post feeds that expose internal vehicle IDs enable location BOLA against other users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiCommunityPostsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — strip vehicleid from community posts and enforce object-level authorization on location endpoints in production.",
+      steps: [
+        "Verify the authenticated user owns the vehicle before returning location data.",
+        "Strip vehicleid from community post author objects or use opaque non-guessable IDs.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI community posts feed leaks vehicleid UUIDs enabling location BOLA. Show API data-minimization remediation.",
     version: 1,
     enabled: true
   },
