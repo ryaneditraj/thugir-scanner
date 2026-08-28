@@ -23827,6 +23827,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-open-redirect-login-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwnshop login open redirect live oracle (PWN-017)",
+    description:
+      "POST /login with next= stores attacker URLs through OTP verification and reflects them in the 302 Location header without validation — the Pwnshop login open redirect oracle.",
+    impactOneline:
+      "Open redirects on login enable phishing attacks that steal credentials or session tokens via trusted-domain post-auth redirects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOpenRedirectLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate post-login redirect targets against an allowlist — Pwnshop PWN-017 is intentional lab software.",
+      steps: [
+        "Allowlist relative paths or known-safe redirect hosts for next/return parameters.",
+        "Reject absolute URLs pointing to external domains on login and OTP verification flows.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /login endpoint preserves next= through OTP verification and reflects it into a 302 Location to external hosts. Show open-redirect remediation for login flows.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-open-redirect-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwnshop /login?next= open redirect route live oracle (PWN-017)",
+    description:
+      "When scanning /login?next=, POST /login with next= reflects attacker URLs in the 302 Location header after OTP verification — route-specific login open redirect oracle.",
+    impactOneline:
+      "Route scans on /login?next= should confirm unvalidated post-auth redirects enable phishing via trusted-domain login flows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOpenRedirectLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate post-login redirect targets against an allowlist — Pwnshop PWN-017 is intentional lab software.",
+      steps: [
+        "Allowlist relative paths or known-safe redirect hosts for next/return parameters.",
+        "Reject absolute URLs pointing to external domains on login and OTP verification flows.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /login?next= route preserves attacker URLs through OTP verification. Show route-specific open-redirect remediation for login flows.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-verify-otp-bruteforce-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -63594,6 +63646,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /login route scan confirms username reflection in inline script. Show route-specific XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-login-next-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /login?next= open redirect route live oracle",
+    description:
+      "When scanning /login?next= with an external URL, the client bundle documents post-login redirect validation that can be abused via the next query parameter — route-specific open redirect oracle (FINDING-020 chain).",
+    impactOneline:
+      "Route scans on /login?next= should confirm client-side redirect validation can be abused for phishing via trusted-domain login flows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceLoginNextOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate post-login redirect targets server-side against an allowlist before client-side navigation.",
+      steps: [
+        "Allowlist relative paths or known-safe redirect hosts for next/return parameters.",
+        "Reject absolute URLs pointing to external domains on login flows.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login?next= route documents client-side redirect validation that can be abused. Show route-specific open-redirect remediation.",
     version: 1,
     enabled: true
   },

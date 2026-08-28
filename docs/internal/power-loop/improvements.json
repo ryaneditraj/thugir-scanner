@@ -5693,6 +5693,24 @@
       "slug": "brokencrystals-upload-api-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsUploadApiSeeds adds /api/metadata + /api/hidden-upload + /api/upload/parse when scanning upload routes; upload/parse crawl seeds metadata XXE live oracle on thin API-only discovery scans; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-open-redirect-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login with next= stores attacker URL through OTP verification and reflects it in 302 Location to evil-open-redirect-probe.example; pwnshop.ctfsecurity.com/login?next=https://example.com findings 49→51 (+pwnshop-open-redirect-login-live-oracle +pwnshop-open-redirect-login-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-open-redirect-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopOpenRedirectLoginRouteLiveOracle delegates to login OTP-chain live oracle on /login?next= route scans; pwnshop.ctfsecurity.com/login?next=https://example.com findings 49→51; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-login-next-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceLoginNextOpenRedirectRouteLiveOracle matches /login?next= with external URL and delegates to clientSideOpenRedirectEvidence bundle markers; ginandjuice.shop/login?next=https://example.com findings 34→35 (+ginandjuice-login-next-open-redirect-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
     }
   ]
 }
