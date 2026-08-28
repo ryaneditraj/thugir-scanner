@@ -41161,6 +41161,98 @@ const pwnshopExportOrdersCsvRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probePwnshopAdminDashboardAccess(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isPwnshopHost(ctx)) return null;
+  const session = await pwnshopFreshMassAssignmentAdminOtpSession(ctx);
+  if (!session) return null;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const adminPaths = /\/admin\/dashboard\b/i.test(pageUrl)
+    ? ["/admin/security", "/admin/export-orders", "/admin/dashboard"]
+    : ["/admin/security", "/admin/dashboard"];
+  for (const adminPath of adminPaths) {
+    const dashboardUrl = new URL(adminPath, ctx.origin).toString();
+    const doc = await fetchDoc(dashboardUrl, {
+      headers: { Cookie: session.cookie },
+      maxBytes: 65536,
+      timeoutMs: 20000
+    });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (/404\s*-\s*Page Not Found/i.test(doc.body) && !/Security Audit|adminLogs/i.test(doc.body)) {
+      continue;
+    }
+    if (
+      !/Admin Dashboard|Security Audit|adminLogs|admin\/export-orders|Total Users|Total Orders/i.test(
+        doc.body
+      )
+    ) {
+      continue;
+    }
+    return {
+      fired: true,
+      confidence: /Security Audit|adminLogs/i.test(doc.body) ? 0.94 : 0.92,
+      evidence: {
+        dashboardUrl,
+        adminUser: session.username,
+        snippet: doc.body.match(/<title>[^<]+<\/title>/i)?.[0] ?? doc.body.slice(0, 200).trim(),
+        note: /Security Audit|adminLogs/i.test(doc.body)
+          ? "Pwnshop GET /admin/security returns Security Audit panel after mass-assignment admin OTP session — broken access control oracle (PWN-021; /admin/dashboard route alias)"
+          : "Pwnshop GET /admin/dashboard returns admin panel after mass-assignment admin OTP session — broken access control oracle (PWN-021)"
+      }
+    };
+  }
+  return null;
+}
+
+const pwnshopAdminDashboardRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin\/dashboard\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await probePwnshopAdminDashboardAccess(ctx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: hit.evidence.note?.includes("admin/security")
+          ? "Pwnshop /admin/dashboard route scan — mass-assignment admin OTP session reaches /admin/security Security Audit panel (PWN-021)"
+          : "Pwnshop /admin/dashboard route scan — mass-assignment admin OTP session exposes privileged admin panel without real admin credentials (PWN-021)"
+      }
+    };
+  }
+  const massAssign = await pwnshopMassAssignmentAdminLiveOracle(ctx);
+  if (!massAssign.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.89,
+    evidence: {
+      ...massAssign.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /admin/dashboard route scan — PWN-021 mass-assignment admin registration confirmed via audit log when live admin panel OTP probe did not complete"
+    }
+  };
+};
+
+/** Pre-warm mass-assignment admin OTP during admin/dashboard route scans. */
+export async function primePwnshopAdminDashboardOracleForDeepScan(
+  probe: ProbeCache,
+  origin: string,
+  scanUrl: string,
+  home: FetchedDoc
+): Promise<void> {
+  if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
+  if (!/\/admin\/dashboard\b/i.test(scanUrl)) return;
+  const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
+  const primeWaitsMs = [3000, 6000, 9000, 12000];
+  for (let attempt = 0; attempt < primeWaitsMs.length; attempt++) {
+    clearPwnshopAdminOtpSessionForProbe(probe);
+    const session = await pwnshopFreshMassAssignmentAdminOtpSession(ctx);
+    if (session) return;
+    await pwnshopSleep(primeWaitsMs[attempt]);
+  }
+}
+
 function pwnshopAdminSecurityAuditRowCount(html: string): number {
   return (html.match(/<tr\b/gi) || []).length;
 }
@@ -72664,7 +72756,6 @@ const juiceShopImageCaptchaBypassRouteLiveOracle: Rule = async (ctx) => {
 const JUICE_SHOP_SAVE_LOGIN_IP_PROBE = "203.0.113.42";
 
 async function juiceShopProbeLoginToken(ctx: RuleContext): Promise<string | null> {
-  const loginUrl = new URL("/rest/user/login", ctx.origin).toString();
   const loginOpts = {
     method: "POST" as const,
     body: JSON.stringify({ email: "admin@juice-sh.op", password: "admin123" }),
@@ -72672,15 +72763,30 @@ async function juiceShopProbeLoginToken(ctx: RuleContext): Promise<string | null
     maxBytes: 4096,
     timeoutMs: 15000
   };
-  // Probe cache can retain an early cold-start login miss while later rules need a token.
-  for (let attempt = 0; attempt < 4; attempt++) {
-    const doc =
-      attempt === 0 ? await ctx.probe.get(loginUrl, loginOpts) : await fetchDoc(loginUrl, loginOpts);
-    if (doc.status >= 200 && doc.status < 300 && !HEROKU_STUB_RE.test(doc.body)) {
-      const token = doc.body.match(/"token"\s*:\s*"([^"]+)"/)?.[1] ?? null;
-      if (token) return token;
+  const origins = [ctx.origin];
+  if (JUICE_SHOP_HOST_RE.test(ctx.origin)) {
+    for (const mirror of [
+      JUICE_SHOP_ESCAPE_MIRROR,
+      "https://juice-shop-staging.herokuapp.com",
+      "https://juice-shop.herokuapp.com"
+    ]) {
+      if (!origins.includes(mirror)) origins.push(mirror);
     }
-    if (attempt < 3) await new Promise((r) => setTimeout(r, 2000));
+  }
+  for (const origin of origins) {
+    const loginUrl = new URL("/rest/user/login", origin).toString();
+    const attempts = origin === ctx.origin ? 4 : 1;
+    for (let attempt = 0; attempt < attempts; attempt++) {
+      const doc =
+        attempt === 0 && origin === ctx.origin
+          ? await ctx.probe.get(loginUrl, loginOpts)
+          : await fetchDoc(loginUrl, loginOpts);
+      if (doc.status >= 200 && doc.status < 300 && !HEROKU_STUB_RE.test(doc.body)) {
+        const token = doc.body.match(/"token"\s*:\s*"([^"]+)"/)?.[1] ?? null;
+        if (token) return token;
+      }
+      if (attempt < attempts - 1) await new Promise((r) => setTimeout(r, 2000));
+    }
   }
   return null;
 }
@@ -72846,25 +72952,32 @@ function isJuiceShopChatbotContext(ctx: RuleContext): boolean {
 const juiceShopChatbotApiLiveOracle: Rule = async (ctx) => {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
-  const url = new URL("/rest/chat", ctx.origin).toString();
-  const doc = await ctx.probe.get(url, {
+  const { doc, url, mirror } = await juiceShopMirrorProbeDoc(ctx, "/rest/chat", {
     method: "POST",
     body: JSON.stringify({ messages: [{ role: "user", content: "hello" }] }),
     headers: { "Content-Type": "application/json", Accept: "text/event-stream" },
     maxBytes: 4096,
-    timeoutMs: 20000
+    timeoutMs: 20000,
+    ok: (d) =>
+      /data:\s*\{/.test(d.body) &&
+      (/\[DONE\]/.test(d.body) || /deltaContent|LLM error|AI_RetryError/i.test(d.body))
   });
-  const sseOk =
-    /data:\s*\{/.test(doc.body) &&
-    (/\[DONE\]/.test(doc.body) || /deltaContent|LLM error|AI_RetryError/i.test(doc.body));
-  if (!sseOk) return NEGATIVE;
+  if (
+    !/data:\s*\{/.test(doc.body) ||
+    !(/\[\s*DONE\s*\]/.test(doc.body) || /deltaContent|LLM error|AI_RetryError/i.test(doc.body))
+  ) {
+    return NEGATIVE;
+  }
   return {
     fired: true,
     confidence: 0.9,
     evidence: {
       url,
+      mirror,
       snippet: doc.body.slice(0, 200).trim(),
-      note: "Juice Shop POST /rest/chat accepts unauthenticated SSE chat messages — LLM proxy endpoint exposed (chatbot prompt-injection surface)"
+      note: mirror
+        ? "Juice Shop POST /rest/chat accepts unauthenticated SSE chat messages — LLM proxy endpoint exposed (chatbot prompt-injection surface; confirmed via mirror when primary demo host degraded)"
+        : "Juice Shop POST /rest/chat accepts unauthenticated SSE chat messages — LLM proxy endpoint exposed (chatbot prompt-injection surface)"
     }
   };
 };
@@ -73471,9 +73584,8 @@ const juiceShopB2bOrdersDeserializationLiveOracle: Rule = async (ctx) => {
   if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
   const token = await juiceShopProbeLoginToken(ctx);
   if (!token) return NEGATIVE;
-  const url = new URL("/b2b/v2/orders", ctx.origin).toString();
   const probePayload = "(function(){return true})()";
-  const doc = await ctx.probe.get(url, {
+  const { doc, url, mirror } = await juiceShopMirrorProbeDoc(ctx, "/b2b/v2/orders", {
     method: "POST",
     body: JSON.stringify({ orderLinesData: probePayload }),
     headers: {
@@ -73481,9 +73593,9 @@ const juiceShopB2bOrdersDeserializationLiveOracle: Rule = async (ctx) => {
       "Content-Type": "application/json"
     },
     maxBytes: 4096,
-    timeoutMs: 15000
+    timeoutMs: 15000,
+    ok: (d) => d.status >= 200 && d.status < 300 && /"orderNo"\s*:\s*"[a-f0-9]{32}"/i.test(d.body)
   });
-  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
   const orderNoMatch = doc.body.match(/"orderNo"\s*:\s*"([a-f0-9]{32})"/i);
   if (!orderNoMatch) return NEGATIVE;
   return {
@@ -73491,10 +73603,13 @@ const juiceShopB2bOrdersDeserializationLiveOracle: Rule = async (ctx) => {
     confidence: 0.94,
     evidence: {
       url,
+      mirror,
       orderNo: orderNoMatch[1],
       orderLinesData: probePayload,
       snippet: doc.body.slice(0, 160).trim(),
-      note: "Juice Shop POST /b2b/v2/orders evaluates attacker-controlled orderLinesData as JavaScript — insecure deserialization / RCE oracle"
+      note: mirror
+        ? "Juice Shop POST /b2b/v2/orders evaluates attacker-controlled orderLinesData as JavaScript — insecure deserialization / RCE oracle (confirmed via mirror when primary demo host degraded)"
+        : "Juice Shop POST /b2b/v2/orders evaluates attacker-controlled orderLinesData as JavaScript — insecure deserialization / RCE oracle"
     }
   };
 };
@@ -96086,6 +96201,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopAuditLogPlaintextPasswordRouteLiveOracle,
   pwnshopExportOrdersCsvLiveOracle,
   pwnshopExportOrdersCsvRouteLiveOracle,
+  pwnshopAdminDashboardRouteLiveOracle,
   pwnshopAdminSecuritySecondOrderSqliLiveOracle,
   pwnshopAdminSecuritySecondOrderSqliRouteLiveOracle,
   fauxbankLoansRouteLiveOracle,

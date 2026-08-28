@@ -23,6 +23,7 @@ import {
   primeBypass403SessionForDeepScan,
   primePwnshopAuditLogOracleForDeepScan,
   primePwnshopExportOrdersOracleForDeepScan,
+  primePwnshopAdminDashboardOracleForDeepScan,
   primePwnshopAvatarUploadOracleForDeepScan,
   primePwnshopCouponOracleForDeepScan,
   primePwnshopResetPasswordOracleForDeepScan,
@@ -2107,6 +2108,7 @@ const DEEP_RULES = new Set<string>([
   "pwnshopAuditLogPlaintextPasswordRouteLiveOracle",
   "pwnshopExportOrdersCsvLiveOracle",
   "pwnshopExportOrdersCsvRouteLiveOracle",
+  "pwnshopAdminDashboardRouteLiveOracle",
   "pwnshopAdminSecuritySecondOrderSqliLiveOracle",
   "pwnshopAdminSecuritySecondOrderSqliRouteLiveOracle",
   "pwnshopPrototypePollutionSearchFiltersLiveOracle",
@@ -10026,6 +10028,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     await primePwnshopAuditLogOracleForDeepScan(probe, origin, targetInput, home);
     await primePwnshopResetPasswordOracleForDeepScan(probe, origin, targetInput, home);
     await primePwnshopExportOrdersOracleForDeepScan(probe, origin, targetInput, home);
+    await primePwnshopAdminDashboardOracleForDeepScan(probe, origin, targetInput, home);
     await primePwnshopSellerSessionForDeepScan(probe, origin, targetInput, home);
     await primePwnshopCouponOracleForDeepScan(probe, origin, targetInput, home);
     await primePwnshopWalletTopupOracleForDeepScan(probe, origin, targetInput, home);
@@ -11526,6 +11529,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   ) {
     clearPwnshopAdminOtpSessionForProbe(probe);
     await primePwnshopExportOrdersOracleForDeepScan(probe, origin, targetInput, home);
+    await primePwnshopAdminDashboardOracleForDeepScan(probe, origin, targetInput, home);
   }
   if (
     /pwnshop|ctfsecurity\.com/i.test(origin) &&
@@ -13564,6 +13568,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("pwnshop-admin-security")
       )
         return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/admin\/dashboard\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-admin-dashboard")
+      )
+        return -4;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-login-sqli")) return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-transfer")) return -2;
       if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;
