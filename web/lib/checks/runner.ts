@@ -2050,6 +2050,12 @@ const DEEP_RULES = new Set<string>([
   "javaSecLabJdbcSqliVul1RouteLiveOracle",
   "javaSecLabXxeVul1LiveOracle",
   "javaSecLabXxeVul1RouteLiveOracle",
+  "javaSecLabSpelVulLiveOracle",
+  "javaSecLabSpelVulRouteLiveOracle",
+  "javaSecLabSstiVul1LiveOracle",
+  "javaSecLabSstiVul1RouteLiveOracle",
+  "javaSecLabXPathVulLiveOracle",
+  "javaSecLabXPathVulRouteLiveOracle",
   "javaSecLabDruidBasicJsonRouteLiveOracle",
   "clientSidePwnedlabsEvidence",
   "clientSidePwnedlabsGitSecretsEvidence",
@@ -4588,7 +4594,11 @@ function extractJavaSecLabSeeds(html: string, pageUrl: string): string[] {
     "/xss/reflected",
     "/ssrf/vul",
     "/sqli/jdbc/vul1",
-    "/xxe/vul1"
+    "/xxe/vul1",
+    "/spel/vul",
+    "/ssti/vul1",
+    "/other/xpath/vul",
+    "/logic/idor/horizontal/getUserInfo"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -14223,6 +14233,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /whgojp\.top/i.test(origin) &&
         /\/xxe\/vul1\b/i.test(targetInput) &&
         p.slug.startsWith("javaseclab-xxe-vul1")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/spel\/vul\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-spel-vul")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/ssti\/vul1\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-ssti-vul1")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/other\/xpath\/vul\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-xpath-vul")
       )
         return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/sql-injection\/?$/i.test(targetInput) && p.slug === "sec-research-lab-sql-injection-route-live-oracle") return -3;

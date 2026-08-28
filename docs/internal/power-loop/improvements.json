@@ -5789,6 +5789,24 @@
       "slug": "wrongsecrets-challenge-30-localstorage-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsChallenge30LocalStorageLiveOracle registered in DEEP_RULES + pattern catalog; challenge-28 scan fires localStorage documentation live oracle alongside route oracles; wrongsecrets.herokuapp.com/challenge/challenge-28 findings 15→18 (+wrongsecrets-challenge-30-localstorage-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-spel-vul-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: javaSecLabSpelVulLiveOracle + javaSecLabSpelVulRouteLiveOracle registered in DEEP_RULES + pattern catalog; GET /spel/vul?ex=100-1 wiki corpus fallback on auth-gated whgojp.top; whgojp.top/spel/vul findings 7→9 (+javaseclab-spel-vul-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-ssti-vul1-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: javaSecLabSstiVul1LiveOracle + javaSecLabSstiVul1RouteLiveOracle registered in DEEP_RULES + pattern catalog; GET /ssti/vul1?para=__${7*7}__::.x Thymeleaf SSTI wiki corpus fallback; whgojp.top/ssti/vul1 findings 5→7 (+javaseclab-ssti-vul1-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-xpath-vul-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: javaSecLabXPathVulLiveOracle + javaSecLabXPathVulRouteLiveOracle registered in DEEP_RULES + pattern catalog; GET /other/xpath/vul?username=admin&password=' or '1'='1 XPath auth-bypass wiki corpus fallback; whgojp.top/other/xpath/vul findings 5→7 (+javaseclab-xpath-vul-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
