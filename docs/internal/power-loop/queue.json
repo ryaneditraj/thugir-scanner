@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T14:10:00.000Z",
+  "updated_at": "2026-08-28T15:20:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "http://whgojp.top/ssrf/vul?url=http://example.com",
+      "source": "whgojp/JavaSecLab wiki — SSRF vul endpoint GET /ssrf/vul?url= (web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/sqli/jdbc/vul1?type=select&id=1",
+      "source": "whgojp/JavaSecLab wiki — JDBC SQLi vul1 native string concat GET /sqli/jdbc/vul1 (web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/xxe/vul1",
+      "source": "whgojp/JavaSecLab wiki — XXE XMLReader file read GET /xxe/vul1?payload= (web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
+      "source": "webspoilt/vulnforge-academy — Level 17 file-upload bypass challenge (GitHub README levels 16-18; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php",
+      "source": "webspoilt/vulnforge-academy — Level 20 Nightmare multi-vector chain challenge (GitHub README; web search 15 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-31",
       "source": "OWASP WrongSecrets Heroku demo — challenge-31 front-end secret-in-webpage oracle (GitHub README; web search 14 UTC)",
@@ -11040,6 +11065,31 @@
     {
       "url": "https://dvwu.vercel.app/labs/crlf",
       "source": "zahidoverflow/dvwu — CRLF injection training lab route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/ssrf/vul?url=http://example.com",
+      "source": "whgojp/JavaSecLab wiki — SSRF vul endpoint GET /ssrf/vul?url= (web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/sqli/jdbc/vul1?type=select&id=1",
+      "source": "whgojp/JavaSecLab wiki — JDBC SQLi vul1 native string concat GET /sqli/jdbc/vul1 (web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://whgojp.top/xxe/vul1",
+      "source": "whgojp/JavaSecLab wiki — XXE XMLReader file read GET /xxe/vul1?payload= (web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
+      "source": "webspoilt/vulnforge-academy — Level 17 file-upload bypass challenge (GitHub README levels 16-18; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php",
+      "source": "webspoilt/vulnforge-academy — Level 20 Nightmare multi-vector chain challenge (GitHub README; web search 15 UTC)",
       "auth": "public_demo"
     }
   ],
