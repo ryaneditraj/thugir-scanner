@@ -70436,6 +70436,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "javaseclab-csrf-vul-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "JavaSecLab CSRF vul live oracle",
+    description:
+      "GET /csrf/vul?receiver=zhangsan&amount=100 on JavaSecLab performs state-changing transfer relying only on session cookie — CSRF training oracle.",
+    impactOneline:
+      "GET-based CSRF lets attackers trigger authenticated transfers via img/link tags without anti-CSRF tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabCsrfVulLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use POST with CSRF tokens for all state-changing operations — JavaSecLab is intentional lab software.",
+      steps: [
+        "Require synchronizer tokens on all state-changing requests.",
+        "Use SameSite=Strict cookies as a defense-in-depth measure.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /csrf/vul endpoint allows GET state-changing transfers. Show CSRF token remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-csrf-vul-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "JavaSecLab CSRF vul route live oracle",
+    description:
+      "When scanning /csrf/vul on whgojp.top, live transfer probe or curated wiki corpus confirms JavaSecLab GET CSRF training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents GET-based CSRF on authenticated transfer endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabCsrfVulRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use POST with CSRF tokens for all state-changing operations on CSRF routes.",
+      steps: [
+        "Require synchronizer tokens on all state-changing requests.",
+        "Use SameSite=Strict cookies as a defense-in-depth measure.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /csrf/vul route is a JavaSecLab CSRF training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-xff-vul2-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "JavaSecLab XFF vul2 live oracle",
+    description:
+      "GET /other/xff/vul2?xff=true with X-Forwarded-For: 8.8.8.8 on JavaSecLab trusts client IP header and leaks credentials — XFF spoofing training oracle.",
+    impactOneline:
+      "Trusting X-Forwarded-For from untrusted clients lets attackers spoof IP-based access controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabXffVul2LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Only trust X-Forwarded-For from known reverse proxies — JavaSecLab is intentional lab software.",
+      steps: [
+        "Validate client IP against a trusted proxy allow-list before using X-Forwarded-For.",
+        "Use direct connection source IP when not behind a trusted proxy.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /other/xff/vul2 endpoint trusts X-Forwarded-For for access control. Show trusted-proxy remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-xff-vul2-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "JavaSecLab XFF vul2 route live oracle",
+    description:
+      "When scanning /other/xff/vul2 on whgojp.top, live X-Forwarded-For spoof probe or curated wiki corpus confirms JavaSecLab IP header trust training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents XFF header spoofing for IP-based access control bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabXffVul2RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Only trust X-Forwarded-For from known reverse proxies on XFF routes.",
+      steps: [
+        "Validate client IP against a trusted proxy allow-list before using X-Forwarded-For.",
+        "Use direct connection source IP when not behind a trusted proxy.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /other/xff/vul2 route is a JavaSecLab XFF spoofing training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "seclab-labs-dead-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",

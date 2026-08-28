@@ -5819,6 +5819,24 @@
       "slug": "oopssec-aes-cbc-padding-oracle-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: clientSideOopssecAesCbcPaddingOracleEvidence + oopssecAesCbcPaddingOracleRouteLiveOracle registered in DEEP_RULES + pattern catalog; /posts/aes-cbc-padding-oracle-forged-share-token documents PKCS#7 padding oracle on /api/documents/share?token=; koadt.github.io/.../aes-cbc-padding-oracle-forged-share-token findings 9→11 (+oopssec-aes-cbc-padding-oracle-route-live-oracle +client-side-oopssec-aes-cbc-padding-oracle-evidence); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-csrf-vul-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: javaSecLabCsrfVulLiveOracle + javaSecLabCsrfVulRouteLiveOracle registered in DEEP_RULES + pattern catalog; GET /csrf/vul?receiver=zhangsan&amount=100 returns HTTP 302 Location /login when unauthenticated; whgojp.top/csrf/vul findings 7→10 (+javaseclab-csrf-vul-live-oracle +javaseclab-csrf-vul-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-xff-vul2-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: javaSecLabXffVul2LiveOracle + javaSecLabXffVul2RouteLiveOracle registered in DEEP_RULES + pattern catalog; GET /other/xff/vul2?xff=true with X-Forwarded-For: 8.8.8.8 returns username:admin,password:Admin123; whgojp.top/other/xff/vul2 findings 5→8 (+javaseclab-xff-vul2-live-oracle +javaseclab-xff-vul2-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-github-pages-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: oopssecGitHubPagesReflexionSuppressed skips reflexionEscalatedSsti on koadt.github.io/oss-oopssec-store static walkthrough pages; koadt.github.io/.../product-search-sql-injection findings 7→6 (-reflexion-escalated-ssti false positive, +oopssec-product-search-sqli-route-live-oracle retained); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
