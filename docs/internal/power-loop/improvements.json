@@ -5441,6 +5441,24 @@
       "slug": "brokencrystals-render-dot-page-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/render Hello {{=7*7}} evaluates doT template to Hello 49; brokencrystals.com/render.dot findings 84 (+brokencrystals-render-dot-ssti-route-live-oracle with /render.dot SPA matcher); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-chatbot-mirror-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopMirrorProbeDoc on POST /rest/chat with SSE ok predicate; demo.owasp-juice.shop/rest/chatbot/respond findings 0→3 (+juice-shop-chatbot-api-live-oracle +juice-shop-chatbot-respond-route-live-oracle via juice-shop.herokuapp.com mirror); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-b2b-orders-mirror-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopProbeLoginToken + juiceShopMirrorProbeDoc mirror fallback on POST /b2b/v2/orders; demo.owasp-juice.shop/rest/b2b/v2/orders findings 0→2 (+juice-shop-b2b-orders-deserialization-live-oracle +route); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-admin-dashboard-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probePwnshopAdminDashboardAccess tries /admin/security when /admin/dashboard is 404; mass-assignment admin OTP reaches Security Audit panel; pwnshop.ctfsecurity.com/admin/dashboard findings 45→46 (+pwnshop-admin-dashboard-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
     }
   ]
 }

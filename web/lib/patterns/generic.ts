@@ -24786,6 +24786,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-admin-dashboard-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Pwnshop admin dashboard route live oracle (PWN-021)",
+    description:
+      "When scanning /admin/dashboard, mass-assignment admin OTP session exposes the privileged admin panel without real admin credentials — route-specific broken access control oracle.",
+    impactOneline:
+      "Route scans on admin dashboard paths should confirm mass-assignment privilege escalation reaches the admin UI.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopAdminDashboardRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject is_admin/role mass-assignment on registration and enforce server-side admin authorization — Pwnshop is intentional lab software.",
+      steps: [
+        "Strip privileged fields from registration request bodies.",
+        "Require verified admin credentials before serving /admin/dashboard.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/dashboard route scan confirms mass-assignment admin reaches the admin panel. Show route-specific access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-export-orders-csv-route-live-oracle",
     platform: "generic",
     category: "Injection",
