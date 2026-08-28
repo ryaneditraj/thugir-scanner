@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-28T07:24:09.576Z",
-  "total": 2745,
-  "uniqueSlugs": 2737,
+  "generatedAt": "2026-08-28T08:20:01.178Z",
+  "total": 2748,
+  "uniqueSlugs": 2740,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2727,
+    "generic": 2730,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2660,
+    "deep": 2663,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 570,
+    "Broken access control": 571,
     "Exposed secret": 112,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 130,
     "Security misconfiguration": 208,
     "Broken authentication": 173,
-    "Injection": 428,
+    "Injection": 430,
     "Cross-site scripting": 729,
     "Open redirect": 24,
     "general": 20,
@@ -105,6 +105,8 @@
     "brokencrystals-api-fetch-route-live-oracle",
     "brokencrystals-api-file-httpbin-ssrf-live-oracle",
     "brokencrystals-api-file-route-live-oracle",
+    "brokencrystals-api-upload-parse-route-live-oracle",
+    "brokencrystals-api-upload-parse-xxe-live-oracle",
     "brokencrystals-aws-metadata-ssrf-live-oracle",
     "brokencrystals-aws-metadata-ssrf-route-live-oracle",
     "brokencrystals-azure-metadata-ssrf-live-oracle",
@@ -137,6 +139,7 @@
     "brokencrystals-goto-open-redirect-live-oracle",
     "brokencrystals-goto-open-redirect-route-live-oracle",
     "brokencrystals-hidden-upload-live-oracle",
+    "brokencrystals-hidden-upload-route-live-oracle",
     "brokencrystals-home-dom-xss-live-oracle",
     "brokencrystals-home-dom-xss-route-live-oracle",
     "brokencrystals-jwt-alg-none-live-oracle",

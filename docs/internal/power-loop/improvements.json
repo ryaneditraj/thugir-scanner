@@ -5585,6 +5585,24 @@
       "slug": "wrongsecrets-challenge-58-60-route-priority",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for wrongsecrets-error-demo-* on challenge-58 and wrongsecrets-mcp*/challenge-60 on challenge-60; removed duplicate challenge-57 priority block; wrongsecrets.herokuapp.com/challenge/challenge-60 findings 15 incl wrongsecrets-mcp-execute-command-live-oracle +wrongsecrets-challenge-60-mcp-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-api-upload-parse-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeBrokencrystalsUploadParseXxe multipart POST then metadata XXE fallback when /api/upload/parse returns 404; brokencrystals.com/api/upload/parse findings 25→80 (+brokencrystals-api-upload-parse-route-live-oracle +brokencrystals-metadata-xxe-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-hidden-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsHiddenUploadRouteLiveOracle delegates to live oracle on /api/hidden-upload route scans; brokencrystals.com/api/hidden-upload findings +brokencrystals-hidden-upload-route-live-oracle (77 total, route count 0→1); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-upload-api-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsUploadApiSeeds adds /api/metadata + /api/hidden-upload + /api/upload/parse when scanning upload routes; upload/parse crawl seeds metadata XXE live oracle on thin API-only discovery scans; benchmark 6/6 maintained"
     }
   ]
 }
