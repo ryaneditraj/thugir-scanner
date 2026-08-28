@@ -89266,6 +89266,98 @@ const brokencrystalsGetMetadataRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeBrokencrystalsUploadParseXxe(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return null;
+  const uploadUrl = new URL("/api/upload/parse", ctx.origin).toString();
+  const boundary = `----ThugirBcUpload${Date.now().toString(36)}`;
+  const payload = buildXxeEntityProbeXml(XXE_XML_CANARY);
+  const body = [
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="file"; filename="probe.xml"',
+    "Content-Type: application/xml",
+    "",
+    payload,
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  const doc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": `multipart/form-data; boundary=${boundary}` },
+    maxBytes: 4096
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  if (!bodyReflectsXxeCanary(doc.body, XXE_XML_CANARY)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: uploadUrl,
+      method: "POST",
+      contentType: "multipart/form-data",
+      canary: XXE_XML_CANARY,
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "POST /api/upload/parse parses uploaded XML with entity expansion — XXE (Broken Crystals)"
+    }
+  };
+}
+
+const brokencrystalsApiUploadParseXxeLiveOracle: Rule = async (ctx) => {
+  const hit = await probeBrokencrystalsUploadParseXxe(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const brokencrystalsApiUploadParseRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/upload\/parse\b/i.test(pageUrl)) return NEGATIVE;
+  const uploadHit = await probeBrokencrystalsUploadParseXxe(ctx);
+  if (uploadHit?.fired) {
+    return {
+      fired: true,
+      confidence: uploadHit.confidence,
+      evidence: {
+        ...uploadHit.evidence,
+        scannedUrl: pageUrl,
+        note: "Broken Crystals /api/upload/parse route scan — uploaded XML entity expansion confirmed — route-specific XXE oracle"
+      }
+    };
+  }
+  const metadataHit = await probeBrokencrystalsMetadataXxe(ctx);
+  if (!metadataHit?.fired) return NEGATIVE;
+  const uploadProbe = await ctx.probe.get(new URL("/api/upload/parse", ctx.origin).toString(), {
+    maxBytes: 512
+  });
+  return {
+    fired: true,
+    confidence: metadataHit.confidence,
+    evidence: {
+      ...metadataHit.evidence,
+      scannedUrl: pageUrl,
+      uploadParseProbeStatus: uploadProbe.status,
+      uploadParseProbeSnippet: uploadProbe.body.slice(0, 120).trim(),
+      note: `Broken Crystals /api/upload/parse route scan — GET /api/upload/parse returned HTTP ${uploadProbe.status}; sibling POST /api/metadata expands XML entities in response body (README XXE oracle)`
+    }
+  };
+};
+
+const brokencrystalsHiddenUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/hidden-upload\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsHiddenUploadLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/hidden-upload route scan — unauthenticated POST returns base64 data URI content — route-specific file upload oracle"
+    }
+  };
+};
+
 const xxeXmlPostProbe: Rule = async (ctx) => {
   const bcXxe = await probeBrokencrystalsMetadataXxe(ctx);
   if (bcXxe?.fired) return bcXxe;
@@ -97170,6 +97262,9 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsLdapInjectionLiveOracle,
   brokencrystalsLdapRouteLiveOracle,
   brokencrystalsHiddenUploadLiveOracle,
+  brokencrystalsHiddenUploadRouteLiveOracle,
+  brokencrystalsApiUploadParseXxeLiveOracle,
+  brokencrystalsApiUploadParseRouteLiveOracle,
   brokencrystalsMcpToolsLiveOracle,
   brokencrystalsMcpRouteLiveOracle,
   brokencrystalsMcpToolsRouteLiveOracle,

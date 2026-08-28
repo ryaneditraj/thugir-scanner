@@ -3181,6 +3181,9 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsLdapInjectionLiveOracle",
   "brokencrystalsLdapRouteLiveOracle",
   "brokencrystalsHiddenUploadLiveOracle",
+  "brokencrystalsHiddenUploadRouteLiveOracle",
+  "brokencrystalsApiUploadParseXxeLiveOracle",
+  "brokencrystalsApiUploadParseRouteLiveOracle",
   "brokencrystalsMcpToolsLiveOracle",
   "brokencrystalsMcpRouteLiveOracle",
   "brokencrystalsMcpToolsRouteLiveOracle",
@@ -3289,6 +3292,9 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsApiFileRouteLiveOracle",
   "brokencrystalsApiFetchLiveOracle",
   "brokencrystalsApiFetchRouteLiveOracle",
+  "brokencrystalsApiUploadParseXxeLiveOracle",
+  "brokencrystalsApiUploadParseRouteLiveOracle",
+  "brokencrystalsHiddenUploadRouteLiveOracle",
   "brokencrystalsFileAwsRouteLiveOracle",
   "brokencrystalsFileAzureRouteLiveOracle",
   "brokencrystalsProductsViewsSqliRouteLiveOracle",
@@ -8818,6 +8824,27 @@ function extractBrokencrystalsLabSeeds(html: string, pageUrl: string): string[] 
   return [...out];
 }
 
+/** Seed XXE/upload lab paths when deep-scanning Broken Crystals upload routes. */
+function brokencrystalsUploadApiSeeds(pageUrl: string): string[] {
+  if (
+    !/brokencrystals\.com/i.test(pageUrl) ||
+    !/\/api\/(?:upload\/parse|hidden-upload)\b/i.test(pageUrl)
+  ) {
+    return [];
+  }
+  const pageOrigin = new URL(pageUrl).origin;
+  const paths = ["/api/metadata", "/api/hidden-upload", "/api/upload/parse"];
+  const out = new Set<string>();
+  for (const p of paths) {
+    try {
+      out.add(new URL(p, pageOrigin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Seed JWT lab validate/login paths when deep-scanning a Broken Crystals API-only JWT route. */
 function brokencrystalsJwtApiSeeds(pageUrl: string): string[] {
   if (!/brokencrystals\.com/i.test(pageUrl) || !/\/api\/auth\/jwt\//i.test(pageUrl)) {
@@ -10266,6 +10293,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ginAndJuiceBlogPostSeeds = extractGinAndJuiceBlogPostSeeds(home.body, home.finalUrl);
   const brokencrystalsLabSeeds = extractBrokencrystalsLabSeeds(home.body, home.finalUrl);
   const brokencrystalsJwtSeeds = brokencrystalsJwtApiSeeds(home.finalUrl || effectiveTargetInput);
+  const brokencrystalsUploadSeeds = brokencrystalsUploadApiSeeds(
+    home.finalUrl || effectiveTargetInput
+  );
   const wrongsecretsChallengeSeeds = wrongsecretsChallengeApiSeeds(
     home.finalUrl || effectiveTargetInput
   );
@@ -11207,6 +11237,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ginAndJuiceBlogPostSeeds,
       ...brokencrystalsLabSeeds,
       ...brokencrystalsJwtSeeds,
+      ...brokencrystalsUploadSeeds,
       ...wrongsecretsChallengeSeeds,
       ...fauxbankLabSeeds,
       ...jwtArsenalExploitSeeds,
@@ -13460,6 +13491,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("brokencrystals-api-fetch")
       )
         return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/upload\/parse\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-api-upload-parse") ||
+          p.slug.startsWith("brokencrystals-metadata-xxe"))
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/hidden-upload\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-hidden-upload")
+      )
+        return -4;
       if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/file\b/i.test(targetInput) &&

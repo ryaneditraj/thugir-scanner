@@ -40002,6 +40002,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-hidden-upload-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals /api/hidden-upload route live oracle",
+    description:
+      "When scanning /api/hidden-upload, unauthenticated POST returns base64 data URI content — route-specific unrestricted file upload confirmation oracle.",
+    impactOneline:
+      "Route scans on /api/hidden-upload confirm unauthenticated file upload without content validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsHiddenUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and strict file validation on upload endpoints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Authenticate all file upload routes and enforce role-based access control.",
+        "Validate file types with magic-byte inspection, not just Content-Type headers.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/hidden-upload route scan confirms unauthenticated uploads. Show route-specific upload hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-api-upload-parse-xxe-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/upload/parse XXE live oracle",
+    description:
+      "POST /api/upload/parse accepts multipart XML file uploads and expands entities in the response — Broken Crystals upload XXE oracle.",
+    impactOneline:
+      "XML file upload parsers with entity expansion let attackers read local files and reach internal services.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsApiUploadParseXxeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in uploaded XML parsers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Reject DOCTYPE declarations in uploaded XML files.",
+        "Use a schema-validated XML parser with entity expansion disabled.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/upload/parse endpoint parses uploaded XML with entity expansion. Show secure upload XXE remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-api-upload-parse-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/upload/parse route XXE live oracle",
+    description:
+      "When scanning /api/upload/parse, probes multipart XML upload first then falls back to sibling POST /api/metadata when upload/parse returns 404 — route-specific XXE confirmation oracle.",
+    impactOneline:
+      "Route scans on /api/upload/parse confirm the Broken Crystals XML upload / metadata XXE training surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsApiUploadParseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Set XML parser options to reject DOCTYPE and external entities on upload handlers.",
+        "Use a schema-validated XML parser with entity expansion disabled.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/upload/parse route scan confirms XXE via upload or sibling /api/metadata. Show route-specific XML upload hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-ldap-injection-live-oracle",
     platform: "generic",
     category: "Injection",
