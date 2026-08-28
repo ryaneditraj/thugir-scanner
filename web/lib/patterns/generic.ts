@@ -41939,10 +41939,36 @@ export const genericPatterns: Pattern[] = [
     impactOneline:
       "Route-specific confirmation that Broken Crystals latest-products endpoint ignores intended pagination limits via the limit query parameter.",
     detectorKind: "rule_ref",
-    detectorConfig: { rule: "brokencrystalsProductsLatestLimitBypassRouteLiveOracle" },
+    detectorConfig: { rule: "brokencrystalsProductsLatestLimitBypassLiveOracle" },
     tierRequired: "deep",
     remediation: {
       summary: "Enforce server-side pagination limits — Broken Crystals is intentional lab software.",
+      steps: [
+        "Cap limit parameters server-side regardless of client input.",
+        "Require authentication for bulk catalog exports.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/products/latest route scan confirms business constraint bypass via ?limit=. Show pagination limit enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-products-latest-limit-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals products latest limit bypass route live oracle",
+    description:
+      "When scanning /api/products/latest, the default response caps at 3 products but ?limit=100 returns the full catalog — route-specific business constraint bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm Broken Crystals latest-products endpoint ignores intended pagination limits via the limit query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsProductsLatestLimitBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce server-side pagination limits on /api/products/latest route handlers.",
       steps: [
         "Cap limit parameters server-side regardless of client input.",
         "Require authentication for bulk catalog exports.",
@@ -62845,6 +62871,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-catalog-search-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop catalog search XSS route live oracle",
+    description:
+      "When scanning /catalog, /catalog/search, or /catalog/product-search-results routes, searchTerm reflects into the searchText JavaScript variable without encoding — route-specific reflected XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm catalog search parameters are not reflected into executable script context.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogSearchXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode user input before embedding in script context on catalog search routes.",
+      steps: [
+        "Never interpolate query parameters into inline JavaScript.",
+        "Use context-appropriate output encoding in catalog templates.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our catalog search route scan reflects raw searchTerm into searchText. Show route-specific XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-catalog-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -64219,6 +64271,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /checkout route scan confirms unauthenticated checkout redirects to login after cart manipulation. Show route-specific checkout remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-forgot-password-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /forgot-password route live oracle",
+    description:
+      "When scanning /forgot-password, phantom 404 page returns missing-content shell while POST /my-account/forgot-password handles password-reset and redirects unauthenticated callers to /login — route-specific password-reset oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop exposes a discoverable password-reset surface behind phantom navigation routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceForgotPasswordRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect password-reset endpoints with rate limiting, anti-enumeration, and secure token delivery.",
+      steps: [
+        "Return generic responses for password-reset requests regardless of account existence.",
+        "Bind reset tokens to the requesting session and expire them quickly.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /forgot-password route scan confirms password-reset handling on /my-account/forgot-password. Show route-specific reset-flow remediation.",
     version: 1,
     enabled: true
   },

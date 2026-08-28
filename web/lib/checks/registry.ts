@@ -41215,7 +41215,7 @@ const pwnshopAdminDashboardRouteLiveOracle: Rule = async (ctx) => {
       evidence: {
         ...hit.evidence,
         scannedUrl: pageUrl,
-        note: hit.evidence.note?.includes("admin/security")
+        note: String(hit.evidence.note ?? "").includes("admin/security")
           ? "Pwnshop /admin/dashboard route scan — mass-assignment admin OTP session reaches /admin/security Security Audit panel (PWN-021)"
           : "Pwnshop /admin/dashboard route scan — mass-assignment admin OTP session exposes privileged admin panel without real admin credentials (PWN-021)"
       }
@@ -68894,6 +68894,27 @@ const ginAndJuiceCatalogSearchXssLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceCatalogSearchXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/catalog(?:\/search|\/product-search-results)?\b/i.test(pageUrl) &&
+    !/\/catalog\?/i.test(pageUrl)
+  )
+    return NEGATIVE;
+  const result = await ginAndJuiceCatalogSearchXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop catalog search route scan — searchTerm reflected into client-side searchText variable (reflected XSS training oracle)"
+    }
+  };
+};
+
 const ginAndJuiceCatalogRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -70253,6 +70274,53 @@ const ginAndJuiceCheckoutRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       checkoutStatus: phantomDoc.status,
       note: "Gin & Juice Shop /checkout route scan — phantom checkout page returns 404 while POST /catalog/cart/checkout redirects unauthenticated users to /login?redirect=cart — checkout business-logic training oracle"
+    }
+  };
+};
+
+async function probeGinAndJuiceForgotPasswordSurface(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isGinAndJuiceHost(ctx)) return null;
+  const resetUrl = new URL("/my-account/forgot-password", ctx.origin).toString();
+  const resetDoc = await ctx.probe.get(resetUrl, {
+    method: "POST",
+    body: new URLSearchParams({ email: "carlos@ginandjuice.shop" }).toString(),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const location = resetDoc.headers.location || resetDoc.headers.Location || "";
+  if (resetDoc.status !== 302 || !/^\/login\b/i.test(String(location))) return null;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      resetUrl,
+      redirectLocation: String(location),
+      note: "Gin & Juice Shop POST /my-account/forgot-password accepts password-reset requests and redirects unauthenticated callers to /login — password-reset surface oracle"
+    }
+  };
+}
+
+const ginAndJuiceForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/forgot-password\b/i.test(pageUrl) || /\/my-account\/forgot-password/i.test(pageUrl))
+    return NEGATIVE;
+  const phantomDoc = await ctx.probe.get(pageUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (phantomDoc.status < 400 || phantomDoc.status >= 500) return NEGATIVE;
+  if (!/oops\.\.\.\s*something went wrong|missing-content|not-found/i.test(phantomDoc.body))
+    return NEGATIVE;
+  const result = await probeGinAndJuiceForgotPasswordSurface(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      phantomStatus: phantomDoc.status,
+      note: "Gin & Juice Shop /forgot-password route scan — phantom 404 page while POST /my-account/forgot-password handles password-reset and redirects to /login — password-reset training oracle"
     }
   };
 };
@@ -86969,10 +87037,8 @@ const brokencrystalsTestimonialsCountSqliRouteLiveOracle: Rule = async (ctx) => 
   };
 };
 
-const brokencrystalsProductsLatestLimitBypassRouteLiveOracle: Rule = async (ctx) => {
+const brokencrystalsProductsLatestLimitBypassLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/products\/latest/i.test(pageUrl)) return NEGATIVE;
   const defaultUrl = new URL("/api/products/latest", ctx.origin).toString();
   const bypassUrl = new URL("/api/products/latest?limit=100", ctx.origin).toString();
   const [defaultDoc, bypassDoc] = await Promise.all([
@@ -86997,11 +87063,27 @@ const brokencrystalsProductsLatestLimitBypassRouteLiveOracle: Rule = async (ctx)
     fired: true,
     confidence: 0.93,
     evidence: {
-      scannedUrl: pageUrl,
       defaultUrl,
       bypassUrl,
       defaultCount,
       bypassCount,
+      note: "Broken Crystals GET /api/products/latest caps at 3 products but ?limit=100 returns full catalog — business constraint bypass oracle"
+    }
+  };
+};
+
+const brokencrystalsProductsLatestLimitBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/products\/latest/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsProductsLatestLimitBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
       note: "Broken Crystals /api/products/latest route scan — default returns 3 products but ?limit=100 returns full catalog — business constraint bypass oracle"
     }
   };
@@ -97116,6 +97198,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsFilesLfiRouteLiveOracle,
   brokencrystalsFileRawLfiRouteLiveOracle,
   brokencrystalsTestimonialsCountSqliRouteLiveOracle,
+  brokencrystalsProductsLatestLimitBypassLiveOracle,
   brokencrystalsProductsLatestLimitBypassRouteLiveOracle,
   brokencrystalsProductsDateManipulationLiveOracle,
   brokencrystalsProductsDateManipulationRouteLiveOracle,
@@ -97824,6 +97907,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceAngularCstiLiveOracle,
   ginAndJuiceAngularCstiRouteLiveOracle,
   ginAndJuiceCatalogSearchXssLiveOracle,
+  ginAndJuiceCatalogSearchXssRouteLiveOracle,
   ginAndJuiceCatalogRouteLiveOracle,
   ginAndJuiceBlogPostOpenRedirectLiveOracle,
   ginAndJuiceBlogPostRouteLiveOracle,
@@ -97875,6 +97959,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCartCheckoutAuthLiveOracle,
   ginAndJuiceCartRouteLiveOracle,
   ginAndJuiceCheckoutRouteLiveOracle,
+  ginAndJuiceForgotPasswordRouteLiveOracle,
   ginAndJuiceAngularVulnerableDependencyLiveOracle,
   ginAndJuiceAngularVulnerableDependencyRouteLiveOracle,
   ginAndJuiceLoggerOastLiveOracle,
