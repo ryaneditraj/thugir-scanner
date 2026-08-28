@@ -14980,6 +14980,97 @@ const sekumartSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeSekumartSearchReflectedXss(
+  ctx: RuleContext
+): Promise<RuleResult | null> {
+  const canary = `thugirXSS${Date.now().toString(36)}`;
+  const payload = `<b>${canary}</b>`;
+  const probeUrl = new URL("/search.php", ctx.origin);
+  probeUrl.searchParams.set("q", payload);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 500) return null;
+  const reflected =
+    doc.body.includes(`<b>${canary}</b>`) ||
+    doc.body.includes(`<b><b>${canary}</b></b>`);
+  if (!reflected) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      snippet: doc.body.match(/You searched for:[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? doc.body.slice(0, 200).trim(),
+      note: "SekuMart GET /search.php?q= reflects search term inside <b> without HTML encoding — reflected XSS training oracle"
+    }
+  };
+}
+
+const sekumartSearchXssLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  return (await probeSekumartSearchReflectedXss(ctx)) ?? NEGATIVE;
+};
+
+const sekumartSearchXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/search\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartSearchXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "SekuMart /search.php route scan — GET ?q= reflects HTML markup unescaped in search results — reflected XSS training oracle"
+    }
+  };
+};
+
+async function probeSekumartDirectoryXPath(
+  ctx: RuleContext
+): Promise<RuleResult | null> {
+  const probeUrl = new URL("/directory.php", ctx.origin);
+  probeUrl.searchParams.set("q", "' or '1'='1");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 500) return null;
+  if (!/svc-directory/i.test(doc.body)) return null;
+  const flagMatch = doc.body.match(/FLAG\{[^}]+\}/i);
+  if (!flagMatch) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      flag: flagMatch[0],
+      snippet: doc.body.match(/svc-directory[\s\S]{0,120}/i)?.[0]?.slice(0, 120) ?? flagMatch[0],
+      note: "SekuMart GET /directory.php?q=' or '1'='1 concatenates into XPath expression and dumps hidden svc-directory flag — XPath injection sqlmap --xpath training oracle"
+    }
+  };
+}
+
+const sekumartDirectoryXPathLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  return (await probeSekumartDirectoryXPath(ctx)) ?? NEGATIVE;
+};
+
+const sekumartDirectoryXPathRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/directory\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartDirectoryXPathLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "SekuMart /directory.php route scan — GET ?q=' or '1'='1 triggers XPath injection dumping svc-directory FLAG — sqlmap --xpath training oracle"
+    }
+  };
+};
+
 const sekumartOpenapiSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isSekumartHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -99300,6 +99391,10 @@ export const RULES: Record<string, Rule> = {
   sekumartProductSqliRouteLiveOracle,
   sekumartSearchSqliLiveOracle,
   sekumartSearchSqliRouteLiveOracle,
+  sekumartSearchXssLiveOracle,
+  sekumartSearchXssRouteLiveOracle,
+  sekumartDirectoryXPathLiveOracle,
+  sekumartDirectoryXPathRouteLiveOracle,
   sekumartOpenapiSqliRouteLiveOracle,
   clientSideBreakTheFlaskEvidence,
   clientSideFlaskVulnappEvidence,
