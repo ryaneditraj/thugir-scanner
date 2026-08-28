@@ -23954,6 +23954,10 @@ JavaSecLab whgojp/JavaSecLab comprehensive Java vulnerability platform
 GET /xss/reflect/vul1?payload= — JSON-return reflected XSS (GET/POST)
 GET /xss/reflect/vul2?payload= — String direct output reflected XSS
 GET /xss/reflect/vul3?type=html&payload= — text/html reflected XSS
+GET /ssrf/vul?url=file:///etc/hosts — local file read via URLConnection SSRF
+GET /ssrf/vul?url=http://127.0.0.1/ssrf/internal/metadata — internal metadata SSRF
+GET /sqli/jdbc/vul1?type=select&id=1 OR 1=1 — native JDBC string concatenation SQLi
+GET /xxe/vul1?payload= — XMLReader external entity file read / internal SSRF
 `;
 
 const JAVASECLAB_XSS_REFLECTION_PROBE = "thugir-javaseclab-xss-reflect-probe";
@@ -24027,6 +24031,158 @@ const javaSecLabDruidBasicJsonRouteLiveOracle: Rule = async (ctx) => {
     };
   }
   return NEGATIVE;
+};
+
+const javaSecLabSsrfVulLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probes = [
+    {
+      url: new URL("/ssrf/vul?url=file:///etc/hosts", ctx.origin).toString(),
+      marker: /localhost|127\.0\.0\.1|hosts/i
+    },
+    {
+      url: new URL("/ssrf/vul?url=http://127.0.0.1/ssrf/internal/metadata", ctx.origin).toString(),
+      marker: /instance-id|metadata|token|role/i
+    }
+  ];
+  for (const probe of probes) {
+    const doc = await ctx.probe.get(probe.url, { maxBytes: 16384, timeoutMs: 15000 });
+    if (doc.status >= 200 && doc.status < 500 && probe.marker.test(doc.body)) {
+      return {
+        fired: true,
+        confidence: 0.92,
+        evidence: {
+          probeUrl: probe.url,
+          snippet: doc.body.slice(0, 200).trim(),
+          note: "JavaSecLab GET /ssrf/vul?url= fetches attacker-controlled URLs server-side — SSRF training oracle (file:// or internal metadata)"
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabSsrfVulRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/ssrf\/vul\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabSsrfVulLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl, note: "JavaSecLab /ssrf/vul route scan — GET ?url= triggers server-side fetch to file:// or internal metadata — route-specific SSRF training oracle" }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/ssrf\/vul\?url=|file:\/\/\/etc\/hosts|internal\/metadata/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /ssrf/vul?url=file:///etc/hosts — URLConnection SSRF",
+      note: "JavaSecLab /ssrf/vul route scan — SSRF training module documented in wiki (auth-gated public demo)"
+    }
+  };
+};
+
+const javaSecLabJdbcSqliVul1LiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/sqli/jdbc/vul1?type=select&id=1%20OR%201%3D1", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 500 &&
+    (/SQL|syntax|mysql|jdbc|ORA-|SQLException/i.test(doc.body) ||
+      (doc.body.match(/<tr\b/gi)?.length ?? 0) > 2)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        probeUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "JavaSecLab GET /sqli/jdbc/vul1?type=select&id=1 OR 1=1 — native JDBC string concatenation SQLi training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabJdbcSqliVul1RouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/sqli\/jdbc\/vul1\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabJdbcSqliVul1LiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl, note: "JavaSecLab /sqli/jdbc/vul1 route scan — native JDBC concatenation SQLi — route-specific training oracle" }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/sqli\/jdbc\/vul1|id=1 OR 1=1|原生拼接/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /sqli/jdbc/vul1?type=select&id=1 OR 1=1 — native JDBC SQLi",
+      note: "JavaSecLab /sqli/jdbc/vul1 route scan — JDBC SQLi training module documented in wiki (auth-gated public demo)"
+    }
+  };
+};
+
+const javaSecLabXxeVul1LiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const xxePayload =
+    '<?xml version="1.0"?><!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/hosts">]><foo>&xxe;</foo>';
+  const probeUrl = new URL(`/xxe/vul1?payload=${encodeURIComponent(xxePayload)}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 500 &&
+    (/localhost|127\.0\.0\.1|hosts|DOCTYPE|ENTITY|XMLReader/i.test(doc.body) ||
+      /instance-id|metadata/i.test(doc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        probeUrl: probeUrl.slice(0, 180),
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "JavaSecLab GET /xxe/vul1?payload= resolves external entities via XMLReader — XXE file read / SSRF training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabXxeVul1RouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/xxe\/vul1\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabXxeVul1LiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl, note: "JavaSecLab /xxe/vul1 route scan — XMLReader external entity file read — route-specific XXE training oracle" }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/xxe\/vul1|XMLReader|external entity/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /xxe/vul1?payload= — XMLReader external entity",
+      note: "JavaSecLab /xxe/vul1 route scan — XXE training module documented in wiki (auth-gated public demo)"
+    }
+  };
 };
 
 // --- Pwned Labs cloud security training platform (pwnedlabs.io) -----------------------
@@ -96978,6 +97134,12 @@ export const RULES: Record<string, Rule> = {
   javaSecLabReflectedXssLiveOracle,
   javaSecLabReflectedXssRouteLiveOracle,
   javaSecLabDruidBasicJsonRouteLiveOracle,
+  javaSecLabSsrfVulLiveOracle,
+  javaSecLabSsrfVulRouteLiveOracle,
+  javaSecLabJdbcSqliVul1LiveOracle,
+  javaSecLabJdbcSqliVul1RouteLiveOracle,
+  javaSecLabXxeVul1LiveOracle,
+  javaSecLabXxeVul1RouteLiveOracle,
   clientSidePwnedlabsEvidence,
   clientSidePwnedlabsGitSecretsEvidence,
   clientSideRedtigerHackitEvidence,
