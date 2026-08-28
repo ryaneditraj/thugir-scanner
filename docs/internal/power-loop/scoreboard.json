@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T13:40:00.000Z",
+  "updated_at": "2026-08-28T17:40:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2922,
-  "total_findings": 33167,
-  "critical_findings": 57,
+  "total_sites_scanned": 2742,
+  "total_findings": 26860,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2051,
-  "discovery_findings": 27904,
-  "improvements_shipped": 1254,
-  "last_run": "2026-08-28T13:40:00.000Z",
+  "discovery_urls_added": 1964,
+  "discovery_findings": 22889,
+  "improvements_shipped": 936,
+  "last_run": "2026-08-28T17:40:00.000Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "17",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
-      "live_oracles": 39,
+      "probes_run": 593,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,44 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles incl secret-resend) — no category gaps"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles); secret-resend slug bridged from juice-shop-resend-key-live-oracle"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
+      "urls_added": 8,
       "urls_scanned": 8,
       "findings": 136,
-      "focus": "ginandjuice alias API route oracles (feedback/submit + identity/auth/login + logger feedback alias) + drained change-email/sekumart/wrongsecrets 15-17/28-30",
+      "focus": "ginandjuice change-email TOCTOU + sekumart sqlmap OpenAPI + wrongsecrets challenges 7/13/14/28-30",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles, gap=[])",
-      "ginandjuice.shop/api/feedback/submit: 33→35 findings (+ginandjuice-feedback-submit-route-live-oracle +ginandjuice-logger-route-live-oracle)",
-      "ginandjuice.shop/api/identity/auth/login: 34→35 findings (+ginandjuice-identity-auth-login-route-live-oracle)",
-      "ginandjuice.shop/my-account/change-email: 34 findings — change-email route oracle",
-      "sekumart.sekuripy.hr/search.php?q=test: 12 findings — search-sqli-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-28 through challenge-30: 15 findings each — route oracles",
-      "wrongsecrets.herokuapp.com/challenge/challenge-15 through challenge-17: 15 findings each — route oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, secret-resend bridged)",
+      "sekumart.sekuripy.hr/search.php: 12→14 (+sekumart-openapi-sqli-live-oracle)",
+      "brokencrystals.com/api/email: 58→85 (+email SMTP SSRF + header injection live oracles via crawl seeds)",
+      "ginandjuice.shop/catalog: +ginandjuice-change-email-live-oracle (302 /login redirect TOCTOU oracle)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-28/29/30: route oracles for GitHub issue + screenshot + localStorage challenges"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "crapi2.apisec.ai unreachable from cloud egress (SSL_ERROR_SYSCALL)",
-      "ginandjuice /api/feedback/submit is SPA alias — live XSS oracle bridges via /catalog?searchTerm= FINDING-021",
-      "ginandjuice change-email race-condition exploit requires authenticated session for TOCTOU proof"
+      "ginandjuice race-condition exploitation requires authenticated session — live oracle confirms protected endpoint only"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "ginandjuice.shop/api/feedback/submit": 35,
-    "ginandjuice.shop/api/identity/auth/login": 35,
     "ginandjuice.shop/my-account/change-email": 34,
-    "sekumart.sekuripy.hr/search.php?q=test": 12,
+    "sekumart.sekuripy.hr/search.php?q=test": 14,
+    "brokencrystals.com/api/email": 85,
     "wrongsecrets.herokuapp.com/challenge/challenge-28": 15,
     "wrongsecrets.herokuapp.com/challenge/challenge-29": 15,
     "wrongsecrets.herokuapp.com/challenge/challenge-30": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-15": 15,
-    "brokencrystals.com/api/email": 84,
-    "brokencrystals.com/api/files?path=test": 87,
-    "vulnbank.org/upload_profile_picture_url": 29
+    "wrongsecrets.herokuapp.com/challenge/challenge-7": 15,
+    "duck-store.escape.tech/api/v1/users/me/profile": 33,
+    "demo.owasp-juice.shop/rest/memories": 27
   }
 }

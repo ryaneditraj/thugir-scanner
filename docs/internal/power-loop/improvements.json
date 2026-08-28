@@ -5693,6 +5693,24 @@
       "slug": "brokencrystals-upload-api-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsUploadApiSeeds adds /api/metadata + /api/hidden-upload + /api/upload/parse when scanning upload routes; upload/parse crawl seeds metadata XXE live oracle on thin API-only discovery scans; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-openapi-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sekumartOpenapiSqliLiveOracle GET /openapi.json documents sqlmap --openapi + live product.php?id= mysqli probe; sekumart.sekuripy.hr/search.php?q=test findings 12→14 (+sekumart-openapi-sqli-live-oracle); sekumartApiSeeds crawl-seeds openapi.json on SekuMart routes; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-email-api-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsEmailApiSeeds adds /api/email/getEmails + /api/email/sendSupportEmail when scanning /api/email hub; brokencrystals.com/api/email findings 58→85 (+brokencrystals-email-smtp-proxy-live-oracle +brokencrystals-send-support-email-ssrf-live-oracle +brokencrystals-send-support-email-header-injection-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-change-email-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceChangeEmailLiveOracle GET /my-account/change-email redirect:manual → 302 Location /login; ginandjuice.shop/catalog findings 42 incl +ginandjuice-change-email-live-oracle; benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
