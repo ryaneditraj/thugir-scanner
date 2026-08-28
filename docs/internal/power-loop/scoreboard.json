@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T10:18:00.000Z",
+  "updated_at": "2026-08-28T11:22:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2890,
-  "total_findings": 32193,
+  "total_sites_scanned": 2898,
+  "total_findings": 32523,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2036,
-  "discovery_findings": 27066,
+  "discovery_urls_added": 2041,
+  "discovery_findings": 27396,
   "improvements_shipped": 1245,
-  "last_run": "2026-08-28T10:18:00.000Z",
+  "last_run": "2026-08-28T11:22:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
-      "live_oracles": 37,
+      "probes_run": 597,
+      "live_oracles": 39,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,35 +49,40 @@
           ]
         }
       },
-      "note": "Rich 6/6 first-pass recall (51 findings, 37 live oracles) — secret-resend + resend-key slugs present"
+      "note": "Rich 6/6 first-pass recall (51 findings, 39 live oracles) — secret-resend slug present; scoreboard write initially blocked by improvements.json syntax error (fixed)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 153,
-      "focus": "brokencrystals search_users alias route + ginandjuice newsletter subscribe route + missing rate-limit oracle",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 330,
+      "focus": "ginandjuice logger OAST + brokencrystals process_numbers SSRF/JSi + identity login + catalog searchTerm XSS + users/search canonical alias; queue drain wrongsecrets 24-26",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 37 live oracles, gap=[])",
-      "brokencrystals.com/api/search_users: 64→85 findings — brokencrystals-search-users-route-live-oracle shipped",
-      "ginandjuice.shop/api/newsletter/subscribe: 32→35 findings — ginandjuice-newsletter-subscribe-route-live-oracle + rate-limit oracles shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles, gap=[])",
+      "ginandjuice.shop/logger: 33 findings — ginandjuice-logger-oast-route-live-oracle + blind OAST telemetry sink",
+      "brokencrystals.com/api/process_numbers: 89 findings — brokencrystals-process-numbers-route-live-oracle + MCP server-side JS injection",
+      "ginandjuice.shop/catalog?searchTerm=test: 41 findings — catalog-searchterm-xss-route-live-oracle + reflected XSS JS breakout",
+      "brokencrystals.com/api/users/search/test: 88 findings — brokencrystals-users-search-route-live-oracle (canonical /api/users/search/:name path)",
+      "ginandjuice.shop/api/identity/auth/login: 34 findings — ginandjuice-login-route-live-oracle (thin vs /login hub)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "brokencrystals /api/search_users is README alias — canonical path is /api/users/search/",
-      "ginandjuice /api/newsletter/subscribe returns 404 — canonical subscribe API is POST /catalog/subscribe"
+      "improvements.json had broken candidate entry (missing source/slug) — fixed to unblock scoreboard writes",
+      "ginandjuice /api/identity/auth/login is SPA route shell — canonical login is POST /login",
+      "brokencrystals /api/users/search/:name mirrors /api/search_users — route-specific oracles may duplicate"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "brokencrystals.com/api/search_users": 85,
-    "ginandjuice.shop/api/newsletter/subscribe": 35,
+    "brokencrystals.com/api/process_numbers": 89,
+    "brokencrystals.com/api/users/search/test": 88,
+    "ginandjuice.shop/catalog?searchTerm=test": 41,
+    "ginandjuice.shop/logger": 33,
+    "ginandjuice.shop/api/identity/auth/login": 34,
     "brokencrystals.com/api/users/one/1/photo?isAdmin=true": 89,
     "ginandjuice.shop/catalog?category=Accessories": 41,
-    "brokencrystals.com/api/config/get_config": 80,
-    "brokencrystals.com/api/products/views": 62,
-    "brokencrystals.com/api/auth/jwt/x5c/validate": 79
+    "brokencrystals.com/api/search_users": 85
   }
 }

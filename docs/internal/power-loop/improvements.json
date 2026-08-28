@@ -18,6 +18,9 @@
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: probeGinAndJuiceCatalogSubscribeRateLimit fires 6 rapid POST /catalog/subscribe without HTTP 429; ginandjuice.shop/api/newsletter/subscribe findings 32→35 (+ginandjuice-newsletter-subscribe-rate-limit-live-oracle +ginandjuice-newsletter-subscribe-rate-limit-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-config-get-config-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: probeBrokencrystalsConfig tries /api/config/get_config then /api/config; brokencrystals.com/api/config/get_config findings 16→80 (+brokencrystals-config-get-config-route-live-oracle +brokencrystals-config-live-oracle); benchmark juice-shop 43 findings 6/6 maintained"
     },
