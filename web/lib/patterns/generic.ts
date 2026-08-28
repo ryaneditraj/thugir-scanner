@@ -64378,6 +64378,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-feedback-submit-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /api/feedback/submit route live oracle",
+    description:
+      "When scanning /api/feedback/submit, GET /catalog?searchTerm= reflects attacker input into searchText — route-specific reflected XSS oracle (alias path; /api/feedback/submit returns SPA 404; PortSwigger FINDING-021).",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice XSS training surfaces are reachable from scanner evaluation alias API paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceFeedbackSubmitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode searchTerm before embedding in client-side searchText variables.",
+      steps: [
+        "Never reflect raw query parameters into JavaScript string literals.",
+        "Use strict output encoding for catalog search reflection sinks.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/feedback/submit route scan confirms catalog searchTerm XSS via searchText reflection. Show route-specific XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-identity-auth-login-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /api/identity/auth/login route live oracle",
+    description:
+      "When scanning /api/identity/auth/login, POST /login reflects failed username into inline var username without escaping — route-specific JavaScript-context XSS oracle (alias path; API returns SPA 404).",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice login XSS training oracle is reachable from identity auth alias API scans.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceIdentityAuthLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode all user input before embedding in JavaScript string literals on login error pages.",
+      steps: [
+        "HTML-encode or JSON-encode usernames before inserting into inline scripts.",
+        "Avoid echoing raw request parameters into script blocks.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/identity/auth/login route scan confirms login username reflection XSS. Show JavaScript-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-newsletter-subscribe-rate-limit-live-oracle",
     platform: "generic",
     category: "Business logic",

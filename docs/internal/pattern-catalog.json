@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-28T12:50:35.647Z",
-  "total": 2762,
-  "uniqueSlugs": 2754,
+  "generatedAt": "2026-08-28T13:35:04.874Z",
+  "total": 2764,
+  "uniqueSlugs": 2756,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2744,
+    "generic": 2746,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2677,
+    "deep": 2679,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 208,
     "Broken authentication": 174,
     "Injection": 434,
-    "Cross-site scripting": 730,
+    "Cross-site scripting": 732,
     "Open redirect": 24,
     "general": 20,
     "SSRF": 18,
@@ -1693,10 +1693,12 @@
     "ginandjuice-change-password-route-live-oracle",
     "ginandjuice-checkout-route-live-oracle",
     "ginandjuice-delete-route-live-oracle",
+    "ginandjuice-feedback-submit-route-live-oracle",
     "ginandjuice-forgot-password-live-oracle",
     "ginandjuice-forgot-password-route-live-oracle",
     "ginandjuice-home-url-override-live-oracle",
     "ginandjuice-home-url-override-route-live-oracle",
+    "ginandjuice-identity-auth-login-route-live-oracle",
     "ginandjuice-logger-oast-live-oracle",
     "ginandjuice-logger-route-live-oracle",
     "ginandjuice-login-route-live-oracle",

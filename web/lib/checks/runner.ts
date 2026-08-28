@@ -2668,6 +2668,8 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCatalogSubscribeLiveOracle",
   "ginAndJuiceCatalogSubscribeRouteLiveOracle",
   "ginAndJuiceNewsletterSubscribeRouteLiveOracle",
+  "ginAndJuiceFeedbackSubmitRouteLiveOracle",
+  "ginAndJuiceIdentityAuthLoginRouteLiveOracle",
   "ginAndJuiceNewsletterSubscribeRateLimitLiveOracle",
   "ginAndJuiceNewsletterSubscribeRateLimitRouteLiveOracle",
   "ginAndJuiceCatalogProductRouteLiveOracle",
@@ -13860,6 +13862,25 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /ginandjuice\.shop/i.test(origin) &&
         /\/api\/newsletter\/subscribe\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-newsletter-subscribe")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/api\/feedback\/submit\b/i.test(targetInput) &&
+        (p.slug.startsWith("ginandjuice-feedback-submit") ||
+          p.slug.startsWith("ginandjuice-catalog-search-xss"))
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/api\/identity\/auth\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-identity-auth-login")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/api\/feedback\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-logger")
       )
         return -4;
       if (
