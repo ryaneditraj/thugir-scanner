@@ -2707,6 +2707,7 @@ const DEEP_RULES = new Set<string>([
   "crapiAdminVideosBflaLiveOracle",
   "crapiAdminVideosBflaRouteLiveOracle",
   "crapiUserVehiclesRouteLiveOracle",
+  "crapiCommunityPostsLiveOracle",
   "crapiCommunityPostsRouteLiveOracle",
   "crapiContactMechanicSsrfLiveOracle",
   "crapiContactMechanicSsrfRouteLiveOracle",
@@ -3268,6 +3269,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsEmailSmtpProxyRouteLiveOracle",
   "brokencrystalsSendSupportEmailSsrfLiveOracle",
   "brokencrystalsSendSupportEmailRouteLiveOracle",
+  "brokencrystalsSendSupportEmailHeaderInjectionLiveOracle",
+  "brokencrystalsEmailHubRouteLiveOracle",
   "brokencrystalsAdminLoginBflaLiveOracle",
   "brokencrystalsAdminLoginBflaRouteLiveOracle",
   "brokencrystalsDeleteEmailsLiveOracle",
@@ -12736,6 +12739,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
+        /\/api\/email\/?(?:\?|#|$)/i.test((targetInput.split(/[?#]/)[0] ?? targetInput)) &&
+        !/\/api\/email\/\w/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-email-hub") ||
+          p.slug.startsWith("brokencrystals-send-support-email-header"))
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
         /\/chat\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-chat")
       )
@@ -13411,7 +13422,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/(?:identity|community)\/api\/v2\/community\/posts/i.test(targetInput) &&
         p.slug.startsWith("crapi-community-posts")
       )
-        return -3;
+        return -4;
       if (
         /crapi2?\.apisec\.ai/i.test(origin) &&
         /\/shop\/orders\b/i.test(targetInput) &&

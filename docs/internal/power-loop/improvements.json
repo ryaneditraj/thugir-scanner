@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-internal-secret-ssrf-chain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /upload_profile_picture_url image_url=http://127.0.0.1:5000/internal/secret returns file_path static/uploads/*_secret; GET reveals app_secret_key=secret123 + DB_PASSWORD; vulnbank.org/upload_profile_picture_url findings 29 maintained (+internal secret chain in vulnbank-upload-profile-picture-url-ssrf-live-oracle 0.96); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-email-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsEmailHubRouteLiveOracle fires sendSupportEmail header injection (%0aCc:) + getEmails SMTP proxy on /api/email hub; brokencrystals.com/api/email findings 35→84 (+brokencrystals-email-hub-route-live-oracle +brokencrystals-send-support-email-header-injection-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-community-posts-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: crapiCommunityPostsLiveOracle delegates vehicleid leak from community posts to location BOLA; runner -4 priority on /community/posts paths; crapi2.apisec.ai/community/api/v2/community/posts/recent findings 12 (+crapi-community-posts-route-live-oracle +live pattern); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:crapi2.apisec.ai",
       "slug": "crapi-convert-video-command-injection-live-oracle",
       "status": "shipped",

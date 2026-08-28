@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T12:22:30.000Z",
+  "updated_at": "2026-08-28T12:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2907,
-  "total_findings": 32814,
-  "critical_findings": 55,
+  "total_sites_scanned": 2911,
+  "total_findings": 32945,
+  "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2046,
-  "discovery_findings": 27637,
-  "improvements_shipped": 1248,
-  "last_run": "2026-08-28T12:22:30.000Z",
+  "discovery_findings": 27768,
+  "improvements_shipped": 1251,
+  "last_run": "2026-08-28T12:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "12",
     "benchmark": {
@@ -49,38 +49,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 38 live oracles incl resend-key-live-oracle) — no category gaps"
+      "note": "Stable 6/6 first-pass recall (50 findings, 38 live oracles) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 241,
-      "focus": "vulnbank SSRF upload_profile_picture_url + brokencrystals LFI/files + email injection + crAPI community posts + ginandjuice feedback/submit + wrongsecrets 20/21/27 drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 113,
+      "focus": "vulnbank internal/secret SSRF chain + brokencrystals /api/email hub header-injection route oracle + crapi community-posts live pattern",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 38 live oracles, gap=[])",
-      "brokencrystals.com/api/files?path=test: 87 findings — LFI path-param route oracle",
-      "vulnbank.org/upload_profile_picture_url: 29 findings — SSRF profile-picture-url route oracle",
-      "ginandjuice.shop/api/feedback/submit: 33 findings — feedback-submit route oracle",
-      "brokencrystals.com/api/email: 35 findings — email-injection route oracle",
-      "crapi2.apisec.ai/community/api/v2/community/posts/recent: 12 findings — community-posts route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-20/21/27: 15 findings each — challenge route oracles"
+      "vulnbank.org/upload_profile_picture_url: 29 findings — internal/secret SSRF chain via loopback fetch (app_secret_key exfiltration)",
+      "brokencrystals.com/api/email: 35→84 findings (+brokencrystals-email-hub-route-live-oracle + header injection)",
+      "crapi2.apisec.ai/community/api/v2/community/posts/recent: 12 findings (+crapi-community-posts-live-oracle pattern)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vulnbank SSRF upload_profile_picture_url: full /internal/secret chain needs loopback fetch proof from cloud scanner",
-      "crapi community posts: thin 12-finding pass — may need authenticated session for BOLA on post author IDs",
-      "brokencrystals /api/email: email injection oracle may need multipart form POST for full header-injection proof"
+      "secret-resend slug still absent on juice-shop benchmark",
+      "crapi community posts live BOLA probe still depends on JWT signup chain from scanner egress"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 50,
+    "brokencrystals.com/api/email": 84,
     "brokencrystals.com/api/files?path=test": 87,
     "vulnbank.org/upload_profile_picture_url": 29,
     "ginandjuice.shop/api/feedback/submit": 33,
-    "brokencrystals.com/api/email": 35,
     "crapi2.apisec.ai/community/api/v2/community/posts/recent": 12,
     "wrongsecrets.herokuapp.com/challenge/challenge-27": 15,
     "brokencrystals.com/api/process_numbers": 89,

