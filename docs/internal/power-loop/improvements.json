@@ -5771,6 +5771,24 @@
       "slug": "javaseclab-xxe-vul1-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: javaSecLabXxeVul1RouteLiveOracle matches /xxe/vul1 and delegates to XMLReader external entity probe with wiki corpus fallback; whgojp.top/xxe/vul1 findings 7→8 (+javaseclab-xxe-vul1-live-oracle +javaseclab-xxe-vul1-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-28-github-issue-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsChallenge28GithubIssueLiveOracle registered in DEEP_RULES + pattern catalog; GET /challenge/challenge-28 confirms closed GitHub issue AWS secret walkthrough; wrongsecrets.herokuapp.com/challenge/challenge-28 findings 15→18 (+wrongsecrets-challenge-28-github-issue-live-oracle +cross-seeded 29/30 live oracles); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-29-screenshot-log-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsChallenge29ScreenshotLogLiveOracle registered in DEEP_RULES + pattern catalog; challenge-28 scan cross-seeds challenge-29/30 via wrongsecretsChallengeApiSeeds; wrongsecrets.herokuapp.com/challenge/challenge-28 findings 15→18 (+wrongsecrets-challenge-29-screenshot-log-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-30-localstorage-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsChallenge30LocalStorageLiveOracle registered in DEEP_RULES + pattern catalog; challenge-28 scan fires localStorage documentation live oracle alongside route oracles; wrongsecrets.herokuapp.com/challenge/challenge-28 findings 15→18 (+wrongsecrets-challenge-30-localstorage-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

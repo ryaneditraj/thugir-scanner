@@ -2912,8 +2912,11 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge36AdvancedCRouteLiveOracle",
   "wrongsecretsChallenge37CiCdLiveOracle",
   "wrongsecretsChallenge37CiCdRouteLiveOracle",
+  "wrongsecretsChallenge28GithubIssueLiveOracle",
   "wrongsecretsChallenge28GithubIssueRouteLiveOracle",
+  "wrongsecretsChallenge29ScreenshotLogLiveOracle",
   "wrongsecretsChallenge29ScreenshotLogRouteLiveOracle",
+  "wrongsecretsChallenge30LocalStorageLiveOracle",
   "wrongsecretsChallenge30LocalStorageRouteLiveOracle",
   "wrongsecretsChallenge31WebPageSecretLiveOracle",
   "wrongsecretsChallenge31WebPageSecretRouteLiveOracle",
@@ -8955,6 +8958,11 @@ function wrongsecretsChallengeApiSeeds(pageUrl: string): string[] {
   const paths: string[] = [];
   if (num === "58") paths.push("/error-demo/database-connection");
   if (num === "60") paths.push("/mcp");
+  if (["28", "29", "30"].includes(num)) {
+    for (const peer of ["28", "29", "30"]) {
+      if (peer !== num) paths.push(`/challenge/challenge-${peer}`);
+    }
+  }
   const out = new Set<string>();
   for (const p of paths) {
     try {

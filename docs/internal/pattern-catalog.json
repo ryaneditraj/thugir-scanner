@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-28T17:45:06.742Z",
-  "total": 2779,
-  "uniqueSlugs": 2771,
+  "generatedAt": "2026-08-28T18:37:16.586Z",
+  "total": 2782,
+  "uniqueSlugs": 2774,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2761,
+    "generic": 2764,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2694,
+    "deep": 2697,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 578,
-    "Exposed secret": 112,
+    "Exposed secret": 115,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -2672,9 +2672,12 @@
     "wrongsecrets-challenge-25-web3-smart-contract-route-live-oracle",
     "wrongsecrets-challenge-26-web3-smart-contract-route-live-oracle",
     "wrongsecrets-challenge-27-web3-smart-contract-route-live-oracle",
+    "wrongsecrets-challenge-28-github-issue-live-oracle",
     "wrongsecrets-challenge-28-github-issue-route-live-oracle",
+    "wrongsecrets-challenge-29-screenshot-log-live-oracle",
     "wrongsecrets-challenge-29-screenshot-log-route-live-oracle",
     "wrongsecrets-challenge-3-docker-env-route-live-oracle",
+    "wrongsecrets-challenge-30-localstorage-live-oracle",
     "wrongsecrets-challenge-30-localstorage-route-live-oracle",
     "wrongsecrets-challenge-31-web-page-secret-route-live-oracle",
     "wrongsecrets-challenge-32-llm-prompt-leak-route-live-oracle",
