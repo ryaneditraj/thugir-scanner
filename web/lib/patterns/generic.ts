@@ -54607,6 +54607,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sekumart-openapi-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart OpenAPI sqlmap SQLi live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/openapi.json documents sqlmap --openapi training endpoints and live product.php?id= probe confirms mysqli SQLi.",
+    impactOneline:
+      "OpenAPI spec exposes deliberately vulnerable SQLi endpoints for sqlmap practice — live probe confirms injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartOpenapiSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — do not expose vulnerable OpenAPI specs in production.",
+      steps: [
+        "Remove public OpenAPI specs listing injection-prone endpoints from production.",
+        "Use parameterized queries on all documented endpoints.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart OpenAPI spec documents sqlmap-vulnerable endpoints. Show how to secure API specs and SQL queries.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sekumart-openapi-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -64504,6 +64530,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /catalog/product route exposes a stock check form that posts XML to /catalog/product/stock. Show route-specific XXE remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-change-email-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop change-email TOCTOU live oracle",
+    description:
+      "GET /my-account/change-email redirects unauthenticated users to /login or renders a login-gated email-change form — the PortSwigger race-condition email takeover training oracle.",
+    impactOneline:
+      "Unauthenticated probes confirm a protected email-change endpoint vulnerable to race-condition abuse after login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceChangeEmailLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Serialize email-change requests and verify ownership atomically before updating accounts.",
+      steps: [
+        "Use database transactions or row locks when processing email-change requests.",
+        "Require re-authentication and out-of-band confirmation before applying email updates.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /my-account/change-email endpoint is vulnerable to race-condition email takeover. Show atomic email-change validation and TOCTOU remediation.",
     version: 1,
     enabled: true
   },

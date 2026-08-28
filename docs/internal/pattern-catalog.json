@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-28T13:35:04.874Z",
-  "total": 2764,
-  "uniqueSlugs": 2756,
+  "generatedAt": "2026-08-28T17:29:29.951Z",
+  "total": 2766,
+  "uniqueSlugs": 2758,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2746,
+    "generic": 2748,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2679,
+    "deep": 2681,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 575,
+    "Broken access control": 576,
     "Exposed secret": 112,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 130,
     "Security misconfiguration": 208,
     "Broken authentication": 174,
-    "Injection": 434,
+    "Injection": 435,
     "Cross-site scripting": 732,
     "Open redirect": 24,
     "general": 20,
@@ -1689,6 +1689,7 @@
     "ginandjuice-catalog-subscribe-live-oracle",
     "ginandjuice-catalog-subscribe-route-live-oracle",
     "ginandjuice-change-address-route-live-oracle",
+    "ginandjuice-change-email-live-oracle",
     "ginandjuice-change-email-route-live-oracle",
     "ginandjuice-change-password-route-live-oracle",
     "ginandjuice-checkout-route-live-oracle",
@@ -2128,6 +2129,7 @@
     "securebank-blog-messages-xss-route-live-oracle",
     "securebank-blog-transfer-csrf-route-live-oracle",
     "security-question-disclosure",
+    "sekumart-openapi-sqli-live-oracle",
     "sekumart-openapi-sqli-route-live-oracle",
     "sekumart-product-sqli-live-oracle",
     "sekumart-product-sqli-route-live-oracle",
