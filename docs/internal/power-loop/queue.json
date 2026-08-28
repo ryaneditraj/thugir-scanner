@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T22:15:00.000Z",
+  "updated_at": "2026-08-28T23:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/api3/user",
+      "source": "roottusk/vAPI Escape-hosted — API3 broken object property level authorization oracle GET/POST /vapi/api3/user (OWASP API3; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/api4/user",
+      "source": "roottusk/vAPI Escape-hosted — API4 unrestricted resource consumption oracle POST /vapi/api4/user (OWASP API4; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/api5/user/1",
+      "source": "roottusk/vAPI Escape-hosted — API5 broken function level authorization oracle GET /vapi/api5/user/{id} (OWASP API5; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/api6/user",
+      "source": "roottusk/vAPI Escape-hosted — API6 mass assignment oracle POST /vapi/api6/user (OWASP API6; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/vapi/api7/user",
+      "source": "roottusk/vAPI Escape-hosted — API7 security misconfiguration oracle GET /vapi/api7/user (OWASP API7; web search 23 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vapi.tools.escape.tech/vapi/api2/user/1",
       "source": "roottusk/vAPI Escape-hosted — API2 broken authentication BOLA oracle GET /vapi/api2/user/{id} (OWASP API Top 10; web search 22 UTC)",
