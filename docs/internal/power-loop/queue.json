@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T19:17:24.301Z",
+  "updated_at": "2026-08-28T20:10:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/",
@@ -11190,6 +11190,31 @@
     {
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php",
       "source": "webspoilt/vulnforge-academy — Level 20 Nightmare multi-vector chain challenge (GitHub README; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/admin-console",
+      "source": "AI & Security Platform — cookie-based admin auth bypass oracle GET /challenges/admin-console (web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/insecure-passwords",
+      "source": "AI & Security Platform — plaintext/MD5 password storage oracle /challenges/insecure-passwords (web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supabase-data",
+      "source": "AI & Security Platform — weak Supabase RLS data exposure oracle /challenges/supabase-data (web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supply-chain",
+      "source": "AI & Security Platform — typosquat/postinstall supply-chain attack oracle /challenges/supply-chain (web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages",
+      "source": "AI & Security Platform — 2025-2026 hacked npm package oracle /challenges/hacked-npm-packages (web search 20 UTC)",
       "auth": "public_demo"
     }
   ],
