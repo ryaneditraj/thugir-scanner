@@ -2650,6 +2650,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCartCheckoutAuthLiveOracle",
   "ginAndJuiceCartRouteLiveOracle",
   "ginAndJuiceCheckoutRouteLiveOracle",
+  "ginAndJuiceForgotPasswordLiveOracle",
   "ginAndJuiceForgotPasswordRouteLiveOracle",
   "ginAndJuiceAngularVulnerableDependencyLiveOracle",
   "ginAndJuiceAngularVulnerableDependencyRouteLiveOracle",
@@ -9774,7 +9775,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
   if (
     /brokencrystals\.com/i.test(targetInput) &&
-    /\/api\/(?:goto|products\/(?:latest|views)|testimonials\/count|get_count|get_metadata|command|spawn|render|process_numbers)\b/i.test(targetInput)
+    /\/(?:api\/(?:goto|products\/(?:latest|views)|testimonials\/count|get_count|get_metadata|command|spawn|render|process_numbers|mcp)|render\.dot)\b/i.test(
+      targetInput
+    )
   ) {
     try {
       const routeDoc = await fetchDoc(targetInput, {
@@ -12278,10 +12281,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
+        /\/api\/mcp(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-mcp-")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
         /\/api\/mcp\/(?:process_numbers|spawn_process|get_config|tools)\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-mcp-")
       )
-        return -3;
+        return -4;
       if (
         /voting-app[\w-]*\.vercel\.app/i.test(origin) &&
         /\/api\/(?:signup|vote|poll|user)\b/i.test(targetInput) &&
@@ -13671,7 +13680,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /ginandjuice\.shop/i.test(origin) &&
         /\/forgot-password\b/i.test(targetInput) &&
         !/\/my-account\/forgot-password/i.test(targetInput) &&
-        p.slug.startsWith("ginandjuice-forgot-password")
+        (p.slug.startsWith("ginandjuice-forgot-password") ||
+          p.slug === "ginandjuice-forgot-password-live-oracle")
       )
         return -4;
       if (
@@ -14303,10 +14313,22 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/cart\/add\b/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-cart-negative-quantity")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/orders\/checkout\b/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-checkout-private-coupon")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
         /\/(?:api\/v1\/)?admin\/users\b/i.test(targetInput) &&
         p.slug.startsWith("duck-store-admin-users")
       )
-        return -3;
+        return -4;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
         /\/(?:api\/v1\/)?admin\/products\b/i.test(targetInput) &&
