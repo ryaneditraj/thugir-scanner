@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-27T23:24:13.057Z",
+  "updated_at": "2026-08-28T00:10:30.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/products/latest?limit=100",
+      "source": "NeuraLegion/brokencrystals — business constraint bypass oracle GET /api/products/latest limit param (README; 00 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/chatbot/respond",
+      "source": "OWASP Juice Shop demo — chatbot LLM proxy POST /rest/chatbot/respond prompt-injection oracle (00 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/b2b/v2/orders",
+      "source": "OWASP Juice Shop demo — insecure deserialization oracle POST /rest/b2b/v2/orders (00 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/transactions",
+      "source": "VulnBank OSS deploy — unauthenticated transactions API BOLA oracle (00 UTC power-loop)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/admin/dashboard",
+      "source": "ctfsec/pwnshop — admin dashboard access-control oracle GET /admin/dashboard (00 UTC power-loop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/forgot-password",
       "source": "PortSwigger ginandjuice.shop — password reset broken logic / poisoning oracle POST /forgot-password (23:00 UTC power-loop)",
