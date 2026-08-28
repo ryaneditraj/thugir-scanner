@@ -5495,6 +5495,24 @@
       "slug": "brokencrystals-render-dot-mcp-route-warmup",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: runDeepScan warmup extended for /render.dot + /api/mcp; runner -4 priority for brokencrystals-mcp-* on /api/mcp; brokencrystals.com/render.dot (+brokencrystals-render-dot-ssti-route-live-oracle), brokencrystals.com/api/mcp 87 findings (+brokencrystals-mcp-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: duckStoreTestimonialsRouteLiveOracle rule existed without pattern slug; added duck-store-testimonials-bola-route-live-oracle + runner -3 priority on /testimonials SPA; duck-store.escape.tech/testimonials findings 44→46 (+duck-store-testimonials-bola-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-testimonials-bola-roster-pivot",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: scanner churn replaced CISO/DevOps/patricia featured rows — duckStoreTestimonialsBolaLiveOracle now accepts any user-linked testimonial row with user_id+content; restores bola live+route oracles after probe churn; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-login-route-priority-boosts",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for brokencrystals-jwt-{jku,x5c,kid-sql,weak-key,hmac,jwk,x5u} route oracles on /api/auth/jwt/*/login paths; brokencrystals.com/api/auth/jwt/weak-key/login findings 19→87 (+brokencrystals-jwt-weak-key-route-live-oracle); jku/login 52 with +brokencrystals-jwt-jku-rogue-route-live-oracle; benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
