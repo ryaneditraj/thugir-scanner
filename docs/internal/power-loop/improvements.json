@@ -5459,6 +5459,24 @@
       "slug": "pwnshop-admin-dashboard-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: probePwnshopAdminDashboardAccess tries /admin/security when /admin/dashboard is 404; mass-assignment admin OTP reaches Security Audit panel; pwnshop.ctfsecurity.com/admin/dashboard findings 45→46 (+pwnshop-admin-dashboard-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-forgot-password-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /forgot-password returns 404 missing-content shell while POST /my-account/forgot-password redirects to /login; ginandjuice.shop/forgot-password findings 32→32 (+ginandjuice-forgot-password-route-live-oracle, route count 0→1); benchmark juice-shop.herokuapp.com 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-catalog-search-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceCatalogSearchXssRouteLiveOracle matches /catalog/search and /catalog/product-search-results; GET /catalog?searchTerm= reflects into searchText; ginandjuice.shop/catalog/product-search-results/1?term=test findings 39→41 (+ginandjuice-catalog-search-xss-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-products-latest-route-slug-split",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: split brokencrystalsProductsLatestLimitBypassLiveOracle from route wrapper; added brokencrystals-products-latest-limit-bypass-route-live-oracle pattern; brokencrystals.com/api/products/latest?limit=100 findings 84→85 (+route slug); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
