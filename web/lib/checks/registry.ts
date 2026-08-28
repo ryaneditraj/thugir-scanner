@@ -87969,6 +87969,23 @@ const brokencrystalsJwtRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsJwtAlgNoneRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/rsa\/signature\/validate\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsJwtAlgNoneLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/rsa/signature/validate route scan — alg:none JWT bypasses authentication and returns secret"
+    }
+  };
+};
+
 /** Broken Crystals JWT_SECRET_KEY from public .env (default weak-key oracle secret). */
 const BROKEN_CRYSTALS_JWT_WEAK_SECRETS = ["1234", "123"] as const;
 
@@ -97157,6 +97174,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsMcpGetConfigRouteLiveOracle,
   brokencrystalsJwtAlgNoneLiveOracle,
   brokencrystalsJwtRouteLiveOracle,
+  brokencrystalsJwtAlgNoneRouteLiveOracle,
   brokencrystalsJwtWeakKeyLiveOracle,
   brokencrystalsJwtWeakKeyRouteLiveOracle,
   brokencrystalsJwtKidSqlLiveOracle,

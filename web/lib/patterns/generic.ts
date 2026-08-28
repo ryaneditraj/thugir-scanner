@@ -39482,6 +39482,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-jwt-alg-none-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/rsa/signature/validate route live oracle",
+    description:
+      "When scanning /api/auth/jwt/rsa/signature/validate, alg:none JWT in Authorization bypasses authentication and returns {\"secret\":\"this is our secret\"} — route-specific JWT none-algorithm confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals rsa/signature validate accepts alg:none tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtAlgNoneRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to expected algorithms and reject alg:none — Broken Crystals is intentional lab software.",
+      steps: [
+        "Configure your JWT library to allow only RS256/HS256 (never 'none').",
+        "Verify the algorithm from the token header matches your expected value.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/rsa/signature/validate route scan confirms alg:none JWT bypass. Show secure JWT verification patterns for NestJS.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-jwt-weak-key-live-oracle",
     platform: "generic",
     category: "Broken authentication",
