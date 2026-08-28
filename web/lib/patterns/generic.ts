@@ -54659,6 +54659,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sekumart-search-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SekuMart search.php reflected XSS live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/search.php?q=<b>marker</b> reflects the search term inside <b> without HTML encoding — the SekuriPy sqlmap playground reflected XSS training oracle.",
+    impactOneline:
+      "Unsanitized q parameter in search.php enables reflected HTML injection on the SekuMart demo shop search results page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartSearchXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — encode output and validate search input.",
+      steps: [
+        "HTML-encode search terms before rendering in the results page.",
+        "Use parameterized queries for the underlying SQL search.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart search.php reflects q inside <b> without encoding. Show output encoding remediation for PHP search results.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-search-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SekuMart /search.php route reflected XSS live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/search.php, GET ?q= reflects HTML markup unescaped in the You searched for line — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route scans on /search.php should confirm live reflected XSS alongside mysqli SQLi on the same q parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartSearchXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — encode output and validate search input.",
+      steps: [
+        "HTML-encode search terms before rendering.",
+        "Use parameterized queries for search SQL.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /search.php route reflects q unescaped in HTML. Show output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-directory-xpath-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart directory.php XPath injection live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/directory.php?q=' or '1'='1 concatenates into an XPath expression and dumps the hidden svc-directory account with FLAG{xp4th_1nj3ct10n_pwn3d} — sqlmap --xpath training oracle.",
+    impactOneline:
+      "Unsanitized q parameter in directory.php enables XPath injection exposing hidden staff records and CTF flags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartDirectoryXPathLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — never concatenate user input into XPath expressions.",
+      steps: [
+        "Use parameterized XPath or map names to IDs instead of string concatenation.",
+        "Validate employee lookup input against an allow-list.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart directory.php concatenates q into XPath. Show safe XPath query construction remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-directory-xpath-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /directory.php route XPath injection live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/directory.php, GET ?q=' or '1'='1 dumps svc-directory FLAG via XPath injection — route-specific sqlmap --xpath training oracle.",
+    impactOneline:
+      "Route scans on /directory.php should confirm live XPath injection dumping hidden staff directory records.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartDirectoryXPathRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — never concatenate user input into XPath.",
+      steps: [
+        "Use safe XPath APIs instead of string-built expressions.",
+        "Restrict directory lookups to validated employee names.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /directory.php route has XPath injection on q. Show parameterized XPath remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sekumart-openapi-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",
