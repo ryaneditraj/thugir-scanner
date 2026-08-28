@@ -5567,6 +5567,24 @@
       "slug": "vapi-tools-queue-url-correction",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: queue priority_discovery_urls replaced incorrect crAPI /workshop/api/shop/orders/1 with roottusk/vapi GET /vapi/api1/user/1 BOLA oracle path; vapi.tools.escape.tech/vapi/api1/user/1 findings 14 with vapi-api1-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-58-error-demo-delegate",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsChallenge58DatabaseConnectionRouteLiveOracle delegates to wrongsecretsErrorDemoDatabaseConnectionLiveOracle; GET /error-demo/database-connection returns jdbc:postgresql password=SuperSecretDB2024!; wrongsecrets.herokuapp.com/challenge/challenge-58 findings 15 incl +wrongsecrets-error-demo-database-connection-live-oracle +wrongsecrets-challenge-58-database-connection-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-58-60-api-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongsecretsChallengeApiSeeds adds /error-demo/database-connection when scanning challenge-58 and /mcp when scanning challenge-60; challenge-58 crawl seeds error-demo live oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-challenge-58-60-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for wrongsecrets-error-demo-* on challenge-58 and wrongsecrets-mcp*/challenge-60 on challenge-60; removed duplicate challenge-57 priority block; wrongsecrets.herokuapp.com/challenge/challenge-60 findings 15 incl wrongsecrets-mcp-execute-command-live-oracle +wrongsecrets-challenge-60-mcp-route-live-oracle; benchmark 6/6 maintained"
     }
   ]
 }
