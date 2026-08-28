@@ -2673,6 +2673,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceNewsletterSubscribeRateLimitLiveOracle",
   "ginAndJuiceNewsletterSubscribeRateLimitRouteLiveOracle",
   "ginAndJuiceCatalogProductRouteLiveOracle",
+  "ginAndJuiceChangeEmailLiveOracle",
   "ginAndJuiceChangeEmailRouteLiveOracle",
   "ginAndJuiceChangePasswordRouteLiveOracle",
   "ginAndJuiceChangeAddressRouteLiveOracle",
@@ -3706,6 +3707,7 @@ const DEEP_RULES = new Set<string>([
   "sekumartProductSqliRouteLiveOracle",
   "sekumartSearchSqliLiveOracle",
   "sekumartSearchSqliRouteLiveOracle",
+  "sekumartOpenapiSqliLiveOracle",
   "sekumartOpenapiSqliRouteLiveOracle",
   "clientSideBreakTheFlaskEvidence",
   "clientSideFlaskVulnappEvidence",
@@ -8891,6 +8893,40 @@ function brokencrystalsJwtApiSeeds(pageUrl: string): string[] {
   return [...out];
 }
 
+/** Seed OpenAPI + product probes when deep-scanning SekuMart sqlmap playground routes. */
+function sekumartApiSeeds(pageUrl: string): string[] {
+  if (!/sekumart\.sekuripy\.hr/i.test(pageUrl)) return [];
+  const pageOrigin = new URL(pageUrl).origin;
+  const paths = ["/openapi.json", "/product.php?id=1", "/search.php?q=test"];
+  const out = new Set<string>();
+  for (const p of paths) {
+    try {
+      out.add(new URL(p, pageOrigin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Seed email sub-endpoints when deep-scanning Broken Crystals /api/email hub route. */
+function brokencrystalsEmailApiSeeds(pageUrl: string): string[] {
+  if (!/brokencrystals\.com/i.test(pageUrl)) return [];
+  const pathOnly = pageUrl.split(/[?#]/)[0] ?? pageUrl;
+  if (!/\/api\/email\/?$/i.test(pathOnly)) return [];
+  const pageOrigin = new URL(pageUrl).origin;
+  const paths = ["/api/email/getEmails", "/api/email/sendSupportEmail"];
+  const out = new Set<string>();
+  for (const p of paths) {
+    try {
+      out.add(new URL(p, pageOrigin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** Seed linked live-oracle endpoints when deep-scanning WrongSecrets challenge pages. */
 function wrongsecretsChallengeApiSeeds(pageUrl: string): string[] {
   if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?\d+\b/i.test(pageUrl)) {
@@ -10313,6 +10349,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const brokencrystalsUploadSeeds = brokencrystalsUploadApiSeeds(
     home.finalUrl || effectiveTargetInput
   );
+  const brokencrystalsEmailSeeds = brokencrystalsEmailApiSeeds(
+    home.finalUrl || effectiveTargetInput
+  );
+  const sekumartSeeds = sekumartApiSeeds(home.finalUrl || effectiveTargetInput);
   const wrongsecretsChallengeSeeds = wrongsecretsChallengeApiSeeds(
     home.finalUrl || effectiveTargetInput
   );
@@ -11255,6 +11295,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...brokencrystalsLabSeeds,
       ...brokencrystalsJwtSeeds,
       ...brokencrystalsUploadSeeds,
+      ...brokencrystalsEmailSeeds,
+      ...sekumartSeeds,
       ...wrongsecretsChallengeSeeds,
       ...fauxbankLabSeeds,
       ...jwtArsenalExploitSeeds,

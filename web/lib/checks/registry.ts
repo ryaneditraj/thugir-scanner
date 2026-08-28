@@ -14980,10 +14980,8 @@ const sekumartSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const sekumartOpenapiSqliRouteLiveOracle: Rule = async (ctx) => {
+const sekumartOpenapiSqliLiveOracle: Rule = async (ctx) => {
   if (!isSekumartHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/openapi\.json/i.test(pageUrl)) return NEGATIVE;
   const specUrl = new URL("/openapi.json", ctx.origin).toString();
   const doc = await ctx.probe.get(specUrl, { maxBytes: 16384, timeoutMs: 12000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -15001,9 +14999,26 @@ const sekumartOpenapiSqliRouteLiveOracle: Rule = async (ctx) => {
     confidence: 0.93,
     evidence: {
       ...productProbe.evidence,
-      scannedUrl: pageUrl,
+      openapiUrl: specUrl,
       openapiMarkers: ["sqlmap --openapi", "/product.php integer SQLi", "/search.php string SQLi"],
       snippet: doc.body.match(/"description":\s*"Deliberately vulnerable[^"]{0,80}/)?.[0]?.slice(0, 100),
+      note: "SekuMart GET /openapi.json documents sqlmap --openapi training endpoints and live product.php?id= probe confirms mysqli SQLi"
+    }
+  };
+};
+
+const sekumartOpenapiSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/openapi\.json/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartOpenapiSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
       note: "SekuMart /openapi.json route scan — OpenAPI spec documents sqlmap --openapi training endpoints and live product.php?id= probe confirms mysqli SQLi"
     }
   };
@@ -70164,26 +70179,63 @@ const ginAndJuiceCatalogProductRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceChangeEmailLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/my-account/change-email", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if (doc.status === 301 || doc.status === 302) {
+    const loc = doc.headers.location ?? doc.headers.Location ?? "";
+    if (/\/login/i.test(loc)) {
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          url: probeUrl,
+          redirectLocation: loc,
+          note: "Gin & Juice Shop GET /my-account/change-email redirects unauthenticated users to /login — race-condition email-change TOCTOU training endpoint oracle"
+        }
+      };
+    }
+  }
+  if (doc.status >= 200 && doc.status < 400) {
+    const hasAccountNav =
+      /account-icon\s+selected/i.test(doc.body) && /href="\/my-account"/i.test(doc.body);
+    const hasLoginSurface =
+      /class=login-form/i.test(doc.body) &&
+      /name="username"/i.test(doc.body) &&
+      /type=username/i.test(doc.body);
+    if (hasAccountNav && hasLoginSurface) {
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          url: probeUrl,
+          snippet: doc.body.match(/class=login-form[\s\S]{0,200}/i)?.[0]?.slice(0, 180),
+          note: "Gin & Juice Shop /my-account/change-email exposes login-gated email-change surface — PortSwigger race-condition training lab oracle"
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
 const ginAndJuiceChangeEmailRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/my-account\/change-email\b/i.test(pageUrl)) return NEGATIVE;
-  const doc = await ctx.probe.get(pageUrl, { maxBytes: 32768, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  const hasAccountNav =
-    /account-icon\s+selected/i.test(doc.body) && /href="\/my-account"/i.test(doc.body);
-  const hasLoginSurface =
-    /class=login-form/i.test(doc.body) &&
-    /name="username"/i.test(doc.body) &&
-    /type=username/i.test(doc.body);
-  if (!hasAccountNav || !hasLoginSurface) return NEGATIVE;
+  const result = await ginAndJuiceChangeEmailLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: 0.9,
+    confidence: result.confidence,
     evidence: {
+      ...result.evidence,
       scannedUrl: pageUrl,
-      snippet: doc.body.match(/class=login-form[\s\S]{0,200}/i)?.[0]?.slice(0, 180),
-      note: "Gin & Juice Shop /my-account/change-email route scan — authenticated email-change surface gated behind login (PortSwigger race-condition training lab entry point)"
+      note: "Gin & Juice Shop /my-account/change-email route scan — login-gated email-change surface for PortSwigger race-condition training lab"
     }
   };
 };
@@ -98746,6 +98798,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceNewsletterSubscribeRateLimitLiveOracle,
   ginAndJuiceNewsletterSubscribeRateLimitRouteLiveOracle,
   ginAndJuiceCatalogProductRouteLiveOracle,
+  ginAndJuiceChangeEmailLiveOracle,
   ginAndJuiceChangeEmailRouteLiveOracle,
   ginAndJuiceChangePasswordRouteLiveOracle,
   ginAndJuiceChangeAddressRouteLiveOracle,
@@ -99167,6 +99220,7 @@ export const RULES: Record<string, Rule> = {
   sekumartProductSqliRouteLiveOracle,
   sekumartSearchSqliLiveOracle,
   sekumartSearchSqliRouteLiveOracle,
+  sekumartOpenapiSqliLiveOracle,
   sekumartOpenapiSqliRouteLiveOracle,
   clientSideBreakTheFlaskEvidence,
   clientSideFlaskVulnappEvidence,
