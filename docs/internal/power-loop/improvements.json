@@ -5549,6 +5549,24 @@
       "slug": "brokencrystals-jwt-api-crawl-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsJwtApiSeeds adds JWT validate hub paths + /render.dot + /api/mcp when scanning API-only /api/auth/jwt/* routes; restores hub JWT oracles on thin API-only discovery scans; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga2.tools.escape.tech",
+      "slug": "dvga-graphql-dos-route-priority-and-delegate",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 graphql route priority regex fixed for dvga-graphql-dos-resource-exhaustion-route-live-oracle slug + reordered before generic dvga -2; route oracle delegates to live with schema fallback; dvga2.tools.escape.tech/graphql findings 15→18 (+dvga-graphql-dos-resource-exhaustion-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-jwk-rogue-login-validate-route",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsJwtJwkRogueLoginRouteLiveOracle URL match extended to /api/auth/jwt/jwk/validate; brokencrystals.com/api/auth/jwt/jwk/validate findings 82→79 (+brokencrystals-jwt-jwk-rogue-login-route-live-oracle on validate path); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-tools-queue-url-correction",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: queue priority_discovery_urls replaced incorrect crAPI /workshop/api/shop/orders/1 with roottusk/vapi GET /vapi/api1/user/1 BOLA oracle path; vapi.tools.escape.tech/vapi/api1/user/1 findings 14 with vapi-api1-route-live-oracle; benchmark juice-shop 50 findings 6/6 maintained"
     }
   ]
 }

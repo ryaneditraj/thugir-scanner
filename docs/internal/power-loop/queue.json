@@ -47,8 +47,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://vapi.tools.escape.tech/workshop/api/shop/orders/1",
-      "source": "OWASP vAPI Escape-hosted — BOLA/order IDOR oracle GET /workshop/api/shop/orders/{id} (vapi.tools.escape.tech)",
+      "url": "https://vapi.tools.escape.tech/vapi/api1/user/1",
+      "source": "OWASP vAPI Escape-hosted — API1 BOLA oracle GET /vapi/api1/user/{id} (vapi.tools.escape.tech; replaces incorrect crAPI /workshop path)",
       "auth": "public_demo"
     },
     {

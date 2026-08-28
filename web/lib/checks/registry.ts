@@ -68078,8 +68078,7 @@ const dvgaGraphqlAuditLogLiveOracle: Rule = async (ctx) => {
   });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   if (!/"audits"\s*:\s*\[/.test(doc.body)) return NEGATIVE;
-  if (!/"gqlquery"\s*:\s*"/.test(doc.body)) return NEGATIVE;
-  if (!/mutation|query\s*\{/i.test(doc.body)) return NEGATIVE;
+  if (!/"gqlquery"\s*:\s*"\{/.test(doc.body)) return NEGATIVE;
   const sampleMatch = doc.body.match(/"gqlquery"\s*:\s*"([^"]{12,120})"/);
   return {
     fired: true,
@@ -68780,6 +68779,18 @@ const dvgaGraphqlDosResourceExhaustionRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/graphql\b/i.test(pageUrl) && !/\/graphql\b/i.test(ctx.home.finalUrl || "")) return NEGATIVE;
+  const live = await dvgaGraphqlDosResourceExhaustionLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "DVGA /graphql route scan — expensive system* resolver query stalls while benign queries return promptly — route-specific GraphQL DoS oracle"
+      }
+    };
+  }
   const base = dvgaCanonicalOrigin(ctx);
   const gqlUrl = new URL("/graphql", base).toString();
   const introDoc = await fetchDoc(gqlUrl, {
@@ -68794,28 +68805,15 @@ const dvgaGraphqlDosResourceExhaustionRouteLiveOracle: Rule = async (ctx) => {
     (field) => new RegExp(`"name"\\s*:\\s*"${field}"`).test(introDoc.body)
   );
   if (expensiveFields.length < 2) return NEGATIVE;
-  const dosStart = Date.now();
-  const dosDoc = await fetchDoc(gqlUrl, {
-    method: "POST",
-    body: JSON.stringify({ query: "{ systemUpdate }" }),
-    headers: { "Content-Type": "application/json" },
-    maxBytes: 4096,
-    timeoutMs: 7000
-  });
-  const dosMs = Date.now() - dosStart;
-  const dosHung = dosDoc.status === 0 || dosMs >= 6000 || dosDoc.body.trim().length === 0;
   return {
     fired: true,
-    confidence: dosHung ? 0.94 : 0.9,
+    confidence: 0.9,
     evidence: {
       scannedUrl: pageUrl,
       url: gqlUrl,
       expensiveFields,
-      dosMs: dosHung ? dosMs : undefined,
-      snippet: dosHung ? "(timed out)" : introDoc.body.slice(0, 180).trim(),
-      note: dosHung
-        ? "DVGA /graphql route scan — systemUpdate query stalls or times out while Query schema exposes system* resolvers — route-specific GraphQL DoS oracle"
-        : "DVGA /graphql route scan — Query type exposes systemUpdate/systemHealth resource-exhaustion resolvers without query cost limits — route-specific GraphQL DoS oracle"
+      snippet: introDoc.body.slice(0, 180).trim(),
+      note: "DVGA /graphql route scan — Query type exposes systemUpdate/systemHealth resource-exhaustion resolvers without query cost limits — route-specific GraphQL DoS oracle"
     }
   };
 };
@@ -88473,7 +88471,7 @@ const brokencrystalsJwtJwkRogueLoginLiveOracle: Rule = async (ctx) => {
 const brokencrystalsJwtJwkRogueLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/auth\/jwt\/jwk\/login\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/auth\/jwt\/jwk\/(?:login|validate)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsJwtJwkRogueLoginLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -88482,7 +88480,7 @@ const brokencrystalsJwtJwkRogueLoginRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Broken Crystals /api/auth/jwt/jwk/login route scan — login issues JWT and empty-jwk rogue header bypasses JWK validation"
+      note: "Broken Crystals /api/auth/jwt/jwk/login or /validate route scan — login issues JWT and empty-jwk rogue header bypasses JWK validation"
     }
   };
 };

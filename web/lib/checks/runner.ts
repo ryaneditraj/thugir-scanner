@@ -14614,18 +14614,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/vulnerable-web-application-jecw\.vercel\.app/i.test(origin) && p.slug.startsWith("buggybuy-")) return -2;
       if (/appsec-ci-pipeline\.onrender\.com/i.test(origin) && p.slug.startsWith("appsec-ci-")) return -2;
       if (
-        /dvga2?\.tools\.escape\.tech|dvga\.lab\.pentest-forge\.com|xplat-demo\.threatx\.io/i.test(origin) &&
-        p.slug.startsWith("dvga-")
-      )
-        return -2;
-      if (
         /dvga2?\.tools\.escape\.tech/i.test(origin) &&
         /\/graphql\b/i.test(targetInput) &&
-        /dvga-(?:import-paste-ssrf|create-paste-stored-xss|my-pastes-idor|graphql-dos-resource-exhaustion)-.*-route-live-oracle/.test(
+        /dvga-(?:import-paste-ssrf|create-paste-stored-xss|my-pastes-idor|graphql-dos-resource-exhaustion)(?:-.*)?-route-live-oracle/.test(
           p.slug
         )
       )
         return -4;
+      if (
+        /dvga2?\.tools\.escape\.tech|dvga\.lab\.pentest-forge\.com|xplat-demo\.threatx\.io/i.test(origin) &&
+        p.slug.startsWith("dvga-")
+      )
+        return -2;
       if (p.platform === "generic") return 0;
       return detection.platform && p.platform === detection.platform ? 1 : 2;
     };
