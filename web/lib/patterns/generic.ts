@@ -42890,6 +42890,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-search-users-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Broken Crystals /api/search_users route exposure oracle",
+    description:
+      "When scanning /api/search_users, GET /api/users/search/ returns cardNumber and phoneNumber for multiple users without authentication — route-specific user-search alias oracle (README documents /api/search_users; canonical path is /api/users/search/).",
+    impactOneline:
+      "Route-scoped scans on search_users alias paths should flag unauthenticated Broken Crystals user search leaking payment data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSearchUsersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose full card numbers or phone numbers via unauthenticated search APIs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication and authorization before returning user profile data.",
+        "Mask or tokenize card numbers; return only last-four digits when necessary.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/search_users route scan confirms unauthenticated user search leaks cardNumber and phoneNumber. Show API data-minimization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-ai-anonymous-chat-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -64140,6 +64166,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /catalog/subscribe route scan confirms email reflection in JSON responses. Show route-specific subscribe XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-newsletter-subscribe-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /api/newsletter/subscribe route live oracle",
+    description:
+      "When scanning /api/newsletter/subscribe, POST /catalog/subscribe echoes attacker email with coupon code — route-specific newsletter subscribe reflected-data oracle (alias path; canonical API is /catalog/subscribe).",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice newsletter subscribe APIs reflect unsanitized email values.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceNewsletterSubscribeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode subscribe API responses and avoid rendering raw email in the DOM.",
+      steps: [
+        "Never reflect raw user input in JSON fields rendered via innerHTML or document.write.",
+        "Use textContent or strict output encoding for subscribe confirmation UIs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/newsletter/subscribe route scan confirms email reflection via /catalog/subscribe. Show route-specific subscribe XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-newsletter-subscribe-rate-limit-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop newsletter subscribe missing rate-limit live oracle",
+    description:
+      "POST /catalog/subscribe accepts rapid repeated newsletter subscriptions without HTTP 429 or quota lockout — the PortSwigger Gin & Juice missing rate-limit / resource-quota training oracle.",
+    impactOneline:
+      "Unlimited newsletter subscriptions enable resource exhaustion, coupon abuse, and email spam without throttling.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceNewsletterSubscribeRateLimitLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply per-IP and per-session rate limits on newsletter subscribe endpoints.",
+      steps: [
+        "Return HTTP 429 after a small number of subscribe attempts per session or IP.",
+        "Require CAPTCHA or proof-of-work for repeated subscriptions.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /catalog/subscribe endpoint accepts unlimited rapid subscriptions. Show rate-limiting and resource-quota remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-newsletter-subscribe-rate-limit-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /api/newsletter/subscribe rate-limit route live oracle",
+    description:
+      "When scanning /api/newsletter/subscribe or /catalog/subscribe, rapid POST requests succeed without HTTP 429 — route-specific missing rate-limit / resource-quota oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice newsletter subscribe lacks throttling on repeated requests.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceNewsletterSubscribeRateLimitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply per-IP and per-session rate limits on newsletter subscribe endpoints.",
+      steps: [
+        "Return HTTP 429 after a small number of subscribe attempts per session or IP.",
+        "Require CAPTCHA or proof-of-work for repeated subscriptions.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/newsletter/subscribe route scan confirms missing subscribe rate limits. Show route-specific throttling remediation.",
     version: 1,
     enabled: true
   },

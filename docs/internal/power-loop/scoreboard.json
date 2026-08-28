@@ -22,7 +22,7 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2036,
   "discovery_findings": 27066,
-  "improvements_shipped": 1242,
+  "improvements_shipped": 1245,
   "last_run": "2026-08-28T10:18:00.000Z",
   "last_run_summary": {
     "hour_utc": "10",
@@ -53,34 +53,31 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 204,
-      "focus": "crAPI dashboard/convert_video/admin-videos + ginandjuice catalog SQLi + brokencrystals photo BFLA + wrongsecrets 38/39/23 drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 153,
+      "focus": "brokencrystals search_users alias route + ginandjuice newsletter subscribe route + missing rate-limit oracle",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 37 live oracles, gap=[])",
-      "crapi2.apisec.ai/identity/api/v2/user/dashboard: 10 findings — crapi-dashboard-route-live-oracle (excessive data exposure)",
-      "ginandjuice.shop/catalog?category=Accessories: 41 findings — ginandjuice-catalog-category-sqli-route-live-oracle + CSTI/CRLF oracles",
-      "brokencrystals.com/api/users/one/1/photo?isAdmin=true: 89 findings — brokencrystals-photo-bfla-route-live-oracle shipped",
-      "wrongsecrets.herokuapp.com/challenge/challenge-38: 15 findings — wrongsecrets-challenge-38-git-notes-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-39: 15 findings — wrongsecrets-challenge-39-aes-filename-key-route-live-oracle"
+      "brokencrystals.com/api/search_users: 64→85 findings — brokencrystals-search-users-route-live-oracle shipped",
+      "ginandjuice.shop/api/newsletter/subscribe: 32→35 findings — ginandjuice-newsletter-subscribe-route-live-oracle + rate-limit oracles shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "crapi2.apisec.ai/identity/api/v2/user/videos/convert_video: 10 findings — no convert_video-specific route oracle (generic crAPI bundle only)",
-      "crapi2.apisec.ai/identity/api/v2/admin/videos/1: 9 findings — no admin-videos BFLA route oracle (needs authenticated session + video_id)"
+      "brokencrystals /api/search_users is README alias — canonical path is /api/users/search/",
+      "ginandjuice /api/newsletter/subscribe returns 404 — canonical subscribe API is POST /catalog/subscribe"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "brokencrystals.com/api/search_users": 85,
+    "ginandjuice.shop/api/newsletter/subscribe": 35,
     "brokencrystals.com/api/users/one/1/photo?isAdmin=true": 89,
     "ginandjuice.shop/catalog?category=Accessories": 41,
-    "crapi2.apisec.ai/identity/api/v2/user/dashboard": 10,
-    "brokencrystals.com/api/search_users": 64,
+    "brokencrystals.com/api/config/get_config": 80,
     "brokencrystals.com/api/products/views": 62,
-    "brokencrystals.com/api/auth/jwt/x5c/validate": 79,
-    "ginandjuice.shop/api/newsletter/subscribe": 32
+    "brokencrystals.com/api/auth/jwt/x5c/validate": 79
   }
 }

@@ -24713,6 +24713,23 @@ const brokencrystalsUsersSearchRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsSearchUsersRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/search_users\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsUsersSearchExposureLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/search_users route scan — README alias for GET /api/users/search/ which returns cardNumber and phoneNumber for multiple users without authentication (falls back to /api/users/search/)"
+    }
+  };
+};
+
 const vulnbankAiAnonymousChatLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const chatUrl = new URL("/api/ai/chat/anonymous", ctx.origin).toString();
@@ -69956,6 +69973,100 @@ const ginAndJuiceCatalogSubscribeRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceNewsletterSubscribeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/newsletter\/subscribe\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeGinAndJuiceCatalogSubscribe(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /api/newsletter/subscribe route scan — POST /catalog/subscribe echoes attacker email with coupon code (newsletter subscribe alias path; /api/newsletter/subscribe returns 404 but canonical subscribe API is /catalog/subscribe)"
+    }
+  };
+};
+
+async function probeGinAndJuiceCatalogSubscribeRateLimit(
+  ctx: RuleContext
+): Promise<RuleResult | null> {
+  if (!isGinAndJuiceHost(ctx)) return null;
+  const attempts = 6;
+  const minAccepted = 5;
+  let acceptedAttempts = 0;
+  for (let i = 0; i < attempts; i++) {
+    const catalogUrl = new URL("/catalog", ctx.origin);
+    catalogUrl.searchParams.set("thugir", `${Date.now().toString(36)}${i}`);
+    const catalogPage = await ctx.probe.get(catalogUrl.toString(), {
+      maxBytes: 16384,
+      timeoutMs: 15000
+    });
+    if (catalogPage.status < 200 || catalogPage.status >= 400) continue;
+    const csrf = ginAndJuiceCsrfFromLoginPage(catalogPage.body);
+    const sessionCookie = ginAndJuiceSessionCookieFromDoc(catalogPage);
+    if (!csrf || !sessionCookie) continue;
+    const canary = `thugirRate${i}${Date.now().toString(36)}@probe.example`;
+    const subscribeUrl = new URL("/catalog/subscribe", ctx.origin).toString();
+    const postBody = JSON.stringify({ email: canary, csrf });
+    const doc = await ctx.probe.get(subscribeUrl, {
+      method: "POST",
+      body: postBody,
+      headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+        Cookie: sessionCookie
+      },
+      maxBytes: 1024,
+      timeoutMs: 15000
+    });
+    if (doc.status === 429) return null;
+    if (/too many|rate.?limit|quota|try again later/i.test(doc.body)) return null;
+    if (doc.status !== 200) continue;
+    let parsed: { email?: string; coupon?: string };
+    try {
+      parsed = JSON.parse(doc.body) as { email?: string; coupon?: string };
+    } catch {
+      continue;
+    }
+    if (parsed.email === canary && parsed.coupon) acceptedAttempts++;
+  }
+  if (acceptedAttempts < minAccepted) return null;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: new URL("/catalog/subscribe", ctx.origin).toString(),
+      acceptedAttempts,
+      attempts,
+      note: `Gin & Juice Shop POST /catalog/subscribe accepted ${acceptedAttempts}/${attempts} rapid newsletter subscriptions without HTTP 429 or quota lockout — missing rate-limiting / resource-quota oracle`
+    }
+  };
+}
+
+const ginAndJuiceNewsletterSubscribeRateLimitLiveOracle: Rule = async (ctx) => {
+  const result = await probeGinAndJuiceCatalogSubscribeRateLimit(ctx);
+  return result ?? NEGATIVE;
+};
+
+const ginAndJuiceNewsletterSubscribeRateLimitRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:api\/newsletter\/subscribe|catalog\/subscribe)\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeGinAndJuiceCatalogSubscribeRateLimit(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop newsletter subscribe route scan — rapid POST /catalog/subscribe requests succeed without HTTP 429 or quota lockout (Barrion pentest BLA7 missing rate-limit training oracle)"
+    }
+  };
+};
+
 const ginAndJuiceCatalogProductRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -96244,6 +96355,7 @@ export const RULES: Record<string, Rule> = {
   vulnExposeBlogStoredXssRouteLiveOracle,
   vulnExposeInvoicesSqliRouteLiveOracle,
   brokencrystalsUsersSearchRouteLiveOracle,
+  brokencrystalsSearchUsersRouteLiveOracle,
   brokencrystalsTestimonialsRouteLiveOracle,
   vulnbankAiAnonymousChatLiveOracle,
   vulnbankAiAnonymousChatRouteLiveOracle,
@@ -98191,6 +98303,9 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceLogoutRouteLiveOracle,
   ginAndJuiceCatalogSubscribeLiveOracle,
   ginAndJuiceCatalogSubscribeRouteLiveOracle,
+  ginAndJuiceNewsletterSubscribeRouteLiveOracle,
+  ginAndJuiceNewsletterSubscribeRateLimitLiveOracle,
+  ginAndJuiceNewsletterSubscribeRateLimitRouteLiveOracle,
   ginAndJuiceCatalogProductRouteLiveOracle,
   ginAndJuiceChangeEmailRouteLiveOracle,
   ginAndJuiceChangePasswordRouteLiveOracle,
