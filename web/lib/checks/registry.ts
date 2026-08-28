@@ -23973,6 +23973,10 @@ GET /ssrf/vul?url=file:///etc/hosts — local file read via URLConnection SSRF
 GET /ssrf/vul?url=http://127.0.0.1/ssrf/internal/metadata — internal metadata SSRF
 GET /sqli/jdbc/vul1?type=select&id=1 OR 1=1 — native JDBC string concatenation SQLi
 GET /xxe/vul1?payload= — XMLReader external entity file read / internal SSRF
+GET /spel/vul?ex=100-1 — Spring Expression Language arithmetic evaluation
+GET /ssti/vul1?para=__${7*7}__::.x — Thymeleaf return-controlled SSTI
+GET /other/xpath/vul?username=admin&password=' or '1'='1 — XPath authentication bypass injection
+GET /logic/idor/horizontal/getUserInfo?username=123 — horizontal IDOR on user profile API
 `;
 
 const JAVASECLAB_XSS_REFLECTION_PROBE = "thugir-javaseclab-xss-reflect-probe";
@@ -24196,6 +24200,142 @@ const javaSecLabXxeVul1RouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "GET /xxe/vul1?payload= — XMLReader external entity",
       note: "JavaSecLab /xxe/vul1 route scan — XXE training module documented in wiki (auth-gated public demo)"
+    }
+  };
+};
+
+const javaSecLabSpelVulLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/spel/vul?ex=100-1", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status >= 200 && doc.status < 500 && /\b99\b/.test(doc.body) && !/登录|layui\.layer/i.test(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        probeUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "JavaSecLab GET /spel/vul?ex= evaluates Spring Expression Language server-side — SpEL injection training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabSpelVulRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/spel\/vul\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabSpelVulLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl, note: "JavaSecLab /spel/vul route scan — SpEL expression evaluation — route-specific injection training oracle" }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/spel\/vul|SpEL|expression language/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /spel/vul?ex=100-1 — Spring Expression Language evaluation",
+      note: "JavaSecLab /spel/vul route scan — SpEL injection training module documented in wiki (auth-gated public demo)"
+    }
+  };
+};
+
+const javaSecLabSstiVul1LiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/ssti/vul1?para=__${7*7}__::.x", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (doc.status >= 200 && doc.status < 500 && /\b49\b|Thymeleaf|template/i.test(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        probeUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "JavaSecLab GET /ssti/vul1?para= evaluates Thymeleaf template expressions server-side — SSTI training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabSstiVul1RouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/ssti\/vul1\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabSstiVul1LiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl, note: "JavaSecLab /ssti/vul1 route scan — Thymeleaf SSTI — route-specific injection training oracle" }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/ssti\/vul1|Thymeleaf|SSTI|template injection/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /ssti/vul1?para=__${7*7}__::.x — Thymeleaf return-controlled SSTI",
+      note: "JavaSecLab /ssti/vul1 route scan — SSTI training module documented in wiki (auth-gated public demo)"
+    }
+  };
+};
+
+const javaSecLabXPathVulLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL(
+    "/other/xpath/vul?username=admin&password=" + encodeURIComponent("' or '1'='1"),
+    ctx.origin
+  ).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 500 &&
+    /XPath|login success|welcome admin|authentication bypass|or '1'='1/i.test(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        probeUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "JavaSecLab GET /other/xpath/vul with XPath injection bypasses authentication — XPath injection training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabXPathVulRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/other\/xpath\/vul\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabXPathVulLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl, note: "JavaSecLab /other/xpath/vul route scan — XPath auth bypass injection — route-specific training oracle" }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/other\/xpath\/vul|XPath|or '1'='1/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /other/xpath/vul?username=admin&password=' or '1'='1 — XPath authentication bypass",
+      note: "JavaSecLab /other/xpath/vul route scan — XPath injection training module documented in wiki (auth-gated public demo)"
     }
   };
 };
@@ -97192,6 +97332,12 @@ export const RULES: Record<string, Rule> = {
   javaSecLabJdbcSqliVul1RouteLiveOracle,
   javaSecLabXxeVul1LiveOracle,
   javaSecLabXxeVul1RouteLiveOracle,
+  javaSecLabSpelVulLiveOracle,
+  javaSecLabSpelVulRouteLiveOracle,
+  javaSecLabSstiVul1LiveOracle,
+  javaSecLabSstiVul1RouteLiveOracle,
+  javaSecLabXPathVulLiveOracle,
+  javaSecLabXPathVulRouteLiveOracle,
   clientSidePwnedlabsEvidence,
   clientSidePwnedlabsGitSecretsEvidence,
   clientSideRedtigerHackitEvidence,

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-28T18:37:16.586Z",
-  "total": 2782,
-  "uniqueSlugs": 2774,
+  "generatedAt": "2026-08-28T19:42:11.361Z",
+  "total": 2788,
+  "uniqueSlugs": 2780,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2764,
+    "generic": 2770,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2697,
+    "deep": 2703,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 130,
     "Security misconfiguration": 208,
     "Broken authentication": 174,
-    "Injection": 441,
+    "Injection": 447,
     "Cross-site scripting": 734,
     "Open redirect": 25,
     "general": 20,
@@ -1773,8 +1773,14 @@
     "javaseclab-jdbc-sqli-vul1-route-live-oracle",
     "javaseclab-reflected-xss-live-oracle",
     "javaseclab-reflected-xss-route-live-oracle",
+    "javaseclab-spel-vul-live-oracle",
+    "javaseclab-spel-vul-route-live-oracle",
     "javaseclab-ssrf-vul-live-oracle",
     "javaseclab-ssrf-vul-route-live-oracle",
+    "javaseclab-ssti-vul1-live-oracle",
+    "javaseclab-ssti-vul1-route-live-oracle",
+    "javaseclab-xpath-vul-live-oracle",
+    "javaseclab-xpath-vul-route-live-oracle",
     "javaseclab-xxe-vul1-live-oracle",
     "javaseclab-xxe-vul1-route-live-oracle",
     "juice-shop-addresss-bola-live-oracle",

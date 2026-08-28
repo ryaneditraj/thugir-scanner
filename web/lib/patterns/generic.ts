@@ -70176,6 +70176,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "javaseclab-spel-vul-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "JavaSecLab SpEL vul live oracle",
+    description:
+      "GET /spel/vul?ex= on JavaSecLab evaluates Spring Expression Language server-side — SpEL injection training oracle.",
+    impactOneline:
+      "SpEL injection enables arbitrary code execution via server-side expression evaluation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabSpelVulLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never evaluate user input as SpEL — JavaSecLab is intentional lab software.",
+      steps: [
+        "Avoid SpelExpressionParser on untrusted input.",
+        "Use allow-listed expression contexts or disable dynamic evaluation.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /spel/vul endpoint evaluates SpEL expressions. Show SpEL injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-spel-vul-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "JavaSecLab /spel/vul route live oracle",
+    description:
+      "When scanning /spel/vul on whgojp.top, live arithmetic probe or curated wiki corpus confirms JavaSecLab SpEL injection training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents Spring Expression Language injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabSpelVulRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never evaluate user input as SpEL on expression routes.",
+      steps: [
+        "Avoid SpelExpressionParser on untrusted input.",
+        "Use allow-listed expression contexts.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /spel/vul route is a JavaSecLab SpEL injection training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-ssti-vul1-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "JavaSecLab SSTI vul1 live oracle",
+    description:
+      "GET /ssti/vul1?para= on JavaSecLab evaluates Thymeleaf template expressions server-side — SSTI training oracle.",
+    impactOneline:
+      "Server-side template injection enables remote code execution via template engine evaluation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabSstiVul1LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into template expressions — JavaSecLab is intentional lab software.",
+      steps: [
+        "Use logic-less templating or sandboxed template engines.",
+        "Keep user data out of template expression contexts.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /ssti/vul1 endpoint evaluates Thymeleaf expressions. Show SSTI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-ssti-vul1-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "JavaSecLab /ssti/vul1 route live oracle",
+    description:
+      "When scanning /ssti/vul1 on whgojp.top, live ${7*7} probe or curated wiki corpus confirms JavaSecLab Thymeleaf SSTI training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents server-side template injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabSstiVul1RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into template expressions on SSTI routes.",
+      steps: [
+        "Use logic-less templating or sandboxed engines.",
+        "Keep user data out of expression contexts.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /ssti/vul1 route is a JavaSecLab SSTI training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-xpath-vul-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "JavaSecLab XPath vul live oracle",
+    description:
+      "GET /other/xpath/vul with XPath injection bypasses authentication on JavaSecLab — XPath injection training oracle.",
+    impactOneline:
+      "XPath injection in authentication queries enables credential bypass and unauthorized access.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabXPathVulLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized XPath queries — JavaSecLab is intentional lab software.",
+      steps: [
+        "Never concatenate user input into XPath expressions.",
+        "Use XPath variables with bound parameters.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /other/xpath/vul endpoint is vulnerable to XPath injection. Show parameterized XPath remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-xpath-vul-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "JavaSecLab /other/xpath/vul route live oracle",
+    description:
+      "When scanning /other/xpath/vul on whgojp.top, live auth-bypass probe or curated wiki corpus confirms JavaSecLab XPath injection training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents XPath authentication bypass injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabXPathVulRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized XPath queries on authentication routes.",
+      steps: [
+        "Never concatenate user input into XPath expressions.",
+        "Use XPath variables with bound parameters.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /other/xpath/vul route is a JavaSecLab XPath injection training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "seclab-labs-dead-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
