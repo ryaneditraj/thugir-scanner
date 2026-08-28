@@ -70036,6 +70036,40 @@ const ginAndJuiceNewsletterSubscribeRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceFeedbackSubmitRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/feedback\/submit\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceCatalogSearchXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /api/feedback/submit route scan — alias queue path returns SPA 404; live XSS oracle confirmed via GET /catalog?searchTerm= searchText reflection (PortSwigger FINDING-021 reflected XSS training oracle)"
+    }
+  };
+};
+
+const ginAndJuiceIdentityAuthLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/identity\/auth\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceLoginUsernameReflectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /api/identity/auth/login route scan — alias API path returns SPA 404; live login username reflection oracle confirmed on POST /login (JavaScript-context XSS training oracle)"
+    }
+  };
+};
+
 async function probeGinAndJuiceCatalogSubscribeRateLimit(
   ctx: RuleContext
 ): Promise<RuleResult | null> {
@@ -70598,7 +70632,7 @@ const ginAndJuiceLoggerOastLiveOracle: Rule = async (ctx) => {
 const ginAndJuiceLoggerRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/logger\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/logger\b/i.test(pageUrl) && !/\/api\/feedback\b/i.test(pageUrl)) return NEGATIVE;
   const result = await ginAndJuiceLoggerOastLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -70607,7 +70641,9 @@ const ginAndJuiceLoggerRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Gin & Juice Shop /logger route scan — POST accepts JSON telemetry with 200 empty body confirming blind OAST interaction sink"
+      note: /\/api\/feedback\b/i.test(pageUrl)
+        ? "Gin & Juice Shop /api/feedback route scan — POST /logger accepts JSON telemetry with 200 empty body (blind OAST sink referenced by searchLogger.js; feedback alias path)"
+        : "Gin & Juice Shop /logger route scan — POST accepts JSON telemetry with 200 empty body confirming blind OAST interaction sink"
     }
   };
 };
@@ -98705,6 +98741,8 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogSubscribeLiveOracle,
   ginAndJuiceCatalogSubscribeRouteLiveOracle,
   ginAndJuiceNewsletterSubscribeRouteLiveOracle,
+  ginAndJuiceFeedbackSubmitRouteLiveOracle,
+  ginAndJuiceIdentityAuthLoginRouteLiveOracle,
   ginAndJuiceNewsletterSubscribeRateLimitLiveOracle,
   ginAndJuiceNewsletterSubscribeRateLimitRouteLiveOracle,
   ginAndJuiceCatalogProductRouteLiveOracle,
