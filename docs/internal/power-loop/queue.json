@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T12:17:00.000Z",
+  "updated_at": "2026-08-28T13:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/my-account/change-email",
+      "source": "PortSwigger Web Security Academy — race-condition email takeover oracle POST /my-account/change-email (web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sekumart.sekuripy.hr/search.php?q=test",
+      "source": "SekuriPy SekuMart sqlmap playground — reflected SQLi oracle GET /search.php?q= (official sqlmap docs; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-28",
+      "source": "OWASP WrongSecrets Heroku demo — challenge-28 secrets-management oracle (gap fill challenges 28-30; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-29",
+      "source": "OWASP WrongSecrets Heroku demo — challenge-29 secrets-management oracle (gap fill; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-30",
+      "source": "OWASP WrongSecrets Heroku demo — challenge-30 secrets-management oracle (gap fill; web search 13 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnbank.org/upload_profile_picture_url",
       "source": "Commando-X/vuln-bank README — SSRF oracle POST upload_profile_picture_url image_url param chains to /internal/secret (web search 12 UTC)",
