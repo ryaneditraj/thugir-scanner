@@ -70302,6 +70302,11 @@ async function probeGinAndJuiceForgotPasswordSurface(ctx: RuleContext): Promise<
   };
 }
 
+const ginAndJuiceForgotPasswordLiveOracle: Rule = async (ctx) => {
+  const result = await probeGinAndJuiceForgotPasswordSurface(ctx);
+  return result ?? NEGATIVE;
+};
+
 const ginAndJuiceForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -97959,6 +97964,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCartCheckoutAuthLiveOracle,
   ginAndJuiceCartRouteLiveOracle,
   ginAndJuiceCheckoutRouteLiveOracle,
+  ginAndJuiceForgotPasswordLiveOracle,
   ginAndJuiceForgotPasswordRouteLiveOracle,
   ginAndJuiceAngularVulnerableDependencyLiveOracle,
   ginAndJuiceAngularVulnerableDependencyRouteLiveOracle,

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-28T01:52:12.459Z",
-  "total": 2740,
-  "uniqueSlugs": 2732,
+  "generatedAt": "2026-08-28T02:30:50.382Z",
+  "total": 2741,
+  "uniqueSlugs": 2733,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2722,
+    "generic": 2723,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2655,
+    "deep": 2656,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 567,
+    "Broken access control": 568,
     "Exposed secret": 111,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -1678,6 +1678,7 @@
     "ginandjuice-change-password-route-live-oracle",
     "ginandjuice-checkout-route-live-oracle",
     "ginandjuice-delete-route-live-oracle",
+    "ginandjuice-forgot-password-live-oracle",
     "ginandjuice-forgot-password-route-live-oracle",
     "ginandjuice-home-url-override-live-oracle",
     "ginandjuice-home-url-override-route-live-oracle",

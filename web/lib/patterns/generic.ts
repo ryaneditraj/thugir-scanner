@@ -64275,6 +64275,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-forgot-password-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop password-reset surface live oracle",
+    description:
+      "POST /my-account/forgot-password accepts password-reset requests and redirects unauthenticated callers to /login while phantom /forgot-password returns 404 — password-reset training oracle.",
+    impactOneline:
+      "Exposed password-reset endpoints without rate limiting enable account enumeration and reset-poisoning attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceForgotPasswordLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect password-reset endpoints with rate limiting, anti-enumeration, and secure token delivery.",
+      steps: [
+        "Return generic responses for password-reset requests regardless of account existence.",
+        "Bind reset tokens to the requesting session and expire them quickly.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /my-account/forgot-password accepts reset requests and redirects unauthenticated users to /login. Show password-reset flow remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-forgot-password-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
