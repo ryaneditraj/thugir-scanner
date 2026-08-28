@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T02:12:00.000Z",
+  "updated_at": "2026-08-28T03:13:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/hmac/login",
+      "source": "NeuraLegion/brokencrystals swagger — RSA-to-HMAC JWT algorithm confusion oracle POST /api/auth/jwt/hmac/login (03 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jku/login",
+      "source": "NeuraLegion/brokencrystals swagger — JWT JKU header injection oracle POST /api/auth/jwt/jku/login (03 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jwk/login",
+      "source": "NeuraLegion/brokencrystals swagger — JWT JWK embedded key oracle POST /api/auth/jwt/jwk/login (03 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5c/login",
+      "source": "NeuraLegion/brokencrystals swagger — JWT X5C certificate chain oracle POST /api/auth/jwt/x5c/login (03 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5u/login",
+      "source": "NeuraLegion/brokencrystals swagger — JWT X5U rogue certificate oracle POST /api/auth/jwt/x5u/login (03 UTC power-loop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/weak-key/login",
       "source": "NeuraLegion/brokencrystals swagger — JWT weak-secret brute-force oracle POST /api/auth/jwt/weak-key/login (02 UTC power-loop)",

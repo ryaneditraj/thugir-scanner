@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T02:35:00.000Z",
+  "updated_at": "2026-08-28T03:22:20.921Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2817,
-  "total_findings": 29391,
+  "total_sites_scanned": 2826,
+  "total_findings": 29792,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1996,
-  "discovery_findings": 24731,
-  "improvements_shipped": 1249,
-  "last_run": "2026-08-28T02:35:00.000Z",
+  "discovery_urls_added": 2001,
+  "discovery_findings": 25081,
+  "improvements_shipped": 900,
+  "last_run": "2026-08-28T03:22:20.921Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,39 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 38 juice-shop live oracles); secret-resend present"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 juice-shop live oracles); secret-resend + captcha-bypass + jwt-alg-none + wallet-balance + security-question-user present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 87,
-      "focus": "ginandjuice forgot-password live oracle + duck-store/brokencrystals route priority + render.dot/mcp warmup",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 350,
+      "focus": "brokencrystals swagger JWT suite (hmac/jku/jwk/x5c/x5u) + drained duck-store admin/users enumeration + wrongsecrets-ctf hub",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, secret-resend present)",
-      "ginandjuice.shop/forgot-password: 32→33 (+ginandjuice-forgot-password-live-oracle + route)",
-      "brokencrystals.com/render.dot: brokencrystals-render-dot-ssti-route-live-oracle confirmed on direct scan",
-      "brokencrystals.com/api/mcp: 87-88 findings (+brokencrystals-mcp-route-live-oracle)",
-      "duck-store.escape.tech/api/v1/cart/add: duck-store-cart-negative-quantity-route-live-oracle confirmed",
-      "brokencrystals.com/api/auth/jwt/kid-sql/login: 20 findings hub only — missing kid-sql route oracle (learning gap)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles incl secret-resend)",
+      "brokencrystals.com/api/auth/jwt/hmac/login: 86 findings (+brokencrystals-jwt-hmac-confusion-route-live-oracle)",
+      "brokencrystals.com/api/auth/jwt/jwk/login: 77 findings (+brokencrystals-jwt-jwk-rogue-login-route-live-oracle + jwk-empty-route)",
+      "brokencrystals.com/api/auth/jwt/x5u/login: 53 findings (hub JWT suite incl x5c/jku rogue oracles)",
+      "duck-store.escape.tech/api/v1/admin/users: 39 findings — duck-store-admin-users-route-live-oracle",
+      "duck-store.escape.tech/api/v1/users/: 40 findings — duck-store-users-enumeration-route-live-oracle",
+      "wrongsecrets-ctf.herokuapp.com/: 11 findings — wrongsecrets-ctf-hub-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "brokencrystals /api/auth/jwt/kid-sql/login: missing brokencrystals-jwt-kid-sql-route-live-oracle"
+      "brokencrystals /api/auth/jwt/jku/login: 21 findings hub only — missing brokencrystals-jwt-jku-rogue-route-live-oracle",
+      "brokencrystals /api/auth/jwt/x5c/login: 23 findings hub only — missing brokencrystals-jwt-x5c-rogue-route-live-oracle",
+      "brokencrystals /api/auth/jwt/kid-sql/login: still thin 20-finding hub without route-specific KID-SQL oracle (prior run)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
+    "juice-shop.herokuapp.com": 51,
+    "brokencrystals.com/api/auth/jwt/hmac/login": 86,
+    "brokencrystals.com/api/auth/jwt/jwk/login": 77,
     "brokencrystals.com/api/auth/jwt/weak-key/login": 90,
     "brokencrystals.com/api/mcp": 88,
-    "brokencrystals.com/api/products/latest?limit=100": 85,
-    "ginandjuice.shop/catalog/product-search-results/1?term=test": 41,
-    "ginandjuice.shop/forgot-password": 33,
+    "brokencrystals.com/api/auth/jwt/x5u/login": 53,
+    "duck-store.escape.tech/api/v1/users/": 40,
+    "duck-store.escape.tech/api/v1/admin/users": 39,
     "duck-store.escape.tech/api/v1/coupons/validate?code=INTERNAL100": 39,
-    "duck-store.escape.tech/api/v1/orders/checkout": 39,
-    "ginandjuice.shop/my-account/orders": 33,
-    "pwnshop.ctfsecurity.com/admin/dashboard": 46
+    "ginandjuice.shop/my-account/orders": 33
   }
 }
