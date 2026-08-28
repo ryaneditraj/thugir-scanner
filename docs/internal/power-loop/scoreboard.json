@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-08-28T06:18:41.276Z",
-=======
-  "updated_at": "2026-08-28T06:25:00.000Z",
->>>>>>> f692fdaf (engine: 3 discovery improvements — DVGA DoS route priority, BC JWK validate route, vapi queue fix)
+  "updated_at": "2026-08-28T07:24:25.957877Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -19,36 +15,24 @@
       ]
     }
   },
-<<<<<<< HEAD
-  "total_sites_scanned": 2854,
-  "total_findings": 30754,
+  "total_sites_scanned": 2863,
+  "total_findings": 31138,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2016,
-  "discovery_findings": 25830,
+  "discovery_urls_added": 2021,
+  "discovery_findings": 26164,
   "improvements_shipped": 1230,
-  "last_run": "2026-08-28T06:18:41.276Z",
-=======
-  "total_sites_scanned": 2848,
-  "total_findings": 30541,
-  "critical_findings": 55,
-  "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2011,
-  "discovery_findings": 25680,
-  "improvements_shipped": 1233,
-  "last_run": "2026-08-28T06:25:00.000Z",
->>>>>>> f692fdaf (engine: 3 discovery improvements — DVGA DoS route priority, BC JWK validate route, vapi queue fix)
+  "last_run": "2026-08-28T07:24:25.957877Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -64,71 +48,41 @@
           ]
         }
       },
-<<<<<<< HEAD
-      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles incl secret-resend)"
+      "note": "Stable 6/6 first-pass recall (50 findings, 38 live oracles incl secret-resend)"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 198,
-      "focus": "brokencrystals JWT validate-path oracles (jwk/x5c/hmac) + DVWU mass-assignment/crlf labs + wrongsecrets 35/36/43 queue drain",
+      "findings": 334,
+      "focus": "brokencrystals /api/fetch SSRF + /api/upload/parse XXE + vulnbank merchant dashboard + wrongsecrets-63 + ginandjuice catalog/product + hmac/validate thin pass",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, secret-resend slug present)",
-      "brokencrystals.com/api/auth/jwt/jwk/validate: 79 findings — brokencrystals-jwt-jwk-empty-route-live-oracle on validate path",
-      "brokencrystals.com/api/auth/jwt/x5c/validate: 29 findings — brokencrystals-jwt-x5c-rogue-route-live-oracle on validate path",
-      "brokencrystals.com/api/auth/jwt/hmac/validate: 20 findings — hub oracles only (thin validate-path pass)",
-      "dvwu.vercel.app/labs/mass-assignment: 12 findings — dvwu-mass-assignment-lab-route-live-oracle",
-      "dvwu.vercel.app/labs/crlf: 13 findings — dvwu-crlf-client-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-35: 15 findings — wrongsecrets-challenge-35-documentation-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-36: 15 findings — wrongsecrets-challenge-36-advanced-c-route-live-oracle"
-=======
-      "note": "Stable 6/6 recall (50 findings); secret-resend slug present"
-    },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-    "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "DVGA GraphQL DoS route priority + brokencrystals JWK validate route + vapi.tools queue URL correction",
-      "improvements_shipped_this_run": 3
-    },
-    "notable_findings": [
-      "dvga2.tools.escape.tech/graphql: 15→18 findings — dvga-graphql-dos-resource-exhaustion-route-live-oracle now fires before live DoS exhausts server",
-      "brokencrystals.com/api/auth/jwt/jwk/validate: +brokencrystals-jwt-jwk-rogue-login-route-live-oracle on validate-only API scans",
-      "vapi.tools.escape.tech/vapi/api1/user/1: queue corrected from invalid crAPI /workshop path to roottusk/vapi API1 BOLA oracle",
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings) maintained"
->>>>>>> f692fdaf (engine: 3 discovery improvements — DVGA DoS route priority, BC JWK validate route, vapi queue fix)
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 38 live oracles, secret-resend present)",
+      "brokencrystals.com/api/fetch: 77 findings \u2014 new /api/fetch SSRF oracle (url param)",
+      "brokencrystals.com/api/upload/parse: 30 findings \u2014 XXE upload route oracle",
+      "vulnbank.org/merchant/dashboard: 31 findings \u2014 merchant payment dashboard oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-63: 15 findings \u2014 secrets-management challenge oracle",
+      "ginandjuice.shop/catalog/product: 42 findings \u2014 product detail XSS/SQLi hub",
+      "brokencrystals.com/api/auth/jwt/hmac/validate: 11 findings \u2014 thin validate-path pass (learning gap vs jwk/x5c)"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "brokencrystals.com/api/auth/jwt/hmac/validate: 20 findings hub-only — missing dedicated hmac validate-path route oracle (vs jwk/x5c validate paths)",
-      "wrongsecrets 57-61 still unscanned this run — queued for next drain"
+      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "brokencrystals.com/api/auth/jwt/hmac/validate: 11 findings \u2014 still thin vs jwk/validate (79) and x5c/validate (49); dedicated hmac validate-path route oracle gap",
+      "scoreboard.json had git merge conflict markers \u2014 fixed this run",
+      "wrongsecrets 57-62 still queued unscanned \u2014 challenge-63 added and scanned this run"
     ]
   },
   "discovery_highlights": {
-<<<<<<< HEAD
-    "juice-shop.herokuapp.com": 51,
-    "brokencrystals.com/api/auth/jwt/jwk/validate": 79,
-    "brokencrystals.com/api/auth/jwt/x5c/validate": 29,
-    "brokencrystals.com/api/auth/jwt/hmac/validate": 20,
-    "dvwu.vercel.app/labs/mass-assignment": 12,
-    "dvwu.vercel.app/labs/crlf": 13,
-    "wrongsecrets.herokuapp.com/challenge/challenge-35": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-36": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-43": 15,
-    "brokencrystals.com/api/auth/jwt/x5u/validate": 77,
-    "brokencrystals.com/api/auth/jwt/kid-sql/validate": 87
-=======
     "juice-shop.herokuapp.com": 50,
-    "dvga2.tools.escape.tech/graphql": 18,
+    "brokencrystals.com/api/fetch": 77,
+    "brokencrystals.com/api/upload/parse": 30,
+    "vulnbank.org/merchant/dashboard": 31,
+    "wrongsecrets.herokuapp.com/challenge/challenge-63": 15,
+    "ginandjuice.shop/catalog/product": 42,
     "brokencrystals.com/api/auth/jwt/jwk/validate": 79,
-    "brokencrystals.com/api/auth/jwt/x5u/validate": 77,
-    "brokencrystals.com/api/auth/jwt/kid-sql/validate": 87,
-    "ginandjuice.shop/my-account/forgot-password": 35,
-    "vapi.tools.escape.tech/vapi/api1/user/1": 14
->>>>>>> f692fdaf (engine: 3 discovery improvements — DVGA DoS route priority, BC JWK validate route, vapi queue fix)
+    "brokencrystals.com/api/auth/jwt/x5c/validate": 49,
+    "brokencrystals.com/api/auth/jwt/hmac/validate": 11
   }
 }
