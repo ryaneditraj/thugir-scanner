@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T02:16:30.000Z",
+  "updated_at": "2026-08-28T02:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2816,
-  "total_findings": 29340,
+  "total_sites_scanned": 2817,
+  "total_findings": 29391,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1996,
   "discovery_findings": 24731,
-  "improvements_shipped": 1246,
-  "last_run": "2026-08-28T02:16:30.000Z",
+  "improvements_shipped": 1249,
+  "last_run": "2026-08-28T02:35:00.000Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,26 +52,23 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 386,
-      "focus": "brokencrystals JWT weak-key/kid-sql routes + duck-store coupon validate/apply + ginandjuice my-account/orders; drained brokencrystals /api/mcp + duck-store checkout/cart",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 87,
+      "focus": "ginandjuice forgot-password live oracle + duck-store/brokencrystals route priority + render.dot/mcp warmup",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 38 live oracles, secret-resend present)",
-      "brokencrystals.com/api/auth/jwt/weak-key/login: 90 findings — brokencrystals-jwt-weak-key-route-live-oracle + full JWT suite",
-      "brokencrystals.com/api/auth/jwt/kid-sql/login: 20 findings — hub oracles only; no route-specific KID-SQL JWT oracle (learning gap)",
-      "duck-store.escape.tech/api/v1/coupons/validate?code=INTERNAL100: 39 findings — duck-store-coupons-validate-live-oracle",
-      "duck-store.escape.tech/api/v1/coupons/apply: 39 findings — duck-store-coupons-apply-route-live-oracle",
-      "ginandjuice.shop/my-account/orders: 33 findings — ginandjuice-my-account-orders-route-live-oracle",
-      "brokencrystals.com/api/mcp: 88 findings — MCP hub oracles (get-count-sqli, spawn-process, get-config)",
-      "duck-store.escape.tech/api/v1/orders/checkout: 39 findings — duck-store-checkout-private-coupon-route-live-oracle",
-      "duck-store.escape.tech/api/v1/cart/add: 38 findings — duck-store-cart-negative-quantity-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, secret-resend present)",
+      "ginandjuice.shop/forgot-password: 32→33 (+ginandjuice-forgot-password-live-oracle + route)",
+      "brokencrystals.com/render.dot: brokencrystals-render-dot-ssti-route-live-oracle confirmed on direct scan",
+      "brokencrystals.com/api/mcp: 87-88 findings (+brokencrystals-mcp-route-live-oracle)",
+      "duck-store.escape.tech/api/v1/cart/add: duck-store-cart-negative-quantity-route-live-oracle confirmed",
+      "brokencrystals.com/api/auth/jwt/kid-sql/login: 20 findings hub only — missing kid-sql route oracle (learning gap)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "brokencrystals /api/auth/jwt/kid-sql/login: 20 findings hub fingerprint only — missing brokencrystals-jwt-kid-sql-route-live-oracle"
+      "brokencrystals /api/auth/jwt/kid-sql/login: missing brokencrystals-jwt-kid-sql-route-live-oracle"
     ]
   },
   "discovery_highlights": {
@@ -80,10 +77,10 @@
     "brokencrystals.com/api/mcp": 88,
     "brokencrystals.com/api/products/latest?limit=100": 85,
     "ginandjuice.shop/catalog/product-search-results/1?term=test": 41,
+    "ginandjuice.shop/forgot-password": 33,
     "duck-store.escape.tech/api/v1/coupons/validate?code=INTERNAL100": 39,
     "duck-store.escape.tech/api/v1/orders/checkout": 39,
     "ginandjuice.shop/my-account/orders": 33,
-    "ginandjuice.shop/forgot-password": 32,
     "pwnshop.ctfsecurity.com/admin/dashboard": 46
   }
 }

@@ -5477,6 +5477,24 @@
       "slug": "brokencrystals-products-latest-route-slug-split",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: split brokencrystalsProductsLatestLimitBypassLiveOracle from route wrapper; added brokencrystals-products-latest-limit-bypass-route-live-oracle pattern; brokencrystals.com/api/products/latest?limit=100 findings 84→85 (+route slug); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-forgot-password-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /my-account/forgot-password returns 302 Location /login for carlos@ginandjuice.shop; ginandjuice.shop/forgot-password findings 32→33 (+ginandjuice-forgot-password-live-oracle alongside route); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-api-route-priority-boosts",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for duck-store-cart-negative-quantity on /api/v1/cart/add, duck-store-checkout-private-coupon on /api/v1/orders/checkout, duck-store-admin-users on /api/v1/admin/users; duck-store.escape.tech/api/v1/cart/add findings 38 (+duck-store-cart-negative-quantity-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-render-dot-mcp-route-warmup",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runDeepScan warmup extended for /render.dot + /api/mcp; runner -4 priority for brokencrystals-mcp-* on /api/mcp; brokencrystals.com/render.dot (+brokencrystals-render-dot-ssti-route-live-oracle), brokencrystals.com/api/mcp 87 findings (+brokencrystals-mcp-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
     }
   ]
 }
