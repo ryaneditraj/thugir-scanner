@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T18:48:00.000Z",
+  "updated_at": "2026-08-28T19:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2752,
-  "total_findings": 27048,
+  "total_sites_scanned": 2761,
+  "total_findings": 27191,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1969,
-  "discovery_findings": 23026,
+  "discovery_urls_added": 1974,
+  "discovery_findings": 23118,
   "improvements_shipped": 949,
-  "last_run": "2026-08-28T18:48:00.000Z",
+  "last_run": "2026-08-28T19:20:00.000Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -48,35 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings); no benchmark category misses"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles incl secret-resend); no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
+      "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 137,
-      "focus": "wrongsecrets challenge-28/29/30 documentation live oracles + prior sekumart/brokencrystals/ginandjuice queue drains",
-      "improvements_shipped_this_run": 3
+      "findings": 92,
+      "focus": "kOaDT product-search SQLi + AES-CBC padding-oracle walkthroughs, FauxBank transfer/profile API oracles, VaultApp IDOR seed",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no category misses",
-      "wrongsecrets.herokuapp.com/challenge/challenge-28: 15→18 findings — wrongsecrets-challenge-28/29/30 live oracles registered in DEEP_RULES + cross-seed peers via wrongsecretsChallengeApiSeeds",
-      "sekumart.sekuripy.hr/search.php: 12→14 findings — sekumart-openapi-sqli-live-oracle (prior 18 UTC run)",
-      "brokencrystals.com/api/email: 35→86 findings — brokencrystalsEmailApiSeeds (prior 18 UTC run)",
-      "ginandjuice.shop/catalog: +ginandjuice-change-email-live-oracle (prior 18 UTC run)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — secret-resend present",
+      "koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection: 7 findings — oopssec-product-search-sqli-route-live-oracle shipped",
+      "koadt.github.io/oss-oopssec-store/posts/aes-cbc-padding-oracle-forged-share-token: 9 findings — walkthrough corpus evidence (no dedicated padding-oracle live oracle yet)",
+      "pentest-fauxbank.vercel.app/api/transfer: 15 findings — fauxbank-transfer-route-live-oracle + CSRF/loan oracles",
+      "pentest-fauxbank.vercel.app/api/profile: 14 findings — fauxbank-profile-route-live-oracle + PII exposure",
+      "vaultapp-omega.vercel.app/api/users/1: 13 findings — vaultapp-users-idor-live-oracle + 6 IDOR route oracles",
+      "sekumart.sekuripy.hr/directory.php: 16 findings — directory XPath + openapi SQLi oracles confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)"
+      "aes-cbc-padding-oracle walkthrough: corpus evidence only — need dedicated padding-oracle live oracle slug",
+      "vaultapp-omega: IDOR oracles fire on seed URL but authenticated session may be needed for full exploitation proof"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "wrongsecrets.herokuapp.com/challenge/challenge-28": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-29": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-30": 15,
-    "sekumart.sekuripy.hr/search.php": 14,
-    "brokencrystals.com/api/email": 86,
-    "ginandjuice.shop/catalog": 43
+    "koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection": 7,
+    "koadt.github.io/oss-oopssec-store/posts/aes-cbc-padding-oracle-forged-share-token": 9,
+    "pentest-fauxbank.vercel.app/api/transfer": 15,
+    "pentest-fauxbank.vercel.app/api/profile": 14,
+    "vaultapp-omega.vercel.app/api/users/1": 13,
+    "sekumart.sekuripy.hr/directory.php": 16
   }
 }

@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T18:23:03.289Z",
+  "updated_at": "2026-08-28T19:17:24.301Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/",
+      "source": "kOaDT/oss-oopssec-store — product search UNION SQLi walkthrough oracle (GitHub Pages; web search 19 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/aes-cbc-padding-oracle-forged-share-token/",
+      "source": "kOaDT/oss-oopssec-store — AES-CBC padding oracle share-token forgery walkthrough (GitHub Pages; web search 19 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/transfer",
+      "source": "alfredang/pentest FauxBank — CSRF-missing transfer API oracle POST /api/transfer (Vercel deploy; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/profile",
+      "source": "alfredang/pentest FauxBank — sensitive data exposure oracle GET /api/profile (Vercel deploy; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/users/1",
+      "source": "MRMcyber/vaultapp — IDOR user object oracle GET /api/users/:id (vaultapp-omega.vercel.app; web search 19 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain",
       "source": "kOaDT/oss-oopssec-store — supply-chain typosquat→AI rules backdoor walkthrough oracle (GitHub Pages; web search 18 UTC)",
