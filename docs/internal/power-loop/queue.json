@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T16:16:46.164705Z",
+  "updated_at": "2026-08-28T17:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api",
+      "source": "kOaDT/oss-oopssec-store \u2014 JWT alg confusion partner API walkthrough with live exploit oracle (GitHub Pages; web search 17 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/live-stream-hijack",
+      "source": "kOaDT/oss-oopssec-store \u2014 BFLA live-stream hijack walkthrough oracle (GitHub Pages; web search 17 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api",
+      "source": "kOaDT/oss-oopssec-store \u2014 path traversal documents API walkthrough oracle (GitHub Pages; web search 17 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/next-public-env-variable-leak",
+      "source": "kOaDT/oss-oopssec-store \u2014 NEXT_PUBLIC env secret leak walkthrough oracle (GitHub Pages; web search 17 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927",
+      "source": "kOaDT/oss-oopssec-store \u2014 CVE-2025-29927 middleware auth bypass walkthrough oracle (GitHub Pages; web search 17 UTC)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://sekumart.sekuripy.hr/directory.php?q=test",
       "source": "SekuriPy SekuMart labs \u2014 staff directory XPath injection oracle GET /directory.php?q= (sqlmap playground; web search 16 UTC)",
