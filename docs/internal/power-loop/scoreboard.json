@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "updated_at": "2026-08-28T15:40:28.406Z",
-=======
-  "updated_at": "2026-08-28T15:20:00.000Z",
->>>>>>> 2e80af960fa30e306726ff4f7fd50af3afd4f055
+  "updated_at": "2026-08-28T16:39:30.281652Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -19,36 +15,24 @@
       ]
     }
   },
-<<<<<<< HEAD
-  "total_sites_scanned": 2941,
-  "total_findings": 33528,
+  "total_sites_scanned": 2950,
+  "total_findings": 33660,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2061,
-  "discovery_findings": 28165,
+  "discovery_urls_added": 2071,
+  "discovery_findings": 28321,
   "improvements_shipped": 1257,
-  "last_run": "2026-08-28T15:40:28.406Z",
-=======
-  "total_sites_scanned": 2934,
-  "total_findings": 33418,
-  "critical_findings": 57,
-  "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2056,
-  "discovery_findings": 28105,
-  "improvements_shipped": 1261,
-  "last_run": "2026-08-28T15:20:00.000Z",
->>>>>>> 2e80af960fa30e306726ff4f7fd50af3afd4f055
+  "last_run": "2026-08-28T16:39:30.281652Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 593,
       "live_oracles": 38,
       "benchmark_recall": {
         "juice-shop": {
@@ -65,75 +49,43 @@
           ]
         }
       },
-<<<<<<< HEAD
-      "note": "Stable 6/6 first-pass recall (50 findings, 38 live oracles incl secret-resend) — no category gaps"
+      "note": "Stable 6/6 first-pass recall (51 findings, 38 live oracles incl secret-resend + resend-key) \u2014 no category gaps"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 75,
-      "focus": "JavaSecLab SSRF/SQLi/XXE route oracles + vulnforge level17/20 file-upload/nightmare tiers + wrongsecrets 13/29/30 drain",
+      "findings": 81,
+      "focus": "sekumart XPath directory + JavaSecLab SpEL/SSTI/XPath/IDOR route oracles + wrongsecrets 7/13/14 drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
-      "whgojp.top/ssrf/vul: 7 findings — JavaSecLab SSRF vul endpoint live oracle",
-      "whgojp.top/sqli/jdbc/vul1: 7 findings — JavaSecLab JDBC SQLi vul1 route oracle",
-      "whgojp.top/xxe/vul1: 7 findings — JavaSecLab XXE XMLReader route oracle",
-      "vulnforge-academy level17.php: 5 findings — file-upload tier route oracle",
-      "vulnforge-academy level20.php: 4 findings — nightmare multi-vector tier route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-29: 15 findings — screenshot-log route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-30: 15 findings — localStorage route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-13: 15 findings — CI/CD route oracle"
-=======
-      "note": "Stable 6/6 first-pass recall (51 findings) — no category gaps"
-    },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-    "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 29,
-      "focus": "sekumart search.php reflected XSS + directory.php XPath injection from 14 UTC learning gaps",
-      "improvements_shipped_this_run": 4
-    },
-    "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "sekumart.sekuripy.hr/search.php?q=test: 12→15 findings — sekumart-search-xss live+route oracles shipped",
-      "sekumart.sekuripy.hr/directory.php: 14 findings — sekumart-directory-xpath live+route oracles shipped (FLAG{xp4th_1nj3ct10n_pwn3d})"
->>>>>>> 2e80af960fa30e306726ff4f7fd50af3afd4f055
+      "sekumart.sekuripy.hr/directory.php?q=test: 14 findings \u2014 sekumart-directory-xpath live+route oracles confirmed",
+      "whgojp.top/spel/vul?ex=100-1: 7 findings \u2014 generic JavaSecLab bundle only; no SpEL route oracle",
+      "whgojp.top/ssti/vul1: 4 findings \u2014 thin pass; Thymeleaf SSTI route oracle gap",
+      "whgojp.top/other/xpath/vul: 4 findings \u2014 thin pass; XPath auth-bypass route oracle gap",
+      "whgojp.top/logic/idor/horizontal/getUserInfo: 7 findings \u2014 horizontal IDOR route oracle gap",
+      "wrongsecrets.herokuapp.com/challenge/challenge-7: 15 findings \u2014 challenge-7 route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-13: 15 findings \u2014 challenge-13 CI/CD route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-14: 15 findings \u2014 challenge-14 route oracle"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "JavaSecLab whgojp routes: SSRF/SQLi/XXE oracles may need dedicated slugs for /ssrf/vul, /sqli/jdbc/vul1, /xxe/vul1",
-      "vulnforge level17/20: file-upload and nightmare tiers thin (4-5 findings) — may need tier-specific route oracles"
+      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "scoreboard.json had git merge conflict markers \u2014 fixed before scoreboard write",
+      "JavaSecLab SpEL/SSTI/XPath/IDOR routes thin (4-7 findings) \u2014 need dedicated route oracles for /spel/vul, /ssti/vul1, /other/xpath/vul, /logic/idor/horizontal",
+      "whgojp SSTI/XPath routes return 1 page crawled \u2014 may need authenticated session (admin/admin) for full probe depth"
     ]
   },
   "discovery_highlights": {
-<<<<<<< HEAD
-    "juice-shop.herokuapp.com": 50,
-    "whgojp.top/ssrf/vul?url=http://example.com": 7,
-    "whgojp.top/sqli/jdbc/vul1?type=select&id=1": 7,
-    "whgojp.top/xxe/vul1": 7,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php": 5,
-    "vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php": 4,
-    "wrongsecrets.herokuapp.com/challenge/challenge-29": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-30": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-13": 15,
-    "pwnshop.ctfsecurity.com/login?next=https://example.com": 51,
-    "ginandjuice.shop/login?next=https://example.com": 35
-=======
     "juice-shop.herokuapp.com": 51,
-    "sekumart.sekuripy.hr/search.php?q=test": 15,
-    "sekumart.sekuripy.hr/directory.php": 14,
-    "pwnshop.ctfsecurity.com/login?next=https://example.com": 51,
-    "ginandjuice.shop/login?next=https://example.com": 35,
-    "wrongsecrets.herokuapp.com/challenge/challenge-31": 13,
-    "wrongsecrets.herokuapp.com/challenge/challenge-32": 13,
-    "wrongsecrets.herokuapp.com/challenge/challenge-34": 15,
-    "ginandjuice.shop/my-account/change-email": 35,
-    "brokencrystals.com/api/files?path=test": 87,
-    "vulnbank.org/upload_profile_picture_url": 29
->>>>>>> 2e80af960fa30e306726ff4f7fd50af3afd4f055
+    "sekumart.sekuripy.hr/directory.php?q=test": 14,
+    "whgojp.top/spel/vul?ex=100-1": 7,
+    "whgojp.top/ssti/vul1?para=__${7*7}__::.x": 4,
+    "whgojp.top/other/xpath/vul?username=admin&password=' or '1'='1": 4,
+    "whgojp.top/logic/idor/horizontal/getUserInfo?username=123": 7,
+    "wrongsecrets.herokuapp.com/challenge/challenge-7": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-13": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-14": 15
   }
 }
