@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T08:25:00.000Z",
+  "updated_at": "2026-08-28T09:26:31.234Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2872,
-  "total_findings": 31545,
+  "total_sites_scanned": 2881,
+  "total_findings": 31938,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2026,
-  "discovery_findings": 26520,
+  "discovery_urls_added": 2031,
+  "discovery_findings": 26862,
   "improvements_shipped": 1239,
-  "last_run": "2026-08-28T08:25:00.000Z",
+  "last_run": "2026-08-28T09:26:31.234Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -48,45 +48,46 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles incl secret-resend)"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles incl secret-resend + resend-key)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 356,
-      "focus": "brokencrystals jku/none validate + get_config + ginandjuice view-order BOLA + product/stock XXE + drained hmac/validate + dvwu mass-assignment/crlf",
+      "findings": 342,
+      "focus": "ginandjuice newsletter/subscribe rate-limit + brokencrystals search_users/spawn/products/views SSTI/SQLi + change-password + drained x5c/validate + vapi BOLA + wrongsecrets-37",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles, secret-resend present)",
-      "brokencrystals.com/api/auth/jwt/jku/validate: 81 findings — new JKU validate-path oracle",
-      "brokencrystals.com/api/auth/jwt/none/validate: 78 findings — alg-none validate-path oracle",
-      "brokencrystals.com/api/auth/jwt/hmac/validate: 80 findings — hmac validate-path now rich (was 11 prior run)",
-      "ginandjuice.shop/catalog/product/stock: 42 findings — ginandjuice-stock-xxe-live-oracle",
-      "ginandjuice.shop/my-account/view-order/1: 34 findings — order detail BOLA/IDOR oracle",
-      "brokencrystals.com/api/config/get_config: 16 findings — thin vs MCP get_config leak",
-      "parallel run: brokencrystals.com/api/upload/parse 80 + hidden-upload 77 — route oracles shipped",
-      "parallel run: wrongsecrets challenge-57/59/61: 15 findings each"
+      "brokencrystals.com/api/search_users: 64 findings — user-search route now rich (BFLA/photo/fullinfo oracles)",
+      "brokencrystals.com/api/products/views: 62 findings — brokencrystals-products-views-sqli-route-live-oracle shipped",
+      "brokencrystals.com/api/spawn: 42 findings — spawn-command-injection + spawn-route live oracles",
+      "brokencrystals.com/api/auth/jwt/x5c/validate: 79 findings — X5C validate-path oracle (queue drain)",
+      "ginandjuice.shop/api/newsletter/subscribe: 32 findings — newsletter subscribe-path oracle (rate-limit gap signal)",
+      "ginandjuice.shop/my-account/change-password: 34 findings — ginandjuice-change-password-route-live-oracle shipped",
+      "vapi.tools.escape.tech/vapi/api1/user/1: 14 findings — thin API1 BOLA pass",
+      "wrongsecrets.herokuapp.com/challenge/challenge-37: 15 findings — CI/CD route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "brokencrystals.com/api/config/get_config: 16 findings — thin dedicated-route pass vs MCP get_config oracle",
-      "brokencrystals.com/api/upload/parse: live endpoint 404 on Heroku — route oracle delegates to POST /api/metadata XXE (parallel run)"
+      "ginandjuice.shop/api/newsletter/subscribe: 32 findings — no dedicated rate-limit/resource-quota live oracle yet",
+      "brokencrystals.com/api/search_users: 64 findings — route delegates to generic user oracles; no search_users-specific slug",
+      "vapi.tools.escape.tech/vapi/api1/user/1: 14 findings — thin vs Escape-hosted API1 BOLA oracle"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "brokencrystals.com/api/search_users": 64,
+    "brokencrystals.com/api/products/views": 62,
+    "brokencrystals.com/api/auth/jwt/x5c/validate": 79,
+    "brokencrystals.com/api/spawn": 42,
+    "ginandjuice.shop/api/newsletter/subscribe": 32,
+    "ginandjuice.shop/my-account/change-password": 34,
+    "vapi.tools.escape.tech/vapi/api1/user/1": 14,
+    "wrongsecrets.herokuapp.com/challenge/challenge-37": 15,
     "brokencrystals.com/api/auth/jwt/jku/validate": 81,
     "brokencrystals.com/api/auth/jwt/none/validate": 78,
-    "brokencrystals.com/api/auth/jwt/hmac/validate": 80,
-    "brokencrystals.com/api/upload/parse": 80,
-    "brokencrystals.com/api/hidden-upload": 77,
-    "ginandjuice.shop/catalog/product/stock": 42,
-    "ginandjuice.shop/my-account/view-order/1": 34,
-    "brokencrystals.com/api/config/get_config": 16,
-    "wrongsecrets.herokuapp.com/challenge/challenge-57": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-59": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-61": 15
+    "brokencrystals.com/api/auth/jwt/hmac/validate": 80
   }
 }

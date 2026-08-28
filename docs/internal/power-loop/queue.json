@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T08:20:00.000Z",
+  "updated_at": "2026-08-28T09:22:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/api/newsletter/subscribe",
+      "source": "PortSwigger ginandjuice.shop — missing rate-limit / resource-quota oracle POST /api/newsletter/subscribe (Barrion pentest report + OWASP BLA7; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/search_users",
+      "source": "NeuraLegion/brokencrystals README — user search SQLi/IDOR oracle GET /api/search_users (web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/spawn",
+      "source": "NeuraLegion/brokencrystals README — SSTI oracle GET /api/spawn (unscanned queue drain; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/products/views",
+      "source": "NeuraLegion/brokencrystals README — SQLi via x-product-name header oracle PUT /api/products/views (unscanned queue drain; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/change-password",
+      "source": "PortSwigger ginandjuice.shop vulnerabilities catalog — authenticated password-change broken-logic oracle (web search 09 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/jku/validate",
       "source": "NeuraLegion/brokencrystals Swagger — JKU rogue-key JWT validate oracle GET /api/auth/jwt/jku/validate (validate-path gap vs /login hub; web search 08 UTC)",
