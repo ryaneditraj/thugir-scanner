@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T12:45:00.000Z",
+  "updated_at": "2026-08-28T13:19:55.521Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2911,
-  "total_findings": 32945,
+  "total_sites_scanned": 2920,
+  "total_findings": 33132,
   "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2046,
-  "discovery_findings": 27768,
+  "discovery_urls_added": 2051,
+  "discovery_findings": 27904,
   "improvements_shipped": 1251,
-  "last_run": "2026-08-28T12:45:00.000Z",
+  "last_run": "2026-08-28T13:19:55.521Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
-      "live_oracles": 38,
+      "probes_run": 596,
+      "live_oracles": 39,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,38 +49,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 38 live oracles) — no category gaps"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles incl secret-resend + resend-key) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 113,
-      "focus": "vulnbank internal/secret SSRF chain + brokencrystals /api/email hub header-injection route oracle + crapi community-posts live pattern",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 136,
+      "focus": "ginandjuice change-email race-condition hub + sekumart search SQLi playground + wrongsecrets challenges 28-30 gap fill + drained 15-17",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 38 live oracles, gap=[])",
-      "vulnbank.org/upload_profile_picture_url: 29 findings — internal/secret SSRF chain via loopback fetch (app_secret_key exfiltration)",
-      "brokencrystals.com/api/email: 35→84 findings (+brokencrystals-email-hub-route-live-oracle + header injection)",
-      "crapi2.apisec.ai/community/api/v2/community/posts/recent: 12 findings (+crapi-community-posts-live-oracle pattern)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles, gap=[])",
+      "ginandjuice.shop/my-account/change-email: 34 findings — change-email route oracle + 27 companion live oracles",
+      "sekumart.sekuripy.hr/search.php?q=test: 12 findings — search-sqli-route-live-oracle (sqlmap playground)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-28: 15 findings — challenge-28-github-issue-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-29: 15 findings — challenge-29-screenshot-log-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-30: 15 findings — challenge-30-localstorage-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-15: 15 findings — challenge-15-git-history-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-16: 15 findings — challenge-16-frontend-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-17: 15 findings — challenge-17-bash-history-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark",
-      "crapi community posts live BOLA probe still depends on JWT signup chain from scanner egress"
+      "ginandjuice change-email race-condition exploit requires authenticated session — route oracle confirms endpoint but TOCTOU proof needs parallel requests",
+      "wrongsecrets challenges 28-30: route oracles confirm walkthrough text; cloud-only execution paths not testable on Heroku"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
-    "brokencrystals.com/api/email": 84,
-    "brokencrystals.com/api/files?path=test": 87,
-    "vulnbank.org/upload_profile_picture_url": 29,
-    "ginandjuice.shop/api/feedback/submit": 33,
-    "crapi2.apisec.ai/community/api/v2/community/posts/recent": 12,
-    "wrongsecrets.herokuapp.com/challenge/challenge-27": 15,
-    "brokencrystals.com/api/process_numbers": 89,
-    "brokencrystals.com/api/users/search/test": 88,
-    "ginandjuice.shop/catalog?searchTerm=test": 41
+    "juice-shop.herokuapp.com": 51,
+    "ginandjuice.shop/my-account/change-email": 34,
+    "sekumart.sekuripy.hr/search.php?q=test": 12,
+    "wrongsecrets.herokuapp.com/challenge/challenge-28": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-29": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-30": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-15": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-16": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-17": 15,
+    "brokencrystals.com/api/email": 84
   }
 }
