@@ -24340,6 +24340,126 @@ const javaSecLabXPathVulRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const javaSecLabHorizontalIdorLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probes = [
+  new URL("/logic/idor/horizontal/getUserInfo?username=123", ctx.origin).toString(),
+  new URL("/logic/idor/horizontal/getUserInfo?username=456", ctx.origin).toString()
+  ];
+  const bodies: string[] = [];
+  for (const probeUrl of probes) {
+    const doc = await ctx.probe.get(probeUrl, { maxBytes: 16384, timeoutMs: 15000 });
+    if (doc.status >= 200 && doc.status < 500) bodies.push(doc.body);
+  }
+  if (bodies.length < 2) return NEGATIVE;
+  if (bodies.some((b) => /JavaSeclab平台登录|layui\.layer/i.test(b))) return NEGATIVE;
+  const profileMarker = /(?:email|phone|mobile|username|userId|address)/i;
+  if (
+    bodies.every((b) => profileMarker.test(b)) &&
+    (bodies[0] !== bodies[1] || /"username"\s*:\s*"?123"?/i.test(bodies[0]))
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        probeUrl: probes[0],
+        snippet: bodies[0].slice(0, 200).trim(),
+        note: "JavaSecLab GET /logic/idor/horizontal/getUserInfo?username= returns another user's profile without ownership check — horizontal IDOR training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabHorizontalIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/logic\/idor\/horizontal\/getUserInfo\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabHorizontalIdorLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "JavaSecLab /logic/idor/horizontal/getUserInfo route scan — horizontal IDOR on user profile API — route-specific training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/logic\/idor\/horizontal\/getUserInfo|horizontal IDOR/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /logic/idor/horizontal/getUserInfo?username=123 — horizontal IDOR on user profile API",
+      note: "JavaSecLab /logic/idor/horizontal/getUserInfo route scan — horizontal IDOR training module documented in wiki (auth-gated public demo)"
+    }
+  };
+};
+
+// --- OopsSec Store AES-CBC padding oracle walkthrough (posts/aes-cbc-padding-oracle-forged-share-token) -
+const CLIENT_OOPSSEC_AES_CBC_PADDING_ORACLE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "AES-CBC padding oracle walkthrough title",
+    re: /Padding oracle attack:\s*forging encrypted share tokens/i
+  },
+  {
+    label: "/api/documents/share token parameter",
+    re: /\/api\/documents\/share\?token=|Share Order.*encrypted links/i
+  },
+  {
+    label: "PKCS#7 padding oracle status differentiation",
+    re: /PKCS#7 padding|bad padding|Invalid share token format|Shared resource not found/i
+  },
+  {
+    label: "AES-256-CBC without HMAC",
+    re: /AES-256-CBC|authenticated encryption|nobody bothered adding an HMAC/i
+  },
+  {
+    label: "AES-CBC padding oracle walkthrough route",
+    re: /\/posts\/aes-cbc-padding-oracle-forged-share-token/i
+  }
+];
+
+const clientSideOopssecAesCbcPaddingOracleEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_AES_CBC_PADDING_ORACLE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|padding oracle|AES-256-CBC|\/api\/documents\/share/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents AES-256-CBC share tokens with PKCS#7 padding-oracle differentiation on /api/documents/share?token="
+    }
+  };
+};
+
+const oopssecAesCbcPaddingOracleRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/aes-cbc-padding-oracle-forged-share-token/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecAesCbcPaddingOracleEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/aes-cbc-padding-oracle-forged-share-token route scan — walkthrough documents PKCS#7 padding oracle on /api/documents/share?token= enabling forged share-token decryption"
+    }
+  };
+};
+
 // --- Pwned Labs cloud security training platform (pwnedlabs.io) -----------------------
 const CLIENT_PWNEDLABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -97338,6 +97458,8 @@ export const RULES: Record<string, Rule> = {
   javaSecLabSstiVul1RouteLiveOracle,
   javaSecLabXPathVulLiveOracle,
   javaSecLabXPathVulRouteLiveOracle,
+  javaSecLabHorizontalIdorLiveOracle,
+  javaSecLabHorizontalIdorRouteLiveOracle,
   clientSidePwnedlabsEvidence,
   clientSidePwnedlabsGitSecretsEvidence,
   clientSideRedtigerHackitEvidence,
@@ -99529,6 +99651,8 @@ export const RULES: Record<string, Rule> = {
   oopssecSupplyChainPoisonedRulesRouteLiveOracle,
   clientSideOopssecGiftCardRandomnessEvidence,
   oopssecGiftCardRandomnessRouteLiveOracle,
+  clientSideOopssecAesCbcPaddingOracleEvidence,
+  oopssecAesCbcPaddingOracleRouteLiveOracle,
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
