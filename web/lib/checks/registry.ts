@@ -69403,6 +69403,23 @@ const ginAndJuiceOrderDetailsIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceViewOrderIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/my-account\/view-order\/\d+\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await ginAndJuiceOrderDetailsIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /my-account/view-order/{id} route scan — canonical GET /order/details?orderId= confirms unauthenticated order details IDOR (view-order path redirects to login without session)"
+    }
+  };
+};
+
 const ginAndJuiceAdminBypassLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const adminUrl = new URL("/admin", ctx.origin).toString();
@@ -87928,38 +87945,57 @@ const brokencrystalsMcpGetConfigRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const brokencrystalsJwtAlgNoneLiveOracle: Rule = async (ctx) => {
-  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
-  const path = "/api/auth/jwt/rsa/signature/validate";
-  const url = new URL(path, ctx.origin).toString();
+const BROKEN_CRYSTALS_JWT_ALG_NONE_PATHS = [
+  "/api/auth/jwt/none/validate",
+  "/api/auth/jwt/rsa/signature/validate"
+] as const;
+
+function brokencrystalsJwtValidateSecretOk(body: string): boolean {
+  return /"secret"\s*:\s*"this is our secret"/i.test(body);
+}
+
+async function probeBrokencrystalsJwtAlgNone(
+  ctx: RuleContext,
+  paths: readonly string[] = ["/api/auth/jwt/rsa/signature/validate"]
+): Promise<RuleResult | null> {
   const now = Math.floor(Date.now() / 1000);
   const algNoneToken = buildAlgNoneJwt({ user: "admin", exp: now + 3600 });
   const badToken = "thugir.invalid.probe.token";
-  const [noAuth, badAuth, noneAuth] = await Promise.all([
-    ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 }),
-    ctx.probe.get(url, {
-      maxBytes: 4096,
-      timeoutMs: 15000,
-      headers: { Authorization: badToken }
-    }),
-    ctx.probe.get(url, {
-      maxBytes: 4096,
-      timeoutMs: 15000,
-      headers: { Authorization: algNoneToken }
-    })
-  ]);
-  if (!looksAuthChallenge(noAuth) || !looksAuthChallenge(badAuth)) return NEGATIVE;
-  if (!looksAuthGatedJson(noneAuth) || !/"secret"\s*:\s*"/i.test(noneAuth.body)) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.94,
-    evidence: {
-      url,
-      statusWithAlgNone: noneAuth.status,
-      responseSample: noneAuth.body.slice(0, 150).trim(),
-      note: "Broken Crystals GET /api/auth/jwt/rsa/signature/validate accepts alg:none JWT and returns secret — JWT none-algorithm bypass oracle"
-    }
-  };
+  for (const path of paths) {
+    const url = new URL(path, ctx.origin).toString();
+    const [noAuth, badAuth, noneAuth] = await Promise.all([
+      ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 }),
+      ctx.probe.get(url, {
+        maxBytes: 4096,
+        timeoutMs: 15000,
+        headers: { Authorization: badToken }
+      }),
+      ctx.probe.get(url, {
+        maxBytes: 4096,
+        timeoutMs: 15000,
+        headers: { Authorization: algNoneToken }
+      })
+    ]);
+    if (noAuth.status === 404) continue;
+    if (!looksAuthChallenge(noAuth) || !looksAuthChallenge(badAuth)) continue;
+    if (!looksAuthGatedJson(noneAuth) || !brokencrystalsJwtValidateSecretOk(noneAuth.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url,
+        statusWithAlgNone: noneAuth.status,
+        responseSample: noneAuth.body.slice(0, 150).trim(),
+        note: `Broken Crystals GET ${path} accepts alg:none JWT and returns secret — JWT none-algorithm bypass oracle`
+      }
+    };
+  }
+  return null;
+}
+
+const brokencrystalsJwtAlgNoneLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  return (await probeBrokencrystalsJwtAlgNone(ctx)) ?? NEGATIVE;
 };
 
 const brokencrystalsJwtRouteLiveOracle: Rule = async (ctx) => {
@@ -87983,8 +88019,8 @@ const brokencrystalsJwtAlgNoneRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/auth\/jwt\/rsa\/signature\/validate\b/i.test(pageUrl)) return NEGATIVE;
-  const result = await brokencrystalsJwtAlgNoneLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  const result = await probeBrokencrystalsJwtAlgNone(ctx);
+  if (!result?.fired) return NEGATIVE;
   return {
     fired: true,
     confidence: result.confidence,
@@ -87996,12 +88032,25 @@ const brokencrystalsJwtAlgNoneRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsJwtNoneValidateRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/none\/validate\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsJwtAlgNone(ctx, BROKEN_CRYSTALS_JWT_ALG_NONE_PATHS);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/none/validate route scan — alg:none JWT bypasses authentication and returns secret (falls back to /api/auth/jwt/rsa/signature/validate when none alias is absent)"
+    }
+  };
+};
+
 /** Broken Crystals JWT_SECRET_KEY from public .env (default weak-key oracle secret). */
 const BROKEN_CRYSTALS_JWT_WEAK_SECRETS = ["1234", "123"] as const;
-
-function brokencrystalsJwtValidateSecretOk(body: string): boolean {
-  return /"secret"\s*:\s*"this is our secret"/i.test(body);
-}
 
 const brokencrystalsJwtWeakKeyLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
@@ -89075,33 +89124,45 @@ function brokencrystalsConfigMarkers(body: string): { label: string; sample: str
   return markers;
 }
 
+const BROKEN_CRYSTALS_CONFIG_PATHS = ["/api/config/get_config", "/api/config"] as const;
+
+async function probeBrokencrystalsConfig(
+  ctx: RuleContext,
+  paths: readonly string[] = BROKEN_CRYSTALS_CONFIG_PATHS
+): Promise<RuleResult | null> {
+  for (const path of paths) {
+    const url = new URL(path, ctx.origin).toString();
+    const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    const ct = doc.headers["content-type"] || "";
+    if (!/json/i.test(ct) && !/^\s*[\[{]/.test(doc.body.trim())) continue;
+    const markers = brokencrystalsConfigMarkers(doc.body);
+    if (markers.length < 2) continue;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url,
+        markers: markers.slice(0, 4),
+        snippet: doc.body.slice(0, 200).trim(),
+        note: `Broken Crystals GET ${path} returns Postgres connection string and cloud API keys without authentication — config disclosure oracle`
+      }
+    };
+  }
+  return null;
+}
+
 const brokencrystalsConfigLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
-  const url = new URL("/api/config", ctx.origin).toString();
-  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
-  const ct = doc.headers["content-type"] || "";
-  if (!/json/i.test(ct) && !/^\s*[\[{]/.test(doc.body.trim())) return NEGATIVE;
-  const markers = brokencrystalsConfigMarkers(doc.body);
-  if (markers.length < 2) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: 0.94,
-    evidence: {
-      url,
-      markers: markers.slice(0, 4),
-      snippet: doc.body.slice(0, 200).trim(),
-      note: "Broken Crystals GET /api/config returns Postgres connection string and cloud API keys without authentication — config disclosure oracle"
-    }
-  };
+  return (await probeBrokencrystalsConfig(ctx)) ?? NEGATIVE;
 };
 
 const brokencrystalsConfigRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/config\b/i.test(pageUrl)) return NEGATIVE;
-  const result = await brokencrystalsConfigLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (!/\/api\/config\b/i.test(pageUrl) || /\/api\/config\/get_config\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsConfig(ctx);
+  if (!result?.fired) return NEGATIVE;
   return {
     fired: true,
     confidence: result.confidence,
@@ -89109,6 +89170,23 @@ const brokencrystalsConfigRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Broken Crystals /api/config route scan — unauthenticated JSON exposes postgres:// credentials and Google Maps API key"
+    }
+  };
+};
+
+const brokencrystalsConfigGetConfigRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/config\/get_config\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsConfig(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/config/get_config route scan — unauthenticated config JSON exposes postgres:// credentials and Google Maps API key (falls back to /api/config when get_config alias is absent)"
     }
   };
 };
@@ -97280,6 +97358,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsJwtAlgNoneLiveOracle,
   brokencrystalsJwtRouteLiveOracle,
   brokencrystalsJwtAlgNoneRouteLiveOracle,
+  brokencrystalsJwtNoneValidateRouteLiveOracle,
   brokencrystalsJwtWeakKeyLiveOracle,
   brokencrystalsJwtWeakKeyRouteLiveOracle,
   brokencrystalsJwtKidSqlLiveOracle,
@@ -97343,6 +97422,7 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsOidcClientSecretRouteLiveOracle,
   brokencrystalsConfigLiveOracle,
   brokencrystalsConfigRouteLiveOracle,
+  brokencrystalsConfigGetConfigRouteLiveOracle,
   brokencrystalsSubscriptionsXssRouteLiveOracle,
   brokencrystalsFileRawLfiLiveOracle,
   brokencrystalsFileLfiLiveOracle,
@@ -98090,6 +98170,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceStockXxeRouteLiveOracle,
   ginAndJuiceOrderDetailsIdorLiveOracle,
   ginAndJuiceOrderDetailsIdorRouteLiveOracle,
+  ginAndJuiceViewOrderIdorRouteLiveOracle,
   ginAndJuiceAdminBypassLiveOracle,
   ginAndJuiceAdminBypassRouteLiveOracle,
   ginAndJuiceBlogPrototypePollutionDomXssLiveOracle,

@@ -2646,6 +2646,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceStockXxeRouteLiveOracle",
   "ginAndJuiceOrderDetailsIdorLiveOracle",
   "ginAndJuiceOrderDetailsIdorRouteLiveOracle",
+  "ginAndJuiceViewOrderIdorRouteLiveOracle",
   "ginAndJuiceAdminBypassLiveOracle",
   "ginAndJuiceAdminBypassRouteLiveOracle",
   "ginAndJuiceBlogPrototypePollutionDomXssLiveOracle",
@@ -3197,6 +3198,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsJwtAlgNoneLiveOracle",
   "brokencrystalsJwtRouteLiveOracle",
   "brokencrystalsJwtAlgNoneRouteLiveOracle",
+  "brokencrystalsJwtNoneValidateRouteLiveOracle",
   "brokencrystalsJwtWeakKeyLiveOracle",
   "brokencrystalsJwtWeakKeyRouteLiveOracle",
   "brokencrystalsJwtKidSqlLiveOracle",
@@ -3276,6 +3278,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsOidcClientSecretRouteLiveOracle",
   "brokencrystalsConfigLiveOracle",
   "brokencrystalsConfigRouteLiveOracle",
+  "brokencrystalsConfigGetConfigRouteLiveOracle",
   "brokencrystalsSubscriptionsXssRouteLiveOracle",
   "brokencrystalsFileRawLfiLiveOracle",
   "brokencrystalsFileLfiLiveOracle",
@@ -8852,6 +8855,7 @@ function brokencrystalsJwtApiSeeds(pageUrl: string): string[] {
   }
   const pageOrigin = new URL(pageUrl).origin;
   const paths = [
+    "/api/auth/jwt/none/validate",
     "/api/auth/jwt/rsa/signature/validate",
     "/api/auth/jwt/x5u/validate",
     "/api/auth/jwt/jku/validate",
@@ -12703,6 +12707,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
+        /\/api\/config\/get_config\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-config-get-config")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
         /\/api\/config\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-config")
       )
@@ -13562,6 +13572,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/none\/validate\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-none-validate")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
         /\/api\/auth\/jwt\/rsa\/signature\/validate\b/i.test(targetInput) &&
         (p.slug.startsWith("brokencrystals-jwt-alg-none") ||
           p.slug.startsWith("brokencrystals-jwt-route"))
@@ -13826,6 +13842,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /ginandjuice\.shop/i.test(origin) &&
         /\/register\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-register")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/my-account\/view-order\/\d+\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-view-order")
       )
         return -4;
       if (
