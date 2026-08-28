@@ -34776,6 +34776,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-28-github-issue-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-28 GitHub issue live oracle",
+    description:
+      "GET /challenge/challenge-28 documents an AWS secret key leaked in a closed GitHub issue — documentation secret exposure live oracle.",
+    impactOneline:
+      "Closed GitHub issues can permanently expose credentials in comment history even after the issue is closed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge28GithubIssueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-28 is intentional — never post secrets in GitHub issues, even when closed.",
+      steps: [
+        "Rotate any credentials that appeared in issue comments or attachments.",
+        "Use private secret managers instead of issue trackers for credential sharing.",
+        "Scan closed issues for accidental secret leaks before archiving."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-28 documents AWS keys leaked in closed GitHub issues. Show remediation for issue-tracker secret hygiene.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-28-github-issue-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -34802,6 +34828,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-29-screenshot-log-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-29 screenshot log live oracle",
+    description:
+      "GET /challenge/challenge-29 documents secrets leaked via log screenshots in closed GitHub issues — documentation log exposure live oracle.",
+    impactOneline:
+      "Log screenshots attached to issue trackers can leak credentials that survive issue closure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge29ScreenshotLogLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-29 is intentional — never post log screenshots containing secrets in GitHub issues.",
+      steps: [
+        "Redact secrets from logs before attaching screenshots to issues.",
+        "Use markdown code blocks with redaction for log excerpts instead of screenshots.",
+        "Rotate credentials that appeared in any posted log images."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-29 documents secrets in log screenshots on GitHub issues. Show remediation for safe log sharing.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-29-screenshot-log-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -34824,6 +34876,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our WrongSecrets challenge-29 route documents secrets in log screenshots on GitHub issues. Show remediation for safe log sharing.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-30-localstorage-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-30 localStorage live oracle",
+    description:
+      "GET /challenge/challenge-30 documents secrets stored in browser localStorage — front-end secret exposure live oracle.",
+    impactOneline:
+      "Secrets persisted in localStorage are readable by any script on the origin and survive browser restarts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge30LocalStorageLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-30 is intentional — never store secrets in localStorage or other client-side persistence.",
+      steps: [
+        "Keep session secrets server-side with HttpOnly cookies.",
+        "Avoid storing API keys or tokens in localStorage, sessionStorage, or IndexedDB.",
+        "Rotate any credentials that were ever persisted in browser storage."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-30 documents secrets in browser localStorage. Show remediation for client-side secret storage.",
     version: 1,
     enabled: true
   },
