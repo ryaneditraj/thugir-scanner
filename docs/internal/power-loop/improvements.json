@@ -5735,6 +5735,24 @@
       "slug": "sekumart-directory-xpath-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: sekumartDirectoryXPathRouteLiveOracle matches /directory.php and delegates to XPath always-true probe; sekumart.sekuripy.hr/directory.php findings 14 (+sekumart-directory-xpath-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-ssrf-vul-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: javaSecLabSsrfVulRouteLiveOracle matches /ssrf/vul and delegates to live file:// or internal metadata probe with wiki corpus fallback; whgojp.top/ssrf/vul?url=http://example.com findings 7→8 (+javaseclab-ssrf-vul-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-jdbc-sqli-vul1-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: javaSecLabJdbcSqliVul1RouteLiveOracle matches /sqli/jdbc/vul1 and delegates to OR 1=1 JDBC probe with wiki corpus fallback; whgojp.top/sqli/jdbc/vul1?type=select&id=1 findings 7→8 (+javaseclab-jdbc-sqli-vul1-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-xxe-vul1-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: javaSecLabXxeVul1RouteLiveOracle matches /xxe/vul1 and delegates to XMLReader external entity probe with wiki corpus fallback; whgojp.top/xxe/vul1 findings 7→8 (+javaseclab-xxe-vul1-live-oracle +javaseclab-xxe-vul1-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
