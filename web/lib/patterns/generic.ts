@@ -51462,6 +51462,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-aes-cbc-padding-oracle-evidence",
+    platform: "generic",
+    category: "Cryptographic failure",
+    severityDefault: "critical",
+    title: "OopsSec Store AES-CBC padding oracle walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/aes-cbc-padding-oracle-forged-share-token documents AES-256-CBC share tokens with PKCS#7 padding-oracle differentiation on /api/documents/share?token=.",
+    impactOneline:
+      "Public walkthrough teaches forging encrypted share tokens via PKCS#7 padding oracle on unauthenticated /api/documents/share.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecAesCbcPaddingOracleEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use authenticated encryption (AES-GCM) and constant-time error responses for ciphertext validation.",
+      steps: [
+        "Replace AES-CBC share tokens with AES-GCM or encrypt-then-MAC.",
+        "Return identical error responses for bad padding and missing resources.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/documents/share?token= leaks PKCS#7 padding validity. Show AES-GCM and constant-time error remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-aes-cbc-padding-oracle-route-live-oracle",
+    platform: "generic",
+    category: "Cryptographic failure",
+    severityDefault: "critical",
+    title: "OopsSec Store AES-CBC padding oracle route live oracle",
+    description:
+      "When scanning /posts/aes-cbc-padding-oracle-forged-share-token, the walkthrough documents PKCS#7 padding oracle on /api/documents/share?token= enabling forged share-token decryption — route-specific cryptographic oracle.",
+    impactOneline:
+      "OopsSec share tokens use unauthenticated AES-CBC with distinguishable padding vs not-found errors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecAesCbcPaddingOracleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use authenticated encryption (AES-GCM) and constant-time error responses for ciphertext validation.",
+      steps: [
+        "Replace AES-CBC share tokens with AES-GCM or encrypt-then-MAC.",
+        "Return identical error responses for bad padding and missing resources.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/aes-cbc-padding-oracle-forged-share-token route documents padding-oracle share-token forgery. Show route-specific AES-GCM remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "oopssec-roadmap-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -70328,6 +70380,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /other/xpath/vul route is a JavaSecLab XPath injection training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-horizontal-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "JavaSecLab horizontal IDOR live oracle",
+    description:
+      "GET /logic/idor/horizontal/getUserInfo?username= on JavaSecLab returns another user's profile without ownership check — horizontal IDOR training oracle.",
+    impactOneline:
+      "Horizontal IDOR lets any authenticated user read peer profiles by changing the username parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabHorizontalIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind profile lookups to the authenticated session user — JavaSecLab is intentional lab software.",
+      steps: [
+        "Never accept a client-supplied username for profile reads without ownership verification.",
+        "Query profiles with WHERE user_id = session.user_id.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /logic/idor/horizontal/getUserInfo endpoint exposes horizontal IDOR. Show ownership-check remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-horizontal-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "JavaSecLab horizontal IDOR route live oracle",
+    description:
+      "When scanning /logic/idor/horizontal/getUserInfo on whgojp.top, live cross-user profile probe or curated wiki corpus confirms JavaSecLab horizontal IDOR training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents horizontal IDOR on user profile APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabHorizontalIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind profile lookups to the authenticated session user on IDOR routes.",
+      steps: [
+        "Never accept a client-supplied username for profile reads without ownership verification.",
+        "Query profiles with WHERE user_id = session.user_id.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /logic/idor/horizontal/getUserInfo route is a JavaSecLab horizontal IDOR training module. Show route-specific remediation.",
     version: 1,
     enabled: true
   },

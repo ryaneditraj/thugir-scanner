@@ -2056,6 +2056,8 @@ const DEEP_RULES = new Set<string>([
   "javaSecLabSstiVul1RouteLiveOracle",
   "javaSecLabXPathVulLiveOracle",
   "javaSecLabXPathVulRouteLiveOracle",
+  "javaSecLabHorizontalIdorLiveOracle",
+  "javaSecLabHorizontalIdorRouteLiveOracle",
   "javaSecLabDruidBasicJsonRouteLiveOracle",
   "clientSidePwnedlabsEvidence",
   "clientSidePwnedlabsGitSecretsEvidence",
@@ -2236,6 +2238,8 @@ const DEEP_RULES = new Set<string>([
   "oopssecSupplyChainPoisonedRulesRouteLiveOracle",
   "clientSideOopssecGiftCardRandomnessEvidence",
   "oopssecGiftCardRandomnessRouteLiveOracle",
+  "clientSideOopssecAesCbcPaddingOracleEvidence",
+  "oopssecAesCbcPaddingOracleRouteLiveOracle",
   "oopssecRoadmapRouteLiveOracle",
   "oopssecStoreHomeRouteLiveOracle",
   "clientSideVoidsecShoppingCartEvidence",
@@ -14251,6 +14255,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /whgojp\.top/i.test(origin) &&
         /\/other\/xpath\/vul\b/i.test(targetInput) &&
         p.slug.startsWith("javaseclab-xpath-vul")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/logic\/idor\/horizontal\/getUserInfo\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-horizontal-idor")
+      )
+        return -3;
+      if (
+        /koadt\.github\.io/i.test(origin) &&
+        /\/posts\/aes-cbc-padding-oracle-forged-share-token/i.test(targetInput) &&
+        (p.slug === "oopssec-aes-cbc-padding-oracle-route-live-oracle" ||
+          p.slug === "client-side-oopssec-aes-cbc-padding-oracle-evidence")
       )
         return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/sql-injection\/?$/i.test(targetInput) && p.slug === "sec-research-lab-sql-injection-route-live-oracle") return -3;

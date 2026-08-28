@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-28T19:42:11.361Z",
-  "total": 2788,
-  "uniqueSlugs": 2780,
+  "generatedAt": "2026-08-28T20:20:40.068Z",
+  "total": 2792,
+  "uniqueSlugs": 2784,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2770,
+    "generic": 2774,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2703,
+    "deep": 2707,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 578,
+    "Broken access control": 580,
     "Exposed secret": 115,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -45,6 +45,7 @@
     "Path traversal": 3,
     "Denial of service": 7,
     "Prompt injection": 5,
+    "Cryptographic failure": 2,
     "XSS": 3,
     "Session management": 2
   },
@@ -627,6 +628,7 @@
     "client-side-nosql-evidence",
     "client-side-oauth-fetch-playground-evidence",
     "client-side-oauth-labs-playground-evidence",
+    "client-side-oopssec-aes-cbc-padding-oracle-evidence",
     "client-side-oopssec-csrf-admin-order-evidence",
     "client-side-oopssec-gift-card-randomness-evidence",
     "client-side-oopssec-information-disclosure-evidence",
@@ -1769,6 +1771,8 @@
     "ist-edu-ssrf-redirect-route-live-oracle",
     "ist-edu-ssti-lab-route-live-oracle",
     "javaseclab-druid-basic-json-route-live-oracle",
+    "javaseclab-horizontal-idor-live-oracle",
+    "javaseclab-horizontal-idor-route-live-oracle",
     "javaseclab-jdbc-sqli-vul1-live-oracle",
     "javaseclab-jdbc-sqli-vul1-route-live-oracle",
     "javaseclab-reflected-xss-live-oracle",
@@ -1910,6 +1914,7 @@
     "notevault-ssrf-internal-flag-route-live-oracle",
     "notices-file-lfi-probe",
     "oauth-oidc-metadata-exposed",
+    "oopssec-aes-cbc-padding-oracle-route-live-oracle",
     "oopssec-csrf-admin-order-route-live-oracle",
     "oopssec-gift-card-randomness-route-live-oracle",
     "oopssec-information-disclosure-api-error-route-live-oracle",
