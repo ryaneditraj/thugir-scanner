@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-28T03:32:52.369Z",
-  "total": 2742,
-  "uniqueSlugs": 2734,
+  "generatedAt": "2026-08-28T04:18:26.394Z",
+  "total": 2744,
+  "uniqueSlugs": 2736,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2724,
+    "generic": 2726,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2657,
+    "deep": 2659,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 569,
-    "Exposed secret": 111,
+    "Broken access control": 570,
+    "Exposed secret": 112,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -1689,6 +1689,7 @@
     "ginandjuice-login-username-reflection-live-oracle",
     "ginandjuice-logout-route-live-oracle",
     "ginandjuice-logout-session-regeneration-live-oracle",
+    "ginandjuice-my-account-forgot-password-route-live-oracle",
     "ginandjuice-my-account-orders-route-live-oracle",
     "ginandjuice-order-details-idor-live-oracle",
     "ginandjuice-order-details-idor-route-live-oracle",
@@ -2685,6 +2686,7 @@
     "wrongsecrets-challenge-live-oracle",
     "wrongsecrets-challenge-route-live-oracle",
     "wrongsecrets-ctf-hub-live-oracle",
+    "wrongsecrets-ctf-hub-route-live-oracle",
     "wrongsecrets-error-demo-database-connection-live-oracle",
     "wrongsecrets-error-demo-database-connection-route-live-oracle",
     "wrongsecrets-heroku-undeployed-challenge-live-oracle",
