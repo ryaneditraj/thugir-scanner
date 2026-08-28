@@ -70330,6 +70330,23 @@ const ginAndJuiceForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceMyAccountForgotPasswordRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/my-account\/forgot-password\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeGinAndJuiceForgotPasswordSurface(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /my-account/forgot-password route scan — POST accepts password-reset requests and redirects unauthenticated callers to /login — route-specific password-reset training oracle"
+    }
+  };
+};
+
 const ginAndJuiceAngularVulnerableDependencyLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/catalog", ctx.origin).toString();
@@ -74678,6 +74695,23 @@ const wrongsecretsCtfHubLiveOracle: Rule = async (ctx) => {
       challengeLinks: challengeLinks.length,
       snippet: body.match(/Challenge 0[\s\S]{0,40}/i)?.[0]?.slice(0, 80) ?? "challenge-0 through challenge-8",
       note: "OWASP WrongSecrets CTF hub exposes challenge-0 through challenge-8 walkthrough routes — condensed CTF training instance oracle"
+    }
+  };
+};
+
+const wrongsecretsCtfHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets-ctf\.herokuapp\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/^https?:\/\/[^/]*wrongsecrets-ctf\.herokuapp\.com\/?(?:\?|#|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsCtfHubLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets CTF hub route scan — homepage lists challenge-0 through challenge-8 walkthrough routes on condensed CTF training instance"
     }
   };
 };
@@ -96792,6 +96826,7 @@ export const RULES: Record<string, Rule> = {
   juiceShopFileUploadLiveOracle,
   juiceShopFileUploadRouteLiveOracle,
   wrongsecretsCtfHubLiveOracle,
+  wrongsecretsCtfHubRouteLiveOracle,
   bingoctfAuthGatedCtfLiveOracle,
   bingoctfAuthGatedCtfRouteLiveOracle,
   wrongsecretsChallengeLiveOracle,
@@ -97966,6 +98001,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCheckoutRouteLiveOracle,
   ginAndJuiceForgotPasswordLiveOracle,
   ginAndJuiceForgotPasswordRouteLiveOracle,
+  ginAndJuiceMyAccountForgotPasswordRouteLiveOracle,
   ginAndJuiceAngularVulnerableDependencyLiveOracle,
   ginAndJuiceAngularVulnerableDependencyRouteLiveOracle,
   ginAndJuiceLoggerOastLiveOracle,

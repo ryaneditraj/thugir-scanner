@@ -33227,6 +33227,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-ctf-hub-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets CTF hub route live oracle",
+    description:
+      "When scanning wrongsecrets-ctf.herokuapp.com hub homepage, challenge-0 through challenge-8 walkthrough routes are listed without authentication — route-specific condensed CTF training oracle.",
+    impactOneline:
+      "Route-scoped scans on the WrongSecrets CTF hub should confirm multiple secret-hiding challenge walkthroughs are exposed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsCtfHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets CTF is intentional training software — isolate it from production secret stores.",
+      steps: [
+        "Run CTF instances only on isolated scanner evaluation infrastructure.",
+        "Never reuse CTF challenge secrets or patterns in production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets CTF hub route scan lists challenge-0 through challenge-8 walkthroughs. Show route-specific CTF isolation guidance.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "bingoctf-auth-gated-ctf-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -64349,6 +64374,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /forgot-password route scan confirms password-reset handling on /my-account/forgot-password. Show route-specific reset-flow remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-my-account-forgot-password-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /my-account/forgot-password route live oracle",
+    description:
+      "When scanning /my-account/forgot-password, POST accepts password-reset requests and redirects unauthenticated callers to /login — route-specific password-reset training oracle.",
+    impactOneline:
+      "Route-scoped scans should confirm Gin & Juice Shop exposes a live password-reset surface on /my-account/forgot-password.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceMyAccountForgotPasswordRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect password-reset endpoints with rate limiting, anti-enumeration, and secure token delivery.",
+      steps: [
+        "Return generic responses for password-reset requests regardless of account existence.",
+        "Bind reset tokens to the requesting session and expire them quickly.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /my-account/forgot-password route scan confirms POST redirects unauthenticated users to /login. Show route-specific password-reset remediation.",
     version: 1,
     enabled: true
   },

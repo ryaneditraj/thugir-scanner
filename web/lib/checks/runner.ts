@@ -312,6 +312,14 @@ function isJuiceShopHerokuHost(url: string): boolean {
   }
 }
 
+function isJuiceShopDemoHost(url: string): boolean {
+  try {
+    return /demo\.owasp-juice\.shop/i.test(new URL(url).hostname);
+  } catch {
+    return false;
+  }
+}
+
 /** Route-only discovery scans on /rest/* or /api/* when the dyno serves Heroku Application Error. */
 function isJuiceShopApiRouteScan(url: string): boolean {
   return isJuiceShopHost(url) && /\/(?:rest|api|ftp|b2b)\//i.test(url);
@@ -668,6 +676,21 @@ async function warmupJuiceShopHome(targetUrl: string, home: FetchedDoc): Promise
       /main\.js/i.test(best.body) &&
       (await juiceShopApiLive(origin));
     if (pageReady) break;
+    if (herokuDown && isJuiceShopDemoHost(origin)) {
+      const mirrorHome = await fetchDoc(`${JUICE_SHOP_ESCAPE_MIRROR}/`, {
+        timeoutMs: 18000,
+        maxBytes: 600_000
+      });
+      if (
+        mirrorHome.status >= 200 &&
+        mirrorHome.status < 500 &&
+        !HEROKU_APP_ERROR_RE.test(mirrorHome.body) &&
+        /main\.js/i.test(mirrorHome.body)
+      ) {
+        best = { ...mirrorHome, finalUrl: origin, url: targetUrl };
+        break;
+      }
+    }
     if (herokuDown && attempt >= 1) break;
     await new Promise((r) => setTimeout(r, 3500));
     const retried = await fetchDoc(best.finalUrl || targetUrl, {
@@ -2652,6 +2675,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCheckoutRouteLiveOracle",
   "ginAndJuiceForgotPasswordLiveOracle",
   "ginAndJuiceForgotPasswordRouteLiveOracle",
+  "ginAndJuiceMyAccountForgotPasswordRouteLiveOracle",
   "ginAndJuiceAngularVulnerableDependencyLiveOracle",
   "ginAndJuiceAngularVulnerableDependencyRouteLiveOracle",
   "ginAndJuiceLoggerOastLiveOracle",
@@ -2782,6 +2806,7 @@ const DEEP_RULES = new Set<string>([
   "vaultappDocumentsIdorLiveOracle",
   "vaultappDocumentsIdorRouteLiveOracle",
   "wrongsecretsCtfHubLiveOracle",
+  "wrongsecretsCtfHubRouteLiveOracle",
   "bingoctfAuthGatedCtfLiveOracle",
   "bingoctfAuthGatedCtfRouteLiveOracle",
   "wrongsecretsChallengeLiveOracle",
@@ -11620,6 +11645,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("wrongsecrets-")
       )
         return -3;
+      if (
+        /wrongsecrets-ctf\.herokuapp\.com/i.test(origin) &&
+        (targetInput === origin || targetInput === `${origin}/`) &&
+        p.slug.startsWith("wrongsecrets-ctf-hub")
+      )
+        return -4;
       if (/ssrf-defense-platform\.onrender\.com/i.test(origin) && p.slug.startsWith("ssrf-defense-platform")) return -2;
       if (
         /ssrf-defense-platform\.onrender\.com/i.test(origin) &&
@@ -13718,6 +13749,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         !/\/my-account\/forgot-password/i.test(targetInput) &&
         (p.slug.startsWith("ginandjuice-forgot-password") ||
           p.slug === "ginandjuice-forgot-password-live-oracle")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/my-account\/forgot-password\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-forgot-password")
       )
         return -4;
       if (

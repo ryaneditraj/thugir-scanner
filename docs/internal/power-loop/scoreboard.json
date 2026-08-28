@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T04:18:00.000Z",
+  "updated_at": "2026-08-28T04:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2006,
   "discovery_findings": 25349,
-  "improvements_shipped": 1224,
-  "last_run": "2026-08-28T04:18:00.000Z",
+  "improvements_shipped": 1227,
+  "last_run": "2026-08-28T04:35:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 49,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,43 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (49 findings, 36 juice-shop live oracles); secret-resend slug still absent"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 juice-shop live oracles incl secret-resend)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 268,
-      "focus": "brokencrystals JWT jku/x5c/kid-sql/x5u route oracles + ginandjuice orders BOLA + wrongsecrets challenges 56/64/65",
-      "improvements_shipped_this_run": 0
+      "focus": "ginandjuice my-account forgot-password route + wrongsecrets-ctf hub route + demo.owasp-juice escape mirror warmup (merged with brokencrystals JWT + wrongsecrets challenge scans)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings, 36 live oracles) — full rich pass",
-      "brokencrystals.com/api/auth/jwt/jku/login: 87 findings — brokencrystals-jwt-jku-rogue-route-live-oracle shipped (was hub-only)",
-      "brokencrystals.com/api/auth/jwt/x5c/login: 40 findings — brokencrystals-jwt-x5c-rogue-route-live-oracle shipped (was hub-only)",
-      "brokencrystals.com/api/auth/jwt/x5u/login: 43 findings — x5u rogue JWT oracles on route-specific scan",
-      "ginandjuice.shop/my-account/orders: 33 findings — ginandjuice-my-account-orders-route-live-oracle + order-details-idor",
-      "wrongsecrets.herokuapp.com/challenge/challenge-56: 15 findings — wrongsecrets-challenge-56-project-spec-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-64: 15 findings — wrongsecrets-challenge-64-swift-binary-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-65: 15 findings — wrongsecrets-challenge-65-java-plain-cli-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — maintained",
+      "ginandjuice.shop/my-account/forgot-password: 33→35 findings — +ginandjuice-my-account-forgot-password-route-live-oracle",
+      "wrongsecrets-ctf.herokuapp.com/: 11→12 findings — +wrongsecrets-ctf-hub-route-live-oracle",
+      "demo.owasp-juice.shop/rest/chatbot/respond: 0→3 findings — escape mirror warmup on degraded demo host",
+      "brokencrystals.com/api/auth/jwt/jku/login: 87 findings — brokencrystals-jwt-jku-rogue-route-live-oracle",
+      "brokencrystals.com/api/auth/jwt/x5c/login: 40 findings — brokencrystals-jwt-x5c-rogue-route-live-oracle",
+      "ginandjuice.shop/my-account/orders: 33 findings — ginandjuice-my-account-orders-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-56: 15 findings — wrongsecrets-challenge-56-project-spec-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "brokencrystals.com/api/auth/jwt/kid-sql/login: 20 findings — hub fingerprint only; missing brokencrystals-jwt-kid-sql-route-live-oracle",
-      "brokencrystals.com/api/auth/jwt/x5u/login: missing brokencrystals-jwt-x5u-rogue-route-live-oracle (hub oracles only)"
+      "brokencrystals.com/api/auth/jwt/kid-sql/login: 20 findings — hub fingerprint only; missing brokencrystals-jwt-kid-sql-route-live-oracle"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 49,
+    "juice-shop.herokuapp.com": 51,
     "brokencrystals.com/api/auth/jwt/jku/login": 87,
-    "brokencrystals.com/api/auth/jwt/x5u/login": 43,
+    "brokencrystals.com/api/auth/jwt/weak-key/login": 87,
+    "brokencrystals.com/api/auth/jwt/x5u/login": 87,
     "brokencrystals.com/api/auth/jwt/x5c/login": 40,
+    "brokencrystals.com/api/mcp": 88,
+    "ginandjuice.shop/my-account/forgot-password": 35,
     "ginandjuice.shop/my-account/orders": 33,
-    "brokencrystals.com/api/auth/jwt/kid-sql/login": 20,
+    "wrongsecrets-ctf.herokuapp.com": 12,
     "wrongsecrets.herokuapp.com/challenge/challenge-56": 15,
     "wrongsecrets.herokuapp.com/challenge/challenge-64": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-65": 15,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52
+    "wrongsecrets.herokuapp.com/challenge/challenge-65": 15
   }
 }
