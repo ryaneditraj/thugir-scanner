@@ -1,14 +1,134 @@
 {
-  "updated_at": "2026-08-28T03:13:00.000Z",
+  "updated_at": "2026-08-28T04:18:00.000Z",
   "priority_discovery_urls": [
     {
-      "url": "https://brokencrystals.com/api/auth/jwt/hmac/login",
-      "source": "NeuraLegion/brokencrystals swagger — RSA-to-HMAC JWT algorithm confusion oracle POST /api/auth/jwt/hmac/login (03 UTC power-loop)",
+      "url": "https://brokencrystals.com/api/auth/jwt/jku/login",
+      "source": "NeuraLegion/brokencrystals Swagger — JKU rogue-key JWT auth bypass oracle POST /api/auth/jwt/jku/login",
       "auth": "public_demo"
     },
     {
-      "url": "https://brokencrystals.com/api/auth/jwt/jku/login",
-      "source": "NeuraLegion/brokencrystals swagger — JWT JKU header injection oracle POST /api/auth/jwt/jku/login (03 UTC power-loop)",
+      "url": "https://brokencrystals.com/api/auth/jwt/x5c/login",
+      "source": "NeuraLegion/brokencrystals Swagger — X5C rogue-certificate JWT auth bypass oracle POST /api/auth/jwt/x5c/login",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/kid-sql/login",
+      "source": "NeuraLegion/brokencrystals Swagger — KID SQL-injection JWT key-lookup oracle POST /api/auth/jwt/kid-sql/login",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5u/login",
+      "source": "NeuraLegion/brokencrystals Swagger — X5U rogue-certificate JWT auth bypass oracle POST /api/auth/jwt/x5u/login",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/orders",
+      "source": "PortSwigger ginandjuice.shop — order history BOLA/IDOR oracle GET /my-account/orders (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/testimonials",
+      "source": "Escape Duck Store — stored XSS oracle POST /testimonials (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/products/1",
+      "source": "Escape Duck Store — negative product price BOLA oracle PUT /api/v1/admin/products/{id} (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/graphql",
+      "source": "DVGA — Damn Vulnerable GraphQL Application hosted by Escape (dvga.tools.escape.tech/graphql)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/workshop/api/merchant/contact_mechanic",
+      "source": "OWASP vAPI — API8 hidden-parameter / mass-assignment oracle POST /workshop/api/merchant/contact_mechanic (vapi.tools.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/identity/api/auth/login",
+      "source": "OWASP vAPI — broken authentication oracle POST /identity/api/auth/login (vapi.tools.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/login",
+      "source": "Escape Duck Store — weak admin credentials + no rate limiting oracle POST /api/v1/auth/login (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/login/totp",
+      "source": "Escape Duck Store — 2FA bypass oracle POST /api/v1/auth/login/totp (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/users/",
+      "source": "Escape Duck Store — user enumeration oracle GET /api/v1/users/ (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/nonexistent?redirect=https://example.com",
+      "source": "Escape Duck Store — open redirect oracle GET /nonexistent?redirect=URL (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga2.tools.escape.tech/graphql",
+      "source": "DVGA2 — Damn Vulnerable GraphQL Application hosted by Escape (dvga2.tools.escape.tech/graphql)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/cart/add",
+      "source": "Escape Duck Store — negative quantity business-logic oracle POST /api/v1/cart/add (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
+      "source": "Escape Duck Store — 100% discount coupon + shipping bypass oracle POST /api/v1/orders/checkout (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/register",
+      "source": "Escape Duck Store — referral code abuse oracle POST /api/v1/auth/register (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/products",
+      "source": "Escape Duck Store — negative product price BFLA oracle /api/v1/admin/products (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/mcp/tools/list_coupons",
+      "source": "Escape Duck Store — MCP coupon disclosure oracle POST /mcp/tools/list_coupons (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/vulnerabilities",
+      "source": "Escape Duck Store — public vulnerability index catalog (23 intentional flaws; escape.tech blog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/coupons",
+      "source": "Escape Duck Store — coupon information disclosure oracle GET /api/v1/orders/coupons (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
+      "source": "Escape Duck Store — unauthenticated PUT BOLA oracle /api/v1/testimonials/{id} (vulnerabilities catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/",
+      "source": "OWASP vAPI — Escape-hosted vulnerable API Top 10 training interface (vapi.tools.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/mcp/info",
+      "source": "Escape Duck Store — MCP unauthenticated access oracle /mcp/info (406 without Accept; hub crawl)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/hmac/login",
+      "source": "NeuraLegion/brokencrystals swagger — RSA-to-HMAC JWT algorithm confusion oracle POST /api/auth/jwt/hmac/login (03 UTC power-loop)",
       "auth": "public_demo"
     },
     {
@@ -17,23 +137,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://brokencrystals.com/api/auth/jwt/x5c/login",
-      "source": "NeuraLegion/brokencrystals swagger — JWT X5C certificate chain oracle POST /api/auth/jwt/x5c/login (03 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/x5u/login",
-      "source": "NeuraLegion/brokencrystals swagger — JWT X5U rogue certificate oracle POST /api/auth/jwt/x5u/login (03 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://brokencrystals.com/api/auth/jwt/weak-key/login",
       "source": "NeuraLegion/brokencrystals swagger — JWT weak-secret brute-force oracle POST /api/auth/jwt/weak-key/login (02 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/kid-sql/login",
-      "source": "NeuraLegion/brokencrystals swagger — JWT KID SQL injection oracle POST /api/auth/jwt/kid-sql/login (02 UTC power-loop)",
       "auth": "public_demo"
     },
     {
@@ -47,33 +152,13 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://ginandjuice.shop/my-account/orders",
-      "source": "PortSwigger ginandjuice.shop — order history BOLA/IDOR route oracle GET /my-account/orders (02 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://brokencrystals.com/api/mcp",
       "source": "NeuraLegion/brokencrystals — MCP JSON-RPC tool-calling oracle with XXE/search_users/metadata leaks (README /api/mcp; 01 UTC power-loop)",
       "auth": "public_demo"
     },
     {
-      "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
-      "source": "Escape Duck Store — checkout business-logic oracle 100% discount coupon + shipping bypass (duck-store.escape.tech/vulnerabilities)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/cart/add",
-      "source": "Escape Duck Store — negative quantity cart business-logic oracle POST /api/v1/cart/add (duck-store.escape.tech/vulnerabilities)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://duck-store.escape.tech/api/v1/admin/users",
       "source": "Escape Duck Store — broken access control oracle GET /api/v1/admin/users (duck-store.escape.tech/vulnerabilities)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/users/",
-      "source": "Escape Duck Store — user enumeration oracle GET /api/v1/users/ (duck-store.escape.tech/vulnerabilities)",
       "auth": "public_demo"
     },
     {
@@ -144,11 +229,6 @@
     {
       "url": "https://brokencrystals.com/render.dot",
       "source": "NeuraLegion/brokencrystals — SSTI oracle GET /render.dot (public benchmark)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
-      "source": "Escape Duck Store — unauthenticated testimonial PUT BOLA oracle (duck-store.escape.tech/vulnerabilities)",
       "auth": "public_demo"
     },
     {
@@ -3249,11 +3329,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://koadt.github.io/oss-oopssec-store/roadmap",
-      "source": "kOaDT/oss-oopssec-store — 34-challenge CTF learning roadmap (GitHub Pages)",
-      "auth": "oss_deploy"
-    },
-    {
       "url": "https://www.hacksplaining.com/lessons/xml-bombs/start",
       "source": "Hacksplaining — XML bomb / billion-laughs DoS lesson (lessons catalog)",
       "auth": "public_demo"
@@ -3833,11 +3908,6 @@
       "url": "https://capture-the-flag.labs.vercel.dev/",
       "source": "vercel-labs/capture-the-flag — AI-powered CTF arena with vulnerable apps (Vercel Labs)",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://demo.owasp-juice.shop/",
-      "source": "OWASP Juice Shop official demo instance (owasp-juice.shop)",
-      "auth": "benchmark"
     },
     {
       "url": "https://juice-shop.lab.pentest-forge.com/",
@@ -10695,31 +10765,6 @@
     {
       "url": "https://dvwu.vercel.app/labs/ssti",
       "source": "zahidoverflow/dvwu — SSTI training lab route (Vercel live demo)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/cart",
-      "source": "PortSwigger ginandjuice.shop — shopping cart business-logic / BOLA route (scanner eval lab; 22:00 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/checkout",
-      "source": "PortSwigger ginandjuice.shop — checkout payment/coupon business-logic route (scanner eval lab)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/register",
-      "source": "PortSwigger ginandjuice.shop — user registration / account takeover route (scanner eval lab)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/render.dot",
-      "source": "NeuraLegion/brokencrystals — SSTI oracle GET /render.dot (public benchmark)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
-      "source": "Escape Duck Store — unauthenticated testimonial PUT BOLA oracle (duck-store.escape.tech/vulnerabilities)",
       "auth": "public_demo"
     }
   ]
