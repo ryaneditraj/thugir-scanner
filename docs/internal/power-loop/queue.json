@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T20:10:00.000Z",
+  "updated_at": "2026-08-28T21:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/profile/update-avatar",
+      "source": "ctfsec/pwnshop vulnerabilities — SSRF avatar update oracle POST /profile/update-avatar targets localhost/debug (PWN-019; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file?path=/etc/passwd&type=text/plain",
+      "source": "NeuraLegion/brokencrystals — SSRF file fetch oracle GET /api/file?path=&type= (README vuln overview; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders",
+      "source": "Escape duck-store — unauthenticated orders BOLA oracle GET /api/v1/orders (public demo; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/basket/1",
+      "source": "OWASP Juice Shop demo — basket IDOR oracle GET /rest/basket/:id (preview.owasp-juice.shop; web search 21 UTC)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://vulnbank.org/api/accounts",
+      "source": "vulnbank.org — unauthenticated accounts API sensitive-data oracle GET /api/accounts (public demo lab; web search 21 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/",
       "source": "kOaDT/oss-oopssec-store — product search UNION SQLi walkthrough oracle (GitHub Pages; web search 19 UTC)",
@@ -11218,5 +11243,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 5
+  "discovery_urls_added": 1961
 }
