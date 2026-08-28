@@ -2044,6 +2044,12 @@ const DEEP_RULES = new Set<string>([
   "clientSideJavaSecLabEvidence",
   "javaSecLabReflectedXssLiveOracle",
   "javaSecLabReflectedXssRouteLiveOracle",
+  "javaSecLabSsrfVulLiveOracle",
+  "javaSecLabSsrfVulRouteLiveOracle",
+  "javaSecLabJdbcSqliVul1LiveOracle",
+  "javaSecLabJdbcSqliVul1RouteLiveOracle",
+  "javaSecLabXxeVul1LiveOracle",
+  "javaSecLabXxeVul1RouteLiveOracle",
   "javaSecLabDruidBasicJsonRouteLiveOracle",
   "clientSidePwnedlabsEvidence",
   "clientSidePwnedlabsGitSecretsEvidence",
@@ -2104,6 +2110,8 @@ const DEEP_RULES = new Set<string>([
   "dvaibLoginRouteLiveOracle",
   "pwnshopMassAssignmentAdminLiveOracle",
   "pwnshopOpenRedirectRegisterLiveOracle",
+  "pwnshopOpenRedirectLoginLiveOracle",
+  "pwnshopOpenRedirectLoginRouteLiveOracle",
   "pwnshopVerifyOtpBruteforceLiveOracle",
   "pwnshopVerifyOtpBruteforceRouteLiveOracle",
   "pwnshopOtpNotInvalidatedLiveOracle",
@@ -2640,6 +2648,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCatalogCategoryCrlfRouteLiveOracle",
   "ginAndJuiceLoginUsernameReflectionLiveOracle",
   "ginAndJuiceLoginRouteLiveOracle",
+  "ginAndJuiceLoginNextOpenRedirectRouteLiveOracle",
   "ginAndJuiceRegisterAtobRedirectLiveOracle",
   "ginAndJuiceRegisterRouteLiveOracle",
   "ginAndJuiceStockXxeLiveOracle",
@@ -3707,6 +3716,10 @@ const DEEP_RULES = new Set<string>([
   "sekumartProductSqliRouteLiveOracle",
   "sekumartSearchSqliLiveOracle",
   "sekumartSearchSqliRouteLiveOracle",
+  "sekumartSearchXssLiveOracle",
+  "sekumartSearchXssRouteLiveOracle",
+  "sekumartDirectoryXPathLiveOracle",
+  "sekumartDirectoryXPathRouteLiveOracle",
   "sekumartOpenapiSqliLiveOracle",
   "sekumartOpenapiSqliRouteLiveOracle",
   "clientSideBreakTheFlaskEvidence",
@@ -4569,7 +4582,10 @@ function extractJavaSecLabSeeds(html: string, pageUrl: string): string[] {
     "/druid/sql.json",
     "/login",
     "/xss/reflect/vul2",
-    "/xss/reflected"
+    "/xss/reflected",
+    "/ssrf/vul",
+    "/sqli/jdbc/vul1",
+    "/xxe/vul1"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -14181,6 +14197,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /whgojp\.top/i.test(origin) &&
         /\/druid\/basic\.json\b/i.test(targetInput) &&
         p.slug === "javaseclab-druid-basic-json-route-live-oracle"
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/ssrf\/vul\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-ssrf-vul")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/sqli\/jdbc\/vul1\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-jdbc-sqli-vul1")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/xxe\/vul1\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-xxe-vul1")
       )
         return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/sql-injection\/?$/i.test(targetInput) && p.slug === "sec-research-lab-sql-injection-route-live-oracle") return -3;

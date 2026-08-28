@@ -5711,6 +5711,66 @@
       "slug": "ginandjuice-change-email-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceChangeEmailLiveOracle GET /my-account/change-email redirect:manual → 302 Location /login; ginandjuice.shop/catalog findings 42 incl +ginandjuice-change-email-live-oracle; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-open-redirect-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /login with next= stores attacker URL through OTP verification and reflects it in 302 Location to evil-open-redirect-probe.example; pwnshop.ctfsecurity.com/login?next=https://example.com findings 49→51 (+pwnshop-open-redirect-login-live-oracle +pwnshop-open-redirect-login-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-open-redirect-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopOpenRedirectLoginRouteLiveOracle delegates to login OTP-chain live oracle on /login?next= route scans; pwnshop.ctfsecurity.com/login?next=https://example.com findings 49→51; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-login-next-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceLoginNextOpenRedirectRouteLiveOracle matches /login?next= with external URL and delegates to clientSideOpenRedirectEvidence bundle markers; ginandjuice.shop/login?next=https://example.com findings 34→35 (+ginandjuice-login-next-open-redirect-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-search-xss-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /search.php?q=<b>canary</b> reflects HTML inside You searched for <b> without encoding; sekumart.sekuripy.hr/search.php?q=test findings 12→15 (+sekumart-search-xss-live-oracle +sekumart-search-xss-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-search-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sekumartSearchXssRouteLiveOracle matches /search.php and delegates to live reflected-XSS probe on q parameter; sekumart.sekuripy.hr/search.php findings 12→15; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-directory-xpath-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /directory.php?q=' or '1'='1 dumps svc-directory FLAG{xp4th_1nj3ct10n_pwn3d} via XPath injection; sekumart.sekuripy.hr/directory.php findings 14 (+sekumart-directory-xpath-live-oracle +route); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-directory-xpath-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: sekumartDirectoryXPathRouteLiveOracle matches /directory.php and delegates to XPath always-true probe; sekumart.sekuripy.hr/directory.php findings 14 (+sekumart-directory-xpath-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-ssrf-vul-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: javaSecLabSsrfVulRouteLiveOracle matches /ssrf/vul and delegates to live file:// or internal metadata probe with wiki corpus fallback; whgojp.top/ssrf/vul?url=http://example.com findings 7→8 (+javaseclab-ssrf-vul-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-jdbc-sqli-vul1-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: javaSecLabJdbcSqliVul1RouteLiveOracle matches /sqli/jdbc/vul1 and delegates to OR 1=1 JDBC probe with wiki corpus fallback; whgojp.top/sqli/jdbc/vul1?type=select&id=1 findings 7→8 (+javaseclab-jdbc-sqli-vul1-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-xxe-vul1-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: javaSecLabXxeVul1RouteLiveOracle matches /xxe/vul1 and delegates to XMLReader external entity probe with wiki corpus fallback; whgojp.top/xxe/vul1 findings 7→8 (+javaseclab-xxe-vul1-live-oracle +javaseclab-xxe-vul1-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
