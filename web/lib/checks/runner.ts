@@ -2598,6 +2598,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceAngularCstiLiveOracle",
   "ginAndJuiceAngularCstiRouteLiveOracle",
   "ginAndJuiceCatalogSearchXssLiveOracle",
+  "ginAndJuiceCatalogSearchXssRouteLiveOracle",
   "ginAndJuiceCatalogRouteLiveOracle",
   "ginAndJuiceBlogPostOpenRedirectLiveOracle",
   "ginAndJuiceBlogPostRouteLiveOracle",
@@ -2649,6 +2650,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCartCheckoutAuthLiveOracle",
   "ginAndJuiceCartRouteLiveOracle",
   "ginAndJuiceCheckoutRouteLiveOracle",
+  "ginAndJuiceForgotPasswordRouteLiveOracle",
   "ginAndJuiceAngularVulnerableDependencyLiveOracle",
   "ginAndJuiceAngularVulnerableDependencyRouteLiveOracle",
   "ginAndJuiceLoggerOastLiveOracle",
@@ -3264,6 +3266,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsFilesLfiRouteLiveOracle",
   "brokencrystalsFileRawLfiRouteLiveOracle",
   "brokencrystalsTestimonialsCountSqliRouteLiveOracle",
+  "brokencrystalsProductsLatestLimitBypassLiveOracle",
   "brokencrystalsProductsLatestLimitBypassRouteLiveOracle",
   "brokencrystalsProductsDateManipulationLiveOracle",
   "brokencrystalsProductsDateManipulationRouteLiveOracle",
@@ -13662,6 +13665,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /ginandjuice\.shop/i.test(origin) &&
         /\/checkout\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-checkout")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/forgot-password\b/i.test(targetInput) &&
+        !/\/my-account\/forgot-password/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-forgot-password")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/catalog(?:\/search|\/product-search-results)?\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-catalog-search-xss")
       )
         return -4;
       if (
