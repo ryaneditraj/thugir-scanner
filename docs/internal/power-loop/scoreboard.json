@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T07:24:25.957877Z",
+  "updated_at": "2026-08-28T07:24:25.957Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2021,
   "discovery_findings": 26164,
-  "improvements_shipped": 1230,
-  "last_run": "2026-08-28T07:24:25.957877Z",
+  "improvements_shipped": 1236,
+  "last_run": "2026-08-28T07:24:25.957Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
@@ -50,7 +50,7 @@
       },
       "note": "Stable 6/6 first-pass recall (50 findings, 38 live oracles incl secret-resend)"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
@@ -60,18 +60,20 @@
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 38 live oracles, secret-resend present)",
-      "brokencrystals.com/api/fetch: 77 findings \u2014 new /api/fetch SSRF oracle (url param)",
-      "brokencrystals.com/api/upload/parse: 30 findings \u2014 XXE upload route oracle",
-      "vulnbank.org/merchant/dashboard: 31 findings \u2014 merchant payment dashboard oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-63: 15 findings \u2014 secrets-management challenge oracle",
-      "ginandjuice.shop/catalog/product: 42 findings \u2014 product detail XSS/SQLi hub",
-      "brokencrystals.com/api/auth/jwt/hmac/validate: 11 findings \u2014 thin validate-path pass (learning gap vs jwk/x5c)"
+      "brokencrystals.com/api/fetch: 77 findings — new /api/fetch SSRF oracle (url param)",
+      "brokencrystals.com/api/upload/parse: 30 findings — XXE upload route oracle",
+      "vulnbank.org/merchant/dashboard: 31 findings — merchant payment dashboard oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-63: 15 findings — secrets-management challenge oracle",
+      "ginandjuice.shop/catalog/product: 42 findings — product detail XSS/SQLi hub",
+      "brokencrystals.com/api/auth/jwt/hmac/validate: 11 findings — thin validate-path pass (learning gap vs jwk/x5c)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-58: 15 findings — error-demo-database-connection live delegate (parallel run)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-60: 15 findings — MCP execute-command route oracle (parallel run)"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
-      "brokencrystals.com/api/auth/jwt/hmac/validate: 11 findings \u2014 still thin vs jwk/validate (79) and x5c/validate (49); dedicated hmac validate-path route oracle gap",
-      "scoreboard.json had git merge conflict markers \u2014 fixed this run",
-      "wrongsecrets 57-62 still queued unscanned \u2014 challenge-63 added and scanned this run"
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "brokencrystals.com/api/auth/jwt/hmac/validate: 11 findings — still thin vs jwk/validate (79) and x5c/validate (49)",
+      "scoreboard.json merge conflict markers fixed this run",
+      "wrongsecrets 57-59/61 still queued — challenge-63 scanned; 58/60 done in parallel run"
     ]
   },
   "discovery_highlights": {
@@ -83,6 +85,8 @@
     "ginandjuice.shop/catalog/product": 42,
     "brokencrystals.com/api/auth/jwt/jwk/validate": 79,
     "brokencrystals.com/api/auth/jwt/x5c/validate": 49,
-    "brokencrystals.com/api/auth/jwt/hmac/validate": 11
+    "brokencrystals.com/api/auth/jwt/hmac/validate": 11,
+    "wrongsecrets.herokuapp.com/challenge/challenge-58": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-60": 15
   }
 }

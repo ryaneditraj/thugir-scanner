@@ -8847,6 +8847,29 @@ function brokencrystalsJwtApiSeeds(pageUrl: string): string[] {
   return [...out];
 }
 
+/** Seed linked live-oracle endpoints when deep-scanning WrongSecrets challenge pages. */
+function wrongsecretsChallengeApiSeeds(pageUrl: string): string[] {
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?\d+\b/i.test(pageUrl)) {
+    return [];
+  }
+  const m = pageUrl.match(/\/challenge\/(?:challenge-)?(\d+)\b/i);
+  const num = m?.[1];
+  if (!num) return [];
+  const pageOrigin = new URL(pageUrl).origin;
+  const paths: string[] = [];
+  if (num === "58") paths.push("/error-demo/database-connection");
+  if (num === "60") paths.push("/mcp");
+  const out = new Set<string>();
+  for (const p of paths) {
+    try {
+      out.add(new URL(p, pageOrigin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** FauxBank OWASP banking pentest training lab — seed disclaimer + API oracle paths. */
 function extractFauxbankLabSeeds(html: string, pageUrl: string): string[] {
   let host = "";
@@ -10243,6 +10266,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ginAndJuiceBlogPostSeeds = extractGinAndJuiceBlogPostSeeds(home.body, home.finalUrl);
   const brokencrystalsLabSeeds = extractBrokencrystalsLabSeeds(home.body, home.finalUrl);
   const brokencrystalsJwtSeeds = brokencrystalsJwtApiSeeds(home.finalUrl || effectiveTargetInput);
+  const wrongsecretsChallengeSeeds = wrongsecretsChallengeApiSeeds(
+    home.finalUrl || effectiveTargetInput
+  );
   const fauxbankLabSeeds = extractFauxbankLabSeeds(home.body, home.finalUrl);
   const jwtArsenalExploitSeeds = extractJwtArsenalExploitSeeds(home.body, home.finalUrl);
   const shieldDarkPatternSeeds = extractShieldDarkPatternSeeds(home.body, home.finalUrl);
@@ -11181,6 +11207,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ginAndJuiceBlogPostSeeds,
       ...brokencrystalsLabSeeds,
       ...brokencrystalsJwtSeeds,
+      ...wrongsecretsChallengeSeeds,
       ...fauxbankLabSeeds,
       ...jwtArsenalExploitSeeds,
       ...shieldDarkPatternSeeds,
@@ -12835,16 +12862,22 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
-        /\/challenge\/(?:challenge-)?57\b/i.test(targetInput) &&
-        wrongsecretsChallengeSlugMatches(57, p.slug)
+        /\/challenge\/(?:challenge-)?58\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-error-demo-database-connection")
       )
-        return -3;
+        return -4;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?58\b/i.test(targetInput) &&
         wrongsecretsChallengeSlugMatches(58, p.slug)
       )
         return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?60\b/i.test(targetInput) &&
+        (p.slug.startsWith("wrongsecrets-mcp") || p.slug.startsWith("wrongsecrets-challenge-60"))
+      )
+        return -4;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?64\b/i.test(targetInput) &&
