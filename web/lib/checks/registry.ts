@@ -78088,13 +78088,25 @@ const wrongsecretsChallenge58DatabaseConnectionLiveOracle: Rule = async (ctx) =>
 const wrongsecretsChallenge58DatabaseConnectionRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?58\b/i.test(pageUrl)) return NEGATIVE;
-  const result = await wrongsecretsChallenge58DatabaseConnectionLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  const live = await wrongsecretsErrorDemoDatabaseConnectionLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "WrongSecrets challenge-58 route scan — GET /error-demo/database-connection returns JDBC connection string with embedded password — live credential exposure oracle"
+      }
+    };
+  }
+  const walkthrough = await wrongsecretsChallenge58DatabaseConnectionLiveOracle(ctx);
+  if (!walkthrough.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: walkthrough.confidence,
     evidence: {
-      ...result.evidence,
+      ...walkthrough.evidence,
       scannedUrl: pageUrl,
       note: "WrongSecrets challenge-58 route scan — Database Connection String Exposure walkthrough confirms /error-demo/database-connection JDBC credential leak"
     }
