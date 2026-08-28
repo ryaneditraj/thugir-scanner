@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T00:10:30.000Z",
+  "updated_at": "2026-08-28T01:20:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/mcp",
+      "source": "NeuraLegion/brokencrystals — MCP JSON-RPC tool-calling oracle with XXE/search_users/metadata leaks (README /api/mcp; 01 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
+      "source": "Escape Duck Store — checkout business-logic oracle 100% discount coupon + shipping bypass (duck-store.escape.tech/vulnerabilities)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/cart/add",
+      "source": "Escape Duck Store — negative quantity cart business-logic oracle POST /api/v1/cart/add (duck-store.escape.tech/vulnerabilities)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/users",
+      "source": "Escape Duck Store — broken access control oracle GET /api/v1/admin/users (duck-store.escape.tech/vulnerabilities)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/users/",
+      "source": "Escape Duck Store — user enumeration oracle GET /api/v1/users/ (duck-store.escape.tech/vulnerabilities)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/products/latest?limit=100",
       "source": "NeuraLegion/brokencrystals — business constraint bypass oracle GET /api/products/latest limit param (README; 00 UTC power-loop)",
