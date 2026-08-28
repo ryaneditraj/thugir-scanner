@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-config-get-config-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeBrokencrystalsConfig tries /api/config/get_config then /api/config; brokencrystals.com/api/config/get_config findings 16→80 (+brokencrystals-config-get-config-route-live-oracle +brokencrystals-config-live-oracle); benchmark juice-shop 43 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-none-validate-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeBrokencrystalsJwtAlgNone tries /api/auth/jwt/none/validate then /api/auth/jwt/rsa/signature/validate; brokencrystals.com/api/auth/jwt/none/validate findings 78→79 (+brokencrystals-jwt-none-validate-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-view-order-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceViewOrderIdorRouteLiveOracle delegates to /order/details?orderId=0254809 on /my-account/view-order/{id} route scans; ginandjuice.shop/my-account/view-order/1 findings 34 (+ginandjuice-view-order-idor-route-live-oracle +ginandjuice-order-details-idor-live-oracle); benchmark juice-shop 43 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets.herokuapp.com",
       "slug": "wrongsecrets-challenge-57-58-hub-seeds",
       "status": "shipped",

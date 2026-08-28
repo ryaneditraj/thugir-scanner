@@ -39508,6 +39508,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-jwt-none-validate-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/none/validate route live oracle",
+    description:
+      "When scanning /api/auth/jwt/none/validate, alg:none JWT in Authorization bypasses authentication and returns {\"secret\":\"this is our secret\"} — route-specific JWT none-algorithm confirmation oracle (falls back to /api/auth/jwt/rsa/signature/validate when none alias is absent).",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals none/validate accepts alg:none tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtNoneValidateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to expected algorithms and reject alg:none — Broken Crystals is intentional lab software.",
+      steps: [
+        "Configure your JWT library to allow only RS256/HS256 (never 'none').",
+        "Verify the algorithm from the token header matches your expected value.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/none/validate route scan confirms alg:none JWT bypass. Show secure JWT verification patterns for NestJS.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-jwt-weak-key-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -41298,6 +41324,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/config route scan confirms database credentials are exposed without auth. Show config endpoint hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-config-get-config-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/config/get_config route credential disclosure oracle",
+    description:
+      "When scanning /api/config/get_config, GET returns postgres:// connection strings and cloud API keys in JSON — route-specific config disclosure oracle (falls back to /api/config when get_config alias is absent).",
+    impactOneline:
+      "Route-scoped scans on get_config paths should flag unauthenticated Broken Crystals config endpoints leaking credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsConfigGetConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose runtime config with credentials via unauthenticated HTTP endpoints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove /api/config/get_config from public routes; serve only non-sensitive public config to browsers.",
+        "Store database URLs and API keys in server-side environment variables only.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/config/get_config route scan confirms database credentials are exposed without auth. Show config endpoint hardening.",
     version: 1,
     enabled: true
   },
@@ -63490,6 +63542,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /order/details route scan confirms unauthenticated order PII disclosure. Show route-specific IDOR remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-view-order-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /my-account/view-order/{id} IDOR route live oracle",
+    description:
+      "When scanning /my-account/view-order/{id}, canonical GET /order/details?orderId= confirms unauthenticated access to another customer's billing address and masked card — route-specific order details IDOR oracle.",
+    impactOneline:
+      "Route-specific confirmation that authenticated view-order paths map to an IDOR-vulnerable order lookup endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceViewOrderIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and ownership checks on /my-account/view-order/{id} before returning PII.",
+      steps: [
+        "Bind order lookups to the authenticated user's session.",
+        "Use unpredictable order identifiers instead of sequential IDs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /my-account/view-order/{id} route scan confirms unauthenticated order PII disclosure via /order/details. Show route-specific IDOR remediation.",
     version: 1,
     enabled: true
   },
