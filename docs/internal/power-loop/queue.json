@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T05:10:00.000Z",
+  "updated_at": "2026-08-28T06:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jwk/validate",
+      "source": "NeuraLegion/brokencrystals Swagger — JWK rogue-key JWT validate oracle GET /api/auth/jwt/jwk/validate (06 UTC power-loop; validate-path gap vs /login hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5c/validate",
+      "source": "NeuraLegion/brokencrystals Swagger — X5C rogue-certificate JWT validate oracle GET /api/auth/jwt/x5c/validate (06 UTC power-loop; validate-path gap vs /login hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/hmac/validate",
+      "source": "NeuraLegion/brokencrystals Swagger — RSA-to-HMAC JWT validate oracle GET /api/auth/jwt/hmac/validate (06 UTC power-loop; validate-path gap vs /login hub)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/mass-assignment",
+      "source": "zahidoverflow/dvwu — mass-assignment privilege escalation training lab route (Vercel live demo; web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/crlf",
+      "source": "zahidoverflow/dvwu — CRLF injection training lab route (Vercel live demo; web search 06 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/kid-sql/validate",
       "source": "NeuraLegion/brokencrystals Swagger — KID SQL-injection JWT validate oracle GET /api/auth/jwt/kid-sql/validate (05 UTC power-loop; route-specific gap vs /login hub)",
@@ -10790,6 +10815,31 @@
     {
       "url": "https://dvwu.vercel.app/labs/ssti",
       "source": "zahidoverflow/dvwu — SSTI training lab route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jwk/validate",
+      "source": "NeuraLegion/brokencrystals Swagger — JWK rogue-key JWT validate oracle GET /api/auth/jwt/jwk/validate (06 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/x5c/validate",
+      "source": "NeuraLegion/brokencrystals Swagger — X5C rogue-certificate JWT validate oracle GET /api/auth/jwt/x5c/validate (06 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/hmac/validate",
+      "source": "NeuraLegion/brokencrystals Swagger — RSA-to-HMAC JWT validate oracle GET /api/auth/jwt/hmac/validate (06 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/mass-assignment",
+      "source": "zahidoverflow/dvwu — mass-assignment privilege escalation training lab route (Vercel live demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/crlf",
+      "source": "zahidoverflow/dvwu — CRLF injection training lab route (Vercel live demo)",
       "auth": "public_demo"
     }
   ]
