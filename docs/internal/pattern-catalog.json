@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-28T21:38:50.764Z",
-  "total": 2796,
-  "uniqueSlugs": 2788,
+  "generatedAt": "2026-08-28T22:57:46.539Z",
+  "total": 2797,
+  "uniqueSlugs": 2789,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2778,
+    "generic": 2779,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2711,
+    "deep": 2712,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 582,
+    "Broken access control": 583,
     "Exposed secret": 115,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -2358,6 +2358,7 @@
     "vapi-route-live-oracle",
     "vapi-serversurfer-ssrf-route-live-oracle",
     "vapi-stickynotes-stored-xss-route-live-oracle",
+    "vapi-workshop-shop-orders-route-live-oracle",
     "vault-notes-jwt-secret-leak-live-oracle",
     "vault-notes-jwt-secret-leak-route-live-oracle",
     "vault-notes-notes-idor-live-oracle",

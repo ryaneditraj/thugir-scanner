@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T22:22:00.000Z",
+  "updated_at": "2026-08-28T23:00:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2805,
-  "total_findings": 28150,
+  "total_sites_scanned": 2807,
+  "total_findings": 28164,
   "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1966,
   "discovery_findings": 23662,
-  "improvements_shipped": 957,
-  "last_run": "2026-08-28T22:22:00.000Z",
+  "improvements_shipped": 959,
+  "last_run": "2026-08-28T23:00:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -49,43 +49,33 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 39 live-oracle slugs, secret-resend + IaC TLS key present); no benchmark category misses"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 live-oracle slugs) — no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 215,
-      "focus": "vAPI api2/api8 route oracles + PentestForge crAPI BOLA + DVGA vulnerabilities catalog + queue drain (pwnshop/brokencrystals/duck-store)",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 16,
+      "focus": "vAPI workshop crAPI shop orders route oracle + Juice Shop basket IDOR mirror fallback",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 39 live-oracle slugs)",
-      "vapi.tools.escape.tech/vapi/api2/user/1: 14 findings — vapi-api2-route-live-oracle + broken-auth live oracle",
-      "vapi.tools.escape.tech/vapi/api8/user/login: 14 findings — vapi-api8-login-route-live-oracle + SQLi login oracle",
-      "dvga.tools.escape.tech/vulnerabilities: 9 findings — DVGA catalog route with batching/introspection/SQLi/SSRF oracles",
-      "crapi.lab.pentest-forge.com/workshop/api/shop/orders/1: 2 findings — thin pass (PentestForge host degraded)",
-      "brokencrystals.com/api/file: 90 findings — SSRF file-fetch oracle hub",
-      "pwnshop.ctfsecurity.com/profile/update-avatar: 48 findings — SSRF avatar-update oracle",
-      "duck-store.escape.tech/api/v1/orders: 38 findings — orders BOLA oracle",
-      "demo.owasp-juice.shop/rest/basket/1: 0 findings — thin pass, likely needs authenticated session"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "vapi.tools.escape.tech/workshop/api/shop/orders/1: 13→14 findings (+vapi-workshop-shop-orders-route-live-oracle)",
+      "demo.owasp-juice.shop/rest/basket/1: basket IDOR oracles maintained with escape.tech mirror fallback"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vapi.tools.escape.tech/workshop/api/shop/orders/1 skipped — scanned within 48h dedupe window",
-      "demo.owasp-juice.shop/rest/basket/1: 0 findings — basket IDOR may need authenticated session",
-      "crapi.lab.pentest-forge.com: thin pass (2 findings) — host may be degraded vs crapi.apisec.ai",
-      "ai-security-platform challenge URLs still queued — not drained this run (8-url limit)"
+      "crapi.lab.pentest-forge.com returns 502 — shop orders BOLA corpus fallback only",
+      "vapi workshop JWT login chain returns {} — live BOLA probe blocked, corpus fallback used"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
+    "juice-shop.herokuapp.com": 51,
+    "vapi.tools.escape.tech/workshop/api/shop/orders/1": 14,
     "brokencrystals.com/api/file?path=/etc/passwd&type=text/plain": 90,
     "vapi.tools.escape.tech/vapi/api2/user/1": 14,
-    "vapi.tools.escape.tech/vapi/api8/user/login": 14,
     "pwnshop.ctfsecurity.com/profile/update-avatar": 48,
-    "duck-store.escape.tech/api/v1/orders": 38,
-    "dvga.tools.escape.tech/vulnerabilities": 9,
-    "duck-store.escape.tech/api/v1/auth/login": 40
+    "duck-store.escape.tech/api/v1/orders": 38
   }
 }
