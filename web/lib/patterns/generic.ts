@@ -23827,6 +23827,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-open-redirect-login-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwnshop login open redirect live oracle (PWN-017)",
+    description:
+      "POST /login with next= stores attacker URLs through OTP verification and reflects them in the 302 Location header without validation — the Pwnshop login open redirect oracle.",
+    impactOneline:
+      "Open redirects on login enable phishing attacks that steal credentials or session tokens via trusted-domain post-auth redirects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOpenRedirectLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate post-login redirect targets against an allowlist — Pwnshop PWN-017 is intentional lab software.",
+      steps: [
+        "Allowlist relative paths or known-safe redirect hosts for next/return parameters.",
+        "Reject absolute URLs pointing to external domains on login and OTP verification flows.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /login endpoint preserves next= through OTP verification and reflects it into a 302 Location to external hosts. Show open-redirect remediation for login flows.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-open-redirect-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwnshop /login?next= open redirect route live oracle (PWN-017)",
+    description:
+      "When scanning /login?next=, POST /login with next= reflects attacker URLs in the 302 Location header after OTP verification — route-specific login open redirect oracle.",
+    impactOneline:
+      "Route scans on /login?next= should confirm unvalidated post-auth redirects enable phishing via trusted-domain login flows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOpenRedirectLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate post-login redirect targets against an allowlist — Pwnshop PWN-017 is intentional lab software.",
+      steps: [
+        "Allowlist relative paths or known-safe redirect hosts for next/return parameters.",
+        "Reject absolute URLs pointing to external domains on login and OTP verification flows.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /login?next= route preserves attacker URLs through OTP verification. Show route-specific open-redirect remediation for login flows.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-verify-otp-bruteforce-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -54607,6 +54659,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sekumart-search-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SekuMart search.php reflected XSS live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/search.php?q=<b>marker</b> reflects the search term inside <b> without HTML encoding — the SekuriPy sqlmap playground reflected XSS training oracle.",
+    impactOneline:
+      "Unsanitized q parameter in search.php enables reflected HTML injection on the SekuMart demo shop search results page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartSearchXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — encode output and validate search input.",
+      steps: [
+        "HTML-encode search terms before rendering in the results page.",
+        "Use parameterized queries for the underlying SQL search.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart search.php reflects q inside <b> without encoding. Show output encoding remediation for PHP search results.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-search-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SekuMart /search.php route reflected XSS live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/search.php, GET ?q= reflects HTML markup unescaped in the You searched for line — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route scans on /search.php should confirm live reflected XSS alongside mysqli SQLi on the same q parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartSearchXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — encode output and validate search input.",
+      steps: [
+        "HTML-encode search terms before rendering.",
+        "Use parameterized queries for search SQL.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /search.php route reflects q unescaped in HTML. Show output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-directory-xpath-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart directory.php XPath injection live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/directory.php?q=' or '1'='1 concatenates into an XPath expression and dumps the hidden svc-directory account with FLAG{xp4th_1nj3ct10n_pwn3d} — sqlmap --xpath training oracle.",
+    impactOneline:
+      "Unsanitized q parameter in directory.php enables XPath injection exposing hidden staff records and CTF flags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartDirectoryXPathLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — never concatenate user input into XPath expressions.",
+      steps: [
+        "Use parameterized XPath or map names to IDs instead of string concatenation.",
+        "Validate employee lookup input against an allow-list.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart directory.php concatenates q into XPath. Show safe XPath query construction remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-directory-xpath-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /directory.php route XPath injection live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/directory.php, GET ?q=' or '1'='1 dumps svc-directory FLAG via XPath injection — route-specific sqlmap --xpath training oracle.",
+    impactOneline:
+      "Route scans on /directory.php should confirm live XPath injection dumping hidden staff directory records.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartDirectoryXPathRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — never concatenate user input into XPath.",
+      steps: [
+        "Use safe XPath APIs instead of string-built expressions.",
+        "Restrict directory lookups to validated employee names.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /directory.php route has XPath injection on q. Show parameterized XPath remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sekumart-openapi-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -63624,6 +63780,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-login-next-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /login?next= open redirect route live oracle",
+    description:
+      "When scanning /login?next= with an external URL, the client bundle documents post-login redirect validation that can be abused via the next query parameter — route-specific open redirect oracle (FINDING-020 chain).",
+    impactOneline:
+      "Route scans on /login?next= should confirm client-side redirect validation can be abused for phishing via trusted-domain login flows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceLoginNextOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate post-login redirect targets server-side against an allowlist before client-side navigation.",
+      steps: [
+        "Allowlist relative paths or known-safe redirect hosts for next/return parameters.",
+        "Reject absolute URLs pointing to external domains on login flows.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login?next= route documents client-side redirect validation that can be abused. Show route-specific open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-register-atob-redirect-live-oracle",
     platform: "generic",
     category: "Open redirect",
@@ -69756,6 +69938,162 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /druid/basic.json endpoint is publicly reachable on JavaSecLab. Show route-specific Druid lockdown.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-ssrf-vul-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "JavaSecLab /ssrf/vul SSRF live oracle",
+    description:
+      "GET /ssrf/vul?url= on JavaSecLab fetches attacker-controlled URLs server-side via URLConnection — file:// and internal metadata SSRF training oracle.",
+    impactOneline:
+      "SSRF lets attackers use the server to read local files or reach internal services and cloud metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabSsrfVulLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block internal IPs, restrict URL schemes, and validate redirect chains — JavaSecLab is intentional lab software.",
+      steps: [
+        "Allowlist permitted URL schemes (https only) and destination hosts.",
+        "Resolve and block private/link-local IP ranges before connecting.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /ssrf/vul endpoint fetches arbitrary URLs server-side. Show SSRF remediation with allowlists and IP blocklists.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-ssrf-vul-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "JavaSecLab /ssrf/vul route live oracle",
+    description:
+      "When scanning /ssrf/vul on whgojp.top, live file:// or internal metadata probe or curated wiki corpus confirms JavaSecLab SSRF training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents SSRF via URLConnection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabSsrfVulRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block internal IPs and restrict URL schemes on SSRF routes.",
+      steps: [
+        "Allowlist permitted URL schemes and destination hosts.",
+        "Resolve and block private IP ranges before connecting.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /ssrf/vul route is a JavaSecLab SSRF training module. Show route-specific SSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-jdbc-sqli-vul1-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "JavaSecLab JDBC SQLi vul1 live oracle",
+    description:
+      "GET /sqli/jdbc/vul1?type=select&id=1 OR 1=1 on JavaSecLab uses native JDBC string concatenation — SQL injection training oracle.",
+    impactOneline:
+      "SQL injection via JDBC concatenation enables unauthorized data reads and database compromise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabJdbcSqliVul1LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized PreparedStatement queries — JavaSecLab is intentional lab software.",
+      steps: [
+        "Never concatenate user input into SQL strings.",
+        "Use PreparedStatement with bound parameters for all dynamic queries.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /sqli/jdbc/vul1 endpoint concatenates id into SQL. Show JDBC parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-jdbc-sqli-vul1-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "JavaSecLab /sqli/jdbc/vul1 route live oracle",
+    description:
+      "When scanning /sqli/jdbc/vul1 on whgojp.top, live OR 1=1 probe or curated wiki corpus confirms JavaSecLab native JDBC SQLi training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents JDBC string concatenation SQLi.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabJdbcSqliVul1RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries on JDBC routes.",
+      steps: [
+        "Never concatenate user input into SQL strings.",
+        "Use PreparedStatement with bound parameters.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/jdbc/vul1 route is a JavaSecLab SQLi training module. Show route-specific JDBC remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-xxe-vul1-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "JavaSecLab XXE vul1 live oracle",
+    description:
+      "GET /xxe/vul1?payload= on JavaSecLab resolves external entities via XMLReader — XXE file read and internal SSRF training oracle.",
+    impactOneline:
+      "XXE enables local file reads and server-side requests via malicious XML external entities.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabXxeVul1LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entities on all XML parsers — JavaSecLab is intentional lab software.",
+      steps: [
+        "Set XMLReader/SAXParser/DocumentBuilder to disallow DOCTYPE and external entities.",
+        "Use JSON or safer serialization formats where possible.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /xxe/vul1 endpoint resolves external XML entities. Show XXE remediation for XMLReader.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-xxe-vul1-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "JavaSecLab /xxe/vul1 route live oracle",
+    description:
+      "When scanning /xxe/vul1 on whgojp.top, live external entity probe or curated wiki corpus confirms JavaSecLab XMLReader XXE training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents XMLReader external entity injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabXxeVul1RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entities on XML parser routes.",
+      steps: [
+        "Disallow DOCTYPE and external entities on XMLReader.",
+        "Restrict ACCESS_EXTERNAL_DTD and ACCESS_EXTERNAL_SCHEMA.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /xxe/vul1 route is a JavaSecLab XXE training module. Show route-specific XML parser hardening.",
     version: 1,
     enabled: true
   },
