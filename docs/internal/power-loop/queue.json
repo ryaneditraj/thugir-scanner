@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-28T07:18:24.000Z",
+  "updated_at": "2026-08-28T08:20:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/jku/validate",
+      "source": "NeuraLegion/brokencrystals Swagger — JKU rogue-key JWT validate oracle GET /api/auth/jwt/jku/validate (validate-path gap vs /login hub; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/config/get_config",
+      "source": "NeuraLegion/brokencrystals README — sensitive config exposure oracle GET /api/config/get_config (DB creds/API keys; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/my-account/view-order/1",
+      "source": "PortSwigger ginandjuice.shop — order detail BOLA/IDOR oracle GET /my-account/view-order/{id} (vulnerabilities catalog; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/none/validate",
+      "source": "NeuraLegion/brokencrystals Swagger — JWT alg-none validate oracle GET /api/auth/jwt/none/validate (validate-path gap; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog/product/stock",
+      "source": "PortSwigger ginandjuice.shop — XXE stock-check oracle POST /catalog/product/stock (pentest report FINDING-015/019; web search 08 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/fetch?url=https://httpbin.org/get",
       "source": "NeuraLegion/brokencrystals README \u2014 /api/fetch SSRF oracle (url param; newer than /api/file hub)",
