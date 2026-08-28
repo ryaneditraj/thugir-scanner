@@ -2,7 +2,22 @@
   "candidates": [
     {
       "source": "discovery:brokencrystals.com",
-      "slug": "brokencrystals-config-get-config-route-live-oracle",
+      "slug": "brokencrystals-search-users-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsSearchUsersRouteLiveOracle matches /api/search_users and delegates to GET /api/users/search/ cardNumber+phoneNumber exposure; brokencrystals.com/api/search_users findings 64→85 (+brokencrystals-search-users-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-newsletter-subscribe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceNewsletterSubscribeRouteLiveOracle matches /api/newsletter/subscribe and delegates to POST /catalog/subscribe email reflection; ginandjuice.shop/api/newsletter/subscribe findings 32→35 (+ginandjuice-newsletter-subscribe-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-newsletter-subscribe-rate-limit-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeGinAndJuiceCatalogSubscribeRateLimit fires 6 rapid POST /catalog/subscribe without HTTP 429; ginandjuice.shop/api/newsletter/subscribe findings 32→35 (+ginandjuice-newsletter-subscribe-rate-limit-live-oracle +ginandjuice-newsletter-subscribe-rate-limit-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: probeBrokencrystalsConfig tries /api/config/get_config then /api/config; brokencrystals.com/api/config/get_config findings 16→80 (+brokencrystals-config-get-config-route-live-oracle +brokencrystals-config-live-oracle); benchmark juice-shop 43 findings 6/6 maintained"
     },

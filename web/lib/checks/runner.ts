@@ -2667,6 +2667,9 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceLogoutRouteLiveOracle",
   "ginAndJuiceCatalogSubscribeLiveOracle",
   "ginAndJuiceCatalogSubscribeRouteLiveOracle",
+  "ginAndJuiceNewsletterSubscribeRouteLiveOracle",
+  "ginAndJuiceNewsletterSubscribeRateLimitLiveOracle",
+  "ginAndJuiceNewsletterSubscribeRateLimitRouteLiveOracle",
   "ginAndJuiceCatalogProductRouteLiveOracle",
   "ginAndJuiceChangeEmailRouteLiveOracle",
   "ginAndJuiceChangePasswordRouteLiveOracle",
@@ -3333,6 +3336,7 @@ const DEEP_RULES = new Set<string>([
   "vulnExposeInvoicesSqliRouteLiveOracle",
   "brokencrystalsTestimonialsRouteLiveOracle",
   "brokencrystalsUsersSearchRouteLiveOracle",
+  "brokencrystalsSearchUsersRouteLiveOracle",
   "vulnbankAiAnonymousChatLiveOracle",
   "vulnbankAiAnonymousChatRouteLiveOracle",
   "vulnbankAiSystemInfoLiveOracle",
@@ -13823,6 +13827,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /ginandjuice\.shop/i.test(origin) &&
         /\/catalog\/subscribe\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-catalog-subscribe")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/api\/newsletter\/subscribe\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-newsletter-subscribe")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/search_users\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-search-users")
       )
         return -4;
       if (
