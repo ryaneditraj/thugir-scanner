@@ -326,6 +326,30 @@ function isJuiceShopApiRouteScan(url: string): boolean {
   return isJuiceShopHost(url) && /\/(?:rest|api|ftp|b2b)\//i.test(url);
 }
 
+/** Companion juice-shop live oracles run on every /rest/* or /api/* route fast-path scan. */
+const JUICE_SHOP_REST_ROUTE_COMPANION_PREFIXES = [
+  "juice-shop-rest-api-hub",
+  "juice-shop-security-question",
+  "juice-shop-security-questions-list",
+  "juice-shop-whoami-unauth",
+  "juice-shop-quantitys-exposure",
+  "juice-shop-products-reviews",
+  "juice-shop-hints-exposure",
+  "juice-shop-challenges-disclosure",
+  "juice-shop-deliverys-exposure",
+  "juice-shop-addresss-bola",
+  "juice-shop-complaints-bola",
+  "juice-shop-basket-items-bola",
+  "juice-shop-users-idor",
+  "juice-shop-recycles-bola",
+  "juice-shop-cards-bola"
+] as const;
+
+function juiceShopRestRouteCompanionMatch(slug: string): boolean {
+  const lower = slug.toLowerCase();
+  return JUICE_SHOP_REST_ROUTE_COMPANION_PREFIXES.some((prefix) => lower.startsWith(prefix));
+}
+
 function juiceShopScanDegraded(home: FetchedDoc): boolean {
   return home.status === 503 || HEROKU_APP_ERROR_RE.test(home.body);
 }
@@ -1708,6 +1732,7 @@ const DEEP_RULES = new Set<string>([
   "pentestGroundRestflawSearchXxeRouteLiveOracle",
   "pentestGroundRestflawUptimeCmdiLiveOracle",
   "pentestGroundRestflawUptimeCmdiRouteLiveOracle",
+  "pentestGroundRestflawHubRouteLiveOracle",
   "clientSideJudgementDayArenaEvidence",
   "clientSideCahyodVulnerableLabEvidence",
   "clientSideXssC2CollectorEvidence",
@@ -2510,6 +2535,7 @@ const DEEP_RULES = new Set<string>([
   "juiceShopBasketIdorRouteLiveOracle",
   "juiceShopMemoriesBolaLiveOracle",
   "juiceShopMemoriesBolaRouteLiveOracle",
+  "juiceShopRestApiHubRouteLiveOracle",
   "juiceShopQuantitysExposureLiveOracle",
   "juiceShopQuantitysExposureRouteLiveOracle",
   "juiceShopHintsExposureLiveOracle",
@@ -10001,7 +10027,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (!DEEP_RULES.has(ruleName)) return false;
       if (!routeResource) return true;
       const slug = p.slug.toLowerCase();
-      return slug.includes(routeResource) || slug.includes(`${routeResource}s`);
+      return (
+        slug.includes(routeResource) ||
+        slug.includes(`${routeResource}s`) ||
+        juiceShopRestRouteCompanionMatch(slug)
+      );
     });
     const routeFindings: PatternFinding[] = [];
     const routeSeen = new Set<string>();
@@ -11895,6 +11925,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
+      if (
+        /pentest-ground\.com:9000/i.test(origin) &&
+        /pentest-ground\.com:9000\/?(?:[#?]|$)/i.test(targetInput) &&
+        p.slug.startsWith("pentest-ground-restflaw-hub")
+      )
+        return -4;
       if (/pentest-ground\.com:81/i.test(origin) && p.slug.startsWith("pentest-ground-guardian-leaks")) return -2;
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
       if (/ssti\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssti-vulnlab")) return -2;
@@ -12297,6 +12333,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("juice-shop-b2b-orders")
       )
         return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/(?:rest|api)\//i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-rest-api-hub")
+      )
+        return -4;
       if (
         /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
         /\/rest\/chatbot\/respond\b/i.test(targetInput) &&
