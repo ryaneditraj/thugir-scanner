@@ -56333,6 +56333,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvai-ai-chat-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "DreamVator Aviation LLM proxy live oracle",
+    description:
+      "POST /api/ai on dvai.vercel.app proxies chat messages to Google Gemini and returns model text rendered via dangerouslySetInnerHTML.",
+    impactOneline:
+      "Unauthenticated LLM proxy endpoints enable prompt injection; unsanitized model HTML becomes DOM XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaiAiChatLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate chatbot endpoints and render LLM output as text, not HTML.",
+      steps: [
+        "Replace dangerouslySetInnerHTML on model responses with textContent or sanitized markdown.",
+        "Require authentication before accepting /api/ai chat messages.",
+        "Monitor chatbot endpoints for adversarial prompt-injection probes."
+      ]
+    },
+    fixPrompt:
+      "Our DreamVator Aviation /api/ai endpoint proxies to Gemini and renders responses as HTML. Show prompt-injection hardening and safe text rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvai-ai-chat-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "DreamVator Aviation LLM proxy route live oracle",
+    description:
+      "When scanning dvai.vercel.app, POST /api/ai confirms an unauthenticated Google Gemini LLM proxy — route-specific prompt-injection oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route scans on DVAI hosts need live /api/ai confirmation with deployment-not-found corpus fallback for dvai-red.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaiAiChatRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate chatbot endpoints and render LLM output as text, not HTML.",
+      steps: [
+        "Replace dangerouslySetInnerHTML on model responses with textContent or sanitized markdown.",
+        "Require authentication before accepting /api/ai chat messages.",
+        "Monitor chatbot endpoints for adversarial prompt-injection probes."
+      ]
+    },
+    fixPrompt:
+      "Our DreamVator Aviation route scan confirms an unauthenticated /api/ai LLM proxy. Show route-level chatbot hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvai-ai-chat-html-sink-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DreamVator Aviation chat HTML sink route live oracle",
+    description:
+      "When scanning dvai hosts, client bundle markers confirm dangerouslySetInnerHTML on /api/ai model responses — route-specific DOM XSS oracle with deployment-not-found corpus fallback.",
+    impactOneline:
+      "DVAI chat UIs trust LLM HTML output; prompt injection becomes reflected DOM XSS when rendered unsanitized.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaiAiChatHtmlSinkRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never render LLM output as HTML — sanitize or use text-only rendering.",
+      steps: [
+        "Replace dangerouslySetInnerHTML on model responses with textContent or markdown-to-safe-html.",
+        "Sanitize LLM output with DOMPurify before any HTML rendering.",
+        "Treat /api/ai endpoints as untrusted input sources in threat models."
+      ]
+    },
+    fixPrompt:
+      "Our DreamVator Aviation route scan confirms dangerouslySetInnerHTML on LLM chat responses. Show safe text-only rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-avid-vuln-registry-evidence",
     platform: "generic",
     category: "Information disclosure",
