@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pentestGroundDvwaHubRouteLiveOracle delegates sqli/exec/xss_r probes on pentest-ground.com:4280/ hub scans; extractPentestGroundDvwaSeeds adds /vulnerabilities/* crawl paths; pentest-ground.com:4280/ findings 9→10 (+pentest-ground-dvwa-hub-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-challenges-api-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for finbot-ctf-challenges* on /ctf/api/v1/challenges; owasp-finbot-ctf.org/ctf/api/v1/challenges findings 15 (+finbot-ctf-challenges-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-chatbot-respond-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for juice-shop-chatbot* on /rest/chatbot/respond route scans; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:hacksplaining.com",
       "slug": "hacksplaining-session-fixation-live-oracle",
       "status": "shipped",

@@ -53032,6 +53032,59 @@ const pentestGroundDvwaCsrfRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pentestGroundDvwaHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/pentest-ground\.com:4280\/?(?:[#?]|$)/i.test(pageUrl)) return NEGATIVE;
+  const origin = pentestGroundDvwaProbeOrigin(ctx);
+  const sqliResult = await pentestGroundDvwaSqliRouteLiveOracle({
+    ...ctx,
+    scanUrl: `${origin}/vulnerabilities/sqli/`
+  });
+  if (sqliResult.fired) {
+    return {
+      fired: true,
+      confidence: sqliResult.confidence,
+      evidence: {
+        ...sqliResult.evidence,
+        scannedUrl: pageUrl,
+        note: "Pentest-Ground DVWA hub route scan — POST /vulnerabilities/sqli/ confirms SQL injection training oracle"
+      }
+    };
+  }
+  const execResult = await pentestGroundDvwaExecCmdiRouteLiveOracle({
+    ...ctx,
+    scanUrl: `${origin}/vulnerabilities/exec/`
+  });
+  if (execResult.fired) {
+    return {
+      fired: true,
+      confidence: execResult.confidence,
+      evidence: {
+        ...execResult.evidence,
+        scannedUrl: pageUrl,
+        note: "Pentest-Ground DVWA hub route scan — POST /vulnerabilities/exec/ confirms command injection training oracle"
+      }
+    };
+  }
+  const xssResult = await pentestGroundDvwaXssRRouteLiveOracle({
+    ...ctx,
+    scanUrl: `${origin}/vulnerabilities/xss_r/`
+  });
+  if (xssResult.fired) {
+    return {
+      fired: true,
+      confidence: xssResult.confidence,
+      evidence: {
+        ...xssResult.evidence,
+        scannedUrl: pageUrl,
+        note: "Pentest-Ground DVWA hub route scan — GET /vulnerabilities/xss_r/ confirms reflected XSS training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 function isTheInternetHost(ctx: RuleContext): boolean {
   return /the-internet\.herokuapp\.com/i.test(ctx.origin);
 }
@@ -99115,6 +99168,7 @@ export const RULES: Record<string, Rule> = {
   pentestForgeDvwaSqliRouteLiveOracle,
   pentestGroundDvwaUploadRouteLiveOracle,
   pentestGroundDvwaCsrfRouteLiveOracle,
+  pentestGroundDvwaHubRouteLiveOracle,
   pentestGroundDvwaXssRRouteLiveOracle,
   pentestGroundDvwaFiRouteLiveOracle,
   pentestGroundDvwaXssDRouteLiveOracle,

@@ -57988,6 +57988,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pentest-ground-dvwa-hub-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pentest-Ground DVWA hub route live oracle",
+    description:
+      "When scanning pentest-ground.com:4280/, hub route scan delegates to /vulnerabilities/sqli/, /exec/, and /xss_r/ live probes — Pentest-Ground DVWA training oracle bridge.",
+    impactOneline:
+      "DVWA hub scans should confirm SQLi, command injection, or reflected XSS training oracles without requiring per-module route URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundDvwaHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — isolate lab instances from production networks.",
+      steps: [
+        "Run DVWA only on isolated Pentest-Ground lab infrastructure.",
+        "Do not expose DVWA vulnerability modules on production hosts.",
+        "Use hub scans to validate training coverage, not production attack surface."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground DVWA hub scan confirms SQLi, command injection, or XSS training oracles. Show how to isolate DVWA lab instances.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-ground-dvwa-xss-r-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

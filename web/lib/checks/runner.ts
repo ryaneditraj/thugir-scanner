@@ -1649,6 +1649,7 @@ const DEEP_RULES = new Set<string>([
   "pentestForgeDvwaSqliRouteLiveOracle",
   "pentestGroundDvwaUploadRouteLiveOracle",
   "pentestGroundDvwaCsrfRouteLiveOracle",
+  "pentestGroundDvwaHubRouteLiveOracle",
   "pentestGroundDvwaXssRRouteLiveOracle",
   "pentestGroundDvwaFiRouteLiveOracle",
   "pentestGroundDvwaXssDRouteLiveOracle",
@@ -8122,6 +8123,34 @@ function extractPentestGroundHubSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Pentest-Ground DVWA (:4280) — seed vulnerability module paths from hub scans. */
+function extractPentestGroundDvwaSeeds(html: string, pageUrl: string): string[] {
+  if (!/pentest-ground\.com:4280/i.test(pageUrl) && !/Damn Vulnerable Web Application \(DVWA\)/i.test(html)) {
+    return [];
+  }
+  const out = new Set<string>();
+  const origin = /pentest-ground\.com:4280/i.test(pageUrl)
+    ? new URL(pageUrl).origin
+    : "https://pentest-ground.com:4280";
+  for (const p of [
+    "/vulnerabilities/sqli/",
+    "/vulnerabilities/exec/",
+    "/vulnerabilities/xss_r/",
+    "/vulnerabilities/csrf/",
+    "/vulnerabilities/upload/",
+    "/vulnerabilities/fi/",
+    "/vulnerabilities/csp/",
+    "/vulnerabilities/weak_id/"
+  ]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** AppSecMaster (appsecmaster.net) — seed XSS/SQLi category lab hub pages. */
 function extractAppsecMasterLabSeeds(html: string, origin: string): string[] {
   if (!/AppSecMaster|appsecmaster\.net/i.test(html)) return [];
@@ -10401,6 +10430,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const hermesCodexSeeds = extractHermesCodexSeeds(home.body, home.finalUrl);
   const arcanumAiSecHubSeeds = extractArcanumAiSecHubSeeds(home.body, home.finalUrl);
   const pentestGroundHubSeeds = extractPentestGroundHubSeeds(home.body, home.finalUrl);
+  const pentestGroundDvwaSeeds = extractPentestGroundDvwaSeeds(home.body, home.finalUrl);
   const securedAiSeeds = extractSecuredAiSeeds(home.body, home.finalUrl);
   const vwadWrongsecretsLiveSeeds = extractVwadWrongsecretsLiveSeed(home.body, home.finalUrl);
   const vwadGinJuiceLiveSeeds = extractVwadGinJuiceLiveSeed(home.body, home.finalUrl);
@@ -11326,6 +11356,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...hermesCodexSeeds,
       ...arcanumAiSecHubSeeds,
       ...pentestGroundHubSeeds,
+      ...pentestGroundDvwaSeeds,
       ...securedAiSeeds,
       ...mcpSherpaWorkshopSeeds,
       ...ffufMeSeeds,
@@ -11845,6 +11876,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   let all = patternPool.sort((a, b) => {
     const w = (p: Pattern) => {
       if (/pentest-ground\.com:4280/i.test(origin) && p.slug.startsWith("pentest-ground-dvwa")) return -2;
+      if (
+        /pentest-ground\.com:4280/i.test(origin) &&
+        /pentest-ground\.com:4280\/?(?:[#?]|$)/i.test(targetInput) &&
+        p.slug.startsWith("pentest-ground-dvwa-hub")
+      )
+        return -4;
       if (/dvwa\.lab\.pentest-forge\.com/i.test(origin) && p.slug.startsWith("pentest-forge-dvwa")) return -2;
       if (
         /dvwa\.lab\.pentest-forge\.com/i.test(origin) &&
@@ -12253,6 +12290,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
         /\/b2b\/v2\/orders\b/i.test(targetInput) &&
         p.slug.startsWith("juice-shop-b2b-orders")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/rest\/chatbot\/respond\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-chatbot")
       )
         return -3;
       if (
@@ -14166,6 +14209,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/xss-game\.appspot\.com/i.test(origin) && p.slug.startsWith("xss-game-")) return -2;
       if (/all-seeing-eye/i.test(origin) && p.slug.startsWith("all-seeing-eye")) return -2;
       if (/owasp-finbot-ctf\.org/i.test(origin) && p.slug.startsWith("finbot-")) return -2;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/ctf\/api\/v1\/challenges\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-ctf-challenges")
+      )
+        return -4;
       if (
         /owasp-finbot-ctf\.org/i.test(origin) &&
         /\/stats\b/i.test(targetInput) &&
