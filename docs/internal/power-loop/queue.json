@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T07:19:44.530Z",
+  "updated_at": "2026-08-29T08:12:00.000Z",
   "discovery_urls": [
     {
       "url": "https://owasp-finbot-ctf.org/vendor/onboarding",
@@ -10547,6 +10547,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab",
+      "source": "OWASP FinBot CTF — Dark Lab supply-chain / tool-poisoning portal (GenAI-Security-Project/finbot-ctf portals page + i-314 case study)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers",
+      "source": "OWASP FinBot CTF — MCP supply-chain server listing oracle (finbot-ctf darklab API README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor/api/v1/chat",
+      "source": "OWASP FinBot CTF — vendor agent chat evaluation channel (i-314 FinBot 19/19 case study)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/api/basket",
+      "source": "ginandjuice.shop — PortSwigger-style basket API BOLA/IDOR oracle (Patrick Double vuln lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php",
+      "source": "webspoilt/vulnforge-academy — Level 16 medium-tier challenge (GitHub README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owasp-finbot-ctf.org/vendor/onboarding",
       "source": "OWASP FinBot CTF — vendor onboarding portal with agentic AI invoice/register oracles (GenAI-Security-Project/finbot-ctf README)",
