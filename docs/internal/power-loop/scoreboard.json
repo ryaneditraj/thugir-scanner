@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T19:30:09.271Z",
+  "updated_at": "2026-08-29T19:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2989,
-  "total_findings": 29485,
+  "total_sites_scanned": 2985,
+  "total_findings": 29424,
   "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2007,
-  "discovery_findings": 24688,
-  "improvements_shipped": 1007,
-  "last_run": "2026-08-29T19:30:09.271Z",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 2002,
+  "discovery_findings": 24535,
+  "improvements_shipped": 1010,
+  "last_run": "2026-08-29T19:35:00.000Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 592,
-      "live_oracles": 36,
+      "probes_run": 573,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,44 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 36 juice-shop live oracles); secret-resend + resend-key present — no category gaps"
+      "note": "Stable 6/6 first-pass recall (50 findings); no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 10,
-      "findings": 249,
-      "focus": "pwnshop seller/storefront SSTI + vuln-expose blind SQLi/users API/CSP-bypass XSS + securebank-blog CSRF transfer + parallel pwnshop download/avatar SSRF hardening; drained wrongsecrets challenge-17/18/19",
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 95,
+      "focus": "pwnshop seller/preview SSTI + reset-password OTP live oracle + AppSecMaster SSRF/CI lab routes",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 36 live oracles, gap=[])",
-      "pwnshop.ctfsecurity.com/seller/storefront: 45 findings — pwnshop-seller-storefront-ssti-route-live-oracle + seller-preview-ssti confirmed (PWN-040)",
-      "pwnshop.ctfsecurity.com/download: 46 findings — pwnshop-download-path-traversal-live-oracle + route oracle confirmed (PWN-038; parallel run)",
-      "pwnshop.ctfsecurity.com/profile/update-avatar: 50 findings — pwnshop-avatar-url-ssrf-live-oracle + update-avatar route oracle confirmed (PWN-029; parallel run)",
-      "vuln-expose.vercel.app/sqli/blind: 18 findings — vuln-expose-sqli-blind-route-live-oracle confirmed",
-      "vuln-expose.vercel.app/api/users: 16 findings — vuln-expose-users-api-route-live-oracle confirmed",
-      "vuln-expose.vercel.app/xss/csp-bypass: 17 findings — vuln-expose-xss-csp-bypass-route-live-oracle confirmed",
-      "securebank-blog.vercel.app/transfer: 3 findings — securebank-blog-transfer-csrf-route-live-oracle confirmed",
-      "wrongsecrets.herokuapp.com/challenge/challenge-17..19: 18 findings each — bash-history/bad-hashing/c-binary route oracles confirmed"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
+      "pwnshop.ctfsecurity.com/seller/preview: 47 findings — pwnshop-seller-preview-ssti-live-oracle + route oracle confirmed (PWN-040; was 23)",
+      "pwnshop.ctfsecurity.com/reset-password: +pwnshop-otp-not-invalidated-live-oracle on route scan (PWN-024)",
+      "appsecmaster.net/labs/ssrf: 12 findings — appsecmaster-ssrf-route-live-oracle (was 11)",
+      "appsecmaster.net/labs/command-injection: 12 findings — appsecmaster-command-injection-route-live-oracle (was 11)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable — no category misses to address",
-      "securebank-blog routes return Vercel Security Checkpoint on live app — oracles rely on curated blog corpus fallback"
+      "benchmark 6/6 stable — no category misses to address"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 50,
-    "pwnshop.ctfsecurity.com/seller/storefront": 45,
-    "pwnshop.ctfsecurity.com/profile/update-avatar": 50,
+    "pwnshop.ctfsecurity.com/seller/preview": 47,
+    "pwnshop.ctfsecurity.com/reset-password": 24,
+    "appsecmaster.net/labs/ssrf": 12,
+    "appsecmaster.net/labs/command-injection": 12,
     "pwnshop.ctfsecurity.com/download": 46,
-    "vuln-expose.vercel.app/sqli/blind": 18,
-    "vuln-expose.vercel.app/api/users": 16,
-    "vuln-expose.vercel.app/xss/csp-bypass": 17,
-    "securebank-blog.vercel.app/transfer": 3,
-    "wrongsecrets.herokuapp.com/challenge/challenge-17": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-18": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-19": 18
+    "pwnshop.ctfsecurity.com/profile/update-avatar": 50,
+    "pwnshop.ctfsecurity.com/chat": 49,
+    "vulnbank.org/merchant/login": 31
   }
 }

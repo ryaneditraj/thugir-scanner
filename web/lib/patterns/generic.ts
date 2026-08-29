@@ -20552,6 +20552,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "appsecmaster-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "high",
+    title: "AppSecMaster SSRF lab category route live oracle",
+    description:
+      "When scanning /labs/ssrf, AppSecMaster documents blind SSRF, cloud metadata theft, and internal network pivoting Docker lab challenges — route-specific SSRF category hub oracle.",
+    impactOneline:
+      "Public AppSecMaster SSRF lab hub documents server-side request forgery training infrastructure for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecmasterSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AppSecMaster SSRF labs are intentional training — gate lab instances behind paid accounts.",
+      steps: [
+        "Require authentication before spawning SSRF lab containers.",
+        "Block server-side fetches to internal metadata and RFC1918 targets.",
+        "Isolate Docker lab instances from production networks."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/ssrf route documents blind SSRF Docker lab challenges. Show route-specific SSRF remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "appsecmaster-command-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "AppSecMaster command injection lab category route live oracle",
+    description:
+      "When scanning /labs/command-injection, AppSecMaster documents OS command injection via unsanitized shell arguments in Docker lab instances — route-specific command injection category hub oracle.",
+    impactOneline:
+      "Public AppSecMaster command injection lab hub documents shell metacharacter abuse training infrastructure for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecmasterCommandInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AppSecMaster command injection labs are intentional training — gate lab instances behind paid accounts.",
+      steps: [
+        "Require authentication before spawning command injection lab containers.",
+        "Never pass user input to shell interpreters — use parameterized APIs.",
+        "Isolate Docker lab instances from production networks."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/command-injection route documents OS command injection Docker lab challenges. Show route-specific command injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ist-edu-vuln-portal-evidence",
     platform: "generic",
     category: "Injection",

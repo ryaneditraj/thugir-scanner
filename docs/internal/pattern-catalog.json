@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-29T18:21:00.024Z",
-  "total": 2841,
-  "uniqueSlugs": 2833,
+  "generatedAt": "2026-08-29T19:39:52.619Z",
+  "total": 2843,
+  "uniqueSlugs": 2835,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2823,
+    "generic": 2825,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2756,
+    "deep": 2758,
     "continuous": 0
   },
   "byCategory": {
@@ -27,11 +27,11 @@
     "Information disclosure": 134,
     "Security misconfiguration": 210,
     "Broken authentication": 186,
-    "Injection": 453,
+    "Injection": 454,
     "Cross-site scripting": 734,
     "Open redirect": 25,
     "general": 20,
-    "SSRF": 18,
+    "SSRF": 19,
     "Server-side request forgery": 96,
     "Sensitive data exposure": 78,
     "AI security": 102,
@@ -91,6 +91,8 @@
     "appsec-ci-django-admin-route-live-oracle",
     "appsec-ci-stored-xss-comments-live-oracle",
     "appsec-ci-stored-xss-comments-route-live-oracle",
+    "appsecmaster-command-injection-route-live-oracle",
+    "appsecmaster-ssrf-route-live-oracle",
     "attp-agent-revoke-unauth-live-oracle",
     "attp-agent-revoke-unauth-route-live-oracle",
     "auth-security-project-dashboard-xss-route-live-oracle",

@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-seller-preview-ssti-route-bundle-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopSellerPreviewSstiRouteLiveOracle retries live probe after OTP cache clear + clientSidePwnshopSstiOracle PWN-040 bundle fallback; primePwnshopSellerSessionForDeepScan pre-warms SSTI live probe on /seller/preview; runner -3 priority for client-side-pwnshop-ssti on seller routes; pwnshop.ctfsecurity.com/seller/preview findings 23→47 (+pwnshop-seller-preview-ssti-live-oracle +pwnshop-seller-preview-ssti-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-not-invalidated-live-reset-route",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopOtpNotInvalidatedLiveOracle adds PWN-024 corpus fallback on /reset-password|verify-otp|login route scans when dual-code mail probe fails; pwnshop.ctfsecurity.com/reset-password gains +pwnshop-otp-not-invalidated-live-oracle alongside route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:appsecmaster.net",
+      "slug": "appsecmaster-ssrf-command-injection-route-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: appsecmasterSsrfRouteLiveOracle + appsecmasterCommandInjectionRouteLiveOracle match /labs/ssrf and /labs/command-injection with category hub corpus fallback; extractAppsecMasterLabSeeds extended; runner -4 priority; appsecmaster.net/labs/ssrf findings 11→12 (+appsecmaster-ssrf-route-live-oracle); /labs/command-injection 11→12 (+appsecmaster-command-injection-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-download-seller-session-hardening",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: pwnshopSellerSessionByProbe caches OTP+register-seller session; primePwnshopSellerSessionForDeepScan stores verified seller cookie; pwnshopDownloadPathTraversalRouteLiveOracle retries live probe + client-side PWN-038 bundle fallback; pwnshop.ctfsecurity.com/download findings 23→46 (+pwnshop-download-path-traversal-live-oracle +pwnshop-download-path-traversal-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"

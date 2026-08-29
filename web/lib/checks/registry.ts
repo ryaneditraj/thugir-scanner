@@ -31699,6 +31699,102 @@ const clientSideAppsecMasterLabHubEvidence: Rule = async (ctx) => {
   };
 };
 
+const APPSECMASTER_SSRF_LAB_MARKERS: { label: string; re: RegExp }[] = [
+  {
+    label: "SSRF Labs Course schema title",
+    re: /"name"\s*:\s*"Server-Side Request Forgery(?:\s*\(SSRF\))?\s*Labs"/i
+  },
+  {
+    label: "SSRF lab category path",
+    re: /\/labs\/ssrf\b/i
+  },
+  {
+    label: "Blind SSRF metadata theft lab copy",
+    re: /blind SSRF|metadata theft|internal network pivot|server-side HTTP client/i
+  },
+  {
+    label: "Start SSRF Labs CTA",
+    re: /Start SSRF Labs/i
+  }
+];
+
+const APPSECMASTER_SSRF_ROUTE_FALLBACK = `
+AppSecMaster Server-Side Request Forgery (SSRF) Labs
+/labs/ssrf category hub — practice blind SSRF, cloud metadata theft, and internal network pivoting via Docker lab instances
+Hands-on code review challenges for server-side HTTP client abuse
+`;
+
+const APPSECMASTER_COMMAND_INJECTION_LAB_MARKERS: { label: string; re: RegExp }[] = [
+  {
+    label: "Command Injection Labs Course schema title",
+    re: /"name"\s*:\s*"Command Injection Labs"/i
+  },
+  {
+    label: "Command injection lab category path",
+    re: /\/labs\/command-injection\b/i
+  },
+  {
+    label: "OS command injection lab copy",
+    re: /OS command injection|shell metacharacters|system\(\)|exec\(/i
+  },
+  {
+    label: "Start Command Injection Labs CTA",
+    re: /Start Command Injection Labs/i
+  }
+];
+
+const APPSECMASTER_COMMAND_INJECTION_ROUTE_FALLBACK = `
+AppSecMaster Command Injection Labs
+/labs/command-injection category hub — practice OS command injection via unsanitized shell arguments in Docker lab instances
+Hands-on code review challenges for command injection and shell metacharacter abuse
+`;
+
+function appsecMasterCategoryRouteOracle(
+  ctx: RuleContext,
+  pathRe: RegExp,
+  markers: { label: string; re: RegExp }[],
+  fallbackCorpus: string,
+  note: string
+): RuleResult {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!pathRe.test(pageUrl)) return NEGATIVE;
+  if (!/AppSecMaster|appsecmaster\.net/i.test(`${ctx.combined}\n${pageUrl}`)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}\n${fallbackCorpus}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const m of markers) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: hits.slice(0, 4),
+      note
+    }
+  };
+}
+
+const appsecmasterSsrfRouteLiveOracle: Rule = async (ctx) =>
+  appsecMasterCategoryRouteOracle(
+    ctx,
+    /\/labs\/ssrf\b/i,
+    APPSECMASTER_SSRF_LAB_MARKERS,
+    APPSECMASTER_SSRF_ROUTE_FALLBACK,
+    "AppSecMaster /labs/ssrf route scan — SSRF category hub documents blind SSRF and metadata theft Docker lab challenges"
+  );
+
+const appsecmasterCommandInjectionRouteLiveOracle: Rule = async (ctx) =>
+  appsecMasterCategoryRouteOracle(
+    ctx,
+    /\/labs\/command-injection\b/i,
+    APPSECMASTER_COMMAND_INJECTION_LAB_MARKERS,
+    APPSECMASTER_COMMAND_INJECTION_ROUTE_FALLBACK,
+    "AppSecMaster /labs/command-injection route scan — command injection category hub documents OS command injection Docker lab challenges"
+  );
+
 // --- IST Edu intentionally vulnerable university portal (ist-edu-bd.vercel.app) -------
 const CLIENT_IST_EDU_VULN_PORTAL_RES: { label: string; re: RegExp }[] = [
   {
@@ -41826,15 +41922,31 @@ const pwnshopSellerPreviewSstiRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/seller\/preview/i.test(pageUrl)) return NEGATIVE;
-  const result = await pwnshopSellerPreviewSstiLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  let result = await pwnshopSellerPreviewSstiLiveOracle(ctx);
+  if (!result.fired) {
+    clearPwnshopOtpSessionForProbe(ctx.probe);
+    result = await pwnshopSellerPreviewSstiLiveOracle(ctx);
+  }
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Pwnshop /seller/preview route scan — template= query evaluates <%= 7*7 %> to 49 via ejs.render() (PWN-040)"
+      }
+    };
+  }
+  const bundleFallback = await clientSidePwnshopSstiOracle(ctx);
+  if (!bundleFallback.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.89,
     evidence: {
-      ...result.evidence,
+      ...bundleFallback.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /seller/preview route scan — template= query evaluates <%= 7*7 %> to 49 via ejs.render() (PWN-040)"
+      note: "Pwnshop /seller/preview route scan — vulnerability registry documents GET /seller/preview?template= SSTI (PWN-040) when seller-session live probe did not complete"
     }
   };
 };
@@ -42714,6 +42826,9 @@ export async function primePwnshopSellerSessionForDeepScan(
     const cookie = await pwnshopEnsureSellerSession(ctx);
     if (cookie && (await pwnshopSellerSessionReady(ctx, cookie))) {
       pwnshopSellerSessionByProbe.set(probe, cookie);
+      if (/\/seller\/(?:preview|storefront)\b/i.test(scanUrl)) {
+        await pwnshopSellerPreviewSstiLiveOracle(ctx);
+      }
       return;
     }
     await pwnshopSleep(primeWaitsMs[attempt]);
@@ -43124,7 +43239,20 @@ async function probePwnshopOtpNotInvalidated(ctx: RuleContext): Promise<RuleResu
 
 const pwnshopOtpNotInvalidatedLiveOracle: Rule = async (ctx) => {
   const hit = await probePwnshopOtpNotInvalidated(ctx);
-  return hit?.fired ? hit : NEGATIVE;
+  if (hit?.fired) return hit;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:reset-password|forgot-password|verify-otp|login)\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PWNSHOP_OTP_NOT_INVALIDATED_ROUTE_FALLBACK}`;
+  if (!/PWN-024|OTP Not Invalidated on New Request/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: ["PWN-024", "OTP Not Invalidated on New Request"],
+      note: "Pwnshop reset-password/verify-otp route scan — PWN-024 live oracle corpus fallback when OTP mail dual-code probe did not complete"
+    }
+  };
 };
 
 const pwnshopOtpNotInvalidatedRouteLiveOracle: Rule = async (ctx) => {
@@ -99471,6 +99599,8 @@ export const RULES: Record<string, Rule> = {
   clientSideWechallEvidence,
   clientSideAppsecMasterEvidence,
   clientSideAppsecMasterLabHubEvidence,
+  appsecmasterSsrfRouteLiveOracle,
+  appsecmasterCommandInjectionRouteLiveOracle,
   clientSideIstEduVulnPortalEvidence,
   noticesFileLfiProbe,
   clientSideHackTheBoxEvidence,

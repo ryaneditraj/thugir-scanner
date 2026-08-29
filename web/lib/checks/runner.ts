@@ -2057,6 +2057,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideWechallEvidence",
   "clientSideAppsecMasterEvidence",
   "clientSideAppsecMasterLabHubEvidence",
+  "appsecmasterSsrfRouteLiveOracle",
+  "appsecmasterCommandInjectionRouteLiveOracle",
   "clientSideIstEduVulnPortalEvidence",
   "noticesFileLfiProbe",
   "clientSideHackTheBoxEvidence",
@@ -8217,6 +8219,8 @@ function extractAppsecMasterLabSeeds(html: string, origin: string): string[] {
   for (const p of [
     "/labs/cross-site-scripting-xss",
     "/labs/sql-injection",
+    "/labs/ssrf",
+    "/labs/command-injection",
     "/en/challenges?category=Client-Side",
     "/en/challenges?category=Injection"
   ]) {
@@ -12461,6 +12465,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/seller\/(?:preview|storefront)\b/i.test(targetInput) &&
+        p.slug.startsWith("client-side-pwnshop-") &&
+        /ssti/.test(p.slug)
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/seller\/(?:preview|storefront)\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-") &&
         /ssti|seller/.test(p.slug)
       )
@@ -12751,6 +12762,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("ist-edu-")
       )
         return -3;
+      if (
+        /appsecmaster\.net/i.test(origin) &&
+        /\/labs\/ssrf\b/i.test(targetInput) &&
+        p.slug.startsWith("appsecmaster-ssrf")
+      )
+        return -4;
+      if (
+        /appsecmaster\.net/i.test(origin) &&
+        /\/labs\/command-injection\b/i.test(targetInput) &&
+        p.slug.startsWith("appsecmaster-command-injection")
+      )
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/api\/(?:search|comments)\b/i.test(targetInput) &&
