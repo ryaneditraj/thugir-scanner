@@ -3254,6 +3254,10 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsJwtRouteLiveOracle",
   "brokencrystalsJwtAlgNoneRouteLiveOracle",
   "brokencrystalsJwtNoneValidateRouteLiveOracle",
+  "brokencrystalsJwtRsaSignatureLoginRouteLiveOracle",
+  "brokencrystalsJwtNoneLoginRouteLiveOracle",
+  "brokencrystalsVendorDirectoryListingLiveOracle",
+  "brokencrystalsVendorDirectoryListingRouteLiveOracle",
   "brokencrystalsJwtWeakKeyLiveOracle",
   "brokencrystalsJwtWeakKeyRouteLiveOracle",
   "brokencrystalsJwtKidSqlLiveOracle",
@@ -13736,6 +13740,28 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/api\/auth\/jwt\/rsa\/signature\/validate\b/i.test(targetInput) &&
         (p.slug.startsWith("brokencrystals-jwt-alg-none") ||
           p.slug.startsWith("brokencrystals-jwt-route"))
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/rsa\/signature\/login\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-jwt-alg-none") ||
+          p.slug.startsWith("brokencrystals-jwt-route") ||
+          p.slug.startsWith("brokencrystals-jwt-rsa-signature-login"))
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/none\/login\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-jwt-none-login") ||
+          p.slug.startsWith("brokencrystals-jwt-alg-none") ||
+          p.slug.startsWith("brokencrystals-jwt-none-validate"))
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/vendor\/?$/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-vendor-directory-listing")
       )
         return -4;
       if (
