@@ -1,6 +1,16 @@
 {
-  "updated_at": "2026-08-29T08:12:00.000Z",
+  "updated_at": "2026-08-29T09:13:29.383Z",
   "discovery_urls": [
+    {
+      "url": "https://sekumart.sekuripy.hr/search.php",
+      "source": "SekuriPy SekuMart — sqlmap playground search SQLi oracle GET search.php?q= (official sqlmap docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
+      "source": "webspoilt/vulnforge-academy — Level 17 file-upload bypass challenge (GitHub README medium tier)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owasp-finbot-ctf.org/vendor/onboarding",
       "source": "OWASP FinBot CTF — vendor onboarding portal with agentic AI invoice/register oracles (GenAI-Security-Project/finbot-ctf README)",
@@ -10547,6 +10557,16 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://sekumart.sekuripy.hr/search.php",
+      "source": "SekuriPy SekuMart — sqlmap playground search SQLi oracle GET search.php?q= (official sqlmap docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
+      "source": "webspoilt/vulnforge-academy — Level 17 file-upload bypass challenge (GitHub README medium tier)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owasp-finbot-ctf.org/darklab",
       "source": "OWASP FinBot CTF — Dark Lab supply-chain / tool-poisoning portal (GenAI-Security-Project/finbot-ctf portals page + i-314 case study)",
