@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-28T23:08:00.000Z",
+  "updated_at": "2026-08-29T00:20:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://vapi.tools.escape.tech/vapi/api3/user",
@@ -11291,7 +11291,32 @@
       "url": "https://ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages",
       "source": "AI & Security Platform — 2025-2026 hacked npm package oracle /challenges/hacked-npm-packages (web search 20 UTC)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access",
+      "source": "kOaDT/oss-oopssec-store — support-form screenshot URL SSRF walkthrough oracle (GitHub Pages; web search 00 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/prompt-injection-ai-assistant",
+      "source": "kOaDT/oss-oopssec-store — OSSBot prompt-injection /api/ai-assistant walkthrough oracle (GitHub Pages; web search 00 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/client-side-price-manipulation",
+      "source": "kOaDT/oss-oopssec-store — client-side price manipulation POST /api/orders walkthrough oracle (GitHub Pages; web search 00 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "http://nodegoat.herokuapp.com/login",
+      "source": "OWASP NodeGoat — official Heroku demo weak-credentials login oracle (cx-demo/NodeGoat README; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/goof/",
+      "source": "OWASP VWAD — Snyk Goof vulnerable Node.js todo app listing with exploit catalog (vwad.owasp.org; web search 00 UTC)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 1966
+  "discovery_urls_added": 1971
 }
