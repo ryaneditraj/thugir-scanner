@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-29T04:16:00.000Z",
+  "updated_at": "2026-08-29T05:18:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor",
+      "source": "OWASP-ASI/finbot-ctf-demo — vendor onboarding portal + /vendor/api/v1/chat agentic AI oracle (web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab",
+      "source": "GenAI-Security-Project/finbot-ctf — Dark Lab MCP supply-chain tool-poisoning surface (web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/vendor/",
+      "source": "NeuraLegion/brokencrystals README — nginx directory listing oracle GET /vendor/ (web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat.herokuapp.com/allocations-threshold",
+      "source": "OWASP/NodeGoat — NoSQL injection / DoS oracle GET /allocations-threshold?threshold= (Heroku demo; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://www.dvaib.com/login",
+      "source": "DVAIB Damn Vulnerable AI Bank — JWT/auth + LLM prompt-injection lab login oracle (awesome-vulnerable-apps; web search 05 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/none/login",
       "source": "NeuraLegion/brokencrystals README — JWT alg:none login bypass oracle POST /api/auth/jwt/none/login (web search 04 UTC)",
