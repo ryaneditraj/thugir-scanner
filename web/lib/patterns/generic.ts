@@ -23281,6 +23281,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pwnshop-avatar-ssrf-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Pwnshop avatar URL SSRF oracle (PWN-029)",
+    description:
+      "Pwnshop documents POST /profile/update-avatar fetching attacker-controlled avatar_url server-side and returning the response — the PWN-029 avatar URL SSRF training oracle.",
+    impactOneline:
+      "Server-side avatar URL fetch can reach internal services or cloud metadata when avatar_url is attacker-controlled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnshopAvatarSsrfOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side avatar URL fetches to internal hosts — Pwnshop PWN-029 is intentional lab software.",
+      steps: [
+        "Validate avatar_url hosts against an allowlist before fetch.",
+        "Block RFC1918, link-local, and metadata IP ranges.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /profile/update-avatar endpoint fetches avatar_url server-side. Show SSRF-safe avatar import remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pwnshop-wallet-topup-oracle",
     platform: "generic",
     category: "Business logic",

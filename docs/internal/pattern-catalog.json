@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-29T17:32:43.762Z",
-  "total": 2840,
-  "uniqueSlugs": 2832,
+  "generatedAt": "2026-08-29T18:21:00.024Z",
+  "total": 2841,
+  "uniqueSlugs": 2833,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2822,
+    "generic": 2823,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2755,
+    "deep": 2756,
     "continuous": 0
   },
   "byCategory": {
@@ -32,7 +32,7 @@
     "Open redirect": 25,
     "general": 20,
     "SSRF": 18,
-    "Server-side request forgery": 95,
+    "Server-side request forgery": 96,
     "Sensitive data exposure": 78,
     "AI security": 102,
     "Cross-site request forgery": 10,
@@ -743,6 +743,7 @@
     "client-side-pwnedlabs-evidence",
     "client-side-pwnedlabs-git-secrets-evidence",
     "client-side-pwning-juice-shop-companion-evidence",
+    "client-side-pwnshop-avatar-ssrf-oracle",
     "client-side-pwnshop-avatar-xss-oracle",
     "client-side-pwnshop-evidence",
     "client-side-pwnshop-export-orders-oracle",

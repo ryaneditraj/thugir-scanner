@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-download-seller-session-hardening",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopSellerSessionByProbe caches OTP+register-seller session; primePwnshopSellerSessionForDeepScan stores verified seller cookie; pwnshopDownloadPathTraversalRouteLiveOracle retries live probe + client-side PWN-038 bundle fallback; pwnshop.ctfsecurity.com/download findings 23→46 (+pwnshop-download-path-traversal-live-oracle +pwnshop-download-path-traversal-route-live-oracle); benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-avatar-ssrf-session-ready",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopAvatarSsrfSessionReady probes POST /profile/update-avatar avatar_url=https://example.com/ during update-avatar route priming; OTP uncached adds update-avatar sleep; pwnshop.ctfsecurity.com/profile/update-avatar findings 23→50 (+pwnshop-avatar-url-ssrf-live-oracle +pwnshop-update-avatar-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "client-side-pwnshop-avatar-ssrf-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: clientSidePwnshopAvatarSsrfOracle + PWNSHOP_AVATAR_SSRF_MARKERS registered in DEEP_RULES + pattern catalog; pwnshopUpdateAvatarRouteLiveOracle bundle fallback when OTP-gated live probe fails; runner -4 priority for avatar-url-ssrf slugs on /profile/update-avatar; benchmark juice-shop 45 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:owasp-finbot-ctf.org",
       "slug": "finbot-darklab-finmail-tools-oracle",
       "status": "shipped",
