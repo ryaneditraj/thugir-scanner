@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T08:20:00.000Z",
+  "updated_at": "2026-08-29T08:22:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1966,
   "discovery_findings": 22967,
-  "improvements_shipped": 1161,
-  "last_run": "2026-08-29T08:20:00.000Z",
+  "improvements_shipped": 1164,
+  "last_run": "2026-08-29T08:22:00.000Z",
   "last_run_summary": {
     "hour_utc": "08",
     "benchmark": {
@@ -33,6 +33,7 @@
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 594,
+      "live_oracles": 39,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,44 +49,35 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 38 juice-shop live oracles); secret-resend + juice-shop-resend-key-live-oracle both present"
+      "note": "Stable 6/6 first-pass recall (50 findings, 39 live oracles incl secret-resend) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 142,
-      "focus": "finbot darklab + supply-chain API + vendor chat, ginandjuice basket API, vulnforge level16, wrongsecrets 50/65/66",
-      "improvements_shipped_this_run": 0
+      "urls_validated": 3,
+      "findings": 34,
+      "focus": "vulnforge SSRF live oracle + finbot CTF challenges live + hacksplaining weak-session live",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 38 live oracles; secret-resend present)",
-      "owasp-finbot-ctf.org/darklab: 17 findings — supply-chain / tool-poisoning portal",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers: 17 findings — MCP server listing oracle",
-      "owasp-finbot-ctf.org/vendor/api/v1/chat: 16 findings — vendor agent chat evaluation channel",
-      "ginandjuice.shop/api/basket: 34 findings — basket API BOLA/IDOR hub",
-      "wrongsecrets.herokuapp.com/challenge/challenge-65: 18 findings",
-      "wrongsecrets.herokuapp.com/challenge/challenge-66: 18 findings",
-      "wrongsecrets.herokuapp.com/challenge/challenge-50: 18 findings",
-      "vulnforge-academy level16: 4 findings — thin route-specific oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
+      "vulnforge-academy.vercel.app/.../level14.php: 4→5 findings (+vulnforge-academy-level-ssrf-live-oracle)",
+      "owasp-finbot-ctf.org/ctf: 18 findings (+finbot-ctf-challenges-live-oracle)",
+      "hacksplaining.com/lessons/weak-session/start: 9→11 findings (+hacksplaining-weak-session-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vulnforge level16: thin 4-finding hub without route-specific LFI/oracle",
-      "finbot vendor/api/v1/chat: 16 findings — may need deeper agent-evaluation channel probes",
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "vulnforge level16: thin 4-finding hub without route-specific file-upload oracle",
       "mcploitable (Show HN MCP lab) is Docker-only — no public hosted URL for queue"
     ]
   },
   "discovery_highlights": {
-    "ginandjuice.shop/api/basket": 34,
     "juice-shop.herokuapp.com": 50,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php": 5,
+    "owasp-finbot-ctf.org/ctf": 18,
+    "hacksplaining.com/lessons/weak-session/start": 11,
+    "ginandjuice.shop/api/basket": 34,
     "owasp-finbot-ctf.org/darklab": 17,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers": 17,
-    "wrongsecrets.herokuapp.com/challenge/challenge-65": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-66": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-50": 18,
-    "brokencrystals.com/api/auth/jwt/none/login": 83,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52
+    "brokencrystals.com/api/auth/jwt/none/login": 83
   }
 }
