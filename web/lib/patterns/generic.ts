@@ -21358,6 +21358,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "hacksplaining-weak-session-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Hacksplaining weak session IDs live oracle",
+    description:
+      "GET /lessons/weak-session/start documents guessable session identifier exploit-then-fix walkthrough — Hacksplaining weak session training oracle.",
+    impactOneline:
+      "Public weak-session lesson pages document predictable session ID patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hacksplainingWeakSessionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining weak session lessons are intentional training — use cryptographically random session IDs in production.",
+      steps: [
+        "Generate session IDs with CSPRNG instead of predictable sequences.",
+        "Regenerate session IDs after authentication.",
+        "Run Hacksplaining lesson mirrors only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Hacksplaining weak-session lesson documents guessable session ID hijacking. Show secure session ID generation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "hacksplaining-weak-session-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -46728,6 +46754,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-ctf-challenges-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot CTF prompt-injection challenges live oracle",
+    description:
+      "GET /ctf/api/v1/challenges exposes agentic prompt-injection challenges (system_prompt_leak) including recon-onboarding and recon-invoice — FinBot CTF live oracle.",
+    impactOneline:
+      "Publicly reachable agentic AI challenge APIs document prompt-injection attack surfaces for FinBot vendor and invoice agents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotCtfChallengesLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — gate challenge APIs behind authentication in production.",
+      steps: [
+        "Do not expose agent challenge metadata on unauthenticated routes.",
+        "Isolate FinBot demo namespaces from production LLM deployments.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /ctf/api/v1/challenges endpoint exposes prompt-injection challenge metadata. Show how to protect agentic CTF APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-ctf-challenges-route-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -50704,6 +50756,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /profile route scan confirms ReDoS via bankRouting regex. Show safe regex validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnForge Academy level SSRF live oracle",
+    description:
+      "GET /api/levels/ssrf/level13–15 returns SSRF filter-bypass flags or blocklist training responses — VulnForge Academy SSRF live oracle.",
+    impactOneline:
+      "VulnForge Academy SSRF levels expose server-side fetch with weak URL blocklists bypassable via IP encoding.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevelSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — validate and restrict outbound fetch destinations in production apps.",
+      steps: [
+        "Resolve URLs and deny link-local, loopback, and metadata IP ranges.",
+        "Use an allowlist of permitted fetch destinations.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy SSRF levels have bypassable localhost blocklists. Show SSRF egress control remediation.",
     version: 1,
     enabled: true
   },

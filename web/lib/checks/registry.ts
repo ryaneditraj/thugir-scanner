@@ -5283,6 +5283,39 @@ const clientSideHacksplainingWeakSessionLessonEvidence: Rule = async (ctx) => {
   };
 };
 
+function hacksplainingWeakSessionMarkers(corpus: string): {
+  hits: { label: string; sample: string }[];
+  onStartStep: boolean;
+} {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_HACKSPLAINING_WEAK_SESSION_LESSON_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const onStartStep = /lessons\/weak-session\/start/i.test(corpus);
+  return { hits, onStartStep };
+}
+
+const hacksplainingWeakSessionLiveOracle: Rule = async (ctx) => {
+  if (!/hacksplaining\.com/i.test(ctx.origin)) return NEGATIVE;
+  const lessonUrl = new URL("/lessons/weak-session/start", ctx.origin).toString();
+  const doc = await ctx.probe.get(lessonUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const corpus = `${doc.body}\n${lessonUrl}`;
+  if (!/hacksplaining\.com\/lessons\/weak-session/i.test(corpus)) return NEGATIVE;
+  const { hits, onStartStep } = hacksplainingWeakSessionMarkers(corpus);
+  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    evidence: {
+      markers: hits.slice(0, 4),
+      url: lessonUrl,
+      note: "Hacksplaining GET /lessons/weak-session/start documents guessable session ID exploit-then-fix walkthrough — weak session training oracle"
+    }
+  };
+};
+
 const hacksplainingSessionFixationRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/hacksplaining\.com\/lessons\/session-fixation/i.test(pageUrl)) return NEGATIVE;
@@ -9213,6 +9246,23 @@ const vulnforgeAcademyLevelSsrfRouteLiveOracle: Rule = async (ctx) => {
   if (!/level\d+\.php/i.test(pageUrl)) return NEGATIVE;
   const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
   if (levelNum === null || levelNum < 13 || levelNum > 15) return NEGATIVE;
+  const result = await probeVulnforgeAcademyLevelSsrf(ctx, levelNum);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl
+    }
+  };
+};
+
+async function probeVulnforgeAcademyLevelSsrf(
+  ctx: RuleContext,
+  levelNum: number
+): Promise<RuleResult | null> {
+  if (levelNum < 13 || levelNum > 15) return null;
   const ssrfUrl = new URL(`/api/levels/ssrf/level${levelNum}`, ctx.origin);
   ssrfUrl.searchParams.set("url", levelNum === 15 ? "http://127.1/" : "http://example.com/");
   const doc = await ctx.probe.get(ssrfUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
@@ -9224,24 +9274,38 @@ const vulnforgeAcademyLevelSsrfRouteLiveOracle: Rule = async (ctx) => {
       fired: true,
       confidence: /FLAG\{/i.test(doc.body) ? 0.93 : 0.9,
       evidence: {
-        scannedUrl: pageUrl,
         url: ssrfUrl.toString(),
         level: levelNum,
         snippet: doc.body.slice(0, 240).trim(),
-        note: `VulnForge Academy level ${levelNum} route scan — SSRF endpoint returns filter-bypass flag or blocklist training response`
+        note: `VulnForge Academy level ${levelNum} — SSRF endpoint returns filter-bypass flag or blocklist training response`
       }
     };
   }
   const urlOracle = vulnforgeAcademyLevelUrlOracle(levelNum);
-  if (!urlOracle) return NEGATIVE;
+  if (!urlOracle) return null;
   return {
     fired: true,
     confidence: urlOracle.confidence,
     evidence: {
       ...urlOracle.evidence,
-      scannedUrl: pageUrl
+      note: urlOracle.evidence.note as string
     }
   };
+}
+
+const vulnforgeAcademyLevelSsrfLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  for (const levelNum of [13, 14, 15] as const) {
+    const result = await probeVulnforgeAcademyLevelSsrf(ctx, levelNum);
+    if (result?.fired && /FLAG\{|Filter bypassed/i.test(String(result.evidence?.snippet ?? ""))) {
+      return result;
+    }
+  }
+  for (const levelNum of [13, 14, 15] as const) {
+    const result = await probeVulnforgeAcademyLevelSsrf(ctx, levelNum);
+    if (result?.fired) return result;
+  }
+  return NEGATIVE;
 };
 
 const vulnforgeAcademyLevel17ContentTypeRouteLiveOracle: Rule = async (ctx) => {
@@ -93562,9 +93626,23 @@ const finbotCtfChallengesRouteLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/(?:ctf|portals)(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotCtfChallenges(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OWASP FinBot /ctf route scan — public /ctf/api/v1/challenges exposes agentic prompt-injection challenges (system_prompt_leak)"
+    }
+  };
+};
+
+async function probeFinbotCtfChallenges(ctx: RuleContext): Promise<RuleResult | null> {
   const challengesUrl = new URL("/ctf/api/v1/challenges", ctx.origin).toString();
   const doc = await ctx.probe.get(challengesUrl, { maxBytes: 65536, timeoutMs: 20000 });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 400) return null;
   let challenges: Array<{
     id?: string;
     subcategory?: string;
@@ -93573,27 +93651,32 @@ const finbotCtfChallengesRouteLiveOracle: Rule = async (ctx) => {
   try {
     challenges = JSON.parse(doc.body);
   } catch {
-    return NEGATIVE;
+    return null;
   }
-  if (!Array.isArray(challenges) || challenges.length < 5) return NEGATIVE;
+  if (!Array.isArray(challenges) || challenges.length < 5) return null;
   const promptInjection = challenges.filter(
     (c) =>
       c.subcategory === "system_prompt_leak" ||
       /prompt injection/i.test(JSON.stringify(c.labels ?? {}))
   );
-  if (promptInjection.length < 1) return NEGATIVE;
+  if (promptInjection.length < 1) return null;
   return {
     fired: true,
     confidence: 0.92,
     evidence: {
-      scannedUrl: pageUrl,
       challengesUrl,
       challengeCount: challenges.length,
       promptInjectionChallenges: promptInjection.slice(0, 4).map((c) => c.id),
       snippet: doc.body.slice(0, 200).trim(),
-      note: "OWASP FinBot CTF exposes agentic prompt-injection challenges (system_prompt_leak) via public /ctf/api/v1/challenges — recon-onboarding/invoice oracle"
+      note: "OWASP FinBot GET /ctf/api/v1/challenges exposes agentic prompt-injection challenges (system_prompt_leak) — recon-onboarding/invoice oracle"
     }
   };
+}
+
+const finbotCtfChallengesLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotCtfChallenges(ctx);
+  return result?.fired ? result : NEGATIVE;
 };
 
 const finbotCtfSidecarRouteLiveOracle: Rule = async (ctx) => {
@@ -99723,6 +99806,7 @@ export const RULES: Record<string, Rule> = {
   crapiShopOrdersIdBolaRouteLiveOracle,
   crapiShopOrderStatusMassAssignmentLiveOracle,
   crapiShopOrderStatusMassAssignmentRouteLiveOracle,
+  finbotCtfChallengesLiveOracle,
   finbotCtfChallengesRouteLiveOracle,
   finbotCtfSidecarRouteLiveOracle,
   finbotVendorSidecarRouteLiveOracle,
@@ -100615,6 +100699,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingSessionFixationLessonEvidence,
   clientSideHacksplainingWeakSessionLessonEvidence,
   hacksplainingSessionFixationRouteLiveOracle,
+  hacksplainingWeakSessionLiveOracle,
   hacksplainingWeakSessionRouteLiveOracle,
   kontraSessionFixationRouteLiveOracle,
   clientSideHacksplainingAiPromptInjectionLessonEvidence,
@@ -100751,6 +100836,7 @@ export const RULES: Record<string, Rule> = {
   vulnforgeAcademyLevel6SqliRouteLiveOracle,
   vulnforgeAcademyLevelXssRouteLiveOracle,
   vulnforgeAcademyLevelSstiRouteLiveOracle,
+  vulnforgeAcademyLevelSsrfLiveOracle,
   vulnforgeAcademyLevelSsrfRouteLiveOracle,
   vulnforgeAcademyLevelIdorRouteLiveOracle,
   vulnforgeAcademyLevelAuthRouteLiveOracle,

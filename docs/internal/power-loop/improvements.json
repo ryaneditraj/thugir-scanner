@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level-ssrf-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeVulnforgeAcademyLevelSsrf probes GET /api/levels/ssrf/level14?url=http://example.com/ with README corpus fallback; vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php findings 4→5 (+vulnforge-academy-level-ssrf-live-oracle +route); benchmark juice-shop.herokuapp.com 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-challenges-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeFinbotCtfChallenges GET /ctf/api/v1/challenges returns system_prompt_leak challenges (recon-onboarding, recon-invoice); owasp-finbot-ctf.org/ctf findings 18 (+finbot-ctf-challenges-live-oracle alongside route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "hacksplaining-weak-session-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /lessons/weak-session/start returns Weak Session IDs — Secure Coding Lesson title + guessable session walkthrough markers; hacksplaining.com/lessons/weak-session/start findings 9→11 (+hacksplaining-weak-session-live-oracle +route); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:nodegoat.herokuapp.com",
       "slug": "nodegoat-probe-origin-auth-fix",
       "status": "shipped",
