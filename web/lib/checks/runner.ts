@@ -2551,6 +2551,7 @@ const DEEP_RULES = new Set<string>([
   "vapiServerSurferRouteLiveOracle",
   "vapiStickyNotesStoredXssLiveOracle",
   "vapiStickyNotesRouteLiveOracle",
+  "vapiIdentityAuthLoginRouteLiveOracle",
   "vapiRouteLiveOracle",
   "duckStoreUsersBolaLiveOracle",
   "duckStoreUsersRouteLiveOracle",
@@ -12857,7 +12858,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
-        /\/api\/file\b/i.test(targetInput) &&
+        /\/api\/(?:file|files)\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-file")
       )
         return -3;
@@ -13534,6 +13535,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /vapi\.tools\.escape\.tech/i.test(origin) &&
+        /\/contact_mechanic/i.test(targetInput) &&
+        p.slug.startsWith("crapi-contact-mechanic-ssrf")
+      )
+        return -4;
+      if (
+        /vapi\.tools\.escape\.tech/i.test(origin) &&
+        /\/identity\/api\/auth\/login/i.test(targetInput) &&
+        p.slug.startsWith("vapi-identity-auth-login")
+      )
+        return -4;
+      if (
         /crapi2?\.apisec\.ai/i.test(origin) &&
         /\/check-otp/i.test(targetInput) &&
         p.slug.startsWith("crapi-check-otp")
@@ -13923,6 +13936,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-transfer")) return -2;
       if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;
       if (/duck-store\.escape\.tech/i.test(origin) && p.slug.startsWith("duck-store")) return -2;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/my-account\/(?:change-password|change-email|change-address|delete)\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-change-email")
+      )
+        return -4;
       if (
         /ginandjuice\.shop/i.test(origin) &&
         /\/my-account\/(?:change-password|change-email|change-address|delete)\b/i.test(targetInput) &&

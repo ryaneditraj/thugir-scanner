@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-29T01:12:54.895Z",
-  "total": 2800,
-  "uniqueSlugs": 2792,
+  "generatedAt": "2026-08-29T02:31:56.379Z",
+  "total": 2801,
+  "uniqueSlugs": 2793,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2782,
+    "generic": 2783,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2715,
+    "deep": 2716,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 130,
     "Security misconfiguration": 208,
-    "Broken authentication": 174,
+    "Broken authentication": 175,
     "Injection": 449,
     "Cross-site scripting": 734,
     "Open redirect": 25,
@@ -2355,6 +2355,7 @@
     "vapi-api8-user-route-live-oracle",
     "vapi-api9-improper-inventory-live-oracle",
     "vapi-api9-route-live-oracle",
+    "vapi-identity-auth-login-route-live-oracle",
     "vapi-jwt-weak-token-route-live-oracle",
     "vapi-route-live-oracle",
     "vapi-serversurfer-ssrf-route-live-oracle",

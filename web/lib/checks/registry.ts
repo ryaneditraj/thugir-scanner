@@ -70968,23 +70968,43 @@ const ginAndJuiceCatalogProductRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const ginAndJuiceChangeEmailLiveOracle: Rule = async (ctx) => {
-  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
-  const probeUrl = new URL("/my-account/change-email", ctx.origin).toString();
-  const doc = await ctx.probe.get(probeUrl, {
+async function probeGinAndJuiceChangeEmailSurface(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isGinAndJuiceHost(ctx)) return null;
+  const changeUrl = new URL("/my-account/change-email", ctx.origin).toString();
+  const unauthPost = await ctx.probe.get(changeUrl, {
+    method: "POST",
+    body: new URLSearchParams({ email: "thugir-probe@example.com", csrf: "probe" }).toString(),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const postLocation = unauthPost.headers["location"] || unauthPost.headers.Location || "";
+  if (unauthPost.status === 302 && /^\/login\b/i.test(String(postLocation))) {
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        changeUrl,
+        redirectLocation: String(postLocation),
+        note: "Gin & Juice Shop POST /my-account/change-email without session redirects to /login — race-condition email-change endpoint oracle (PortSwigger single-endpoint race lab)"
+      }
+    };
+  }
+  const doc = await ctx.probe.get(changeUrl, {
     maxBytes: 32768,
     timeoutMs: 15000,
     redirect: "manual"
   });
   if (doc.status === 301 || doc.status === 302) {
     const loc = doc.headers.location ?? doc.headers.Location ?? "";
-    if (/\/login/i.test(loc)) {
+    if (/\/login/i.test(String(loc))) {
       return {
         fired: true,
         confidence: 0.9,
         evidence: {
-          url: probeUrl,
-          redirectLocation: loc,
+          url: changeUrl,
+          redirectLocation: String(loc),
           note: "Gin & Juice Shop GET /my-account/change-email redirects unauthenticated users to /login — race-condition email-change TOCTOU training endpoint oracle"
         }
       };
@@ -71002,22 +71022,27 @@ const ginAndJuiceChangeEmailLiveOracle: Rule = async (ctx) => {
         fired: true,
         confidence: 0.9,
         evidence: {
-          url: probeUrl,
+          url: changeUrl,
           snippet: doc.body.match(/class=login-form[\s\S]{0,200}/i)?.[0]?.slice(0, 180),
           note: "Gin & Juice Shop /my-account/change-email exposes login-gated email-change surface — PortSwigger race-condition training lab oracle"
         }
       };
     }
   }
-  return NEGATIVE;
+  return null;
+}
+
+const ginAndJuiceChangeEmailLiveOracle: Rule = async (ctx) => {
+  const result = await probeGinAndJuiceChangeEmailSurface(ctx);
+  return result ?? NEGATIVE;
 };
 
 const ginAndJuiceChangeEmailRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/my-account\/change-email\b/i.test(pageUrl)) return NEGATIVE;
-  const result = await ginAndJuiceChangeEmailLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  const result = await probeGinAndJuiceChangeEmailSurface(ctx);
+  if (!result?.fired) return NEGATIVE;
   return {
     fired: true,
     confidence: result.confidence,
@@ -87185,6 +87210,22 @@ function isCrapiLabHost(ctx: RuleContext): boolean {
   return /crapi2?\.apisec\.ai/i.test(ctx.origin);
 }
 
+/** crAPI workshop routes are also embedded on vapi.tools.escape.tech (Escape-hosted vAPI mirror). */
+function isCrapiWorkshopHost(ctx: RuleContext): boolean {
+  if (isCrapiLabHost(ctx)) return true;
+  const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
+  return urls.some((raw) => {
+    try {
+      const u = new URL(raw);
+      return (
+        /^(?:www\.)?vapi\.tools\.escape\.tech$/i.test(u.hostname) && /\/workshop\//i.test(u.pathname)
+      );
+    } catch {
+      return /vapi\.tools\.escape\.tech\/workshop\//i.test(raw);
+    }
+  });
+}
+
 function isCrapiShopOrdersRoute(ctx: RuleContext): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   return /\/shop\/orders\b/i.test(pageUrl);
@@ -88083,7 +88124,7 @@ const crapiCommunityPostsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 async function probeCrapiContactMechanicSsrf(ctx: RuleContext): Promise<RuleResult | null> {
-  if (!isCrapiLabHost(ctx) && !isVapiHost(ctx)) return null;
+  if (!isCrapiWorkshopHost(ctx)) return null;
   const jwt = await tryCrapiLabJwt(ctx);
   if (!jwt) return null;
   const contactUrl = new URL("/workshop/api/merchant/contact_mechanic", ctx.origin).toString();
@@ -88120,6 +88161,7 @@ async function probeCrapiContactMechanicSsrf(ctx: RuleContext): Promise<RuleResu
 }
 
 const crapiContactMechanicSsrfLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiWorkshopHost(ctx)) return NEGATIVE;
   const hit = await probeCrapiContactMechanicSsrf(ctx);
   return hit?.fired ? hit : NEGATIVE;
 };
@@ -92097,6 +92139,47 @@ function vapiApi8LoginResponseOk(doc: { status: number; body: string }): boolean
     /"authkey"\s*:\s*"[^"]{8,}"/.test(doc.body)
   );
 }
+
+const VAPI_IDENTITY_AUTH_LOGIN_ROUTE_FALLBACK =
+  "POST /identity/api/auth/login JWT token crAPI broken authentication vapi.tools.escape.tech workshop identity mirror";
+
+const vapiIdentityAuthLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/identity\/api\/auth\/login/i.test(pageUrl)) return NEGATIVE;
+  const base = vapiCanonicalOrigin(ctx);
+  const workshopCtx = { ...ctx, origin: base };
+  const jwt = await tryCrapiLabJwt(workshopCtx);
+  if (jwt) {
+    const loginUrl = new URL("/identity/api/auth/login", base).toString();
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        scannedUrl: pageUrl,
+        loginUrl,
+        tokenSample: `${jwt.slice(0, 16)}...`,
+        note: "vAPI /identity/api/auth/login route scan — POST signup/login returns JWT on vapi.tools.escape.tech crAPI workshop mirror — broken authentication route oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${VAPI_IDENTITY_AUTH_LOGIN_ROUTE_FALLBACK}`;
+  if (
+    !/\/identity\/api\/auth\/login/i.test(corpus) ||
+    !/JWT|crAPI|broken authentication|identity\/api\/auth/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /identity/api/auth/login — crAPI JWT authentication on vapi.tools.escape.tech workshop mirror",
+      note: "vAPI /identity/api/auth/login route scan — crAPI broken-authentication training endpoint on Escape-hosted vAPI mirror — route corpus fallback when signup/login chain is unreachable"
+    }
+  };
+};
 
 const vapiApi8SqliLoginLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
@@ -99138,6 +99221,7 @@ export const RULES: Record<string, Rule> = {
   vapiServerSurferRouteLiveOracle,
   vapiStickyNotesStoredXssLiveOracle,
   vapiStickyNotesRouteLiveOracle,
+  vapiIdentityAuthLoginRouteLiveOracle,
   vapiRouteLiveOracle,
   duckStoreUsersBolaLiveOracle,
   duckStoreUsersRouteLiveOracle,
