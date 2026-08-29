@@ -45142,6 +45142,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-workshop-contact-mechanic-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "vAPI workshop crAPI contact_mechanic SSRF route live oracle",
+    description:
+      "When scanning /workshop/api/merchant/contact_mechanic on vapi.tools.escape.tech, embedded OWASP crAPI SSRF challenge fires — route-specific workshop oracle (API7).",
+    impactOneline:
+      "Escape-hosted vAPI embeds crAPI contact_mechanic endpoint that fetches attacker-controlled mechanic_api URLs server-side.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiWorkshopContactMechanicRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to attacker-controlled URLs and restrict egress from mechanic integration endpoints.",
+      steps: [
+        "Validate mechanic_api against an allowlist of trusted integration hosts.",
+        "Disable repeat_request_if_failed loops that amplify SSRF.",
+        "Run vAPI workshop labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vAPI /workshop/api/merchant/contact_mechanic route exposes crAPI SSRF via mechanic_api. Show egress filtering remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vapi-api3-comment-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",
