@@ -64954,11 +64954,11 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Broken access control",
     severityDefault: "high",
-    title: "Gin & Juice Shop change-email TOCTOU live oracle",
+    title: "Gin & Juice Shop change-email POST live oracle",
     description:
-      "GET /my-account/change-email redirects unauthenticated users to /login or renders a login-gated email-change form — the PortSwigger race-condition email takeover training oracle.",
+      "POST /my-account/change-email without an active session redirects unauthenticated callers to /login; GET renders login-gated email-change form — PortSwigger race-condition training oracle.",
     impactOneline:
-      "Unauthenticated probes confirm a protected email-change endpoint vulnerable to race-condition abuse after login.",
+      "Session-gated email-change endpoint confirms race-condition TOCTOU attack surface on Gin & Juice Shop.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "ginAndJuiceChangeEmailLiveOracle" },
     tierRequired: "deep",
@@ -71292,6 +71292,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Vault Notes route scan confirms IDOR on GET /notes/:id via forged JWT. Show ownership enforcement remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-identity-auth-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "vAPI identity auth login route live oracle",
+    description:
+      "When scanning vapi.tools.escape.tech/identity/api/auth/login, POST signup/login returns a JWT — crAPI broken-authentication training oracle on the Escape-hosted vAPI identity mirror.",
+    impactOneline:
+      "Route-specific confirmation that vAPI identity mirror exposes crAPI JWT authentication on /identity/api/auth/login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiIdentityAuthLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden API authentication endpoints against weak signup/login flows.",
+      steps: [
+        "Enforce strong password policies and rate-limit authentication endpoints.",
+        "Use short-lived JWTs with proper signature validation.",
+        "Run vAPI identity labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vapi.tools.escape.tech /identity/api/auth/login route accepts signup/login and returns JWTs. Show production API authentication hardening.",
     version: 1,
     enabled: true
   }

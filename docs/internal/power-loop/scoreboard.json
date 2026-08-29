@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T01:41:16.540Z",
+  "updated_at": "2026-08-29T02:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,10 +22,10 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1976,
   "discovery_findings": 24208,
-  "improvements_shipped": 963,
-  "last_run": "2026-08-29T01:41:16.540Z",
+  "improvements_shipped": 966,
+  "last_run": "2026-08-29T02:20:00.000Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -49,40 +49,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles incl secret-resend) — no category gaps"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 157,
-      "focus": "kOaDT auth/XSS/XXE walkthroughs (brute-force, password-reset, stored-xss, open-redirect, XXE import) + drained duck-store MCP/coupons/vulnerabilities",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 153,
+      "focus": "ginandjuice change-email POST live oracle + vapi.tools workshop contact_mechanic SSRF route + vapi identity auth login route",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles, gap=[])",
-      "koadt.github.io/.../brute-force-no-rate-limiting: 3 findings — auth brute-force route oracle",
-      "koadt.github.io/.../insecure-password-reset: 7 findings — password-reset route oracle",
-      "koadt.github.io/.../stored-xss-product-reviews: 14 findings — stored XSS route oracle",
-      "koadt.github.io/.../open-redirect-login-bypass: 7 findings — open-redirect route oracle",
-      "koadt.github.io/.../xxe-supplier-order-import: 5 findings — XXE route oracle",
-      "duck-store.escape.tech/mcp/tools/list_coupons: 39 findings — MCP coupon oracle",
-      "duck-store.escape.tech/vulnerabilities: 41 findings — vuln catalog route oracle",
-      "duck-store.escape.tech/api/v1/orders/coupons: 41 findings — coupon BOLA oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "ginandjuice.shop/my-account/change-email: 34→37 findings (+ginandjuice-change-email-live-oracle)",
+      "vapi.tools.escape.tech/workshop/api/merchant/contact_mechanic: 13→14 findings (+crapi-contact-mechanic-ssrf-route-live-oracle)",
+      "vapi.tools.escape.tech/identity/api/auth/login: 13→14 findings (+vapi-identity-auth-login-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "koadt walkthrough pages are GitHub Pages docs — live oracles use corpus fallbacks; brute-force walkthrough thin at 3 findings",
-      "duck-store MCP/coupon routes fire high finding counts via corpus + cross-route probes"
+      "crapi2.apisec.ai unreachable from cloud egress (SSL_ERROR_SYSCALL)",
+      "ginandjuice authenticated POST /my-account/change-email returns 404 on live site — live oracle uses unauthenticated 302→/login gate"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "ginandjuice.shop/my-account/change-email": 37,
+    "vapi.tools.escape.tech/workshop/api/merchant/contact_mechanic": 14,
+    "vapi.tools.escape.tech/identity/api/auth/login": 14,
     "koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews": 14,
-    "koadt.github.io/oss-oopssec-store/posts/insecure-password-reset": 7,
-    "koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass": 7,
-    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import": 5,
-    "koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting": 3,
     "duck-store.escape.tech/vulnerabilities": 41,
     "duck-store.escape.tech/api/v1/orders/coupons": 41,
     "duck-store.escape.tech/mcp/tools/list_coupons": 39

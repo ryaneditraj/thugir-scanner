@@ -20,6 +20,24 @@
     },
     {
       "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-change-email-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /my-account/change-email without session returns HTTP 302 Location /login; ginandjuice.shop/my-account/change-email findings 34→37 (+ginandjuice-change-email-live-oracle +ginandjuice-change-email-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-workshop-contact-mechanic-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isCrapiWorkshopHost extends contact_mechanic SSRF route oracle to vapi.tools.escape.tech/workshop with corpus fallback; vapi.tools.escape.tech/workshop/api/merchant/contact_mechanic findings 13→14 (+crapi-contact-mechanic-ssrf-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-identity-auth-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vapiIdentityAuthLoginRouteLiveOracle matches /identity/api/auth/login with JWT signup fallback + corpus; vapi.tools.escape.tech/identity/api/auth/login findings 13→14 (+vapi-identity-auth-login-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-feedback-submit-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceFeedbackSubmitRouteLiveOracle delegates GET /catalog?searchTerm= searchText reflection on /api/feedback/submit alias scans; ginandjuice.shop/api/feedback/submit findings 33→35 (+ginandjuice-feedback-submit-route-live-oracle +ginandjuice-logger-route-live-oracle on /api/feedback alias); benchmark juice-shop 51 findings 6/6 maintained"
