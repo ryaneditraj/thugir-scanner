@@ -19,18 +19,6 @@
       "validation": "SOURCE: discovery:url EVIDENCE: nodegoatLiveOrigin maps decommissioned nodegoat.herokuapp.com to nodegoat-websec.herokuapp.com; POST /login admin/Admin_123 returns 302 /dashboard; nodegoat.herokuapp.com/login findings 0→3 (+nodegoat-login-weak-credentials-live-oracle +route); benchmark juice-shop 51 findings 6/6 maintained"
     },
     {
-      "source": "discovery:ginandjuice.shop",
-      "slug": "ginandjuice-change-email-live-oracle",
-      "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: POST /my-account/change-email without session returns HTTP 302 Location /login; ginandjuice.shop/my-account/change-email findings 34→37 (+ginandjuice-change-email-live-oracle +ginandjuice-change-email-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
-    },
-    {
-      "source": "discovery:vapi.tools.escape.tech",
-      "slug": "vapi-workshop-contact-mechanic-route-live-oracle",
-      "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: isCrapiWorkshopHost extends contact_mechanic SSRF route oracle to vapi.tools.escape.tech/workshop with corpus fallback; vapi.tools.escape.tech/workshop/api/merchant/contact_mechanic findings 13→14 (+crapi-contact-mechanic-ssrf-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
-    },
-    {
       "source": "discovery:vapi.tools.escape.tech",
       "slug": "vapi-identity-auth-login-route-live-oracle",
       "status": "shipped",
