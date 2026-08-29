@@ -2617,6 +2617,7 @@ const DEEP_RULES = new Set<string>([
   "duckStoreAuthRegisterRouteLiveOracle",
   "duckStoreOpenRedirectLiveOracle",
   "duckStoreOpenRedirectRouteLiveOracle",
+  "duckStoreVulnerabilitiesHubRouteLiveOracle",
   "duckStoreReferralCodeAbuseLiveOracle",
   "duckStoreReferralCodeAbuseRouteLiveOracle",
   "duckStoreAdminProductsNegativePriceLiveOracle",
@@ -2764,7 +2765,9 @@ const DEEP_RULES = new Set<string>([
   "crapiCheckOtpRouteLiveOracle",
   "finbotCtfChallengesLiveOracle",
   "finbotCtfChallengesRouteLiveOracle",
+  "finbotCtfSidecarLiveOracle",
   "finbotCtfSidecarRouteLiveOracle",
+  "finbotCtfSidecarApiRouteLiveOracle",
   "finbotVendorSidecarRouteLiveOracle",
   "finbotVendorChatLiveOracle",
   "finbotVendorChatRouteLiveOracle",
@@ -14219,6 +14222,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/ctf\/api\/v1\/sidecar\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-ctf-sidecar")
+      )
+        return -4;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
         /\/stats\b/i.test(targetInput) &&
         p.slug.startsWith("finbot-ctf-stats")
       )
@@ -15076,6 +15085,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("duck-store-open-redirect")
       )
         return -3;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/vulnerabilities\/?(?:[#?]|$)/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-vulnerabilities-hub")
+      )
+        return -4;
       if (/juicesec\.mrdinesh\.workers\.dev/i.test(origin) && p.slug.startsWith("client-side-juicesec")) return -2;
       if (/vulnerable-web-application-jecw\.vercel\.app/i.test(origin) && p.slug.startsWith("buggybuy-")) return -2;
       if (/appsec-ci-pipeline\.onrender\.com/i.test(origin) && p.slug.startsWith("appsec-ci-")) return -2;

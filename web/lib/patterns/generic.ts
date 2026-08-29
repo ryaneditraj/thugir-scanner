@@ -46884,6 +46884,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-ctf-sidecar-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP FinBot CTF sidecar live oracle",
+    description:
+      "GET /ctf/api/v1/sidecar returns public challenge progress JSON (total, completed, points) without authentication on FinBot CTF hosts.",
+    impactOneline:
+      "Unauthenticated CTF sidecar APIs leak agentic challenge catalog size and participant progress on FinBot training platforms.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotCtfSidecarLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — restrict sidecar APIs to authenticated CTF participants.",
+      steps: [
+        "Require session authentication on /ctf/api/v1/sidecar.",
+        "Avoid exposing toolkit dead-drop and exfil metadata without auth.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /ctf/api/v1/sidecar endpoint is publicly reachable. Show how to gate agentic CTF progress APIs behind authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-ctf-sidecar-api-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP FinBot CTF sidecar API route live oracle",
+    description:
+      "When scanning /ctf/api/v1/sidecar directly, the JSON response exposes total challenge count and completion progress — route-specific FinBot sidecar API oracle.",
+    impactOneline:
+      "Direct scans of /ctf/api/v1/sidecar confirm unauthenticated agentic challenge progress disclosure on FinBot CTF hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotCtfSidecarApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — restrict sidecar APIs to authenticated CTF participants.",
+      steps: [
+        "Require session authentication on /ctf/api/v1/sidecar.",
+        "Avoid exposing toolkit dead-drop and exfil metadata without auth.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /ctf/api/v1/sidecar API route scan confirms public progress JSON. Show remediation for agentic CTF sidecar endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-vendor-sidecar-route-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -63048,6 +63100,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Duck Store redirect route accepts external URLs. Show route-specific open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-vulnerabilities-hub-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Duck Store vulnerability index hub route live oracle",
+    description:
+      "When scanning /vulnerabilities, the Escape Duck Store hub documents intentional OWASP Top 10 flaws and OpenAPI lists SSRF, SQLi, BOLA, and coupon-abuse API routes — route-specific vulnerability catalog oracle.",
+    impactOneline:
+      "Published vulnerability indexes on training apps disclose the full intentional flaw surface for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreVulnerabilitiesHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Duck Store is intentional security training — restrict vulnerability catalog pages to authorized lab environments.",
+      steps: [
+        "Keep vulnerability index documentation on VPN-only lab networks.",
+        "Do not point production DAST scanners at public Duck Store instances without authorization.",
+        "Treat OpenAPI paths as sensitive reconnaissance data on vulnerable training apps."
+      ]
+    },
+    fixPrompt:
+      "Our Duck Store /vulnerabilities route publishes the intentional flaw catalog. Show how to scope scanner targets to authorized lab infrastructure.",
     version: 1,
     enabled: true
   },
