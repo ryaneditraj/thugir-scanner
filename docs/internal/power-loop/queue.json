@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-29T14:15:00.000Z",
+  "updated_at": "2026-08-29T15:10:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/login/totp",
+      "source": "Escape Duck Store vuln index — 2FA bypass oracle POST /api/v1/auth/login/totp (duck-store.escape.tech/vulnerabilities)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/users/",
+      "source": "Escape Duck Store vuln index — user enumeration oracle GET /api/v1/users/ (duck-store.escape.tech/vulnerabilities)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/cart/add",
+      "source": "Escape Duck Store vuln index — negative quantity business-logic oracle POST /api/v1/cart/add (duck-store.escape.tech/vulnerabilities)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
+      "source": "Escape Duck Store vuln index — coupon/shipping business-logic oracle POST /api/v1/orders/checkout (duck-store.escape.tech/vulnerabilities)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/merchants/login",
+      "source": "Commando-X/vuln-bank — merchant portal login API oracle (vulnbank.org/static/openapi.json merchant endpoints)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/supply-chain",
       "source": "AI & Security Platform — typosquatted packages / malicious postinstall supply-chain challenge (Vercel public demo; web search 14 UTC)",
