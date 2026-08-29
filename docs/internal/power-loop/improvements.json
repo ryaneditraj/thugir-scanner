@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-finmail-server-reset-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /darklab/api/v1/supply-chain/servers/finmail returns server_type:finmail with send_email default_tools; POST /finmail/reset-tools returns 403 csrf_error; owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools findings 21→25 (+finbot-darklab-finmail-server-live-oracle +finbot-darklab-finmail-reset-tools-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-findrive-server-reset-oracles",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /darklab/api/v1/supply-chain/servers/findrive returns server_type:findrive with upload_file/get_file default_tools; POST /findrive/reset-tools returns 403 csrf_error; owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/findrive/tools findings 21→24 (+finbot-darklab-findrive-server-live-oracle +finbot-darklab-findrive-reset-tools-live-oracle +finbot-darklab-findrive-tools-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-mcp-server-reset-deep-rules",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: registered finbotDarklabFinmail/Findrive server+reset rules in DEEP_RULES + runner -5 priority for /finmail/* and /findrive/* server/reset route scans; closes scoreboard finmail/findrive MCP learning gap; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:appsecmaster.net",
       "slug": "appsecmaster-ci-pipeline-route-live-oracle",
       "status": "shipped",

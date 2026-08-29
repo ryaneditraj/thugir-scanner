@@ -95174,6 +95174,207 @@ const finbotDarklabFindriveToolsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeFinbotDarklabNamedServer(
+  ctx: RuleContext,
+  serverSlug: string,
+  expectedType: string,
+  validate: (server: {
+    server_type?: string;
+    display_name?: string;
+    default_tools?: Array<{ name?: string }>;
+    tool_overrides?: Record<string, unknown>;
+    config?: Record<string, unknown>;
+  }) => boolean,
+  note: string
+): Promise<RuleResult | null> {
+  const serverUrl = new URL(`/darklab/api/v1/supply-chain/servers/${serverSlug}`, ctx.origin).toString();
+  const doc = await ctx.probe.get(serverUrl, { maxBytes: 65536, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  try {
+    const data = JSON.parse(doc.body) as { server?: Parameters<typeof validate>[0] };
+    const server = data.server;
+    if (!server || server.server_type !== expectedType || !validate(server)) return null;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        serverUrl,
+        serverType: server.server_type,
+        displayName: server.display_name,
+        toolCount: (server.default_tools ?? []).length,
+        hasToolOverrides: Object.keys(server.tool_overrides ?? {}).length > 0,
+        snippet: doc.body.slice(0, 200).trim(),
+        note
+      }
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function probeFinbotDarklabFinmailServer(ctx: RuleContext): Promise<RuleResult | null> {
+  return probeFinbotDarklabNamedServer(
+    ctx,
+    "finmail",
+    "finmail",
+    (server) => (server.default_tools ?? []).some((t) => t.name === "send_email"),
+    "OWASP FinBot Dark Lab public /darklab/api/v1/supply-chain/servers/finmail exposes FinMail MCP server config and send_email tool definitions — email attack tool-poisoning surface oracle"
+  );
+}
+
+const finbotDarklabFinmailServerLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabFinmailServer(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabFinmailServerRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/servers\/finmail\b/i.test(pageUrl)) return NEGATIVE;
+  if (/\/finmail\/tools\b|\/finmail\/reset-tools\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabFinmailServer(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "OWASP FinBot FinMail MCP server route scan — public /darklab/api/v1/supply-chain/servers/finmail exposes send_email tool definitions for supply-chain poisoning labs"
+    }
+  };
+};
+
+async function probeFinbotDarklabFindriveServer(ctx: RuleContext): Promise<RuleResult | null> {
+  return probeFinbotDarklabNamedServer(
+    ctx,
+    "findrive",
+    "findrive",
+    (server) => {
+      const tools = server.default_tools ?? [];
+      return tools.some((t) => t.name === "upload_file") && tools.some((t) => t.name === "get_file");
+    },
+    "OWASP FinBot Dark Lab public /darklab/api/v1/supply-chain/servers/findrive exposes FinDrive MCP server config and upload_file/get_file tool definitions — indirect prompt injection delivery surface oracle"
+  );
+}
+
+const finbotDarklabFindriveServerLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabFindriveServer(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabFindriveServerRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/servers\/findrive\b/i.test(pageUrl)) return NEGATIVE;
+  if (/\/findrive\/tools\b|\/findrive\/reset-tools\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabFindriveServer(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "OWASP FinBot FinDrive MCP server route scan — public /darklab/api/v1/supply-chain/servers/findrive exposes upload_file/get_file tool definitions for supply-chain poisoning labs"
+    }
+  };
+};
+
+async function probeFinbotDarklabServerResetTools(
+  ctx: RuleContext,
+  serverSlug: string
+): Promise<RuleResult | null> {
+  const resetUrl = new URL(
+    `/darklab/api/v1/supply-chain/servers/${serverSlug}/reset-tools`,
+    ctx.origin
+  ).toString();
+  const doc = await ctx.probe.get(resetUrl, {
+    method: "POST",
+    body: "{}",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (doc.status === 403 && /csrf_error/i.test(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        resetUrl,
+        status: doc.status,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: `OWASP FinBot Dark Lab POST /darklab/api/v1/supply-chain/servers/${serverSlug}/reset-tools is a writable MCP tool-reset API (CSRF gate confirms route, not 404)`
+      }
+    };
+  }
+  if (doc.status >= 200 && doc.status < 300 && /reset|tool_overrides|default_tools/i.test(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        resetUrl,
+        status: doc.status,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: `OWASP FinBot Dark Lab POST /${serverSlug}/reset-tools resets MCP tool overrides without authentication`
+      }
+    };
+  }
+  return null;
+}
+
+const finbotDarklabFinmailResetToolsLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabServerResetTools(ctx, "finmail");
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabFinmailResetToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/servers\/finmail\/reset-tools\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabServerResetTools(ctx, "finmail");
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "OWASP FinBot FinMail /reset-tools route scan — public MCP tool-reset write API for supply-chain poisoning labs"
+    }
+  };
+};
+
+const finbotDarklabFindriveResetToolsLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabServerResetTools(ctx, "findrive");
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabFindriveResetToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/servers\/findrive\/reset-tools\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabServerResetTools(ctx, "findrive");
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "OWASP FinBot FinDrive /reset-tools route scan — public MCP tool-reset write API for supply-chain poisoning labs"
+    }
+  };
+};
+
 async function probeFinbotCtfStats(ctx: RuleContext): Promise<RuleResult | null> {
   const statsUrl = new URL("/ctf/api/v1/stats", ctx.origin).toString();
   const doc = await ctx.probe.get(statsUrl, { maxBytes: 8192, timeoutMs: 20000 });
@@ -100813,6 +101014,14 @@ export const RULES: Record<string, Rule> = {
   finbotDarklabFinmailToolsRouteLiveOracle,
   finbotDarklabFindriveToolsLiveOracle,
   finbotDarklabFindriveToolsRouteLiveOracle,
+  finbotDarklabFinmailServerLiveOracle,
+  finbotDarklabFinmailServerRouteLiveOracle,
+  finbotDarklabFinmailResetToolsLiveOracle,
+  finbotDarklabFinmailResetToolsRouteLiveOracle,
+  finbotDarklabFindriveServerLiveOracle,
+  finbotDarklabFindriveServerRouteLiveOracle,
+  finbotDarklabFindriveResetToolsLiveOracle,
+  finbotDarklabFindriveResetToolsRouteLiveOracle,
   finbotCtfStatsLiveOracle,
   finbotCtfStatsRouteLiveOracle,
   finbotVendorInvoicesLiveOracle,
