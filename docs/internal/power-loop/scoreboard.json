@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T11:58:00.000Z",
+  "updated_at": "2026-08-29T12:37:21.141273Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2770,
-  "total_findings": 27556,
+  "total_sites_scanned": 2779,
+  "total_findings": 27751,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1972,
-  "discovery_findings": 23286,
+  "discovery_urls_added": 1977,
+  "discovery_findings": 23430,
   "improvements_shipped": 1173,
-  "last_run": "2026-08-29T11:58:00.000Z",
+  "last_run": "2026-08-29T12:37:21.141273Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -33,7 +33,7 @@
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 596,
-      "live_oracles": 39,
+      "live_oracles": 37,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,28 +49,31 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles); secret-resend + resend-key present"
+      "note": "Stable 6/6 first-pass recall (51 findings, 37 live oracles); secret-resend + resend-key present"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 188,
-      "focus": "Escape.tech DVGA2 Expert + Duck Store vuln index + preview chatbot + WebSec level17 live timing oracle + DVGA GraphiQL route oracles",
-      "improvements_shipped_this_run": 3
+      "findings": 144,
+      "focus": "duck-store MCP tools/info + finbot vendor chat + appsecmaster command-injection/ssrf queued; drained wrongsecrets challenge-35..43",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "websec.fr/level17/: 4→5 findings (+websec-level17-timing-attack-live-oracle with source.php fetch)",
-      "pentest-ground.com:5013/graphiql: 10→14 findings (+dvga-graphiql-route-live-oracle + graphql route-specific slugs on /graphiql path)",
-      "preview.owasp-juice.shop/#/chatbot: 53 findings — rich preview-instance chatbot + REST oracle pass",
-      "duck-store.escape.tech/vulnerabilities: 41 findings — vuln index hub with IDOR/XSS/SQLi route coverage",
-      "dvga2.tools.escape.tech/: 15 findings — Expert-mode GraphQL hardened controls + custom vulns"
+      "wrongsecrets.herokuapp.com/challenge/challenge-35: 18 findings \u2014 route-specific live oracles",
+      "wrongsecrets.herokuapp.com/challenge/challenge-36: 18 findings \u2014 route-specific live oracles",
+      "wrongsecrets.herokuapp.com/challenge/challenge-37: 18 findings \u2014 route-specific live oracles",
+      "wrongsecrets.herokuapp.com/challenge/challenge-38: 18 findings \u2014 route-specific live oracles",
+      "wrongsecrets.herokuapp.com/challenge/challenge-40: 18 findings \u2014 route-specific live oracles",
+      "wrongsecrets.herokuapp.com/challenge/challenge-41: 18 findings \u2014 route-specific live oracles",
+      "wrongsecrets.herokuapp.com/challenge/challenge-42: 18 findings \u2014 route-specific live oracles",
+      "wrongsecrets.herokuapp.com/challenge/challenge-43: 18 findings \u2014 route-specific live oracles"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "pentest-ground DVWA hub still thin (10 findings) — SQLi module DB not seeded on hosted instance",
-      "juice-shop.demo.escape.tech/rest/memories: thin 2-finding pass — single-endpoint BOLA needs deeper REST crawl from hub"
+      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "new discovery URLs (duck-store MCP, appsecmaster labs) queued at end \u2014 pending drain next run",
+      "wrongsecrets challenge-35..43: consistent 18-finding passes with route-specific documentation oracles"
     ]
   },
   "discovery_highlights": {
@@ -83,6 +86,14 @@
     "pentest-ground.com:4280": 10,
     "pentest-ground.com:5013": 15,
     "pentest-ground.com:9000": 12,
-    "wrongsecrets-ctf.herokuapp.com": 13
+    "wrongsecrets-ctf.herokuapp.com": 13,
+    "wrongsecrets.herokuapp.com/challenge/challenge-35": 18,
+    "wrongsecrets.herokuapp.com/challenge/challenge-36": 18,
+    "wrongsecrets.herokuapp.com/challenge/challenge-37": 18,
+    "wrongsecrets.herokuapp.com/challenge/challenge-38": 18,
+    "wrongsecrets.herokuapp.com/challenge/challenge-40": 18,
+    "wrongsecrets.herokuapp.com/challenge/challenge-41": 18,
+    "wrongsecrets.herokuapp.com/challenge/challenge-42": 18,
+    "wrongsecrets.herokuapp.com/challenge/challenge-43": 18
   }
 }
