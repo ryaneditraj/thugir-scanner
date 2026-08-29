@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T02:35:38.135Z",
+  "updated_at": "2026-08-29T03:29:10.812Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2847,
-  "total_findings": 29131,
+  "total_sites_scanned": 2856,
+  "total_findings": 29493,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1981,
-  "discovery_findings": 24477,
+  "discovery_urls_added": 1986,
+  "discovery_findings": 24788,
   "improvements_shipped": 963,
-  "last_run": "2026-08-29T02:35:38.135Z",
+  "last_run": "2026-08-29T03:29:10.813Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
-      "live_oracle_slugs": 36,
+      "probes_run": 596,
+      "live_oracle_slugs": 37,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,42 +49,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 36 live oracles incl secret-resend + resend-key) — no category gaps"
+      "note": "Stable 6/6 first-pass recall (51 findings, 37 live oracles incl secret-resend + resend-key) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 269,
-      "focus": "pwnshop product/cart/admin-orders/api-users + ginandjuice basket BOLA; drained duck-store checkout/testimonials + vapi root",
+      "findings": 311,
+      "focus": "pwnshop seller/preview SSTI + download path-traversal + chat LLM; ginandjuice /api/products/1/price + /api/checkout; drained duck-store users/cart-add/mcp-info",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 36 live oracles, gap=[])",
-      "pwnshop.ctfsecurity.com/product/1: 42 findings — product review XSS + search SQLi live oracles (PWN-010/011)",
-      "pwnshop.ctfsecurity.com/admin/orders: 46 findings — admin audit-log SQLi + CSV export oracles (PWN-013/014)",
-      "pwnshop.ctfsecurity.com/cart: 25 findings — debug/info + events audit-log live oracles (PWN-005/018)",
-      "pwnshop.ctfsecurity.com/api/users/1: 22 findings — user profile IDOR route oracle (PWN-001)",
-      "ginandjuice.shop/api/basket: 34 findings — basket BOLA live oracle",
-      "duck-store.escape.tech/api/v1/orders/checkout: 40 findings — checkout business-logic oracle",
-      "duck-store.escape.tech/api/v1/testimonials/1: 42 findings — testimonials BOLA oracle",
-      "vapi.tools.escape.tech/: 18 findings — vAPI workshop root hub"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 37 live oracles, gap=[])",
+      "pwnshop.ctfsecurity.com/seller/preview: 41 findings — SSTI live oracle (PWN-040)",
+      "pwnshop.ctfsecurity.com/download: 47 findings — path traversal live oracle (PWN-038)",
+      "pwnshop.ctfsecurity.com/chat: 37 findings — prompt-injection + order IDOR live oracles (PWN-031/035)",
+      "ginandjuice.shop/api/products/1/price: 33 findings — corpus oracles; no PATCH price oracle yet",
+      "ginandjuice.shop/api/checkout: 34 findings — checkout-route live oracle + mass-assignment surface",
+      "duck-store.escape.tech/api/v1/users/: 41 findings — users BOLA route oracle",
+      "duck-store.escape.tech/api/v1/cart/add: 39 findings — cart business-logic oracle",
+      "duck-store.escape.tech/mcp/info: 39 findings — MCP info disclosure oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "pwnshop cart thin at 25 findings — checkout HPP/coupon oracles need authenticated session for full proof",
-      "ginandjuice basket BOLA may need session cookie for exploitation confirmation"
+      "ginandjuice /api/products/1/price: no dedicated PATCH price-manipulation live oracle — PortSwigger unused-endpoint lab needs authenticated session probe",
+      "ginandjuice /api/checkout: ginandjuice-checkout-route-live-oracle fires but chosen_discount mass-assignment needs auth cookie for full proof",
+      "pwnshop chat: prompt-injection oracle fires; agent command-injection chain (PWN-032+) may need Groq API key in lab"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
-    "pwnshop.ctfsecurity.com/admin/orders": 46,
-    "pwnshop.ctfsecurity.com/product/1": 42,
-    "duck-store.escape.tech/api/v1/testimonials/1": 42,
-    "duck-store.escape.tech/api/v1/orders/checkout": 40,
-    "ginandjuice.shop/api/basket": 34,
-    "pwnshop.ctfsecurity.com/cart": 25,
-    "pwnshop.ctfsecurity.com/api/users/1": 22,
-    "vapi.tools.escape.tech/": 18
+    "juice-shop.herokuapp.com": 51,
+    "pwnshop.ctfsecurity.com/download": 47,
+    "pwnshop.ctfsecurity.com/seller/preview": 41,
+    "duck-store.escape.tech/api/v1/users/": 41,
+    "duck-store.escape.tech/api/v1/cart/add": 39,
+    "duck-store.escape.tech/mcp/info": 39,
+    "pwnshop.ctfsecurity.com/chat": 37,
+    "ginandjuice.shop/api/checkout": 34,
+    "ginandjuice.shop/api/products/1/price": 33
   }
 }
