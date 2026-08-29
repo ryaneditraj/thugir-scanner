@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T15:10:00.000Z",
+  "updated_at": "2026-08-29T16:30:00.000Z",
   "discovery_urls": [
     {
       "url": "https://duck-store.escape.tech/api/v1/auth/login/totp",
@@ -10637,6 +10637,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/product/1",
+      "source": "ctfsec/pwnshop vulnerabilities \u2014 stored XSS via POST /review on product page (PWN-011; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/profile/update-avatar",
+      "source": "ctfsec/pwnshop vulnerabilities \u2014 SSRF via avatar URL POST /profile/update-avatar chains to /debug/info (PWN-033; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/account/delete",
+      "source": "ctfsec/pwnshop vulnerabilities \u2014 CSRF account deletion POST /account/delete no token (PWN-029; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/admin/export-orders",
+      "source": "ctfsec/pwnshop vulnerabilities \u2014 CSV formula injection GET /admin/export-orders admin-only (PWN-013; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/reset-password",
+      "source": "ctfsec/pwnshop vulnerabilities \u2014 soft rate-limit bypass via X-Forwarded-For on password reset (PWN-028; web search 16 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://dvga2.tools.escape.tech/",
       "source": "Escape.tech DVGA Expert mode \u2014 hardened GraphQL with cost/depth controls + custom vulns (dvga2.tools.escape.tech)",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T16:17:00.000Z",
+  "updated_at": "2026-08-29T16:41:59.618Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2953,
-  "total_findings": 28562,
+  "total_sites_scanned": 2962,
+  "total_findings": 28837,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1992,
-  "discovery_findings": 24044,
-  "improvements_shipped": 1185,
-  "last_run": "2026-08-29T16:17:00.000Z",
+  "discovery_urls_added": 1997,
+  "discovery_findings": 24269,
+  "improvements_shipped": 1002,
+  "last_run": "2026-08-29T16:41:59.618Z",
   "last_run_summary": {
     "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 593,
-      "live_oracles": 39,
+      "probes_run": 542,
+      "live_oracles": 38,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,34 +49,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles) — no category gaps"
+      "note": "Stable 6/6 first-pass recall (50 findings, 38 live oracles); secret-resend + resend-key present — no category gaps"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 32,
-      "focus": "vulnbank merchants/login route-specific merchant SQLi + profile debug disclosure oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 225,
+      "focus": "pwnshop product review XSS + avatar SSRF + account-delete CSRF + admin CSV export + reset-password rate-limit bypass oracles",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "vulnbank.org/api/v1/merchants/login: 32 findings — vulnbank-merchant-sqli-login + merchant-me-debug route oracles shipped (was 29 with false user-login route association)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 38 live oracles, gap=[])",
+      "pwnshop.ctfsecurity.com/product/1: 42 findings — pwnshop-product-review-stored-xss-live-oracle + product-search-sqli route oracles",
+      "pwnshop.ctfsecurity.com/account/delete: 47 findings — pwnshop-account-delete-csrf-live-oracle + route oracle",
+      "pwnshop.ctfsecurity.com/admin/export-orders: 46 findings — pwnshop-export-orders-csv-route-live-oracle",
+      "pwnshop.ctfsecurity.com/profile/update-avatar: 23 findings — avatar-upload route oracle; SSRF live oracle still absent on route-only scan",
+      "wrongsecrets.herokuapp.com/challenge/challenge-15: 18 findings — challenge hub drained"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable — no category misses to address"
+      "benchmark 6/6 stable — no category misses to address",
+      "pwnshop profile/update-avatar: pwnshop-avatar-url-ssrf-live-oracle absent on dedicated route scan (PWN-033)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
-    "vulnbank.org/api/v1/merchants/login": 32,
-    "duck-store.escape.tech/api/v1/users/": 39,
-    "duck-store.escape.tech/api/v1/auth/login/totp": 38,
-    "duck-store.escape.tech/api/v1/cart/add": 38,
-    "duck-store.escape.tech/api/v1/orders/checkout": 35,
-    "wrongsecrets.herokuapp.com/challenge/challenge-20": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-21": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-22": 18
+    "juice-shop.herokuapp.com": 50,
+    "pwnshop.ctfsecurity.com/account/delete": 47,
+    "pwnshop.ctfsecurity.com/admin/export-orders": 46,
+    "pwnshop.ctfsecurity.com/product/1": 42,
+    "pwnshop.ctfsecurity.com/profile/update-avatar": 23,
+    "pwnshop.ctfsecurity.com/reset-password": 23,
+    "wrongsecrets.herokuapp.com/challenge/challenge-15": 18,
+    "dvwu.vercel.app/labs/path-traversal": 14,
+    "dvwu.vercel.app/labs/command-injection": 12
   }
 }
