@@ -51514,6 +51514,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-insecure-password-reset-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "OopsSec Store insecure password reset walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/insecure-password-reset documents predictable MD5(email+timestamp) reset tokens with requestedAt timestamp leaked in POST /api/auth/forgot-password response.",
+    impactOneline:
+      "Public password-reset walkthrough teaches token forgery via leaked server timestamps on a live e-commerce API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecInsecurePasswordResetEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use crypto.randomBytes for reset tokens; never leak timestamps in forgot-password responses; add rate limiting.",
+      steps: [
+        "Replace MD5(email+timestamp) with crypto.randomBytes(32).toString('hex').",
+        "Remove requestedAt from forgot-password JSON responses.",
+        "Rate-limit POST /api/auth/forgot-password per IP and per email."
+      ]
+    },
+    fixPrompt:
+      "Our OopsSec Store walkthrough documents predictable password-reset tokens. Show crypto.randomBytes remediation and response hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-insecure-password-reset-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "OopsSec Store insecure password reset route live oracle",
+    description:
+      "When scanning /posts/insecure-password-reset, the walkthrough documents MD5(email+timestamp) reset tokens with requestedAt timestamp leaked via POST /api/auth/forgot-password — route-specific live oracle.",
+    impactOneline:
+      "OopsSec forgot-password endpoint leaks the exact timestamp used in predictable MD5 reset token generation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecInsecurePasswordResetRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use crypto.randomBytes for reset tokens; never leak timestamps in forgot-password responses.",
+      steps: [
+        "Replace MD5(email+timestamp) with crypto.randomBytes(32).toString('hex').",
+        "Remove requestedAt from forgot-password JSON responses.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/insecure-password-reset route documents predictable reset tokens. Show route-specific crypto.randomBytes remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-open-redirect-login-bypass-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store open-redirect login bypass walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/open-redirect-login-bypass documents unvalidated login redirect parameter enabling access to /internal/oauth/callback via window.location.href.",
+    impactOneline:
+      "Public open-redirect walkthrough teaches post-login navigation to internal endpoints gated only by oauth_callback cookie presence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecOpenRedirectLoginBypassEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets against same-origin allowlist before post-login navigation.",
+      steps: [
+        "Only allow relative paths starting with a single / and reject protocol-relative URLs.",
+        "Use router.push() instead of window.location.href for same-origin redirects.",
+        "Host OopsSec open-redirect walkthroughs on localhost only."
+      ]
+    },
+    fixPrompt:
+      "Our OopsSec Store walkthrough documents open-redirect login bypass to internal pages. Show redirect validation and allowlist fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-open-redirect-login-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store open-redirect login bypass route live oracle",
+    description:
+      "When scanning /posts/open-redirect-login-bypass, the walkthrough documents unvalidated redirect query parameter reaching /internal/oauth/callback after login — route-specific live oracle.",
+    impactOneline:
+      "OopsSec login redirect accepts arbitrary targets via window.location.href, exposing internal oauth callback pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecOpenRedirectLoginBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets against same-origin allowlist before post-login navigation.",
+      steps: [
+        "Only allow relative paths starting with a single / and reject external URLs.",
+        "Use router.push() instead of window.location.href for same-origin redirects.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/open-redirect-login-bypass route documents internal page access via login redirect. Show route-specific redirect validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-mass-assignment-admin-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "OopsSec Store mass-assignment admin escalation walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/mass-assignment-admin-privilege-escalation documents POST /api/auth/signup spreading request body to inject role: ADMIN during registration.",
+    impactOneline:
+      "Public mass-assignment walkthrough teaches admin privilege escalation via unfiltered signup JSON fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecMassAssignmentAdminEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Explicitly allowlist signup fields and hardcode role to CUSTOMER server-side.",
+      steps: [
+        "Destructure only email and password from req.body; set role: CUSTOMER explicitly.",
+        "Validate signup input with Zod schema rejecting unexpected fields.",
+        "Host OopsSec mass-assignment walkthroughs on localhost only."
+      ]
+    },
+    fixPrompt:
+      "Our OopsSec Store walkthrough documents signup mass-assignment to ADMIN. Show explicit field extraction and schema validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-mass-assignment-admin-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "OopsSec Store mass-assignment admin escalation route live oracle",
+    description:
+      "When scanning /posts/mass-assignment-admin-privilege-escalation, the walkthrough documents POST /api/auth/signup spreading request body to set role: ADMIN — route-specific live oracle.",
+    impactOneline:
+      "OopsSec signup endpoint persists all JSON fields including attacker-supplied role: ADMIN via Prisma spread operator.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecMassAssignmentAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Explicitly allowlist signup fields and hardcode role to CUSTOMER server-side.",
+      steps: [
+        "Destructure only email and password from req.body; set role: CUSTOMER explicitly.",
+        "Validate signup input with Zod schema rejecting unexpected fields.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/mass-assignment-admin-privilege-escalation route documents signup role injection. Show route-specific allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-aes-cbc-padding-oracle-evidence",
     platform: "generic",
     category: "Cryptographic failure",
