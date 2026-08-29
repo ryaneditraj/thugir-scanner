@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-29T03:20:00.000Z",
+  "updated_at": "2026-08-29T04:16:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/none/login",
+      "source": "NeuraLegion/brokencrystals README — JWT alg:none login bypass oracle POST /api/auth/jwt/none/login (web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/rsa/signature/login",
+      "source": "NeuraLegion/brokencrystals README — JWT RSA signature confusion oracle POST /api/auth/jwt/rsa/signature/login (web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/mcp",
+      "source": "Escape duck-store README — MCP tool-calling / excessive-agency oracle GET /api/v1/mcp (OWASP LLM Top 10; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/cards",
+      "source": "Official demo.owasp-juice.shop — payment cards BOLA oracle GET /rest/cards (Pwning Juice Shop; web search 04 UTC)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/profile/apply-coupon",
+      "source": "ctfsec/pwnshop vulnerabilities — HTTP parameter pollution coupon bypass oracle POST /profile/apply-coupon (PWN-039; web search 04 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/seller/preview",
       "source": "ctfsec/pwnshop README — SSTI storefront preview oracle GET /seller/preview (PWN-040; web search 03 UTC)",
