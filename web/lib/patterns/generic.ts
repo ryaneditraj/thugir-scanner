@@ -43564,6 +43564,108 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-merchant-sqli-login-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vuln Bank merchant portal SQL injection login bypass oracle",
+    description:
+      "POST /api/v1/merchants/login with email admin' OR '1'='1 bypasses merchant authentication and returns api_key plus JWT without valid credentials — the Vuln Bank merchant portal SQL injection login oracle.",
+    impactOneline:
+      "SQL injection in merchant login endpoints lets attackers obtain merchant API keys and session tokens without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantSqliLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all merchant authentication SQL — Vuln Bank is intentional training software.",
+      steps: [
+        "Replace string-concatenated merchant login queries with prepared statements or ORM bindings.",
+        "Apply account lockout and MFA for merchant administrative accounts.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/merchants/login endpoint is bypassed with email admin' OR '1'='1 and returns api_key + JWT. Show parameterized query remediation for merchant authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-merchant-sqli-login-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vuln Bank /api/v1/merchants/login SQL injection route live oracle",
+    description:
+      "When scanning /api/v1/merchants/login on vulnbank.org, POST with email admin' OR '1'='1 bypasses merchant authentication and returns api_key plus JWT — route-specific merchant portal SQL injection login oracle.",
+    impactOneline:
+      "Route-specific scans confirm merchant login APIs are vulnerable to SQL injection credential bypass on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantSqliLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all merchant authentication SQL — Vuln Bank is intentional training software.",
+      steps: [
+        "Replace string-concatenated merchant login queries with prepared statements or ORM bindings.",
+        "Apply account lockout and MFA for merchant administrative accounts."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/merchants/login route scan shows SQLi bypass with email admin' OR '1'='1. Show route-specific parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-merchant-me-debug-disclosure-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Vuln Bank merchant profile debug_info api_key disclosure oracle",
+    description:
+      "GET /api/v1/merchants/me with a merchant JWT echoes debug_info.api_key in the JSON response — the Vuln Bank merchant profile sensitive-data disclosure oracle.",
+    impactOneline:
+      "Merchant profile endpoints that echo API keys in debug_info leak payment-integration credentials to authenticated attackers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantMeDebugDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove debug_info blocks from merchant profile responses — Vuln Bank is intentional training software.",
+      steps: [
+        "Never echo raw merchant api_key values in profile or debug responses.",
+        "Return API keys only once at registration via a secure channel.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/merchants/me endpoint echoes debug_info.api_key in the JSON body. Show merchant profile response hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-merchant-me-debug-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Vuln Bank /api/v1/merchants/me debug disclosure route live oracle",
+    description:
+      "When scanning /api/v1/merchants/me on vulnbank.org, GET with a merchant JWT echoes debug_info.api_key — route-specific merchant profile sensitive-data disclosure oracle.",
+    impactOneline:
+      "Route-specific scans confirm merchant profile APIs leak API keys in debug_info on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantMeDebugDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove debug_info blocks from merchant profile responses — Vuln Bank is intentional training software.",
+      steps: [
+        "Never echo raw merchant api_key values in profile or debug responses.",
+        "Return API keys only once at registration via a secure channel."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/merchants/me route scan confirms debug_info.api_key disclosure. Show route-specific merchant profile hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-merchant-register-live-oracle",
     platform: "generic",
     category: "Sensitive data exposure",

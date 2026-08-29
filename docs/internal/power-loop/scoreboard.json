@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T15:17:00.000Z",
+  "updated_at": "2026-08-29T16:17:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2952,
-  "total_findings": 28508,
+  "total_sites_scanned": 2953,
+  "total_findings": 28562,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1992,
-  "discovery_findings": 24041,
-  "improvements_shipped": 1182,
-  "last_run": "2026-08-29T15:17:00.000Z",
+  "discovery_findings": 24044,
+  "improvements_shipped": 1185,
+  "last_run": "2026-08-29T16:17:00.000Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -53,34 +53,28 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 233,
-      "focus": "duck-store vuln-index route oracles (totp/users/cart/checkout) + vulnbank merchants/login + wrongsecrets 20-22 drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 32,
+      "focus": "vulnbank merchants/login route-specific merchant SQLi + profile debug disclosure oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "duck-store.escape.tech/api/v1/auth/login/totp: 38 findings — duck-store-auth-totp-bypass-live-oracle confirmed on route scan",
-      "duck-store.escape.tech/api/v1/users/: 39 findings — duck-store-users-enumeration-live-oracle",
-      "duck-store.escape.tech/api/v1/cart/add: 38 findings — duck-store-cart-negative-quantity-live-oracle",
-      "duck-store.escape.tech/api/v1/orders/checkout: 35 findings — duck-store-checkout-private-coupon-live-oracle",
-      "vulnbank.org/api/v1/merchants/login: 29 findings — vulnbank-sqli-login + BOPLA oracles",
-      "wrongsecrets.herokuapp.com/challenge/challenge-20/21/22: 18 findings each — C++/binary route oracles"
+      "vulnbank.org/api/v1/merchants/login: 32 findings — vulnbank-merchant-sqli-login + merchant-me-debug route oracles shipped (was 29 with false user-login route association)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable — no category misses to address",
-      "vulnbank merchants/login: no route-specific merchant-login oracle slug yet (shared vulnbank API fingerprint)"
+      "benchmark 6/6 stable — no category misses to address"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "vulnbank.org/api/v1/merchants/login": 32,
     "duck-store.escape.tech/api/v1/users/": 39,
     "duck-store.escape.tech/api/v1/auth/login/totp": 38,
     "duck-store.escape.tech/api/v1/cart/add": 38,
     "duck-store.escape.tech/api/v1/orders/checkout": 35,
-    "vulnbank.org/api/v1/merchants/login": 29,
     "wrongsecrets.herokuapp.com/challenge/challenge-20": 18,
     "wrongsecrets.herokuapp.com/challenge/challenge-21": 18,
     "wrongsecrets.herokuapp.com/challenge/challenge-22": 18

