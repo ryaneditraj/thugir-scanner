@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-29T18:22:09.875Z",
+  "updated_at": "2026-08-29T20:18:01.993Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+      "source": "OWASP WrongSecrets — Challenge 63 hardcoded AES key oracle (Heroku demo README challenges 62-63)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://appsecmaster.net/labs/ci-pipeline",
+      "source": "AppSecMaster — CI/CD pipeline injection lab with stored XSS + command injection oracles (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://appsecmaster.net/labs/deserialization",
+      "source": "AppSecMaster — insecure deserialization gadget chain lab (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/ssrf",
+      "source": "DaniSam-STU/security-lab — SSRF lab module on seclab.vercel.app (GitHub README OWASP labs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/auth/jwt/weak/login",
+      "source": "NeuraLegion/brokencrystals — JWT weak-secret login oracle POST /api/auth/jwt/weak/login (public benchmark)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://securebank-blog.vercel.app/transfer",
       "source": "SecureBank FAST-NUCES attack lab — CSRF bank transfer Attack 3 oracle (securebank-blog Medium article)",
