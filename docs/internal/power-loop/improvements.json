@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-rest-companion-prefix-expansion-v2",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JUICE_SHOP_REST_ROUTE_COMPANION_PREFIXES extended with track-order, jwt-alg-none, captcha-bypass, wallet-balance, resend-key, login-sqli, memories-bola, feedbacks-bola, b2b-orders, admin-config (+17 prefixes); demo.owasp-juice.shop/rest/memories findings 17→29; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-change-password-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /my-account/change-password without session returns HTTP 302 Location /login; ginandjuice.shop/my-account/change-password findings 34→36 (+ginandjuice-change-password-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-mass-assignment-lab-priority-seeds",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/mass-assignment added to extractDvwuVulnPortalSeeds + runner -4 priority for dvwu-mass-assignment/portal-sqli on mass-assignment routes; dvwu.vercel.app/labs/mass-assignment findings 8 maintained (+dvwu-portal-sqli-live-oracle +dvwu-mass-assignment-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:juice-shop.demo.escape.tech",
       "slug": "juice-shop-rest-api-hub-route-live-oracle",
       "status": "shipped",

@@ -71796,24 +71796,90 @@ const ginAndJuiceChangePasswordRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/my-account\/change-password\b/i.test(pageUrl)) return NEGATIVE;
-  const doc = await ctx.probe.get(pageUrl, { maxBytes: 32768, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  const hasAccountNav =
-    /account-icon\s+selected/i.test(doc.body) && /href="\/my-account"/i.test(doc.body);
-  const hasLoginSurface =
-    /class=login-form/i.test(doc.body) &&
-    /name="username"/i.test(doc.body) &&
-    /type=username/i.test(doc.body);
-  if (!hasAccountNav || !hasLoginSurface) return NEGATIVE;
+  const result = await probeGinAndJuiceChangePasswordSurface(ctx);
+  if (!result?.fired) {
+    const doc = await ctx.probe.get(pageUrl, { maxBytes: 32768, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+    const hasAccountNav =
+      /account-icon\s+selected/i.test(doc.body) && /href="\/my-account"/i.test(doc.body);
+    const hasLoginSurface =
+      /class=login-form/i.test(doc.body) &&
+      /name="username"/i.test(doc.body) &&
+      /type=username/i.test(doc.body);
+    if (!hasAccountNav || !hasLoginSurface) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: doc.body.match(/class=login-form[\s\S]{0,200}/i)?.[0]?.slice(0, 180),
+        note: "Gin & Juice Shop /my-account/change-password route scan — authenticated password-change surface gated behind login (PortSwigger account-takeover training lab entry point)"
+      }
+    };
+  }
   return {
     fired: true,
-    confidence: 0.9,
+    confidence: result.confidence,
     evidence: {
+      ...result.evidence,
       scannedUrl: pageUrl,
-      snippet: doc.body.match(/class=login-form[\s\S]{0,200}/i)?.[0]?.slice(0, 180),
-      note: "Gin & Juice Shop /my-account/change-password route scan — authenticated password-change surface gated behind login (PortSwigger account-takeover training lab entry point)"
+      note: "Gin & Juice Shop /my-account/change-password route scan — login-gated password-change surface for PortSwigger account-takeover training lab"
     }
   };
+};
+
+async function probeGinAndJuiceChangePasswordSurface(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isGinAndJuiceHost(ctx)) return null;
+  const changeUrl = new URL("/my-account/change-password", ctx.origin).toString();
+  const unauthPost = await ctx.probe.get(changeUrl, {
+    method: "POST",
+    body: new URLSearchParams({
+      currentPassword: "wrong",
+      newPassword: "ThugirProbe123!",
+      confirmPassword: "ThugirProbe123!"
+    }).toString(),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const postLocation = unauthPost.headers["location"] || unauthPost.headers.Location || "";
+  if (unauthPost.status === 302 && /^\/login\b/i.test(String(postLocation))) {
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        changeUrl,
+        redirectLocation: String(postLocation),
+        note: "Gin & Juice Shop POST /my-account/change-password without session redirects to /login — account-takeover password-change endpoint oracle"
+      }
+    };
+  }
+  const doc = await ctx.probe.get(changeUrl, {
+    maxBytes: 32768,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if (doc.status === 301 || doc.status === 302) {
+    const loc = doc.headers.location ?? doc.headers.Location ?? "";
+    if (/\/login/i.test(String(loc))) {
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          url: changeUrl,
+          redirectLocation: String(loc),
+          note: "Gin & Juice Shop GET /my-account/change-password redirects unauthenticated users to /login — password-change training endpoint oracle"
+        }
+      };
+    }
+  }
+  return null;
+}
+
+const ginAndJuiceChangePasswordLiveOracle: Rule = async (ctx) => {
+  const result = await probeGinAndJuiceChangePasswordSurface(ctx);
+  return result ?? NEGATIVE;
 };
 
 const ginAndJuiceChangeAddressRouteLiveOracle: Rule = async (ctx) => {
@@ -100906,6 +100972,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogProductRouteLiveOracle,
   ginAndJuiceChangeEmailLiveOracle,
   ginAndJuiceChangeEmailRouteLiveOracle,
+  ginAndJuiceChangePasswordLiveOracle,
   ginAndJuiceChangePasswordRouteLiveOracle,
   ginAndJuiceChangeAddressRouteLiveOracle,
   ginAndJuiceMyAccountOrdersRouteLiveOracle,
