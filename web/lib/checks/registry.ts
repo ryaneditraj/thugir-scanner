@@ -54782,6 +54782,74 @@ const pentestGroundRestflawUptimeCmdiRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const pentestGroundRestflawHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestGroundRestflawHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/pentest-ground\.com:9000\/?(?:[#?]|$)/i.test(pageUrl)) return NEGATIVE;
+  const origin = pentestGroundRestflawProbeOrigin(ctx);
+  const evalResult = await pentestGroundRestflawEvalCodeInjectionRouteLiveOracle({
+    ...ctx,
+    scanUrl: `${origin}/eval`
+  });
+  if (evalResult.fired) {
+    return {
+      fired: true,
+      confidence: evalResult.confidence,
+      evidence: {
+        ...evalResult.evidence,
+        scannedUrl: pageUrl,
+        note: "Pentest-Ground RestFlaw hub route scan — GET /eval confirms Python code injection training oracle"
+      }
+    };
+  }
+  const sqliResult = await pentestGroundRestflawTokensSqliRouteLiveOracle({
+    ...ctx,
+    scanUrl: `${origin}/tokens`
+  });
+  if (sqliResult.fired) {
+    return {
+      fired: true,
+      confidence: sqliResult.confidence,
+      evidence: {
+        ...sqliResult.evidence,
+        scannedUrl: pageUrl,
+        note: "Pentest-Ground RestFlaw hub route scan — POST /tokens confirms SQL injection training oracle"
+      }
+    };
+  }
+  const xxeResult = await pentestGroundRestflawSearchXxeRouteLiveOracle({
+    ...ctx,
+    scanUrl: `${origin}/search`
+  });
+  if (xxeResult.fired) {
+    return {
+      fired: true,
+      confidence: xxeResult.confidence,
+      evidence: {
+        ...xxeResult.evidence,
+        scannedUrl: pageUrl,
+        note: "Pentest-Ground RestFlaw hub route scan — POST /search confirms XXE training oracle"
+      }
+    };
+  }
+  const cmdiResult = await pentestGroundRestflawUptimeCmdiRouteLiveOracle({
+    ...ctx,
+    scanUrl: `${origin}/uptime`
+  });
+  if (cmdiResult.fired) {
+    return {
+      fired: true,
+      confidence: cmdiResult.confidence,
+      evidence: {
+        ...cmdiResult.evidence,
+        scannedUrl: pageUrl,
+        note: "Pentest-Ground RestFlaw hub route scan — GET /uptime/;id confirms command injection training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 // --- Judgement Day AI red team arena (judgement-day-khaki.vercel.app) -----------------
 const CLIENT_JUDGEMENT_DAY_ARENA_RES: { label: string; re: RegExp }[] = [
   {
@@ -75866,6 +75934,39 @@ const juiceShopMemoriesBolaRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Juice Shop /rest/memories route scan — unauthenticated memories API exposes cross-user PII — route-specific BOLA oracle"
+    }
+  };
+};
+
+const juiceShopRestApiHubRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const corpus = `${ctx.origin}\n${pageUrl}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  if (!/\/(?:rest|api)\//i.test(pageUrl)) return NEGATIVE;
+  const companionProbes: Array<{ name: string; rule: Rule }> = [
+    { name: "security-question-user", rule: juiceShopSecurityQuestionUserLiveOracle },
+    { name: "security-questions-list", rule: juiceShopSecurityQuestionsListLiveOracle },
+    { name: "whoami-unauth", rule: juiceShopWhoamiUnauthLiveOracle },
+    { name: "quantitys-exposure", rule: juiceShopQuantitysExposureLiveOracle },
+    { name: "products-reviews", rule: juiceShopProductsReviewsExposureLiveOracle },
+    { name: "memories-bola", rule: juiceShopMemoriesBolaLiveOracle },
+    { name: "hints-exposure", rule: juiceShopHintsExposureLiveOracle },
+    { name: "challenges-disclosure", rule: juiceShopChallengesDisclosureLiveOracle },
+    { name: "deliverys-exposure", rule: juiceShopDeliverysExposureLiveOracle }
+  ];
+  const confirmed: string[] = [];
+  for (const { name, rule } of companionProbes) {
+    const result = await rule(ctx);
+    if (result.fired) confirmed.push(name);
+  }
+  if (confirmed.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: confirmed.length >= 6 ? 0.93 : 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      confirmedProbes: confirmed,
+      note: `Juice Shop REST API route scan — ${confirmed.length} companion probes confirm intentional OWASP training surface beyond single-endpoint slug match`
     }
   };
 };
@@ -99374,6 +99475,7 @@ export const RULES: Record<string, Rule> = {
   pentestGroundRestflawSearchXxeRouteLiveOracle,
   pentestGroundRestflawUptimeCmdiLiveOracle,
   pentestGroundRestflawUptimeCmdiRouteLiveOracle,
+  pentestGroundRestflawHubRouteLiveOracle,
   clientSideJudgementDayArenaEvidence,
   clientSideCahyodVulnerableLabEvidence,
   clientSideCtfchallengeEvidence,
@@ -99584,6 +99686,7 @@ export const RULES: Record<string, Rule> = {
   juiceShopBasketIdorRouteLiveOracle,
   juiceShopMemoriesBolaLiveOracle,
   juiceShopMemoriesBolaRouteLiveOracle,
+  juiceShopRestApiHubRouteLiveOracle,
   juiceShopQuantitysExposureLiveOracle,
   juiceShopQuantitysExposureRouteLiveOracle,
   juiceShopHintsExposureLiveOracle,

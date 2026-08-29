@@ -57884,6 +57884,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pentest-ground-restflaw-hub-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Pentest-Ground RestFlaw hub route live oracle",
+    description:
+      "When scanning pentest-ground.com:9000/ hub, companion probes delegate to /eval code injection, /tokens SQLi, /search XXE, and /uptime command injection — route-specific RestFlaw training catalog oracle.",
+    impactOneline:
+      "RestFlaw hub scans should confirm the full intentional flaw surface, not only generic misconfiguration findings.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundRestflawHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RestFlaw is intentional security training — restrict hub scans to authorized lab environments.",
+      steps: [
+        "Keep RestFlaw instances on VPN-only lab networks.",
+        "Do not point production DAST scanners at public RestFlaw without authorization.",
+        "Treat eval/tokens/search endpoints as sensitive reconnaissance data on training apps."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground RestFlaw hub route scan confirmed multiple injection training oracles. Show how to scope scanner targets to authorized lab infrastructure.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentest-ground-hub-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -60714,6 +60740,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Juice Shop /rest/memories route scan exposes cross-user PII via BOLA. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-rest-api-hub-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop REST API hub route live oracle",
+    description:
+      "When scanning any Juice Shop /rest/* or /api/* endpoint, companion probes confirm multiple unauthenticated training oracles (security questions, inventory, hints, challenges) beyond the single route slug — REST API hub delegation oracle.",
+    impactOneline:
+      "Single-endpoint Juice Shop REST scans should surface the full intentional flaw surface, not only the matched route resource.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopRestApiHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Juice Shop is intentional security training — scope REST API route scans to authorized lab instances.",
+      steps: [
+        "Require authentication before returning security questions, hints, or challenge scoreboards.",
+        "Scope inventory and memory APIs to the authenticated user.",
+        "Treat unauthenticated REST responses as sensitive reconnaissance data on training apps."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop REST API route scan confirmed multiple unauthenticated training oracles via companion probes. Show how to scope scanner targets to authorized lab infrastructure.",
     version: 1,
     enabled: true
   },

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-rest-api-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: juiceShopRestApiHubRouteLiveOracle runs 9 companion probes on any /rest/* or /api/* route scan; juice-shop.demo.escape.tech/rest/memories findings 2→17 (+juice-shop-rest-api-hub-route-live-oracle +15 companion oracles); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:juice-shop.demo.escape.tech",
+      "slug": "juice-shop-rest-route-companion-probes",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: JUICE_SHOP_REST_ROUTE_COMPANION_PREFIXES expands fast-path route scan beyond single slug match; juice-shop.demo.escape.tech/rest/memories probes 1→17 (+security-question +quantitys +hints +challenges +deliverys +addresss-bola etc); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com:9000",
+      "slug": "pentest-ground-restflaw-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pentestGroundRestflawHubRouteLiveOracle delegates eval/sqli/xxe/uptime probes on :9000/ hub scans; pentest-ground.com:9000/ findings 12→13 (+pentest-ground-restflaw-hub-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-vulnerabilities-hub-route-live-oracle",
       "status": "shipped",

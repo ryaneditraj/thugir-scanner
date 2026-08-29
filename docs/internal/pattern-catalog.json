@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-29T12:55:09.498Z",
-  "total": 2829,
-  "uniqueSlugs": 2821,
+  "generatedAt": "2026-08-29T13:18:51.025Z",
+  "total": 2831,
+  "uniqueSlugs": 2823,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2811,
+    "generic": 2813,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2744,
+    "deep": 2746,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 132,
+    "Information disclosure": 134,
     "Security misconfiguration": 210,
     "Broken authentication": 186,
     "Injection": 451,
@@ -1871,6 +1871,7 @@
     "juice-shop-recycles-bola-live-oracle",
     "juice-shop-recycles-bola-route-live-oracle",
     "juice-shop-resend-key-live-oracle",
+    "juice-shop-rest-api-hub-route-live-oracle",
     "juice-shop-save-login-ip-live-oracle",
     "juice-shop-save-login-ip-route-live-oracle",
     "juice-shop-security-answers-disclosure-live-oracle",
@@ -2006,6 +2007,7 @@
     "pentest-ground-guardian-leaks-search-sqli-live-oracle",
     "pentest-ground-guardian-leaks-search-sqli-route-live-oracle",
     "pentest-ground-restflaw-eval-code-injection-route-live-oracle",
+    "pentest-ground-restflaw-hub-route-live-oracle",
     "pentest-ground-restflaw-search-xxe-route-live-oracle",
     "pentest-ground-restflaw-tokens-sqli-error-route-live-oracle",
     "pentest-ground-restflaw-tokens-sqli-route-live-oracle",
