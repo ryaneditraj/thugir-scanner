@@ -6119,10 +6119,29 @@ const clientSideOopssecPriceManipulationEvidence: Rule = async (ctx) => {
   };
 };
 
+async function oopssecWalkthroughEvidenceWithFetch(
+  ctx: RuleContext,
+  pageUrl: string,
+  evidenceFn: (ctx: RuleContext) => Promise<RuleResult>
+): Promise<RuleResult> {
+  let result = await evidenceFn(ctx);
+  if (result.fired) return result;
+  const fetchUrl = pageUrl.endsWith("/") ? pageUrl : `${pageUrl}/`;
+  const doc = await ctx.probe.get(fetchUrl, { maxBytes: 196_608, timeoutMs: 20000 });
+  if (doc.status >= 200 && doc.status < 400) {
+    result = await evidenceFn({ ...ctx, combined: `${ctx.combined}\n${doc.body}` });
+  }
+  return result;
+}
+
 const oopssecPriceManipulationRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/posts\/client-side-price-manipulation/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecPriceManipulationEvidence(ctx);
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecPriceManipulationEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -6371,7 +6390,7 @@ const clientSideOopssecSsrfEvidence: Rule = async (ctx) => {
 const oopssecSsrfRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/posts\/ssrf-internal-page-access/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecSsrfEvidence(ctx);
+  const result = await oopssecWalkthroughEvidenceWithFetch(ctx, pageUrl, clientSideOopssecSsrfEvidence);
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -6431,7 +6450,11 @@ const clientSideOopssecPromptInjectionEvidence: Rule = async (ctx) => {
 const oopssecPromptInjectionRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/posts\/prompt-injection-ai-assistant/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecPromptInjectionEvidence(ctx);
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecPromptInjectionEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -7898,8 +7921,16 @@ const clientSideNodegoatEvidence: Rule = async (ctx) => {
   };
 };
 
+const NODEGOAT_LIVE_ORIGIN = "https://nodegoat-websec.herokuapp.com";
+
 function isNodegoatHost(ctx: RuleContext): boolean {
-  return /nodegoat-websec\.herokuapp\.com/i.test(ctx.origin);
+  return /nodegoat(?:-websec)?\.herokuapp\.com/i.test(ctx.origin);
+}
+
+/** Official nodegoat.herokuapp.com is decommissioned — probe the live websec demo instead. */
+function nodegoatLiveOrigin(ctx: RuleContext): string {
+  if (/nodegoat(?:-websec)?\.herokuapp\.com/i.test(ctx.origin)) return NODEGOAT_LIVE_ORIGIN;
+  return ctx.origin;
 }
 
 /** Login page meta/title also contains "OWASP NodeGoat" — require authenticated nav/profile markers. */
@@ -9740,7 +9771,7 @@ const nodegoatSignupRouteLiveOracle: Rule = async (ctx) => {
 
 const nodegoatLoginWeakCredentialsLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
-  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginUrl = new URL("/login", nodegoatLiveOrigin(ctx)).toString();
   const loginPage = await ctx.probe.get(loginUrl, { maxBytes: 16384, timeoutMs: 15000 });
   if (loginPage.status < 200 || loginPage.status >= 400) return NEGATIVE;
   if (!/userName/i.test(loginPage.body) || !/loginform|Enter User Name/i.test(loginPage.body))
@@ -97272,6 +97303,78 @@ const vwadOopssecStoreRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- VWAD Snyk Goof vulnerable Node.js todo app listing --------------------------------
+const clientSideVwadGoofEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/goof/i.test(pageUrl)) return NEGATIVE;
+  const corpus = ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "Goof VWAD listing",
+      re: /Goof[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "Snyk vulnerable Node.js demo",
+      re: /Snyk'?s vulnerable Node\.js demo app|todo list, Express\/MongoDB/i
+    },
+    {
+      label: "Exploitable npm and code-level vulns",
+      re: /open redirect|NoSQL injection|code injection|hardcoded secrets|misconfiguration/i
+    },
+    {
+      label: "Offline container availability",
+      re: /available offline|Collections offline container/i
+    },
+    {
+      label: "Default admin credentials documented",
+      re: /admin@snyk\.io|SuperSecretPassword/i
+    }
+  ];
+  for (const { label, re } of checks) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : hits.length >= 3 ? 0.9 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Snyk Goof VWAD listing documents intentionally vulnerable Express/MongoDB todo app with NoSQL injection, XSS, open redirect, and hardcoded secrets"
+    }
+  };
+};
+
+const vwadGoofRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/vwad\.owasp\.org\/app\/goof/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideVwadGoofEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  const githubRepo = await ctx.probe.get("https://github.com/snyk-labs/nodejs-goof", {
+    maxBytes: 65536,
+    timeoutMs: 15000
+  });
+  let repoConfirmed = false;
+  if (githubRepo.status >= 200 && githubRepo.status < 400) {
+    repoConfirmed =
+      /vulnerable.*todo|intentionally vulnerable|exploits\//i.test(githubRepo.body);
+  }
+  return {
+    fired: true,
+    confidence: repoConfirmed ? 0.94 : result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      githubRepoUrl: "https://github.com/snyk-labs/nodejs-goof",
+      repoConfirmed,
+      note: repoConfirmed
+        ? "VWAD /app/goof route scan — Snyk Goof listing documents offline Express/MongoDB todo app with exploits/ walkthrough catalog; GitHub repo confirmed"
+        : "VWAD /app/goof route scan — Snyk Goof listing documents intentionally vulnerable Node.js todo app with NoSQL injection, XSS, and hardcoded secrets"
+    }
+  };
+};
+
 // --- VWAD OWASP VulnerableApp scanner-evaluation oracle listing -------------------------
 const clientSideVwadVulnerableappEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -98767,6 +98870,8 @@ export const RULES: Record<string, Rule> = {
   clientSideVwadVulnerableappEvidence,
   clientSideVwadOopssecStoreEvidence,
   vwadOopssecStoreRouteLiveOracle,
+  clientSideVwadGoofEvidence,
+  vwadGoofRouteLiveOracle,
   clientSideVulnerableappDomXssEvidence,
   seclabNextjsLabApiProbe,
   seclabAngularStubRouteLiveOracle,

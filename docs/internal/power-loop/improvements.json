@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "vwad-goof-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vwad.owasp.org/app/goof/ VWAD listing documents Snyk Goof Express/MongoDB todo app with NoSQL injection, XSS, open redirect, hardcoded secrets; GitHub snyk-labs/nodejs-goof repo confirmed; findings 0→6 (+client-side-vwad-goof-evidence +vwad-goof-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-walkthrough-fetch-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: oopssecWalkthroughEvidenceWithFetch fetches trailing-slash Astro walkthrough HTML when shallow crawl omits markers; koadt.github.io/.../ssrf-internal-page-access findings 0→6 (+oopssec-ssrf-route-live-oracle); .../prompt-injection-ai-assistant findings 0→5 (+oopssec-prompt-injection-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat.herokuapp.com",
+      "slug": "nodegoat-heroku-dead-host-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: nodegoatLiveOrigin maps decommissioned nodegoat.herokuapp.com to nodegoat-websec.herokuapp.com; POST /login admin/Admin_123 returns 302 /dashboard; nodegoat.herokuapp.com/login findings 0→3 (+nodegoat-login-weak-credentials-live-oracle +route); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-feedback-submit-route-live-oracle",
       "status": "shipped",
