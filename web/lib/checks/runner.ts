@@ -334,6 +334,7 @@ const JUICE_SHOP_REST_ROUTE_COMPANION_PREFIXES = [
   "juice-shop-whoami-unauth",
   "juice-shop-quantitys-exposure",
   "juice-shop-products-reviews",
+  "juice-shop-products-search",
   "juice-shop-hints-exposure",
   "juice-shop-challenges-disclosure",
   "juice-shop-deliverys-exposure",
@@ -342,7 +343,25 @@ const JUICE_SHOP_REST_ROUTE_COMPANION_PREFIXES = [
   "juice-shop-basket-items-bola",
   "juice-shop-users-idor",
   "juice-shop-recycles-bola",
-  "juice-shop-cards-bola"
+  "juice-shop-cards-bola",
+  "juice-shop-memories-bola",
+  "juice-shop-feedbacks-bola",
+  "juice-shop-track-order",
+  "juice-shop-order-history",
+  "juice-shop-wallet-balance",
+  "juice-shop-jwt-alg-none",
+  "juice-shop-captcha-bypass",
+  "juice-shop-image-captcha",
+  "juice-shop-login-sqli",
+  "juice-shop-resend-key",
+  "juice-shop-leaked-api-key",
+  "juice-shop-b2b-orders",
+  "juice-shop-deluxe-membership",
+  "juice-shop-chatbot-api",
+  "juice-shop-forgotten-backup",
+  "juice-shop-open-redirect",
+  "juice-shop-privacy-requests",
+  "juice-shop-admin-config"
 ] as const;
 
 function juiceShopRestRouteCompanionMatch(slug: string): boolean {
@@ -2741,6 +2760,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCatalogProductRouteLiveOracle",
   "ginAndJuiceChangeEmailLiveOracle",
   "ginAndJuiceChangeEmailRouteLiveOracle",
+  "ginAndJuiceChangePasswordLiveOracle",
   "ginAndJuiceChangePasswordRouteLiveOracle",
   "ginAndJuiceChangeAddressRouteLiveOracle",
   "ginAndJuiceMyAccountOrdersRouteLiveOracle",
@@ -8276,6 +8296,7 @@ function extractDvwuVulnPortalSeeds(html: string, pageUrl: string): string[] {
     "/labs/broken-auth",
     "/labs/open-redirect",
     "/labs/file-upload",
+    "/labs/mass-assignment",
     "/api/comments",
     "/api/search",
     "/newsletter"
@@ -13503,6 +13524,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
+        /\/labs\/mass-assignment\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-") &&
+        /mass-assignment|portal-sqli|portal/.test(p.slug)
+      )
+        return -4;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/sqli\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-") &&
         /sqli|portal/.test(p.slug)
@@ -14075,7 +14103,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (
         /ginandjuice\.shop/i.test(origin) &&
         /\/my-account\/(?:change-password|change-email|change-address|delete)\b/i.test(targetInput) &&
-        p.slug.startsWith("ginandjuice-change-email")
+        (p.slug.startsWith("ginandjuice-change-email") ||
+          p.slug.startsWith("ginandjuice-change-password"))
       )
         return -4;
       if (

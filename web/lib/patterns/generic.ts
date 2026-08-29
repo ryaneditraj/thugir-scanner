@@ -65704,6 +65704,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-change-password-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop change-password live oracle",
+    description:
+      "POST /my-account/change-password without an authenticated session redirects to /login — the PortSwigger account-takeover password-change training oracle entry point.",
+    impactOneline:
+      "Unauthenticated POST to the password-change endpoint confirms an account-takeover-prone surface on Gin & Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceChangePasswordLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authenticated sessions and re-verification before applying password changes.",
+      steps: [
+        "Reject password-change POSTs without a valid authenticated session.",
+        "Require current-password verification and CSRF tokens on state-changing account forms.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /my-account/change-password accepts unauthenticated requests and redirects to login. Show session-gated password-change remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-change-password-route-live-oracle",
     platform: "generic",
     category: "Broken access control",

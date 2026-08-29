@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T14:26:25.532Z",
+  "updated_at": "2026-08-29T15:05:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2802,
-  "total_findings": 28093,
+  "total_sites_scanned": 2943,
+  "total_findings": 28224,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1987,
-  "discovery_findings": 23677,
-  "improvements_shipped": 1179,
-  "last_run": "2026-08-29T14:26:25.532Z",
+  "discovery_findings": 23808,
+  "improvements_shipped": 1182,
+  "last_run": "2026-08-29T15:05:00.000Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -49,45 +49,36 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles incl secret-resend) — no category gaps"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 70,
-      "focus": "AI Security Platform supply-chain/hacked-npm/ai-phishing/weak-rls/privacy-policy + drained wrongsecrets 25-27",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 73,
+      "focus": "REST companion prefix expansion v2 + ginandjuice change-password live oracle + dvwu mass-assignment priority",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles incl secret-resend, gap=[])",
-      "ai-security-platform-iota.vercel.app/challenges/supply-chain: 4 findings — ai-security-supply-chain-route-live-oracle",
-      "ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages: 3 findings — ai-security-hacked-npm-packages-route-live-oracle",
-      "ai-security-platform-iota.vercel.app/challenges/ai-phishing: 3 findings — ai-security-ai-phishing-route-live-oracle",
-      "ai-security-platform-iota.vercel.app/challenges/weak-rls: 3 findings — ai-security-supabase-data-route-live-oracle",
-      "ai-security-platform-iota.vercel.app/challenges/privacy-policy: 3 findings — ai-security-privacy-policy-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-25: 18 findings — route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-26: 18 findings — route oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-27: 18 findings — route oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "demo.owasp-juice.shop/rest/memories: 17→29 findings (+track-order +jwt-alg-none +captcha-bypass +wallet-balance +resend-key companion prefixes)",
+      "ginandjuice.shop/my-account/change-password: 34→36 findings (+ginandjuice-change-password-live-oracle)",
+      "dvwu.vercel.app/labs/mass-assignment: 8 findings — portal-sqli + mass-assignment route oracles with -4 priority"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses to address",
-      "AI Security Platform challenges gate live demos behind login — route oracles confirm challenge metadata only",
-      "finbot finmail/findrive tools routes: MCP write oracle may need authenticated session after PR #545 guardrail patch"
+      "duck-store totp-bypass live oracle still not firing on /api/v1/auth/login/totp route-only scans"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "wrongsecrets.herokuapp.com/challenge/challenge-25": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-26": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-27": 18,
-    "ai-security-platform-iota.vercel.app/challenges/supply-chain": 4,
-    "nodegoat-websec.herokuapp.com/contributions": 16,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/findrive/tools": 18,
-    "juice-shop.demo.escape.tech/rest/memories": 17,
-    "duck-store.escape.tech/vulnerabilities": 42,
+    "demo.owasp-juice.shop/rest/memories": 29,
+    "ginandjuice.shop/my-account/change-password": 36,
+    "ginandjuice.shop/my-account/change-email": 35,
     "pentest-ground.com:9000": 13,
-    "owasp-finbot-ctf.org/ctf/api/v1/sidecar": 18
+    "dvwu.vercel.app/labs/mass-assignment": 8,
+    "wrongsecrets.herokuapp.com/challenge/challenge-25": 18,
+    "ai-security-platform-iota.vercel.app/challenges/supply-chain": 5
   }
 }
