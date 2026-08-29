@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-merchant-sqli-login-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/merchants/login with email admin' OR '1'='1 returns status:success api_key vk_* + JWT; vulnbank.org/api/v1/merchants/login findings 29→32 (+vulnbank-merchant-sqli-login-live-oracle +vulnbank-merchant-sqli-login-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-merchant-me-debug-disclosure-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/merchants/me with merchant JWT echoes debug_info.api_key vk_*; vulnbank.org/api/v1/merchants/login findings 29→32 (+vulnbank-merchant-me-debug-disclosure-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-sqli-login-route-merchants-exclusion",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnbankSqliLoginRouteLiveOracle excludes /merchants/login path — stops false route association of user /login SQLi oracle on merchant API scans; vulnbank.org/api/v1/merchants/login no longer emits vulnbank-sqli-login-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:demo.owasp-juice.shop",
       "slug": "juice-shop-rest-companion-prefix-expansion-v2",
       "status": "shipped",

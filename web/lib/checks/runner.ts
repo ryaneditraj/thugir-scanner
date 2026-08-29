@@ -3456,6 +3456,10 @@ const DEEP_RULES = new Set<string>([
   "vulnbankBoplaRegisterRouteLiveOracle",
   "vulnbankSqliLoginLiveOracle",
   "vulnbankSqliLoginRouteLiveOracle",
+  "vulnbankMerchantSqliLoginLiveOracle",
+  "vulnbankMerchantSqliLoginRouteLiveOracle",
+  "vulnbankMerchantMeDebugDisclosureLiveOracle",
+  "vulnbankMerchantMeDebugDisclosureRouteLiveOracle",
   "vulnbankMerchantRegisterLiveOracle",
   "vulnbankMerchantRegisterRouteLiveOracle",
   "vulnbankBillPaymentsNegativeAmountLiveOracle",
@@ -12726,6 +12730,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /vulnbank\.org/i.test(origin) &&
         /\/merchant\/dashboard\b/i.test(targetInput) &&
         p.slug.startsWith("vulnbank-merchant-")
+      )
+        return -3;
+      if (
+        /vulnbank\.org/i.test(origin) &&
+        /\/api\/v1\/merchants\/(?:login|me)\b/i.test(targetInput) &&
+        (p.slug.startsWith("vulnbank-merchant-sqli-login") ||
+          p.slug.startsWith("vulnbank-merchant-me-debug"))
       )
         return -3;
       if (
