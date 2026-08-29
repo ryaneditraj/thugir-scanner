@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-29T09:24:09.495Z",
-  "total": 2823,
-  "uniqueSlugs": 2815,
+  "generatedAt": "2026-08-29T10:34:02.515Z",
+  "total": 2824,
+  "uniqueSlugs": 2816,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2805,
+    "generic": 2806,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2738,
+    "deep": 2739,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 130,
     "Security misconfiguration": 210,
     "Broken authentication": 185,
-    "Injection": 450,
+    "Injection": 451,
     "Cross-site scripting": 734,
     "Open redirect": 25,
     "general": 20,
@@ -1989,6 +1989,7 @@
     "pentest-ground-dvwa-exec-cmdi-route-live-oracle",
     "pentest-ground-dvwa-fi-route-live-oracle",
     "pentest-ground-dvwa-file-upload-route-live-oracle",
+    "pentest-ground-dvwa-hub-route-live-oracle",
     "pentest-ground-dvwa-javascript-route-live-oracle",
     "pentest-ground-dvwa-open-redirect-route-live-oracle",
     "pentest-ground-dvwa-sqli-route-live-oracle",
