@@ -2838,6 +2838,14 @@ const DEEP_RULES = new Set<string>([
   "finbotDarklabFinmailToolsRouteLiveOracle",
   "finbotDarklabFindriveToolsLiveOracle",
   "finbotDarklabFindriveToolsRouteLiveOracle",
+  "finbotDarklabFinmailServerLiveOracle",
+  "finbotDarklabFinmailServerRouteLiveOracle",
+  "finbotDarklabFinmailResetToolsLiveOracle",
+  "finbotDarklabFinmailResetToolsRouteLiveOracle",
+  "finbotDarklabFindriveServerLiveOracle",
+  "finbotDarklabFindriveServerRouteLiveOracle",
+  "finbotDarklabFindriveResetToolsLiveOracle",
+  "finbotDarklabFindriveResetToolsRouteLiveOracle",
   "finbotCtfStatsLiveOracle",
   "finbotCtfStatsRouteLiveOracle",
   "finbotVendorInvoicesLiveOracle",
@@ -15016,6 +15024,30 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /owasp-finbot-ctf\.org/i.test(origin) &&
         /\/darklab\/api\/v1\/supply-chain\/servers\/findrive\/tools\b/i.test(targetInput) &&
         p.slug.startsWith("finbot-darklab-findrive-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/finmail\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-finmail-server")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/finmail\/reset-tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-finmail-reset-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/findrive\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-findrive-server")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/findrive\/reset-tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-findrive-reset-tools")
       )
         return -5;
       if (
