@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T13:27:02.994Z",
+  "updated_at": "2026-08-29T14:26:25.532Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2793,
-  "total_findings": 27972,
+  "total_sites_scanned": 2802,
+  "total_findings": 28093,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1982,
-  "discovery_findings": 23607,
+  "discovery_urls_added": 1987,
+  "discovery_findings": 23677,
   "improvements_shipped": 1179,
-  "last_run": "2026-08-29T13:27:02.994Z",
+  "last_run": "2026-08-29T14:26:25.532Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
-      "live_oracles": 37,
+      "probes_run": 593,
+      "live_oracles": 39,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,46 +49,45 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 37 live oracles); secret-resend + resend-key present"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles incl secret-resend) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 10,
-      "findings": 167,
-      "focus": "nodegoat SSJS/SSRF/memos + finbot MCP tool APIs; parallel run drained memories/RestFlaw",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 70,
+      "focus": "AI Security Platform supply-chain/hacked-npm/ai-phishing/weak-rls/privacy-policy + drained wrongsecrets 25-27",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "nodegoat-websec.herokuapp.com/contributions: 16 findings (+nodegoat-contributions-ssjs-live-oracle)",
-      "nodegoat-websec.herokuapp.com/research: 16 findings (+nodegoat-research-ssrf-route-live-oracle)",
-      "nodegoat-websec.herokuapp.com/memos: 16 findings (+nodegoat-memos-stored-xss-live-oracle)",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools: 17 findings",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/findrive/tools: 18 findings",
-      "juice-shop.demo.escape.tech/rest/memories: 2→17 findings (+juice-shop-rest-api-hub-route-live-oracle)",
-      "pentest-ground.com:9000/: 12→13 findings (+pentest-ground-restflaw-hub-route-live-oracle)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-39/23/24: 18 findings each"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles incl secret-resend, gap=[])",
+      "ai-security-platform-iota.vercel.app/challenges/supply-chain: 4 findings — ai-security-supply-chain-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages: 3 findings — ai-security-hacked-npm-packages-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/ai-phishing: 3 findings — ai-security-ai-phishing-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/weak-rls: 3 findings — ai-security-supabase-data-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/privacy-policy: 3 findings — ai-security-privacy-policy-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-25: 18 findings — route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-26: 18 findings — route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-27: 18 findings — route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses to address",
+      "AI Security Platform challenges gate live demos behind login — route oracles confirm challenge metadata only",
       "finbot finmail/findrive tools routes: MCP write oracle may need authenticated session after PR #545 guardrail patch"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "wrongsecrets.herokuapp.com/challenge/challenge-25": 18,
+    "wrongsecrets.herokuapp.com/challenge/challenge-26": 18,
+    "wrongsecrets.herokuapp.com/challenge/challenge-27": 18,
+    "ai-security-platform-iota.vercel.app/challenges/supply-chain": 4,
     "nodegoat-websec.herokuapp.com/contributions": 16,
-    "nodegoat-websec.herokuapp.com/research": 16,
-    "nodegoat-websec.herokuapp.com/memos": 16,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools": 17,
     "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/findrive/tools": 18,
     "juice-shop.demo.escape.tech/rest/memories": 17,
-    "pentest-ground.com:9000": 13,
-    "wrongsecrets.herokuapp.com/challenge/challenge-39": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-23": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-24": 18,
     "duck-store.escape.tech/vulnerabilities": 42,
+    "pentest-ground.com:9000": 13,
     "owasp-finbot-ctf.org/ctf/api/v1/sidecar": 18
   }
 }
