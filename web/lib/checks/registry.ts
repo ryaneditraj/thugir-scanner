@@ -39867,13 +39867,19 @@ const pwnshopTrackIdorLiveOracle: Rule = async (ctx) => {
 const pwnshopTrackIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/track\b/i.test(pageUrl) || /\/track\/\d+/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/track(?:\/\d+)?\b/i.test(pageUrl)) return NEGATIVE;
   const result = await pwnshopTrackIdorLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
     confidence: result.confidence,
-    evidence: { ...result.evidence, scannedUrl: pageUrl, note: "Pwnshop /track route scan — GET /track/1 returns order tracking with shippingAddress without authentication (PWN-002)" }
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: /\/track\/\d+/i.test(pageUrl)
+        ? "Pwnshop /track/:order_id route scan — GET /track/1 returns order tracking with shippingAddress without authentication (PWN-002)"
+        : "Pwnshop /track route scan — GET /track/1 returns order tracking with shippingAddress without authentication (PWN-002)"
+    }
   };
 };
 
@@ -71328,6 +71334,23 @@ const ginAndJuiceCartRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const ginAndJuiceBasketRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/basket\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeGinAndJuiceCartCheckoutAuth(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Gin & Juice Shop /api/basket route scan — SPA alias returns 404 while POST /catalog/cart adds items and unauthenticated checkout redirects to /login?redirect=cart — basket/cart business-logic training oracle"
+    }
+  };
+};
+
 const ginAndJuiceCheckoutRouteLiveOracle: Rule = async (ctx) => {
   if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -99894,6 +99917,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCatalogLinkManipulationRouteLiveOracle,
   ginAndJuiceCartCheckoutAuthLiveOracle,
   ginAndJuiceCartRouteLiveOracle,
+  ginAndJuiceBasketRouteLiveOracle,
   ginAndJuiceCheckoutRouteLiveOracle,
   ginAndJuiceForgotPasswordLiveOracle,
   ginAndJuiceForgotPasswordRouteLiveOracle,

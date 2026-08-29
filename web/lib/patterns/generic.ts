@@ -65288,6 +65288,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-basket-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /api/basket route live oracle",
+    description:
+      "When scanning /api/basket, the SPA alias returns 404 while POST /catalog/cart adds items and unauthenticated checkout redirects to /login?redirect=cart — route-specific basket/cart business-logic oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop /api/basket alias exposes cart checkout business-logic training surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBasketRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate cart totals server-side and gate checkout behind authentication.",
+      steps: [
+        "Recompute cart totals server-side on checkout.",
+        "Require authentication before order placement.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/basket route scan is an SPA alias for cart checkout business-logic. Show route-specific cart remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-checkout-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
