@@ -2170,6 +2170,9 @@ const DEEP_RULES = new Set<string>([
   "dvaibPromptInjectionLiveOracle",
   "dvaibPromptInjectionRouteLiveOracle",
   "dvaibLoginRouteLiveOracle",
+  "dvaiAiChatLiveOracle",
+  "dvaiAiChatRouteLiveOracle",
+  "dvaiAiChatHtmlSinkRouteLiveOracle",
   "pwnshopMassAssignmentAdminLiveOracle",
   "pwnshopOpenRedirectRegisterLiveOracle",
   "pwnshopOpenRedirectLoginLiveOracle",
@@ -13678,6 +13681,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /dvai\.vercel\.app|dvai-red\.vercel\.app/i.test(origin) &&
+        p.slug.startsWith("dvai-ai-chat")
+      )
+        return -4;
+      if (
+        /dvai\.vercel\.app|dvai-red\.vercel\.app/i.test(origin) &&
+        p.slug === "client-side-ai-chat-html-sink-evidence"
+      )
+        return -3;
+      if (
         /vulnshop\.vercel\.app/i.test(origin) &&
         /\/upload-review\b/i.test(targetInput) &&
         p.slug.startsWith("vulnshop-upload-review")
@@ -14729,6 +14742,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return 2;
       if (/pwnshop|ctfsecurity\.com/i.test(origin) && /\/review\b/i.test(targetInput) && p.slug.startsWith("pwnshop-") && /review/.test(p.slug)) return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/account\/delete\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-account-delete")
+      )
+        return -4;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/track(?:\/\d+)?\b/i.test(targetInput) &&

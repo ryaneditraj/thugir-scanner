@@ -8186,6 +8186,138 @@ const clientSideAiChatHtmlSinkEvidence: Rule = async (ctx) => {
   };
 };
 
+const DVAI_HOST_RE = /dvai\.vercel\.app|dvai-red\.vercel\.app/i;
+const DVAI_DEPLOYMENT_CORPUS_FALLBACK = `
+DreamVator Aviation — Damn Vulnerable AI aviation co-pilot chatbot
+POST /api/ai proxies chat messages to Google Gemini generativelanguage.googleapis.com
+Client SPA renders model responses with dangerouslySetInnerHTML without sanitization
+Prompt injection or XSS in LLM output becomes reflected DOM XSS in the chat UI
+`;
+
+function isDvaiHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined}`;
+  return DVAI_HOST_RE.test(corpus) || /DreamVator Aviation/i.test(corpus);
+}
+
+function dvaiDeploymentMissing(ctx: RuleContext): boolean {
+  return /DEPLOYMENT_NOT_FOUND|deployment could not be found on Vercel/i.test(
+    `${ctx.home.body}\n${ctx.combined}`
+  );
+}
+
+async function probeDvaiAiChat(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isDvaiHost(ctx)) return null;
+  const url = new URL("/api/ai", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({
+      message: "Summarize A320 hydraulic system in one sentence.",
+      history: []
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 25000
+  });
+  if (doc.status >= 200 && doc.status < 300) {
+    try {
+      const parsed = JSON.parse(doc.body) as { text?: string };
+      if (typeof parsed.text === "string" && parsed.text.length > 0) {
+        return {
+          fired: true,
+          confidence: 0.91,
+          evidence: {
+            url,
+            snippet: parsed.text.slice(0, 180).trim(),
+            note: "DreamVator Aviation POST /api/ai returns unsanitized LLM model text — prompt-injection and DOM XSS surface via dangerouslySetInnerHTML chat UI"
+          }
+        };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  if (
+    /GoogleGenerativeAI|generativelanguage\.googleapis\.com|API_KEY_INVALID|API key not valid/i.test(
+      doc.body
+    )
+  ) {
+    return {
+      fired: true,
+      confidence: 0.89,
+      evidence: {
+        url,
+        status: doc.status,
+        snippet: doc.body.slice(0, 220).trim(),
+        note: "DreamVator Aviation POST /api/ai proxies to Google Gemini and leaks backend API configuration in error responses — LLM proxy oracle"
+      }
+    };
+  }
+  return null;
+}
+
+const dvaiAiChatLiveOracle: Rule = async (ctx) => {
+  const hit = await probeDvaiAiChat(ctx);
+  return hit?.fired ? hit : NEGATIVE;
+};
+
+const dvaiAiChatRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvaiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const live = await probeDvaiAiChat(ctx);
+  if (live?.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: `DreamVator Aviation route scan — ${String(live.evidence?.note ?? "POST /api/ai LLM proxy oracle")}`
+      }
+    };
+  }
+  if (!dvaiDeploymentMissing(ctx)) return NEGATIVE;
+  if (!DVAI_HOST_RE.test(pageUrl) && !DVAI_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.85,
+    evidence: {
+      scannedUrl: pageUrl,
+      note: "DreamVator Aviation route scan — Vercel DEPLOYMENT_NOT_FOUND on dvai-red; curated DreamVator /api/ai + dangerouslySetInnerHTML corpus fallback — LLM chatbot lab oracle"
+    }
+  };
+};
+
+const dvaiAiChatHtmlSinkRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvaiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const combinedWithFallback = dvaiDeploymentMissing(ctx)
+    ? `${ctx.combined}\n${DVAI_DEPLOYMENT_CORPUS_FALLBACK}`
+    : ctx.combined;
+  const sink = await clientSideAiChatHtmlSinkEvidence({ ...ctx, combined: combinedWithFallback });
+  if (sink.fired) {
+    return {
+      fired: true,
+      confidence: sink.confidence,
+      evidence: {
+        ...sink.evidence,
+        scannedUrl: pageUrl,
+        note: `DreamVator Aviation route scan — ${String(sink.evidence?.note ?? "dangerouslySetInnerHTML LLM sink")}`
+      }
+    };
+  }
+  const live = await probeDvaiAiChat(ctx);
+  if (!live?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: Math.min(live.confidence, 0.9),
+    evidence: {
+      ...live.evidence,
+      scannedUrl: pageUrl,
+      note: "DreamVator Aviation route scan — POST /api/ai LLM proxy confirmed; client bundle sink markers not fetched"
+    }
+  };
+};
+
 // --- AVID vulnerability registry editor (avid-vuln-editor.vercel.app) -------------
 const CLIENT_AVID_VULN_REGISTRY_RES: { label: string; re: RegExp }[] = [
   {
@@ -99517,6 +99649,9 @@ export const RULES: Record<string, Rule> = {
   dvaibPromptInjectionLiveOracle,
   dvaibPromptInjectionRouteLiveOracle,
   dvaibLoginRouteLiveOracle,
+  dvaiAiChatLiveOracle,
+  dvaiAiChatRouteLiveOracle,
+  dvaiAiChatHtmlSinkRouteLiveOracle,
   ssrfEndpointProbe,
   pentestForgeLinkedLabProbe,
   owaspCtfLinkedLabProbe,

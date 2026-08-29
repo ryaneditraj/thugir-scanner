@@ -71,6 +71,10 @@ function canonicalDiscoveryUrl(url: string): string {
       u.hostname = "vaultapp-omega.vercel.app";
       return u.toString();
     }
+    if (/^dvai-red\.vercel\.app$/i.test(u.hostname)) {
+      u.hostname = "dvai.vercel.app";
+      return u.toString();
+    }
   } catch {
     /* ignore */
   }
