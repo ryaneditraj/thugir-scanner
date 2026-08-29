@@ -56411,6 +56411,136 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-dvai-ecosystem-evidence",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "DVAI ecosystem documents adversarial LLM operations",
+    description:
+      "bb1nfosec/dvai Damn Vulnerable AI Ecosystem bundles OP-ORACLE logprob side-channel and OP-SCHEMAPOISON RAG poisoning operations with Groq-proxied API routes.",
+    impactOneline:
+      "DVAI training range exposes logprob side-channels and RAG knowledge-base poisoning as deliberate AI red-team attack surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDvaiEcosystemEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVAI is intentional training software — never deploy logprob-exposing proxies or unauthenticated RAG inject endpoints in production.",
+      steps: [
+        "Disable logprob output on production LLM proxies unless strictly required.",
+        "Authenticate and audit RAG knowledge-base write paths.",
+        "Treat player-supplied API key flows as untrusted in production threat models."
+      ]
+    },
+    fixPrompt:
+      "Our DVAI deployment documents OP-ORACLE logprob extraction and OP-SCHEMAPOISON RAG poisoning. Show production hardening for LLM side-channels and RAG integrity.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvai-oracle-logprob-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "DVAI OP-ORACLE logprob side-channel live oracle",
+    description:
+      "POST /api/oracle/init on DVAI hosts initializes OP-ORACLE — Groq-backed logprob side-channel secret extraction with full token probability output.",
+    impactOneline:
+      "Logprob side-channels leak embedded system-prompt secrets statistically even when model output appears benign.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaiOracleLogprobLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose full logprob distributions on production LLM APIs to untrusted callers.",
+      steps: [
+        "Disable logprob output for external API consumers.",
+        "Rate-limit and monitor statistical probing patterns on inference endpoints.",
+        "Rotate secrets when logprob side-channel exposure is suspected."
+      ]
+    },
+    fixPrompt:
+      "DVAI OP-ORACLE exposes Groq logprobs for secret extraction. Show how to disable logprob leakage on production LLM proxies.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvai-oracle-logprob-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "DVAI /api/oracle OP-ORACLE logprob route live oracle",
+    description:
+      "When scanning /api/oracle routes on DVAI hosts, POST /api/oracle/init confirms OP-ORACLE logprob side-channel challenge initialization — route-specific oracle with README corpus fallback.",
+    impactOneline:
+      "Route-scoped DVAI scans should flag OP-ORACLE logprob side-channel training endpoints on /api/oracle/* paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaiOracleLogprobRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose full logprob distributions on production LLM APIs to untrusted callers.",
+      steps: [
+        "Disable logprob output for external API consumers.",
+        "Rate-limit and monitor statistical probing patterns on inference endpoints.",
+        "Rotate secrets when logprob side-channel exposure is suspected."
+      ]
+    },
+    fixPrompt:
+      "Our DVAI /api/oracle route scan confirms OP-ORACLE logprob side-channel initialization. Show production logprob hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvai-schemapoison-rag-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "DVAI OP-SCHEMAPOISON RAG poisoning live oracle",
+    description:
+      "POST /api/schemapoison/init on DVAI hosts initializes OP-SCHEMAPOISON — simulated RAG pipeline knowledge-base poisoning without explicit trigger words.",
+    impactOneline:
+      "RAG knowledge-base poisoning shifts model answers persistently when untrusted documents are injected into retrieval corpora.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaiSchemapoisonRagLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate RAG corpus writes and validate document provenance before indexing.",
+      steps: [
+        "Require auth on knowledge-base injection endpoints.",
+        "Scan indexed documents for schema-poisoning and authority-forging patterns.",
+        "Monitor retrieval drift after corpus updates."
+      ]
+    },
+    fixPrompt:
+      "DVAI OP-SCHEMAPOISON allows RAG knowledge-base poisoning via /api/schemapoison/inject. Show RAG integrity controls.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvai-schemapoison-rag-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "DVAI /api/schemapoison RAG poisoning route live oracle",
+    description:
+      "When scanning /api/schemapoison routes on DVAI hosts, POST /api/schemapoison/init confirms OP-SCHEMAPOISON RAG knowledge-base poisoning challenge — route-specific oracle with README corpus fallback.",
+    impactOneline:
+      "Route-scoped DVAI scans should flag OP-SCHEMAPOISON RAG poisoning training endpoints on /api/schemapoison/* paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaiSchemapoisonRagRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate RAG corpus writes and validate document provenance before indexing.",
+      steps: [
+        "Require auth on knowledge-base injection endpoints.",
+        "Scan indexed documents for schema-poisoning patterns.",
+        "Monitor retrieval drift after corpus updates."
+      ]
+    },
+    fixPrompt:
+      "Our DVAI /api/schemapoison route scan confirms OP-SCHEMAPOISON RAG poisoning initialization. Show RAG corpus integrity controls.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-avid-vuln-registry-evidence",
     platform: "generic",
     category: "Information disclosure",

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-29T22:20:32.427Z",
-  "total": 2856,
-  "uniqueSlugs": 2848,
+  "generatedAt": "2026-08-29T23:25:32.611Z",
+  "total": 2861,
+  "uniqueSlugs": 2853,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2838,
+    "generic": 2843,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2771,
+    "deep": 2776,
     "continuous": 0
   },
   "byCategory": {
@@ -44,7 +44,7 @@
     "API security": 3,
     "Path traversal": 3,
     "Denial of service": 7,
-    "Prompt injection": 7,
+    "Prompt injection": 12,
     "Cryptographic failure": 2,
     "XSS": 3,
     "Session management": 2
@@ -465,6 +465,7 @@
     "client-side-dotnet-serialization-lab-evidence",
     "client-side-drag-security-flaws-evidence",
     "client-side-drag-security-flaws-lab-module-evidence",
+    "client-side-dvai-ecosystem-evidence",
     "client-side-dvna-evidence",
     "client-side-dvrag-lab-evidence",
     "client-side-echoctf-evidence",
@@ -1064,6 +1065,10 @@
     "dvai-ai-chat-html-sink-route-live-oracle",
     "dvai-ai-chat-live-oracle",
     "dvai-ai-chat-route-live-oracle",
+    "dvai-oracle-logprob-live-oracle",
+    "dvai-oracle-logprob-route-live-oracle",
+    "dvai-schemapoison-rag-live-oracle",
+    "dvai-schemapoison-rag-route-live-oracle",
     "dvaib-login-route-live-oracle",
     "dvaib-prompt-injection-live-oracle",
     "dvaib-prompt-injection-route-live-oracle",
