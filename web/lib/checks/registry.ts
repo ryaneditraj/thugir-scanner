@@ -26189,7 +26189,8 @@ const vulnbankSqliLoginLiveOracle: Rule = async (ctx) => {
 const vulnbankSqliLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/login\b/i.test(pageUrl) || /\/merchants\/login\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  if (/\/merchant\b|\/api\/v1\/merchants\b/i.test(pageUrl)) return NEGATIVE;
   const hit = await vulnbankSqliLoginBypassProbe(ctx);
   if (!hit?.fired) return NEGATIVE;
   return {

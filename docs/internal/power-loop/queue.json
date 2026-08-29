@@ -10663,6 +10663,16 @@
       "auth": "public_demo"
     },
     {
+      "url": "https://vulnbank.org/merchant/login",
+      "source": "VulnBank merchant portal \u2014 POST /api/v1/merchants/login email SQLi bypass returns live api_key (README merchant module)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/merchants/me",
+      "source": "VulnBank merchant API \u2014 GET /api/v1/merchants/me echoes debug_info.api_key with X-Merchant-Api-Key auth",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://dvga2.tools.escape.tech/",
       "source": "Escape.tech DVGA Expert mode \u2014 hardened GraphQL with cost/depth controls + custom vulns (dvga2.tools.escape.tech)",
       "auth": "public_demo"
