@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-29T00:06:36.685Z",
-  "total": 2798,
-  "uniqueSlugs": 2790,
+  "generatedAt": "2026-08-29T01:12:54.895Z",
+  "total": 2800,
+  "uniqueSlugs": 2792,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2780,
+    "generic": 2782,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2713,
+    "deep": 2715,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 130,
     "Security misconfiguration": 208,
     "Broken authentication": 174,
-    "Injection": 447,
+    "Injection": 449,
     "Cross-site scripting": 734,
     "Open redirect": 25,
     "general": 20,
@@ -841,6 +841,7 @@
     "client-side-vwad-app-not-found-evidence",
     "client-side-vwad-bodgeit-evidence",
     "client-side-vwad-gin-juice-evidence",
+    "client-side-vwad-goof-evidence",
     "client-side-vwad-mcp-servers-lab-evidence",
     "client-side-vwad-mutillidae-evidence",
     "client-side-vwad-nodegoat-evidence",
@@ -2611,6 +2612,7 @@
     "vulnweb-csrf-route-live-oracle",
     "vulnweb-profile-idor-route-live-oracle",
     "vulnweb-search-sqli-route-live-oracle",
+    "vwad-goof-route-live-oracle",
     "vwad-oopssec-store-route-live-oracle",
     "weak-api-default-credentials",
     "web-pentest-playground-admin-dashboard-route-live-oracle",

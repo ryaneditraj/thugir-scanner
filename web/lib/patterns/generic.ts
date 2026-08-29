@@ -56870,6 +56870,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vwad-goof-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "OWASP VWAD Snyk Goof vulnerable Node.js lab disclosed",
+    description:
+      "Snyk Goof VWAD listing documents intentionally vulnerable Express/MongoDB todo app with NoSQL injection, XSS, open redirect, hardcoded secrets, and exploits/ walkthrough catalog.",
+    impactOneline:
+      "Public VWAD Goof catalog exposes offline-deployable Node.js training lab with documented default credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadGoofEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Goof is intentional Snyk training — isolate lab instances from production networks.",
+      steps: [
+        "Deploy Goof only on isolated lab infrastructure.",
+        "Rotate default admin@snyk.io credentials before any public exposure.",
+        "Monitor VWAD-linked Goof containers for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our Snyk Goof instance is listed in OWASP VWAD with documented default credentials. Show how to isolate Node.js training labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vwad-goof-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "OWASP VWAD Snyk Goof route live oracle",
+    description:
+      "When scanning vwad.owasp.org/app/goof/, the VWAD listing documents Snyk's vulnerable Express/MongoDB todo app with NoSQL injection, XSS, and hardcoded secrets — route-specific Goof training oracle.",
+    impactOneline:
+      "VWAD Goof listing exposes offline container deploy scope and documented admin@snyk.io default credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vwadGoofRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Goof is intentional training — limit public disclosure of exploit catalog on VWAD-linked hosts.",
+      steps: [
+        "Gate Goof challenge details behind authenticated lab enrollment.",
+        "Run Goof only on isolated training infrastructure.",
+        "Rotate default credentials before publishing VWAD listings."
+      ]
+    },
+    fixPrompt:
+      "Our VWAD Goof listing documents a vulnerable Node.js todo app with default credentials. Show route-specific training-platform access control.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vwad-vulnerableapp-evidence",
     platform: "generic",
     category: "Injection",

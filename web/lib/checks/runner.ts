@@ -3162,6 +3162,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideVwadMcpServersLabEvidence",
   "clientSideVwadOopssecStoreEvidence",
   "vwadOopssecStoreRouteLiveOracle",
+  "clientSideVwadGoofEvidence",
+  "vwadGoofRouteLiveOracle",
   "clientSideVulnerableappDomXssEvidence",
   "seclabNextjsLabApiProbe",
   "seclabAngularStubRouteLiveOracle",
