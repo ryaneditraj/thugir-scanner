@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-29T13:20:00.000Z",
+  "updated_at": "2026-08-29T14:15:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supply-chain",
+      "source": "AI & Security Platform — typosquatted packages / malicious postinstall supply-chain challenge (Vercel public demo; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages",
+      "source": "AI & Security Platform — real 2025-2026 npm supply-chain attacks challenge (axios RAT, React RCE; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/ai-phishing",
+      "source": "AI & Security Platform — AI-assisted phishing / cloned login pages challenge (Vercel public demo; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/weak-rls",
+      "source": "AI & Security Platform — misconfigured Supabase Row Level Security challenge (Vercel public demo; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/privacy-policy",
+      "source": "AI & Security Platform — deceptive privacy policy / dark patterns challenge (Vercel public demo; web search 14 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pentest-ground.com:5013/graphiql",
       "source": "Pentest-Ground DVGA \u2014 GraphiQL IDE introspection oracle (DVGA README graphiql endpoint)",
