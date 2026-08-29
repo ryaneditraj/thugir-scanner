@@ -15,14 +15,14 @@
       ]
     }
   },
-  "total_sites_scanned": 2971,
-  "total_findings": 29153,
+  "total_sites_scanned": 2980,
+  "total_findings": 29287,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2002,
-  "discovery_findings": 24269,
-  "improvements_shipped": 1002,
+  "discovery_findings": 24535,
+  "improvements_shipped": 1004,
   "last_run": "2026-08-29T17:35:25.895Z",
   "last_run_summary": {
     "hour_utc": "17",
@@ -51,28 +51,29 @@
       },
       "note": "Stable 6/6 first-pass recall (50 findings, 36 juice-shop live oracles); secret-resend + resend-key present — no category gaps"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 266,
-      "focus": "pwnshop chat LLM prompt-injection + order-IDOR + debug/info credentials + audit-log API + wrongsecrets challenge-57 browser-LLM oracle",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 16,
+      "findings": 400,
+      "focus": "pwnshop chat/download/debug-info/events + wrongsecrets-57; parallel drain wrongsecrets-20..27 + finbot darklab tools",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 36 live oracles, gap=[])",
-      "pwnshop.ctfsecurity.com/chat: 49 findings — pwnshop-chat-prompt-injection-live-oracle + chat-order-idor route oracles confirmed",
-      "pwnshop.ctfsecurity.com/debug/info: 47 findings — pwnshop-debug-info-live-oracle confirmed (PWN-018 session secret exposure)",
-      "pwnshop.ctfsecurity.com/api/v1/events: 49 findings — pwnshop-events-audit-live-oracle + events-audit-route-live-oracle confirmed (PWN-005)",
-      "pwnshop.ctfsecurity.com/download: 23 findings — debug/events oracles only; pwnshop-download-path-traversal-live-oracle still absent (PWN-038)",
+      "pwnshop.ctfsecurity.com/chat: 49 findings — pwnshop-chat-prompt-injection + chat-order-idor route oracles confirmed",
+      "pwnshop.ctfsecurity.com/debug/info: 47 findings — pwnshop-debug-info-live-oracle confirmed (PWN-018)",
+      "pwnshop.ctfsecurity.com/api/v1/events: 49 findings — pwnshop-events-audit-live-oracle + route oracle confirmed (PWN-005)",
+      "pwnshop.ctfsecurity.com/download: 23 findings — path-traversal live oracle still absent (PWN-038)",
       "wrongsecrets.herokuapp.com/challenge/challenge-57: 18 findings — wrongsecrets-challenge-57-browser-llm-route-live-oracle confirmed",
-      "vulnbank.org/merchant/login: 31 findings — vulnbank-merchant-sqli-login + merchant-me-debug-disclosure oracles (queue drain)"
+      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools: 21 findings — finbot-darklab-finmail-tools-live-oracle (parallel run)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-20..27: 18 findings each (parallel queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses to address",
       "pwnshop /download: pwnshop-download-path-traversal-live-oracle absent on dedicated route scan (PWN-038; seller session may be required)",
-      "pwnshop /chat: rich 49-finding pass but download route scan thin — path-traversal chain may need authenticated seller session priming"
+      "pwnshop profile/update-avatar: pwnshop-avatar-url-ssrf-live-oracle absent on route-only scan (PWN-033)"
     ]
   },
   "discovery_highlights": {
@@ -80,10 +81,12 @@
     "pwnshop.ctfsecurity.com/chat": 49,
     "pwnshop.ctfsecurity.com/api/v1/events": 49,
     "pwnshop.ctfsecurity.com/debug/info": 47,
+    "pwnshop.ctfsecurity.com/account/delete": 47,
+    "pwnshop.ctfsecurity.com/admin/export-orders": 46,
+    "pwnshop.ctfsecurity.com/product/1": 42,
     "pwnshop.ctfsecurity.com/download": 23,
     "vulnbank.org/merchant/login": 31,
-    "vulnbank.org/api/v1/merchants/me": 31,
     "wrongsecrets.herokuapp.com/challenge/challenge-57": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-16": 18
+    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools": 21
   }
 }
