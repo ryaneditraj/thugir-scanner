@@ -2710,6 +2710,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCatalogLinkManipulationRouteLiveOracle",
   "ginAndJuiceCartCheckoutAuthLiveOracle",
   "ginAndJuiceCartRouteLiveOracle",
+  "ginAndJuiceBasketRouteLiveOracle",
   "ginAndJuiceCheckoutRouteLiveOracle",
   "ginAndJuiceForgotPasswordLiveOracle",
   "ginAndJuiceForgotPasswordRouteLiveOracle",
@@ -14055,8 +14056,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ginandjuice\.shop/i.test(origin) &&
-        /\/(?:catalog\/cart|cart)\b/i.test(targetInput) &&
-        p.slug.startsWith("ginandjuice-cart")
+        /\/(?:catalog\/cart|cart|api\/basket)\b/i.test(targetInput) &&
+        (p.slug.startsWith("ginandjuice-cart") || p.slug.startsWith("ginandjuice-basket"))
       )
         return -4;
       if (
@@ -14470,6 +14471,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return 2;
       if (/pwnshop|ctfsecurity\.com/i.test(origin) && /\/review\b/i.test(targetInput) && p.slug.startsWith("pwnshop-") && /review/.test(p.slug)) return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/track(?:\/\d+)?\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-track")
+      )
+        return -4;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/(?:api\/)?support\b/i.test(targetInput) &&

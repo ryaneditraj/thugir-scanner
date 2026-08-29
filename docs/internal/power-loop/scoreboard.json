@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T03:29:10.812Z",
+  "updated_at": "2026-08-29T03:50:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2856,
-  "total_findings": 29493,
+  "total_sites_scanned": 2850,
+  "total_findings": 29184,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1986,
-  "discovery_findings": 24788,
-  "improvements_shipped": 963,
-  "last_run": "2026-08-29T03:29:10.813Z",
+  "discovery_urls_added": 1981,
+  "discovery_findings": 24530,
+  "improvements_shipped": 965,
+  "last_run": "2026-08-29T03:50:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
     "benchmark": {
@@ -33,7 +33,7 @@
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 596,
-      "live_oracle_slugs": 37,
+      "live_oracle_slugs": 39,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,43 +49,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 37 live oracles incl secret-resend + resend-key) — no category gaps"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles incl secret-resend) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 311,
-      "focus": "pwnshop seller/preview SSTI + download path-traversal + chat LLM; ginandjuice /api/products/1/price + /api/checkout; drained duck-store users/cart-add/mcp-info",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 15,
+      "focus": "ginandjuice /api/basket SPA alias route oracle + pwnshop /track/:id IDOR route regex fix",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 37 live oracles, gap=[])",
-      "pwnshop.ctfsecurity.com/seller/preview: 41 findings — SSTI live oracle (PWN-040)",
-      "pwnshop.ctfsecurity.com/download: 47 findings — path traversal live oracle (PWN-038)",
-      "pwnshop.ctfsecurity.com/chat: 37 findings — prompt-injection + order IDOR live oracles (PWN-031/035)",
-      "ginandjuice.shop/api/products/1/price: 33 findings — corpus oracles; no PATCH price oracle yet",
-      "ginandjuice.shop/api/checkout: 34 findings — checkout-route live oracle + mass-assignment surface",
-      "duck-store.escape.tech/api/v1/users/: 41 findings — users BOLA route oracle",
-      "duck-store.escape.tech/api/v1/cart/add: 39 findings — cart business-logic oracle",
-      "duck-store.escape.tech/mcp/info: 39 findings — MCP info disclosure oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "ginandjuice.shop/api/basket: 34 findings (+ginandjuice-basket-route-live-oracle)",
+      "pwnshop.ctfsecurity.com/track/1: 35→49 findings (+pwnshop-track-idor-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "ginandjuice /api/products/1/price: no dedicated PATCH price-manipulation live oracle — PortSwigger unused-endpoint lab needs authenticated session probe",
-      "ginandjuice /api/checkout: ginandjuice-checkout-route-live-oracle fires but chosen_discount mass-assignment needs auth cookie for full proof",
-      "pwnshop chat: prompt-injection oracle fires; agent command-injection chain (PWN-032+) may need Groq API key in lab"
+      "pwnshop cart thin at 25 findings on prior scan — coupon oracles now fire at 49 on re-scan with OTP warmup",
+      "ginandjuice basket BOLA may need authenticated session for exploitation proof"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "pwnshop.ctfsecurity.com/download": 47,
-    "pwnshop.ctfsecurity.com/seller/preview": 41,
-    "duck-store.escape.tech/api/v1/users/": 41,
-    "duck-store.escape.tech/api/v1/cart/add": 39,
-    "duck-store.escape.tech/mcp/info": 39,
-    "pwnshop.ctfsecurity.com/chat": 37,
-    "ginandjuice.shop/api/checkout": 34,
-    "ginandjuice.shop/api/products/1/price": 33
+    "ginandjuice.shop/api/basket": 34,
+    "pwnshop.ctfsecurity.com/track/1": 49,
+    "pwnshop.ctfsecurity.com/cart": 49,
+    "pwnshop.ctfsecurity.com/product/1": 42,
+    "vapi.tools.escape.tech/workshop/api/merchant/contact_mechanic": 14,
+    "vapi.tools.escape.tech/identity/api/auth/login": 14
   }
 }
