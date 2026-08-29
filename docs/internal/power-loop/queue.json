@@ -1,876 +1,29 @@
 {
-  "updated_at": "2026-08-29T06:18:35.408Z",
-  "priority_discovery_urls": [
+  "updated_at": "2026-08-29T07:19:44.530Z",
+  "discovery_urls": [
     {
-      "url": "https://pwnshop.ctfsecurity.com/debug/info",
-      "source": "ctfsec/pwnshop README — PWN-018 debug endpoint leaks session secret + DB config (web search 06 UTC)",
+      "url": "https://owasp-finbot-ctf.org/vendor/onboarding",
+      "source": "OWASP FinBot CTF — vendor onboarding portal with agentic AI invoice/register oracles (GenAI-Security-Project/finbot-ctf README)",
       "auth": "public_demo"
     },
     {
-      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
-      "source": "ctfsec/pwnshop README — PWN-005 unauthenticated audit log JSON feed (web search 06 UTC)",
+      "url": "https://owasp-finbot-ctf.org/ctf",
+      "source": "OWASP FinBot CTF — CTF challenge portal with event-driven exploit detection (owasp-finbot-ctf.org)",
       "auth": "public_demo"
     },
     {
-      "url": "https://pwnshop.ctfsecurity.com/vulnerabilities",
-      "source": "pwnshop.ctfsecurity.com — interactive 51-vuln OWASP Top 10 (2025) index hub (web search 06 UTC)",
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php",
+      "source": "webspoilt/vulnforge-academy — Level 14 file inclusion challenge (GitHub README medium tier)",
       "auth": "public_demo"
     },
     {
-      "url": "https://owasp-finbot-ctf.org/vendor/api/v1/chat",
-      "source": "OWASP-ASI/finbot-ctf-demo — vendor onboarding SSE chat agentic-AI oracle (learning gap 06 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain",
-      "source": "GenAI-Security-Project/finbot-ctf — Dark Lab MCP supply-chain tool catalog API (learning gap 06 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://owasp-finbot-ctf.org/vendor",
-      "source": "OWASP-ASI/finbot-ctf-demo — vendor onboarding portal + /vendor/api/v1/chat agentic AI oracle (web search 05 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://owasp-finbot-ctf.org/darklab",
-      "source": "GenAI-Security-Project/finbot-ctf — Dark Lab MCP supply-chain tool-poisoning surface (web search 05 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/vendor/",
-      "source": "NeuraLegion/brokencrystals README — nginx directory listing oracle GET /vendor/ (web search 05 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://nodegoat.herokuapp.com/allocations-threshold",
-      "source": "OWASP/NodeGoat — NoSQL injection / DoS oracle GET /allocations-threshold?threshold= (Heroku demo; web search 05 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://www.dvaib.com/login",
-      "source": "DVAIB Damn Vulnerable AI Bank — JWT/auth + LLM prompt-injection lab login oracle (awesome-vulnerable-apps; web search 05 UTC)",
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level15.php",
+      "source": "webspoilt/vulnforge-academy — Level 15 command injection challenge (GitHub README hard tier)",
       "auth": "public_demo"
     },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/none/login",
-      "source": "NeuraLegion/brokencrystals README — JWT alg:none login bypass oracle POST /api/auth/jwt/none/login (web search 04 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/rsa/signature/login",
-      "source": "NeuraLegion/brokencrystals README — JWT RSA signature confusion oracle POST /api/auth/jwt/rsa/signature/login (web search 04 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/mcp",
-      "source": "Escape duck-store README — MCP tool-calling / excessive-agency oracle GET /api/v1/mcp (OWASP LLM Top 10; web search 04 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://demo.owasp-juice.shop/rest/cards",
-      "source": "Official demo.owasp-juice.shop — payment cards BOLA oracle GET /rest/cards (Pwning Juice Shop; web search 04 UTC)",
-      "auth": "benchmark"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/profile/apply-coupon",
-      "source": "ctfsec/pwnshop vulnerabilities — HTTP parameter pollution coupon bypass oracle POST /profile/apply-coupon (PWN-039; web search 04 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/seller/preview",
-      "source": "ctfsec/pwnshop README — SSTI storefront preview oracle GET /seller/preview (PWN-040; web search 03 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/download",
-      "source": "ctfsec/pwnshop README — path traversal file download oracle GET /download (PWN-038; web search 03 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/chat",
-      "source": "ctfsec/pwnshop README — LLM chatbot prompt-injection oracle GET/POST /chat (PWN LLM Top 10; web search 03 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/api/products/1/price",
-      "source": "PortSwigger WS Academy — hidden PATCH price oracle GET/PATCH /api/products/1/price (unused API endpoint lab; web search 03 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/api/checkout",
-      "source": "PortSwigger WS Academy — mass-assignment checkout oracle GET/POST /api/checkout (API testing lab; web search 03 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/product/1",
-      "source": "ctfsec/pwnshop README — product detail page oracle GET /product/:id (PWN catalog; web search 02 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/cart",
-      "source": "ctfsec/pwnshop README — cart business-logic oracle GET /cart negative-quantity/coupon chain (web search 02 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/admin/orders",
-      "source": "ctfsec/pwnshop vulnerabilities — admin orders BFLA oracle GET /admin/orders (PWN-003; web search 02 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/api/users/1",
-      "source": "ctfsec/pwnshop vulnerabilities — user profile IDOR oracle GET /api/users/:id (PWN-001; web search 02 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/api/basket",
-      "source": "PortSwigger ginandjuice.shop — basket BOLA oracle GET /api/basket (autopentest-2026 API access control; web search 02 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting/",
-      "source": "kOaDT/oss-oopssec-store walkthrough — login brute-force no rate-limit oracle (web search 01 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-password-reset/",
-      "source": "kOaDT/oss-oopssec-store walkthrough — insecure password reset token oracle (web search 01 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews/",
-      "source": "kOaDT/oss-oopssec-store walkthrough — stored XSS in product reviews oracle (web search 01 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass/",
-      "source": "kOaDT/oss-oopssec-store walkthrough — open redirect login bypass oracle (web search 01 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import/",
-      "source": "kOaDT/oss-oopssec-store walkthrough — XXE supplier order import oracle (web search 01 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/vapi/api3/user",
-      "source": "roottusk/vAPI Escape-hosted — API3 broken object property level authorization oracle GET/POST /vapi/api3/user (OWASP API3; web search 23 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/vapi/api4/user",
-      "source": "roottusk/vAPI Escape-hosted — API4 unrestricted resource consumption oracle POST /vapi/api4/user (OWASP API4; web search 23 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/vapi/api5/user/1",
-      "source": "roottusk/vAPI Escape-hosted — API5 broken function level authorization oracle GET /vapi/api5/user/{id} (OWASP API5; web search 23 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/vapi/api6/user",
-      "source": "roottusk/vAPI Escape-hosted — API6 mass assignment oracle POST /vapi/api6/user (OWASP API6; web search 23 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/vapi/api7/user",
-      "source": "roottusk/vAPI Escape-hosted — API7 security misconfiguration oracle GET /vapi/api7/user (OWASP API7; web search 23 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/vapi/api2/user/1",
-      "source": "roottusk/vAPI Escape-hosted — API2 broken authentication BOLA oracle GET /vapi/api2/user/{id} (OWASP API Top 10; web search 22 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/vapi/api8/user/login",
-      "source": "roottusk/vAPI Escape-hosted — API8 SQLi login oracle POST /vapi/api8/user/login (improvements.json vapi-api8-sqli-login-live-oracle; web search 22 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/workshop/api/shop/orders/1",
-      "source": "roottusk/vAPI Escape-hosted — workshop BOLA order oracle GET /workshop/api/shop/orders/{id} (vapi.tools not crAPI path; web search 22 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://crapi.lab.pentest-forge.com/workshop/api/shop/orders/1",
-      "source": "PentestForge Lab — crAPI BOLA order shadow-API oracle GET /workshop/api/shop/orders/{id} (lab.pentest-forge.com; web search 22 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvga.tools.escape.tech/vulnerabilities",
-      "source": "DVGA Escape-hosted — GraphQL vulnerability catalog / challenge index page (dvga.tools.escape.tech; web search 22 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/profile/update-avatar",
-      "source": "ctfsec/pwnshop vulnerabilities — SSRF avatar update oracle POST /profile/update-avatar targets localhost/debug (PWN-019; web search 21 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/file?path=/etc/passwd&type=text/plain",
-      "source": "NeuraLegion/brokencrystals — SSRF file fetch oracle GET /api/file?path=&type= (README vuln overview; web search 21 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/orders",
-      "source": "Escape duck-store — unauthenticated orders BOLA oracle GET /api/v1/orders (public demo; web search 21 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://demo.owasp-juice.shop/rest/basket/1",
-      "source": "OWASP Juice Shop demo — basket IDOR oracle GET /rest/basket/:id (preview.owasp-juice.shop; web search 21 UTC)",
-      "auth": "benchmark"
-    },
-    {
-      "url": "https://vulnbank.org/api/accounts",
-      "source": "vulnbank.org — unauthenticated accounts API sensitive-data oracle GET /api/accounts (public demo lab; web search 21 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/",
-      "source": "kOaDT/oss-oopssec-store — product search UNION SQLi walkthrough oracle (GitHub Pages; web search 19 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/aes-cbc-padding-oracle-forged-share-token/",
-      "source": "kOaDT/oss-oopssec-store — AES-CBC padding oracle share-token forgery walkthrough (GitHub Pages; web search 19 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://pentest-fauxbank.vercel.app/api/transfer",
-      "source": "alfredang/pentest FauxBank — CSRF-missing transfer API oracle POST /api/transfer (Vercel deploy; web search 19 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pentest-fauxbank.vercel.app/api/profile",
-      "source": "alfredang/pentest FauxBank — sensitive data exposure oracle GET /api/profile (Vercel deploy; web search 19 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vaultapp-omega.vercel.app/api/users/1",
-      "source": "MRMcyber/vaultapp — IDOR user object oracle GET /api/users/:id (vaultapp-omega.vercel.app; web search 19 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain",
-      "source": "kOaDT/oss-oopssec-store — supply-chain typosquat→AI rules backdoor walkthrough oracle (GitHub Pages; web search 18 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update",
-      "source": "kOaDT/oss-oopssec-store — CSRF admin order update walkthrough oracle (GitHub Pages; web search 18 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card",
-      "source": "kOaDT/oss-oopssec-store — LCG gift-card code recovery walkthrough oracle (GitHub Pages; web search 18 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/information-disclosure-api-error",
-      "source": "kOaDT/oss-oopssec-store — verbose API debug error disclosure walkthrough oracle (GitHub Pages; web search 18 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://ginandjuice.shop/blog/post?postId=1",
-      "source": "PortSwigger Gin & Juice Shop — blog stored XSS oracle GET /blog/post?postId= (public scanner eval lab; web search 18 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api",
-      "source": "kOaDT/oss-oopssec-store — JWT alg confusion partner API walkthrough with live exploit oracle (GitHub Pages; web search 17 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/live-stream-hijack",
-      "source": "kOaDT/oss-oopssec-store — BFLA live-stream hijack walkthrough oracle (GitHub Pages; web search 17 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api",
-      "source": "kOaDT/oss-oopssec-store — path traversal documents API walkthrough oracle (GitHub Pages; web search 17 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/next-public-env-variable-leak",
-      "source": "kOaDT/oss-oopssec-store — NEXT_PUBLIC env secret leak walkthrough oracle (GitHub Pages; web search 17 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927",
-      "source": "kOaDT/oss-oopssec-store — CVE-2025-29927 middleware auth bypass walkthrough oracle (GitHub Pages; web search 17 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://sekumart.sekuripy.hr/directory.php?q=test",
-      "source": "SekuriPy SekuMart labs — staff directory XPath injection oracle GET /directory.php?q= (sqlmap playground; web search 16 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "http://whgojp.top/spel/vul?ex=100-1",
-      "source": "whgojp/JavaSecLab wiki — SpEL expression injection oracle GET /spel/vul?ex= (testing guide; web search 16 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "http://whgojp.top/ssti/vul1?para=__${7*7}__::.x",
-      "source": "whgojp/JavaSecLab wiki — Thymeleaf SSTI return-controlled oracle GET /ssti/vul1?para= (testing guide; web search 16 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "http://whgojp.top/other/xpath/vul?username=admin&password=' or '1'='1",
-      "source": "whgojp/JavaSecLab wiki — XPath auth-bypass injection oracle GET /other/xpath/vul (testing guide; web search 16 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "http://whgojp.top/logic/idor/horizontal/getUserInfo?username=123",
-      "source": "whgojp/JavaSecLab wiki — horizontal IDOR oracle GET /logic/idor/horizontal/getUserInfo?username= (testing guide; web search 16 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "http://whgojp.top/ssrf/vul?url=http://example.com",
-      "source": "whgojp/JavaSecLab wiki — SSRF vul endpoint GET /ssrf/vul?url= (web search 15 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "http://whgojp.top/sqli/jdbc/vul1?type=select&id=1",
-      "source": "whgojp/JavaSecLab wiki — JDBC SQLi vul1 native string concat GET /sqli/jdbc/vul1 (web search 15 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "http://whgojp.top/xxe/vul1",
-      "source": "whgojp/JavaSecLab wiki — XXE XMLReader file read GET /xxe/vul1?payload= (web search 15 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
-      "source": "webspoilt/vulnforge-academy — Level 17 file-upload bypass challenge (GitHub README levels 16-18; web search 15 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php",
-      "source": "webspoilt/vulnforge-academy — Level 20 Nightmare multi-vector chain challenge (GitHub README; web search 15 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-31",
-      "source": "OWASP WrongSecrets Heroku demo — challenge-31 front-end secret-in-webpage oracle (GitHub README; web search 14 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-32",
-      "source": "OWASP WrongSecrets Heroku demo — challenge-32 AI/LLM prompt-extraction oracle (GitHub README; web search 14 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-34",
-      "source": "OWASP WrongSecrets Heroku demo — challenge-34 secrets-management oracle (gap fill 31-34; web search 14 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/login?next=https://example.com",
-      "source": "ctfsec/pwnshop vulnerabilities — open redirect oracle GET /login?next= (PWN-017; web search 14 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/login?next=https://example.com",
-      "source": "PortSwigger ginandjuice.shop — post-auth open redirect oracle GET /login?next= (autopentest-2026 FINDING-020 chain; web search 14 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/my-account/change-email",
-      "source": "PortSwigger Web Security Academy — race-condition email takeover oracle POST /my-account/change-email (web search 13 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://sekumart.sekuripy.hr/search.php?q=test",
-      "source": "SekuriPy SekuMart sqlmap playground — reflected SQLi oracle GET /search.php?q= (official sqlmap docs; web search 13 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-28",
-      "source": "OWASP WrongSecrets Heroku demo — challenge-28 secrets-management oracle (gap fill challenges 28-30; web search 13 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-29",
-      "source": "OWASP WrongSecrets Heroku demo — challenge-29 secrets-management oracle (gap fill; web search 13 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-30",
-      "source": "OWASP WrongSecrets Heroku demo — challenge-30 secrets-management oracle (gap fill; web search 13 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vulnbank.org/upload_profile_picture_url",
-      "source": "Commando-X/vuln-bank README — SSRF oracle POST upload_profile_picture_url image_url param chains to /internal/secret (web search 12 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/files?path=test",
-      "source": "NeuraLegion/brokencrystals README — LFI oracle GET /api/files path param (web search 12 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/email",
-      "source": "NeuraLegion/brokencrystals README — email header injection oracle POST /api/email (web search 12 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://crapi2.apisec.ai/community/api/v2/community/posts/recent",
-      "source": "APIsec crAPI OWASPLA 2025 guide — community posts excessive data exposure oracle GET /community/api/v2/community/posts/recent (web search 12 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/api/feedback/submit",
-      "source": "PortSwigger ginandjuice.shop vulnerabilities catalog — stored XSS / feedback submission oracle POST /api/feedback/submit (web search 12 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/logger",
-      "source": "PortSwigger ginandjuice.shop vulnerabilities catalog — blind OAST interaction oracle POST /logger (searchLogger.js telemetry sink; web search 11 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/process_numbers",
-      "source": "NeuraLegion/brokencrystals README — server-side JS injection oracle POST /api/process_numbers processing_expression eval (MCP tool proxy; web search 11 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/api/identity/auth/login",
-      "source": "PortSwigger ginandjuice.shop — identity auth login reflected-XSS oracle POST /api/identity/auth/login (improvements.json ginandjuice-login-route-live-oracle; web search 11 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/catalog?searchTerm=test",
-      "source": "autopentest-2026-ginandjuice report FINDING-021 — reflected XSS via searchTerm JS string breakout GET /catalog?searchTerm= (web search 11 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/users/search/test",
-      "source": "NeuraLegion/brokencrystals README — canonical user search SQLi/IDOR oracle GET /api/users/search/:name (alias of /api/search_users; web search 11 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://crapi2.apisec.ai/identity/api/v2/user/dashboard",
-      "source": "APIsec crAPI OWASPLA 2025 guide Challenge 5 — excessive data exposure oracle GET /identity/api/v2/user/dashboard (conversion_params leak; web search 10 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://crapi2.apisec.ai/identity/api/v2/user/videos/convert_video",
-      "source": "APIsec crAPI OWASPLA 2025 guide Challenge 6 — command injection chain oracle GET /identity/api/v2/user/videos/convert_video?video_id= (web search 10 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://crapi2.apisec.ai/identity/api/v2/admin/videos/1",
-      "source": "APIsec crAPI OWASPLA 2025 guide Challenge 7 — BFLA admin video delete oracle DELETE /identity/api/v2/admin/videos/{id} (web search 10 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/catalog?category=Accessories",
-      "source": "PortSwigger ginandjuice.shop vulnerabilities + autopentest-2026 report — UNION SQLi oracle GET /catalog?category= (web search 10 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/users/one/1/photo?isAdmin=true",
-      "source": "NeuraLegion/brokencrystals README — BFLA profile photo delete oracle DELETE /api/users/one/:id/photo?isAdmin=true (web search 10 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/api/newsletter/subscribe",
-      "source": "PortSwigger ginandjuice.shop — missing rate-limit / resource-quota oracle POST /api/newsletter/subscribe (Barrion pentest report + OWASP BLA7; web search 09 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/search_users",
-      "source": "NeuraLegion/brokencrystals README — user search SQLi/IDOR oracle GET /api/search_users (web search 09 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/spawn",
-      "source": "NeuraLegion/brokencrystals README — SSTI oracle GET /api/spawn (unscanned queue drain; web search 09 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/products/views",
-      "source": "NeuraLegion/brokencrystals README — SQLi via x-product-name header oracle PUT /api/products/views (unscanned queue drain; web search 09 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/my-account/change-password",
-      "source": "PortSwigger ginandjuice.shop vulnerabilities catalog — authenticated password-change broken-logic oracle (web search 09 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/jku/validate",
-      "source": "NeuraLegion/brokencrystals Swagger — JKU rogue-key JWT validate oracle GET /api/auth/jwt/jku/validate (validate-path gap vs /login hub; web search 08 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/config/get_config",
-      "source": "NeuraLegion/brokencrystals README — sensitive config exposure oracle GET /api/config/get_config (DB creds/API keys; web search 08 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/my-account/view-order/1",
-      "source": "PortSwigger ginandjuice.shop — order detail BOLA/IDOR oracle GET /my-account/view-order/{id} (vulnerabilities catalog; web search 08 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/none/validate",
-      "source": "NeuraLegion/brokencrystals Swagger — JWT alg-none validate oracle GET /api/auth/jwt/none/validate (validate-path gap; web search 08 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/catalog/product/stock",
-      "source": "PortSwigger ginandjuice.shop — XXE stock-check oracle POST /catalog/product/stock (pentest report FINDING-015/019; web search 08 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/fetch?url=https://httpbin.org/get",
-      "source": "NeuraLegion/brokencrystals README — /api/fetch SSRF oracle (url param; newer than /api/file hub)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/upload/parse",
-      "source": "NeuraLegion/brokencrystals README — XXE via XML file upload POST /api/upload/parse (web search 07 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vulnbank.org/merchant/dashboard",
-      "source": "Commando-X/vuln-bank — merchant payment dashboard BOLA/SQLi oracle GET /merchant/dashboard (GitHub merchant_payments.py)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
-      "source": "OWASP/wrongsecrets Heroku demo — challenge-63 secrets-management oracle (OWASP DevGuide)",
-      "auth": "public_benchmark"
-    },
-    {
-      "url": "https://ginandjuice.shop/catalog/product",
-      "source": "PortSwigger ginandjuice.shop vulnerabilities catalog — product detail XSS/SQLi oracle GET /catalog/product",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/jwk/validate",
-      "source": "NeuraLegion/brokencrystals Swagger — JWK rogue-key JWT validate oracle GET /api/auth/jwt/jwk/validate (06 UTC power-loop; validate-path gap vs /login hub)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/x5c/validate",
-      "source": "NeuraLegion/brokencrystals Swagger — X5C rogue-certificate JWT validate oracle GET /api/auth/jwt/x5c/validate (06 UTC power-loop; validate-path gap vs /login hub)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/hmac/validate",
-      "source": "NeuraLegion/brokencrystals Swagger — RSA-to-HMAC JWT validate oracle GET /api/auth/jwt/hmac/validate (06 UTC power-loop; validate-path gap vs /login hub)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/mass-assignment",
-      "source": "zahidoverflow/dvwu — mass-assignment privilege escalation training lab route (Vercel live demo; web search 06 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/crlf",
-      "source": "zahidoverflow/dvwu — CRLF injection training lab route (Vercel live demo; web search 06 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/kid-sql/validate",
-      "source": "NeuraLegion/brokencrystals Swagger — KID SQL-injection JWT validate oracle GET /api/auth/jwt/kid-sql/validate (05 UTC power-loop; route-specific gap vs /login hub)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/x5u/validate",
-      "source": "NeuraLegion/brokencrystals Swagger — X5U rogue-certificate JWT validate oracle GET /api/auth/jwt/x5u/validate (05 UTC power-loop; route-specific gap vs /login hub)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/my-account/forgot-password",
-      "source": "PortSwigger ginandjuice.shop — authenticated password-reset broken-logic oracle GET /my-account/forgot-password (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/rsa/signature/validate",
-      "source": "NeuraLegion/brokencrystals Swagger — invalid RSA JWT signature oracle GET /api/auth/jwt/rsa/signature/validate",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/vapi/api1/user/1",
-      "source": "OWASP vAPI Escape-hosted — API1 BOLA oracle GET /vapi/api1/user/{id} (vapi.tools.escape.tech; replaces incorrect crAPI /workshop path)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/jku/login",
-      "source": "NeuraLegion/brokencrystals Swagger — JKU rogue-key JWT auth bypass oracle POST /api/auth/jwt/jku/login",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/x5c/login",
-      "source": "NeuraLegion/brokencrystals Swagger — X5C rogue-certificate JWT auth bypass oracle POST /api/auth/jwt/x5c/login",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/kid-sql/login",
-      "source": "NeuraLegion/brokencrystals Swagger — KID SQL-injection JWT key-lookup oracle POST /api/auth/jwt/kid-sql/login",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/x5u/login",
-      "source": "NeuraLegion/brokencrystals Swagger — X5U rogue-certificate JWT auth bypass oracle POST /api/auth/jwt/x5u/login",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/my-account/orders",
-      "source": "PortSwigger ginandjuice.shop — order history BOLA/IDOR oracle GET /my-account/orders (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/testimonials",
-      "source": "Escape Duck Store — stored XSS oracle POST /testimonials (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/admin/products/1",
-      "source": "Escape Duck Store — negative product price BOLA oracle PUT /api/v1/admin/products/{id} (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvga.tools.escape.tech/graphql",
-      "source": "DVGA — Damn Vulnerable GraphQL Application hosted by Escape (dvga.tools.escape.tech/graphql)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/workshop/api/merchant/contact_mechanic",
-      "source": "OWASP vAPI — API8 hidden-parameter / mass-assignment oracle POST /workshop/api/merchant/contact_mechanic (vapi.tools.escape.tech)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/identity/api/auth/login",
-      "source": "OWASP vAPI — broken authentication oracle POST /identity/api/auth/login (vapi.tools.escape.tech)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/auth/login",
-      "source": "Escape Duck Store — weak admin credentials + no rate limiting oracle POST /api/v1/auth/login (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/auth/login/totp",
-      "source": "Escape Duck Store — 2FA bypass oracle POST /api/v1/auth/login/totp (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/users/",
-      "source": "Escape Duck Store — user enumeration oracle GET /api/v1/users/ (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/nonexistent?redirect=https://example.com",
-      "source": "Escape Duck Store — open redirect oracle GET /nonexistent?redirect=URL (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvga2.tools.escape.tech/graphql",
-      "source": "DVGA2 — Damn Vulnerable GraphQL Application hosted by Escape (dvga2.tools.escape.tech/graphql)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/cart/add",
-      "source": "Escape Duck Store — negative quantity business-logic oracle POST /api/v1/cart/add (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
-      "source": "Escape Duck Store — 100% discount coupon + shipping bypass oracle POST /api/v1/orders/checkout (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/auth/register",
-      "source": "Escape Duck Store — referral code abuse oracle POST /api/v1/auth/register (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/admin/products",
-      "source": "Escape Duck Store — negative product price BFLA oracle /api/v1/admin/products (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/mcp/tools/list_coupons",
-      "source": "Escape Duck Store — MCP coupon disclosure oracle POST /mcp/tools/list_coupons (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/vulnerabilities",
-      "source": "Escape Duck Store — public vulnerability index catalog (23 intentional flaws; escape.tech blog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/orders/coupons",
-      "source": "Escape Duck Store — coupon information disclosure oracle GET /api/v1/orders/coupons (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
-      "source": "Escape Duck Store — unauthenticated PUT BOLA oracle /api/v1/testimonials/{id} (vulnerabilities catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vapi.tools.escape.tech/",
-      "source": "OWASP vAPI — Escape-hosted vulnerable API Top 10 training interface (vapi.tools.escape.tech)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/mcp/info",
-      "source": "Escape Duck Store — MCP unauthenticated access oracle /mcp/info (406 without Accept; hub crawl)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/hmac/login",
-      "source": "NeuraLegion/brokencrystals swagger — RSA-to-HMAC JWT algorithm confusion oracle POST /api/auth/jwt/hmac/login (03 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/jwk/login",
-      "source": "NeuraLegion/brokencrystals swagger — JWT JWK embedded key oracle POST /api/auth/jwt/jwk/login (03 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/weak-key/login",
-      "source": "NeuraLegion/brokencrystals swagger — JWT weak-secret brute-force oracle POST /api/auth/jwt/weak-key/login (02 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/coupons/validate?code=INTERNAL100",
-      "source": "Escape Duck Store — 100% discount coupon validation oracle GET /api/v1/coupons/validate (improvements.json duck-store-coupons-validate; 02 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/coupons/apply",
-      "source": "Escape Duck Store — coupon apply business-logic oracle POST /api/v1/coupons/apply (duck-store.escape.tech/vulnerabilities; 02 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/mcp",
-      "source": "NeuraLegion/brokencrystals — MCP JSON-RPC tool-calling oracle with XXE/search_users/metadata leaks (README /api/mcp; 01 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/admin/users",
-      "source": "Escape Duck Store — broken access control oracle GET /api/v1/admin/users (duck-store.escape.tech/vulnerabilities)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/products/latest?limit=100",
-      "source": "NeuraLegion/brokencrystals — business constraint bypass oracle GET /api/products/latest limit param (README; 00 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://demo.owasp-juice.shop/rest/chatbot/respond",
-      "source": "OWASP Juice Shop demo — chatbot LLM proxy POST /rest/chatbot/respond prompt-injection oracle (00 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://demo.owasp-juice.shop/rest/b2b/v2/orders",
-      "source": "OWASP Juice Shop demo — insecure deserialization oracle POST /rest/b2b/v2/orders (00 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vulnbank.org/api/v1/transactions",
-      "source": "VulnBank OSS deploy — unauthenticated transactions API BOLA oracle (00 UTC power-loop)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/admin/dashboard",
-      "source": "ctfsec/pwnshop — admin dashboard access-control oracle GET /admin/dashboard (00 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/forgot-password",
-      "source": "PortSwigger ginandjuice.shop — password reset broken logic / poisoning oracle POST /forgot-password (23:00 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/files",
-      "source": "NeuraLegion/brokencrystals — LFI/RFI oracle GET /api/files path+type params (public benchmark)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/chat",
-      "source": "NeuraLegion/brokencrystals — insecure LLM output handling /chat route (public benchmark)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/catalog/search/2?term=test",
-      "source": "PortSwigger Burp Scanner sample report — reflected XSS term parameter on catalog/search",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/catalog/product-search-results/1?term=test",
-      "source": "PortSwigger Burp Scanner sample report — reflected XSS term parameter product-search-results",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/cart",
-      "source": "PortSwigger ginandjuice.shop — shopping cart business-logic / BOLA route (scanner eval lab; 22:00 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/checkout",
-      "source": "PortSwigger ginandjuice.shop — checkout payment/coupon business-logic route (scanner eval lab)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/register",
-      "source": "PortSwigger ginandjuice.shop — user registration / account takeover route (scanner eval lab)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/render.dot",
-      "source": "NeuraLegion/brokencrystals — SSTI oracle GET /render.dot (public benchmark)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/auth/login",
-      "source": "PortSwigger ginandjuice.shop — auth/login route oracle (Patrick Double vuln lab; 20:00 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/transactions",
-      "source": "PortSwigger ginandjuice.shop — transactions BOLA/IDOR route (Patrick Double vuln lab)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/products/reviews",
-      "source": "Escape Duck Store — product reviews BOLA API (422 on GET; improvements.json duck-store hub)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://duck-store.escape.tech/api/v1/wishlist",
-      "source": "Escape Duck Store — wishlist BOLA API route (Escape.tech intentionally vulnerable store)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/mcp",
-      "source": "OWASP WrongSecrets — MCP execute_command env leak endpoint (challenge-60 oracle; POST-only)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/",
-      "source": "kOaDT/oss-oopssec-store roadmap Ch.03 — signup mass-assignment role:ADMIN privilege escalation walkthrough (05 UTC)",
-      "auth": "public_demo"
-    }
-  ],
-  "discovery_urls": [
-    {
-      "url": "https://owasp-finbot-ctf.org/vendor/api/v1/chat",
-      "source": "OWASP-ASI/finbot-ctf-demo — vendor onboarding SSE chat agentic-AI oracle (learning gap 06 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain",
-      "source": "GenAI-Security-Project/finbot-ctf — Dark Lab MCP supply-chain tool catalog API (learning gap 06 UTC)",
+      "source": "NeuraLegion/brokencrystals — JWT alg:none login oracle (public benchmark)",
       "auth": "public_demo"
     },
     {
@@ -1667,6 +820,11 @@
       "url": "https://wrongsecrets.herokuapp.com/challenge/1",
       "source": "OWASP WrongSecrets — Challenge 1 git-secrets oracle on official Heroku demo (README)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/basket/1",
+      "source": "OWASP Juice Shop v20.1.1 — REST basket IDOR oracle (BOLA on /rest/basket/:id)",
+      "auth": "benchmark"
     },
     {
       "url": "https://pwnshop.ctfsecurity.com/api/chat",
@@ -2754,6 +1912,16 @@
       "auth": "oss_deploy"
     },
     {
+      "url": "https://pwnshop.ctfsecurity.com/seller/preview",
+      "source": "ctfsec/pwnshop — SSTI seller storefront preview entry point PWN-040 (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/download",
+      "source": "ctfsec/pwnshop — path traversal file download lab PWN-038 (GitHub README)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://vulnshop.vercel.app/admin",
       "source": "yashasrnair/VulnShop — admin panel JWT bypass + env dump + command injection (GitHub README)",
       "auth": "oss_deploy"
@@ -3574,6 +2742,11 @@
       "auth": "benchmark"
     },
     {
+      "url": "https://brokencrystals.com/api/products/views",
+      "source": "NeuraLegion/brokencrystals — SQLi via x-product-name header oracle (README)",
+      "auth": "benchmark"
+    },
+    {
       "url": "https://pentest-fauxbank.vercel.app/lab",
       "source": "alfredang/pentest FauxBank — guided OWASP pentest lab scenarios surface (web search)",
       "auth": "public_demo"
@@ -3606,6 +2779,11 @@
     {
       "url": "https://brokencrystals.com/api/render",
       "source": "NeuraLegion/brokencrystals — SSTI via doT templating on /api/render (README oracle)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://brokencrystals.com/api/spawn",
+      "source": "NeuraLegion/brokencrystals — OS command injection via query param (README oracle)",
       "auth": "benchmark"
     },
     {
@@ -3917,6 +3095,11 @@
       "url": "https://vwad.owasp.org/app/pixi/",
       "source": "OWASP VWAD — DevSlop Pixi MEAN-stack intentionally insecure API catalog entry",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/roadmap",
+      "source": "kOaDT/oss-oopssec-store — 34-challenge CTF learning roadmap (GitHub Pages)",
+      "auth": "oss_deploy"
     },
     {
       "url": "https://www.hacksplaining.com/lessons/xml-bombs/start",
@@ -4498,6 +3681,11 @@
       "url": "https://capture-the-flag.labs.vercel.dev/",
       "source": "vercel-labs/capture-the-flag — AI-powered CTF arena with vulnerable apps (Vercel Labs)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/",
+      "source": "OWASP Juice Shop official demo instance (owasp-juice.shop)",
+      "auth": "benchmark"
     },
     {
       "url": "https://juice-shop.lab.pentest-forge.com/",
@@ -6883,6 +6071,16 @@
     {
       "url": "https://ginandjuice.shop/my-account",
       "source": "PortSwigger Gin & Juice Shop — session/auth oracle with disclosed carlos:hunter2 credentials",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog/product/stock",
+      "source": "PortSwigger Gin & Juice Shop — XXE stock check endpoint (vulnerability disclosure page oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/chat",
+      "source": "ctfsec/pwnshop — LLM prompt-injection / agentic attack entry point (GitHub README)",
       "auth": "public_demo"
     },
     {
@@ -11346,55 +10544,32 @@
       "url": "https://dvwu.vercel.app/labs/ssti",
       "source": "zahidoverflow/dvwu — SSTI training lab route (Vercel live demo)",
       "auth": "public_demo"
-    },
+    }
+  ],
+  "priority_discovery_urls": [
     {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/admin-console",
-      "source": "AI & Security Platform — cookie-based admin auth bypass oracle GET /challenges/admin-console (web search 20 UTC)",
+      "url": "https://owasp-finbot-ctf.org/vendor/onboarding",
+      "source": "OWASP FinBot CTF — vendor onboarding portal with agentic AI invoice/register oracles (GenAI-Security-Project/finbot-ctf README)",
       "auth": "public_demo"
     },
     {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/insecure-passwords",
-      "source": "AI & Security Platform — plaintext/MD5 password storage oracle /challenges/insecure-passwords (web search 20 UTC)",
+      "url": "https://owasp-finbot-ctf.org/ctf",
+      "source": "OWASP FinBot CTF — CTF challenge portal with event-driven exploit detection (owasp-finbot-ctf.org)",
       "auth": "public_demo"
     },
     {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/supabase-data",
-      "source": "AI & Security Platform — weak Supabase RLS data exposure oracle /challenges/supabase-data (web search 20 UTC)",
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php",
+      "source": "webspoilt/vulnforge-academy — Level 14 file inclusion challenge (GitHub README medium tier)",
       "auth": "public_demo"
     },
     {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/supply-chain",
-      "source": "AI & Security Platform — typosquat/postinstall supply-chain attack oracle /challenges/supply-chain (web search 20 UTC)",
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level15.php",
+      "source": "webspoilt/vulnforge-academy — Level 15 command injection challenge (GitHub README hard tier)",
       "auth": "public_demo"
     },
     {
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/hacked-npm-packages",
-      "source": "AI & Security Platform — 2025-2026 hacked npm package oracle /challenges/hacked-npm-packages (web search 20 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access",
-      "source": "kOaDT/oss-oopssec-store — support-form screenshot URL SSRF walkthrough oracle (GitHub Pages; web search 00 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/prompt-injection-ai-assistant",
-      "source": "kOaDT/oss-oopssec-store — OSSBot prompt-injection /api/ai-assistant walkthrough oracle (GitHub Pages; web search 00 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/client-side-price-manipulation",
-      "source": "kOaDT/oss-oopssec-store — client-side price manipulation POST /api/orders walkthrough oracle (GitHub Pages; web search 00 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "http://nodegoat.herokuapp.com/login",
-      "source": "OWASP NodeGoat — official Heroku demo weak-credentials login oracle (cx-demo/NodeGoat README; web search 00 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vwad.owasp.org/app/goof/",
-      "source": "OWASP VWAD — Snyk Goof vulnerable Node.js todo app listing with exploit catalog (vwad.owasp.org; web search 00 UTC)",
+      "url": "https://brokencrystals.com/api/auth/jwt/none/login",
+      "source": "NeuraLegion/brokencrystals — JWT alg:none login oracle (public benchmark)",
       "auth": "public_demo"
     }
   ]
