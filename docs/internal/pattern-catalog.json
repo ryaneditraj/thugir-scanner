@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-29T06:17:32.527Z",
-  "total": 2816,
-  "uniqueSlugs": 2808,
+  "generatedAt": "2026-08-29T07:22:17.729Z",
+  "total": 2819,
+  "uniqueSlugs": 2811,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2798,
+    "generic": 2801,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2731,
+    "deep": 2734,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 130,
     "Security misconfiguration": 210,
-    "Broken authentication": 180,
+    "Broken authentication": 183,
     "Injection": 450,
     "Cross-site scripting": 734,
     "Open redirect": 25,
@@ -1749,6 +1749,8 @@
     "graphqlbook-register-admin-mass-assignment-live-oracle",
     "graphqlbook-register-admin-mass-assignment-route-live-oracle",
     "hack-health-a03-sql-injection-route-live-oracle",
+    "hacksplaining-session-fixation-route-live-oracle",
+    "hacksplaining-weak-session-route-live-oracle",
     "hidden-prompt-injection",
     "html-comment-credential-disclosure",
     "hts-yuppers-search-sqli-probe",
@@ -1879,6 +1881,7 @@
     "juice-shop-whoami-unauth-live-oracle",
     "juice-shop-whoami-unauth-route-live-oracle",
     "jwt-alg-none-accepted",
+    "kontra-session-fixation-route-live-oracle",
     "leaky-jar-recipe-review-stored-xss",
     "lovable-client-only-auth",
     "lovable-supabase-storage-public",

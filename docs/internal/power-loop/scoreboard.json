@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T06:30:00.000Z",
+  "updated_at": "2026-08-29T07:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2888,
-  "total_findings": 30447,
+  "total_sites_scanned": 2891,
+  "total_findings": 30456,
   "critical_findings": 64,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1999,
-  "discovery_findings": 25425,
-  "improvements_shipped": 971,
-  "last_run": "2026-08-29T06:30:00.000Z",
+  "discovery_findings": 25434,
+  "improvements_shipped": 974,
+  "last_run": "2026-08-29T07:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 50,
@@ -48,53 +48,36 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, gap=[]) — secret-resend + resend-key live oracles present"
+      "note": "Stable 6/6 first-pass recall (50 findings, gap=[]) — no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 215,
-      "urls_validated": 4,
-      "findings_delta": "+6 route-specific oracles",
-      "focus": "pwnshop debug/info + audit-log + vuln index + finbot vendor/darklab API routes + queue drain; parallel oracle validation on brokencrystals vendor + finbot vendor chat + JWT login routes",
+      "urls_validated": 3,
+      "findings_delta": "nodegoat allocations-threshold 2→5; kontra session-fixation 3→4; hacksplaining session-fixation route oracle confirmed",
+      "focus": "nodegoat dead-host auth probe remap + Hacksplaining/Kontra session-fixation route oracles from learning-gap queue",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
-      "pwnshop.ctfsecurity.com/debug/info: 45 findings — PWN-018 debug endpoint session-secret oracle",
-      "pwnshop.ctfsecurity.com/vulnerabilities: 46 findings — 51-vuln index hub crawl",
-      "pwnshop.ctfsecurity.com/profile/apply-coupon: 51 findings — coupon HPP oracle (PWN-039)",
-      "pwnshop.ctfsecurity.com/api/v1/events: 25 findings — PWN-005 unauthenticated audit log",
-      "brokencrystals.com/vendor/: 87→89 (+vendor directory-listing live+route oracles)",
-      "owasp-finbot-ctf.org/vendor: 16→18 (+finbot-vendor-chat live+route via onboarding CSRF bootstrap)",
-      "owasp-finbot-ctf.org/vendor/api/v1/chat: 16 findings — vendor SSE chat agentic-AI oracle",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain: 16 findings — MCP supply-chain catalog API",
-      "brokencrystals.com/api/auth/jwt/none/login: 21→22 (+none-login route oracle)",
-      "demo.owasp-juice.shop/rest/cards: 2 findings — thin pass, may need auth session"
+      "nodegoat.herokuapp.com/allocations-threshold: 2→5 (+nodegoat-allocations-route-live-oracle +nodegoat-benefits-nosql-live-oracle via websec fallback)",
+      "hacksplaining.com/lessons/session-fixation/start: +hacksplaining-session-fixation-route-live-oracle",
+      "application.security/.../owasp-top-10-session-fixation: 3→4 (+kontra-session-fixation-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "demo.owasp-juice.shop/rest/cards thin at 2 findings — payment cards BOLA may need authenticated session on demo mirror",
-      "pwnshop /api/v1/events only 25 findings vs debug/info 45 — audit-log oracle may need dedicated slug for plaintext password leaks in LOGIN_FAILED events",
       "finbot vendor/chat + darklab/supply-chain both 16 findings — route-specific oracles may need deeper SSE/MCP write probes with authenticated session",
-      "nodegoat.herokuapp.com/allocations-threshold thin at 2 findings — NoSQL oracle may need authenticated session on websec demo",
-      "oopssec session-fixation still needs route oracle when walkthrough URL is queued"
+      "hacksplaining weak-session lesson queued — route oracle shipped this run for session-fixation; weak-session route oracle also added"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 50,
+    "nodegoat.herokuapp.com/allocations-threshold": 5,
+    "hacksplaining.com/lessons/session-fixation/start": 9,
+    "application.security/owasp-top-10-session-fixation": 4,
     "pwnshop.ctfsecurity.com/profile/apply-coupon": 51,
-    "pwnshop.ctfsecurity.com/vulnerabilities": 46,
-    "pwnshop.ctfsecurity.com/debug/info": 45,
     "brokencrystals.com/vendor/": 89,
-    "pwnshop.ctfsecurity.com/api/v1/events": 25,
     "owasp-finbot-ctf.org/vendor": 18,
-    "owasp-finbot-ctf.org/vendor/api/v1/chat": 16,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain": 16,
-    "brokencrystals.com/api/auth/jwt/none/login": 22,
-    "duck-store.escape.tech/api/v1/mcp": 38,
-    "vapi.tools.escape.tech/workshop/api/shop/orders/1": 14,
     "demo.owasp-juice.shop/rest/cards": 2
   }
 }

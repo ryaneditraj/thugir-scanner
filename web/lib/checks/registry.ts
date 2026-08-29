@@ -5283,6 +5283,65 @@ const clientSideHacksplainingWeakSessionLessonEvidence: Rule = async (ctx) => {
   };
 };
 
+const hacksplainingSessionFixationRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/hacksplaining\.com\/lessons\/session-fixation/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideHacksplainingSessionFixationLessonEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Hacksplaining /lessons/session-fixation route scan — interactive exploit-then-fix walkthrough documents attacker-controlled session IDs enabling hijacking after victim login"
+    }
+  };
+};
+
+const hacksplainingWeakSessionRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/hacksplaining\.com\/lessons\/weak-session/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideHacksplainingWeakSessionLessonEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Hacksplaining /lessons/weak-session route scan — interactive walkthrough documents guessable session identifiers enabling session hijacking"
+    }
+  };
+};
+
+const kontraSessionFixationRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/application\.security\/free-application-security-training\/owasp-top-10-session-fixation/i.test(pageUrl))
+    return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "Kontra session fixation lab title", re: /Session Fixation \| Kontra/i },
+    { label: "OWASP session fixation training path", re: /owasp-top-10-session-fixation/i },
+    { label: "Kontra application security training", re: /Kontra Application Security Training|application\.security/i },
+    { label: "Session fixation attack description", re: /session fixation|session hijack|attacker.*session/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: hits.slice(0, 4),
+      note: "Kontra /free-application-security-training/owasp-top-10-session-fixation route scan — interactive OWASP session fixation lab documents pre-auth session ID injection patterns"
+    }
+  };
+};
+
 // --- Hacksplaining AI prompt injection lesson (hacksplaining.com/lessons/ai-prompt-injection) -
 const CLIENT_HACKSPLAINING_AI_PROMPT_INJECTION_LESSON_RES: { label: string; re: RegExp }[] = [
   {
@@ -8125,6 +8184,11 @@ function nodegoatLiveOrigin(ctx: RuleContext): string {
   return ctx.origin;
 }
 
+/** HTTP probe base for NodeGoat — maps decommissioned nodegoat.herokuapp.com to websec demo. */
+function nodegoatProbeOrigin(ctx: RuleContext): string {
+  return nodegoatLiveOrigin(ctx);
+}
+
 /** Login page meta/title also contains "OWASP NodeGoat" — require authenticated nav/profile markers. */
 function nodegoatLooksAuthenticated(html: string): boolean {
   if (/Enter sign up information/i.test(html)) return false;
@@ -8155,7 +8219,7 @@ async function nodegoatTutorialMarkers(
   markers: { label: string; re: RegExp }[],
   note: string
 ): Promise<RuleResult> {
-  const canonicalUrl = new URL(`/tutorial/${tutorialSlug}`, ctx.origin).toString();
+  const canonicalUrl = new URL(`/tutorial/${tutorialSlug}`, nodegoatProbeOrigin(ctx)).toString();
   const doc = await ctx.probe.get(canonicalUrl, { maxBytes: 65536, timeoutMs: 20000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const hits: { label: string; sample: string }[] = [];
@@ -8467,7 +8531,7 @@ function nodegoatSessionCookieFromDoc(doc: { setCookies: string[] }): string | n
 
 async function nodegoatRegisterSessionCookie(ctx: RuleContext): Promise<string | null> {
   const userName = `thugir_ng_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-  const signupUrl = new URL("/signup", ctx.origin).toString();
+  const signupUrl = new URL("/signup", nodegoatProbeOrigin(ctx)).toString();
   const signupPage = await ctx.probe.get(signupUrl, { maxBytes: 8192, timeoutMs: 15000 });
   const csrfMatch = signupPage.body.match(/name="_csrf"\s+value="([^"]*)"/i);
   const csrf = csrfMatch?.[1] ?? "";
@@ -8480,7 +8544,7 @@ async function nodegoatRegisterSessionCookie(ctx: RuleContext): Promise<string |
   });
   const registerCookie = nodegoatSessionCookieFromDoc(registerDoc);
   if (!registerCookie) return null;
-  const loginDoc = await ctx.probe.get(new URL("/login", ctx.origin).toString(), {
+  const loginDoc = await ctx.probe.get(new URL("/login", nodegoatProbeOrigin(ctx)).toString(), {
     method: "POST",
     body: `userName=${encodeURIComponent(userName)}&password=ThugirTest123!`,
     headers: {
@@ -8499,7 +8563,7 @@ async function nodegoatRegisterSessionCookie(ctx: RuleContext): Promise<string |
 }
 
 async function nodegoatNosqlLoginCookie(ctx: RuleContext): Promise<string | null> {
-  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginUrl = new URL("/login", nodegoatProbeOrigin(ctx)).toString();
   const payloads = [
     "userName[$gt]=&password[$gt]=",
     `userName=${encodeURIComponent('{"$gt":""}')}&password=${encodeURIComponent('{"$gt":""}')}`
@@ -8520,7 +8584,7 @@ async function nodegoatNosqlLoginCookie(ctx: RuleContext): Promise<string | null
       return sessionCookie;
     }
     if (doc.status === 200) {
-      const dashDoc = await ctx.probe.get(new URL("/dashboard", ctx.origin).toString(), {
+      const dashDoc = await ctx.probe.get(new URL("/dashboard", nodegoatProbeOrigin(ctx)).toString(), {
         maxBytes: 4096,
         timeoutMs: 15000,
         headers: { Cookie: sessionCookie }
@@ -8538,7 +8602,7 @@ async function nodegoatBenefitsNosqlLiveProbe(ctx: RuleContext): Promise<RuleRes
   if (!cookie) cookie = await nodegoatNosqlLoginCookie(ctx);
   if (!cookie) cookie = await nodegoatRegisterSessionCookie(ctx);
   if (!cookie) return NEGATIVE;
-  const allocationsUrl = new URL("/allocations/2", ctx.origin);
+  const allocationsUrl = new URL("/allocations/2", nodegoatProbeOrigin(ctx));
   allocationsUrl.searchParams.set("threshold", "0");
   const allocDoc = await ctx.probe.get(allocationsUrl.toString(), {
     maxBytes: 16384,
@@ -8550,7 +8614,7 @@ async function nodegoatBenefitsNosqlLiveProbe(ctx: RuleContext): Promise<RuleRes
     /allocations/i.test(allocDoc.body) &&
     (/stocks/i.test(allocDoc.body) || /bonds/i.test(allocDoc.body) || /funds/i.test(allocDoc.body));
   if (!idorOk) return NEGATIVE;
-  const nosqlUrl = new URL("/allocations/1", ctx.origin);
+  const nosqlUrl = new URL("/allocations/1", nodegoatProbeOrigin(ctx));
   nosqlUrl.searchParams.set("threshold", "0");
   const nosqlDoc = await ctx.probe.get(nosqlUrl.toString(), {
     maxBytes: 65536,
@@ -8581,7 +8645,7 @@ const nodegoatBenefitsNosqlRouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/benefits\b/i.test(pageUrl)) return NEGATIVE;
-  const benefitsUrl = new URL("/benefits", ctx.origin).toString();
+  const benefitsUrl = new URL("/benefits", nodegoatProbeOrigin(ctx)).toString();
   const benefitsDoc = await ctx.probe.get(benefitsUrl, {
     maxBytes: 16384,
     timeoutMs: 15000,
@@ -8639,7 +8703,7 @@ const nodegoatBenefitsNosqlLiveOracle: Rule = async (ctx) => {
 };
 
 async function nodegoatBenefitsBacLiveProbe(ctx: RuleContext): Promise<RuleResult> {
-  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginUrl = new URL("/login", nodegoatProbeOrigin(ctx)).toString();
   const loginDoc = await ctx.probe.get(loginUrl, {
     method: "POST",
     body: "userName=user1&password=User1_123",
@@ -8658,7 +8722,7 @@ async function nodegoatBenefitsBacLiveProbe(ctx: RuleContext): Promise<RuleResul
   ) {
     return NEGATIVE;
   }
-  const benefitsUrl = new URL("/benefits", ctx.origin).toString();
+  const benefitsUrl = new URL("/benefits", nodegoatProbeOrigin(ctx)).toString();
   const benefitsDoc = await ctx.probe.get(benefitsUrl, {
     maxBytes: 16384,
     timeoutMs: 15000,
@@ -8708,7 +8772,7 @@ const nodegoatNosqlLoginLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
   const cookie = await nodegoatNosqlLoginCookie(ctx);
   if (!cookie) return NEGATIVE;
-  const dashUrl = new URL("/dashboard", ctx.origin).toString();
+  const dashUrl = new URL("/dashboard", nodegoatProbeOrigin(ctx)).toString();
   const dashDoc = await ctx.probe.get(dashUrl, {
     maxBytes: 16384,
     timeoutMs: 15000,
@@ -10156,7 +10220,7 @@ const nodegoatMemosRouteLiveOracle: Rule = async (ctx) => {
 };
 
 async function nodegoatAuthenticatedSessionCookie(ctx: RuleContext): Promise<string | null> {
-  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginUrl = new URL("/login", nodegoatProbeOrigin(ctx)).toString();
   for (const { userName, password } of [
     { userName: "user1", password: "User1_123" },
     { userName: "admin", password: "Admin_123" }
@@ -100550,6 +100614,9 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingXssDomLessonEvidence,
   clientSideHacksplainingSessionFixationLessonEvidence,
   clientSideHacksplainingWeakSessionLessonEvidence,
+  hacksplainingSessionFixationRouteLiveOracle,
+  hacksplainingWeakSessionRouteLiveOracle,
+  kontraSessionFixationRouteLiveOracle,
   clientSideHacksplainingAiPromptInjectionLessonEvidence,
   clientSideHacksplainingFileUploadLessonEvidence,
   clientSideHacksplainingCommandExecutionLessonEvidence,
