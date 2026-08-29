@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T01:15:00.000Z",
+  "updated_at": "2026-08-29T01:41:16.540Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2829,
-  "total_findings": 28604,
+  "total_sites_scanned": 2838,
+  "total_findings": 28812,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1971,
-  "discovery_findings": 24051,
+  "discovery_urls_added": 1976,
+  "discovery_findings": 24208,
   "improvements_shipped": 963,
-  "last_run": "2026-08-29T01:15:00.000Z",
+  "last_run": "2026-08-29T01:41:16.540Z",
   "last_run_summary": {
     "hour_utc": "01",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
+      "probes_run": 596,
       "live_oracle_slugs": 39,
       "benchmark_recall": {
         "juice-shop": {
@@ -49,38 +49,42 @@
           ]
         }
       },
-      "note": "Primary Heroku 6/6 (51 findings, 39 live oracles); no category gaps"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles incl secret-resend) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 20,
-      "focus": "Deferred queue drain — vwad/goof + oopssec SSRF/prompt-injection walkthroughs + nodegoat.herokuapp.com/login dead-host fallback",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 157,
+      "focus": "kOaDT auth/XSS/XXE walkthroughs (brute-force, password-reset, stored-xss, open-redirect, XXE import) + drained duck-store MCP/coupons/vulnerabilities",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings maintained)",
-      "vwad.owasp.org/app/goof/: 6 findings — vwad-goof-route-live-oracle + client-side-vwad-goof-evidence shipped",
-      "koadt.github.io/.../ssrf-internal-page-access: 6 findings — oopssec walkthrough fetch fallback enables oopssec-ssrf-route-live-oracle",
-      "koadt.github.io/.../prompt-injection-ai-assistant: 5 findings — oopssec-prompt-injection-route-live-oracle via walkthrough fetch",
-      "nodegoat.herokuapp.com/login: 3 findings — nodegoat-login-weak-credentials via websec fallback (dead Heroku host)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles, gap=[])",
+      "koadt.github.io/.../brute-force-no-rate-limiting: 3 findings — auth brute-force route oracle",
+      "koadt.github.io/.../insecure-password-reset: 7 findings — password-reset route oracle",
+      "koadt.github.io/.../stored-xss-product-reviews: 14 findings — stored XSS route oracle",
+      "koadt.github.io/.../open-redirect-login-bypass: 7 findings — open-redirect route oracle",
+      "koadt.github.io/.../xxe-supplier-order-import: 5 findings — XXE route oracle",
+      "duck-store.escape.tech/mcp/tools/list_coupons: 39 findings — MCP coupon oracle",
+      "duck-store.escape.tech/vulnerabilities: 41 findings — vuln catalog route oracle",
+      "duck-store.escape.tech/api/v1/orders/coupons: 41 findings — coupon BOLA oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "nodegoat.herokuapp.com officially decommissioned — websec fallback probes live demo",
-      "oopssec price-manipulation walkthrough also benefits from fetch fallback (same helper)",
-      "ai-security-platform challenge routes still unscanned — auth-gated catalog oracles pending session priming"
+      "koadt walkthrough pages are GitHub Pages docs — live oracles use corpus fallbacks; brute-force walkthrough thin at 3 findings",
+      "duck-store MCP/coupon routes fire high finding counts via corpus + cross-route probes"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "vwad.owasp.org/app/goof/": 6,
-    "koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access": 6,
-    "koadt.github.io/oss-oopssec-store/posts/prompt-injection-ai-assistant": 5,
-    "nodegoat.herokuapp.com/login": 3,
-    "duck-store.escape.tech/nonexistent?redirect=https://example.com": 42,
-    "duck-store.escape.tech/api/v1/auth/login/totp": 40,
-    "dvga.tools.escape.tech/graphql": 18
+    "koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews": 14,
+    "koadt.github.io/oss-oopssec-store/posts/insecure-password-reset": 7,
+    "koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass": 7,
+    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import": 5,
+    "koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting": 3,
+    "duck-store.escape.tech/vulnerabilities": 41,
+    "duck-store.escape.tech/api/v1/orders/coupons": 41,
+    "duck-store.escape.tech/mcp/tools/list_coupons": 39
   }
 }

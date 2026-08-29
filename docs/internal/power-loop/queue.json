@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-29T00:20:00.000Z",
+  "updated_at": "2026-08-29T01:35:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting/",
+      "source": "kOaDT/oss-oopssec-store walkthrough — login brute-force no rate-limit oracle (web search 01 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-password-reset/",
+      "source": "kOaDT/oss-oopssec-store walkthrough — insecure password reset token oracle (web search 01 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews/",
+      "source": "kOaDT/oss-oopssec-store walkthrough — stored XSS in product reviews oracle (web search 01 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass/",
+      "source": "kOaDT/oss-oopssec-store walkthrough — open redirect login bypass oracle (web search 01 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import/",
+      "source": "kOaDT/oss-oopssec-store walkthrough — XXE supplier order import oracle (web search 01 UTC)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://vapi.tools.escape.tech/vapi/api3/user",
       "source": "roottusk/vAPI Escape-hosted — API3 broken object property level authorization oracle GET/POST /vapi/api3/user (OWASP API3; web search 23 UTC)",
