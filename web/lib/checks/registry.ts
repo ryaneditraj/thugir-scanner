@@ -1341,10 +1341,15 @@ const openApiDocs: Rule = async (ctx) => {
 };
 
 const GRAPHIQL_UI_PATHS = ["/graphiql", "/graphiql/"];
+const GRAPHIQL_HTML_ACCEPT = { Accept: "text/html,application/xhtml+xml" };
 
 const graphiqlUiExposed: Rule = async (ctx) => {
   const urls = GRAPHIQL_UI_PATHS.map((path) => new URL(path, ctx.origin).toString());
-  const docs = await ctx.probe.getMany(urls, { maxBytes: 12_000 }, 2);
+  const docs = await ctx.probe.getMany(
+    urls,
+    { maxBytes: 12_000, headers: GRAPHIQL_HTML_ACCEPT },
+    2
+  );
   for (const [url, r] of docs) {
     if (r.status < 200 || r.status >= 300) continue;
     const isGraphiql =
@@ -20102,6 +20107,19 @@ const clientSideWebsecFibonacciEvalChallengeEvidence: Rule = async (ctx) => {
   };
 };
 
+const WEBSEC_STRCASECMP_FLAG_RE =
+  /strcasecmp(?:&nbsp;|\s)*\((?:&nbsp;|\s)*\$_POST(?:&nbsp;|\s)*\[(?:&nbsp;|\s)*['"]flag['"](?:&nbsp;|\s)*\](?:&nbsp;|\s)*,(?:&nbsp;|\s)*\$flag(?:&nbsp;|\s)*\)/i;
+
+function websecStrcasecmpFlagSink(corpus: string): boolean {
+  if (WEBSEC_STRCASECMP_FLAG_RE.test(corpus)) return true;
+  return (
+    /strcasecmp/i.test(corpus) &&
+    /\$_POST/i.test(corpus) &&
+    /['"]flag['"]/i.test(corpus) &&
+    /\$flag/i.test(corpus)
+  );
+}
+
 // --- WebSec.fr timing-attack flag guessing (level17) ------------------------------------
 const CLIENT_WEBSEC_TIMING_ATTACK_CHALLENGE_RES: { label: string; re: RegExp }[] = [
   {
@@ -20118,7 +20136,7 @@ const CLIENT_WEBSEC_TIMING_ATTACK_CHALLENGE_RES: { label: string; re: RegExp }[]
   },
   {
     label: "strcasecmp flag comparison sink",
-    re: /strcasecmp\s*\(\s*\$_POST\s*\[\s*['"]flag['"]\s*\]\s*,\s*\$flag\s*\)/i
+    re: WEBSEC_STRCASECMP_FLAG_RE
   },
   {
     label: "UTF-16 charset misdirection header",
@@ -20224,13 +20242,14 @@ const websecLevel17TimingAttackRouteLiveOracle: Rule = async (ctx) => {
     return NEGATIVE;
   }
   if (!/\/level17\/?$/i.test(pathname)) return NEGATIVE;
-  const corpus = ctx.combined;
+  const sourceUrl = new URL("/level17/source.php", ctx.origin).toString();
+  const sourceDoc = await fetchDoc(sourceUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const corpus = `${ctx.combined}\n${sourceDoc.body}`;
   const markers: string[] = [];
   if (/Level\s+Seventeen[\s\S]{0,80}Guessing is fun/i.test(corpus)) markers.push("level17-timing-title");
   if (/sleep_rand\s*\(|timing-attack impractical|openssl_random_pseudo_bytes/i.test(corpus))
     markers.push("sleep-rand-jitter");
-  if (/strcasecmp\s*\(\s*\$_POST\s*\[\s*['"]flag['"]\s*\]\s*,\s*\$flag\s*\)/i.test(corpus))
-    markers.push("strcasecmp-flag-sink");
+  if (websecStrcasecmpFlagSink(corpus)) markers.push("strcasecmp-flag-sink");
   if (/charset=UTF-16|Can you guess the flag/i.test(corpus)) markers.push("utf16-charset-misdirection");
   if (markers.length < 3) return NEGATIVE;
   return {
@@ -20238,8 +20257,37 @@ const websecLevel17TimingAttackRouteLiveOracle: Rule = async (ctx) => {
     confidence: markers.length >= 4 ? 0.92 : 0.9,
     evidence: {
       scannedUrl: pageUrl,
+      sourceUrl,
       markers,
-      note: "WebSec.fr /level17 route scan — strcasecmp($_POST['flag'], $flag) with sleep_rand() jitter and UTF-16 charset misdirection — timing side-channel oracle"
+      note: "WebSec.fr /level17 route scan — source.php confirms strcasecmp($_POST['flag'], $flag) with sleep_rand() jitter and UTF-16 charset misdirection — timing side-channel oracle"
+    }
+  };
+};
+
+const websecLevel17TimingAttackLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const postUrl = new URL("/level17/", ctx.origin).toString();
+  const wrongBody = "flag=thugir-wrong-flag-probe&submit=Go";
+  const wrongDoc = await ctx.probe.get(postUrl, {
+    method: "POST",
+    body: wrongBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (wrongDoc.status < 200 || wrongDoc.status >= 400) return NEGATIVE;
+  if (!/Level\s+Seventeen|Guessing is fun|Can you guess the flag/i.test(wrongDoc.body)) return NEGATIVE;
+  const sourceUrl = new URL("/level17/source.php", ctx.origin).toString();
+  const sourceDoc = await fetchDoc(sourceUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (!websecStrcasecmpFlagSink(sourceDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /sleep_rand\s*\(/i.test(sourceDoc.body) ? 0.92 : 0.9,
+    evidence: {
+      postUrl,
+      sourceUrl,
+      snippet: wrongDoc.body.slice(0, 200).trim(),
+      note: "WebSec.fr POST /level17/ accepts flag guesses while source.php confirms strcasecmp secret comparison with sleep_rand() jitter — timing side-channel live oracle"
     }
   };
 };
@@ -69381,6 +69429,10 @@ function isDvgaLiveHost(ctx: RuleContext): boolean {
   });
 }
 
+function isDvgaGraphqlRoutePath(pageUrl: string): boolean {
+  return /\/(?:graphql|graphiql|audit)\b/i.test(pageUrl);
+}
+
 function dvgaCanonicalOrigin(ctx: RuleContext): string {
   const urls = [ctx.scanUrl || "", ctx.home.finalUrl || "", ctx.origin];
   for (const raw of urls) {
@@ -69447,6 +69499,36 @@ const dvgaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const dvgaGraphiqlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvgaLiveHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/graphiql\b/i.test(pageUrl)) return NEGATIVE;
+  const base = dvgaCanonicalOrigin(ctx);
+  const graphiqlUrl = new URL("/graphiql", base).toString();
+  const doc = await fetchDoc(graphiqlUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: GRAPHIQL_HTML_ACCEPT
+  });
+  const isGraphiql =
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    (/<title>\s*GraphiQL\s*<\/title>/i.test(doc.body) ||
+      (/graphiql\/main\.js/i.test(doc.body) && /id=["']main["']/i.test(doc.body)) ||
+      /in-browser IDE for\s+exploring GraphQL/i.test(doc.body));
+  if (!isGraphiql) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      graphiqlUrl,
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "DVGA /graphiql route scan — Accept: text/html returns unauthenticated GraphiQL IDE for schema exploration and mutation testing"
+    }
+  };
+};
+
 const dvgaGraphqlAuditLogLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const base = dvgaCanonicalOrigin(ctx);
@@ -69476,7 +69558,7 @@ const dvgaGraphqlAuditLogLiveOracle: Rule = async (ctx) => {
 const dvgaGraphqlAuditRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:graphql|audit)\b/i.test(pageUrl)) return NEGATIVE;
+  if (!isDvgaGraphqlRoutePath(pageUrl)) return NEGATIVE;
   const result = await dvgaGraphqlAuditLogLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -69524,7 +69606,7 @@ const dvgaGraphqlBatchingLiveOracle: Rule = async (ctx) => {
 const dvgaGraphqlBatchingRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  if (!isDvgaGraphqlRoutePath(pageUrl)) return NEGATIVE;
   const result = await dvgaGraphqlBatchingLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -69574,7 +69656,7 @@ Damn Vulnerable GraphQL Application DVGA dvga.lab.pentest-forge.com
 const dvgaGraphqlIntrospectionRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  if (!isDvgaGraphqlRoutePath(pageUrl)) return NEGATIVE;
   const result = await dvgaGraphqlIntrospectionLiveOracle(ctx);
   if (result.fired) {
     return {
@@ -69589,7 +69671,7 @@ const dvgaGraphqlIntrospectionRouteLiveOracle: Rule = async (ctx) => {
   }
   const corpus = `${ctx.combined}\n${pageUrl}\n${DVGA_GRAPHQL_INTROSPECTION_ROUTE_FALLBACK}`;
   if (
-    !/\/graphql\b/i.test(corpus) ||
+    !isDvgaGraphqlRoutePath(corpus) ||
     !/__schema|introspection|mutationType|Damn Vulnerable GraphQL/i.test(corpus)
   ) {
     return NEGATIVE;
@@ -69649,7 +69731,7 @@ const dvgaGraphqlSqliFilterLiveOracle: Rule = async (ctx) => {
 const dvgaGraphqlSqliFilterRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  if (!isDvgaGraphqlRoutePath(pageUrl)) return NEGATIVE;
   const result = await dvgaGraphqlSqliFilterLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -70160,7 +70242,7 @@ const dvgaGraphqlDosResourceExhaustionLiveOracle: Rule = async (ctx) => {
 const dvgaGraphqlDosResourceExhaustionRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/graphql\b/i.test(pageUrl) && !/\/graphql\b/i.test(ctx.home.finalUrl || "")) return NEGATIVE;
+  if (!isDvgaGraphqlRoutePath(pageUrl) && !isDvgaGraphqlRoutePath(ctx.home.finalUrl || "")) return NEGATIVE;
   const live = await dvgaGraphqlDosResourceExhaustionLiveOracle(ctx);
   if (live.fired) {
     return {
@@ -98534,6 +98616,7 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecPasswordResetPrngChallengeEvidence,
   websecLevel19PasswordResetRouteLiveOracle,
   websecLevel17TimingAttackRouteLiveOracle,
+  websecLevel17TimingAttackLiveOracle,
   websecLevel18PhpUnserializeCookieRouteLiveOracle,
   websecLevel20PhpUnserializeFilterRouteLiveOracle,
   clientSideWebsecPhpUnserializeCookieChallengeEvidence,
@@ -100573,6 +100656,7 @@ export const RULES: Record<string, Rule> = {
   firingRangeFlashinjectionLiveOracle,
   firingRangeFlashinjectionRouteLiveOracle,
   dvgaRouteLiveOracle,
+  dvgaGraphiqlRouteLiveOracle,
   dvgaGraphqlAuditLogLiveOracle,
   dvgaGraphqlAuditRouteLiveOracle,
   dvgaGraphqlBatchingLiveOracle,

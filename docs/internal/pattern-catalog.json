@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-29T10:34:02.515Z",
-  "total": 2824,
-  "uniqueSlugs": 2816,
+  "generatedAt": "2026-08-29T11:40:31.717Z",
+  "total": 2826,
+  "uniqueSlugs": 2818,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2806,
+    "generic": 2808,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2739,
+    "deep": 2741,
     "continuous": 0
   },
   "byCategory": {
@@ -24,9 +24,9 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 130,
+    "Information disclosure": 131,
     "Security misconfiguration": 210,
-    "Broken authentication": 185,
+    "Broken authentication": 186,
     "Injection": 451,
     "Cross-site scripting": 734,
     "Open redirect": 25,
@@ -1060,6 +1060,7 @@
     "dvaib-prompt-injection-route-live-oracle",
     "dvga-create-paste-stored-xss-live-oracle",
     "dvga-create-paste-stored-xss-route-live-oracle",
+    "dvga-graphiql-route-live-oracle",
     "dvga-graphql-audit-log-live-oracle",
     "dvga-graphql-audit-route-live-oracle",
     "dvga-graphql-batching-live-oracle",
@@ -2658,6 +2659,7 @@
     "web-security-learning-labs-ssti-module-route-live-oracle",
     "webexp05-c3-stored-xss-live-oracle",
     "webexp05-c3-stored-xss-route-live-oracle",
+    "websec-level17-timing-attack-live-oracle",
     "websec-level17-timing-attack-route-live-oracle",
     "websec-level18-php-unserialize-cookie-route-live-oracle",
     "websec-level19-password-reset-route-live-oracle",
