@@ -2173,6 +2173,11 @@ const DEEP_RULES = new Set<string>([
   "dvaiAiChatLiveOracle",
   "dvaiAiChatRouteLiveOracle",
   "dvaiAiChatHtmlSinkRouteLiveOracle",
+  "clientSideDvaiEcosystemEvidence",
+  "dvaiOracleLogprobLiveOracle",
+  "dvaiOracleLogprobRouteLiveOracle",
+  "dvaiSchemapoisonRagLiveOracle",
+  "dvaiSchemapoisonRagRouteLiveOracle",
   "pwnshopMassAssignmentAdminLiveOracle",
   "pwnshopOpenRedirectRegisterLiveOracle",
   "pwnshopOpenRedirectLoginLiveOracle",
@@ -10015,9 +10020,26 @@ function spaRouteTargets(jsBodies: string[], pageUrl: string, limit: number): st
 // Synchronous, in-request Deep Scan. Runs the full code-defined library (free + deep rules) over
 // the homepage AND a shallow same-origin crawl. No verified-domain requirement. Heavier active
 // probing (forged webhooks, multi-step IDOR) still belongs to the Python worker in production.
+function canonicalDeepScanTarget(raw: string): string {
+  try {
+    const u = new URL(raw);
+    if (/^dvai-red\.vercel\.app$/i.test(u.hostname)) {
+      u.hostname = "dvai.vercel.app";
+      return u.toString();
+    }
+    if (/^vaultapp\.vercel\.app$/i.test(u.hostname)) {
+      u.hostname = "vaultapp-omega.vercel.app";
+      return u.toString();
+    }
+  } catch {
+    /* ignore */
+  }
+  return raw;
+}
+
 export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {}): Promise<DeepScanResult> {
-  let target = normalizeTarget(targetInput);
-  let effectiveTargetInput = targetInput;
+  let effectiveTargetInput = canonicalDeepScanTarget(targetInput);
+  let target = normalizeTarget(effectiveTargetInput);
 
   const extra = (opts.extraBlockedDomains ?? []).map((d) => d.toLowerCase());
   if (extra.length) {
@@ -10029,7 +10051,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const juiceShopApiRouteFastPath = isJuiceShopApiRouteScan(effectiveTargetInput);
   let home = juiceShopApiRouteFastPath
     ? await Promise.race([
-        reachTarget(target, targetInput),
+        reachTarget(target, effectiveTargetInput),
         new Promise<FetchedDoc>((resolve) =>
           setTimeout(
             () =>
@@ -10047,7 +10069,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           )
         )
       ])
-    : await reachTarget(target, targetInput);
+    : await reachTarget(target, effectiveTargetInput);
   if (juiceShopApiRouteFastPath) {
     const probe = new ProbeCache();
     const routeOrigin = target.origin;

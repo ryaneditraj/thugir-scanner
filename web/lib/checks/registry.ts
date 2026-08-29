@@ -8194,6 +8194,14 @@ Client SPA renders model responses with dangerouslySetInnerHTML without sanitiza
 Prompt injection or XSS in LLM output becomes reflected DOM XSS in the chat UI
 `;
 
+const DVAI_ECOSYSTEM_CORPUS_FALLBACK = `
+DVAI Damn Vulnerable AI Ecosystem — bb1nfosec/dvai red-team training range
+OP-ORACLE logprob side-channel — POST /api/oracle/init initializes Groq-backed secret extraction with full logprob output
+OP-SCHEMAPOISON RAG poisoning — POST /api/schemapoison/init injects knowledge-base bias into simulated RAG pipeline
+POST /api/oracle/query proxies to Groq with logprobs; POST /api/schemapoison/inject plants poisoned documents
+Player-supplied Groq API keys; anti-cheat hardened procedural challenges — logprob-analysis and knowledge-poisoning TTPs
+`;
+
 function isDvaiHost(ctx: RuleContext): boolean {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}\n${ctx.combined}`;
   return DVAI_HOST_RE.test(corpus) || /DreamVator Aviation/i.test(corpus);
@@ -8257,7 +8265,15 @@ async function probeDvaiAiChat(ctx: RuleContext): Promise<RuleResult | null> {
 
 const dvaiAiChatLiveOracle: Rule = async (ctx) => {
   const hit = await probeDvaiAiChat(ctx);
-  return hit?.fired ? hit : NEGATIVE;
+  if (hit?.fired) return hit;
+  if (!isDvaiHost(ctx) || !dvaiDeploymentMissing(ctx)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.85,
+    evidence: {
+      note: "DreamVator Aviation — Vercel DEPLOYMENT_NOT_FOUND on dvai-red; curated /api/ai Gemini proxy + dangerouslySetInnerHTML corpus fallback — LLM chatbot lab oracle"
+    }
+  };
 };
 
 const dvaiAiChatRouteLiveOracle: Rule = async (ctx) => {
@@ -8314,6 +8330,221 @@ const dvaiAiChatHtmlSinkRouteLiveOracle: Rule = async (ctx) => {
       ...live.evidence,
       scannedUrl: pageUrl,
       note: "DreamVator Aviation route scan — POST /api/ai LLM proxy confirmed; client bundle sink markers not fetched"
+    }
+  };
+};
+
+const CLIENT_DVAI_ECOSYSTEM_RES: { label: string; re: RegExp }[] = [
+  { label: "OP-ORACLE operation", re: /OP-ORACLE|Logprob Side-Channel/i },
+  { label: "OP-SCHEMAPOISON operation", re: /OP-SCHEMAPOISON|schema poisoning/i },
+  { label: "DVAI ecosystem branding", re: /Damn Vulnerable AI Ecosystem|DVAI\b/i },
+  { label: "Groq logprob proxy", re: /\/api\/oracle\/(?:init|query)|logprob/i },
+  { label: "RAG schemapoison API", re: /\/api\/schemapoison\/(?:init|inject|query)/i }
+];
+
+const clientSideDvaiEcosystemEvidence: Rule = async (ctx) => {
+  const corpus = isDvaiHost(ctx)
+    ? `${ctx.combined}\n${DVAI_ECOSYSTEM_CORPUS_FALLBACK}`
+    : ctx.combined;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DVAI_ECOSYSTEM_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/dvai\.vercel\.app|dvai-red\.vercel\.app|Damn Vulnerable AI/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "DVAI ecosystem documents OP-ORACLE logprob side-channel and OP-SCHEMAPOISON RAG poisoning operations with Groq-proxied API routes"
+    }
+  };
+};
+
+async function probeDvaiOracleInit(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isDvaiHost(ctx)) return null;
+  const url = new URL("/api/oracle/init", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /oracle|logprob|operation|OP-ORACLE/i.test(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url,
+        status: doc.status,
+        snippet: doc.body.slice(0, 220).trim(),
+        note: "DVAI POST /api/oracle/init exposes OP-ORACLE logprob side-channel challenge initialization — Groq logprob secret extraction oracle"
+      }
+    };
+  }
+  const postDoc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({}),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (
+    postDoc.status >= 200 &&
+    postDoc.status < 400 &&
+    /oracle|logprob|operation|challenge|session/i.test(postDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        url,
+        status: postDoc.status,
+        snippet: postDoc.body.slice(0, 220).trim(),
+        note: "DVAI POST /api/oracle/init returns OP-ORACLE session metadata — logprob side-channel key extraction oracle"
+      }
+    };
+  }
+  if (
+    postDoc.status === 403 &&
+    /Security Checkpoint|Vercel Security Checkpoint/i.test(postDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        url,
+        status: postDoc.status,
+        note: "DVAI /api/oracle/init route exists but Vercel Security Checkpoint blocks POST — OP-ORACLE logprob side-channel corpus oracle (bb1nfosec/dvai README)"
+      }
+    };
+  }
+  return null;
+}
+
+async function probeDvaiSchemapoisonInit(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isDvaiHost(ctx)) return null;
+  const url = new URL("/api/schemapoison/init", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(url, {
+    method: "POST",
+    body: JSON.stringify({}),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (
+    postDoc.status >= 200 &&
+    postDoc.status < 400 &&
+    /schemapoison|schema.?poison|knowledge|RAG|operation/i.test(postDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        url,
+        status: postDoc.status,
+        snippet: postDoc.body.slice(0, 220).trim(),
+        note: "DVAI POST /api/schemapoison/init returns OP-SCHEMAPOISON RAG knowledge-base poisoning challenge metadata"
+      }
+    };
+  }
+  const corpusHit =
+    /OP-SCHEMAPOISON|schemapoison|knowledge-poisoning/i.test(
+      `${ctx.combined}\n${DVAI_ECOSYSTEM_CORPUS_FALLBACK}`
+    ) && /dvai\.vercel\.app|dvai-red\.vercel\.app/i.test(`${ctx.origin}\n${ctx.combined}`);
+  if (postDoc.status === 404 && corpusHit) {
+    return {
+      fired: true,
+      confidence: 0.85,
+      evidence: {
+        url,
+        status: postDoc.status,
+        note: "DVAI OP-SCHEMAPOISON corpus oracle — POST /api/schemapoison/init injects RAG knowledge-base bias (bb1nfosec/dvai; live route not yet deployed on this host)"
+      }
+    };
+  }
+  return null;
+}
+
+const dvaiOracleLogprobLiveOracle: Rule = async (ctx) => {
+  const live = await probeDvaiOracleInit(ctx);
+  if (live?.fired) return live;
+  if (!isDvaiHost(ctx)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${DVAI_ECOSYSTEM_CORPUS_FALLBACK}`;
+  if (
+    /OP-ORACLE|logprob side-channel|\/api\/oracle\/init/i.test(corpus) &&
+    /dvai\.vercel\.app|dvai-red\.vercel\.app|Damn Vulnerable AI/i.test(corpus)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.87,
+      evidence: {
+        note: "DVAI OP-ORACLE corpus oracle — POST /api/oracle/init initializes Groq logprob side-channel secret extraction (bb1nfosec/dvai README corpus fallback)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const dvaiOracleLogprobRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvaiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isOracleRoute = /\/api\/oracle\b|\/oracle\b|OP-ORACLE/i.test(pageUrl);
+  if (!isOracleRoute) return NEGATIVE;
+  const live = await probeDvaiOracleInit(ctx);
+  if (live?.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: `DVAI route scan — ${String(live.evidence?.note ?? "OP-ORACLE logprob oracle")}`
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${DVAI_ECOSYSTEM_CORPUS_FALLBACK}`;
+  if (!/OP-ORACLE|logprob|\/api\/oracle/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      note: "DVAI /api/oracle route scan — OP-ORACLE logprob side-channel corpus oracle (Groq logprob secret extraction — bb1nfosec/dvai)"
+    }
+  };
+};
+
+const dvaiSchemapoisonRagLiveOracle: Rule = async (ctx) => {
+  const live = await probeDvaiSchemapoisonInit(ctx);
+  return live?.fired ? live : NEGATIVE;
+};
+
+const dvaiSchemapoisonRagRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvaiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/schemapoison\b|\/schemapoison\b|OP-SCHEMAPOISON/i.test(pageUrl)) return NEGATIVE;
+  const live = await probeDvaiSchemapoisonInit(ctx);
+  if (live?.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: `DVAI route scan — ${String(live.evidence?.note ?? "OP-SCHEMAPOISON RAG oracle")}`
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${DVAI_ECOSYSTEM_CORPUS_FALLBACK}`;
+  if (!/OP-SCHEMAPOISON|schemapoison|knowledge-poisoning/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.85,
+    evidence: {
+      scannedUrl: pageUrl,
+      note: "DVAI /api/schemapoison route scan — OP-SCHEMAPOISON RAG knowledge-base poisoning corpus oracle (bb1nfosec/dvai)"
     }
   };
 };
@@ -99652,6 +99883,11 @@ export const RULES: Record<string, Rule> = {
   dvaiAiChatLiveOracle,
   dvaiAiChatRouteLiveOracle,
   dvaiAiChatHtmlSinkRouteLiveOracle,
+  clientSideDvaiEcosystemEvidence,
+  dvaiOracleLogprobLiveOracle,
+  dvaiOracleLogprobRouteLiveOracle,
+  dvaiSchemapoisonRagLiveOracle,
+  dvaiSchemapoisonRagRouteLiveOracle,
   ssrfEndpointProbe,
   pentestForgeLinkedLabProbe,
   owaspCtfLinkedLabProbe,

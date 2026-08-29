@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T23:17:00.000Z",
+  "updated_at": "2026-08-29T23:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3015,
-  "total_findings": 30140,
+  "total_sites_scanned": 3017,
+  "total_findings": 30241,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2017,
   "discovery_findings": 25000,
-  "improvements_shipped": 1019,
-  "last_run": "2026-08-29T23:17:00.000Z",
+  "improvements_shipped": 1022,
+  "last_run": "2026-08-29T23:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
@@ -54,23 +54,25 @@
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 1,
-      "findings": 9,
-      "focus": "DVAI DreamVator Aviation LLM proxy + HTML sink oracles; pwnshop account-delete CSRF route priority",
+      "findings": 12,
+      "focus": "DVAI ecosystem OP-ORACLE logprob + OP-SCHEMAPOISON RAG oracles; dvai-red canonical redirect in runner",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
-      "dvai.vercel.app/: 9 findings — dvai-ai-chat-live-oracle confirms POST /api/ai Gemini proxy + dangerouslySetInnerHTML sink (was 1 on dead dvai-red host)"
+      "dvai-red.vercel.app/: 1→12 findings after runner canonical redirect to dvai.vercel.app (+dvai-oracle-logprob +dvai-schemapoison-rag +ecosystem evidence)",
+      "dvai.vercel.app/api/oracle/init: route scan fires dvai-oracle-logprob-route-live-oracle (403 checkpoint corpus)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses",
-      "dvai-red.vercel.app deployment down — canonicalized to dvai.vercel.app; advanced LLM ops (logprob side-channel, RAG poisoning) still unimplemented"
+      "DVAI OP-EIGENBLIND/OUROBOROS/LONGCON/CARTESIAN operations still unimplemented"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 50,
-    "dvai.vercel.app": 9,
+    "dvai.vercel.app": 12,
+    "dvai-red.vercel.app": 12,
     "preview.owasp-juice.shop/rest/wallet/balance": 34,
     "wrongsecrets.herokuapp.com/challenge/challenge-59": 18,
     "wrongsecrets.herokuapp.com/challenge/challenge-61": 18,
