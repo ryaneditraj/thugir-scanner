@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level17-timing-attack-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: websecLevel17TimingAttackRouteLiveOracle fetches /level17/source.php; websecLevel17TimingAttackLiveOracle POST /level17/ + highlighted-source strcasecmp markers; websec.fr/level17/ findings 4→5 (+websec-level17-timing-attack-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com:5013",
+      "slug": "dvga-graphiql-route-oracle-path-match",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isDvgaGraphqlRoutePath matches /graphiql; dvgaGraphiqlRouteLiveOracle probes Accept:text/html GraphiQL IDE; pentest-ground.com:5013/graphiql findings 10→14 (+dvga-graphiql-route-live-oracle +5 graphql *-route-live-oracle slugs); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:generic",
+      "slug": "graphiql-ui-exposed-accept-header",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: graphiqlUiExposed probes /graphiql with Accept:text/html — DVGA returns GraphiQL HTML (curl status 200) instead of JSON error without header; supports graphiql route detection on pentest-ground.com:5013; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pentest-ground.com",
       "slug": "pentest-ground-dvwa-hub-route-live-oracle",
       "status": "shipped",
