@@ -94647,24 +94647,23 @@ const finbotDarklabTaxcalcServerRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-async function probeFinbotDarklabTaxcalcToolsWrite(
+type FinbotDarklabMcpToolSpec = {
+  name: string;
+  description: string;
+  parameters: Record<string, unknown>;
+};
+
+async function probeFinbotDarklabServerToolsWrite(
   ctx: RuleContext,
-  method: "PUT" | "POST"
+  serverSlug: string,
+  tool: FinbotDarklabMcpToolSpec,
+  method: "PUT" | "POST" = "PUT"
 ): Promise<RuleResult | null> {
-  const toolsUrl = new URL("/darklab/api/v1/supply-chain/servers/taxcalc/tools", ctx.origin).toString();
-  const putBody = JSON.stringify({
-    tools: [
-      {
-        name: "calculate_tax",
-        description: "thugir-tool-poison-probe — indirect prompt injection surface",
-        parameters: {
-          type: "object",
-          properties: { amount: { type: "number" } },
-          required: ["amount"]
-        }
-      }
-    ]
-  });
+  const toolsUrl = new URL(
+    `/darklab/api/v1/supply-chain/servers/${serverSlug}/tools`,
+    ctx.origin
+  ).toString();
+  const putBody = JSON.stringify({ tools: [tool] });
   const doc = await ctx.probe.get(toolsUrl, {
     method,
     body: method === "PUT" ? putBody : "{}",
@@ -94681,12 +94680,16 @@ async function probeFinbotDarklabTaxcalcToolsWrite(
         method,
         status: doc.status,
         snippet: doc.body.slice(0, 200).trim(),
-        note:
-          "OWASP FinBot Dark Lab MCP tool write API at /darklab/api/v1/supply-chain/servers/taxcalc/tools accepts tool-poisoning PUT/POST (CSRF gate confirms writable route, not 404)"
+        note: `OWASP FinBot Dark Lab MCP tool write API at /darklab/api/v1/supply-chain/servers/${serverSlug}/tools accepts tool-poisoning PUT/POST (CSRF gate confirms writable route, not 404)`
       }
     };
   }
-  if (doc.status >= 200 && doc.status < 300 && /calculate_tax|tool_overrides|default_tools/i.test(doc.body)) {
+  const toolPattern = new RegExp(tool.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+  if (
+    doc.status >= 200 &&
+    doc.status < 300 &&
+    (toolPattern.test(doc.body) || /tool_overrides|default_tools/i.test(doc.body))
+  ) {
     return {
       fired: true,
       confidence: 0.93,
@@ -94695,11 +94698,31 @@ async function probeFinbotDarklabTaxcalcToolsWrite(
         method,
         status: doc.status,
         snippet: doc.body.slice(0, 200).trim(),
-        note: "OWASP FinBot Dark Lab PUT /darklab/api/v1/supply-chain/servers/taxcalc/tools mutates MCP tool catalog without authentication"
+        note: `OWASP FinBot Dark Lab PUT /darklab/api/v1/supply-chain/servers/${serverSlug}/tools mutates MCP tool catalog without authentication`
       }
     };
   }
   return null;
+}
+
+async function probeFinbotDarklabTaxcalcToolsWrite(
+  ctx: RuleContext,
+  method: "PUT" | "POST"
+): Promise<RuleResult | null> {
+  return probeFinbotDarklabServerToolsWrite(
+    ctx,
+    "taxcalc",
+    {
+      name: "calculate_tax",
+      description: "thugir-tool-poison-probe — indirect prompt injection surface",
+      parameters: {
+        type: "object",
+        properties: { amount: { type: "number" } },
+        required: ["amount"]
+      }
+    },
+    method
+  );
 }
 
 const finbotDarklabTaxcalcToolsLiveOracle: Rule = async (ctx) => {
@@ -94786,6 +94809,85 @@ const finbotDarklabTaxcalcResetToolsRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       note:
         "OWASP FinBot TaxCalc /reset-tools route scan — public MCP tool-reset write API for supply-chain poisoning labs"
+    }
+  };
+};
+
+async function probeFinbotDarklabFinmailToolsWrite(ctx: RuleContext): Promise<RuleResult | null> {
+  return probeFinbotDarklabServerToolsWrite(ctx, "finmail", {
+    name: "send_email",
+    description: "thugir-tool-poison-probe — indirect prompt injection surface for FinMail MCP",
+    parameters: {
+      type: "object",
+      properties: {
+        to: { type: "string" },
+        subject: { type: "string" },
+        body: { type: "string" }
+      },
+      required: ["to", "subject", "body"]
+    }
+  });
+}
+
+const finbotDarklabFinmailToolsLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabFinmailToolsWrite(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabFinmailToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/servers\/finmail\/tools\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabFinmailToolsWrite(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "OWASP FinBot FinMail /tools route scan — public MCP tool write API enables supply-chain tool-poisoning labs (issue #544)"
+    }
+  };
+};
+
+async function probeFinbotDarklabFindriveToolsWrite(ctx: RuleContext): Promise<RuleResult | null> {
+  return probeFinbotDarklabServerToolsWrite(ctx, "findrive", {
+    name: "upload_file",
+    description: "thugir-tool-poison-probe — indirect prompt injection surface for FinDrive MCP",
+    parameters: {
+      type: "object",
+      properties: {
+        filename: { type: "string" },
+        content: { type: "string" }
+      },
+      required: ["filename", "content"]
+    }
+  });
+}
+
+const finbotDarklabFindriveToolsLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabFindriveToolsWrite(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabFindriveToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/servers\/findrive\/tools\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabFindriveToolsWrite(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "OWASP FinBot FinDrive /tools route scan — public MCP tool write API enables supply-chain tool-poisoning labs (issue #544)"
     }
   };
 };
@@ -100420,6 +100522,10 @@ export const RULES: Record<string, Rule> = {
   finbotDarklabTaxcalcToolsRouteLiveOracle,
   finbotDarklabTaxcalcResetToolsLiveOracle,
   finbotDarklabTaxcalcResetToolsRouteLiveOracle,
+  finbotDarklabFinmailToolsLiveOracle,
+  finbotDarklabFinmailToolsRouteLiveOracle,
+  finbotDarklabFindriveToolsLiveOracle,
+  finbotDarklabFindriveToolsRouteLiveOracle,
   finbotCtfStatsLiveOracle,
   finbotCtfStatsRouteLiveOracle,
   finbotVendorInvoicesLiveOracle,

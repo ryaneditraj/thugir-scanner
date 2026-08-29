@@ -47352,6 +47352,114 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-darklab-finmail-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinMail MCP tools write live oracle",
+    description:
+      "PUT /darklab/api/v1/supply-chain/servers/finmail/tools accepts MCP tool definition updates for send_email — supply-chain tool-poisoning write surface.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinmailToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinMail MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finmail/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes a writable MCP tool API at /finmail/tools. Show how to protect agentic email tool catalogs from supply-chain poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finmail-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinMail /tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/finmail/tools, PUT confirms MCP tool-poisoning write API for FinMail send_email tool definitions.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinmailToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinMail MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finmail/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /finmail/tools route scan confirms writable MCP tool definitions. Show remediation for agentic supply-chain tool poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-findrive-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinDrive MCP tools write live oracle",
+    description:
+      "PUT /darklab/api/v1/supply-chain/servers/findrive/tools accepts MCP tool definition updates for upload_file — supply-chain tool-poisoning write surface.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFindriveToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinDrive MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/findrive/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes a writable MCP tool API at /findrive/tools. Show how to protect agentic document-storage tool catalogs from supply-chain poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-findrive-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinDrive /tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/findrive/tools, PUT confirms MCP tool-poisoning write API for FinDrive upload_file tool definitions.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFindriveToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinDrive MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/findrive/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /findrive/tools route scan confirms writable MCP tool definitions. Show remediation for agentic supply-chain tool poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-darklab-taxcalc-reset-tools-live-oracle",
     platform: "generic",
     category: "AI security",
