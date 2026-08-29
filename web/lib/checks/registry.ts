@@ -57865,6 +57865,47 @@ const duckStoreOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const duckStoreVulnerabilitiesHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDuckStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/vulnerabilities\/?$/i.test(pathname)) return NEGATIVE;
+  const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
+  const openapiDoc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const markers: string[] = [];
+  if (openapiDoc.status >= 200 && openapiDoc.status < 400) {
+    if (/\/api\/v1\/uploads\/fetch-url/i.test(openapiDoc.body)) markers.push("openapi-ssrf-fetch-url");
+    if (/\/api\/v1\/uploads\/import-from-url/i.test(openapiDoc.body)) markers.push("openapi-ssrf-import-from-url");
+    if (/\/api\/v1\/products\/filter\/by-color/i.test(openapiDoc.body)) markers.push("openapi-sqli-filter-by-color");
+    if (/\/api\/v1\/users\//i.test(openapiDoc.body)) markers.push("openapi-users-bola");
+    if (/\/api\/v1\/orders\/coupons/i.test(openapiDoc.body)) markers.push("openapi-coupon-abuse");
+  }
+  const bundle = await duckStoreSpaBundleBody(ctx);
+  const corpus = `${ctx.combined}\n${bundle}`;
+  if (/vulnerabilit/i.test(corpus) && /(?:IDOR|SSRF|SQL injection|XSS|business logic)/i.test(corpus)) {
+    markers.push("spa-vulnerability-index");
+  }
+  if (/escape\.tech/i.test(corpus) && /intentionally vulnerable|security testing/i.test(corpus)) {
+    markers.push("escape-vuln-app-catalog");
+  }
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      openapiUrl,
+      markers,
+      note: "Duck Store /vulnerabilities route scan — published vulnerability index plus OpenAPI confirms SSRF, SQLi, BOLA, and coupon abuse training surface"
+    }
+  };
+};
+
 const duckStoreReferralCodeAbuseLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const username = `thugir_ref_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -93871,6 +93912,12 @@ const finbotCtfChallengesLiveOracle: Rule = async (ctx) => {
   return result?.fired ? result : NEGATIVE;
 };
 
+const finbotCtfSidecarLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotCtfSidecar(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
 const finbotCtfSidecarRouteLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -93881,6 +93928,23 @@ const finbotCtfSidecarRouteLiveOracle: Rule = async (ctx) => {
     fired: true,
     confidence: result.confidence,
     evidence: { ...result.evidence, scannedUrl: pageUrl }
+  };
+};
+
+const finbotCtfSidecarApiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/ctf\/api\/v1\/sidecar\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotCtfSidecar(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OWASP FinBot /ctf/api/v1/sidecar route scan — public JSON exposes total challenge count, completion progress, and agentic toolkit metadata"
+    }
   };
 };
 
@@ -100002,7 +100066,9 @@ export const RULES: Record<string, Rule> = {
   crapiShopOrderStatusMassAssignmentRouteLiveOracle,
   finbotCtfChallengesLiveOracle,
   finbotCtfChallengesRouteLiveOracle,
+  finbotCtfSidecarLiveOracle,
   finbotCtfSidecarRouteLiveOracle,
+  finbotCtfSidecarApiRouteLiveOracle,
   finbotVendorSidecarRouteLiveOracle,
   finbotVendorChatLiveOracle,
   finbotVendorChatRouteLiveOracle,
@@ -100125,6 +100191,7 @@ export const RULES: Record<string, Rule> = {
   duckStoreAuthRegisterRouteLiveOracle,
   duckStoreOpenRedirectLiveOracle,
   duckStoreOpenRedirectRouteLiveOracle,
+  duckStoreVulnerabilitiesHubRouteLiveOracle,
   duckStoreReferralCodeAbuseLiveOracle,
   duckStoreReferralCodeAbuseRouteLiveOracle,
   duckStoreAdminProductsNegativePriceLiveOracle,

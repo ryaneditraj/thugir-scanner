@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-29T11:40:31.717Z",
-  "total": 2826,
-  "uniqueSlugs": 2818,
+  "generatedAt": "2026-08-29T12:55:09.498Z",
+  "total": 2829,
+  "uniqueSlugs": 2821,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2808,
+    "generic": 2811,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2741,
+    "deep": 2744,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 131,
+    "Information disclosure": 132,
     "Security misconfiguration": 210,
     "Broken authentication": 186,
     "Injection": 451,
@@ -34,7 +34,7 @@
     "SSRF": 18,
     "Server-side request forgery": 95,
     "Sensitive data exposure": 76,
-    "AI security": 96,
+    "AI security": 98,
     "Cross-site request forgery": 10,
     "Business logic": 26,
     "Authentication bypass": 3,
@@ -1053,6 +1053,7 @@
     "duck-store-users-enumeration-live-oracle",
     "duck-store-users-enumeration-route-live-oracle",
     "duck-store-users-route-live-oracle",
+    "duck-store-vulnerabilities-hub-route-live-oracle",
     "duck-store-wishlist-phantom-api-live-oracle",
     "duck-store-wishlist-phantom-api-route-live-oracle",
     "dvaib-login-route-live-oracle",
@@ -1141,6 +1142,8 @@
     "finbot-admin-copilot-route-live-oracle",
     "finbot-ctf-challenges-live-oracle",
     "finbot-ctf-challenges-route-live-oracle",
+    "finbot-ctf-sidecar-api-route-live-oracle",
+    "finbot-ctf-sidecar-live-oracle",
     "finbot-ctf-sidecar-route-live-oracle",
     "finbot-ctf-stats-live-oracle",
     "finbot-ctf-stats-route-live-oracle",

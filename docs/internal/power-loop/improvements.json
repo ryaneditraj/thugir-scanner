@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-vulnerabilities-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities route scan matches OpenAPI SSRF/SQLi/BOLA/coupon paths + SPA vulnerability index markers; duck-store.escape.tech/vulnerabilities findings 41→42 (+duck-store-vulnerabilities-hub-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-sidecar-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ctf/api/v1/sidecar returns {\"total\":19,\"completed\":0,\"points\":0}; finbotCtfSidecarLiveOracle probes sidecar JSON on any FinBot host scan; owasp-finbot-ctf.org/ findings 18 (+finbot-ctf-sidecar-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-sidecar-api-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: finbotCtfSidecarApiRouteLiveOracle matches /ctf/api/v1/sidecar direct API scans; owasp-finbot-ctf.org/ctf/api/v1/sidecar findings 16→18 (+finbot-ctf-sidecar-api-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:websec.fr",
       "slug": "websec-level17-timing-attack-live-oracle",
       "status": "shipped",
