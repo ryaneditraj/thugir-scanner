@@ -2,8 +2,8 @@
   "updated_at": "2026-08-29T22:12:19.605Z",
   "discovery_urls": [
     {
-      "url": "https://dvai-red.vercel.app/",
-      "source": "DVAI Damn Vulnerable AI Ecosystem — OWASP LLM red-team range with 6 operations (dvai-red.vercel.app public demo)",
+      "url": "https://dvai.vercel.app/",
+      "source": "DVAI Damn Vulnerable AI Ecosystem — DreamVator Aviation LLM co-pilot with /api/ai Gemini proxy (canonical; dvai-red redirects here)",
       "auth": "public_demo"
     },
     {

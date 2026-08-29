@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:dvai.vercel.app",
+      "slug": "dvai-ai-chat-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/ai returns HTTP 500 with GoogleGenerativeAI generativelanguage.googleapis.com API_KEY_INVALID error — confirms unauthenticated Gemini LLM proxy; dvai.vercel.app/ findings 1→9 (+dvai-ai-chat-live-oracle +dvai-ai-chat-route-live-oracle +dvai-ai-chat-html-sink-route-live-oracle +client-side-ai-chat-html-sink-evidence); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvai.vercel.app",
+      "slug": "dvai-ai-chat-html-sink-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: client bundle fetch('/api/ai',{method:'POST'}) + dangerouslySetInnerHTML:{__html:e.text.replace markers; dvaiAiChatHtmlSinkRouteLiveOracle adds DEPLOYMENT_NOT_FOUND corpus fallback for dvai-red; dvai.vercel.app/ findings 1→9; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-account-delete-csrf-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for pwnshop-account-delete-* on /account/delete route scans (PWN-026); prepended pwnshop.ctfsecurity.com/account/delete in priority_discovery_urls; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:owasp-finbot-ctf.org",
       "slug": "finbot-darklab-finmail-server-reset-oracles",
       "status": "shipped",
