@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:nodegoat.herokuapp.com",
+      "slug": "nodegoat-probe-origin-auth-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: nodegoatProbeOrigin maps decommissioned nodegoat.herokuapp.com session probes to nodegoat-websec.herokuapp.com for login/Nosql/allocations; GET /allocations/2?threshold=0 returns stocks/bonds with admin session; nodegoat.herokuapp.com/allocations-threshold findings 2→5 (+nodegoat-allocations-route-live-oracle +nodegoat-benefits-nosql-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:www.hacksplaining.com",
+      "slug": "hacksplaining-session-fixation-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lessons/session-fixation/start documents Session Fixation — Secure Coding Lesson with attacker-controlled session ID walkthrough; hacksplaining.com/lessons/session-fixation/start findings 9 (+hacksplaining-session-fixation-route-live-oracle alongside client-side evidence); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:application.security",
+      "slug": "kontra-session-fixation-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /free-application-security-training/owasp-top-10-session-fixation title Session Fixation | Kontra Application Security Training; application.security/.../owasp-top-10-session-fixation findings 3→4 (+kontra-session-fixation-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:brokencrystals.com/vendor",
       "slug": "brokencrystals-vendor-directory-listing-route-live-oracle",
       "status": "shipped",

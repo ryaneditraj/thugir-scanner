@@ -3508,6 +3508,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingXssDomLessonEvidence",
   "clientSideHacksplainingSessionFixationLessonEvidence",
   "clientSideHacksplainingWeakSessionLessonEvidence",
+  "hacksplainingSessionFixationRouteLiveOracle",
+  "hacksplainingWeakSessionRouteLiveOracle",
+  "kontraSessionFixationRouteLiveOracle",
   "clientSideHacksplainingAiPromptInjectionLessonEvidence",
   "clientSideHacksplainingFileUploadLessonEvidence",
   "clientSideHacksplainingCommandExecutionLessonEvidence",
@@ -14726,6 +14729,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
         /\/allocations\b/i.test(targetInput) &&
         p.slug.startsWith("nodegoat-allocations-")
+      )
+        return -4;
+      if (
+        /hacksplaining\.com/i.test(origin) &&
+        /\/lessons\/session-fixation/i.test(targetInput) &&
+        p.slug.startsWith("hacksplaining-session-fixation")
+      )
+        return -4;
+      if (
+        /hacksplaining\.com/i.test(origin) &&
+        /\/lessons\/weak-session/i.test(targetInput) &&
+        p.slug.startsWith("hacksplaining-weak-session")
+      )
+        return -4;
+      if (
+        /application\.security/i.test(origin) &&
+        /owasp-top-10-session-fixation/i.test(targetInput) &&
+        p.slug.startsWith("kontra-session-fixation")
       )
         return -4;
       if (

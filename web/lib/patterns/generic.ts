@@ -21332,6 +21332,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "hacksplaining-session-fixation-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Hacksplaining session fixation route live oracle",
+    description:
+      "When scanning /lessons/session-fixation, the interactive exploit-then-fix walkthrough documents attacker-controlled session IDs that enable hijacking after victim login — route-specific session fixation training oracle.",
+    impactOneline:
+      "Route scans on Hacksplaining session fixation lessons should confirm pre-auth session ID injection walkthrough content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hacksplainingSessionFixationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining session fixation lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable session fixation lesson instances on private deployments.",
+        "Regenerate session IDs after authentication in production.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "Our /lessons/session-fixation route scan documents session fixation exploit-then-fix training. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hacksplaining-weak-session-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Hacksplaining weak session IDs route live oracle",
+    description:
+      "When scanning /lessons/weak-session, the interactive walkthrough documents guessable session identifiers that enable session hijacking — route-specific weak session training oracle.",
+    impactOneline:
+      "Route scans on Hacksplaining weak session lessons should confirm predictable session ID walkthrough content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hacksplainingWeakSessionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining weak session lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable weak session lesson instances on private deployments.",
+        "Use cryptographically random session IDs in production.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "Our /lessons/weak-session route scan documents guessable session ID exploit-then-fix training. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "kontra-session-fixation-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Kontra session fixation route live oracle",
+    description:
+      "When scanning /free-application-security-training/owasp-top-10-session-fixation, Kontra's interactive OWASP lab documents pre-auth session ID injection enabling hijacking after login — route-specific session fixation training oracle.",
+    impactOneline:
+      "Route scans on Kontra session fixation labs should confirm interactive OWASP session fixation training content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "kontraSessionFixationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Kontra session fixation labs are intentional training — gate free exercises behind business email verification.",
+      steps: [
+        "Require authenticated accounts before launching session fixation lab instances.",
+        "Regenerate session IDs after authentication in production.",
+        "Isolate Kontra-style training environments from production authentication services."
+      ]
+    },
+    fixPrompt:
+      "Our /owasp-top-10-session-fixation route scan documents Kontra session fixation training. Show how to gate lab modules behind auth and regenerate session IDs after login.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-hacksplaining-ai-prompt-injection-lesson-evidence",
     platform: "generic",
     category: "AI security",
