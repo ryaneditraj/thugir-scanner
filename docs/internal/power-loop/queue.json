@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T05:18:00.000Z",
+  "updated_at": "2026-08-29T05:36:06.357Z",
   "priority_discovery_urls": [
     {
       "url": "https://owasp-finbot-ctf.org/vendor",
@@ -830,6 +830,11 @@
       "url": "https://wrongsecrets.herokuapp.com/mcp",
       "source": "OWASP WrongSecrets — MCP execute_command env leak endpoint (challenge-60 oracle; POST-only)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/",
+      "source": "kOaDT/oss-oopssec-store roadmap Ch.03 — signup mass-assignment role:ADMIN privilege escalation walkthrough (05 UTC)",
+      "auth": "public_demo"
     }
   ],
   "discovery_urls": [
@@ -1627,11 +1632,6 @@
       "url": "https://wrongsecrets.herokuapp.com/challenge/1",
       "source": "OWASP WrongSecrets — Challenge 1 git-secrets oracle on official Heroku demo (README)",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://demo.owasp-juice.shop/rest/basket/1",
-      "source": "OWASP Juice Shop v20.1.1 — REST basket IDOR oracle (BOLA on /rest/basket/:id)",
-      "auth": "benchmark"
     },
     {
       "url": "https://pwnshop.ctfsecurity.com/api/chat",
@@ -2719,16 +2719,6 @@
       "auth": "oss_deploy"
     },
     {
-      "url": "https://pwnshop.ctfsecurity.com/seller/preview",
-      "source": "ctfsec/pwnshop — SSTI seller storefront preview entry point PWN-040 (GitHub README)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/download",
-      "source": "ctfsec/pwnshop — path traversal file download lab PWN-038 (GitHub README)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://vulnshop.vercel.app/admin",
       "source": "yashasrnair/VulnShop — admin panel JWT bypass + env dump + command injection (GitHub README)",
       "auth": "oss_deploy"
@@ -3549,11 +3539,6 @@
       "auth": "benchmark"
     },
     {
-      "url": "https://brokencrystals.com/api/products/views",
-      "source": "NeuraLegion/brokencrystals — SQLi via x-product-name header oracle (README)",
-      "auth": "benchmark"
-    },
-    {
       "url": "https://pentest-fauxbank.vercel.app/lab",
       "source": "alfredang/pentest FauxBank — guided OWASP pentest lab scenarios surface (web search)",
       "auth": "public_demo"
@@ -3586,11 +3571,6 @@
     {
       "url": "https://brokencrystals.com/api/render",
       "source": "NeuraLegion/brokencrystals — SSTI via doT templating on /api/render (README oracle)",
-      "auth": "benchmark"
-    },
-    {
-      "url": "https://brokencrystals.com/api/spawn",
-      "source": "NeuraLegion/brokencrystals — OS command injection via query param (README oracle)",
       "auth": "benchmark"
     },
     {
@@ -6868,16 +6848,6 @@
     {
       "url": "https://ginandjuice.shop/my-account",
       "source": "PortSwigger Gin & Juice Shop — session/auth oracle with disclosed carlos:hunter2 credentials",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://ginandjuice.shop/catalog/product/stock",
-      "source": "PortSwigger Gin & Juice Shop — XXE stock check endpoint (vulnerability disclosure page oracle)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/chat",
-      "source": "ctfsec/pwnshop — LLM prompt-injection / agentic attack entry point (GitHub README)",
       "auth": "public_demo"
     },
     {
@@ -11343,56 +11313,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://brokencrystals.com/api/auth/jwt/jwk/validate",
-      "source": "NeuraLegion/brokencrystals Swagger — JWK rogue-key JWT validate oracle GET /api/auth/jwt/jwk/validate (06 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/x5c/validate",
-      "source": "NeuraLegion/brokencrystals Swagger — X5C rogue-certificate JWT validate oracle GET /api/auth/jwt/x5c/validate (06 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://brokencrystals.com/api/auth/jwt/hmac/validate",
-      "source": "NeuraLegion/brokencrystals Swagger — RSA-to-HMAC JWT validate oracle GET /api/auth/jwt/hmac/validate (06 UTC power-loop)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/mass-assignment",
-      "source": "zahidoverflow/dvwu — mass-assignment privilege escalation training lab route (Vercel live demo)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/crlf",
-      "source": "zahidoverflow/dvwu — CRLF injection training lab route (Vercel live demo)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "http://whgojp.top/ssrf/vul?url=http://example.com",
-      "source": "whgojp/JavaSecLab wiki — SSRF vul endpoint GET /ssrf/vul?url= (web search 15 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "http://whgojp.top/sqli/jdbc/vul1?type=select&id=1",
-      "source": "whgojp/JavaSecLab wiki — JDBC SQLi vul1 native string concat GET /sqli/jdbc/vul1 (web search 15 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "http://whgojp.top/xxe/vul1",
-      "source": "whgojp/JavaSecLab wiki — XXE XMLReader file read GET /xxe/vul1?payload= (web search 15 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
-      "source": "webspoilt/vulnforge-academy — Level 17 file-upload bypass challenge (GitHub README levels 16-18; web search 15 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php",
-      "source": "webspoilt/vulnforge-academy — Level 20 Nightmare multi-vector chain challenge (GitHub README; web search 15 UTC)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/admin-console",
       "source": "AI & Security Platform — cookie-based admin auth bypass oracle GET /challenges/admin-console (web search 20 UTC)",
       "auth": "public_demo"
@@ -11442,6 +11362,5 @@
       "source": "OWASP VWAD — Snyk Goof vulnerable Node.js todo app listing with exploit catalog (vwad.owasp.org; web search 00 UTC)",
       "auth": "public_demo"
     }
-  ],
-  "discovery_urls_added": 1971
+  ]
 }

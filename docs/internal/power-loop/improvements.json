@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-insecure-password-reset-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/insecure-password-reset documents MD5(email+timestamp) reset tokens with requestedAt leaked via POST /api/auth/forgot-password; koadt.github.io/oss-oopssec-store/posts/insecure-password-reset/ findings 7→9 (+oopssec-insecure-password-reset-route-live-oracle +client-side-oopssec-insecure-password-reset-evidence); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-open-redirect-login-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/open-redirect-login-bypass documents unvalidated login redirect reaching /internal/oauth/callback via window.location.href; koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass/ findings 7→9 (+oopssec-open-redirect-login-bypass-route-live-oracle +client-side-oopssec-open-redirect-login-bypass-evidence); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-mass-assignment-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/mass-assignment-admin-privilege-escalation documents POST /api/auth/signup spreading request body to inject role: ADMIN; koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/ findings 6→8 (+oopssec-mass-assignment-admin-route-live-oracle +client-side-oopssec-mass-assignment-admin-evidence); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-product-price-route-live-oracle",
       "status": "shipped",

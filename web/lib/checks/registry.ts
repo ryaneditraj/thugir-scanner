@@ -6813,6 +6813,198 @@ const oopssecGiftCardRandomnessRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store insecure password reset walkthrough (posts/insecure-password-reset) ---
+const CLIENT_OOPSSEC_INSECURE_PASSWORD_RESET_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Insecure password reset title",
+    re: /Insecure Password Reset:[\s\S]{0,80}Predictable Token Forgery/i
+  },
+  {
+    label: "MD5 email plus timestamp token",
+    re: /token = MD5\(email \+ Math\.floor\(Date\.now\(\) \/ 1000\)\)|hashMD5\(email \+ timestamp\)/i
+  },
+  {
+    label: "requestedAt timestamp leak in forgot-password response",
+    re: /requestedAt.*password reset|requestedAt.*token generation|leaks the timestamp used in token generation/i
+  },
+  {
+    label: "POST /api/auth/forgot-password endpoint",
+    re: /POST \/api\/auth\/forgot-password|\/api\/auth\/reset-password/i
+  },
+  {
+    label: "Insecure password reset walkthrough route",
+    re: /\/posts\/insecure-password-reset/i
+  }
+];
+
+const clientSideOopssecInsecurePasswordResetEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_INSECURE_PASSWORD_RESET_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|password reset|forgot-password|requestedAt/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents predictable MD5(email+timestamp) password-reset tokens with requestedAt timestamp leaked in POST /api/auth/forgot-password response"
+    }
+  };
+};
+
+const oopssecInsecurePasswordResetRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/insecure-password-reset/i.test(pageUrl)) return NEGATIVE;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecInsecurePasswordResetEvidence
+  );
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/insecure-password-reset route scan — walkthrough documents MD5(email+timestamp) reset tokens with requestedAt timestamp leaked via POST /api/auth/forgot-password"
+    }
+  };
+};
+
+// --- OopsSec Store open-redirect login bypass walkthrough (posts/open-redirect-login-bypass) -
+const CLIENT_OOPSSEC_OPEN_REDIRECT_LOGIN_BYPASS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Open redirect login bypass title",
+    re: /Open Redirect:[\s\S]{0,80}Accessing Internal Pages via Login Redirect/i
+  },
+  {
+    label: "Unvalidated redirect query parameter on login",
+    re: /redirect.*query parameter|searchParams\.get\("redirect"\)|login\?redirect=/i
+  },
+  {
+    label: "window.location.href post-login navigation",
+    re: /window\.location\.href = redirect|redirects to an external domain/i
+  },
+  {
+    label: "Internal oauth callback bypass path",
+    re: /\/internal\/oauth\/callback|oauth_callback cookie/i
+  },
+  {
+    label: "Open redirect login bypass walkthrough route",
+    re: /\/posts\/open-redirect-login-bypass/i
+  }
+];
+
+const clientSideOopssecOpenRedirectLoginBypassEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_OPEN_REDIRECT_LOGIN_BYPASS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|open redirect|login.*redirect|\/internal\/oauth/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents unvalidated login redirect parameter enabling access to /internal/oauth/callback via window.location.href"
+    }
+  };
+};
+
+const oopssecOpenRedirectLoginBypassRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/open-redirect-login-bypass/i.test(pageUrl)) return NEGATIVE;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecOpenRedirectLoginBypassEvidence
+  );
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/open-redirect-login-bypass route scan — walkthrough documents unvalidated redirect query parameter reaching /internal/oauth/callback after login"
+    }
+  };
+};
+
+// --- OopsSec Store mass-assignment admin escalation walkthrough (posts/mass-assignment-admin-privilege-escalation) -
+const CLIENT_OOPSSEC_MASS_ASSIGNMENT_ADMIN_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Mass assignment admin privilege escalation title",
+    re: /Mass Assignment:[\s\S]{0,80}Admin Privilege Escalation via Signup/i
+  },
+  {
+    label: "POST /api/auth/signup spreads request body",
+    re: /POST to `\/api\/auth\/signup`|POST to \/api\/auth\/signup|\.\.\.body.*persisted/i
+  },
+  {
+    label: "role ADMIN injection in signup JSON",
+    re: /"role":\s*"ADMIN"|role.*ADMIN.*signup/i
+  },
+  {
+    label: "Prisma spread operator mass assignment",
+    re: /data:\s*\{[\s\S]{0,40}\.\.\.body|spreads the entire request body/i
+  },
+  {
+    label: "Mass assignment admin walkthrough route",
+    re: /\/posts\/mass-assignment-admin-privilege-escalation/i
+  }
+];
+
+const clientSideOopssecMassAssignmentAdminEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_MASS_ASSIGNMENT_ADMIN_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|mass assignment|signup|role.*ADMIN/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents mass-assignment admin escalation — POST /api/auth/signup spreads request body allowing role: ADMIN injection"
+    }
+  };
+};
+
+const oopssecMassAssignmentAdminRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/mass-assignment-admin-privilege-escalation/i.test(pageUrl)) return NEGATIVE;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecMassAssignmentAdminEvidence
+  );
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/mass-assignment-admin-privilege-escalation route scan — walkthrough documents POST /api/auth/signup spreading request body to set role: ADMIN"
+    }
+  };
+};
+
 // --- VoidSec Shopping Cart hack-lab landing (voidsec.github.io/shopping-cart) ---------
 const CLIENT_VOIDSEC_SHOPPING_CART_RES: { label: string; re: RegExp }[] = [
   {
@@ -100321,6 +100513,12 @@ export const RULES: Record<string, Rule> = {
   oopssecSupplyChainPoisonedRulesRouteLiveOracle,
   clientSideOopssecGiftCardRandomnessEvidence,
   oopssecGiftCardRandomnessRouteLiveOracle,
+  clientSideOopssecInsecurePasswordResetEvidence,
+  oopssecInsecurePasswordResetRouteLiveOracle,
+  clientSideOopssecOpenRedirectLoginBypassEvidence,
+  oopssecOpenRedirectLoginBypassRouteLiveOracle,
+  clientSideOopssecMassAssignmentAdminEvidence,
+  oopssecMassAssignmentAdminRouteLiveOracle,
   clientSideOopssecAesCbcPaddingOracleEvidence,
   oopssecAesCbcPaddingOracleRouteLiveOracle,
   clientSideOopssecBruteForceEvidence,
