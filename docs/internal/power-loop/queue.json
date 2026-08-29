@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-29T05:36:06.357Z",
+  "updated_at": "2026-08-29T06:18:35.408Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/debug/info",
+      "source": "ctfsec/pwnshop README — PWN-018 debug endpoint leaks session secret + DB config (web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
+      "source": "ctfsec/pwnshop README — PWN-005 unauthenticated audit log JSON feed (web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/vulnerabilities",
+      "source": "pwnshop.ctfsecurity.com — interactive 51-vuln OWASP Top 10 (2025) index hub (web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor/api/v1/chat",
+      "source": "OWASP-ASI/finbot-ctf-demo — vendor onboarding SSE chat agentic-AI oracle (learning gap 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain",
+      "source": "GenAI-Security-Project/finbot-ctf — Dark Lab MCP supply-chain tool catalog API (learning gap 06 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owasp-finbot-ctf.org/vendor",
       "source": "OWASP-ASI/finbot-ctf-demo — vendor onboarding portal + /vendor/api/v1/chat agentic AI oracle (web search 05 UTC)",
@@ -838,6 +863,16 @@
     }
   ],
   "discovery_urls": [
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor/api/v1/chat",
+      "source": "OWASP-ASI/finbot-ctf-demo — vendor onboarding SSE chat agentic-AI oracle (learning gap 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain",
+      "source": "GenAI-Security-Project/finbot-ctf — Dark Lab MCP supply-chain tool catalog API (learning gap 06 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-55",
       "source": "OWASP WrongSecrets — Challenge 55 SSH private key in .ssh/wrongsecrets.keys oracle (Heroku demo README: challenges 54-66 available)",
