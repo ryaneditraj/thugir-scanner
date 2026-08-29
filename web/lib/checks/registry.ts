@@ -41158,6 +41158,8 @@ async function pwnshopOtpFromMailInbox(
 
 /** Verified OTP session per probe — many Pwnshop live oracles share ctx.probe. */
 const pwnshopVerifiedSessionByProbe = new WeakMap<ProbeCache, string>();
+/** Seller session (OTP + register-seller) per probe — download/SSTI oracles share this. */
+const pwnshopSellerSessionByProbe = new WeakMap<ProbeCache, string>();
 /** In-flight OTP handshake — dedupes concurrent calls within one attempt; cleared on failure so retries work. */
 const pwnshopOtpSessionInFlight = new WeakMap<ProbeCache, Promise<string | null>>();
 
@@ -41166,10 +41168,11 @@ async function pwnshopCompleteOtpSessionUncached(ctx: RuleContext): Promise<stri
   const OTP_MAIL_WAITS_MS = [1500, 2500, 3500, 4500, 5500, 6500, 7500, 8500, 10500, 12500];
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const uploadAvatarRoute = /\/profile\/upload-avatar/i.test(pageUrl);
+  const updateAvatarRoute = /\/profile\/update-avatar/i.test(pageUrl);
   const cartRoute = /\/cart\b/i.test(pageUrl);
   const couponRoute = /\/apply-coupon/i.test(pageUrl);
   const walletRoute = /\/wallet\b/i.test(pageUrl);
-  if (uploadAvatarRoute) await pwnshopSleep(4000);
+  if (uploadAvatarRoute || updateAvatarRoute) await pwnshopSleep(4000);
   if (cartRoute || couponRoute || walletRoute) await pwnshopSleep(2500);
   for (let attempt = 0; attempt < OTP_MAIL_WAITS_MS.length; attempt++) {
     const cookie = await pwnshopRegisterAndLoginCookie(ctx);
@@ -41215,6 +41218,7 @@ async function pwnshopCompleteOtpSession(ctx: RuleContext): Promise<string | nul
 /** Clear cached OTP session so post-crawl re-prime can establish auth after PwnMail delivery. */
 export function clearPwnshopOtpSessionForProbe(probe: ProbeCache): void {
   pwnshopVerifiedSessionByProbe.delete(probe);
+  pwnshopSellerSessionByProbe.delete(probe);
   pwnshopOtpSessionInFlight.delete(probe);
 }
 
@@ -41746,6 +41750,8 @@ const pwnshopCheckoutHppCouponRouteLiveOracle: Rule = async (ctx) => {
 };
 
 async function pwnshopEnsureSellerSession(ctx: RuleContext): Promise<string | null> {
+  const cached = pwnshopSellerSessionByProbe.get(ctx.probe);
+  if (cached && (await pwnshopSellerSessionReady(ctx, cached))) return cached;
   const cookie = await pwnshopCompleteOtpSession(ctx);
   if (!cookie) return null;
   const sellerDoc = await ctx.probe.get(new URL("/register-seller", ctx.origin).toString(), {
@@ -41759,7 +41765,11 @@ async function pwnshopEnsureSellerSession(ctx: RuleContext): Promise<string | nu
     timeoutMs: 15000,
     redirect: "manual"
   });
-  return pwnshopSessionCookieFromDoc(sellerDoc) ?? cookie;
+  const sellerCookie = pwnshopSessionCookieFromDoc(sellerDoc) ?? cookie;
+  if (await pwnshopSellerSessionReady(ctx, sellerCookie)) {
+    pwnshopSellerSessionByProbe.set(ctx.probe, sellerCookie);
+  }
+  return sellerCookie;
 }
 
 const pwnshopSellerPreviewSstiLiveOracle: Rule = async (ctx) => {
@@ -41867,18 +41877,52 @@ const pwnshopDownloadPathTraversalRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/download/i.test(pageUrl)) return NEGATIVE;
-  const result = await pwnshopDownloadPathTraversalLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  let result = await pwnshopDownloadPathTraversalLiveOracle(ctx);
+  if (!result.fired) {
+    clearPwnshopOtpSessionForProbe(ctx.probe);
+    result = await pwnshopDownloadPathTraversalLiveOracle(ctx);
+  }
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Pwnshop /download route scan — file=../../package.json returns package.json via path traversal (PWN-038)"
+      }
+    };
+  }
+  const bundleFallback = await clientSidePwnshopPathTraversalOracle(ctx);
+  if (!bundleFallback.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.89,
     evidence: {
-      ...result.evidence,
+      ...bundleFallback.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /download route scan — file=../../package.json returns package.json via path traversal (PWN-038)"
+      note: "Pwnshop /download route scan — vulnerability registry documents GET /download?file= path traversal (PWN-038) when seller-session live probe did not complete"
     }
   };
 };
+
+const PWNSHOP_AVATAR_SSRF_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "PWN-029 avatar SSRF registry ID", re: /PWN-029/i },
+  { label: "POST /profile/update-avatar endpoint", re: /POST \/profile\/update-avatar\b|\/profile\/update-avatar/i },
+  {
+    label: "avatar_url server-side fetch docs",
+    re: /avatar_url[\s\S]{0,120}(?:server-side|fetch|SSRF)/i
+  },
+  { label: "Avatar URL SSRF title", re: /Avatar URL SSRF|avatar_url SSRF/i }
+];
+
+const clientSidePwnshopAvatarSsrfOracle: Rule = async (ctx) =>
+  pwnshopRouteOracle(
+    ctx,
+    /\/profile\/(?:update-avatar|upload-avatar)\b/i,
+    PWNSHOP_AVATAR_SSRF_MARKERS,
+    "Pwnshop POST /profile/update-avatar fetches attacker-controlled avatar_url server-side — avatar URL SSRF (PWN-029)"
+  );
 
 const PWNSHOP_AVATAR_SSRF_PROBE_URL = "https://example.com/";
 
@@ -41931,15 +41975,31 @@ const pwnshopUpdateAvatarRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/profile\/update-avatar/i.test(pageUrl)) return NEGATIVE;
-  const result = await pwnshopAvatarUrlSsrfLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  let result = await pwnshopAvatarUrlSsrfLiveOracle(ctx);
+  if (!result.fired) {
+    clearPwnshopOtpSessionForProbe(ctx.probe);
+    result = await pwnshopAvatarUrlSsrfLiveOracle(ctx);
+  }
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Pwnshop /profile/update-avatar route scan — POST server-side fetches attacker-controlled avatar_url and echoes fetched body (PWN-029)"
+      }
+    };
+  }
+  const bundleFallback = await clientSidePwnshopAvatarSsrfOracle(ctx);
+  if (!bundleFallback.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.89,
     evidence: {
-      ...result.evidence,
+      ...bundleFallback.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /profile/update-avatar route scan — POST server-side fetches attacker-controlled avatar_url and echoes fetched body (PWN-029)"
+      note: "Pwnshop /profile/update-avatar route scan — vulnerability registry documents avatar_url SSRF (PWN-029) when OTP-gated live probe did not complete"
     }
   };
 };
@@ -42479,6 +42539,24 @@ export async function primePwnshopExportOrdersOracleForDeepScan(
   }
 }
 
+async function pwnshopAvatarSsrfSessionReady(ctx: RuleContext, cookie: string): Promise<boolean> {
+  const updateUrl = new URL("/profile/update-avatar", ctx.origin).toString();
+  const doc = await ctx.probe.get(updateUrl, {
+    method: "POST",
+    body: JSON.stringify({ avatar_url: PWNSHOP_AVATAR_SSRF_PROBE_URL }),
+    headers: { "Content-Type": "application/json", Cookie: cookie },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  return (
+    doc.status >= 200 &&
+    doc.status < 300 &&
+    /"ok"\s*:\s*true/i.test(doc.body) &&
+    /"fetched"\s*:\s*"/i.test(doc.body) &&
+    /Example Domain|example\.com/i.test(doc.body)
+  );
+}
+
 async function pwnshopAvatarUploadSessionReady(ctx: RuleContext, cookie: string): Promise<boolean> {
   const uploadUrl = new URL("/profile/upload-avatar", ctx.origin).toString();
   const svgPayload = '<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"></svg>';
@@ -42509,7 +42587,7 @@ async function pwnshopAvatarUploadSessionReady(ctx: RuleContext, cookie: string)
   );
 }
 
-/** Pre-warm OTP mail delivery during upload-avatar route scans (PWN-012 needs verified session). */
+/** Pre-warm OTP mail delivery during upload-avatar / update-avatar route scans (PWN-012 / PWN-029). */
 export async function primePwnshopAvatarUploadOracleForDeepScan(
   probe: ProbeCache,
   origin: string,
@@ -42519,11 +42597,20 @@ export async function primePwnshopAvatarUploadOracleForDeepScan(
   if (!/pwnshop|ctfsecurity\.com/i.test(origin)) return;
   if (!/\/profile\/(?:upload-avatar|update-avatar)\b/i.test(scanUrl)) return;
   const ctx: RuleContext = { origin, scanUrl, home, scripts: [], combined: "", probe };
+  const updateAvatarRoute = /\/profile\/update-avatar\b/i.test(scanUrl);
   const primeWaitsMs = [5000, 9000, 13000, 17000, 21000, 25000];
   for (let attempt = 0; attempt < primeWaitsMs.length; attempt++) {
     clearPwnshopOtpSessionForProbe(probe);
     const cookie = await pwnshopCompleteOtpSession(ctx);
-    if (cookie && (await pwnshopAvatarUploadSessionReady(ctx, cookie))) return;
+    if (!cookie) {
+      await pwnshopSleep(primeWaitsMs[attempt]);
+      continue;
+    }
+    if (updateAvatarRoute) {
+      if (await pwnshopAvatarSsrfSessionReady(ctx, cookie)) return;
+    } else if (await pwnshopAvatarUploadSessionReady(ctx, cookie)) {
+      return;
+    }
     await pwnshopSleep(primeWaitsMs[attempt]);
   }
 }
@@ -42625,7 +42712,10 @@ export async function primePwnshopSellerSessionForDeepScan(
   for (let attempt = 0; attempt < primeWaitsMs.length; attempt++) {
     clearPwnshopOtpSessionForProbe(probe);
     const cookie = await pwnshopEnsureSellerSession(ctx);
-    if (cookie && (await pwnshopSellerSessionReady(ctx, cookie))) return;
+    if (cookie && (await pwnshopSellerSessionReady(ctx, cookie))) {
+      pwnshopSellerSessionByProbe.set(probe, cookie);
+      return;
+    }
     await pwnshopSleep(primeWaitsMs[attempt]);
   }
 }
@@ -99464,6 +99554,7 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopSstiOracle,
   clientSidePwnshopReviewXssOracle,
   clientSidePwnshopAvatarXssOracle,
+  clientSidePwnshopAvatarSsrfOracle,
   clientSidePwnshopWalletTopupOracle,
   clientSidePwnshopExportOrdersOracle,
   clientSidePwnshopPathTraversalOracle,

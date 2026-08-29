@@ -14651,6 +14651,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/profile\/update-avatar\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-") &&
+        /avatar-url-ssrf|update-avatar/.test(p.slug)
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/profile\/update-avatar\b/i.test(targetInput) &&
+        p.slug.startsWith("client-side-pwnshop-avatar") &&
+        /ssrf/.test(p.slug)
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/profile\/upload-avatar/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-avatar")
       )
