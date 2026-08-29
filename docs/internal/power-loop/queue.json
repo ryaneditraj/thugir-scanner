@@ -1,6 +1,11 @@
 {
-  "updated_at": "2026-08-29T09:13:29.383Z",
+  "updated_at": "2026-08-29T10:11:44.371Z",
   "discovery_urls": [
+    {
+      "url": "https://pentest-ground.com:5013/graphiql",
+      "source": "Pentest-Ground DVGA — GraphiQL IDE introspection oracle (DVGA README graphiql endpoint)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sekumart.sekuripy.hr/search.php",
       "source": "SekuriPy SekuMart — sqlmap playground search SQLi oracle GET search.php?q= (official sqlmap docs)",
@@ -10557,6 +10562,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://pentest-ground.com:5013/",
+      "source": "Pentest-Ground DVGA — deliberately vulnerable GraphQL app with CMDi/XSS/SQLi (pentest-ground.com catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:5013/graphiql",
+      "source": "Pentest-Ground DVGA — GraphiQL IDE introspection oracle (DVGA README graphiql endpoint)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:9000/",
+      "source": "Pentest-Ground RestFlaw — REST API with SQLi/code-injection/XXE (pentest-ground.com catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/",
+      "source": "Pentest-Ground DVWA — classic web app CSRF/XSS/SQLi benchmark (pentest-ground.com catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level17/",
+      "source": "WebSec.fr level 17 — timing side-channel flag oracle (websec.fr catalog)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sekumart.sekuripy.hr/search.php",
       "source": "SekuriPy SekuMart — sqlmap playground search SQLi oracle GET search.php?q= (official sqlmap docs)",
