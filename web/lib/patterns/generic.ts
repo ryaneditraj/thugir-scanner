@@ -39664,6 +39664,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-jwt-rsa-signature-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/rsa/signature/login route live oracle",
+    description:
+      "When scanning /api/auth/jwt/rsa/signature/login, companion GET /api/auth/jwt/rsa/signature/validate accepts alg:none JWT in Authorization and returns {\"secret\":\"this is our secret\"} — route-specific RSA signature confusion login oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals rsa/signature login family accepts alg:none JWT bypass on companion validate endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtRsaSignatureLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to expected algorithms and reject alg:none — Broken Crystals is intentional lab software.",
+      steps: [
+        "Configure your JWT library to allow only RS256/HS256 (never 'none').",
+        "Verify the algorithm from the token header matches your expected value.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/rsa/signature/login route scan confirms alg:none JWT bypass on companion validate. Show secure JWT verification patterns for NestJS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-none-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/none/login route live oracle",
+    description:
+      "When scanning /api/auth/jwt/none/login, alg:none JWT bypasses companion validate endpoints and returns {\"secret\":\"this is our secret\"} — route-specific JWT none-algorithm login oracle (falls back to /api/auth/jwt/rsa/signature/validate when none alias is absent).",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals none/login JWT family accepts alg:none tokens on companion validate endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtNoneLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to expected algorithms and reject alg:none — Broken Crystals is intentional lab software.",
+      steps: [
+        "Configure your JWT library to allow only RS256/HS256 (never 'none').",
+        "Verify the algorithm from the token header matches your expected value.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/none/login route scan confirms alg:none JWT bypass. Show secure JWT verification patterns for NestJS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-vendor-directory-listing-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Broken Crystals /vendor/ nginx directory listing live oracle",
+    description:
+      "GET /vendor/ returns an nginx autoindex HTML page listing bootstrap-4.1, counter-up, slick, and wow vendor asset directories without authentication.",
+    impactOneline:
+      "Directory listing on /vendor/ exposes frontend dependency paths and confirms nginx autoindex misconfiguration on Broken Crystals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsVendorDirectoryListingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable directory autoindex on vendor asset paths — Broken Crystals is intentional lab software.",
+      steps: [
+        "Turn off autoindex for /vendor/ at the nginx or CDN layer.",
+        "Serve vendor assets from a CDN or hashed build output without directory indexes.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /vendor/ path exposes nginx directory listing. Show how to disable autoindex for vendor asset directories.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-vendor-directory-listing-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Broken Crystals /vendor/ directory listing route live oracle",
+    description:
+      "When scanning /vendor/, nginx autoindex lists bootstrap-4.1, counter-up, slick, and wow directories — route-specific directory listing confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals /vendor/ exposes nginx directory listing of frontend vendor assets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsVendorDirectoryListingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable directory autoindex on vendor asset paths — Broken Crystals is intentional lab software.",
+      steps: [
+        "Turn off autoindex for /vendor/ at the nginx or CDN layer.",
+        "Serve vendor assets from a CDN or hashed build output without directory indexes.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /vendor/ route scan confirms nginx directory listing. Show how to disable autoindex for vendor directories.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-jwt-weak-key-live-oracle",
     platform: "generic",
     category: "Broken authentication",

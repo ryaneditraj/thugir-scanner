@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:brokencrystals.com/vendor",
+      "slug": "brokencrystals-vendor-directory-listing-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vendor/ returns nginx Index of /vendor/ listing bootstrap-4.1, counter-up, slick, wow; brokencrystals.com/vendor/ findings 87→89 (+brokencrystals-vendor-directory-listing-live-oracle +brokencrystals-vendor-directory-listing-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org/vendor",
+      "slug": "finbot-vendor-chat-csrf-bootstrap-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vendor/ lacks csrf-token meta — probeFinbotVendorChatAgent now bootstraps via /vendor/onboarding; POST /vendor/api/v1/chat streams SSE token events; owasp-finbot-ctf.org/vendor findings 16→18 (+finbot-vendor-chat-live-oracle +finbot-vendor-chat-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com/api/auth/jwt",
+      "slug": "brokencrystals-jwt-rsa-signature-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/auth/jwt/rsa/signature/validate accepts alg:none JWT returns {\"secret\":\"this is our secret\"}; brokencrystals.com/api/auth/jwt/rsa/signature/login route scan fires +brokencrystals-jwt-rsa-signature-login-route-live-oracle; none/login 21→22 (+brokencrystals-jwt-none-login-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:koadt.github.io/oss-oopssec-store",
       "slug": "oopssec-insecure-password-reset-route-live-oracle",
       "status": "shipped",

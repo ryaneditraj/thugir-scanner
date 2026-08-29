@@ -89919,6 +89919,79 @@ const brokencrystalsJwtNoneValidateRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const brokencrystalsJwtRsaSignatureLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/rsa\/signature\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsJwtAlgNone(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/rsa/signature/login route scan — companion /rsa/signature/validate accepts alg:none JWT and returns secret — RSA signature confusion login oracle"
+    }
+  };
+};
+
+const brokencrystalsJwtNoneLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/jwt\/none\/login\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeBrokencrystalsJwtAlgNone(ctx, BROKEN_CRYSTALS_JWT_ALG_NONE_PATHS);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /api/auth/jwt/none/login route scan — alg:none JWT bypasses authentication on companion validate endpoint — JWT none-algorithm login oracle"
+    }
+  };
+};
+
+const brokencrystalsVendorDirectoryListingLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/vendor/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const listingOk =
+    /Index of \/vendor\//i.test(doc.body) &&
+    /<a\s+href=["']\/vendor\/bootstrap-4\.1["']/i.test(doc.body) &&
+    /counter-up/i.test(doc.body) &&
+    /slick/i.test(doc.body);
+  if (!listingOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Broken Crystals GET /vendor/ exposes nginx autoindex directory listing of bootstrap-4.1, counter-up, slick, and wow vendor assets — directory listing misconfiguration oracle"
+    }
+  };
+};
+
+const brokencrystalsVendorDirectoryListingRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vendor\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsVendorDirectoryListingLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /vendor/ route scan — nginx autoindex lists bootstrap-4.1, counter-up, slick, and wow vendor directories without authentication"
+    }
+  };
+};
+
 /** Broken Crystals JWT_SECRET_KEY from public .env (default weak-key oracle secret). */
 const BROKEN_CRYSTALS_JWT_WEAK_SECRETS = ["1234", "123"] as const;
 
@@ -93531,7 +93604,10 @@ const finbotVendorSidecarRouteLiveOracle: Rule = async (ctx) => {
 };
 
 async function probeFinbotVendorChatAgent(ctx: RuleContext): Promise<RuleResult | null> {
-  const bootstrap = await finbotPageCsrfBootstrap(ctx, "/vendor/");
+  const bootstrap =
+    (await finbotPageCsrfBootstrap(ctx, "/vendor/onboarding")) ??
+    (await finbotPageCsrfBootstrap(ctx, "/vendor/onboarding/")) ??
+    (await finbotPageCsrfBootstrap(ctx, "/vendor/"));
   if (!bootstrap) return null;
   const chatUrl = new URL("/vendor/api/v1/chat", ctx.origin).toString();
   const doc = await ctx.probe.get(chatUrl, {
@@ -99462,6 +99538,10 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsJwtRouteLiveOracle,
   brokencrystalsJwtAlgNoneRouteLiveOracle,
   brokencrystalsJwtNoneValidateRouteLiveOracle,
+  brokencrystalsJwtRsaSignatureLoginRouteLiveOracle,
+  brokencrystalsJwtNoneLoginRouteLiveOracle,
+  brokencrystalsVendorDirectoryListingLiveOracle,
+  brokencrystalsVendorDirectoryListingRouteLiveOracle,
   brokencrystalsJwtWeakKeyLiveOracle,
   brokencrystalsJwtWeakKeyRouteLiveOracle,
   brokencrystalsJwtKidSqlLiveOracle,

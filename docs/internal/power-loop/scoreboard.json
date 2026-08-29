@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T05:36:00.000Z",
+  "updated_at": "2026-08-29T06:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,10 +22,10 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1994,
   "discovery_findings": 25210,
-  "improvements_shipped": 968,
-  "last_run": "2026-08-29T05:36:00.000Z",
+  "improvements_shipped": 971,
+  "last_run": "2026-08-29T06:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 50,
@@ -52,39 +52,31 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 275,
-      "focus": "finbot vendor/darklab agentic AI + brokencrystals vendor/ dir-listing + nodegoat allocations-threshold + dvaib login + brokencrystals JWT none/rsa login + duck-store MCP",
-      "improvements_shipped_this_run": 0,
-      "parallel_run_note": "concurrent automation also scanned 3 oopssec walkthrough URLs (+26 findings, 3 oracles shipped)"
+      "urls_validated": 4,
+      "findings_delta": "+6 route-specific oracles",
+      "focus": "brokencrystals vendor dir-listing + finbot vendor chat CSRF bootstrap + JWT rsa/none login route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
-      "brokencrystals.com/vendor/: 87 findings — nginx directory listing oracle hub",
-      "brokencrystals.com/api/auth/jwt/none/login: 87 findings — JWT alg:none login oracle",
-      "duck-store.escape.tech/api/v1/mcp: 38 findings — MCP excessive-agency oracle",
-      "brokencrystals.com/api/auth/jwt/rsa/signature/login: 21 findings — JWT RSA signature confusion oracle",
-      "owasp-finbot-ctf.org/vendor: 16 findings — FinBot vendor onboarding portal",
-      "owasp-finbot-ctf.org/darklab: 16 findings — Dark Lab MCP supply-chain surface",
-      "www.dvaib.com/login: 8 findings — DVAIB auth/login oracle",
-      "nodegoat.herokuapp.com/allocations-threshold: 2 findings — thin pass, NoSQL oracle likely needs auth session"
+      "brokencrystals.com/vendor/: 87→89 (+vendor directory-listing live+route oracles)",
+      "owasp-finbot-ctf.org/vendor: 16→18 (+finbot-vendor-chat live+route via onboarding CSRF bootstrap)",
+      "brokencrystals.com/api/auth/jwt/rsa/signature/login: +rsa-signature-login route oracle",
+      "brokencrystals.com/api/auth/jwt/none/login: 21→22 (+none-login route oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "nodegoat.herokuapp.com/allocations-threshold thin at 2 findings — NoSQL injection oracle may need cx-demo login session",
-      "finbot vendor/darklab: route-specific live oracles for /vendor/api/v1/chat and /darklab/api/v1/supply-chain not yet shipped",
-      "brokencrystals.com/vendor/ fires 87 findings — directory-listing route oracle may need dedicated slug",
-      "oopssec mass-assignment-admin shipped by parallel run; session-fixation still needs route oracle"
+      "nodegoat.herokuapp.com/allocations-threshold thin at 2 findings — NoSQL oracle may need authenticated session on websec demo",
+      "oopssec session-fixation still needs route oracle when walkthrough URL is queued"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 50,
-    "brokencrystals.com/vendor/": 87,
-    "brokencrystals.com/api/auth/jwt/none/login": 87,
+    "brokencrystals.com/vendor/": 89,
+    "brokencrystals.com/api/auth/jwt/none/login": 22,
     "duck-store.escape.tech/api/v1/mcp": 38,
-    "brokencrystals.com/api/auth/jwt/rsa/signature/login": 21,
-    "owasp-finbot-ctf.org/vendor": 16,
+    "brokencrystals.com/api/auth/jwt/rsa/signature/login": 22,
+    "owasp-finbot-ctf.org/vendor": 18,
     "owasp-finbot-ctf.org/darklab": 16,
     "www.dvaib.com/login": 8,
     "nodegoat.herokuapp.com/allocations-threshold": 2
