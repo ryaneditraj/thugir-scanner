@@ -2059,6 +2059,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideAppsecMasterLabHubEvidence",
   "appsecmasterSsrfRouteLiveOracle",
   "appsecmasterCommandInjectionRouteLiveOracle",
+  "appsecmasterCiPipelineRouteLiveOracle",
+  "appsecmasterDeserializationRouteLiveOracle",
   "clientSideIstEduVulnPortalEvidence",
   "noticesFileLfiProbe",
   "clientSideHackTheBoxEvidence",
@@ -8221,6 +8223,8 @@ function extractAppsecMasterLabSeeds(html: string, origin: string): string[] {
     "/labs/sql-injection",
     "/labs/ssrf",
     "/labs/command-injection",
+    "/labs/ci-pipeline",
+    "/labs/deserialization",
     "/en/challenges?category=Client-Side",
     "/en/challenges?category=Injection"
   ]) {
@@ -12775,6 +12779,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -4;
       if (
+        /appsecmaster\.net/i.test(origin) &&
+        /\/labs\/ci-pipeline\b/i.test(targetInput) &&
+        p.slug.startsWith("appsecmaster-ci-pipeline")
+      )
+        return -4;
+      if (
+        /appsecmaster\.net/i.test(origin) &&
+        /\/labs\/deserialization\b/i.test(targetInput) &&
+        p.slug.startsWith("appsecmaster-deserialization")
+      )
+        return -4;
+      if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/api\/(?:search|comments)\b/i.test(targetInput) &&
         (p.slug === "dvwu-search-sqli-route-live-oracle" ||
@@ -13935,7 +13951,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /brokencrystals\.com/i.test(origin) &&
-        /\/api\/auth\/jwt\/weak-key\/(?:validate|login)\b/i.test(targetInput) &&
+        /\/api\/auth\/jwt\/weak(?:-key)?\/(?:validate|login)\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-jwt-weak-key")
       )
         return -4;

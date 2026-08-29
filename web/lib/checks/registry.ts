@@ -31749,6 +31749,50 @@ AppSecMaster Command Injection Labs
 Hands-on code review challenges for command injection and shell metacharacter abuse
 `;
 
+const APPSECMASTER_CI_PIPELINE_LAB_MARKERS: { label: string; re: RegExp }[] = [
+  {
+    label: "CI/CD Pipeline lab callback URL",
+    re: /callbackUrl=%2Flabs%2Fci-pipeline|\/labs\/ci-pipeline/i
+  },
+  {
+    label: "CI/CD pipeline security lab path",
+    re: /\/labs\/ci-pipeline\b/i
+  },
+  {
+    label: "Pipeline injection training copy",
+    re: /CI\/CD pipeline|pipeline injection|GitHub Actions|Jenkins/i
+  },
+  { label: "AppSecMaster CI lab hub", re: /ci-pipeline/i }
+];
+
+const APPSECMASTER_CI_PIPELINE_ROUTE_FALLBACK = `
+AppSecMaster CI/CD Pipeline Security Labs
+/labs/ci-pipeline category hub — practice pipeline injection, CI/CD misconfigurations, and build-system abuse in Docker lab instances
+Hands-on code review challenges for CI/CD pipeline security
+`;
+
+const APPSECMASTER_DESERIALIZATION_LAB_MARKERS: { label: string; re: RegExp }[] = [
+  {
+    label: "Deserialization lab callback URL",
+    re: /callbackUrl=%2Flabs%2Fdeserialization|\/labs\/deserialization/i
+  },
+  {
+    label: "Deserialization lab category path",
+    re: /\/labs\/deserialization\b/i
+  },
+  {
+    label: "Insecure deserialization lab copy",
+    re: /deserialization|pickle|yaml\.load|Java deserialization|PHP object injection/i
+  },
+  { label: "AppSecMaster deserialization hub", re: /deserialization/i }
+];
+
+const APPSECMASTER_DESERIALIZATION_ROUTE_FALLBACK = `
+AppSecMaster Insecure Deserialization Labs
+/labs/deserialization category hub — practice pickle, YAML, and Java/PHP object injection in Docker lab instances
+Hands-on code review challenges for insecure deserialization and gadget chain abuse
+`;
+
 function appsecMasterCategoryRouteOracle(
   ctx: RuleContext,
   pathRe: RegExp,
@@ -31793,6 +31837,24 @@ const appsecmasterCommandInjectionRouteLiveOracle: Rule = async (ctx) =>
     APPSECMASTER_COMMAND_INJECTION_LAB_MARKERS,
     APPSECMASTER_COMMAND_INJECTION_ROUTE_FALLBACK,
     "AppSecMaster /labs/command-injection route scan — command injection category hub documents OS command injection Docker lab challenges"
+  );
+
+const appsecmasterCiPipelineRouteLiveOracle: Rule = async (ctx) =>
+  appsecMasterCategoryRouteOracle(
+    ctx,
+    /\/labs\/ci-pipeline\b/i,
+    APPSECMASTER_CI_PIPELINE_LAB_MARKERS,
+    APPSECMASTER_CI_PIPELINE_ROUTE_FALLBACK,
+    "AppSecMaster /labs/ci-pipeline route scan — CI/CD pipeline security category hub documents pipeline injection and build-system abuse Docker lab challenges"
+  );
+
+const appsecmasterDeserializationRouteLiveOracle: Rule = async (ctx) =>
+  appsecMasterCategoryRouteOracle(
+    ctx,
+    /\/labs\/deserialization\b/i,
+    APPSECMASTER_DESERIALIZATION_LAB_MARKERS,
+    APPSECMASTER_DESERIALIZATION_ROUTE_FALLBACK,
+    "AppSecMaster /labs/deserialization route scan — insecure deserialization category hub documents pickle/YAML/Java object injection Docker lab challenges"
   );
 
 // --- IST Edu intentionally vulnerable university portal (ist-edu-bd.vercel.app) -------
@@ -90940,7 +91002,7 @@ const brokencrystalsJwtWeakKeyLiveOracle: Rule = async (ctx) => {
 const brokencrystalsJwtWeakKeyRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/auth\/jwt\/weak-key\/(?:validate|login)\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/auth\/jwt\/weak(?:-key)?\/(?:validate|login)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsJwtWeakKeyLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -90949,7 +91011,9 @@ const brokencrystalsJwtWeakKeyRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Broken Crystals /api/auth/jwt/weak-key/validate route scan — HS256 JWT signed with weak HMAC secret bypasses authentication"
+      note: /\/api\/auth\/jwt\/weak\/login\b/i.test(pageUrl)
+        ? "Broken Crystals /api/auth/jwt/weak/login route scan — SPA alias for weak-key JWT hub; HS256 JWT signed with weak HMAC secret bypasses authentication"
+        : "Broken Crystals /api/auth/jwt/weak-key/validate route scan — HS256 JWT signed with weak HMAC secret bypasses authentication"
     }
   };
 };
@@ -99601,6 +99665,8 @@ export const RULES: Record<string, Rule> = {
   clientSideAppsecMasterLabHubEvidence,
   appsecmasterSsrfRouteLiveOracle,
   appsecmasterCommandInjectionRouteLiveOracle,
+  appsecmasterCiPipelineRouteLiveOracle,
+  appsecmasterDeserializationRouteLiveOracle,
   clientSideIstEduVulnPortalEvidence,
   noticesFileLfiProbe,
   clientSideHackTheBoxEvidence,

@@ -20604,6 +20604,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "appsecmaster-ci-pipeline-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "AppSecMaster CI/CD pipeline lab category route live oracle",
+    description:
+      "When scanning /labs/ci-pipeline, AppSecMaster documents CI/CD pipeline injection and build-system abuse in Docker lab instances — route-specific pipeline security category hub oracle.",
+    impactOneline:
+      "Public AppSecMaster CI/CD pipeline lab hub documents pipeline injection training infrastructure for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecmasterCiPipelineRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AppSecMaster CI/CD pipeline labs are intentional training — gate lab instances behind paid accounts.",
+      steps: [
+        "Require authentication before spawning pipeline security lab containers.",
+        "Sanitize CI/CD inputs and restrict pipeline script permissions.",
+        "Isolate Docker lab instances from production networks."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/ci-pipeline route documents CI/CD pipeline injection Docker lab challenges. Show route-specific pipeline security remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "appsecmaster-deserialization-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "AppSecMaster deserialization lab category route live oracle",
+    description:
+      "When scanning /labs/deserialization, AppSecMaster documents pickle, YAML, and Java/PHP object injection in Docker lab instances — route-specific insecure deserialization category hub oracle.",
+    impactOneline:
+      "Public AppSecMaster deserialization lab hub documents gadget chain abuse training infrastructure for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecmasterDeserializationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AppSecMaster deserialization labs are intentional training — gate lab instances behind paid accounts.",
+      steps: [
+        "Require authentication before spawning deserialization lab containers.",
+        "Use safe deserialization APIs and block untrusted object graphs.",
+        "Isolate Docker lab instances from production networks."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/deserialization route documents insecure deserialization Docker lab challenges. Show route-specific deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ist-edu-vuln-portal-evidence",
     platform: "generic",
     category: "Injection",
@@ -40034,7 +40086,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Broken Crystals /api/auth/jwt/weak-key/validate route live oracle",
     description:
-      "When scanning /api/auth/jwt/weak-key/validate, HS256 JWT signed with weak JWT_SECRET_KEY bypasses auth and returns the protected secret — route-specific weak HMAC key confirmation oracle.",
+      "When scanning /api/auth/jwt/weak-key/validate or the /api/auth/jwt/weak/login SPA alias, HS256 JWT signed with weak JWT_SECRET_KEY bypasses auth and returns the protected secret — route-specific weak HMAC key confirmation oracle.",
     impactOneline:
       "Route-specific confirmation that Broken Crystals weak-key JWT validation accepts trivial HMAC secrets.",
     detectorKind: "rule_ref",

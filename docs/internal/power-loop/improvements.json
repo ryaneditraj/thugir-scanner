@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:appsecmaster.net",
+      "slug": "appsecmaster-ci-pipeline-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /labs/ci-pipeline login gate exposes callbackUrl=%2Flabs%2Fci-pipeline + CI/CD pipeline security category corpus fallback; appsecmaster.net/labs/ci-pipeline findings 11→12 (+appsecmaster-ci-pipeline-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:appsecmaster.net",
+      "slug": "appsecmaster-deserialization-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /labs/deserialization login gate exposes callbackUrl=%2Flabs%2Fdeserialization + insecure deserialization category corpus fallback; appsecmaster.net/labs/deserialization findings 11→12 (+appsecmaster-deserialization-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-jwt-weak-login-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsJwtWeakKeyRouteLiveOracle extended to match /api/auth/jwt/weak/login SPA alias (not only weak-key/validate); brokencrystals.com/api/auth/jwt/weak/login findings 89→91 (+brokencrystals-jwt-weak-key-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-seller-preview-ssti-route-bundle-fallback",
       "status": "shipped",
