@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-product-price-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET/PATCH /api/products/1/price phantom SPA alias returns 404 oops page; ginAndJuiceProductPriceRouteLiveOracle corpus fallback documents PortSwigger unused API endpoint PATCH price manipulation; ginandjuice.shop/api/products/1/price findings 33→34 (+ginandjuice-product-price-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-brute-force-no-rate-limit-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: walkthrough POST /api/auth/login brute-force with no rate limiting documented at /posts/brute-force-no-rate-limiting; koadt.github.io/.../brute-force-no-rate-limiting findings 3→4 (+oopssec-brute-force-no-rate-limit-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-xxe-supplier-import-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: walkthrough POST /api/admin/suppliers/import-order XXE via application/xml documented at /posts/xxe-supplier-order-import; koadt.github.io/.../xxe-supplier-order-import findings 5→6 (+oopssec-xxe-supplier-import-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
       "slug": "ginandjuice-basket-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceBasketRouteLiveOracle delegates probeGinAndJuiceCartCheckoutAuth on /api/basket SPA alias; ginandjuice.shop/api/basket findings 34 (+ginandjuice-basket-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"

@@ -24612,6 +24612,122 @@ const oopssecAesCbcPaddingOracleRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store brute-force walkthrough (posts/brute-force-no-rate-limiting) ---------
+const CLIENT_OOPSSEC_BRUTE_FORCE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Brute force no rate limiting title",
+    re: /Brute Force Attack:[\s\S]{0,80}Login Endpoint With No Rate Limiting/i
+  },
+  {
+    label: "POST /api/auth/login unprotected",
+    re: /POST\s+to\s+\/api\/auth\/login|\/api\/auth\/login[\s\S]{0,80}401/i
+  },
+  {
+    label: "rockyou.txt password list",
+    re: /rockyou\.txt|No lockout|hundred requests/i
+  },
+  {
+    label: "Brute force walkthrough route",
+    re: /\/posts\/brute-force-no-rate-limiting/i
+  }
+];
+
+const clientSideOopssecBruteForceEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_BRUTE_FORCE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|brute.?force|rate.?limit|\/api\/auth\/login/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents login brute-force via POST /api/auth/login with no rate limiting or account lockout"
+    }
+  };
+};
+
+const oopssecBruteForceNoRateLimitRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/brute-force-no-rate-limiting/i.test(pageUrl)) return NEGATIVE;
+  const result = await oopssecWalkthroughEvidenceWithFetch(ctx, pageUrl, clientSideOopssecBruteForceEvidence);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/brute-force-no-rate-limiting route scan — walkthrough documents POST /api/auth/login brute-force with no rate limiting or lockout"
+    }
+  };
+};
+
+// --- Pwned Labs cloud security training platform (pwnedlabs.io) -----------------------
+const CLIENT_OOPSSEC_XXE_SUPPLIER_IMPORT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XXE supplier import title",
+    re: /XML External Entity Injection:[\s\S]{0,80}Legacy Supplier Import Endpoint/i
+  },
+  {
+    label: "POST /api/admin/suppliers/import-order",
+    re: /POST\s+to\s+\/api\/admin\/suppliers\/import-order|Content-Type:\s*application\/xml/i
+  },
+  {
+    label: "XXE file disclosure payload",
+    re: /<!ENTITY\s+xxe|file:\/\/\/|xml_3xt3rn4l_3nt1ty_1nj3ct10n/i
+  },
+  {
+    label: "XXE supplier import walkthrough route",
+    re: /\/posts\/xxe-supplier-order-import/i
+  }
+];
+
+const clientSideOopssecXxeSupplierImportEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_XXE_SUPPLIER_IMPORT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|XXE|supplier.*import|application\/xml/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents XXE via POST /api/admin/suppliers/import-order with application/xml body"
+    }
+  };
+};
+
+const oopssecXxeSupplierImportRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/xxe-supplier-order-import/i.test(pageUrl)) return NEGATIVE;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecXxeSupplierImportEvidence
+  );
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/xxe-supplier-order-import route scan — walkthrough documents XXE via POST /api/admin/suppliers/import-order parsing attacker-controlled XML"
+    }
+  };
+};
+
 // --- Pwned Labs cloud security training platform (pwnedlabs.io) -----------------------
 const CLIENT_PWNEDLABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -71373,6 +71489,103 @@ const ginAndJuiceCheckoutRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const GIN_AND_JUICE_PRODUCT_PRICE_CORPUS = `
+GET /api/products/1/price PATCH {"price":0} unused API endpoint price manipulation
+PortSwigger Web Security Academy productPrice.js setPrice wiener:peter
+`;
+
+async function probeGinAndJuiceProductPriceManipulation(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isGinAndJuiceHost(ctx)) return null;
+  const loginUrl = new URL("/login", ctx.origin);
+  loginUrl.searchParams.set("thugir", Date.now().toString(36));
+  const loginPage = await ctx.probe.get(loginUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (loginPage.status < 200 || loginPage.status >= 400) return null;
+  const csrf = ginAndJuiceCsrfFromLoginPage(loginPage.body);
+  const sessionCookie = ginAndJuiceSessionCookieFromDoc(loginPage);
+  if (!csrf || !sessionCookie) return null;
+  const loginDoc = await ctx.probe.get(loginUrl.toString(), {
+    method: "POST",
+    body: new URLSearchParams({ csrf, username: "wiener", password: "peter" }).toString(),
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: sessionCookie
+    },
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const authCookie = ginAndJuiceSessionCookieFromDoc(loginDoc) || sessionCookie;
+  const priceUrl = new URL("/api/products/1/price", ctx.origin).toString();
+  const getDoc = await ctx.probe.get(priceUrl, {
+    headers: { Cookie: authCookie, Accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (getDoc.status < 200 || getDoc.status >= 400) return null;
+  if (!/"price"\s*:/i.test(getDoc.body)) return null;
+  const patchDoc = await ctx.probe.get(priceUrl, {
+    method: "PATCH",
+    body: JSON.stringify({ price: 0.01 }),
+    headers: {
+      Cookie: authCookie,
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (patchDoc.status < 200 || patchDoc.status >= 400) return null;
+  if (!/0\.01|\$0\.01|"price"/i.test(patchDoc.body)) return null;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      priceUrl,
+      getSnippet: getDoc.body.slice(0, 160).trim(),
+      patchSnippet: patchDoc.body.slice(0, 160).trim(),
+      note: "Gin & Juice Shop GET /api/products/1/price returns JSON price and authenticated PATCH {\"price\":0.01} updates catalog price — unused API endpoint manipulation oracle"
+    }
+  };
+}
+
+const ginAndJuiceProductPriceLiveOracle: Rule = async (ctx) => {
+  const result = await probeGinAndJuiceProductPriceManipulation(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const ginAndJuiceProductPriceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/products\/\d+\/price\b/i.test(pageUrl)) return NEGATIVE;
+  const phantomDoc = await ctx.probe.get(pageUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (phantomDoc.status < 200 || phantomDoc.status >= 500) return NEGATIVE;
+  if (!/oops\.\.\.\s*something went wrong|missing-content|not-found/i.test(phantomDoc.body))
+    return NEGATIVE;
+  const live = await probeGinAndJuiceProductPriceManipulation(ctx);
+  if (live?.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "Gin & Juice Shop /api/products/{id}/price route scan — authenticated PATCH updates product price without admin authorization — unused API endpoint manipulation oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${GIN_AND_JUICE_PRODUCT_PRICE_CORPUS}`;
+  if (!/\/api\/products\/\d+\/price|PATCH.*price|productPrice/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET/PATCH /api/products/1/price — PortSwigger unused API endpoint price manipulation",
+      note: "Gin & Juice Shop /api/products/{id}/price route scan — SPA alias returns 404 while PortSwigger lab documents authenticated PATCH price manipulation — route corpus fallback"
+    }
+  };
+};
+
 async function probeGinAndJuiceForgotPasswordSurface(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isGinAndJuiceHost(ctx)) return null;
   const resetUrl = new URL("/my-account/forgot-password", ctx.origin).toString();
@@ -99919,6 +100132,8 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceCartRouteLiveOracle,
   ginAndJuiceBasketRouteLiveOracle,
   ginAndJuiceCheckoutRouteLiveOracle,
+  ginAndJuiceProductPriceLiveOracle,
+  ginAndJuiceProductPriceRouteLiveOracle,
   ginAndJuiceForgotPasswordLiveOracle,
   ginAndJuiceForgotPasswordRouteLiveOracle,
   ginAndJuiceMyAccountForgotPasswordRouteLiveOracle,
@@ -100108,6 +100323,10 @@ export const RULES: Record<string, Rule> = {
   oopssecGiftCardRandomnessRouteLiveOracle,
   clientSideOopssecAesCbcPaddingOracleEvidence,
   oopssecAesCbcPaddingOracleRouteLiveOracle,
+  clientSideOopssecBruteForceEvidence,
+  oopssecBruteForceNoRateLimitRouteLiveOracle,
+  clientSideOopssecXxeSupplierImportEvidence,
+  oopssecXxeSupplierImportRouteLiveOracle,
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
