@@ -16,7 +16,7 @@
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-sqli-login-route-merchants-exclusion",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: vulnbankSqliLoginRouteLiveOracle excludes /merchants/login path — stops false route association of user /login SQLi oracle on merchant API scans; vulnbank.org/api/v1/merchants/login no longer emits vulnbank-sqli-login-route-live-oracle; benchmark 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnbankSqliLoginRouteLiveOracle excludes /merchant/* and /api/v1/merchants/* paths — stops false route association of user /login SQLi oracle on merchant login/API scans; vulnbank.org/merchant/login no longer emits vulnbank-sqli-login-route-live-oracle; benchmark 6/6 maintained"
     },
     {
       "source": "discovery:demo.owasp-juice.shop",
