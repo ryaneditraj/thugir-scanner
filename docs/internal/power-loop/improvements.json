@@ -1,6 +1,18 @@
 {
   "candidates": [
     {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-finmail-tools-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /darklab/api/v1/supply-chain/servers/finmail/tools returns 403 csrf_error (writable MCP tool catalog, issue #544); owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools findings 17→21 (+finbot-darklab-finmail-tools-live-oracle +finbot-darklab-finmail-tools-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-findrive-tools-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /darklab/api/v1/supply-chain/servers/findrive/tools returns 403 csrf_error (writable MCP tool catalog, issue #544); owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/findrive/tools findings 18→21 (+finbot-darklab-findrive-tools-live-oracle +finbot-darklab-findrive-tools-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnbank.org",
       "slug": "vulnbank-merchant-sqli-login-live-oracle",
       "status": "shipped",
