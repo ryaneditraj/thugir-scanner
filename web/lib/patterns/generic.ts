@@ -16180,7 +16180,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "WebSec.fr level17 timing-attack route live oracle",
     description:
-      "When scanning /level17/, disclosed sources confirm strcasecmp($_POST['flag'], $flag) with sleep_rand() jitter and UTF-16 charset misdirection — timing side-channel flag oracle.",
+      "When scanning /level17/, source.php confirms strcasecmp($_POST['flag'], $flag) with sleep_rand() jitter and UTF-16 charset misdirection — timing side-channel flag oracle.",
     impactOneline:
       "Route-specific confirmation that WebSec.fr level17 documents a timing-attack flag-guessing challenge.",
     detectorKind: "rule_ref",
@@ -16196,6 +16196,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our WebSec.fr /level17 route scan exposes strcasecmp flag checks with sleep_rand() jitter. Show constant-time comparison remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level17-timing-attack-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "WebSec.fr level17 timing-attack live oracle",
+    description:
+      "POST /level17/ accepts flag guesses while source.php confirms strcasecmp($_POST['flag'], $flag) with sleep_rand() jitter — timing side-channel live oracle.",
+    impactOneline:
+      "Interactive flag-guessing endpoint uses non-constant-time secret comparison vulnerable to timing analysis.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel17TimingAttackLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use constant-time comparisons and rate-limit authentication attempts.",
+      steps: [
+        "Replace strcasecmp with hash_equals for secret comparisons.",
+        "Apply rate limits on flag or password guess endpoints.",
+        "Serve WebSec challenges only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level17 POST handler compares secrets with strcasecmp and sleep_rand jitter. Show constant-time comparison and rate limiting.",
     version: 1,
     enabled: true
   },
@@ -63464,6 +63490,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our DVGA deployment exposes GraphQL introspection on route scans. Show how to auth-gate and disable introspection on lab hosts.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-graphiql-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "DVGA GraphiQL IDE route live oracle",
+    description:
+      "When scanning /graphiql on DVGA hosts, Accept: text/html returns the unauthenticated GraphiQL in-browser IDE — route-specific schema exploration oracle.",
+    impactOneline:
+      "Public GraphiQL IDE enables unauthenticated schema introspection and mutation testing on DVGA lab routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaGraphiqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or auth-gate GraphiQL IDE routes on internet-facing GraphQL endpoints.",
+      steps: [
+        "Disable GraphiQL in production deployments.",
+        "Require authentication before exposing interactive GraphQL explorers.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphiql route scan exposes an unauthenticated GraphiQL IDE. Show how to auth-gate or remove GraphiQL from production.",
     version: 1,
     enabled: true
   },
