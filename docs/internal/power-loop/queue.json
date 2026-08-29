@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-29T02:16:00.000Z",
+  "updated_at": "2026-08-29T03:20:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/seller/preview",
+      "source": "ctfsec/pwnshop README — SSTI storefront preview oracle GET /seller/preview (PWN-040; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/download",
+      "source": "ctfsec/pwnshop README — path traversal file download oracle GET /download (PWN-038; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/chat",
+      "source": "ctfsec/pwnshop README — LLM chatbot prompt-injection oracle GET/POST /chat (PWN LLM Top 10; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/api/products/1/price",
+      "source": "PortSwigger WS Academy — hidden PATCH price oracle GET/PATCH /api/products/1/price (unused API endpoint lab; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/api/checkout",
+      "source": "PortSwigger WS Academy — mass-assignment checkout oracle GET/POST /api/checkout (API testing lab; web search 03 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/product/1",
       "source": "ctfsec/pwnshop README — product detail page oracle GET /product/:id (PWN catalog; web search 02 UTC)",
