@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-29T21:20:00.000Z",
+  "updated_at": "2026-08-29T22:12:19.605Z",
   "discovery_urls": [
+    {
+      "url": "https://dvai-red.vercel.app/",
+      "source": "DVAI Damn Vulnerable AI Ecosystem — OWASP LLM red-team range with 6 operations (dvai-red.vercel.app public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-59",
+      "source": "OWASP WrongSecrets — Challenge 59 Spring Cloud Config oracle (Heroku demo README challenges 54-66)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-61",
+      "source": "OWASP WrongSecrets — Challenge 61 Kotlin binary secrets oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-62",
+      "source": "OWASP WrongSecrets — Challenge 62 hardcoded AES key in Go binary oracle (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/wallet/balance",
+      "source": "OWASP Juice Shop preview — wallet balance BOLA oracle GET /rest/wallet/balance (preview.owasp-juice.shop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/tools",
       "source": "OWASP FinBot CTF — unauthenticated MCP taxcalc tool override PUT oracle (issue #544 Dark Lab supply chain)",
@@ -422,21 +447,6 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-59",
-      "source": "OWASP WrongSecrets — Challenge 59 CI/CD pipeline secret oracle (official Heroku demo)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-61",
-      "source": "OWASP WrongSecrets — Challenge 61 secrets-management oracle (official Heroku demo)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-62",
-      "source": "OWASP WrongSecrets — Challenge 62 AI secret-extraction oracle (official Heroku demo)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://sekumart.sekuripy.hr/product.php?id=1",
       "source": "SekuriPy SekuMart — sqlmap playground SQLi oracle GET product.php?id= (official sqlmap docs)",
       "auth": "public_demo"
@@ -445,11 +455,6 @@
       "url": "https://sekumart.sekuripy.hr/openapi.json",
       "source": "SekuriPy SekuMart — OpenAPI spec surface for multi-context injection (sqlmap --openapi)",
       "auth": "public_demo"
-    },
-    {
-      "url": "https://preview.owasp-juice.shop/rest/wallet/balance",
-      "source": "Official preview.owasp-juice.shop — wallet balance BOLA oracle on develop-preview Heroku instance",
-      "auth": "public_benchmark"
     },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-4",
@@ -4380,11 +4385,6 @@
     {
       "url": "https://escape.tech/academy/",
       "source": "Escape GraphQL Security Academy — public GraphQL vulnerability learning platform (Awesome-Vulnerable-Labs)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvai-red.vercel.app/",
-      "source": "bb1nfosec/dvai — Damn Vulnerable AI Ecosystem red-team range variant (web search)",
       "auth": "public_demo"
     },
     {
