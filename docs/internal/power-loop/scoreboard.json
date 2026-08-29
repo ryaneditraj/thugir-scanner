@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T20:23:55.206Z",
+  "updated_at": "2026-08-29T20:51:17.210Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2994,
-  "total_findings": 29662,
+  "total_sites_scanned": 2995,
+  "total_findings": 29712,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2007,
   "discovery_findings": 24722,
-  "improvements_shipped": 1010,
-  "last_run": "2026-08-29T20:23:55.206Z",
+  "improvements_shipped": 1013,
+  "last_run": "2026-08-29T20:51:17.210Z",
   "last_run_summary": {
     "hour_utc": "20",
     "benchmark": {
@@ -52,40 +52,32 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 187,
-      "focus": "wrongsecrets-63 + AppSecMaster CI/deserialization + seclab SSRF + brokencrystals JWT weak login + wrongsecrets 10-12 drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 3,
+      "urls_scanned": 3,
+      "findings": 115,
+      "focus": "appsecmaster ci-pipeline + deserialization hub route oracles + brokencrystals jwt/weak/login alias",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles, gap=[])",
-      "wrongsecrets.herokuapp.com/challenge/challenge-63: 18 findings — wrongsecrets-challenge-63-hardcoded-aes-key-route-live-oracle confirmed",
-      "brokencrystals.com/api/auth/jwt/weak/login: 88 findings — brokencrystals JWT weak-secret hub fingerprint",
-      "wrongsecrets.herokuapp.com/challenge/challenge-10: 18 findings — wrongsecrets-challenge-10-csi-driver-route-live-oracle confirmed",
-      "wrongsecrets.herokuapp.com/challenge/challenge-11: 18 findings — wrongsecrets-challenge-11-iam-escalation-route-live-oracle confirmed",
-      "wrongsecrets.herokuapp.com/challenge/challenge-12: 18 findings — wrongsecrets-challenge-12-docker-route-live-oracle confirmed",
-      "appsecmaster.net/labs/ci-pipeline: 11 findings — thin hub, no route-specific CI injection oracle",
-      "appsecmaster.net/labs/deserialization: 11 findings — thin hub, no route-specific deserialization oracle",
-      "seclab.vercel.app/labs/ssrf: 5 findings — seclab-labs-dead-route-live-oracle (SSRF module not deployed)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "appsecmaster.net/labs/ci-pipeline: 12 findings (+appsecmaster-ci-pipeline-route-live-oracle)",
+      "appsecmaster.net/labs/deserialization: 12 findings (+appsecmaster-deserialization-route-live-oracle)",
+      "brokencrystals.com/api/auth/jwt/weak/login: 91 findings (+brokencrystals-jwt-weak-key-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses",
-      "appsecmaster ci-pipeline/deserialization: 11-finding hub without route-specific live oracles",
-      "seclab.vercel.app/labs/ssrf: dead-route oracle — SSRF lab module not live on Vercel deploy",
-      "brokencrystals jwt/weak/login: 88-finding shared hub fingerprint — route-specific weak-JWT oracle still absent"
+      "seclab.vercel.app/labs/ssrf: dead-route oracle — SSRF lab module not live on Vercel deploy"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "brokencrystals.com/api/auth/jwt/weak/login": 88,
-    "wrongsecrets.herokuapp.com/challenge/challenge-63": 18,
+    "brokencrystals.com/api/auth/jwt/weak/login": 91,
+    "appsecmaster.net/labs/ci-pipeline": 12,
+    "appsecmaster.net/labs/deserialization": 12,
     "wrongsecrets.herokuapp.com/challenge/challenge-10": 18,
     "wrongsecrets.herokuapp.com/challenge/challenge-11": 18,
     "wrongsecrets.herokuapp.com/challenge/challenge-12": 18,
-    "appsecmaster.net/labs/ci-pipeline": 11,
-    "appsecmaster.net/labs/deserialization": 11,
     "seclab.vercel.app/labs/ssrf": 5
   }
 }

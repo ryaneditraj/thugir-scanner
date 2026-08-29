@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-29T19:39:52.619Z",
-  "total": 2843,
-  "uniqueSlugs": 2835,
+  "generatedAt": "2026-08-29T20:46:57.453Z",
+  "total": 2845,
+  "uniqueSlugs": 2837,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2825,
+    "generic": 2827,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2758,
+    "deep": 2760,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 134,
     "Security misconfiguration": 210,
     "Broken authentication": 186,
-    "Injection": 454,
+    "Injection": 456,
     "Cross-site scripting": 734,
     "Open redirect": 25,
     "general": 20,
@@ -91,7 +91,9 @@
     "appsec-ci-django-admin-route-live-oracle",
     "appsec-ci-stored-xss-comments-live-oracle",
     "appsec-ci-stored-xss-comments-route-live-oracle",
+    "appsecmaster-ci-pipeline-route-live-oracle",
     "appsecmaster-command-injection-route-live-oracle",
+    "appsecmaster-deserialization-route-live-oracle",
     "appsecmaster-ssrf-route-live-oracle",
     "attp-agent-revoke-unauth-live-oracle",
     "attp-agent-revoke-unauth-route-live-oracle",
