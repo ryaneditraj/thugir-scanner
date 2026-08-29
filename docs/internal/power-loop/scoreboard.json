@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T04:20:34.585Z",
+  "updated_at": "2026-08-29T05:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2859,
-  "total_findings": 29616,
-  "critical_findings": 61,
+  "total_sites_scanned": 2862,
+  "total_findings": 29643,
+  "critical_findings": 64,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1986,
-  "discovery_findings": 24911,
-  "improvements_shipped": 965,
-  "last_run": "2026-08-29T04:20:34.585Z",
+  "discovery_urls_added": 1989,
+  "discovery_findings": 24938,
+  "improvements_shipped": 968,
+  "last_run": "2026-08-29T05:35:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 596,
-      "live_oracle_slugs": 39,
+      "live_oracles": 39,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,42 +49,35 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles incl secret-resend + resend-key) — no category gaps"
+      "note": "Stable 6/6 first-pass recall (50 findings) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 381,
-      "focus": "brokencrystals JWT none/rsa login oracles + duck-store MCP + demo.owasp-juice cards BOLA + pwnshop apply-coupon HPP + drained brokencrystals jku/x5c/kid-sql login",
-      "improvements_shipped_this_run": 0
+      "urls_added": 3,
+      "urls_scanned": 3,
+      "findings": 26,
+      "focus": "OopsSec Store auth/access-control walkthrough gaps (insecure-password-reset, open-redirect-login-bypass, mass-assignment-admin)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles, gap=[])",
-      "brokencrystals.com/api/auth/jwt/none/login: 90 findings — JWT alg:none login oracle hub",
-      "brokencrystals.com/api/auth/jwt/jku/login: 89 findings — JWT JKU confusion oracle",
-      "brokencrystals.com/api/auth/jwt/kid-sql/login: 53 findings — JWT kid SQLi oracle",
-      "pwnshop.ctfsecurity.com/profile/apply-coupon: 49 findings — coupon HPP business-logic oracle",
-      "duck-store.escape.tech/api/v1/mcp: 38 findings — MCP excessive-agency oracle",
-      "brokencrystals.com/api/auth/jwt/rsa/signature/login: 30 findings",
-      "brokencrystals.com/api/auth/jwt/x5c/login: 30 findings",
-      "demo.owasp-juice.shop/rest/cards: 2 findings — thin pass, likely needs authenticated session"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
+      "koadt.github.io/oss-oopssec-store/posts/insecure-password-reset: 7→9 findings (+oopssec-insecure-password-reset-route-live-oracle)",
+      "koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass: 7→9 findings (+oopssec-open-redirect-login-bypass-route-live-oracle)",
+      "koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation: 6→8 findings (+oopssec-mass-assignment-admin-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "demo.owasp-juice.shop/rest/cards thin at 2 findings — payment-cards BOLA oracle may need JWT session on demo mirror",
-      "brokencrystals JWT login endpoints fire 30-90 findings but route-specific live oracles not yet shipped for none/rsa/jku/kid-sql login paths"
+      "oopssec session-fixation-weak-session-management still needs route oracle",
+      "ginandjuice change-email race-condition exploit requires authenticated session for TOCTOU proof"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
-    "brokencrystals.com/api/auth/jwt/none/login": 90,
-    "brokencrystals.com/api/auth/jwt/jku/login": 89,
-    "brokencrystals.com/api/auth/jwt/kid-sql/login": 53,
-    "pwnshop.ctfsecurity.com/profile/apply-coupon": 49,
-    "duck-store.escape.tech/api/v1/mcp": 38,
-    "brokencrystals.com/api/auth/jwt/rsa/signature/login": 30,
-    "brokencrystals.com/api/auth/jwt/x5c/login": 30,
-    "demo.owasp-juice.shop/rest/cards": 2
+    "juice-shop.herokuapp.com": 50,
+    "koadt.github.io/oss-oopssec-store/posts/insecure-password-reset": 9,
+    "koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass": 9,
+    "koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation": 8,
+    "koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting": 4,
+    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import": 6,
+    "ginandjuice.shop/api/products/1/price": 34
   }
 }
