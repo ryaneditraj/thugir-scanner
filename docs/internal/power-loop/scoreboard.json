@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T21:30:00.000Z",
+  "updated_at": "2026-08-29T21:35:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2997,
-  "total_findings": 29762,
+  "total_sites_scanned": 3004,
+  "total_findings": 29888,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2007,
-  "discovery_findings": 24772,
+  "discovery_urls_added": 2012,
+  "discovery_findings": 24848,
   "improvements_shipped": 1016,
-  "last_run": "2026-08-29T21:30:00.000Z",
+  "last_run": "2026-08-29T21:35:30.000Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,34 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings); secret-resend + resend-key present"
+      "note": "Stable 6/6 first-pass recall (50 findings); secret-resend + resend-key + iac-terraform-tls-key present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 49,
-      "focus": "finbot finmail/findrive MCP server + reset-tools route oracles (extends 20 UTC tools oracles)",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 126,
+      "focus": "FinBot Dark Lab taxcalc/stats + CTF challenges API + Chimera swagger/SQLi auth + wrongsecrets 7/13/14 drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools: 21→25 findings (+finbot-darklab-finmail-server-reset-oracles)",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/findrive/tools: 21→24 findings (+finbot-darklab-findrive-server-reset-oracles)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
+      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/tools: 22 findings — finbot-darklab-taxcalc-tools-route-live-oracle confirmed",
+      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/stats: 20 findings — finbot-darklab-supply-chain-stats-route-live-oracle confirmed",
+      "owasp-finbot-ctf.org/ctf/api/v1/challenges: 19 findings — finbot-ctf-challenges-route-live-oracle confirmed",
+      "chimera.atlascrew.dev/swagger: 5 findings — thin hub (generic misconfig only, no route-specific Chimera oracles)",
+      "chimera.atlascrew.dev/api/v1/auth/login-vulnerable: 6 findings — thin hub without SQLi auth-bypass route oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-7/13/14: 18 findings each — challenge route oracles confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable — no category misses to address"
+      "benchmark 6/6 stable — no category misses",
+      "chimera.atlascrew.dev: thin 5-6 finding hubs — need chimera-auth-login-vulnerable-sqli route oracle",
+      "FinBot taxcalc/stats/challenges: strong 19-22 finding passes with route oracles confirmed"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools": 25,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/findrive/tools": 24,
-    "brokencrystals.com/api/auth/jwt/weak/login": 91,
-    "appsecmaster.net/labs/ci-pipeline": 12,
-    "appsecmaster.net/labs/deserialization": 12,
-    "wrongsecrets.herokuapp.com/challenge/challenge-10": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-11": 18
+    "juice-shop.herokuapp.com": 50,
+    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/tools": 22,
+    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/stats": 20,
+    "owasp-finbot-ctf.org/ctf/api/v1/challenges": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-7": 18,
+    "wrongsecrets.herokuapp.com/challenge/challenge-13": 18,
+    "wrongsecrets.herokuapp.com/challenge/challenge-14": 18,
+    "chimera.atlascrew.dev/swagger": 5,
+    "chimera.atlascrew.dev/api/v1/auth/login-vulnerable": 6
   }
 }
