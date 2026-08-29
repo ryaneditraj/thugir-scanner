@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-29T01:35:00.000Z",
+  "updated_at": "2026-08-29T02:16:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/product/1",
+      "source": "ctfsec/pwnshop README — product detail page oracle GET /product/:id (PWN catalog; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/cart",
+      "source": "ctfsec/pwnshop README — cart business-logic oracle GET /cart negative-quantity/coupon chain (web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/admin/orders",
+      "source": "ctfsec/pwnshop vulnerabilities — admin orders BFLA oracle GET /admin/orders (PWN-003; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/users/1",
+      "source": "ctfsec/pwnshop vulnerabilities — user profile IDOR oracle GET /api/users/:id (PWN-001; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/api/basket",
+      "source": "PortSwigger ginandjuice.shop — basket BOLA oracle GET /api/basket (autopentest-2026 API access control; web search 02 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting/",
       "source": "kOaDT/oss-oopssec-store walkthrough — login brute-force no rate-limit oracle (web search 01 UTC)",

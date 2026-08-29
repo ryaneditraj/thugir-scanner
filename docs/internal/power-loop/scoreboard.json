@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T02:20:00.000Z",
+  "updated_at": "2026-08-29T02:35:38.135Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2838,
-  "total_findings": 28812,
+  "total_sites_scanned": 2847,
+  "total_findings": 29131,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1976,
-  "discovery_findings": 24208,
-  "improvements_shipped": 964,
-  "last_run": "2026-08-29T02:20:00.000Z",
+  "discovery_urls_added": 1981,
+  "discovery_findings": 24477,
+  "improvements_shipped": 963,
+  "last_run": "2026-08-29T02:35:38.135Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
-      "live_oracle_slugs": 39,
+      "probes_run": 595,
+      "live_oracle_slugs": 36,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,36 +49,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles) — no category gaps"
+      "note": "Stable 6/6 first-pass recall (50 findings, 36 live oracles incl secret-resend + resend-key) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 153,
-      "focus": "ginandjuice change-email POST live oracle + vapi.tools workshop contact_mechanic SSRF route + vapi identity auth login route",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 269,
+      "focus": "pwnshop product/cart/admin-orders/api-users + ginandjuice basket BOLA; drained duck-store checkout/testimonials + vapi root",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "ginandjuice.shop/my-account/change-email: 34→37 findings (+ginandjuice-change-email-live-oracle)",
-      "vapi.tools.escape.tech/workshop/api/merchant/contact_mechanic: 13→14 findings (+crapi-contact-mechanic-ssrf-route-live-oracle)",
-      "vapi.tools.escape.tech/identity/api/auth/login: 13→14 findings (+vapi-identity-auth-login-route-live-oracle)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 36 live oracles, gap=[])",
+      "pwnshop.ctfsecurity.com/product/1: 42 findings — product review XSS + search SQLi live oracles (PWN-010/011)",
+      "pwnshop.ctfsecurity.com/admin/orders: 46 findings — admin audit-log SQLi + CSV export oracles (PWN-013/014)",
+      "pwnshop.ctfsecurity.com/cart: 25 findings — debug/info + events audit-log live oracles (PWN-005/018)",
+      "pwnshop.ctfsecurity.com/api/users/1: 22 findings — user profile IDOR route oracle (PWN-001)",
+      "ginandjuice.shop/api/basket: 34 findings — basket BOLA live oracle",
+      "duck-store.escape.tech/api/v1/orders/checkout: 40 findings — checkout business-logic oracle",
+      "duck-store.escape.tech/api/v1/testimonials/1: 42 findings — testimonials BOLA oracle",
+      "vapi.tools.escape.tech/: 18 findings — vAPI workshop root hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "crapi2.apisec.ai unreachable from cloud egress (SSL_ERROR_SYSCALL)",
-      "ginandjuice authenticated POST /my-account/change-email returns 404 on live site — live oracle uses unauthenticated 302→/login gate"
+      "pwnshop cart thin at 25 findings — checkout HPP/coupon oracles need authenticated session for full proof",
+      "ginandjuice basket BOLA may need session cookie for exploitation confirmation"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
-    "ginandjuice.shop/my-account/change-email": 37,
-    "vapi.tools.escape.tech/workshop/api/merchant/contact_mechanic": 14,
-    "vapi.tools.escape.tech/identity/api/auth/login": 14,
-    "koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews": 14,
-    "duck-store.escape.tech/vulnerabilities": 41,
-    "duck-store.escape.tech/api/v1/orders/coupons": 41,
-    "duck-store.escape.tech/mcp/tools/list_coupons": 39
+    "juice-shop.herokuapp.com": 50,
+    "pwnshop.ctfsecurity.com/admin/orders": 46,
+    "pwnshop.ctfsecurity.com/product/1": 42,
+    "duck-store.escape.tech/api/v1/testimonials/1": 42,
+    "duck-store.escape.tech/api/v1/orders/checkout": 40,
+    "ginandjuice.shop/api/basket": 34,
+    "pwnshop.ctfsecurity.com/cart": 25,
+    "pwnshop.ctfsecurity.com/api/users/1": 22,
+    "vapi.tools.escape.tech/": 18
   }
 }
