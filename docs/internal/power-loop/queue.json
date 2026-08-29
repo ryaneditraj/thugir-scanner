@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T10:11:44.371Z",
+  "updated_at": "2026-08-29T11:12:00.000Z",
   "discovery_urls": [
     {
       "url": "https://pentest-ground.com:5013/graphiql",
@@ -10562,6 +10562,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://dvga2.tools.escape.tech/",
+      "source": "Escape.tech DVGA Expert mode — hardened GraphQL with cost/depth controls + custom vulns (dvga2.tools.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/vulnerabilities",
+      "source": "Escape Duck Store — published vulnerability index hub (escape.tech blog Dec 2025)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.demo.escape.tech/rest/memories",
+      "source": "Escape OWASP Juice Shop demo — photo memories BOLA oracle GET /rest/memories",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/graphiql",
+      "source": "Escape DVGA Beginner — GraphiQL IDE introspection oracle (dvga.tools.escape.tech)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/#/chatbot",
+      "source": "Official preview.owasp-juice.shop — chatbot prompt-injection route oracle (develop-preview Heroku)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pentest-ground.com:5013/",
       "source": "Pentest-Ground DVGA — deliberately vulnerable GraphQL app with CMDi/XSS/SQLi (pentest-ground.com catalog)",
