@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-08-29T04:16:00.000Z",
+  "updated_at": "2026-08-29T05:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-password-reset/",
+      "source": "kOaDT/oss-oopssec-store roadmap Ch.07 — predictable MD5(email+timestamp) reset token walkthrough (05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass/",
+      "source": "kOaDT/oss-oopssec-store roadmap Ch.02 — open redirect to /internal/oauth/callback login bypass walkthrough (05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/",
+      "source": "kOaDT/oss-oopssec-store roadmap Ch.03 — signup mass-assignment role:ADMIN privilege escalation walkthrough (05 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/auth/jwt/none/login",
       "source": "NeuraLegion/brokencrystals README — JWT alg:none login bypass oracle POST /api/auth/jwt/none/login (web search 04 UTC)",
