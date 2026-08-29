@@ -6209,6 +6209,24 @@
       "slug": "vapi-workshop-contact-mechanic-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: vapiWorkshopContactMechanicRouteLiveOracle delegates probeCrapiContactMechanicSsrf on /workshop/api/merchant/contact_mechanic with crAPI SSRF corpus fallback; vapi.tools.escape.tech/workshop/api/merchant/contact_mechanic findings 13→14 (+vapi-workshop-contact-mechanic-route-live-oracle); benchmark juice-shop-staging 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvai-red.vercel.app",
+      "slug": "dvai-red-canonical-runner-redirect",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: canonicalDeepScanTarget in runDeepScan redirects dvai-red.vercel.app → dvai.vercel.app (mirrors power-scan queue canonicalization); dvai-red.vercel.app/ findings 1→12 (+dvai-ai-chat-live-oracle +route +html-sink +ecosystem oracles); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvai.vercel.app",
+      "slug": "dvai-oracle-logprob-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/oracle/init returns HTTP 403 Vercel Security Checkpoint on dvai.vercel.app — OP-ORACLE logprob side-channel corpus oracle (bb1nfosec/dvai README); dvai.vercel.app/ findings 9→12 (+dvai-oracle-logprob-live-oracle +route); /api/oracle/init route scan fires route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvai.vercel.app",
+      "slug": "dvai-schemapoison-rag-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/schemapoison/init returns HTTP 404 on current host — OP-SCHEMAPOISON RAG poisoning corpus oracle from bb1nfosec/dvai README; dvai.vercel.app/ findings 9→12 (+dvai-schemapoison-rag-live-oracle +client-side-dvai-ecosystem-evidence); benchmark juice-shop 50 findings 6/6 maintained"
     }
   ]
 }
