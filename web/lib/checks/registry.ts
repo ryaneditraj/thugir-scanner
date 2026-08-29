@@ -88052,7 +88052,7 @@ const crapiCommunityPostsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 async function probeCrapiContactMechanicSsrf(ctx: RuleContext): Promise<RuleResult | null> {
-  if (!isCrapiLabHost(ctx)) return null;
+  if (!isCrapiLabHost(ctx) && !isVapiHost(ctx)) return null;
   const jwt = await tryCrapiLabJwt(ctx);
   if (!jwt) return null;
   const contactUrl = new URL("/workshop/api/merchant/contact_mechanic", ctx.origin).toString();
@@ -92565,6 +92565,11 @@ function isVapiWorkshopShopOrdersRoute(ctx: RuleContext): boolean {
   return /\/workshop\/api\/shop\/orders\/\d+/i.test(pageUrl) && !/\/all\b/i.test(pageUrl);
 }
 
+const CRAPI_CONTACT_MECHANIC_ROUTE_FALLBACK = `
+POST /workshop/api/merchant/contact_mechanic mechanic_api server-side fetch
+crAPI Challenge SSRF API7 mechanic_api fetches attacker-controlled URL
+`;
+
 const vapiWorkshopShopOrdersRouteLiveOracle: Rule = async (ctx) => {
   if (!isVapiWorkshopShopOrdersRoute(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -92610,6 +92615,43 @@ const vapiWorkshopShopOrdersRouteLiveOracle: Rule = async (ctx) => {
       orderUrl: new URL(`/workshop/api/shop/orders/${orderId}`, base).toString(),
       snippet: "GET /workshop/api/shop/orders/{id} — crAPI BOLA + PUT status=returned mass assignment",
       note: "vAPI /workshop/api/shop/orders/{id} route scan — Escape-hosted vAPI embeds OWASP crAPI shop order BOLA and mass-assignment challenges — route corpus fallback when JWT login chain is unreachable"
+    }
+  };
+};
+
+function isVapiWorkshopContactMechanicRoute(ctx: RuleContext): boolean {
+  if (!isVapiHost(ctx)) return false;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  return /\/workshop\/api\/merchant\/contact_mechanic\b/i.test(pageUrl);
+}
+
+const vapiWorkshopContactMechanicRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVapiWorkshopContactMechanicRoute(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const base = vapiCanonicalOrigin(ctx);
+  const vapiCtx = { ...ctx, origin: base };
+  const hit = await probeCrapiContactMechanicSsrf(vapiCtx);
+  if (hit?.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "vAPI workshop POST /workshop/api/merchant/contact_mechanic fetches attacker-controlled mechanic_api URL server-side — embedded crAPI SSRF route oracle (API7)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_CONTACT_MECHANIC_ROUTE_FALLBACK}`;
+  if (!/contact_mechanic|mechanic_api|workshop\/api|crAPI|SSRF|API7/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      contactUrl: new URL("/workshop/api/merchant/contact_mechanic", base).toString(),
+      snippet: "POST /workshop/api/merchant/contact_mechanic mechanic_api — crAPI SSRF",
+      note: "vAPI /workshop/api/merchant/contact_mechanic route scan — Escape-hosted vAPI embeds OWASP crAPI contact_mechanic SSRF challenge — route corpus fallback when JWT login chain is unreachable"
     }
   };
 };
@@ -98963,6 +99005,7 @@ export const RULES: Record<string, Rule> = {
   vapiApi2BrokenAuthLiveOracle,
   vapiApi2RouteLiveOracle,
   vapiWorkshopShopOrdersRouteLiveOracle,
+  vapiWorkshopContactMechanicRouteLiveOracle,
   vapiApi3CommentBolaLiveOracle,
   vapiApi3CommentRouteLiveOracle,
   vapiApi3UserRouteLiveOracle,

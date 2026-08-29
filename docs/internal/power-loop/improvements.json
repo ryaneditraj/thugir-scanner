@@ -5849,6 +5849,12 @@
       "slug": "juice-shop-basket-idor-mirror-fallback",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: juiceShopBasketIdorLiveOracle retries escape.tech + staging mirrors when primary demo.owasp-juice.shop basket probes fail; demo.owasp-juice.shop/rest/basket/1 findings maintain juice-shop-basket-idor-live-oracle +route oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-workshop-contact-mechanic-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vapiWorkshopContactMechanicRouteLiveOracle delegates probeCrapiContactMechanicSsrf on /workshop/api/merchant/contact_mechanic with crAPI SSRF corpus fallback; vapi.tools.escape.tech/workshop/api/merchant/contact_mechanic findings 13→14 (+vapi-workshop-contact-mechanic-route-live-oracle); benchmark juice-shop-staging 51 findings 6/6 maintained"
     }
   ]
 }
