@@ -30314,7 +30314,7 @@
       "scanned_at": "2026-08-29T12:30:59.232Z"
     },
     {
-      "run_id": "2026-08-29T13:15:54.776Z",
+      "run_id": "2026-08-29T13:16:56.702Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -30684,7 +30684,1086 @@
       "pages_crawled": 6,
       "probes_run": 596,
       "status": "ok",
-      "scanned_at": "2026-08-29T13:15:54.776Z"
+      "scanned_at": "2026-08-29T13:16:56.702Z"
+    },
+    {
+      "run_id": "2026-08-29T13:20:43.470Z",
+      "url": "https://nodegoat-websec.herokuapp.com/contributions",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 16,
+      "findings": [
+        {
+          "slug": "nodegoat-contributions-ssjs-live-oracle",
+          "title": "NodeGoat contributions server-side JS injection live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "nodegoat-contributions-route-live-oracle",
+          "title": "NodeGoat /contributions SSJS injection route live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "server-side-eval-evidence",
+          "title": "Server handler passes request body to eval()",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-nosql-evidence",
+          "title": "Client bundle documents NoSQL injection via MongoDB operators",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-nodegoat-evidence",
+          "title": "OWASP NodeGoat intentionally insecure Node.js lab disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "nodegoat-benefits-nosql-live-oracle",
+          "title": "NodeGoat allocations IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "nodegoat-benefits-bac-live-oracle",
+          "title": "NodeGoat benefits function-level access control bypass live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "nodegoat-profile-stored-xss-live-oracle",
+          "title": "NodeGoat profile stored XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "nodegoat-signup-open-registration-live-oracle",
+          "title": "NodeGoat signup open registration live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "nodegoat-login-weak-credentials-live-oracle",
+          "title": "NodeGoat login weak default credentials live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "nodegoat-memos-stored-xss-live-oracle",
+          "title": "NodeGoat MemosDAO stored XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "nodegoat-profile-sensitive-data-live-oracle",
+          "title": "NodeGoat profile sensitive data live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "nodegoat-profile-csrf-live-oracle",
+          "title": "NodeGoat profile CSRF live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vibe-hardcoded-demo-credentials",
+          "title": "Hardcoded demo credentials in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 3,
+      "probes_run": 586,
+      "status": "ok",
+      "scanned_at": "2026-08-29T13:20:43.470Z"
+    },
+    {
+      "run_id": "2026-08-29T13:21:34.681Z",
+      "url": "https://nodegoat-websec.herokuapp.com/research",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 16,
+      "findings": [
+        {
+          "slug": "nodegoat-research-ssrf-route-live-oracle",
+          "title": "NodeGoat /research SSRF route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "server-side-eval-evidence",
+          "title": "Server handler passes request body to eval()",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-nosql-evidence",
+          "title": "Client bundle documents NoSQL injection via MongoDB operators",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-nodegoat-evidence",
+          "title": "OWASP NodeGoat intentionally insecure Node.js lab disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "nodegoat-benefits-nosql-live-oracle",
+          "title": "NodeGoat allocations IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "nodegoat-benefits-bac-live-oracle",
+          "title": "NodeGoat benefits function-level access control bypass live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "nodegoat-profile-stored-xss-live-oracle",
+          "title": "NodeGoat profile stored XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "nodegoat-signup-open-registration-live-oracle",
+          "title": "NodeGoat signup open registration live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "nodegoat-login-weak-credentials-live-oracle",
+          "title": "NodeGoat login weak default credentials live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "nodegoat-memos-stored-xss-live-oracle",
+          "title": "NodeGoat MemosDAO stored XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "nodegoat-contributions-ssjs-live-oracle",
+          "title": "NodeGoat contributions server-side JS injection live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "nodegoat-profile-sensitive-data-live-oracle",
+          "title": "NodeGoat profile sensitive data live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "nodegoat-profile-csrf-live-oracle",
+          "title": "NodeGoat profile CSRF live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vibe-hardcoded-demo-credentials",
+          "title": "Hardcoded demo credentials in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 3,
+      "probes_run": 589,
+      "status": "ok",
+      "scanned_at": "2026-08-29T13:21:34.681Z"
+    },
+    {
+      "run_id": "2026-08-29T13:22:12.595Z",
+      "url": "https://nodegoat-websec.herokuapp.com/memos",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 16,
+      "findings": [
+        {
+          "slug": "nodegoat-memos-stored-xss-live-oracle",
+          "title": "NodeGoat MemosDAO stored XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "nodegoat-memos-route-live-oracle",
+          "title": "NodeGoat /memos stored XSS route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "server-side-eval-evidence",
+          "title": "Server handler passes request body to eval()",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-nosql-evidence",
+          "title": "Client bundle documents NoSQL injection via MongoDB operators",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-nodegoat-evidence",
+          "title": "OWASP NodeGoat intentionally insecure Node.js lab disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "nodegoat-benefits-nosql-live-oracle",
+          "title": "NodeGoat allocations IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "nodegoat-benefits-bac-live-oracle",
+          "title": "NodeGoat benefits function-level access control bypass live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "nodegoat-profile-stored-xss-live-oracle",
+          "title": "NodeGoat profile stored XSS live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "nodegoat-signup-open-registration-live-oracle",
+          "title": "NodeGoat signup open registration live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "nodegoat-login-weak-credentials-live-oracle",
+          "title": "NodeGoat login weak default credentials live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "nodegoat-contributions-ssjs-live-oracle",
+          "title": "NodeGoat contributions server-side JS injection live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "nodegoat-profile-sensitive-data-live-oracle",
+          "title": "NodeGoat profile sensitive data live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "nodegoat-profile-csrf-live-oracle",
+          "title": "NodeGoat profile CSRF live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vibe-hardcoded-demo-credentials",
+          "title": "Hardcoded demo credentials in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 3,
+      "probes_run": 586,
+      "status": "ok",
+      "scanned_at": "2026-08-29T13:22:12.595Z"
+    },
+    {
+      "run_id": "2026-08-29T13:22:49.957Z",
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 17,
+      "findings": [
+        {
+          "slug": "finbot-ctf-challenges-live-oracle",
+          "title": "OWASP FinBot CTF prompt-injection challenges live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-ctf-sidecar-live-oracle",
+          "title": "OWASP FinBot CTF sidecar live oracle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-how-it-works-live-oracle",
+          "title": "OWASP FinBot how-it-works Dark Lab supply-chain live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-darklab-supply-chain-live-oracle",
+          "title": "OWASP FinBot Dark Lab MCP supply-chain live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-darklab-supply-chain-route-live-oracle",
+          "title": "OWASP FinBot Dark Lab supply-chain route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-darklab-supply-chain-stats-live-oracle",
+          "title": "OWASP FinBot Dark Lab supply-chain stats live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-darklab-taxcalc-server-live-oracle",
+          "title": "OWASP FinBot Dark Lab TaxCalc MCP server live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-darklab-taxcalc-tools-live-oracle",
+          "title": "OWASP FinBot Dark Lab TaxCalc MCP tools write live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-darklab-taxcalc-reset-tools-live-oracle",
+          "title": "OWASP FinBot Dark Lab TaxCalc reset-tools write live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-ctf-stats-live-oracle",
+          "title": "OWASP FinBot CTF platform stats live oracle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-vendor-invoices-live-oracle",
+          "title": "OWASP FinBot vendor invoice agent live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-labs-guardrails-webhook-live-oracle",
+          "title": "OWASP FinBot Labs guardrail webhook SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-agentic-ai-ctf-evidence",
+          "title": "Agentic AI security CTF platform disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "client-side-owasp-genai-lab-evidence",
+          "title": "OWASP GenAI Security Lab disclosed",
+          "severity": "medium",
+          "confidence": 0.87,
+          "category": "AI security"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 2,
+      "probes_run": 570,
+      "status": "ok",
+      "scanned_at": "2026-08-29T13:22:49.957Z"
+    },
+    {
+      "run_id": "2026-08-29T13:24:16.863Z",
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/findrive/tools",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 18,
+      "findings": [
+        {
+          "slug": "finbot-ctf-challenges-live-oracle",
+          "title": "OWASP FinBot CTF prompt-injection challenges live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-ctf-sidecar-live-oracle",
+          "title": "OWASP FinBot CTF sidecar live oracle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-how-it-works-live-oracle",
+          "title": "OWASP FinBot how-it-works Dark Lab supply-chain live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-darklab-supply-chain-live-oracle",
+          "title": "OWASP FinBot Dark Lab MCP supply-chain live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-darklab-supply-chain-route-live-oracle",
+          "title": "OWASP FinBot Dark Lab supply-chain route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-darklab-supply-chain-stats-live-oracle",
+          "title": "OWASP FinBot Dark Lab supply-chain stats live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-darklab-taxcalc-server-live-oracle",
+          "title": "OWASP FinBot Dark Lab TaxCalc MCP server live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-darklab-taxcalc-tools-live-oracle",
+          "title": "OWASP FinBot Dark Lab TaxCalc MCP tools write live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-darklab-taxcalc-reset-tools-live-oracle",
+          "title": "OWASP FinBot Dark Lab TaxCalc reset-tools write live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-ctf-stats-live-oracle",
+          "title": "OWASP FinBot CTF platform stats live oracle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-vendor-invoices-live-oracle",
+          "title": "OWASP FinBot vendor invoice agent live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "AI security"
+        },
+        {
+          "slug": "finbot-labs-guardrails-webhook-live-oracle",
+          "title": "OWASP FinBot Labs guardrail webhook SSRF live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "finbot-vendor-chat-live-oracle",
+          "title": "OWASP FinBot vendor onboarding chat agent live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "AI security"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-agentic-ai-ctf-evidence",
+          "title": "Agentic AI security CTF platform disclosed",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "AI security"
+        },
+        {
+          "slug": "client-side-owasp-genai-lab-evidence",
+          "title": "OWASP GenAI Security Lab disclosed",
+          "severity": "medium",
+          "confidence": 0.87,
+          "category": "AI security"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 2,
+      "probes_run": 571,
+      "status": "ok",
+      "scanned_at": "2026-08-29T13:24:16.863Z"
+    },
+    {
+      "run_id": "2026-08-29T13:25:26.116Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-39",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 18,
+      "findings": [
+        {
+          "slug": "wrongsecrets-challenge-39-aes-filename-key-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge-39 AES filename-key route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-live-oracle",
+          "title": "OWASP WrongSecrets challenge live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-28-github-issue-live-oracle",
+          "title": "OWASP WrongSecrets challenge-28 GitHub issue live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-29-screenshot-log-live-oracle",
+          "title": "OWASP WrongSecrets challenge-29 screenshot log live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-30-localstorage-live-oracle",
+          "title": "OWASP WrongSecrets challenge-30 localStorage live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+          "title": "OWASP WrongSecrets database connection error live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
+          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 573,
+      "status": "ok",
+      "scanned_at": "2026-08-29T13:25:26.116Z"
+    },
+    {
+      "run_id": "2026-08-29T13:25:58.607Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-23",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 18,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-live-oracle",
+          "title": "OWASP WrongSecrets challenge live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-23-base64-frontend-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge-23 Base64 front-end route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-28-github-issue-live-oracle",
+          "title": "OWASP WrongSecrets challenge-28 GitHub issue live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-29-screenshot-log-live-oracle",
+          "title": "OWASP WrongSecrets challenge-29 screenshot log live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-30-localstorage-live-oracle",
+          "title": "OWASP WrongSecrets challenge-30 localStorage live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+          "title": "OWASP WrongSecrets database connection error live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
+          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 576,
+      "status": "ok",
+      "scanned_at": "2026-08-29T13:25:58.607Z"
+    },
+    {
+      "run_id": "2026-08-29T13:26:30.898Z",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-24",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 18,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "spring-boot-actuator-exposed",
+          "title": "Spring Boot actuator endpoints exposed",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "postmessage-dom-xss-evidence",
+          "title": "DOM XSS via postMessage → innerHTML sink",
+          "severity": "high",
+          "confidence": 0.86,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-wrongsecrets-evidence",
+          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "client-side-wrongsecrets-challenge-evidence",
+          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-live-oracle",
+          "title": "OWASP WrongSecrets challenge live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-24-hmac-cryptography-route-live-oracle",
+          "title": "OWASP WrongSecrets challenge-24 HMAC cryptography route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-28-github-issue-live-oracle",
+          "title": "OWASP WrongSecrets challenge-28 GitHub issue live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-29-screenshot-log-live-oracle",
+          "title": "OWASP WrongSecrets challenge-29 screenshot log live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-challenge-30-localstorage-live-oracle",
+          "title": "OWASP WrongSecrets challenge-30 localStorage live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
+          "title": "OWASP WrongSecrets database connection error live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
+          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
+          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
+          "severity": "critical",
+          "confidence": 0.96,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "stack-database-url-in-bundle",
+          "title": "Database connection string in client bundle",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 573,
+      "status": "ok",
+      "scanned_at": "2026-08-29T13:26:30.898Z"
     }
   ],
   "teacher_delta_runs": [
@@ -31746,6 +32825,32 @@
       },
       "notes": "No teacher tools available. 12 UTC run: stable 6/6 first-pass recall (51 findings, 37 live oracles); secret-resend + resend-key present. Discovery: +5 URLs (duck-store MCP tools/info, finbot vendor chat, appsecmaster command-injection/ssrf).",
       "scanned_at": "2026-08-29T12:27:03.951886Z"
+    },
+    {
+      "run_id": "2026-08-29T13:27:02.994Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 37 juice-shop live oracles; secret-resend + resend-key present)",
+      "teacher_delta": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "notes": "No teacher tools available. 13 UTC run: stable 6/6 first-pass recall (51 findings, 37 live oracles); secret-resend + resend-key present. Discovery: +5 URLs (nodegoat contributions/research/memos, finbot finmail/findrive MCP tool override APIs) + drained wrongsecrets challenge-39/23/24 → 137 findings across 8 URLs; nodegoat route-specific SSJS + SSRF + memos XSS oracles confirmed.",
+      "scanned_at": "2026-08-29T13:27:02.994Z"
     }
   ]
 }

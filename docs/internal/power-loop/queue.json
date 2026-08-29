@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T12:27:03.936581Z",
+  "updated_at": "2026-08-29T13:20:00.000Z",
   "discovery_urls": [
     {
       "url": "https://pentest-ground.com:5013/graphiql",
@@ -10695,6 +10695,31 @@
     {
       "url": "https://brokencrystals.com/api/auth/jwt/none/login",
       "source": "NeuraLegion/brokencrystals \u2014 JWT alg:none login oracle (public benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/contributions",
+      "source": "OWASP NodeGoat \u2014 server-side JS eval via preTax POST (A3 XSS / code injection tutorial)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/research",
+      "source": "OWASP NodeGoat \u2014 SSRF via needle.get url parameter (tutorial/ssrf oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/memos",
+      "source": "OWASP NodeGoat \u2014 stored XSS via memo field (A3 XSS tutorial oracle)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools",
+      "source": "OWASP FinBot CTF \u2014 unauthenticated MCP finmail tool override PUT oracle (issue #544)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/findrive/tools",
+      "source": "OWASP FinBot CTF \u2014 unauthenticated MCP findrive tool override PUT oracle (issue #544)",
       "auth": "public_demo"
     }
   ]
