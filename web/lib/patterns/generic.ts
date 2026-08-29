@@ -51566,6 +51566,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "oopssec-brute-force-no-rate-limit-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "OopsSec Store brute-force no rate-limit route live oracle",
+    description:
+      "When scanning /posts/brute-force-no-rate-limiting, the walkthrough documents POST /api/auth/login brute-force with no rate limiting or account lockout — route-specific authentication oracle.",
+    impactOneline:
+      "OopsSec login API accepts unlimited password guesses enabling offline wordlist attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecBruteForceNoRateLimitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce rate limiting, account lockout, and CAPTCHA on authentication endpoints.",
+      steps: [
+        "Add progressive delays after failed login attempts.",
+        "Lock accounts temporarily after repeated failures.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/brute-force-no-rate-limiting route documents unprotected POST /api/auth/login. Show rate-limiting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-xxe-supplier-import-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "OopsSec Store XXE supplier import route live oracle",
+    description:
+      "When scanning /posts/xxe-supplier-order-import, the walkthrough documents XXE via POST /api/admin/suppliers/import-order parsing attacker-controlled XML — route-specific injection oracle.",
+    impactOneline:
+      "OopsSec supplier import endpoint parses external XML entities enabling arbitrary file disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecXxeSupplierImportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers.",
+      steps: [
+        "Set XML parser options to reject DOCTYPE and external entities.",
+        "Validate uploaded XML against a strict schema before parsing.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/xxe-supplier-order-import route documents XXE via POST /api/admin/suppliers/import-order. Show XML parser hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "oopssec-roadmap-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -65336,6 +65388,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /checkout route scan confirms unauthenticated checkout redirects to login after cart manipulation. Show route-specific checkout remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-product-price-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop product price manipulation live oracle",
+    description:
+      "Authenticated PATCH /api/products/{id}/price updates catalog price without admin authorization — the PortSwigger unused API endpoint price manipulation oracle.",
+    impactOneline:
+      "Hidden price-update endpoints let any logged-in user zero out product costs before checkout.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceProductPriceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict price updates to admin roles and recompute cart totals server-side.",
+      steps: [
+        "Remove unused PATCH handlers or gate them behind admin authorization.",
+        "Recompute order totals from authoritative catalog prices on checkout.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PATCH /api/products/{id}/price endpoint lets authenticated users change product prices. Show API authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-product-price-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /api/products/{id}/price route live oracle",
+    description:
+      "When scanning /api/products/{id}/price, the SPA alias returns 404 while authenticated PATCH updates catalog price — route-specific unused API endpoint oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop exposes hidden price-manipulation API endpoints from client JavaScript.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceProductPriceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict price updates to admin roles and recompute cart totals server-side.",
+      steps: [
+        "Remove unused PATCH handlers or gate them behind admin authorization.",
+        "Recompute order totals from authoritative catalog prices on checkout.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/products/{id}/price route scan documents hidden PATCH price manipulation. Show route-specific API authorization remediation.",
     version: 1,
     enabled: true
   },

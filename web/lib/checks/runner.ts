@@ -2244,6 +2244,10 @@ const DEEP_RULES = new Set<string>([
   "oopssecGiftCardRandomnessRouteLiveOracle",
   "clientSideOopssecAesCbcPaddingOracleEvidence",
   "oopssecAesCbcPaddingOracleRouteLiveOracle",
+  "clientSideOopssecBruteForceEvidence",
+  "oopssecBruteForceNoRateLimitRouteLiveOracle",
+  "clientSideOopssecXxeSupplierImportEvidence",
+  "oopssecXxeSupplierImportRouteLiveOracle",
   "oopssecRoadmapRouteLiveOracle",
   "oopssecStoreHomeRouteLiveOracle",
   "clientSideVoidsecShoppingCartEvidence",
@@ -2712,6 +2716,8 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCartRouteLiveOracle",
   "ginAndJuiceBasketRouteLiveOracle",
   "ginAndJuiceCheckoutRouteLiveOracle",
+  "ginAndJuiceProductPriceLiveOracle",
+  "ginAndJuiceProductPriceRouteLiveOracle",
   "ginAndJuiceForgotPasswordLiveOracle",
   "ginAndJuiceForgotPasswordRouteLiveOracle",
   "ginAndJuiceMyAccountForgotPasswordRouteLiveOracle",
@@ -14064,6 +14070,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /ginandjuice\.shop/i.test(origin) &&
         /\/checkout\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-checkout")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/api\/products\/\d+\/price\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-product-price")
       )
         return -4;
       if (
