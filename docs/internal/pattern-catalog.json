@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-29T08:21:28.958Z",
-  "total": 2822,
-  "uniqueSlugs": 2814,
+  "generatedAt": "2026-08-29T09:24:09.495Z",
+  "total": 2823,
+  "uniqueSlugs": 2815,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2804,
+    "generic": 2805,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2737,
+    "deep": 2738,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 130,
     "Security misconfiguration": 210,
-    "Broken authentication": 184,
+    "Broken authentication": 185,
     "Injection": 450,
     "Cross-site scripting": 734,
     "Open redirect": 25,
@@ -1750,6 +1750,7 @@
     "graphqlbook-register-admin-mass-assignment-live-oracle",
     "graphqlbook-register-admin-mass-assignment-route-live-oracle",
     "hack-health-a03-sql-injection-route-live-oracle",
+    "hacksplaining-session-fixation-live-oracle",
     "hacksplaining-session-fixation-route-live-oracle",
     "hacksplaining-weak-session-live-oracle",
     "hacksplaining-weak-session-route-live-oracle",

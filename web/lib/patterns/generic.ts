@@ -21332,6 +21332,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "hacksplaining-session-fixation-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Hacksplaining session fixation lesson live oracle",
+    description:
+      "GET hacksplaining.com/lessons/session-fixation/start returns the Session Fixation secure-coding lesson with exploit-then-fix walkthrough markers — live training-lab oracle.",
+    impactOneline:
+      "Public session fixation lesson /start pages confirm attacker-controlled session ID injection patterns for unauthenticated scanner evaluation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hacksplainingSessionFixationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining session fixation lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable session fixation lesson instances on private deployments.",
+        "Regenerate session IDs after authentication in production.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "Our Hacksplaining session fixation /start probe confirms live lesson content. Show how to auth-gate training lab instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "hacksplaining-session-fixation-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -46786,7 +46812,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "OWASP FinBot CTF prompt-injection challenges route live oracle",
     description:
-      "When scanning /ctf or /portals, GET /ctf/api/v1/challenges exposes agentic prompt-injection challenges (system_prompt_leak) including recon-onboarding — route-specific FinBot CTF oracle.",
+      "When scanning /ctf, /portals, or /ctf/api/v1/challenges, GET /ctf/api/v1/challenges exposes agentic prompt-injection challenges (system_prompt_leak) including recon-onboarding — route-specific FinBot CTF oracle.",
     impactOneline:
       "Publicly reachable agentic AI challenge APIs document prompt-injection attack surfaces for FinBot vendor and invoice agents.",
     detectorKind: "rule_ref",

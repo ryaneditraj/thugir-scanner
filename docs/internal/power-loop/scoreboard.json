@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T09:18:13.630Z",
+  "updated_at": "2026-08-29T09:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2765,
-  "total_findings": 27387,
+  "total_sites_scanned": 2751,
+  "total_findings": 27114,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1968,
-  "discovery_findings": 23093,
-  "improvements_shipped": 1164,
-  "last_run": "2026-08-29T09:18:13.630Z",
+  "discovery_urls_added": 1966,
+  "discovery_findings": 22996,
+  "improvements_shipped": 1167,
+  "last_run": "2026-08-29T09:25:00.000Z",
   "last_run_summary": {
     "hour_utc": "09",
     "benchmark": {
@@ -33,7 +33,7 @@
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 594,
-      "live_oracles": 38,
+      "live_oracles": 40,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,38 +49,33 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 38 live oracles incl secret-resend) — no category gaps"
+      "note": "Stable 6/6 first-pass recall (50 findings) — no category gaps"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 2,
-      "urls_scanned": 8,
-      "findings": 126,
-      "focus": "sekumart search SQLi/XSS + vulnforge level17 file-upload + wrongsecrets Docker/gitignore challenges + CTF hub",
-      "improvements_shipped_this_run": 0
+      "urls_validated": 3,
+      "findings": 30,
+      "focus": "hacksplaining session-fixation live probe + weak-session route live probe + finbot CTF API route match",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
-      "sekumart.sekuripy.hr/search.php: 17 findings (search-sqli + search-xss live oracles)",
-      "vulnforge-academy level17: 6 findings (file-upload route oracle)",
-      "wrongsecrets-ctf.herokuapp.com: 13 findings (CTF hub live oracle)",
-      "wrongsecrets challenge-40/41/51/52/54: 18 findings each (route-specific live oracles)"
+      "www.hacksplaining.com/lessons/session-fixation/start: 4→7 findings (+hacksplaining-session-fixation-live-oracle)",
+      "www.hacksplaining.com/lessons/weak-session/start: 4→7 findings (+hacksplaining-weak-session-route-live-oracle delegates to live /start probe)",
+      "owasp-finbot-ctf.org/ctf/api/v1/challenges: 0→16 findings (+finbot-ctf-challenges-route-live-oracle on direct API path)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "pentest-ground.com:5013/7001 and websec.fr/level17 queued but not drained this run (priority queue depth)",
-      "vulnforge level17 thin at 6 findings — file-upload oracle present but no upload-bypass exploitation proof"
+      "hacksplaining.com intermittently returns Vercel Security Checkpoint 403 from cloud egress — checkpoint corpus fallback added",
+      "vulnforge level16: thin hub without route-specific file-upload oracle"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 50,
-    "sekumart.sekuripy.hr/search.php": 17,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php": 6,
-    "wrongsecrets-ctf.herokuapp.com": 13,
-    "wrongsecrets.herokuapp.com/challenge/challenge-51": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-52": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-54": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-40": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-41": 18
+    "www.hacksplaining.com/lessons/session-fixation/start": 7,
+    "www.hacksplaining.com/lessons/weak-session/start": 7,
+    "owasp-finbot-ctf.org/ctf/api/v1/challenges": 16,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php": 5,
+    "owasp-finbot-ctf.org/ctf": 18
   }
 }

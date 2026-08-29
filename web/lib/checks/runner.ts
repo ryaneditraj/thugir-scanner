@@ -3509,6 +3509,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingXssDomLessonEvidence",
   "clientSideHacksplainingSessionFixationLessonEvidence",
   "clientSideHacksplainingWeakSessionLessonEvidence",
+  "hacksplainingSessionFixationLiveOracle",
   "hacksplainingSessionFixationRouteLiveOracle",
   "hacksplainingWeakSessionLiveOracle",
   "hacksplainingWeakSessionRouteLiveOracle",
