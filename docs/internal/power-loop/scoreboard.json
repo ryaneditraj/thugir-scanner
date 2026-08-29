@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29T23:17:00.000Z",
+  "updated_at": "2026-08-29T23:26:12.279Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3015,
-  "total_findings": 30140,
+  "total_sites_scanned": 3024,
+  "total_findings": 30305,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2017,
-  "discovery_findings": 25000,
+  "discovery_urls_added": 2022,
+  "discovery_findings": 25114,
   "improvements_shipped": 1019,
-  "last_run": "2026-08-29T23:17:00.000Z",
+  "last_run": "2026-08-29T23:26:12.279Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 588,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,33 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 588 probes); secret-resend + resend-key + iac-terraform-tls-key present"
+      "note": "Stable 6/6 first-pass recall (51 findings, 596 probes, 39 juice-shop live oracles); secret-resend + resend-key + iac-terraform-tls-key present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 9,
-      "focus": "DVAI DreamVator Aviation LLM proxy + HTML sink oracles; pwnshop account-delete CSRF route priority",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 114,
+      "focus": "DVAI /api/ai LLM proxy + NodeGoat signup/login/tutorial/benefits route oracles + drained wrongsecrets challenge-49/5",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
-      "dvai.vercel.app/: 9 findings — dvai-ai-chat-live-oracle confirms POST /api/ai Gemini proxy + dangerouslySetInnerHTML sink (was 1 on dead dvai-red host)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "dvai.vercel.app/api/ai: 6 findings — dvai-ai-chat-live-oracle + HTML sink route oracle on POST /api/ai",
+      "nodegoat-websec.herokuapp.com/login: 18 findings — nodegoat-nosql-login-route-live-oracle + weak-credentials route oracle",
+      "nodegoat-websec.herokuapp.com/signup: 13 findings — nodegoat-signup-open-registration + signup-route oracles",
+      "nodegoat-websec.herokuapp.com/benefits: 17 findings — nodegoat-benefits-nosql + BAC live oracles",
+      "wrongsecrets.herokuapp.com/challenge/challenge-5: 18 findings — wrongsecrets-challenge-5-configmap-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-49: 18 findings — wrongsecrets-challenge-49-aes-weak-md5-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses",
-      "dvai-red.vercel.app deployment down — canonicalized to dvai.vercel.app; advanced LLM ops (logprob side-channel, RAG poisoning) still unimplemented"
+      "dvai-red.vercel.app advanced LLM ops (logprob side-channel, RAG poisoning) still unimplemented — /api/ai route oracle confirmed on canonical dvai.vercel.app",
+      "nodegoat tutorial hub: 15 findings — shared hub fingerprint without route-specific A1-A10 lesson oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
-    "dvai.vercel.app": 9,
-    "preview.owasp-juice.shop/rest/wallet/balance": 34,
-    "wrongsecrets.herokuapp.com/challenge/challenge-59": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-61": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-62": 18,
-    "wrongsecrets.herokuapp.com/challenge/challenge-48": 18
+    "juice-shop.herokuapp.com": 51,
+    "nodegoat-websec.herokuapp.com/login": 18,
+    "wrongsecrets.herokuapp.com/challenge/challenge-5": 18,
+    "wrongsecrets.herokuapp.com/challenge/challenge-49": 18,
+    "nodegoat-websec.herokuapp.com/benefits": 17,
+    "nodegoat-websec.herokuapp.com/tutorial": 15,
+    "nodegoat-websec.herokuapp.com/signup": 13,
+    "dvai.vercel.app/api/ai": 6,
+    "dvai.vercel.app": 9
   }
 }

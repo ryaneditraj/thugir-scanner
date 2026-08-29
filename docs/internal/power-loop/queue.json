@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-29T22:12:19.605Z",
+  "updated_at": "2026-08-29T23:22:30.000Z",
   "discovery_urls": [
+    {
+      "url": "https://dvai.vercel.app/api/ai",
+      "source": "bb1nfosec/dvai — Groq LLM proxy POST /api/ai with logprob side-channel oracle (DVAI OP-ORACLE; HN Show)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/signup",
+      "source": "OWASP NodeGoat — open registration + weak password policy oracle (nodegoat-websec.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/login",
+      "source": "OWASP NodeGoat — default admin credentials login oracle (nodegoat-websec.herokuapp.com)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial",
+      "source": "OWASP NodeGoat — tutorial hub with A1-A10 injection/XSS/SSRF lesson routes (nodegoat-websec Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/benefits",
+      "source": "OWASP NodeGoat — benefits allocations IDOR + function-level access control bypass oracle",
+      "auth": "public_demo"
+    },
     {
       "url": "https://dvai.vercel.app/",
       "source": "DVAI Damn Vulnerable AI Ecosystem — DreamVator Aviation LLM co-pilot with /api/ai Gemini proxy (canonical; dvai-red redirects here)",
