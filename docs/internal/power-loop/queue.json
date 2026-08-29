@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-29T20:18:01.993Z",
+  "updated_at": "2026-08-29T21:20:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/taxcalc/tools",
+      "source": "OWASP FinBot CTF — unauthenticated MCP taxcalc tool override PUT oracle (issue #544 Dark Lab supply chain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/stats",
+      "source": "OWASP FinBot CTF — supply-chain poisoned_tools stats oracle GET /darklab/api/v1/supply-chain/stats",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/ctf/api/v1/challenges",
+      "source": "OWASP FinBot CTF — CTF challenges API with system_prompt_leak recon flags (owasp-finbot-ctf.org)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/swagger",
+      "source": "atlas-crew/Chimera — 456+ vulnerable endpoint Swagger UI catalog (chimera.atlascrew.dev public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/auth/login-vulnerable",
+      "source": "atlas-crew/Chimera — classic SQLi auth-bypass oracle POST /api/v1/auth/login-vulnerable (vuln-api README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
       "source": "OWASP WrongSecrets — Challenge 63 hardcoded AES key oracle (Heroku demo README challenges 62-63)",
