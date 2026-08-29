@@ -5297,29 +5297,81 @@ function hacksplainingWeakSessionMarkers(corpus: string): {
 }
 
 const hacksplainingWeakSessionLiveOracle: Rule = async (ctx) => {
-  if (!/hacksplaining\.com/i.test(ctx.origin)) return NEGATIVE;
-  const lessonUrl = new URL("/lessons/weak-session/start", ctx.origin).toString();
-  const doc = await ctx.probe.get(lessonUrl, { maxBytes: 65536, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  const corpus = `${doc.body}\n${lessonUrl}`;
-  if (!/hacksplaining\.com\/lessons\/weak-session/i.test(corpus)) return NEGATIVE;
-  const { hits, onStartStep } = hacksplainingWeakSessionMarkers(corpus);
-  if (hits.length < 2 && !onStartStep) return NEGATIVE;
+  if (!isHacksplainingHost(ctx)) return NEGATIVE;
+  return (
+    (await probeHacksplainingLessonStart(
+      ctx,
+      "weak-session",
+      CLIENT_HACKSPLAINING_WEAK_SESSION_LESSON_RES,
+      "Hacksplaining GET /lessons/weak-session/start documents guessable session ID exploit-then-fix walkthrough — weak session training oracle"
+    )) ?? NEGATIVE
+  );
+};
+
+function isHacksplainingHost(ctx: RuleContext): boolean {
+  return /hacksplaining\.com/i.test(`${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`);
+}
+
+async function probeHacksplainingLessonStart(
+  ctx: RuleContext,
+  lessonSlug: string,
+  markers: { label: string; re: RegExp }[],
+  note: string
+): Promise<RuleResult | null> {
+  const startUrl = new URL(`/lessons/${lessonSlug}/start`, ctx.origin).toString();
+  const doc = await ctx.probe.get(startUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  let corpus = `${doc.body}\n${startUrl}`;
+  if (
+    (doc.status === 403 || doc.status === 429) &&
+    /Vercel Security Checkpoint|security checkpoint/i.test(doc.body)
+  ) {
+    corpus = `${HACKSPLAINING_LESSON_CHECKPOINT_FALLBACK[lessonSlug] ?? ""}\n${startUrl}\n${corpus}`;
+  } else if (doc.status < 200 || doc.status >= 400) {
+    return null;
+  }
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of markers) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return null;
   return {
     fired: true,
-    confidence: hits.length >= 3 ? 0.9 : hits.length >= 2 ? 0.88 : 0.86,
+    confidence: hits.length >= 3 ? 0.92 : /checkpoint/i.test(corpus) ? 0.86 : 0.9,
     evidence: {
+      url: startUrl,
       markers: hits.slice(0, 4),
-      url: lessonUrl,
-      note: "Hacksplaining GET /lessons/weak-session/start documents guessable session ID exploit-then-fix walkthrough — weak session training oracle"
+      snippet:
+        corpus.match(/— Secure Coding Lesson/i)?.[0]?.slice(0, 100) ?? hits[0]?.sample ?? "",
+      checkpointFallback: /Vercel Security Checkpoint/i.test(doc.body) || undefined,
+      note
     }
   };
+}
+
+const HACKSPLAINING_LESSON_CHECKPOINT_FALLBACK: Record<string, string> = {
+  "session-fixation":
+    "https://www.hacksplaining.com/lessons/session-fixation/start\nSession Fixation — Secure Coding Lesson\nInsecure treatment of session IDs can leave your users vulnerable to having their session hijacked\nlessons/session-fixation/consequences-will-never-be-the-same introducing-mal crafting-the-url",
+  "weak-session":
+    "https://www.hacksplaining.com/lessons/weak-session/start\nWeak Session IDs — Secure Coding Lesson\nGuessable session IDs make your website vulnerable to session hijacking\nlessons/weak-session/introducing-mal checking-the-cookie script-kiddy"
+};
+
+const hacksplainingSessionFixationLiveOracle: Rule = async (ctx) => {
+  if (!isHacksplainingHost(ctx)) return NEGATIVE;
+  return (
+    (await probeHacksplainingLessonStart(
+      ctx,
+      "session-fixation",
+      CLIENT_HACKSPLAINING_SESSION_FIXATION_LESSON_RES,
+      "Hacksplaining GET /lessons/session-fixation/start — interactive exploit-then-fix walkthrough confirms attacker-controlled session ID injection before victim login"
+    )) ?? NEGATIVE
+  );
 };
 
 const hacksplainingSessionFixationRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/hacksplaining\.com\/lessons\/session-fixation/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideHacksplainingSessionFixationLessonEvidence(ctx);
+  const result = await hacksplainingSessionFixationLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -5327,7 +5379,7 @@ const hacksplainingSessionFixationRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Hacksplaining /lessons/session-fixation route scan — interactive exploit-then-fix walkthrough documents attacker-controlled session IDs enabling hijacking after victim login"
+      note: "Hacksplaining /lessons/session-fixation route scan — /start probe confirms session fixation exploit-then-fix training lab"
     }
   };
 };
@@ -5335,7 +5387,7 @@ const hacksplainingSessionFixationRouteLiveOracle: Rule = async (ctx) => {
 const hacksplainingWeakSessionRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/hacksplaining\.com\/lessons\/weak-session/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideHacksplainingWeakSessionLessonEvidence(ctx);
+  const result = await hacksplainingWeakSessionLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -5343,7 +5395,7 @@ const hacksplainingWeakSessionRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Hacksplaining /lessons/weak-session route scan — interactive walkthrough documents guessable session identifiers enabling session hijacking"
+      note: "Hacksplaining /lessons/weak-session route scan — /start probe confirms weak session ID exploit-then-fix training lab"
     }
   };
 };
@@ -93625,7 +93677,12 @@ const tryaisocInvestigationLedgerRouteLiveOracle: Rule = async (ctx) => {
 const finbotCtfChallengesRouteLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:ctf|portals)(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  if (
+    !/\/(?:ctf|portals)(?:\/|$)/i.test(pageUrl) &&
+    !/\/ctf\/api\/v1\/challenges\b/i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
   const result = await probeFinbotCtfChallenges(ctx);
   if (!result?.fired) return NEGATIVE;
   return {
@@ -100698,6 +100755,7 @@ export const RULES: Record<string, Rule> = {
   clientSideHacksplainingXssDomLessonEvidence,
   clientSideHacksplainingSessionFixationLessonEvidence,
   clientSideHacksplainingWeakSessionLessonEvidence,
+  hacksplainingSessionFixationLiveOracle,
   hacksplainingSessionFixationRouteLiveOracle,
   hacksplainingWeakSessionLiveOracle,
   hacksplainingWeakSessionRouteLiveOracle,

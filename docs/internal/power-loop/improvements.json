@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-session-fixation-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeHacksplainingLessonStart GET /lessons/session-fixation/start with Vercel checkpoint corpus fallback; www.hacksplaining.com/lessons/session-fixation/start findings 4→7 (+hacksplaining-session-fixation-live-oracle +route); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hacksplaining.com",
+      "slug": "hacksplaining-weak-session-route-live-probe",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: hacksplainingWeakSessionRouteLiveOracle delegates to live /start probe with checkpoint fallback; www.hacksplaining.com/lessons/weak-session/start findings 4→7 (+hacksplaining-weak-session-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-ctf-challenges-api-route-match",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: finbotCtfChallengesRouteLiveOracle extended to match /ctf/api/v1/challenges direct API scans; owasp-finbot-ctf.org/ctf/api/v1/challenges findings 0→16 (+finbot-ctf-challenges-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnforge-academy.vercel.app",
       "slug": "vulnforge-academy-level-ssrf-live-oracle",
       "status": "shipped",
