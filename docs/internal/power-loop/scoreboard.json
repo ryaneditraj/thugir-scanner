@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T02:22:00.000Z",
+  "updated_at": "2026-08-30T02:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3056,
-  "total_findings": 30952,
+  "total_sites_scanned": 3059,
+  "total_findings": 31007,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2032,
-  "discovery_findings": 25440,
-  "improvements_shipped": 1025,
-  "last_run": "2026-08-30T02:22:00.000Z",
+  "discovery_findings": 25495,
+  "improvements_shipped": 1028,
+  "last_run": "2026-08-30T02:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,43 +48,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 36 live oracles, 595 probes); secret-resend + resend-key + iac-terraform-tls-key present"
+      "note": "Stable 6/6 first-pass recall (51 findings, secret-resend + resend-key present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 198,
-      "focus": "NodeGoat A8/A9/A10 CSRF/components/redirect lesson routes + profile CSRF/XSS + /learn open-redirect + vAPI/wrongsecrets-3/brokencrystals queue drain",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 55,
+      "focus": "vulnbank merchant/login SPA route oracle, seclab /labs/ssrf hub SSRF oracle, dvga2 Expert hardened mode oracle",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 36 live oracles, gap=[])",
-      "nodegoat-websec.herokuapp.com/tutorial/a8: 17 findings — nodegoat-tutorial-a8-route-live-oracle confirmed",
-      "nodegoat-websec.herokuapp.com/tutorial/a9: 17 findings — nodegoat-tutorial-a9-route-live-oracle confirmed",
-      "nodegoat-websec.herokuapp.com/tutorial/a10: 17 findings — nodegoat-tutorial-a10-route-live-oracle confirmed",
-      "nodegoat-websec.herokuapp.com/profile: 19 findings — nodegoat-profile-csrf-route-live-oracle + profile-redos-route-live-oracle confirmed",
-      "nodegoat-websec.herokuapp.com/learn: 16 findings — nodegoat-learn-open-redirect-route-live-oracle confirmed",
-      "vapi.apisec.ai/vapi: 16 findings — vAPI API1-API10 live oracles confirmed",
-      "wrongsecrets.herokuapp.com/challenge/challenge-3: 18 findings — wrongsecrets-challenge-3-docker-env-route-live-oracle confirmed",
-      "brokencrystals.com/put.raw: 78 findings — brokencrystals-* live oracle hub confirmed"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings)",
+      "vulnbank.org/merchant/login: 32→33 (+vulnbank-merchant-sqli-login-route-live-oracle on SPA portal)",
+      "seclab.vercel.app/labs/ssrf: 5→6 (+seclab-ssrf-vulnerable-route-live-oracle on labs hub)",
+      "dvga2.tools.escape.tech/: 16→17 (+dvga2-expert-hardened-mode-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable — no category misses on juice-shop",
-      "nodegoat /learn open-redirect live oracle corpus-only when Heroku auth degraded (signup 500, learn→/login)",
-      "nodegoat profile CSRF oracle requires authenticated session — route oracle fires but exploitation proof auth-gated on public Heroku"
+      "benchmark 6/6 stable — no category misses",
+      "seclab /labs/ssrf still serves Angular stub — live /api/ssrf-vulnerable API not deployed on Vercel host"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
-    "nodegoat-websec.herokuapp.com/tutorial/a8": 17,
-    "nodegoat-websec.herokuapp.com/tutorial/a9": 17,
-    "nodegoat-websec.herokuapp.com/tutorial/a10": 17,
+    "juice-shop.herokuapp.com": 51,
+    "vulnbank.org/merchant/login": 33,
+    "seclab.vercel.app/labs/ssrf": 6,
+    "dvga2.tools.escape.tech": 17,
     "nodegoat-websec.herokuapp.com/profile": 19,
-    "nodegoat-websec.herokuapp.com/learn": 16,
-    "vapi.apisec.ai/vapi": 16,
-    "wrongsecrets.herokuapp.com/challenge/challenge-3": 18,
     "brokencrystals.com/put.raw": 78
   }
 }

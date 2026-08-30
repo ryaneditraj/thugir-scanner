@@ -39280,7 +39280,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "SecLab /api/ssrf-vulnerable route live oracle",
     description:
-      "When scanning seclab.vercel.app /api/ssrf-vulnerable, GET with attacker-controlled url fetches internal targets — or the route serves an Angular SPA shell instead of the documented Next.js SSRF training API.",
+      "When scanning seclab.vercel.app /api/ssrf-vulnerable or /labs/ssrf hub, GET with attacker-controlled url fetches internal targets — or the route serves an Angular SPA shell instead of the documented Next.js SSRF training API.",
     impactOneline:
       "Route-specific SSRF lab oracle confirms live server-side fetch or flags dead /api/ssrf-vulnerable stubs on the public Vercel host.",
     detectorKind: "rule_ref",
@@ -43726,7 +43726,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Vuln Bank /api/v1/merchants/login SQL injection route live oracle",
     description:
-      "When scanning /api/v1/merchants/login on vulnbank.org, POST with email admin' OR '1'='1 bypasses merchant authentication and returns api_key plus JWT — route-specific merchant portal SQL injection login oracle.",
+      "When scanning /api/v1/merchants/login or the /merchant/login SPA portal on vulnbank.org, POST with email admin' OR '1'='1 bypasses merchant authentication and returns api_key plus JWT — route-specific merchant portal SQL injection login oracle.",
     impactOneline:
       "Route-specific scans confirm merchant login APIs are vulnerable to SQL injection credential bypass on Vuln Bank training instances.",
     detectorKind: "rule_ref",
@@ -64462,6 +64462,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our DVGA deployment exposes GraphQL introspection on route scans. Show how to auth-gate and disable introspection on lab hosts.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga2-expert-hardened-mode-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "DVGA2 Expert hardened mode route live oracle",
+    description:
+      "When scanning dvga2.tools.escape.tech, home re-fetch confirms Expert (Hardened) game mode with X-DVGA-MODE header and cost/depth GraphQL query controls — Escape.tech hardened DVGA training tier oracle.",
+    impactOneline:
+      "DVGA2 Expert mode documents hardened GraphQL controls while still exposing introspection for security training calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvga2ExpertHardenedModeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVGA2 is intentional GraphQL training — isolate hardened-mode labs from production infrastructure.",
+      steps: [
+        "Run DVGA2 only on isolated lab hosts with authorized scanner access.",
+        "Disable GraphQL introspection on any non-training GraphQL endpoints.",
+        "Document X-DVGA-MODE as a lab-only header not used in production APIs."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA2 deployment documents Expert hardened mode with X-DVGA-MODE. Show how to isolate hardened GraphQL training from production APIs.",
     version: 1,
     enabled: true
   },

@@ -6263,6 +6263,24 @@
       "slug": "crapi-community-posts-bola-seed-uuid-fallback",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: crapiVehicleBolaLiveOracle merges scan-body vehicleid UUIDs on community posts routes + CRAPI_KNOWN_VEHICLE_UUIDS seed fallback; crapi2.apisec.ai/identity/api/v2/community/posts/recent findings 11→13 (+crapi-community-posts-live-oracle +crapi-vehicle-bola-live-oracle alongside route oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-merchant-sqli-login-spa-route-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnbankMerchantSqliLoginRouteLiveOracle accepts /merchant/login SPA portal in addition to /api/v1/merchants/login; POST email admin' OR '1'='1 returns api_key + JWT; vulnbank.org/merchant/login findings 32→33 (+vulnbank-merchant-sqli-login-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-ssrf-labs-hub-route-match",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: seclabSsrfVulnerableRouteLiveOracle matches /labs/ssrf hub and probes /api/ssrf-vulnerable; seclab.vercel.app/labs/ssrf findings 5→6 (+seclab-ssrf-vulnerable-route-live-oracle alongside seclab-labs-dead-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvga2.tools.escape.tech",
+      "slug": "dvga2-expert-hardened-mode-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvga2ExpertHardenedModeRouteLiveOracle confirms Expert (Hardened) menu, X-DVGA-MODE header docs, and cost/depth GraphQL controls on dvga2.tools.escape.tech home re-fetch; dvga2.tools.escape.tech/ findings 16→17 (+dvga2-expert-hardened-mode-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-30T02:06:52.557Z",
-  "total": 2864,
-  "uniqueSlugs": 2856,
+  "generatedAt": "2026-08-30T02:35:51.324Z",
+  "total": 2865,
+  "uniqueSlugs": 2857,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2846,
+    "generic": 2847,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2779,
+    "deep": 2780,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 134,
-    "Security misconfiguration": 211,
+    "Security misconfiguration": 212,
     "Broken authentication": 187,
     "Injection": 456,
     "Cross-site scripting": 735,
@@ -1090,6 +1090,7 @@
     "dvga-my-pastes-idor-live-oracle",
     "dvga-my-pastes-idor-route-live-oracle",
     "dvga-route-live-oracle",
+    "dvga2-expert-hardened-mode-route-live-oracle",
     "dvrag-admin-config-live-oracle",
     "dvrag-rag-pipeline-live-oracle",
     "dvwu-admin-route-live-oracle",
