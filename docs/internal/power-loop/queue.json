@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T10:16:49.525Z",
+  "updated_at": "2026-08-30T11:08:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/aes-cbc-padding-oracle-forged-share-token/",
+      "source": "kOaDT/oss-oopssec-store — AES-CBC padding oracle share-token forgery walkthrough GET /api/documents/share (GitHub Pages ch.09)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews/",
+      "source": "kOaDT/oss-oopssec-store — stored XSS in product reviews walkthrough POST /api/reviews (GitHub Pages ch.04)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting/",
+      "source": "kOaDT/oss-oopssec-store — login brute-force / no rate-limit walkthrough POST /api/auth/login (GitHub Pages ch.07)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-password-reset/",
+      "source": "kOaDT/oss-oopssec-store — predictable password-reset token walkthrough POST /api/auth/reset (GitHub Pages ch.07)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass/",
+      "source": "kOaDT/oss-oopssec-store — open redirect to login bypass walkthrough GET /api/auth/redirect (GitHub Pages ch.02)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/client-side-price-manipulation/",
       "source": "kOaDT/oss-oopssec-store — client-side price manipulation oracle POST /api/orders total tampering (GitHub Pages walkthrough)",
