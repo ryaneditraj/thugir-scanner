@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T19:06:30.104Z",
+  "updated_at": "2026-08-30T20:08:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finbank/tools",
+      "source": "OWASP FinBot CTF — unauthenticated MCP finbank tool override PUT oracle (issue #544 Dark Lab supply chain; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/labs/api/v1/guardrails/test",
+      "source": "OWASP FinBot CTF — guardrail webhook SSRF test-fire oracle POST /labs/api/v1/guardrails/test (PR #538)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level18.php",
+      "source": "webspoilt/vulnforge-academy — Level 18 hard-tier challenge (GitHub README Nightmare tier gap fill)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level19/",
+      "source": "WebSec.fr level 19 — PHP deserialization / object injection training challenge (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/debug/info",
+      "source": "ctfsec/pwnshop — debug endpoint exposes session secret + DB config (PWN-018; vulnerabilities index)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://seclab.vercel.app/api/jwt-vulnerable",
       "source": "DaniSam-STU/security-lab — JWT none/weak-secret API route oracle /api/jwt-vulnerable (homepage securityweb-iota.vercel.app; web search 19 UTC)",
