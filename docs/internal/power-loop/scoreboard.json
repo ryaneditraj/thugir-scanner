@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T20:15:00.000Z",
+  "updated_at": "2026-08-30T21:08:09.288Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3264,
-  "total_findings": 34250,
+  "total_sites_scanned": 3271,
+  "total_findings": 34419,
   "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2123,
-  "discovery_findings": 27487,
-  "improvements_shipped": 1182,
-  "last_run": "2026-08-30T20:15:00.000Z",
+  "discovery_urls_added": 2128,
+  "discovery_findings": 27605,
+  "improvements_shipped": 1085,
+  "last_run": "2026-08-30T21:08:09.288Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -54,40 +54,34 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 6,
-      "findings": 124,
-      "focus": "OWASP FinBot finbank MCP + guardrails SSRF test + vulnforge level18 + websec level19 + pwnshop debug/info PWN-018",
-      "improvements_shipped_this_run": 3
+      "findings": 118,
+      "focus": "brokencrystals MCP endpoint + AI Security Platform admin-console/insecure-passwords/security-headers/vulnerable-deps",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[]; secret-resend + resend-key + iac-terraform-tls-key)",
-      "pwnshop.ctfsecurity.com/debug/info: 47 findings — pwnshop-debug-info-route-live-oracle + pwnshop-debug-info-live-oracle confirmed (PWN-018)",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finbank/tools: 24 findings — finbot-darklab-supply-chain-route-live-oracle",
-      "owasp-finbot-ctf.org/labs/api/v1/guardrails/test: 24 findings — finbot-labs-guardrails-webhook-live-oracle confirmed",
-      "wrongsecrets.herokuapp.com/challenge/challenge-59: 18 findings (queue drain)",
-      "websec.fr/level19/: 6 findings — websec-level19-password-reset-route-live-oracle confirmed",
-      "koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach: 7 findings — oopssec-idor-order-privacy-route-live-oracle confirmed",
-      "koadt.github.io/oss-oopssec-store/posts/session-fixation-weak-session-management: 8 findings — oopssec-session-fixation-route-live-oracle confirmed",
-      "koadt.github.io/oss-oopssec-store/posts/mcp-malicious-server: 6 findings — oopssec-mcp-malicious-server-route-live-oracle confirmed"
+      "brokencrystals.com/api/mcp: 89 findings — brokencrystals-mcp-tools-live-oracle + mcp-route + spawn_process + get_config + process_numbers confirmed",
+      "ai-security-platform-iota.vercel.app/challenges/admin-console: 7 findings — ai-security-admin-console-route-live-oracle confirmed",
+      "ai-security-platform-iota.vercel.app/challenges/insecure-passwords: 7 findings — ai-security-insecure-passwords-route-live-oracle confirmed",
+      "ai-security-platform-iota.vercel.app/challenges/security-headers: 3 findings — ai-security-security-headers-route-live-oracle confirmed",
+      "ai-security-platform-iota.vercel.app/challenges/vulnerable-deps: 3 findings — ai-security-vulnerable-deps-route-live-oracle confirmed",
+      "dvai.vercel.app/api/ai: 9 findings — dvai-ai-chat-route-live-oracle + html-sink route oracles (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "finbank/tools: shares finbot darklab supply-chain fingerprint without finbank-specific route oracle",
       "damn-vulnerable-startup.fly.dev/challenges/* unreachable — Fly.io host offline",
-      "vulnforge level18: 403 on direct PHP path limits live-oracle depth",
-      "oopssec SVG upload XSS walkthrough: route oracle still absent"
+      "AI Security Platform security-headers/vulnerable-deps: thinner 3-finding passes (route oracles fire; generic missing-security-headers only)",
+      "brokencrystals MCP spawn_process/get_config require authenticated MCP session for full exploitation proof"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "pwnshop.ctfsecurity.com/debug/info": 47,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finbank/tools": 24,
-    "owasp-finbot-ctf.org/labs/api/v1/guardrails/test": 24,
-    "wrongsecrets.herokuapp.com/challenge/challenge-59": 18,
-    "koadt.github.io/oss-oopssec-store/posts/session-fixation-weak-session-management": 8,
-    "koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach": 7,
-    "websec.fr/level19/": 6,
-    "koadt.github.io/oss-oopssec-store/posts/mcp-malicious-server": 6,
-    "vulnforge-academy.vercel.app/backend/includes/levels/hard/level18.php": 5
+    "brokencrystals.com/api/mcp": 89,
+    "ai-security-platform-iota.vercel.app/challenges/admin-console": 7,
+    "ai-security-platform-iota.vercel.app/challenges/insecure-passwords": 7,
+    "dvai.vercel.app/api/ai": 9,
+    "ai-security-platform-iota.vercel.app/challenges/security-headers": 3,
+    "ai-security-platform-iota.vercel.app/challenges/vulnerable-deps": 3
   }
 }

@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T20:08:00.000Z",
+  "updated_at": "2026-08-30T21:06:07.666Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/mcp",
+      "source": "NeuraLegion/brokencrystals — MCP JSON-RPC endpoint with SQLi/SSTI/LFI/cmd-injection tool oracles (README MCP section; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/admin-console",
+      "source": "AI Security Platform — cookie-based admin auth bypass challenge /challenges/admin-console (CWE-784; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/insecure-passwords",
+      "source": "AI Security Platform — plaintext/MD5 password storage challenge /challenges/insecure-passwords (CWE-256)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/security-headers",
+      "source": "AI Security Platform — missing CSP/HSTS/X-Frame-Options challenge /challenges/security-headers (CWE-693)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/vulnerable-deps",
+      "source": "AI Security Platform — outdated npm CVE dependency challenge /challenges/vulnerable-deps (CWE-1104)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finbank/tools",
       "source": "OWASP FinBot CTF — unauthenticated MCP finbank tool override PUT oracle (issue #544 Dark Lab supply chain; web search 20 UTC)",
