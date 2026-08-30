@@ -2484,6 +2484,10 @@ const DEEP_RULES = new Set<string>([
   "vulnlabValidateUploadLiveOracle",
   "vulnlabValidateCorsLiveOracle",
   "vulnlabValidateInputValidationLiveOracle",
+  "vulnlabValidateSecurityHeadersLiveOracle",
+  "vulnlabValidateSstiLiveOracle",
+  "vulnlabValidateSstiApiRouteLiveOracle",
+  "vulnlabValidateSqliApiRouteLiveOracle",
   "vulnlabValidatePathTraversalLiveOracle",
   "vulnlabValidatePathTraversalRouteLiveOracle",
   "vulnlabJwtDecodeLiveOracle",
@@ -3945,6 +3949,7 @@ const DEEP_RULES = new Set<string>([
   "zenDemoReadPathTraversalLiveOracle",
   "zenDemoReadRouteLiveOracle",
   "codeBreakingPuzzleRouteLiveOracle",
+  "codeBreakingEasyRouteLiveOracle",
   "clientSideAevumAgentConsentDemoEvidence",
   "aevumConsentReviewUnauthLiveOracle",
   "aevumConsentReviewUnauthRouteLiveOracle",
@@ -13009,6 +13014,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /code-breaking\.fly\.dev/i.test(origin) &&
+        /\/easy\/[\w-]+/i.test(targetInput) &&
+        p.slug.startsWith("code-breaking-easy")
+      )
+        return -3;
+      if (
+        /code-breaking\.fly\.dev/i.test(origin) &&
         /\/puzzle\/\d+/i.test(targetInput) &&
         p.slug.startsWith("code-breaking-puzzle")
       )
@@ -15206,6 +15217,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /hack-this-site-eta\.vercel\.app/i.test(origin) &&
         /\/labs\/cors\.html/i.test(targetInput) &&
         (p.slug.startsWith("vulnlab-cors") || p.slug === "vulnlab-validate-cors-live-oracle")
+      )
+        return -4;
+      if (
+        /hack-this-site-eta\.vercel\.app/i.test(origin) &&
+        /\/api\/validate\/ssti/i.test(targetInput) &&
+        (p.slug === "vulnlab-validate-ssti-live-oracle" ||
+          p.slug === "vulnlab-validate-ssti-api-route-live-oracle")
+      )
+        return -4;
+      if (
+        /hack-this-site-eta\.vercel\.app/i.test(origin) &&
+        /\/api\/validate\/sqli-error/i.test(targetInput) &&
+        (p.slug === "vulnlab-validate-sqli-live-oracle" ||
+          p.slug === "vulnlab-validate-sqli-api-route-live-oracle")
       )
         return -4;
       if (

@@ -6641,6 +6641,24 @@
       "slug": "hack-health-a01-brute-force-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity/a01/bruteForce Nextra tutorial documents CWE-307 brute-force / credential stuffing BAC lab; hack-health-tutorial.vercel.app/cybersecurity/a01/bruteForce findings 8→11 (+hack-health-a01-brute-force-route-live-oracle +client-side-hack-health-brute-force-evidence); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:code-breaking.fly.dev",
+      "slug": "code-breaking-easy-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /easy/{slug} maps to /puzzle/{id} via CODE_BREAKING_EASY_META (function→1, nodechr→5) with GitHub phith0n/code-breaking source archive; code-breaking.fly.dev/easy/function findings 2→3 (+code-breaking-easy-route-live-oracle); code-breaking.fly.dev/easy/nodechr findings 2→3 (+code-breaking-easy-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-validate-sqli-api-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeVulnlabValidateApiRouteOracle fires on /api/validate/sqli-error route scans with labId sqli-error + hint JSON; Vercel checkpoint retry added to probeVulnlabValidateLabOracle; hack-this-site-eta.vercel.app/api/validate/sqli-error route-specific SQLi checker oracle distinct from hub fingerprint; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-this-site-eta.vercel.app",
+      "slug": "vulnlab-validate-ssti-api-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnlabValidateSstiApiRouteLiveOracle + vulnlabValidateSstiLiveOracle probe /api/validate/ssti when deployed; endpoint currently returns 404 Not Found on hack-this-site-eta.vercel.app (not yet in API router handlers list) — oracle infrastructure ready for when VulnLab ships SSTI validate lab; benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

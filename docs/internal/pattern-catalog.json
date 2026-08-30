@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-30T22:12:57.598Z",
-  "total": 2927,
-  "uniqueSlugs": 2919,
+  "generatedAt": "2026-08-30T23:06:40.137Z",
+  "total": 2932,
+  "uniqueSlugs": 2924,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2909,
+    "generic": 2914,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2842,
+    "deep": 2847,
     "continuous": 0
   },
   "byCategory": {
@@ -25,9 +25,9 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 134,
-    "Security misconfiguration": 212,
+    "Security misconfiguration": 213,
     "Broken authentication": 189,
-    "Injection": 469,
+    "Injection": 473,
     "Cross-site scripting": 766,
     "Open redirect": 26,
     "general": 20,
@@ -942,6 +942,7 @@
     "client-side-zero-health-evidence",
     "client-side-zeroday-training-evidence",
     "client-side-ziran-agent-security-evidence",
+    "code-breaking-easy-route-live-oracle",
     "code-breaking-puzzle-route-live-oracle",
     "command-injection-form-probe",
     "compass-demo-angularjs-route-live-oracle",
@@ -2645,7 +2646,11 @@
     "vulnlab-validate-input-validation-live-oracle",
     "vulnlab-validate-path-traversal-live-oracle",
     "vulnlab-validate-path-traversal-route-live-oracle",
+    "vulnlab-validate-security-headers-live-oracle",
+    "vulnlab-validate-sqli-api-route-live-oracle",
     "vulnlab-validate-sqli-live-oracle",
+    "vulnlab-validate-ssti-api-route-live-oracle",
+    "vulnlab-validate-ssti-live-oracle",
     "vulnlab-validate-upload-live-oracle",
     "vulnlab-validate-xss-live-oracle",
     "vulnlab-xss-reflected-route-live-oracle",
