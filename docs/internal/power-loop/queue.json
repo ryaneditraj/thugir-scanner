@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T07:22:00.000Z",
+  "updated_at": "2026-08-30T08:14:00.000Z",
   "discovery_urls": [
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api/",
@@ -11185,6 +11185,31 @@
     {
       "url": "https://dvga.xplat-demo.threatx.io/graphiql",
       "source": "ThreatX DVGA public demo \u2014 GraphiQL introspection + injection oracle (dvga.xplat-demo.threatx.io)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.lab.pentest-forge.com/",
+      "source": "PentestForge Lab \u2014 hosted OWASP crAPI API Top 10 microservices (web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vampi.lab.pentest-forge.com/",
+      "source": "PentestForge Lab \u2014 VAmPI REST API vulnerability training (web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-6/",
+      "source": "the0x-pwn/lab-xss \u2014 HTML encoding weakness reflected XSS lab (learning gap 08 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-7/",
+      "source": "the0x-pwn/lab-xss \u2014 JS context XSS with character restrictions lab (learning gap 08 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/jwt",
+      "source": "zahidoverflow/damn-vulnerable-web-university \u2014 JWT algorithm confusion lab (web search 08 UTC)",
       "auth": "public_demo"
     }
   ]
