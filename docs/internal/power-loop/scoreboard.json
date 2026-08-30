@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T11:51:30.588Z",
+  "updated_at": "2026-08-30T11:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,19 +16,19 @@
     }
   },
   "total_sites_scanned": 3170,
-  "total_findings": 32625,
+  "total_findings": 32486,
   "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2078,
-  "discovery_findings": 26377,
-  "improvements_shipped": 1055,
-  "last_run": "2026-08-30T11:51:30.588Z",
+  "discovery_findings": 26401,
+  "improvements_shipped": 1058,
+  "last_run": "2026-08-30T11:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,42 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)"
+      "note": "Stable 6/6 first-pass recall (50 findings); no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
+      "urls_added": 0,
       "urls_scanned": 8,
-      "findings": 81,
-      "focus": "oopssec aes-cbc-padding-oracle + stored-xss/brute-force/password-reset/open-redirect (queued) + priority drain the0x-pwn lab-7 + dvwu JWT + oopssec second-order/ssrf/xxe + fauxbank login/transfer",
-      "improvements_shipped_this_run": 1
+      "findings": 121,
+      "focus": "yogsec XSS labs 24-26 route oracles + nodegoat/finbot priority drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles, gap=[])",
-      "koadt.github.io/.../aes-cbc-padding-oracle-forged-share-token/: 11 findings — oopssec-aes-cbc-padding-oracle-route-live-oracle confirmed",
-      "pentest-fauxbank.vercel.app/api/auth/login: 16 findings — fauxbank-auth-login-route-live-oracle",
-      "pentest-fauxbank.vercel.app/api/transfer: 15 findings — fauxbank-transfer-route-live-oracle + loans-negative-amount",
-      "dvwu.vercel.app/labs/jwt: 12 findings — JWT lab hub",
-      "koadt.github.io/.../second-order-sql-injection/: 8 findings — oopssec-second-order-sqli-route-live-oracle",
-      "koadt.github.io/.../xxe-supplier-order-import/: 8 findings — oopssec-xxe-supplier-import-route-live-oracle",
-      "the0x-pwn.github.io/lab-xss/lab-7/: 5 findings — XSS lab module"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
+      "yogsec.github.io/xss-labs/labs/lab24.html: 7→8 findings (+yogsec-xss-lab24-outerhtml-route-live-oracle)",
+      "yogsec.github.io/xss-labs/labs/lab25.html: 7→8 findings (+yogsec-xss-lab25-eval-route-live-oracle)",
+      "yogsec.github.io/xss-labs/labs/lab26.html: 7→8 findings (+yogsec-xss-lab26-settimeout-route-live-oracle)",
+      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools: 25 findings (finmail MCP oracles confirmed)",
+      "nodegoat-websec.herokuapp.com/contributions|research|memos: 16 findings each"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "priority_discovery_urls preempted queue head — client-side-price/live-stream-hijack/supply-chain-poisoned/information-disclosure-api-error/mcp-malicious-server + stored-xss/brute-force/password-reset/open-redirect still pending drain",
-      "oopssec walkthrough pages are GitHub Pages docs — route oracles confirm walkthrough text but live /api/* exploitation requires local docker deploy"
+      "yogsec labs 27-29 (setInterval, Function constructor, javascript: href) still lack route-specific live oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
-    "pentest-fauxbank.vercel.app/api/auth/login": 16,
-    "pentest-fauxbank.vercel.app/api/transfer": 15,
-    "dvwu.vercel.app/labs/jwt": 12,
-    "koadt.github.io/oss-oopssec-store/posts/aes-cbc-padding-oracle-forged-share-token": 11,
-    "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection": 8,
-    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import": 8,
-    "koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access": 6,
-    "the0x-pwn.github.io/lab-xss/lab-7": 5
+    "juice-shop.herokuapp.com": 50,
+    "yogsec.github.io/xss-labs/labs/lab24.html": 8,
+    "yogsec.github.io/xss-labs/labs/lab25.html": 8,
+    "yogsec.github.io/xss-labs/labs/lab26.html": 8,
+    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools": 25,
+    "nodegoat-websec.herokuapp.com/contributions": 16,
+    "nodegoat-websec.herokuapp.com/research": 16,
+    "nodegoat-websec.herokuapp.com/memos": 16
   }
 }

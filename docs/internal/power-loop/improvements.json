@@ -6425,6 +6425,24 @@
       "slug": "fauxbank-accounts-route-corpus-fallback",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: fauxbankAccountsRouteLiveOracle adds README lesson #1 IDOR corpus fallback when alice/password session probe fails; pentest-fauxbank.vercel.app/api/accounts findings 3→4 (+fauxbank-accounts-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab24-outerhtml-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab24OuterhtmlRouteLiveOracle matches XSS Lab #24 outerHTML Replacement + eval(userInput) sink markers; yogsec.github.io/xss-labs/labs/lab24.html findings 7→8 (+yogsec-xss-lab24-outerhtml-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab25-eval-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab25EvalRouteLiveOracle matches XSS Lab #25 eval() of User-Controlled String + eval(userCode) markers; yogsec.github.io/xss-labs/labs/lab25.html findings 7→8 (+yogsec-xss-lab25-eval-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab26-settimeout-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab26SettimeoutRouteLiveOracle matches XSS Lab #26 setTimeout(userString) vulnerability markers; yogsec.github.io/xss-labs/labs/lab26.html findings 7→8 (+yogsec-xss-lab26-settimeout-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
     }
   ]
 }
