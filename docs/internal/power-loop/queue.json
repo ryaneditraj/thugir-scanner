@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T08:14:00.000Z",
+  "updated_at": "2026-08-30T09:10:00.000Z",
   "discovery_urls": [
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api/",
@@ -11210,6 +11210,31 @@
     {
       "url": "https://dvwu.vercel.app/labs/jwt",
       "source": "zahidoverflow/damn-vulnerable-web-university \u2014 JWT algorithm confusion lab (web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection/",
+      "source": "kOaDT/oss-oopssec-store \u2014 second-order SQLi walkthrough POST /api/orders then admin search (OSS roadmap ch.05)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access/",
+      "source": "kOaDT/oss-oopssec-store \u2014 SSRF internal page oracle POST /api/fetch-url (OSS roadmap ch.08)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import/",
+      "source": "kOaDT/oss-oopssec-store \u2014 XXE supplier order import walkthrough POST /api/orders/import (OSS roadmap ch.06)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/auth/login",
+      "source": "alfredang/pentest FauxBank \u2014 weak login API oracle POST /api/auth/login (Vercel public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/transfer",
+      "source": "alfredang/pentest FauxBank \u2014 CSRF transfer API oracle POST /api/transfer without token (Vercel public demo)",
       "auth": "public_demo"
     }
   ]
