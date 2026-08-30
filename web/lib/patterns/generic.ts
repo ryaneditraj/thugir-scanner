@@ -48700,6 +48700,60 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-darklab-finbank-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinBank MCP tools write live oracle",
+    description:
+      "PUT /darklab/api/v1/supply-chain/servers/finbank/tools accepts MCP tool definition updates for get_account_balance — supply-chain tool-poisoning write surface.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinbankToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinBank MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finbank/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes a writable MCP tool API at /finbank/tools. Show how to protect agentic banking tool catalogs from supply-chain poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finbank-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinBank /tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/finbank/tools, PUT confirms MCP tool-poisoning write API for FinBank get_account_balance tool definitions.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinbankToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinBank MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finbank/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /finbank/tools route scan confirms writable MCP tool definitions. Show remediation for agentic supply-chain tool poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-darklab-finmail-server-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -53930,6 +53984,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /posts/xxe-supplier-order-import route documents XXE via POST /api/admin/suppliers/import-order. Show XML parser hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-react2shell-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "OopsSec Store React2Shell CVE-2025-55182 walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/react2shell-cve-2025-55182 documents CVE-2025-55182 Flight protocol deserialization RCE via constructor property chain in React Server Components.",
+    impactOneline:
+      "Public walkthrough teaches unauthenticated server-side code execution via malicious Flight protocol payloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecReact2shellEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade React and Next.js to patched versions that validate Flight deserialization property names.",
+      steps: [
+        "Upgrade React to the latest patched release addressing CVE-2025-55182.",
+        "Upgrade Next.js and redeploy all RSC-enabled applications.",
+        "Run OopsSec RCE walkthroughs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our React Server Components Flight deserializer trusts client-controlled property names. Show CVE-2025-55182 patching and deserialization hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-react2shell-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "OopsSec Store React2Shell route live oracle",
+    description:
+      "When scanning /posts/react2shell-cve-2025-55182, the walkthrough documents CVE-2025-55182 Flight protocol deserialization reaching Function constructor for unauthenticated RCE — route-specific RSC oracle.",
+    impactOneline:
+      "OopsSec React2Shell lab confirms attacker-controlled Flight payloads execute arbitrary server-side JavaScript.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecReact2shellRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade React/Next.js and restrict Flight deserialization to allowlisted property names.",
+      steps: [
+        "Patch React and Next.js to versions fixing CVE-2025-55182.",
+        "Validate property names during Flight deserialization with own-property checks.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/react2shell-cve-2025-55182 route documents Flight protocol RCE. Show route-specific RSC deserialization hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-malicious-file-upload-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "OopsSec Store malicious SVG upload walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/malicious-file-upload-stored-xss documents stored XSS via SVG upload to admin product image field served at /api/uploads with <object> tag script execution.",
+    impactOneline:
+      "Public walkthrough teaches stored XSS when SVG uploads with embedded scripts are rendered via <object> tags on product pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecMaliciousFileUploadEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject SVG uploads or sanitize/strip script handlers; serve uploads with Content-Disposition attachment.",
+      steps: [
+        "Allow only raster image formats (PNG/JPEG/WebP) for product image uploads.",
+        "Sanitize SVG with DOMPurify server-side before saving if SVG support is required.",
+        "Serve user uploads from a separate origin without script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/products image upload accepts SVG with executable scripts served via <object>. Show upload validation and safe rendering remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-malicious-file-upload-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "OopsSec Store malicious SVG upload route live oracle",
+    description:
+      "When scanning /posts/malicious-file-upload-stored-xss, the walkthrough documents stored XSS via SVG upload to /admin/products served at /api/uploads with <object> tag execution — route-specific file-upload XSS oracle.",
+    impactOneline:
+      "OopsSec admin product image upload stores malicious SVG that executes JavaScript for every visitor viewing the product.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecMaliciousFileUploadStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject SVG uploads or sanitize before serving; use <img> instead of <object> for untrusted SVG.",
+      steps: [
+        "Block SVG uploads or strip script/event handlers server-side.",
+        "Render product images with safe tags that do not execute embedded scripts.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/malicious-file-upload-stored-xss route documents SVG stored XSS. Show route-specific upload validation fixes.",
     version: 1,
     enabled: true
   },

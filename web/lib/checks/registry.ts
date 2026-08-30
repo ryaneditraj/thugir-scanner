@@ -26161,6 +26161,135 @@ const oopssecXxeSupplierImportRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store React2Shell walkthrough (posts/react2shell-cve-2025-55182) -----------
+const CLIENT_OOPSSEC_REACT2SHELL_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "React2Shell CVE-2025-55182 title",
+    re: /React2Shell:[\s\S]{0,80}CVE-2025-55182/i
+  },
+  {
+    label: "Flight protocol RSC deserialization",
+    re: /Flight protocol|React Server Components \(RSC\)|deserialization logic/i
+  },
+  {
+    label: "Function constructor prototype chain exploit",
+    re: /chunk\.constructor\.constructor === Function|Function\("malicious code"\)/i
+  },
+  {
+    label: "OSS react2shell flag",
+    re: /OSS\{r3act2sh3ll\}/i
+  },
+  {
+    label: "React2Shell walkthrough route",
+    re: /\/posts\/react2shell-cve-2025-55182/i
+  }
+];
+
+const clientSideOopssecReact2shellEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_REACT2SHELL_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|React2Shell|CVE-2025-55182|Flight protocol/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents CVE-2025-55182 React2Shell — Flight protocol deserialization reaches Function constructor for unauthenticated RCE"
+    }
+  };
+};
+
+const oopssecReact2shellRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/react2shell-cve-2025-55182/i.test(pageUrl)) return NEGATIVE;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecReact2shellEvidence
+  );
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/react2shell-cve-2025-55182 route scan — walkthrough documents CVE-2025-55182 Flight protocol deserialization RCE via constructor property chain"
+    }
+  };
+};
+
+// --- OopsSec Store malicious SVG upload walkthrough (posts/malicious-file-upload-stored-xss)
+const CLIENT_OOPSSEC_MALICIOUS_FILE_UPLOAD_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Malicious file upload SVG XSS title",
+    re: /Malicious File Upload:[\s\S]{0,80}Stored XSS via SVG/i
+  },
+  {
+    label: "Admin product image SVG upload",
+    re: /admin panel.*upload product images|upload product images, including SVGs/i
+  },
+  {
+    label: "object tag executes SVG scripts",
+    re: /renders SVGs with an <object> tag|executes embedded scripts/i
+  },
+  {
+    label: "/api/uploads SVG served path",
+    re: /\/api\/uploads\/\[filename\]\.svg|product\.imageUrl/i
+  },
+  {
+    label: "Malicious file upload walkthrough route",
+    re: /\/posts\/malicious-file-upload-stored-xss/i
+  }
+];
+
+const clientSideOopssecMaliciousFileUploadEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_MALICIOUS_FILE_UPLOAD_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|SVG|file upload|stored XSS|\/admin\/products/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents stored XSS via malicious SVG upload to admin product image field — /api/uploads serves SVG with executable <script> via <object> tag"
+    }
+  };
+};
+
+const oopssecMaliciousFileUploadStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/malicious-file-upload-stored-xss/i.test(pageUrl)) return NEGATIVE;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecMaliciousFileUploadEvidence
+  );
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/malicious-file-upload-stored-xss route scan — walkthrough documents stored XSS via SVG upload to /admin/products served at /api/uploads with <object> tag script execution"
+    }
+  };
+};
+
 // --- Pwned Labs cloud security training platform (pwnedlabs.io) -----------------------
 const CLIENT_PWNEDLABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -97279,6 +97408,44 @@ const finbotDarklabFindriveToolsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeFinbotDarklabFinbankToolsWrite(ctx: RuleContext): Promise<RuleResult | null> {
+  return probeFinbotDarklabServerToolsWrite(ctx, "finbank", {
+    name: "get_account_balance",
+    description: "thugir-tool-poison-probe — indirect prompt injection surface for FinBank MCP",
+    parameters: {
+      type: "object",
+      properties: {
+        account_id: { type: "string" }
+      },
+      required: ["account_id"]
+    }
+  });
+}
+
+const finbotDarklabFinbankToolsLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabFinbankToolsWrite(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabFinbankToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/servers\/finbank\/tools\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabFinbankToolsWrite(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "OWASP FinBot FinBank /tools route scan — public MCP tool write API enables supply-chain tool-poisoning labs (issue #544)"
+    }
+  };
+};
+
 async function probeFinbotDarklabNamedServer(
   ctx: RuleContext,
   serverSlug: string,
@@ -103172,6 +103339,8 @@ export const RULES: Record<string, Rule> = {
   finbotDarklabFinmailToolsRouteLiveOracle,
   finbotDarklabFindriveToolsLiveOracle,
   finbotDarklabFindriveToolsRouteLiveOracle,
+  finbotDarklabFinbankToolsLiveOracle,
+  finbotDarklabFinbankToolsRouteLiveOracle,
   finbotDarklabFinmailServerLiveOracle,
   finbotDarklabFinmailServerRouteLiveOracle,
   finbotDarklabFinmailResetToolsLiveOracle,
@@ -104127,6 +104296,10 @@ export const RULES: Record<string, Rule> = {
   oopssecBruteForceNoRateLimitRouteLiveOracle,
   clientSideOopssecXxeSupplierImportEvidence,
   oopssecXxeSupplierImportRouteLiveOracle,
+  clientSideOopssecReact2shellEvidence,
+  oopssecReact2shellRouteLiveOracle,
+  clientSideOopssecMaliciousFileUploadEvidence,
+  oopssecMaliciousFileUploadStoredXssRouteLiveOracle,
   clientSideVoidsecShoppingCartEvidence,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,

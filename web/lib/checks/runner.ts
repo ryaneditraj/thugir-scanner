@@ -2337,6 +2337,8 @@ const DEEP_RULES = new Set<string>([
   "oopssecBruteForceNoRateLimitRouteLiveOracle",
   "clientSideOopssecXxeSupplierImportEvidence",
   "oopssecXxeSupplierImportRouteLiveOracle",
+  "oopssecReact2shellRouteLiveOracle",
+  "oopssecMaliciousFileUploadStoredXssRouteLiveOracle",
   "oopssecRoadmapRouteLiveOracle",
   "oopssecStoreHomeRouteLiveOracle",
   "clientSideVoidsecShoppingCartEvidence",
@@ -2902,6 +2904,8 @@ const DEEP_RULES = new Set<string>([
   "finbotDarklabFinmailToolsRouteLiveOracle",
   "finbotDarklabFindriveToolsLiveOracle",
   "finbotDarklabFindriveToolsRouteLiveOracle",
+  "finbotDarklabFinbankToolsLiveOracle",
+  "finbotDarklabFinbankToolsRouteLiveOracle",
   "finbotDarklabFinmailServerLiveOracle",
   "finbotDarklabFinmailServerRouteLiveOracle",
   "finbotDarklabFinmailResetToolsLiveOracle",
@@ -15386,6 +15390,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /owasp-finbot-ctf\.org/i.test(origin) &&
         /\/darklab\/api\/v1\/supply-chain\/servers\/findrive\/tools\b/i.test(targetInput) &&
         p.slug.startsWith("finbot-darklab-findrive-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/finbank\/tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-finbank-tools")
       )
         return -5;
       if (
