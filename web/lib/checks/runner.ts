@@ -1791,6 +1791,8 @@ const DEEP_RULES = new Set<string>([
   "chimeraClaimsSubmitRouteLiveOracle",
   "chimeraHealthcareRecordsExportRouteLiveOracle",
   "chimeraClaimsAmountsInflateRouteLiveOracle",
+  "chimeraBankingAccountsSearchSqliRouteLiveOracle",
+  "chimeraInsurancePoliciesLookupSqliRouteLiveOracle",
   "chimeraSwaggerRouteLiveOracle",
   "chimeraApiReferenceRouteLiveOracle",
   "chimeraFedrampOpenapiExtensionsRouteLiveOracle",
@@ -2288,12 +2290,14 @@ const DEEP_RULES = new Set<string>([
   "clientSideOopssecRaceConditionEvidence",
   "clientSideOopssecPriceManipulationEvidence",
   "clientSideOopssecXffSqliEvidence",
+  "clientSideOopssecBolaWishlistEvidence",
   "clientSideOopssecProductSearchSqliEvidence",
   "clientSideOopssecSecondOrderSqliEvidence",
   "oopssecSecondOrderSqliRouteLiveOracle",
   "clientSideOopssecStoredXssReviewsEvidence",
   "oopssecXffSqliRouteLiveOracle",
   "oopssecLiveStreamBflaRouteLiveOracle",
+  "oopssecBolaWishlistRouteLiveOracle",
   "oopssecProductSearchSqliRouteLiveOracle",
   "oopssecStoredXssReviewsRouteLiveOracle",
   "oopssecRaceConditionCouponRouteLiveOracle",
@@ -12244,6 +12248,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/banking\/accounts\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-banking-accounts-search")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/insurance\/policies\/lookup\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-insurance-policies-lookup")
+      )
+        return -3;
+      if (
         /ssti\.vulnlab\.dev/i.test(origin) &&
         /\/sandboxed\b/i.test(targetInput) &&
         p.slug.startsWith("ssti-vulnlab-sandboxed")
@@ -13076,6 +13092,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
         /\/posts\/x-forwarded-for-sql-injection/i.test(targetInput) &&
         p.slug.startsWith("oopssec-xff-sqli")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/bola-wishlist-access/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-bola-wishlist")
       )
         return -4;
       if (

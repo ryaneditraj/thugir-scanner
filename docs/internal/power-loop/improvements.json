@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-banking-accounts-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chimeraBankingAccountsSearchSqliRouteLiveOracle matches GET /api/v1/banking/accounts/search?account_number= UNION-based SQLi from vuln-api README corpus fallback; chimera.atlascrew.dev/api/v1/banking/accounts/search findings 5→6 (+chimera-banking-accounts-search-sqli-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-insurance-policies-lookup-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chimeraInsurancePoliciesLookupSqliRouteLiveOracle matches GET /api/v1/insurance/policies/lookup?policy_number= blind boolean SQLi from vuln-api README corpus fallback; chimera.atlascrew.dev/api/v1/insurance/policies/lookup findings 5→6 (+chimera-insurance-policies-lookup-sqli-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-bola-wishlist-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/wishlists/wl-internal-001 walkthrough documents missing ownership check on GET /api/wishlists/[id]; koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access findings 4→5 (+oopssec-bola-wishlist-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
       "slug": "chimera-claims-submit-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: chimeraClaimsSubmitRouteLiveOracle matches POST /api/claims/submit Claims submission + Claims Processing from endpoints-catalog corpus; chimera.atlascrew.dev/api/claims/submit findings 5→5 (+chimera-claims-submit-route-live-oracle, -generic patients-search host oracle); benchmark juice-shop 51 findings 6/6 maintained"

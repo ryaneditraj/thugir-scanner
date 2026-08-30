@@ -15004,6 +15004,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-banking-accounts-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera banking account search SQLi route live oracle",
+    description:
+      "When scanning /api/v1/banking/accounts/search on chimera.atlascrew.dev, the vuln-api README documents UNION-based SQLi via account_number query parameter when USE_DATABASE=true — route-specific banking SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional UNION-based SQL injection on the banking account search endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraBankingAccountsSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries on account search endpoints.",
+        "Validate account_number format server-side before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/banking/accounts/search route documents UNION-based SQLi via account_number. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-insurance-policies-lookup-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera insurance policy lookup SQLi route live oracle",
+    description:
+      "When scanning /api/v1/insurance/policies/lookup on chimera.atlascrew.dev, the vuln-api README documents blind boolean SQLi via policy_number query parameter when USE_DATABASE=true — route-specific insurance SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional blind boolean SQL injection on the insurance policy lookup endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraInsurancePoliciesLookupSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries on policy lookup endpoints.",
+        "Validate policy_number format server-side before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/insurance/policies/lookup route documents blind boolean SQLi via policy_number. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-swagger-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -52994,6 +53046,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/live/stream endpoint allows any authenticated user to read RTMP keys and hijack the broadcast. Show BFLA remediation for stream management APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-bola-wishlist-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store BOLA wishlist route live oracle",
+    description:
+      "When scanning /posts/bola-wishlist-access, the walkthrough documents missing ownership verification on GET /api/wishlists/[id] — any authenticated user can read wl-internal-001 admin wishlist notes — route-specific BOLA oracle.",
+    impactOneline:
+      "OopsSec wishlist API authenticates users but never verifies wishlist ownership — cross-user wishlist reads including admin internal notes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecBolaWishlistRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — compare wishlist.userId to user.id before returning data.",
+      steps: [
+        "Verify wishlist.userId matches the authenticated user before returning wishlist contents.",
+        "Apply the same ownership check consistently across GET and DELETE handlers.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/wishlists/[id] endpoint returns any wishlist without ownership checks. Show BOLA remediation for wishlist reads.",
     version: 1,
     enabled: true
   },
