@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T15:05:00.000Z",
+  "updated_at": "2026-08-30T16:07:04.645Z",
   "discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/mcp",
+      "source": "OWASP WrongSecrets challenge-60 — insecure MCP server POST /mcp execute_command env leak (Heroku public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/loans",
+      "source": "alfredang/pentest FauxBank — negative loan amount business-logic oracle POST /api/loans (Vercel README module)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/profile",
+      "source": "alfredang/pentest FauxBank — sensitive data exposure oracle GET /api/profile (OWASP scenario 4)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/support",
+      "source": "alfredang/pentest FauxBank — stored XSS support tickets oracle POST /api/support (OWASP scenario 3)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/deserialization",
+      "source": "AI Security Platform — insecure deserialization live demo challenge (Vercel OSS deploy; web search 16 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/transfers/wire",
       "source": "atlas-crew/Chimera — wire transfer business-logic / auth bypass oracle POST /api/v1/transfers/wire (endpoints catalog)",
