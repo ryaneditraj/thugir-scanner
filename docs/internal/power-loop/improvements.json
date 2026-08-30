@@ -6461,6 +6461,24 @@
       "slug": "yogsec-xss-lab29-javascript-href-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab29JavascriptHrefRouteLiveOracle matches XSS Lab #29 javascript: Pseudo-Protocol in location.href + location.href = javascript: markers; yogsec.github.io/xss-labs/labs/lab29.html findings 7→8 (+yogsec-xss-lab29-javascript-href-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab30-dynamic-script-src-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab30DynamicScriptSrcRouteLiveOracle matches XSS Lab #30 Dynamic script src + document.createElement('script') + script.src = scriptUrl markers; yogsec.github.io/xss-labs/labs/lab30.html findings 6→7 (+yogsec-xss-lab30-dynamic-script-src-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab31-onclick-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab31OnclickRouteLiveOracle matches XSS Lab #31 onclick Attribute Injection + button.onclick = new Function(userCode) markers; yogsec.github.io/xss-labs/labs/lab31.html findings 7→8 (+yogsec-xss-lab31-onclick-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab32-onmouseover-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab32OnmouseoverRouteLiveOracle matches XSS Lab #32 onmouseover Injection + setAttribute('onmouseover', userCode) markers; yogsec.github.io/xss-labs/labs/lab32.html findings 7→8 (+yogsec-xss-lab32-onmouseover-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
     }
   ]
 }

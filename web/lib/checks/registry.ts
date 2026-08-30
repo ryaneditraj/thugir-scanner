@@ -56771,6 +56771,51 @@ const yogsecXssLab29JavascriptHrefRouteLiveOracle: Rule = async (ctx) =>
     "yogsec XSS Lab #29 route scan — location.href = javascript: URLs and href=javascript: links execute attacker code — URL-based XSS training sink"
   );
 
+const yogsecXssLab30DynamicScriptSrcRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    30,
+    [
+      {
+        label: "dynamic script src lab title",
+        re: /XSS Lab #30:\s*Dynamic\s*(?:<script src>|&lt;script src&gt;)?\s*with User Parameter/i
+      },
+      { label: "createElement script src heading", re: /Dynamic with User Parameter|LOAD SCRIPT \(createElement \+ src\)/i },
+      { label: "createElement script src sink", re: /document\.createElement\(['"]script['"]\)|script\.src\s*=\s*scriptUrl|script\.src\s*=\s*userLib/i },
+      { label: "extremely dangerous script src disclaimer", re: /EXTREMELY DANGEROUS.*user-controlled.*src|NEVER let users control script src/i }
+    ],
+    "yogsec XSS Lab #30 route scan — document.createElement('script') + script.src = userInput loads remote code — DOM XSS training sink"
+  );
+
+const yogsecXssLab31OnclickRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    31,
+    [
+      { label: "onclick injection lab title", re: /XSS Lab #31:\s*onclick Attribute Injection/i },
+      { label: "onclick attribute injection heading", re: /onclick Attribute Injection/i },
+      { label: "onclick Function userCode sink", re: /button\.onclick\s*=\s*new Function\(userCode\)|onclick\s*=\s*new Function/i },
+      { label: "click trigger XSS button", re: /CLICK ME - TRIGGER XSS|Inject onclick/i }
+    ],
+    "yogsec XSS Lab #31 route scan — button.onclick = new Function(userCode) executes attacker code on click — DOM XSS training sink"
+  );
+
+const yogsecXssLab32OnmouseoverRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    32,
+    [
+      { label: "onmouseover injection lab title", re: /XSS Lab #32:\s*onmouseover Injection/i },
+      { label: "onmouseover attribute injection heading", re: /onmouseover Injection/i },
+      {
+        label: "onmouseover setAttribute sink",
+        re: /setAttribute\(['"]onmouseover['"],\s*userCode\)|element\.onmouseover\s*=\s*userCode/i
+      },
+      { label: "hover trigger XSS box", re: /HOVER OVER ME|Inject onmouseover/i }
+    ],
+    "yogsec XSS Lab #32 route scan — setAttribute('onmouseover', userCode) executes attacker code on hover — DOM XSS training sink"
+  );
+
 // --- the0x-pwn XSS Labs (the0x-pwn.github.io/lab-xss — 10 reflected/DOM challenges) ----
 const CLIENT_THE0X_PWN_XSS_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -101687,6 +101732,9 @@ export const RULES: Record<string, Rule> = {
   yogsecXssLab27SetintervalRouteLiveOracle,
   yogsecXssLab28FunctionRouteLiveOracle,
   yogsecXssLab29JavascriptHrefRouteLiveOracle,
+  yogsecXssLab30DynamicScriptSrcRouteLiveOracle,
+  yogsecXssLab31OnclickRouteLiveOracle,
+  yogsecXssLab32OnmouseoverRouteLiveOracle,
   clientSideThe0xPwnXssLabsEvidence,
   clientSideThe0xPwnXssQueryParamLabEvidence,
   clientSideThe0xPwnXssDomHashLabEvidence,
