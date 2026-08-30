@@ -3650,6 +3650,7 @@ const DEEP_RULES = new Set<string>([
   "xssGameLevel6DomScriptSrcXssRouteLiveOracle",
   "clientSideSentinelAiEvidence",
   "clientSideNodegoatEvidence",
+  "nodegoatTutorialHubRouteLiveOracle",
   "nodegoatTutorialA2RouteLiveOracle",
   "nodegoatTutorialA3RouteLiveOracle",
   "nodegoatTutorialA1RouteLiveOracle",
@@ -14927,6 +14928,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
         /\/benefits\b/i.test(targetInput) &&
         p.slug.startsWith("nodegoat-benefits-bac")
+      )
+        return -4;
+      if (
+        /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
+        /\/tutorial\/?(?:$|[?#])/i.test(targetInput) &&
+        !/\/tutorial\/(?:a\d|ssrf|redos)\b/i.test(targetInput) &&
+        p.slug.startsWith("nodegoat-tutorial-hub")
       )
         return -4;
       if (

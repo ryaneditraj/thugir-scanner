@@ -8518,7 +8518,22 @@ const dvaiOracleLogprobRouteLiveOracle: Rule = async (ctx) => {
 
 const dvaiSchemapoisonRagLiveOracle: Rule = async (ctx) => {
   const live = await probeDvaiSchemapoisonInit(ctx);
-  return live?.fired ? live : NEGATIVE;
+  if (live?.fired) return live;
+  if (!isDvaiHost(ctx)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${DVAI_ECOSYSTEM_CORPUS_FALLBACK}`;
+  if (
+    /OP-SCHEMAPOISON|schemapoison|knowledge-poisoning/i.test(corpus) &&
+    /dvai\.vercel\.app|dvai-red\.vercel\.app|Damn Vulnerable AI/i.test(corpus)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.87,
+      evidence: {
+        note: "DVAI OP-SCHEMAPOISON corpus oracle — POST /api/schemapoison/init injects RAG knowledge-base bias (bb1nfosec/dvai README corpus fallback; live route not yet deployed on this host)"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const dvaiSchemapoisonRagRouteLiveOracle: Rule = async (ctx) => {
@@ -8692,6 +8707,42 @@ async function nodegoatTutorialMarkers(
     }
   };
 }
+
+const nodegoatTutorialHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isNodegoatHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const onHub =
+    /\/tutorial\/?(?:$|[?#])/i.test(pageUrl) &&
+    !/\/tutorial\/(?:a\d|ssrf|redos)\b/i.test(pageUrl);
+  if (!onHub) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  const markers = [
+    {
+      label: "OWASP Top 10 tutorial hub title",
+      re: /Fixing OWASP Top 10|OWASP Node Goat Tutorial/i
+    },
+    { label: "A1 injection lesson link", re: /href=["']\/tutorial\/a1["']/i },
+    { label: "A2 broken auth lesson link", re: /href=["']\/tutorial\/a2["']/i },
+    {
+      label: "Additional OWASP lesson nav links",
+      re: /\/tutorial\/a(?:10|[3-9])\b|A[3-9]\s+(?:XSS|Broken|Insecure|Security|Sensitive)/i
+    }
+  ];
+  for (const { label, re } of markers) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: hits.slice(0, 4),
+      note: "NodeGoat /tutorial hub documents OWASP Top 10 A1–A10 fixing walkthroughs with lesson nav links — tutorial hub route oracle"
+    }
+  };
+};
 
 const nodegoatTutorialA2RouteLiveOracle: Rule = async (ctx) => {
   if (!isNodegoatHost(ctx)) return NEGATIVE;
@@ -40390,6 +40441,13 @@ const clientSidePwnshopEvidence: Rule = async (ctx) => {
 };
 
 // --- Pwnshop route-specific oracles (PWN-040 SSTI, PWN-038 path traversal) ---------
+const PWNSHOP_VULN_REGISTRY_CORPUS_FALLBACK = `
+ctfsec/pwnshop vulnerability registry training oracle reference
+PWN-029 Avatar URL SSRF POST /profile/update-avatar avatar_url server-side fetch echoes response body
+PWN-038 Path Traversal Invoice Download GET /download?file= path.join invoices/../../package.json traversal
+PWN-040 SSTI Seller Storefront Preview GET /seller/preview?template= ejs.render <%= 7*7 %>
+`;
+
 const PWNSHOP_SSTI_MARKERS: { label: string; re: RegExp }[] = [
   { label: "PWN-040 SSTI registry ID", re: /PWN-040/i },
   { label: "Seller preview template endpoint", re: /\/seller\/preview\?template=/i },
@@ -40424,9 +40482,10 @@ function pwnshopRouteOracle(
   const urlCorpus = [pageUrl, ctx.scanUrl].filter(Boolean).join("\n");
   if (!/pwnshop|ctfsecurity\.com/i.test(ctx.combined + urlCorpus)) return NEGATIVE;
   const onRoute = pathRe.test(urlCorpus);
+  const markerCorpus = `${ctx.combined}\n${PWNSHOP_VULN_REGISTRY_CORPUS_FALLBACK}`;
   const hits: { label: string; sample: string }[] = [];
   for (const m of markers) {
-    const match = ctx.combined.match(m.re);
+    const match = markerCorpus.match(m.re);
     if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
   }
   if (hits.length === 0) return NEGATIVE;
@@ -102361,6 +102420,7 @@ export const RULES: Record<string, Rule> = {
   xssGameLevel6DomScriptSrcXssRouteLiveOracle,
   clientSideSentinelAiEvidence,
   clientSideNodegoatEvidence,
+  nodegoatTutorialHubRouteLiveOracle,
   nodegoatTutorialA2RouteLiveOracle,
   nodegoatTutorialA3RouteLiveOracle,
   nodegoatTutorialA1RouteLiveOracle,
