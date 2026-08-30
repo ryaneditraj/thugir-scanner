@@ -11301,6 +11301,31 @@
       "url": "https://pentest-fauxbank.vercel.app/api/transfer",
       "source": "alfredang/pentest FauxBank — CSRF transfer API oracle POST /api/transfer without token (Vercel public demo)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/accounts/search?account_number=test",
+      "source": "atlas-crew/Chimera — UNION-based SQLi oracle GET /api/v1/banking/accounts/search (vuln-api README database mode)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/insurance/policies/lookup?policy_number=test",
+      "source": "atlas-crew/Chimera — blind boolean SQLi oracle GET /api/v1/insurance/policies/lookup (vuln-api README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/transactions/history?account_id=1",
+      "source": "atlas-crew/Chimera — time-based blind SQLi oracle GET /api/v1/transactions/history (vuln-api README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.testfire.net/login.jsp",
+      "source": "Altoro Mutual demo.testfire.net — classic banking login SQLi/XSS training target (IBM AppScan demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level18/",
+      "source": "websec.fr — timing attack / side-channel challenge level 18 (public CTF lab)",
+      "auth": "public_demo"
     }
   ]
 }
