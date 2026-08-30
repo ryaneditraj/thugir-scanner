@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T12:20:00.000Z",
+  "updated_at": "2026-08-30T13:18:33.516Z",
   "discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182/",
+      "source": "kOaDT/oss-oopssec-store — React2Shell CVE-2025-55182 RSC deserialization walkthrough (OSS roadmap ch.11)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ctf-challange-3.vercel.app/",
+      "source": "Gowreesh-VT/CTF_Challange_3 — Next.js middleware auth bypass lab hub (Vercel OSS deploy)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://yogsec.github.io/Open-Redirect/",
+      "source": "yogsec/Open-Redirect — open redirect parameter oracle demo (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://yogsec.github.io/Vulnerable-Shopping-Cart/",
+      "source": "yogsec/Vulnerable-Shopping-Cart — 16-vuln e-commerce cart with DOM XSS/IDOR/CSRF (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://yogsec.github.io/Vulnerable-Login/",
+      "source": "yogsec/Vulnerable-Login — SQLi auth-bypass login form demo (GitHub Pages README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://www.cyberhub.blog/ctf",
       "source": "Cyber Hub — OopsSec Store OSS CTF lab landing + local deploy instructions (web search 12 UTC)",
