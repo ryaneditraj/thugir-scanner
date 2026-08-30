@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T07:48:00.000Z",
+  "updated_at": "2026-08-30T08:23:01.418Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3119,
-  "total_findings": 31739,
+  "total_sites_scanned": 3128,
+  "total_findings": 31908,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2058,
-  "discovery_findings": 25864,
+  "discovery_urls_added": 2063,
+  "discovery_findings": 25982,
   "improvements_shipped": 1046,
-  "last_run": "2026-08-30T07:48:00.000Z",
+  "last_run": "2026-08-30T08:23:01.418Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 593,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,45 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)"
+      "note": "Stable 6/6 first-pass recall (51 findings, 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 130,
-      "focus": "PentestForge Mutillidae login + DVWA sqli/xss_d + ThreatX DVGA GraphiQL + FinBot vendor/ctf + vulnforge level14/15 + brokencrystals JWT none + the0x-pwn lab-1/4/5",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 118,
+      "focus": "FinBot darklab/supply-chain/vendor-chat + ginandjuice basket + vulnforge level16 + PentestForge mutillidae register + DVWA sqli/xss_d; queued crapi/vampi/the0x-pwn lab-6/7 + dvwu JWT for next drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 38 live oracles, gap=[])",
-      "owasp-finbot-ctf.org/vendor/onboarding: 25 findings — FinBot Dark Lab MCP supply-chain + vendor chat route oracles",
-      "owasp-finbot-ctf.org/ctf: 26 findings — FinBot CTF challenges route + sidecar route oracles",
-      "brokencrystals.com/api/auth/jwt/none/login: 42 findings — brokencrystals-jwt-none-login-route-live-oracle confirmed",
-      "the0x-pwn.github.io/lab-xss/lab-1/: 6 findings — the0x-pwn-xss-query-param-route-live-oracle confirmed",
-      "the0x-pwn.github.io/lab-xss/lab-4/: 5 findings — the0x-pwn-xss-filter-bypass-tags-route-live-oracle confirmed",
-      "the0x-pwn.github.io/lab-xss/lab-5/: 5 findings — the0x-pwn-xss-document-write-route-live-oracle confirmed",
-      "mutillidae.lab.pentest-forge.com/index.php?page=login.php: 1 finding — thin pass (no Mutillidae login SQLi route oracle)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 38 live oracles, gap=[])",
+      "ginandjuice.shop/api/basket: 36 findings — ginandjuice-basket-route-live-oracle + 25 ginandjuice live oracles (CSTI, XXE, IDOR, admin bypass)",
+      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers: 25 findings — finbot-darklab-supply-chain-route-live-oracle confirmed",
+      "owasp-finbot-ctf.org/vendor/api/v1/chat: 24 findings — finbot-vendor-chat-live-oracle confirmed",
+      "dvwa.lab.pentest-forge.com/vulnerabilities/sqli/: 2 findings — pentest-forge-dvwa-sqli-route-live-oracle confirmed",
+      "dvwa.lab.pentest-forge.com/vulnerabilities/xss_d/: 1 finding — thin pass (no DOM XSS route oracle)",
+      "mutillidae.lab.pentest-forge.com/index.php?page=register.php: 1 finding — thin pass (no Mutillidae register SQLi route oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "mutillidae.lab.pentest-forge.com login/register: thin 1-finding hub — PentestForge Mutillidae SQLi route oracles still absent",
-      "dvwa.lab.pentest-forge.com sqli/xss_d + dvga.xplat-demo graphiql queued but not yet drained this hour",
-      "the0x-pwn lab-6/7/10 route oracles still absent"
+      "dvwa.lab.pentest-forge.com/xss_d: thin 1-finding pass — PentestForge DVWA DOM XSS route oracle still absent",
+      "mutillidae.lab.pentest-forge.com register: thin 1-finding hub — Mutillidae registration SQLi route oracles still absent",
+      "crapi/vampi/the0x-pwn lab-6/7 + dvwu JWT + dvga graphiql queued at end — pending next drain"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
-    "brokencrystals.com/api/auth/jwt/none/login": 42,
-    "owasp-finbot-ctf.org/ctf": 26,
-    "owasp-finbot-ctf.org/vendor/onboarding": 25,
-    "the0x-pwn.github.io/lab-xss/lab-1/": 6,
-    "the0x-pwn.github.io/lab-xss/lab-3/": 5,
-    "the0x-pwn.github.io/lab-xss/lab-4/": 5,
-    "the0x-pwn.github.io/lab-xss/lab-5/": 5,
-    "the0x-pwn.github.io/lab-xss/lab-9/": 5,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php": 5,
-    "mutillidae.lab.pentest-forge.com/index.php?page=login.php": 1
+    "juice-shop.herokuapp.com": 51,
+    "ginandjuice.shop/api/basket": 36,
+    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers": 25,
+    "owasp-finbot-ctf.org/darklab": 24,
+    "owasp-finbot-ctf.org/vendor/api/v1/chat": 24,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php": 5,
+    "dvwa.lab.pentest-forge.com/vulnerabilities/sqli/": 2,
+    "dvwa.lab.pentest-forge.com/vulnerabilities/xss_d/": 1,
+    "mutillidae.lab.pentest-forge.com/index.php?page=register.php": 1
   }
 }
