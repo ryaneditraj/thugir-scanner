@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T04:12:00.000Z",
+  "updated_at": "2026-08-30T05:12:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card/",
+      "source": "kOaDT/oss-oopssec-store — insecure randomness gift-card LCG oracle walkthrough GET /api/gift-cards (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/",
+      "source": "kOaDT/oss-oopssec-store — signup mass-assignment admin role oracle POST /api/auth/signup (OSS README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/",
+      "source": "kOaDT/oss-oopssec-store — race-condition TOCTOU coupon abuse walkthrough POST /api/coupons/apply (GitHub Pages)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/messages",
+      "source": "FAST-NUCES SecureBank — stored XSS messages page attack-mode oracle (Vercel public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/oopssec-store/",
+      "source": "OWASP VWAD — OopsSec Store intentionally vulnerable e-commerce lab hub (vwad.owasp.org public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/a8",
       "source": "OWASP NodeGoat — A8 CSRF lesson hub with profile forgery + missing anti-CSRF token oracles (nodegoat-websec Heroku demo)",

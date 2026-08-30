@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T04:40:00.000Z",
+  "updated_at": "2026-08-30T05:13:26.138Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3085,
-  "total_findings": 31267,
+  "total_sites_scanned": 3094,
+  "total_findings": 31378,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2037,
-  "discovery_findings": 25592,
+  "discovery_urls_added": 2042,
+  "discovery_findings": 25653,
   "improvements_shipped": 1034,
-  "last_run": "2026-08-30T04:40:00.000Z",
+  "last_run": "2026-08-30T05:13:26.138Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -49,35 +49,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 38 juice-shop live oracles)"
+      "note": "Stable 6/6 first-pass recall (50 findings, 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 6,
-      "focus": "PentestForge mutillidae user-info + DVWA sqli_blind/xss_r corpus fallbacks when lab.pentest-forge.com returns 502",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 61,
+      "focus": "OopsSec Store gift-card randomness + mass-assignment + race-condition walkthroughs, SecureBank stored XSS messages, OWASP VWAD OopsSec hub",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "mutillidae.lab.pentest-forge.com/index.php?page=user-info.php: 1→2 findings (+pentest-forge-mutillidae-user-info-route-live-oracle)",
-      "dvwa.lab.pentest-forge.com/vulnerabilities/sqli_blind/: 2 findings (+pentest-forge-dvwa-sqli-blind-route-live-oracle)",
-      "dvwa.lab.pentest-forge.com/vulnerabilities/xss_r/: 1→2 findings (+pentest-forge-dvwa-xss-r-route-live-oracle)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
+      "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card/: 14 findings — oopssec-gift-card-randomness-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/: 8 findings — oopssec-mass-assignment-admin-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/: 11 findings — oopssec-race-condition-coupon-route-live-oracle",
+      "securebank-blog.vercel.app/messages: 3 findings — securebank-blog-messages-xss-route-live-oracle",
+      "vwad.owasp.org/app/oopssec-store/: 7 findings — vwad-oopssec-store-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/command-injection: 7 findings — ai-security-command-injection-route-live-oracle (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "PentestForge lab.pentest-forge.com shared infra still returns 502 — corpus fallbacks used for route oracles"
+      "OopsSec walkthrough pages are GitHub Pages docs — live oracles are corpus/route fallbacks referencing localhost deploy paths"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
+    "juice-shop.herokuapp.com": 50,
+    "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card/": 14,
+    "koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/": 8,
+    "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/": 11,
+    "securebank-blog.vercel.app/messages": 3,
+    "vwad.owasp.org/app/oopssec-store/": 7,
+    "ai-security-platform-iota.vercel.app/challenges/command-injection": 7,
     "mutillidae.lab.pentest-forge.com/index.php?page=user-info.php": 2,
     "dvwa.lab.pentest-forge.com/vulnerabilities/sqli_blind/": 2,
-    "dvwa.lab.pentest-forge.com/vulnerabilities/xss_r/": 2,
-    "dvwu.vercel.app/labs/sqli": 15,
-    "dvwu.vercel.app/labs/xss": 15,
-    "koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api/": 10
+    "dvwa.lab.pentest-forge.com/vulnerabilities/xss_r/": 2
   }
 }
