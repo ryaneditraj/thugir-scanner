@@ -10913,6 +10913,16 @@
   ],
   "priority_discovery_urls": [
     {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-3/",
+      "source": "the0x-pwn/lab-xss — DOM hash innerHTML XSS lab module (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-9/",
+      "source": "the0x-pwn/lab-xss — SVG-based script injection XSS lab module (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/",
       "source": "kOaDT/oss-oopssec-store \u2014 race-condition TOCTOU coupon abuse walkthrough with vulnerable code oracle",
       "auth": "oss_deploy"

@@ -30654,6 +30654,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the0x-pwn-xss-dom-hash-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn DOM hash innerHTML XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-3 on the0x-pwn.github.io, location.hash is decoded and assigned to resultQuery.innerHTML without sanitization — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-3 documents location.hash → innerHTML DOM XSS sink for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssDomHashRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign location.hash to innerHTML — use textContent in production.",
+      steps: [
+        "Decode hash fragments with textContent or DOMPurify instead of innerHTML.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-3 route documents DOM hash XSS. Show safe hash handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-document-write-lab-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -30908,6 +30933,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host the0x-pwn lab-9-style SVG injection XSS labs. Show proper sanitization and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the0x-pwn-xss-svg-script-injection-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn SVG script injection XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-9 on the0x-pwn.github.io, query is reflected into resultQuery.innerHTML when SVG/animatetransform tags are omitted from the blockTag denylist — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-9 documents SVG/animatetransform injection via partial tag filtering.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssSvgScriptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Incomplete SVG tag blocking leaves animatetransform event handlers exploitable via innerHTML.",
+      steps: [
+        "Replace innerHTML with textContent for reflected search results.",
+        "Use a strict HTML sanitizer that strips SVG event handlers.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-9 route documents SVG script injection XSS. Show proper sanitization remediation.",
     version: 1,
     enabled: true
   },

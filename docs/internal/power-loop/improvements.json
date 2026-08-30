@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:koadt.github.io",
+      "slug": "oopssec-xff-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/x-forwarded-for-sql-injection documents SQLi via unsanitized X-Forwarded-For header in POST /api/tracking; oopssecWalkthroughEvidenceWithFetch fetches Astro walkthrough when shallow crawl omits markers; koadt.github.io/.../x-forwarded-for-sql-injection findings 9 (+oopssec-xff-sqli-route-live-oracle +client-side-oopssec-xff-sqli-evidence); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "the0x-pwn-xss-dom-hash-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lab-xss/lab-3 decodeURIComponent(location.hash.slice(1)) assigned to resultQuery.innerHTML; the0x-pwn.github.io/lab-xss/lab-3/ findings 5 (+the0x-pwn-xss-dom-hash-route-live-oracle +client-side-the0x-pwn-xss-dom-hash-lab-evidence -reflexion-escalated-ssti); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "the0x-pwn-xss-svg-script-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lab-xss/lab-9 resultQuery.innerHTML=query with blockTag denylist omitting SVG/animatetransform onbegin payloads; the0x-pwn.github.io/lab-xss/lab-9/ findings 5 (+the0x-pwn-xss-svg-script-injection-route-live-oracle +client-side-the0x-pwn-xss-svg-script-injection-lab-evidence -reflexion-escalated-ssti); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
       "slug": "oopssec-race-condition-coupon-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /posts/race-condition-coupon-abuse documents TOCTOU coupon validation split across two DB calls via POST /api/coupons/redeem; koadt.github.io/.../race-condition-coupon-abuse findings 11 (+oopssec-race-condition-coupon-route-live-oracle +client-side-oopssec-race-condition-evidence); benchmark juice-shop 50 findings 6/6 maintained"

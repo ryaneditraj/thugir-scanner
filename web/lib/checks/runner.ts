@@ -2394,6 +2394,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideThe0xPwnXssSvgScriptInjectionLabEvidence",
   "the0xPwnXssTemplateLiteralRouteLiveOracle",
   "the0xPwnXssHrefAngleBracketsRouteLiveOracle",
+  "the0xPwnXssDomHashRouteLiveOracle",
+  "the0xPwnXssSvgScriptInjectionRouteLiveOracle",
   "clientSideMontanajimXssClassroomEvidence",
   "clientSideHackxorEvidence",
   "clientSidePygoatEvidence",
@@ -13013,6 +13015,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
         /\/lab-xss\/lab-8\/?/i.test(targetInput) &&
         p.slug.startsWith("the0x-pwn-xss-href-angle-brackets")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-3\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-dom-hash")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-9\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-svg-script-injection")
       )
         return -4;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
