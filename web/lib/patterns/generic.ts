@@ -30837,6 +30837,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "yogsec-xss-lab30-dynamic-script-src-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "critical",
+    title: "yogsec XSS Lab #30 dynamic script src route live oracle",
+    description:
+      "When scanning /labs/lab30.html, yogsec documents document.createElement('script') with user-controlled script.src — route-specific remote script injection training oracle.",
+    impactOneline:
+      "yogsec Lab #30 exposes dynamic script tag creation with attacker-controlled src for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab30DynamicScriptSrcRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never let users control script src attributes in production.",
+      steps: [
+        "Validate and allowlist script sources; block data: and blob: schemes for script tags.",
+        "Use Subresource Integrity (SRI) for third-party scripts.",
+        "Use Content-Security-Policy script-src to restrict script origins."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #30 route documents createElement('script') + user-controlled src XSS. Show safe script loading and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab31-onclick-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #31 onclick attribute route live oracle",
+    description:
+      "When scanning /labs/lab31.html, yogsec documents button.onclick = new Function(userCode) — route-specific event-handler XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #31 exposes onclick attribute injection with user-controlled JavaScript for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab31OnclickRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never set onclick with user-controlled code in production.",
+      steps: [
+        "Use addEventListener with safe function references instead of string-based event handlers.",
+        "Remove Function() constructor usage with user-supplied code.",
+        "Use Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #31 route documents onclick = new Function(userCode) XSS. Show safe event binding and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab32-onmouseover-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #32 onmouseover attribute route live oracle",
+    description:
+      "When scanning /labs/lab32.html, yogsec documents setAttribute('onmouseover', userCode) — route-specific hover-triggered XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #32 exposes onmouseover attribute injection with user-controlled JavaScript for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab32OnmouseoverRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never set onmouseover with user-controlled strings in production.",
+      steps: [
+        "Use addEventListener('mouseover', safeFn) instead of setAttribute with user input.",
+        "Sanitize or reject user-controlled event handler attributes.",
+        "Use Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #32 route documents onmouseover injection XSS. Show safe event listeners and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-labs-evidence",
     platform: "generic",
     category: "Cross-site scripting",
