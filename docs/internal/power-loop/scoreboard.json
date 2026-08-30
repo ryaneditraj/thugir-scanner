@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T22:15:00.000Z",
+  "updated_at": "2026-08-30T22:18:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3270,
-  "total_findings": 34304,
+  "total_sites_scanned": 3278,
+  "total_findings": 34489,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2123,
-  "discovery_findings": 27535,
+  "discovery_urls_added": 2128,
+  "discovery_findings": 27700,
   "improvements_shipped": 1188,
-  "last_run": "2026-08-30T22:15:00.000Z",
+  "last_run": "2026-08-30T22:18:00.000Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
@@ -50,32 +50,37 @@
       },
       "note": "Stable 6/6 first-pass recall (51 findings, 596 probes, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 22,
-      "focus": "chimera transactions/history SQLi + ai-security deserialization + hack-health A01 brute-force route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 185,
+      "focus": "brokencrystals process_numbers JS injection + code-breaking PHP/Node CTF + finbot guardrails SSRF config + hack-this-site SSTI validate",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "chimera.atlascrew.dev/api/v1/transactions/history: 7 findings — chimera-transactions-history-sqli-route-live-oracle shipped",
-      "ai-security-platform-iota.vercel.app/challenges/deserialization: 4 findings — ai-security-deserialization-route-live-oracle shipped",
-      "hack-health-tutorial.vercel.app/cybersecurity/a01/bruteForce: 11 findings — hack-health-a01-brute-force-route-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[]; secret-resend + resend-key + iac-terraform-tls-key)",
+      "brokencrystals.com/api/process_numbers: 91 findings — brokencrystals-process-numbers-route-live-oracle + brokencrystals-mcp-process-numbers-live-oracle confirmed",
+      "owasp-finbot-ctf.org/labs/api/v1/guardrails: 23 findings — finbot-labs-guardrails-webhook-route-live-oracle confirmed (base config endpoint)",
+      "hack-this-site-eta.vercel.app/api/validate/ssti: 50 findings — vulnlab hub fingerprint; SSTI-specific route oracle still absent",
+      "nodegoat-websec.herokuapp.com/tutorial/a3: 17 findings — nodegoat-tutorial-a3-route-live-oracle confirmed (queue drain)",
+      "code-breaking.fly.dev/easy/function + nodechr: 2 findings each — thin passes without route oracles (source-code CTF)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "chimera banking/insurance route oracles restored via corpus SQLi-marker fallback (catalog path-only listings no longer suppress CHIMERA_OPENAPI_FALLBACK)"
+      "hack-this-site validate/ssti: generic vulnlab hub dominates (~50 findings) without SSTI-specific route oracle",
+      "code-breaking.fly.dev: source-audit CTF pages need dedicated file-fetch oracle, not page crawl",
+      "damn-vulnerable-startup.fly.dev/challenges/* unreachable — Fly.io host offline"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "chimera.atlascrew.dev/api/v1/transactions/history": 7,
-    "ai-security-platform-iota.vercel.app/challenges/deserialization": 4,
-    "hack-health-tutorial.vercel.app/cybersecurity/a01/bruteForce": 11,
-    "koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182": 6,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finbank/tools": 25
+    "brokencrystals.com/api/process_numbers": 91,
+    "hack-this-site-eta.vercel.app/api/validate/ssti": 50,
+    "owasp-finbot-ctf.org/labs/api/v1/guardrails": 23,
+    "nodegoat-websec.herokuapp.com/tutorial/a3": 17,
+    "code-breaking.fly.dev/easy/function": 2,
+    "code-breaking.fly.dev/easy/nodechr": 2
   }
 }

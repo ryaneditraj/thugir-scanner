@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T21:06:07.666Z",
+  "updated_at": "2026-08-30T22:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/process_numbers",
+      "source": "NeuraLegion/brokencrystals — server-side JS injection oracle POST /api/process_numbers processing_expression (README MCP process_numbers tool; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://code-breaking.fly.dev/easy/function",
+      "source": "code-breaking.fly.dev — PHP function challenge easy tier (open code-audit CTF; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://code-breaking.fly.dev/easy/nodechr",
+      "source": "code-breaking.fly.dev — Node.js black-magic challenge easy tier (open code-audit CTF; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/labs/api/v1/guardrails",
+      "source": "OWASP FinBot CTF — guardrail webhook SSRF config oracle PUT /labs/api/v1/guardrails (PR #538; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://hack-this-site-eta.vercel.app/api/validate/ssti",
+      "source": "dkyazzentwatwa/hack-this-site — SSTI validation API lab endpoint (GitHub api/validate tree; web search 22 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/mcp",
       "source": "NeuraLegion/brokencrystals — MCP JSON-RPC endpoint with SQLi/SSTI/LFI/cmd-injection tool oracles (README MCP section; web search 21 UTC)",
