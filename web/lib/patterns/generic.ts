@@ -53076,6 +53076,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "oopssec-idor-order-privacy-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store IDOR order privacy route live oracle",
+    description:
+      "When scanning /posts/idor-order-privacy-breach, the walkthrough documents missing ownership verification on GET /orders/ORD-* — sequential order IDs expose other customers' PII — route-specific IDOR oracle.",
+    impactOneline:
+      "OopsSec order confirmation API authenticates users but never verifies order.userId — cross-user order reads via ORD-001 enumeration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecIdorOrderPrivacyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — compare order.userId to user.id before returning order details.",
+      steps: [
+        "Verify order.userId matches the authenticated user before returning order confirmation data.",
+        "Use non-sequential order IDs and filter by ownership in the database query.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /orders/[id] endpoint returns any order without ownership checks. Show IDOR remediation for order confirmation pages.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-session-fixation-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "OopsSec Store session fixation support-access route live oracle",
+    description:
+      "When scanning /posts/session-fixation-weak-session-management, the walkthrough documents mass assignment on POST /api/user/support-access — body.email generates admin support tokens — route-specific session hijack oracle.",
+    impactOneline:
+      "OopsSec support-access endpoint trusts client-supplied email — any authenticated user can mint admin@oss.com supportLoginUrl sessions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecSessionFixationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind support tokens to the authenticated user only; enforce revocation and short token lifetimes.",
+      steps: [
+        "Set targetEmail = user.email server-side — never accept email from request body.",
+        "Check supportToken.revoked before creating sessions on /support-login.",
+        "Reduce support token lifetime from 365 days to hours and rate-limit generation."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/user/support-access accepts body.email to generate tokens for arbitrary accounts. Show mass-assignment and support-token remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-mcp-malicious-server-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "OopsSec Store malicious MCP server route live oracle",
+    description:
+      "When scanning /posts/mcp-malicious-server, the walkthrough documents indirect prompt injection via external MCP tool responses bypassing get_compliance_report restrictions — route-specific MCP poisoning oracle.",
+    impactOneline:
+      "OopsSec OSSBot merges untrusted external MCP tools with privileged internal tools — poisoned tool responses trigger restricted get_compliance_report calls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecMcpMaliciousServerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate external MCP tools from privileged internal tools; validate tool responses before passing to the LLM.",
+      steps: [
+        "Do not merge external MCP tool pools with internal privileged tools in the same agent context.",
+        "Strip instruction-like patterns from tool responses before LLM ingestion.",
+        "Allowlist approved MCP server URLs and block private/internal IP ranges (SSRF)."
+      ]
+    },
+    fixPrompt:
+      "Our AI assistant accepts arbitrary mcpServerUrl and passes poisoned tool responses to the LLM. Show MCP trust-boundary and SSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-jwt-alg-confusion-evidence",
     platform: "generic",
     category: "Broken authentication",
