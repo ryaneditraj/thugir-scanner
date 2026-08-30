@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-30T08:11:05.882Z",
-  "total": 2881,
-  "uniqueSlugs": 2873,
+  "generatedAt": "2026-08-30T09:06:57.782Z",
+  "total": 2884,
+  "uniqueSlugs": 2876,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2863,
+    "generic": 2866,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2796,
+    "deep": 2799,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 134,
     "Security misconfiguration": 212,
     "Broken authentication": 187,
-    "Injection": 458,
-    "Cross-site scripting": 747,
+    "Injection": 460,
+    "Cross-site scripting": 748,
     "Open redirect": 25,
     "general": 20,
     "SSRF": 19,
@@ -2020,8 +2020,11 @@
     "pc-parts-store-stored-xss-route-live-oracle",
     "pentest-forge-dvwa-sqli-blind-route-live-oracle",
     "pentest-forge-dvwa-sqli-route-live-oracle",
+    "pentest-forge-dvwa-xss-d-route-live-oracle",
     "pentest-forge-dvwa-xss-r-route-live-oracle",
     "pentest-forge-linked-lab-probe",
+    "pentest-forge-mutillidae-login-sqli-route-live-oracle",
+    "pentest-forge-mutillidae-register-sqli-route-live-oracle",
     "pentest-forge-mutillidae-user-info-route-live-oracle",
     "pentest-ground-dvwa-csp-bypass-route-live-oracle",
     "pentest-ground-dvwa-csrf-route-live-oracle",

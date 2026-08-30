@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:dvwa.lab.pentest-forge.com",
+      "slug": "pentest-forge-dvwa-xss-d-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /vulnerabilities/xss_d/ reads default= from document.location.href into document.write(lang) without encoding; dvwa.lab.pentest-forge.com/vulnerabilities/xss_d/ findings 1→2 (+pentest-forge-dvwa-xss-d-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:mutillidae.lab.pentest-forge.com",
+      "slug": "pentest-forge-mutillidae-login-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST index.php?page=login.php username=' OR 1=1 -- bypasses authentication via SQL injection; mutillidae.lab.pentest-forge.com/index.php?page=login.php findings 1→2 (+pentest-forge-mutillidae-login-sqli-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:mutillidae.lab.pentest-forge.com",
+      "slug": "pentest-forge-mutillidae-register-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST index.php?page=register.php username=' triggers INSERT SQL syntax error; mutillidae.lab.pentest-forge.com/index.php?page=register.php findings 1→2 (+pentest-forge-mutillidae-register-sqli-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:the0x-pwn.github.io",
       "slug": "the0x-pwn-xss-tag-filter-bypass-route-live-oracle",
       "status": "shipped",

@@ -59809,6 +59809,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pentest-forge-dvwa-xss-d-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentestForge DVWA DOM XSS route live oracle",
+    description:
+      "When scanning /vulnerabilities/xss_d/ on dvwa.lab.pentest-forge.com, the page reads default= from document.location.href into document.write without encoding — PentestForge hosted DVWA DOM-based XSS route oracle.",
+    impactOneline:
+      "DOM-based XSS on PentestForge DVWA default= parameter lets attackers inject scripts via crafted URLs without server-side reflection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeDvwaXssDRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — never pass URL parameters to document.write.",
+      steps: [
+        "Avoid document.write and other dangerous DOM sinks for user-controlled data.",
+        "Use textContent or safe DOM APIs instead of innerHTML/document.write.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge DVWA /vulnerabilities/xss_d/ route passes default= URL param to document.write. Show DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pentest-forge-mutillidae-user-info-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -59831,6 +59857,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our PentestForge Mutillidae user-info.php route allows viewing account details without auth. Show access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-mutillidae-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentestForge Mutillidae login SQL injection route live oracle",
+    description:
+      "When scanning index.php?page=login.php on mutillidae.lab.pentest-forge.com, POST username=' OR 1=1 -- bypasses authentication — PentestForge hosted Mutillidae SQL injection login bypass route oracle.",
+    impactOneline:
+      "Unsanitized SQL concatenation on Mutillidae login lets attackers bypass authentication with tautology payloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeMutillidaeLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Mutillidae is intentional security training — use parameterized queries for login lookups.",
+      steps: [
+        "Bind username and password with prepared statements.",
+        "Hash passwords server-side and compare digests, never store plaintext.",
+        "Run Mutillidae only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge Mutillidae login.php route concatenates credentials into SQL. Show authentication bypass remediation with parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-mutillidae-register-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentestForge Mutillidae register INSERT SQL injection route live oracle",
+    description:
+      "When scanning index.php?page=register.php on mutillidae.lab.pentest-forge.com, username field is concatenated into INSERT without sanitization — PentestForge hosted Mutillidae INSERT SQL injection route oracle.",
+    impactOneline:
+      "INSERT SQL injection on Mutillidae register lets attackers manipulate account creation queries and exfiltrate database contents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeMutillidaeRegisterSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Mutillidae is intentional security training — use parameterized INSERT statements.",
+      steps: [
+        "Bind registration fields with prepared statements.",
+        "Validate and reject SQL metacharacters in username and signature fields.",
+        "Run Mutillidae only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge Mutillidae register.php route concatenates username into INSERT SQL. Show INSERT injection remediation with parameterized queries.",
     version: 1,
     enabled: true
   },
