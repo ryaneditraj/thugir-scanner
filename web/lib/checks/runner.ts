@@ -2691,6 +2691,7 @@ const DEEP_RULES = new Set<string>([
   "duckStoreProductsBolaRouteLiveOracle",
   "duckStoreAdminStatsLiveOracle",
   "duckStoreAdminStatsRouteLiveOracle",
+  "dvga2ExpertHardenedModeRouteLiveOracle",
   "dvgaRouteLiveOracle",
   "dvgaGraphiqlRouteLiveOracle",
   "dvgaGraphqlAuditLogLiveOracle",
@@ -12787,7 +12788,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /vulnbank\.org/i.test(origin) &&
-        /\/api\/v1\/merchants\/(?:login|me)\b/i.test(targetInput) &&
+        /\/(?:api\/v1\/merchants\/(?:login|me)|merchant\/login)\b/i.test(targetInput) &&
         (p.slug.startsWith("vulnbank-merchant-sqli-login") ||
           p.slug.startsWith("vulnbank-merchant-me-debug"))
       )
@@ -13422,6 +13423,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/api\/path-traversal\b/i.test(targetInput) &&
         p.slug.startsWith("seclab-path-traversal")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/ssrf\b/i.test(targetInput) &&
+        p.slug.startsWith("seclab-ssrf-vulnerable")
       )
         return -3;
       if (
@@ -15326,6 +15333,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/juicesec\.mrdinesh\.workers\.dev/i.test(origin) && p.slug.startsWith("client-side-juicesec")) return -2;
       if (/vulnerable-web-application-jecw\.vercel\.app/i.test(origin) && p.slug.startsWith("buggybuy-")) return -2;
       if (/appsec-ci-pipeline\.onrender\.com/i.test(origin) && p.slug.startsWith("appsec-ci-")) return -2;
+      if (
+        /dvga2\.tools\.escape\.tech/i.test(origin) &&
+        p.slug.startsWith("dvga2-expert-hardened-mode")
+      )
+        return -4;
       if (
         /dvga2?\.tools\.escape\.tech/i.test(origin) &&
         /\/graphql\b/i.test(targetInput) &&

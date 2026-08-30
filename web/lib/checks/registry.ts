@@ -26752,16 +26752,19 @@ const vulnbankMerchantSqliLoginLiveOracle: Rule = async (ctx) => {
 const vulnbankMerchantSqliLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/merchants\/login\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/v1\/merchants\/login\b|\/merchant\/login\b/i.test(pageUrl)) return NEGATIVE;
   const hit = await vulnbankMerchantSqliLoginBypassProbe(ctx);
   if (!hit?.fired) return NEGATIVE;
+  const isSpaPortal = /\/merchant\/login\b/i.test(pageUrl);
   return {
     fired: true,
     confidence: hit.confidence,
     evidence: {
       ...hit.evidence,
       scannedUrl: pageUrl,
-      note: "Vuln Bank /api/v1/merchants/login route scan — POST with email admin' OR '1'='1 bypasses merchant authentication and returns api_key + JWT — route-specific merchant portal SQL injection login oracle"
+      note: isSpaPortal
+        ? "Vuln Bank /merchant/login SPA route scan — POST /api/v1/merchants/login with email admin' OR '1'='1 bypasses merchant authentication and returns api_key + JWT — route-specific merchant portal SQL injection login oracle"
+        : "Vuln Bank /api/v1/merchants/login route scan — POST with email admin' OR '1'='1 bypasses merchant authentication and returns api_key + JWT — route-specific merchant portal SQL injection login oracle"
     }
   };
 };
@@ -70426,6 +70429,56 @@ function dvgaCanonicalOrigin(ctx: RuleContext): string {
   return ctx.origin.replace(/^http:\/\//i, "https://").replace(/^(https:\/\/)www\./i, "$1");
 }
 
+function isDvga2Host(ctx: RuleContext): boolean {
+  const urls = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""];
+  return urls.some((raw) => {
+    try {
+      return /^dvga2\.tools\.escape\.tech$/i.test(new URL(raw).hostname.toLowerCase());
+    } catch {
+      return /dvga2\.tools\.escape\.tech/i.test(raw);
+    }
+  });
+}
+
+const dvga2ExpertHardenedModeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDvga2Host(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const base = dvgaCanonicalOrigin(ctx);
+  const homeUrl = new URL("/", base).toString();
+  const homeDoc = await fetchDoc(homeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  const corpus = `${ctx.combined}\n${homeDoc.body}`;
+  const markers: string[] = [];
+  if (/Expert \(Hardened\)/i.test(corpus)) markers.push("expert-hardened-menu");
+  if (/X-DVGA-MODE/i.test(corpus)) markers.push("x-dvga-mode-header");
+  if (/Cost Based Analysis|Query Depth|Field De-dup/i.test(corpus)) markers.push("graphql-hardening-controls");
+  if (/difficulty\/hard/i.test(corpus)) markers.push("difficulty-hard-route");
+  if (markers.length < 2) return NEGATIVE;
+  const gqlUrl = new URL("/graphql", base).toString();
+  const gqlDoc = await fetchDoc(gqlUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: "{ __schema { queryType { name } } }" }),
+    headers: { "Content-Type": "application/json", "X-DVGA-MODE": "Expert" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const expertIntrospection =
+    gqlDoc.status >= 200 && gqlDoc.status < 300 && /"__schema"\s*:/.test(gqlDoc.body);
+  return {
+    fired: true,
+    confidence: expertIntrospection && markers.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      homeUrl,
+      graphqlUrl: gqlUrl,
+      markers,
+      expertIntrospection,
+      snippet:
+        homeDoc.body.match(/X-DVGA-MODE[\s\S]{0,120}/i)?.[0]?.slice(0, 120) ?? corpus.slice(0, 120),
+      note: "DVGA2 Expert (Hardened) mode documents X-DVGA-MODE header plus cost/depth GraphQL query controls — Escape.tech hardened training tier oracle"
+    }
+  };
+};
+
 const dvgaRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvgaLiveHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -87407,7 +87460,8 @@ const seclabPathTraversalRouteLiveOracle: Rule = async (ctx) => {
 
 const seclabSsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!seclabApiLabShorthandRouteMatch(pageUrl, "ssrf")) return NEGATIVE;
+  const isLabsSsrfHub = /\/labs\/ssrf\b/i.test(pageUrl);
+  if (!seclabApiLabShorthandRouteMatch(pageUrl, "ssrf") && !isLabsSsrfHub) return NEGATIVE;
   let pageHost = "";
   let originHost = "";
   try {
@@ -102124,6 +102178,7 @@ export const RULES: Record<string, Rule> = {
   firingRangeThirdPartySriDynamicRouteLiveOracle,
   firingRangeFlashinjectionLiveOracle,
   firingRangeFlashinjectionRouteLiveOracle,
+  dvga2ExpertHardenedModeRouteLiveOracle,
   dvgaRouteLiveOracle,
   dvgaGraphiqlRouteLiveOracle,
   dvgaGraphqlAuditLogLiveOracle,
