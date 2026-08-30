@@ -30759,6 +30759,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "yogsec-xss-lab27-setinterval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #27 setInterval eval route live oracle",
+    description:
+      "When scanning /labs/lab27.html, yogsec documents setInterval(function(){ eval(userCode); }, interval) repeating attacker code — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #27 exposes setInterval + eval for repeating XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab27SetintervalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never pass user strings to setInterval/eval in production.",
+      steps: [
+        "Use function references instead of string arguments to setInterval.",
+        "Remove eval() of any user-supplied input.",
+        "Use Content-Security-Policy to mitigate script injection."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #27 route documents setInterval + eval repeating XSS. Show safe timer callbacks and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab28-function-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "critical",
+    title: "yogsec XSS Lab #28 Function constructor route live oracle",
+    description:
+      "When scanning /labs/lab28.html, yogsec documents new Function(...params, userCode)() executing user-controlled strings — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #28 exposes Function() constructor code execution for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab28FunctionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never pass user strings to the Function constructor in production.",
+      steps: [
+        "Remove Function() constructor usage with user-supplied code.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #28 route documents Function() constructor XSS. Show safe alternatives and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab29-javascript-href-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #29 javascript href route live oracle",
+    description:
+      "When scanning /labs/lab29.html, yogsec documents location.href = javascript: URLs and href=javascript: links — route-specific URL-based XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #29 exposes javascript: pseudo-protocol in location.href for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab29JavascriptHrefRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — block javascript: URLs and validate user-controlled hrefs in production.",
+      steps: [
+        "Reject javascript: and data: schemes in user-supplied URLs.",
+        "Use allowlists for redirect and navigation targets.",
+        "Use Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #29 route documents javascript: href XSS. Show URL validation and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-labs-evidence",
     platform: "generic",
     category: "Cross-site scripting",
