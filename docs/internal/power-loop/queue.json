@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T00:32:00.000Z",
+  "updated_at": "2026-08-30T01:22:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a2",
+      "source": "OWASP NodeGoat — A2 broken authentication lesson hub with weak session/credential oracles (nodegoat-websec Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a4",
+      "source": "OWASP NodeGoat — A4 XXE lesson hub with XML external entity injection routes (nodegoat-websec Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a5",
+      "source": "OWASP NodeGoat — A5 broken access control lesson hub with direct object reference oracles (nodegoat-websec Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a6",
+      "source": "OWASP NodeGoat — A6 security misconfiguration lesson hub with debug/verbose error oracles (nodegoat-websec Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a7",
+      "source": "OWASP NodeGoat — A7 XSS lesson hub with stored/reflected cross-site scripting routes (nodegoat-websec Heroku demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/a3",
       "source": "OWASP NodeGoat — A3 NoSQL injection login bypass oracle POST /login userName[$gt]= (tutorial/a3 lesson route)",
