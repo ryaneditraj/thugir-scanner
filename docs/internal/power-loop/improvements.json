@@ -6479,6 +6479,24 @@
       "slug": "yogsec-xss-lab32-onmouseover-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab32OnmouseoverRouteLiveOracle matches XSS Lab #32 onmouseover Injection + setAttribute('onmouseover', userCode) markers; yogsec.github.io/xss-labs/labs/lab32.html findings 7→8 (+yogsec-xss-lab32-onmouseover-route-live-oracle); benchmark juice-shop 47 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab33-onerror-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab33OnerrorRouteLiveOracle matches XSS Lab #33 onerror in img Injection + img.setAttribute('onerror', userCode) markers; yogsec.github.io/xss-labs/labs/lab33.html findings 7→8 (+yogsec-xss-lab33-onerror-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab34-onload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab34OnloadRouteLiveOracle matches XSS Lab #34 onload in body Injection + document.body.setAttribute('onload', userCode) markers; yogsec.github.io/xss-labs/labs/lab34.html findings 7→8 (+yogsec-xss-lab34-onload-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab35-onfocus-autofocus-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab35OnfocusAutofocusRouteLiveOracle matches XSS Lab #35 onfocus autofocus Injection + setAttribute('onfocus', userCode) + autofocus markers; yogsec.github.io/xss-labs/labs/lab35.html findings 7→8 (+yogsec-xss-lab35-onfocus-autofocus-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

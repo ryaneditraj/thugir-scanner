@@ -30915,6 +30915,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "yogsec-xss-lab33-onerror-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #33 img onerror route live oracle",
+    description:
+      "When scanning /labs/lab33.html, yogsec documents img.setAttribute('onerror', userCode) — route-specific image error-handler XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #33 exposes img onerror attribute injection with user-controlled JavaScript for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab33OnerrorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never set onerror with user-controlled strings in production.",
+      steps: [
+        "Use addEventListener('error', safeFn) instead of setAttribute with user input.",
+        "Sanitize or reject user-controlled event handler attributes on img tags.",
+        "Use Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #33 route documents img onerror injection XSS. Show safe error handlers and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab34-onload-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #34 body onload route live oracle",
+    description:
+      "When scanning /labs/lab34.html, yogsec documents document.body.setAttribute('onload', userCode) — route-specific page-load XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #34 exposes body onload attribute injection with user-controlled JavaScript for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab34OnloadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never set onload with user-controlled code in production.",
+      steps: [
+        "Use DOMContentLoaded event listeners instead of string-based onload handlers.",
+        "Sanitize or reject user-controlled event handler attributes on body elements.",
+        "Use Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #34 route documents body onload injection XSS. Show safe page-load handlers and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab35-onfocus-autofocus-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #35 onfocus autofocus route live oracle",
+    description:
+      "When scanning /labs/lab35.html, yogsec documents setAttribute('onfocus', userCode) with autofocus — route-specific auto-triggered XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #35 exposes onfocus + autofocus attribute injection with user-controlled JavaScript for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab35OnfocusAutofocusRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never set onfocus or autofocus with user-controlled strings in production.",
+      steps: [
+        "Use addEventListener('focus', safeFn) instead of setAttribute with user input.",
+        "Reject user-controlled autofocus and event handler attributes on form inputs.",
+        "Use Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #35 route documents onfocus + autofocus injection XSS. Show safe focus handlers and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-labs-evidence",
     platform: "generic",
     category: "Cross-site scripting",

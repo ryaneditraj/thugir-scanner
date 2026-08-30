@@ -56816,6 +56816,54 @@ const yogsecXssLab32OnmouseoverRouteLiveOracle: Rule = async (ctx) =>
     "yogsec XSS Lab #32 route scan — setAttribute('onmouseover', userCode) executes attacker code on hover — DOM XSS training sink"
   );
 
+const yogsecXssLab33OnerrorRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    33,
+    [
+      { label: "onerror img injection lab title", re: /XSS Lab #33:\s*onerror in/i },
+      { label: "onerror img injection heading", re: /onerror in\s*(?:<img>|&lt;img&gt;)?\s*Injection/i },
+      {
+        label: "onerror setAttribute sink",
+        re: /setAttribute\(['"]onerror['"],\s*userCode\)|img\.setAttribute\(['"]onerror['"]/i
+      },
+      { label: "target image onerror trigger", re: /targetImage|Inject onerror into Image|onerror triggered/i }
+    ],
+    "yogsec XSS Lab #33 route scan — img.setAttribute('onerror', userCode) executes attacker code when image fails to load — DOM XSS training sink"
+  );
+
+const yogsecXssLab34OnloadRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    34,
+    [
+      { label: "onload body injection lab title", re: /XSS Lab #34:\s*onload in/i },
+      { label: "onload body injection heading", re: /onload in\s*(?:<body>|&lt;body&gt;)?\s*Injection/i },
+      {
+        label: "body onload setAttribute sink",
+        re: /document\.body\.setAttribute\(['"]onload['"],\s*userCode\)|setAttribute\(['"]onload['"],\s*userCode\)/i
+      },
+      { label: "simulate body onload injection", re: /Inject & Simulate onload|Simulated Body onload|onload triggered/i }
+    ],
+    "yogsec XSS Lab #34 route scan — document.body.setAttribute('onload', userCode) executes attacker code on page load — DOM XSS training sink"
+  );
+
+const yogsecXssLab35OnfocusAutofocusRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    35,
+    [
+      { label: "onfocus autofocus injection lab title", re: /XSS Lab #35:\s*onfocus autofocus Injection/i },
+      { label: "onfocus autofocus heading", re: /onfocus \+ autofocus Injection/i },
+      {
+        label: "onfocus autofocus setAttribute sink",
+        re: /setAttribute\(['"]onfocus['"],\s*userCode\)|setAttribute\(['"]autofocus['"],\s*['"]autofocus['"]\)/i
+      },
+      { label: "inject onfocus autofocus button", re: /Inject onfocus \+ autofocus|TARGET INPUT \(with onfocus \+ autofocus\)/i }
+    ],
+    "yogsec XSS Lab #35 route scan — setAttribute('onfocus', userCode) + autofocus executes attacker code on focus — DOM XSS training sink"
+  );
+
 // --- the0x-pwn XSS Labs (the0x-pwn.github.io/lab-xss — 10 reflected/DOM challenges) ----
 const CLIENT_THE0X_PWN_XSS_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -101735,6 +101783,9 @@ export const RULES: Record<string, Rule> = {
   yogsecXssLab30DynamicScriptSrcRouteLiveOracle,
   yogsecXssLab31OnclickRouteLiveOracle,
   yogsecXssLab32OnmouseoverRouteLiveOracle,
+  yogsecXssLab33OnerrorRouteLiveOracle,
+  yogsecXssLab34OnloadRouteLiveOracle,
+  yogsecXssLab35OnfocusAutofocusRouteLiveOracle,
   clientSideThe0xPwnXssLabsEvidence,
   clientSideThe0xPwnXssQueryParamLabEvidence,
   clientSideThe0xPwnXssDomHashLabEvidence,
