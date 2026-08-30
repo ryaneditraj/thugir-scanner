@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T22:05:00.000Z",
+  "updated_at": "2026-08-30T23:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/mcp/tools",
+      "source": "NeuraLegion/brokencrystals — MCP tools/list enumeration oracle GET /api/mcp/tools (README MCP section; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/mcp/get_config",
+      "source": "NeuraLegion/brokencrystals — MCP get_config admin tool oracle /api/mcp/get_config (README MCP tools; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/mcp/spawn_process",
+      "source": "NeuraLegion/brokencrystals — MCP spawn_process cmd-injection oracle /api/mcp/spawn_process (README MCP; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://code-breaking.fly.dev/medium/function",
+      "source": "code-breaking.fly.dev — PHP function challenge medium tier (open code-audit CTF; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://code-breaking.fly.dev/medium/nodechr",
+      "source": "code-breaking.fly.dev — Node.js black-magic challenge medium tier (open code-audit CTF; web search 23 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/process_numbers",
       "source": "NeuraLegion/brokencrystals — server-side JS injection oracle POST /api/process_numbers processing_expression (README MCP process_numbers tool; web search 22 UTC)",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T22:18:00.000Z",
+  "updated_at": "2026-08-30T23:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3278,
-  "total_findings": 34489,
+  "total_sites_scanned": 3285,
+  "total_findings": 34762,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2128,
-  "discovery_findings": 27700,
-  "improvements_shipped": 1188,
-  "last_run": "2026-08-30T22:18:00.000Z",
+  "discovery_urls_added": 2133,
+  "discovery_findings": 27922,
+  "improvements_shipped": 1091,
+  "last_run": "2026-08-30T23:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -53,34 +53,34 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 185,
-      "focus": "brokencrystals process_numbers JS injection + code-breaking PHP/Node CTF + finbot guardrails SSRF config + hack-this-site SSTI validate",
+      "urls_scanned": 6,
+      "findings": 222,
+      "focus": "brokencrystals MCP tools/get_config/spawn_process + code-breaking medium/function+nodechr + nodegoat tutorial/a2 drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[]; secret-resend + resend-key + iac-terraform-tls-key)",
-      "brokencrystals.com/api/process_numbers: 91 findings — brokencrystals-process-numbers-route-live-oracle + brokencrystals-mcp-process-numbers-live-oracle confirmed",
-      "owasp-finbot-ctf.org/labs/api/v1/guardrails: 23 findings — finbot-labs-guardrails-webhook-route-live-oracle confirmed (base config endpoint)",
-      "hack-this-site-eta.vercel.app/api/validate/ssti: 50 findings — vulnlab hub fingerprint; SSTI-specific route oracle still absent",
-      "nodegoat-websec.herokuapp.com/tutorial/a3: 17 findings — nodegoat-tutorial-a3-route-live-oracle confirmed (queue drain)",
-      "code-breaking.fly.dev/easy/function + nodechr: 2 findings each — thin passes without route oracles (source-code CTF)"
+      "brokencrystals.com/api/mcp/tools: 90 findings — brokencrystals-mcp-tools-route-live-oracle confirmed",
+      "brokencrystals.com/api/mcp/get_config: 51 findings — brokencrystals-mcp-get-config route oracle on spawn_process hub",
+      "brokencrystals.com/api/mcp/spawn_process: 58 findings — brokencrystals-mcp-spawn-process route oracle confirmed",
+      "nodegoat-websec.herokuapp.com/tutorial/a2: 18 findings — nodegoat-tutorial-a2-route-live-oracle + login-weak-credentials route oracle",
+      "code-breaking.fly.dev/medium/function + nodechr: 2-3 findings — thin passes without route oracles (source-audit CTF)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "hack-this-site validate/ssti: generic vulnlab hub dominates (~50 findings) without SSTI-specific route oracle",
-      "code-breaking.fly.dev: source-audit CTF pages need dedicated file-fetch oracle, not page crawl",
-      "damn-vulnerable-startup.fly.dev/challenges/* unreachable — Fly.io host offline"
+      "code-breaking.fly.dev medium tier: source-audit CTF needs file-fetch oracle, not page crawl",
+      "damn-vulnerable-startup.fly.dev/challenges/* still unreachable (Fly.io offline)",
+      "brokencrystals MCP get_config endpoint: route oracle fires on spawn_process scan but dedicated get_config slug thin"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "brokencrystals.com/api/process_numbers": 91,
-    "hack-this-site-eta.vercel.app/api/validate/ssti": 50,
-    "owasp-finbot-ctf.org/labs/api/v1/guardrails": 23,
-    "nodegoat-websec.herokuapp.com/tutorial/a3": 17,
-    "code-breaking.fly.dev/easy/function": 2,
-    "code-breaking.fly.dev/easy/nodechr": 2
+    "brokencrystals.com/api/mcp/tools": 90,
+    "brokencrystals.com/api/mcp/spawn_process": 58,
+    "brokencrystals.com/api/mcp/get_config": 51,
+    "nodegoat-websec.herokuapp.com/tutorial/a2": 18,
+    "code-breaking.fly.dev/medium/nodechr": 3,
+    "code-breaking.fly.dev/medium/function": 2
   }
 }
