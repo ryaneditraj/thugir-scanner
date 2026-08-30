@@ -56765,6 +56765,38 @@ const clientSideThe0xPwnXssSvgScriptInjectionLabEvidence: Rule = async (ctx) => 
   };
 };
 
+const the0xPwnXssTemplateLiteralRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/lab-xss\/lab-2\/?/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideThe0xPwnXssTemplateLiteralLabEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "the0x-pwn /lab-xss/lab-2 route scan — eval(templateLiteral) assigns resultQuery.textContent from query parameter"
+    }
+  };
+};
+
+const the0xPwnXssHrefAngleBracketsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/lab-xss\/lab-8\/?/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideThe0xPwnXssHrefAngleBracketsLabEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "the0x-pwn /lab-xss/lab-8 route scan — innerHTML href injection via decodeURIComponent(query) with angle-bracket encoding bypass"
+    }
+  };
+};
+
 // --- montanajim CSCI210 classroom XSS examples (montanajim.github.io/CSCI210/wpref/xssExamples.html) -
 const CLIENT_MONTANAJIM_XSS_CLASSROOM_RES: { label: string; re: RegExp }[] = [
   {
@@ -101059,6 +101091,8 @@ export const RULES: Record<string, Rule> = {
   clientSideThe0xPwnXssHrefAngleBracketsLabEvidence,
   clientSideThe0xPwnXssTagFilterBypassLabEvidence,
   clientSideThe0xPwnXssSvgScriptInjectionLabEvidence,
+  the0xPwnXssTemplateLiteralRouteLiveOracle,
+  the0xPwnXssHrefAngleBracketsRouteLiveOracle,
   clientSideMontanajimXssClassroomEvidence,
   clientSideHackxorEvidence,
   clientSidePygoatEvidence,

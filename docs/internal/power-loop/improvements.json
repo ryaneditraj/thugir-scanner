@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-race-condition-coupon-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/race-condition-coupon-abuse documents TOCTOU coupon validation split across two DB calls via POST /api/coupons/redeem; koadt.github.io/.../race-condition-coupon-abuse findings 11 (+oopssec-race-condition-coupon-route-live-oracle +client-side-oopssec-race-condition-evidence); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "the0x-pwn-xss-template-literal-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lab-xss/lab-2 eval(templateLiteral) assigns resultQuery.textContent from query; the0xPwnLabXssReflexionSuppressed removes reflexion-escalated-ssti false positive on static GitHub Pages; the0x-pwn.github.io/lab-xss/lab-2/ findings 6→6 (+the0x-pwn-xss-template-literal-route-live-oracle -reflexion-escalated-ssti); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "the0x-pwn-xss-href-angle-brackets-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lab-xss/lab-8 innerHTML href injection via decodeURIComponent(query); the0x-pwn.github.io/lab-xss/lab-8/ findings 5→5 (+the0x-pwn-xss-href-angle-brackets-route-live-oracle +client-side-the0x-pwn-xss-href-angle-brackets-lab-evidence -reflexion-escalated-ssti); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:mutillidae.lab.pentest-forge.com",
       "slug": "pentest-forge-mutillidae-user-info-route-live-oracle",
       "status": "shipped",

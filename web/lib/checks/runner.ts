@@ -2392,6 +2392,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideThe0xPwnXssHrefAngleBracketsLabEvidence",
   "clientSideThe0xPwnXssTagFilterBypassLabEvidence",
   "clientSideThe0xPwnXssSvgScriptInjectionLabEvidence",
+  "the0xPwnXssTemplateLiteralRouteLiveOracle",
+  "the0xPwnXssHrefAngleBracketsRouteLiveOracle",
   "clientSideMontanajimXssClassroomEvidence",
   "clientSideHackxorEvidence",
   "clientSidePygoatEvidence",
@@ -12989,6 +12991,30 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug === "oopssec-next-public-env-route-live-oracle"
       )
         return -3;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/race-condition-coupon-abuse/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-race-condition-coupon")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/x-forwarded-for-sql-injection/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-xff-sqli")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-2\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-template-literal")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-8\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-href-angle-brackets")
+      )
+        return -4;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
       if (/xss\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("xss-vulnlab")) return -2;
       if (/ssti\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssti-vulnlab")) return -2;

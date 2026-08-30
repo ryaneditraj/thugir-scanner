@@ -30758,6 +30758,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the0x-pwn-xss-template-literal-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn template literal eval XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-2 on the0x-pwn.github.io, eval() executes a template literal assigning resultQuery.textContent from the query parameter — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-2 documents eval(templateLiteral) XSS sink for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssTemplateLiteralRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into eval() — use textContent in production.",
+      steps: [
+        "Remove eval() from client-side code paths that touch user-controlled query parameters.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-2 route documents eval(templateLiteral) XSS. Show safe output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-filter-bypass-tags-lab-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -30806,6 +30831,31 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host the0x-pwn lab-8-style href XSS labs. Show URL validation and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the0x-pwn-xss-href-angle-brackets-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn href attribute XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-8 on the0x-pwn.github.io, innerHTML injects decodeURIComponent(query) into an anchor href — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-8 documents href-attribute XSS via innerHTML concatenation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssHrefAngleBracketsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encoding angle brackets does not protect href attributes — validate URLs in production.",
+      steps: [
+        "Block javascript: and data: schemes in dynamic href values.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-8 route documents href XSS via innerHTML. Show URL validation remediation.",
     version: 1,
     enabled: true
   },

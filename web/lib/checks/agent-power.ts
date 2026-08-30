@@ -129,6 +129,12 @@ function oopssecGitHubPagesReflexionSuppressed(ctx: PowerCtx): boolean {
   return /koadt\.github\.io\/oss-oopssec-store/i.test(pageUrl);
 }
 
+/** the0x-pwn XSS labs are static GitHub Pages with client-side eval/innerHTML sinks — no server-side SSTI. */
+function the0xPwnLabXssReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /the0x-pwn\.github\.io\/lab-xss/i.test(pageUrl);
+}
+
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
 
 // --- Directory wordlist (compact subset) ------------------------------------
@@ -320,6 +326,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (securebankBlogReflexionSuppressed(ctx)) return NEGATIVE;
   if (ginAndJuiceReflexionSuppressed(ctx)) return NEGATIVE;
   if (oopssecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
+  if (the0xPwnLabXssReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 
