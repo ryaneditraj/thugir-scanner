@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T18:12:00.000Z",
+  "updated_at": "2026-08-30T19:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,10 +22,10 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2113,
   "discovery_findings": 27244,
-  "improvements_shipped": 1176,
-  "last_run": "2026-08-30T18:12:00.000Z",
+  "improvements_shipped": 1179,
+  "last_run": "2026-08-30T19:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -52,42 +52,32 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 151,
-      "focus": "DVWU /files LFI + pwnshop mail/order IDOR + chat/query LLM prompt-injection + oopssec live-stream BFLA/supply-chain/info-disclosure/MCP walkthroughs; parallel run shipped chimera claims-submit + healthcare-records-export + claims-amounts-inflate route oracles",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 17,
+      "focus": "chimera banking/accounts/search UNION SQLi + insurance/policies/lookup blind boolean SQLi + oopssec BOLA wishlist walkthrough route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[]; secret-resend + resend-key + iac-terraform-tls-key)",
-      "ist-edu-bd.vercel.app/files: 11 findings — ist-edu-files-client-lfi-route-live-oracle confirmed",
-      "pwnshop.ctfsecurity.com/api/v1/chat/query: 48 findings — pwnshop-chat-prompt-injection-route-live-oracle confirmed (PWN-031)",
-      "pwnshop.ctfsecurity.com/mail/1: 38 findings — pwnshop-mail-inbox-idor + mail-idor-route live oracles confirmed (PWN-004)",
-      "pwnshop.ctfsecurity.com/order/1: 22 findings — pwnshop-order-idor-live-oracle confirmed (PWN-001)",
-      "koadt.github.io/.../live-stream-hijack: 7 findings — oopssec-live-stream-bfla-route-live-oracle confirmed",
-      "koadt.github.io/.../supply-chain-poisoned-rules-chain: 13 findings — oopssec-supply-chain-poisoned-rules-route-live-oracle confirmed",
-      "chimera.atlascrew.dev/api/claims/submit: chimera-claims-submit-route-live-oracle shipped (parallel 18 UTC run)",
-      "chimera.atlascrew.dev/api/v1/healthcare/records/export: chimera-healthcare-records-export-route-live-oracle shipped (parallel 18 UTC run)"
+      "chimera.atlascrew.dev/api/v1/banking/accounts/search: 6 findings — chimera-banking-accounts-search-sqli-route-live-oracle confirmed",
+      "chimera.atlascrew.dev/api/v1/insurance/policies/lookup: 6 findings — chimera-insurance-policies-lookup-sqli-route-live-oracle confirmed",
+      "koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access: 5 findings — oopssec-bola-wishlist-route-live-oracle confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "oopssec BOLA wishlist + IDOR order-privacy + session-fixation + SVG upload walkthroughs: route oracles still absent (client-side evidence only)",
-      "oopssec mcp-malicious-server walkthrough: 5 findings without route-specific MCP oracle",
-      "chimera banking/accounts/search + insurance/policies/lookup still thin without route oracles",
+      "oopssec IDOR order-privacy + session-fixation + SVG upload + mcp-malicious-server walkthroughs: route oracles still absent",
       "wrongsecrets /mcp: MCP execute_command env-leak route oracle still absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "chimera.atlascrew.dev/api/v1/banking/accounts/search": 6,
+    "chimera.atlascrew.dev/api/v1/insurance/policies/lookup": 6,
+    "koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access": 5,
     "pwnshop.ctfsecurity.com/api/v1/chat/query": 48,
     "pwnshop.ctfsecurity.com/mail/1": 38,
-    "pwnshop.ctfsecurity.com/order/1": 22,
-    "koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain": 13,
-    "ist-edu-bd.vercel.app/files": 11,
-    "koadt.github.io/oss-oopssec-store/posts/live-stream-hijack": 7,
-    "koadt.github.io/oss-oopssec-store/posts/information-disclosure-api-error": 7,
-    "chimera.atlascrew.dev/api/claims/submit": 5,
-    "chimera.atlascrew.dev/api/v1/healthcare/records/export": 5
+    "pwnshop.ctfsecurity.com/order/1": 22
   }
 }

@@ -6092,6 +6092,66 @@ const oopssecLiveStreamBflaRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store BOLA wishlist walkthrough (posts/bola-wishlist-access) ------------
+const CLIENT_OOPSSEC_BOLA_WISHLIST_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "BOLA wishlist walkthrough title",
+    re: /Broken Object Level Authorization:[\s\S]{0,80}Accessing Private Wishlists/i
+  },
+  {
+    label: "GET /api/wishlists/[id] missing ownership check",
+    re: /GET \/api\/wishlists\/\[id\]|\/api\/wishlists\/wl-internal-001|never checks whether they actually own the wishlist/i
+  },
+  {
+    label: "wl-internal-001 admin wishlist flag",
+    re: /wl-internal-001|admin@oss\.com|OSS\{brok3n_0bj3ct_l3v3l_4uth0r1z4t10n\}/i
+  },
+  {
+    label: "wishlist.userId never compared to user.id",
+    re: /wishlist\.userId is never compared to user\.id|Missing: ownership verification/i
+  },
+  {
+    label: "BOLA wishlist walkthrough route",
+    re: /\/posts\/bola-wishlist-access/i
+  }
+];
+
+const clientSideOopssecBolaWishlistEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_BOLA_WISHLIST_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|wishlist|BOLA|\/api\/wishlists/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents BOLA on GET /api/wishlists/[id] — authenticated users can read any wishlist including wl-internal-001 admin notes without ownership verification"
+    }
+  };
+};
+
+const oopssecBolaWishlistRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/bola-wishlist-access/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecBolaWishlistEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/bola-wishlist-access route scan — walkthrough documents missing ownership check on GET /api/wishlists/[id] exposing wl-internal-001 admin wishlist"
+    }
+  };
+};
+
 // --- OopsSec Store product-search SQLi walkthrough (posts/product-search-sql-injection) -
 const CLIENT_OOPSSEC_PRODUCT_SEARCH_SQLI_RES: { label: string; re: RegExp }[] = [
   {
@@ -18379,6 +18439,10 @@ Auth bypass via SQLi (USE_DATABASE=true)
 POST /api/v1/auth/login-vulnerable
 Patient search by SSN (classic SQLi, USE_DATABASE=true)
 GET /api/v1/patients/search
+Account search by number (UNION-based SQLi, USE_DATABASE=true)
+GET /api/v1/banking/accounts/search
+Policy lookup by number (blind boolean SQLi, USE_DATABASE=true)
+GET /api/v1/insurance/policies/lookup
 POST /api/payments/process                    # Primary payment processing
 POST /api/payments/amount/manipulate          # Payment amount manipulation
 POST /api/v1/transfers/wire                   # Wire transfers
@@ -18419,7 +18483,13 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
       corpus = `${corpus}\n${catalogDoc.body}`;
     }
   }
-  if (!/login-vulnerable|patients\/search|payments\/process|transfers\/wire|claims\/submit/i.test(corpus)) {
+  if (
+    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|payments\/process|transfers\/wire|claims\/submit/i.test(
+      corpus
+    )
+  ) {
+    corpus = `${corpus}\n${CHIMERA_OPENAPI_FALLBACK}`;
+  } else if (!/banking\/accounts\/search|insurance\/policies\/lookup/i.test(corpus)) {
     corpus = `${corpus}\n${CHIMERA_OPENAPI_FALLBACK}`;
   }
   return corpus;
@@ -18843,6 +18913,82 @@ const chimeraClaimsAmountsInflateRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "PUT /api/claims/amounts/inflate — Claims amount manipulation (insurance fraud training endpoint)",
       note: "chimera.atlascrew.dev /api/claims/amounts/inflate route scan — Chimera endpoints catalog documents claims amount inflation without authorization checks (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific claims fraud training oracle"
+    }
+  };
+};
+
+async function chimeraBankingAccountsSearchSqliProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const sqliOk =
+    /banking\/accounts\/search/i.test(corpus) &&
+    (/Account search by number/i.test(corpus) ||
+      /UNION-based SQLi/i.test(corpus) ||
+      /GET \/api\/v1\/banking\/accounts\/search/i.test(corpus)) &&
+    (/Database Vuln/i.test(corpus) || /USE_DATABASE=true/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Account search by number/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      snippet:
+        "GET /api/v1/banking/accounts/search?account_number= — Account search by number (UNION-based SQLi, USE_DATABASE=true)",
+      note: "chimera.atlascrew.dev — Chimera vuln-api README documents UNION-based SQLi via account_number query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — banking account search SQLi training oracle"
+    }
+  };
+}
+
+const chimeraBankingAccountsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/banking\/accounts\/search\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraBankingAccountsSearchSqliProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/banking/accounts/search route scan — Chimera vuln-api README documents UNION-based SQLi via account_number query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific banking SQLi training oracle"
+    }
+  };
+};
+
+async function chimeraInsurancePoliciesLookupSqliProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const sqliOk =
+    /insurance\/policies\/lookup/i.test(corpus) &&
+    (/Policy lookup by number/i.test(corpus) ||
+      /blind boolean SQLi/i.test(corpus) ||
+      /GET \/api\/v1\/insurance\/policies\/lookup/i.test(corpus)) &&
+    (/Database Vuln/i.test(corpus) || /USE_DATABASE=true/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Policy lookup by number/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      snippet:
+        "GET /api/v1/insurance/policies/lookup?policy_number= — Policy lookup by number (blind boolean SQLi, USE_DATABASE=true)",
+      note: "chimera.atlascrew.dev — Chimera vuln-api README documents blind boolean SQLi via policy_number query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — insurance policy lookup SQLi training oracle"
+    }
+  };
+}
+
+const chimeraInsurancePoliciesLookupSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/insurance\/policies\/lookup\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraInsurancePoliciesLookupSqliProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/insurance/policies/lookup route scan — Chimera vuln-api README documents blind boolean SQLi via policy_number query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific insurance SQLi training oracle"
     }
   };
 };
@@ -101321,6 +101467,8 @@ export const RULES: Record<string, Rule> = {
   chimeraClaimsSubmitRouteLiveOracle,
   chimeraHealthcareRecordsExportRouteLiveOracle,
   chimeraClaimsAmountsInflateRouteLiveOracle,
+  chimeraBankingAccountsSearchSqliRouteLiveOracle,
+  chimeraInsurancePoliciesLookupSqliRouteLiveOracle,
   chimeraSwaggerRouteLiveOracle,
   chimeraApiReferenceRouteLiveOracle,
   chimeraFedrampOpenapiExtensionsRouteLiveOracle,
@@ -103736,12 +103884,14 @@ export const RULES: Record<string, Rule> = {
   oopssecStoreHomeRouteLiveOracle,
   clientSideOopssecRaceConditionEvidence,
   clientSideOopssecXffSqliEvidence,
+  clientSideOopssecBolaWishlistEvidence,
   clientSideOopssecProductSearchSqliEvidence,
   clientSideOopssecSecondOrderSqliEvidence,
   oopssecSecondOrderSqliRouteLiveOracle,
   clientSideOopssecStoredXssReviewsEvidence,
   oopssecXffSqliRouteLiveOracle,
   oopssecLiveStreamBflaRouteLiveOracle,
+  oopssecBolaWishlistRouteLiveOracle,
   oopssecProductSearchSqliRouteLiveOracle,
   oopssecStoredXssReviewsRouteLiveOracle,
   oopssecRaceConditionCouponRouteLiveOracle,
