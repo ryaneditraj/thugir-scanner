@@ -56917,6 +56917,54 @@ const the0xPwnXssDocumentWriteRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const the0xPwnXssTagFilterBypassRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/lab-xss\/lab-6\/?/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideThe0xPwnXssTagFilterBypassLabEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "the0x-pwn /lab-xss/lab-6 route scan — innerHTML reflects query behind blockTag denylist bypassable via unknown elements and onfocus autofocus"
+    }
+  };
+};
+
+const the0xPwnXssJavascriptUrlRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/lab-xss\/lab-7\/?/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideThe0xPwnXssJavascriptUrlLabEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "the0x-pwn /lab-xss/lab-7 route scan — back.href assigned to javascript: URL with analytics fetch callback"
+    }
+  };
+};
+
+const the0xPwnXssIframeDataUriRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/lab-xss\/lab-10\/?/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideThe0xPwnXssIframeDataUriLabEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "the0x-pwn /lab-xss/lab-10 route scan — iframe data:text/html payloads injected into resultQuery.innerHTML with HTML-tag filter bypass"
+    }
+  };
+};
+
 // --- montanajim CSCI210 classroom XSS examples (montanajim.github.io/CSCI210/wpref/xssExamples.html) -
 const CLIENT_MONTANAJIM_XSS_CLASSROOM_RES: { label: string; re: RegExp }[] = [
   {
@@ -101219,6 +101267,9 @@ export const RULES: Record<string, Rule> = {
   the0xPwnXssQueryParamRouteLiveOracle,
   the0xPwnXssFilterBypassTagsRouteLiveOracle,
   the0xPwnXssDocumentWriteRouteLiveOracle,
+  the0xPwnXssTagFilterBypassRouteLiveOracle,
+  the0xPwnXssJavascriptUrlRouteLiveOracle,
+  the0xPwnXssIframeDataUriRouteLiveOracle,
   clientSideMontanajimXssClassroomEvidence,
   clientSideHackxorEvidence,
   clientSidePygoatEvidence,

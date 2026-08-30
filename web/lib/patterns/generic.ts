@@ -30807,6 +30807,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the0x-pwn-xss-javascript-url-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn javascript: URL XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-7 on the0x-pwn.github.io, back.href is assigned to a javascript: URL with an analytics fetch callback — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-7 documents javascript: URL injection via href assignment for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssJavascriptUrlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign user input to javascript: href URLs — validate and block dangerous URL schemes.",
+      steps: [
+        "Block javascript: and data: schemes in dynamic href assignments.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-7 route documents javascript: URL XSS. Show URL scheme validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-iframe-data-uri-lab-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -30829,6 +30854,31 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host the0x-pwn lab-10-style iframe data: URI XSS labs. Show data: URI blocking and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the0x-pwn-xss-iframe-data-uri-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn iframe data: URI XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-10 on the0x-pwn.github.io, iframe elements with data:text/html payloads are injected into resultQuery.innerHTML behind an HTML-tag filter bypass — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-10 documents iframe data: URI injection with HTML-tag filter bypass for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssIframeDataUriRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block data: URIs and sanitize iframe src attributes in production.",
+      steps: [
+        "Disallow data: and javascript: URI schemes in iframe src attributes.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-10 route documents iframe data: URI XSS. Show data: URI blocking remediation.",
     version: 1,
     enabled: true
   },
@@ -31008,6 +31058,31 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host the0x-pwn lab-6-style tag-filter bypass XSS labs. Show proper sanitization and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the0x-pwn-xss-tag-filter-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn HTML tag filter bypass XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-6 on the0x-pwn.github.io, query is reflected into resultQuery.innerHTML behind a blockTag denylist bypassable via unknown elements and onfocus autofocus — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-6 documents denylist-based tag filtering bypass before innerHTML assignment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssTagFilterBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Tag denylists are bypassable — use textContent or a strict HTML sanitizer instead of innerHTML.",
+      steps: [
+        "Replace innerHTML assignments with textContent for user-controlled data.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-6 route documents tag-filter bypass XSS. Show proper sanitization remediation.",
     version: 1,
     enabled: true
   },
