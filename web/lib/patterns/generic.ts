@@ -30993,6 +30993,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "yogsec-xss-lab36-oninput-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #36 oninput route live oracle",
+    description:
+      "When scanning /labs/lab36.html, yogsec documents newInput.oninput with new Function('event', code) — route-specific per-keystroke XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #36 exposes oninput event injection with user-controlled JavaScript that executes on every keystroke for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab36OninputRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never assign oninput handlers from user-controlled code in production.",
+      steps: [
+        "Use addEventListener('input', safeFn) instead of new Function with user input.",
+        "Reject user-controlled event handler attributes on dynamically created inputs.",
+        "Use Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #36 route documents oninput injection XSS. Show safe input event handlers and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab37-onchange-select-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "critical",
+    title: "yogsec XSS Lab #37 select onchange route live oracle",
+    description:
+      "When scanning /labs/lab37.html, yogsec documents select.onchange with eval(code) — route-specific dropdown-change XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #37 exposes select onchange with eval(userCode) that executes attacker JavaScript when the dropdown changes for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab37OnchangeSelectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never use eval() in onchange handlers with user-controlled code in production.",
+      steps: [
+        "Use addEventListener('change', safeFn) instead of eval with user input.",
+        "Never pass user-controlled strings to eval() in select change handlers.",
+        "Use Content-Security-Policy to block eval and inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #37 route documents select onchange eval XSS. Show safe change handlers and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab38-onkeyup-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "critical",
+    title: "yogsec XSS Lab #38 onkeyup route live oracle",
+    description:
+      "When scanning /labs/lab38.html, yogsec documents input.onkeyup with eval(code) — route-specific key-release XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #38 exposes onkeyup event injection with eval(userCode) that executes attacker JavaScript on every key release for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab38OnkeyupRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never use eval() in onkeyup handlers with user-controlled code in production.",
+      steps: [
+        "Use addEventListener('keyup', safeFn) instead of eval with user input.",
+        "Never pass user-controlled strings to eval() in keyboard event handlers.",
+        "Use Content-Security-Policy to block eval and inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #38 route documents onkeyup eval XSS. Show safe keyboard event handlers and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-labs-evidence",
     platform: "generic",
     category: "Cross-site scripting",

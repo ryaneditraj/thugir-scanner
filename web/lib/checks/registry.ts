@@ -56864,6 +56864,48 @@ const yogsecXssLab35OnfocusAutofocusRouteLiveOracle: Rule = async (ctx) =>
     "yogsec XSS Lab #35 route scan — setAttribute('onfocus', userCode) + autofocus executes attacker code on focus — DOM XSS training sink"
   );
 
+const yogsecXssLab36OninputRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    36,
+    [
+      { label: "oninput event injection lab title", re: /XSS Lab #36:\s*oninput Event Injection/i },
+      { label: "oninput dynamic input heading", re: /oninput Event in Dynamically Created Input/i },
+      {
+        label: "oninput new Function sink",
+        re: /new Function\(['"]event['"],\s*code\)|newInput\.oninput\s*=\s*function/i
+      },
+      { label: "create input with oninput button", re: /Create Input with oninput|createInputWithOninput|oninput injection/i }
+    ],
+    "yogsec XSS Lab #36 route scan — newInput.oninput with new Function('event', code) executes attacker code on every keystroke — DOM XSS training sink"
+  );
+
+const yogsecXssLab37OnchangeSelectRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    37,
+    [
+      { label: "onchange select lab title", re: /XSS Lab #37:\s*onchange in select Element/i },
+      { label: "onchange select heading", re: /onchange in select Element/i },
+      { label: "select onchange handler sink", re: /select\.onchange\s*=\s*function/i },
+      { label: "eval on select change", re: /eval\(code\)|XSS from select onchange/i }
+    ],
+    "yogsec XSS Lab #37 route scan — select.onchange with eval(code) executes attacker JavaScript on dropdown change — DOM XSS training sink"
+  );
+
+const yogsecXssLab38OnkeyupRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    38,
+    [
+      { label: "onkeyup injection lab title", re: /XSS Lab #38:\s*onkeyup Injection/i },
+      { label: "onkeyup injection heading", re: /onkeyup Injection/i },
+      { label: "input onkeyup handler sink", re: /input\.onkeyup\s*=\s*function/i },
+      { label: "eval on keyup release", re: /eval\(code\)|XSS from onkeyup/i }
+    ],
+    "yogsec XSS Lab #38 route scan — input.onkeyup with eval(code) executes attacker JavaScript on every key release — DOM XSS training sink"
+  );
+
 // --- the0x-pwn XSS Labs (the0x-pwn.github.io/lab-xss — 10 reflected/DOM challenges) ----
 const CLIENT_THE0X_PWN_XSS_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -101786,6 +101828,9 @@ export const RULES: Record<string, Rule> = {
   yogsecXssLab33OnerrorRouteLiveOracle,
   yogsecXssLab34OnloadRouteLiveOracle,
   yogsecXssLab35OnfocusAutofocusRouteLiveOracle,
+  yogsecXssLab36OninputRouteLiveOracle,
+  yogsecXssLab37OnchangeSelectRouteLiveOracle,
+  yogsecXssLab38OnkeyupRouteLiveOracle,
   clientSideThe0xPwnXssLabsEvidence,
   clientSideThe0xPwnXssQueryParamLabEvidence,
   clientSideThe0xPwnXssDomHashLabEvidence,

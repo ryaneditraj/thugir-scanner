@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-30T14:03:51.773Z",
-  "total": 2899,
-  "uniqueSlugs": 2891,
+  "generatedAt": "2026-08-30T15:03:50.179Z",
+  "total": 2902,
+  "uniqueSlugs": 2894,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2881,
+    "generic": 2884,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2814,
+    "deep": 2817,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 212,
     "Broken authentication": 188,
     "Injection": 462,
-    "Cross-site scripting": 760,
+    "Cross-site scripting": 763,
     "Open redirect": 25,
     "general": 20,
     "SSRF": 19,
@@ -2885,6 +2885,9 @@
     "yogsec-xss-lab33-onerror-route-live-oracle",
     "yogsec-xss-lab34-onload-route-live-oracle",
     "yogsec-xss-lab35-onfocus-autofocus-route-live-oracle",
+    "yogsec-xss-lab36-oninput-route-live-oracle",
+    "yogsec-xss-lab37-onchange-select-route-live-oracle",
+    "yogsec-xss-lab38-onkeyup-route-live-oracle",
     "zen-demo-java-create-route-live-oracle",
     "zen-demo-java-create-sqli-live-oracle",
     "zen-demo-java-execute-route-live-oracle",
