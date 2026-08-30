@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T03:12:37.391Z",
+  "updated_at": "2026-08-30T04:12:00.000Z",
   "discovery_urls": [
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/a8",
@@ -11056,6 +11056,31 @@
       "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/findrive/tools",
       "source": "OWASP FinBot CTF — unauthenticated MCP findrive tool override PUT oracle (issue #544)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://mutillidae.lab.pentest-forge.com/index.php?page=user-info.php",
+      "source": "PentestForge Lab — Mutillidae user-info SQLi hub (lab.pentest-forge.com Mutillidae classic extended)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwa.lab.pentest-forge.com/vulnerabilities/sqli_blind/",
+      "source": "PentestForge Lab — DVWA blind SQLi challenge route (lab.pentest-forge.com hosted DVWA)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwa.lab.pentest-forge.com/vulnerabilities/xss_r/",
+      "source": "PentestForge Lab — DVWA reflected XSS challenge route (lab.pentest-forge.com hosted DVWA)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/",
+      "source": "kOaDT/oss-oopssec-store — product search SQLi walkthrough GET /api/products/search?q= (OSS README deploy docs)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api/",
+      "source": "kOaDT/oss-oopssec-store — path traversal files API walkthrough /api/files?file= (OSS README deploy docs)",
+      "auth": "oss_deploy"
     }
   ]
 }
