@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T17:31:32.344Z",
+  "updated_at": "2026-08-30T18:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3241,
-  "total_findings": 33721,
-  "critical_findings": 58,
+  "total_sites_scanned": 3245,
+  "total_findings": 33787,
+  "critical_findings": 59,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2108,
-  "discovery_findings": 27093,
-  "improvements_shipped": 1173,
-  "last_run": "2026-08-30T17:31:32.344Z",
+  "discovery_findings": 27108,
+  "improvements_shipped": 1176,
+  "last_run": "2026-08-30T18:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,45 +48,36 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 598 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present"
+      "note": "Stable 6/6 first-pass recall (51 findings); no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 112,
-      "focus": "oopssec roadmap gaps (BOLA wishlist, IDOR order privacy, JWT weak secret, SVG upload XSS, session fixation) + priority drain vuln-expose /api/users + /sqli/blind + pwnshop seller/storefront SSTI",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 15,
+      "focus": "Chimera insurance claims + HIPAA PHI export route oracles from endpoints-catalog / hipaa-evidence-endpoints gaps",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[]; 38 live oracles)",
-      "vuln-expose.vercel.app/api/users: 16 findings — vuln-expose-users-api-live-oracle + route oracle confirmed",
-      "vuln-expose.vercel.app/sqli/blind: 18 findings — vuln-expose-sqli-blind-route-live-oracle confirmed",
-      "pwnshop.ctfsecurity.com/seller/storefront: 46 findings — pwnshop-seller-storefront-ssti-route-live-oracle confirmed (PWN-040)",
-      "yogsec.github.io/Vulnerable-Shopping-Cart/: 5 findings — yogsec-vulnerable-shopping-cart-route-live-oracle shipped (prior 17 UTC partial)",
-      "chimera.atlascrew.dev/api/payments/process: 5 findings — chimera-payments-process-route-live-oracle shipped (prior partial)",
-      "koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access: 4 findings — client-side walkthrough only; BOLA route oracle still absent"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "chimera.atlascrew.dev/api/claims/submit: 5 findings — chimera-claims-submit-route-live-oracle shipped",
+      "chimera.atlascrew.dev/api/v1/healthcare/records/export: 5 findings — chimera-healthcare-records-export-route-live-oracle shipped",
+      "chimera.atlascrew.dev/api/claims/amounts/inflate: 5 findings — chimera-claims-amounts-inflate-route-live-oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
       "oopssec walkthrough pages (GitHub Pages) yield client-side evidence only — live app oracles require self-hosted npx create-oss-store",
       "oopssec BOLA wishlist + IDOR order-privacy + session-fixation + SVG upload: route-specific live oracles still absent",
-      "chimera claims/submit + healthcare/records/export still thin without route oracles",
-      "wrongsecrets /mcp: MCP execute_command env-leak route oracle still absent"
+      "chimera banking/accounts/search + insurance/policies/lookup still thin without route oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
-    "pwnshop.ctfsecurity.com/seller/storefront": 46,
-    "vuln-expose.vercel.app/sqli/blind": 18,
-    "vuln-expose.vercel.app/api/users": 16,
-    "koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss": 8,
-    "koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass": 7,
-    "koadt.github.io/oss-oopssec-store/posts/session-fixation-weak-session-management": 7,
-    "koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach": 6,
-    "koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access": 4,
-    "yogsec.github.io/Vulnerable-Shopping-Cart/": 5,
-    "chimera.atlascrew.dev/api/payments/process": 5
+    "juice-shop.herokuapp.com": 51,
+    "chimera.atlascrew.dev/api/claims/submit": 5,
+    "chimera.atlascrew.dev/api/v1/healthcare/records/export": 5,
+    "chimera.atlascrew.dev/api/claims/amounts/inflate": 5,
+    "chimera.atlascrew.dev/api/payments/process": 5,
+    "yogsec.github.io/Vulnerable-Shopping-Cart/": 5
   }
 }
