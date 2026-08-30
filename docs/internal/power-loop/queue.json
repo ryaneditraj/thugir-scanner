@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T02:14:00.000Z",
+  "updated_at": "2026-08-30T03:12:37.391Z",
   "discovery_urls": [
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/a8",
@@ -10833,6 +10833,31 @@
     {
       "url": "https://appsecmaster.net/labs/ssrf",
       "source": "AppSecMaster — interactive SSRF practice lab (appsecmaster.net/labs catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finstripe/tools",
+      "source": "OWASP FinBot CTF — unauthenticated MCP finstripe tool override PUT oracle (issue #544)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/systemutils/tools",
+      "source": "OWASP FinBot CTF — unauthenticated MCP systemutils tool override PUT oracle (issue #544)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-1",
+      "source": "OWASP WrongSecrets — challenge-1 hardcoded password oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-2",
+      "source": "OWASP WrongSecrets — challenge-2 canary token oracle (public Heroku benchmark)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ctf-challange-3.vercel.app/api/hacker",
+      "source": "Gowreesh-VT/CTF_Challange_3 — Next.js middleware auth bypass oracle GET /api/hacker (GitHub README)",
       "auth": "public_demo"
     }
   ],
