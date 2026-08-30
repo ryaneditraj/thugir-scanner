@@ -6623,6 +6623,24 @@
       "slug": "yogsec-xss-lab35-onfocus-autofocus-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab35OnfocusAutofocusRouteLiveOracle matches XSS Lab #35 onfocus autofocus Injection + setAttribute('onfocus', userCode) + autofocus markers; yogsec.github.io/xss-labs/labs/lab35.html findings 7→8 (+yogsec-xss-lab35-onfocus-autofocus-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-transactions-history-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/transactions/history?account_id= — time-based blind SQLi via account_id per atlas-crew/Chimera vuln-api README; chimeraDocsCorpus appends CHIMERA_OPENAPI_FALLBACK when catalog lists paths without USE_DATABASE SQLi markers; chimera.atlascrew.dev/api/v1/transactions/history findings 5→7 (+chimera-transactions-history-sqli-live-oracle +chimera-transactions-history-sqli-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-deserialization-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/deserialization returns HTTP 307 Location /login?next=%2Fchallenges%2Fdeserialization; aiSecurityDeserializationRouteLiveOracle added to AI_SECURITY_AUTH_GATED_CHALLENGE_META; ai-security-platform-iota.vercel.app/challenges/deserialization findings 6→4 (+ai-security-deserialization-route-live-oracle; Vercel throttling reduced generic hub fingerprint); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hack-health-tutorial.vercel.app",
+      "slug": "hack-health-a01-brute-force-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cybersecurity/a01/bruteForce Nextra tutorial documents CWE-307 brute-force / credential stuffing BAC lab; hack-health-tutorial.vercel.app/cybersecurity/a01/bruteForce findings 8→11 (+hack-health-a01-brute-force-route-live-oracle +client-side-hack-health-brute-force-evidence); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

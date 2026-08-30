@@ -15056,6 +15056,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-transactions-history-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera transaction history SQLi live oracle",
+    description:
+      "On chimera.atlascrew.dev, Chimera vuln-api README documents time-based blind SQLi via GET /api/v1/transactions/history?account_id= when USE_DATABASE=true — host-level SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Chimera docs disclose time-based blind SQL injection on the transaction history endpoint for WAF honeypot training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraTransactionsHistorySqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries on transaction history endpoints.",
+        "Validate account_id format server-side before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our Chimera transaction history endpoint documents time-based blind SQLi via account_id. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-transactions-history-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera transaction history SQLi route live oracle",
+    description:
+      "When scanning /api/v1/transactions/history on chimera.atlascrew.dev, the vuln-api README documents time-based blind SQLi via account_id query parameter when USE_DATABASE=true — route-specific transaction history SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional time-based blind SQL injection on the transaction history endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraTransactionsHistorySqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries on transaction history endpoints.",
+        "Validate account_id format server-side before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/transactions/history route documents time-based blind SQLi via account_id. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-swagger-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -15182,6 +15234,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our HackHealth /cybersecurity/a03/sqlInjection route documents intentional login SQLi. Show parameterized query fixes for the attack lab.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hack-health-a01-brute-force-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "HackHealth A01 brute-force route live oracle",
+    description:
+      "When scanning /cybersecurity/a01/bruteForce on hack-health-tutorial.vercel.app, the Nextra A01 Broken Access Control tutorial documents CWE-307 brute-force / credential stuffing against the login API — route-specific BAC training oracle (Vercel checkpoint corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation of HackHealth A01 brute-force tutorial enables targeted scanner calibration for educational BAC labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hackHealthA01BruteForceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce login rate limiting and restrict tutorial labs to local dev.",
+      steps: [
+        "Add account lockout and CAPTCHA after repeated failed login attempts.",
+        "Host HackHealth attack tutorials on localhost only, not public Vercel deploys.",
+        "Monitor and alert on brute-force patterns against authentication endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth /cybersecurity/a01/bruteForce route documents CWE-307 brute-force attacks. Show rate-limiting and account lockout remediation.",
     version: 1,
     enabled: true
   },
@@ -38716,6 +38794,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /challenges/xxe route redirects to login preserving a CWE-611 XXE challenge URL. Show XML parser hardening remediation for Next.js API routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-deserialization-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "AI Security Platform deserialization challenge route live oracle",
+    description:
+      "When scanning /challenges/deserialization on ai-security-platform-iota.vercel.app, the route redirects to /login?next=/challenges/deserialization confirming an auth-gated insecure deserialization CWE-502 challenge route on the discovery queue.",
+    impactOneline:
+      "Route-specific confirmation that AI Security Platform preserves a deserialization challenge route for scanner calibration even when the 14-challenge public catalog omits insecure deserialization labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityDeserializationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — never deserialize untrusted object graphs.",
+      steps: [
+        "Use safe data formats such as JSON with strict schema validation instead of native object deserialization.",
+        "Sign and verify serialized payloads with HMAC before accepting them.",
+        "Require authentication before exposing deserialization lab panels."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/deserialization route redirects to login preserving a CWE-502 insecure deserialization challenge URL. Show safe serialization remediation for Next.js APIs.",
     version: 1,
     enabled: true
   },
