@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T06:18:04.000Z",
+  "updated_at": "2026-08-30T07:22:00.000Z",
   "discovery_urls": [
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api/",
@@ -11161,6 +11161,31 @@
       "url": "https://koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api/",
       "source": "kOaDT/oss-oopssec-store \u2014 path traversal files API walkthrough /api/files?file= (OSS README deploy docs)",
       "auth": "oss_deploy"
+    },
+    {
+      "url": "https://mutillidae.lab.pentest-forge.com/index.php?page=login.php",
+      "source": "PentestForge Lab \u2014 Mutillidae login SQLi/auth-bypass hub (lab.pentest-forge.com hosted Mutillidae II)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://mutillidae.lab.pentest-forge.com/index.php?page=register.php",
+      "source": "PentestForge Lab \u2014 Mutillidae registration SQLi/XSS hub (lab.pentest-forge.com hosted Mutillidae II)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwa.lab.pentest-forge.com/vulnerabilities/sqli/",
+      "source": "PentestForge Lab \u2014 DVWA classic SQLi challenge route (lab.pentest-forge.com hosted DVWA)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwa.lab.pentest-forge.com/vulnerabilities/xss_d/",
+      "source": "PentestForge Lab \u2014 DVWA DOM-based XSS challenge route (lab.pentest-forge.com hosted DVWA)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.xplat-demo.threatx.io/graphiql",
+      "source": "ThreatX DVGA public demo \u2014 GraphiQL introspection + injection oracle (dvga.xplat-demo.threatx.io)",
+      "auth": "public_demo"
     }
   ]
 }
