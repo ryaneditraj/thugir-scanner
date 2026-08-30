@@ -46206,6 +46206,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-jwt-weak-token-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "vAPI JustWeakToken JWT live oracle",
+    description:
+      "POST /jwt/user registers a user then forged admin JWT (alg:none or HS256 re-sign with known weak key) returns flag{jwt_*} — the vAPI JustWeakToken oracle.",
+    impactOneline:
+      "Accepting alg:none or weak HS256 secrets lets attackers forge admin JWTs and read protected flags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiJwtWeakTokenLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — pin JWT algorithms and use strong secrets in production.",
+      steps: [
+        "Reject alg:none and enforce an allowlist of signing algorithms (RS256/HS256 only).",
+        "Use strong, rotated signing secrets never embedded in client code.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /jwt/user accepts forged admin JWTs with a known weak HS256 secret. Show secure JWT verification patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-serversurfer-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "vAPI ServerSurfer SSRF live oracle",
+    description:
+      "GET /serversurfer?url= fetches attacker-controlled URLs server-side (blocks 127.0.0.1 but accepts example.com) — the vAPI ServerSurfer SSRF oracle.",
+    impactOneline:
+      "Server-side URL fetchers without strict allowlists let attackers reach internal services or exfiltrate cloud metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiServerSurferLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — block internal IPs and use URL allowlists in production.",
+      steps: [
+        "Deny private/link-local/metadata IP ranges in server-side fetchers.",
+        "Use an allowlist of permitted outbound hosts instead of blocklists.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /serversurfer endpoint fetches arbitrary external URLs server-side. Show SSRF-safe URL validation patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vapi-jwt-weak-token-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",

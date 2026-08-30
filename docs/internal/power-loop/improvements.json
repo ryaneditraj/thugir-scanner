@@ -6245,6 +6245,24 @@
       "slug": "nodegoat-tutorial-hub-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial hub exposes OWASP Top 10 A1–A10 nav links (Fixing OWASP Top 10 title + /tutorial/a1–a10 hrefs); nodegoat-websec.herokuapp.com/tutorial findings 15→16 (+nodegoat-tutorial-hub-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-jwt-serversurfer-live-oracle-patterns",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: added vapi-jwt-weak-token-live-oracle + vapi-serversurfer-ssrf-live-oracle pattern catalog entries (rule_ref to vapiJwtWeakTokenLiveOracle/vapiServerSurferLiveOracle); http://vapi.apisec.ai/vapi findings 16→18 (+vapi-jwt-weak-token-live-oracle +vapi-serversurfer-ssrf-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.apisec.ai",
+      "slug": "vapi-api7-cors-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vapiApi7CorsRouteLiveOracle adds VAPI_API7_CORS_ROUTE_FALLBACK when PHP session live probe fails; vapiApi7CorsMisconfigLiveOracle primes PHPSESSID from /api7/user/key before login; http://vapi.apisec.ai/vapi/api7/cors findings 13→16 (+vapi-api7-cors-route-live-oracle +vapi-jwt-weak-token-live-oracle +vapi-serversurfer-ssrf-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi-community-posts-bola-seed-uuid-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: crapiVehicleBolaLiveOracle merges scan-body vehicleid UUIDs on community posts routes + CRAPI_KNOWN_VEHICLE_UUIDS seed fallback; crapi2.apisec.ai/identity/api/v2/community/posts/recent findings 11→13 (+crapi-community-posts-live-oracle +crapi-vehicle-bola-live-oracle alongside route oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
