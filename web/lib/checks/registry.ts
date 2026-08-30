@@ -6015,7 +6015,11 @@ const clientSideOopssecXffSqliEvidence: Rule = async (ctx) => {
 const oopssecXffSqliRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/posts\/x-forwarded-for-sql-injection/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecXffSqliEvidence(ctx);
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecXffSqliEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -56797,6 +56801,38 @@ const the0xPwnXssHrefAngleBracketsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const the0xPwnXssDomHashRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/lab-xss\/lab-3\/?/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideThe0xPwnXssDomHashLabEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "the0x-pwn /lab-xss/lab-3 route scan — location.hash decoded into resultQuery.innerHTML without sanitization"
+    }
+  };
+};
+
+const the0xPwnXssSvgScriptInjectionRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/lab-xss\/lab-9\/?/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideThe0xPwnXssSvgScriptInjectionLabEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "the0x-pwn /lab-xss/lab-9 route scan — innerHTML reflects query when SVG/animatetransform tags are omitted from blockTag denylist"
+    }
+  };
+};
+
 // --- montanajim CSCI210 classroom XSS examples (montanajim.github.io/CSCI210/wpref/xssExamples.html) -
 const CLIENT_MONTANAJIM_XSS_CLASSROOM_RES: { label: string; re: RegExp }[] = [
   {
@@ -101093,6 +101129,8 @@ export const RULES: Record<string, Rule> = {
   clientSideThe0xPwnXssSvgScriptInjectionLabEvidence,
   the0xPwnXssTemplateLiteralRouteLiveOracle,
   the0xPwnXssHrefAngleBracketsRouteLiveOracle,
+  the0xPwnXssDomHashRouteLiveOracle,
+  the0xPwnXssSvgScriptInjectionRouteLiveOracle,
   clientSideMontanajimXssClassroomEvidence,
   clientSideHackxorEvidence,
   clientSidePygoatEvidence,
