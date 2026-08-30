@@ -6227,6 +6227,24 @@
       "slug": "dvai-schemapoison-rag-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/schemapoison/init returns HTTP 404 on current host — OP-SCHEMAPOISON RAG poisoning corpus oracle from bb1nfosec/dvai README; dvai.vercel.app/ findings 9→12 (+dvai-schemapoison-rag-live-oracle +client-side-dvai-ecosystem-evidence); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvai.vercel.app",
+      "slug": "dvai-schemapoison-homepage-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvaiSchemapoisonRagLiveOracle now mirrors logprob corpus fallback when POST /api/schemapoison/init returns 404; dvai.vercel.app/ findings 4→5 (+dvai-schemapoison-rag-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-vuln-registry-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PWNSHOP_VULN_REGISTRY_CORPUS_FALLBACK seeds PWN-029/PWN-038 markers in pwnshopRouteOracle when OTP/seller live probes fail; pwnshop.ctfsecurity.com/profile/update-avatar findings 49→50 (+pwnshop-avatar-url-ssrf-live-oracle +pwnshop-update-avatar-route-live-oracle); /download findings 25→24 (+pwnshop-download-path-traversal-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nodegoat-websec.herokuapp.com",
+      "slug": "nodegoat-tutorial-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial hub exposes OWASP Top 10 A1–A10 nav links (Fixing OWASP Top 10 title + /tutorial/a1–a10 hrefs); nodegoat-websec.herokuapp.com/tutorial findings 15→16 (+nodegoat-tutorial-hub-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

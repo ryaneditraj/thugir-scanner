@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-29T23:25:32.611Z",
-  "total": 2861,
-  "uniqueSlugs": 2853,
+  "generatedAt": "2026-08-30T00:38:29.725Z",
+  "total": 2862,
+  "uniqueSlugs": 2854,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2843,
+    "generic": 2844,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2776,
+    "deep": 2777,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 134,
-    "Security misconfiguration": 210,
+    "Security misconfiguration": 211,
     "Broken authentication": 186,
     "Injection": 456,
     "Cross-site scripting": 735,
@@ -1958,6 +1958,7 @@
     "nodegoat-tutorial-a7-route-live-oracle",
     "nodegoat-tutorial-a8-route-live-oracle",
     "nodegoat-tutorial-a9-route-live-oracle",
+    "nodegoat-tutorial-hub-route-live-oracle",
     "nodegoat-tutorial-redos-live-oracle",
     "nodegoat-tutorial-redos-route-live-oracle",
     "nodegoat-tutorial-ssrf-route-live-oracle",

@@ -50377,6 +50377,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-tutorial-hub-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "NodeGoat OWASP Top 10 tutorial hub route live oracle",
+    description:
+      "When scanning /tutorial, the hub documents OWASP Top 10 A1–A10 fixing walkthroughs with nav links to /tutorial/a1–a10 lesson routes — route-specific NodeGoat training hub oracle.",
+    impactOneline:
+      "Public NodeGoat tutorial hub documents the full OWASP Top 10 lesson catalog for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatTutorialHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — gate tutorial hubs behind authentication in production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes.",
+        "Do not expose OWASP training walkthroughs on production-facing domains."
+      ]
+    },
+    fixPrompt:
+      "Our /tutorial hub documents OWASP Top 10 lesson navigation. Show how to isolate NodeGoat training from production deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "nodegoat-tutorial-a1-route-live-oracle",
     platform: "generic",
     category: "Injection",
