@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-30T02:35:51.324Z",
-  "total": 2865,
-  "uniqueSlugs": 2857,
+  "generatedAt": "2026-08-30T03:42:25.245Z",
+  "total": 2867,
+  "uniqueSlugs": 2859,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2847,
+    "generic": 2849,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2780,
+    "deep": 2782,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 591,
+    "Broken access control": 592,
     "Exposed secret": 115,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 134,
     "Security misconfiguration": 212,
     "Broken authentication": 187,
-    "Injection": 456,
+    "Injection": 457,
     "Cross-site scripting": 735,
     "Open redirect": 25,
     "general": 20,
@@ -368,6 +368,7 @@
     "chimera-fedramp-openapi-extensions-route-live-oracle",
     "chimera-hipaa-evidence-endpoints-route-live-oracle",
     "chimera-login-vulnerable-sqli-route-live-oracle",
+    "chimera-patients-search-sqli-live-oracle",
     "chimera-patients-search-sqli-route-live-oracle",
     "chimera-swagger-route-live-oracle",
     "chimera-vulnerability-inventory-route-live-oracle",
@@ -2009,6 +2010,7 @@
     "owasp-genai-unbounded-consumption-route-live-oracle",
     "owasp-genai-vector-embedding-route-live-oracle",
     "pc-parts-store-api-login-token-route-live-oracle",
+    "pc-parts-store-checkout-idor-live-oracle",
     "pc-parts-store-checkout-idor-route-live-oracle",
     "pc-parts-store-login-sqli-route-live-oracle",
     "pc-parts-store-product-idor-route-live-oracle",

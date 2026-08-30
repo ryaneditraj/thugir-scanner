@@ -14744,6 +14744,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-patients-search-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera patient SSN search SQLi live oracle",
+    description:
+      "On chimera.atlascrew.dev, Chimera openapi documents classic SQLi via GET /api/v1/patients/search?ssn= when USE_DATABASE=true — host-level SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Chimera docs disclose classic SQL injection on the patient SSN search endpoint for WAF honeypot training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraPatientsSearchSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries.",
+        "Validate and sanitize all query parameters before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera patient search API documents classic SQLi via SSN parameter. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-patients-search-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -55891,6 +55917,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pc-parts-store-checkout-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PC Parts Store checkout IDOR live oracle",
+    description:
+      "On pc-parts-store.vercel.app, checkout.php accepts spoofed user_id and captures credit card numbers without session ownership checks — jgpython/pc-parts-store-lab README corpus oracle on Vercel SPA deploy.",
+    impactOneline:
+      "Checkout IDOR lets attackers submit orders and card data for arbitrary user IDs without authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pcPartsStoreCheckoutIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind checkout to authenticated session user_id server-side; never trust hidden form fields.",
+      steps: [
+        "Derive user_id from server-side session, not client-supplied hidden inputs.",
+        "Require authentication before checkout and validate order ownership.",
+        "Tokenize credit card data via PCI-compliant payment processor instead of raw capture."
+      ]
+    },
+    fixPrompt:
+      "Our checkout.php trusts hidden user_id and stores raw credit card numbers. Show session-bound checkout remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pc-parts-store-checkout-idor-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -58836,7 +58888,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Pentest-Ground DVWA SQL injection route live oracle",
     description:
-      "When scanning /vulnerabilities/sqli/, POST id=1' OR '1'='1 returns multiple user rows — Pentest-Ground hosted DVWA SQL injection route oracle.",
+      "When scanning /vulnerabilities/sqli/, POST id=1' OR '1'='1 returns multiple user rows, or DVWA SQL Injection module corpus confirms training oracle — Pentest-Ground hosted DVWA SQL injection route oracle.",
     impactOneline:
       "Unsanitized SQL concatenation on DVWA id parameters lets attackers dump every user record with a tautology payload.",
     detectorKind: "rule_ref",
