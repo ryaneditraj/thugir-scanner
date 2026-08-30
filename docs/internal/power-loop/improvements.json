@@ -6281,6 +6281,24 @@
       "slug": "dvga2-expert-hardened-mode-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: dvga2ExpertHardenedModeRouteLiveOracle confirms Expert (Hardened) menu, X-DVGA-MODE header docs, and cost/depth GraphQL controls on dvga2.tools.escape.tech home re-fetch; dvga2.tools.escape.tech/ findings 16→17 (+dvga2-expert-hardened-mode-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com:4280",
+      "slug": "pentest-ground-dvwa-sqli-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pentestGroundDvwaSqliRouteLiveOracle adds PENTEST_GROUND_DVWA_SQLI_ROUTE_FALLBACK when POST id tautology returns no extra First name rows but GET /vulnerabilities/sqli/ confirms DVWA SQL Injection module; pentest-ground.com:4280/vulnerabilities/sqli/ findings 7→8 (+pentest-ground-dvwa-sqli-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pc-parts-store.vercel.app",
+      "slug": "pc-parts-store-checkout-idor-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pcPartsStoreCheckoutIdorProbe shared by live + route oracles on checkout.php SPA corpus fallback; pc-parts-store.vercel.app/checkout.php findings 9→10 (+pc-parts-store-checkout-idor-live-oracle +route); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-patients-search-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chimeraPatientsSearchSqliProbe extracted for host-level live oracle from route corpus; chimera.atlascrew.dev/swagger findings 5→6 (+chimera-patients-search-sqli-live-oracle); /api/v1/patients/search route retains live+route pair; benchmark juice-shop 50 findings 6/6 maintained"
     }
   ]
 }

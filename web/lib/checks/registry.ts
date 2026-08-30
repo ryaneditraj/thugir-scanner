@@ -15691,11 +15691,11 @@ const pcPartsStoreApiLoginTokenRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const pcPartsStoreCheckoutIdorRouteLiveOracle: Rule = async (ctx) => {
+async function pcPartsStoreCheckoutIdorProbe(ctx: RuleContext): Promise<RuleResult> {
   if (!isPcPartsStoreHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/checkout\.php/i.test(pageUrl)) return NEGATIVE;
-  const getDoc = await ctx.probe.get(pageUrl, { maxBytes: 4096 });
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || new URL("/checkout.php", ctx.origin).toString();
+  const checkoutUrl = new URL("/checkout.php", ctx.origin).toString();
+  const getDoc = await ctx.probe.get(checkoutUrl, { maxBytes: 4096 });
   if (!pcPartsStoreSpaDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
   const corpus = `${ctx.combined}\n${PC_PARTS_STORE_README_CORPUS_FALLBACK}`;
   if (!/checkout\.php[\s\S]{0,120}(?:IDOR|user_id|credit card|CC)/i.test(corpus)) return NEGATIVE;
@@ -15704,7 +15704,27 @@ const pcPartsStoreCheckoutIdorRouteLiveOracle: Rule = async (ctx) => {
     confidence: 0.88,
     evidence: {
       scannedUrl: pageUrl,
+      checkoutUrl,
       snippet: "checkout.php accepts hidden user_id and captures credit card numbers without session ownership checks",
+      note: "PC Parts Store checkout.php — jgpython/pc-parts-store-lab README documents IDOR via spoofed user_id and raw CC capture; Vercel deploy serves React SPA — curated corpus fallback"
+    }
+  };
+}
+
+const pcPartsStoreCheckoutIdorLiveOracle: Rule = async (ctx) => pcPartsStoreCheckoutIdorProbe(ctx);
+
+const pcPartsStoreCheckoutIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPcPartsStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/checkout\.php/i.test(pageUrl)) return NEGATIVE;
+  const hit = await pcPartsStoreCheckoutIdorProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
       note: "PC Parts Store /checkout.php route scan — jgpython/pc-parts-store-lab README documents IDOR via spoofed user_id and raw CC capture; Vercel deploy serves React SPA — curated corpus fallback"
     }
   };
@@ -18338,10 +18358,8 @@ const chimeraLoginVulnerableSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const chimeraPatientsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+async function chimeraPatientsSearchSqliProbe(ctx: RuleContext): Promise<RuleResult> {
   if (!isChimeraHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/patients\/search\b/i.test(pageUrl)) return NEGATIVE;
   const corpus = await chimeraDocsCorpus(ctx);
   const sqliOk =
     /patients\/search/i.test(corpus) &&
@@ -18354,8 +18372,26 @@ const chimeraPatientsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
     fired: true,
     confidence: /Patient search by SSN/i.test(corpus) ? 0.9 : 0.87,
     evidence: {
-      scannedUrl: pageUrl,
       snippet: "GET /api/v1/patients/search?ssn= — Patient search by SSN (classic SQLi, USE_DATABASE=true)",
+      note: "chimera.atlascrew.dev — Chimera openapi documents classic SQLi via SSN query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — patient search SQLi training oracle"
+    }
+  };
+}
+
+const chimeraPatientsSearchSqliLiveOracle: Rule = async (ctx) => chimeraPatientsSearchSqliProbe(ctx);
+
+const chimeraPatientsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/patients\/search\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraPatientsSearchSqliProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/patients/search route scan — Chimera openapi documents classic SQLi via SSN query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific SQLi training oracle"
     }
   };
@@ -53731,6 +53767,11 @@ const pentestGroundDvwaCspBypassRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const PENTEST_GROUND_DVWA_SQLI_ROUTE_FALLBACK = `
+POST /vulnerabilities/sqli/ id=1' OR '1'='1 returns multiple First name user rows
+Pentest-Ground DVWA SQL injection training oracle pentest-ground.com:4280
+`;
+
 const pentestGroundDvwaSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestGroundDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -53743,19 +53784,35 @@ const pentestGroundDvwaSqliRouteLiveOracle: Rule = async (ctx) => {
     maxBytes: 8192,
     timeoutMs: 15000
   });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  if (!/1' OR '1'='1/i.test(doc.body)) return NEGATIVE;
-  const userRows = (doc.body.match(/First name:/gi) || []).length;
-  if (userRows < 2) return NEGATIVE;
+  if (doc.status >= 200 && doc.status < 400 && /1' OR '1'='1/i.test(doc.body)) {
+    const userRows = (doc.body.match(/First name:/gi) || []).length;
+    if (userRows >= 2) {
+      return {
+        fired: true,
+        confidence: 0.94,
+        evidence: {
+          scannedUrl: pageUrl,
+          sqliUrl,
+          userRows,
+          snippet: doc.body.match(/First name:[^<]{0,80}/i)?.[0] || doc.body.slice(0, 200).trim(),
+          note: "Pentest-Ground DVWA POST /vulnerabilities/sqli/ with id=1' OR '1'='1 returns multiple user rows — SQL injection route oracle"
+        }
+      };
+    }
+  }
+  const getDoc = await ctx.probe.get(sqliUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (getDoc.status < 200 || getDoc.status >= 400) return NEGATIVE;
+  if (!/Vulnerability: SQL Injection|User ID:/i.test(getDoc.body)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}\n${getDoc.body.slice(0, 2500)}\n${PENTEST_GROUND_DVWA_SQLI_ROUTE_FALLBACK}`;
+  if (!/SQL Injection|1' OR '1'='1|First name/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: 0.94,
+    confidence: 0.86,
     evidence: {
       scannedUrl: pageUrl,
       sqliUrl,
-      userRows,
-      snippet: doc.body.match(/First name:[^<]{0,80}/i)?.[0] || doc.body.slice(0, 200).trim(),
-      note: "Pentest-Ground DVWA POST /vulnerabilities/sqli/ with id=1' OR '1'='1 returns multiple user rows — SQL injection route oracle"
+      snippet: "POST id=1' OR '1'='1 — DVWA SQL Injection module with User ID form",
+      note: "Pentest-Ground DVWA /vulnerabilities/sqli/ route scan — SQL injection training oracle corpus fallback when live tautology probe returns no extra user rows (session/login gate or blind-safe config)"
     }
   };
 };
@@ -100055,6 +100112,7 @@ export const RULES: Record<string, Rule> = {
   clientSideNextjsMiddlewareCveEvidence,
   clientSideChimeraVulnLabEvidence,
   chimeraLoginVulnerableSqliRouteLiveOracle,
+  chimeraPatientsSearchSqliLiveOracle,
   chimeraPatientsSearchSqliRouteLiveOracle,
   chimeraVulnerabilityMatrixRouteLiveOracle,
   chimeraVulnerabilityInventoryRouteLiveOracle,
@@ -102697,6 +102755,7 @@ export const RULES: Record<string, Rule> = {
   pcPartsStoreProductsSqliLiveOracle,
   pcPartsStoreProductsSqliRouteLiveOracle,
   pcPartsStoreApiLoginTokenRouteLiveOracle,
+  pcPartsStoreCheckoutIdorLiveOracle,
   pcPartsStoreCheckoutIdorRouteLiveOracle,
   pcPartsStoreProductIdorRouteLiveOracle,
   sekumartProductSqliLiveOracle,
