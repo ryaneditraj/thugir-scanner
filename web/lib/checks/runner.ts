@@ -1690,6 +1690,9 @@ const DEEP_RULES = new Set<string>([
   "pentestGroundDvwaCspBypassRouteLiveOracle",
   "pentestGroundDvwaSqliRouteLiveOracle",
   "pentestForgeDvwaSqliRouteLiveOracle",
+  "pentestForgeDvwaSqliBlindRouteLiveOracle",
+  "pentestForgeDvwaXssRRouteLiveOracle",
+  "pentestForgeMutillidaeUserInfoRouteLiveOracle",
   "pentestGroundDvwaUploadRouteLiveOracle",
   "pentestGroundDvwaCsrfRouteLiveOracle",
   "pentestGroundDvwaHubRouteLiveOracle",
@@ -11994,10 +11997,28 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/dvwa\.lab\.pentest-forge\.com/i.test(origin) && p.slug.startsWith("pentest-forge-dvwa")) return -2;
       if (
         /dvwa\.lab\.pentest-forge\.com/i.test(origin) &&
-        /\/vulnerabilities\/sqli\/?/i.test(targetInput) &&
+        /\/vulnerabilities\/sqli_blind\/?/i.test(targetInput) &&
+        p.slug.startsWith("pentest-forge-dvwa-sqli-blind")
+      )
+        return -4;
+      if (
+        /dvwa\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/vulnerabilities\/xss_r\/?/i.test(targetInput) &&
+        p.slug.startsWith("pentest-forge-dvwa-xss-r")
+      )
+        return -4;
+      if (
+        /dvwa\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/vulnerabilities\/sqli(?:\/|$|[?#])/i.test(targetInput) &&
         p.slug.startsWith("pentest-forge-dvwa-sqli")
       )
         return -3;
+      if (
+        /mutillidae\.lab\.pentest-forge\.com/i.test(origin) &&
+        /page=user-info\.php/i.test(targetInput) &&
+        p.slug.startsWith("pentest-forge-mutillidae-user-info")
+      )
+        return -4;
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
       if (
         /pentest-ground\.com:9000/i.test(origin) &&

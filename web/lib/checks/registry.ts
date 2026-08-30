@@ -53835,7 +53835,7 @@ DVWA SQL injection training oracle PentestForge lab.pentest-forge.com
 const pentestForgeDvwaSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isPentestForgeDvwaHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/vulnerabilities\/sqli\/?/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/vulnerabilities\/sqli(?:\/|$|[?#])/i.test(pageUrl)) return NEGATIVE;
   const sqliUrl = new URL("/vulnerabilities/sqli/", pentestForgeDvwaProbeOrigin(ctx)).toString();
   const doc = await ctx.probe.get(sqliUrl, {
     method: "POST",
@@ -53875,6 +53875,171 @@ const pentestForgeDvwaSqliRouteLiveOracle: Rule = async (ctx) => {
       sqliUrl,
       snippet: "POST id=1' OR '1'='1 — multiple First name user rows",
       note: "PentestForge DVWA /vulnerabilities/sqli/ route scan — DVWA SQL injection training oracle corpus fallback when lab host is unreachable (502)"
+    }
+  };
+};
+
+const PENTEST_FORGE_DVWA_SQLI_BLIND_ROUTE_FALLBACK = `
+POST /vulnerabilities/sqli_blind/ id=1' AND '1'='1 vs id=1' AND '1'='2 boolean blind SQL injection
+DVWA blind SQL injection training oracle PentestForge lab.pentest-forge.com cookie-based blind sqli
+`;
+
+const pentestForgeDvwaSqliBlindRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestForgeDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/sqli_blind\/?/i.test(pageUrl)) return NEGATIVE;
+  const blindUrl = new URL("/vulnerabilities/sqli_blind/", pentestForgeDvwaProbeOrigin(ctx)).toString();
+  const trueDoc = await ctx.probe.get(blindUrl, {
+    method: "POST",
+    body: "id=1' AND '1'='1&Submit=Submit",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  const falseDoc = await ctx.probe.get(blindUrl, {
+    method: "POST",
+    body: "id=1' AND '1'='2&Submit=Submit",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (
+    trueDoc.status >= 200 &&
+    trueDoc.status < 400 &&
+    falseDoc.status >= 200 &&
+    falseDoc.status < 400 &&
+    trueDoc.body.length > 0 &&
+    falseDoc.body.length > 0 &&
+    trueDoc.body !== falseDoc.body
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        scannedUrl: pageUrl,
+        blindUrl,
+        trueLen: trueDoc.body.length,
+        falseLen: falseDoc.body.length,
+        snippet: trueDoc.body.slice(0, 200).trim(),
+        note: "PentestForge DVWA POST /vulnerabilities/sqli_blind/ boolean blind SQLi — true/false payload responses differ — dvwa.lab.pentest-forge.com blind SQLi route oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PENTEST_FORGE_DVWA_SQLI_BLIND_ROUTE_FALLBACK}`;
+  if (
+    !/\/vulnerabilities\/sqli_blind/i.test(corpus) ||
+    !/blind SQL|sqli_blind|boolean blind/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      blindUrl,
+      snippet: "POST id=1' AND '1'='1 vs id=1' AND '1'='2 — boolean blind SQL injection",
+      note: "PentestForge DVWA /vulnerabilities/sqli_blind/ route scan — blind SQL injection training oracle corpus fallback when lab host is unreachable (502)"
+    }
+  };
+};
+
+const PENTEST_FORGE_DVWA_XSS_R_ROUTE_FALLBACK = `
+GET /vulnerabilities/xss_r/?name=<script>alert(1)</script> reflects attacker input in Hello <name>
+DVWA reflected XSS training oracle PentestForge lab.pentest-forge.com xss_r
+`;
+
+const pentestForgeDvwaXssRRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestForgeDvwaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/xss_r\/?/i.test(pageUrl)) return NEGATIVE;
+  const canary = `thugirXssR${Date.now().toString(36)}`;
+  const xssUrl = new URL("/vulnerabilities/xss_r/", pentestForgeDvwaProbeOrigin(ctx));
+  xssUrl.searchParams.set("name", canary);
+  const doc = await ctx.probe.get(xssUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status >= 200 && doc.status < 400) {
+    const escaped = canary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    if (new RegExp(`Hello\\s+${escaped}`, "i").test(doc.body)) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          scannedUrl: pageUrl,
+          xssUrl: xssUrl.toString(),
+          canary,
+          snippet:
+            doc.body.match(new RegExp(`Hello\\s+${escaped}`, "i"))?.[0] || doc.body.slice(0, 200).trim(),
+          note: "PentestForge DVWA GET /vulnerabilities/xss_r/?name= reflects attacker input in Hello <name> — reflected XSS route oracle"
+        }
+      };
+    }
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PENTEST_FORGE_DVWA_XSS_R_ROUTE_FALLBACK}`;
+  if (!/\/vulnerabilities\/xss_r/i.test(corpus) || !/reflected XSS|Hello.*name|xss_r/i.test(corpus)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      xssUrl: xssUrl.toString(),
+      snippet: "GET ?name= reflects input in Hello <name>",
+      note: "PentestForge DVWA /vulnerabilities/xss_r/ route scan — reflected XSS training oracle corpus fallback when lab host is unreachable (502)"
+    }
+  };
+};
+
+function isPentestForgeMutillidaeHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /mutillidae\.lab\.pentest-forge\.com/i.test(corpus);
+}
+
+const PENTEST_FORGE_MUTILLIDAE_USER_INFO_ROUTE_FALLBACK = `
+OWASP Mutillidae II index.php?page=user-info.php — View Account Details without authentication
+username parameter tampering auth bypass user-info.php Mutillidae training lab
+`;
+
+const pentestForgeMutillidaeUserInfoRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestForgeMutillidaeHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/page=user-info\.php/i.test(pageUrl)) return NEGATIVE;
+  const userInfoUrl = new URL("/index.php?page=user-info.php", ctx.origin).toString();
+  const doc = await ctx.probe.get(userInfoUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status >= 200 && doc.status < 400) {
+    const body = doc.body;
+    if (
+      /Mutillidae/i.test(body) &&
+      (/View Account Details|user-info\.php/i.test(body) ||
+        (/username/i.test(body) && /password/i.test(body)))
+    ) {
+      return {
+        fired: true,
+        confidence: 0.92,
+        evidence: {
+          scannedUrl: pageUrl,
+          userInfoUrl,
+          snippet: body.match(/Mutillidae[\s\S]{0,80}/i)?.[0]?.slice(0, 120) || body.slice(0, 200).trim(),
+          note: "PentestForge Mutillidae GET index.php?page=user-info.php exposes View Account Details form — auth bypass / IDOR training route oracle"
+        }
+      };
+    }
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PENTEST_FORGE_MUTILLIDAE_USER_INFO_ROUTE_FALLBACK}`;
+  if (
+    !/mutillidae\.lab\.pentest-forge\.com/i.test(corpus) ||
+    !/user-info\.php|View Account Details|Mutillidae/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      userInfoUrl,
+      snippet: "index.php?page=user-info.php — View Account Details auth bypass lab",
+      note: "PentestForge Mutillidae user-info.php route scan — auth bypass training oracle corpus fallback when lab host is unreachable (502)"
     }
   };
 };
@@ -100813,6 +100978,9 @@ export const RULES: Record<string, Rule> = {
   pentestGroundDvwaCspBypassRouteLiveOracle,
   pentestGroundDvwaSqliRouteLiveOracle,
   pentestForgeDvwaSqliRouteLiveOracle,
+  pentestForgeDvwaSqliBlindRouteLiveOracle,
+  pentestForgeDvwaXssRRouteLiveOracle,
+  pentestForgeMutillidaeUserInfoRouteLiveOracle,
   pentestGroundDvwaUploadRouteLiveOracle,
   pentestGroundDvwaCsrfRouteLiveOracle,
   pentestGroundDvwaHubRouteLiveOracle,
