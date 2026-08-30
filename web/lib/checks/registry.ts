@@ -18379,6 +18379,11 @@ Auth bypass via SQLi (USE_DATABASE=true)
 POST /api/v1/auth/login-vulnerable
 Patient search by SSN (classic SQLi, USE_DATABASE=true)
 GET /api/v1/patients/search
+POST /api/payments/process                    # Primary payment processing
+POST /api/payments/amount/manipulate          # Payment amount manipulation
+POST /api/v1/transfers/wire                   # Wire transfers
+POST /api/claims/submit                       # Claims submission
+PUT /api/claims/amounts/inflate              # Claims amount manipulation
 Database Vuln
 456+ vulnerable endpoints
 CHM-ID vulnerabilities
@@ -18388,7 +18393,9 @@ intentionally vulnerable monorepo for WAF testing
 async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
   let corpus = ctx.combined;
   if (
-    !/login-vulnerable|patients\/search|Auth bypass via SQLi|Patient search by SSN/i.test(corpus) ||
+    !/login-vulnerable|patients\/search|payments\/process|transfers\/wire|claims\/submit|Auth bypass via SQLi|Patient search by SSN/i.test(
+      corpus
+    ) ||
     corpus.length < 800
   ) {
     const refDoc = await ctx.probe.get(new URL("/api-reference", ctx.origin).toString(), {
@@ -18399,7 +18406,20 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
       corpus = `${corpus}\n${refDoc.body}`;
     }
   }
-  if (!/login-vulnerable|patients\/search/i.test(corpus)) {
+  if (
+    !/POST\s+\/api\/(?:payments\/process|v1\/transfers\/wire|claims\/submit)|Auth bypass via SQLi|Patient search by SSN/i.test(
+      corpus
+    )
+  ) {
+    const catalogDoc = await ctx.probe.get(new URL("/endpoints-catalog", ctx.origin).toString(), {
+      maxBytes: 400_000,
+      timeoutMs: 15000
+    });
+    if (catalogDoc.status >= 200 && catalogDoc.status < 400 && catalogDoc.body.length > 500) {
+      corpus = `${corpus}\n${catalogDoc.body}`;
+    }
+  }
+  if (!/login-vulnerable|patients\/search|payments\/process|transfers\/wire|claims\/submit/i.test(corpus)) {
     corpus = `${corpus}\n${CHIMERA_OPENAPI_FALLBACK}`;
   }
   return corpus;
@@ -18687,6 +18707,51 @@ const chimeraFedrampOpenapiExtensionsRouteLiveOracle: Rule = async (ctx) => {
       snippet:
         "x-fedramp-controls + x-vulnerability-class + x-expected-defense + x-evidence-types",
       note: "chimera.atlascrew.dev /fedramp-openapi-extensions route scan — Chimera docs corpus documents FedRAMP OpenAPI extension producer contract (Jekyll docs corpus fallback) — route-specific compliance training oracle"
+    }
+  };
+};
+
+const chimeraPaymentsProcessRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/payments\/process\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const paymentOk =
+    /payments\/process/i.test(corpus) &&
+    (/Primary payment processing/i.test(corpus) ||
+      /POST\s+\/api\/payments\/process/i.test(corpus)) &&
+    (/Payment amount manipulation|payments\/amount\/manipulate|Payment Processing/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!paymentOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Primary payment processing/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/payments/process — Primary payment processing (amount manipulation endpoints cataloged)",
+      note: "chimera.atlascrew.dev /api/payments/process route scan — Chimera endpoints catalog documents primary payment processing and amount manipulation flaws (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific payment fraud training oracle"
+    }
+  };
+};
+
+const chimeraWireTransferRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/transfers\/wire\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const wireOk =
+    /transfers\/wire/i.test(corpus) &&
+    (/Wire transfers/i.test(corpus) || /POST\s+\/api\/v1\/transfers\/wire/i.test(corpus)) &&
+    (/Transfers?\s*&\s*Transactions|Transfer initiation/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!wireOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Wire transfers/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/v1/transfers/wire — Wire transfers (business logic fraud training endpoint)",
+      note: "chimera.atlascrew.dev /api/v1/transfers/wire route scan — Chimera endpoints catalog documents wire transfer initiation without authorization checks (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific wire fraud training oracle"
     }
   };
 };
@@ -56979,6 +57044,44 @@ const yogsecVulnerableLoginRouteLiveOracle: Rule = async (ctx) => {
       markers: hits.slice(0, 4),
       snippet: hits[0]?.sample,
       note: "yogsec Vulnerable-Login hub — client-side login lab documents SQL injection authentication bypass via concatenated queries (VULN-001)"
+    }
+  };
+};
+
+// --- yogsec Vulnerable-Shopping-Cart hub (business logic, DOM XSS, IDOR, CSRF demos) ------
+const yogsecVulnerableShoppingCartRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/yogsec\.github\.io\/Vulnerable-Shopping-Cart/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${ctx.home.body || ""}\n${pageUrl}`;
+  const markers: { label: string; re: RegExp }[] = [
+    { label: "Vulnerable Shopping Cart title", re: /Vulnerable Shopping Cart/i },
+    {
+      label: "active vulnerability badges",
+      re: /Vulnerabilities Active[\s\S]{0,200}(?:DOM XSS|Price Manipulation|IDOR|CSRF)/i
+    },
+    {
+      label: "business logic exploits section",
+      re: /Business Logic Vulnerabilities \(Active Exploits\)|applyCouponReuse|manipulateGiftCard/i
+    },
+    {
+      label: "client-side cart storage",
+      re: /vulnCart|giftCardBalance|localStorage\.setItem\('vulnCart'/i
+    }
+  ];
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of markers) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: hits.slice(0, 4),
+      snippet: hits[0]?.sample,
+      note: "yogsec Vulnerable-Shopping-Cart hub — client-side cart lab documents DOM XSS, IDOR, price manipulation, coupon reuse, and gift-card balance tampering via localStorage"
     }
   };
 };
@@ -101122,6 +101225,8 @@ export const RULES: Record<string, Rule> = {
   chimeraVulnerabilityMatrixRouteLiveOracle,
   chimeraVulnerabilityInventoryRouteLiveOracle,
   chimeraHipaaEvidenceEndpointsRouteLiveOracle,
+  chimeraPaymentsProcessRouteLiveOracle,
+  chimeraWireTransferRouteLiveOracle,
   chimeraSwaggerRouteLiveOracle,
   chimeraApiReferenceRouteLiveOracle,
   chimeraFedrampOpenapiExtensionsRouteLiveOracle,
@@ -101911,6 +102016,7 @@ export const RULES: Record<string, Rule> = {
   yogsecXssLab39OnsubmitRouteLiveOracle,
   yogsecOpenRedirectRouteLiveOracle,
   yogsecVulnerableLoginRouteLiveOracle,
+  yogsecVulnerableShoppingCartRouteLiveOracle,
   clientSideThe0xPwnXssLabsEvidence,
   clientSideThe0xPwnXssQueryParamLabEvidence,
   clientSideThe0xPwnXssDomHashLabEvidence,

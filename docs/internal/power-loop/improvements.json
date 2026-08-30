@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-vulnerable-shopping-cart-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecVulnerableShoppingCartRouteLiveOracle matches Vulnerable Shopping Cart + Vulnerabilities Active badges (DOM XSS/Price Manipulation/IDOR/CSRF) + applyCouponReuse/manipulateGiftCard + vulnCart localStorage markers; yogsec.github.io/Vulnerable-Shopping-Cart/ findings 3→5 (+yogsec-vulnerable-shopping-cart-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-payments-process-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chimeraPaymentsProcessRouteLiveOracle matches POST /api/payments/process Primary payment processing + Payment amount manipulation from endpoints-catalog corpus; chimera.atlascrew.dev/api/payments/process findings 5→5 (+chimera-payments-process-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-wire-transfer-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chimeraWireTransferRouteLiveOracle matches POST /api/v1/transfers/wire Wire transfers from endpoints-catalog corpus; chimera.atlascrew.dev/api/v1/transfers/wire findings 5→5 (+chimera-wire-transfer-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
       "slug": "yogsec-xss-lab39-onsubmit-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab39OnsubmitRouteLiveOracle matches XSS Lab #39 onsubmit Injection in Form + form.onsubmit + eval(code) markers; yogsec.github.io/xss-labs/labs/lab39.html findings 7→8 (+yogsec-xss-lab39-onsubmit-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"

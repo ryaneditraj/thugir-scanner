@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T16:22:00.771Z",
+  "updated_at": "2026-08-30T17:00:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3232,
-  "total_findings": 33559,
+  "total_sites_scanned": 3236,
+  "total_findings": 33620,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2103,
-  "discovery_findings": 26981,
-  "improvements_shipped": 1170,
-  "last_run": "2026-08-30T16:22:00.771Z",
+  "discovery_urls_added": 2106,
+  "discovery_findings": 26991,
+  "improvements_shipped": 1173,
+  "last_run": "2026-08-30T17:00:00.000Z",
   "last_run_summary": {
-    "hour_utc": "16",
+    "hour_utc": "17",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,48 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 595 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present"
+      "note": "Stable 6/6 first-pass recall (51 findings, 595 probes); no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 99,
-      "focus": "wrongsecrets MCP + fauxbank loans/profile/support + ai-security deserialization + priority drain securebank transfer + vuln-expose CSP bypass + chimera healthcare export + yogsec lab39/Open-Redirect/Vulnerable-Login",
+      "urls_added": 3,
+      "urls_scanned": 3,
+      "findings": 15,
+      "focus": "yogsec Vulnerable-Shopping-Cart + chimera payments/process + chimera wire transfer route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[]; 38 live oracles)",
-      "wrongsecrets.herokuapp.com/mcp: 16 findings — wrongsecrets MCP challenge-60 client-side evidence; no execute_command route oracle",
-      "pentest-fauxbank.vercel.app/api/support: 6 findings — fauxbank-stored-xss-support-probe confirmed",
-      "pentest-fauxbank.vercel.app/api/loans: 15 findings — generic fauxbank-authenticated-sqli-search; negative-amount oracle still absent",
-      "vuln-expose.vercel.app/xss/csp-bypass: 17 findings — vuln-expose-xss-csp-bypass-route-live-oracle confirmed",
-      "securebank-blog.vercel.app/transfer: 3 findings — securebank-blog-transfer-csrf-route-live-oracle confirmed",
-      "yogsec.github.io/xss-labs/labs/lab39.html: 8 findings — yogsec-xss-lab39-onsubmit-route-live-oracle shipped",
-      "yogsec.github.io/Open-Redirect/: 4 findings — yogsec-open-redirect-route-live-oracle shipped",
-      "yogsec.github.io/Vulnerable-Login/: 4 findings — yogsec-vulnerable-login-route-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "yogsec.github.io/Vulnerable-Shopping-Cart/: 5 findings — yogsec-vulnerable-shopping-cart-route-live-oracle shipped (3→5)",
+      "chimera.atlascrew.dev/api/payments/process: 5 findings — chimera-payments-process-route-live-oracle shipped",
+      "chimera.atlascrew.dev/api/v1/transfers/wire: 5 findings — chimera-wire-transfer-route-live-oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "wrongsecrets /mcp: MCP execute_command env-leak route oracle still absent (POST-only endpoint)",
-      "fauxbank /api/loans: negative loan amount business-logic oracle still absent",
-      "ai-security deserialization challenge: no route-specific insecure-deserialization oracle",
-      "chimera healthcare/records/export: thin 5-finding pass without PHI export route oracle",
-      "yogsec Vulnerable-Shopping-Cart hub still needs route oracle"
+      "chimera claims/submit + healthcare/records/export still thin without route oracles",
+      "wrongsecrets /mcp: MCP execute_command env-leak route oracle still absent",
+      "fauxbank /api/loans: negative loan amount business-logic oracle still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
-    "wrongsecrets.herokuapp.com/mcp": 16,
-    "pentest-fauxbank.vercel.app/api/loans": 15,
-    "pentest-fauxbank.vercel.app/api/profile": 15,
-    "pentest-fauxbank.vercel.app/api/support": 6,
-    "vuln-expose.vercel.app/xss/csp-bypass": 17,
-    "securebank-blog.vercel.app/transfer": 3,
-    "chimera.atlascrew.dev/api/v1/healthcare/records/export": 5,
+    "juice-shop.herokuapp.com": 51,
+    "yogsec.github.io/Vulnerable-Shopping-Cart/": 5,
+    "chimera.atlascrew.dev/api/payments/process": 5,
+    "chimera.atlascrew.dev/api/v1/transfers/wire": 5,
     "yogsec.github.io/xss-labs/labs/lab39.html": 8,
     "yogsec.github.io/Open-Redirect/": 4,
-    "yogsec.github.io/Vulnerable-Login/": 4
+    "yogsec.github.io/Vulnerable-Login/": 4,
+    "wrongsecrets.herokuapp.com/mcp": 16,
+    "vuln-expose.vercel.app/xss/csp-bypass": 17
   }
 }

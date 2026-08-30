@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-30T16:03:46.705Z",
-  "total": 2905,
-  "uniqueSlugs": 2897,
+  "generatedAt": "2026-08-30T17:03:18.646Z",
+  "total": 2908,
+  "uniqueSlugs": 2900,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2887,
+    "generic": 2890,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2820,
+    "deep": 2823,
     "continuous": 0
   },
   "byCategory": {
@@ -35,8 +35,8 @@
     "Server-side request forgery": 97,
     "Sensitive data exposure": 78,
     "AI security": 110,
+    "Business logic": 29,
     "Cross-site request forgery": 10,
-    "Business logic": 26,
     "Authentication bypass": 4,
     "Insecure file upload": 2,
     "Command injection": 2,
@@ -370,9 +370,11 @@
     "chimera-login-vulnerable-sqli-route-live-oracle",
     "chimera-patients-search-sqli-live-oracle",
     "chimera-patients-search-sqli-route-live-oracle",
+    "chimera-payments-process-route-live-oracle",
     "chimera-swagger-route-live-oracle",
     "chimera-vulnerability-inventory-route-live-oracle",
     "chimera-vulnerability-matrix-route-live-oracle",
+    "chimera-wire-transfer-route-live-oracle",
     "client-side-aevum-agent-consent-demo-evidence",
     "client-side-agentic-ai-ctf-evidence",
     "client-side-ai-chat-html-sink-evidence",
@@ -2875,6 +2877,7 @@
     "xxe-xml-post-probe",
     "yogsec-open-redirect-route-live-oracle",
     "yogsec-vulnerable-login-route-live-oracle",
+    "yogsec-vulnerable-shopping-cart-route-live-oracle",
     "yogsec-xss-lab24-outerhtml-route-live-oracle",
     "yogsec-xss-lab25-eval-route-live-oracle",
     "yogsec-xss-lab26-settimeout-route-live-oracle",

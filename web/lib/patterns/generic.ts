@@ -14874,6 +14874,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-payments-process-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Chimera primary payment processing route live oracle",
+    description:
+      "When scanning /api/payments/process on chimera.atlascrew.dev, the endpoints catalog documents primary payment processing with amount manipulation flaws — route-specific payment fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional payment processing and amount manipulation vulnerabilities for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraPaymentsProcessRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate payment amounts server-side and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce server-side amount validation independent of client-submitted values.",
+        "Require authentication and authorization on all payment processing endpoints.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/payments/process route documents payment amount manipulation flaws. Show server-side amount validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-wire-transfer-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "critical",
+    title: "Chimera wire transfer route live oracle",
+    description:
+      "When scanning /api/v1/transfers/wire on chimera.atlascrew.dev, the endpoints catalog documents wire transfer initiation without authorization checks — route-specific wire fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional wire transfer business logic flaws for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraWireTransferRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require multi-factor authorization for wire transfers and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce step-up authentication and dual approval for wire transfers.",
+        "Validate transfer amounts and beneficiary accounts server-side.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/transfers/wire route documents wire transfer fraud flaws. Show authorization and dual-approval remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-swagger-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -31145,6 +31197,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our yogsec Vulnerable-Login hub documents SQL injection auth bypass. Show parameterized query remediation and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-vulnerable-shopping-cart-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "yogsec Vulnerable-Shopping-Cart hub route live oracle",
+    description:
+      "When scanning yogsec.github.io/Vulnerable-Shopping-Cart/, the education lab documents DOM XSS, IDOR, price manipulation, coupon reuse, and gift-card balance tampering via localStorage — route-specific business logic training oracle.",
+    impactOneline:
+      "yogsec Vulnerable-Shopping-Cart exposes client-side business logic flaws including coupon reuse, negative quantity manipulation, and gift-card balance hacking for e-commerce security training on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecVulnerableShoppingCartRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec Vulnerable-Shopping-Cart is intentional training — validate prices server-side and never trust client-side cart state in production.",
+      steps: [
+        "Validate cart quantities, prices, and discounts on the server before checkout.",
+        "Store gift-card balances and coupon usage in server-side sessions with atomic redemption.",
+        "Run business-logic training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Vulnerable-Shopping-Cart hub documents client-side business logic flaws. Show server-side price validation and lab isolation from production.",
     version: 1,
     enabled: true
   },
