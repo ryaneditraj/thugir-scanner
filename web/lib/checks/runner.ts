@@ -1793,11 +1793,14 @@ const DEEP_RULES = new Set<string>([
   "chimeraClaimsAmountsInflateRouteLiveOracle",
   "chimeraBankingAccountsSearchSqliRouteLiveOracle",
   "chimeraInsurancePoliciesLookupSqliRouteLiveOracle",
+  "chimeraTransactionsHistorySqliLiveOracle",
+  "chimeraTransactionsHistorySqliRouteLiveOracle",
   "chimeraSwaggerRouteLiveOracle",
   "chimeraApiReferenceRouteLiveOracle",
   "chimeraFedrampOpenapiExtensionsRouteLiveOracle",
   "clientSideHackHealthLabEvidence",
   "hackHealthA03SqlInjectionRouteLiveOracle",
+  "hackHealthA01BruteForceRouteLiveOracle",
   "clientSideDomGoatLabEvidence",
   "domgoReferrerDomXssEvidence",
   "domgoHashDomXssEvidence",
@@ -3258,6 +3261,7 @@ const DEEP_RULES = new Set<string>([
   "aiSecurityPathTraversalRouteLiveOracle",
   "aiSecurityCsrfRouteLiveOracle",
   "aiSecurityXxeRouteLiveOracle",
+  "aiSecurityDeserializationRouteLiveOracle",
   "aiSecurityRateLimitingBruteforceLiveOracle",
   "aiSecurityLoginRouteLiveOracle",
   "juiceShopForgottenBackupDisclosure",
@@ -12270,6 +12274,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/transactions\/history\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-transactions-history")
+      )
+        return -3;
+      if (
+        /hack-health-tutorial\.vercel\.app/i.test(origin) &&
+        /\/cybersecurity\/a01\/bruteForce\b/i.test(targetInput) &&
+        p.slug.startsWith("hack-health-a01-brute-force")
+      )
+        return -3;
+      if (
         /ssti\.vulnlab\.dev/i.test(origin) &&
         /\/sandboxed\b/i.test(targetInput) &&
         p.slug.startsWith("ssti-vulnlab-sandboxed")
@@ -12999,7 +13015,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/(?:sqli|prompt-injection|broken-auth|ssrf|command-injection|path-traversal|csrf|xxe|leaked-(?:config|secrets))\b/i.test(targetInput) &&
+        /\/challenges\/(?:sqli|prompt-injection|broken-auth|ssrf|command-injection|path-traversal|csrf|xxe|deserialization|leaked-(?:config|secrets))\b/i.test(targetInput) &&
         (p.slug === "ai-security-sqli-route-live-oracle" ||
           p.slug === "ai-security-prompt-injection-route-live-oracle" ||
           p.slug === "ai-security-broken-auth-route-live-oracle" ||
@@ -13008,6 +13024,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           p.slug === "ai-security-path-traversal-route-live-oracle" ||
           p.slug === "ai-security-csrf-route-live-oracle" ||
           p.slug === "ai-security-xxe-route-live-oracle" ||
+          p.slug === "ai-security-deserialization-route-live-oracle" ||
           p.slug === "ai-security-leaked-config-route-live-oracle")
       )
         return -3;

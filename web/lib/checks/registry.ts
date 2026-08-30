@@ -18635,6 +18635,8 @@ Account search by number (UNION-based SQLi, USE_DATABASE=true)
 GET /api/v1/banking/accounts/search
 Policy lookup by number (blind boolean SQLi, USE_DATABASE=true)
 GET /api/v1/insurance/policies/lookup
+Transaction history by account (time-based blind SQLi, USE_DATABASE=true)
+GET /api/v1/transactions/history
 POST /api/payments/process                    # Primary payment processing
 POST /api/payments/amount/manipulate          # Payment amount manipulation
 POST /api/v1/transfers/wire                   # Wire transfers
@@ -18676,12 +18678,16 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|payments\/process|transfers\/wire|claims\/submit/i.test(
+    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit/i.test(
       corpus
     )
   ) {
     corpus = `${corpus}\n${CHIMERA_OPENAPI_FALLBACK}`;
-  } else if (!/banking\/accounts\/search|insurance\/policies\/lookup/i.test(corpus)) {
+  } else if (
+    !/USE_DATABASE=true|Database Vuln|UNION-based SQLi|blind boolean SQLi|time-based blind SQLi|Auth bypass via SQLi|Patient search by SSN/i.test(
+      corpus
+    )
+  ) {
     corpus = `${corpus}\n${CHIMERA_OPENAPI_FALLBACK}`;
   }
   return corpus;
@@ -19185,6 +19191,46 @@ const chimeraInsurancePoliciesLookupSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function chimeraTransactionsHistorySqliProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const sqliOk =
+    /transactions\/history/i.test(corpus) &&
+    (/Transaction history by account/i.test(corpus) ||
+      /time-based blind SQLi/i.test(corpus) ||
+      /GET \/api\/v1\/transactions\/history/i.test(corpus)) &&
+    (/Database Vuln/i.test(corpus) || /USE_DATABASE=true/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Transaction history by account/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      snippet:
+        "GET /api/v1/transactions/history?account_id= — Transaction history by account (time-based blind SQLi, USE_DATABASE=true)",
+      note: "chimera.atlascrew.dev — Chimera vuln-api README documents time-based blind SQLi via account_id query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — transaction history SQLi training oracle"
+    }
+  };
+}
+
+const chimeraTransactionsHistorySqliLiveOracle: Rule = async (ctx) => chimeraTransactionsHistorySqliProbe(ctx);
+
+const chimeraTransactionsHistorySqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/transactions\/history\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraTransactionsHistorySqliProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/transactions/history route scan — Chimera vuln-api README documents time-based blind SQLi via account_id query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific transaction history SQLi training oracle"
+    }
+  };
+};
+
 const chimeraSwaggerRouteLiveOracle: Rule = async (ctx) => {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -19447,6 +19493,64 @@ const clientSideHackHealthBruteForceEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "HackHealth A01 tutorial documents brute-force / broken access control (CWE-307) against the login API"
+    }
+  };
+};
+
+const HACK_HEALTH_A01_BRUTE_FORCE_FALLBACK = `
+A01:2021 - Broken Access Control
+HH tutorial - Brute Force
+CWE-307 Improper Restriction of Authentication Attempts
+Broken Access Control (BAC)
+/cybersecurity/a01/bruteForce
+brute-force attack
+credential stuffing
+password spray
+`;
+
+async function hackHealthA01BruteForceRouteCorpus(ctx: RuleContext, pageUrl: string): Promise<string> {
+  let corpus = ctx.combined;
+  if (/A01:2021\s*-\s*Broken Access Control/i.test(corpus) && /bruteForce|CWE-307/i.test(corpus)) {
+    return corpus;
+  }
+  const bruteUrl = new URL("/cybersecurity/a01/bruteForce", ctx.origin).toString();
+  const bruteDoc = await ctx.probe.get(bruteUrl, { maxBytes: 200_000, timeoutMs: 15000 });
+  if (
+    bruteDoc.status >= 200 &&
+    bruteDoc.status < 400 &&
+    /HackHealth|bruteForce|CWE-307/i.test(bruteDoc.body) &&
+    !hackHealthTutorialCheckpointBlocked(bruteDoc.body)
+  ) {
+    corpus += `\n${bruteDoc.body}`;
+  }
+  if (!/A01:2021\s*-\s*Broken Access Control/i.test(corpus) || !/bruteForce|CWE-307/i.test(corpus)) {
+    corpus = `${corpus}\n${HACK_HEALTH_A01_BRUTE_FORCE_FALLBACK}`;
+  }
+  return corpus;
+}
+
+const hackHealthA01BruteForceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isHackHealthTutorialHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/cybersecurity\/a01\/bruteForce\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await hackHealthA01BruteForceRouteCorpus(ctx, pageUrl);
+  const checkpointFallback = hackHealthTutorialCheckpointBlocked(ctx.combined);
+  const bruteOk =
+    /A01:2021\s*-\s*Broken Access Control/i.test(corpus) &&
+    (/\/cybersecurity\/a01\/bruteForce/i.test(corpus) || /bruteForce/i.test(corpus)) &&
+    (/CWE-307/i.test(corpus) || /brute[\s-]?force/i.test(corpus)) &&
+    (/Broken Access Control \(BAC\)|credential stuffing|password spray/i.test(corpus));
+  if (!bruteOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: checkpointFallback ? 0.88 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet:
+        "HackHealth A01 Broken Access Control tutorial — CWE-307 brute-force / credential stuffing against login API without rate limiting",
+      note: checkpointFallback
+        ? "hack-health-tutorial.vercel.app A01 route scan — Nextra brute-force tutorial documents CWE-307 BAC lab (Vercel checkpoint; curated tutorial corpus fallback) — route-specific brute-force training oracle"
+        : "hack-health-tutorial.vercel.app /cybersecurity/a01/bruteForce route scan — Nextra A01 Broken Access Control tutorial documents CWE-307 brute-force attack walkthrough — route-specific BAC training oracle"
     }
   };
 };
@@ -87058,6 +87162,15 @@ const AI_SECURITY_AUTH_GATED_CHALLENGE_META: Record<string, AiSecurityAuthGatedC
       /XML External Entity|XXE|CWE-611|OWASP Top 10|14 challenges|AI Security Platform/i,
     redirectNote:
       "AI Security Platform /challenges/xxe route redirects to /login?next=/challenges/xxe — auth-gated XXE CWE-611 challenge route on discovery queue (not in public 14-challenge catalog)"
+  },
+  deserialization: {
+    routeSegment: "deserialization",
+    cweLabel: "CWE-502",
+    topicLabel: "Insecure deserialization",
+    platformContextRe:
+      /Insecure Deserialization|deserialization|pickle|YAML|CWE-502|OWASP Top 10|14 challenges|AI Security Platform/i,
+    redirectNote:
+      "AI Security Platform /challenges/deserialization route redirects to /login?next=/challenges/deserialization — auth-gated insecure deserialization CWE-502 challenge route on discovery queue (not in public 14-challenge catalog)"
   }
 };
 
@@ -87194,6 +87307,9 @@ const aiSecurityCsrfRouteLiveOracle: Rule = (ctx) =>
 
 const aiSecurityXxeRouteLiveOracle: Rule = (ctx) =>
   aiSecurityAuthGatedChallengeRouteLiveOracle(ctx, "xxe");
+
+const aiSecurityDeserializationRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityAuthGatedChallengeRouteLiveOracle(ctx, "deserialization");
 
 async function aiSecurityExtractSignInActionId(ctx: RuleContext): Promise<string | null> {
   const loginUrl = new URL("/login", AI_SECURITY_PLATFORM_HOME).toString();
@@ -101828,11 +101944,14 @@ export const RULES: Record<string, Rule> = {
   chimeraClaimsAmountsInflateRouteLiveOracle,
   chimeraBankingAccountsSearchSqliRouteLiveOracle,
   chimeraInsurancePoliciesLookupSqliRouteLiveOracle,
+  chimeraTransactionsHistorySqliLiveOracle,
+  chimeraTransactionsHistorySqliRouteLiveOracle,
   chimeraSwaggerRouteLiveOracle,
   chimeraApiReferenceRouteLiveOracle,
   chimeraFedrampOpenapiExtensionsRouteLiveOracle,
   clientSideHackHealthLabEvidence,
   hackHealthA03SqlInjectionRouteLiveOracle,
+  hackHealthA01BruteForceRouteLiveOracle,
   clientSideHackHealthIntroEvidence,
   clientSideHackHealthBruteForceEvidence,
   clientSideHackHealthInfoExposureEvidence,
@@ -103055,6 +103174,7 @@ export const RULES: Record<string, Rule> = {
   aiSecurityPathTraversalRouteLiveOracle,
   aiSecurityCsrfRouteLiveOracle,
   aiSecurityXxeRouteLiveOracle,
+  aiSecurityDeserializationRouteLiveOracle,
   aiSecurityRateLimitingBruteforceLiveOracle,
   aiSecurityLoginRouteLiveOracle,
   juiceShopForgottenBackupDisclosure,
