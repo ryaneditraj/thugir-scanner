@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T05:25:00.000Z",
+  "updated_at": "2026-08-30T06:19:03.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3094,
-  "total_findings": 31378,
+  "total_sites_scanned": 3104,
+  "total_findings": 31540,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2046,
-  "discovery_findings": 25653,
-  "improvements_shipped": 1037,
-  "last_run": "2026-08-30T05:25:00.000Z",
+  "discovery_urls_added": 2051,
+  "discovery_findings": 25715,
+  "improvements_shipped": 1040,
+  "last_run": "2026-08-30T06:19:03.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,36 +50,40 @@
       },
       "note": "Stable 6/6 first-pass recall (50 findings, 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 4,
-      "urls_scanned": 3,
-      "findings": 22,
-      "focus": "OopsSec race-condition coupon TOCTOU + the0x-pwn lab-2 template-literal and lab-8 href XSS route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 62,
+      "focus": "OopsSec JWT alg confusion + CVE-2025-29927 middleware bypass + CSRF admin order + NEXT_PUBLIC env leak + LLM prompt injection walkthroughs",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
-      "koadt.github.io/.../race-condition-coupon-abuse: 11 findings (+oopssec-race-condition-coupon-route-live-oracle)",
-      "the0x-pwn.github.io/lab-xss/lab-2/: 6 findings (+the0x-pwn-xss-template-literal-route-live-oracle, -reflexion-escalated-ssti false positive)",
-      "the0x-pwn.github.io/lab-xss/lab-8/: 5 findings (+the0x-pwn-xss-href-angle-brackets-route-live-oracle, -reflexion-escalated-ssti false positive)",
-      "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card/: 14 findings — oopssec-gift-card-randomness-route-live-oracle (concurrent 05 UTC drain)",
-      "securebank-blog.vercel.app/messages: 3 findings — securebank-blog-messages-xss-route-live-oracle (concurrent drain)"
+      "koadt.github.io/.../jwt-algorithm-confusion-partner-api: 6 findings (+oopssec-jwt-alg-confusion-route-live-oracle)",
+      "koadt.github.io/.../middleware-authorization-bypass-cve-2025-29927: 8 findings (+oopssec-middleware-bypass-route-live-oracle)",
+      "koadt.github.io/.../csrf-admin-order-update: 15 findings (+oopssec-csrf-admin-order-route-live-oracle)",
+      "koadt.github.io/.../next-public-env-variable-leak: 8 findings (+oopssec-next-public-env-route-live-oracle)",
+      "koadt.github.io/.../prompt-injection-ai-assistant: 5 findings (+oopssec-prompt-injection-route-live-oracle)",
+      "koadt.github.io/.../x-forwarded-for-sql-injection: 9 findings (queue drain)",
+      "the0x-pwn.github.io/lab-xss/lab-2/: 6 findings (queue drain)",
+      "the0x-pwn.github.io/lab-xss/lab-8/: 5 findings (queue drain)"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable — no category misses on juice-shop",
-      "OopsSec walkthrough pages are GitHub Pages docs — live oracles are corpus/route fallbacks referencing localhost deploy paths"
+      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "benchmark 6/6 stable \u2014 no category misses on juice-shop",
+      "OopsSec walkthrough pages are GitHub Pages docs \u2014 live oracles are corpus/route fallbacks referencing localhost deploy paths"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 50,
-    "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/": 11,
+    "koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/": 15,
+    "koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927/": 8,
+    "koadt.github.io/oss-oopssec-store/posts/next-public-env-variable-leak/": 8,
+    "koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection/": 9,
+    "koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api/": 6,
     "the0x-pwn.github.io/lab-xss/lab-2/": 6,
-    "the0x-pwn.github.io/lab-xss/lab-8/": 5,
-    "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card/": 14,
-    "koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/": 8,
-    "securebank-blog.vercel.app/messages": 3,
-    "vwad.owasp.org/app/oopssec-store/": 7
+    "koadt.github.io/oss-oopssec-store/posts/prompt-injection-ai-assistant/": 5,
+    "the0x-pwn.github.io/lab-xss/lab-8/": 5
   }
 }
