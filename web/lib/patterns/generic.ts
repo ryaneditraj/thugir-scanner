@@ -22011,6 +22011,59 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-second-order-sqli-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store second-order SQLi walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/second-order-sql-injection documents stored review author names later interpolated into db.exec() queries in /api/admin/reviews — second-order SQL injection via trusted database data.",
+    impactOneline:
+      "Public walkthrough teaches second-order SQLi where stored display names execute as multi-statement SQL when reused in unparameterized admin filter queries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecSecondOrderSqliEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Parameterize every query regardless of data source; never use db.exec() with interpolated values from the database.",
+      steps: [
+        "Replace raw db.exec() author filters with Prisma findMany and bound parameters.",
+        "Use allowlists for filter dropdown values instead of interpolating stored author strings.",
+        "Host OopsSec SQLi walkthroughs on localhost only, not public GitHub Pages deploys."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/reviews endpoint interpolates stored author names into db.exec() SQL. Show parameterized query fixes for second-order injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-second-order-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store second-order SQLi route live oracle",
+    description:
+      "When scanning /posts/second-order-sql-injection, the walkthrough documents stored author names later interpolated into db.exec() in /api/admin/reviews — route-specific second-order SQLi oracle.",
+    impactOneline:
+      "OopsSec review moderation reuses stored author strings in raw multi-statement SQL, enabling DROP TABLE via second-order injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecSecondOrderSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize admin filter queries; never trust database-sourced strings in raw SQL.",
+      steps: [
+        "Replace db.exec() with Prisma findMany where: { author: authorFilter }.",
+        "Allowlist valid author filter values from a server-side enum.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/second-order-sql-injection route documents second-order SQLi via /api/admin/reviews. Show parameterized query remediation for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-price-manipulation-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -25301,6 +25354,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/transfer route processes POST requests with only a session cookie. Show route-specific CSRF token validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-auth-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "FauxBank auth login API route live oracle",
+    description:
+      "When scanning /api/auth/login on pentest-fauxbank.vercel.app, POST accepts alice/password or admin/admin without MFA — route-specific weak-credentials authentication oracle.",
+    impactOneline:
+      "Route scans on login APIs need live weak-credential confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankAuthLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce strong passwords, MFA, and rate limiting on authentication endpoints.",
+      steps: [
+        "Remove seeded demo credentials from production-like deployments.",
+        "Require MFA for all banking accounts.",
+        "Add progressive lockout after failed login attempts."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/login route accepts alice/password without MFA. Show route-specific authentication hardening.",
     version: 1,
     enabled: true
   },
