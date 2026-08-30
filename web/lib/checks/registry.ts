@@ -6152,6 +6152,198 @@ const oopssecBolaWishlistRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store IDOR order privacy walkthrough (posts/idor-order-privacy-breach) ---
+const CLIENT_OOPSSEC_IDOR_ORDER_PRIVACY_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "IDOR order privacy walkthrough title",
+    re: /Insecure Direct Object Reference:[\s\S]{0,80}Unauthorized Order Access/i
+  },
+  {
+    label: "/orders/ORD- sequential order IDs",
+    re: /\/orders\/ORD-|ORD-004|ORD-001|sequential IDs/i
+  },
+  {
+    label: "findUnique without ownership verification",
+    re: /findUnique|Missing: ownership verification|never checks whether the order is yours/i
+  },
+  {
+    label: "IDOR order privacy flag",
+    re: /OSS\{1ns3cur3_d1r3ct_0bj3ct_r3f3r3nc3\}|order\.userId/i
+  },
+  {
+    label: "IDOR order privacy walkthrough route",
+    re: /\/posts\/idor-order-privacy-breach/i
+  }
+];
+
+const clientSideOopssecIdorOrderPrivacyEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_IDOR_ORDER_PRIVACY_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|\/orders\/ORD|order privacy|IDOR/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents IDOR on /orders/ORD-* — authenticated users read any order via sequential IDs without ownership verification"
+    }
+  };
+};
+
+const oopssecIdorOrderPrivacyRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/idor-order-privacy-breach/i.test(pageUrl)) return NEGATIVE;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecIdorOrderPrivacyEvidence
+  );
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/idor-order-privacy-breach route scan — walkthrough documents missing ownership check on GET /orders/ORD-* exposing other customers' PII"
+    }
+  };
+};
+
+// --- OopsSec Store session fixation via support access (posts/session-fixation-weak-session-management) ---
+const CLIENT_OOPSSEC_SESSION_FIXATION_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Session fixation support access title",
+    re: /Session Fixation:[\s\S]{0,80}Hijacking an Admin Account Through Support Access/i
+  },
+  {
+    label: "POST /api/user/support-access token generation",
+    re: /POST \/api\/user\/support-access|Generate Support Access Token/i
+  },
+  {
+    label: "Mass assignment admin@oss.com email parameter",
+    re: /"email":\s*"admin@oss\.com"|targetEmail = body\.email \|\| user\.email/i
+  },
+  {
+    label: "supportLoginUrl admin session hijack",
+    re: /supportLoginUrl|\/support-login\?token=|Navigate to.*\/admin/i
+  },
+  {
+    label: "Session fixation walkthrough route",
+    re: /\/posts\/session-fixation-weak-session-management/i
+  }
+];
+
+const clientSideOopssecSessionFixationEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_SESSION_FIXATION_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|support-access|admin@oss\.com|supportLoginUrl/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents mass assignment on POST /api/user/support-access — any user can generate admin support tokens via body.email"
+    }
+  };
+};
+
+const oopssecSessionFixationRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/session-fixation-weak-session-management/i.test(pageUrl)) return NEGATIVE;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecSessionFixationEvidence
+  );
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/session-fixation-weak-session-management route scan — walkthrough documents POST /api/user/support-access accepting attacker-supplied email to hijack admin sessions"
+    }
+  };
+};
+
+// --- OopsSec Store malicious MCP server walkthrough (posts/mcp-malicious-server) ---------
+const CLIENT_OOPSSEC_MCP_MALICIOUS_SERVER_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Malicious MCP server walkthrough title",
+    re: /Malicious MCP Server:[\s\S]{0,80}Poisoning an AI Agent Through Tool Responses/i
+  },
+  {
+    label: "get_compliance_report restricted internal MCP tool",
+    re: /get_compliance_report|Restricted to authorized compliance directives|\/api\/mcp/i
+  },
+  {
+    label: "External mcpServerUrl indirect prompt injection",
+    re: /mcpServerUrl|indirect prompt injection|poisoned tool response/i
+  },
+  {
+    label: "Malicious MCP flag",
+    re: /OSS\{mcp_p01s0n3d_t00l_r3sp0ns3\}|X-MCP-Session/i
+  },
+  {
+    label: "Malicious MCP walkthrough route",
+    re: /\/posts\/mcp-malicious-server/i
+  }
+];
+
+const clientSideOopssecMcpMaliciousServerEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_MCP_MALICIOUS_SERVER_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|mcpTools|get_compliance_report|mcpServerUrl/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents indirect prompt injection via external MCP tool responses bypassing get_compliance_report restrictions"
+    }
+  };
+};
+
+const oopssecMcpMaliciousServerRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/mcp-malicious-server/i.test(pageUrl)) return NEGATIVE;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecMcpMaliciousServerEvidence
+  );
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/mcp-malicious-server route scan — walkthrough documents poisoned external MCP tool responses tricking OSSBot into calling restricted get_compliance_report"
+    }
+  };
+};
+
 // --- OopsSec Store product-search SQLi walkthrough (posts/product-search-sql-injection) -
 const CLIENT_OOPSSEC_PRODUCT_SEARCH_SQLI_RES: { label: string; re: RegExp }[] = [
   {
@@ -103892,6 +104084,12 @@ export const RULES: Record<string, Rule> = {
   oopssecXffSqliRouteLiveOracle,
   oopssecLiveStreamBflaRouteLiveOracle,
   oopssecBolaWishlistRouteLiveOracle,
+  clientSideOopssecIdorOrderPrivacyEvidence,
+  oopssecIdorOrderPrivacyRouteLiveOracle,
+  clientSideOopssecSessionFixationEvidence,
+  oopssecSessionFixationRouteLiveOracle,
+  clientSideOopssecMcpMaliciousServerEvidence,
+  oopssecMcpMaliciousServerRouteLiveOracle,
   oopssecProductSearchSqliRouteLiveOracle,
   oopssecStoredXssReviewsRouteLiveOracle,
   oopssecRaceConditionCouponRouteLiveOracle,
