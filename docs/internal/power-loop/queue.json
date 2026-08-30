@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T01:22:00.000Z",
+  "updated_at": "2026-08-30T02:14:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a8",
+      "source": "OWASP NodeGoat — A8 CSRF lesson hub with profile forgery + missing anti-CSRF token oracles (nodegoat-websec Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a9",
+      "source": "OWASP NodeGoat — A9 known-vulnerable-components lesson hub with outdated dependency oracles (nodegoat-websec Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a10",
+      "source": "OWASP NodeGoat — A10 unvalidated redirects lesson hub with /learn open-redirect oracle (nodegoat-websec Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/profile",
+      "source": "OWASP NodeGoat — profile CSRF + stored XSS oracle POST /profile without token (nodegoat-websec Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/learn",
+      "source": "OWASP NodeGoat — unvalidated redirect oracle GET /learn?url= reflects attacker URL (nodegoat-websec Heroku demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/tutorial/a2",
       "source": "OWASP NodeGoat — A2 broken authentication lesson hub with weak session/credential oracles (nodegoat-websec Heroku demo)",
