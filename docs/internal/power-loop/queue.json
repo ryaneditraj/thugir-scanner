@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T13:18:33.516Z",
+  "updated_at": "2026-08-30T15:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/transfers/wire",
+      "source": "atlas-crew/Chimera — wire transfer business-logic / auth bypass oracle POST /api/v1/transfers/wire (endpoints catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/payments/process",
+      "source": "atlas-crew/Chimera — payment processing injection oracle POST /api/payments/process (endpoints catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/claims/submit",
+      "source": "atlas-crew/Chimera — insurance claims fraud oracle POST /api/claims/submit (endpoints catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.testfire.net/bank/transfer.jsp",
+      "source": "Altoro Mutual demo.testfire.net — bank transfer SQLi/XSS training page (IBM AppScan classic demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/records/export",
+      "source": "atlas-crew/Chimera — PHI bulk export BOLA oracle GET /api/v1/healthcare/records/export (endpoints catalog HIPAA)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182/",
       "source": "kOaDT/oss-oopssec-store — React2Shell CVE-2025-55182 RSC deserialization walkthrough (OSS roadmap ch.11)",
