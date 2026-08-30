@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-29T23:22:30.000Z",
+  "updated_at": "2026-08-30T00:32:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a3",
+      "source": "OWASP NodeGoat — A3 NoSQL injection login bypass oracle POST /login userName[$gt]= (tutorial/a3 lesson route)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a1",
+      "source": "OWASP NodeGoat — A1 injection lesson hub with SQLi/XSS tutorial routes (nodegoat-websec Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/patients/search?ssn=test",
+      "source": "atlas-crew/Chimera — classic SQLi patient search by SSN GET /api/v1/patients/search (openapi CHM catalog)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php",
+      "source": "webspoilt/vulnforge-academy — Level 20 Final Boss nightmare multi-chain challenge (GitHub README Nightmare tier)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/ssrf",
+      "source": "OWASP NodeGoat — SSRF via needle.get url parameter tutorial lesson route (A10 server-side request forgery)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://dvai.vercel.app/api/ai",
       "source": "bb1nfosec/dvai — Groq LLM proxy POST /api/ai with logprob side-channel oracle (DVAI OP-ORACLE; HN Show)",
