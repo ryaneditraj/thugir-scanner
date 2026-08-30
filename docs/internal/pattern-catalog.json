@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-30T09:06:57.782Z",
-  "total": 2884,
-  "uniqueSlugs": 2876,
+  "generatedAt": "2026-08-30T10:19:04.512Z",
+  "total": 2887,
+  "uniqueSlugs": 2879,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2866,
+    "generic": 2869,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2799,
+    "deep": 2802,
     "continuous": 0
   },
   "byCategory": {
@@ -26,8 +26,8 @@
     "Information exposure": 1,
     "Information disclosure": 134,
     "Security misconfiguration": 212,
-    "Broken authentication": 187,
-    "Injection": 460,
+    "Broken authentication": 188,
+    "Injection": 462,
     "Cross-site scripting": 748,
     "Open redirect": 25,
     "general": 20,
@@ -653,6 +653,7 @@
     "client-side-oopssec-product-search-sqli-evidence",
     "client-side-oopssec-prompt-injection-evidence",
     "client-side-oopssec-race-condition-evidence",
+    "client-side-oopssec-second-order-sqli-evidence",
     "client-side-oopssec-ssrf-evidence",
     "client-side-oopssec-store-evidence",
     "client-side-oopssec-stored-xss-reviews-evidence",
@@ -1141,6 +1142,7 @@
     "fauxbank-accounts-route-live-oracle",
     "fauxbank-admin-panel-live-oracle",
     "fauxbank-admin-route-live-oracle",
+    "fauxbank-auth-login-route-live-oracle",
     "fauxbank-authenticated-sqli-search",
     "fauxbank-csrf-transfer-probe",
     "fauxbank-idor-accounts-probe",
@@ -1988,6 +1990,7 @@
     "oopssec-prompt-injection-route-live-oracle",
     "oopssec-race-condition-coupon-route-live-oracle",
     "oopssec-roadmap-route-live-oracle",
+    "oopssec-second-order-sqli-route-live-oracle",
     "oopssec-ssrf-route-live-oracle",
     "oopssec-store-home-route-live-oracle",
     "oopssec-stored-xss-reviews-route-live-oracle",

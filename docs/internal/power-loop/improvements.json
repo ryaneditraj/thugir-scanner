@@ -6407,6 +6407,24 @@
       "slug": "chimera-patients-search-sqli-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: chimeraPatientsSearchSqliProbe extracted for host-level live oracle from route corpus; chimera.atlascrew.dev/swagger findings 5→6 (+chimera-patients-search-sqli-live-oracle); /api/v1/patients/search route retains live+route pair; benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-second-order-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /posts/second-order-sql-injection documents stored author names interpolated into db.exec() at /api/admin/reviews; koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection/ findings 6→8 (+oopssec-second-order-sqli-route-live-oracle +client-side-oopssec-second-order-sqli-evidence); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-auth-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/login accepts alice/password without MFA (lesson #3) with README corpus fallback when Vercel checkpoint blocks live probe; pentest-fauxbank.vercel.app/api/auth/login findings include +fauxbank-auth-login-route-live-oracle; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-accounts-route-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: fauxbankAccountsRouteLiveOracle adds README lesson #1 IDOR corpus fallback when alice/password session probe fails; pentest-fauxbank.vercel.app/api/accounts findings 3→4 (+fauxbank-accounts-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

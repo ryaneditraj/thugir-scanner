@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T09:16:00.000Z",
+  "updated_at": "2026-08-30T10:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3144,
-  "total_findings": 32133,
+  "total_sites_scanned": 3147,
+  "total_findings": 32146,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2068,
-  "discovery_findings": 26106,
-  "improvements_shipped": 1052,
-  "last_run": "2026-08-30T09:16:00.000Z",
+  "discovery_findings": 26119,
+  "improvements_shipped": 1055,
+  "last_run": "2026-08-30T10:20:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,42 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)"
+      "note": "Stable 6/6 first-pass recall (51 findings, 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 101,
-      "focus": "pentest-ground DVGA/RESTFlaw hubs + sekumart SQLi/XSS + websec.fr timing + vulnforge level17 upload/SSRF + dvga.xplat-demo graphiql",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 17,
+      "focus": "oopssec second-order SQLi + fauxbank api/auth/login + api/accounts route oracles from 09 UTC queued drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 38 live oracles, gap=[])",
-      "pentest-ground.com:5013/graphiql: 15 findings \u2014 dvga-graphiql-route-live-oracle + graphql batching/introspection/SQLi live oracles",
-      "pentest-ground.com:9000/: 13 findings \u2014 pentest-ground-restflaw-uptime-cmdi-live-oracle + eval-code-injection + tokens-sqli route oracles",
-      "sekumart.sekuripy.hr/search.php: 17 findings \u2014 sekumart-search-sqli-route-live-oracle + sekumart-search-xss-route-live-oracle confirmed",
-      "dvga.xplat-demo.threatx.io/graphiql: 19 findings \u2014 dvga-graphiql-route-live-oracle + graphql batching/introspection live oracles",
-      "websec.fr/level17/: 5 findings \u2014 websec-level17-timing-attack-route-live-oracle confirmed",
-      "vulnforge-academy.vercel.app/.../level17.php: 6 findings \u2014 vulnforge-academy-level17-content-type-upload-route-live-oracle + level-ssrf live oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection/: 8 findings — oopssec-second-order-sqli-route-live-oracle shipped (6→8)",
+      "pentest-fauxbank.vercel.app/api/auth/login: +fauxbank-auth-login-route-live-oracle route-specific weak-credentials oracle",
+      "pentest-fauxbank.vercel.app/api/accounts: 4 findings — fauxbank-accounts-route-live-oracle corpus fallback (3→4)"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable \u2014 no category misses on juice-shop",
-      "pentest-ground.com:4280/: thin 10-finding DVWA hub \u2014 buggybuy-api-bola present but DVWA route-specific oracles still thin",
-      "newly queued oopssec second-order SQLi + SSRF + XXE + fauxbank api/auth/login + api/transfer \u2014 pending next drain",
-      "websec.fr/level17/: timing oracle confirmed but no SQLi/XSS category signal on timing-only lab"
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "benchmark 6/6 stable — no category misses on juice-shop",
+      "oopssec SSRF + XXE walkthroughs already had route oracles — second-order SQLi was the remaining queued gap",
+      "fauxbank api/transfer already had fauxbank-transfer-route-live-oracle — auth/login route oracle was the remaining fauxbank API gap"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
+    "juice-shop.herokuapp.com": 51,
+    "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection": 8,
+    "pentest-fauxbank.vercel.app/api/auth/login": 5,
+    "pentest-fauxbank.vercel.app/api/accounts": 4,
     "dvga.xplat-demo.threatx.io/graphiql": 19,
     "sekumart.sekuripy.hr/search.php": 17,
-    "pentest-ground.com:5013/": 16,
     "pentest-ground.com:5013/graphiql": 15,
-    "pentest-ground.com:9000/": 13,
-    "pentest-ground.com:4280/": 10,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php": 6,
-    "websec.fr/level17/": 5
+    "pentest-ground.com:9000": 13
   }
 }

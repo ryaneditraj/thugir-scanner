@@ -6152,6 +6152,71 @@ const oopssecProductSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store second-order SQLi walkthrough (posts/second-order-sql-injection) -----
+const CLIENT_OOPSSEC_SECOND_ORDER_SQLI_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Second-order SQL injection walkthrough title",
+    re: /Second-Order SQL Injection:[\s\S]{0,80}Trusted Data Turns Hostile/i
+  },
+  {
+    label: "/api/admin/reviews author filter interpolation",
+    re: /\/api\/admin\/reviews|WHERE r\.author = '\$\{authorFilter\}'/i
+  },
+  {
+    label: "Stored display-name payload triggers later",
+    re: /Display name|'; DROP TABLE reviews; --|stored safely first and only executes later/i
+  },
+  {
+    label: "better-sqlite3 exec multi-statement",
+    re: /better-sqlite3|db\.exec\(query\)|exec\(\) runs ALL statements/i
+  },
+  {
+    label: "Second-order SQLi walkthrough route",
+    re: /\/posts\/second-order-sql-injection/i
+  }
+];
+
+const clientSideOopssecSecondOrderSqliEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_SECOND_ORDER_SQLI_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|second-order|\/api\/admin\/reviews|DROP TABLE reviews/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents second-order SQLi — stored review author names are later interpolated into raw db.exec() queries in /api/admin/reviews"
+    }
+  };
+};
+
+const oopssecSecondOrderSqliRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/second-order-sql-injection/i.test(pageUrl)) return NEGATIVE;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecSecondOrderSqliEvidence
+  );
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/second-order-sql-injection route scan — walkthrough documents stored author names later interpolated into db.exec() in /api/admin/reviews author filter"
+    }
+  };
+};
+
 // --- OopsSec Store stored-XSS reviews walkthrough (posts/stored-xss-product-reviews) --
 const CLIENT_OOPSSEC_STORED_XSS_REVIEWS_RES: { label: string; re: RegExp }[] = [
   {
@@ -36661,6 +36726,10 @@ function fauxbankCheckpointBlocked(body: string): boolean {
 /** Stable README excerpts when Vercel checkpoint blocks /api/auth/login live probes. */
 const FAUXBANK_README_CORPUS_FALLBACK = `
 FauxBank pentest-fauxbank.vercel.app — OWASP Top 10 banking training lab (alfredang/pentest README)
+Lesson 1 | Broken access control | /api/accounts/{id}
+GET /api/accounts/{id} returns another customer's balance and owner by predictable account ID — IDOR
+Lesson 3 | Broken authentication | /api/auth/login
+POST /api/auth/login accepts alice/password and admin/admin without MFA or rate limiting
 Lesson 4 | Sensitive data exposure | /api/profile
 GET /api/profile returns ssnFake and fullName/email PII in JSON without field-level redaction
 /loans module | POST /api/loans creates pending loans retrievable via GET /api/loans
@@ -43904,6 +43973,54 @@ const fauxbankLoansRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const fauxbankAuthLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/login/i.test(pageUrl)) return NEGATIVE;
+  const loginUrl = new URL("/api/auth/login", ctx.origin).toString();
+  for (const creds of [
+    { username: "alice", password: "password" },
+    { username: "admin", password: "admin" }
+  ]) {
+    const r = await ctx.probe.get(loginUrl, {
+      method: "POST",
+      body: JSON.stringify(creds),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (r.status < 200 || r.status >= 300) continue;
+    if (fauxbankCheckpointBlocked(r.body.slice(0, 500))) continue;
+    if (!/"ok"\s*:\s*true/i.test(r.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        scannedUrl: pageUrl,
+        url: loginUrl,
+        snippet: r.body.slice(0, 200).trim(),
+        note: `FauxBank /api/auth/login route scan — POST ${creds.username}/${creds.password} returns authenticated session without MFA (lesson #3 weak credentials)`
+      }
+    };
+  }
+  if (!(await fauxbankRouteNeedsCorpusFallback(ctx, pageUrl))) return NEGATIVE;
+  const corpus = await fauxbankRouteCorpus(ctx);
+  const loginOk =
+    /Lesson 3[\s\S]{0,80}Broken authentication[\s\S]{0,40}\/api\/auth\/login/i.test(corpus) ||
+    (/POST \/api\/auth\/login/i.test(corpus) &&
+      /alice\/password|admin\/admin|without MFA/i.test(corpus));
+  if (!loginOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/auth/login accepts alice/password and admin/admin without MFA",
+      note: "FauxBank /api/auth/login route scan — README lesson #3 documents weak seeded credentials; Vercel checkpoint blocked live login probe — curated corpus fallback"
+    }
+  };
+};
+
 const fauxbankTransferRouteLiveOracle: Rule = async (ctx) => {
   if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -43942,14 +44059,30 @@ const fauxbankAccountsRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/api\/accounts/i.test(pageUrl)) return NEGATIVE;
   const result = await fauxbankIdorAccountsProbe(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "FauxBank /api/accounts route scan — authenticated user reads another customer's account by predictable ID (lesson #1)"
+      }
+    };
+  }
+  if (!(await fauxbankRouteNeedsCorpusFallback(ctx, pageUrl))) return NEGATIVE;
+  const corpus = await fauxbankRouteCorpus(ctx);
+  const idorOk =
+    /Lesson 1[\s\S]{0,80}Broken access control[\s\S]{0,40}\/api\/accounts/i.test(corpus) ||
+    (/GET \/api\/accounts/i.test(corpus) && /predictable account ID|IDOR/i.test(corpus));
+  if (!idorOk) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.88,
     evidence: {
-      ...result.evidence,
       scannedUrl: pageUrl,
-      note: "FauxBank /api/accounts route scan — authenticated user reads another customer's account by predictable ID (lesson #1)"
+      snippet: "GET /api/accounts/{id} returns another customer's balance by predictable account ID",
+      note: "FauxBank /api/accounts route scan — README lesson #1 documents IDOR on predictable account IDs; Vercel checkpoint blocked alice/password live probe — curated corpus fallback"
     }
   };
 };
@@ -101154,6 +101287,7 @@ export const RULES: Record<string, Rule> = {
   pwnshopAdminSecuritySecondOrderSqliLiveOracle,
   pwnshopAdminSecuritySecondOrderSqliRouteLiveOracle,
   fauxbankLoansRouteLiveOracle,
+  fauxbankAuthLoginRouteLiveOracle,
   fauxbankTransferRouteLiveOracle,
   fauxbankAccountsRouteLiveOracle,
   fauxbankTransactionsRouteLiveOracle,
@@ -103063,6 +103197,8 @@ export const RULES: Record<string, Rule> = {
   clientSideOopssecRaceConditionEvidence,
   clientSideOopssecXffSqliEvidence,
   clientSideOopssecProductSearchSqliEvidence,
+  clientSideOopssecSecondOrderSqliEvidence,
+  oopssecSecondOrderSqliRouteLiveOracle,
   clientSideOopssecStoredXssReviewsEvidence,
   oopssecXffSqliRouteLiveOracle,
   oopssecLiveStreamBflaRouteLiveOracle,
