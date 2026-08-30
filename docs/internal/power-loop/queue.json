@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T16:07:04.645Z",
+  "updated_at": "2026-08-30T17:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access/",
+      "source": "kOaDT/oss-oopssec-store roadmap ch02 — BOLA wishlist access walkthrough with live API oracle (OSS README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach/",
+      "source": "kOaDT/oss-oopssec-store roadmap ch02 — IDOR order privacy breach walkthrough (OSS README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass/",
+      "source": "kOaDT/oss-oopssec-store roadmap ch07 — weak JWT secret admin bypass walkthrough (OSS README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss/",
+      "source": "kOaDT/oss-oopssec-store roadmap ch06 — SVG file upload stored XSS walkthrough (OSS README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/session-fixation-weak-session-management/",
+      "source": "kOaDT/oss-oopssec-store roadmap ch07 — session fixation weak session management walkthrough (OSS README)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/mcp",
       "source": "OWASP WrongSecrets challenge-60 — insecure MCP server POST /mcp execute_command env leak (Heroku public demo)",
@@ -11027,6 +11052,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access/",
+      "source": "kOaDT/oss-oopssec-store roadmap ch02 — BOLA wishlist access walkthrough with live API oracle (OSS README; 17 UTC priority)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach/",
+      "source": "kOaDT/oss-oopssec-store roadmap ch02 — IDOR order privacy breach walkthrough (OSS README; 17 UTC priority)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass/",
+      "source": "kOaDT/oss-oopssec-store roadmap ch07 — weak JWT secret admin bypass walkthrough (OSS README; 17 UTC priority)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss/",
+      "source": "kOaDT/oss-oopssec-store roadmap ch06 — SVG file upload stored XSS walkthrough (OSS README; 17 UTC priority)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/session-fixation-weak-session-management/",
+      "source": "kOaDT/oss-oopssec-store roadmap ch07 — session fixation weak session management walkthrough (OSS README; 17 UTC priority)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://the0x-pwn.github.io/lab-xss/lab-3/",
       "source": "the0x-pwn/lab-xss — DOM hash innerHTML XSS lab module (GitHub Pages)",
