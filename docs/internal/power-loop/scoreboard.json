@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T05:13:26.138Z",
+  "updated_at": "2026-08-30T05:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -20,10 +20,10 @@
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2042,
+  "discovery_urls_added": 2046,
   "discovery_findings": 25653,
-  "improvements_shipped": 1034,
-  "last_run": "2026-08-30T05:13:26.138Z",
+  "improvements_shipped": 1037,
+  "last_run": "2026-08-30T05:25:00.000Z",
   "last_run_summary": {
     "hour_utc": "05",
     "benchmark": {
@@ -33,7 +33,6 @@
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 596,
-      "live_oracles": 38,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,20 +52,19 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 61,
-      "focus": "OopsSec Store gift-card randomness + mass-assignment + race-condition walkthroughs, SecureBank stored XSS messages, OWASP VWAD OopsSec hub",
-      "improvements_shipped_this_run": 0
+      "urls_added": 4,
+      "urls_scanned": 3,
+      "findings": 22,
+      "focus": "OopsSec race-condition coupon TOCTOU + the0x-pwn lab-2 template-literal and lab-8 href XSS route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
-      "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card/: 14 findings — oopssec-gift-card-randomness-route-live-oracle",
-      "koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/: 8 findings — oopssec-mass-assignment-admin-route-live-oracle",
-      "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/: 11 findings — oopssec-race-condition-coupon-route-live-oracle",
-      "securebank-blog.vercel.app/messages: 3 findings — securebank-blog-messages-xss-route-live-oracle",
-      "vwad.owasp.org/app/oopssec-store/: 7 findings — vwad-oopssec-store-route-live-oracle",
-      "ai-security-platform-iota.vercel.app/challenges/command-injection: 7 findings — ai-security-command-injection-route-live-oracle (queue drain)"
+      "koadt.github.io/.../race-condition-coupon-abuse: 11 findings (+oopssec-race-condition-coupon-route-live-oracle)",
+      "the0x-pwn.github.io/lab-xss/lab-2/: 6 findings (+the0x-pwn-xss-template-literal-route-live-oracle, -reflexion-escalated-ssti false positive)",
+      "the0x-pwn.github.io/lab-xss/lab-8/: 5 findings (+the0x-pwn-xss-href-angle-brackets-route-live-oracle, -reflexion-escalated-ssti false positive)",
+      "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card/: 14 findings — oopssec-gift-card-randomness-route-live-oracle (concurrent 05 UTC drain)",
+      "securebank-blog.vercel.app/messages: 3 findings — securebank-blog-messages-xss-route-live-oracle (concurrent drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -76,14 +74,12 @@
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 50,
+    "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/": 11,
+    "the0x-pwn.github.io/lab-xss/lab-2/": 6,
+    "the0x-pwn.github.io/lab-xss/lab-8/": 5,
     "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card/": 14,
     "koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/": 8,
-    "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/": 11,
     "securebank-blog.vercel.app/messages": 3,
-    "vwad.owasp.org/app/oopssec-store/": 7,
-    "ai-security-platform-iota.vercel.app/challenges/command-injection": 7,
-    "mutillidae.lab.pentest-forge.com/index.php?page=user-info.php": 2,
-    "dvwa.lab.pentest-forge.com/vulnerabilities/sqli_blind/": 2,
-    "dvwa.lab.pentest-forge.com/vulnerabilities/xss_r/": 2
+    "vwad.owasp.org/app/oopssec-store/": 7
   }
 }

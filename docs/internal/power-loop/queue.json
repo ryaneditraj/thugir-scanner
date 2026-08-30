@@ -10888,6 +10888,26 @@
   ],
   "priority_discovery_urls": [
     {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/",
+      "source": "kOaDT/oss-oopssec-store — race-condition TOCTOU coupon abuse walkthrough with vulnerable code oracle",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection/",
+      "source": "kOaDT/oss-oopssec-store — X-Forwarded-For SQLi walkthrough GET /api/tracking (OSS README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-2/",
+      "source": "the0x-pwn/lab-xss — template-literal reflected XSS lab module (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-8/",
+      "source": "the0x-pwn/lab-xss — href-attribute reflected XSS lab module (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://securebank-blog.vercel.app/transfer",
       "source": "SecureBank FAST-NUCES attack lab — CSRF bank transfer Attack 3 oracle (securebank-blog Medium article)",
       "auth": "public_demo"

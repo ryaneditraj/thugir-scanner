@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-30T04:40:37.786Z",
-  "total": 2870,
-  "uniqueSlugs": 2862,
+  "generatedAt": "2026-08-30T05:20:58.180Z",
+  "total": 2872,
+  "uniqueSlugs": 2864,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2852,
+    "generic": 2854,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2785,
+    "deep": 2787,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 212,
     "Broken authentication": 187,
     "Injection": 458,
-    "Cross-site scripting": 736,
+    "Cross-site scripting": 738,
     "Open redirect": 25,
     "general": 20,
     "SSRF": 19,
@@ -2366,6 +2366,8 @@
     "the-internet-tinymce-route-live-oracle",
     "the-internet-typos-route-live-oracle",
     "the-internet-windows-route-live-oracle",
+    "the0x-pwn-xss-href-angle-brackets-route-live-oracle",
+    "the0x-pwn-xss-template-literal-route-live-oracle",
     "thugir-dir-discovery",
     "thugir-jwt-weak-claims",
     "thugir-sensitive-js-endpoints",
