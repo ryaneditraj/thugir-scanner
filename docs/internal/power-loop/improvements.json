@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab36-oninput-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab36OninputRouteLiveOracle matches XSS Lab #36 oninput Event Injection + new Function('event', code) + newInput.oninput markers; yogsec.github.io/xss-labs/labs/lab36.html findings 7→8 (+yogsec-xss-lab36-oninput-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab37-onchange-select-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab37OnchangeSelectRouteLiveOracle matches XSS Lab #37 onchange in select Element + select.onchange + eval(code) markers; yogsec.github.io/xss-labs/labs/lab37.html findings 7→8 (+yogsec-xss-lab37-onchange-select-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab38-onkeyup-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab38OnkeyupRouteLiveOracle matches XSS Lab #38 onkeyup Injection + input.onkeyup + eval(code) markers; yogsec.github.io/xss-labs/labs/lab38.html findings 7→8 (+yogsec-xss-lab38-onkeyup-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:dvwa.lab.pentest-forge.com",
       "slug": "pentest-forge-dvwa-xss-d-route-live-oracle",
       "status": "shipped",

@@ -2400,6 +2400,9 @@ const DEEP_RULES = new Set<string>([
   "yogsecXssLab33OnerrorRouteLiveOracle",
   "yogsecXssLab34OnloadRouteLiveOracle",
   "yogsecXssLab35OnfocusAutofocusRouteLiveOracle",
+  "yogsecXssLab36OninputRouteLiveOracle",
+  "yogsecXssLab37OnchangeSelectRouteLiveOracle",
+  "yogsecXssLab38OnkeyupRouteLiveOracle",
   "clientSideThe0xPwnXssLabsEvidence",
   "clientSideThe0xPwnXssQueryParamLabEvidence",
   "clientSideThe0xPwnXssDomHashLabEvidence",
@@ -13160,6 +13163,42 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /yogsec\.github\.io\/xss-labs/i.test(origin) &&
         /\/labs\/lab32\.html/i.test(targetInput) &&
         p.slug.startsWith("yogsec-xss-lab32")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab33\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab33")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab34\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab34")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab35\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab35")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab36\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab36")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab37\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab37")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab38\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab38")
       )
         return -4;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
