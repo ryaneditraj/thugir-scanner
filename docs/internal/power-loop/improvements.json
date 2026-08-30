@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:the0x-pwn.github.io",
+      "slug": "the0x-pwn-xss-tag-filter-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lab-xss/lab-6 blockTag denylist bypassable via unknown elements and onfocus autofocus before resultQuery.innerHTML=query; the0x-pwn.github.io/lab-xss/lab-6/ findings 4→5 (+the0x-pwn-xss-tag-filter-bypass-route-live-oracle +client-side-the0x-pwn-xss-tag-filter-bypass-lab-evidence); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "the0x-pwn-xss-javascript-url-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lab-xss/lab-7 back.href=`javascript:fetch('/analytics',{method:'post',body:'/${query}'})` analytics callback XSS sink; the0x-pwn.github.io/lab-xss/lab-7/ findings 4→5 (+the0x-pwn-xss-javascript-url-route-live-oracle +client-side-the0x-pwn-xss-javascript-url-lab-evidence); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "the0x-pwn-xss-iframe-data-uri-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lab-xss/lab-10 iframe data:text/html payloads injected into resultQuery.innerHTML with HTML-tag filter bypass; the0x-pwn.github.io/lab-xss/lab-10/ findings 6→7 (+the0x-pwn-xss-iframe-data-uri-route-live-oracle +client-side-the0x-pwn-xss-iframe-data-uri-lab-evidence); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
       "slug": "the0x-pwn-xss-query-param-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /lab-xss/lab-1 URLSearchParams q assigned to resultQuery.innerHTML without sanitization; the0x-pwn.github.io/lab-xss/lab-1/ findings 6 (+the0x-pwn-xss-query-param-route-live-oracle +client-side-the0x-pwn-xss-query-param-lab-evidence +dangerous-html-sinks); benchmark juice-shop 51 findings 6/6 maintained"
