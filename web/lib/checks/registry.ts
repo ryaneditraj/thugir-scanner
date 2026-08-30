@@ -56433,6 +56433,42 @@ const clientSideThe0xPwnXssLabsEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- the0x-pwn lab-1 reflected query innerHTML (the0x-pwn.github.io/lab-xss/lab-1/) -
+const CLIENT_THE0X_PWN_XSS_QUERY_PARAM_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Reflected XSS query param lab heading",
+    re: /Reflected XSS[\s\S]{0,40}(?:\/ Labs|Labs)/i
+  },
+  {
+    label: "URLSearchParams q query read",
+    re: /new URLSearchParams\(location\.search\)\.get\(['"]q['"]\)/
+  },
+  {
+    label: "resultQuery innerHTML query assignment",
+    re: /resultQuery\.innerHTML\s*=\s*query/
+  }
+];
+
+const clientSideThe0xPwnXssQueryParamLabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/the0x-pwn\.github\.io\/lab-xss\/lab-1/i.test(pageUrl)) return NEGATIVE;
+  const page = ctx.home.body || "";
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_THE0X_PWN_XSS_QUERY_PARAM_RES) {
+    const m = page.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "the0x-pwn lab-1 documents reflected XSS via resultQuery.innerHTML = query from URLSearchParams q parameter"
+    }
+  };
+};
+
 // --- the0x-pwn lab-3 DOM hash innerHTML module (the0x-pwn.github.io/lab-xss/lab-3/) ----
 const CLIENT_THE0X_PWN_XSS_DOM_HASH_RES: { label: string; re: RegExp }[] = [
   {
@@ -56829,6 +56865,54 @@ const the0xPwnXssSvgScriptInjectionRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "the0x-pwn /lab-xss/lab-9 route scan — innerHTML reflects query when SVG/animatetransform tags are omitted from blockTag denylist"
+    }
+  };
+};
+
+const the0xPwnXssQueryParamRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/lab-xss\/lab-1\/?/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideThe0xPwnXssQueryParamLabEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "the0x-pwn /lab-xss/lab-1 route scan — URLSearchParams q parameter assigned to resultQuery.innerHTML without sanitization"
+    }
+  };
+};
+
+const the0xPwnXssFilterBypassTagsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/lab-xss\/lab-4\/?/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideThe0xPwnXssFilterBypassTagsLabEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "the0x-pwn /lab-xss/lab-4 route scan — angle-bracket replacement then innerHTML assignment leaves filter-bypass XSS sink"
+    }
+  };
+};
+
+const the0xPwnXssDocumentWriteRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/lab-xss\/lab-5\/?/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideThe0xPwnXssDocumentWriteLabEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "the0x-pwn /lab-xss/lab-5 route scan — document.write injects unsanitized query into option elements"
     }
   };
 };
@@ -101118,6 +101202,7 @@ export const RULES: Record<string, Rule> = {
   clientSideYogsecXssLabsEvidence,
   clientSideYogsecXssLabModuleEvidence,
   clientSideThe0xPwnXssLabsEvidence,
+  clientSideThe0xPwnXssQueryParamLabEvidence,
   clientSideThe0xPwnXssDomHashLabEvidence,
   clientSideThe0xPwnXssDocumentWriteLabEvidence,
   clientSideThe0xPwnXssJavascriptUrlLabEvidence,
@@ -101131,6 +101216,9 @@ export const RULES: Record<string, Rule> = {
   the0xPwnXssHrefAngleBracketsRouteLiveOracle,
   the0xPwnXssDomHashRouteLiveOracle,
   the0xPwnXssSvgScriptInjectionRouteLiveOracle,
+  the0xPwnXssQueryParamRouteLiveOracle,
+  the0xPwnXssFilterBypassTagsRouteLiveOracle,
+  the0xPwnXssDocumentWriteRouteLiveOracle,
   clientSideMontanajimXssClassroomEvidence,
   clientSideHackxorEvidence,
   clientSidePygoatEvidence,
