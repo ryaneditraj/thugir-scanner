@@ -2383,6 +2383,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideYogsecXssLabsEvidence",
   "clientSideYogsecXssLabModuleEvidence",
   "clientSideThe0xPwnXssLabsEvidence",
+  "clientSideThe0xPwnXssQueryParamLabEvidence",
   "clientSideThe0xPwnXssDomHashLabEvidence",
   "clientSideThe0xPwnXssDocumentWriteLabEvidence",
   "clientSideThe0xPwnXssJavascriptUrlLabEvidence",
@@ -2396,6 +2397,9 @@ const DEEP_RULES = new Set<string>([
   "the0xPwnXssHrefAngleBracketsRouteLiveOracle",
   "the0xPwnXssDomHashRouteLiveOracle",
   "the0xPwnXssSvgScriptInjectionRouteLiveOracle",
+  "the0xPwnXssQueryParamRouteLiveOracle",
+  "the0xPwnXssFilterBypassTagsRouteLiveOracle",
+  "the0xPwnXssDocumentWriteRouteLiveOracle",
   "clientSideMontanajimXssClassroomEvidence",
   "clientSideHackxorEvidence",
   "clientSidePygoatEvidence",
@@ -13003,6 +13007,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
         /\/posts\/x-forwarded-for-sql-injection/i.test(targetInput) &&
         p.slug.startsWith("oopssec-xff-sqli")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-1\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-query-param")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-4\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-filter-bypass-tags")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-5\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-document-write")
       )
         return -4;
       if (
