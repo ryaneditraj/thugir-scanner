@@ -6443,6 +6443,24 @@
       "slug": "yogsec-xss-lab26-settimeout-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab26SettimeoutRouteLiveOracle matches XSS Lab #26 setTimeout(userString) vulnerability markers; yogsec.github.io/xss-labs/labs/lab26.html findings 7→8 (+yogsec-xss-lab26-settimeout-route-live-oracle); benchmark juice-shop 50 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab27-setinterval-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab27SetintervalRouteLiveOracle matches XSS Lab #27 setInterval(userString) + setInterval(function(){ eval(userCode); }, interval) markers; yogsec.github.io/xss-labs/labs/lab27.html findings 7→8 (+yogsec-xss-lab27-setinterval-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab28-function-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab28FunctionRouteLiveOracle matches XSS Lab #28 Function() Constructor + new Function(...params, userCode) markers; yogsec.github.io/xss-labs/labs/lab28.html findings 7→8 (+yogsec-xss-lab28-function-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab29-javascript-href-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab29JavascriptHrefRouteLiveOracle matches XSS Lab #29 javascript: Pseudo-Protocol in location.href + location.href = javascript: markers; yogsec.github.io/xss-labs/labs/lab29.html findings 7→8 (+yogsec-xss-lab29-javascript-href-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

@@ -56729,6 +56729,48 @@ const yogsecXssLab26SettimeoutRouteLiveOracle: Rule = async (ctx) =>
     "yogsec XSS Lab #26 route scan — setTimeout(userString) passes attacker code to timer callback — DOM XSS training sink"
   );
 
+const yogsecXssLab27SetintervalRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    27,
+    [
+      { label: "setInterval userString lab title", re: /XSS Lab #27:\s*setInterval\(userString\)/i },
+      { label: "setInterval eval repeating XSS heading", re: /setInterval\(\)\s+with\s+eval\(\)\s*-\s*Repeating XSS/i },
+      { label: "setInterval eval userCode sink", re: /setInterval\(function\(\)\s*\{\s*eval\(userCode\)|eval\(userCode\);\s*\},\s*interval\)/i },
+      { label: "START Repeating XSS button", re: /START Repeating XSS|alert every 2 sec/i }
+    ],
+    "yogsec XSS Lab #27 route scan — setInterval(function(){ eval(userCode); }, interval) repeats attacker code — DOM XSS training sink"
+  );
+
+const yogsecXssLab28FunctionRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    28,
+    [
+      { label: "Function constructor lab title", re: /XSS Lab #28:\s*Function\(\)\s+Constructor/i },
+      { label: "Function constructor vulnerability heading", re: /Function\(\)\s+Constructor\s+Vulnerability/i },
+      { label: "new Function userCode sink", re: /new Function\(\.\.\.params,\s*userCode\)|new Function\([^)]*userCode/i },
+      { label: "CREATE & EXECUTE Function button", re: /Function\(\)\s*-\s*CREATE\s*&\s*EXECUTE|createBtn/i }
+    ],
+    "yogsec XSS Lab #28 route scan — new Function(...params, userCode)() executes user strings — DOM XSS training sink"
+  );
+
+const yogsecXssLab29JavascriptHrefRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    29,
+    [
+      {
+        label: "javascript href lab title",
+        re: /XSS Lab #29:\s*javascript:\s*Pseudo-Protocol in location\.href/i
+      },
+      { label: "javascript pseudo-protocol heading", re: /javascript:\s*Pseudo-Protocol in location\.href/i },
+      { label: "location.href javascript sink", re: /location\.href\s*=\s*[^;]*javascript:|Navigate \(location\.href = value\)/i },
+      { label: "malicious javascript link", re: /href="javascript:alert\(|javascript:alert\('XSS from link/i }
+    ],
+    "yogsec XSS Lab #29 route scan — location.href = javascript: URLs and href=javascript: links execute attacker code — URL-based XSS training sink"
+  );
+
 // --- the0x-pwn XSS Labs (the0x-pwn.github.io/lab-xss — 10 reflected/DOM challenges) ----
 const CLIENT_THE0X_PWN_XSS_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -101642,6 +101684,9 @@ export const RULES: Record<string, Rule> = {
   yogsecXssLab24OuterhtmlRouteLiveOracle,
   yogsecXssLab25EvalRouteLiveOracle,
   yogsecXssLab26SettimeoutRouteLiveOracle,
+  yogsecXssLab27SetintervalRouteLiveOracle,
+  yogsecXssLab28FunctionRouteLiveOracle,
+  yogsecXssLab29JavascriptHrefRouteLiveOracle,
   clientSideThe0xPwnXssLabsEvidence,
   clientSideThe0xPwnXssQueryParamLabEvidence,
   clientSideThe0xPwnXssDomHashLabEvidence,

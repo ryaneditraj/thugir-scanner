@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T11:45:00.000Z",
+  "updated_at": "2026-08-30T12:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3170,
-  "total_findings": 32486,
+  "total_sites_scanned": 3171,
+  "total_findings": 32510,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2078,
   "discovery_findings": 26401,
-  "improvements_shipped": 1058,
-  "last_run": "2026-08-30T11:45:00.000Z",
+  "improvements_shipped": 1061,
+  "last_run": "2026-08-30T12:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 593,
+      "probes_run": 594,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,35 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings); no category misses"
+      "note": "Stable 6/6 first-pass recall (51 findings); no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 8,
-      "findings": 121,
-      "focus": "yogsec XSS labs 24-26 route oracles + nodegoat/finbot priority drain",
+      "urls_scanned": 3,
+      "findings": 24,
+      "focus": "yogsec XSS labs 27-29 route oracles (setInterval, Function constructor, javascript: href)",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
-      "yogsec.github.io/xss-labs/labs/lab24.html: 7→8 findings (+yogsec-xss-lab24-outerhtml-route-live-oracle)",
-      "yogsec.github.io/xss-labs/labs/lab25.html: 7→8 findings (+yogsec-xss-lab25-eval-route-live-oracle)",
-      "yogsec.github.io/xss-labs/labs/lab26.html: 7→8 findings (+yogsec-xss-lab26-settimeout-route-live-oracle)",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools: 25 findings (finmail MCP oracles confirmed)",
-      "nodegoat-websec.herokuapp.com/contributions|research|memos: 16 findings each"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "yogsec.github.io/xss-labs/labs/lab27.html: 7→8 findings (+yogsec-xss-lab27-setinterval-route-live-oracle)",
+      "yogsec.github.io/xss-labs/labs/lab28.html: 7→8 findings (+yogsec-xss-lab28-function-route-live-oracle)",
+      "yogsec.github.io/xss-labs/labs/lab29.html: 7→8 findings (+yogsec-xss-lab29-javascript-href-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "yogsec labs 27-29 (setInterval, Function constructor, javascript: href) still lack route-specific live oracles"
+      "yogsec labs 30+ still lack route-specific live oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
+    "juice-shop.herokuapp.com": 51,
+    "yogsec.github.io/xss-labs/labs/lab27.html": 8,
+    "yogsec.github.io/xss-labs/labs/lab28.html": 8,
+    "yogsec.github.io/xss-labs/labs/lab29.html": 8,
     "yogsec.github.io/xss-labs/labs/lab24.html": 8,
     "yogsec.github.io/xss-labs/labs/lab25.html": 8,
-    "yogsec.github.io/xss-labs/labs/lab26.html": 8,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools": 25,
-    "nodegoat-websec.herokuapp.com/contributions": 16,
-    "nodegoat-websec.herokuapp.com/research": 16,
-    "nodegoat-websec.herokuapp.com/memos": 16
+    "yogsec.github.io/xss-labs/labs/lab26.html": 8
   }
 }
