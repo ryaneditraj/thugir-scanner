@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-claims-submit-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chimeraClaimsSubmitRouteLiveOracle matches POST /api/claims/submit Claims submission + Claims Processing from endpoints-catalog corpus; chimera.atlascrew.dev/api/claims/submit findings 5→5 (+chimera-claims-submit-route-live-oracle, -generic patients-search host oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-healthcare-records-export-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chimeraHealthcareRecordsExportRouteLiveOracle matches POST /api/v1/healthcare/records/export with X-Skip-Audit audit suppression from /hipaa-evidence-endpoints corpus; chimera.atlascrew.dev/api/v1/healthcare/records/export findings 5→5 (+chimera-healthcare-records-export-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-claims-amounts-inflate-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chimeraClaimsAmountsInflateRouteLiveOracle matches PUT /api/claims/amounts/inflate Claims amount manipulation from endpoints-catalog corpus; chimera.atlascrew.dev/api/claims/amounts/inflate findings 5→5 (+chimera-claims-amounts-inflate-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:yogsec.github.io",
       "slug": "yogsec-vulnerable-shopping-cart-route-live-oracle",
       "status": "shipped",

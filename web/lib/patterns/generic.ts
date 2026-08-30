@@ -14926,6 +14926,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-claims-submit-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Chimera insurance claims submission route live oracle",
+    description:
+      "When scanning /api/claims/submit on chimera.atlascrew.dev, the endpoints catalog documents unauthenticated claims submission and insurance fraud scenarios — route-specific claims fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional insurance claims submission flaws for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraClaimsSubmitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and fraud controls on claims submission endpoints.",
+      steps: [
+        "Enforce authenticated sessions and role checks before accepting claims.",
+        "Validate claim amounts and supporting evidence server-side.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/claims/submit route documents unauthenticated claims submission flaws. Show authorization and fraud-detection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-healthcare-records-export-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Chimera HIPAA patient records export route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/records/export on chimera.atlascrew.dev, HIPAA evidence routes document bulk PHI export with X-Skip-Audit audit suppression — route-specific healthcare compliance training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents unauthenticated patient record export and audit bypass for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcareRecordsExportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict PHI export endpoints and reject audit-suppression headers.",
+      steps: [
+        "Require authentication and HIPAA role checks before exporting patient records.",
+        "Reject X-Skip-Audit headers and always log PHI access.",
+        "Keep Chimera healthcare training routes on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/records/export route documents PHI bulk export with audit suppression. Show HIPAA-compliant access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-claims-amounts-inflate-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "critical",
+    title: "Chimera claims amount inflation route live oracle",
+    description:
+      "When scanning /api/claims/amounts/inflate on chimera.atlascrew.dev, the endpoints catalog documents claims amount manipulation without authorization checks — route-specific insurance fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional claims amount inflation flaws for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraClaimsAmountsInflateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate claim amounts server-side and require authorization for adjustments.",
+      steps: [
+        "Enforce server-side claim amount validation independent of client-submitted values.",
+        "Require multi-party approval for claim amount modifications.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/claims/amounts/inflate route documents claims amount manipulation flaws. Show authorization and amount-validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-swagger-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
