@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T17:05:00.000Z",
+  "updated_at": "2026-08-30T18:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ist-edu-bd.vercel.app/files",
+      "source": "zahidoverflow/damn-vulnerable-web-university — LFI document library /api/files?file= oracle (Vercel live demo; web search 18 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/chat/query",
+      "source": "ctfsec/pwnshop — LLM prompt-injection system-prompt extraction oracle POST /api/v1/chat/query (PWN-031; vulnerabilities index)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/mail/1",
+      "source": "ctfsec/pwnshop — inbox IDOR oracle GET /mail/:user_id exposes OTP/reset tokens (PWN-004; learning gap 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/order/1",
+      "source": "ctfsec/pwnshop — order IDOR oracle GET /order/:id no ownership check (PWN-001; vulnerabilities index)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/",
+      "source": "kOaDT/oss-oopssec-store — BFLA live-stream hijack walkthrough POST /api/live/broadcast (OSS roadmap ch.02; pending 10 UTC)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access/",
       "source": "kOaDT/oss-oopssec-store roadmap ch02 — BOLA wishlist access walkthrough with live API oracle (OSS README)",
