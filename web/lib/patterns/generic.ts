@@ -31071,6 +31071,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "yogsec-xss-lab39-onsubmit-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "critical",
+    title: "yogsec XSS Lab #39 onsubmit route live oracle",
+    description:
+      "When scanning /labs/lab39.html, yogsec documents form.onsubmit with eval(code) — route-specific form-submission XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #39 exposes onsubmit event injection with eval(userCode) that executes attacker JavaScript on form submission for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab39OnsubmitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never use eval() in onsubmit handlers with user-controlled code in production.",
+      steps: [
+        "Use addEventListener('submit', safeFn) instead of eval with user input.",
+        "Never pass user-controlled strings to eval() in form submission handlers.",
+        "Use Content-Security-Policy to block eval and inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #39 route documents onsubmit eval XSS. Show safe form submission handlers and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "yogsec Open-Redirect hub route live oracle",
+    description:
+      "When scanning yogsec.github.io/Open-Redirect/, the education lab documents redirectForm assigning window.location.href from user input without destination validation — route-specific open redirect training oracle.",
+    impactOneline:
+      "yogsec Open-Redirect simulator exposes unvalidated redirect destinations via window.location.href for phishing and OAuth bypass practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec Open-Redirect is intentional training — validate and whitelist redirect destinations in production.",
+      steps: [
+        "Allowlist permitted redirect hosts instead of accepting arbitrary URLs.",
+        "Use relative paths or signed redirect tokens for post-login navigation.",
+        "Run open-redirect training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Open-Redirect hub documents unvalidated window.location.href redirects. Show allowlist validation and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-vulnerable-login-route-live-oracle",
+    platform: "generic",
+    category: "Authentication bypass",
+    severityDefault: "critical",
+    title: "yogsec Vulnerable-Login hub route live oracle",
+    description:
+      "When scanning yogsec.github.io/Vulnerable-Login/, the education lab documents SQL injection authentication bypass via concatenated login queries (VULN-001) — route-specific auth-bypass training oracle.",
+    impactOneline:
+      "yogsec Vulnerable-Login exposes client-side SQL injection login bypass with plaintext password storage and missing rate limiting for authentication training on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecVulnerableLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec Vulnerable-Login is intentional training — use parameterized queries and server-side authentication in production.",
+      steps: [
+        "Use parameterized queries or ORM bindings instead of string-concatenated SQL.",
+        "Hash passwords with bcrypt/argon2 and enforce rate limiting on login endpoints.",
+        "Run authentication training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Vulnerable-Login hub documents SQL injection auth bypass. Show parameterized query remediation and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-labs-evidence",
     platform: "generic",
     category: "Cross-site scripting",

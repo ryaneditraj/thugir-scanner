@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab39-onsubmit-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab39OnsubmitRouteLiveOracle matches XSS Lab #39 onsubmit Injection in Form + form.onsubmit + eval(code) markers; yogsec.github.io/xss-labs/labs/lab39.html findings 7→8 (+yogsec-xss-lab39-onsubmit-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecOpenRedirectRouteLiveOracle matches Open Redirect Simulator + redirectForm + window.location.href unvalidated redirect markers; yogsec.github.io/Open-Redirect/ findings 3→4 (+yogsec-open-redirect-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-vulnerable-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecVulnerableLoginRouteLiveOracle matches Vulnerable Login Page + SQL injection hint + Login Vulnerabilities + User Database markers; yogsec.github.io/Vulnerable-Login/ findings 3→4 (+yogsec-vulnerable-login-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
       "slug": "yogsec-xss-lab36-oninput-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab36OninputRouteLiveOracle matches XSS Lab #36 oninput Event Injection + new Function('event', code) + newInput.oninput markers; yogsec.github.io/xss-labs/labs/lab36.html findings 7→8 (+yogsec-xss-lab36-oninput-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
