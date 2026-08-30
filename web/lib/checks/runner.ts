@@ -1788,6 +1788,9 @@ const DEEP_RULES = new Set<string>([
   "chimeraHipaaEvidenceEndpointsRouteLiveOracle",
   "chimeraPaymentsProcessRouteLiveOracle",
   "chimeraWireTransferRouteLiveOracle",
+  "chimeraClaimsSubmitRouteLiveOracle",
+  "chimeraHealthcareRecordsExportRouteLiveOracle",
+  "chimeraClaimsAmountsInflateRouteLiveOracle",
   "chimeraSwaggerRouteLiveOracle",
   "chimeraApiReferenceRouteLiveOracle",
   "chimeraFedrampOpenapiExtensionsRouteLiveOracle",
@@ -12220,6 +12223,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/fedramp-openapi-extensions\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-fedramp-openapi-extensions")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/claims\/submit\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-claims-submit")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/claims\/amounts\/inflate\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-claims-amounts-inflate")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/healthcare\/records\/export\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-healthcare-records-export")
       )
         return -3;
       if (

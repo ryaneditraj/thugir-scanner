@@ -18756,6 +18756,97 @@ const chimeraWireTransferRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const chimeraClaimsSubmitRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/claims\/submit\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const claimsOk =
+    /claims\/submit/i.test(corpus) &&
+    (/Claims submission/i.test(corpus) || /POST\s+\/api\/claims\/submit/i.test(corpus)) &&
+    (/Claims Processing|Claims Fraud|Insurance Industry/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!claimsOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Claims submission/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/claims/submit — Claims submission (insurance fraud training endpoint)",
+      note: "chimera.atlascrew.dev /api/claims/submit route scan — Chimera endpoints catalog documents unauthenticated claims submission and insurance fraud scenarios (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific claims fraud training oracle"
+    }
+  };
+};
+
+const chimeraHealthcareRecordsExportRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/healthcare\/records\/export\b/i.test(pageUrl)) return NEGATIVE;
+  const hipaaDoc = await ctx.probe.get(
+    new URL("/hipaa-evidence-endpoints", ctx.origin).toString(),
+    { maxBytes: 400_000, timeoutMs: 15000 }
+  );
+  if (
+    hipaaDoc.status >= 200 &&
+    hipaaDoc.status < 400 &&
+    /\/api\/v1\/healthcare\/records\/export/i.test(hipaaDoc.body) &&
+    (/X-Skip-Audit:\s*true|audit_logged/i.test(hipaaDoc.body) ||
+      /patient_ids|compliance-hipaa-patient-export/i.test(hipaaDoc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: /X-Skip-Audit:\s*true/i.test(hipaaDoc.body) ? 0.92 : 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet:
+          "POST /api/v1/healthcare/records/export — X-Skip-Audit: true makes audit_logged false",
+        note: "chimera.atlascrew.dev /api/v1/healthcare/records/export route scan — HIPAA evidence routes document unauthenticated PHI export with audit suppression — route-specific healthcare compliance training oracle"
+      }
+    };
+  }
+  const corpus = await chimeraDocsCorpus(ctx);
+  const exportOk =
+    /\/api\/v1\/healthcare\/records\/export/i.test(corpus) &&
+    (/Patient export|Patient-record export evidence/i.test(corpus) ||
+      /POST\s+\/api\/v1\/healthcare\/records\/export/i.test(corpus)) &&
+    (/X-Skip-Audit|audit_logged|patient_ids|compliance-hipaa-patient-export/i.test(corpus) ||
+      /Healthcare|HIPAA Evidence/i.test(corpus));
+  if (!exportOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet:
+        "POST /api/v1/healthcare/records/export — patient_ids bulk export with optional X-Skip-Audit audit suppression",
+      note: "chimera.atlascrew.dev /api/v1/healthcare/records/export route scan — Chimera docs corpus documents HIPAA PHI export and audit suppression (Jekyll docs corpus fallback) — route-specific healthcare compliance training oracle"
+    }
+  };
+};
+
+const chimeraClaimsAmountsInflateRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/claims\/amounts\/inflate\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const inflateOk =
+    /claims\/amounts\/inflate/i.test(corpus) &&
+    (/Claims amount manipulation/i.test(corpus) ||
+      /PUT\s+\/api\/claims\/amounts\/inflate/i.test(corpus)) &&
+    (/Claims Fraud|amount inflation|Duplicate claims/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!inflateOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Claims amount manipulation/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "PUT /api/claims/amounts/inflate — Claims amount manipulation (insurance fraud training endpoint)",
+      note: "chimera.atlascrew.dev /api/claims/amounts/inflate route scan — Chimera endpoints catalog documents claims amount inflation without authorization checks (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific claims fraud training oracle"
+    }
+  };
+};
+
 const chimeraSwaggerRouteLiveOracle: Rule = async (ctx) => {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -101227,6 +101318,9 @@ export const RULES: Record<string, Rule> = {
   chimeraHipaaEvidenceEndpointsRouteLiveOracle,
   chimeraPaymentsProcessRouteLiveOracle,
   chimeraWireTransferRouteLiveOracle,
+  chimeraClaimsSubmitRouteLiveOracle,
+  chimeraHealthcareRecordsExportRouteLiveOracle,
+  chimeraClaimsAmountsInflateRouteLiveOracle,
   chimeraSwaggerRouteLiveOracle,
   chimeraApiReferenceRouteLiveOracle,
   chimeraFedrampOpenapiExtensionsRouteLiveOracle,
