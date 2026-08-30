@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "the0x-pwn-xss-query-param-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lab-xss/lab-1 URLSearchParams q assigned to resultQuery.innerHTML without sanitization; the0x-pwn.github.io/lab-xss/lab-1/ findings 6 (+the0x-pwn-xss-query-param-route-live-oracle +client-side-the0x-pwn-xss-query-param-lab-evidence +dangerous-html-sinks); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "the0x-pwn-xss-filter-bypass-tags-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lab-xss/lab-4 query.replace angle brackets then resultQuery.innerHTML=query incomplete filter; the0x-pwn.github.io/lab-xss/lab-4/ findings 5 (+the0x-pwn-xss-filter-bypass-tags-route-live-oracle +client-side-the0x-pwn-xss-filter-bypass-tags-lab-evidence); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:the0x-pwn.github.io",
+      "slug": "the0x-pwn-xss-document-write-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lab-xss/lab-5 document.write('<option selected>'+query) unsanitized DOM XSS sink; the0x-pwn.github.io/lab-xss/lab-5/ findings 5 (+the0x-pwn-xss-document-write-route-live-oracle +client-side-the0x-pwn-xss-document-write-lab-evidence); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:koadt.github.io",
       "slug": "oopssec-xff-sqli-route-live-oracle",
       "status": "shipped",

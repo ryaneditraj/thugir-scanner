@@ -30628,6 +30628,57 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-the0x-pwn-xss-query-param-lab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn reflected query innerHTML XSS lab disclosed",
+    description:
+      "the0x-pwn lab-1 reads the q query parameter via URLSearchParams and assigns it to resultQuery.innerHTML without sanitization — a beginner reflected XSS training module.",
+    impactOneline:
+      "Public the0x-pwn lab-1 page documents query-parameter → innerHTML reflected XSS sink for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideThe0xPwnXssQueryParamLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign URL query parameters to innerHTML — use textContent and output encoding in production.",
+      steps: [
+        "Replace innerHTML assignments with textContent for user-controlled search results.",
+        "HTML-encode all dynamic output before rendering in the DOM.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host the0x-pwn lab-1-style reflected query XSS labs. Show safe output encoding and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the0x-pwn-xss-query-param-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn reflected query innerHTML XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-1 on the0x-pwn.github.io, URLSearchParams q is assigned to resultQuery.innerHTML without sanitization — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-1 documents query-parameter → innerHTML reflected XSS sink for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssQueryParamRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign URL query parameters to innerHTML — use textContent in production.",
+      steps: [
+        "Replace innerHTML assignments with textContent for user-controlled search results.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-1 route documents reflected query XSS. Show safe output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-dom-hash-lab-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -30701,6 +30752,31 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host the0x-pwn lab-5-style document.write XSS labs. Show safe DOM construction and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the0x-pwn-xss-document-write-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn document.write option injection XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-5 on the0x-pwn.github.io, document.write injects unsanitized query into option elements — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-5 documents document.write query concatenation XSS sink for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssDocumentWriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Avoid document.write with user-controlled data — build DOM nodes with createElement in production.",
+      steps: [
+        "Replace document.write concatenation with safe DOM APIs and output encoding.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-5 route documents document.write XSS. Show safe DOM construction remediation.",
     version: 1,
     enabled: true
   },
@@ -30830,6 +30906,31 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host the0x-pwn lab-4-style filter-bypass XSS labs. Show proper sanitization and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the0x-pwn-xss-filter-bypass-tags-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn HTML tag filter bypass XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-4 on the0x-pwn.github.io, angle-bracket replacement still leaves innerHTML assignment vulnerable to filter-bypass XSS — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-4 documents partial tag filtering before innerHTML assignment for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssFilterBypassTagsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Angle-bracket replacement alone does not prevent XSS — use textContent in production.",
+      steps: [
+        "Replace innerHTML assignments with textContent for user-controlled data.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-4 route documents filter-bypass XSS. Show proper sanitization remediation.",
     version: 1,
     enabled: true
   },
