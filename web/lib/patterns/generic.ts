@@ -28531,6 +28531,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "code-breaking-easy-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Code-Breaking /easy tier route live oracle",
+    description:
+      "When scanning /easy/{slug}, Code-Breaking maps to /puzzle/{id} source-code audit puzzles with GitHub source archives and flag submission forms — route-specific easy-tier code-audit CTF oracle.",
+    impactOneline:
+      "Route-scoped scans of /easy/* paths should confirm source-code audit CTF puzzle content even when the short URL returns 404.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "codeBreakingEasyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Code-Breaking is intentional training — isolate puzzle instances from production codebases.",
+      steps: [
+        "Run source-audit CTF puzzles only on dedicated lab infrastructure.",
+        "Require authentication before serving downloadable challenge source archives.",
+        "Use puzzle findings to train reviewers without copying vulnerable patterns into production."
+      ]
+    },
+    fixPrompt:
+      "Our Code-Breaking /easy route scan confirms open source-code audit CTF content. Show how to isolate challenge instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sanitize-xss-demo-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -29924,6 +29950,107 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/validate/input-validation checker API exposes input validation lab. Show validation hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-validate-security-headers-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "VulnLab security-headers validate API live oracle",
+    description:
+      "GET /api/validate/security-headers returns JSON with labId security-headers and a hint describing missing CSP/HSTS/X-Frame-Options expectations.",
+    impactOneline:
+      "Live validation API confirms security-headers lab checker is reachable on VulnLab Academy.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidateSecurityHeadersLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab validation APIs behind authenticated sessions.",
+      steps: [
+        "Require lab login before /api/validate/security-headers responds.",
+        "Deploy Content-Security-Policy, HSTS, and X-Frame-Options on production apps."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/security-headers endpoint leaks security-headers lab hints. Show header hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-validate-ssti-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnLab SSTI validate API live oracle",
+    description:
+      "GET /api/validate/ssti returns JSON with labId ssti and a hint describing server-side template injection payload expectations for the hands-on lab.",
+    impactOneline:
+      "Live validation API confirms SSTI lab checker is reachable on VulnLab Academy when deployed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidateSstiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab validation APIs behind authenticated sessions.",
+      steps: [
+        "Require lab login before /api/validate/ssti responds.",
+        "Never pass user input into template render functions.",
+        "Use server-side grading for SSTI labs."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/ssti endpoint leaks SSTI lab hints. Show how to gate validation behind auth.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-validate-ssti-api-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnLab /api/validate/ssti route live oracle",
+    description:
+      "When scanning /api/validate/ssti, probes the live SSTI validation checker API for labId ssti + hint JSON — route-specific SSTI lab oracle distinct from generic VulnLab hub fingerprint.",
+    impactOneline:
+      "Route-scoped scans of /api/validate/ssti should confirm SSTI lab checker API without relying on shared SPA bundle markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidateSstiApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab validation APIs behind authenticated sessions.",
+      steps: [
+        "Require lab login before /api/validate/ssti responds.",
+        "Never pass user input into template render functions."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/ssti route scan confirms SSTI lab checker API. Show template injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-validate-sqli-api-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnLab /api/validate/sqli-error route live oracle",
+    description:
+      "When scanning /api/validate/sqli-error, probes the live SQLi validation checker API for labId sqli-error + hint JSON — route-specific SQLi lab oracle distinct from generic VulnLab hub fingerprint.",
+    impactOneline:
+      "Route-scoped scans of /api/validate/sqli-error should confirm SQLi lab checker API without relying on shared SPA bundle markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidateSqliApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab validation APIs behind authenticated sessions.",
+      steps: [
+        "Require lab login before /api/validate/sqli-error responds.",
+        "Use parameterized queries for all database access."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/sqli-error route scan confirms SQLi lab checker API. Show SQL injection remediation.",
     version: 1,
     enabled: true
   },

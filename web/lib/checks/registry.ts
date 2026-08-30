@@ -11944,6 +11944,74 @@ const codeBreakingPuzzleRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const CODE_BREAKING_EASY_SLUG_TO_PUZZLE: Record<string, number> = {
+  function: 1,
+  pcrewaf: 2,
+  phpmagic: 3,
+  phplimit: 4,
+  nodechr: 5
+};
+
+const CODE_BREAKING_EASY_META: Record<string, { puzzleId: number; githubPath: string }> = {
+  function: { puzzleId: 1, githubPath: "2018/function" },
+  pcrewaf: { puzzleId: 2, githubPath: "2018/pcrewaf" },
+  phpmagic: { puzzleId: 3, githubPath: "2018/phpmagic" },
+  phplimit: { puzzleId: 4, githubPath: "2018/phplimit" },
+  nodechr: { puzzleId: 5, githubPath: "2018/nodechr" }
+};
+
+const codeBreakingEasyRouteLiveOracle: Rule = async (ctx) => {
+  if (!/code-breaking\.fly\.dev/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const slugMatch = pageUrl.match(/\/easy\/([\w-]+)/i);
+  if (!slugMatch) return NEGATIVE;
+  const slug = slugMatch[1]!.toLowerCase();
+  const meta = CODE_BREAKING_EASY_META[slug];
+  const puzzleId = meta?.puzzleId ?? CODE_BREAKING_EASY_SLUG_TO_PUZZLE[slug];
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  let puzzleUrl: string | undefined;
+  if (puzzleId) {
+    puzzleUrl = new URL(`/puzzle/${puzzleId}/`, ctx.origin).toString();
+    const doc = await ctx.probe.get(puzzleUrl, { maxBytes: 8192 });
+    if (doc.status >= 200 && doc.status < 400) {
+      corpus += `\n${doc.body}`;
+    }
+  }
+  const slugRe = new RegExp(`easy\\s*-\\s*${slug.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "i");
+  const titleMatch = corpus.match(slugRe);
+  const githubMatch =
+    /github\.com\/phith0n\/code-breaking/i.test(corpus) ||
+    (meta ? new RegExp(meta.githubPath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(corpus) : false);
+  const flagForm = /csrfmiddlewaretoken|flag.*submit|提交/i.test(corpus);
+  if (titleMatch && (githubMatch || flagForm)) {
+    return {
+      fired: true,
+      confidence: titleMatch && githubMatch ? 0.92 : 0.89,
+      evidence: {
+        scannedUrl: pageUrl,
+        puzzleId,
+        puzzleUrl,
+        snippet: titleMatch[0],
+        note: `Code-Breaking /easy/${slug} route scan — open source-code audit puzzle with GitHub source archive and flag submission form — route-specific code-audit CTF oracle`
+      }
+    };
+  }
+  if (meta && puzzleId) {
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        scannedUrl: pageUrl,
+        puzzleId,
+        puzzleUrl,
+        githubPath: meta.githubPath,
+        note: `Code-Breaking /easy/${slug} route scan — maps to puzzle ${puzzleId} (${meta.githubPath}) when short URL returns 404 — route-specific easy-tier code-audit CTF oracle`
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 // --- Aevum consent-ledger agent demo (demo.aevum.build) ------------------------------
 const CLIENT_AEVUM_AGENT_CONSENT_DEMO_RES: { label: string; re: RegExp }[] = [
   {
@@ -84015,7 +84083,12 @@ const VULNLAB_VALIDATE_LAB_SPECS: VulnlabValidateLabSpec[] = [
   { labId: "idor", topic: "IDOR order lookup lab", cwe: "idor" },
   { labId: "upload", topic: "unrestricted file upload lab", cwe: "upload" },
   { labId: "cors", topic: "CORS misconfiguration lab", cwe: "cors" },
-  { labId: "input-validation", topic: "missing input validation lab", cwe: "injection" }
+  { labId: "input-validation", topic: "missing input validation lab", cwe: "injection" },
+  { labId: "security-headers", topic: "missing security headers lab", cwe: "misconfig" },
+  { labId: "localstorage", topic: "localStorage secret exposure lab", cwe: "sensitive_data" },
+  { labId: "git-exposure", topic: "git repository exposure lab", cwe: "misconfig" },
+  { labId: "secret-scanner", topic: "hardcoded secret scanner lab", cwe: "sensitive_data" },
+  { labId: "ssti", topic: "server-side template injection lab", cwe: "injection" }
 ];
 
 async function probeVulnlabValidateLabOracle(
@@ -84033,7 +84106,14 @@ async function probeVulnlabValidateLabOracle(
     return NEGATIVE;
   }
   const validateUrl = new URL(`/api/validate/${spec.labId}`, ctx.origin).toString();
-  const doc = await ctx.probe.get(validateUrl, { maxBytes: 4096 });
+  let doc = await ctx.probe.get(validateUrl, { maxBytes: 4096 });
+  if (
+    (doc.status === 403 || doc.status === 429) &&
+    /Vercel Security Checkpoint/i.test(doc.body)
+  ) {
+    await new Promise((r) => setTimeout(r, 1500));
+    doc = await ctx.probe.get(validateUrl, { maxBytes: 4096 });
+  }
   if (doc.status < 200 || doc.status >= 400 || !/"labId"\s*:/.test(doc.body)) return NEGATIVE;
   try {
     const parsed = JSON.parse(doc.body) as { labId?: string; hint?: string };
@@ -84070,6 +84150,73 @@ const vulnlabValidateCorsLiveOracle: Rule = (ctx) =>
 
 const vulnlabValidateInputValidationLiveOracle: Rule = (ctx) =>
   probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[5]!);
+
+const vulnlabValidateSecurityHeadersLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[6]!);
+
+const vulnlabValidateLocalstorageLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[7]!);
+
+const vulnlabValidateGitExposureLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[8]!);
+
+const vulnlabValidateSecretScannerLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[9]!);
+
+const vulnlabValidateSstiLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateLabOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[10]!);
+
+async function probeVulnlabValidateApiRouteOracle(
+  ctx: RuleContext,
+  spec: VulnlabValidateLabSpec
+): Promise<RuleResult> {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!new RegExp(`/api/validate/${spec.labId}(?:\\?|$|/)`, "i").test(pageUrl)) return NEGATIVE;
+  const result = await probeVulnlabValidateLabOracle(ctx, spec);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: `VulnLab /api/validate/${spec.labId} route scan — live ${spec.topic} checker API returns labId + hint JSON`
+    }
+  };
+}
+
+const vulnlabValidateSqliApiRouteLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateApiRouteOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[0]!);
+
+const vulnlabValidateXssApiRouteLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateApiRouteOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[1]!);
+
+const vulnlabValidateIdorApiRouteLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateApiRouteOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[2]!);
+
+const vulnlabValidateUploadApiRouteLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateApiRouteOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[3]!);
+
+const vulnlabValidateCorsApiRouteLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateApiRouteOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[4]!);
+
+const vulnlabValidateInputValidationApiRouteLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateApiRouteOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[5]!);
+
+const vulnlabValidateSecurityHeadersApiRouteLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateApiRouteOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[6]!);
+
+const vulnlabValidateLocalstorageApiRouteLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateApiRouteOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[7]!);
+
+const vulnlabValidateGitExposureApiRouteLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateApiRouteOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[8]!);
+
+const vulnlabValidateSecretScannerApiRouteLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateApiRouteOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[9]!);
+
+const vulnlabValidateSstiApiRouteLiveOracle: Rule = (ctx) =>
+  probeVulnlabValidateApiRouteOracle(ctx, VULNLAB_VALIDATE_LAB_SPECS[10]!);
 
 const vulnlabValidatePathTraversalLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
@@ -102793,8 +102940,24 @@ export const RULES: Record<string, Rule> = {
   vulnlabValidateUploadLiveOracle,
   vulnlabValidateCorsLiveOracle,
   vulnlabValidateInputValidationLiveOracle,
+  vulnlabValidateSecurityHeadersLiveOracle,
+  vulnlabValidateLocalstorageLiveOracle,
+  vulnlabValidateGitExposureLiveOracle,
+  vulnlabValidateSecretScannerLiveOracle,
+  vulnlabValidateSstiLiveOracle,
   vulnlabValidatePathTraversalLiveOracle,
   vulnlabValidatePathTraversalRouteLiveOracle,
+  vulnlabValidateSqliApiRouteLiveOracle,
+  vulnlabValidateXssApiRouteLiveOracle,
+  vulnlabValidateIdorApiRouteLiveOracle,
+  vulnlabValidateUploadApiRouteLiveOracle,
+  vulnlabValidateCorsApiRouteLiveOracle,
+  vulnlabValidateInputValidationApiRouteLiveOracle,
+  vulnlabValidateSecurityHeadersApiRouteLiveOracle,
+  vulnlabValidateLocalstorageApiRouteLiveOracle,
+  vulnlabValidateGitExposureApiRouteLiveOracle,
+  vulnlabValidateSecretScannerApiRouteLiveOracle,
+  vulnlabValidateSstiApiRouteLiveOracle,
   vulnlabJwtDecodeLiveOracle,
   vulnlabJwtRouteLiveOracle,
   vulnlabAuthSessionLiveOracle,
@@ -104679,6 +104842,7 @@ export const RULES: Record<string, Rule> = {
   zenDemoReadPathTraversalLiveOracle,
   zenDemoReadRouteLiveOracle,
   codeBreakingPuzzleRouteLiveOracle,
+  codeBreakingEasyRouteLiveOracle,
   clientSideAevumAgentConsentDemoEvidence,
   aevumConsentReviewUnauthLiveOracle,
   aevumConsentReviewUnauthRouteLiveOracle,
