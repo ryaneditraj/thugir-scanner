@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T10:20:00.000Z",
+  "updated_at": "2026-08-30T10:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3147,
-  "total_findings": 32146,
+  "total_sites_scanned": 3155,
+  "total_findings": 32330,
   "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2068,
-  "discovery_findings": 26119,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 2073,
+  "discovery_findings": 26296,
   "improvements_shipped": 1055,
-  "last_run": "2026-08-30T10:20:00.000Z",
+  "last_run": "2026-08-30T10:25:00.000Z",
   "last_run_summary": {
     "hour_utc": "10",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 590,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,33 +52,42 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 17,
-      "focus": "oopssec second-order SQLi + fauxbank api/auth/login + api/accounts route oracles from 09 UTC queued drain",
+      "urls_added": 5,
+      "urls_scanned": 11,
+      "findings": 180,
+      "focus": "oopssec second-order SQLi + fauxbank api/auth/login/accounts + Escape DVGA2/duck-store vuln index/juice.demo memories/DVGA graphiql/preview chatbot + PentestForge crapi/vampi + the0x-pwn lab-6",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection/: 8 findings — oopssec-second-order-sqli-route-live-oracle shipped (6→8)",
-      "pentest-fauxbank.vercel.app/api/auth/login: +fauxbank-auth-login-route-live-oracle route-specific weak-credentials oracle",
-      "pentest-fauxbank.vercel.app/api/accounts: 4 findings — fauxbank-accounts-route-live-oracle corpus fallback (3→4)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 38 live oracles, gap=[])",
+      "preview.owasp-juice.shop/#/chatbot: 52 findings — juice-shop-chatbot-route-live-oracle + chatbot-api live oracles",
+      "duck-store.escape.tech/vulnerabilities: 42 findings — duck-store vuln index hub",
+      "juice-shop.demo.escape.tech/rest/memories: 33 findings — juice-shop-memories-bola-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection/: 8 findings — oopssec-second-order-sqli-route-live-oracle shipped",
+      "pentest-fauxbank.vercel.app/api/auth/login: route-specific fauxbank-auth-login-route-live-oracle shipped",
+      "pentest-fauxbank.vercel.app/api/accounts: 4 findings — fauxbank-accounts-route-live-oracle",
+      "dvga2.tools.escape.tech/: 15 findings — DVGA Expert GraphQL hub",
+      "dvga.tools.escape.tech/graphiql: 14 findings — graphql introspection/batching hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "oopssec SSRF + XXE walkthroughs already had route oracles — second-order SQLi was the remaining queued gap",
-      "fauxbank api/transfer already had fauxbank-transfer-route-live-oracle — auth/login route oracle was the remaining fauxbank API gap"
+      "priority_discovery_urls preempted new oopssec walkthrough head — client-side-price/live-stream-hijack/supply-chain-poisoned/information-disclosure-api-error/mcp-malicious-server still pending drain",
+      "crapi.lab.pentest-forge.com + vampi.lab.pentest-forge.com: thin 1-finding passes — PentestForge hub fingerprint only"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "preview.owasp-juice.shop/#/chatbot": 52,
+    "duck-store.escape.tech/vulnerabilities": 42,
+    "juice-shop.demo.escape.tech/rest/memories": 33,
+    "dvga2.tools.escape.tech/": 15,
+    "dvga.tools.escape.tech/graphiql": 14,
     "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection": 8,
     "pentest-fauxbank.vercel.app/api/auth/login": 5,
     "pentest-fauxbank.vercel.app/api/accounts": 4,
-    "dvga.xplat-demo.threatx.io/graphiql": 19,
-    "sekumart.sekuripy.hr/search.php": 17,
-    "pentest-ground.com:5013/graphiql": 15,
-    "pentest-ground.com:9000": 13
+    "the0x-pwn.github.io/lab-xss/lab-6/": 5,
+    "crapi.lab.pentest-forge.com/": 1,
+    "vampi.lab.pentest-forge.com/": 1
   }
 }
