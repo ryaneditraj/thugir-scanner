@@ -2403,6 +2403,9 @@ const DEEP_RULES = new Set<string>([
   "yogsecXssLab36OninputRouteLiveOracle",
   "yogsecXssLab37OnchangeSelectRouteLiveOracle",
   "yogsecXssLab38OnkeyupRouteLiveOracle",
+  "yogsecXssLab39OnsubmitRouteLiveOracle",
+  "yogsecOpenRedirectRouteLiveOracle",
+  "yogsecVulnerableLoginRouteLiveOracle",
   "clientSideThe0xPwnXssLabsEvidence",
   "clientSideThe0xPwnXssQueryParamLabEvidence",
   "clientSideThe0xPwnXssDomHashLabEvidence",
@@ -13199,6 +13202,22 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /yogsec\.github\.io\/xss-labs/i.test(origin) &&
         /\/labs\/lab38\.html/i.test(targetInput) &&
         p.slug.startsWith("yogsec-xss-lab38")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab39\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab39")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/Open-Redirect/i.test(origin) &&
+        p.slug.startsWith("yogsec-open-redirect")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/Vulnerable-Login/i.test(origin) &&
+        p.slug.startsWith("yogsec-vulnerable-login")
       )
         return -4;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;

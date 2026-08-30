@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-30T15:03:50.179Z",
-  "total": 2902,
-  "uniqueSlugs": 2894,
+  "generatedAt": "2026-08-30T16:03:46.705Z",
+  "total": 2905,
+  "uniqueSlugs": 2897,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2884,
+    "generic": 2887,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2817,
+    "deep": 2820,
     "continuous": 0
   },
   "byCategory": {
@@ -28,8 +28,8 @@
     "Security misconfiguration": 212,
     "Broken authentication": 188,
     "Injection": 462,
-    "Cross-site scripting": 763,
-    "Open redirect": 25,
+    "Cross-site scripting": 764,
+    "Open redirect": 26,
     "general": 20,
     "SSRF": 19,
     "Server-side request forgery": 97,
@@ -37,7 +37,7 @@
     "AI security": 110,
     "Cross-site request forgery": 10,
     "Business logic": 26,
-    "Authentication bypass": 3,
+    "Authentication bypass": 4,
     "Insecure file upload": 2,
     "Command injection": 2,
     "XML external entity injection": 1,
@@ -2873,6 +2873,8 @@
     "xss-vulnlab-stored-live-oracle",
     "xss-vulnlab-stored-route-live-oracle",
     "xxe-xml-post-probe",
+    "yogsec-open-redirect-route-live-oracle",
+    "yogsec-vulnerable-login-route-live-oracle",
     "yogsec-xss-lab24-outerhtml-route-live-oracle",
     "yogsec-xss-lab25-eval-route-live-oracle",
     "yogsec-xss-lab26-settimeout-route-live-oracle",
@@ -2888,6 +2890,7 @@
     "yogsec-xss-lab36-oninput-route-live-oracle",
     "yogsec-xss-lab37-onchange-select-route-live-oracle",
     "yogsec-xss-lab38-onkeyup-route-live-oracle",
+    "yogsec-xss-lab39-onsubmit-route-live-oracle",
     "zen-demo-java-create-route-live-oracle",
     "zen-demo-java-create-sqli-live-oracle",
     "zen-demo-java-execute-route-live-oracle",

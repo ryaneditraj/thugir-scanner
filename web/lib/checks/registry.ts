@@ -56906,6 +56906,83 @@ const yogsecXssLab38OnkeyupRouteLiveOracle: Rule = async (ctx) =>
     "yogsec XSS Lab #38 route scan — input.onkeyup with eval(code) executes attacker JavaScript on every key release — DOM XSS training sink"
   );
 
+const yogsecXssLab39OnsubmitRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    39,
+    [
+      { label: "onsubmit injection lab title", re: /XSS Lab #39:\s*onsubmit Injection in Form/i },
+      { label: "onsubmit injection heading", re: /onsubmit Injection in Form/i },
+      { label: "form onsubmit handler sink", re: /form\.onsubmit\s*=\s*function/i },
+      { label: "eval on form submission", re: /eval\(code\)|XSS from form onsubmit/i }
+    ],
+    "yogsec XSS Lab #39 route scan — form.onsubmit with eval(code) executes attacker JavaScript on form submission — DOM XSS training sink"
+  );
+
+// --- yogsec Open-Redirect hub (yogsec.github.io/Open-Redirect — unvalidated redirect demo) -
+const yogsecOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/yogsec\.github\.io\/Open-Redirect/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${ctx.home.body || ""}\n${pageUrl}`;
+  const markers: { label: string; re: RegExp }[] = [
+    { label: "Open Redirect Education Lab title", re: /Open Redirect · Education Lab/i },
+    { label: "Open Redirect Simulator heading", re: /Open Redirect Simulator/i },
+    {
+      label: "redirectForm window.location sink",
+      re: /redirectForm|window\.location\.href\s*=\s*(?:rawUrl|decoded)/i
+    },
+    {
+      label: "unvalidated redirect warning",
+      re: /unvalidated redirects|validate and whitelist redirect destinations/i
+    }
+  ];
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of markers) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: hits.slice(0, 4),
+      snippet: hits[0]?.sample,
+      note: "yogsec Open-Redirect hub — redirectForm assigns window.location.href from user input without destination validation"
+    }
+  };
+};
+
+// --- yogsec Vulnerable-Login hub (yogsec.github.io/Vulnerable-Login — SQLi auth bypass demo) -
+const yogsecVulnerableLoginRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/yogsec\.github\.io\/Vulnerable-Login/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${ctx.home.body || ""}\n${pageUrl}`;
+  const markers: { label: string; re: RegExp }[] = [
+    { label: "Vulnerable Login Lab title", re: /Vulnerable Login Lab|Vulnerable Login Page/i },
+    { label: "SQL injection login hint", re: /Try: anything when using SQL injection/i },
+    { label: "login vulnerabilities section", re: /Login Vulnerabilities|vulnerabilityList/i },
+    { label: "user database demo", re: /User Database|userDatabase/i }
+  ];
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of markers) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: hits.slice(0, 4),
+      snippet: hits[0]?.sample,
+      note: "yogsec Vulnerable-Login hub — client-side login lab documents SQL injection authentication bypass via concatenated queries (VULN-001)"
+    }
+  };
+};
+
 // --- the0x-pwn XSS Labs (the0x-pwn.github.io/lab-xss — 10 reflected/DOM challenges) ----
 const CLIENT_THE0X_PWN_XSS_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -101831,6 +101908,9 @@ export const RULES: Record<string, Rule> = {
   yogsecXssLab36OninputRouteLiveOracle,
   yogsecXssLab37OnchangeSelectRouteLiveOracle,
   yogsecXssLab38OnkeyupRouteLiveOracle,
+  yogsecXssLab39OnsubmitRouteLiveOracle,
+  yogsecOpenRedirectRouteLiveOracle,
+  yogsecVulnerableLoginRouteLiveOracle,
   clientSideThe0xPwnXssLabsEvidence,
   clientSideThe0xPwnXssQueryParamLabEvidence,
   clientSideThe0xPwnXssDomHashLabEvidence,
