@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-30T07:20:11.746Z",
-  "total": 2878,
-  "uniqueSlugs": 2870,
+  "generatedAt": "2026-08-30T08:11:05.882Z",
+  "total": 2881,
+  "uniqueSlugs": 2873,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2860,
+    "generic": 2863,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2793,
+    "deep": 2796,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 212,
     "Broken authentication": 187,
     "Injection": 458,
-    "Cross-site scripting": 744,
+    "Cross-site scripting": 747,
     "Open redirect": 25,
     "general": 20,
     "SSRF": 19,
@@ -2371,8 +2371,11 @@
     "the0x-pwn-xss-dom-hash-route-live-oracle",
     "the0x-pwn-xss-filter-bypass-tags-route-live-oracle",
     "the0x-pwn-xss-href-angle-brackets-route-live-oracle",
+    "the0x-pwn-xss-iframe-data-uri-route-live-oracle",
+    "the0x-pwn-xss-javascript-url-route-live-oracle",
     "the0x-pwn-xss-query-param-route-live-oracle",
     "the0x-pwn-xss-svg-script-injection-route-live-oracle",
+    "the0x-pwn-xss-tag-filter-bypass-route-live-oracle",
     "the0x-pwn-xss-template-literal-route-live-oracle",
     "thugir-dir-discovery",
     "thugir-jwt-weak-claims",

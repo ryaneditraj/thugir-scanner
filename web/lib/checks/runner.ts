@@ -2400,6 +2400,9 @@ const DEEP_RULES = new Set<string>([
   "the0xPwnXssQueryParamRouteLiveOracle",
   "the0xPwnXssFilterBypassTagsRouteLiveOracle",
   "the0xPwnXssDocumentWriteRouteLiveOracle",
+  "the0xPwnXssTagFilterBypassRouteLiveOracle",
+  "the0xPwnXssJavascriptUrlRouteLiveOracle",
+  "the0xPwnXssIframeDataUriRouteLiveOracle",
   "clientSideMontanajimXssClassroomEvidence",
   "clientSideHackxorEvidence",
   "clientSidePygoatEvidence",
@@ -13049,6 +13052,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
         /\/lab-xss\/lab-9\/?/i.test(targetInput) &&
         p.slug.startsWith("the0x-pwn-xss-svg-script-injection")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-6\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-tag-filter-bypass")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-7\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-javascript-url")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-10\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-iframe-data-uri")
       )
         return -4;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
