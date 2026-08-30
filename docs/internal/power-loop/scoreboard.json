@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T04:14:11.856Z",
+  "updated_at": "2026-08-30T04:40:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 3082,
-  "total_findings": 31261,
+  "total_sites_scanned": 3085,
+  "total_findings": 31267,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2037,
-  "discovery_findings": 25586,
-  "improvements_shipped": 1031,
-  "last_run": "2026-08-30T04:14:11.856Z",
+  "discovery_findings": 25592,
+  "improvements_shipped": 1034,
+  "last_run": "2026-08-30T04:40:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 596,
+      "live_oracles": 38,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +49,35 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)"
+      "note": "Stable 6/6 first-pass recall (51 findings, 38 juice-shop live oracles)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 63,
-      "focus": "PentestForge mutillidae user-info + dvwa sqli_blind/xss_r, oopssec product-search-sql-injection + path-traversal-documents-api walkthroughs, dvwu labs sqli/lfi/xss drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 6,
+      "focus": "PentestForge mutillidae user-info + DVWA sqli_blind/xss_r corpus fallbacks when lab.pentest-forge.com returns 502",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 38 live oracles)",
-      "koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api/: 10 findings — oopssec path-traversal route oracle + client-side evidence",
-      "koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/: 6 findings — oopssec product-search SQLi walkthrough corpus",
-      "dvwu.vercel.app/labs/sqli: 15 findings — dvwu SQLi route live oracle hub",
-      "dvwu.vercel.app/labs/xss: 15 findings — dvwu XSS route live oracle hub",
-      "dvwu.vercel.app/labs/lfi: 13 findings — dvwu LFI route live oracle hub",
-      "dvwa.lab.pentest-forge.com/vulnerabilities/sqli_blind/: 2 findings — pentest-forge-dvwa-sqli corpus fallback (lab may 502)",
-      "mutillidae.lab.pentest-forge.com/index.php?page=user-info.php: 1 finding — thin hub fingerprint"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "mutillidae.lab.pentest-forge.com/index.php?page=user-info.php: 1→2 findings (+pentest-forge-mutillidae-user-info-route-live-oracle)",
+      "dvwa.lab.pentest-forge.com/vulnerabilities/sqli_blind/: 2 findings (+pentest-forge-dvwa-sqli-blind-route-live-oracle)",
+      "dvwa.lab.pentest-forge.com/vulnerabilities/xss_r/: 1→2 findings (+pentest-forge-dvwa-xss-r-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "PentestForge mutillidae/dvwa labs return thin 1-2 finding hubs — likely 502/cold-start on lab.pentest-forge.com shared infra",
-      "oopssec walkthrough pages fire corpus oracles but no live app endpoint without local docker deploy"
+      "PentestForge lab.pentest-forge.com shared infra still returns 502 — corpus fallbacks used for route oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
+    "juice-shop.herokuapp.com": 51,
+    "mutillidae.lab.pentest-forge.com/index.php?page=user-info.php": 2,
+    "dvwa.lab.pentest-forge.com/vulnerabilities/sqli_blind/": 2,
+    "dvwa.lab.pentest-forge.com/vulnerabilities/xss_r/": 2,
     "dvwu.vercel.app/labs/sqli": 15,
     "dvwu.vercel.app/labs/xss": 15,
-    "dvwu.vercel.app/labs/lfi": 13,
-    "koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api": 10,
-    "koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection": 6,
-    "dvwa.lab.pentest-forge.com/vulnerabilities/sqli_blind": 2,
-    "mutillidae.lab.pentest-forge.com/index.php?page=user-info.php": 1
+    "koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api/": 10
   }
 }

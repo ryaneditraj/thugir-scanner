@@ -59480,6 +59480,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pentest-forge-dvwa-sqli-blind-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentestForge DVWA blind SQL injection route live oracle",
+    description:
+      "When scanning /vulnerabilities/sqli_blind/ on dvwa.lab.pentest-forge.com, boolean blind SQLi payloads produce differing responses — PentestForge hosted DVWA blind SQLi route oracle.",
+    impactOneline:
+      "Blind SQL injection on PentestForge DVWA lets attackers exfiltrate data one bit at a time without visible error messages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeDvwaSqliBlindRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — use parameterized queries and disable verbose error leakage.",
+      steps: [
+        "Bind user input with prepared statements.",
+        "Normalize response sizes to prevent boolean inference.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge DVWA /vulnerabilities/sqli_blind/ route is vulnerable to boolean blind SQLi. Show remediation with parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-dvwa-xss-r-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentestForge DVWA reflected XSS route live oracle",
+    description:
+      "When scanning /vulnerabilities/xss_r/ on dvwa.lab.pentest-forge.com, GET ?name= reflects attacker input in Hello <name> — PentestForge hosted DVWA reflected XSS route oracle.",
+    impactOneline:
+      "Reflected XSS on PentestForge DVWA name parameter lets attackers execute JavaScript in victim browsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeDvwaXssRRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — HTML-encode all reflected output.",
+      steps: [
+        "Encode dynamic output before rendering in HTML.",
+        "Use Content-Security-Policy to mitigate inline script execution.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge DVWA /vulnerabilities/xss_r/ route reflects the name query parameter. Show XSS output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-mutillidae-user-info-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentestForge Mutillidae user-info auth bypass route live oracle",
+    description:
+      "When scanning index.php?page=user-info.php on mutillidae.lab.pentest-forge.com, View Account Details form exposes auth bypass / parameter tampering training surface.",
+    impactOneline:
+      "Mutillidae user-info.php lets attackers view or modify account details without proper session authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeMutillidaeUserInfoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Mutillidae is intentional security training — enforce server-side session checks before account detail views.",
+      steps: [
+        "Require authenticated sessions before rendering account details.",
+        "Bind account lookups to the logged-in user ID server-side.",
+        "Run Mutillidae only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge Mutillidae user-info.php route allows viewing account details without auth. Show access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "the-internet-shadowdom-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",

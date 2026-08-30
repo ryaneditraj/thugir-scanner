@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:mutillidae.lab.pentest-forge.com",
+      "slug": "pentest-forge-mutillidae-user-info-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: index.php?page=user-info.php View Account Details auth bypass corpus fallback when mutillidae.lab.pentest-forge.com returns 502; mutillidae.lab.pentest-forge.com/index.php?page=user-info.php findings 1→2 (+pentest-forge-mutillidae-user-info-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwa.lab.pentest-forge.com",
+      "slug": "pentest-forge-dvwa-sqli-blind-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vulnerabilities/sqli_blind/ boolean blind SQLi corpus fallback + tightened sqli route regex excludes sqli_blind; dvwa.lab.pentest-forge.com/vulnerabilities/sqli_blind/ findings 2→2 (+pentest-forge-dvwa-sqli-blind-route-live-oracle replaces misrouted pentest-forge-dvwa-sqli); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwa.lab.pentest-forge.com",
+      "slug": "pentest-forge-dvwa-xss-r-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vulnerabilities/xss_r/?name= reflects Hello <name> corpus fallback when lab 502; dvwa.lab.pentest-forge.com/vulnerabilities/xss_r/ findings 1→2 (+pentest-forge-dvwa-xss-r-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:dvai.vercel.app",
       "slug": "dvai-ai-chat-live-oracle",
       "status": "shipped",
