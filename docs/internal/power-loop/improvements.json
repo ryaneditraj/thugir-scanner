@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-react2shell-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/react2shell-cve-2025-55182 documents CVE-2025-55182 Flight protocol deserialization RCE via chunk.constructor.constructor === Function chain; koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182/ findings 5→6 (+oopssec-react2shell-route-live-oracle +client-side-oopssec-react2shell-evidence); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-malicious-file-upload-stored-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/malicious-file-upload-stored-xss documents SVG upload to /admin/products served at /api/uploads with <object> tag script execution; koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss/ findings 8→9 (+oopssec-malicious-file-upload-stored-xss-route-live-oracle +client-side-oopssec-malicious-file-upload-evidence); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-finbank-tools-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /darklab/api/v1/supply-chain/servers/finbank/tools returns 403 csrf_error (writable MCP tool catalog, issue #544); owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finbank/tools findings 24→25 (+finbot-darklab-finbank-tools-route-live-oracle +finbot-darklab-finbank-tools-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:koadt.github.io",
       "slug": "oopssec-idor-order-privacy-route-live-oracle",
       "status": "shipped",
