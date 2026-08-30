@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-30T06:20:00.387Z",
-  "total": 2874,
-  "uniqueSlugs": 2866,
+  "generatedAt": "2026-08-30T07:20:11.746Z",
+  "total": 2878,
+  "uniqueSlugs": 2870,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2856,
+    "generic": 2860,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2789,
+    "deep": 2793,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 212,
     "Broken authentication": 187,
     "Injection": 458,
-    "Cross-site scripting": 740,
+    "Cross-site scripting": 744,
     "Open redirect": 25,
     "general": 20,
     "SSRF": 19,
@@ -804,6 +804,7 @@
     "client-side-the0x-pwn-xss-iframe-data-uri-lab-evidence",
     "client-side-the0x-pwn-xss-javascript-url-lab-evidence",
     "client-side-the0x-pwn-xss-labs-evidence",
+    "client-side-the0x-pwn-xss-query-param-lab-evidence",
     "client-side-the0x-pwn-xss-svg-script-injection-lab-evidence",
     "client-side-the0x-pwn-xss-tag-filter-bypass-lab-evidence",
     "client-side-the0x-pwn-xss-template-literal-lab-evidence",
@@ -2366,8 +2367,11 @@
     "the-internet-tinymce-route-live-oracle",
     "the-internet-typos-route-live-oracle",
     "the-internet-windows-route-live-oracle",
+    "the0x-pwn-xss-document-write-route-live-oracle",
     "the0x-pwn-xss-dom-hash-route-live-oracle",
+    "the0x-pwn-xss-filter-bypass-tags-route-live-oracle",
     "the0x-pwn-xss-href-angle-brackets-route-live-oracle",
+    "the0x-pwn-xss-query-param-route-live-oracle",
     "the0x-pwn-xss-svg-script-injection-route-live-oracle",
     "the0x-pwn-xss-template-literal-route-live-oracle",
     "thugir-dir-discovery",
