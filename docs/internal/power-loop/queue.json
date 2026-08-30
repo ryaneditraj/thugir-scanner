@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T11:08:00.000Z",
+  "updated_at": "2026-08-30T12:20:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://www.cyberhub.blog/ctf",
+      "source": "Cyber Hub — OopsSec Store OSS CTF lab landing + local deploy instructions (web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/search?q=test",
+      "source": "nr-yolo/Vulnshop — product search SQLi oracle GET /api/search (Vercel OSS deploy; README A03 injection)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/cart",
+      "source": "nr-yolo/Vulnshop — cart IDOR / business-logic oracle (Vercel OSS deploy)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/cards",
+      "source": "Official demo.owasp-juice.shop — payment cards BOLA oracle GET /rest/cards (Pwning Juice Shop companion)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/addresss",
+      "source": "Official demo.owasp-juice.shop — shipping addresses BOLA oracle GET /rest/addresss (Pwning Juice Shop companion)",
+      "auth": "benchmark"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/aes-cbc-padding-oracle-forged-share-token/",
       "source": "kOaDT/oss-oopssec-store — AES-CBC padding oracle share-token forgery walkthrough GET /api/documents/share (GitHub Pages ch.09)",
