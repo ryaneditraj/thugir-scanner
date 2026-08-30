@@ -30681,6 +30681,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "yogsec-xss-lab24-outerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #24 outerHTML replacement route live oracle",
+    description:
+      "When scanning /labs/lab24.html, yogsec documents outerHTML replacement combined with eval(userInput) — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #24 exposes outerHTML + eval sinks for DOM XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab24OuterhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — use textContent instead of outerHTML/eval in production.",
+      steps: [
+        "Never pass user input to eval() or assign unsanitized HTML via outerHTML.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #24 route documents outerHTML + eval XSS. Show safe DOM updates and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab25-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "critical",
+    title: "yogsec XSS Lab #25 eval user string route live oracle",
+    description:
+      "When scanning /labs/lab25.html, yogsec documents eval() of user-controlled strings — route-specific code execution XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #25 exposes direct eval(userCode) for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab25EvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never eval() user-controlled strings in production.",
+      steps: [
+        "Remove eval() of any user-supplied input.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #25 route documents eval(userCode) XSS. Show safe alternatives and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab26-settimeout-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #26 setTimeout userString route live oracle",
+    description:
+      "When scanning /labs/lab26.html, yogsec documents setTimeout(userString) passing attacker code to timer callbacks — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #26 exposes setTimeout(userString) for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab26SettimeoutRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never pass user strings to setTimeout/setInterval in production.",
+      steps: [
+        "Use function references instead of string arguments to setTimeout.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy to mitigate script injection."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #26 route documents setTimeout(userString) XSS. Show safe timer callbacks and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-labs-evidence",
     platform: "generic",
     category: "Cross-site scripting",

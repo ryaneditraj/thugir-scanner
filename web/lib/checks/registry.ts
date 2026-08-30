@@ -56661,6 +56661,74 @@ const clientSideYogsecXssLabModuleEvidence: Rule = async (ctx) => {
   };
 };
 
+function yogsecXssLabRouteOracle(
+  ctx: RuleContext,
+  labNum: number,
+  markers: { label: string; re: RegExp }[],
+  note: string
+): RuleResult {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/yogsec\.github\.io\/xss-labs/i.test(pageUrl)) return NEGATIVE;
+  if (!new RegExp(`/labs/lab${labNum}\\.html`, "i").test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${ctx.home.body || ""}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of markers) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: hits.slice(0, 4),
+      snippet: hits[0]?.sample,
+      note
+    }
+  };
+}
+
+const yogsecXssLab24OuterhtmlRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    24,
+    [
+      { label: "outerHTML replacement lab title", re: /XSS Lab #24:\s*outerHTML Replacement/i },
+      { label: "outerHTML + eval heading", re: /outerHTML Replacement\s*\+\s*eval\(\)/i },
+      { label: "outerHTML demo replace button", re: /Replace with outerHTML \(demo\)|replaceDemoBtn/i },
+      { label: "eval userInput outerHTML sink", re: /eval\(userInput|outerHTML\s*=\s*[^;]+eval/i }
+    ],
+    "yogsec XSS Lab #24 route scan — outerHTML replacement combined with eval(userInput) documents DOM XSS training sink"
+  );
+
+const yogsecXssLab25EvalRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    25,
+    [
+      {
+        label: "eval user-controlled string lab title",
+        re: /XSS Lab #25:\s*eval\(\)\s+of\s+User-Controlled String/i
+      },
+      { label: "eval userCode sink", re: /eval\(userCode\)|eval\(userInput\)/i },
+      { label: "extremely dangerous eval disclaimer", re: /EXTREMELY DANGEROUS with user input/i }
+    ],
+    "yogsec XSS Lab #25 route scan — eval() of user-controlled string documents direct code execution XSS training sink"
+  );
+
+const yogsecXssLab26SettimeoutRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    26,
+    [
+      { label: "setTimeout userString lab title", re: /XSS Lab #26:\s*setTimeout\(userString\)/i },
+      { label: "setTimeout userString sink", re: /setTimeout\(userString|setTimeout\(codeString/i },
+      { label: "setTimeout vulnerability heading", re: /setTimeout\(userString\) Vulnerability/i }
+    ],
+    "yogsec XSS Lab #26 route scan — setTimeout(userString) passes attacker code to timer callback — DOM XSS training sink"
+  );
+
 // --- the0x-pwn XSS Labs (the0x-pwn.github.io/lab-xss — 10 reflected/DOM challenges) ----
 const CLIENT_THE0X_PWN_XSS_LABS_RES: { label: string; re: RegExp }[] = [
   {
@@ -101571,6 +101639,9 @@ export const RULES: Record<string, Rule> = {
   clientSideExploitEducationEvidence,
   clientSideYogsecXssLabsEvidence,
   clientSideYogsecXssLabModuleEvidence,
+  yogsecXssLab24OuterhtmlRouteLiveOracle,
+  yogsecXssLab25EvalRouteLiveOracle,
+  yogsecXssLab26SettimeoutRouteLiveOracle,
   clientSideThe0xPwnXssLabsEvidence,
   clientSideThe0xPwnXssQueryParamLabEvidence,
   clientSideThe0xPwnXssDomHashLabEvidence,
