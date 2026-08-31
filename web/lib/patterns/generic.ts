@@ -53491,6 +53491,136 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-jwt-weak-secret-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "OopsSec Store JWT weak secret admin bypass walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/jwt-weak-secret-admin-bypass documents cracking a weak JWT_SECRET with hashcat and forging role:ADMIN tokens to access restricted /admin endpoints.",
+    impactOneline:
+      "Public walkthrough teaches HS256 JWT forgery after offline hashcat crack of JWT_SECRET — admin dashboard access without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecJwtWeakSecretEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically strong JWT secrets and enforce server-side role checks independent of token claims.",
+      steps: [
+        "Generate JWT_SECRET with openssl rand -base64 64 — never use dictionary words.",
+        "Verify role claims server-side on every /admin request; do not trust client-forged tokens.",
+        "Host OopsSec JWT walkthroughs on localhost only, not public GitHub Pages deploys."
+      ]
+    },
+    fixPrompt:
+      "Our JWT_SECRET is crackable via hashcat and role:ADMIN in the payload grants /admin access. Show strong secret generation and server-side authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-jwt-weak-secret-admin-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "OopsSec Store JWT weak secret admin bypass route live oracle",
+    description:
+      "When scanning /posts/jwt-weak-secret-admin-bypass, the walkthrough documents cracking JWT_SECRET with hashcat and forging role:ADMIN to access /admin — route-specific weak-secret JWT oracle.",
+    impactOneline:
+      "OopsSec JWT verifier accepts HS256 tokens signed with crackable JWT_SECRET — attackers forge admin role after offline dictionary attack.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecJwtWeakSecretAdminBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rotate to a strong JWT secret and verify admin role server-side on every protected route.",
+      steps: [
+        "Replace JWT_SECRET with openssl rand -base64 64 output.",
+        "Add server-side role middleware on /admin routes independent of JWT claims alone.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/jwt-weak-secret-admin-bypass walkthrough documents hashcat JWT_SECRET crack and role:ADMIN forgery. Show strong secret and authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ctf-challange-3-middleware-bypass-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+    description:
+      "Gowreesh-VT/CTF_Challange_3 documents a Next.js middleware authorization bypass on GET /api/hacker via x-middleware-subrequest header forgery.",
+    impactOneline:
+      "Public CTF lab teaches skipping Next.js middleware auth checks to reach protected /api/hacker routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtfChallange3MiddlewareBypassEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Next.js to a fixed version and strip internal middleware headers at the edge.",
+      steps: [
+        "Upgrade Next.js past CVE-2025-29927 fixed releases.",
+        "Strip x-middleware-subrequest at the reverse proxy before requests reach the app.",
+        "Do not rely on middleware alone for authorization on sensitive API routes."
+      ]
+    },
+    fixPrompt:
+      "Our /api/hacker route is protected only by bypassable Next.js middleware. Show CVE-2025-29927 remediation and edge header stripping.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ctf-challange-3-middleware-auth-bypass-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "CTF Challenge 3 middleware auth bypass live oracle",
+    description:
+      "GET /api/hacker on ctf-challange-3.vercel.app with x-middleware-subrequest bypasses Next.js middleware auth — CTF_Challange_3 training oracle.",
+    impactOneline:
+      "Middleware-only protection on /api/hacker is bypassable via forged internal subrequest headers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ctfChallange3MiddlewareAuthBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Next.js and add server-side authorization on /api/hacker.",
+      steps: [
+        "Upgrade Next.js past CVE-2025-29927.",
+        "Strip x-middleware-subrequest at the edge.",
+        "Enforce auth checks in the /api/hacker route handler itself."
+      ]
+    },
+    fixPrompt:
+      "Our /api/hacker endpoint relies on bypassable Next.js middleware. Show patch and in-route authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ctf-challange-3-middleware-auth-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "CTF Challenge 3 /api/hacker middleware bypass route live oracle",
+    description:
+      "When scanning ctf-challange-3.vercel.app /api/hacker or hub, the CTF_Challange_3 lab documents Next.js middleware authorization bypass — route-specific training oracle.",
+    impactOneline:
+      "Route scan confirms CTF_Challange_3 middleware auth bypass training surface on /api/hacker.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ctfChallange3MiddlewareAuthBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Next.js middleware bypass and enforce route-handler authorization.",
+      steps: [
+        "Upgrade Next.js past CVE-2025-29927.",
+        "Strip internal middleware headers at the edge.",
+        "Add explicit auth checks in /api/hacker handler code."
+      ]
+    },
+    fixPrompt:
+      "Our ctf-challange-3 /api/hacker route scan confirms middleware-only auth. Show CVE-2025-29927 remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-path-traversal-evidence",
     platform: "generic",
     category: "Injection",
