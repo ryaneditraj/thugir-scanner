@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-31T12:07:06.627Z",
-  "total": 2972,
-  "uniqueSlugs": 2964,
+  "generatedAt": "2026-08-31T13:15:23.610Z",
+  "total": 2977,
+  "uniqueSlugs": 2969,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2954,
+    "generic": 2959,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2887,
+    "deep": 2892,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 599,
+    "Broken access control": 600,
     "Exposed secret": 115,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,12 +27,12 @@
     "Information disclosure": 135,
     "Security misconfiguration": 214,
     "Broken authentication": 194,
-    "Injection": 478,
+    "Injection": 480,
     "Cross-site scripting": 787,
     "Open redirect": 26,
     "general": 20,
     "SSRF": 19,
-    "Server-side request forgery": 97,
+    "Server-side request forgery": 98,
     "Sensitive data exposure": 79,
     "AI security": 113,
     "Business logic": 31,
@@ -48,7 +48,8 @@
     "Prompt injection": 12,
     "Cryptographic failure": 2,
     "XSS": 3,
-    "Session management": 2
+    "Session management": 2,
+    "Cryptographic failures": 1
   },
   "slugs": [
     "aevum-consent-review-unauth-live-oracle",
@@ -2067,6 +2068,7 @@
     "pentest-forge-linked-lab-probe",
     "pentest-forge-mutillidae-login-sqli-route-live-oracle",
     "pentest-forge-mutillidae-register-sqli-route-live-oracle",
+    "pentest-forge-mutillidae-sqli-route-live-oracle",
     "pentest-forge-mutillidae-user-info-route-live-oracle",
     "pentest-ground-dvwa-csp-bypass-route-live-oracle",
     "pentest-ground-dvwa-csrf-route-live-oracle",
@@ -2427,6 +2429,10 @@
     "thugir-sensitive-js-endpoints",
     "tryaisoc-investigation-ledger-live-oracle",
     "tryaisoc-investigation-ledger-route-live-oracle",
+    "ucu-owasp-ctf-access-route-live-oracle",
+    "ucu-owasp-ctf-crypto-route-live-oracle",
+    "ucu-owasp-ctf-injection-route-live-oracle",
+    "ucu-owasp-ctf-ssrf-route-live-oracle",
     "unauthenticated-admin-endpoint",
     "unprotected-webhook-endpoint",
     "v0-openapi-routes-exposed",

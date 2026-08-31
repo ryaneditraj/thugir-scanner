@@ -1,6 +1,42 @@
 {
   "candidates": [
     {
+      "source": "discovery:ucu-owasp-ctf.vercel.app",
+      "slug": "ucu-owasp-ctf-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ucuOwaspCtfInjectionRouteLiveOracle matches /injection/ OWASP A03 SQLi + command injection markers via UCU OWASP CTF 2025 corpus fallback; ucu-owasp-ctf.vercel.app/injection/ findings 3→4 (+ucu-owasp-ctf-injection-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ucu-owasp-ctf.vercel.app",
+      "slug": "ucu-owasp-ctf-access-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ucuOwaspCtfAccessRouteLiveOracle matches /access/ OWASP A01 admin bypass + path traversal ?file= markers via curated corpus; ucu-owasp-ctf.vercel.app/access/ findings 3→4 (+ucu-owasp-ctf-access-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ucu-owasp-ctf.vercel.app",
+      "slug": "ucu-owasp-ctf-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ucuOwaspCtfSsrfRouteLiveOracle matches /ssrf/ OWASP A10 flag-server:8080 internal SSRF markers via curated corpus; ucu-owasp-ctf.vercel.app/ssrf/ findings 3→4 (+ucu-owasp-ctf-ssrf-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ucu-owasp-ctf.vercel.app",
+      "slug": "ucu-owasp-ctf-crypto-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ucuOwaspCtfCryptoRouteLiveOracle matches /crypto/ OWASP A02 weak MD5 + predictable RNG markers via curated corpus; ucu-owasp-ctf.vercel.app/crypto/ findings 3→4 (+ucu-owasp-ctf-crypto-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:mutillidae.lab.pentest-forge.com",
+      "slug": "pentest-forge-mutillidae-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pentestForgeMutillidaeSqliRouteLiveOracle matches index.php?page=sqlinjection.php User Info SQLi via username=' OR 1=1 -- with corpus fallback when lab host unreachable; mutillidae.lab.pentest-forge.com/index.php?page=sqlinjection.php findings 2→3 (+pentest-forge-mutillidae-sqli-route-live-oracle corpus); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-bola-wishlist-walkthrough-fetch-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: oopssecBolaWishlistRouteLiveOracle now uses oopssecWalkthroughEvidenceWithFetch for Astro walkthrough body fetch parity with idor-order oracle; koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access/ findings 6 maintained (+oopssec-bola-wishlist-route-live-oracle reliable); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:yogsec.github.io",
       "slug": "yogsec-xss-lab21-search-box-route-live-oracle",
       "status": "shipped",

@@ -1646,6 +1646,10 @@ const DEEP_RULES = new Set<string>([
   "postMessageDomXssEvidence",
   "clientSideXssEvidence",
   "owaspCtfLinkedLabProbe",
+  "ucuOwaspCtfInjectionRouteLiveOracle",
+  "ucuOwaspCtfAccessRouteLiveOracle",
+  "ucuOwaspCtfCryptoRouteLiveOracle",
+  "ucuOwaspCtfSsrfRouteLiveOracle",
   "clientSideSecurityGameEvidence",
   "clientSideCtfPlatformEvidence",
   "clientSideCtfdPlatformEvidence",
@@ -1696,6 +1700,7 @@ const DEEP_RULES = new Set<string>([
   "pentestForgeMutillidaeUserInfoRouteLiveOracle",
   "pentestForgeMutillidaeLoginSqliRouteLiveOracle",
   "pentestForgeMutillidaeRegisterSqliRouteLiveOracle",
+  "pentestForgeMutillidaeSqliRouteLiveOracle",
   "pentestGroundDvwaUploadRouteLiveOracle",
   "pentestGroundDvwaCsrfRouteLiveOracle",
   "pentestGroundDvwaHubRouteLiveOracle",
@@ -12145,6 +12150,36 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /mutillidae\.lab\.pentest-forge\.com/i.test(origin) &&
         /page=register\.php/i.test(targetInput) &&
         p.slug.startsWith("pentest-forge-mutillidae-register-sqli")
+      )
+        return -4;
+      if (
+        /mutillidae\.lab\.pentest-forge\.com/i.test(origin) &&
+        /page=sqlinjection\.php/i.test(targetInput) &&
+        p.slug.startsWith("pentest-forge-mutillidae-sqli")
+      )
+        return -4;
+      if (
+        /ucu-owasp-ctf\.vercel\.app/i.test(origin) &&
+        /\/injection\/?/i.test(targetInput) &&
+        p.slug.startsWith("ucu-owasp-ctf-injection")
+      )
+        return -4;
+      if (
+        /ucu-owasp-ctf\.vercel\.app/i.test(origin) &&
+        /\/access\/?/i.test(targetInput) &&
+        p.slug.startsWith("ucu-owasp-ctf-access")
+      )
+        return -4;
+      if (
+        /ucu-owasp-ctf\.vercel\.app/i.test(origin) &&
+        /\/crypto\/?/i.test(targetInput) &&
+        p.slug.startsWith("ucu-owasp-ctf-crypto")
+      )
+        return -4;
+      if (
+        /ucu-owasp-ctf\.vercel\.app/i.test(origin) &&
+        /\/ssrf\/?/i.test(targetInput) &&
+        p.slug.startsWith("ucu-owasp-ctf-ssrf")
       )
         return -4;
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
