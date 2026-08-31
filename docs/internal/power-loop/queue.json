@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T19:05:00.000Z",
+  "updated_at": "2026-08-31T21:05:40.499Z",
   "discovery_urls": [
     {
       "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
@@ -11427,6 +11427,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/records/123",
+      "source": "atlas-crew/Chimera CHM-HEALTH-002 — BOLA/IDOR oracle GET /api/v1/healthcare/records/{record_id} (vuln inventory; learning gap 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api1/user/1",
+      "source": "vAPI OWASP API1 — BOLA oracle GET /vapi/api1/user/{api1_id} enumerate other users (allthewriteups + Medium walkthrough; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/",
+      "source": "kOaDT/oss-oopssec-store — BFLA live-stream hijack oracle POST /api/live/broadcast (OSS roadmap ch.02; learning gap 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/",
+      "source": "kOaDT/oss-oopssec-store — signup mass-assignment admin role oracle POST /api/auth/signup (OSS README ch.05; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/imaging/1/download",
+      "source": "atlas-crew/Chimera — imaging record IDOR oracle GET /api/v1/healthcare/imaging/{record_id}/download (API-DOCUMENTATION.md; web search 21 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vapi.apisec.ai/vapi/api3/comment",
       "source": "vAPI OWASP API3 — excessive data exposure oracle GET /vapi/api3/comment leaks PII (GangGreenTemperTatum + allthewriteups walkthrough; web search 20 UTC)",
