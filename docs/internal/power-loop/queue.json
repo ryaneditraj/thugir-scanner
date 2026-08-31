@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-31T08:10:00.000Z",
+  "updated_at": "2026-08-31T09:12:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-10/",
+      "source": "the0x-pwn/lab-xss — Level 10 iframe Data URI injection XSS lab with sandbox bypass (GitHub Pages; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://juice-shop.lab.pentest-forge.com/",
+      "source": "PentestForge Lab — hosted OWASP Juice Shop benchmark instance with auto-reset (lab.pentest-forge.com; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://tomcat.lab.pentest-forge.com/",
+      "source": "PentestForge Lab — Apache Tomcat CVE-2017-12615 PUT RCE training target (lab.pentest-forge.com; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://voidsec.github.io/shopping-cart/",
+      "source": "voidsec/shopping-cart — classic intentionally vulnerable e-commerce hack-lab with SQLi/XSS/CSRF (GitHub Pages; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://povzayd.github.io/XSS-LABS/LABS/lab8.html",
+      "source": "povzayd/XSS-LABS — Level 8 JS-context XSS lab with character restrictions (case-sensitive /LABS/ path; web search 09 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sabyasachidhal.github.io/MCPGoat/",
       "source": "sabyasachidhal/MCPGoat — deliberately vulnerable MCP server with 78 CTF flags across tool poisoning, prompt injection, SSRF, SQLi (GitHub Pages; web search 08 UTC)",
