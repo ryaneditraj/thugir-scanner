@@ -1803,6 +1803,9 @@ const DEEP_RULES = new Set<string>([
   "chimeraHealthcareRecordsBolaRouteLiveOracle",
   "chimeraHealthcareImagingIdorRouteLiveOracle",
   "chimeraHealthcareRecordsPhiExposureRouteLiveOracle",
+  "chimeraHipaaRecordsPatientIdorRouteLiveOracle",
+  "chimeraHipaaRecordsBulkExportRouteLiveOracle",
+  "chimeraHealthcareRecordsEmergencyAccessRouteLiveOracle",
   "chimeraClaimsAmountsInflateRouteLiveOracle",
   "chimeraBankingAccountsSearchSqliRouteLiveOracle",
   "chimeraInsurancePoliciesLookupSqliRouteLiveOracle",
@@ -12456,6 +12459,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/healthcare\/records\/search\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-healthcare-records-search")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/hipaa\/records\/patient\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-hipaa-records-patient")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/hipaa\/records\/bulk-export\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-hipaa-records-bulk-export")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/healthcare\/records\/emergency-access\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-healthcare-records-emergency-access")
       )
         return -3;
       if (
