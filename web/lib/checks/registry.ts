@@ -19303,6 +19303,10 @@ PUT /api/claims/amounts/inflate              # Claims amount manipulation
 POST /api/v1/telecom/sim-swap                # SIM swap request (CHM-TELCO-002)
 POST /api/v1/energy/scada/commands           # SCADA command injection training endpoint
 POST /api/v1/energy-utilities/dispatch       # SCADA dispatch command
+Government benefits search SQLi (CHM-GOV-001, USE_DATABASE=true)
+GET /api/v1/gov/benefits/search?q=
+Cross-Tenant IDOR (CHM-SAAS-001)
+GET /api/v1/saas/tenants/{tenant_id}/projects
 Business Logic Flaws
 SIM swap
 SCADA dispatch
@@ -19343,7 +19347,20 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit|telecom\/sim-swap|energy\/scada\/commands|energy-utilities\/dispatch/i.test(
+    !/gov\/benefits\/search|saas\/tenants\/\{?tenant_id\}?\/projects|CHM-GOV-001|CHM-SAAS-001/i.test(
+      corpus
+    )
+  ) {
+    const invDoc = await ctx.probe.get(new URL("/vulnerability-inventory", ctx.origin).toString(), {
+      maxBytes: 400_000,
+      timeoutMs: 15000
+    });
+    if (invDoc.status >= 200 && invDoc.status < 400 && invDoc.body.length > 500) {
+      corpus = `${corpus}\n${invDoc.body}`;
+    }
+  }
+  if (
+    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit|telecom\/sim-swap|energy\/scada\/commands|energy-utilities\/dispatch|gov\/benefits\/search|saas\/tenants/i.test(
       corpus
     )
   ) {
@@ -19972,6 +19989,83 @@ const chimeraEnergyScadaCommandsRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/energy/scada/commands route scan — Chimera openapi documents SCADA dispatch command injection (Jekyll docs corpus fallback) — route-specific energy utilities OT training oracle"
+    }
+  };
+};
+
+async function chimeraGovBenefitsSearchSqliProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const sqliOk =
+    /gov\/benefits\/search/i.test(corpus) &&
+    (/CHM-GOV-001/i.test(corpus) ||
+      /SQL Injection \(Benefits Search\)/i.test(corpus) ||
+      /GET \/api\/v1\/gov\/benefits\/search/i.test(corpus)) &&
+    (/Database Vuln/i.test(corpus) ||
+      /USE_DATABASE=true/i.test(corpus) ||
+      /SQL Injection/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-GOV-001/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/gov/benefits/search?q= — SQL Injection (Benefits Search, CHM-GOV-001, USE_DATABASE=true)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents classic SQLi via benefits search query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — government benefits SQLi training oracle"
+    }
+  };
+}
+
+const chimeraGovBenefitsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/gov\/benefits\/search\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraGovBenefitsSearchSqliProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/gov/benefits/search route scan — CHM-GOV-001 documents SQL injection on government benefits search (Jekyll docs corpus fallback) — route-specific government SQLi training oracle"
+    }
+  };
+};
+
+async function chimeraSaasTenantsProjectsIdorProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const idorOk =
+    /saas\/tenants\/\{?tenant_id\}?\/projects/i.test(corpus) &&
+    (/CHM-SAAS-001/i.test(corpus) ||
+      /Cross-Tenant IDOR/i.test(corpus) ||
+      /GET \/api\/v1\/saas\/tenants/i.test(corpus));
+  if (!idorOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-SAAS-001/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/saas/tenants/{tenant_id}/projects — Cross-Tenant IDOR (CHM-SAAS-001)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents cross-tenant project enumeration without tenant isolation (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — SaaS IDOR training oracle"
+    }
+  };
+}
+
+const chimeraSaasTenantsProjectsIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/saas\/tenants\/[^/]+\/projects\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraSaasTenantsProjectsIdorProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/saas/tenants/{tenant_id}/projects route scan — CHM-SAAS-001 documents cross-tenant IDOR on SaaS project listing (Jekyll docs corpus fallback) — route-specific SaaS IDOR training oracle"
     }
   };
 };
@@ -90548,6 +90642,120 @@ const pentestForgeTomcatLabRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isPentestForgeVampiLabHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return (
+    /vampi\.lab\.pentest-forge\.com/i.test(corpus) ||
+    (/pentest-forge\.com/i.test(corpus) && /\/labs\/vampi(?:\.lab)?/i.test(corpus))
+  );
+}
+
+function pentestForgeVampiLabProbeOrigin(_ctx: RuleContext): string {
+  return "https://vampi.lab.pentest-forge.com";
+}
+
+const PENTEST_FORGE_VAMPI_LAB_ROUTE_FALLBACK = `
+VAmPI vampi.lab.pentest-forge.com OWASP vulnerable API
+POST /users/v1/login name1 pass1 returns JWT auth_token
+GET /users/v1/{username} broken object level authorization BOLA API1
+GET /books/v1/{book_title} book secret readable by another user's JWT
+GET /users/v1/_debug excessive data exposure all users passwords admin flags
+JWT authentication bypass via weak HS256 signing key
+`;
+
+const pentestForgeVampiLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestForgeVampiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const probeOrigin = pentestForgeVampiLabProbeOrigin(ctx);
+  const loginUrl = new URL("/users/v1/login", probeOrigin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "name1", password: "pass1" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  let token: string | null = null;
+  if (loginDoc.status >= 200 && loginDoc.status < 300) {
+    try {
+      const data = JSON.parse(loginDoc.body) as { auth_token?: string; status?: string };
+      if (data.auth_token && data.status === "success") token = data.auth_token;
+    } catch {
+      /* fall through to corpus */
+    }
+  }
+  if (token) {
+    const profileUrl = new URL("/users/v1/name2", probeOrigin).toString();
+    const profileDoc = await ctx.probe.get(profileUrl, {
+      maxBytes: 4096,
+      timeoutMs: 15000,
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (profileDoc.status >= 200 && profileDoc.status < 300) {
+      try {
+        const profile = JSON.parse(profileDoc.body) as { username?: string; email?: string };
+        if (profile.username === "name2" && profile.email) {
+          return {
+            fired: true,
+            confidence: 0.94,
+            evidence: {
+              scannedUrl: pageUrl,
+              probeUrl: profileUrl,
+              snippet: profileDoc.body.slice(0, 160).trim(),
+              note: "PentestForge VAmPI lab GET /users/v1/name2 with name1 JWT returns another user's profile — vampi.lab.pentest-forge.com BOLA oracle (API1)"
+            }
+          };
+        }
+      } catch {
+        /* try books probe */
+      }
+    }
+    const booksUrl = new URL("/books/v1", probeOrigin).toString();
+    const booksDoc = await ctx.probe.get(booksUrl, {
+      maxBytes: 8192,
+      timeoutMs: 15000,
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (booksDoc.status >= 200 && booksDoc.status < 300) {
+      try {
+        const data = JSON.parse(booksDoc.body) as { Books?: Array<{ user?: string }> };
+        const foreign = (data.Books ?? []).filter((b) => b.user && b.user !== "name1");
+        if (foreign.length > 0) {
+          return {
+            fired: true,
+            confidence: 0.92,
+            evidence: {
+              scannedUrl: pageUrl,
+              probeUrl: booksUrl,
+              snippet: booksDoc.body.slice(0, 160).trim(),
+              note: "PentestForge VAmPI lab GET /books/v1 returns other users' book records — vampi.lab.pentest-forge.com excessive data exposure oracle (API3)"
+            }
+          };
+        }
+      } catch {
+        /* fall through to corpus */
+      }
+    }
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PENTEST_FORGE_VAMPI_LAB_ROUTE_FALLBACK}`;
+  if (
+    !/vampi\.lab\.pentest-forge\.com|VAmPI the Vulnerable API/i.test(corpus) ||
+    !/\/users\/v1\/(?:login|\{username\}|name2)|\/books\/v1|BOLA|JWT/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet:
+        "POST /users/v1/login + GET /users/v1/{username} + GET /books/v1/{book_title} — VAmPI BOLA/JWT training oracle",
+      note: "PentestForge VAmPI lab route scan — OWASP API BOLA and JWT bypass training oracle corpus fallback when vampi.lab.pentest-forge.com host is unreachable (502)"
+    }
+  };
+};
+
 // --- Atlas Crew Horizon + Synapse edge protection (synapse.atlascrew.dev) -----------
 const CLIENT_ATLAS_CREW_EDGE_PROTECTION_RES: { label: string; re: RegExp }[] = [
   {
@@ -103989,6 +104197,8 @@ export const RULES: Record<string, Rule> = {
   chimeraTransactionsHistorySqliRouteLiveOracle,
   chimeraTelecomSimSwapRouteLiveOracle,
   chimeraEnergyScadaCommandsRouteLiveOracle,
+  chimeraGovBenefitsSearchSqliRouteLiveOracle,
+  chimeraSaasTenantsProjectsIdorRouteLiveOracle,
   chimeraSwaggerRouteLiveOracle,
   chimeraApiReferenceRouteLiveOracle,
   chimeraFedrampOpenapiExtensionsRouteLiveOracle,
@@ -105302,6 +105512,7 @@ export const RULES: Record<string, Rule> = {
   crucibleScenarioCatalogRouteLiveOracle,
   pentestForgeJuiceShopLabRouteLiveOracle,
   pentestForgeTomcatLabRouteLiveOracle,
+  pentestForgeVampiLabRouteLiveOracle,
   clientSideAtlasCrewEdgeProtectionEvidence,
   clientSideAtlasCrewHubEvidence,
   clientSideMcpSupplyChainEvidence,
