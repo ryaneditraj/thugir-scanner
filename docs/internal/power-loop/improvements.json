@@ -6965,6 +6965,24 @@
       "slug": "povzayd-xss-lab2-dom-hash-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: location.hash.slice(1) → dom-box innerHTML + lvl2_comments localStorage stored XSS on lab2.html; povzayd.github.io/XSS-LABS/LABS/lab2.html findings 6→9 (+povzayd-xss-lab2-dom-hash-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-gov-benefits-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/gov/benefits/search?q= — CHM-GOV-001 SQL Injection (Benefits Search) from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/gov/benefits/search findings 7→8 (+chimera-gov-benefits-search-sqli-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-saas-tenants-projects-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/saas/tenants/{tenant_id}/projects — CHM-SAAS-001 Cross-Tenant IDOR from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/saas/tenants/1/projects findings 7→8 (+chimera-saas-tenants-projects-idor-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vampi.lab.pentest-forge.com",
+      "slug": "pentest-forge-vampi-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probes vampi.lab.pentest-forge.com POST /users/v1/login + GET /users/v1/name2 BOLA with corpus fallback when lab host returns 502; vampi.lab.pentest-forge.com/ findings 2→3 (+pentest-forge-vampi-lab-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

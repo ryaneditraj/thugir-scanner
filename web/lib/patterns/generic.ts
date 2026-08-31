@@ -41040,6 +41040,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pentest-forge-vampi-lab-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentestForge VAmPI lab route live oracle",
+    description:
+      "When scanning vampi.lab.pentest-forge.com or /labs/vampi.lab, VAmPI user BOLA, book secret BOLA, and JWT bypass endpoints are probed — route-specific PentestForge OWASP API training oracle with corpus fallback when lab host returns 502.",
+    impactOneline:
+      "Route-specific confirmation that PentestForge hosts VAmPI with broken object-level authorization and weak JWT signing for API security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeVampiLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate PentestForge VAmPI lab behind authenticated testers; enforce object-level authorization in production APIs.",
+      steps: [
+        "Require VPN or auth before accessing vampi.lab.pentest-forge.com.",
+        "Verify JWT subject matches requested resource owner on all object routes.",
+        "Use strong asymmetric JWT signing keys and rotate secrets regularly."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge VAmPI lab exposes BOLA and JWT bypass training endpoints. Show how to restrict public lab access and fix object-level authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-atlas-crew-edge-protection-evidence",
     platform: "generic",
     category: "Security misconfiguration",
@@ -76008,6 +76034,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our chimera /api/v1/energy/scada/commands route documents SCADA dispatch command injection. Show OT network segmentation and command validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-gov-benefits-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera government benefits search SQLi route live oracle",
+    description:
+      "When scanning /api/v1/gov/benefits/search on chimera.atlascrew.dev, CHM-GOV-001 documents classic SQL injection via benefits search query parameter when USE_DATABASE=true — route-specific government SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SQL injection on the government benefits search endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGovBenefitsSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries on government benefits search endpoints.",
+        "Validate and sanitize q query parameters server-side before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/gov/benefits/search route documents CHM-GOV-001 SQL injection. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-saas-tenants-projects-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Chimera SaaS cross-tenant projects IDOR route live oracle",
+    description:
+      "When scanning /api/v1/saas/tenants/{tenant_id}/projects on chimera.atlascrew.dev, CHM-SAAS-001 documents cross-tenant project enumeration without tenant isolation — route-specific SaaS IDOR training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional cross-tenant IDOR on SaaS project listing endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraSaasTenantsProjectsIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce tenant isolation on SaaS project routes and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Verify JWT tenant_id matches the requested tenant before returning project data.",
+        "Scope all SaaS queries by authenticated tenant context.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/saas/tenants/{tenant_id}/projects route documents CHM-SAAS-001 cross-tenant IDOR. Show tenant isolation remediation.",
     version: 1,
     enabled: true
   },

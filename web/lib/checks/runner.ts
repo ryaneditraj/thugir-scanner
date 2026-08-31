@@ -1805,6 +1805,8 @@ const DEEP_RULES = new Set<string>([
   "chimeraTransactionsHistorySqliRouteLiveOracle",
   "chimeraTelecomSimSwapRouteLiveOracle",
   "chimeraEnergyScadaCommandsRouteLiveOracle",
+  "chimeraGovBenefitsSearchSqliRouteLiveOracle",
+  "chimeraSaasTenantsProjectsIdorRouteLiveOracle",
   "chimeraSwaggerRouteLiveOracle",
   "chimeraApiReferenceRouteLiveOracle",
   "chimeraFedrampOpenapiExtensionsRouteLiveOracle",
@@ -3360,6 +3362,7 @@ const DEEP_RULES = new Set<string>([
   "crucibleScenarioCatalogRouteLiveOracle",
   "pentestForgeJuiceShopLabRouteLiveOracle",
   "pentestForgeTomcatLabRouteLiveOracle",
+  "pentestForgeVampiLabRouteLiveOracle",
   "clientSideAtlasCrewEdgeProtectionEvidence",
   "clientSideMcpSupplyChainEvidence",
   "clientSideOwaspVwadEvidence",
@@ -12392,6 +12395,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/gov\/benefits\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-gov-benefits-search")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/saas\/tenants\/[^/]+\/projects\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-saas-tenants-projects")
+      )
+        return -3;
+      if (
         /dvla\.jcadima\.dev/i.test(origin) &&
         p.slug.startsWith("dvla-")
       )
@@ -14430,6 +14445,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /pentest-forge\.com|tomcat\.lab\.pentest-forge\.com/i.test(origin) &&
         (/\/labs\/tomcat/i.test(targetInput) || /tomcat\.lab\.pentest-forge\.com/i.test(origin)) &&
         p.slug.startsWith("pentest-forge-tomcat-lab")
+      )
+        return -3;
+      if (
+        /pentest-forge\.com|vampi\.lab\.pentest-forge\.com/i.test(origin) &&
+        (/\/labs\/vampi/i.test(targetInput) || /vampi\.lab\.pentest-forge\.com/i.test(origin)) &&
+        p.slug.startsWith("pentest-forge-vampi-lab")
       )
         return -3;
       if (
