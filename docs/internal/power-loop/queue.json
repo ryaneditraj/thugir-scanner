@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T02:05:00.000Z",
+  "updated_at": "2026-08-31T03:06:00.000Z",
   "discovery_urls": [
     {
       "url": "https://ginandjuice.shop/my-account/change-email",
@@ -11675,6 +11675,31 @@
     {
       "url": "https://websec.fr/level18/",
       "source": "websec.fr — timing attack / side-channel challenge level 18 (public CTF lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/injection/",
+      "source": "allaboutapps/owasp-ctf-2025 — SQL/command injection lab route (GitHub README; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/access/",
+      "source": "allaboutapps/owasp-ctf-2025 — broken access control + path traversal lab (GitHub README; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/ssrf/",
+      "source": "allaboutapps/owasp-ctf-2025 — SSRF + security misconfiguration lab (GitHub README; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/crypto/",
+      "source": "allaboutapps/owasp-ctf-2025 — cryptographic failures lab (GitHub README; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/goof/login",
+      "source": "OWASP VWAD Goof — NoSQL injection auth bypass oracle POST /login (Snyk nodejs-goof; web search 03 UTC)",
       "auth": "public_demo"
     }
   ]
