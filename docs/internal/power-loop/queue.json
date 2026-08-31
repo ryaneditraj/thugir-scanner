@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-31T03:06:00.000Z",
+  "updated_at": "2026-08-31T04:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/prompt-leakage",
+      "source": "OWASP GenAI Security Lab — LLM07 system prompt leakage lesson with live demo (Vercel Pages; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/data-poisoning",
+      "source": "OWASP GenAI Security Lab — LLM04 data & model poisoning lesson with live demo (Vercel Pages; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/vector-embedding",
+      "source": "OWASP GenAI Security Lab — LLM08 vector & embedding weaknesses lesson with live demo (Vercel Pages; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/unbounded-consumption",
+      "source": "OWASP GenAI Security Lab — LLM10 unbounded consumption lesson with live demo (Vercel Pages; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/info-disclosure",
+      "source": "OWASP GenAI Security Lab — LLM02 sensitive information disclosure lesson with live demo (Vercel Pages; web search 04 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/my-account/change-email",
       "source": "PortSwigger ginandjuice.shop — race-condition admin takeover oracle POST /my-account/change-email (InfosecWriteups lab; web search 02 UTC)",
