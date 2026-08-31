@@ -58148,6 +58148,81 @@ const yogsecXssLab17SessionstorageSearchRouteLiveOracle: Rule = async (ctx) =>
     "yogsec XSS Lab #17 route scan — sessionStorage search matches executed via eval(match) — stored DOM XSS training sink"
   );
 
+const yogsecXssLab18LocalstorageJsonRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    18,
+    [
+      {
+        label: "localStorage JSON parsed lab title",
+        re: /XSS Lab #18:\s*localStorage JSON/i
+      },
+      {
+        label: "localStorage JSON stored XSS lab badge",
+        re: /Lab #18 · Stored XSS \(JSON in localStorage\)|localStorage as JSON/i
+      },
+      {
+        label: "eval stored JSON payloads sink",
+        re: /eval\(payload\)|VULNERABLE:\s*eval\(\) with stored payloads/i
+      },
+      {
+        label: "localStorage JSON execute target",
+        re: /Execute All Payloads \(XSS\)|JSON\.parse\(localStorage\.getItem\(['"]payloads['"]\)\)/i
+      }
+    ],
+    "yogsec XSS Lab #18 route scan — localStorage JSON payloads parsed and executed via eval(payload) — stored DOM XSS training sink"
+  );
+
+const yogsecXssLab19CrossKeyInjectionRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    19,
+    [
+      {
+        label: "cross-key injection lab title",
+        re: /XSS Lab #19:\s*Multiple Keys/i
+      },
+      {
+        label: "cross-key injection lab badge",
+        re: /Lab #19 · Cross-Key Injection|Stored in Multiple Keys/i
+      },
+      {
+        label: "eval combined localStorage keys sink",
+        re: /eval\(combined\)|VULNERABLE.*eval\(combined\)/i
+      },
+      {
+        label: "cross-key execute combined target",
+        re: /Execute Combined Code \(XSS via eval\)|localStorage\.getItem\(['"]part1['"]\)/i
+      }
+    ],
+    "yogsec XSS Lab #19 route scan — multiple localStorage keys joined and executed via eval(combined) — cross-key stored DOM XSS training sink"
+  );
+
+const yogsecXssLab20Base64DecodeRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    20,
+    [
+      {
+        label: "base64 encoded stored XSS lab title",
+        re: /XSS Lab #20:\s*Base64 Encoded/i
+      },
+      {
+        label: "base64 encoded XSS lab badge",
+        re: /Lab #20 · Base64 Encoded XSS|Stored as Base64/i
+      },
+      {
+        label: "atob decode eval sink",
+        re: /eval\(decoded\)|let decoded = atob\(base64Data\)/i
+      },
+      {
+        label: "base64 decode execute target",
+        re: /Decode & Execute \(XSS via eval\)|Encode & Store in localStorage/i
+      }
+    ],
+    "yogsec XSS Lab #20 route scan — Base64 payloads in localStorage decoded via atob() and executed with eval(decoded) — stored DOM XSS training sink"
+  );
+
 const yogsecXssLab22InnerhtmlEvalRouteLiveOracle: Rule = async (ctx) =>
   yogsecXssLabRouteOracle(
     ctx,
@@ -103626,6 +103701,9 @@ export const RULES: Record<string, Rule> = {
   yogsecXssLab15WindownamePersistentRouteLiveOracle,
   yogsecXssLab16HistoryStateRouteLiveOracle,
   yogsecXssLab17SessionstorageSearchRouteLiveOracle,
+  yogsecXssLab18LocalstorageJsonRouteLiveOracle,
+  yogsecXssLab19CrossKeyInjectionRouteLiveOracle,
+  yogsecXssLab20Base64DecodeRouteLiveOracle,
   yogsecXssLab22InnerhtmlEvalRouteLiveOracle,
   yogsecXssLab23InsertadjacenthtmlRouteLiveOracle,
   yogsecXssLab24OuterhtmlRouteLiveOracle,

@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab18-localstorage-json-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab18LocalstorageJsonRouteLiveOracle matches XSS Lab #18 localStorage JSON + eval(payload) + Execute All Payloads (XSS) markers; yogsec.github.io/xss-labs/labs/lab18.html findings 7→8 (+yogsec-xss-lab18-localstorage-json-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab19-cross-key-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab19CrossKeyInjectionRouteLiveOracle matches XSS Lab #19 Multiple Keys + eval(combined) + Execute Combined Code (XSS via eval) markers; yogsec.github.io/xss-labs/labs/lab19.html findings 7→8 (+yogsec-xss-lab19-cross-key-injection-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab20-base64-decode-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab20Base64DecodeRouteLiveOracle matches XSS Lab #20 Base64 Encoded + atob(base64Data) + eval(decoded) + Decode & Execute (XSS via eval) markers; yogsec.github.io/xss-labs/labs/lab20.html findings 6→7 (+yogsec-xss-lab20-base64-decode-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
       "slug": "yogsec-xss-lab15-windowname-persistent-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab15WindownamePersistentRouteLiveOracle matches XSS Lab #15 window.name Across Pages + eval(window.name) + Go to Page 2 (Same Tab) markers; yogsec.github.io/xss-labs/labs/lab15.html findings 7→8 (+yogsec-xss-lab15-windowname-persistent-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
