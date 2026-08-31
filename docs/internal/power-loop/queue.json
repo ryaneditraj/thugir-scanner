@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T21:05:40.499Z",
+  "updated_at": "2026-08-31T22:06:00.000Z",
   "discovery_urls": [
     {
       "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
@@ -11427,6 +11427,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/search_users?name=test",
+      "source": "NeuraLegion/brokencrystals — LDAP/search_users SQLi oracle GET /api/search_users?name= (README search_users proxy; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/hipaa/records/patient",
+      "source": "atlas-crew/Chimera — HIPAA patient lookup IDOR oracle GET /api/hipaa/records/patient (api-reference.md; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/records/emergency-access",
+      "source": "atlas-crew/Chimera — break-glass PHI emergency-access oracle POST /api/v1/healthcare/records/emergency-access (healthcare routes.py; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/hipaa/records/bulk-export",
+      "source": "atlas-crew/Chimera — bulk PHI export oracle POST /api/hipaa/records/bulk-export (api-reference.md HIPAA slice; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/users/1",
+      "source": "sr33jih/vulnshop — BOLA/IDOR oracle GET /api/users/{id} (GitHub README API1:2023; web search 22 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/healthcare/records/123",
       "source": "atlas-crew/Chimera CHM-HEALTH-002 — BOLA/IDOR oracle GET /api/v1/healthcare/records/{record_id} (vuln inventory; learning gap 21 UTC)",
