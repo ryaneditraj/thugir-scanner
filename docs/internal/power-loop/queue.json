@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-31T07:00:00.000Z",
+  "updated_at": "2026-08-31T08:10:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://sabyasachidhal.github.io/MCPGoat/",
+      "source": "sabyasachidhal/MCPGoat — deliberately vulnerable MCP server with 78 CTF flags across tool poisoning, prompt injection, SSRF, SQLi (GitHub Pages; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvmcp.co.uk/",
+      "source": "CyberSecAI DVMCP — Damn Vulnerable MCP Server educational hub mapping OWASP MCP Top 10 (dvmcp.co.uk; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://yrprey.com/",
+      "source": "yrprey/yrprey-application — OWASP API Top 10 2019/2023 vulnerable API framework marketing + deploy links (VWAD listing; web search 08 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ginandjuice.shop/vulnerabilities",
+      "source": "PortSwigger ginandjuice.shop — vulnerability disclosure page listing SQLi/XXE/XSS/prototype-pollution oracles (ginandjuice.shop/vulnerabilities; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://the0x-pwn.github.io/lab-xss/lab-9/",
+      "source": "the0x-pwn/lab-xss — Level 9 SVG script injection XSS lab with tag-filter bypass (GitHub Pages; web search 08 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owaspbased-lessons.vercel.app/lesson/prompt-leakage",
       "source": "OWASP GenAI Security Lab — LLM07 system prompt leakage lesson with live demo (Vercel Pages; web search 04 UTC)",
