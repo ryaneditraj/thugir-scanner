@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T12:15:00.000Z",
+  "updated_at": "2026-08-31T12:17:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2783,
-  "total_findings": 27619,
+  "total_sites_scanned": 2791,
+  "total_findings": 27815,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1981,
-  "discovery_findings": 23274,
+  "discovery_urls_added": 1986,
+  "discovery_findings": 23470,
   "improvements_shipped": 1231,
-  "last_run": "2026-08-31T12:15:00.000Z",
+  "last_run": "2026-08-31T12:17:00.000Z",
   "last_run_summary": {
     "hour_utc": "12",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,18 +48,21 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 595 probes); secret-resend + resend-key + iac-terraform-tls-key present"
+      "note": "Stable 6/6 first-pass recall (52 findings, 596 probes); secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 24,
-      "focus": "Chimera telecom SIM-swap + energy SCADA commands + DVLA Laravel lab route oracles",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 196,
+      "focus": "Escape Duck Store route oracles + Atlas Crew Apparatus/Crucible hubs + priority drain dvga2/duck-store hub/juice-shop demo/DVGA graphiql/preview chatbot; parallel engine shipped Chimera telecom/SCADA + DVLA oracles",
       "improvements_shipped_this_run": 4
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
+      "duck-store.escape.tech/vulnerabilities: 41 findings — duck-store-admin-users-bfla + testimonials-stored-xss + mcp-coupons-disclosure + profile-mass-assignment route oracles",
+      "dvga2.tools.escape.tech: 16 findings — dvga2-expert-hardened-mode-route-live-oracle + GraphQL SQLi/SSRF/XSS oracles",
+      "preview.owasp-juice.shop/#/chatbot: 54 findings — chatbot prompt-injection route oracles",
       "chimera.atlascrew.dev/api/v1/telecom/sim-swap: 7→8 (+chimera-telecom-sim-swap-route-live-oracle)",
       "chimera.atlascrew.dev/api/v1/energy/scada/commands: 7→8 (+chimera-energy-scada-commands-route-live-oracle)",
       "dvla.jcadima.dev/: 6→8 (+client-side-dvla-evidence +dvla-route-live-oracle)"
@@ -67,16 +70,18 @@
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "povzayd XSS-LABS lab4-8 offline (404) — route oracles blocked until GitHub Pages redeploy",
-      "vulnerability-intelligence MCP Heroku offline (404) — MCP-specific oracle blocked"
+      "duck-store testimonials/admin-users/auth/register + apparatus/crucible hubs queued but not scanned (8-URL priority limit)",
+      "povzayd XSS-LABS lab4-8 offline (404) — route oracles blocked until GitHub Pages redeploy"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "duck-store.escape.tech/vulnerabilities": 41,
+    "preview.owasp-juice.shop/#/chatbot": 54,
+    "juice-shop.demo.escape.tech/rest/memories": 33,
+    "dvga2.tools.escape.tech": 16,
     "chimera.atlascrew.dev/api/v1/telecom/sim-swap": 8,
     "chimera.atlascrew.dev/api/v1/energy/scada/commands": 8,
-    "dvla.jcadima.dev": 8,
-    "pwnshop.ctfsecurity.com/reset-password": 51,
-    "vulnbank.org/merchant/login": 33
+    "dvla.jcadima.dev": 8
   }
 }

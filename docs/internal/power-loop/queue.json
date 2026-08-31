@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-31T11:06:00.000Z",
+  "updated_at": "2026-08-31T12:08:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/testimonials",
+      "source": "Escape Duck Store vuln index — stored XSS testimonials oracle POST /testimonials (duck-store.escape.tech/vulnerabilities; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/users",
+      "source": "Escape Duck Store vuln index — broken access control oracle GET /api/v1/admin/users (duck-store.escape.tech/vulnerabilities; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/register",
+      "source": "Escape Duck Store vuln index — referral code abuse oracle POST /api/v1/auth/register (duck-store.escape.tech/vulnerabilities; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://apparatus.atlascrew.dev/",
+      "source": "atlas-crew/Apparatus — AI-augmented network security simulation lab with red team/chaos/defense APIs (apparatus.atlascrew.dev public demo; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crucible.atlascrew.dev/",
+      "source": "atlas-crew/Crucible — 80+ attack scenario security testing platform with visual editor (crucible.atlascrew.dev public demo; web search 12 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://the0x-pwn.github.io/lab-xss/lab-10/",
       "source": "the0x-pwn/lab-xss — Level 10 iframe Data URI injection XSS lab with sandbox bypass (GitHub Pages; web search 09 UTC)",
