@@ -13248,7 +13248,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
       if (
         /owaspbased-lessons\.vercel\.app/i.test(origin) &&
-        /\/lesson\/(?:prompt-injection|sensitive-info|info-disclosure|supply-chain|data-poisoning|misinformation|improper-output|output-handling|system-prompt-leakage|prompt-leakage|excessive-agency|vector-embedding|unbounded-consumption)\b/i.test(targetInput) &&
+        /\/(?:lesson\/(?:prompt-injection|sensitive-info|info-disclosure|supply-chain|data-poisoning|misinformation|improper-output|output-handling|system-prompt-leakage|prompt-leakage|excessive-agency|vector-embedding|unbounded-consumption)|direct-prompt-injection|insecure-plugin)\b/i.test(targetInput) &&
         p.slug.startsWith("owasp-genai-")
       )
         return -3;
@@ -14415,7 +14415,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
-        /\/coupon\/validate-coupon\b/i.test(targetInput) &&
+        /\/(?:coupon\/validate-coupon|shop\/validate[-_]coupon)\b/i.test(targetInput) &&
         p.slug.startsWith("crapi-validate-coupon")
       )
         return -3;
@@ -14853,6 +14853,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/my-account\/(?:change-password|change-email|change-address|delete)\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-") &&
         /-route-/.test(p.slug)
+      )
+        return -3;
+      if (
+        /vampi/i.test(origin) &&
+        /\/users\/v1\/?$/i.test(targetInput) &&
+        p.slug.startsWith("vampi-users-enumeration")
       )
         return -3;
       if (
