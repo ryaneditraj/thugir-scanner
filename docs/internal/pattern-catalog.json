@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-31T04:03:50.252Z",
-  "total": 2945,
-  "uniqueSlugs": 2937,
+  "generatedAt": "2026-08-31T05:05:07.469Z",
+  "total": 2948,
+  "uniqueSlugs": 2940,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2927,
+    "generic": 2930,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2860,
+    "deep": 2863,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 214,
     "Broken authentication": 194,
     "Injection": 475,
-    "Cross-site scripting": 771,
+    "Cross-site scripting": 774,
     "Open redirect": 26,
     "general": 20,
     "SSRF": 19,
@@ -2913,6 +2913,7 @@
     "yogsec-xss-lab1-reflected-innerhtml-route-live-oracle",
     "yogsec-xss-lab2-post-sessionstorage-route-live-oracle",
     "yogsec-xss-lab22-innerhtml-eval-route-live-oracle",
+    "yogsec-xss-lab23-insertadjacenthtml-route-live-oracle",
     "yogsec-xss-lab24-outerhtml-route-live-oracle",
     "yogsec-xss-lab25-eval-route-live-oracle",
     "yogsec-xss-lab26-settimeout-route-live-oracle",
@@ -2931,6 +2932,8 @@
     "yogsec-xss-lab39-onsubmit-route-live-oracle",
     "yogsec-xss-lab4-referer-route-live-oracle",
     "yogsec-xss-lab5-user-agent-route-live-oracle",
+    "yogsec-xss-lab6-localstorage-route-live-oracle",
+    "yogsec-xss-lab7-document-title-route-live-oracle",
     "zen-demo-java-create-route-live-oracle",
     "zen-demo-java-create-sqli-live-oracle",
     "zen-demo-java-execute-route-live-oracle",
