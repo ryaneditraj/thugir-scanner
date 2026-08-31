@@ -1,239 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-08-30T20:09:38.536Z",
-      "url": "https://owasp-finbot-ctf.org/labs/api/v1/guardrails/test",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 24,
-      "findings": [
-        {
-          "slug": "finbot-ctf-challenges-live-oracle",
-          "title": "OWASP FinBot CTF prompt-injection challenges live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-ctf-sidecar-live-oracle",
-          "title": "OWASP FinBot CTF sidecar live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-how-it-works-live-oracle",
-          "title": "OWASP FinBot how-it-works Dark Lab supply-chain live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-darklab-supply-chain-live-oracle",
-          "title": "OWASP FinBot Dark Lab MCP supply-chain live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-darklab-supply-chain-stats-live-oracle",
-          "title": "OWASP FinBot Dark Lab supply-chain stats live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-darklab-taxcalc-server-live-oracle",
-          "title": "OWASP FinBot Dark Lab TaxCalc MCP server live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-darklab-taxcalc-tools-live-oracle",
-          "title": "OWASP FinBot Dark Lab TaxCalc MCP tools write live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-darklab-finmail-tools-live-oracle",
-          "title": "OWASP FinBot Dark Lab FinMail MCP tools write live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-darklab-findrive-tools-live-oracle",
-          "title": "OWASP FinBot Dark Lab FinDrive MCP tools write live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-darklab-finmail-server-live-oracle",
-          "title": "OWASP FinBot Dark Lab FinMail MCP server live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-darklab-finmail-reset-tools-live-oracle",
-          "title": "OWASP FinBot Dark Lab FinMail reset-tools write live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-darklab-findrive-server-live-oracle",
-          "title": "OWASP FinBot Dark Lab FinDrive MCP server live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-darklab-findrive-reset-tools-live-oracle",
-          "title": "OWASP FinBot Dark Lab FinDrive reset-tools write live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-darklab-taxcalc-reset-tools-live-oracle",
-          "title": "OWASP FinBot Dark Lab TaxCalc reset-tools write live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-ctf-stats-live-oracle",
-          "title": "OWASP FinBot CTF platform stats live oracle",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-vendor-invoices-live-oracle",
-          "title": "OWASP FinBot vendor invoice agent live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "AI security"
-        },
-        {
-          "slug": "finbot-labs-guardrails-webhook-live-oracle",
-          "title": "OWASP FinBot Labs guardrail webhook SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "finbot-labs-guardrails-webhook-route-live-oracle",
-          "title": "OWASP FinBot /labs guardrail webhook route live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "finbot-vendor-chat-live-oracle",
-          "title": "OWASP FinBot vendor onboarding chat agent live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "AI security"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-agentic-ai-ctf-evidence",
-          "title": "Agentic AI security CTF platform disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "client-side-owasp-genai-lab-evidence",
-          "title": "OWASP GenAI Security Lab disclosed",
-          "severity": "medium",
-          "confidence": 0.87,
-          "category": "AI security"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-openapi-docs-exposed",
-          "title": "OpenAPI / Swagger docs publicly reachable",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "Information disclosure"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 2,
-      "probes_run": 578,
-      "status": "ok",
-      "scanned_at": "2026-08-30T20:09:38.536Z"
-    },
-    {
-      "run_id": "2026-08-30T20:10:53.923Z",
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level18.php",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "vulnforge-academy-level-file-upload-route-live-oracle",
-          "title": "VulnForge Academy level 16\u201318 file upload route live oracle",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Injection"
-        },
-        {
-          "slug": "vulnforge-academy-level-ssrf-live-oracle",
-          "title": "VulnForge Academy level SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 464,
-      "status": "ok",
-      "scanned_at": "2026-08-30T20:10:53.923Z"
-    },
-    {
       "run_id": "2026-08-30T20:10:58.535Z",
       "url": "https://websec.fr/level19/",
       "auth": "public_demo",
@@ -647,7 +414,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-30T20:13:01.616Z",
-      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-30T20:13:01.645Z",
@@ -662,7 +429,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-30T20:13:01.645Z",
-      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-30T20:13:01.664Z",
@@ -695,7 +462,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -1391,7 +1158,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -1405,7 +1172,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF \u2014 server fetches attacker-controlled URL",
+          "title": "SSRF — server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -2029,7 +1796,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-30T21:07:20.515Z",
-      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-30T21:07:20.541Z",
@@ -2044,7 +1811,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-30T21:07:20.541Z",
-      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-30T21:07:20.558Z",
@@ -2682,7 +2449,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -2710,7 +2477,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF \u2014 server fetches attacker-controlled URL",
+          "title": "SSRF — server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -3761,7 +3528,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-30T22:12:15.500Z",
-      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-30T22:12:15.527Z",
@@ -3776,7 +3543,7 @@
       "probes_run": 0,
       "status": "error",
       "scanned_at": "2026-08-30T22:12:15.527Z",
-      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again \u2014 include https:// if it only serves one protocol."
+      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again — include https:// if it only serves one protocol."
     },
     {
       "run_id": "2026-08-30T22:12:15.540Z",
@@ -6245,7 +6012,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -6273,7 +6040,7 @@
         },
         {
           "slug": "ssrf-endpoint-fetch",
-          "title": "SSRF \u2014 server fetches attacker-controlled URL",
+          "title": "SSRF — server fetches attacker-controlled URL",
           "severity": "high",
           "confidence": 0.92,
           "category": "Server-side request forgery"
@@ -14409,7 +14176,7 @@
       "findings": [
         {
           "slug": "vulnforge-academy-level-file-upload-route-live-oracle",
-          "title": "VulnForge Academy level 16\u201318 file upload route live oracle",
+          "title": "VulnForge Academy level 16–18 file upload route live oracle",
           "severity": "high",
           "confidence": 0.86,
           "category": "Security misconfiguration"
@@ -14620,7 +14387,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -16093,7 +15860,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -18700,7 +18467,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -20481,7 +20248,7 @@
       "findings": [
         {
           "slug": "vulnforge-academy-level-file-upload-route-live-oracle",
-          "title": "VulnForge Academy level 16\u201318 file upload route live oracle",
+          "title": "VulnForge Academy level 16–18 file upload route live oracle",
           "severity": "high",
           "confidence": 0.86,
           "category": "Security misconfiguration"
@@ -23498,7 +23265,7 @@
         },
         {
           "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage \u2192 innerHTML sink",
+          "title": "DOM XSS via postMessage → innerHTML sink",
           "severity": "high",
           "confidence": 0.86,
           "category": "Cross-site scripting"
@@ -30999,6 +30766,766 @@
       "probes_run": 464,
       "status": "ok",
       "scanned_at": "2026-08-31T19:14:20.857Z"
+    },
+    {
+      "run_id": "2026-08-31T20:06:09.938Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 52,
+      "findings": [
+        {
+          "slug": "juice-shop-addresss-bola-live-oracle",
+          "title": "Juice Shop shipping addresses BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-addresss-id-bola-live-oracle",
+          "title": "Juice Shop address-by-ID BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-iac-terraform-tls-key-live-oracle",
+          "title": "Juice Shop IaC Terraform TLS private key live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-resend-key-live-oracle",
+          "title": "Juice Shop Resend API key live oracle",
+          "severity": "high",
+          "confidence": 0.84,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-jwt-alg-none-live-oracle",
+          "title": "Juice Shop JWT none-algorithm live oracle",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-captcha-bypass-live-oracle",
+          "title": "Juice Shop captcha bypass live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-image-captcha-bypass-live-oracle",
+          "title": "Juice Shop image captcha bypass live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-save-login-ip-live-oracle",
+          "title": "Juice Shop login IP spoofing live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-whoami-unauth-live-oracle",
+          "title": "Juice Shop unauthenticated whoami live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-products-reviews-exposure-live-oracle",
+          "title": "Juice Shop product reviews disclosure live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-chatbot-api-live-oracle",
+          "title": "Juice Shop chatbot LLM proxy live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-chatbot-route-live-oracle",
+          "title": "Juice Shop chatbot route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-login-sqli-live-oracle",
+          "title": "Juice Shop login SQL injection live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-login-route-live-oracle",
+          "title": "Juice Shop /rest/user/login SQLi route live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-users-idor-live-oracle",
+          "title": "Juice Shop user profile IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-basket-items-bola-live-oracle",
+          "title": "Juice Shop basket items BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-complaints-bola-live-oracle",
+          "title": "Juice Shop complaints BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-security-questions-list-live-oracle",
+          "title": "Juice Shop security-question catalog live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-security-question-user-live-oracle",
+          "title": "Juice Shop user security-question disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-wallet-balance-bola-live-oracle",
+          "title": "Juice Shop wallet balance BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-deluxe-membership-live-oracle",
+          "title": "Juice Shop deluxe membership live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Business logic"
+        },
+        {
+          "slug": "juice-shop-b2b-orders-deserialization-live-oracle",
+          "title": "Juice Shop B2B orders insecure deserialization live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-recycles-bola-live-oracle",
+          "title": "Juice Shop recycle requests BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-cards-bola-live-oracle",
+          "title": "Juice Shop payment cards BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-basket-idor-live-oracle",
+          "title": "Juice Shop basket IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-memories-bola-live-oracle",
+          "title": "Juice Shop memories BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-admin-config-live-oracle",
+          "title": "Juice Shop admin application-configuration live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "juice-shop-quantitys-exposure-live-oracle",
+          "title": "Juice Shop inventory quantities exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-hints-exposure-live-oracle",
+          "title": "Juice Shop challenge hints exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-challenges-disclosure-live-oracle",
+          "title": "Juice Shop challenge scoreboard exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-deliverys-exposure-live-oracle",
+          "title": "Juice Shop delivery methods exposed live oracle",
+          "severity": "low",
+          "confidence": 0.89,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-feedbacks-bola-live-oracle",
+          "title": "Juice Shop product feedback BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-security-answers-disclosure-live-oracle",
+          "title": "Juice Shop security-answer hashes disclosed live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-privacy-requests-bola-live-oracle",
+          "title": "Juice Shop GDPR privacy-request BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-track-order-idor-live-oracle",
+          "title": "Juice Shop track-order IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-order-history-bola-live-oracle",
+          "title": "Juice Shop order-history BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-open-redirect-live-oracle",
+          "title": "Juice Shop allowlist-bypass open redirect live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "secret-resend",
+          "title": "Resend API key exposed in client bundle",
+          "severity": "high",
+          "confidence": 0.84,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 596,
+      "status": "ok",
+      "scanned_at": "2026-08-31T20:06:09.938Z"
+    },
+    {
+      "run_id": "2026-08-31T20:10:40.957Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 52,
+      "findings": [
+        {
+          "slug": "juice-shop-addresss-bola-live-oracle",
+          "title": "Juice Shop shipping addresses BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-addresss-id-bola-live-oracle",
+          "title": "Juice Shop address-by-ID BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-iac-terraform-tls-key-live-oracle",
+          "title": "Juice Shop IaC Terraform TLS private key live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-resend-key-live-oracle",
+          "title": "Juice Shop Resend API key live oracle",
+          "severity": "high",
+          "confidence": 0.84,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-jwt-alg-none-live-oracle",
+          "title": "Juice Shop JWT none-algorithm live oracle",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-captcha-bypass-live-oracle",
+          "title": "Juice Shop captcha bypass live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-image-captcha-bypass-live-oracle",
+          "title": "Juice Shop image captcha bypass live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-save-login-ip-live-oracle",
+          "title": "Juice Shop login IP spoofing live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-whoami-unauth-live-oracle",
+          "title": "Juice Shop unauthenticated whoami live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-products-reviews-exposure-live-oracle",
+          "title": "Juice Shop product reviews disclosure live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-chatbot-api-live-oracle",
+          "title": "Juice Shop chatbot LLM proxy live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-chatbot-route-live-oracle",
+          "title": "Juice Shop chatbot route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-login-sqli-live-oracle",
+          "title": "Juice Shop login SQL injection live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-login-route-live-oracle",
+          "title": "Juice Shop /rest/user/login SQLi route live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-users-idor-live-oracle",
+          "title": "Juice Shop user profile IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-basket-items-bola-live-oracle",
+          "title": "Juice Shop basket items BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-complaints-bola-live-oracle",
+          "title": "Juice Shop complaints BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-security-questions-list-live-oracle",
+          "title": "Juice Shop security-question catalog live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-security-question-user-live-oracle",
+          "title": "Juice Shop user security-question disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-wallet-balance-bola-live-oracle",
+          "title": "Juice Shop wallet balance BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-deluxe-membership-live-oracle",
+          "title": "Juice Shop deluxe membership live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Business logic"
+        },
+        {
+          "slug": "juice-shop-b2b-orders-deserialization-live-oracle",
+          "title": "Juice Shop B2B orders insecure deserialization live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-recycles-bola-live-oracle",
+          "title": "Juice Shop recycle requests BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-cards-bola-live-oracle",
+          "title": "Juice Shop payment cards BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-basket-idor-live-oracle",
+          "title": "Juice Shop basket IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-memories-bola-live-oracle",
+          "title": "Juice Shop memories BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-admin-config-live-oracle",
+          "title": "Juice Shop admin application-configuration live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "juice-shop-quantitys-exposure-live-oracle",
+          "title": "Juice Shop inventory quantities exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-hints-exposure-live-oracle",
+          "title": "Juice Shop challenge hints exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-challenges-disclosure-live-oracle",
+          "title": "Juice Shop challenge scoreboard exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-deliverys-exposure-live-oracle",
+          "title": "Juice Shop delivery methods exposed live oracle",
+          "severity": "low",
+          "confidence": 0.89,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-feedbacks-bola-live-oracle",
+          "title": "Juice Shop product feedback BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-security-answers-disclosure-live-oracle",
+          "title": "Juice Shop security-answer hashes disclosed live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-privacy-requests-bola-live-oracle",
+          "title": "Juice Shop GDPR privacy-request BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-track-order-idor-live-oracle",
+          "title": "Juice Shop track-order IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-order-history-bola-live-oracle",
+          "title": "Juice Shop order-history BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-open-redirect-live-oracle",
+          "title": "Juice Shop allowlist-bypass open redirect live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "secret-resend",
+          "title": "Resend API key exposed in client bundle",
+          "severity": "high",
+          "confidence": 0.84,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 596,
+      "status": "ok",
+      "scanned_at": "2026-08-31T20:10:40.957Z"
     }
   ],
   "teacher_delta_runs": [
@@ -31008,7 +31535,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.demo.escape.tech",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on Escape.tech fallback (Heroku+staging 503; pages_crawled=6 probes_run=597; gap=[]; 39 juice-shop live oracles)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on Escape.tech fallback (Heroku+staging 503; pages_crawled=6 probes_run=597; gap=[]; 39 juice-shop live oracles)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31025,7 +31552,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 01 UTC run: Heroku primary 503, staging 503; Escape.tech fallback 6/6 with 50 findings. Discovery: +5 URLs (wrongsecrets challenge-10/11/12/13/14) + drained challenge-7/9/33 \u2192 120 findings across 8 URLs with route-specific live oracles.",
+      "notes": "No teacher tools available. 01 UTC run: Heroku primary 503, staging 503; Escape.tech fallback 6/6 with 50 findings. Discovery: +5 URLs (wrongsecrets challenge-10/11/12/13/14) + drained challenge-7/9/33 → 120 findings across 8 URLs with route-specific live oracles.",
       "scanned_at": "2026-08-25T01:12:00.000Z"
     },
     {
@@ -31034,7 +31561,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 45 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=594; gap=[]; 34 juice-shop live oracles)",
+      "benchmark_status": "ok — 45 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=594; gap=[]; 34 juice-shop live oracles)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31051,7 +31578,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 03 UTC run: stable 6/6 first-pass recall (45 findings, 34 juice-shop live oracles); secret-resend slug still absent. Discovery: +5 URLs (wrongsecrets challenge-20/21/22, dvwu path-traversal/command-injection) + drained fabraix LLM challenges + seclab/labs/xss \u2192 88 findings across 8 URLs.",
+      "notes": "No teacher tools available. 03 UTC run: stable 6/6 first-pass recall (45 findings, 34 juice-shop live oracles); secret-resend slug still absent. Discovery: +5 URLs (wrongsecrets challenge-20/21/22, dvwu path-traversal/command-injection) + drained fabraix LLM challenges + seclab/labs/xss → 88 findings across 8 URLs.",
       "scanned_at": "2026-08-25T03:12:00.000Z"
     },
     {
@@ -31060,7 +31587,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 47 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=593; gap=[]; 34 juice-shop live oracles)",
+      "benchmark_status": "ok — 47 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=593; gap=[]; 34 juice-shop live oracles)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31077,7 +31604,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 04 UTC run: stable 6/6 first-pass recall (47 findings, 34 juice-shop live oracles); secret-resend slug still absent. Discovery: +5 URLs (dvwu file-upload/xxe/deserialization/jwt/ssti) + drained order-history (49), pwnshop register-seller (47 full live-oracle suite incl SSTI/coupon-bypass/wallet-topup), seclab /api/* routes (sqli/xss/csrf 4 each), ai-security idor (7) \u2192 123 findings across 8 URLs.",
+      "notes": "No teacher tools available. 04 UTC run: stable 6/6 first-pass recall (47 findings, 34 juice-shop live oracles); secret-resend slug still absent. Discovery: +5 URLs (dvwu file-upload/xxe/deserialization/jwt/ssti) + drained order-history (49), pwnshop register-seller (47 full live-oracle suite incl SSTI/coupon-bypass/wallet-topup), seclab /api/* routes (sqli/xss/csrf 4 each), ai-security idor (7) → 123 findings across 8 URLs.",
       "scanned_at": "2026-08-25T04:08:00.000Z"
     },
     {
@@ -31086,7 +31613,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 48 findings, 6/6 recall after pass1 Heroku wake gap (pass1: 8 findings gap=xss,sqli,auth_bypass pages=6 probes=211; retry merged: 48 findings pages=6 probes=591; gap=[]; 35 juice-shop live oracles)",
+      "benchmark_status": "ok — 48 findings, 6/6 recall after pass1 Heroku wake gap (pass1: 8 findings gap=xss,sqli,auth_bypass pages=6 probes=211; retry merged: 48 findings pages=6 probes=591; gap=[]; 35 juice-shop live oracles)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31103,7 +31630,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 05 UTC run: pass1 degraded 8 findings gap=xss,sqli,auth_bypass (Heroku cold start); 12s retry restored 6/6 with 48 findings (35 juice-shop live oracles); secret-resend slug still absent. Discovery: +5 URLs (wrongsecrets challenge-23/24/25/26/27) + drained 6/8 queue (demo.owasp-juice.shop/rest/recycles/1 hung >25min, killed) \u2192 79 findings across 6 URLs with route-specific live oracles for Base64 front-end, HMAC crypto, and Web3 challenges.",
+      "notes": "No teacher tools available. 05 UTC run: pass1 degraded 8 findings gap=xss,sqli,auth_bypass (Heroku cold start); 12s retry restored 6/6 with 48 findings (35 juice-shop live oracles); secret-resend slug still absent. Discovery: +5 URLs (wrongsecrets challenge-23/24/25/26/27) + drained 6/8 queue (demo.owasp-juice.shop/rest/recycles/1 hung >25min, killed) → 79 findings across 6 URLs with route-specific live oracles for Base64 front-end, HMAC crypto, and Web3 challenges.",
       "scanned_at": "2026-08-25T05:12:00.000Z"
     },
     {
@@ -31112,7 +31639,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 48 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=591; gap=[]; 37 juice-shop live oracles)",
+      "benchmark_status": "ok — 48 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=591; gap=[]; 37 juice-shop live oracles)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31129,7 +31656,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 07 UTC run: stable 6/6 first-pass recall (48 findings, 37 juice-shop live oracles); secret-resend slug still absent. Discovery: +5 URLs (wrongsecrets challenge-35/36/37/38/39) \u2192 74 findings with route-specific live oracles for advanced C binary, CI/CD, Git notes, and AES filename-key challenges; challenge-35 route-specific documentation oracle gap.",
+      "notes": "No teacher tools available. 07 UTC run: stable 6/6 first-pass recall (48 findings, 37 juice-shop live oracles); secret-resend slug still absent. Discovery: +5 URLs (wrongsecrets challenge-35/36/37/38/39) → 74 findings with route-specific live oracles for advanced C binary, CI/CD, Git notes, and AES filename-key challenges; challenge-35 route-specific documentation oracle gap.",
       "scanned_at": "2026-08-25T07:12:00.000Z"
     },
     {
@@ -31138,7 +31665,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 47 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=590; gap=[]; 34 juice-shop live oracles)",
+      "benchmark_status": "ok — 47 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=590; gap=[]; 34 juice-shop live oracles)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31155,7 +31682,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 08 UTC run: stable 6/6 first-pass recall (47 findings, 34 juice-shop live oracles); secret-resend slug still absent. Discovery: +4 URLs (wrongsecrets challenge-40/41/42/43) + drained demo.owasp-juice recycles/1 (49 findings incl recycles-bola-route oracle), owasp-finbot-ctf admin (15), vulnforge level13 SSRF + level19 RCE (4 each) \u2192 132 findings across 8 URLs; route-specific live oracles shipped for AES-JSON, password-shucking, actuator-audit, reddit-blunder challenges.",
+      "notes": "No teacher tools available. 08 UTC run: stable 6/6 first-pass recall (47 findings, 34 juice-shop live oracles); secret-resend slug still absent. Discovery: +4 URLs (wrongsecrets challenge-40/41/42/43) + drained demo.owasp-juice recycles/1 (49 findings incl recycles-bola-route oracle), owasp-finbot-ctf admin (15), vulnforge level13 SSRF + level19 RCE (4 each) → 132 findings across 8 URLs; route-specific live oracles shipped for AES-JSON, password-shucking, actuator-audit, reddit-blunder challenges.",
       "scanned_at": "2026-08-25T08:12:00.000Z"
     },
     {
@@ -31164,7 +31691,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 48 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=591; gap=[]; 35 juice-shop live oracles)",
+      "benchmark_status": "ok — 48 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=591; gap=[]; 35 juice-shop live oracles)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31181,7 +31708,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 10 UTC run: stable 6/6 first-pass recall (48 findings, 35 juice-shop live oracles); secret-resend slug still absent. Discovery: +5 URLs (wrongsecrets challenge-55/56/64/65/66) + drained duck-store.escape.tech SSRF API routes (import-from-url 32, fetch-url 32, orders/1 31) \u2192 170 findings across 8 URLs; route-specific live oracles confirmed for SSH bastion, project-spec, Swift binary, plain Java CLI, obfuscated Java CLI challenges.",
+      "notes": "No teacher tools available. 10 UTC run: stable 6/6 first-pass recall (48 findings, 35 juice-shop live oracles); secret-resend slug still absent. Discovery: +5 URLs (wrongsecrets challenge-55/56/64/65/66) + drained duck-store.escape.tech SSRF API routes (import-from-url 32, fetch-url 32, orders/1 31) → 170 findings across 8 URLs; route-specific live oracles confirmed for SSH bastion, project-spec, Swift binary, plain Java CLI, obfuscated Java CLI challenges.",
       "scanned_at": "2026-08-25T10:12:00.000Z"
     },
     {
@@ -31190,7 +31717,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 20 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=541; gap=[]; 9 juice-shop live oracles)",
+      "benchmark_status": "ok — 20 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=541; gap=[]; 9 juice-shop live oracles)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31207,7 +31734,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 11 UTC run: stable 6/6 first-pass recall (20 findings, 9 juice-shop live oracles); thinner than typical 45-48 pass but all categories hit; secret-resend slug still absent. Discovery: +5 URLs (wrongsecrets challenge-44/45/46/47/53 Vault+K8s oracles) + drained duck-store profile (33), demo.owasp-juice memories (27), duck-store color-filter (31) \u2192 166 findings across 8 URLs; route-specific live oracles shipped for Vault metadata/subkey/template-injection/hardcoded/debugging-container challenges.",
+      "notes": "No teacher tools available. 11 UTC run: stable 6/6 first-pass recall (20 findings, 9 juice-shop live oracles); thinner than typical 45-48 pass but all categories hit; secret-resend slug still absent. Discovery: +5 URLs (wrongsecrets challenge-44/45/46/47/53 Vault+K8s oracles) + drained duck-store profile (33), demo.owasp-juice memories (27), duck-store color-filter (31) → 166 findings across 8 URLs; route-specific live oracles shipped for Vault metadata/subkey/template-injection/hardcoded/debugging-container challenges.",
       "scanned_at": "2026-08-25T11:14:00.000Z"
     },
     {
@@ -31216,7 +31743,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 47 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=589; gap=[]; 36 juice-shop live oracles)",
+      "benchmark_status": "ok — 47 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=589; gap=[]; 36 juice-shop live oracles)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31242,7 +31769,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=594; gap=[]; 38 juice-shop live oracles; secret-resend present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=594; gap=[]; 38 juice-shop live oracles; secret-resend present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31259,7 +31786,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 08 UTC run: stable 6/6 first-pass recall (50 findings, 38 juice-shop live oracles); secret-resend + juice-shop-resend-key-live-oracle both present. Discovery: +5 URLs (finbot darklab + supply-chain API + vendor chat, ginandjuice basket API, vulnforge level16) + drained wrongsecrets 50/65/66 \u2192 142 findings across 8 URLs.",
+      "notes": "No teacher tools available. 08 UTC run: stable 6/6 first-pass recall (50 findings, 38 juice-shop live oracles); secret-resend + juice-shop-resend-key-live-oracle both present. Discovery: +5 URLs (finbot darklab + supply-chain API + vendor chat, ginandjuice basket API, vulnforge level16) + drained wrongsecrets 50/65/66 → 142 findings across 8 URLs.",
       "scanned_at": "2026-08-29T08:20:00.000Z"
     },
     {
@@ -31268,7 +31795,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=594; gap=[]; 40 juice-shop live oracles; secret-resend + juice-shop-resend-key-live-oracle present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=594; gap=[]; 40 juice-shop live oracles; secret-resend + juice-shop-resend-key-live-oracle present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31285,7 +31812,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 10 UTC run: stable 6/6 first-pass recall (50 findings, 40 juice-shop live oracles); secret-resend + resend-key present. Discovery: +5 URLs (pentest-ground DVGA + graphiql + RestFlaw + DVWA, websec level17) + drained sekumart search, vulnforge level17, wrongsecrets-51 \u2192 91 findings across 8 URLs.",
+      "notes": "No teacher tools available. 10 UTC run: stable 6/6 first-pass recall (50 findings, 40 juice-shop live oracles); secret-resend + resend-key present. Discovery: +5 URLs (pentest-ground DVGA + graphiql + RestFlaw + DVWA, websec level17) + drained sekumart search, vulnforge level17, wrongsecrets-51 → 91 findings across 8 URLs.",
       "scanned_at": "2026-08-29T10:20:09.712Z"
     },
     {
@@ -31294,7 +31821,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; secret-resend present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; secret-resend present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31320,7 +31847,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 37 juice-shop live oracles; secret-resend + resend-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 37 juice-shop live oracles; secret-resend + resend-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31337,7 +31864,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 13 UTC run: stable 6/6 first-pass recall (51 findings, 37 live oracles); secret-resend + resend-key present. Discovery: +5 URLs (nodegoat contributions/research/memos, finbot finmail/findrive MCP tool override APIs) + drained wrongsecrets challenge-39/23/24 \u2192 137 findings across 8 URLs; nodegoat route-specific SSJS + SSRF + memos XSS oracles confirmed.",
+      "notes": "No teacher tools available. 13 UTC run: stable 6/6 first-pass recall (51 findings, 37 live oracles); secret-resend + resend-key present. Discovery: +5 URLs (nodegoat contributions/research/memos, finbot finmail/findrive MCP tool override APIs) + drained wrongsecrets challenge-39/23/24 → 137 findings across 8 URLs; nodegoat route-specific SSJS + SSRF + memos XSS oracles confirmed.",
       "scanned_at": "2026-08-29T13:27:02.994Z"
     },
     {
@@ -31346,7 +31873,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=593; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=593; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31363,7 +31890,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 15 UTC run: stable 6/6 first-pass recall (51 findings, 39 live oracles); secret-resend + resend-key present. Discovery: +5 URLs (duck-store totp/users/cart/checkout routes, vulnbank merchants/login) + drained wrongsecrets challenge-20/21/22 \u2192 233 findings across 8 URLs; duck-store-auth-totp-bypass-live-oracle confirmed on /api/v1/auth/login/totp route scan.",
+      "notes": "No teacher tools available. 15 UTC run: stable 6/6 first-pass recall (51 findings, 39 live oracles); secret-resend + resend-key present. Discovery: +5 URLs (duck-store totp/users/cart/checkout routes, vulnbank merchants/login) + drained wrongsecrets challenge-20/21/22 → 233 findings across 8 URLs; duck-store-auth-totp-bypass-live-oracle confirmed on /api/v1/auth/login/totp route scan.",
       "scanned_at": "2026-08-29T15:17:00.000Z"
     },
     {
@@ -31372,7 +31899,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=542; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=542; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31389,7 +31916,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 16 UTC run: stable 6/6 first-pass recall (50 findings, 38 live oracles); secret-resend + resend-key present. Discovery: +5 URLs (pwnshop product/1, profile/update-avatar, account/delete, admin/export-orders, reset-password) + drained dvwu path-traversal/command-injection + wrongsecrets challenge-15 \u2192 225 findings across 8 URLs; pwnshop-product-review-stored-xss + account-delete-csrf + export-orders-csv route oracles confirmed; pwnshop-avatar-url-ssrf still absent on update-avatar route scan.",
+      "notes": "No teacher tools available. 16 UTC run: stable 6/6 first-pass recall (50 findings, 38 live oracles); secret-resend + resend-key present. Discovery: +5 URLs (pwnshop product/1, profile/update-avatar, account/delete, admin/export-orders, reset-password) + drained dvwu path-traversal/command-injection + wrongsecrets challenge-15 → 225 findings across 8 URLs; pwnshop-product-review-stored-xss + account-delete-csrf + export-orders-csv route oracles confirmed; pwnshop-avatar-url-ssrf still absent on update-avatar route scan.",
       "scanned_at": "2026-08-29T16:42:00.000Z"
     },
     {
@@ -31398,7 +31925,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 36 juice-shop live oracles; secret-resend + resend-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 36 juice-shop live oracles; secret-resend + resend-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31415,7 +31942,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 17 UTC run: stable 6/6 first-pass recall (50 findings, 36 live oracles); secret-resend + resend-key present. Discovery: +5 URLs (pwnshop chat/download/debug-info/api-v1-events, wrongsecrets challenge-57) + drained vulnbank merchant/login + merchants/me + wrongsecrets challenge-16 \u2192 266 findings across 8 URLs; pwnshop-chat-prompt-injection + debug-info + events-audit route oracles confirmed; pwnshop-download-path-traversal still absent on /download route scan.",
+      "notes": "No teacher tools available. 17 UTC run: stable 6/6 first-pass recall (50 findings, 36 live oracles); secret-resend + resend-key present. Discovery: +5 URLs (pwnshop chat/download/debug-info/api-v1-events, wrongsecrets challenge-57) + drained vulnbank merchant/login + merchants/me + wrongsecrets challenge-16 → 266 findings across 8 URLs; pwnshop-chat-prompt-injection + debug-info + events-audit route oracles confirmed; pwnshop-download-path-traversal still absent on /download route scan.",
       "scanned_at": "2026-08-29T17:35:25.895Z"
     },
     {
@@ -31424,7 +31951,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=592; gap=[]; 36 juice-shop live oracles; secret-resend + juice-shop-resend-key-live-oracle present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=592; gap=[]; 36 juice-shop live oracles; secret-resend + juice-shop-resend-key-live-oracle present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31441,7 +31968,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 18 UTC run: stable 6/6 first-pass recall (50 findings, 36 live oracles); secret-resend + resend-key present. Discovery: +5 URLs (pwnshop seller/storefront, vuln-expose sqli/blind + api/users + xss/csp-bypass, securebank-blog transfer CSRF) + drained wrongsecrets challenge-17/18/19 \u2192 153 findings across 8 URLs; pwnshop-seller-storefront-ssti-route-live-oracle + vuln-expose-users-api-route-live-oracle + vuln-expose-sqli-blind-route-live-oracle + vuln-expose-xss-csp-bypass-route-live-oracle + securebank-blog-transfer-csrf-route-live-oracle confirmed.",
+      "notes": "No teacher tools available. 18 UTC run: stable 6/6 first-pass recall (50 findings, 36 live oracles); secret-resend + resend-key present. Discovery: +5 URLs (pwnshop seller/storefront, vuln-expose sqli/blind + api/users + xss/csp-bypass, securebank-blog transfer CSRF) + drained wrongsecrets challenge-17/18/19 → 153 findings across 8 URLs; pwnshop-seller-storefront-ssti-route-live-oracle + vuln-expose-users-api-route-live-oracle + vuln-expose-sqli-blind-route-live-oracle + vuln-expose-xss-csp-bypass-route-live-oracle + securebank-blog-transfer-csrf-route-live-oracle confirmed.",
       "scanned_at": "2026-08-29T19:30:09.260Z"
     },
     {
@@ -31450,7 +31977,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31467,7 +31994,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 20 UTC run: stable 6/6 first-pass recall (51 findings, 39 live oracles); secret-resend + resend-key present. Discovery: +5 URLs (wrongsecrets-63, AppSecMaster ci-pipeline/deserialization, seclab SSRF, brokencrystals jwt/weak/login) + drained wrongsecrets challenge-10/11/12 \u2192 187 findings across 8 URLs; wrongsecrets-63 hardcoded-AES-key + challenge-10/11/12 route oracles confirmed; AppSecMaster ci/deserialization thin hubs; seclab SSRF dead-route; brokencrystals jwt/weak/login shared hub fingerprint.",
+      "notes": "No teacher tools available. 20 UTC run: stable 6/6 first-pass recall (51 findings, 39 live oracles); secret-resend + resend-key present. Discovery: +5 URLs (wrongsecrets-63, AppSecMaster ci-pipeline/deserialization, seclab SSRF, brokencrystals jwt/weak/login) + drained wrongsecrets challenge-10/11/12 → 187 findings across 8 URLs; wrongsecrets-63 hardcoded-AES-key + challenge-10/11/12 route oracles confirmed; AppSecMaster ci/deserialization thin hubs; seclab SSRF dead-route; brokencrystals jwt/weak/login shared hub fingerprint.",
       "scanned_at": "2026-08-29T20:23:55.206Z"
     },
     {
@@ -31476,7 +32003,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31493,7 +32020,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 21 UTC run: stable 6/6 first-pass recall (50 findings); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (FinBot taxcalc/tools + supply-chain/stats + ctf/challenges API, Chimera swagger + login-vulnerable) + drained wrongsecrets challenge-7/13/14 \u2192 126 findings across 8 URLs; FinBot taxcalc/stats/challenges route oracles confirmed (19-22 findings); Chimera thin 5-6 finding hubs without route-specific SQLi oracle.",
+      "notes": "No teacher tools available. 21 UTC run: stable 6/6 first-pass recall (50 findings); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (FinBot taxcalc/tools + supply-chain/stats + ctf/challenges API, Chimera swagger + login-vulnerable) + drained wrongsecrets challenge-7/13/14 → 126 findings across 8 URLs; FinBot taxcalc/stats/challenges route oracles confirmed (19-22 findings); Chimera thin 5-6 finding hubs without route-specific SQLi oracle.",
       "scanned_at": "2026-08-29T21:35:30.000Z"
     },
     {
@@ -31502,7 +32029,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=588; gap=[]; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=588; gap=[]; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31519,7 +32046,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 22 UTC run: stable 6/6 first-pass recall (50 findings, 588 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (DVAI LLM range, wrongsecrets 59/61/62, preview.owasp-juice wallet BOLA) + drained wrongsecrets 9/33/48 \u2192 143 findings across 8 URLs; wrongsecrets 59/61/62/48 route oracles confirmed; preview wallet-balance BOLA route oracle confirmed; dvai-red thin 1-finding hub without LLM operation oracles.",
+      "notes": "No teacher tools available. 22 UTC run: stable 6/6 first-pass recall (50 findings, 588 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (DVAI LLM range, wrongsecrets 59/61/62, preview.owasp-juice wallet BOLA) + drained wrongsecrets 9/33/48 → 143 findings across 8 URLs; wrongsecrets 59/61/62/48 route oracles confirmed; preview wallet-balance BOLA route oracle confirmed; dvai-red thin 1-finding hub without LLM operation oracles.",
       "scanned_at": "2026-08-29T22:16:00.000Z"
     },
     {
@@ -31528,7 +32055,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31545,7 +32072,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 23 UTC run: stable 6/6 first-pass recall (51 findings, 596 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (dvai /api/ai, nodegoat signup/login/tutorial/benefits) + drained wrongsecrets challenge-49/5 \u2192 114 findings across 8 URLs; dvai-ai-chat + HTML sink route oracles confirmed; nodegoat NoSQL login bypass + signup/benefits route oracles confirmed; wrongsecrets challenge-5 ConfigMap + challenge-49 AES weak MD5 route oracles confirmed.",
+      "notes": "No teacher tools available. 23 UTC run: stable 6/6 first-pass recall (51 findings, 596 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (dvai /api/ai, nodegoat signup/login/tutorial/benefits) + drained wrongsecrets challenge-49/5 → 114 findings across 8 URLs; dvai-ai-chat + HTML sink route oracles confirmed; nodegoat NoSQL login bypass + signup/benefits route oracles confirmed; wrongsecrets challenge-5 ConfigMap + challenge-49 AES weak MD5 route oracles confirmed.",
       "scanned_at": "2026-08-29T23:26:12.279Z"
     },
     {
@@ -31554,7 +32081,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 48 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=433; gap=[]; 37 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 48 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=433; gap=[]; 37 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31571,7 +32098,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 00 UTC run: stable 6/6 first-pass recall (48 findings, 433 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (nodegoat tutorial/a3 + a1 + ssrf, chimera patients/search SQLi, vulnforge level20 Final Boss) + drained sekumart product/openapi + wrongsecrets challenge-4 \u2192 108 findings across 8 URLs; nodegoat-tutorial-a1/a3/ssrf route oracles confirmed; chimera-patients-search-sqli-route-live-oracle confirmed; vulnforge level20 final-boss route oracle confirmed.",
+      "notes": "No teacher tools available. 00 UTC run: stable 6/6 first-pass recall (48 findings, 433 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (nodegoat tutorial/a3 + a1 + ssrf, chimera patients/search SQLi, vulnforge level20 Final Boss) + drained sekumart product/openapi + wrongsecrets challenge-4 → 108 findings across 8 URLs; nodegoat-tutorial-a1/a3/ssrf route oracles confirmed; chimera-patients-search-sqli-route-live-oracle confirmed; vulnforge level20 final-boss route oracle confirmed.",
       "scanned_at": "2026-08-30T00:36:30.000Z"
     },
     {
@@ -31580,7 +32107,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 36 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 36 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31597,7 +32124,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 01 UTC run: stable 6/6 first-pass recall (50 findings, 596 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (nodegoat tutorial/a2 + a4 + a5 + a6 + a7) + drained crapi2 contact_mechanic + community/posts/recent + mechanic_report \u2192 119 findings across 8 URLs; nodegoat-tutorial-a2/a4/a5/a6/a7 route oracles confirmed; crapi-contact-mechanic-ssrf-route-live-oracle + crapi-community-posts-route-live-oracle + crapi-mechanic-report-bola-live-oracle confirmed.",
+      "notes": "No teacher tools available. 01 UTC run: stable 6/6 first-pass recall (50 findings, 596 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (nodegoat tutorial/a2 + a4 + a5 + a6 + a7) + drained crapi2 contact_mechanic + community/posts/recent + mechanic_report → 119 findings across 8 URLs; nodegoat-tutorial-a2/a4/a5/a6/a7 route oracles confirmed; crapi-contact-mechanic-ssrf-route-live-oracle + crapi-community-posts-route-live-oracle + crapi-mechanic-report-bola-live-oracle confirmed.",
       "scanned_at": "2026-08-30T01:27:30.000Z"
     },
     {
@@ -31606,7 +32133,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 36 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 36 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31623,7 +32150,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 02 UTC run: stable 6/6 first-pass recall (50 findings, 595 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (nodegoat tutorial/a8 + a9 + a10 + profile + learn) + drained vapi/vapi + wrongsecrets challenge-3 + brokencrystals put.raw \u2192 198 findings across 8 URLs; nodegoat-tutorial-a8/a9/a10 route oracles confirmed; nodegoat-profile-csrf-route-live-oracle + nodegoat-learn-open-redirect-route-live-oracle confirmed; vAPI API1-API10 live oracles confirmed; wrongsecrets-challenge-3-docker-env-route-live-oracle confirmed.",
+      "notes": "No teacher tools available. 02 UTC run: stable 6/6 first-pass recall (50 findings, 595 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (nodegoat tutorial/a8 + a9 + a10 + profile + learn) + drained vapi/vapi + wrongsecrets challenge-3 + brokencrystals put.raw → 198 findings across 8 URLs; nodegoat-tutorial-a8/a9/a10 route oracles confirmed; nodegoat-profile-csrf-route-live-oracle + nodegoat-learn-open-redirect-route-live-oracle confirmed; vAPI API1-API10 live oracles confirmed; wrongsecrets-challenge-3-docker-env-route-live-oracle confirmed.",
       "scanned_at": "2026-08-30T02:22:00.000Z"
     },
     {
@@ -31632,7 +32159,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31658,7 +32185,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31675,7 +32202,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 05 UTC run: stable 6/6 first-pass recall (50 findings, 596 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (oopssec gift-card randomness + mass-assignment + race-condition, securebank messages XSS, vwad oopssec-store) + drained ai-security command-injection + path-traversal + ratdo.thexssrat.com \u2192 61 findings across 8 URLs; oopssec-gift-card-randomness-route-live-oracle + oopssec-mass-assignment-admin-route-live-oracle + oopssec-race-condition-coupon-route-live-oracle + securebank-blog-messages-xss-route-live-oracle + vwad-oopssec-store-route-live-oracle confirmed.",
+      "notes": "No teacher tools available. 05 UTC run: stable 6/6 first-pass recall (50 findings, 596 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (oopssec gift-card randomness + mass-assignment + race-condition, securebank messages XSS, vwad oopssec-store) + drained ai-security command-injection + path-traversal + ratdo.thexssrat.com → 61 findings across 8 URLs; oopssec-gift-card-randomness-route-live-oracle + oopssec-mass-assignment-admin-route-live-oracle + oopssec-race-condition-coupon-route-live-oracle + securebank-blog-messages-xss-route-live-oracle + vwad-oopssec-store-route-live-oracle confirmed.",
       "scanned_at": "2026-08-30T05:14:00.000Z"
     },
     {
@@ -31684,7 +32211,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31701,7 +32228,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 07 UTC run: stable 6/6 first-pass recall (50 findings, 595 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (PentestForge Mutillidae login/register + DVWA sqli/xss_d + ThreatX DVGA Graphiql) + drained FinBot vendor/ctf + vulnforge level14/15 + brokencrystals JWT none \u2192 114 findings across 8 URLs; FinBot vendor/ctf route oracles confirmed; brokencrystals-jwt-none-login-route-live-oracle confirmed; vulnforge-academy SSRF route oracles confirmed; mutillidae login thin 1-finding pass without SQLi route oracle.",
+      "notes": "No teacher tools available. 07 UTC run: stable 6/6 first-pass recall (50 findings, 595 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (PentestForge Mutillidae login/register + DVWA sqli/xss_d + ThreatX DVGA Graphiql) + drained FinBot vendor/ctf + vulnforge level14/15 + brokencrystals JWT none → 114 findings across 8 URLs; FinBot vendor/ctf route oracles confirmed; brokencrystals-jwt-none-login-route-live-oracle confirmed; vulnforge-academy SSRF route oracles confirmed; mutillidae login thin 1-finding pass without SQLi route oracle.",
       "scanned_at": "2026-08-30T07:28:00.000Z"
     },
     {
@@ -31710,7 +32237,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=593; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=593; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31727,7 +32254,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 08 UTC run: stable 6/6 first-pass recall (51 findings, 593 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (crapi/vampi PentestForge, the0x-pwn lab-6/7, dvwu JWT) + drained FinBot darklab/supply-chain/vendor-chat + ginandjuice basket + vulnforge level16 + mutillidae register + DVWA sqli/xss_d \u2192 118 findings across 8 URLs; ginandjuice-basket-route-live-oracle + finbot-darklab-supply-chain-route-live-oracle + finbot-vendor-chat-live-oracle + pentest-forge-dvwa-sqli-route-live-oracle confirmed; DVWA xss_d + mutillidae register thin passes without route oracles.",
+      "notes": "No teacher tools available. 08 UTC run: stable 6/6 first-pass recall (51 findings, 593 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (crapi/vampi PentestForge, the0x-pwn lab-6/7, dvwu JWT) + drained FinBot darklab/supply-chain/vendor-chat + ginandjuice basket + vulnforge level16 + mutillidae register + DVWA sqli/xss_d → 118 findings across 8 URLs; ginandjuice-basket-route-live-oracle + finbot-darklab-supply-chain-route-live-oracle + finbot-vendor-chat-live-oracle + pentest-forge-dvwa-sqli-route-live-oracle confirmed; DVWA xss_d + mutillidae register thin passes without route oracles.",
       "scanned_at": "2026-08-30T08:23:00.000Z"
     },
     {
@@ -31736,7 +32263,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=590; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=590; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31753,7 +32280,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 09 UTC run: stable 6/6 first-pass recall (50 findings, 590 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (oopssec second-order SQLi + SSRF + XXE walkthroughs, fauxbank api/auth/login + api/transfer) + drained pentest-ground DVGA/RESTFlaw hubs + sekumart search + websec.fr level17 + vulnforge level17 + dvga.xplat-demo graphiql \u2192 101 findings across 8 URLs; sekumart-search-sqli-route-live-oracle + sekumart-search-xss-route-live-oracle + dvga-graphiql-route-live-oracle + pentest-ground-restflaw-uptime-cmdi-live-oracle + websec-level17-timing-attack-route-live-oracle confirmed.",
+      "notes": "No teacher tools available. 09 UTC run: stable 6/6 first-pass recall (50 findings, 590 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (oopssec second-order SQLi + SSRF + XXE walkthroughs, fauxbank api/auth/login + api/transfer) + drained pentest-ground DVGA/RESTFlaw hubs + sekumart search + websec.fr level17 + vulnforge level17 + dvga.xplat-demo graphiql → 101 findings across 8 URLs; sekumart-search-sqli-route-live-oracle + sekumart-search-xss-route-live-oracle + dvga-graphiql-route-live-oracle + pentest-ground-restflaw-uptime-cmdi-live-oracle + websec-level17-timing-attack-route-live-oracle confirmed.",
       "scanned_at": "2026-08-30T09:16:00.000Z"
     },
     {
@@ -31762,7 +32289,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31779,7 +32306,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 10 UTC run: stable 6/6 first-pass recall (50 findings, 595 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (oopssec client-side-price + live-stream-hijack + supply-chain-poisoned-rules + information-disclosure-api-error + mcp-malicious-server) + priority drain Escape DVGA2/duck-store vuln index/juice-shop.demo memories/DVGA graphiql/preview chatbot + PentestForge crapi/vampi + the0x-pwn lab-6 \u2192 163 findings across 8 URLs; preview chatbot 52 findings with juice-shop-chatbot live oracles; duck-store vuln index 42; juice-shop.demo memories 33; new oopssec walkthrough URLs still pending (priority queue preempted head).",
+      "notes": "No teacher tools available. 10 UTC run: stable 6/6 first-pass recall (50 findings, 595 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (oopssec client-side-price + live-stream-hijack + supply-chain-poisoned-rules + information-disclosure-api-error + mcp-malicious-server) + priority drain Escape DVGA2/duck-store vuln index/juice-shop.demo memories/DVGA graphiql/preview chatbot + PentestForge crapi/vampi + the0x-pwn lab-6 → 163 findings across 8 URLs; preview chatbot 52 findings with juice-shop-chatbot live oracles; duck-store vuln index 42; juice-shop.demo memories 33; new oopssec walkthrough URLs still pending (priority queue preempted head).",
       "scanned_at": "2026-08-30T10:25:00.000Z"
     },
     {
@@ -31788,7 +32315,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=593; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=593; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31805,7 +32332,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 11 UTC run: stable 6/6 first-pass recall (51 findings, 593 probes, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (oopssec aes-cbc-padding-oracle + stored-xss/brute-force/password-reset/open-redirect) + priority drain the0x-pwn lab-7 + dvwu JWT + oopssec second-order/ssrf/xxe + fauxbank login/transfer \u2192 81 findings across 8 URLs; oopssec-aes-cbc-padding-oracle-route-live-oracle confirmed; fauxbank-transfer-route-live-oracle + fauxbank-loans-negative-amount-live-oracle confirmed; queue head oopssec client-side-price/live-stream-hijack/supply-chain still pending (priority preempted).",
+      "notes": "No teacher tools available. 11 UTC run: stable 6/6 first-pass recall (51 findings, 593 probes, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (oopssec aes-cbc-padding-oracle + stored-xss/brute-force/password-reset/open-redirect) + priority drain the0x-pwn lab-7 + dvwu JWT + oopssec second-order/ssrf/xxe + fauxbank login/transfer → 81 findings across 8 URLs; oopssec-aes-cbc-padding-oracle-route-live-oracle confirmed; fauxbank-transfer-route-live-oracle + fauxbank-loans-negative-amount-live-oracle confirmed; queue head oopssec client-side-price/live-stream-hijack/supply-chain still pending (priority preempted).",
       "scanned_at": "2026-08-30T11:08:58.000Z"
     },
     {
@@ -31814,7 +32341,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31831,7 +32358,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 12 UTC run: stable 6/6 first-pass recall (51 findings, 596 probes, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (cyberhub OopsSec hub + vulnshop search/cart + demo.owasp-juice cards/addresss) + priority drain FinBot findrive/tools + oopssec stored-xss/brute-force \u2192 122 findings across 8 URLs; vulnshop-search-xss-route-live-oracle + vulnshop-cart-route-live-oracle + juice-shop-cards-bola-route-live-oracle + oopssec-stored-xss-reviews-route-live-oracle + oopssec-brute-force-no-rate-limit-route-live-oracle confirmed; queue head oopssec aes-cbc-padding-oracle/client-side-price/live-stream-hijack still pending.",
+      "notes": "No teacher tools available. 12 UTC run: stable 6/6 first-pass recall (51 findings, 596 probes, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (cyberhub OopsSec hub + vulnshop search/cart + demo.owasp-juice cards/addresss) + priority drain FinBot findrive/tools + oopssec stored-xss/brute-force → 122 findings across 8 URLs; vulnshop-search-xss-route-live-oracle + vulnshop-cart-route-live-oracle + juice-shop-cards-bola-route-live-oracle + oopssec-stored-xss-reviews-route-live-oracle + oopssec-brute-force-no-rate-limit-route-live-oracle confirmed; queue head oopssec aes-cbc-padding-oracle/client-side-price/live-stream-hijack still pending.",
       "scanned_at": "2026-08-30T12:38:00.000Z"
     },
     {
@@ -31840,7 +32367,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=598; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=598; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31866,7 +32393,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31883,7 +32410,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 14 UTC run: stable 6/6 first-pass recall (50 findings, 595 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (chimera banking/insurance/transactions SQLi + demo.testfire.net/login.jsp + websec.fr/level18) + priority drain pwnshop product/avatar/delete/export + chimera banking routes \u2192 168 findings across 8 URLs; testfire-login-sqli-route-live-oracle + testfire-transfer-sqli-live-oracle confirmed; pwnshop-product-review-stored-xss-route-live-oracle + pwnshop-update-avatar-route-live-oracle + pwnshop-export-orders-csv-live-oracle confirmed; chimera banking/insurance/transactions thin 5-finding passes without route-specific SQLi oracles (patients-search oracle fires generically); websec.fr/level18 still pending (queue preempted).",
+      "notes": "No teacher tools available. 14 UTC run: stable 6/6 first-pass recall (50 findings, 595 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (chimera banking/insurance/transactions SQLi + demo.testfire.net/login.jsp + websec.fr/level18) + priority drain pwnshop product/avatar/delete/export + chimera banking routes → 168 findings across 8 URLs; testfire-login-sqli-route-live-oracle + testfire-transfer-sqli-live-oracle confirmed; pwnshop-product-review-stored-xss-route-live-oracle + pwnshop-update-avatar-route-live-oracle + pwnshop-export-orders-csv-live-oracle confirmed; chimera banking/insurance/transactions thin 5-finding passes without route-specific SQLi oracles (patients-search oracle fires generically); websec.fr/level18 still pending (queue preempted).",
       "scanned_at": "2026-08-30T14:21:00.000Z"
     },
     {
@@ -31892,7 +32419,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 37 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 37 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31909,7 +32436,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 15 UTC run: stable 6/6 first-pass recall (51 findings, 596 probes, 37 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (chimera wire/payments/claims + testfire transfer.jsp + healthcare export pending) + priority drain pwnshop reset-password + vulnbank merchant login/me + websec level18 + chimera routes \u2192 145 findings across 8 URLs; websec-level18-php-unserialize-cookie-route-live-oracle + testfire-transfer-sqli-route-live-oracle + vulnbank-merchant-sqli-login-route-live-oracle + pwnshop-verify-otp-bruteforce-route-live-oracle confirmed; chimera wire/payments/claims thin 5-finding passes without route-specific oracles.",
+      "notes": "No teacher tools available. 15 UTC run: stable 6/6 first-pass recall (51 findings, 596 probes, 37 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (chimera wire/payments/claims + testfire transfer.jsp + healthcare export pending) + priority drain pwnshop reset-password + vulnbank merchant login/me + websec level18 + chimera routes → 145 findings across 8 URLs; websec-level18-php-unserialize-cookie-route-live-oracle + testfire-transfer-sqli-route-live-oracle + vulnbank-merchant-sqli-login-route-live-oracle + pwnshop-verify-otp-bruteforce-route-live-oracle confirmed; chimera wire/payments/claims thin 5-finding passes without route-specific oracles.",
       "scanned_at": "2026-08-30T15:10:14.074Z"
     },
     {
@@ -31918,7 +32445,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31935,7 +32462,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 16 UTC run: stable 6/6 first-pass recall (50 findings, 595 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (wrongsecrets MCP + fauxbank loans/profile/support + ai-security deserialization) + priority drain securebank transfer + vuln-expose CSP bypass + chimera healthcare export \u2192 83 findings across 8 URLs; fauxbank-stored-xss-support-probe + vuln-expose-xss-csp-bypass-route-live-oracle + securebank-blog-transfer-csrf-route-live-oracle confirmed; wrongsecrets MCP + fauxbank loans negative-amount + ai-security deserialization route oracles still absent.",
+      "notes": "No teacher tools available. 16 UTC run: stable 6/6 first-pass recall (50 findings, 595 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (wrongsecrets MCP + fauxbank loans/profile/support + ai-security deserialization) + priority drain securebank transfer + vuln-expose CSP bypass + chimera healthcare export → 83 findings across 8 URLs; fauxbank-stored-xss-support-probe + vuln-expose-xss-csp-bypass-route-live-oracle + securebank-blog-transfer-csrf-route-live-oracle confirmed; wrongsecrets MCP + fauxbank loans negative-amount + ai-security deserialization route oracles still absent.",
       "scanned_at": "2026-08-30T16:22:00.771Z"
     },
     {
@@ -31944,7 +32471,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=598; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=598; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31961,7 +32488,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 17 UTC run: stable 6/6 first-pass recall (50 findings, 598 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (oopssec BOLA wishlist, IDOR order privacy, JWT weak secret, SVG upload XSS, session fixation) + priority drain vuln-expose /api/users + /sqli/blind + pwnshop seller/storefront \u2192 112 findings across 8 URLs; vuln-expose-users-api-live-oracle + vuln-expose-sqli-blind-route-live-oracle + pwnshop-seller-storefront-ssti-route-live-oracle confirmed; oopssec walkthrough pages client-side evidence only \u2014 BOLA/IDOR/session-fixation route oracles still absent.",
+      "notes": "No teacher tools available. 17 UTC run: stable 6/6 first-pass recall (50 findings, 598 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (oopssec BOLA wishlist, IDOR order privacy, JWT weak secret, SVG upload XSS, session fixation) + priority drain vuln-expose /api/users + /sqli/blind + pwnshop seller/storefront → 112 findings across 8 URLs; vuln-expose-users-api-live-oracle + vuln-expose-sqli-blind-route-live-oracle + pwnshop-seller-storefront-ssti-route-live-oracle confirmed; oopssec walkthrough pages client-side evidence only — BOLA/IDOR/session-fixation route oracles still absent.",
       "scanned_at": "2026-08-30T17:31:32.344Z"
     },
     {
@@ -31970,7 +32497,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -31987,7 +32514,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 18 UTC run: stable 6/6 first-pass recall (51 findings, 596 probes, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (ist-edu-bd /files LFI, pwnshop chat/query + mail/1 + order/1 IDOR) + drained oopssec live-stream-hijack + supply-chain-poisoned-rules + information-disclosure-api-error + mcp-malicious-server \u2192 151 findings across 8 URLs; ist-edu-files-client-lfi + pwnshop-chat-prompt-injection-route + pwnshop-mail-inbox-idor + pwnshop-order-idor + oopssec-live-stream-bfla + oopssec-supply-chain-poisoned-rules + oopssec-information-disclosure-api-error route oracles confirmed; oopssec mcp-malicious-server walkthrough still without route oracle.",
+      "notes": "No teacher tools available. 18 UTC run: stable 6/6 first-pass recall (51 findings, 596 probes, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (ist-edu-bd /files LFI, pwnshop chat/query + mail/1 + order/1 IDOR) + drained oopssec live-stream-hijack + supply-chain-poisoned-rules + information-disclosure-api-error + mcp-malicious-server → 151 findings across 8 URLs; ist-edu-files-client-lfi + pwnshop-chat-prompt-injection-route + pwnshop-mail-inbox-idor + pwnshop-order-idor + oopssec-live-stream-bfla + oopssec-supply-chain-poisoned-rules + oopssec-information-disclosure-api-error route oracles confirmed; oopssec mcp-malicious-server walkthrough still without route oracle.",
       "scanned_at": "2026-08-30T18:12:00.000Z"
     },
     {
@@ -31996,7 +32523,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=598; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=598; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32013,7 +32540,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 19 UTC run: stable 6/6 first-pass recall (50 findings, 598 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (seclab JWT API, fauxbank /api/accounts/1 IDOR, DVS terminal+owasp hubs, testfire /bank/login.jsp) + drained owasp-finbot darklab supply-chain taxcalc/stats + ctf challenges \u2192 102 findings across 6 ok URLs; seclab-jwt-vulnerable-route-live-oracle + fauxbank-accounts-route-live-oracle + testfire-login-sqli-route-live-oracle confirmed; damn-vulnerable-startup.fly.dev unreachable (Fly.io offline).",
+      "notes": "No teacher tools available. 19 UTC run: stable 6/6 first-pass recall (50 findings, 598 probes, 38 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (seclab JWT API, fauxbank /api/accounts/1 IDOR, DVS terminal+owasp hubs, testfire /bank/login.jsp) + drained owasp-finbot darklab supply-chain taxcalc/stats + ctf challenges → 102 findings across 6 ok URLs; seclab-jwt-vulnerable-route-live-oracle + fauxbank-accounts-route-live-oracle + testfire-login-sqli-route-live-oracle confirmed; damn-vulnerable-startup.fly.dev unreachable (Fly.io offline).",
       "scanned_at": "2026-08-30T19:11:00.000Z"
     },
     {
@@ -32022,7 +32549,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32039,7 +32566,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 20 UTC run: stable 6/6 first-pass recall (51 findings, 596 probes, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (finbank MCP tools, guardrails/test SSRF, vulnforge level18, websec level19, pwnshop debug/info) + drained DVS terminal/owasp (Fly.io offline) + wrongsecrets challenge-59 \u2192 124 findings across 6 ok URLs; pwnshop-debug-info-route-live-oracle + websec-level19-password-reset-route-live-oracle + finbot-labs-guardrails-webhook-live-oracle confirmed; finbank/tools shares finbot darklab supply-chain fingerprint without finbank-specific route oracle; vulnforge level18 thin 5-finding pass (403 gate).",
+      "notes": "No teacher tools available. 20 UTC run: stable 6/6 first-pass recall (51 findings, 596 probes, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (finbank MCP tools, guardrails/test SSRF, vulnforge level18, websec level19, pwnshop debug/info) + drained DVS terminal/owasp (Fly.io offline) + wrongsecrets challenge-59 → 124 findings across 6 ok URLs; pwnshop-debug-info-route-live-oracle + websec-level19-password-reset-route-live-oracle + finbot-labs-guardrails-webhook-live-oracle confirmed; finbank/tools shares finbot darklab supply-chain fingerprint without finbank-specific route oracle; vulnforge level18 thin 5-finding pass (403 gate).",
       "scanned_at": "2026-08-30T20:13:39.108Z"
     },
     {
@@ -32048,7 +32575,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32074,7 +32601,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32091,7 +32618,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 22 UTC run: stable 6/6 first-pass recall (51 findings, 596 probes, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (brokencrystals process_numbers JS injection, code-breaking easy/function+nodechr, finbot guardrails SSRF config, hack-this-site validate/ssti) + drained DVS terminal/owasp (Fly.io offline) + nodegoat tutorial/a3 \u2192 185 findings across 6 ok URLs; brokencrystals-process-numbers-route-live-oracle + finbot-labs-guardrails-webhook-route-live-oracle + nodegoat-tutorial-a3-route-live-oracle confirmed; hack-this-site validate/ssti hub fingerprint without SSTI-specific route oracle; code-breaking thin 2-finding passes.",
+      "notes": "No teacher tools available. 22 UTC run: stable 6/6 first-pass recall (51 findings, 596 probes, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (brokencrystals process_numbers JS injection, code-breaking easy/function+nodechr, finbot guardrails SSRF config, hack-this-site validate/ssti) + drained DVS terminal/owasp (Fly.io offline) + nodegoat tutorial/a3 → 185 findings across 6 ok URLs; brokencrystals-process-numbers-route-live-oracle + finbot-labs-guardrails-webhook-route-live-oracle + nodegoat-tutorial-a3-route-live-oracle confirmed; hack-this-site validate/ssti hub fingerprint without SSTI-specific route oracle; code-breaking thin 2-finding passes.",
       "scanned_at": "2026-08-30T22:15:25.967Z"
     },
     {
@@ -32100,7 +32627,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32117,7 +32644,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 02 UTC run: stable 6/6 first-pass recall (51 findings, 595 probes, 38 live oracles). Discovery: +5 URLs (ginandjuice change-email + catalog/search + owaspbased prompt-injection/excessive-agency/supply-chain) + priority drain ai-security leaked-config/supabase-data + nodegoat allocations + brokencrystals render.dot + pwnshop chat/init \u2192 257 findings across 8 URLs; ginandjuice-change-email-route-live-oracle + ginandjuice-catalog-category-sqli-route-live-oracle + owasp-genai-prompt-injection-route-live-oracle + pwnshop-chat-init-route-live-oracle confirmed; owaspbased excessive-agency + supply-chain lessons queued but not scanned (8-URL limit).",
+      "notes": "No teacher tools available. 02 UTC run: stable 6/6 first-pass recall (51 findings, 595 probes, 38 live oracles). Discovery: +5 URLs (ginandjuice change-email + catalog/search + owaspbased prompt-injection/excessive-agency/supply-chain) + priority drain ai-security leaked-config/supabase-data + nodegoat allocations + brokencrystals render.dot + pwnshop chat/init → 257 findings across 8 URLs; ginandjuice-change-email-route-live-oracle + ginandjuice-catalog-category-sqli-route-live-oracle + owasp-genai-prompt-injection-route-live-oracle + pwnshop-chat-init-route-live-oracle confirmed; owaspbased excessive-agency + supply-chain lessons queued but not scanned (8-URL limit).",
       "scanned_at": "2026-08-31T02:12:00.000Z"
     },
     {
@@ -32126,7 +32653,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 52 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
+      "benchmark_status": "ok — 52 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32143,7 +32670,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 03 UTC run: stable 6/6 first-pass recall (52 findings, 596 probes, 39 live oracles). Discovery: +5 URLs (ucu-owasp-ctf injection/access/ssrf/crypto + vwad goof/login) + drained owaspbased excessive-agency/supply-chain + ginandjuice api/catalog/search \u2192 71 findings across 8 URLs; owasp-genai-excessive-agency-route-live-oracle + owasp-genai-supply-chain-route-live-oracle + ginandjuice-catalog-category-sqli-route-live-oracle confirmed; ucu-owasp-ctf routes thin 3-finding hub fingerprint; vwad goof/login 404 offline.",
+      "notes": "No teacher tools available. 03 UTC run: stable 6/6 first-pass recall (52 findings, 596 probes, 39 live oracles). Discovery: +5 URLs (ucu-owasp-ctf injection/access/ssrf/crypto + vwad goof/login) + drained owaspbased excessive-agency/supply-chain + ginandjuice api/catalog/search → 71 findings across 8 URLs; owasp-genai-excessive-agency-route-live-oracle + owasp-genai-supply-chain-route-live-oracle + ginandjuice-catalog-category-sqli-route-live-oracle confirmed; ucu-owasp-ctf routes thin 3-finding hub fingerprint; vwad goof/login 404 offline.",
       "scanned_at": "2026-08-31T03:10:00.000Z"
     },
     {
@@ -32152,7 +32679,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32169,7 +32696,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 04 UTC run: stable 6/6 first-pass recall (51 findings, 595 probes, 38 live oracles). Discovery: +5 URLs (owaspbased prompt-leakage/data-poisoning/vector-embedding/unbounded-consumption/info-disclosure) + drained pentest-forge Mutillidae/DVWA + oopssec product-search/path-traversal \u2192 41 findings across 8 URLs; owasp-genai-system-prompt-leakage-route-live-oracle + owasp-genai-data-poisoning-route-live-oracle + owasp-genai-vector-embedding-route-live-oracle + oopssec-product-search-sqli-route-live-oracle + pentest-forge mutillidae/dvwa route oracles confirmed; unbounded-consumption + info-disclosure still queued.",
+      "notes": "No teacher tools available. 04 UTC run: stable 6/6 first-pass recall (51 findings, 595 probes, 38 live oracles). Discovery: +5 URLs (owaspbased prompt-leakage/data-poisoning/vector-embedding/unbounded-consumption/info-disclosure) + drained pentest-forge Mutillidae/DVWA + oopssec product-search/path-traversal → 41 findings across 8 URLs; owasp-genai-system-prompt-leakage-route-live-oracle + owasp-genai-data-poisoning-route-live-oracle + owasp-genai-vector-embedding-route-live-oracle + oopssec-product-search-sqli-route-live-oracle + pentest-forge mutillidae/dvwa route oracles confirmed; unbounded-consumption + info-disclosure still queued.",
       "scanned_at": "2026-08-31T04:05:00.000Z"
     },
     {
@@ -32178,7 +32705,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 38 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32195,7 +32722,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 05 UTC run: stable 6/6 first-pass recall (51 findings, 595 probes, 38 live oracles). Discovery: +5 URLs (ist-edu-bd api/search+portal + labs/ssti+graphql + vulnerability-intelligence MCP Heroku) + drained oopssec race-condition-coupon + owaspbased unbounded-consumption/info-disclosure \u2192 62 findings across 8 URLs; ist-edu-search-sqli-route-live-oracle + ist-edu-portal-sqli-route-live-oracle + ist-edu-ssti-lab-route-live-oracle + ist-edu-graphql-lab-route-live-oracle + oopssec-race-condition-coupon-route-live-oracle + owasp-genai-unbounded-consumption-route-live-oracle + owasp-genai-sensitive-info-route-live-oracle confirmed; vulnerability-intelligence MCP Heroku thin 2-finding pass without MCP-specific oracle.",
+      "notes": "No teacher tools available. 05 UTC run: stable 6/6 first-pass recall (51 findings, 595 probes, 38 live oracles). Discovery: +5 URLs (ist-edu-bd api/search+portal + labs/ssti+graphql + vulnerability-intelligence MCP Heroku) + drained oopssec race-condition-coupon + owaspbased unbounded-consumption/info-disclosure → 62 findings across 8 URLs; ist-edu-search-sqli-route-live-oracle + ist-edu-portal-sqli-route-live-oracle + ist-edu-ssti-lab-route-live-oracle + ist-edu-graphql-lab-route-live-oracle + oopssec-race-condition-coupon-route-live-oracle + owasp-genai-unbounded-consumption-route-live-oracle + owasp-genai-sensitive-info-route-live-oracle confirmed; vulnerability-intelligence MCP Heroku thin 2-finding pass without MCP-specific oracle.",
       "scanned_at": "2026-08-31T05:06:00.000Z"
     },
     {
@@ -32204,7 +32731,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 52 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 52 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; 39 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32221,7 +32748,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 07 UTC run: stable 6/6 first-pass recall (52 findings, 596 probes, 39 live oracles). Discovery: +5 URLs (dvla.jcadima.dev docs hub + povzayd XSS-LABS lab4-7) + drained oopssec x-forwarded-for-sql-injection + the0x-pwn lab-2/lab-8 \u2192 54 findings across 8 URLs; oopssec-xff-sqli-route-live-oracle + the0x-pwn-xss-template-literal-route-live-oracle + the0x-pwn-xss-href-angle-brackets-route-live-oracle confirmed; parallel engine run shipped yogsec-xss-lab12/13/14 route oracles; povzayd lab4-7 thin 6-finding shared fingerprint without route-specific XSS oracles; dvla docs hub 6-finding fingerprint without Laravel-module oracles.",
+      "notes": "No teacher tools available. 07 UTC run: stable 6/6 first-pass recall (52 findings, 596 probes, 39 live oracles). Discovery: +5 URLs (dvla.jcadima.dev docs hub + povzayd XSS-LABS lab4-7) + drained oopssec x-forwarded-for-sql-injection + the0x-pwn lab-2/lab-8 → 54 findings across 8 URLs; oopssec-xff-sqli-route-live-oracle + the0x-pwn-xss-template-literal-route-live-oracle + the0x-pwn-xss-href-angle-brackets-route-live-oracle confirmed; parallel engine run shipped yogsec-xss-lab12/13/14 route oracles; povzayd lab4-7 thin 6-finding shared fingerprint without route-specific XSS oracles; dvla docs hub 6-finding fingerprint without Laravel-module oracles.",
       "scanned_at": "2026-08-31T07:10:00.000Z"
     },
     {
@@ -32230,7 +32757,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=600; gap=[]; 35 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=600; gap=[]; 35 juice-shop live oracles; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32247,7 +32774,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 08 UTC run: stable 6/6 first-pass recall (50 findings, 600 probes, 35 live oracles). Discovery: +5 URLs (MCPGoat + DVMCP + yrprey + ginandjuice vulnerabilities + the0x-pwn lab-9) + drained finbot vendor/onboarding + finbot ctf + vulnforge level14/15 + the0x-pwn lab-3 \u2192 88 findings across 8 URLs; the0x-pwn-xss-svg-script-injection-route-live-oracle + the0x-pwn-xss-dom-hash-route-live-oracle + finbot-vendor-sidecar-route-live-oracle confirmed; MCPGoat + dvmcp.co.uk thin 4-finding marketing passes without MCP-specific route oracles; yrprey + ginandjuice/vulnerabilities still queued behind priority_discovery_urls.",
+      "notes": "No teacher tools available. 08 UTC run: stable 6/6 first-pass recall (50 findings, 600 probes, 35 live oracles). Discovery: +5 URLs (MCPGoat + DVMCP + yrprey + ginandjuice vulnerabilities + the0x-pwn lab-9) + drained finbot vendor/onboarding + finbot ctf + vulnforge level14/15 + the0x-pwn lab-3 → 88 findings across 8 URLs; the0x-pwn-xss-svg-script-injection-route-live-oracle + the0x-pwn-xss-dom-hash-route-live-oracle + finbot-vendor-sidecar-route-live-oracle confirmed; MCPGoat + dvmcp.co.uk thin 4-finding marketing passes without MCP-specific route oracles; yrprey + ginandjuice/vulnerabilities still queued behind priority_discovery_urls.",
       "scanned_at": "2026-08-31T08:14:00.000Z"
     },
     {
@@ -32256,7 +32783,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 52 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
+      "benchmark_status": "ok — 52 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32273,7 +32800,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 09 UTC run: stable 6/6 first-pass recall (52 findings, 596 probes). Parallel engine run shipped yogsec-xss-lab18/19/20 route oracles. Discovery: +5 URLs (the0x-pwn lab-10 + PentestForge juice-shop/tomcat + voidsec shopping-cart + povzayd lab8) + drained finbot darklab/supply-chain/vendor-chat + ginandjuice basket + vulnforge level16 + brokencrystals jwt/none + mutillidae login \u2192 211 findings across 8 URLs; ginandjuice-basket-route-live-oracle + brokencrystals-jwt-none-login-route-live-oracle + pentest-forge-mutillidae-login-sqli-route-live-oracle + the0x-pwn-xss-iframe-data-uri-route-live-oracle confirmed; juice-shop.lab/tomcat.lab/voidsec/povzayd lab8 still queued behind priority_discovery_urls.",
+      "notes": "No teacher tools available. 09 UTC run: stable 6/6 first-pass recall (52 findings, 596 probes). Parallel engine run shipped yogsec-xss-lab18/19/20 route oracles. Discovery: +5 URLs (the0x-pwn lab-10 + PentestForge juice-shop/tomcat + voidsec shopping-cart + povzayd lab8) + drained finbot darklab/supply-chain/vendor-chat + ginandjuice basket + vulnforge level16 + brokencrystals jwt/none + mutillidae login → 211 findings across 8 URLs; ginandjuice-basket-route-live-oracle + brokencrystals-jwt-none-login-route-live-oracle + pentest-forge-mutillidae-login-sqli-route-live-oracle + the0x-pwn-xss-iframe-data-uri-route-live-oracle confirmed; juice-shop.lab/tomcat.lab/voidsec/povzayd lab8 still queued behind priority_discovery_urls.",
       "scanned_at": "2026-08-31T09:20:00.000Z"
     },
     {
@@ -32282,9 +32809,9 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall (pages_crawled=6 probes=595; gap=[])",
+      "benchmark_status": "ok — 51 findings, 6/6 recall (pages_crawled=6 probes=595; gap=[])",
       "teacher_delta": [],
-      "notes": "No teacher tools available. 10 UTC run: stable 6/6 benchmark recall; discovery +5 URLs (ginandjuice catalog SQLi, Chimera SCADA/telecom, Mutillidae SQLi, kOaDT SSRF metadata) \u2192 112 findings across 8 URLs; Pentest-Ground DVGA/RestFlaw hubs strong (17/16/14 findings).",
+      "notes": "No teacher tools available. 10 UTC run: stable 6/6 benchmark recall; discovery +5 URLs (ginandjuice catalog SQLi, Chimera SCADA/telecom, Mutillidae SQLi, kOaDT SSRF metadata) → 112 findings across 8 URLs; Pentest-Ground DVGA/RestFlaw hubs strong (17/16/14 findings).",
       "scanned_at": "2026-08-31T10:11:12.469Z"
     },
     {
@@ -32293,7 +32820,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=614; gap=[]; secret-resend + resend-key + iac-terraform-tls-key present)",
+      "benchmark_status": "ok — 50 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=614; gap=[]; secret-resend + resend-key + iac-terraform-tls-key present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32310,7 +32837,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 11 UTC run: stable 6/6 first-pass recall (50 findings, 614 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (owaspbased-lessons prompt-injection/data-poisoning/excessive-agency/supply-chain/unbounded-consumption) + priority drain pwnshop reset-password + vulnbank merchant/login + merchants/me + websec.fr/level18 \u2192 135 findings across 8 URLs; owasp-genai-prompt-injection-route-live-oracle + owasp-genai-data-poisoning-route-live-oracle + owasp-genai-excessive-agency-route-live-oracle + owasp-genai-supply-chain-route-live-oracle confirmed; pwnshop-verify-otp-bruteforce-route-live-oracle on reset-password; unbounded-consumption lesson queued but not scanned (8-URL limit).",
+      "notes": "No teacher tools available. 11 UTC run: stable 6/6 first-pass recall (50 findings, 614 probes); secret-resend + resend-key + iac-terraform-tls-key present. Discovery: +5 URLs (owaspbased-lessons prompt-injection/data-poisoning/excessive-agency/supply-chain/unbounded-consumption) + priority drain pwnshop reset-password + vulnbank merchant/login + merchants/me + websec.fr/level18 → 135 findings across 8 URLs; owasp-genai-prompt-injection-route-live-oracle + owasp-genai-data-poisoning-route-live-oracle + owasp-genai-excessive-agency-route-live-oracle + owasp-genai-supply-chain-route-live-oracle confirmed; pwnshop-verify-otp-bruteforce-route-live-oracle on reset-password; unbounded-consumption lesson queued but not scanned (8-URL limit).",
       "scanned_at": "2026-08-31T11:16:20.330Z"
     },
     {
@@ -32319,7 +32846,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 52 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
+      "benchmark_status": "ok — 52 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=596; gap=[]; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32336,7 +32863,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 12 UTC run: stable 6/6 first-pass recall (52 findings, 596 probes). Discovery: +5 URLs (duck-store testimonials/admin-users/register + apparatus + crucible hubs) + priority drain dvga2 + duck-store/vulnerabilities + juice-shop.demo/memories + dvga graphiql + preview chatbot + pentest-ground + websec level17 + sekumart \u2192 196 findings across 8 URLs; duck-store-vulnerabilities-hub 41 findings with admin-users-bfla + testimonials-stored-xss + mcp-coupons-disclosure + profile-mass-assignment route oracles; dvga2-expert-hardened-mode-route-live-oracle confirmed; new duck-store route oracles + apparatus/crucible hubs still queued behind priority_discovery_urls.",
+      "notes": "No teacher tools available. 12 UTC run: stable 6/6 first-pass recall (52 findings, 596 probes). Discovery: +5 URLs (duck-store testimonials/admin-users/register + apparatus + crucible hubs) + priority drain dvga2 + duck-store/vulnerabilities + juice-shop.demo/memories + dvga graphiql + preview chatbot + pentest-ground + websec level17 + sekumart → 196 findings across 8 URLs; duck-store-vulnerabilities-hub 41 findings with admin-users-bfla + testimonials-stored-xss + mcp-coupons-disclosure + profile-mass-assignment route oracles; dvga2-expert-hardened-mode-route-live-oracle confirmed; new duck-store route oracles + apparatus/crucible hubs still queued behind priority_discovery_urls.",
       "scanned_at": "2026-08-31T12:17:00.000Z"
     },
     {
@@ -32345,7 +32872,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 52 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=593; gap=[]; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
+      "benchmark_status": "ok — 52 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=593; gap=[]; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32362,7 +32889,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 13 UTC run: stable 6/6 first-pass recall (52 findings, 593 probes). Discovery: +5 URLs (crapi.apisec.ai/login + crapi2 user/videos BOLA + duck-store mcp/coupons + testimonials/guest + users enumeration) + priority drain vulnforge level17 + nodegoat contributions/research/memos + finbot supply-chain + PentestForge mutillidae register + dvwa sqli/xss_d \u2192 233 findings across 13 URLs; crapi-user-videos-bola-route-live-oracle + duck-store-users-enumeration-route-live-oracle + duck-store-mcp-coupons-disclosure confirmed; PentestForge labs 502-thin; duck-store testimonials/admin-users/apparatus/crucible still 48h-skipped from 12 UTC run.",
+      "notes": "No teacher tools available. 13 UTC run: stable 6/6 first-pass recall (52 findings, 593 probes). Discovery: +5 URLs (crapi.apisec.ai/login + crapi2 user/videos BOLA + duck-store mcp/coupons + testimonials/guest + users enumeration) + priority drain vulnforge level17 + nodegoat contributions/research/memos + finbot supply-chain + PentestForge mutillidae register + dvwa sqli/xss_d → 233 findings across 13 URLs; crapi-user-videos-bola-route-live-oracle + duck-store-users-enumeration-route-live-oracle + duck-store-mcp-coupons-disclosure confirmed; PentestForge labs 502-thin; duck-store testimonials/admin-users/apparatus/crucible still 48h-skipped from 12 UTC run.",
       "scanned_at": "2026-08-31T13:15:00.000Z"
     },
     {
@@ -32371,7 +32898,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 52 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=593; gap=[]; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
+      "benchmark_status": "ok — 52 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=593; gap=[]; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32388,7 +32915,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 14 UTC run: stable 6/6 first-pass recall (52 findings, 593 probes). Discovery: +5 URLs (crapi validate-coupon NoSQL + apply_coupon SQLi + crapi2 convert_video + vapi api8 login + apparatus hub) + priority drain finbot findrive/tools + dvga graphiql + crapi.lab.pentest-forge \u2192 109 findings across 8 URLs; crapi-convert-video-route-live-oracle + vapi-api8-sqli-login-route-live-oracle + vapi full OWASP API Top 10 suite confirmed; validate-coupon/apply_coupon still generic crAPI bundle without route-specific NoSQL/SQLi oracles; apparatus atlas-crew client-side evidence only.",
+      "notes": "No teacher tools available. 14 UTC run: stable 6/6 first-pass recall (52 findings, 593 probes). Discovery: +5 URLs (crapi validate-coupon NoSQL + apply_coupon SQLi + crapi2 convert_video + vapi api8 login + apparatus hub) + priority drain finbot findrive/tools + dvga graphiql + crapi.lab.pentest-forge → 109 findings across 8 URLs; crapi-convert-video-route-live-oracle + vapi-api8-sqli-login-route-live-oracle + vapi full OWASP API Top 10 suite confirmed; validate-coupon/apply_coupon still generic crAPI bundle without route-specific NoSQL/SQLi oracles; apparatus atlas-crew client-side evidence only.",
       "scanned_at": "2026-08-31T14:14:00.000Z"
     },
     {
@@ -32397,7 +32924,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32414,7 +32941,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 16 UTC run: stable 6/6 first-pass recall (51 findings, 595 probes). Discovery: +5 URLs (chimera gov benefits SQLi + saas cross-tenant IDOR + cart update + loyalty transfer + admin orders override) + priority drain pwnshop product/1 + profile/update-avatar + vampi.lab \u2192 139 findings across 8 URLs; pwnshop-product-review-stored-xss-route-live-oracle + pwnshop-avatar-url-ssrf-route-live-oracle confirmed; chimera gov/saas/cart/loyalty/admin routes still generic 7-finding bundle without CHM-GOV-001 / CHM-SAAS-001 route oracles.",
+      "notes": "No teacher tools available. 16 UTC run: stable 6/6 first-pass recall (51 findings, 595 probes). Discovery: +5 URLs (chimera gov benefits SQLi + saas cross-tenant IDOR + cart update + loyalty transfer + admin orders override) + priority drain pwnshop product/1 + profile/update-avatar + vampi.lab → 139 findings across 8 URLs; pwnshop-product-review-stored-xss-route-live-oracle + pwnshop-avatar-url-ssrf-route-live-oracle confirmed; chimera gov/saas/cart/loyalty/admin routes still generic 7-finding bundle without CHM-GOV-001 / CHM-SAAS-001 route oracles.",
       "scanned_at": "2026-08-31T16:15:00.000Z"
     },
     {
@@ -32423,7 +32950,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 29 findings, 6/6 recall on primary heroku (pages_crawled=6 probes_run=473; gap=[]; thin pass; secret-resend + jwt-alg-none + captcha-bypass present)",
+      "benchmark_status": "ok — 29 findings, 6/6 recall on primary heroku (pages_crawled=6 probes_run=473; gap=[]; thin pass; secret-resend + jwt-alg-none + captcha-bypass present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32440,7 +32967,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 17 UTC run: 6/6 recall thin pass (29 findings); secret-resend slug present. Discovery: +5 priority URLs (crapi2 validate-coupon, urban-VAmPI users/books BOLA, owaspbased direct-prompt-injection/insecure-plugin) + drained vuln-expose CSP-bypass + apparatus redteam/validate + vapi API1 \u2192 92 findings; crapi-validate-coupon-nosql-live-oracle + vampi-user-bola-live-oracle + vapi-api1-route-live-oracle confirmed; owaspbased /direct-prompt-injection paths thin (headers only).",
+      "notes": "No teacher tools available. 17 UTC run: 6/6 recall thin pass (29 findings); secret-resend slug present. Discovery: +5 priority URLs (crapi2 validate-coupon, urban-VAmPI users/books BOLA, owaspbased direct-prompt-injection/insecure-plugin) + drained vuln-expose CSP-bypass + apparatus redteam/validate + vapi API1 → 92 findings; crapi-validate-coupon-nosql-live-oracle + vampi-user-bola-live-oracle + vapi-api1-route-live-oracle confirmed; owaspbased /direct-prompt-injection paths thin (headers only).",
       "scanned_at": "2026-08-31T17:49:34.159Z"
     },
     {
@@ -32449,7 +32976,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32466,7 +32993,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 18 UTC run: stable 6/6 first-pass recall (51 findings, 595 probes). Discovery: +5 URLs (vapi api2/details + api4/login + api5/user + owaspbased output-handling/misinformation lessons) + drained oopssec bola-wishlist + idor-order-privacy + jwt-weak-secret \u2192 84 findings across 8 URLs; vapi-api2-route-live-oracle + vapi-api4-otp-route-live-oracle + vapi-api5-route-live-oracle + owasp-genai-improper-output-route-live-oracle + owasp-genai-misinformation-route-live-oracle + oopssec-bola-wishlist-route-live-oracle + oopssec-idor-order-privacy-route-live-oracle confirmed.",
+      "notes": "No teacher tools available. 18 UTC run: stable 6/6 first-pass recall (51 findings, 595 probes). Discovery: +5 URLs (vapi api2/details + api4/login + api5/user + owaspbased output-handling/misinformation lessons) + drained oopssec bola-wishlist + idor-order-privacy + jwt-weak-secret → 84 findings across 8 URLs; vapi-api2-route-live-oracle + vapi-api4-otp-route-live-oracle + vapi-api5-route-live-oracle + owasp-genai-improper-output-route-live-oracle + owasp-genai-misinformation-route-live-oracle + oopssec-bola-wishlist-route-live-oracle + oopssec-idor-order-privacy-route-live-oracle confirmed.",
       "scanned_at": "2026-08-31T18:15:00.000Z"
     },
     {
@@ -32475,7 +33002,7 @@
       "status": "skipped",
       "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
       "benchmark_url": "https://juice-shop.herokuapp.com",
-      "benchmark_status": "ok \u2014 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
+      "benchmark_status": "ok — 51 findings, 6/6 recall on primary heroku first pass (pages_crawled=6 probes_run=595; gap=[]; secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present)",
       "teacher_delta": [],
       "benchmark_recall": {
         "juice-shop": {
@@ -32492,7 +33019,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 19 UTC run: stable 6/6 first-pass recall (51 findings, 595 probes, 39 live oracles). Discovery: +5 URLs (vapi api6/user + api7/user/key + api10/user/flag + chimera healthcare/records + oopssec middleware-bypass) + drained oopssec malicious-file-upload + session-fixation + vuln-expose api/users \u2192 103 findings across 8 URLs; vapi-api6-route-live-oracle + vapi-api7-cors-route-live-oracle + vapi-api10-route-live-oracle + oopssec-middleware-bypass-route-live-oracle + oopssec-malicious-file-upload-stored-xss-route-live-oracle + oopssec-session-fixation-route-live-oracle + vuln-expose-users-api-route-live-oracle confirmed; chimera healthcare/records still generic 7-finding bundle without second-order SQLi route oracle.",
+      "notes": "No teacher tools available. 19 UTC run: stable 6/6 first-pass recall (51 findings, 595 probes, 39 live oracles). Discovery: +5 URLs (vapi api6/user + api7/user/key + api10/user/flag + chimera healthcare/records + oopssec middleware-bypass) + drained oopssec malicious-file-upload + session-fixation + vuln-expose api/users → 103 findings across 8 URLs; vapi-api6-route-live-oracle + vapi-api7-cors-route-live-oracle + vapi-api10-route-live-oracle + oopssec-middleware-bypass-route-live-oracle + oopssec-malicious-file-upload-stored-xss-route-live-oracle + oopssec-session-fixation-route-live-oracle + vuln-expose-users-api-route-live-oracle confirmed; chimera healthcare/records still generic 7-finding bundle without second-order SQLi route oracle.",
       "scanned_at": "2026-08-31T19:27:00.000Z"
     }
   ]
