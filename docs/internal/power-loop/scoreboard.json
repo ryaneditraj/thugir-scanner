@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T07:07:52.668Z",
+  "updated_at": "2026-08-31T07:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2731,
-  "total_findings": 26726,
+  "total_sites_scanned": 2742,
+  "total_findings": 26801,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1956,
-  "discovery_findings": 22653,
+  "discovery_urls_added": 1961,
+  "discovery_findings": 22728,
   "improvements_shipped": 1215,
-  "last_run": "2026-08-31T07:07:52.668Z",
+  "last_run": "2026-08-31T07:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
@@ -52,28 +52,37 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 21,
-      "focus": "yogsec XSS labs 12-14 sessionStorage/IndexedDB/cookie stored XSS route oracles",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 54,
+      "focus": "DVLA docs hub + povzayd XSS-LABS levels 4-7; parallel engine run shipped yogsec lab12-14 oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings) — no category misses",
-      "yogsec.github.io/xss-labs/labs/lab12.html: 7 findings — yogsec-xss-lab12-sessionstorage-stored-route-live-oracle shipped",
-      "yogsec.github.io/xss-labs/labs/lab13.html: 7 findings — yogsec-xss-lab13-indexeddb-route-live-oracle shipped",
-      "yogsec.github.io/xss-labs/labs/lab14.html: 7 findings — yogsec-xss-lab14-cookie-stored-route-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 596 probes, 39 live oracles)",
+      "koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection/: 11 findings — oopssec-xff-sqli-route-live-oracle confirmed",
+      "the0x-pwn.github.io/lab-xss/lab-2/: 7 findings — the0x-pwn-xss-template-literal-route-live-oracle confirmed",
+      "the0x-pwn.github.io/lab-xss/lab-8/: 6 findings — the0x-pwn-xss-href-angle-brackets-route-live-oracle confirmed",
+      "yogsec.github.io/xss-labs/labs/lab12-14.html: 7 findings each — sessionStorage/IndexedDB/cookie route oracles shipped (engine evolve)",
+      "dvla.jcadima.dev/: 6 findings — docs hub fingerprint without Laravel-module route oracles",
+      "povzayd.github.io/XSS-LABS/LABS/lab4-7.html: 6 findings each — shared vulnlab fingerprint without route-specific XSS oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "povzayd XSS-LABS levels 4-7 lack route-specific live oracles (generic reflexion-escalated-ssti + vibe-weak-csp only)",
+      "dvla.jcadima.dev docs hub has no Laravel-module live oracles (mass-assignment/SQLi/SSRF walkthroughs are blog-only)",
       "yogsec XSS labs 3,10,15-21 still lack route oracles (lab3 Try Again stub; lab10 empty)",
       "ucu-owasp-ctf.vercel.app returns 404 — oracles blocked until redeploy"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection/": 11,
+    "the0x-pwn.github.io/lab-xss/lab-2/": 7,
     "yogsec.github.io/xss-labs/labs/lab12.html": 7,
     "yogsec.github.io/xss-labs/labs/lab13.html": 7,
-    "yogsec.github.io/xss-labs/labs/lab14.html": 7
+    "yogsec.github.io/xss-labs/labs/lab14.html": 7,
+    "ginandjuice.shop/api/catalog/search?q=test": 44,
+    "brokencrystals.com/render.dot": 94
   }
 }

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T05:05:00.000Z",
+  "updated_at": "2026-08-31T07:00:00.000Z",
   "discovery_urls": [
     {
       "url": "https://owaspbased-lessons.vercel.app/lesson/prompt-leakage",
@@ -11750,6 +11750,31 @@
     {
       "url": "https://vwad.owasp.org/app/goof/login",
       "source": "OWASP VWAD Goof — NoSQL injection auth bypass oracle POST /login (Snyk nodejs-goof; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvla.jcadima.dev/",
+      "source": "jcadima/DVLA — Damn Vulnerable Laravel Application docs hub with 13-module kill-chain walkthroughs (web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://povzayd.github.io/XSS-LABS/LABS/lab4.html",
+      "source": "povzayd/XSS-LABS — Level 4 attribute-context XSS lab (case-sensitive /LABS/ path; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://povzayd.github.io/XSS-LABS/LABS/lab5.html",
+      "source": "povzayd/XSS-LABS — Level 5 filter-bypass XSS lab (case-sensitive /LABS/ path; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://povzayd.github.io/XSS-LABS/LABS/lab6.html",
+      "source": "povzayd/XSS-LABS — Level 6 encoding-weakness XSS lab (case-sensitive /LABS/ path; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://povzayd.github.io/XSS-LABS/LABS/lab7.html",
+      "source": "povzayd/XSS-LABS — Level 7 JS-context XSS lab (case-sensitive /LABS/ path; web search 07 UTC)",
       "auth": "public_demo"
     }
   ]
