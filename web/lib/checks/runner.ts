@@ -2488,6 +2488,9 @@ const DEEP_RULES = new Set<string>([
   "the0xPwnXssTagFilterBypassRouteLiveOracle",
   "the0xPwnXssJavascriptUrlRouteLiveOracle",
   "the0xPwnXssIframeDataUriRouteLiveOracle",
+  "povzaydXssLab1DocumentWriteRouteLiveOracle",
+  "povzaydXssLab2ReflectedFilteredInnerhtmlRouteLiveOracle",
+  "povzaydXssLab2DomHashRouteLiveOracle",
   "clientSideMontanajimXssClassroomEvidence",
   "clientSideHackxorEvidence",
   "clientSidePygoatEvidence",
@@ -4030,6 +4033,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideZiranAgentSecurityEvidence",
   "clientSideDotnetSerializationLabEvidence",
   "clientSidePovzaydXssLabsEvidence",
+  "povzaydXssLab1DocumentWriteRouteLiveOracle",
+  "povzaydXssLab2ReflectedFilteredInnerhtmlRouteLiveOracle",
+  "povzaydXssLab2DomHashRouteLiveOracle",
   "clientSideJuiceShopVaptEvidence",
   "clientSideRogueStudioEvidence",
   "thugirDirEnum",
@@ -13337,6 +13343,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /yogsec\.github\.io\/xss-labs/i.test(origin) &&
         /\/labs\/lab2\.html/i.test(targetInput) &&
         p.slug.startsWith("yogsec-xss-lab2")
+      )
+        return -4;
+      if (
+        /povzayd\.github\.io\/XSS-LABS/i.test(origin) &&
+        /\/LABS\/lab1\.html/i.test(targetInput) &&
+        p.slug.startsWith("povzayd-xss-lab1")
+      )
+        return -4;
+      if (
+        /povzayd\.github\.io\/XSS-LABS/i.test(origin) &&
+        /\/LABS\/lab2\.html/i.test(targetInput) &&
+        p.slug.startsWith("povzayd-xss-lab2")
       )
         return -4;
       if (

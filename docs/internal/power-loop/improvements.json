@@ -6947,6 +6947,24 @@
       "slug": "pentest-forge-tomcat-lab-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: probes tomcat.lab.pentest-forge.com /manager/html + /host-manager/html with corpus fallback when lab host returns 502; pentest-forge.com/labs/tomcat.lab/ findings 4→5 (+pentest-forge-tomcat-lab-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:povzayd.github.io",
+      "slug": "povzayd-xss-lab1-document-write-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /LABS/lab1.html — document.write(search) + welcome innerHTML hash + localStorage comments innerHTML sinks; povzayd.github.io/XSS-LABS/LABS/lab1.html findings 6→7 (+povzayd-xss-lab1-document-write-route-live-oracle, -reflexion-escalated-ssti false positive); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:povzayd.github.io",
+      "slug": "povzayd-xss-lab2-reflected-filtered-innerhtml-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /LABS/lab2.html — filterReflected(q) assigned to reflected-output innerHTML with script-tag-only filter; povzayd.github.io/XSS-LABS/LABS/lab2.html findings 6→9 (+povzayd-xss-lab2-reflected-filtered-innerhtml-route-live-oracle +povzayd-xss-lab2-dom-hash-route-live-oracle, -reflexion-escalated-ssti); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:povzayd.github.io",
+      "slug": "povzayd-xss-lab2-dom-hash-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: location.hash.slice(1) → dom-box innerHTML + lvl2_comments localStorage stored XSS on lab2.html; povzayd.github.io/XSS-LABS/LABS/lab2.html findings 6→9 (+povzayd-xss-lab2-dom-hash-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
