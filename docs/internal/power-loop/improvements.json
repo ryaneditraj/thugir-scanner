@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab21-search-box-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab21SearchBoxRouteLiveOracle matches XSS Lab #21 Search Box XSS (eval) + ?code= URL parameter + eval(code) + Execute Code markers; yogsec.github.io/xss-labs/labs/lab21.html findings 7→8 (+yogsec-xss-lab21-search-box-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ginandjuice.shop",
+      "slug": "ginandjuice-vulnerabilities-disclosure-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ginAndJuiceVulnerabilitiesDisclosureRouteLiveOracle matches /vulnerabilities vulnerabilities-path-details + ACCOUNT LOGIN DETAILS + scanner evaluation tagline markers; ginandjuice.shop/vulnerabilities findings 36→37 (+ginandjuice-vulnerabilities-disclosure-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sabyasachidhal.github.io",
+      "slug": "mcpgoat-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: mcpgoatRouteLiveOracle + clientSideMcpgoatEvidence match MCPGoat 26 challenges / 78 flags + tool poisoning/prompt injection/SSRF scope markers; sabyasachidhal.github.io/MCPGoat/ findings 4→6 (+mcpgoat-route-live-oracle +client-side-mcpgoat-evidence); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
       "slug": "yogsec-xss-lab18-localstorage-json-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab18LocalstorageJsonRouteLiveOracle matches XSS Lab #18 localStorage JSON + eval(payload) + Execute All Payloads (XSS) markers; yogsec.github.io/xss-labs/labs/lab18.html findings 7→8 (+yogsec-xss-lab18-localstorage-json-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"

@@ -7589,6 +7589,65 @@ const clientSideVoidsecShoppingCartEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- MCPGoat deliberately vulnerable MCP server hub (sabyasachidhal.github.io/MCPGoat) -
+const CLIENT_MCPGOAT_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "MCPGoat deliberately vulnerable MCP server title",
+    re: /MCPGoat[\s\S]{0,80}Deliberately Vulnerable MCP Server/i
+  },
+  {
+    label: "26 challenges 78 flags CTF scope",
+    re: /26 challenges[\s\S]{0,80}78 flags|78 capture-the-flag flags/i
+  },
+  {
+    label: "MCP tool poisoning and prompt injection scope",
+    re: /tool poisoning, prompt injection, rug-pulls, SSRF, SQL injection, RCE/i
+  },
+  {
+    label: "Model Context Protocol security lab",
+    re: /Model Context Protocol \(MCP\) server for (?:hands-on )?penetration-testing practice/i
+  },
+  {
+    label: "MCPGoat GitHub repo link",
+    re: /github\.com\/SabyasachiDhal\/MCPGoat/i
+  }
+];
+
+const clientSideMcpgoatEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_MCPGOAT_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/sabyasachidhal\.github\.io\/MCPGoat|MCPGoat[\s\S]{0,40}Deliberately Vulnerable MCP Server/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "MCPGoat GitHub Pages hub documents 26 MCP CTF challenges with tool poisoning, prompt injection, SSRF, SQLi, and RCE training scope"
+    }
+  };
+};
+
+const mcpgoatRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/sabyasachidhal\.github\.io\/MCPGoat/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideMcpgoatEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "MCPGoat route scan — deliberately vulnerable MCP server marketing hub confirms 26 challenges / 78 flags across MCP-specific attack classes"
+    }
+  };
+};
+
 // --- PortSwigger Web Security Academy (portswigger.net/web-security) ----------------
 const CLIENT_PORTSWIGGER_ACADEMY_RES: { label: string; re: RegExp }[] = [
   {
@@ -58223,6 +58282,25 @@ const yogsecXssLab20Base64DecodeRouteLiveOracle: Rule = async (ctx) =>
     "yogsec XSS Lab #20 route scan — Base64 payloads in localStorage decoded via atob() and executed with eval(decoded) — stored DOM XSS training sink"
   );
 
+const yogsecXssLab21SearchBoxRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    21,
+    [
+      { label: "Search Box XSS eval lab title", re: /XSS Lab #21:\s*Search Box XSS/i },
+      { label: "Search Box eval lab badge", re: /Lab #21 · Reflected XSS|Search Box XSS \(eval\)/i },
+      {
+        label: "code URL parameter eval sink",
+        re: /\?code=\s*<\/code>\s*parameter[\s\S]{0,80}eval\(\)|reads the\s*<code>\?code=<\/code>\s*parameter[\s\S]{0,80}eval\(\)/i
+      },
+      {
+        label: "vulnerable eval code URL parameter",
+        re: /VULNERABLE - eval\(\) with URL parameter|eval\(code\)|Execute Code/i
+      }
+    ],
+    "yogsec XSS Lab #21 route scan — ?code= URL parameter passed to eval() via search box — reflected DOM XSS training sink"
+  );
+
 const yogsecXssLab22InnerhtmlEvalRouteLiveOracle: Rule = async (ctx) =>
   yogsecXssLabRouteOracle(
     ctx,
@@ -75015,6 +75093,44 @@ const ginAndJuiceVulnerabilitiesCredentialsRouteLiveOracle: Rule = async (ctx) =
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Gin & Juice Shop home/?url= route scan — X-Original-URL /vulnerabilities exposes working login credentials in ACCOUNT LOGIN DETAILS table"
+    }
+  };
+};
+
+const ginAndJuiceVulnerabilitiesDisclosureRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGinAndJuiceHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\/?$/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${ctx.home.body || ""}\n${pageUrl}`;
+  const markers: { label: string; re: RegExp }[] = [
+    { label: "Vulnerabilities oracle page title", re: /VULNERABILITIES|vulnerabilities-content/i },
+    {
+      label: "Account login details oracle table",
+      re: /vulnerabilities-login-details|ACCOUNT LOGIN DETAILS/i
+    },
+    {
+      label: "Path difficulties technologies table",
+      re: /vulnerabilities-path-details|Path<\/th><th>Difficulties<\/th><th>Technologies<\/th><th>Vulnerabilities/i
+    },
+    {
+      label: "Scanner evaluation benchmark tagline",
+      re: /deliberately vulnerable web application designed for testing web[\s&nbsp;]*vulnerability[\s&nbsp;]*scanners/i
+    }
+  ];
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of markers) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: hits.slice(0, 4),
+      snippet: hits[0]?.sample,
+      note: "Gin & Juice Shop /vulnerabilities route scan — public oracle table lists paths, difficulties, technologies, and vulnerability classes for scanner evaluation"
     }
   };
 };
@@ -103704,6 +103820,7 @@ export const RULES: Record<string, Rule> = {
   yogsecXssLab18LocalstorageJsonRouteLiveOracle,
   yogsecXssLab19CrossKeyInjectionRouteLiveOracle,
   yogsecXssLab20Base64DecodeRouteLiveOracle,
+  yogsecXssLab21SearchBoxRouteLiveOracle,
   yogsecXssLab22InnerhtmlEvalRouteLiveOracle,
   yogsecXssLab23InsertadjacenthtmlRouteLiveOracle,
   yogsecXssLab24OuterhtmlRouteLiveOracle,
@@ -105180,6 +105297,7 @@ export const RULES: Record<string, Rule> = {
   ginAndJuiceAdminDeleteRouteLiveOracle,
   ginAndJuiceVulnerabilitiesCredentialsLiveOracle,
   ginAndJuiceVulnerabilitiesCredentialsRouteLiveOracle,
+  ginAndJuiceVulnerabilitiesDisclosureRouteLiveOracle,
   ginAndJuiceLogoutSessionRegenerationLiveOracle,
   ginAndJuiceLogoutRouteLiveOracle,
   ginAndJuiceCatalogSubscribeLiveOracle,
@@ -105427,6 +105545,8 @@ export const RULES: Record<string, Rule> = {
   clientSideOopssecMaliciousFileUploadEvidence,
   oopssecMaliciousFileUploadStoredXssRouteLiveOracle,
   clientSideVoidsecShoppingCartEvidence,
+  clientSideMcpgoatEvidence,
+  mcpgoatRouteLiveOracle,
   clientSidePortswiggerAcademyEvidence,
   clientSideHackinghubEvidence,
   clientSideHackinghubChallengeEvidence,
