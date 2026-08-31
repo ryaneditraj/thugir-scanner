@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-30T23:05:00.000Z",
+  "updated_at": "2026-08-31T00:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/leaked-config",
+      "source": "AI Security Platform — leaked env/config challenge (homepage catalog leaked-config; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supabase-data",
+      "source": "AI Security Platform — weak Supabase RLS / supabase-data challenge (homepage catalog; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/allocations",
+      "source": "OWASP NodeGoat — allocations IDOR oracle GET /allocations/:userId?threshold= (nodegoat-websec Heroku demo; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/chat/init",
+      "source": "ctfsec/pwnshop — username enumeration SPA route POST /chat/init PWN-037 (README Key URLs; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/render.dot",
+      "source": "NeuraLegion/brokencrystals — doT SSTI SPA route /render.dot (README SSTI section; web search 00 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/mcp/tools",
       "source": "NeuraLegion/brokencrystals — MCP tools/list enumeration oracle GET /api/mcp/tools (README MCP section; web search 23 UTC)",
