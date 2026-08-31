@@ -48940,7 +48940,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "crAPI validate-coupon NoSQL injection route live oracle",
     description:
-      "When scanning /community/api/v2/coupon/validate-coupon, MongoDB operator injection in coupon_code returns valid coupons — route-specific crAPI Challenge 12 oracle.",
+      "When scanning /community/api/v2/coupon/validate-coupon or /workshop/api/shop/validate-coupon, MongoDB operator injection in coupon_code returns valid coupons — route-specific crAPI Challenge 12 oracle.",
     impactOneline:
       "Route scans on validate-coupon should confirm MongoDB NoSQL injection via coupon_code operators.",
     detectorKind: "rule_ref",
