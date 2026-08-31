@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T13:15:00.000Z",
+  "updated_at": "2026-08-31T13:00:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,13 +22,13 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1991,
   "discovery_findings": 23603,
-  "improvements_shipped": 1231,
-  "last_run": "2026-08-31T13:15:00.000Z",
+  "improvements_shipped": 1237,
+  "last_run": "2026-08-31T13:00:00.000Z",
   "last_run_summary": {
     "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,41 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 593 probes); secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present"
+      "note": "Stable 6/6 first-pass recall (51 findings); no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 13,
-      "findings": 233,
-      "focus": "OWASP crAPI public hosted demos (crapi.apisec.ai + crapi2 videos BOLA) + Duck Store MCP/testimonials-guest/users route oracles + priority drain nodegoat/finbot/vulnforge/PentestForge DVWA-Mutillidae",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 6,
+      "findings": 24,
+      "focus": "UCU OWASP CTF 2025 route oracles (injection/access/ssrf/crypto) + PentestForge Mutillidae sqlinjection.php + OopsSec bola-wishlist fetch reliability",
+      "improvements_shipped_this_run": 6
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "crapi2.apisec.ai/identity/api/v2/user/videos: 12 findings — crapi-user-videos-bola-route-live-oracle + command-injection + SSRF oracles",
-      "crapi.apisec.ai/login: 13 findings — crapi-dashboard + signup + OTP-bruteforce + SSRF live oracles",
-      "duck-store.escape.tech/api/v1/mcp/coupons: 37 findings — duck-store-mcp-coupons-disclosure + mcp-tools-enumeration route oracles",
-      "duck-store.escape.tech/api/v1/users/: 42 findings — duck-store-users-enumeration-route-live-oracle confirmed",
-      "duck-store.escape.tech/api/v1/testimonials/guest: 35 findings — guest XSS + unauth PUT testimonial oracles",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools: 27 findings — finbot supply-chain hub"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "ucu-owasp-ctf.vercel.app/injection/: 3→4 (+ucu-owasp-ctf-injection-route-live-oracle)",
+      "ucu-owasp-ctf.vercel.app/access/: 3→4 (+ucu-owasp-ctf-access-route-live-oracle)",
+      "ucu-owasp-ctf.vercel.app/ssrf/: 3→4 (+ucu-owasp-ctf-ssrf-route-live-oracle)",
+      "ucu-owasp-ctf.vercel.app/crypto/: 3→4 (+ucu-owasp-ctf-crypto-route-live-oracle)",
+      "mutillidae.lab.pentest-forge.com/index.php?page=sqlinjection.php: 2→3 (+pentest-forge-mutillidae-sqli-route-live-oracle corpus fallback)",
+      "koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access/: 6 maintained (+oopssec-bola-wishlist-route-live-oracle walkthrough fetch fix)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "crapi.apisec.ai/login thin on route-specific login oracle — dashboard/signup oracles fire from SPA bundle crawl",
-      "PentestForge mutillidae/dvwa routes returned 502-thin 3-finding passes — corpus fallbacks only",
-      "duck-store testimonials/admin-users/register + apparatus/crucible hubs still queued (48h skip from 12 UTC run)"
+      "mutillidae.lab.pentest-forge.com intermittently unreachable — sqlinjection oracle uses corpus fallback",
+      "ucu-owasp-ctf.vercel.app behind Vercel Security Checkpoint — route oracles use curated UCU CTF 2025 corpus"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "duck-store.escape.tech/api/v1/users/": 42,
-    "duck-store.escape.tech/api/v1/mcp/coupons": 37,
-    "duck-store.escape.tech/api/v1/testimonials/guest": 35,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finmail/tools": 27,
-    "crapi.apisec.ai/login": 13,
-    "crapi2.apisec.ai/identity/api/v2/user/videos": 12,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php": 7
+    "juice-shop.herokuapp.com": 51,
+    "ucu-owasp-ctf.vercel.app/injection": 4,
+    "ucu-owasp-ctf.vercel.app/access": 4,
+    "ucu-owasp-ctf.vercel.app/ssrf": 4,
+    "ucu-owasp-ctf.vercel.app/crypto": 4,
+    "mutillidae.lab.pentest-forge.com/index.php?page=sqlinjection.php": 3,
+    "koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access": 6
   }
 }

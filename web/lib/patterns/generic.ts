@@ -75776,5 +75776,135 @@ export const genericPatterns: Pattern[] = [
       "Our DVLA route scan confirms intentionally vulnerable Laravel training scope. Show production Laravel hardening remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "ucu-owasp-ctf-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "UCU OWASP CTF injection lab route live oracle",
+    description:
+      "When scanning /injection/ on ucu-owasp-ctf.vercel.app, the UCU OWASP Top 10 CTF 2025 hub documents SQL injection login bypass and command injection training (OWASP A03).",
+    impactOneline:
+      "Route-specific confirmation that UCU CTF documents intentional SQLi and command injection on the injection challenge app.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ucuOwaspCtfInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run UCU CTF labs only on isolated Docker networks; use parameterized queries in production.",
+      steps: [
+        "Gate CTF challenge apps behind team authentication.",
+        "Use prepared statements for all database queries.",
+        "Never pass user input to shell commands."
+      ]
+    },
+    fixPrompt:
+      "Our ucu-owasp-ctf /injection/ route documents SQLi and command injection. Show parameterized query and input validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ucu-owasp-ctf-access-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "UCU OWASP CTF access control lab route live oracle",
+    description:
+      "When scanning /access/ on ucu-owasp-ctf.vercel.app, the UCU OWASP Top 10 CTF 2025 hub documents admin panel bypass and path traversal via ?file= (OWASP A01).",
+    impactOneline:
+      "Route-specific confirmation that UCU CTF documents broken access control and directory traversal on the access challenge app.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ucuOwaspCtfAccessRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce server-side role checks; validate file paths against an allowlist.",
+      steps: [
+        "Require admin role server-side before rendering admin panels.",
+        "Reject path traversal sequences in file viewer parameters.",
+        "Run CTF labs on isolated infrastructure only."
+      ]
+    },
+    fixPrompt:
+      "Our ucu-owasp-ctf /access/ route documents admin bypass and path traversal. Show access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ucu-owasp-ctf-crypto-route-live-oracle",
+    platform: "generic",
+    category: "Cryptographic failures",
+    severityDefault: "high",
+    title: "UCU OWASP CTF cryptographic failures lab route live oracle",
+    description:
+      "When scanning /crypto/ on ucu-owasp-ctf.vercel.app, the UCU OWASP Top 10 CTF 2025 hub documents weak MD5 hashing and predictable random number generation (OWASP A02).",
+    impactOneline:
+      "Route-specific confirmation that UCU CTF documents cryptographic failures on the crypto challenge app.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ucuOwaspCtfCryptoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use bcrypt/Argon2 for passwords; use cryptographically secure random for tokens.",
+      steps: [
+        "Replace MD5 with bcrypt or Argon2id for password hashing.",
+        "Use crypto.randomBytes for session and token generation.",
+        "Run CTF labs on isolated infrastructure only."
+      ]
+    },
+    fixPrompt:
+      "Our ucu-owasp-ctf /crypto/ route documents weak MD5 and predictable RNG. Show cryptographic remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ucu-owasp-ctf-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "UCU OWASP CTF SSRF lab route live oracle",
+    description:
+      "When scanning /ssrf/ on ucu-owasp-ctf.vercel.app, the UCU OWASP Top 10 CTF 2025 hub documents SSRF to internal flag-server:8080 (OWASP A10).",
+    impactOneline:
+      "Route-specific confirmation that UCU CTF documents server-side request forgery and internal service access on the SSRF challenge app.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ucuOwaspCtfSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF with URL allowlists and network egress controls.",
+      steps: [
+        "Validate outbound URLs against an allowlist of permitted hosts.",
+        "Block requests to link-local, metadata, and private IP ranges.",
+        "Run CTF labs on isolated Docker networks only."
+      ]
+    },
+    fixPrompt:
+      "Our ucu-owasp-ctf /ssrf/ route documents SSRF to internal flag-server. Show SSRF defense-in-depth remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-mutillidae-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentestForge Mutillidae user-info SQL injection route live oracle",
+    description:
+      "When scanning index.php?page=sqlinjection.php on mutillidae.lab.pentest-forge.com, POST username=' OR 1=1 -- triggers classic SQL injection on the User Info lookup form.",
+    impactOneline:
+      "Unsanitized SQL concatenation on Mutillidae sqlinjection.php lets attackers bypass lookups and extract database contents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeMutillidaeSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Mutillidae is intentional security training — use parameterized queries for user lookups.",
+      steps: [
+        "Bind username with prepared statements.",
+        "Validate and reject SQL metacharacters in lookup fields.",
+        "Run Mutillidae only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge Mutillidae sqlinjection.php route concatenates username into SQL. Show classic SQLi remediation with parameterized queries.",
+    version: 1,
+    enabled: true
   }
 ];
