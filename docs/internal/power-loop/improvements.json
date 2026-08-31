@@ -6983,6 +6983,24 @@
       "slug": "pentest-forge-vampi-lab-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: probes vampi.lab.pentest-forge.com POST /users/v1/login + GET /users/v1/name2 BOLA with corpus fallback when lab host returns 502; vampi.lab.pentest-forge.com/ findings 2→3 (+pentest-forge-vampi-lab-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi2.apisec.ai",
+      "slug": "crapi2-shop-validate-coupon-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeCrapiValidateCouponNosql extended to /workshop/api/shop/validate-coupon + route oracle matches /shop/validate[-_]coupon; crapi2.apisec.ai/workshop/api/shop/validate-coupon findings 13→14 (+crapi-validate-coupon-nosql-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:urban-vampi-staging.up.railway.app",
+      "slug": "vampi-users-enumeration-route-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for vampi-users-enumeration on exact /users/v1 route; urban-vampi-staging.up.railway.app/users/v1 findings 15→16 (+vampi-users-enumeration-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-shortcut-path-aliases",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /direct-prompt-injection aliases /lesson/prompt-injection (LLM01) + /insecure-plugin aliases /lesson/improper-output (LLM05); owaspbased-lessons.vercel.app/direct-prompt-injection findings 2→4 (+owasp-genai-prompt-injection-route-live-oracle); /insecure-plugin 2→4 (+owasp-genai-improper-output-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
