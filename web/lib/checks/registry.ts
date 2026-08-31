@@ -19307,6 +19307,10 @@ Government benefits search SQLi (CHM-GOV-001, USE_DATABASE=true)
 GET /api/v1/gov/benefits/search?q=
 Cross-Tenant IDOR (CHM-SAAS-001)
 GET /api/v1/saas/tenants/{tenant_id}/projects
+PUT /api/cart/update                         # Cart update with negative quantities
+POST /api/loyalty/points/transfer             # Loyalty manipulation (CHM-LOYAL-001)
+POST /api/admin/orders/override               # Administrative order manipulation
+Business Logic Manipulation (Points)
 Business Logic Flaws
 SIM swap
 SCADA dispatch
@@ -19347,9 +19351,7 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/gov\/benefits\/search|saas\/tenants\/\{?tenant_id\}?\/projects|CHM-GOV-001|CHM-SAAS-001/i.test(
-      corpus
-    )
+    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001/i.test(corpus)
   ) {
     const invDoc = await ctx.probe.get(new URL("/vulnerability-inventory", ctx.origin).toString(), {
       maxBytes: 400_000,
@@ -19360,7 +19362,20 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit|telecom\/sim-swap|energy\/scada\/commands|energy-utilities\/dispatch|gov\/benefits\/search|saas\/tenants/i.test(
+    !/\/api\/cart\/update|loyalty\/points\/transfer|admin\/orders\/override|negative quantit|Administrative order manipulation/i.test(
+      corpus
+    )
+  ) {
+    const catalogDoc = await ctx.probe.get(new URL("/endpoints-catalog", ctx.origin).toString(), {
+      maxBytes: 400_000,
+      timeoutMs: 15000
+    });
+    if (catalogDoc.status >= 200 && catalogDoc.status < 400 && catalogDoc.body.length > 500) {
+      corpus = `${corpus}\n${catalogDoc.body}`;
+    }
+  }
+  if (
+    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit|telecom\/sim-swap|energy\/scada\/commands|energy-utilities\/dispatch|gov\/benefits\/search|saas\/tenants|cart\/update|loyalty\/points\/transfer|admin\/orders\/override/i.test(
       corpus
     )
   ) {
@@ -20066,6 +20081,77 @@ const chimeraSaasTenantsProjectsIdorRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/saas/tenants/{tenant_id}/projects route scan — CHM-SAAS-001 documents cross-tenant IDOR on SaaS project listing (Jekyll docs corpus fallback) — route-specific SaaS IDOR training oracle"
+    }
+  };
+};
+
+const chimeraCartUpdateRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/cart\/update\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const cartOk =
+    /cart\/update/i.test(corpus) &&
+    (/negative quantit/i.test(corpus) ||
+      /PUT\s+\/api\/cart\/update/i.test(corpus) ||
+      /Update cart \(negative quantity\)/i.test(corpus)) &&
+    (/Business Logic|retail|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus) ||
+      /Cart update with negative quantities/i.test(corpus));
+  if (!cartOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /negative quantit/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "PUT /api/cart/update — Cart update with negative quantities (business logic manipulation)",
+      note: "chimera.atlascrew.dev /api/cart/update route scan — Chimera endpoints catalog documents negative-quantity cart manipulation (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific retail cart fraud training oracle"
+    }
+  };
+};
+
+const chimeraLoyaltyPointsTransferRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/loyalty\/points\/transfer\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const loyaltyOk =
+    /loyalty\/points\/transfer/i.test(corpus) &&
+    (/CHM-LOYAL-001/i.test(corpus) ||
+      /Business Logic Manipulation \(Points\)/i.test(corpus) ||
+      /POST\s+\/api\/loyalty\/points\/transfer/i.test(corpus) ||
+      /Loyalty manipulation/i.test(corpus)) &&
+    (/loyalty|Business Logic|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!loyaltyOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-LOYAL-001/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/loyalty/points/transfer — Business Logic Manipulation (Points, CHM-LOYAL-001)",
+      note: "chimera.atlascrew.dev /api/loyalty/points/transfer route scan — CHM-LOYAL-001 documents loyalty points transfer manipulation (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific loyalty fraud training oracle"
+    }
+  };
+};
+
+const chimeraAdminOrdersOverrideRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/admin\/orders\/override\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const adminOk =
+    /admin\/orders\/override/i.test(corpus) &&
+    (/Administrative order manipulation/i.test(corpus) ||
+      /POST\s+\/api\/admin\/orders\/override/i.test(corpus) ||
+      /CHM-ADMIN/i.test(corpus)) &&
+    (/admin|Business Logic|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!adminOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Administrative order manipulation/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/admin/orders/override — Administrative order manipulation",
+      note: "chimera.atlascrew.dev /api/admin/orders/override route scan — Chimera endpoints catalog documents administrative order override without authorization (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific admin order fraud training oracle"
     }
   };
 };
@@ -104244,6 +104330,9 @@ export const RULES: Record<string, Rule> = {
   chimeraEnergyScadaCommandsRouteLiveOracle,
   chimeraGovBenefitsSearchSqliRouteLiveOracle,
   chimeraSaasTenantsProjectsIdorRouteLiveOracle,
+  chimeraCartUpdateRouteLiveOracle,
+  chimeraLoyaltyPointsTransferRouteLiveOracle,
+  chimeraAdminOrdersOverrideRouteLiveOracle,
   chimeraSwaggerRouteLiveOracle,
   chimeraApiReferenceRouteLiveOracle,
   chimeraFedrampOpenapiExtensionsRouteLiveOracle,

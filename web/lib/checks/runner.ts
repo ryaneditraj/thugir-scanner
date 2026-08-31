@@ -1807,6 +1807,9 @@ const DEEP_RULES = new Set<string>([
   "chimeraEnergyScadaCommandsRouteLiveOracle",
   "chimeraGovBenefitsSearchSqliRouteLiveOracle",
   "chimeraSaasTenantsProjectsIdorRouteLiveOracle",
+  "chimeraCartUpdateRouteLiveOracle",
+  "chimeraLoyaltyPointsTransferRouteLiveOracle",
+  "chimeraAdminOrdersOverrideRouteLiveOracle",
   "chimeraSwaggerRouteLiveOracle",
   "chimeraApiReferenceRouteLiveOracle",
   "chimeraFedrampOpenapiExtensionsRouteLiveOracle",
@@ -12404,6 +12407,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/saas\/tenants\/[^/]+\/projects\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-saas-tenants-projects")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/cart\/update\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-cart-update")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/loyalty\/points\/transfer\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-loyalty-points-transfer")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/admin\/orders\/override\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-orders-override")
       )
         return -3;
       if (

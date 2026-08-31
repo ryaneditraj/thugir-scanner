@@ -7001,6 +7001,24 @@
       "slug": "owasp-genai-shortcut-path-aliases",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /direct-prompt-injection aliases /lesson/prompt-injection (LLM01) + /insecure-plugin aliases /lesson/improper-output (LLM05); owaspbased-lessons.vercel.app/direct-prompt-injection findings 2→4 (+owasp-genai-prompt-injection-route-live-oracle); /insecure-plugin 2→4 (+owasp-genai-improper-output-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-cart-update-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /api/cart/update — Cart update with negative quantities from endpoints-catalog corpus; chimera.atlascrew.dev/api/cart/update findings 7→8 (+chimera-cart-update-route-live-oracle); benchmark juice-shop 36 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-loyalty-points-transfer-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/loyalty/points/transfer — CHM-LOYAL-001 Business Logic Manipulation (Points) from vulnerability-inventory corpus; chimera.atlascrew.dev/api/loyalty/points/transfer findings 7→8 (+chimera-loyalty-points-transfer-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-admin-orders-override-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/admin/orders/override — Administrative order manipulation from endpoints-catalog corpus; chimera.atlascrew.dev/api/admin/orders/override findings 7→8 (+chimera-admin-orders-override-route-live-oracle); benchmark juice-shop 36 findings 6/6 maintained"
     }
   ]
 }
