@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T17:49:34.159Z",
+  "updated_at": "2026-08-31T18:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2865,
-  "total_findings": 28996,
+  "total_sites_scanned": 2874,
+  "total_findings": 29131,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2011,
-  "discovery_findings": 24299,
+  "discovery_urls_added": 2016,
+  "discovery_findings": 24383,
   "improvements_shipped": 1249,
-  "last_run": "2026-08-31T17:49:34.159Z",
+  "last_run": "2026-08-31T18:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 29,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 473,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,40 @@
           ]
         }
       },
-      "note": "6/6 recall on thin pass (29 findings); secret-resend slug present; jwt-alg-none + captcha-bypass live oracles confirmed"
+      "note": "Stable 6/6 first-pass recall (51 findings); secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 92,
-      "focus": "crapi2 validate-coupon NoSQL + urban-VAmPI BOLA + owaspbased direct-prompt-injection/insecure-plugin + vuln-expose CSP-bypass + vapi API1 BOLA drain",
+      "findings": 84,
+      "focus": "vAPI API2/4/5 route oracles + owaspbased output-handling/misinformation lessons + oopssec BOLA/IDOR/JWT drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (29 findings thin pass; secret-resend present)",
-      "crapi2.apisec.ai/workshop/api/shop/validate-coupon: 13 findings — crapi-validate-coupon-nosql-live-oracle route oracle confirmed",
-      "urban-vampi-staging.up.railway.app/users/v1: 15 findings — vampi-user-bola-live-oracle + openapi-debug-password-exposure",
-      "urban-vampi-staging.up.railway.app/books/v1/1: 17 findings — vampi-books-excessive-data-live-oracle",
-      "vapi.apisec.ai/vapi/api1/user: 17 findings — vapi-api1-route-live-oracle + full API suite",
-      "vuln-expose.vercel.app/xss/csp-bypass: 18 findings — CSP bypass XSS lab"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 595 probes)",
+      "vapi.apisec.ai/vapi/api2/user/details: 17 findings — vapi-api2-route-live-oracle confirmed",
+      "vapi.apisec.ai/vapi/api4/login: 18 findings — vapi-api4-otp-route-live-oracle confirmed",
+      "vapi.apisec.ai/vapi/api5/user: 17 findings — vapi-api5-route-live-oracle confirmed",
+      "owaspbased-lessons.vercel.app/lesson/output-handling: 4 findings — owasp-genai-improper-output-route-live-oracle",
+      "owaspbased-lessons.vercel.app/lesson/misinformation: 4 findings — owasp-genai-misinformation-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access/: 6 findings — oopssec-bola-wishlist-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach/: 8 findings — oopssec-idor-order-privacy-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "owaspbased-lessons /direct-prompt-injection + /insecure-plugin: thin 2-finding passes (headers only) — use /lesson/* paths for GenAI oracles",
-      "queue.json duplicate priority_discovery_urls key caused first scan to skip new URLs — fixed by merging into single priority block",
-      "benchmark thin pass 29 findings vs typical 48-52 on Heroku wake"
+      "vAPI api2/api4/api5 routes share full OWASP API Top 10 suite — route-specific oracles now confirmed but overlap with hub scans",
+      "owaspbased /lesson/output-handling + /lesson/misinformation: 4-finding passes with route oracles (better than /direct-prompt-injection thin headers-only)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 29,
-    "crapi2.apisec.ai/workshop/api/shop/validate-coupon": 13,
-    "urban-vampi-staging.up.railway.app/users/v1": 15,
-    "urban-vampi-staging.up.railway.app/books/v1/1": 17,
-    "vapi.apisec.ai/vapi/api1/user": 17,
-    "vuln-expose.vercel.app/xss/csp-bypass": 18
+    "juice-shop.herokuapp.com": 51,
+    "vapi.apisec.ai/vapi/api2/user/details": 17,
+    "vapi.apisec.ai/vapi/api4/login": 18,
+    "vapi.apisec.ai/vapi/api5/user": 17,
+    "owaspbased-lessons.vercel.app/lesson/output-handling": 4,
+    "owaspbased-lessons.vercel.app/lesson/misinformation": 4,
+    "koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access/": 6,
+    "koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach/": 8
   }
 }
