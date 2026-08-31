@@ -11976,6 +11976,31 @@
       "url": "https://povzayd.github.io/XSS-LABS/LABS/lab7.html",
       "source": "povzayd/XSS-LABS — Level 7 JS-context XSS lab (case-sensitive /LABS/ path; web search 07 UTC)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://apparatus.atlascrew.dev/api/redteam/autopilot/start",
+      "source": "atlas-crew/Apparatus — red team autopilot API POST /api/redteam/autopilot/start (GitHub README + HN Show HN; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://apparatus.atlascrew.dev/redteam/validate",
+      "source": "atlas-crew/Apparatus — payload validator oracle GET /redteam/validate XSS/SQLi/CMDi probe (GitHub README; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api1/user",
+      "source": "roottusk/vAPI — API1 BOLA oracle POST /vapi/api1/user (vapi.apisec.ai hosted lab; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api2/user/login",
+      "source": "roottusk/vAPI — API2 broken authentication oracle POST /vapi/api2/user/login (vapi.apisec.ai; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api9/v1/user/login",
+      "source": "roottusk/vAPI — API9 improper assets management oracle POST /vapi/api9/v1/user/login (SecLayers walkthrough; web search 15 UTC)",
+      "auth": "public_demo"
     }
   ]
 }
