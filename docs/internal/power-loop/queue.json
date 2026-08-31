@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-31T00:05:00.000Z",
+  "updated_at": "2026-08-31T01:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/api/catalog/search?q=test",
+      "source": "PortSwigger ginandjuice.shop — catalog search SQLi/XSS oracle GET /api/catalog/search (lab README; web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/output-handling",
+      "source": "OWASP GenAI Security Lab — LLM03 output handling lesson with live demo (Vercel Pages; web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/misinformation",
+      "source": "OWASP GenAI Security Lab — LLM09 misinformation lesson with live demo (Vercel Pages; web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/goof/",
+      "source": "OWASP VWAD — Snyk Goof Express/MongoDB todo app with NoSQL injection + XSS (vwad.owasp.org; web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/api/order-details/1",
+      "source": "PortSwigger ginandjuice.shop — order-details IDOR oracle GET /api/order-details/:id (lab README; web search 01 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/leaked-config",
       "source": "AI Security Platform — leaked env/config challenge (homepage catalog leaked-config; web search 00 UTC)",
@@ -11227,6 +11252,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/leaked-config",
+      "source": "AI Security Platform — leaked env/config challenge (homepage catalog; 01 UTC priority)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supabase-data",
+      "source": "AI Security Platform — weak Supabase RLS supabase-data challenge (homepage catalog; 01 UTC priority)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/allocations",
+      "source": "OWASP NodeGoat — allocations IDOR oracle GET /allocations/:userId (01 UTC priority)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/render.dot",
+      "source": "NeuraLegion/brokencrystals — doT SSTI SPA route /render.dot (README SSTI; 01 UTC priority)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/chat/init",
+      "source": "ctfsec/pwnshop — username enumeration POST /chat/init PWN-037 (01 UTC priority)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access/",
       "source": "kOaDT/oss-oopssec-store roadmap ch02 — BOLA wishlist access walkthrough with live API oracle (OSS README; 17 UTC priority)",
