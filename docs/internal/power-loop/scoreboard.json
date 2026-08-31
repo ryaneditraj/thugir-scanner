@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T08:14:00.000Z",
+  "updated_at": "2026-08-31T09:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2751,
-  "total_findings": 26939,
+  "total_sites_scanned": 2753,
+  "total_findings": 27043,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1966,
   "discovery_findings": 22816,
-  "improvements_shipped": 1218,
-  "last_run": "2026-08-31T08:14:00.000Z",
+  "improvements_shipped": 1221,
+  "last_run": "2026-08-31T09:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 600,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 35 juice-shop live oracles); secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present"
+      "note": "Stable 6/6 first-pass recall (52 findings); secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 88,
-      "focus": "MCPGoat + DVMCP MCP labs + the0x-pwn lab-9 SVG XSS; parallel engine run shipped yogsec lab15-17 oracles",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 23,
+      "focus": "yogsec XSS labs 18-20 localStorage JSON/cross-key/Base64 eval route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 600 probes, 35 live oracles)",
-      "the0x-pwn.github.io/lab-xss/lab-9/: 6 findings — the0x-pwn-xss-svg-script-injection-route-live-oracle confirmed",
-      "the0x-pwn.github.io/lab-xss/lab-3/: 6 findings — the0x-pwn-xss-dom-hash-route-live-oracle confirmed",
-      "owasp-finbot-ctf.org/vendor/onboarding: 28 findings — finbot-vendor-sidecar-route-live-oracle confirmed",
-      "yogsec.github.io/xss-labs/labs/lab15-17.html: 8 findings each — window.name/history.state/sessionStorage route oracles shipped (engine evolve)",
-      "sabyasachidhal.github.io/MCPGoat/: 4 findings — thin marketing-page pass without MCP-specific route oracles",
-      "dvmcp.co.uk/: 4 findings — client-side-attp-agent-trust-evidence only; MCP challenge oracles require local Docker"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 596 probes)",
+      "yogsec.github.io/xss-labs/labs/lab18.html: 8 findings — yogsec-xss-lab18-localstorage-json-route-live-oracle shipped",
+      "yogsec.github.io/xss-labs/labs/lab19.html: 8 findings — yogsec-xss-lab19-cross-key-injection-route-live-oracle shipped",
+      "yogsec.github.io/xss-labs/labs/lab20.html: 7 findings — yogsec-xss-lab20-base64-decode-route-live-oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "yrprey.com + ginandjuice.shop/vulnerabilities queued but preempted by priority_discovery_urls drain",
-      "MCPGoat + DVMCP landing pages lack route-specific MCP tool-poisoning/prompt-injection live oracles",
-      "povzayd XSS-LABS levels 4-7 still lack route-specific live oracles",
-      "yogsec XSS labs 3,10,18-21 still lack route oracles"
+      "yogsec XSS labs 3,10,21 still lack route oracles (lab3 Try Again stub; lab10 empty page)",
+      "yrprey.com + ginandjuice.shop/vulnerabilities queued behind priority_discovery_urls",
+      "MCPGoat + DVMCP landing pages lack route-specific MCP tool-poisoning/prompt-injection live oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
-    "the0x-pwn.github.io/lab-xss/lab-9/": 6,
-    "owasp-finbot-ctf.org/vendor/onboarding": 28,
+    "juice-shop.herokuapp.com": 52,
+    "yogsec.github.io/xss-labs/labs/lab18.html": 8,
+    "yogsec.github.io/xss-labs/labs/lab19.html": 8,
+    "yogsec.github.io/xss-labs/labs/lab20.html": 7,
     "yogsec.github.io/xss-labs/labs/lab15.html": 8,
     "yogsec.github.io/xss-labs/labs/lab16.html": 8,
     "yogsec.github.io/xss-labs/labs/lab17.html": 8,

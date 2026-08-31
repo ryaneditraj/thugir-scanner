@@ -31516,6 +31516,87 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "yogsec-xss-lab18-localstorage-json-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #18 localStorage JSON route live oracle",
+    description:
+      "When scanning /labs/lab18.html, yogsec documents JSON payloads in localStorage parsed and executed via eval() — route-specific stored DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #18 exposes localStorage JSON → eval(payload) stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab18LocalstorageJsonRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never eval() JSON payloads from localStorage in production.",
+      steps: [
+        "Parse localStorage JSON with safe schemas instead of eval().",
+        "Treat all client-side stored payloads as untrusted when deserialized.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #18 route scan documents localStorage JSON eval XSS. Show safe JSON parsing and eval removal.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab19-cross-key-injection-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #19 cross-key injection route live oracle",
+    description:
+      "When scanning /labs/lab19.html, yogsec documents JavaScript split across multiple localStorage keys joined and executed via eval() — route-specific cross-key stored DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #19 exposes multi-key localStorage → eval(combined) cross-key XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab19CrossKeyInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never concatenate localStorage keys into eval() in production.",
+      steps: [
+        "Avoid assembling executable code from multiple client-side storage keys.",
+        "Use structured data formats with strict validation instead of eval().",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #19 route scan documents cross-key localStorage eval XSS. Show safe storage handling and eval removal.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab20-base64-decode-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #20 Base64 decode route live oracle",
+    description:
+      "When scanning /labs/lab20.html, yogsec documents Base64-encoded payloads in localStorage decoded via atob() and executed with eval() — route-specific stored DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #20 exposes localStorage Base64 → atob() → eval(decoded) stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab20Base64DecodeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never decode and eval() Base64 payloads from localStorage in production.",
+      steps: [
+        "Treat Base64 encoding as obfuscation, not sanitization — never pass decoded output to eval().",
+        "Use safe data formats and strict allowlists for client-side storage.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #20 route scan documents Base64 decode eval XSS. Show safe decoding and eval removal.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "yogsec-xss-lab22-innerhtml-eval-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
