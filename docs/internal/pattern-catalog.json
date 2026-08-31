@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-31T01:43:53.831Z",
-  "total": 2939,
-  "uniqueSlugs": 2931,
+  "generatedAt": "2026-08-31T03:04:48.263Z",
+  "total": 2942,
+  "uniqueSlugs": 2934,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2921,
+    "generic": 2924,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2854,
+    "deep": 2857,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 134,
     "Security misconfiguration": 214,
     "Broken authentication": 194,
-    "Injection": 474,
-    "Cross-site scripting": 766,
+    "Injection": 475,
+    "Cross-site scripting": 768,
     "Open redirect": 26,
     "general": 20,
     "SSRF": 19,
@@ -945,6 +945,7 @@
     "client-side-zeroday-training-evidence",
     "client-side-ziran-agent-security-evidence",
     "code-breaking-easy-route-live-oracle",
+    "code-breaking-hard-route-live-oracle",
     "code-breaking-medium-route-live-oracle",
     "code-breaking-puzzle-route-live-oracle",
     "command-injection-form-probe",
@@ -2909,6 +2910,8 @@
     "yogsec-open-redirect-route-live-oracle",
     "yogsec-vulnerable-login-route-live-oracle",
     "yogsec-vulnerable-shopping-cart-route-live-oracle",
+    "yogsec-xss-lab1-reflected-innerhtml-route-live-oracle",
+    "yogsec-xss-lab22-innerhtml-eval-route-live-oracle",
     "yogsec-xss-lab24-outerhtml-route-live-oracle",
     "yogsec-xss-lab25-eval-route-live-oracle",
     "yogsec-xss-lab26-settimeout-route-live-oracle",

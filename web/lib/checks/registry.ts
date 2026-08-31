@@ -12193,6 +12193,57 @@ const codeBreakingMediumRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const CODE_BREAKING_HARD_META: Record<string, { puzzleId: number; githubPath: string }> = {
+  picklecode: { puzzleId: 8, githubPath: "2018/picklecode" },
+  thejs: { puzzleId: 9, githubPath: "2018/thejs" }
+};
+
+const codeBreakingHardRouteLiveOracle: Rule = async (ctx) => {
+  if (!/code-breaking\.fly\.dev/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const slugMatch = pageUrl.match(/\/hard\/([\w-]+)/i);
+  if (!slugMatch) return NEGATIVE;
+  const slug = slugMatch[1]!.toLowerCase();
+  const meta = CODE_BREAKING_HARD_META[slug];
+  if (!meta) return NEGATIVE;
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const puzzleUrl = new URL(`/puzzle/${meta.puzzleId}/`, ctx.origin).toString();
+  const doc = await ctx.probe.get(puzzleUrl, { maxBytes: 8192 });
+  if (doc.status >= 200 && doc.status < 400) {
+    corpus += `\n${doc.body}`;
+  }
+  const slugRe = new RegExp(`hard\\s*-\\s*${slug.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "i");
+  const titleMatch = corpus.match(slugRe);
+  const githubMatch =
+    /github\.com\/phith0n\/code-breaking/i.test(corpus) ||
+    new RegExp(meta.githubPath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(corpus);
+  const flagForm = /csrfmiddlewaretoken|flag.*submit|提交/i.test(corpus);
+  if (titleMatch && (githubMatch || flagForm)) {
+    return {
+      fired: true,
+      confidence: titleMatch && githubMatch ? 0.92 : 0.89,
+      evidence: {
+        scannedUrl: pageUrl,
+        puzzleId: meta.puzzleId,
+        puzzleUrl,
+        snippet: titleMatch[0],
+        note: `Code-Breaking /hard/${slug} route scan — open source-code audit puzzle with GitHub source archive and flag submission form — route-specific hard-tier code-audit CTF oracle`
+      }
+    };
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      puzzleId: meta.puzzleId,
+      puzzleUrl,
+      githubPath: meta.githubPath,
+      note: `Code-Breaking /hard/${slug} route scan — maps to puzzle ${meta.puzzleId} (${meta.githubPath}) when short URL returns 404 — route-specific hard-tier code-audit CTF oracle`
+    }
+  };
+};
+
 // --- Aevum consent-ledger agent demo (demo.aevum.build) ------------------------------
 const CLIENT_AEVUM_AGENT_CONSENT_DEMO_RES: { label: string; re: RegExp }[] = [
   {
@@ -57770,6 +57821,32 @@ function yogsecXssLabRouteOracle(
   };
 }
 
+const yogsecXssLab1ReflectedInnerhtmlRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    1,
+    [
+      { label: "GET parameter reflection lab title", re: /XSS Lab #1:\s*GET Parameter Reflection/i },
+      { label: "innerHTML no sanitization disclaimer", re: /innerHTML\s*—\s*NO sanitization|injects it directly into the DOM using\s*<code>innerHTML<\/code>/i },
+      { label: "URL q parameter innerHTML sink", re: /element\.innerHTML\s*=\s*userInput|\?q=\s*<\/code>\s*parameter/i },
+      { label: "vulnerable reflected innerHTML target", re: /VULNERABLE TARGET \(Reflected via innerHTML\)/i }
+    ],
+    "yogsec XSS Lab #1 route scan — ?q= URL parameter assigned to element.innerHTML without escaping — reflected XSS training sink"
+  );
+
+const yogsecXssLab22InnerhtmlEvalRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    22,
+    [
+      { label: "innerHTML unsanitized input lab title", re: /XSS Lab #22:\s*innerHTML with Unsanitized Input/i },
+      { label: "innerHTML unsanitized heading", re: /innerHTML with Unsanitized Input/i },
+      { label: "execute eval button", re: /Execute \(eval\)|Running eval\(\)/i },
+      { label: "innerHTML result output sink", re: /resultOutput\.innerHTML|NEVER use eval\(\) with user input/i }
+    ],
+    "yogsec XSS Lab #22 route scan — user input rendered via innerHTML then passed to eval() — DOM XSS training sink"
+  );
+
 const yogsecXssLab24OuterhtmlRouteLiveOracle: Rule = async (ctx) =>
   yogsecXssLabRouteOracle(
     ctx,
@@ -103207,6 +103284,8 @@ export const RULES: Record<string, Rule> = {
   clientSideExploitEducationEvidence,
   clientSideYogsecXssLabsEvidence,
   clientSideYogsecXssLabModuleEvidence,
+  yogsecXssLab1ReflectedInnerhtmlRouteLiveOracle,
+  yogsecXssLab22InnerhtmlEvalRouteLiveOracle,
   yogsecXssLab24OuterhtmlRouteLiveOracle,
   yogsecXssLab25EvalRouteLiveOracle,
   yogsecXssLab26SettimeoutRouteLiveOracle,
@@ -105189,6 +105268,7 @@ export const RULES: Record<string, Rule> = {
   codeBreakingPuzzleRouteLiveOracle,
   codeBreakingEasyRouteLiveOracle,
   codeBreakingMediumRouteLiveOracle,
+  codeBreakingHardRouteLiveOracle,
   clientSideAevumAgentConsentDemoEvidence,
   aevumConsentReviewUnauthLiveOracle,
   aevumConsentReviewUnauthRouteLiveOracle,

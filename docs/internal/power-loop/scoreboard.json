@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T02:12:00.000Z",
+  "updated_at": "2026-08-31T03:07:46.577Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2738,
-  "total_findings": 26931,
+  "total_sites_scanned": 2743,
+  "total_findings": 27007,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1961,
-  "discovery_findings": 22910,
-  "improvements_shipped": 1161,
-  "last_run": "2026-08-31T02:12:00.000Z",
+  "discovery_findings": 22926,
+  "improvements_shipped": 1203,
+  "last_run": "2026-08-31T03:07:46.577Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,46 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 38 live oracles, 595 probes); secret-resend + resend-key + iac-terraform-tls-key present"
+      "note": "Stable 6/6 first-pass recall (52 findings, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 257,
-      "focus": "ginandjuice change-email race + catalog/search SQLi + owaspbased GenAI lessons + priority drain ai-security/nodegoat/brokencrystals/pwnshop",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 16,
+      "focus": "code-breaking hard tier (picklecode/thejs) + yogsec XSS labs 1/22 route oracles for labs 1-23 gap",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 38 live oracles)",
-      "ginandjuice.shop/my-account/change-email: 38 findings — ginandjuice-change-email-route-live-oracle confirmed",
-      "ginandjuice.shop/catalog/search: 45 findings — ginandjuice-catalog-category-sqli-route-live-oracle + catalog-search-xss",
-      "owaspbased-lessons.vercel.app/lesson/prompt-injection: 4 findings — owasp-genai-prompt-injection-route-live-oracle",
-      "brokencrystals.com/render.dot: 94 findings — brokencrystals-render-dot-ssti-route-live-oracle",
-      "pwnshop.ctfsecurity.com/chat/init: 47 findings — pwnshop-chat-init-route-live-oracle",
-      "nodegoat-websec.herokuapp.com/allocations: 13 findings — nodegoat-allocations-route-live-oracle",
-      "ai-security-platform-iota.vercel.app/challenges/leaked-config: 8 findings — ai-security-leaked-config-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles)",
+      "code-breaking.fly.dev/hard/picklecode: 4 findings — code-breaking-hard-route-live-oracle shipped",
+      "code-breaking.fly.dev/hard/thejs: 4 findings — code-breaking-hard-route-live-oracle shipped",
+      "yogsec.github.io/xss-labs/labs/lab1.html: 7 findings — yogsec-xss-lab1-reflected-innerhtml-route-live-oracle shipped",
+      "yogsec.github.io/xss-labs/labs/lab22.html: 8 findings — yogsec-xss-lab22-innerhtml-eval-route-live-oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "owaspbased excessive-agency + supply-chain lessons queued but not scanned (8-URL limit)",
-      "ginandjuice race-condition admin takeover needs authenticated session for full exploitation proof"
+      "yogsec XSS labs 2-21,23 still lack route-specific oracles (labs 24-39 covered)",
+      "code-breaking easy slugs pcrewaf/phpmagic/phplimit covered by easy-tier oracle but thin 4-finding passes"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
-    "ginandjuice.shop/my-account/change-email": 38,
+    "juice-shop.herokuapp.com": 52,
+    "code-breaking.fly.dev/hard/picklecode": 4,
+    "code-breaking.fly.dev/hard/thejs": 4,
+    "yogsec.github.io/xss-labs/labs/lab1.html": 7,
+    "yogsec.github.io/xss-labs/labs/lab22.html": 8,
     "ginandjuice.shop/catalog/search": 45,
-    "owaspbased-lessons.vercel.app/lesson/prompt-injection": 4,
     "brokencrystals.com/render.dot": 94,
     "pwnshop.ctfsecurity.com/chat/init": 47,
     "nodegoat-websec.herokuapp.com/allocations": 13,
-    "ai-security-platform-iota.vercel.app/challenges/leaked-config": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-44": 15,
-    "duck-store.escape.tech/api/v1/users/me/profile": 33,
-    "demo.owasp-juice.shop/rest/memories": 27,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52
+    "ai-security-platform-iota.vercel.app/challenges/leaked-config": 8
   }
 }
