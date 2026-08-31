@@ -20325,6 +20325,49 @@ const chimeraHealthcareImagingIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function chimeraHealthcareRecordsPhiExposureProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const phiOk =
+    /healthcare\/records/i.test(corpus) &&
+    (/CHM-HEALTH-003/i.test(corpus) ||
+      /PHI Data Exposure/i.test(corpus) ||
+      /Critical PHI Exposure/i.test(corpus) ||
+      /GET \/api\/v1\/healthcare\/records\b/i.test(corpus)) &&
+    (/Massive PHI exposure|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!phiOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-HEALTH-003/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/healthcare/records — PHI Data Exposure (unauthenticated bulk patient record listing, CHM-HEALTH-003)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents unauthenticated PHI listing via GET /api/v1/healthcare/records (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — healthcare PHI exposure training oracle"
+    }
+  };
+}
+
+const chimeraHealthcareRecordsPhiExposureRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/healthcare\/records(?:\?|$)/i.test(pageUrl)) return NEGATIVE;
+  if (/\/api\/v1\/healthcare\/records\/(?:export|search|emergency-access|upload)/i.test(pageUrl)) {
+    return NEGATIVE;
+  }
+  if (/\/api\/v1\/healthcare\/records\/[^/?]+/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraHealthcareRecordsPhiExposureProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/healthcare/records route scan — CHM-HEALTH-003 documents unauthenticated PHI bulk listing (Jekyll docs corpus fallback) — route-specific healthcare PHI exposure training oracle"
+    }
+  };
+};
+
 // --- DVLA Damn Vulnerable Laravel Application (dvla.jcadima.dev) -----------------
 const CLIENT_DVLA_RES: { label: string; re: RegExp }[] = [
   {
@@ -100066,6 +100109,87 @@ const finbotDarklabFindriveToolsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeFinbotDarklabFinstripeToolsWrite(ctx: RuleContext): Promise<RuleResult | null> {
+  return probeFinbotDarklabServerToolsWrite(ctx, "finstripe", {
+    name: "create_transfer",
+    description: "thugir-tool-poison-probe — indirect prompt injection surface for FinStripe MCP",
+    parameters: {
+      type: "object",
+      properties: {
+        vendor_account: { type: "string" },
+        amount: { type: "number" },
+        invoice_reference: { type: "string" },
+        vendor_id: { type: "integer" },
+        invoice_id: { type: "integer" }
+      },
+      required: ["vendor_account", "amount", "invoice_reference", "vendor_id", "invoice_id"]
+    }
+  });
+}
+
+const finbotDarklabFinstripeToolsLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabFinstripeToolsWrite(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabFinstripeToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/servers\/finstripe\/tools\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabFinstripeToolsWrite(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "OWASP FinBot FinStripe /tools route scan — public MCP tool write API enables supply-chain tool-poisoning labs (issue #544)"
+    }
+  };
+};
+
+async function probeFinbotDarklabSystemutilsToolsWrite(ctx: RuleContext): Promise<RuleResult | null> {
+  return probeFinbotDarklabServerToolsWrite(ctx, "systemutils", {
+    name: "execute_script",
+    description: "thugir-tool-poison-probe — indirect prompt injection surface for SystemUtils MCP",
+    parameters: {
+      type: "object",
+      properties: {
+        script: { type: "string" },
+        args: { type: "string" }
+      },
+      required: ["script"]
+    }
+  });
+}
+
+const finbotDarklabSystemutilsToolsLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabSystemutilsToolsWrite(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabSystemutilsToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/servers\/systemutils\/tools\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabSystemutilsToolsWrite(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "OWASP FinBot SystemUtils /tools route scan — public MCP tool write API enables supply-chain tool-poisoning labs (issue #544)"
+    }
+  };
+};
+
 async function probeFinbotDarklabFinbankToolsWrite(ctx: RuleContext): Promise<RuleResult | null> {
   return probeFinbotDarklabServerToolsWrite(ctx, "finbank", {
     name: "get_account_balance",
@@ -104506,6 +104630,7 @@ export const RULES: Record<string, Rule> = {
   chimeraHealthcareRecordsSearchSqliRouteLiveOracle,
   chimeraHealthcareRecordsBolaRouteLiveOracle,
   chimeraHealthcareImagingIdorRouteLiveOracle,
+  chimeraHealthcareRecordsPhiExposureRouteLiveOracle,
   chimeraSwaggerRouteLiveOracle,
   chimeraApiReferenceRouteLiveOracle,
   chimeraFedrampOpenapiExtensionsRouteLiveOracle,
@@ -106067,6 +106192,10 @@ export const RULES: Record<string, Rule> = {
   finbotDarklabFinmailToolsRouteLiveOracle,
   finbotDarklabFindriveToolsLiveOracle,
   finbotDarklabFindriveToolsRouteLiveOracle,
+  finbotDarklabFinstripeToolsLiveOracle,
+  finbotDarklabFinstripeToolsRouteLiveOracle,
+  finbotDarklabSystemutilsToolsLiveOracle,
+  finbotDarklabSystemutilsToolsRouteLiveOracle,
   finbotDarklabFinbankToolsLiveOracle,
   finbotDarklabFinbankToolsRouteLiveOracle,
   finbotDarklabFinmailServerLiveOracle,
