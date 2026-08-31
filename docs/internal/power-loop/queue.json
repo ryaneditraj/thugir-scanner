@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-31T13:05:00.000Z",
+  "updated_at": "2026-08-31T14:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
+      "source": "OWASP crAPI Challenge 12 — NoSQL injection oracle POST /community/api/v2/coupon/validate-coupon (OWASPLA 2025 guide + allthewriteups; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.apisec.ai/workshop/api/shop/apply_coupon",
+      "source": "OWASP crAPI Challenge 13 — SQL injection oracle POST /workshop/api/shop/apply_coupon (OWASPLA 2025 guide; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/v2/user/videos/convert_video",
+      "source": "OWASP crAPI2 — command injection chain oracle POST /identity/api/v2/user/videos/convert_video (Medium walkthrough + OWASPLA guide; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api8/user/login",
+      "source": "vAPI OWASP API8 — SQL injection oracle POST /vapi/api8/user/login (roottusk/vapi + apisec.ai hosted lab; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://apparatus.atlascrew.dev/",
+      "source": "atlas-crew/Apparatus — AI network security simulation lab with red team/chaos/defense APIs (HN Show HN atlas-crew; web search 14 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crapi.apisec.ai/login",
       "source": "OWASP crAPI public hosted demo — login/signup API security lab (crapi.apisec.ai; allthewriteups + OWASP LA 2025 guide; web search 13 UTC)",
@@ -11402,6 +11427,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
+      "source": "OWASP crAPI Challenge 12 — NoSQL injection oracle POST /community/api/v2/coupon/validate-coupon (OWASPLA 2025 guide + allthewriteups; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.apisec.ai/workshop/api/shop/apply_coupon",
+      "source": "OWASP crAPI Challenge 13 — SQL injection oracle POST /workshop/api/shop/apply_coupon (OWASPLA 2025 guide; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/v2/user/videos/convert_video",
+      "source": "OWASP crAPI2 — command injection chain oracle POST /identity/api/v2/user/videos/convert_video (Medium walkthrough + OWASPLA guide; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api8/user/login",
+      "source": "vAPI OWASP API8 — SQL injection oracle POST /vapi/api8/user/login (roottusk/vapi + apisec.ai hosted lab; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://apparatus.atlascrew.dev/",
+      "source": "atlas-crew/Apparatus — AI network security simulation lab with red team/chaos/defense APIs (HN Show HN atlas-crew; web search 14 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crapi.apisec.ai/login",
       "source": "OWASP crAPI public hosted demo — login/signup API security lab (crapi.apisec.ai; allthewriteups + OWASP LA 2025 guide; web search 13 UTC)",
