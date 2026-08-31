@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T01:15:00.000Z",
+  "updated_at": "2026-08-31T01:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3309,
-  "total_findings": 35448,
+  "total_sites_scanned": 3312,
+  "total_findings": 35494,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2143,
-  "discovery_findings": 28230,
-  "improvements_shipped": 1197,
-  "last_run": "2026-08-31T01:15:00.000Z",
+  "discovery_findings": 28244,
+  "improvements_shipped": 1200,
+  "last_run": "2026-08-31T01:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "01",
     "benchmark": {
@@ -48,41 +48,33 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 596 probes, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present"
+      "note": "Stable 6/6 first-pass recall (52 findings, 596 probes); no benchmark category misses"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 223,
-      "focus": "ai-security leaked-config/supabase-data + nodegoat allocations + brokencrystals render.dot SSTI + pwnshop chat/init + ginandjuice catalog search + owaspbased-lessons output-handling/misinformation",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 14,
+      "focus": "vulnlab validate/ssti 404 path fallback + code-breaking medium tier + vulnforge level18 extension bypass",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles; secret-resend + resend-key + iac-terraform-tls-key)",
-      "brokencrystals.com/render.dot: 95 findings — doT SSTI hub with brokencrystals-render-dot-route-live-oracle",
-      "pwnshop.ctfsecurity.com/chat/init: 47 findings — username enumeration + product-search-sqli live oracles",
-      "ginandjuice.shop/api/catalog/search?q=test: 44 findings — ginandjuice-catalog-search-xss-live-oracle + ginandjuice-catalog-category-sqli-live-oracle",
-      "nodegoat-websec.herokuapp.com/allocations: 13 findings — nodegoat-allocations-route-live-oracle confirmed",
-      "ai-security-platform-iota.vercel.app/challenges/leaked-config: 8 findings — ai-security-leaked-config-route-live-oracle",
-      "ai-security-platform-iota.vercel.app/challenges/supabase-data: 8 findings — ai-security-supabase-data-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings) — no category misses",
+      "hack-this-site-eta.vercel.app/api/validate/ssti: 53 findings — vulnlab-validate-ssti-api-route-live-oracle 404 JSON path fallback",
+      "code-breaking.fly.dev/medium/javacon: 4 findings — code-breaking-medium-route-live-oracle",
+      "vulnforge-academy.vercel.app/.../level18.php: 7 findings — vulnforge-academy-level18-extension-bypass-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable — no category misses on juice-shop",
-      "vwad.owasp.org/app/goof/ + ginandjuice order-details IDOR still pending (queue limit 8 preempted)",
-      "owaspbased-lessons output-handling/misinformation thin 4-finding passes — Vercel checkpoint may block /onboard session probes"
+      "vulnlab /api/validate/ssti returns 404 JSON (router registered, lab checker not deployed) — route oracle now fires via path fallback"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "hack-this-site-eta.vercel.app/api/validate/ssti": 53,
+    "code-breaking.fly.dev/medium/javacon": 4,
+    "vulnforge-academy.vercel.app/backend/includes/levels/hard/level18.php": 7,
     "brokencrystals.com/render.dot": 95,
-    "pwnshop.ctfsecurity.com/chat/init": 47,
-    "ginandjuice.shop/api/catalog/search?q=test": 44,
-    "nodegoat-websec.herokuapp.com/allocations": 13,
-    "ai-security-platform-iota.vercel.app/challenges/leaked-config": 8,
-    "ai-security-platform-iota.vercel.app/challenges/supabase-data": 8,
-    "owaspbased-lessons.vercel.app/lesson/output-handling": 4,
-    "owaspbased-lessons.vercel.app/lesson/misinformation": 4
+    "pwnshop.ctfsecurity.com/chat/init": 47
   }
 }

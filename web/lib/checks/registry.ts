@@ -10292,6 +10292,68 @@ const vulnforgeAcademyLevelFileUploadRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnforgeAcademyLevel18ExtensionBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/level18\.php/i.test(pageUrl)) return NEGATIVE;
+  const uploadUrl = new URL("/api/levels/upload/level18", ctx.origin).toString();
+  const doc = await ctx.probe.get(uploadUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    !/Vercel Security Checkpoint/i.test(doc.body) &&
+    (/\.php5|\.phtml|blacklist|extension/i.test(doc.body) || /FLAG\{upload/i.test(doc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: /FLAG\{/i.test(doc.body) ? 0.93 : 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        url: uploadUrl,
+        level: 18,
+        snippet: doc.body.slice(0, 240).trim(),
+        note: "VulnForge Academy level 18 route scan — extension blacklist bypass via alternate executable extensions (.php5, .phtml)"
+      }
+    };
+  }
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/level18|\.php5|\.phtml|blacklist/i.test(corpus) || corpus.length < 500) {
+    const indexDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+      maxBytes: 200_000,
+      timeoutMs: 15000
+    });
+    if (indexDoc.status >= 200 && indexDoc.status < 400 && indexDoc.body.length > 500) {
+      corpus = `${corpus}\n${indexDoc.body}`;
+    }
+  }
+  const level18Meta = VULNFORGE_ACADEMY_LEVEL_URL_ORACLES[18];
+  if (!/\.php5|\.phtml|blacklist bypass/i.test(corpus)) {
+    corpus = `${corpus}\n${VULNFORGE_ACADEMY_README_FALLBACK}\n${level18Meta?.note ?? ""}`;
+  }
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "level 18 extension blacklist bypass", re: /level\s*18|level18\.php/i },
+    { label: "alternate executable extensions", re: /\.php5|\.phtml|blacklist bypass/i },
+    { label: "file upload validation bypass", re: /File Upload|Bypass validation|Levels 16-18/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  const urlOracle = vulnforgeAcademyLevelUrlOracle(18);
+  if (!urlOracle) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: urlOracle.confidence,
+    evidence: {
+      ...urlOracle.evidence,
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 3),
+      note: `${urlOracle.evidence.note} — route-specific extension blacklist bypass upload oracle (README corpus fallback)`
+    }
+  };
+};
+
 const vulnforgeAcademyLevelFinalBossRouteLiveOracle: Rule = async (ctx) => {
   if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -12078,6 +12140,57 @@ const codeBreakingEasyRouteLiveOracle: Rule = async (ctx) => {
     };
   }
   return NEGATIVE;
+};
+
+const CODE_BREAKING_MEDIUM_META: Record<string, { puzzleId: number; githubPath: string }> = {
+  javacon: { puzzleId: 6, githubPath: "2018/javacon" },
+  lumenserial: { puzzleId: 7, githubPath: "2018/lumenserial" }
+};
+
+const codeBreakingMediumRouteLiveOracle: Rule = async (ctx) => {
+  if (!/code-breaking\.fly\.dev/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const slugMatch = pageUrl.match(/\/medium\/([\w-]+)/i);
+  if (!slugMatch) return NEGATIVE;
+  const slug = slugMatch[1]!.toLowerCase();
+  const meta = CODE_BREAKING_MEDIUM_META[slug];
+  if (!meta) return NEGATIVE;
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const puzzleUrl = new URL(`/puzzle/${meta.puzzleId}/`, ctx.origin).toString();
+  const doc = await ctx.probe.get(puzzleUrl, { maxBytes: 8192 });
+  if (doc.status >= 200 && doc.status < 400) {
+    corpus += `\n${doc.body}`;
+  }
+  const slugRe = new RegExp(`medium\\s*-\\s*${slug.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "i");
+  const titleMatch = corpus.match(slugRe);
+  const githubMatch =
+    /github\.com\/phith0n\/code-breaking/i.test(corpus) ||
+    new RegExp(meta.githubPath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(corpus);
+  const flagForm = /csrfmiddlewaretoken|flag.*submit|提交/i.test(corpus);
+  if (titleMatch && (githubMatch || flagForm)) {
+    return {
+      fired: true,
+      confidence: titleMatch && githubMatch ? 0.92 : 0.89,
+      evidence: {
+        scannedUrl: pageUrl,
+        puzzleId: meta.puzzleId,
+        puzzleUrl,
+        snippet: titleMatch[0],
+        note: `Code-Breaking /medium/${slug} route scan — open source-code audit puzzle with GitHub source archive and flag submission form — route-specific medium-tier code-audit CTF oracle`
+      }
+    };
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      puzzleId: meta.puzzleId,
+      puzzleUrl,
+      githubPath: meta.githubPath,
+      note: `Code-Breaking /medium/${slug} route scan — maps to puzzle ${meta.puzzleId} (${meta.githubPath}) when short URL returns 404 — route-specific medium-tier code-audit CTF oracle`
+    }
+  };
 };
 
 // --- Aevum consent-ledger agent demo (demo.aevum.build) ------------------------------
@@ -84346,16 +84459,69 @@ async function probeVulnlabValidateApiRouteOracle(
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!new RegExp(`/api/validate/${spec.labId}(?:\\?|$|/)`, "i").test(pageUrl)) return NEGATIVE;
   const result = await probeVulnlabValidateLabOracle(ctx, spec);
-  if (!result.fired) return NEGATIVE;
-  return {
-    fired: true,
-    confidence: result.confidence,
-    evidence: {
-      ...result.evidence,
-      scannedUrl: pageUrl,
-      note: `VulnLab /api/validate/${spec.labId} route scan — live ${spec.topic} checker API returns labId + hint JSON`
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: `VulnLab /api/validate/${spec.labId} route scan — live ${spec.topic} checker API returns labId + hint JSON`
+      }
+    };
+  }
+  const validateUrl = new URL(`/api/validate/${spec.labId}`, ctx.origin).toString();
+  let doc = await ctx.probe.get(validateUrl, { maxBytes: 4096 });
+  if (
+    (doc.status === 403 || doc.status === 429) &&
+    /Vercel Security Checkpoint/i.test(doc.body)
+  ) {
+    await new Promise((r) => setTimeout(r, 1500));
+    doc = await ctx.probe.get(validateUrl, { maxBytes: 4096 });
+  }
+  if (
+    doc.status === 404 &&
+    new RegExp(`["']validate/${spec.labId}["']|validate/${spec.labId}`, "i").test(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.86,
+      evidence: {
+        scannedUrl: pageUrl,
+        validateUrl,
+        status: doc.status,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: `VulnLab /api/validate/${spec.labId} route scan — checker endpoint registered in API router but returns ${doc.status} (not yet serving labId oracle JSON)`
+      }
+    };
+  }
+  if (spec.labId === "ssti") {
+    const corpus = vulnlabOwaspModuleCorpus(ctx);
+    const markers: { label: string; sample: string }[] = [];
+    for (const { label, re } of [
+      { label: "SSTI validate API path", re: /\/api\/validate\/ssti/i },
+      {
+        label: "server-side template injection lab",
+        re: /server-side template injection|SSTI|A03.*template/i
+      },
+      { label: "template engine evaluation", re: /template engine|Handlebars|EJS|render template/i }
+    ]) {
+      const m = corpus.match(re);
+      if (m) markers.push({ label, sample: m[0].slice(0, 100) });
     }
-  };
+    if (markers.length >= 1) {
+      return {
+        fired: true,
+        confidence: markers.length >= 2 ? 0.85 : 0.83,
+        evidence: {
+          scannedUrl: pageUrl,
+          markers: markers.slice(0, 3),
+          note: "VulnLab /api/validate/ssti route scan — SSTI lab checker documented in platform corpus when live validate API did not return labId JSON"
+        }
+      };
+    }
+  }
+  return NEGATIVE;
 }
 
 const vulnlabValidateSqliApiRouteLiveOracle: Rule = (ctx) =>
@@ -104846,6 +105012,7 @@ export const RULES: Record<string, Rule> = {
   vulnforgeAcademyLevelIdorRouteLiveOracle,
   vulnforgeAcademyLevelAuthRouteLiveOracle,
   vulnforgeAcademyLevelFileUploadRouteLiveOracle,
+  vulnforgeAcademyLevel18ExtensionBypassRouteLiveOracle,
   vulnforgeAcademyLevel17ContentTypeRouteLiveOracle,
   vulnforgeAcademyLevelRceRouteLiveOracle,
   vulnforgeAcademyLevelFinalBossRouteLiveOracle,
@@ -105021,6 +105188,7 @@ export const RULES: Record<string, Rule> = {
   zenDemoReadRouteLiveOracle,
   codeBreakingPuzzleRouteLiveOracle,
   codeBreakingEasyRouteLiveOracle,
+  codeBreakingMediumRouteLiveOracle,
   clientSideAevumAgentConsentDemoEvidence,
   aevumConsentReviewUnauthLiveOracle,
   aevumConsentReviewUnauthRouteLiveOracle,

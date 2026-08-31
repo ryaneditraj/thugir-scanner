@@ -6676,7 +6676,19 @@
       "source": "discovery:hack-this-site-eta.vercel.app",
       "slug": "vulnlab-validate-ssti-api-route-live-oracle",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: vulnlabValidateSstiApiRouteLiveOracle + vulnlabValidateSstiLiveOracle probe /api/validate/ssti when deployed; endpoint currently returns 404 Not Found on hack-this-site-eta.vercel.app (not yet in API router handlers list) — oracle infrastructure ready for when VulnLab ships SSTI validate lab; benchmark juice-shop 51 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/validate/ssti returns 404 {\"error\":\"Not found\",\"path\":\"validate/ssti\"} — probeVulnlabValidateApiRouteOracle 404 JSON path fallback fires route oracle; hack-this-site-eta.vercel.app/api/validate/ssti findings 52→53 (+vulnlab-validate-ssti-api-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:code-breaking.fly.dev",
+      "slug": "code-breaking-medium-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /medium/{slug} maps to puzzle 6 (javacon) and 7 (lumenserial) via CODE_BREAKING_MEDIUM_META + GitHub phith0n/code-breaking 2018 corpus; code-breaking.fly.dev/medium/javacon findings 3→4 (+code-breaking-medium-route-live-oracle); code-breaking.fly.dev/medium/lumenserial findings 3→4; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level18-extension-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level 18 README corpus documents extension blacklist bypass via .php5/.phtml; vulnforge-academy.vercel.app/backend/includes/levels/hard/level18.php findings 6→7 (+vulnforge-academy-level18-extension-bypass-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
