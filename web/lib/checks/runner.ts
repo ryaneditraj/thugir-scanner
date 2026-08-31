@@ -2350,6 +2350,9 @@ const DEEP_RULES = new Set<string>([
   "oopssecRoadmapRouteLiveOracle",
   "oopssecStoreHomeRouteLiveOracle",
   "clientSideVoidsecShoppingCartEvidence",
+  "voidsecShoppingCartRouteLiveOracle",
+  "clientSideDvmcpEvidence",
+  "dvmcpRouteLiveOracle",
   "clientSideMcpgoatEvidence",
   "mcpgoatRouteLiveOracle",
   "clientSideWhoopsPayEvidence",
@@ -3315,6 +3318,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideOverthewireNatasEvidence",
   "clientSideFfufMeEvidence",
   "clientSideYrpreyEvidence",
+  "yrpreyRouteLiveOracle",
   "clientSideBergerCyberLabEvidence",
   "clientSidePwnCollegeEvidence",
   "clientSideReactDomXssLabEvidence",
@@ -14868,6 +14872,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("mcpgoat")
       )
         return -4;
+      if (/dvmcp\.co\.uk/i.test(origin) && p.slug.startsWith("dvmcp")) return -4;
+      if (/yrprey\.com/i.test(origin) && p.slug.startsWith("yrprey")) return -4;
+      if (
+        /voidsec\.github\.io\/shopping-cart/i.test(origin) &&
+        p.slug.startsWith("voidsec-shopping-cart")
+      )
+        return -4;
+      if (
+        /voidsec\.github\.io\/shopping-cart/i.test(origin) &&
+        p.slug.startsWith("client-side-voidsec-shopping-cart")
+      )
+        return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/forgot-password\b/i.test(targetInput) &&

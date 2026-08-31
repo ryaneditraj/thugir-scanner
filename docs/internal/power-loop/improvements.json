@@ -6833,6 +6833,24 @@
       "slug": "yogsec-xss-lab5-user-agent-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab5UserAgentRouteLiveOracle matches XSS Lab #5 User-Agent Reflection + navigator.userAgent innerHTML sink + VULNERABLE to XSS if User-Agent contains malicious code markers; yogsec.github.io/xss-labs/labs/lab5.html findings 6→7 (+yogsec-xss-lab5-user-agent-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvmcp.co.uk",
+      "slug": "dvmcp-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvmcpRouteLiveOracle matches Damn Vulnerable MCP Server + OWASP MCP Top 10 + MCP-001..MCP-010 catalog on dvmcp.co.uk; dvmcp.co.uk/ findings 4→6 (+client-side-dvmcp-evidence +dvmcp-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yrprey.com",
+      "slug": "yrprey-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yrpreyRouteLiveOracle matches Groundbreaking Framework + yrprey-frontend/backend/application GitHub repos on yrprey.com; yrprey.com/ findings 4→5 (+yrprey-route-live-oracle +client-side-yrprey-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:voidsec.github.io",
+      "slug": "voidsec-shopping-cart-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: voidsecShoppingCartRouteLiveOracle matches Shopping Cart pen-test scope + XSS/SQLi/auth-bypass catalog on voidsec.github.io/shopping-cart; findings 4→6 (+voidsec-shopping-cart-route-live-oracle +client-side-voidsec-shopping-cart-evidence); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

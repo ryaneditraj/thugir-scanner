@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T10:12:00.000Z",
+  "updated_at": "2026-08-31T11:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2770,
-  "total_findings": 27417,
+  "total_sites_scanned": 2773,
+  "total_findings": 27432,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1976,
   "discovery_findings": 23139,
-  "improvements_shipped": 1224,
-  "last_run": "2026-08-31T10:12:00.000Z",
+  "improvements_shipped": 1227,
+  "last_run": "2026-08-31T11:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 547,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,35 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 595 probes); no category misses"
+      "note": "Stable 6/6 first-pass recall (52 findings) — no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 51,
-      "focus": "yogsec lab21 search-box eval + ginandjuice /vulnerabilities disclosure + MCPGoat hub route oracles",
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "dvmcp + yrprey + voidsec shopping-cart route oracles from queued learning gaps",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 595 probes)",
-      "yogsec.github.io/xss-labs/labs/lab21.html: 8 findings — yogsec-xss-lab21-search-box-route-live-oracle shipped",
-      "ginandjuice.shop/vulnerabilities: 37 findings — ginandjuice-vulnerabilities-disclosure-route-live-oracle shipped",
-      "sabyasachidhal.github.io/MCPGoat/: 6 findings — mcpgoat-route-live-oracle + client-side-mcpgoat-evidence shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings)",
+      "dvmcp.co.uk/: 6 findings — dvmcp-route-live-oracle + client-side-dvmcp-evidence shipped",
+      "yrprey.com/: 5 findings — yrprey-route-live-oracle shipped",
+      "voidsec.github.io/shopping-cart/: 6 findings — voidsec-shopping-cart-route-live-oracle shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "yogsec XSS labs 3,10 still stub/empty (Try Again / blank) — route oracles blocked until upstream content restored",
-      "juice-shop.lab.pentest-forge.com + tomcat.lab + voidsec shopping-cart + povzayd lab8 still queued",
-      "povzayd XSS-LABS levels 4-7 still lack route-specific live oracles",
-      "dvmcp.co.uk + yrprey.com still pending MCP/API lab route oracles"
+      "juice-shop.lab.pentest-forge.com + tomcat.lab still 502 — PentestForge hosted labs unreachable",
+      "povzayd XSS-LABS lab4-8 return 404 on GitHub Pages — route oracles blocked until upstream restores",
+      "yogsec XSS labs 3,10 still stub/empty (Try Again / blank)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
+    "juice-shop.herokuapp.com": 52,
+    "dvmcp.co.uk": 6,
+    "voidsec.github.io/shopping-cart": 6,
+    "yrprey.com": 5,
     "ginandjuice.shop/vulnerabilities": 37,
-    "yogsec.github.io/xss-labs/labs/lab21.html": 8,
-    "sabyasachidhal.github.io/MCPGoat/": 6,
-    "ginandjuice.shop/catalog?category=1": 45,
-    "brokencrystals.com/api/auth/jwt/none/login": 79,
-    "ginandjuice.shop/api/basket": 37
+    "brokencrystals.com/api/auth/jwt/none/login": 79
   }
 }

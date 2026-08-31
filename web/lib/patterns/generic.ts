@@ -22480,6 +22480,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "voidsec-shopping-cart-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "VoidSec Shopping Cart route live oracle",
+    description:
+      "When scanning voidsec.github.io/shopping-cart/, the GitHub Pages landing confirms XSS, SQLi, auth bypass, clickjacking, and response-splitting hack-lab scope — route-specific e-commerce training oracle.",
+    impactOneline:
+      "Route-specific confirmation that VoidSec Shopping Cart documents deliberately vulnerable e-commerce training targets for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "voidsecShoppingCartRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VoidSec Shopping Cart is intentional training — isolate hack-lab instances from production e-commerce.",
+      steps: [
+        "Deploy Shopping Cart only on local XAMPP or Docker lab instances.",
+        "Gate live vulnerable instances behind VPN-only access.",
+        "Do not copy Shopping Cart vulnerability patterns into production e-commerce code."
+      ]
+    },
+    fixPrompt:
+      "Our VoidSec Shopping Cart route scan confirms deliberately vulnerable e-commerce training scope. Show lab isolation and marketing-page hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-dvmcp-evidence",
+    platform: "generic",
+    category: "AI / LLM security",
+    severityDefault: "medium",
+    title: "DVMCP Damn Vulnerable MCP Server hub disclosed",
+    description:
+      "DVMCP marketing hub documents a deliberately insecure MCP server with 10 vulnerabilities mapping OWASP MCP Top 10 categories including tool poisoning, command injection, and SSRF.",
+    impactOneline:
+      "Public DVMCP docs advertise MCP-specific attack classes attackers use to tune scanners against AI agent infrastructure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDvmcpEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVMCP is intentional MCP security training — host only in isolated lab environments.",
+      steps: [
+        "Run DVMCP Docker images only on private lab networks.",
+        "Validate MCP tool schemas and block dynamic tool poisoning in production.",
+        "Use OWASP MCP Top 10 guidance to harden production MCP servers."
+      ]
+    },
+    fixPrompt:
+      "We host DVMCP-style vulnerable MCP server training. Show how to isolate MCP CTF labs from production agent deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvmcp-route-live-oracle",
+    platform: "generic",
+    category: "AI / LLM security",
+    severityDefault: "medium",
+    title: "DVMCP hub route live oracle",
+    description:
+      "When scanning dvmcp.co.uk/, the hub confirms 10 OWASP MCP Top 10 vulnerabilities (MCP-001 through MCP-010) across auth bypass, tool poisoning, command injection, SSRF, and data exfiltration — route-specific MCP security lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that DVMCP documents deliberately vulnerable MCP server training scope for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvmcpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVMCP is intentional MCP training — isolate MCP lab infrastructure from production agent deployments.",
+      steps: [
+        "Run DVMCP only on private lab networks.",
+        "Validate MCP tool schemas and block dynamic tool poisoning in production.",
+        "Use OWASP MCP Top 10 guidance to harden production MCP servers."
+      ]
+    },
+    fixPrompt:
+      "Our DVMCP route scan confirms deliberately vulnerable MCP server training scope. Show MCP tool validation and lab isolation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-mcpgoat-evidence",
     platform: "generic",
     category: "AI / LLM security",
@@ -40308,6 +40386,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host YRprey-style vulnerability testing frameworks. Show how to isolate training apps from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yrprey-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "YRprey framework hub route live oracle",
+    description:
+      "When scanning yrprey.com/, the marketing hub confirms 22 intentional vulnerabilities with frontend/backend/Docker training repos — route-specific OWASP API security framework oracle.",
+    impactOneline:
+      "Route-specific confirmation that YRprey documents deliberately vulnerable API security training scope for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yrpreyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "YRprey is intentional training — isolate vulnerability testing frameworks from production networks.",
+      steps: [
+        "Require authentication before serving the testing framework.",
+        "Do not deploy YRprey-style intentional flaws in production environments.",
+        "Rate-limit unauthenticated framework enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our YRprey route scan confirms deliberately vulnerable API security training scope. Show framework isolation and production hardening remediation.",
     version: 1,
     enabled: true
   },
