@@ -31354,6 +31354,87 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "yogsec-xss-lab12-sessionstorage-stored-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #12 sessionStorage route live oracle",
+    description:
+      "When scanning /labs/lab12.html, yogsec documents sessionStorage storedData rendered via innerHTML on page reload — route-specific stored XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #12 exposes sessionStorage save-on-reload → innerHTML stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab12SessionstorageStoredRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never render persisted sessionStorage values via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying sessionStorage data on page load.",
+        "Sanitize stored user content before persistence and on retrieval.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #12 route scan documents sessionStorage stored XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab13-indexeddb-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #13 IndexedDB route live oracle",
+    description:
+      "When scanning /labs/lab13.html, yogsec documents IndexedDB notes rendered via innerHTML after read — route-specific stored XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #13 exposes IndexedDB notes → innerHTML stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab13IndexeddbRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never render IndexedDB records via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying notes loaded from IndexedDB.",
+        "Escape HTML entities before inserting database-backed content into the DOM.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #13 route scan documents IndexedDB stored XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab14-cookie-stored-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #14 cookie route live oracle",
+    description:
+      "When scanning /labs/lab14.html, yogsec documents userPref cookie value assigned to innerHTML on page load — route-specific stored XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #14 exposes cookie read-and-inject → innerHTML stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab14CookieStoredRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never render cookie values via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying cookie-backed preferences.",
+        "Treat all cookie data as untrusted when reflected in HTML contexts.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #14 route scan documents cookie stored XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "yogsec-xss-lab22-innerhtml-eval-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

@@ -57998,6 +57998,81 @@ const yogsecXssLab11LocalstorageStoredRouteLiveOracle: Rule = async (ctx) =>
     "yogsec XSS Lab #11 route scan — localStorage messages array rendered via innerHTML on page load — stored XSS training sink"
   );
 
+const yogsecXssLab12SessionstorageStoredRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    12,
+    [
+      {
+        label: "sessionStorage stored XSS on reload lab title",
+        re: /XSS Lab #12:\s*sessionStorage Stored XSS \| Shown on Reload/i
+      },
+      {
+        label: "sessionStorage reload lab badge",
+        re: /Lab #12 · Stored XSS \(sessionStorage\)|Stored in sessionStorage → Shown on Reload/i
+      },
+      {
+        label: "sessionStorage storedData innerHTML sink",
+        re: /sessionStorage\.getItem\(['"]storedData['"]\)|Save to sessionStorage[\s\S]{0,80}innerHTML[\s\S]{0,40}NO sanitization/i
+      },
+      {
+        label: "vulnerable stored XSS on reload target",
+        re: /VULNERABLE TARGET \(Stored XSS on Reload\)|Reload Page \(XSS will trigger again!\)/i
+      }
+    ],
+    "yogsec XSS Lab #12 route scan — sessionStorage storedData rendered via innerHTML on page load — stored XSS training sink"
+  );
+
+const yogsecXssLab13IndexeddbRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    13,
+    [
+      {
+        label: "IndexedDB stored XSS lab title",
+        re: /XSS Lab #13:\s*IndexedDB Storage \| Rendered After Read/i
+      },
+      {
+        label: "IndexedDB stored XSS lab badge",
+        re: /Lab #13 · Stored XSS \(IndexedDB\)|Stored in IndexedDB → Rendered After Read/i
+      },
+      {
+        label: "IndexedDB notes innerHTML sink",
+        re: /IndexedDB[\s\S]{0,120}innerHTML[\s\S]{0,40}NO sanitization|Notes loaded from IndexedDB \(rendered with innerHTML\)/i
+      },
+      {
+        label: "vulnerable IndexedDB notes target",
+        re: /VULNERABLE TARGET \(IndexedDB XSS\)|Add Note to IndexedDB|objectStore\(['"]notes['"]\)/i
+      }
+    ],
+    "yogsec XSS Lab #13 route scan — IndexedDB notes rendered via innerHTML after read — stored XSS training sink"
+  );
+
+const yogsecXssLab14CookieStoredRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    14,
+    [
+      {
+        label: "cookie stored XSS lab title",
+        re: /XSS Lab #14:\s*Cookie Storage \| Read and Injected/i
+      },
+      {
+        label: "cookie stored XSS lab badge",
+        re: /Lab #14 · Stored XSS \(Cookies\)|Stored in Cookies → Read and Injected/i
+      },
+      {
+        label: "userPref cookie innerHTML sink",
+        re: /getCookie\(['"]userPref['"]\)|document\.cookie[\s\S]{0,80}innerHTML[\s\S]{0,40}NO sanitization/i
+      },
+      {
+        label: "vulnerable cookie reflection target",
+        re: /VULNERABLE TARGET \(Cookie XSS\)|Current Cookie \(userPref\)|Set XSS: img onerror/i
+      }
+    ],
+    "yogsec XSS Lab #14 route scan — userPref cookie value assigned to innerHTML on page load — stored XSS training sink"
+  );
+
 const yogsecXssLab22InnerhtmlEvalRouteLiveOracle: Rule = async (ctx) =>
   yogsecXssLabRouteOracle(
     ctx,
@@ -103470,6 +103545,9 @@ export const RULES: Record<string, Rule> = {
   yogsecXssLab8WindownameRouteLiveOracle,
   yogsecXssLab9LocalstorageKeyRouteLiveOracle,
   yogsecXssLab11LocalstorageStoredRouteLiveOracle,
+  yogsecXssLab12SessionstorageStoredRouteLiveOracle,
+  yogsecXssLab13IndexeddbRouteLiveOracle,
+  yogsecXssLab14CookieStoredRouteLiveOracle,
   yogsecXssLab22InnerhtmlEvalRouteLiveOracle,
   yogsecXssLab23InsertadjacenthtmlRouteLiveOracle,
   yogsecXssLab24OuterhtmlRouteLiveOracle,
