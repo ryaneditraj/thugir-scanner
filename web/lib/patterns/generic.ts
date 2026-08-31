@@ -76090,6 +76090,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-cart-update-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Chimera retail cart negative-quantity route live oracle",
+    description:
+      "When scanning /api/cart/update on chimera.atlascrew.dev, the endpoints catalog documents cart updates accepting negative quantities — route-specific retail business logic training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional negative-quantity cart manipulation for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraCartUpdateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate cart quantities server-side and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Reject negative or zero cart quantities on all cart mutation endpoints.",
+        "Bind cart line totals to authoritative product catalog prices server-side.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/cart/update route documents negative-quantity cart manipulation. Show server-side quantity validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-loyalty-points-transfer-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "critical",
+    title: "Chimera loyalty points transfer route live oracle",
+    description:
+      "When scanning /api/loyalty/points/transfer on chimera.atlascrew.dev, CHM-LOYAL-001 documents loyalty points transfer manipulation without authorization — route-specific loyalty fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional loyalty points transfer business logic flaws.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraLoyaltyPointsTransferRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce authorization on loyalty point transfers and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Require authenticated sessions and account ownership checks before transferring loyalty points.",
+        "Validate transfer amounts and recipient accounts server-side.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/loyalty/points/transfer route documents CHM-LOYAL-001 points manipulation. Show authorization and transfer validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-orders-override-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Chimera admin orders override route live oracle",
+    description:
+      "When scanning /api/admin/orders/override on chimera.atlascrew.dev, the endpoints catalog documents administrative order manipulation without authorization — route-specific admin order fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional administrative order override flaws for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminOrdersOverrideRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authorization on order override endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce role-based access control on all administrative order mutation endpoints.",
+        "Audit and alert on privileged order override operations.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/admin/orders/override route documents administrative order manipulation. Show admin authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-dvla-evidence",
     platform: "generic",
     category: "Injection",
