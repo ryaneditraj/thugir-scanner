@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T14:05:00.000Z",
+  "updated_at": "2026-08-31T16:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
@@ -11428,6 +11428,31 @@
   ],
   "priority_discovery_urls": [
     {
+      "url": "https://chimera.atlascrew.dev/api/v1/gov/benefits/search?q=test",
+      "source": "atlas-crew/Chimera — government benefits SQLi oracle GET /api/v1/gov/benefits/search (CHM-GOV-001 vuln_registry; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/saas/tenants/1/projects",
+      "source": "atlas-crew/Chimera — cross-tenant IDOR oracle GET /api/v1/saas/tenants/{tenant_id}/projects (CHM-SAAS-001; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/cart/update",
+      "source": "atlas-crew/Chimera — retail cart negative-quantity manipulation oracle PUT /api/cart/update (endpoints-catalog; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/loyalty/points/transfer",
+      "source": "atlas-crew/Chimera — loyalty points fraud oracle POST /api/loyalty/points/transfer (endpoints-catalog; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/admin/orders/override",
+      "source": "atlas-crew/Chimera — administrative order manipulation oracle POST /api/admin/orders/override (endpoints-catalog; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
       "source": "OWASP crAPI Challenge 12 — NoSQL injection oracle POST /community/api/v2/coupon/validate-coupon (OWASPLA 2025 guide + allthewriteups; web search 14 UTC)",
       "auth": "public_demo"
@@ -12000,6 +12025,31 @@
     {
       "url": "https://vapi.apisec.ai/vapi/api9/v1/user/login",
       "source": "roottusk/vAPI — API9 improper assets management oracle POST /vapi/api9/v1/user/login (SecLayers walkthrough; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/gov/benefits/search?q=test",
+      "source": "atlas-crew/Chimera — government benefits SQLi oracle GET /api/v1/gov/benefits/search (CHM-GOV-001 vuln_registry; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/saas/tenants/1/projects",
+      "source": "atlas-crew/Chimera — cross-tenant IDOR oracle GET /api/v1/saas/tenants/{tenant_id}/projects (CHM-SAAS-001; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/cart/update",
+      "source": "atlas-crew/Chimera — retail cart negative-quantity manipulation oracle PUT /api/cart/update (endpoints-catalog; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/loyalty/points/transfer",
+      "source": "atlas-crew/Chimera — loyalty points fraud oracle POST /api/loyalty/points/transfer (endpoints-catalog; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/admin/orders/override",
+      "source": "atlas-crew/Chimera — administrative order manipulation oracle POST /api/admin/orders/override (endpoints-catalog; web search 16 UTC)",
       "auth": "public_demo"
     }
   ]
