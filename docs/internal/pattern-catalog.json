@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-31T20:06:08.135Z",
-  "total": 2996,
-  "uniqueSlugs": 2988,
+  "generatedAt": "2026-08-31T21:19:36.411Z",
+  "total": 2998,
+  "uniqueSlugs": 2990,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2978,
+    "generic": 2980,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2911,
+    "deep": 2913,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 604,
+    "Broken access control": 606,
     "Exposed secret": 115,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -377,6 +377,8 @@
     "chimera-energy-scada-commands-route-live-oracle",
     "chimera-fedramp-openapi-extensions-route-live-oracle",
     "chimera-gov-benefits-search-sqli-route-live-oracle",
+    "chimera-healthcare-imaging-idor-route-live-oracle",
+    "chimera-healthcare-records-bola-route-live-oracle",
     "chimera-healthcare-records-export-route-live-oracle",
     "chimera-healthcare-records-search-sqli-route-live-oracle",
     "chimera-healthcare-records-second-order-sqli-route-live-oracle",

@@ -76220,6 +76220,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-healthcare-records-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera healthcare records BOLA route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/records/{record_id} on chimera.atlascrew.dev, CHM-HEALTH-002 documents BOLA/IDOR via predictable record_id without ownership checks — route-specific healthcare access control training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional healthcare record BOLA for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcareRecordsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind healthcare record reads to the authenticated principal and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Scope GET /api/v1/healthcare/records/{record_id} queries with owner_id = authenticated user.",
+        "Return 404 for records the caller does not own instead of leaking PHI.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/records/{record_id} route documents CHM-HEALTH-002 BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-healthcare-imaging-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera healthcare imaging IDOR route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/imaging/{record_id}/download on chimera.atlascrew.dev, Chimera healthcare routes document imaging record download IDOR without authorization — route-specific healthcare imaging access control training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional imaging record IDOR for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcareImagingIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize imaging downloads per patient record ownership and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Verify the authenticated user owns the imaging record before serving downloads.",
+        "Use signed, short-lived download URLs instead of predictable record_id paths.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/imaging/{record_id}/download route documents imaging IDOR. Show authorization remediation for medical imaging downloads.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-dvla-evidence",
     platform: "generic",
     category: "Injection",

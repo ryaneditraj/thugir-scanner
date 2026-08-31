@@ -1800,6 +1800,8 @@ const DEEP_RULES = new Set<string>([
   "chimeraHealthcareRecordsExportRouteLiveOracle",
   "chimeraHealthcareRecordsSecondOrderSqliRouteLiveOracle",
   "chimeraHealthcareRecordsSearchSqliRouteLiveOracle",
+  "chimeraHealthcareRecordsBolaRouteLiveOracle",
+  "chimeraHealthcareImagingIdorRouteLiveOracle",
   "chimeraClaimsAmountsInflateRouteLiveOracle",
   "chimeraBankingAccountsSearchSqliRouteLiveOracle",
   "chimeraInsurancePoliciesLookupSqliRouteLiveOracle",
