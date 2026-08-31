@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T19:25:38.196Z",
+  "updated_at": "2026-08-31T19:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2883,
-  "total_findings": 29205,
+  "total_sites_scanned": 2891,
+  "total_findings": 29308,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2016,
-  "discovery_findings": 24383,
+  "discovery_urls_added": 2021,
+  "discovery_findings": 24486,
   "improvements_shipped": 1255,
-  "last_run": "2026-08-31T19:25:38.196Z",
+  "last_run": "2026-08-31T19:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 36,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
-      "pages_crawled": 1,
-      "probes_run": 563,
+      "pages_crawled": 6,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,43 @@
           ]
         }
       },
-      "note": "6/6 recall thin pass (36 findings, shallow crawl); secret-resend + jwt-alg-none + captcha-bypass present"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles) — richer than parallel thin pass (36 findings); secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 0,
-      "findings": 0,
-      "focus": "chimera retail cart/loyalty/admin route oracles shipped from 16 UTC queue gaps",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 103,
+      "focus": "vAPI API6 mass-assignment + API7 CORS + API10 logging route oracles + chimera healthcare/records + oopssec CVE-2025-29927 middleware bypass",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (36 findings, 563 probes — thin shallow pass)",
-      "chimera.atlascrew.dev/api/cart/update: 7→8 (+chimera-cart-update-route-live-oracle)",
-      "chimera.atlascrew.dev/api/loyalty/points/transfer: 7→8 (+chimera-loyalty-points-transfer-route-live-oracle)",
-      "chimera.atlascrew.dev/api/admin/orders/override: 7→8 (+chimera-admin-orders-override-route-live-oracle)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles) — stable first-pass",
+      "vapi.apisec.ai/vapi/api6/user: 17 findings — vapi-api6-route-live-oracle confirmed",
+      "vapi.apisec.ai/vapi/api7/user/key: 17 findings — vapi-api7-cors-route-live-oracle confirmed",
+      "vapi.apisec.ai/vapi/api10/user/flag: 17 findings — vapi-api10-route-live-oracle confirmed",
+      "koadt.github.io/.../middleware-authorization-bypass-cve-2025-29927: 9 findings — oopssec-middleware-bypass-route-live-oracle confirmed",
+      "koadt.github.io/.../malicious-file-upload-stored-xss: 10 findings — oopssec-malicious-file-upload-stored-xss-route-live-oracle confirmed",
+      "koadt.github.io/.../session-fixation-weak-session-management: 9 findings — oopssec-session-fixation-route-live-oracle confirmed",
+      "vuln-expose.vercel.app/api/users: 17 findings — vuln-expose-users-api-route-live-oracle confirmed",
+      "chimera.atlascrew.dev/api/v1/healthcare/records: 7 findings — generic chimera bundle, no second-order SQLi route oracle",
+      "parallel run: chimera cart/loyalty/admin route oracles shipped (engine commit 46e5fbff)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "urban-vampi-staging /books/v1/1: stale catalog oracle present but numeric book IDs all return not-found",
-      "vAPI api2/api4/api5 routes share full OWASP API Top 10 suite — route-specific oracles confirmed but overlap with hub scans"
+      "chimera.atlascrew.dev/api/v1/healthcare/records: second-order SQLi route oracle still absent",
+      "vAPI api6/api7/api10: full OWASP API Top 10 suite overlap on each route — route-specific oracles confirmed but bundle noise remains high"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 36,
-    "chimera.atlascrew.dev/api/cart/update": 8,
-    "chimera.atlascrew.dev/api/loyalty/points/transfer": 8,
-    "chimera.atlascrew.dev/api/admin/orders/override": 8,
-    "vapi.apisec.ai/vapi/api2/user/details": 17,
-    "vapi.apisec.ai/vapi/api4/login": 18,
-    "vapi.apisec.ai/vapi/api5/user": 17
+    "juice-shop.herokuapp.com": 51,
+    "vapi.apisec.ai/vapi/api6/user": 17,
+    "vapi.apisec.ai/vapi/api7/user/key": 17,
+    "vapi.apisec.ai/vapi/api10/user/flag": 17,
+    "koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927": 9,
+    "koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss": 10,
+    "koadt.github.io/oss-oopssec-store/posts/session-fixation-weak-session-management": 9,
+    "vuln-expose.vercel.app/api/users": 17,
+    "chimera.atlascrew.dev/api/v1/healthcare/records": 7
   }
 }
