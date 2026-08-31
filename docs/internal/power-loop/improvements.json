@@ -2,7 +2,22 @@
   "candidates": [
     {
       "source": "discovery:yogsec.github.io",
-      "slug": "yogsec-xss-lab6-localstorage-route-live-oracle",
+      "slug": "yogsec-xss-lab8-windowname-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab8WindownameRouteLiveOracle matches XSS Lab #8 window.name Reflection + eval(window.name) EXTREMELY VULNERABLE markers; yogsec.github.io/xss-labs/labs/lab8.html findings 7→8 (+yogsec-xss-lab8-windowname-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab9-localstorage-key-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab9LocalstorageKeyRouteLiveOracle matches XSS Lab #9 localStorage Key Reflection + localStorage.getItem('userData') innerHTML NO sanitization markers; yogsec.github.io/xss-labs/labs/lab9.html findings 6→7 (+yogsec-xss-lab9-localstorage-key-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab11-localstorage-stored-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab11LocalstorageStoredRouteLiveOracle matches XSS Lab #11 localStorage Stored XSS Displayed Later + localStorage.getItem('messages') innerHTML VULNERABLE TARGET (Stored XSS) markers; yogsec.github.io/xss-labs/labs/lab11.html findings 6→7 (+yogsec-xss-lab11-localstorage-stored-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab6LocalstorageRouteLiveOracle matches XSS Lab #6 localStorage Value Reflection + localStorage.getItem('userData') innerHTML NO sanitization markers; yogsec.github.io/xss-labs/labs/lab6.html findings 6→7 (+yogsec-xss-lab6-localstorage-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     },

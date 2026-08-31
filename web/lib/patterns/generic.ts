@@ -31276,6 +31276,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "yogsec-xss-lab8-windowname-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #8 window.name route live oracle",
+    description:
+      "When scanning /labs/lab8.html, yogsec documents window.name passed to eval() without validation — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #8 exposes window.name → eval() DOM XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab8WindownameRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never pass window.name to eval() in production.",
+      steps: [
+        "Never use eval() with window.name or other cross-page persistent properties.",
+        "Clear window.name after use and avoid reading it into executable contexts.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #8 route scan documents window.name XSS via eval(). Show safe alternatives and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab9-localstorage-key-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #9 localStorage key route live oracle",
+    description:
+      "When scanning /labs/lab9.html, yogsec documents localStorage userData key assigned to innerHTML without sanitization — route-specific stored XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #9 exposes localStorage key reflection → innerHTML stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab9LocalstorageKeyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never render localStorage values via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying localStorage data.",
+        "Validate and sanitize client-side storage before DOM insertion.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #9 route scan documents localStorage key reflection XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab11-localstorage-stored-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #11 localStorage stored route live oracle",
+    description:
+      "When scanning /labs/lab11.html, yogsec documents localStorage messages rendered via innerHTML on page load — route-specific stored XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #11 exposes localStorage save-for-later → innerHTML stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab11LocalstorageStoredRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never render persisted localStorage messages via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying saved messages from localStorage.",
+        "Sanitize stored user content before persistence and on retrieval.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #11 route scan documents localStorage stored XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "yogsec-xss-lab22-innerhtml-eval-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
