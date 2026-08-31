@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T16:05:00.000Z",
+  "updated_at": "2026-08-31T17:30:00.000Z",
   "discovery_urls": [
     {
       "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
@@ -11427,6 +11427,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://crapi2.apisec.ai/workshop/api/shop/validate-coupon",
+      "source": "OWASP crAPI2 — validate-coupon NoSQL/SQLi business-logic oracle (crapi2.apisec.ai workshop; web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-staging.up.railway.app/users/v1",
+      "source": "apisec-inc/urban-VAmPI — BOLA user enumeration oracle GET /users/v1 (Railway hosted staging demo; web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-staging.up.railway.app/books/v1/1",
+      "source": "apisec-inc/urban-VAmPI — BOLA book-by-ID oracle GET /books/v1/{id} (Railway hosted staging demo; web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/direct-prompt-injection",
+      "source": "OWASP GenAI Security Lab — LLM01 direct prompt injection lesson (owaspbased-lessons.vercel.app; web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/insecure-plugin",
+      "source": "OWASP GenAI Security Lab — LLM05 insecure plugin SQLi lesson (PwnzzAI lab manual; web search 17 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/gov/benefits/search?q=test",
       "source": "atlas-crew/Chimera — government benefits SQLi oracle GET /api/v1/gov/benefits/search (CHM-GOV-001 vuln_registry; web search 16 UTC)",
