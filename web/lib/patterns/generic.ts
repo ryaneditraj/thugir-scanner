@@ -28583,6 +28583,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "code-breaking-hard-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Code-Breaking /hard tier route live oracle",
+    description:
+      "When scanning /hard/{slug}, Code-Breaking maps to /puzzle/{id} source-code audit puzzles (picklecode, thejs) with GitHub source archives and flag submission forms — route-specific hard-tier code-audit CTF oracle.",
+    impactOneline:
+      "Route-scoped scans of /hard/* paths should confirm hard-tier source-code audit CTF puzzle content even when the short URL returns 404.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "codeBreakingHardRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Code-Breaking is intentional training — isolate puzzle instances from production codebases.",
+      steps: [
+        "Run source-audit CTF puzzles only on dedicated lab infrastructure.",
+        "Require authentication before serving downloadable challenge source archives.",
+        "Use puzzle findings to train reviewers without copying vulnerable patterns into production."
+      ]
+    },
+    fixPrompt:
+      "Our Code-Breaking /hard route scan confirms hard-tier source-code audit CTF content. Show how to isolate challenge instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sanitize-xss-demo-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -31090,6 +31116,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host yogsec XSS lab modules with innerHTML sinks. Show textContent/DOMPurify fixes and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab1-reflected-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #1 GET parameter reflection route live oracle",
+    description:
+      "When scanning /labs/lab1.html, yogsec documents ?q= URL parameter reflected into element.innerHTML without sanitization — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #1 exposes query-parameter → innerHTML reflected XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab1ReflectedInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — use textContent instead of innerHTML in production.",
+      steps: [
+        "Replace innerHTML with textContent or DOMPurify-sanitized output for user-controlled data.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #1 route scan documents reflected query XSS via innerHTML. Show textContent/DOMPurify remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab22-innerhtml-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #22 innerHTML eval route live oracle",
+    description:
+      "When scanning /labs/lab22.html, yogsec documents user input rendered via innerHTML then executed with eval() — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #22 exposes innerHTML + eval() sinks for DOM XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab22InnerhtmlEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never use eval() with user input in production.",
+      steps: [
+        "Replace eval() with safe parsing and textContent rendering for user-controlled data.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #22 route scan documents innerHTML + eval DOM XSS. Show safe output encoding and eval removal.",
     version: 1,
     enabled: true
   },

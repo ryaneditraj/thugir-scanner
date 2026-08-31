@@ -2413,6 +2413,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideExploitEducationEvidence",
   "clientSideYogsecXssLabsEvidence",
   "clientSideYogsecXssLabModuleEvidence",
+  "yogsecXssLab1ReflectedInnerhtmlRouteLiveOracle",
+  "yogsecXssLab22InnerhtmlEvalRouteLiveOracle",
   "yogsecXssLab24OuterhtmlRouteLiveOracle",
   "yogsecXssLab25EvalRouteLiveOracle",
   "yogsecXssLab26SettimeoutRouteLiveOracle",
@@ -3957,6 +3959,7 @@ const DEEP_RULES = new Set<string>([
   "codeBreakingPuzzleRouteLiveOracle",
   "codeBreakingEasyRouteLiveOracle",
   "codeBreakingMediumRouteLiveOracle",
+  "codeBreakingHardRouteLiveOracle",
   "clientSideAevumAgentConsentDemoEvidence",
   "aevumConsentReviewUnauthLiveOracle",
   "aevumConsentReviewUnauthRouteLiveOracle",
@@ -13039,6 +13042,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /code-breaking\.fly\.dev/i.test(origin) &&
+        /\/hard\/[\w-]+/i.test(targetInput) &&
+        p.slug.startsWith("code-breaking-hard")
+      )
+        return -3;
+      if (
+        /code-breaking\.fly\.dev/i.test(origin) &&
         /\/puzzle\/\d+/i.test(targetInput) &&
         p.slug.startsWith("code-breaking-puzzle")
       )
@@ -13221,6 +13230,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
         /\/lab-xss\/lab-10\/?/i.test(targetInput) &&
         p.slug.startsWith("the0x-pwn-xss-iframe-data-uri")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab1\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab1")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab22\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab22")
       )
         return -4;
       if (
