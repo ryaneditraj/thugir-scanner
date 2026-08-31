@@ -60208,6 +60208,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "povzayd-xss-lab1-document-write-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "povzayd XSS Lab 1 document.write route live oracle",
+    description:
+      "When scanning /LABS/lab1.html, povzayd reflects ?search= via document.write plus hash/localStorage innerHTML sinks — route-specific reflected/stored/DOM XSS training oracle.",
+    impactOneline:
+      "povzayd Lab 1 exposes document.write and innerHTML XSS sinks for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "povzaydXssLab1DocumentWriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "povzayd lab modules are intentional training — use textContent instead of document.write/innerHTML in production.",
+      steps: [
+        "Replace document.write and innerHTML with textContent or DOMPurify-sanitized output.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our povzayd Lab 1 route scan documents document.write and innerHTML XSS sinks. Show textContent/DOMPurify remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "povzayd-xss-lab2-reflected-filtered-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "povzayd XSS Lab 2 filtered reflected innerHTML route live oracle",
+    description:
+      "When scanning /LABS/lab2.html, povzayd reflects ?query= through filterReflected into reflected-output innerHTML — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "povzayd Lab 2 exposes script-tag-only filter bypass reflected XSS via innerHTML for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "povzaydXssLab2ReflectedFilteredInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "povzayd lab modules are intentional training — encode output instead of blacklist filters.",
+      steps: [
+        "Replace innerHTML with textContent or context-aware encoding for user-controlled data.",
+        "Avoid blacklist-only XSS filters that miss event handlers and non-script tags.",
+        "Run XSS training labs only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our povzayd Lab 2 route scan documents filterReflected innerHTML XSS. Show encoding-based remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "povzayd-xss-lab2-dom-hash-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "povzayd XSS Lab 2 DOM hash route live oracle",
+    description:
+      "When scanning /LABS/lab2.html, povzayd assigns location.hash to dom-box innerHTML plus lvl2_comments localStorage stored XSS — route-specific DOM/stored XSS training oracle.",
+    impactOneline:
+      "povzayd Lab 2 exposes location.hash and localStorage innerHTML sinks for DOM/stored XSS scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "povzaydXssLab2DomHashRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "povzayd lab modules are intentional training — never assign location.hash to innerHTML in production.",
+      steps: [
+        "Use textContent for hash-fragment and stored-comment rendering.",
+        "Sanitize client-side storage round-trips before DOM insertion.",
+        "Run XSS training labs only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our povzayd Lab 2 route scan documents DOM hash and localStorage innerHTML XSS. Show safe fragment handling.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-juice-shop-vapt-evidence",
     platform: "generic",
     category: "Broken access control",
