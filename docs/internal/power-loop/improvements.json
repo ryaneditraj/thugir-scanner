@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-healthcare-records-phi-exposure-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-HEALTH-003 GET /api/v1/healthcare/records PHI Data Exposure per Chimera vulnerability-inventory Critical PHI Exposure section; chimera.atlascrew.dev/api/v1/healthcare/records findings 8→9 (+chimera-healthcare-records-phi-exposure-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-finstripe-tools-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /darklab/api/v1/supply-chain/servers/finstripe/tools accepts create_transfer MCP tool override without auth (issue #544); owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finstripe/tools findings 27→29 (+finbot-darklab-finstripe-tools-live-oracle +finbot-darklab-finstripe-tools-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-systemutils-tools-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /darklab/api/v1/supply-chain/servers/systemutils/tools accepts execute_script MCP tool override without auth (issue #544); owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/systemutils/tools findings 27→29 (+finbot-darklab-systemutils-tools-live-oracle +finbot-darklab-systemutils-tools-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
       "slug": "chimera-healthcare-records-bola-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: CHM-HEALTH-002 GET /api/v1/healthcare/records/{record_id} BOLA/IDOR per Chimera vulnerability-inventory; chimera.atlascrew.dev/api/v1/healthcare/records/123 findings 7→8 (+chimera-healthcare-records-bola-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"

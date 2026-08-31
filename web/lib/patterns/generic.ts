@@ -49928,6 +49928,114 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-darklab-finstripe-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinStripe MCP tools write live oracle",
+    description:
+      "PUT /darklab/api/v1/supply-chain/servers/finstripe/tools accepts MCP tool definition updates for create_transfer — supply-chain tool-poisoning write surface.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent payment tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinstripeToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinStripe MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finstripe/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes a writable MCP tool API at /finstripe/tools. Show how to protect agentic payment tool catalogs from supply-chain poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finstripe-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinStripe /tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/finstripe/tools, PUT confirms MCP tool-poisoning write API for FinStripe create_transfer tool definitions.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent payment tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinstripeToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinStripe MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finstripe/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /finstripe/tools route scan confirms writable MCP tool definitions. Show remediation for agentic supply-chain tool poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-systemutils-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab SystemUtils MCP tools write live oracle",
+    description:
+      "PUT /darklab/api/v1/supply-chain/servers/systemutils/tools accepts MCP tool definition updates for execute_script — supply-chain tool-poisoning write surface.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent system-utility tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabSystemutilsToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict SystemUtils MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/systemutils/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes a writable MCP tool API at /systemutils/tools. Show how to protect agentic system-utility tool catalogs from supply-chain poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-systemutils-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab SystemUtils /tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/systemutils/tools, PUT confirms MCP tool-poisoning write API for SystemUtils execute_script tool definitions.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent system-utility tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabSystemutilsToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict SystemUtils MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/systemutils/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /systemutils/tools route scan confirms writable MCP tool definitions. Show remediation for agentic supply-chain tool poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-darklab-finbank-tools-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -76268,6 +76376,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our chimera /api/v1/healthcare/imaging/{record_id}/download route documents imaging IDOR. Show authorization remediation for medical imaging downloads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-healthcare-records-phi-exposure-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Chimera healthcare records PHI exposure route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/records on chimera.atlascrew.dev, CHM-HEALTH-003 documents unauthenticated bulk PHI listing without authorization — route-specific healthcare sensitive data exposure training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional unauthenticated PHI bulk listing for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcareRecordsPhiExposureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and authorization before listing healthcare records and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Gate GET /api/v1/healthcare/records behind authenticated sessions with role-based access control.",
+        "Scope record listings to the authenticated clinician or patient principal.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/records route documents CHM-HEALTH-003 PHI bulk exposure. Show HIPAA-compliant access control remediation.",
     version: 1,
     enabled: true
   },
