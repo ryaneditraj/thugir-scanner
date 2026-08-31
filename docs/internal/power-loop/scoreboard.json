@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T14:35:00.000Z",
+  "updated_at": "2026-08-31T15:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2817,
-  "total_findings": 28294,
+  "total_sites_scanned": 2826,
+  "total_findings": 28447,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1996,
-  "discovery_findings": 23745,
+  "discovery_urls_added": 2001,
+  "discovery_findings": 23847,
   "improvements_shipped": 1240,
-  "last_run": "2026-08-31T14:35:00.000Z",
+  "last_run": "2026-08-31T15:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 593,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,32 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings); no category misses"
+      "note": "Stable 6/6 first-pass recall (51 findings, 38 juice-shop live oracles); no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 33,
-      "focus": "crAPI validate-coupon NoSQL + apply_coupon SQLi + apparatus red-team autopilot route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 102,
+      "focus": "pwnshop product/1 review XSS + oopssec second-order SQLi/SSRF/XXE + DVWU JWT lab",
+      "improvements_shipped_this_run": 0,
+      "urls_queued_not_scanned": [
+        "apparatus.atlascrew.dev/api/redteam/autopilot/start",
+        "apparatus.atlascrew.dev/redteam/validate",
+        "vapi.apisec.ai/vapi/api1/user",
+        "vapi.apisec.ai/vapi/api2/user/login",
+        "vapi.apisec.ai/vapi/api9/v1/user/login"
+      ]
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "crapi.apisec.ai/community/api/v2/coupon/validate-coupon: 10→12 (+crapi-validate-coupon-nosql-route-live-oracle Challenge 12)",
-      "crapi.apisec.ai/workshop/api/shop/apply_coupon: 10→12 (+crapi-apply-coupon-sqli-route-live-oracle Challenge 13)",
-      "apparatus.atlascrew.dev/: 8→9 (+apparatus-redteam-autopilot-route-live-oracle)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "pwnshop.ctfsecurity.com/product/1: 50 findings (+pwnshop-product-review-stored-xss-route-live-oracle)",
+      "dvwu.vercel.app/labs/jwt: 13 findings (+dvwu-jwt-lab-route-live-oracle)",
+      "koadt.github.io/oss-oopssec-store: second-order SQLi (9), SSRF (7), XXE import (9) route live oracles confirmed",
+      "vampi.lab.pentest-forge.com: thin 2-finding pass (502/degraded)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "crAPI live JWT chain intermittently unreachable from cloud — route corpus fallbacks used when signup/login times out"
+      "new vAPI + Apparatus API routes queued behind priority_discovery_urls drain"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "crapi.apisec.ai/community/api/v2/coupon/validate-coupon": 12,
-    "crapi.apisec.ai/workshop/api/shop/apply_coupon": 12,
-    "apparatus.atlascrew.dev": 9
+    "juice-shop.herokuapp.com": 51,
+    "pwnshop.ctfsecurity.com/product/1": 50,
+    "dvwu.vercel.app/labs/jwt": 13,
+    "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection": 9,
+    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import": 9
   }
 }
