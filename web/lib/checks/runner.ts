@@ -1798,9 +1798,13 @@ const DEEP_RULES = new Set<string>([
   "chimeraInsurancePoliciesLookupSqliRouteLiveOracle",
   "chimeraTransactionsHistorySqliLiveOracle",
   "chimeraTransactionsHistorySqliRouteLiveOracle",
+  "chimeraTelecomSimSwapRouteLiveOracle",
+  "chimeraEnergyScadaCommandsRouteLiveOracle",
   "chimeraSwaggerRouteLiveOracle",
   "chimeraApiReferenceRouteLiveOracle",
   "chimeraFedrampOpenapiExtensionsRouteLiveOracle",
+  "clientSideDvlaEvidence",
+  "dvlaRouteLiveOracle",
   "clientSideHackHealthLabEvidence",
   "hackHealthA03SqlInjectionRouteLiveOracle",
   "hackHealthA01BruteForceRouteLiveOracle",
@@ -12324,6 +12328,28 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/transactions\/history\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-transactions-history")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/telecom\/(?:subscribers\/[^/]+\/)?sim-swap\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-telecom-sim-swap")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/energy(?:-utilities)?\/(?:scada\/commands|dispatch)\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-energy-scada-commands")
+      )
+        return -3;
+      if (
+        /dvla\.jcadima\.dev/i.test(origin) &&
+        p.slug.startsWith("dvla-")
+      )
+        return -3;
+      if (
+        /dvla\.jcadima\.dev/i.test(origin) &&
+        p.slug.startsWith("client-side-dvla")
       )
         return -3;
       if (

@@ -19180,6 +19180,13 @@ POST /api/payments/amount/manipulate          # Payment amount manipulation
 POST /api/v1/transfers/wire                   # Wire transfers
 POST /api/claims/submit                       # Claims submission
 PUT /api/claims/amounts/inflate              # Claims amount manipulation
+POST /api/v1/telecom/sim-swap                # SIM swap request (CHM-TELCO-002)
+POST /api/v1/energy/scada/commands           # SCADA command injection training endpoint
+POST /api/v1/energy-utilities/dispatch       # SCADA dispatch command
+Business Logic Flaws
+SIM swap
+SCADA dispatch
+Energy & Utilities
 Database Vuln
 456+ vulnerable endpoints
 CHM-ID vulnerabilities
@@ -19216,7 +19223,7 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit/i.test(
+    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit|telecom\/sim-swap|energy\/scada\/commands|energy-utilities\/dispatch/i.test(
       corpus
     )
   ) {
@@ -19765,6 +19772,154 @@ const chimeraTransactionsHistorySqliRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/transactions/history route scan — Chimera vuln-api README documents time-based blind SQLi via account_id query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific transaction history SQLi training oracle"
+    }
+  };
+};
+
+async function chimeraTelecomSimSwapProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const simSwapOk =
+    /telecom\/sim-swap|subscribers\/\{?subscriber_id\}?\/sim-swap/i.test(corpus) &&
+    (/SIM swap request/i.test(corpus) ||
+      /POST\s+\/api\/v1\/telecom\/sim-swap/i.test(corpus) ||
+      /CHM-TELCO-002/i.test(corpus) ||
+      /bypass_verification/i.test(corpus)) &&
+    (/Business Logic Flaws|SIM swap/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!simSwapOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-TELCO-002|bypass_verification/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      snippet:
+        "POST /api/v1/telecom/sim-swap — SIM swap request (CHM-TELCO-002 business logic bypass)",
+      note: "chimera.atlascrew.dev — Chimera openapi documents SIM swap identity bypass without verification (Jekyll docs corpus fallback) — telecom business logic training oracle"
+    }
+  };
+}
+
+const chimeraTelecomSimSwapRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/telecom\/(?:subscribers\/[^/]+\/)?sim-swap\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraTelecomSimSwapProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/telecom/sim-swap route scan — Chimera openapi documents SIM swap identity bypass without verification (Jekyll docs corpus fallback) — route-specific telecom business logic training oracle"
+    }
+  };
+};
+
+async function chimeraEnergyScadaCommandsProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const scadaOk =
+    /energy(?:-utilities)?\/(?:scada\/commands|dispatch)|SCADA dispatch/i.test(corpus) &&
+    (/SCADA dispatch command/i.test(corpus) ||
+      /POST\s+\/api\/v1\/energy(?:-utilities)?\/(?:scada\/commands|dispatch)/i.test(corpus) ||
+      /Circuit breaker control|Load shedding/i.test(corpus)) &&
+    (/Energy\s*&\s*Utilities|Grid control|ICS\/OT/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!scadaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /SCADA dispatch command/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      snippet:
+        "POST /api/v1/energy/scada/commands — SCADA command injection training endpoint",
+      note: "chimera.atlascrew.dev — Chimera openapi documents SCADA dispatch/grid control command injection (Jekyll docs corpus fallback) — energy utilities OT training oracle"
+    }
+  };
+}
+
+const chimeraEnergyScadaCommandsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/energy(?:-utilities)?\/(?:scada\/commands|dispatch)\b/i.test(pageUrl))
+    return NEGATIVE;
+  const hit = await chimeraEnergyScadaCommandsProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/energy/scada/commands route scan — Chimera openapi documents SCADA dispatch command injection (Jekyll docs corpus fallback) — route-specific energy utilities OT training oracle"
+    }
+  };
+};
+
+// --- DVLA Damn Vulnerable Laravel Application (dvla.jcadima.dev) -----------------
+const CLIENT_DVLA_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "DVLA Damn Vulnerable Laravel Application",
+    re: /DVLA:\s*Damn Vulnerable Laravel Application/i
+  },
+  {
+    label: "LEMP Laravel 12 Livewire stack",
+    re: /PHP 8\.3, Laravel 12, Livewire 3/i
+  },
+  {
+    label: "Full kill chain host compromise",
+    re: /\.env leak[\s\S]{0,120}APP_KEY RCE|docker\.sock.*host escape/i
+  },
+  {
+    label: "Mass assignment Eloquent vulnerability",
+    re: /Mass Assignment[\s\S]{0,80}is_admin=1/i
+  },
+  {
+    label: "Laravel SQL injection module",
+    re: /SQL Injection[\s\S]{0,120}DB::select\(\)/i
+  },
+  {
+    label: "Redis job injection module",
+    re: /Redis Job Injection|Unauthenticated Redis/i
+  },
+  {
+    label: "13 intentional misconfigurations",
+    re: /13 intentional misconfigurations|Vulnerability Modules/i
+  }
+];
+
+const clientSideDvlaEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/dvla\.jcadima\.dev/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${ctx.home.body || ""}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DVLA_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "DVLA documents modern Laravel stack vulnerabilities with a full kill chain from .env leak to docker.sock host escape"
+    }
+  };
+};
+
+const dvlaRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/dvla\.jcadima\.dev/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideDvlaEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "dvla.jcadima.dev route scan — Damn Vulnerable Laravel Application documents 13 intentional Laravel/LEMP stack misconfigurations with companion exploit walkthroughs"
     }
   };
 };
@@ -103120,6 +103275,8 @@ export const RULES: Record<string, Rule> = {
   chimeraInsurancePoliciesLookupSqliRouteLiveOracle,
   chimeraTransactionsHistorySqliLiveOracle,
   chimeraTransactionsHistorySqliRouteLiveOracle,
+  chimeraTelecomSimSwapRouteLiveOracle,
+  chimeraEnergyScadaCommandsRouteLiveOracle,
   chimeraSwaggerRouteLiveOracle,
   chimeraApiReferenceRouteLiveOracle,
   chimeraFedrampOpenapiExtensionsRouteLiveOracle,
@@ -105639,6 +105796,8 @@ export const RULES: Record<string, Rule> = {
   voidsecShoppingCartRouteLiveOracle,
   clientSideDvmcpEvidence,
   dvmcpRouteLiveOracle,
+  clientSideDvlaEvidence,
+  dvlaRouteLiveOracle,
   clientSideMcpgoatEvidence,
   mcpgoatRouteLiveOracle,
   clientSidePortswiggerAcademyEvidence,
