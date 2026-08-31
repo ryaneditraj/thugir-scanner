@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T23:45:00.000Z",
+  "updated_at": "2026-08-31T00:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3288,
-  "total_findings": 34768,
-  "critical_findings": 61,
+  "total_sites_scanned": 2739,
+  "total_findings": 27004,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2133,
-  "discovery_findings": 27928,
-  "improvements_shipped": 1194,
-  "last_run": "2026-08-30T23:45:00.000Z",
+  "discovery_urls_added": 1961,
+  "discovery_findings": 22932,
+  "improvements_shipped": 1161,
+  "last_run": "2026-08-31T00:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -48,36 +48,45 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 596 probes, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present"
+      "note": "Stable 6/6 first-pass recall (51 findings, 39 live oracles, 596 probes); secret-resend + resend-key + iac-terraform-tls-key present"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 9,
-      "focus": "code-breaking /easy tier route oracles + vulnlab validate API route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 279,
+      "focus": "AI Security Platform leaked-config + supabase-data, NodeGoat allocations IDOR, pwnshop chat/init PWN-037, brokencrystals render.dot SSTI + MCP tools/get_config/spawn_process drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[]; secret-resend + resend-key + iac-terraform-tls-key)",
-      "code-breaking.fly.dev/easy/function: 2→3 findings — code-breaking-easy-route-live-oracle confirmed (maps to puzzle/1)",
-      "code-breaking.fly.dev/easy/nodechr: 2→3 findings — code-breaking-easy-route-live-oracle confirmed (maps to puzzle/5)",
-      "hack-this-site-eta.vercel.app/api/validate/sqli-error: vulnlab-validate-sqli-api-route-live-oracle shipped",
-      "hack-this-site-eta.vercel.app/api/validate/ssti: vulnlab-validate-ssti-api-route-live-oracle shipped — endpoint still 404 pending VulnLab deployment"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 39 live oracles, 596 probes)",
+      "ai-security-platform-iota.vercel.app/challenges/leaked-config: 7 findings — ai-security-leaked-config-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/supabase-data: 7 findings — ai-security-supabase-data-route-live-oracle",
+      "nodegoat-websec.herokuapp.com/allocations: 12 findings — nodegoat-allocations-route-live-oracle + nodegoat-benefits-nosql-live-oracle",
+      "pwnshop.ctfsecurity.com/chat/init: 44 findings — pwnshop-chat-init-route-live-oracle + pwnshop-chat-init-email-enumeration-live-oracle",
+      "brokencrystals.com/render.dot: 90 findings — brokencrystals-render-dot-ssti-route-live-oracle",
+      "brokencrystals.com/api/mcp/tools: 65 findings — brokencrystals-mcp-tools-route-live-oracle",
+      "brokencrystals.com/api/mcp/get_config: 26 findings — brokencrystals-mcp-get-config-route-live-oracle",
+      "brokencrystals.com/api/mcp/spawn_process: 28 findings — brokencrystals-mcp-spawn-process-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable — no category misses on juice-shop",
-      "hack-this-site /api/validate/ssti endpoint not yet deployed on VulnLab Academy (404) — oracle infrastructure ready",
-      "damn-vulnerable-startup.fly.dev/challenges/* still unreachable (Fly.io offline)"
+      "brokencrystals MCP spawn_process/get_config: admin tools return Unauthorized on tools/call — route oracles confirm exposure but live exploitation gated",
+      "AI Security Platform leaked-config/supabase-data: login-gated challenges surface route oracles on catalog metadata; thin 7-finding passes"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "code-breaking.fly.dev/easy/function": 3,
-    "code-breaking.fly.dev/easy/nodechr": 3,
-    "brokencrystals.com/api/mcp/tools": 90,
-    "hack-this-site-eta.vercel.app/api/validate/ssti": 50,
-    "nodegoat-websec.herokuapp.com/tutorial/a2": 18
+    "ai-security-platform-iota.vercel.app/challenges/leaked-config": 7,
+    "ai-security-platform-iota.vercel.app/challenges/supabase-data": 7,
+    "nodegoat-websec.herokuapp.com/allocations": 12,
+    "pwnshop.ctfsecurity.com/chat/init": 44,
+    "brokencrystals.com/render.dot": 90,
+    "brokencrystals.com/api/mcp/tools": 65,
+    "brokencrystals.com/api/mcp/get_config": 26,
+    "brokencrystals.com/api/mcp/spawn_process": 28,
+    "brokencrystals.com/api/process_numbers": 91,
+    "duck-store.escape.tech/api/v1/users/me/profile": 33,
+    "demo.owasp-juice.shop/rest/memories": 27
   }
 }
