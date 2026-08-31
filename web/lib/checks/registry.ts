@@ -57897,6 +57897,44 @@ const yogsecXssLab5UserAgentRouteLiveOracle: Rule = async (ctx) =>
     "yogsec XSS Lab #5 route scan — navigator.userAgent assigned to innerHTML without escaping — reflected XSS training sink"
   );
 
+const yogsecXssLab6LocalstorageRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    6,
+    [
+      { label: "localStorage value reflection lab title", re: /XSS Lab #6:\s*localStorage Value Reflection/i },
+      { label: "localStorage stored XSS lab badge", re: /Lab #6 · Stored XSS \(localStorage\)|localStorage Value Reflection/i },
+      {
+        label: "localStorage innerHTML no sanitization sink",
+        re: /localStorage[\s\S]{0,80}innerHTML[\s\S]{0,40}NO sanitization|localStorage\.getItem\(['"]userData['"]\)/i
+      },
+      {
+        label: "vulnerable localStorage innerHTML code sample",
+        re: /VULNERABLE:\s*innerHTML injection|document\.getElementById\(['"]output['"]\)\.innerHTML\s*=\s*storedValue/i
+      }
+    ],
+    "yogsec XSS Lab #6 route scan — localStorage userData assigned to innerHTML without escaping — stored XSS training sink"
+  );
+
+const yogsecXssLab7DocumentTitleRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    7,
+    [
+      { label: "document.title injection lab title", re: /XSS Lab #7:\s*document\.title Injection/i },
+      { label: "document.title DOM XSS lab badge", re: /Lab #7 · DOM-Based XSS|document\.title Injection/i },
+      {
+        label: "document.title innerHTML sink",
+        re: /document\.title[\s\S]{0,80}innerHTML[\s\S]{0,40}NO sanitization|let pageTitle = document\.title/i
+      },
+      {
+        label: "vulnerable title injection target",
+        re: /VULNERABLE TARGET \(Title Injection\)|document\.getElementById\(['"]output['"]\)\.innerHTML\s*=\s*pageTitle/i
+      }
+    ],
+    "yogsec XSS Lab #7 route scan — document.title assigned to innerHTML without escaping — DOM XSS training sink"
+  );
+
 const yogsecXssLab22InnerhtmlEvalRouteLiveOracle: Rule = async (ctx) =>
   yogsecXssLabRouteOracle(
     ctx,
@@ -57908,6 +57946,19 @@ const yogsecXssLab22InnerhtmlEvalRouteLiveOracle: Rule = async (ctx) =>
       { label: "innerHTML result output sink", re: /resultOutput\.innerHTML|NEVER use eval\(\) with user input/i }
     ],
     "yogsec XSS Lab #22 route scan — user input rendered via innerHTML then passed to eval() — DOM XSS training sink"
+  );
+
+const yogsecXssLab23InsertadjacenthtmlRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    23,
+    [
+      { label: "insertAdjacentHTML vulnerability lab title", re: /XSS Lab #23:\s*insertAdjacentHTML Vulnerability/i },
+      { label: "insertAdjacentHTML eval heading", re: /insertAdjacentHTML \+ eval\(\) XSS|insertAdjacentHTML\(\) is vulnerable/i },
+      { label: "insertAdjacentHTML beforeend sink", re: /insertAdjacentHTML\(['"]beforeend['"]|targetContainer\.insertAdjacentHTML/i },
+      { label: "eval userInput vulnerable code sample", re: /VULNERABLE - eval with user input|eval\(userInput\)/i }
+    ],
+    "yogsec XSS Lab #23 route scan — insertAdjacentHTML combined with eval(userInput) documents DOM XSS training sink"
   );
 
 const yogsecXssLab24OuterhtmlRouteLiveOracle: Rule = async (ctx) =>
@@ -103351,7 +103402,10 @@ export const RULES: Record<string, Rule> = {
   yogsecXssLab2PostSessionstorageRouteLiveOracle,
   yogsecXssLab4RefererRouteLiveOracle,
   yogsecXssLab5UserAgentRouteLiveOracle,
+  yogsecXssLab6LocalstorageRouteLiveOracle,
+  yogsecXssLab7DocumentTitleRouteLiveOracle,
   yogsecXssLab22InnerhtmlEvalRouteLiveOracle,
+  yogsecXssLab23InsertadjacenthtmlRouteLiveOracle,
   yogsecXssLab24OuterhtmlRouteLiveOracle,
   yogsecXssLab25EvalRouteLiveOracle,
   yogsecXssLab26SettimeoutRouteLiveOracle,

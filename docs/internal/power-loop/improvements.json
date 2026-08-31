@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab6-localstorage-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab6LocalstorageRouteLiveOracle matches XSS Lab #6 localStorage Value Reflection + localStorage.getItem('userData') innerHTML NO sanitization markers; yogsec.github.io/xss-labs/labs/lab6.html findings 6→7 (+yogsec-xss-lab6-localstorage-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab7-document-title-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab7DocumentTitleRouteLiveOracle matches XSS Lab #7 document.title Injection + document.title innerHTML VULNERABLE TARGET (Title Injection) markers; yogsec.github.io/xss-labs/labs/lab7.html findings 6→7 (+yogsec-xss-lab7-document-title-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab23-insertadjacenthtml-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab23InsertadjacenthtmlRouteLiveOracle matches XSS Lab #23 insertAdjacentHTML Vulnerability + insertAdjacentHTML('beforeend') + eval(userInput) markers; yogsec.github.io/xss-labs/labs/lab23.html findings 7→8 (+yogsec-xss-lab23-insertadjacenthtml-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:koadt.github.io/oss-oopssec-store",
       "slug": "oopssec-jwt-weak-secret-admin-bypass-route-live-oracle",
       "status": "shipped",

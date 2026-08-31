@@ -31224,6 +31224,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "yogsec-xss-lab6-localstorage-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #6 localStorage route live oracle",
+    description:
+      "When scanning /labs/lab6.html, yogsec documents localStorage userData assigned to innerHTML without sanitization — route-specific stored XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #6 exposes localStorage → innerHTML stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab6LocalstorageRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never render localStorage values via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying localStorage or cookie data.",
+        "Validate and sanitize client-side storage before DOM insertion.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #6 route scan documents localStorage XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab7-document-title-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #7 document.title route live oracle",
+    description:
+      "When scanning /labs/lab7.html, yogsec documents document.title assigned to innerHTML without sanitization — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #7 exposes document.title → innerHTML DOM XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab7DocumentTitleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never render document.title via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying page titles in the DOM.",
+        "Treat document.title as untrusted when reflected in HTML contexts.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #7 route scan documents document.title XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "yogsec-xss-lab22-innerhtml-eval-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -31246,6 +31298,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our yogsec Lab #22 route scan documents innerHTML + eval DOM XSS. Show safe output encoding and eval removal.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab23-insertadjacenthtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #23 insertAdjacentHTML route live oracle",
+    description:
+      "When scanning /labs/lab23.html, yogsec documents insertAdjacentHTML combined with eval(userInput) — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #23 exposes insertAdjacentHTML + eval() sinks for DOM XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab23InsertadjacenthtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never combine insertAdjacentHTML with eval() in production.",
+      steps: [
+        "Avoid insertAdjacentHTML with user-controlled HTML; use textContent or DOMPurify.",
+        "Never pass user input to eval().",
+        "Use Content-Security-Policy to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #23 route documents insertAdjacentHTML + eval XSS. Show safe DOM updates and lab isolation from production.",
     version: 1,
     enabled: true
   },
