@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T13:00:00.000Z",
+  "updated_at": "2026-08-31T14:14:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2805,
-  "total_findings": 28100,
+  "total_sites_scanned": 2814,
+  "total_findings": 28261,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1991,
-  "discovery_findings": 23603,
+  "discovery_urls_added": 1996,
+  "discovery_findings": 23712,
   "improvements_shipped": 1237,
-  "last_run": "2026-08-31T13:00:00.000Z",
+  "last_run": "2026-08-31T14:14:00.000Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,39 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings); no category misses"
+      "note": "Stable 6/6 first-pass recall (52 findings); no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 6,
-      "findings": 24,
-      "focus": "UCU OWASP CTF 2025 route oracles (injection/access/ssrf/crypto) + PentestForge Mutillidae sqlinjection.php + OopsSec bola-wishlist fetch reliability",
-      "improvements_shipped_this_run": 6
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 109,
+      "focus": "crAPI validate-coupon NoSQL + apply_coupon SQLi + crapi2 convert_video command injection + vAPI API8 SQLi + atlas-crew Apparatus hub",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "ucu-owasp-ctf.vercel.app/injection/: 3→4 (+ucu-owasp-ctf-injection-route-live-oracle)",
-      "ucu-owasp-ctf.vercel.app/access/: 3→4 (+ucu-owasp-ctf-access-route-live-oracle)",
-      "ucu-owasp-ctf.vercel.app/ssrf/: 3→4 (+ucu-owasp-ctf-ssrf-route-live-oracle)",
-      "ucu-owasp-ctf.vercel.app/crypto/: 3→4 (+ucu-owasp-ctf-crypto-route-live-oracle)",
-      "mutillidae.lab.pentest-forge.com/index.php?page=sqlinjection.php: 2→3 (+pentest-forge-mutillidae-sqli-route-live-oracle corpus fallback)",
-      "koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access/: 6 maintained (+oopssec-bola-wishlist-route-live-oracle walkthrough fetch fix)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
+      "crapi2.apisec.ai/identity/api/v2/user/videos/convert_video: 13 findings (+crapi-convert-video-route-live-oracle)",
+      "vapi.apisec.ai/vapi/api8/user/login: 18 findings (+vapi-api8-sqli-login-route-live-oracle + full vAPI OWASP API Top 10 suite)",
+      "crapi.apisec.ai/community/api/v2/coupon/validate-coupon: 10 findings (generic crAPI bundle; route-specific NoSQL oracle gap)",
+      "crapi.apisec.ai/workshop/api/shop/apply_coupon: 10 findings (generic crAPI bundle; route-specific SQLi oracle gap)",
+      "apparatus.atlascrew.dev/: 8 findings (client-side atlas-crew evidence; no simulation API route oracles)",
+      "owasp-finbot-ctf.org/darklab/.../findrive/tools: 27 findings (finbot-darklab-findrive-tools-route-live-oracle confirmed)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "mutillidae.lab.pentest-forge.com intermittently unreachable — sqlinjection oracle uses corpus fallback",
-      "ucu-owasp-ctf.vercel.app behind Vercel Security Checkpoint — route oracles use curated UCU CTF 2025 corpus"
+      "crAPI validate-coupon NoSQL + apply_coupon SQLi routes hit generic crAPI live-oracle bundle only — route-specific oracles still absent",
+      "apparatus.atlascrew.dev hub fingerprint without red-team/chaos/defense API route oracles",
+      "crapi.lab.pentest-forge.com 502-thin (2 findings) — PentestForge crAPI instance intermittently unreachable"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
-    "ucu-owasp-ctf.vercel.app/injection": 4,
-    "ucu-owasp-ctf.vercel.app/access": 4,
-    "ucu-owasp-ctf.vercel.app/ssrf": 4,
-    "ucu-owasp-ctf.vercel.app/crypto": 4,
-    "mutillidae.lab.pentest-forge.com/index.php?page=sqlinjection.php": 3,
-    "koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access": 6
+    "juice-shop.herokuapp.com": 52,
+    "vapi.apisec.ai/vapi/api8/user/login": 18,
+    "crapi2.apisec.ai/identity/api/v2/user/videos/convert_video": 13,
+    "crapi.apisec.ai/community/api/v2/coupon/validate-coupon": 10,
+    "crapi.apisec.ai/workshop/api/shop/apply_coupon": 10,
+    "apparatus.atlascrew.dev": 8,
+    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/findrive/tools": 27
   }
 }
