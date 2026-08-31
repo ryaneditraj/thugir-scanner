@@ -2914,6 +2914,10 @@ const DEEP_RULES = new Set<string>([
   "crapiUserVideosBolaRouteLiveOracle",
   "crapiConvertVideoCommandInjectionLiveOracle",
   "crapiConvertVideoRouteLiveOracle",
+  "crapiValidateCouponNosqlLiveOracle",
+  "crapiValidateCouponNosqlRouteLiveOracle",
+  "crapiApplyCouponSqliLiveOracle",
+  "crapiApplyCouponSqliRouteLiveOracle",
   "crapiAdminVideosBflaLiveOracle",
   "crapiAdminVideosBflaRouteLiveOracle",
   "crapiUserVehiclesRouteLiveOracle",
@@ -3349,6 +3353,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideCtfDefiEvidence",
   "clientSideAtlasCrewHubEvidence",
   "clientSideAtlasCrewInfernoLabEvidence",
+  "apparatusRedteamAutopilotRouteLiveOracle",
   "clientSideAtlasCrewEdgeProtectionEvidence",
   "clientSideMcpSupplyChainEvidence",
   "clientSideOwaspVwadEvidence",
@@ -14370,6 +14375,23 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
         /\/convert_video\b/i.test(targetInput) &&
         p.slug.startsWith("crapi-convert-video")
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/coupon\/validate-coupon\b/i.test(targetInput) &&
+        p.slug.startsWith("crapi-validate-coupon")
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/shop\/apply_coupon\b/i.test(targetInput) &&
+        p.slug.startsWith("crapi-apply-coupon")
+      )
+        return -3;
+      if (
+        /apparatus\.atlascrew\.dev/i.test(origin) &&
+        p.slug.startsWith("apparatus-redteam-autopilot")
       )
         return -3;
       if (

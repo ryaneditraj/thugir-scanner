@@ -40936,6 +40936,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "apparatus-redteam-autopilot-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Apparatus AI red-team autopilot route live oracle",
+    description:
+      "When scanning apparatus.atlascrew.dev, Apparatus docs document /api/redteam/autopilot/start autonomous AI attack campaigns — route-specific red-team training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Apparatus documents unauthenticated AI red-team autopilot APIs for attack scenario automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "apparatusRedteamAutopilotRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep Apparatus red-team APIs on isolated lab networks with authentication.",
+      steps: [
+        "Require authentication before starting AI red-team autopilot campaigns.",
+        "Do not expose Apparatus API servers to the public internet.",
+        "Segment inferno lab subnets from production VPCs."
+      ]
+    },
+    fixPrompt:
+      "Our apparatus route documents AI red-team autopilot APIs. Show how to restrict offensive security automation to authenticated lab networks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-atlas-crew-edge-protection-evidence",
     platform: "generic",
     category: "Security misconfiguration",
@@ -48774,6 +48800,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /identity/api/v2/user/videos/convert_video route scan confirms conversion_params command injection chain. Show route-specific shell hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-validate-coupon-nosql-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "crAPI validate-coupon NoSQL injection live oracle",
+    description:
+      "POST /community/api/v2/coupon/validate-coupon accepts MongoDB operator injection in coupon_code and returns a valid coupon without knowing the code — crAPI NoSQL injection oracle (Challenge 12).",
+    impactOneline:
+      "MongoDB query operators in coupon_code bypass coupon validation and leak arbitrary coupon documents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiValidateCouponNosqlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — validate coupon_code as a string and reject object payloads in production.",
+      steps: [
+        "Reject non-string coupon_code values at the API schema layer.",
+        "Use parameterized MongoDB queries without operator injection.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI validate-coupon endpoint accepts MongoDB operators in coupon_code. Show schema validation and safe NoSQL query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-validate-coupon-nosql-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "crAPI validate-coupon NoSQL injection route live oracle",
+    description:
+      "When scanning /community/api/v2/coupon/validate-coupon, MongoDB operator injection in coupon_code returns valid coupons — route-specific crAPI Challenge 12 oracle.",
+    impactOneline:
+      "Route scans on validate-coupon should confirm MongoDB NoSQL injection via coupon_code operators.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiValidateCouponNosqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — validate coupon_code as a string and reject object payloads in production.",
+      steps: [
+        "Reject non-string coupon_code values at the API schema layer.",
+        "Use parameterized MongoDB queries without operator injection.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /community/api/v2/coupon/validate-coupon route scan confirms MongoDB NoSQL injection. Show route-specific schema validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-apply-coupon-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "crAPI apply_coupon SQL injection live oracle",
+    description:
+      "POST /workshop/api/shop/apply_coupon concatenates coupon_code into SQL queries enabling authentication bypass and data extraction — crAPI SQL injection oracle (Challenge 13).",
+    impactOneline:
+      "SQL injection in coupon_code bypasses coupon redemption checks and can extract database contents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiApplyCouponSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — use parameterized queries for coupon redemption in production.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries.",
+        "Validate coupon_code format before database lookup.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI apply_coupon endpoint is vulnerable to SQL injection in coupon_code. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-apply-coupon-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "crAPI apply_coupon SQL injection route live oracle",
+    description:
+      "When scanning /workshop/api/shop/apply_coupon, SQL injection in coupon_code bypasses redemption checks — route-specific crAPI Challenge 13 oracle.",
+    impactOneline:
+      "Route scans on apply_coupon should confirm SQL injection via coupon_code concatenation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiApplyCouponSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — use parameterized queries for coupon redemption in production.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries.",
+        "Validate coupon_code format before database lookup.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /workshop/api/shop/apply_coupon route scan confirms SQL injection in coupon_code. Show route-specific parameterized query fixes.",
     version: 1,
     enabled: true
   },

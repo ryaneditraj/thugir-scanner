@@ -6911,6 +6911,24 @@
       "slug": "dvla-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: dvlaRouteLiveOracle confirms 13 intentional Laravel/LEMP misconfigurations on dvla.jcadima.dev hub; findings 6→8 (+client-side-dvla-evidence +dvla-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-validate-coupon-nosql-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /community/api/v2/coupon/validate-coupon — MongoDB operator injection coupon_code {\"$ne\":null} per OWASP crAPI Challenge 12; crapi.apisec.ai/community/api/v2/coupon/validate-coupon findings 10→12 (+crapi-validate-coupon-nosql-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-apply-coupon-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /workshop/api/shop/apply_coupon — SQL injection coupon_code TRAC075' OR '1'='1 per OWASP crAPI Challenge 13; crapi.apisec.ai/workshop/api/shop/apply_coupon findings 10→12 (+crapi-apply-coupon-sqli-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:apparatus.atlascrew.dev",
+      "slug": "apparatus-redteam-autopilot-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial-advanced-red-team documents POST /api/redteam/autopilot/start autonomous AI red-team campaigns; apparatus.atlascrew.dev/ findings 8→9 (+apparatus-redteam-autopilot-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
