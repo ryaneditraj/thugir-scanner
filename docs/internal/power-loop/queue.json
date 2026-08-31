@@ -11428,6 +11428,31 @@
   ],
   "priority_discovery_urls": [
     {
+      "url": "https://vapi.apisec.ai/vapi/api3/comment",
+      "source": "vAPI OWASP API3 — excessive data exposure oracle GET /vapi/api3/comment leaks PII (GangGreenTemperTatum + allthewriteups walkthrough; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api9/v1/user/login",
+      "source": "vAPI OWASP API9 — improper assets management oracle POST /vapi/api9/v1/user/login lacks rate limiting vs v2 (SecLayers + Medium walkthrough; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/transfers/wire",
+      "source": "atlas-crew/Chimera — wire transfer business-logic / auth bypass oracle POST /api/v1/transfers/wire (endpoints catalog; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api/",
+      "source": "kOaDT/oss-oopssec-store — JWT alg confusion HS256/RS256 partner API oracle POST /api/partner/sandbox-token (GitHub Pages ch.08; learning gap 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/",
+      "source": "kOaDT/oss-oopssec-store — CSRF admin order status oracle PATCH /api/orders/:id without token (GitHub Pages ch.03; learning gap 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://vapi.apisec.ai/vapi/api6/user",
       "source": "vAPI OWASP API6 — mass assignment oracle POST /vapi/api6/user with credit parameter (allthewriteups + Medium walkthrough; web search 19 UTC)",
       "auth": "public_demo"
