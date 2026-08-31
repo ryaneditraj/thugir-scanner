@@ -7589,6 +7589,80 @@ const clientSideVoidsecShoppingCartEvidence: Rule = async (ctx) => {
   };
 };
 
+const voidsecShoppingCartRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/voidsec\.github\.io\/shopping-cart/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideVoidsecShoppingCartEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "VoidSec Shopping Cart route scan — GitHub Pages landing documents XSS, SQLi, auth bypass, clickjacking, and response-splitting hack-lab targets"
+    }
+  };
+};
+
+// --- DVMCP Damn Vulnerable MCP Server hub (dvmcp.co.uk) --------------------------------
+const CLIENT_DVMCP_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Damn Vulnerable MCP Server title",
+    re: /DVMCP[\s\S]{0,60}Damn Vulnerable MCP Server|damn vulnerable MCP server/i
+  },
+  {
+    label: "OWASP MCP Top 10 scope",
+    re: /OWASP MCP Top 10|10 vulnerabilities covering all OWASP MCP/i
+  },
+  {
+    label: "MCP-001 through MCP-010 vulnerability catalog",
+    re: /MCP-001[\s\S]{0,120}MCP-010|No authentication on any endpoint/i
+  },
+  {
+    label: "Tool poisoning and command injection scope",
+    re: /Tool definition tampering|Command injection via tool arguments|SSRF via resources\/read/i
+  },
+  {
+    label: "DVMCP GitHub repo",
+    re: /github\.com\/razashariff\/dvmcp/i
+  }
+];
+
+const clientSideDvmcpEvidence: Rule = async (ctx) => {
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_DVMCP_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/dvmcp\.co\.uk|Damn Vulnerable MCP Server/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : hits.length >= 3 ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "DVMCP publishes a deliberately insecure MCP server mapping 10 vulnerabilities across OWASP MCP Top 10 categories for agent security training"
+    }
+  };
+};
+
+const dvmcpRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/dvmcp\.co\.uk/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideDvmcpEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "DVMCP route scan — deliberately insecure MCP server hub confirms 10 OWASP MCP Top 10 vulnerabilities (MCP-001 through MCP-010)"
+    }
+  };
+};
+
 // --- MCPGoat deliberately vulnerable MCP server hub (sabyasachidhal.github.io/MCPGoat) -
 const CLIENT_MCPGOAT_RES: { label: string; re: RegExp }[] = [
   {
@@ -89156,6 +89230,22 @@ const clientSideYrpreyEvidence: Rule = async (ctx) => {
   };
 };
 
+const yrpreyRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/yrprey\.com/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideYrpreyEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "YRprey route scan — vulnerability testing framework hub confirms 22 intentional flaws with frontend/backend/Docker training repos"
+    }
+  };
+};
+
 // --- BergerZvika Secure Programming Cyber-Lab (bergerzvika.github.io/Cyber-Lab) ------
 const CLIENT_BERGER_CYBER_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -104317,6 +104407,7 @@ export const RULES: Record<string, Rule> = {
   clientSideOverthewireNatasRefererEvidence,
   clientSideFfufMeEvidence,
   clientSideYrpreyEvidence,
+  yrpreyRouteLiveOracle,
   clientSideBergerCyberLabEvidence,
   clientSidePwnCollegeEvidence,
   clientSideReactDomXssLabEvidence,
@@ -105545,6 +105636,9 @@ export const RULES: Record<string, Rule> = {
   clientSideOopssecMaliciousFileUploadEvidence,
   oopssecMaliciousFileUploadStoredXssRouteLiveOracle,
   clientSideVoidsecShoppingCartEvidence,
+  voidsecShoppingCartRouteLiveOracle,
+  clientSideDvmcpEvidence,
+  dvmcpRouteLiveOracle,
   clientSideMcpgoatEvidence,
   mcpgoatRouteLiveOracle,
   clientSidePortswiggerAcademyEvidence,
