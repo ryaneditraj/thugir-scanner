@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T18:05:00.000Z",
+  "updated_at": "2026-08-31T19:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
@@ -11427,6 +11427,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://vapi.apisec.ai/vapi/api6/user",
+      "source": "vAPI OWASP API6 — mass assignment oracle POST /vapi/api6/user with credit parameter (allthewriteups + Medium walkthrough; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api7/user/key",
+      "source": "vAPI OWASP API7 — CORS misconfiguration oracle GET /vapi/api7/user/key with Origin header (GangGreenTemperTatum CTF walkthrough; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api10/user/flag",
+      "source": "vAPI OWASP API10 — insufficient logging oracle GET /vapi/api10/user/flag (allthewriteups vAPI guide; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/records",
+      "source": "atlas-crew/Chimera — second-order SQLi oracle POST /api/v1/healthcare/records (vuln-api README USE_DATABASE mode; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927/",
+      "source": "kOaDT/oss-oopssec-store — CVE-2025-29927 x-middleware-subrequest auth bypass oracle GET /monitoring/internal-status (OSS roadmap ch.11; learning gap 18 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vapi.apisec.ai/vapi/api2/user/details",
       "source": "vAPI OWASP API2 — broken authentication BOLA oracle GET /vapi/api2/user/details after cred-stuffing (vapi.apisec.ai docs; web search 18 UTC)",
