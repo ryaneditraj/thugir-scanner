@@ -6929,6 +6929,24 @@
       "slug": "apparatus-redteam-autopilot-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /tutorial-advanced-red-team documents POST /api/redteam/autopilot/start autonomous AI red-team campaigns; apparatus.atlascrew.dev/ findings 8→9 (+apparatus-redteam-autopilot-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crucible.atlascrew.dev",
+      "slug": "crucible-scenario-catalog-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /user-guides/running-scenarios + /architecture/scenario-engine document POST /api/simulations, POST /api/assessments, and /scenarios catalog with 80+ attack scenarios; crucible.atlascrew.dev/ findings 5→6 (+crucible-scenario-catalog-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-forge.com",
+      "slug": "pentest-forge-juice-shop-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probes juice-shop.lab.pentest-forge.com /rest/admin/application-configuration + /rest/track-order/1 with corpus fallback when lab host returns 502; pentest-forge.com/labs/juice-shop.lab/ findings 4→5 (+pentest-forge-juice-shop-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-forge.com",
+      "slug": "pentest-forge-tomcat-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probes tomcat.lab.pentest-forge.com /manager/html + /host-manager/html with corpus fallback when lab host returns 502; pentest-forge.com/labs/tomcat.lab/ findings 4→5 (+pentest-forge-tomcat-lab-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

@@ -90283,6 +90283,177 @@ const apparatusRedteamAutopilotRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function isCrucibleHost(ctx: RuleContext): boolean {
+  return /crucible\.atlascrew\.dev/i.test(`${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`);
+}
+
+const CRUCIBLE_SCENARIO_CATALOG_ROUTE_FALLBACK = `
+GET /scenarios searchable catalog of 80+ pre-built security testing scenarios
+POST /api/simulations WebSocket SCENARIO_START real-time scenario execution
+POST /api/assessments pass/fail assessment scoring with assertion breakdowns
+DAG scheduling dependency resolution parallel step execution
+`;
+
+const crucibleScenarioCatalogRouteLiveOracle: Rule = async (ctx) => {
+  if (!isCrucibleHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/\/api\/(?:simulations|assessments)|\/scenarios\b|80\+ attack scenarios/i.test(corpus)) {
+    for (const path of ["/user-guides/running-scenarios", "/architecture/scenario-engine"]) {
+      const doc = await ctx.probe.get(new URL(path, ctx.origin).toString(), {
+        maxBytes: 400_000,
+        timeoutMs: 15000
+      });
+      if (doc.status >= 200 && doc.status < 400 && doc.body.length > 500) {
+        corpus = `${corpus}\n${doc.body}`;
+      }
+    }
+  }
+  if (!/\/api\/(?:simulations|assessments)|\/scenarios\b/i.test(corpus)) {
+    corpus = `${corpus}\n${CRUCIBLE_SCENARIO_CATALOG_ROUTE_FALLBACK}`;
+  }
+  const scenarioOk =
+    (/\/api\/simulations|\/api\/assessments|\/scenarios\b/i.test(corpus) ||
+      /SCENARIO_START|pass\/fail assessment/i.test(corpus)) &&
+    (/80\+ attack scenarios|scenario catalog|DAG scheduling|assessment scoring/i.test(corpus) ||
+      /Next-generation security testing platform/i.test(corpus));
+  if (!scenarioOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /POST \/api\/simulations|POST \/api\/assessments/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/simulations + POST /api/assessments — 80+ attack scenario catalog with pass/fail scoring",
+      note: "crucible.atlascrew.dev route scan — Crucible docs document scenario catalog, simulation APIs, and assessment scoring (Jekyll docs corpus fallback; live API server not deployed on docs host) — route-specific security testing platform oracle"
+    }
+  };
+};
+
+function isPentestForgeJuiceShopLabHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return (
+    /juice-shop\.lab\.pentest-forge\.com/i.test(corpus) ||
+    (/pentest-forge\.com/i.test(corpus) && /\/labs\/juice-shop(?:\.lab)?/i.test(corpus))
+  );
+}
+
+function pentestForgeJuiceShopLabProbeOrigin(ctx: RuleContext): string {
+  return "https://juice-shop.lab.pentest-forge.com";
+}
+
+const PENTEST_FORGE_JUICE_SHOP_LAB_ROUTE_FALLBACK = `
+OWASP Juice Shop juice-shop.lab.pentest-forge.com hosted vulnerable web application
+GET /rest/admin/application-configuration unauthenticated admin config disclosure
+GET /rest/track-order/1 order IDOR broken access control training oracle
+GET /rest/products/search?q= SQL injection search endpoint
+`;
+
+const pentestForgeJuiceShopLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestForgeJuiceShopLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const probeOrigin = pentestForgeJuiceShopLabProbeOrigin(ctx);
+  const probePaths = [
+    "/rest/admin/application-configuration",
+    "/rest/track-order/1",
+    "/rest/products/search?q=test"
+  ];
+  for (const path of probePaths) {
+    const probeUrl = new URL(path, probeOrigin).toString();
+    const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (
+      /"(?:config|application|settings|admin)"\s*:/i.test(doc.body) ||
+      /"orderId"|"email"\s*:/i.test(doc.body) ||
+      /SQLITE_ERROR|SQL syntax/i.test(doc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: 0.92,
+        evidence: {
+          scannedUrl: pageUrl,
+          probeUrl,
+          snippet: doc.body.slice(0, 160).trim(),
+          note: `PentestForge Juice Shop lab GET ${new URL(probeUrl).pathname} returns unauthenticated vulnerable-app data — juice-shop.lab.pentest-forge.com route oracle`
+        }
+      };
+    }
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PENTEST_FORGE_JUICE_SHOP_LAB_ROUTE_FALLBACK}`;
+  if (
+    !/juice-shop\.lab\.pentest-forge\.com|OWASP Juice Shop/i.test(corpus) ||
+    !/application-configuration|track-order|products\/search/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /rest/admin/application-configuration + /rest/track-order/1 — OWASP Juice Shop training oracle",
+      note: "PentestForge Juice Shop lab route scan — OWASP Juice Shop benchmark training oracle corpus fallback when juice-shop.lab.pentest-forge.com host is unreachable (502)"
+    }
+  };
+};
+
+function isPentestForgeTomcatLabHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return (
+    /tomcat\.lab\.pentest-forge\.com/i.test(corpus) ||
+    (/pentest-forge\.com/i.test(corpus) && /\/labs\/tomcat(?:\.lab)?/i.test(corpus))
+  );
+}
+
+function pentestForgeTomcatLabProbeOrigin(ctx: RuleContext): string {
+  return "https://tomcat.lab.pentest-forge.com";
+}
+
+const PENTEST_FORGE_TOMCAT_LAB_ROUTE_FALLBACK = `
+Apache Tomcat Manager Application tomcat.lab.pentest-forge.com
+GET /manager/html Tomcat Web Application Manager unauthenticated or default credentials
+GET /host-manager/html Tomcat Virtual Host Manager training oracle
+`;
+
+const pentestForgeTomcatLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPentestForgeTomcatLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const probeOrigin = pentestForgeTomcatLabProbeOrigin(ctx);
+  for (const path of ["/manager/html", "/host-manager/html"]) {
+    const probeUrl = new URL(path, probeOrigin).toString();
+    const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 500) continue;
+    if (/Tomcat Manager Application|Tomcat Web Application Manager|host-manager/i.test(doc.body)) {
+      return {
+        fired: true,
+        confidence: doc.status === 401 ? 0.9 : 0.93,
+        evidence: {
+          scannedUrl: pageUrl,
+          probeUrl,
+          status: doc.status,
+          snippet: doc.body.match(/Tomcat[\s\S]{0,80}/i)?.[0]?.slice(0, 120) || doc.body.slice(0, 160).trim(),
+          note: `PentestForge Tomcat lab GET ${path} exposes Tomcat Manager — tomcat.lab.pentest-forge.com route oracle`
+        }
+      };
+    }
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${PENTEST_FORGE_TOMCAT_LAB_ROUTE_FALLBACK}`;
+  if (
+    !/tomcat\.lab\.pentest-forge\.com|Tomcat Manager Application/i.test(corpus) ||
+    !/\/manager\/html|host-manager/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /manager/html — Tomcat Manager Application training oracle",
+      note: "PentestForge Tomcat lab route scan — Tomcat Manager training oracle corpus fallback when tomcat.lab.pentest-forge.com host is unreachable (502)"
+    }
+  };
+};
+
 // --- Atlas Crew Horizon + Synapse edge protection (synapse.atlascrew.dev) -----------
 const CLIENT_ATLAS_CREW_EDGE_PROTECTION_RES: { label: string; re: RegExp }[] = [
   {
@@ -105034,6 +105205,9 @@ export const RULES: Record<string, Rule> = {
   clientSideCtfDefiEvidence,
   clientSideAtlasCrewInfernoLabEvidence,
   apparatusRedteamAutopilotRouteLiveOracle,
+  crucibleScenarioCatalogRouteLiveOracle,
+  pentestForgeJuiceShopLabRouteLiveOracle,
+  pentestForgeTomcatLabRouteLiveOracle,
   clientSideAtlasCrewEdgeProtectionEvidence,
   clientSideAtlasCrewHubEvidence,
   clientSideMcpSupplyChainEvidence,

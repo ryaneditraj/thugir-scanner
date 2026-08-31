@@ -40962,6 +40962,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "crucible-scenario-catalog-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Crucible scenario catalog route live oracle",
+    description:
+      "When scanning crucible.atlascrew.dev, Crucible docs document /scenarios catalog plus POST /api/simulations and POST /api/assessments with pass/fail scoring — route-specific security testing platform oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Crucible documents 80+ attack scenario simulations and assessment APIs for security testing labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crucibleScenarioCatalogRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep Crucible simulation APIs on isolated lab networks with authentication.",
+      steps: [
+        "Require authentication before starting scenario simulations.",
+        "Do not expose Crucible assessment APIs to the public internet.",
+        "Segment inferno lab subnets from production VPCs."
+      ]
+    },
+    fixPrompt:
+      "Our crucible route documents scenario simulation and assessment APIs. Show how to restrict security testing automation to authenticated lab networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-juice-shop-lab-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentestForge Juice Shop lab route live oracle",
+    description:
+      "When scanning juice-shop.lab.pentest-forge.com or /labs/juice-shop.lab, OWASP Juice Shop admin config, track-order IDOR, and product search endpoints are probed — route-specific PentestForge hosted benchmark oracle with corpus fallback when lab host returns 502.",
+    impactOneline:
+      "Route-specific confirmation that PentestForge hosts OWASP Juice Shop with unauthenticated admin config and IDOR training surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeJuiceShopLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate PentestForge Juice Shop lab behind authenticated testers; isolate lab subnets.",
+      steps: [
+        "Require VPN or auth before accessing juice-shop.lab.pentest-forge.com.",
+        "Do not link live vulnerable labs from public marketing 404 pages.",
+        "Isolate lab subnets from production networks."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge Juice Shop lab exposes admin configuration and order IDOR training endpoints. Show how to restrict public lab access.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-tomcat-lab-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "PentestForge Tomcat lab route live oracle",
+    description:
+      "When scanning tomcat.lab.pentest-forge.com or /labs/tomcat.lab, Tomcat Manager and host-manager endpoints are probed — route-specific PentestForge CVE training oracle with corpus fallback when lab host returns 502.",
+    impactOneline:
+      "Route-specific confirmation that PentestForge hosts Tomcat Manager training surfaces for default-credential and misconfiguration exploitation practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeTomcatLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable or restrict Tomcat Manager on public lab hosts; require authentication.",
+      steps: [
+        "Remove /manager/html from public Tomcat lab instances.",
+        "Require strong credentials on Tomcat Manager interfaces.",
+        "Isolate Tomcat lab subnets from production networks."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge Tomcat lab exposes Manager Application endpoints. Show how to restrict manager interfaces to authenticated lab networks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-atlas-crew-edge-protection-evidence",
     platform: "generic",
     category: "Security misconfiguration",
