@@ -57935,6 +57935,69 @@ const yogsecXssLab7DocumentTitleRouteLiveOracle: Rule = async (ctx) =>
     "yogsec XSS Lab #7 route scan — document.title assigned to innerHTML without escaping — DOM XSS training sink"
   );
 
+const yogsecXssLab8WindownameRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    8,
+    [
+      { label: "window.name reflection lab title", re: /XSS Lab #8:\s*window\.name Reflection/i },
+      { label: "window.name DOM XSS lab badge", re: /Lab #8 · DOM-Based XSS|window\.name Reflection/i },
+      {
+        label: "eval window.name sink",
+        re: /eval\(window\.name\)|EXTREMELY VULNERABLE:\s*eval\(\)\s*with\s*window\.name/i
+      },
+      {
+        label: "vulnerable window.name eval code sample",
+        re: /reads\s*<code>window\.name<\/code>\s*and uses\s*<code>eval\(\)<\/code>|window\.name persists/i
+      }
+    ],
+    "yogsec XSS Lab #8 route scan — window.name passed to eval() without validation — DOM XSS training sink"
+  );
+
+const yogsecXssLab9LocalstorageKeyRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    9,
+    [
+      { label: "localStorage key reflection lab title", re: /XSS Lab #9:\s*localStorage Key Reflection/i },
+      { label: "localStorage key reflection lab badge", re: /Lab #9 · Stored XSS \(localStorage\)|localStorage Key Reflection/i },
+      {
+        label: "localStorage userData innerHTML sink",
+        re: /localStorage\.getItem\(['"]userData['"]\)[\s\S]{0,80}innerHTML[\s\S]{0,40}NO sanitization|VULNERABLE TARGET \(localStorage Reflection\)/i
+      },
+      {
+        label: "vulnerable localStorage key reflection code sample",
+        re: /injects its value into the DOM using\s*<code>innerHTML<\/code>\s*—\s*NO sanitization|Set ANY localStorage key \(demonstrate key reflection\)/i
+      }
+    ],
+    "yogsec XSS Lab #9 route scan — localStorage userData key assigned to innerHTML without escaping — stored XSS training sink"
+  );
+
+const yogsecXssLab11LocalstorageStoredRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    11,
+    [
+      {
+        label: "localStorage stored XSS displayed later lab title",
+        re: /XSS Lab #11:\s*localStorage Stored XSS \| Displayed Later/i
+      },
+      {
+        label: "localStorage save-for-later lab badge",
+        re: /Lab #11 · Stored XSS \(localStorage\)|Stored in localStorage → Displayed Later/i
+      },
+      {
+        label: "localStorage messages innerHTML sink",
+        re: /localStorage\.getItem\(['"]messages['"]\)|Save to localStorage[\s\S]{0,80}innerHTML[\s\S]{0,40}NO sanitization/i
+      },
+      {
+        label: "vulnerable stored messages target",
+        re: /VULNERABLE TARGET \(Stored XSS\)|Saved Messages \(loaded from localStorage\)/i
+      }
+    ],
+    "yogsec XSS Lab #11 route scan — localStorage messages array rendered via innerHTML on page load — stored XSS training sink"
+  );
+
 const yogsecXssLab22InnerhtmlEvalRouteLiveOracle: Rule = async (ctx) =>
   yogsecXssLabRouteOracle(
     ctx,
@@ -103404,6 +103467,9 @@ export const RULES: Record<string, Rule> = {
   yogsecXssLab5UserAgentRouteLiveOracle,
   yogsecXssLab6LocalstorageRouteLiveOracle,
   yogsecXssLab7DocumentTitleRouteLiveOracle,
+  yogsecXssLab8WindownameRouteLiveOracle,
+  yogsecXssLab9LocalstorageKeyRouteLiveOracle,
+  yogsecXssLab11LocalstorageStoredRouteLiveOracle,
   yogsecXssLab22InnerhtmlEvalRouteLiveOracle,
   yogsecXssLab23InsertadjacenthtmlRouteLiveOracle,
   yogsecXssLab24OuterhtmlRouteLiveOracle,
