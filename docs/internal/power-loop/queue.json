@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T04:05:00.000Z",
+  "updated_at": "2026-08-31T05:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://owaspbased-lessons.vercel.app/lesson/prompt-leakage",
@@ -11302,6 +11302,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/search",
+      "source": "Damn Vulnerable Web University — GET /api/search SQLi oracle (GitHub zahidoverflow/damn-vulnerable-web-university; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/portal",
+      "source": "Damn Vulnerable Web University — POST /api/portal authentication SQLi bypass oracle (GitHub README; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/labs/ssti",
+      "source": "Damn Vulnerable Web University — SSTI lab SPA route with /api/portal probe oracle (improvements.json ist-edu-ssti-lab; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/labs/graphql",
+      "source": "Damn Vulnerable Web University — GraphQL lab SPA route with SQLi bypass oracle (improvements.json ist-edu-graphql-lab; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerability-intelligence-mcp-server-edb8b15494e8.herokuapp.com/",
+      "source": "firetix/vulnerability-intelligence-mcp-server — public Heroku MCP SSE demo endpoint (GitHub README hosted server; web search 05 UTC)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/leaked-config",
       "source": "AI Security Platform — leaked env/config challenge (homepage catalog; 01 UTC priority)",
