@@ -6707,6 +6707,24 @@
       "slug": "yogsec-xss-lab22-innerhtml-eval-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab22InnerhtmlEvalRouteLiveOracle matches XSS Lab #22 innerHTML with Unsanitized Input + Execute (eval) + resultOutput.innerHTML markers; yogsec.github.io/xss-labs/labs/lab22.html findings 7→8 (+yogsec-xss-lab22-innerhtml-eval-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab2-post-sessionstorage-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab2PostSessionstorageRouteLiveOracle matches XSS Lab #2 POST Parameter Reflection + sessionStorage innerHTML NO sanitization + VULNERABLE TARGET (POST Data) markers; yogsec.github.io/xss-labs/labs/lab2.html findings 6→7 (+yogsec-xss-lab2-post-sessionstorage-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab4-referer-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab4RefererRouteLiveOracle matches XSS Lab #4 Referer Header Reflection + document.referrer innerHTML NO sanitization + VULNERABLE TARGET (Referer Reflection) markers; yogsec.github.io/xss-labs/labs/lab4.html findings 6→7 (+yogsec-xss-lab4-referer-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab5-user-agent-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab5UserAgentRouteLiveOracle matches XSS Lab #5 User-Agent Reflection + navigator.userAgent innerHTML sink + VULNERABLE to XSS if User-Agent contains malicious code markers; yogsec.github.io/xss-labs/labs/lab5.html findings 6→7 (+yogsec-xss-lab5-user-agent-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

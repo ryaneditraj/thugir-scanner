@@ -57834,6 +57834,69 @@ const yogsecXssLab1ReflectedInnerhtmlRouteLiveOracle: Rule = async (ctx) =>
     "yogsec XSS Lab #1 route scan — ?q= URL parameter assigned to element.innerHTML without escaping — reflected XSS training sink"
   );
 
+const yogsecXssLab2PostSessionstorageRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    2,
+    [
+      { label: "POST parameter reflection lab title", re: /XSS Lab #2:\s*POST Parameter Reflection/i },
+      {
+        label: "POST sessionStorage innerHTML lab badge",
+        re: /Lab #2 · POST Parameter Reflection|POST Data XSS using sessionStorage/i
+      },
+      {
+        label: "sessionStorage innerHTML POST simulation sink",
+        re: /sessionStorage[\s\S]{0,80}innerHTML[\s\S]{0,40}NO sanitization/i
+      },
+      {
+        label: "vulnerable POST data target",
+        re: /VULNERABLE TARGET \(POST Data\)|sessionStorage\.setItem\('postData'/i
+      }
+    ],
+    "yogsec XSS Lab #2 route scan — POST form data stored in sessionStorage then assigned to innerHTML — stored XSS training sink"
+  );
+
+const yogsecXssLab4RefererRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    4,
+    [
+      { label: "Referer header reflection lab title", re: /XSS Lab #4:\s*Referer Header Reflection/i },
+      {
+        label: "Referer mock lab badge",
+        re: /Lab #4 · Reflected XSS \(Referer Mock\)|Referer Header Reflection/i
+      },
+      {
+        label: "document.referrer innerHTML sink",
+        re: /document\.referrer[\s\S]{0,80}innerHTML[\s\S]{0,40}NO sanitization/i
+      },
+      {
+        label: "vulnerable referer reflection target",
+        re: /VULNERABLE TARGET \(Referer Reflection\)|let referer = document\.referrer/i
+      }
+    ],
+    "yogsec XSS Lab #4 route scan — document.referrer assigned to innerHTML without escaping — reflected XSS training sink"
+  );
+
+const yogsecXssLab5UserAgentRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    5,
+    [
+      { label: "User-Agent reflection lab title", re: /XSS Lab #5:\s*User-Agent Reflection/i },
+      { label: "User-Agent reflected XSS lab badge", re: /Lab #5 · Reflected XSS|User-Agent Reflection/i },
+      {
+        label: "navigator.userAgent innerHTML sink",
+        re: /innerHTML\s*=\s*navigator\.userAgent|navigator\.userAgent[\s\S]{0,60}innerHTML/i
+      },
+      {
+        label: "vulnerable User-Agent innerHTML code sample",
+        re: /VULNERABLE to XSS if User-Agent contains malicious code|Injecting User-Agent directly with innerHTML/i
+      }
+    ],
+    "yogsec XSS Lab #5 route scan — navigator.userAgent assigned to innerHTML without escaping — reflected XSS training sink"
+  );
+
 const yogsecXssLab22InnerhtmlEvalRouteLiveOracle: Rule = async (ctx) =>
   yogsecXssLabRouteOracle(
     ctx,
@@ -103285,6 +103348,9 @@ export const RULES: Record<string, Rule> = {
   clientSideYogsecXssLabsEvidence,
   clientSideYogsecXssLabModuleEvidence,
   yogsecXssLab1ReflectedInnerhtmlRouteLiveOracle,
+  yogsecXssLab2PostSessionstorageRouteLiveOracle,
+  yogsecXssLab4RefererRouteLiveOracle,
+  yogsecXssLab5UserAgentRouteLiveOracle,
   yogsecXssLab22InnerhtmlEvalRouteLiveOracle,
   yogsecXssLab24OuterhtmlRouteLiveOracle,
   yogsecXssLab25EvalRouteLiveOracle,
