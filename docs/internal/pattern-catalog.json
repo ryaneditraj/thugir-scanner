@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-31T00:07:27.244Z",
-  "total": 2937,
-  "uniqueSlugs": 2929,
+  "generatedAt": "2026-08-31T01:43:53.831Z",
+  "total": 2939,
+  "uniqueSlugs": 2931,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2919,
+    "generic": 2921,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2852,
+    "deep": 2854,
     "continuous": 0
   },
   "byCategory": {
@@ -25,9 +25,9 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 134,
-    "Security misconfiguration": 213,
+    "Security misconfiguration": 214,
     "Broken authentication": 194,
-    "Injection": 473,
+    "Injection": 474,
     "Cross-site scripting": 766,
     "Open redirect": 26,
     "general": 20,
@@ -945,6 +945,7 @@
     "client-side-zeroday-training-evidence",
     "client-side-ziran-agent-security-evidence",
     "code-breaking-easy-route-live-oracle",
+    "code-breaking-medium-route-live-oracle",
     "code-breaking-puzzle-route-live-oracle",
     "command-injection-form-probe",
     "compass-demo-angularjs-route-live-oracle",
@@ -2615,6 +2616,7 @@
     "vulnforge-academy-level-ssti-route-live-oracle",
     "vulnforge-academy-level-xss-route-live-oracle",
     "vulnforge-academy-level17-content-type-upload-route-live-oracle",
+    "vulnforge-academy-level18-extension-bypass-route-live-oracle",
     "vulnforge-academy-level20-final-boss-route-live-oracle",
     "vulnforge-academy-level4-sqli-route-live-oracle",
     "vulnforge-academy-level6-sqli-route-live-oracle",

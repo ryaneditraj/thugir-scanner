@@ -3777,6 +3777,7 @@ const DEEP_RULES = new Set<string>([
   "vulnforgeAcademyLevelAuthRouteLiveOracle",
   "vulnforgeAcademyLevelFileUploadRouteLiveOracle",
   "vulnforgeAcademyLevel17ContentTypeRouteLiveOracle",
+  "vulnforgeAcademyLevel18ExtensionBypassRouteLiveOracle",
   "vulnforgeAcademyLevelRceRouteLiveOracle",
   "vulnforgeAcademyLevelFinalBossRouteLiveOracle",
   "vulnbankUploadProfilePictureUrlRouteLiveOracle",
@@ -3955,6 +3956,7 @@ const DEEP_RULES = new Set<string>([
   "zenDemoReadRouteLiveOracle",
   "codeBreakingPuzzleRouteLiveOracle",
   "codeBreakingEasyRouteLiveOracle",
+  "codeBreakingMediumRouteLiveOracle",
   "clientSideAevumAgentConsentDemoEvidence",
   "aevumConsentReviewUnauthLiveOracle",
   "aevumConsentReviewUnauthRouteLiveOracle",
@@ -13031,6 +13033,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /code-breaking\.fly\.dev/i.test(origin) &&
+        /\/medium\/[\w-]+/i.test(targetInput) &&
+        p.slug.startsWith("code-breaking-medium")
+      )
+        return -3;
+      if (
+        /code-breaking\.fly\.dev/i.test(origin) &&
         /\/puzzle\/\d+/i.test(targetInput) &&
         p.slug.startsWith("code-breaking-puzzle")
       )
@@ -14466,6 +14474,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
         /\/level(?:s)?\/17\b|level17\.php/i.test(targetInput) &&
         p.slug.startsWith("vulnforge-academy-level17-content-type")
+      )
+        return -4;
+      if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level(?:s)?\/18\b|level18\.php/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level18-extension-bypass")
       )
         return -4;
       if (

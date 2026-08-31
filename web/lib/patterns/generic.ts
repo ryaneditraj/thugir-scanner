@@ -28557,6 +28557,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "code-breaking-medium-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Code-Breaking /medium tier route live oracle",
+    description:
+      "When scanning /medium/{slug}, Code-Breaking maps to /puzzle/{id} source-code audit puzzles (javacon, lumenserial) with GitHub source archives and flag submission forms — route-specific medium-tier code-audit CTF oracle.",
+    impactOneline:
+      "Route-scoped scans of /medium/* paths should confirm medium-tier source-code audit CTF puzzle content even when the short URL returns 404.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "codeBreakingMediumRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Code-Breaking is intentional training — isolate puzzle instances from production codebases.",
+      steps: [
+        "Run source-audit CTF puzzles only on dedicated lab infrastructure.",
+        "Require authentication before serving downloadable challenge source archives.",
+        "Use puzzle findings to train reviewers without copying vulnerable patterns into production."
+      ]
+    },
+    fixPrompt:
+      "Our Code-Breaking /medium route scan confirms medium-tier source-code audit CTF content. Show how to isolate challenge instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-sanitize-xss-demo-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -53201,6 +53227,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnForge Academy level 17 route documents Content-Type spoofing upload bypass. Show secure upload validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level18-extension-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnForge Academy level 18 extension blacklist bypass route live oracle",
+    description:
+      "When scanning level18.php routes, VulnForge Academy documents extension blacklist bypass via alternate executable extensions (.php5, .phtml) — route-specific level 18 file upload training oracle.",
+    impactOneline:
+      "VulnForge Academy level 18 exposes intentional extension blacklist bypass patterns distinct from generic levels 16–18 upload oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevel18ExtensionBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — use extension allowlists and content inspection in production apps.",
+      steps: [
+        "Allowlist permitted extensions and verify file magic bytes server-side.",
+        "Reject double extensions and alternate PHP handlers (.php5, .phtml).",
+        "Store uploads outside the web root and serve via authenticated download endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 18 route documents extension blacklist bypass via .php5/.phtml. Show secure upload validation remediation.",
     version: 1,
     enabled: true
   },
