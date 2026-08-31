@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2838,
-  "total_findings": 28653,
+  "total_sites_scanned": 2840,
+  "total_findings": 28670,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2006,
-  "discovery_findings": 24002,
-  "improvements_shipped": 1142,
+  "discovery_findings": 24015,
+  "improvements_shipped": 1246,
   "last_run": "2026-08-31T16:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,7 +48,7 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 595 probes); secret-resend + resend-key + iac-terraform-tls-key + jwt-alg-none + captcha-bypass present"
+      "note": "Stable 6/6 first-pass recall (52 findings); no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
@@ -59,9 +59,8 @@
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
       "chimera.atlascrew.dev/api/v1/gov/benefits/search: 7 findings — generic chimera SQLi oracles only (no gov-benefits route oracle)",
-      "chimera.atlascrew.dev/api/v1/saas/tenants/1/projects: 7 findings — generic chimera bundle (no saas cross-tenant IDOR route oracle)",
       "pwnshop.ctfsecurity.com/product/1: 51 findings (+pwnshop-product-review-stored-xss-route-live-oracle)",
       "pwnshop.ctfsecurity.com/profile/update-avatar: 51 findings (+pwnshop-avatar-url-ssrf-route-live-oracle)",
       "vampi.lab.pentest-forge.com/: 2 findings — thin VAMPI hub pass"
@@ -74,9 +73,8 @@
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
+    "juice-shop.herokuapp.com": 52,
     "chimera.atlascrew.dev/api/v1/gov/benefits/search": 7,
-    "chimera.atlascrew.dev/api/v1/saas/tenants/1/projects": 7,
     "pwnshop.ctfsecurity.com/product/1": 51,
     "pwnshop.ctfsecurity.com/profile/update-avatar": 51,
     "vampi.lab.pentest-forge.com": 2

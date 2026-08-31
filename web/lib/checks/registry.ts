@@ -59818,6 +59818,100 @@ const clientSidePovzaydXssLabsEvidence: Rule = async (ctx) => {
   };
 };
 
+function povzaydXssLabRouteOracle(
+  ctx: RuleContext,
+  labNum: number,
+  markers: { label: string; re: RegExp }[],
+  note: string
+): RuleResult {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/povzayd\.github\.io\/XSS-LABS/i.test(pageUrl)) return NEGATIVE;
+  if (!new RegExp(`/LABS/lab${labNum}\\.html`, "i").test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${ctx.home.body || ""}\n${pageUrl}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of markers) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: hits.slice(0, 4),
+      snippet: hits[0]?.sample,
+      note
+    }
+  };
+}
+
+const povzaydXssLab1DocumentWriteRouteLiveOracle: Rule = async (ctx) =>
+  povzaydXssLabRouteOracle(
+    ctx,
+    1,
+    [
+      { label: "XSS Demo enhanced UI lab title", re: /XSS Demo\s*-\s*Enhanced UI/i },
+      {
+        label: "document.write search parameter sink",
+        re: /document\.write\(search\)|params\.get\(['"]search['"]\)[\s\S]{0,40}document\.write/
+      },
+      {
+        label: "location.hash innerHTML welcome sink",
+        re: /getElementById\(["']welcome["']\)\.innerHTML\s*=\s*["']Welcome,\s*["']\s*\+\s*hash/
+      },
+      {
+        label: "localStorage stored comment innerHTML",
+        re: /localStorage\.getItem\(['"]comments['"]\)|div\.innerHTML\s*=\s*comment/
+      }
+    ],
+    "povzayd XSS Lab 1 route scan — ?search= URL parameter passed to document.write plus hash/localStorage innerHTML sinks — reflected/stored/DOM XSS training"
+  );
+
+const povzaydXssLab2ReflectedFilteredInnerhtmlRouteLiveOracle: Rule = async (ctx) =>
+  povzaydXssLabRouteOracle(
+    ctx,
+    2,
+    [
+      { label: "XSS Lab Level 2 title", re: /XSS Lab\s*—\s*Level 2|XSS Lab - Level 2/i },
+      {
+        label: "filterReflected script-tag stripper",
+        re: /function filterReflected\(input\)[\s\S]{0,80}replace\(\/<script/i
+      },
+      {
+        label: "reflected-output innerHTML assignment",
+        re: /getElementById\(["']reflected-output["']\)\.innerHTML\s*=\s*filterReflected\(q\)/
+      },
+      {
+        label: "query parameter GET reflection form",
+        re: /name=["']query["'][\s\S]{0,60}placeholder=['"][^'"]*onerror=alert/
+      }
+    ],
+    "povzayd XSS Lab 2 route scan — ?query= reflected into filterReflected then innerHTML with script-tag-only filter bypass — reflected XSS training sink"
+  );
+
+const povzaydXssLab2DomHashRouteLiveOracle: Rule = async (ctx) =>
+  povzaydXssLabRouteOracle(
+    ctx,
+    2,
+    [
+      { label: "DOM-based XSS section", re: /DOM-based XSS|🧠 DOM-based XSS/i },
+      {
+        label: "location.hash dom-box innerHTML sink",
+        re: /location\.hash\.slice\(1\)|getElementById\(["']dom-box["']\)\.innerHTML\s*=\s*domInput/
+      },
+      {
+        label: "lvl2_comments localStorage stored XSS",
+        re: /localStorage\.getItem\(["']lvl2_comments["']\)|filterStored\(c\)/
+      },
+      {
+        label: "xss-popup custom alert simulation",
+        re: /id=["']xss-popup["']|xssSuccess\(\)/
+      }
+    ],
+    "povzayd XSS Lab 2 route scan — location.hash assigned to dom-box innerHTML plus lvl2_comments localStorage stored XSS — DOM/stored XSS training sinks"
+  );
+
 // --- Juice Shop VAPT write-up hub (lucky-cyber3008.github.io/juice-shop-vapt) ---------
 const CLIENT_JUICE_SHOP_VAPT_RES: { label: string; re: RegExp }[] = [
   {
@@ -106716,6 +106810,9 @@ export const RULES: Record<string, Rule> = {
   clientSideZiranAgentSecurityEvidence,
   clientSideDotnetSerializationLabEvidence,
   clientSidePovzaydXssLabsEvidence,
+  povzaydXssLab1DocumentWriteRouteLiveOracle,
+  povzaydXssLab2ReflectedFilteredInnerhtmlRouteLiveOracle,
+  povzaydXssLab2DomHashRouteLiveOracle,
   clientSideJuiceShopVaptEvidence,
   clientSideRogueStudioEvidence,
   clientSideOverthewireLeviathanEvidence,
