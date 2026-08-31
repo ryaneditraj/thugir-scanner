@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-31T01:05:00.000Z",
+  "updated_at": "2026-08-31T02:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://ginandjuice.shop/my-account/change-email",
+      "source": "PortSwigger ginandjuice.shop — race-condition admin takeover oracle POST /my-account/change-email (InfosecWriteups lab; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog/search",
+      "source": "PortSwigger ginandjuice.shop — POST /catalog/search SQLi oracle (Burp Scanner sample report; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/prompt-injection",
+      "source": "OWASP GenAI Security Lab — LLM01 prompt-injection interactive lesson (Vercel Pages; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/excessive-agency",
+      "source": "OWASP GenAI Security Lab — LLM08 excessive agency lesson with live demo (Vercel Pages; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/lesson/supply-chain",
+      "source": "OWASP GenAI Security Lab — LLM05 supply-chain lesson with live demo (Vercel Pages; web search 02 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ginandjuice.shop/api/catalog/search?q=test",
       "source": "PortSwigger ginandjuice.shop — catalog search SQLi/XSS oracle GET /api/catalog/search (lab README; web search 01 UTC)",
