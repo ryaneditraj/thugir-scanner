@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T22:06:00.000Z",
+  "updated_at": "2026-08-31T23:00:00.000Z",
   "discovery_urls": [
     {
       "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
@@ -11427,6 +11427,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/records/search?q=test",
+      "source": "atlas-crew/Chimera CHM-HEALTH-001 — SQLi oracle GET /api/v1/healthcare/records/search?q= (vuln_registry + vulnerability-inventory; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/accounts",
+      "source": "atlas-crew/Chimera CHM-BANK-002 — BOLA/IDOR oracle GET /api/v1/banking/accounts enumerate balances (vuln_registry; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/transfer",
+      "source": "atlas-crew/Chimera CHM-BANK-001 — negative-amount transfer business-logic oracle POST /api/v1/banking/transfer (vuln_registry; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finstripe/reset-tools",
+      "source": "OWASP FinBot CTF — MCP finstripe reset-tools write oracle POST /darklab/api/v1/supply-chain/servers/finstripe/reset-tools (issue #544; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/systemutils/reset-tools",
+      "source": "OWASP FinBot CTF — MCP systemutils reset-tools write oracle POST /darklab/api/v1/supply-chain/servers/systemutils/reset-tools (issue #544; web search 23 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/search_users?name=test",
       "source": "NeuraLegion/brokencrystals — LDAP/search_users SQLi oracle GET /api/search_users?name= (README search_users proxy; web search 22 UTC)",
