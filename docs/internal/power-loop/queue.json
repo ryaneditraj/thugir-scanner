@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-08-31T12:08:00.000Z",
+  "updated_at": "2026-08-31T13:05:00.000Z",
   "discovery_urls": [
+    {
+      "url": "https://crapi.apisec.ai/login",
+      "source": "OWASP crAPI public hosted demo — login/signup API security lab (crapi.apisec.ai; allthewriteups + OWASP LA 2025 guide; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/v2/user/videos",
+      "source": "OWASP crAPI2 public hosted demo — Challenge 5 BOLA on user videos endpoint (crapi2.apisec.ai; APIsec OWASP LA guide; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/mcp/coupons",
+      "source": "Escape Duck Store — MCP server coupon disclosure oracle (duck-store.escape.tech/vulnerabilities MCP section; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/guest",
+      "source": "Escape Duck Store — guest testimonial XSS route oracle GET /api/v1/testimonials/guest (improvements.json duck-store-testimonials-guest-route-live-oracle; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/users/",
+      "source": "Escape Duck Store vuln index — user enumeration oracle GET /api/v1/users/ (duck-store.escape.tech/vulnerabilities; web search 13 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/testimonials",
       "source": "Escape Duck Store vuln index — stored XSS testimonials oracle POST /testimonials (duck-store.escape.tech/vulnerabilities; web search 12 UTC)",
@@ -11377,6 +11402,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://crapi.apisec.ai/login",
+      "source": "OWASP crAPI public hosted demo — login/signup API security lab (crapi.apisec.ai; allthewriteups + OWASP LA 2025 guide; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/v2/user/videos",
+      "source": "OWASP crAPI2 public hosted demo — Challenge 5 BOLA on user videos endpoint (crapi2.apisec.ai; APIsec OWASP LA guide; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/mcp/coupons",
+      "source": "Escape Duck Store — MCP server coupon disclosure oracle (duck-store.escape.tech/vulnerabilities MCP section; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/guest",
+      "source": "Escape Duck Store — guest testimonial XSS route oracle GET /api/v1/testimonials/guest (improvements.json duck-store-testimonials-guest-route-live-oracle; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/users/",
+      "source": "Escape Duck Store vuln index — user enumeration oracle GET /api/v1/users/ (duck-store.escape.tech/vulnerabilities; web search 13 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/telecom/sim-swap",
       "source": "atlas-crew/Chimera — telecom SIM-swap business-logic oracle POST /api/v1/telecom/sim-swap (chimera.atlascrew.dev public demo; web search 10 UTC)",
