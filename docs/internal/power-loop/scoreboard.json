@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T05:03:04.054Z",
+  "updated_at": "2026-08-31T05:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2761,
-  "total_findings": 27191,
+  "total_sites_scanned": 2769,
+  "total_findings": 27253,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1971,
-  "discovery_findings": 23038,
+  "discovery_urls_added": 1976,
+  "discovery_findings": 23100,
   "improvements_shipped": 1206,
-  "last_run": "2026-08-31T05:03:04.054Z",
+  "last_run": "2026-08-31T05:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 593,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,46 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 39 live oracles); secret-resend + resend-key + iac-terraform-tls-key present"
+      "note": "Stable 6/6 first-pass recall (51 findings, 38 live oracles, 595 probes); secret-resend + resend-key + iac-terraform-tls-key present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
+      "urls_scanned": 8,
       "findings": 62,
-      "focus": "owaspbased GenAI prompt-leakage/data-poisoning/vector-embedding + pentest-forge DVWA/Mutillidae + oopssec walkthroughs + yogsec XSS labs 2/4/5",
-      "improvements_shipped_this_run": 3
+      "focus": "ist-edu-bd API/search+portal + labs/ssti+graphql + vulnerability-intelligence MCP Heroku + drained oopssec race-condition-coupon + owaspbased unbounded-consumption/info-disclosure",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles)",
-      "owaspbased-lessons.vercel.app/lesson/prompt-leakage: 4 findings — owasp-genai-system-prompt-leakage-route-live-oracle confirmed",
-      "owaspbased-lessons.vercel.app/lesson/data-poisoning: 5 findings — owasp-genai-data-poisoning-route-live-oracle confirmed",
-      "owaspbased-lessons.vercel.app/lesson/vector-embedding: 4 findings — owasp-genai-vector-embedding-route-live-oracle confirmed",
-      "koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection: 8 findings — oopssec-product-search-sqli-route-live-oracle confirmed",
-      "yogsec.github.io/xss-labs/labs/lab2.html: 7 findings — yogsec-xss-lab2-post-sessionstorage-route-live-oracle shipped",
-      "yogsec.github.io/xss-labs/labs/lab4.html: 7 findings — yogsec-xss-lab4-referer-route-live-oracle shipped",
-      "yogsec.github.io/xss-labs/labs/lab5.html: 7 findings — yogsec-xss-lab5-user-agent-route-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 38 live oracles)",
+      "ist-edu-bd.vercel.app/api/search: 9 findings — ist-edu-search-sqli-route-live-oracle + ist-edu-search-xss-route-live-oracle confirmed",
+      "ist-edu-bd.vercel.app/api/portal: 8 findings — ist-edu-portal-sqli-route-live-oracle confirmed",
+      "ist-edu-bd.vercel.app/labs/ssti: 11 findings — ist-edu-ssti-lab-route-live-oracle confirmed",
+      "ist-edu-bd.vercel.app/labs/graphql: 11 findings — ist-edu-graphql-lab-route-live-oracle confirmed",
+      "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse: 13 findings — oopssec-race-condition-coupon-route-live-oracle confirmed",
+      "owaspbased-lessons.vercel.app/lesson/unbounded-consumption: 4 findings — owasp-genai-unbounded-consumption-route-live-oracle confirmed",
+      "owaspbased-lessons.vercel.app/lesson/info-disclosure: 4 findings — owasp-genai-sensitive-info-route-live-oracle confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "owaspbased unbounded-consumption + info-disclosure queued but not scanned (8-URL limit preempted by pentest-forge + oopssec priority drain)",
-      "pentest-forge Mutillidae/DVWA routes: thin 3-finding passes with shared CTF-challenge-3 middleware-bypass fingerprint",
-      "yogsec XSS labs 3,6-21,23 still lack route-specific oracles (labs 1-2,4-5,22,24-39 covered)",
-      "oopssec walkthrough pages confirm route oracles but require local Docker for full exploit chain"
+      "vulnerability-intelligence-mcp Heroku demo: thin 2-finding pass (missing-security-headers only); no MCP-specific route oracle",
+      "ist-edu-bd /api/* routes confirm SQLi oracles via shared portal/search probes but lack dedicated API-endpoint live oracles",
+      "oopssec race-condition-coupon walkthrough confirms route oracle but full coupon race exploit needs local Docker stack"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "owaspbased-lessons.vercel.app/lesson/prompt-leakage": 4,
-    "owaspbased-lessons.vercel.app/lesson/data-poisoning": 5,
-    "owaspbased-lessons.vercel.app/lesson/vector-embedding": 4,
-    "koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection": 8,
-    "koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api": 11,
-    "mutillidae.lab.pentest-forge.com/index.php?page=user-info.php": 3,
-    "dvwa.lab.pentest-forge.com/vulnerabilities/sqli_blind": 3,
-    "yogsec.github.io/xss-labs/labs/lab2.html": 7,
-    "yogsec.github.io/xss-labs/labs/lab4.html": 7,
-    "yogsec.github.io/xss-labs/labs/lab5.html": 7,
+    "juice-shop.herokuapp.com": 51,
+    "ist-edu-bd.vercel.app/api/search": 9,
+    "ist-edu-bd.vercel.app/api/portal": 8,
+    "ist-edu-bd.vercel.app/labs/ssti": 11,
+    "ist-edu-bd.vercel.app/labs/graphql": 11,
+    "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse": 13,
+    "owaspbased-lessons.vercel.app/lesson/unbounded-consumption": 4,
+    "owaspbased-lessons.vercel.app/lesson/info-disclosure": 4,
+    "vulnerability-intelligence-mcp-server-edb8b15494e8.herokuapp.com": 2,
     "ginandjuice.shop/api/catalog/search?q=test": 44,
     "brokencrystals.com/render.dot": 94,
     "pwnshop.ctfsecurity.com/chat/init": 47
