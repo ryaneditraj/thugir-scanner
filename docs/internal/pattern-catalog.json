@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-30T23:06:40.137Z",
-  "total": 2932,
-  "uniqueSlugs": 2924,
+  "generatedAt": "2026-08-31T00:07:27.244Z",
+  "total": 2937,
+  "uniqueSlugs": 2929,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2914,
+    "generic": 2919,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2847,
+    "deep": 2852,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 134,
     "Security misconfiguration": 213,
-    "Broken authentication": 189,
+    "Broken authentication": 194,
     "Injection": 473,
     "Cross-site scripting": 766,
     "Open redirect": 26,
@@ -439,6 +439,7 @@
     "client-side-cs-training-academy-evidence",
     "client-side-csrf-evidence",
     "client-side-css-injection-evidence",
+    "client-side-ctf-challange-3-middleware-bypass-evidence",
     "client-side-ctf-challenge-hub-evidence",
     "client-side-ctf-defi-evidence",
     "client-side-ctf-platform-evidence",
@@ -654,6 +655,7 @@
     "client-side-oopssec-information-disclosure-evidence",
     "client-side-oopssec-insecure-password-reset-evidence",
     "client-side-oopssec-jwt-alg-confusion-evidence",
+    "client-side-oopssec-jwt-weak-secret-evidence",
     "client-side-oopssec-malicious-file-upload-evidence",
     "client-side-oopssec-mass-assignment-admin-evidence",
     "client-side-oopssec-middleware-bypass-evidence",
@@ -991,6 +993,8 @@
     "crapi2-auth-login-route-live-oracle",
     "crapi2-shop-orders-bfla-route-live-oracle",
     "crapi2-shop-orders-id-bola-route-live-oracle",
+    "ctf-challange-3-middleware-auth-bypass-live-oracle",
+    "ctf-challange-3-middleware-auth-bypass-route-live-oracle",
     "cursor-next-public-secret",
     "dangerous-html-sinks",
     "directory-listing-enabled",
@@ -1997,6 +2001,7 @@
     "oopssec-information-disclosure-api-error-route-live-oracle",
     "oopssec-insecure-password-reset-route-live-oracle",
     "oopssec-jwt-alg-confusion-route-live-oracle",
+    "oopssec-jwt-weak-secret-admin-bypass-route-live-oracle",
     "oopssec-live-stream-bfla-route-live-oracle",
     "oopssec-malicious-file-upload-stored-xss-route-live-oracle",
     "oopssec-mass-assignment-admin-route-live-oracle",

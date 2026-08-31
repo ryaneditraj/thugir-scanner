@@ -1779,6 +1779,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideReactRscCveEvidence",
   "clientSideCve55182SaasPocEvidence",
   "clientSideNextjsMiddlewareCveEvidence",
+  "clientSideCtfChallange3MiddlewareBypassEvidence",
+  "ctfChallange3MiddlewareAuthBypassLiveOracle",
+  "ctfChallange3MiddlewareAuthBypassRouteLiveOracle",
   "clientSideChimeraVulnLabEvidence",
   "chimeraLoginVulnerableSqliRouteLiveOracle",
   "chimeraPatientsSearchSqliLiveOracle",
@@ -2313,6 +2316,8 @@ const DEEP_RULES = new Set<string>([
   "oopssecPriceManipulationRouteLiveOracle",
   "clientSideOopssecJwtAlgConfusionEvidence",
   "oopssecJwtAlgConfusionRouteLiveOracle",
+  "clientSideOopssecJwtWeakSecretEvidence",
+  "oopssecJwtWeakSecretAdminBypassRouteLiveOracle",
   "clientSideOopssecPathTraversalEvidence",
   "oopssecPathTraversalRouteLiveOracle",
   "clientSideOopssecCsrfAdminOrderEvidence",
@@ -12054,6 +12059,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/pentest-ground\.com:4280/i.test(origin) && p.slug.startsWith("pentest-ground-dvwa")) return -2;
       if (
         /pentest-ground\.com:4280/i.test(origin) &&
+        /\/vulnerabilities\/csrf\/?/i.test(targetInput) &&
+        p.slug.startsWith("pentest-ground-dvwa-csrf")
+      )
+        return -4;
+      if (
+        /pentest-ground\.com:4280/i.test(origin) &&
         /pentest-ground\.com:4280\/?(?:[#?]|$)/i.test(targetInput) &&
         p.slug.startsWith("pentest-ground-dvwa-hub")
       )
@@ -13130,6 +13141,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
         /\/posts\/x-forwarded-for-sql-injection/i.test(targetInput) &&
         p.slug.startsWith("oopssec-xff-sqli")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/jwt-weak-secret-admin-bypass/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-jwt-weak-secret")
       )
         return -4;
       if (
@@ -14788,6 +14805,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("securebank-blog")
       )
         return -3;
+      if (
+        /ctf-challange-3\.vercel\.app/i.test(origin) &&
+        (/\/api\/hacker\/?/i.test(targetInput) || /ctf-challange-3\.vercel\.app\/?(?:[#?]|$)/i.test(targetInput)) &&
+        p.slug.startsWith("ctf-challange-3-middleware")
+      )
+        return -4;
       if (/vulnweb\.netlify\.app/i.test(origin) && p.slug.startsWith("vulnweb-")) return -2;
       if (/vapi\.apisec\.ai/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
       if (/vapi\.tools\.escape\.tech/i.test(origin) && p.slug.startsWith("vapi-")) return -2;

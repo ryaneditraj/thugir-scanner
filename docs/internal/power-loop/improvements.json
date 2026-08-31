@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-jwt-weak-secret-admin-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/jwt-weak-secret-admin-bypass documents JWT_SECRET crackable via hashcat + forge role:ADMIN to access /admin + OSS{w34k_jwt_s3cr3t_k3y}; koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass/ findings 7→10 (+oopssec-jwt-weak-secret-admin-bypass-route-live-oracle +client-side-oopssec-jwt-weak-secret-evidence); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ctf-challange-3.vercel.app",
+      "slug": "ctf-challange-3-middleware-auth-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Gowreesh-VT/CTF_Challange_3 documents GET /api/hacker middleware auth bypass via x-middleware-subrequest; ctf-challange-3.vercel.app/ findings 2→5 (+ctf-challange-3-middleware-auth-bypass-route-live-oracle +ctf-challange-3-middleware-auth-bypass-live-oracle +client-side-ctf-challange-3-middleware-bypass-evidence -reflexion-escalated-ssti); /api/hacker findings 2→4; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-ground.com",
+      "slug": "pentest-ground-dvwa-csrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /vulnerabilities/csrf/ password_new/password_conf form accepts cross-site POST without CSRF token; pentest-ground.com:4280/vulnerabilities/csrf/ findings 9 (+pentest-ground-dvwa-csrf-route-live-oracle); runner -4 priority on /vulnerabilities/csrf route scans; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
       "slug": "oopssec-react2shell-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /posts/react2shell-cve-2025-55182 documents CVE-2025-55182 Flight protocol deserialization RCE via chunk.constructor.constructor === Function chain; koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182/ findings 5→6 (+oopssec-react2shell-route-live-oracle +client-side-oopssec-react2shell-evidence); benchmark juice-shop 51 findings 6/6 maintained"

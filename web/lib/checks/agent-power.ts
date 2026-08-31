@@ -129,6 +129,18 @@ function oopssecGitHubPagesReflexionSuppressed(ctx: PowerCtx): boolean {
   return /koadt\.github\.io\/oss-oopssec-store/i.test(pageUrl);
 }
 
+/** yogsec.github.io static XSS/login labs have client-side sinks — no server-side SSTI. */
+function yogsecGitHubPagesReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /yogsec\.github\.io/i.test(pageUrl);
+}
+
+/** ctf-challange-3 is a static Next.js middleware bypass demo — no server-side SSTI. */
+function ctfChallange3ReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /ctf-challange-3\.vercel\.app/i.test(pageUrl);
+}
+
 /** the0x-pwn XSS labs are static GitHub Pages with client-side eval/innerHTML sinks — no server-side SSTI. */
 function the0xPwnLabXssReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
@@ -326,6 +338,8 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (securebankBlogReflexionSuppressed(ctx)) return NEGATIVE;
   if (ginAndJuiceReflexionSuppressed(ctx)) return NEGATIVE;
   if (oopssecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
+  if (yogsecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
+  if (ctfChallange3ReflexionSuppressed(ctx)) return NEGATIVE;
   if (the0xPwnLabXssReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];

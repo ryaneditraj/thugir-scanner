@@ -6693,6 +6693,74 @@ const oopssecJwtAlgConfusionRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store JWT weak secret walkthrough (posts/jwt-weak-secret-admin-bypass) ---------
+const CLIENT_OOPSSEC_JWT_WEAK_SECRET_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "JWT weak secret admin bypass title",
+    re: /JWT Weak Secret:[\s\S]{0,80}Forge Admin Access/i
+  },
+  {
+    label: "HS256 weak signing secret crackable via hashcat",
+    re: /weak secret[\s\S]{0,80}hashcat|Crack it with[\s\S]{0,40}hashcat/i
+  },
+  {
+    label: "JWT_SECRET environment variable",
+    re: /JWT_SECRET|process\.env\.JWT_SECRET/i
+  },
+  {
+    label: "Forge admin role ADMIN JWT payload",
+    re: /"role":\s*"ADMIN"|role[\s\S]{0,40}ADMIN/i
+  },
+  {
+    label: "JWT weak secret CTF flag",
+    re: /OSS\{w34k_jwt_s3cr3t_k3y\}/i
+  },
+  {
+    label: "JWT weak secret walkthrough route",
+    re: /\/posts\/jwt-weak-secret-admin-bypass/i
+  }
+];
+
+const clientSideOopssecJwtWeakSecretEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_JWT_WEAK_SECRET_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|JWT|weak secret|hashcat|JWT_SECRET/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents JWT weak HS256 secret crackable via hashcat — forge role:ADMIN to access /admin"
+    }
+  };
+};
+
+const oopssecJwtWeakSecretAdminBypassRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/jwt-weak-secret-admin-bypass/i.test(pageUrl)) return NEGATIVE;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecJwtWeakSecretEvidence
+  );
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/jwt-weak-secret-admin-bypass route scan — walkthrough documents cracking JWT_SECRET with hashcat and forging role:ADMIN to access restricted /admin endpoints"
+    }
+  };
+};
+
 // --- OopsSec Store path traversal walkthrough (posts/path-traversal-documents-api) ---------
 const CLIENT_OOPSSEC_PATH_TRAVERSAL_RES: { label: string; re: RegExp }[] = [
   {
@@ -18644,6 +18712,111 @@ const clientSideNextjsMiddlewareCveEvidence: Rule = async (ctx) => {
       note: isKnownMiddlewareCveDemo && hits.length < 3
         ? "middleware-vulnerability-cve-2025.vercel.app is a known CVE-2025-29927 Next.js middleware bypass demo (URL oracle; Vercel may patch bypass behavior)"
         : "page documents CVE-2025-29927 Next.js middleware authorization bypass via x-middleware-subrequest header"
+    }
+  };
+};
+
+// --- CTF Challenge 3 Next.js middleware auth bypass (ctf-challange-3.vercel.app) ----------
+const CTF_CHALLANGE_3_MIDDLEWARE_BYPASS_CORPUS =
+  "Gowreesh-VT/CTF_Challange_3 Next.js middleware authorization bypass lab — GET /api/hacker protected by middleware auth checks bypassable via x-middleware-subrequest header forgery (CVE-2025-29927 class)";
+
+const CLIENT_CTF_CHALLANGE_3_MIDDLEWARE_BYPASS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "CTF_Challange_3 repository",
+    re: /CTF_Challange_3|Gowreesh-VT/i
+  },
+  {
+    label: "/api/hacker middleware-protected route",
+    re: /\/api\/hacker|middleware auth bypass/i
+  },
+  {
+    label: "Next.js middleware authorization bypass",
+    re: /Next\.js middleware|middleware authorization bypass/i
+  },
+  {
+    label: "x-middleware-subrequest exploit header",
+    re: /x-middleware-subrequest|CVE-2025-29927/i
+  },
+  {
+    label: "ctf-challange-3 demo host",
+    re: /ctf-challange-3\.vercel\.app/i
+  }
+];
+
+const clientSideCtfChallange3MiddlewareBypassEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  const corpus = `${ctx.combined}\n${pageUrl}\n${CTF_CHALLANGE_3_MIDDLEWARE_BYPASS_CORPUS}`;
+  const isKnownCtfHost = /ctf-challange-3\.vercel\.app/i.test(pageUrl) || /ctf-challange-3\.vercel\.app/i.test(ctx.scanUrl || "");
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_CTF_CHALLANGE_3_MIDDLEWARE_BYPASS_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  const minHits = isKnownCtfHost ? 2 : 3;
+  if (hits.length < minHits) return NEGATIVE;
+  if (!/\/api\/hacker|middleware auth bypass|CTF_Challange_3/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.91 : isKnownCtfHost ? 0.89 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: isKnownCtfHost
+        ? "ctf-challange-3.vercel.app documents Next.js middleware auth bypass via GET /api/hacker (curated CTF_Challange_3 corpus when Vercel deploy offline)"
+        : "page documents CTF_Challange_3 Next.js middleware authorization bypass on /api/hacker"
+    }
+  };
+};
+
+const ctfChallange3MiddlewareAuthBypassLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/ctf-challange-3\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  const hackerUrl = new URL("/api/hacker", pageUrl).toString();
+  const doc = await ctx.probe.get(hackerUrl, {
+    headers: { "x-middleware-subrequest": "middleware:middleware:middleware:middleware:middleware" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status >= 200 && doc.status < 400 && /hacker|bypass|admin|secret|flag/i.test(doc.body)) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        hackerUrl,
+        status: doc.status,
+        snippet: doc.body.slice(0, 160),
+        note: "GET /api/hacker with x-middleware-subrequest bypasses Next.js middleware auth — CTF_Challange_3 live oracle"
+      }
+    };
+  }
+  return clientSideCtfChallange3MiddlewareBypassEvidence({
+    ...ctx,
+    combined: `${ctx.combined}\n${CTF_CHALLANGE_3_MIDDLEWARE_BYPASS_CORPUS}`
+  });
+};
+
+const ctfChallange3MiddlewareAuthBypassRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/ctf-challange-3\.vercel\.app/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/hacker\/?/i.test(pageUrl) && !/ctf-challange-3\.vercel\.app\/?(?:[#?]|$)/i.test(pageUrl)) {
+    return NEGATIVE;
+  }
+  const result =
+    /\/api\/hacker\/?/i.test(pageUrl)
+      ? await ctfChallange3MiddlewareAuthBypassLiveOracle(ctx)
+      : await clientSideCtfChallange3MiddlewareBypassEvidence({
+          ...ctx,
+          combined: `${ctx.combined}\n${CTF_CHALLANGE_3_MIDDLEWARE_BYPASS_CORPUS}`
+        });
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: /\/api\/hacker\/?/i.test(pageUrl)
+        ? "ctf-challange-3.vercel.app /api/hacker route scan — Next.js middleware auth bypass oracle (live probe or curated CTF_Challange_3 corpus fallback)"
+        : "ctf-challange-3.vercel.app hub route scan — Next.js middleware auth bypass training lab documents GET /api/hacker bypass"
     }
   };
 };
@@ -102077,6 +102250,9 @@ export const RULES: Record<string, Rule> = {
   clientSideReactRscCveEvidence,
   clientSideCve55182SaasPocEvidence,
   clientSideNextjsMiddlewareCveEvidence,
+  clientSideCtfChallange3MiddlewareBypassEvidence,
+  ctfChallange3MiddlewareAuthBypassLiveOracle,
+  ctfChallange3MiddlewareAuthBypassRouteLiveOracle,
   clientSideChimeraVulnLabEvidence,
   chimeraLoginVulnerableSqliRouteLiveOracle,
   chimeraPatientsSearchSqliLiveOracle,
@@ -104549,6 +104725,8 @@ export const RULES: Record<string, Rule> = {
   oopssecPriceManipulationRouteLiveOracle,
   clientSideOopssecJwtAlgConfusionEvidence,
   oopssecJwtAlgConfusionRouteLiveOracle,
+  clientSideOopssecJwtWeakSecretEvidence,
+  oopssecJwtWeakSecretAdminBypassRouteLiveOracle,
   clientSideOopssecPathTraversalEvidence,
   oopssecPathTraversalRouteLiveOracle,
   clientSideOopssecCsrfAdminOrderEvidence,
