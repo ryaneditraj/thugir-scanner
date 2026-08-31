@@ -3354,6 +3354,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideAtlasCrewHubEvidence",
   "clientSideAtlasCrewInfernoLabEvidence",
   "apparatusRedteamAutopilotRouteLiveOracle",
+  "crucibleScenarioCatalogRouteLiveOracle",
+  "pentestForgeJuiceShopLabRouteLiveOracle",
+  "pentestForgeTomcatLabRouteLiveOracle",
   "clientSideAtlasCrewEdgeProtectionEvidence",
   "clientSideMcpSupplyChainEvidence",
   "clientSideOwaspVwadEvidence",
@@ -14392,6 +14395,23 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (
         /apparatus\.atlascrew\.dev/i.test(origin) &&
         p.slug.startsWith("apparatus-redteam-autopilot")
+      )
+        return -3;
+      if (
+        /crucible\.atlascrew\.dev/i.test(origin) &&
+        p.slug.startsWith("crucible-scenario-catalog")
+      )
+        return -3;
+      if (
+        /pentest-forge\.com|juice-shop\.lab\.pentest-forge\.com/i.test(origin) &&
+        (/\/labs\/juice-shop/i.test(targetInput) || /juice-shop\.lab\.pentest-forge\.com/i.test(origin)) &&
+        p.slug.startsWith("pentest-forge-juice-shop-lab")
+      )
+        return -3;
+      if (
+        /pentest-forge\.com|tomcat\.lab\.pentest-forge\.com/i.test(origin) &&
+        (/\/labs\/tomcat/i.test(targetInput) || /tomcat\.lab\.pentest-forge\.com/i.test(origin)) &&
+        p.slug.startsWith("pentest-forge-tomcat-lab")
       )
         return -3;
       if (
