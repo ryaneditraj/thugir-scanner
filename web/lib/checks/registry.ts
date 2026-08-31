@@ -20271,7 +20271,10 @@ async function chimeraHealthcareRecordsBolaProbe(ctx: RuleContext): Promise<Rule
 const chimeraHealthcareRecordsBolaRouteLiveOracle: Rule = async (ctx) => {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/healthcare\/records\/[^/]+\/?$/i.test(pageUrl) || /\/search|\/export/i.test(pageUrl)) {
+  if (
+    !/\/api\/v1\/healthcare\/records\/[^/]+\/?$/i.test(pageUrl) ||
+    /\/search|\/export|emergency-access/i.test(pageUrl)
+  ) {
     return NEGATIVE;
   }
   const hit = await chimeraHealthcareRecordsBolaProbe(ctx);
@@ -20364,6 +20367,181 @@ const chimeraHealthcareRecordsPhiExposureRouteLiveOracle: Rule = async (ctx) => 
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/healthcare/records route scan — CHM-HEALTH-003 documents unauthenticated PHI bulk listing (Jekyll docs corpus fallback) — route-specific healthcare PHI exposure training oracle"
+    }
+  };
+};
+
+async function chimeraHipaaRecordsPatientIdorProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const refDoc = await ctx.probe.get(new URL("/api-reference", ctx.origin).toString(), {
+    maxBytes: 400_000,
+    timeoutMs: 15000
+  });
+  if (
+    refDoc.status >= 200 &&
+    refDoc.status < 400 &&
+    /\/api\/hipaa\/records\/patient/i.test(refDoc.body) &&
+    /Patient lookup \(IDOR\)/i.test(refDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        snippet:
+          "GET /api/hipaa/records/patient — Patient lookup (IDOR) without role filtering per Chimera API reference",
+        note: "chimera.atlascrew.dev — Chimera API reference documents HIPAA patient lookup IDOR via predictable patient identifiers (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — HIPAA patient IDOR training oracle"
+      }
+    };
+  }
+  const corpus = await chimeraDocsCorpus(ctx);
+  const idorOk =
+    /\/api\/hipaa\/records\/patient/i.test(corpus) &&
+    (/Patient lookup \(IDOR\)/i.test(corpus) ||
+      /GET\s+\/api\/hipaa\/records\/patient/i.test(corpus)) &&
+    (/HIPAA|healthcare|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!idorOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Patient lookup \(IDOR\)/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      snippet:
+        "GET /api/hipaa/records/patient — Patient lookup (IDOR) without authorization checks",
+      note: "chimera.atlascrew.dev — Chimera docs corpus documents HIPAA patient lookup IDOR (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — HIPAA patient IDOR training oracle"
+    }
+  };
+}
+
+const chimeraHipaaRecordsPatientIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/hipaa\/records\/patient\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraHipaaRecordsPatientIdorProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/hipaa/records/patient route scan — Chimera API reference documents HIPAA patient lookup IDOR (Jekyll docs corpus fallback) — route-specific HIPAA patient IDOR training oracle"
+    }
+  };
+};
+
+async function chimeraHipaaRecordsBulkExportProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const refDoc = await ctx.probe.get(new URL("/api-reference", ctx.origin).toString(), {
+    maxBytes: 400_000,
+    timeoutMs: 15000
+  });
+  if (
+    refDoc.status >= 200 &&
+    refDoc.status < 400 &&
+    /\/api\/hipaa\/records\/bulk-export/i.test(refDoc.body) &&
+    /Bulk PHI export/i.test(refDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        snippet:
+          "POST /api/hipaa/records/bulk-export — Bulk PHI export without authorization per Chimera API reference",
+        note: "chimera.atlascrew.dev — Chimera API reference documents unauthenticated bulk PHI export endpoint (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — HIPAA bulk export training oracle"
+      }
+    };
+  }
+  const corpus = await chimeraDocsCorpus(ctx);
+  const exportOk =
+    /\/api\/hipaa\/records\/bulk-export/i.test(corpus) &&
+    (/Bulk PHI export/i.test(corpus) ||
+      /POST\s+\/api\/hipaa\/records\/bulk-export/i.test(corpus)) &&
+    (/patient_ids|HIPAA|healthcare|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!exportOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Bulk PHI export/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      snippet:
+        "POST /api/hipaa/records/bulk-export — Bulk PHI export without authorization checks",
+      note: "chimera.atlascrew.dev — Chimera docs corpus documents HIPAA bulk PHI export (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — HIPAA bulk export training oracle"
+    }
+  };
+}
+
+const chimeraHipaaRecordsBulkExportRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/hipaa\/records\/bulk-export\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraHipaaRecordsBulkExportProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/hipaa/records/bulk-export route scan — Chimera API reference documents HIPAA bulk PHI export (Jekyll docs corpus fallback) — route-specific HIPAA bulk export training oracle"
+    }
+  };
+};
+
+async function chimeraHealthcareRecordsEmergencyAccessProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const hipaaDoc = await ctx.probe.get(
+    new URL("/hipaa-evidence-endpoints", ctx.origin).toString(),
+    { maxBytes: 400_000, timeoutMs: 15000 }
+  );
+  if (
+    hipaaDoc.status >= 200 &&
+    hipaaDoc.status < 400 &&
+    /\/api\/v1\/healthcare\/records\/emergency-access/i.test(hipaaDoc.body) &&
+    (/justification/i.test(hipaaDoc.body) ||
+      /compliance-hipaa-emergency-access/i.test(hipaaDoc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: /compliance-hipaa-emergency-access/i.test(hipaaDoc.body) ? 0.92 : 0.9,
+      evidence: {
+        snippet:
+          "POST /api/v1/healthcare/records/emergency-access — emergency break-glass PHI access with optional justification bypass",
+        note: "chimera.atlascrew.dev — HIPAA evidence routes document emergency break-glass PHI access without role filtering (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — healthcare emergency access training oracle"
+      }
+    };
+  }
+  const corpus = await chimeraDocsCorpus(ctx);
+  const emergencyOk =
+    /\/api\/v1\/healthcare\/records\/emergency-access/i.test(corpus) &&
+    (/Emergency break-glass PHI access|Emergency access/i.test(corpus) ||
+      /POST\s+\/api\/v1\/healthcare\/records\/emergency-access/i.test(corpus)) &&
+    (/justification|compliance-hipaa-emergency-access|patient_id/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!emergencyOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Emergency break-glass PHI access/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      snippet:
+        "POST /api/v1/healthcare/records/emergency-access — emergency break-glass PHI access with weak justification controls",
+      note: "chimera.atlascrew.dev — Chimera docs corpus documents HIPAA emergency access break-glass flow (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — healthcare emergency access training oracle"
+    }
+  };
+}
+
+const chimeraHealthcareRecordsEmergencyAccessRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/healthcare\/records\/emergency-access\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraHealthcareRecordsEmergencyAccessProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/healthcare/records/emergency-access route scan — HIPAA evidence routes document emergency break-glass PHI access (Jekyll docs corpus fallback) — route-specific healthcare emergency access training oracle"
     }
   };
 };
@@ -104631,6 +104809,9 @@ export const RULES: Record<string, Rule> = {
   chimeraHealthcareRecordsBolaRouteLiveOracle,
   chimeraHealthcareImagingIdorRouteLiveOracle,
   chimeraHealthcareRecordsPhiExposureRouteLiveOracle,
+  chimeraHipaaRecordsPatientIdorRouteLiveOracle,
+  chimeraHipaaRecordsBulkExportRouteLiveOracle,
+  chimeraHealthcareRecordsEmergencyAccessRouteLiveOracle,
   chimeraSwaggerRouteLiveOracle,
   chimeraApiReferenceRouteLiveOracle,
   chimeraFedrampOpenapiExtensionsRouteLiveOracle,

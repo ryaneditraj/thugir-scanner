@@ -76406,6 +76406,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-hipaa-records-patient-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera HIPAA patient lookup IDOR route live oracle",
+    description:
+      "When scanning /api/hipaa/records/patient on chimera.atlascrew.dev, the API reference documents patient lookup IDOR without role filtering — route-specific HIPAA access control training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional HIPAA patient lookup IDOR for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHipaaRecordsPatientIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind HIPAA patient lookups to authenticated principals and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Require authentication and role checks before returning patient record details.",
+        "Scope patient lookups to the authenticated clinician or patient principal.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/hipaa/records/patient route documents HIPAA patient lookup IDOR. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-hipaa-records-bulk-export-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Chimera HIPAA bulk PHI export route live oracle",
+    description:
+      "When scanning /api/hipaa/records/bulk-export on chimera.atlascrew.dev, the API reference documents bulk PHI export without authorization — route-specific HIPAA sensitive data exposure training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional bulk PHI export for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHipaaRecordsBulkExportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict bulk PHI export endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Require authentication and HIPAA role checks before bulk-exporting patient records.",
+        "Log all bulk PHI export requests with tamper-evident audit trails.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/hipaa/records/bulk-export route documents bulk PHI export without authorization. Show HIPAA-compliant access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-healthcare-records-emergency-access-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Chimera healthcare emergency access route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/records/emergency-access on chimera.atlascrew.dev, HIPAA evidence routes document emergency break-glass PHI access with weak justification controls — route-specific healthcare compliance training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional emergency break-glass PHI access for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcareRecordsEmergencyAccessRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce strong justification and audit controls on emergency PHI access and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Require multi-factor authentication and supervisor approval for emergency break-glass access.",
+        "Reject emergency access requests without documented clinical justification.",
+        "Always log emergency PHI access with tamper-evident audit trails."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/records/emergency-access route documents emergency break-glass PHI access. Show HIPAA-compliant emergency access remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-dvla-evidence",
     platform: "generic",
     category: "Injection",

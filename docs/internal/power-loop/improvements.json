@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-hipaa-records-patient-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/hipaa/records/patient — Patient lookup (IDOR) per Chimera api-reference.md; chimera.atlascrew.dev/api/hipaa/records/patient findings 7→8 (+chimera-hipaa-records-patient-idor-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-hipaa-records-bulk-export-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/hipaa/records/bulk-export — Bulk PHI export per Chimera api-reference.md; chimera.atlascrew.dev/api/hipaa/records/bulk-export findings 7→8 (+chimera-hipaa-records-bulk-export-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-healthcare-records-emergency-access-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/healthcare/records/emergency-access — emergency break-glass PHI access with justification bypass per /hipaa-evidence-endpoints; chimera.atlascrew.dev/api/v1/healthcare/records/emergency-access findings 8→8 (+emergency-access oracle, -false-positive BOLA); benchmark juice-shop 48 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
       "slug": "chimera-healthcare-records-phi-exposure-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: CHM-HEALTH-003 GET /api/v1/healthcare/records PHI Data Exposure per Chimera vulnerability-inventory Critical PHI Exposure section; chimera.atlascrew.dev/api/v1/healthcare/records findings 8→9 (+chimera-healthcare-records-phi-exposure-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
