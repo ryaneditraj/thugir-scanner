@@ -76168,6 +76168,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-healthcare-records-second-order-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera healthcare records second-order SQLi route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/records on chimera.atlascrew.dev, the vuln-api README documents second-order SQLi via POST when USE_DATABASE=true — route-specific healthcare injection training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional second-order SQLi on healthcare record creation for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcareRecordsSecondOrderSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries on all healthcare record endpoints.",
+        "Sanitize stored payloads before they are used in subsequent queries.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/records route documents second-order SQLi. Show parameterized query and stored-data sanitization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-healthcare-records-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera healthcare records search SQLi route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/records/search on chimera.atlascrew.dev, CHM-HEALTH-001 documents SQL injection on the search query parameter when USE_DATABASE=true — route-specific healthcare SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SQL injection on healthcare record search for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcareRecordsSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries on healthcare search endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries on /api/v1/healthcare/records/search.",
+        "Validate and sanitize all search query parameters server-side.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/records/search route documents CHM-HEALTH-001 SQL injection. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-dvla-evidence",
     platform: "generic",
     category: "Injection",

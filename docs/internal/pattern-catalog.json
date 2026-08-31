@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-31T19:10:50.093Z",
-  "total": 2994,
-  "uniqueSlugs": 2986,
+  "generatedAt": "2026-08-31T20:06:08.135Z",
+  "total": 2996,
+  "uniqueSlugs": 2988,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2976,
+    "generic": 2978,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2909,
+    "deep": 2911,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 135,
     "Security misconfiguration": 217,
     "Broken authentication": 194,
-    "Injection": 485,
+    "Injection": 487,
     "Cross-site scripting": 790,
     "Open redirect": 26,
     "general": 20,
@@ -378,6 +378,8 @@
     "chimera-fedramp-openapi-extensions-route-live-oracle",
     "chimera-gov-benefits-search-sqli-route-live-oracle",
     "chimera-healthcare-records-export-route-live-oracle",
+    "chimera-healthcare-records-search-sqli-route-live-oracle",
+    "chimera-healthcare-records-second-order-sqli-route-live-oracle",
     "chimera-hipaa-evidence-endpoints-route-live-oracle",
     "chimera-insurance-policies-lookup-sqli-route-live-oracle",
     "chimera-login-vulnerable-sqli-route-live-oracle",

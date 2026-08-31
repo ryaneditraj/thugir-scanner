@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-healthcare-records-second-order-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/healthcare/records — Second-order SQLi per atlas-crew/Chimera vuln-api README (USE_DATABASE=true); chimera.atlascrew.dev/api/v1/healthcare/records findings 7→8 (+chimera-healthcare-records-second-order-sqli-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-healthcare-records-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/healthcare/records/search?q= — CHM-HEALTH-001 SQL Injection (Search) from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/healthcare/records/search findings 7→8 (+chimera-healthcare-records-search-sqli-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:apparatus.atlascrew.dev",
+      "slug": "atlascrew-docs-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: atlascrewDocsReflexionSuppressed extends Jekyll-docs SSTI FP suppression to apparatus.atlascrew.dev and crucible.atlascrew.dev (no server-side template engine); apparatus.atlascrew.dev/api/redteam/autopilot/start findings 8→7 (-reflexion-escalated-ssti false positive, +apparatus-redteam-autopilot-route-live-oracle retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ucu-owasp-ctf.vercel.app",
       "slug": "ucu-owasp-ctf-injection-route-live-oracle",
       "status": "shipped",

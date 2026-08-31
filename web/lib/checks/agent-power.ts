@@ -97,10 +97,10 @@ function promptShieldReflexionSuppressed(ctx: PowerCtx): boolean {
   return /prompt-shield1\.vercel\.app|promptshield-production[-a-z0-9]*\.up\.railway\.app/i.test(pageUrl);
 }
 
-/** Chimera Jekyll docs site has no server-side template engine — suppress reflexion SSTI FPs on docs pages. */
-function chimeraAtlascrewReflexionSuppressed(ctx: PowerCtx): boolean {
+/** Atlas Crew Jekyll docs sites have no server-side template engine — suppress reflexion SSTI FPs. */
+function atlascrewDocsReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
-  return /chimera\.atlascrew\.dev/i.test(pageUrl);
+  return /(?:chimera|apparatus|crucible)\.atlascrew\.dev/i.test(pageUrl);
 }
 
 /** Vercel Security Checkpoint obfuscated JS embeds coincidental '49' — suppress reflexion SSTI FPs on blog corpus routes. */
@@ -340,7 +340,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (riglabsCyberLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (vulnerableBountySiteReflexionSuppressed(ctx)) return NEGATIVE;
   if (promptShieldReflexionSuppressed(ctx)) return NEGATIVE;
-  if (chimeraAtlascrewReflexionSuppressed(ctx)) return NEGATIVE;
+  if (atlascrewDocsReflexionSuppressed(ctx)) return NEGATIVE;
   if (securebankBlogReflexionSuppressed(ctx)) return NEGATIVE;
   if (ginAndJuiceReflexionSuppressed(ctx)) return NEGATIVE;
   if (oopssecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;

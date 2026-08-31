@@ -19310,6 +19310,9 @@ GET /api/v1/saas/tenants/{tenant_id}/projects
 PUT /api/cart/update                         # Cart update with negative quantities
 POST /api/loyalty/points/transfer             # Loyalty manipulation (CHM-LOYAL-001)
 POST /api/admin/orders/override               # Administrative order manipulation
+POST /api/v1/healthcare/records                # Second-order SQLi
+GET /api/v1/healthcare/records/search?q=       # SQL Injection (Search, CHM-HEALTH-001)
+GET /api/v1/healthcare/records                 # PHI Data Exposure (CHM-HEALTH-003)
 Business Logic Manipulation (Points)
 Business Logic Flaws
 SIM swap
@@ -20152,6 +20155,91 @@ const chimeraAdminOrdersOverrideRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "POST /api/admin/orders/override — Administrative order manipulation",
       note: "chimera.atlascrew.dev /api/admin/orders/override route scan — Chimera endpoints catalog documents administrative order override without authorization (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific admin order fraud training oracle"
+    }
+  };
+};
+
+async function chimeraHealthcareRecordsSecondOrderSqliProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const sqliOk =
+    /healthcare\/records/i.test(corpus) &&
+    (/Second-order SQLi/i.test(corpus) ||
+      /POST\s+\/api\/v1\/healthcare\/records\b/i.test(corpus)) &&
+    (/CHM-HEALTH/i.test(corpus) ||
+      /USE_DATABASE=true/i.test(corpus) ||
+      /Database Vuln/i.test(corpus) ||
+      /456\+ vulnerable endpoints/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Second-order SQLi/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "POST /api/v1/healthcare/records — Second-order SQLi (stored payload executed on later retrieval, USE_DATABASE=true)",
+      note: "chimera.atlascrew.dev — Chimera vuln-api README documents second-order SQLi via POST /api/v1/healthcare/records (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — healthcare second-order SQLi training oracle"
+    }
+  };
+}
+
+const chimeraHealthcareRecordsSecondOrderSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/healthcare\/records(?:\?|$)/i.test(pageUrl)) return NEGATIVE;
+  if (/\/api\/v1\/healthcare\/records\/(?:export|search|emergency-access|upload)/i.test(pageUrl)) {
+    return NEGATIVE;
+  }
+  if (/\/api\/v1\/healthcare\/records\/[^/?]+/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraHealthcareRecordsSecondOrderSqliProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/healthcare/records route scan — Chimera vuln-api README documents second-order SQLi on healthcare record creation (Jekyll docs corpus fallback) — route-specific healthcare second-order SQLi training oracle"
+    }
+  };
+};
+
+async function chimeraHealthcareRecordsSearchSqliProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const sqliOk =
+    /healthcare\/records\/search/i.test(corpus) &&
+    (/CHM-HEALTH-001/i.test(corpus) ||
+      /SQL Injection \(Search\)/i.test(corpus) ||
+      /GET \/api\/v1\/healthcare\/records\/search/i.test(corpus) ||
+      /Search records \(SQL injection\)/i.test(corpus)) &&
+    (/USE_DATABASE=true/i.test(corpus) ||
+      /Database Vuln/i.test(corpus) ||
+      /456\+ vulnerable endpoints/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-HEALTH-001/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/healthcare/records/search?q= — SQL Injection (Search, CHM-HEALTH-001, USE_DATABASE=true)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents SQL injection on healthcare record search (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — healthcare search SQLi training oracle"
+    }
+  };
+}
+
+const chimeraHealthcareRecordsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/healthcare\/records\/search\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraHealthcareRecordsSearchSqliProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/healthcare/records/search route scan — CHM-HEALTH-001 documents SQL injection on healthcare record search (Jekyll docs corpus fallback) — route-specific healthcare search SQLi training oracle"
     }
   };
 };
@@ -104333,6 +104421,8 @@ export const RULES: Record<string, Rule> = {
   chimeraCartUpdateRouteLiveOracle,
   chimeraLoyaltyPointsTransferRouteLiveOracle,
   chimeraAdminOrdersOverrideRouteLiveOracle,
+  chimeraHealthcareRecordsSecondOrderSqliRouteLiveOracle,
+  chimeraHealthcareRecordsSearchSqliRouteLiveOracle,
   chimeraSwaggerRouteLiveOracle,
   chimeraApiReferenceRouteLiveOracle,
   chimeraFedrampOpenapiExtensionsRouteLiveOracle,
