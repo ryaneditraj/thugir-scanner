@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T15:35:00.000Z",
+  "updated_at": "2026-08-31T16:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2829,
-  "total_findings": 28463,
+  "total_sites_scanned": 2832,
+  "total_findings": 28531,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2001,
-  "discovery_findings": 23863,
-  "improvements_shipped": 1243,
-  "last_run": "2026-08-31T15:35:00.000Z",
+  "discovery_urls_added": 2003,
+  "discovery_findings": 23879,
+  "improvements_shipped": 1246,
+  "last_run": "2026-08-31T16:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,37 +48,35 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings); no category misses"
+      "note": "Stable 6/6 first-pass recall (52 findings); no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 118,
-      "focus": "Crucible scenario catalog + PentestForge juice-shop/tomcat lab route oracles + pwnshop product review XSS + oopssec second-order SQLi/SSRF/XXE",
+      "urls_added": 2,
+      "urls_scanned": 2,
+      "findings": 16,
+      "focus": "povzayd XSS LABS lab1/lab2 route oracles + SSTI false-positive suppression",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "crucible.atlascrew.dev/: 5→6 (+crucible-scenario-catalog-route-live-oracle)",
-      "pentest-forge.com/labs/juice-shop.lab/: 4→5 (+pentest-forge-juice-shop-lab-route-live-oracle)",
-      "pentest-forge.com/labs/tomcat.lab/: 4→5 (+pentest-forge-tomcat-lab-route-live-oracle)",
-      "pwnshop.ctfsecurity.com/product/1: 50 findings (+pwnshop-product-review-stored-xss-route-live-oracle)",
-      "koadt.github.io/oss-oopssec-store: second-order SQLi (9), SSRF (7), XXE import (9) route live oracles confirmed"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
+      "povzayd.github.io/XSS-LABS/LABS/lab1.html: 6→7 (+povzayd-xss-lab1-document-write-route-live-oracle, -reflexion-escalated-ssti)",
+      "povzayd.github.io/XSS-LABS/LABS/lab2.html: 6→9 (+povzayd-xss-lab2-reflected-filtered-innerhtml-route-live-oracle +povzayd-xss-lab2-dom-hash-route-live-oracle, -reflexion-escalated-ssti)",
+      "povzayd labs 4-8 return 404 — lab3 is maintenance placeholder"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "juice-shop.lab.pentest-forge.com + tomcat.lab.pentest-forge.com return 502 — route corpus fallbacks used",
-      "new vAPI + Apparatus API routes queued behind priority_discovery_urls drain"
+      "vulnerability-intelligence MCP Heroku thin 2-finding pass without MCP-specific route oracle",
+      "povzayd lab4-7 previously scanned with generic fingerprint — labs now 404 on GitHub Pages"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
+    "juice-shop.herokuapp.com": 52,
+    "povzayd.github.io/XSS-LABS/LABS/lab1.html": 7,
+    "povzayd.github.io/XSS-LABS/LABS/lab2.html": 9,
     "crucible.atlascrew.dev": 6,
     "pentest-forge.com/labs/juice-shop.lab": 5,
-    "pentest-forge.com/labs/tomcat.lab": 5,
-    "pwnshop.ctfsecurity.com/product/1": 50,
-    "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection": 9
+    "pentest-forge.com/labs/tomcat.lab": 5
   }
 }

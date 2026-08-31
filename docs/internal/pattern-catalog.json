@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-31T15:15:26.126Z",
-  "total": 2985,
-  "uniqueSlugs": 2977,
+  "generatedAt": "2026-08-31T16:06:47.043Z",
+  "total": 2988,
+  "uniqueSlugs": 2980,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2967,
+    "generic": 2970,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2900,
+    "deep": 2903,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 217,
     "Broken authentication": 194,
     "Injection": 484,
-    "Cross-site scripting": 787,
+    "Cross-site scripting": 790,
     "Open redirect": 26,
     "general": 20,
     "SSRF": 19,
@@ -2108,6 +2108,9 @@
     "phpmyadmin-exposed",
     "post-login-sql-bypass",
     "postmessage-dom-xss-evidence",
+    "povzayd-xss-lab1-document-write-route-live-oracle",
+    "povzayd-xss-lab2-dom-hash-route-live-oracle",
+    "povzayd-xss-lab2-reflected-filtered-innerhtml-route-live-oracle",
     "prompt-shield-prompt-injection-defense-live-oracle",
     "prompt-shield-prompt-injection-defense-route-live-oracle",
     "pwnshop-account-delete-csrf-live-oracle",
