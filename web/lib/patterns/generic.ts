@@ -31146,6 +31146,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "yogsec-xss-lab2-post-sessionstorage-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #2 POST sessionStorage route live oracle",
+    description:
+      "When scanning /labs/lab2.html, yogsec documents POST form data stored in sessionStorage then reflected via innerHTML — route-specific stored XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #2 exposes sessionStorage → innerHTML stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab2PostSessionstorageRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — use textContent instead of innerHTML in production.",
+      steps: [
+        "Replace innerHTML with textContent or DOMPurify-sanitized output for user-controlled data.",
+        "Never reflect POST responses via client-side sessionStorage into innerHTML.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #2 route scan documents POST/sessionStorage XSS via innerHTML. Show textContent/DOMPurify remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab4-referer-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #4 Referer header route live oracle",
+    description:
+      "When scanning /labs/lab4.html, yogsec documents document.referrer reflected into innerHTML without sanitization — route-specific Referer XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #4 exposes Referer/document.referrer → innerHTML reflected XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab4RefererRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never reflect Referer headers via innerHTML in production.",
+      steps: [
+        "Encode Referer values with textContent or contextual output encoding before DOM insertion.",
+        "Validate and allow-list Referer URLs when they must be displayed.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #4 route scan documents Referer header XSS via innerHTML. Show safe Referer handling and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab5-user-agent-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #5 User-Agent route live oracle",
+    description:
+      "When scanning /labs/lab5.html, yogsec documents navigator.userAgent assigned to innerHTML without sanitization — route-specific User-Agent XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #5 exposes User-Agent → innerHTML reflected XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab5UserAgentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never render User-Agent strings via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying User-Agent or other request metadata.",
+        "Treat all HTTP header values as untrusted when reflected in HTML.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #5 route scan documents User-Agent XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "yogsec-xss-lab22-innerhtml-eval-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
