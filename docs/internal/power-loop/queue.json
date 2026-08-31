@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T09:12:00.000Z",
+  "updated_at": "2026-08-31T10:05:44.677Z",
   "discovery_urls": [
     {
       "url": "https://the0x-pwn.github.io/lab-xss/lab-10/",
@@ -11352,6 +11352,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/telecom/sim-swap",
+      "source": "atlas-crew/Chimera — telecom SIM-swap business-logic oracle POST /api/v1/telecom/sim-swap (chimera.atlascrew.dev public demo; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/ssrf-metadata/",
+      "source": "kOaDT/oss-oopssec-store — SSRF cloud metadata walkthrough POST /api/fetch-url (OSS roadmap; web search 10 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ginandjuice.shop/catalog?category=1",
+      "source": "PortSwigger ginandjuice.shop — UNION SQLi oracle GET /catalog?category= (autopentest-ai pentest report; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/energy/scada/commands",
+      "source": "atlas-crew/Chimera — SCADA command injection oracle POST /api/v1/energy/scada/commands (chimera.atlascrew.dev public demo; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://mutillidae.lab.pentest-forge.com/index.php?page=sqlinjection.php",
+      "source": "PentestForge Lab — Mutillidae SQL injection lab hub (mutillidae.lab.pentest-forge.com; web search 10 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ist-edu-bd.vercel.app/api/search",
       "source": "Damn Vulnerable Web University — GET /api/search SQLi oracle (GitHub zahidoverflow/damn-vulnerable-web-university; web search 05 UTC)",
