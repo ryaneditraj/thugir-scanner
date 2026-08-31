@@ -31435,6 +31435,87 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "yogsec-xss-lab15-windowname-persistent-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #15 window.name persistent route live oracle",
+    description:
+      "When scanning /labs/lab15.html, yogsec documents window.name persisting across reloads/navigation and executed via eval() — route-specific persistent DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #15 exposes cross-page window.name → eval() persistent XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab15WindownamePersistentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never pass window.name or navigation state to eval() in production.",
+      steps: [
+        "Never use eval() with window.name or other cross-page persistent browser state.",
+        "Clear or validate window.name before page scripts execute on load.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #15 route scan documents persistent window.name eval XSS. Show eval removal and safe state handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab16-history-state-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #16 history.state route live oracle",
+    description:
+      "When scanning /labs/lab16.html, yogsec documents history.state.data executed via eval() on reload/back/forward — route-specific stored DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #16 exposes history.state pushState → eval() stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab16HistoryStateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never execute history.state payloads with eval() in production.",
+      steps: [
+        "Treat history.state as untrusted when deserialized on navigation events.",
+        "Use structured JSON parsing instead of eval() for history state data.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #16 route scan documents history.state eval XSS. Show safe state serialization and eval removal.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab17-sessionstorage-search-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #17 sessionStorage search route live oracle",
+    description:
+      "When scanning /labs/lab17.html, yogsec documents sessionStorage search matches executed via eval(match) — route-specific stored DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #17 exposes sessionStorage search → eval(match) stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab17SessionstorageSearchRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never execute sessionStorage search hits with eval() in production.",
+      steps: [
+        "Use textContent or safe filtering instead of eval() when searching stored client data.",
+        "Sanitize data before persisting to sessionStorage.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #17 route scan documents sessionStorage search eval XSS. Show safe search rendering and eval removal.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "yogsec-xss-lab22-innerhtml-eval-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

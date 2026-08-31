@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab15-windowname-persistent-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab15WindownamePersistentRouteLiveOracle matches XSS Lab #15 window.name Across Pages + eval(window.name) + Go to Page 2 (Same Tab) markers; yogsec.github.io/xss-labs/labs/lab15.html findings 7→8 (+yogsec-xss-lab15-windowname-persistent-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab16-history-state-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab16HistoryStateRouteLiveOracle matches XSS Lab #16 history.state Storage + eval(history.state.data) + pushState persistence markers; yogsec.github.io/xss-labs/labs/lab16.html findings 7→8 (+yogsec-xss-lab16-history-state-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
+      "slug": "yogsec-xss-lab17-sessionstorage-search-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab17SessionstorageSearchRouteLiveOracle matches XSS Lab #17 sessionStorage + Search Filter + eval(match) + Search (XSS vulnerable) markers; yogsec.github.io/xss-labs/labs/lab17.html findings 7→8 (+yogsec-xss-lab17-sessionstorage-search-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:yogsec.github.io",
       "slug": "yogsec-xss-lab12-sessionstorage-stored-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: yogsecXssLab12SessionstorageStoredRouteLiveOracle matches XSS Lab #12 sessionStorage Stored XSS Shown on Reload + sessionStorage.getItem('storedData') innerHTML NO sanitization markers; yogsec.github.io/xss-labs/labs/lab12.html findings 6→7 (+yogsec-xss-lab12-sessionstorage-stored-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"

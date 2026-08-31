@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-31T07:03:57.200Z",
-  "total": 2954,
-  "uniqueSlugs": 2946,
+  "generatedAt": "2026-08-31T08:04:37.919Z",
+  "total": 2957,
+  "uniqueSlugs": 2949,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2936,
+    "generic": 2939,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2869,
+    "deep": 2872,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 214,
     "Broken authentication": 194,
     "Injection": 475,
-    "Cross-site scripting": 780,
+    "Cross-site scripting": 783,
     "Open redirect": 26,
     "general": 20,
     "SSRF": 19,
@@ -2915,6 +2915,9 @@
     "yogsec-xss-lab12-sessionstorage-stored-route-live-oracle",
     "yogsec-xss-lab13-indexeddb-route-live-oracle",
     "yogsec-xss-lab14-cookie-stored-route-live-oracle",
+    "yogsec-xss-lab15-windowname-persistent-route-live-oracle",
+    "yogsec-xss-lab16-history-state-route-live-oracle",
+    "yogsec-xss-lab17-sessionstorage-search-route-live-oracle",
     "yogsec-xss-lab2-post-sessionstorage-route-live-oracle",
     "yogsec-xss-lab22-innerhtml-eval-route-live-oracle",
     "yogsec-xss-lab23-insertadjacenthtml-route-live-oracle",

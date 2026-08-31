@@ -58073,6 +58073,81 @@ const yogsecXssLab14CookieStoredRouteLiveOracle: Rule = async (ctx) =>
     "yogsec XSS Lab #14 route scan — userPref cookie value assigned to innerHTML on page load — stored XSS training sink"
   );
 
+const yogsecXssLab15WindownamePersistentRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    15,
+    [
+      {
+        label: "window.name across pages lab title",
+        re: /XSS Lab #15:\s*window\.name Across Pages/i
+      },
+      {
+        label: "window.name persistent XSS lab badge",
+        re: /Lab #15 · Persistent XSS|window\.name Across Pages/i
+      },
+      {
+        label: "eval window.name persistent sink",
+        re: /eval\(window\.name\)|VULNERABLE CODE - eval\(\) with window\.name/i
+      },
+      {
+        label: "window.name cross-page navigation target",
+        re: /Go to Page 2 \(Same Tab\)|window\.name persists across page reloads/i
+      }
+    ],
+    "yogsec XSS Lab #15 route scan — window.name persists across reloads/navigation and is passed to eval() — persistent DOM XSS training sink"
+  );
+
+const yogsecXssLab16HistoryStateRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    16,
+    [
+      {
+        label: "history.state storage lab title",
+        re: /XSS Lab #16:\s*history\.state Storage/i
+      },
+      {
+        label: "history.state stored XSS lab badge",
+        re: /Lab #16 · Stored XSS|history\.state \(pushState\) Storage/i
+      },
+      {
+        label: "eval history.state.data sink",
+        re: /eval\(history\.state\.data\)|VULNERABLE - eval\(\) with history\.state/i
+      },
+      {
+        label: "history.state pushState persistence target",
+        re: /history\.state persists across page reloads|push XSS payload to history\.state/i
+      }
+    ],
+    "yogsec XSS Lab #16 route scan — history.state.data passed to eval() on reload/back/forward — stored DOM XSS training sink"
+  );
+
+const yogsecXssLab17SessionstorageSearchRouteLiveOracle: Rule = async (ctx) =>
+  yogsecXssLabRouteOracle(
+    ctx,
+    17,
+    [
+      {
+        label: "sessionStorage search filter lab title",
+        re: /XSS Lab #17:\s*sessionStorage \+ Search Filter/i
+      },
+      {
+        label: "sessionStorage search eval lab badge",
+        re: /Lab #17 · Stored XSS \+ Search|sessionStorage \+ Search Filter/i
+      },
+      {
+        label: "eval match search sink",
+        re: /eval\(match\)|VULNERABLE - EXECUTE EACH MATCH WITH eval\(\)/i
+      },
+      {
+        label: "sessionStorage search filter target",
+        re: /Search \(XSS vulnerable\)|VULNERABLE SEARCH FUNCTION|Add Data to sessionStorage/i
+      }
+    ],
+    "yogsec XSS Lab #17 route scan — sessionStorage search matches executed via eval(match) — stored DOM XSS training sink"
+  );
+
 const yogsecXssLab22InnerhtmlEvalRouteLiveOracle: Rule = async (ctx) =>
   yogsecXssLabRouteOracle(
     ctx,
@@ -103548,6 +103623,9 @@ export const RULES: Record<string, Rule> = {
   yogsecXssLab12SessionstorageStoredRouteLiveOracle,
   yogsecXssLab13IndexeddbRouteLiveOracle,
   yogsecXssLab14CookieStoredRouteLiveOracle,
+  yogsecXssLab15WindownamePersistentRouteLiveOracle,
+  yogsecXssLab16HistoryStateRouteLiveOracle,
+  yogsecXssLab17SessionstorageSearchRouteLiveOracle,
   yogsecXssLab22InnerhtmlEvalRouteLiveOracle,
   yogsecXssLab23InsertadjacenthtmlRouteLiveOracle,
   yogsecXssLab24OuterhtmlRouteLiveOracle,
