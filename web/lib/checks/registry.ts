@@ -19312,7 +19312,9 @@ POST /api/loyalty/points/transfer             # Loyalty manipulation (CHM-LOYAL-
 POST /api/admin/orders/override               # Administrative order manipulation
 POST /api/v1/healthcare/records                # Second-order SQLi
 GET /api/v1/healthcare/records/search?q=       # SQL Injection (Search, CHM-HEALTH-001)
+GET /api/v1/healthcare/records/{record_id}     # BOLA/IDOR (CHM-HEALTH-002)
 GET /api/v1/healthcare/records                 # PHI Data Exposure (CHM-HEALTH-003)
+GET /api/v1/healthcare/imaging/{record_id}/download  # Imaging IDOR download
 Business Logic Manipulation (Points)
 Business Logic Flaws
 SIM swap
@@ -20240,6 +20242,85 @@ const chimeraHealthcareRecordsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/healthcare/records/search route scan — CHM-HEALTH-001 documents SQL injection on healthcare record search (Jekyll docs corpus fallback) — route-specific healthcare search SQLi training oracle"
+    }
+  };
+};
+
+async function chimeraHealthcareRecordsBolaProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const bolaOk =
+    /healthcare\/records\/(?:\{record_id\}|<record_id>|\{id\})/i.test(corpus) &&
+    (/CHM-HEALTH-002/i.test(corpus) ||
+      /Broken Object Level Authorization \(BOLA\/IDOR\)/i.test(corpus) ||
+      /GET \/api\/v1\/healthcare\/records\/\{record_id\}/i.test(corpus)) &&
+    (/bola_protection|changing the record ID|No authorization check/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!bolaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-HEALTH-002/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/healthcare/records/{record_id} — Broken Object Level Authorization (BOLA/IDOR, CHM-HEALTH-002)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents healthcare record BOLA via predictable record_id without ownership checks (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — healthcare BOLA training oracle"
+    }
+  };
+}
+
+const chimeraHealthcareRecordsBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/healthcare\/records\/[^/]+\/?$/i.test(pageUrl) || /\/search|\/export/i.test(pageUrl)) {
+    return NEGATIVE;
+  }
+  const hit = await chimeraHealthcareRecordsBolaProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/healthcare/records/{record_id} route scan — CHM-HEALTH-002 documents BOLA/IDOR on healthcare record access (Jekyll docs corpus fallback) — route-specific healthcare BOLA training oracle"
+    }
+  };
+};
+
+async function chimeraHealthcareImagingIdorProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const idorOk =
+    /healthcare\/imaging\/(?:\{record_id\}|<record_id>)[^"'\s]*\/download/i.test(corpus) &&
+    (/Imaging download - IDOR vulnerability|imaging_download/i.test(corpus) ||
+      /GET \/api\/v1\/healthcare\/imaging/i.test(corpus) ||
+      /without authorization/i.test(corpus)) &&
+    (/456\+ vulnerable endpoints|intentionally vulnerable monorepo|healthcare/i.test(corpus));
+  if (!idorOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Imaging download - IDOR vulnerability/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/healthcare/imaging/{record_id}/download — Imaging IDOR without authorization check",
+      note: "chimera.atlascrew.dev — Chimera healthcare routes document imaging record download IDOR via predictable record_id (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — healthcare imaging IDOR training oracle"
+    }
+  };
+}
+
+const chimeraHealthcareImagingIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/healthcare\/imaging\/[^/]+\/download\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraHealthcareImagingIdorProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/healthcare/imaging/{record_id}/download route scan — Chimera healthcare routes document imaging IDOR without authorization (Jekyll docs corpus fallback) — route-specific healthcare imaging IDOR training oracle"
     }
   };
 };
@@ -104423,6 +104504,8 @@ export const RULES: Record<string, Rule> = {
   chimeraAdminOrdersOverrideRouteLiveOracle,
   chimeraHealthcareRecordsSecondOrderSqliRouteLiveOracle,
   chimeraHealthcareRecordsSearchSqliRouteLiveOracle,
+  chimeraHealthcareRecordsBolaRouteLiveOracle,
+  chimeraHealthcareImagingIdorRouteLiveOracle,
   chimeraSwaggerRouteLiveOracle,
   chimeraApiReferenceRouteLiveOracle,
   chimeraFedrampOpenapiExtensionsRouteLiveOracle,
