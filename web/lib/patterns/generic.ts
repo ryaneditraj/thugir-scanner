@@ -75672,5 +75672,109 @@ export const genericPatterns: Pattern[] = [
       "Our vapi.tools.escape.tech /identity/api/auth/login route accepts signup/login and returns JWTs. Show production API authentication hardening.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "chimera-telecom-sim-swap-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Chimera telecom SIM-swap route live oracle",
+    description:
+      "When scanning /api/v1/telecom/sim-swap on chimera.atlascrew.dev, Chimera openapi documents CHM-TELCO-002 SIM swap identity bypass without verification — route-specific telecom business logic training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SIM swap business logic bypass on the telecom endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraTelecomSimSwapRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require multi-factor verification before SIM swaps and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce out-of-band identity verification before processing SIM swap requests.",
+        "Reject bypass_verification flags on subscriber SIM swap endpoints.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/telecom/sim-swap route documents SIM swap identity bypass. Show telecom business logic verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-energy-scada-commands-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera energy SCADA commands route live oracle",
+    description:
+      "When scanning /api/v1/energy/scada/commands on chimera.atlascrew.dev, Chimera openapi documents SCADA dispatch command injection for grid control — route-specific energy utilities OT training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SCADA command injection on energy utilities dispatch endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraEnergyScadaCommandsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict SCADA dispatch to authenticated OT operators and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Require mutual TLS and role-based access for SCADA dispatch commands.",
+        "Validate and sanitize all grid control command parameters server-side.",
+        "Do not expose Chimera energy utilities endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/energy/scada/commands route documents SCADA dispatch command injection. Show OT network segmentation and command validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-dvla-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVLA Damn Vulnerable Laravel Application disclosed",
+    description:
+      "dvla.jcadima.dev documents 13 intentional Laravel/LEMP stack misconfigurations spanning mass assignment, SQLi, SSRF, Redis job injection, and docker.sock host escape.",
+    impactOneline:
+      "Public DVLA hub teaches modern Laravel kill-chain exploitation from .env leak to full host compromise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDvlaEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVLA is intentional training — run only on local Docker lab networks.",
+      steps: [
+        "Never deploy DVLA on public-facing servers.",
+        "Block .env and docker.sock exposure in production Nginx configs.",
+        "Use parameterized queries and Eloquent $fillable guards on all models."
+      ]
+    },
+    fixPrompt:
+      "We host DVLA-style Laravel security training. Show how to isolate intentional vulnerability labs from production deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvla-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVLA Laravel security lab route live oracle",
+    description:
+      "When scanning dvla.jcadima.dev, the hub confirms 13 intentional Laravel/LEMP misconfigurations with companion exploit walkthroughs — route-specific OSWE/AppSec training oracle.",
+    impactOneline:
+      "Route-specific confirmation that DVLA documents a full Laravel kill chain from .env exposure to docker.sock host escape.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvlaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run DVLA only on local Docker lab networks; never expose on public hosts.",
+      steps: [
+        "Block HTTP access to .env and storage directories in Nginx.",
+        "Pin JWT/session algorithms and use separate signing keys.",
+        "Remove docker.sock mounts from application containers."
+      ]
+    },
+    fixPrompt:
+      "Our DVLA route scan confirms intentionally vulnerable Laravel training scope. Show production Laravel hardening remediation.",
+    version: 1,
+    enabled: true
   }
 ];

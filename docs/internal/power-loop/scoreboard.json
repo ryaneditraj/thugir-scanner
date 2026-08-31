@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T11:16:20.330Z",
+  "updated_at": "2026-08-31T12:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2782,
-  "total_findings": 27567,
+  "total_sites_scanned": 2783,
+  "total_findings": 27619,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1981,
   "discovery_findings": 23274,
-  "improvements_shipped": 1227,
-  "last_run": "2026-08-31T11:16:20.330Z",
+  "improvements_shipped": 1231,
+  "last_run": "2026-08-31T12:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 614,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,40 +48,35 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (50 findings, 614 probes); secret-resend + resend-key + iac-terraform-tls-key present"
+      "note": "Stable 6/6 first-pass recall (52 findings, 595 probes); secret-resend + resend-key + iac-terraform-tls-key present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 135,
-      "focus": "OWASP GenAI Security Lab lesson demos + priority drain pwnshop reset-password + vulnbank merchant + websec.fr/level18",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 24,
+      "focus": "Chimera telecom SIM-swap + energy SCADA commands + DVLA Laravel lab route oracles",
+      "improvements_shipped_this_run": 4
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, gap=[])",
-      "owaspbased-lessons.vercel.app/lesson/prompt-injection: owasp-genai-prompt-injection-route-live-oracle",
-      "owaspbased-lessons.vercel.app/lesson/data-poisoning: owasp-genai-data-poisoning-route-live-oracle",
-      "owaspbased-lessons.vercel.app/lesson/excessive-agency: owasp-genai-excessive-agency-route-live-oracle",
-      "owaspbased-lessons.vercel.app/lesson/supply-chain: owasp-genai-supply-chain-route-live-oracle",
-      "pwnshop.ctfsecurity.com/reset-password: 51 findings — OTP brute-force route oracles",
-      "vulnbank.org/merchant/login: vulnbank-merchant-sqli-login-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
+      "chimera.atlascrew.dev/api/v1/telecom/sim-swap: 7→8 (+chimera-telecom-sim-swap-route-live-oracle)",
+      "chimera.atlascrew.dev/api/v1/energy/scada/commands: 7→8 (+chimera-energy-scada-commands-route-live-oracle)",
+      "dvla.jcadima.dev/: 6→8 (+client-side-dvla-evidence +dvla-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "owaspbased-lessons/lesson/unbounded-consumption queued but not scanned (8-URL limit)",
-      "parallel engine run shipped dvmcp/yrprey/voidsec oracles on same branch"
+      "povzayd XSS-LABS lab4-8 offline (404) — route oracles blocked until GitHub Pages redeploy",
+      "vulnerability-intelligence MCP Heroku offline (404) — MCP-specific oracle blocked"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
+    "juice-shop.herokuapp.com": 52,
+    "chimera.atlascrew.dev/api/v1/telecom/sim-swap": 8,
+    "chimera.atlascrew.dev/api/v1/energy/scada/commands": 8,
+    "dvla.jcadima.dev": 8,
     "pwnshop.ctfsecurity.com/reset-password": 51,
-    "vulnbank.org/merchant/login": 33,
-    "owaspbased-lessons.vercel.app/lesson/prompt-injection": 4,
-    "owaspbased-lessons.vercel.app/lesson/data-poisoning": 4,
-    "owaspbased-lessons.vercel.app/lesson/excessive-agency": 3,
-    "owaspbased-lessons.vercel.app/lesson/supply-chain": 3,
-    "websec.fr/level18/": 6
+    "vulnbank.org/merchant/login": 33
   }
 }

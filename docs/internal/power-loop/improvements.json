@@ -6851,6 +6851,30 @@
       "slug": "voidsec-shopping-cart-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: voidsecShoppingCartRouteLiveOracle matches Shopping Cart pen-test scope + XSS/SQLi/auth-bypass catalog on voidsec.github.io/shopping-cart; findings 4→6 (+voidsec-shopping-cart-route-live-oracle +client-side-voidsec-shopping-cart-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-telecom-sim-swap-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chimeraTelecomSimSwapRouteLiveOracle matches POST /api/v1/telecom/sim-swap CHM-TELCO-002 SIM swap bypass_verification markers via chimeraDocsCorpus; chimera.atlascrew.dev/api/v1/telecom/sim-swap findings 7→8 (+chimera-telecom-sim-swap-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-energy-scada-commands-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chimeraEnergyScadaCommandsRouteLiveOracle matches POST /api/v1/energy/scada/commands SCADA dispatch command injection markers via chimeraDocsCorpus; chimera.atlascrew.dev/api/v1/energy/scada/commands findings 7→8 (+chimera-energy-scada-commands-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvla.jcadima.dev",
+      "slug": "client-side-dvla-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: clientSideDvlaEvidence matches DVLA Laravel 12 kill-chain markers (mass assignment, SQLi, Redis job injection, docker.sock escape); dvla.jcadima.dev/ findings 6→8 (+client-side-dvla-evidence +dvla-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvla.jcadima.dev",
+      "slug": "dvla-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dvlaRouteLiveOracle confirms 13 intentional Laravel/LEMP misconfigurations on dvla.jcadima.dev hub; findings 6→8 (+client-side-dvla-evidence +dvla-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
