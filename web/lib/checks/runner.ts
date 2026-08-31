@@ -2350,6 +2350,8 @@ const DEEP_RULES = new Set<string>([
   "oopssecRoadmapRouteLiveOracle",
   "oopssecStoreHomeRouteLiveOracle",
   "clientSideVoidsecShoppingCartEvidence",
+  "clientSideMcpgoatEvidence",
+  "mcpgoatRouteLiveOracle",
   "clientSideWhoopsPayEvidence",
   "clientSideTegalsecLabEvidence",
   "clientSideXvwaEvidence",
@@ -2431,6 +2433,7 @@ const DEEP_RULES = new Set<string>([
   "yogsecXssLab18LocalstorageJsonRouteLiveOracle",
   "yogsecXssLab19CrossKeyInjectionRouteLiveOracle",
   "yogsecXssLab20Base64DecodeRouteLiveOracle",
+  "yogsecXssLab21SearchBoxRouteLiveOracle",
   "yogsecXssLab22InnerhtmlEvalRouteLiveOracle",
   "yogsecXssLab23InsertadjacenthtmlRouteLiveOracle",
   "yogsecXssLab24OuterhtmlRouteLiveOracle",
@@ -2850,6 +2853,7 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceAdminDeleteRouteLiveOracle",
   "ginAndJuiceVulnerabilitiesCredentialsLiveOracle",
   "ginAndJuiceVulnerabilitiesCredentialsRouteLiveOracle",
+  "ginAndJuiceVulnerabilitiesDisclosureRouteLiveOracle",
   "ginAndJuiceLogoutSessionRegenerationLiveOracle",
   "ginAndJuiceLogoutRouteLiveOracle",
   "ginAndJuiceCatalogSubscribeLiveOracle",
@@ -13324,6 +13328,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab21\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab21")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
         /\/labs\/lab22\.html/i.test(targetInput) &&
         p.slug.startsWith("yogsec-xss-lab22")
       )
@@ -14845,6 +14855,17 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /ginandjuice\.shop/i.test(origin) &&
         /\/login\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-login")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/vulnerabilities\/?$/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-vulnerabilities-disclosure")
+      )
+        return -4;
+      if (
+        /sabyasachidhal\.github\.io\/MCPGoat/i.test(origin) &&
+        p.slug.startsWith("mcpgoat")
       )
         return -4;
       if (

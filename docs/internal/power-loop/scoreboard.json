@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T10:11:12.469Z",
+  "updated_at": "2026-08-31T10:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1976,
   "discovery_findings": 23139,
-  "improvements_shipped": 1221,
-  "last_run": "2026-08-31T10:11:12.469Z",
+  "improvements_shipped": 1224,
+  "last_run": "2026-08-31T10:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "10",
     "benchmark": {
@@ -48,43 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 595 probes); jwt-alg-none + captcha-bypass + wallet-balance-bola live oracles present"
+      "note": "Stable 6/6 first-pass recall (51 findings, 595 probes); no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 112,
-      "focus": "ginandjuice catalog SQLi + Chimera SCADA/telecom + Pentest-Ground DVGA/RestFlaw + Mutillidae SQLi + kOaDT SSRF metadata",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 51,
+      "focus": "yogsec lab21 search-box eval + ginandjuice /vulnerabilities disclosure + MCPGoat hub route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 595 probes)",
-      "ginandjuice.shop/catalog?category=1: 45 findings — UNION SQLi category param oracle",
-      "pentest-ground.com:5013/: 17 findings — DVGA GraphQL hub",
-      "pentest-ground.com:5013/graphiql: 16 findings — GraphiQL introspection oracle",
-      "pentest-ground.com:9000/: 14 findings — RestFlaw REST API hub",
-      "chimera.atlascrew.dev/api/v1/energy/scada/commands: 7 findings — SCADA command route",
-      "chimera.atlascrew.dev/api/v1/telecom/sim-swap: 7 findings — telecom SIM-swap route",
-      "mutillidae.lab.pentest-forge.com/index.php?page=sqlinjection.php: 2 findings — Mutillidae SQLi lab (thin pass, lab reachable)"
+      "yogsec.github.io/xss-labs/labs/lab21.html: 8 findings — yogsec-xss-lab21-search-box-route-live-oracle shipped",
+      "ginandjuice.shop/vulnerabilities: 37 findings — ginandjuice-vulnerabilities-disclosure-route-live-oracle shipped",
+      "sabyasachidhal.github.io/MCPGoat/: 6 findings — mcpgoat-route-live-oracle + client-side-mcpgoat-evidence shipped"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "mutillidae SQLi lab thin pass (2 findings) — may need route-specific live oracle for page=sqlinjection.php",
-      "juice-shop.lab.pentest-forge.com + tomcat.lab + voidsec shopping-cart still queued behind priority_discovery_urls",
-      "yrprey.com + ginandjuice.shop/vulnerabilities still pending at queue head",
-      "koadt SSRF metadata walkthrough (4 findings) — may need POST /api/fetch-url route oracle"
+      "yogsec XSS labs 3,10 still stub/empty (Try Again / blank) — route oracles blocked until upstream content restored",
+      "juice-shop.lab.pentest-forge.com + tomcat.lab + voidsec shopping-cart + povzayd lab8 still queued",
+      "povzayd XSS-LABS levels 4-7 still lack route-specific live oracles",
+      "dvmcp.co.uk + yrprey.com still pending MCP/API lab route oracles"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "ginandjuice.shop/vulnerabilities": 37,
+    "yogsec.github.io/xss-labs/labs/lab21.html": 8,
+    "sabyasachidhal.github.io/MCPGoat/": 6,
     "ginandjuice.shop/catalog?category=1": 45,
-    "pentest-ground.com:5013/": 17,
-    "pentest-ground.com:5013/graphiql": 16,
-    "pentest-ground.com:9000/": 14,
-    "chimera.atlascrew.dev/api/v1/energy/scada/commands": 7,
-    "chimera.atlascrew.dev/api/v1/telecom/sim-swap": 7,
-    "mutillidae.lab.pentest-forge.com/index.php?page=sqlinjection.php": 2,
-    "koadt.github.io/oss-oopssec-store/posts/ssrf-metadata/": 4
+    "brokencrystals.com/api/auth/jwt/none/login": 79,
+    "ginandjuice.shop/api/basket": 37
   }
 }

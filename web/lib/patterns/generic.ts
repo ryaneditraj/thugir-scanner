@@ -22480,6 +22480,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-mcpgoat-evidence",
+    platform: "generic",
+    category: "AI / LLM security",
+    severityDefault: "medium",
+    title: "MCPGoat deliberately vulnerable MCP server hub disclosed",
+    description:
+      "MCPGoat GitHub Pages hub documents 26 MCP CTF challenges with 78 flags across tool poisoning, prompt injection, rug-pulls, SSRF, SQL injection, and RCE training modules.",
+    impactOneline:
+      "Public MCPGoat marketing documents intentionally insecure Model Context Protocol server challenges attackers use to practice AI supply-chain attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideMcpgoatEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "MCPGoat is intentional MCP security training — host only in isolated lab environments.",
+      steps: [
+        "Deploy MCPGoat via Docker on private lab networks, not public marketing pages alone.",
+        "Gate MCP tool servers behind authentication and tool-schema validation.",
+        "Do not copy MCPGoat vulnerability patterns into production AI agent infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host MCPGoat-style vulnerable MCP server training. Show how to isolate MCP CTF labs from production agent deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "mcpgoat-route-live-oracle",
+    platform: "generic",
+    category: "AI / LLM security",
+    severityDefault: "medium",
+    title: "MCPGoat hub route live oracle",
+    description:
+      "When scanning sabyasachidhal.github.io/MCPGoat/, the hub confirms 26 challenges and 78 flags across MCP tool poisoning, prompt injection, SSRF, SQLi, and RCE training scope — route-specific MCP security lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that MCPGoat documents deliberately vulnerable MCP server CTF challenges for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "mcpgoatRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "MCPGoat is intentional training — isolate MCP CTF infrastructure from production agent deployments.",
+      steps: [
+        "Run MCPGoat only on private lab networks.",
+        "Validate MCP tool schemas and block dynamic tool poisoning in production.",
+        "Use OWASP MCP Top 10 guidance to harden production MCP servers."
+      ]
+    },
+    fixPrompt:
+      "Our MCPGoat route scan confirms deliberately vulnerable MCP server training scope. Show MCP tool validation and lab isolation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-whoopspay-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -31593,6 +31645,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our yogsec Lab #20 route scan documents Base64 decode eval XSS. Show safe decoding and eval removal.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab21-search-box-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #21 search box route live oracle",
+    description:
+      "When scanning /labs/lab21.html, yogsec documents ?code= URL parameter read from search box and executed with eval() — route-specific reflected DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #21 exposes search-box ?code= → eval() reflected XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab21SearchBoxRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never pass URL parameters to eval() in production.",
+      steps: [
+        "Replace eval() with safe parsing and never execute user-controlled code strings.",
+        "Use textContent instead of dynamic code execution for search results.",
+        "Use Content-Security-Policy to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #21 route scan documents search-box eval XSS via ?code=. Show safe alternatives and eval removal.",
     version: 1,
     enabled: true
   },
@@ -68674,6 +68752,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our home/?url= route scan confirms credential disclosure via X-Original-URL /vulnerabilities. Show remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-vulnerabilities-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop vulnerabilities disclosure route live oracle",
+    description:
+      "When scanning /vulnerabilities on ginandjuice.shop, the public oracle table lists paths, difficulties, technologies, and vulnerability classes plus ACCOUNT LOGIN DETAILS — route-specific scanner benchmark disclosure oracle.",
+    impactOneline:
+      "Direct /vulnerabilities route scans confirm PortSwigger Gin & Juice scanner evaluation oracle content is reachable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceVulnerabilitiesDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gin & Juice Shop is an intentional scanner benchmark — restrict /vulnerabilities oracle pages to isolated lab infrastructure.",
+      steps: [
+        "Do not mirror Gin & Juice vulnerability oracle tables in production apps.",
+        "Remove embedded credentials from public oracle pages.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /vulnerabilities route scan confirms Gin & Juice scanner evaluation oracle disclosure. Show route-specific information disclosure remediation.",
     version: 1,
     enabled: true
   },
