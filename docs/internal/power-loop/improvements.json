@@ -7307,6 +7307,24 @@
       "slug": "chimera-sanctions-check-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: endpoints-catalog GET /api/sanctions/check — Sanctions screening; chimera.atlascrew.dev/api/sanctions/check findings 7→8 (+chimera-sanctions-check-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-gov-cases-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: api-reference POST /api/v1/gov/cases — Create case; chimera.atlascrew.dev/api/v1/gov/cases findings 7→8 (+chimera-gov-cases-bola-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-cards-data-export-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: endpoints-catalog GET /api/cards/data/export — Card data extraction; chimera.atlascrew.dev/api/cards/data/export findings 7→8 (+chimera-cards-data-export-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-mobile-biometric-verify-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: endpoints-catalog POST /api/mobile/v2/auth/biometric/verify — Biometric bypass attempts; chimera.atlascrew.dev/api/mobile/v2/auth/biometric/verify findings 7→8 (+chimera-mobile-biometric-verify-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
