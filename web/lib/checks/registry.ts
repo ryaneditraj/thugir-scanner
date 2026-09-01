@@ -19333,6 +19333,10 @@ POST /api/v1/diagnostics/webhook
 CHM-ADMIN-003 XML External Entity (XXE)
 POST /api/v1/admin/attack/xxe
 XXE in legacy import behavior
+CHM-ENERGY-001 Server-Side Request Forgery (SSRF)
+POST /api/v1/energy-utilities/assets/calibration
+CHM-ENERGY-002 BOLA / IDOR (Outages)
+GET /api/v1/energy-utilities/outages/{outage_id}
 POST /api/v1/healthcare/records                # Second-order SQLi
 GET /api/v1/healthcare/records/search?q=       # SQL Injection (Search, CHM-HEALTH-001)
 GET /api/v1/healthcare/records/{record_id}     # BOLA/IDOR (CHM-HEALTH-002)
@@ -19379,7 +19383,7 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001|CHM-ADMIN-002|CHM-ADMIN-003|CHM-BANK-001|CHM-BANK-002|CHM-AI-001|CHM-AI-002|CHM-AI-003|CHM-AI-004|CHM-ECOM-002|CHM-TELCO-001|CHM-INS-002/i.test(corpus)
+    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001|CHM-ADMIN-002|CHM-ADMIN-003|CHM-ENERGY-001|CHM-ENERGY-002|CHM-BANK-001|CHM-BANK-002|CHM-AI-001|CHM-AI-002|CHM-AI-003|CHM-AI-004|CHM-ECOM-002|CHM-TELCO-001|CHM-INS-002/i.test(corpus)
   ) {
     const invDoc = await ctx.probe.get(new URL("/vulnerability-inventory", ctx.origin).toString(), {
       maxBytes: 400_000,
@@ -19403,7 +19407,7 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit|telecom\/sim-swap|energy\/scada\/commands|energy-utilities\/dispatch|gov\/benefits\/search|saas\/tenants|cart\/update|loyalty\/points\/transfer|admin\/orders\/override|genai\/chat|genai\/agent\/browse/i.test(
+    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit|telecom\/sim-swap|energy\/scada\/commands|energy-utilities\/(?:dispatch|assets\/calibration|outages)|gov\/benefits\/search|saas\/tenants|cart\/update|loyalty\/points\/transfer|admin\/(?:orders\/override|attack\/xxe)|genai\/chat|genai\/agent\/browse/i.test(
       corpus
     )
   ) {
@@ -20529,6 +20533,92 @@ const chimeraDiagnosticsWebhookSsrfRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/diagnostics/webhook route scan — CHM-ADMIN-002 documents SSRF via diagnostics webhook callback URL (Jekyll docs corpus fallback) — route-specific SSRF training oracle"
+    }
+  };
+};
+
+async function chimeraAdminAttackXxeProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const xxeOk =
+    /admin\/attack\/xxe/i.test(corpus) &&
+    (/CHM-ADMIN-003/i.test(corpus) ||
+      /XML External Entity/i.test(corpus) ||
+      /XXE in legacy import/i.test(corpus) ||
+      /POST\s+\/api\/v1\/admin\/attack\/xxe/i.test(corpus)) &&
+    (/admin|Security Misconfiguration|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!xxeOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-ADMIN-003/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet:
+        "POST /api/v1/admin/attack/xxe — XML External Entity (Legacy Import, CHM-ADMIN-003)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents XXE in legacy import behavior (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — admin XXE training oracle"
+    }
+  };
+}
+
+const chimeraAdminAttackXxeLiveOracle: Rule = async (ctx) => chimeraAdminAttackXxeProbe(ctx);
+
+const chimeraAdminAttackXxeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/attack\/xxe\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraAdminAttackXxeProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/admin/attack/xxe route scan — CHM-ADMIN-003 documents XXE in legacy import behavior (Jekyll docs corpus fallback) — route-specific XXE training oracle"
+    }
+  };
+};
+
+async function chimeraEnergyUtilitiesCalibrationSsrfProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const ssrfOk =
+    /energy-utilities\/assets\/calibration/i.test(corpus) &&
+    (/CHM-ENERGY-001/i.test(corpus) ||
+      /Server-Side Request Forgery/i.test(corpus) ||
+      /POST\s+\/api\/v1\/energy-utilities\/assets\/calibration/i.test(corpus)) &&
+    (/Energy\s*&\s*Utilities|energy_utilities|ICS\/OT|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!ssrfOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-ENERGY-001/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet:
+        "POST /api/v1/energy-utilities/assets/calibration — Server-Side Request Forgery (SSRF, CHM-ENERGY-001)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents SSRF on energy utilities asset calibration callbacks (Jekyll docs corpus fallback) — energy utilities SSRF training oracle"
+    }
+  };
+}
+
+const chimeraEnergyUtilitiesCalibrationSsrfLiveOracle: Rule = async (ctx) =>
+  chimeraEnergyUtilitiesCalibrationSsrfProbe(ctx);
+
+const chimeraEnergyUtilitiesCalibrationSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/energy-utilities\/assets\/calibration\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraEnergyUtilitiesCalibrationSsrfProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/energy-utilities/assets/calibration route scan — CHM-ENERGY-001 documents SSRF via calibration callback URL (Jekyll docs corpus fallback) — route-specific energy utilities SSRF training oracle"
     }
   };
 };
@@ -41601,6 +41691,9 @@ Excessive Data Exposure
 GET /accounts
 Information Disclosure / Login Enumeration
 POST /auth/token
+Privilege Escalation via Mass Assignment
+PUT /api/v1/profile
+GET /api/v1/admin/users
 `;
 
 async function openvaultDocsCorpus(ctx: RuleContext): Promise<string> {
@@ -41619,7 +41712,7 @@ async function openvaultDocsCorpus(ctx: RuleContext): Promise<string> {
       corpus = `${corpus}\n${learnDoc.body}`;
     }
   }
-  if (!/POST \/payments|GET \/admin\/accounts|POST \/auth\/token/i.test(corpus)) {
+  if (!/POST \/payments|GET \/admin\/accounts|POST \/auth\/token|admin\/users|Mass Assignment/i.test(corpus)) {
     corpus = `${corpus}\n${OPENVAULT_LEARN_FALLBACK}`;
   }
   return corpus;
@@ -41734,6 +41827,45 @@ const openvaultAuthTokenEnumerationRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "openvaultbank.com /api/v1/auth/token route scan — /learn documents distinguishable login error messages enabling email enumeration — route-specific user enumeration training oracle"
+    }
+  };
+};
+
+async function openvaultUsersEnumerationProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const corpus = await openvaultDocsCorpus(ctx);
+  const usersOk =
+    /(?:\/api\/v1\/)?admin\/users|\/users\b/i.test(corpus) &&
+    (/Mass Assignment|Privilege Escalation|role.*admin|hashed password/i.test(corpus) ||
+      /GET\s+\/api\/v1\/admin\/users/i.test(corpus) ||
+      /every user in the system/i.test(corpus) ||
+      /PUT\s+\/api\/v1\/profile/i.test(corpus)) &&
+    (/OpenVault Bank|deliberately vulnerable banking/i.test(corpus));
+  if (!usersOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /GET\s+\/api\/v1\/admin\/users|every user in the system/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet:
+        "PUT /api/v1/profile mass assignment → GET /api/v1/admin/users — user roster with emails and hashed passwords",
+      note: "openvaultbank.com — OpenVault Bank /learn documents privilege escalation via mass assignment unlocking admin user listing with hashed passwords — user enumeration training oracle"
+    }
+  };
+}
+
+const openvaultUsersEnumerationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/users\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await openvaultUsersEnumerationProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "openvaultbank.com /api/v1/users route scan — /learn documents mass-assignment privilege escalation unlocking GET /api/v1/admin/users user roster — route-specific user enumeration training oracle"
     }
   };
 };
@@ -105374,6 +105506,7 @@ export const RULES: Record<string, Rule> = {
   openvaultPaymentsBolaRouteLiveOracle,
   openvaultAdminAccountsBflaRouteLiveOracle,
   openvaultAuthTokenEnumerationRouteLiveOracle,
+  openvaultUsersEnumerationRouteLiveOracle,
   clientSideWebgoatEvidence,
   clientSideWhoopsPayEvidence,
   whoopsPayTransactionsBolaLiveOracle,
@@ -105541,6 +105674,10 @@ export const RULES: Record<string, Rule> = {
   chimeraDiagnosticsPingRceRouteLiveOracle,
   chimeraDiagnosticsWebhookSsrfLiveOracle,
   chimeraDiagnosticsWebhookSsrfRouteLiveOracle,
+  chimeraAdminAttackXxeLiveOracle,
+  chimeraAdminAttackXxeRouteLiveOracle,
+  chimeraEnergyUtilitiesCalibrationSsrfLiveOracle,
+  chimeraEnergyUtilitiesCalibrationSsrfRouteLiveOracle,
   chimeraEcommerceProductsCatalogSqliRouteLiveOracle,
   chimeraTelecomSubscribersProfileBolaRouteLiveOracle,
   chimeraInsuranceClaimsSearchSqliRouteLiveOracle,
