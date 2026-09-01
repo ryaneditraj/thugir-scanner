@@ -11428,6 +11428,31 @@
   ],
   "priority_discovery_urls": [
     {
+      "url": "https://chimera.atlascrew.dev/api/ot/protocols/modbus",
+      "source": "atlas-crew/Chimera CHM-ICS-001 — Modbus command injection oracle POST /api/ot/protocols/modbus (vuln_registry; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/ics/scada/systems",
+      "source": "atlas-crew/Chimera CHM-ICS-003 — unauthorized SCADA topology discovery oracle GET /api/ics/scada/systems (vuln_registry; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/insurance/policies/1",
+      "source": "atlas-crew/Chimera CHM-INS-001 — insurance policy BOLA oracle GET /api/v1/insurance/policies/{policy_id} (vuln_registry; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/loyalty/transactions/export?customer_id=1",
+      "source": "atlas-crew/Chimera CHM-LOYAL-002 — loyalty transaction export IDOR oracle GET /api/loyalty/transactions/export (vuln_registry; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.apisec.ai/identity/api/v2/user/vehicles",
+      "source": "OWASP crAPI Challenge 1 — vehicle list BOLA oracle GET /identity/api/v2/user/vehicles (OWASPLA 2025 + allthewriteups; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://chimera.atlascrew.dev/api/v1/gov/cases",
       "source": "atlas-crew/Chimera CHM-GOV-002 — citizen case management BOLA oracle GET/POST /api/v1/gov/cases (api-reference.md; web search 11 UTC)",
       "auth": "public_demo"
