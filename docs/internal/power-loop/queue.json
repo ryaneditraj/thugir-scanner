@@ -1,33 +1,58 @@
 {
-  "updated_at": "2026-09-01T17:05:00.000Z",
+  "updated_at": "2026-09-01T18:10:00.000Z",
   "priority_discovery_urls": [
     {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
-      "source": "OWASP WrongSecrets — Challenge 63 hardcoded AES encryption key cryptography oracle (v1.13.3 release)",
-      "auth": "public_demo"
+      "url": "https://ist-edu-bd.vercel.app/xss",
+      "source": "zahidoverflow/damn-vulnerable-web-university — DVWU reflected XSS lab route oracle (ist-edu-bd.vercel.app/xss)",
+      "auth": "oss_deploy"
     },
     {
-      "url": "https://dvga2.tools.escape.tech/",
-      "source": "Escape-hosted Damn Vulnerable GraphQL Application v2 — GraphQL introspection/injection oracle (dvga2.tools.escape.tech)",
-      "auth": "public_demo"
+      "url": "https://ist-edu-bd.vercel.app/idor",
+      "source": "zahidoverflow/damn-vulnerable-web-university — DVWU IDOR student-records route oracle (ist-edu-bd.vercel.app/idor)",
+      "auth": "oss_deploy"
     },
     {
-      "url": "http://vapi.apisec.ai/vapi/api2/user/login",
-      "source": "roottusk/vAPI — API2 broken authentication credential stuffing oracle (vapi.apisec.ai public demo)",
-      "auth": "public_demo"
+      "url": "https://pentest-fauxbank.vercel.app/lab",
+      "source": "alfredang/pentest FauxBank — guided OWASP pentest scenarios lab mode (pentest-fauxbank.vercel.app/lab)",
+      "auth": "oss_deploy"
     },
     {
-      "url": "http://vapi.apisec.ai/vapi/api8/user/secret",
-      "source": "roottusk/vAPI — API8 excessive data exposure secret endpoint oracle (vapi.apisec.ai public demo)",
-      "auth": "public_demo"
+      "url": "https://vaultapp-omega.vercel.app/api/documents/1",
+      "source": "MRMcyber/vaultapp — VaultApp documents IDOR oracle (vaultapp-omega.vercel.app/api/documents/1)",
+      "auth": "oss_deploy"
     },
     {
-      "url": "http://vapi.apisec.ai/vapi/api5/user",
-      "source": "roottusk/vAPI — API5 broken function level authorization mass-assignment oracle (vapi.apisec.ai public demo)",
+      "url": "https://pentest-ground.com:4280/vulnerabilities/sqli/",
+      "source": "pentest-ground DVWA — SQL injection lesson route oracle (pentest-ground.com:4280/vulnerabilities/sqli/)",
       "auth": "public_demo"
     }
   ],
   "discovery_urls": [
+    {
+      "url": "https://ist-edu-bd.vercel.app/xss",
+      "source": "zahidoverflow/damn-vulnerable-web-university — DVWU reflected XSS lab route oracle (ist-edu-bd.vercel.app/xss)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/idor",
+      "source": "zahidoverflow/damn-vulnerable-web-university — DVWU IDOR student-records route oracle (ist-edu-bd.vercel.app/idor)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/lab",
+      "source": "alfredang/pentest FauxBank — guided OWASP pentest scenarios lab mode (pentest-fauxbank.vercel.app/lab)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/documents/1",
+      "source": "MRMcyber/vaultapp — VaultApp documents IDOR oracle (vaultapp-omega.vercel.app/api/documents/1)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-ground.com:4280/vulnerabilities/sqli/",
+      "source": "pentest-ground DVWA — SQL injection lesson route oracle (pentest-ground.com:4280/vulnerabilities/sqli/)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
       "source": "OWASP WrongSecrets — Challenge 63 hardcoded AES encryption key cryptography oracle (v1.13.3 release)",
