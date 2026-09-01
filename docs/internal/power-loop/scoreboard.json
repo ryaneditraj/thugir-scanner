@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T02:12:00.000Z",
+  "updated_at": "2026-09-01T03:06:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2959,
-  "total_findings": 30563,
-  "critical_findings": 58,
+  "total_sites_scanned": 2962,
+  "total_findings": 30587,
+  "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2056,
-  "discovery_findings": 25381,
-  "improvements_shipped": 1175,
-  "last_run": "2026-09-01T02:12:00.000Z",
+  "discovery_findings": 25405,
+  "improvements_shipped": 1178,
+  "last_run": "2026-09-01T03:06:00.000Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
@@ -55,20 +55,17 @@
       "urls_added": 0,
       "urls_scanned": 3,
       "findings": 24,
-      "focus": "Chimera CHM-AI-001/002/003 genai route oracles shipped (chat prompt injection, agent browse SSRF, models config disclosure)",
+      "focus": "Chimera CHM-ECOM-002/TELCO-001/INS-002 route oracles shipped (ecommerce catalog SQLi, telecom subscriber BOLA, insurance claims SQLi)",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "chimera.atlascrew.dev/api/v1/genai/chat: 7→8 findings — +chimera-genai-chat-prompt-injection-route-live-oracle (CHM-AI-001)",
-      "chimera.atlascrew.dev/api/v1/genai/agent/browse: 7→8 findings — +chimera-genai-agent-browse-ssrf-route-live-oracle (CHM-AI-002)",
-      "chimera.atlascrew.dev/api/v1/genai/models/config: 7→8 findings — +chimera-genai-models-config-disclosure-route-live-oracle (CHM-AI-003)"
+      "chimera.atlascrew.dev/api/v1/ecommerce/products: 7→8 findings — +chimera-ecommerce-products-catalog-sqli-route-live-oracle (CHM-ECOM-002)",
+      "chimera.atlascrew.dev/api/v1/telecom/subscribers/1/profile: 7→8 findings — +chimera-telecom-subscribers-profile-bola-route-live-oracle (CHM-TELCO-001)",
+      "chimera.atlascrew.dev/api/v1/insurance/claims/search: 7→8 findings — +chimera-insurance-claims-search-sqli-route-live-oracle (CHM-INS-002)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "CHM-ECOM-002 ecommerce/products catalog SQLi route oracle absent — generic bundle only",
-      "CHM-TELCO-001 telecom/subscribers/{id}/profile BOLA route oracle absent — generic bundle only",
-      "CHM-INS-002 insurance/claims/search SQLi route oracle absent — generic bundle only",
       "CHM-ADMIN-002 diagnostics/webhook SSRF route oracle absent — generic bundle only",
       "CHM-ADMIN-001 diagnostics/ping RCE route oracle absent — generic bundle only",
       "CHM-AI-004 genai/knowledge/upload unrestricted file upload route oracle absent"
@@ -76,12 +73,12 @@
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "chimera.atlascrew.dev/api/v1/ecommerce/products": 8,
+    "chimera.atlascrew.dev/api/v1/telecom/subscribers/1/profile": 8,
+    "chimera.atlascrew.dev/api/v1/insurance/claims/search": 8,
     "chimera.atlascrew.dev/api/v1/genai/chat": 8,
     "chimera.atlascrew.dev/api/v1/genai/agent/browse": 8,
     "chimera.atlascrew.dev/api/v1/genai/models/config": 8,
-    "chimera.atlascrew.dev/api/v1/ecommerce/products": 7,
-    "chimera.atlascrew.dev/api/v1/telecom/subscribers/1/profile": 7,
-    "chimera.atlascrew.dev/api/v1/insurance/claims/search": 7,
     "chimera.atlascrew.dev/api/v1/diagnostics/webhook": 7,
     "chimera.atlascrew.dev/api/v1/diagnostics/ping": 7
   }
