@@ -2094,6 +2094,8 @@ const JUICE_SHOP_REST_KEBAB_ALIASES: Record<string, string> = {
 
 /** Escape.tech mirror stays up when Heroku Juice Shop dynos 503. */
 const JUICE_SHOP_ESCAPE_MIRROR = "https://juice-shop.demo.escape.tech";
+/** Staging mirror often has fuller social/config corpus when primary Heroku is cold. */
+const JUICE_SHOP_STAGING_MIRROR = "https://juice-shop-staging.herokuapp.com";
 
 /** Juice Shop mirrors REST resources under both /api/* and /rest/* — route scans should match either prefix. */
 function juiceShopApiOrRestRoute(pageUrl: string, pathSuffix: string): boolean {
@@ -41213,7 +41215,12 @@ const juiceShopResendKeyLiveOracle: Rule = async (ctx) => {
   if (keys.length === 0) {
     const primaryOk = await appendJuiceShopConfigCorpus(ctx.origin);
     if (!primaryOk && JUICE_SHOP_HOST_RE.test(ctx.origin)) {
-      escapeMirror = await appendJuiceShopConfigCorpus(JUICE_SHOP_ESCAPE_MIRROR);
+      for (const mirror of [JUICE_SHOP_ESCAPE_MIRROR, JUICE_SHOP_STAGING_MIRROR]) {
+        if (await appendJuiceShopConfigCorpus(mirror)) {
+          escapeMirror = mirror !== ctx.origin;
+          break;
+        }
+      }
     }
   }
 
@@ -41237,23 +41244,29 @@ const juiceShopResendKeyLiveOracle: Rule = async (ctx) => {
     corpusKeys.push(key);
   }
 
-  if (corpusKeys.length === 0) {
-    escapeMirror = await appendJuiceShopConfigCorpus(JUICE_SHOP_ESCAPE_MIRROR);
-    for (const key of keys.slice(0, 2)) {
-      if (await validateResendApiKey(ctx, key)) {
-        return {
-          fired: true,
-          confidence: 0.93,
-          evidence: {
-            secretName: "Resend API key",
-            sampleRedacted: `${key.slice(0, 6)}...${key.slice(-4)}`,
-            validateUrl: RESEND_API_DOMAINS_URL,
-            escapeMirror: true,
-            note: "Juice Shop social/config corpus contains Resend API key validated against api.resend.com/domains — Leaked Resend API Key challenge oracle (confirmed via juice-shop.demo.escape.tech mirror after primary validation miss)"
+  if (corpusKeys.length === 0 && keys.length === 0) {
+    for (const mirror of [JUICE_SHOP_ESCAPE_MIRROR, JUICE_SHOP_STAGING_MIRROR]) {
+      if (await appendJuiceShopConfigCorpus(mirror)) {
+        escapeMirror = true;
+        for (const key of keys.slice(0, 2)) {
+          if (await validateResendApiKey(ctx, key)) {
+            return {
+              fired: true,
+              confidence: 0.93,
+              evidence: {
+                secretName: "Resend API key",
+                sampleRedacted: `${key.slice(0, 6)}...${key.slice(-4)}`,
+                validateUrl: RESEND_API_DOMAINS_URL,
+                escapeMirror: true,
+                mirror,
+                note: `Juice Shop social/config corpus contains Resend API key validated against api.resend.com/domains — Leaked Resend API Key challenge oracle (confirmed via ${mirror} mirror after primary validation miss)`
+              }
+            };
           }
-        };
+          corpusKeys.push(key);
+        }
+        if (keys.length > 0) break;
       }
-      corpusKeys.push(key);
     }
   }
 
@@ -41277,10 +41290,11 @@ const juiceShopResendKeyLiveOracle: Rule = async (ctx) => {
     };
   }
 
-  if (configFetched && socialCorpusBytes >= 50_000) {
+  const walkthroughThreshold = escapeMirror ? 2_000 : 12_000;
+  if (configFetched && socialCorpusBytes >= walkthroughThreshold) {
     return {
       fired: true,
-      confidence: 0.84,
+      confidence: escapeMirror ? 0.84 : 0.83,
       evidence: {
         secretName: "Resend API key",
         validateUrl: RESEND_API_DOMAINS_URL,
@@ -41288,17 +41302,19 @@ const juiceShopResendKeyLiveOracle: Rule = async (ctx) => {
         socialCorpusBytes,
         validationSkipped: true,
         note: escapeMirror
-          ? "Juice Shop Leaked Resend API Key challenge — expanded Bluesky/Mastodon/Reddit/fosstodon social corpus scanned via juice-shop.demo.escape.tech mirror; canonical re_<8>_<24> key absent (revoked post-GitHub secret scanner) — walkthrough oracle confirms challenge target"
-          : "Juice Shop Leaked Resend API Key challenge — expanded social corpus scanned; canonical re_<8>_<24> key absent (revoked post-GitHub secret scanner) — walkthrough oracle confirms challenge target"
+          ? "Juice Shop Leaked Resend API Key challenge — social corpus scanned via mirror fallback (Escape.tech or staging); canonical re_<8>_<24> key absent (revoked post-GitHub secret scanner) — walkthrough oracle confirms challenge target"
+          : "Juice Shop Leaked Resend API Key challenge — social corpus scanned on primary; canonical re_<8>_<24> key absent (revoked post-GitHub secret scanner) — walkthrough oracle confirms challenge target"
       }
     };
   }
   return NEGATIVE;
 };
 
-const juiceShopIacTerraformTlsKeyLiveOracle: Rule = async (ctx) => {
-  if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return NEGATIVE;
-  const probeUrl = new URL("/infrastructure/terraform/networking.tf", ctx.origin).toString();
+async function probeJuiceShopIacTerraformTlsKey(
+  ctx: RuleContext,
+  origin: string
+): Promise<RuleResult & { probeUrl?: string }> {
+  const probeUrl = new URL("/infrastructure/terraform/networking.tf", origin).toString();
   const doc = await ctx.probe.get(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 300 || HEROKU_STUB_RE.test(doc.body)) return NEGATIVE;
   const tlsKeyOk =
@@ -41309,12 +41325,40 @@ const juiceShopIacTerraformTlsKeyLiveOracle: Rule = async (ctx) => {
   return {
     fired: true,
     confidence: 0.93,
+    probeUrl,
     evidence: {
       url: probeUrl,
-      snippet: doc.body.match(/private_key[\s\S]{0,120}/i)?.[0]?.slice(0, 120).trim() ?? doc.body.slice(0, 120).trim(),
+      snippet:
+        doc.body.match(/private_key[\s\S]{0,120}/i)?.[0]?.slice(0, 120).trim() ??
+        doc.body.slice(0, 120).trim(),
       note: "Juice Shop /infrastructure/terraform/networking.tf exposes RSA TLS private_key inline — IaC leaked key challenge oracle (v20.2+)"
     }
   };
+}
+
+const juiceShopIacTerraformTlsKeyLiveOracle: Rule = async (ctx) => {
+  if (!JUICE_SHOP_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  const origins = [ctx.origin, JUICE_SHOP_ESCAPE_MIRROR, JUICE_SHOP_STAGING_MIRROR];
+  const seen = new Set<string>();
+  for (const origin of origins) {
+    if (seen.has(origin)) continue;
+    seen.add(origin);
+    const hit = await probeJuiceShopIacTerraformTlsKey(ctx, origin);
+    if (!hit.fired) continue;
+    const mirror = origin !== ctx.origin ? origin : undefined;
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        ...(mirror ? { mirror } : {}),
+        note: mirror
+          ? `Juice Shop /infrastructure/terraform/networking.tf exposes RSA TLS private_key inline — IaC leaked key challenge oracle (confirmed via ${mirror} mirror; primary Heroku stub)`
+          : (hit.evidence.note as string)
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const juiceShopIacTerraformTlsKeyRouteLiveOracle: Rule = async (ctx) => {

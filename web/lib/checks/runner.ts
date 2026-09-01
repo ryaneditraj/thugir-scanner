@@ -13000,6 +13000,17 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        p.slug.startsWith("juice-shop-resend-key")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/infrastructure\/terraform\//i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-iac-terraform")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
         /\/rest\/user\/login\b/i.test(targetInput) &&
         p.slug.startsWith("juice-shop-login")
       )
