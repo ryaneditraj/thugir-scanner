@@ -20230,6 +20230,23 @@ const chimeraSaasTenantsProjectsIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const chimeraSaasTenantsBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/saas\/tenants\/\d+\/?$/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraSaasTenantsProjectsIdorProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/saas/tenants/{tenant_id} route scan — CHM-SAAS-001 documents cross-tenant project enumeration without tenant isolation (Jekyll docs corpus fallback) — route-specific SaaS tenant BOLA training oracle"
+    }
+  };
+};
+
 const chimeraCartUpdateRouteLiveOracle: Rule = async (ctx) => {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -20579,6 +20596,121 @@ const chimeraAdminAttackXxeRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/admin/attack/xxe route scan — CHM-ADMIN-003 documents XXE in legacy import behavior (Jekyll docs corpus fallback) — route-specific XXE training oracle"
+    }
+  };
+};
+
+async function chimeraAdminExecuteRceProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const executeOk =
+    /admin\/execute/i.test(corpus) &&
+    (/Direct Command Execution|Remote Code Execution|cat \/etc\/passwd/i.test(corpus) ||
+      /POST\s+\/api\/v1\/admin\/execute/i.test(corpus)) &&
+    (/No authorization required|Full system compromise|admin|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!executeOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Direct Command Execution/i.test(corpus) ? 0.93 : 0.9,
+    evidence: {
+      snippet: 'POST /api/v1/admin/execute — Direct command execution {"command":"cat /etc/passwd"}',
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents unauthenticated admin command execution on POST /api/v1/admin/execute (Jekyll docs corpus fallback) — admin RCE training oracle"
+    }
+  };
+}
+
+const chimeraAdminExecuteRceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/execute\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraAdminExecuteRceProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/admin/execute route scan — vulnerability inventory documents unauthenticated direct command execution (Jekyll docs corpus fallback) — route-specific admin RCE training oracle"
+    }
+  };
+};
+
+async function chimeraAdminDeserializeProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const deserializeOk =
+    /admin\/attack\/deserialize/i.test(corpus) &&
+    (/Insecure Deserialization|Python pickle|base64_pickle_payload/i.test(corpus) ||
+      /POST\s+\/api\/admin\/attack\/deserialize/i.test(corpus)) &&
+    (/Remote code execution|Command execution|admin|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!deserializeOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Python pickle/i.test(corpus) ? 0.93 : 0.9,
+    evidence: {
+      snippet: 'POST /api/admin/attack/deserialize — Python pickle insecure deserialization {"data":"base64_pickle_payload"}',
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents pickle deserialization RCE on POST /api/admin/attack/deserialize (Jekyll docs corpus fallback) — insecure deserialization training oracle"
+    }
+  };
+}
+
+const chimeraAdminDeserializeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/admin\/attack\/deserialize\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraAdminDeserializeProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/admin/attack/deserialize route scan — vulnerability inventory documents Python pickle insecure deserialization RCE (Jekyll docs corpus fallback) — route-specific deserialization training oracle"
+    }
+  };
+};
+
+async function chimeraHipaaTransferSsrfProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const transferOk =
+    /hipaa\/transfer\/encrypted/i.test(corpus) &&
+    (/Unencrypted PHI Transfer|encryption:\s*none|169\.254\.169\.254/i.test(corpus) ||
+      /POST\s+\/api\/hipaa\/transfer\/encrypted/i.test(corpus)) &&
+    (/Cloud metadata access|Internal network scanning|HIPAA|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!transferOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /169\.254\.169\.254/i.test(corpus) ? 0.93 : 0.9,
+    evidence: {
+      snippet:
+        'POST /api/hipaa/transfer/encrypted — SSRF via destination http://169.254.169.254/latest/meta-data/ with encryption:none',
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents SSRF and unencrypted PHI transfer on POST /api/hipaa/transfer/encrypted (Jekyll docs corpus fallback) — HIPAA transfer SSRF training oracle"
+    }
+  };
+}
+
+const chimeraHipaaTransferSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/hipaa\/transfer\/encrypted\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraHipaaTransferSsrfProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/hipaa/transfer/encrypted route scan — vulnerability inventory documents SSRF to cloud metadata with encryption:none (Jekyll docs corpus fallback) — route-specific HIPAA transfer SSRF training oracle"
     }
   };
 };
@@ -42073,6 +42205,80 @@ const openvaultProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "openvaultbank.com /api/v1/profile route scan — /cheatsheet documents privilege escalation via mass assignment on PUT /api/v1/profile — route-specific profile mass-assignment training oracle"
+    }
+  };
+};
+
+async function openvaultHealthMisconfigProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const corpus = await openvaultDocsCorpus(ctx);
+  const healthOk =
+    /\/api\/v1\/health\b/i.test(corpus) &&
+    (/Security Misconfiguration.*Health|Health Endpoint|debug health|database connection strings/i.test(
+      corpus
+    ) ||
+      /GET \/api\/v1\/health/i.test(corpus)) &&
+    (/OpenVault Bank|deliberately vulnerable banking/i.test(corpus));
+  if (!healthOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Security Misconfiguration/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet: "GET /api/v1/health — Security Misconfiguration health endpoint exposing debug status",
+      note: "openvaultbank.com — OpenVault Bank /learn documents unauthenticated health endpoint leaking debug status and infrastructure details — health misconfiguration training oracle"
+    }
+  };
+}
+
+const openvaultHealthMisconfigRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/health\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await openvaultHealthMisconfigProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "openvaultbank.com /api/v1/health route scan — /learn documents unauthenticated debug health endpoint — route-specific security misconfiguration training oracle"
+    }
+  };
+};
+
+async function openvaultResetRequestProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const corpus = await openvaultDocsCorpus(ctx);
+  const resetOk =
+    /\/auth\/reset-request|reset-request/i.test(corpus) &&
+    (/Sensitive Data Exposure.*Password Reset|password reset token|reset token/i.test(corpus) ||
+      /POST \/api\/v1\/auth\/reset-request/i.test(corpus)) &&
+    (/OpenVault Bank|deliberately vulnerable banking/i.test(corpus));
+  if (!resetOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Sensitive Data Exposure/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet: "POST /api/v1/auth/reset-request — Sensitive data exposure on password reset token response",
+      note: "openvaultbank.com — OpenVault Bank /learn documents password reset responses leaking reset tokens — sensitive data exposure training oracle"
+    }
+  };
+}
+
+const openvaultResetRequestRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/auth\/reset-request\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await openvaultResetRequestProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "openvaultbank.com /api/v1/auth/reset-request route scan — /learn documents password reset token leakage — route-specific sensitive data exposure training oracle"
     }
   };
 };
@@ -105717,6 +105923,8 @@ export const RULES: Record<string, Rule> = {
   openvaultUsersEnumerationRouteLiveOracle,
   openvaultTransactionsBolaRouteLiveOracle,
   openvaultProfileMassAssignmentRouteLiveOracle,
+  openvaultHealthMisconfigRouteLiveOracle,
+  openvaultResetRequestRouteLiveOracle,
   clientSideWebgoatEvidence,
   clientSideWhoopsPayEvidence,
   whoopsPayTransactionsBolaLiveOracle,
@@ -105869,6 +106077,7 @@ export const RULES: Record<string, Rule> = {
   chimeraEnergyScadaCommandsRouteLiveOracle,
   chimeraGovBenefitsSearchSqliRouteLiveOracle,
   chimeraSaasTenantsProjectsIdorRouteLiveOracle,
+  chimeraSaasTenantsBolaRouteLiveOracle,
   chimeraCartUpdateRouteLiveOracle,
   chimeraLoyaltyPointsTransferRouteLiveOracle,
   chimeraAdminOrdersOverrideRouteLiveOracle,
@@ -105886,6 +106095,9 @@ export const RULES: Record<string, Rule> = {
   chimeraDiagnosticsWebhookSsrfRouteLiveOracle,
   chimeraAdminAttackXxeLiveOracle,
   chimeraAdminAttackXxeRouteLiveOracle,
+  chimeraAdminExecuteRceRouteLiveOracle,
+  chimeraAdminDeserializeRouteLiveOracle,
+  chimeraHipaaTransferSsrfRouteLiveOracle,
   chimeraEnergyUtilitiesCalibrationSsrfLiveOracle,
   chimeraEnergyUtilitiesCalibrationSsrfRouteLiveOracle,
   chimeraEnergyUtilitiesOutagesBolaLiveOracle,
