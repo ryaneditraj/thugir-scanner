@@ -76670,6 +76670,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-genai-chat-prompt-injection-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "critical",
+    title: "Chimera GenAI chat prompt injection route live oracle",
+    description:
+      "When scanning /api/v1/genai/chat on chimera.atlascrew.dev, CHM-AI-001 documents direct/indirect GenAI prompt injection — route-specific LLM prompt injection training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional GenAI prompt injection on the chat endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGenaiChatPromptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize LLM inputs and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Treat all user-supplied chat content as untrusted and apply output encoding.",
+        "Restrict LLM tool permissions and isolate model inference from sensitive data.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/genai/chat route documents CHM-AI-001 prompt injection. Show LLM input validation and tool permission remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-genai-agent-browse-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Chimera GenAI agent browse SSRF route live oracle",
+    description:
+      "When scanning /api/v1/genai/agent/browse on chimera.atlascrew.dev, CHM-AI-002 documents SSRF via autonomous agent URL fetch — route-specific GenAI agent SSRF training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional agent-driven SSRF on the GenAI browse endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGenaiAgentBrowseSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block agent URL fetches to internal networks and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Denylist internal IP ranges and metadata endpoints from agent browse targets.",
+        "Require URL allowlists for autonomous agent fetch capabilities.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/genai/agent/browse route documents CHM-AI-002 agent SSRF. Show URL allowlist and network segmentation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-genai-models-config-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Chimera GenAI models config disclosure route live oracle",
+    description:
+      "When scanning /api/v1/genai/models/config on chimera.atlascrew.dev, CHM-AI-003 documents unauthenticated GenAI model configuration exposure — route-specific model config disclosure training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional sensitive model configuration disclosure for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGenaiModelsConfigDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on model configuration endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Restrict model configuration APIs to authenticated admin roles.",
+        "Remove API keys and internal model parameters from public config responses.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/genai/models/config route documents CHM-AI-003 model config exposure. Show authentication and config redaction remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-dvla-evidence",
     platform: "generic",
     category: "Injection",
