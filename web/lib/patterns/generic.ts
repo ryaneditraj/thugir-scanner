@@ -76748,6 +76748,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-genai-knowledge-upload-route-live-oracle",
+    platform: "generic",
+    category: "Unrestricted file upload",
+    severityDefault: "critical",
+    title: "Chimera GenAI knowledge upload unrestricted file upload route live oracle",
+    description:
+      "When scanning /api/v1/genai/knowledge/upload on chimera.atlascrew.dev, CHM-AI-004 documents unrestricted file upload on GenAI RAG knowledge ingestion — route-specific file upload training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional unrestricted file upload on the GenAI knowledge ingestion endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGenaiKnowledgeUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate uploaded file types and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce allowlisted MIME types and scan uploaded knowledge documents before ingestion.",
+        "Store uploaded files outside the web root with randomized names.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/genai/knowledge/upload route documents CHM-AI-004 unrestricted file upload. Show file validation and sandboxed storage remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-payments-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "OpenVault Bank payments BOLA route live oracle",
+    description:
+      "When scanning /api/v1/payments on openvaultbank.com, /learn documents unauthorized fund transfer via manipulated source account ID — route-specific payment BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional payment BOLA on the fund transfer endpoint for API security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultPaymentsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate account ownership on payment source fields and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Bind payment source account IDs to the authenticated user's owned accounts.",
+        "Reject transfers when the source account does not belong to the token subject.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/payments route documents unauthorized fund transfer. Show account ownership validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-admin-accounts-bfla-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "OpenVault Bank admin accounts BFLA route live oracle",
+    description:
+      "When scanning /api/v1/admin/accounts on openvaultbank.com, /learn documents RBAC bypass allowing customer tokens to list all accounts — route-specific BFLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional broken function-level authorization on the admin accounts endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultAdminAccountsBflaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce admin role checks on privileged endpoints and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Require admin role claims on all /admin/* API routes.",
+        "Return 403 for non-admin tokens before querying privileged data.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/admin/accounts route documents RBAC bypass. Show function-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-ecommerce-products-catalog-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",

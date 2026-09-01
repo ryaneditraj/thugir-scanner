@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-genai-knowledge-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/genai/knowledge/upload — CHM-AI-004 Unrestricted File Upload (RAG) per vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/genai/knowledge/upload findings 7→8 (+chimera-genai-knowledge-upload-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:openvaultbank.com",
+      "slug": "openvault-payments-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /payments — Unauthorized Fund Transfer via source account ID manipulation per openvaultbank.com/learn; openvaultbank.com/api/v1/payments findings 8→9 (+openvault-payments-bola-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:openvaultbank.com",
+      "slug": "openvault-admin-accounts-bfla-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /admin/accounts — Broken Function-Level Authorization (RBAC bypass) per openvaultbank.com/learn; openvaultbank.com/api/v1/admin/accounts findings 8→9 (+openvault-admin-accounts-bfla-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
       "slug": "chimera-payments-amount-manipulate-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/payments/amount/manipulate — Payment amount manipulation per Chimera openapi/endpoints-catalog corpus; chimera.atlascrew.dev/api/payments/amount/manipulate findings 7→8 (+chimera-payments-amount-manipulate-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"

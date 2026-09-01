@@ -1626,6 +1626,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideCyberpunkerInsecureshipEvidence",
   "clientSideOpenvaultLearnEvidence",
   "clientSideOpenvaultCheatsheetEvidence",
+  "openvaultPaymentsBolaRouteLiveOracle",
+  "openvaultAdminAccountsBflaRouteLiveOracle",
   "clientSideCookiejarLabEvidence",
   "clientSideWebgoatEvidence",
   "clientSideSessionHijackEvidence",
@@ -1827,6 +1829,8 @@ const DEEP_RULES = new Set<string>([
   "chimeraGenaiAgentBrowseSsrfRouteLiveOracle",
   "chimeraGenaiModelsConfigDisclosureLiveOracle",
   "chimeraGenaiModelsConfigDisclosureRouteLiveOracle",
+  "chimeraGenaiKnowledgeUploadLiveOracle",
+  "chimeraGenaiKnowledgeUploadRouteLiveOracle",
   "chimeraEcommerceProductsCatalogSqliRouteLiveOracle",
   "chimeraTelecomSubscribersProfileBolaRouteLiveOracle",
   "chimeraInsuranceClaimsSearchSqliRouteLiveOracle",
@@ -7701,7 +7705,7 @@ function extractOpenvaultBankSeeds(html: string, pageUrl: string): string[] {
   if (!/OpenVault Bank|openvaultbank\.com/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/learn", "/cheatsheet", "/api/v1/users", "/api/v1/admin", "/api/v1/accounts"]) {
+  for (const p of ["/learn", "/cheatsheet", "/api/v1/users", "/api/v1/admin", "/api/v1/accounts", "/api/v1/payments", "/api/v1/admin/accounts", "/api/v1/auth/token"]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
@@ -12502,6 +12506,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/genai\/models\/config\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-genai-models-config")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/genai\/knowledge\/upload\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-genai-knowledge-upload")
+      )
+        return -3;
+      if (
+        /openvaultbank\.com/i.test(origin) &&
+        /\/api\/v1\/payments\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-payments-bola")
+      )
+        return -3;
+      if (
+        /openvaultbank\.com/i.test(origin) &&
+        /\/api\/v1\/admin\/accounts\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-admin-accounts-bfla")
       )
         return -3;
       if (

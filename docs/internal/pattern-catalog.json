@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-01T03:03:57.212Z",
-  "total": 3019,
-  "uniqueSlugs": 3011,
+  "generatedAt": "2026-09-01T04:04:59.120Z",
+  "total": 3022,
+  "uniqueSlugs": 3014,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3001,
+    "generic": 3004,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2934,
+    "deep": 2937,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 609,
+    "Broken access control": 611,
     "Exposed secret": 115,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -49,6 +49,7 @@
     "Cryptographic failure": 2,
     "XSS": 3,
     "Session management": 2,
+    "Unrestricted file upload": 1,
     "Cryptographic failures": 1
   },
   "slugs": [
@@ -381,6 +382,7 @@
     "chimera-fedramp-openapi-extensions-route-live-oracle",
     "chimera-genai-agent-browse-ssrf-route-live-oracle",
     "chimera-genai-chat-prompt-injection-route-live-oracle",
+    "chimera-genai-knowledge-upload-route-live-oracle",
     "chimera-genai-models-config-disclosure-route-live-oracle",
     "chimera-gov-benefits-search-sqli-route-live-oracle",
     "chimera-healthcare-imaging-idor-route-live-oracle",
@@ -2075,6 +2077,8 @@
     "oopssec-xxe-supplier-import-route-live-oracle",
     "open-redirect-query-param",
     "openapi-debug-password-exposure",
+    "openvault-admin-accounts-bfla-route-live-oracle",
+    "openvault-payments-bola-route-live-oracle",
     "owasp-andreabrioschi-top10-2025-hub-live-oracle",
     "owasp-andreabrioschi-top10-2025-hub-route-live-oracle",
     "owasp-demo-vulcanlab-llm-top10-live-oracle",

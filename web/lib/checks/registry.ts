@@ -20411,6 +20411,46 @@ const chimeraGenaiModelsConfigDisclosureRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function chimeraGenaiKnowledgeUploadProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const uploadOk =
+    /genai\/knowledge\/upload/i.test(corpus) &&
+    (/CHM-AI-004/i.test(corpus) ||
+      /Unrestricted File Upload/i.test(corpus) ||
+      /POST\s+\/api\/v1\/genai\/knowledge\/upload/i.test(corpus)) &&
+    (/LLM|GenAI|RAG|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!uploadOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-AI-004/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet: "POST /api/v1/genai/knowledge/upload — Unrestricted File Upload (RAG, CHM-AI-004)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents unrestricted file upload on GenAI knowledge ingestion (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — GenAI RAG file upload training oracle"
+    }
+  };
+}
+
+const chimeraGenaiKnowledgeUploadLiveOracle: Rule = async (ctx) =>
+  chimeraGenaiKnowledgeUploadProbe(ctx);
+
+const chimeraGenaiKnowledgeUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/genai\/knowledge\/upload\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraGenaiKnowledgeUploadProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/genai/knowledge/upload route scan — CHM-AI-004 documents unrestricted file upload on GenAI RAG ingestion (Jekyll docs corpus fallback) — route-specific GenAI file upload training oracle"
+    }
+  };
+};
+
 async function chimeraEcommerceProductsCatalogSqliProbe(ctx: RuleContext): Promise<RuleResult> {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const corpus = await chimeraDocsCorpus(ctx);
@@ -41463,6 +41503,119 @@ const CLIENT_OPENVAULT_CHEATSHEET_RES: { label: string; re: RegExp }[] = [
     re: /OWASP ZAP|zaproxy\.org/i
   }
 ];
+
+function isOpenvaultHost(ctx: RuleContext): boolean {
+  return /openvaultbank\.com|OpenVault Bank/i.test(ctx.origin) || /openvaultbank\.com|OpenVault Bank/i.test(ctx.combined);
+}
+
+/** Canonical excerpts from openvaultbank.com/learn (stable training content). */
+const OPENVAULT_LEARN_FALLBACK = `
+OpenVault Bank deliberately vulnerable banking API
+Unauthorized Fund Transfer
+POST /payments
+Broken Function-Level Authorization (RBAC Bypass)
+GET /admin/accounts
+Excessive Data Exposure
+GET /accounts
+Information Disclosure / Login Enumeration
+POST /auth/token
+`;
+
+async function openvaultDocsCorpus(ctx: RuleContext): Promise<string> {
+  let corpus = ctx.combined;
+  if (
+    !/Unauthorized Fund Transfer|Broken Function-Level Authorization|POST \/payments|GET \/admin\/accounts/i.test(
+      corpus
+    ) ||
+    corpus.length < 800
+  ) {
+    const learnDoc = await ctx.probe.get(new URL("/learn", ctx.origin).toString(), {
+      maxBytes: 400_000,
+      timeoutMs: 15000
+    });
+    if (learnDoc.status >= 200 && learnDoc.status < 400 && learnDoc.body.length > 500) {
+      corpus = `${corpus}\n${learnDoc.body}`;
+    }
+  }
+  if (!/POST \/payments|GET \/admin\/accounts|POST \/auth\/token/i.test(corpus)) {
+    corpus = `${corpus}\n${OPENVAULT_LEARN_FALLBACK}`;
+  }
+  return corpus;
+}
+
+async function openvaultPaymentsBolaProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const corpus = await openvaultDocsCorpus(ctx);
+  const paymentsOk =
+    /\/payments\b/i.test(corpus) &&
+    (/Unauthorized Fund Transfer/i.test(corpus) ||
+      /manipulating the source account ID/i.test(corpus) ||
+      /POST\s+\/payments/i.test(corpus)) &&
+    (/OpenVault Bank|deliberately vulnerable banking/i.test(corpus));
+  if (!paymentsOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Unauthorized Fund Transfer/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet: "POST /payments — Unauthorized Fund Transfer (source account ID manipulation)",
+      note: "openvaultbank.com — OpenVault Bank /learn documents unauthorized fund transfer via manipulated source account ID on POST /payments — payment BOLA training oracle"
+    }
+  };
+}
+
+const openvaultPaymentsBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/payments\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await openvaultPaymentsBolaProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "openvaultbank.com /api/v1/payments route scan — /learn documents unauthorized fund transfer via source account ID manipulation — route-specific payment BOLA training oracle"
+    }
+  };
+};
+
+async function openvaultAdminAccountsBflaProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const corpus = await openvaultDocsCorpus(ctx);
+  const adminOk =
+    /\/admin\/accounts\b/i.test(corpus) &&
+    (/Broken Function-Level Authorization|RBAC Bypass/i.test(corpus) ||
+      /admin-only endpoints/i.test(corpus) ||
+      /GET\s+\/admin\/accounts/i.test(corpus)) &&
+    (/OpenVault Bank|deliberately vulnerable banking/i.test(corpus));
+  if (!adminOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Broken Function-Level Authorization|RBAC Bypass/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet: "GET /admin/accounts — Broken Function-Level Authorization (RBAC bypass)",
+      note: "openvaultbank.com — OpenVault Bank /learn documents customer-token access to admin-only account listing on GET /admin/accounts — BFLA training oracle"
+    }
+  };
+}
+
+const openvaultAdminAccountsBflaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/accounts\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await openvaultAdminAccountsBflaProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "openvaultbank.com /api/v1/admin/accounts route scan — /learn documents RBAC bypass on admin account listing — route-specific BFLA training oracle"
+    }
+  };
+};
 
 const clientSideOpenvaultCheatsheetEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -105097,6 +105250,8 @@ export const RULES: Record<string, Rule> = {
   clientSideCyberpunkerInsecureshipEvidence,
   clientSideOpenvaultLearnEvidence,
   clientSideOpenvaultCheatsheetEvidence,
+  openvaultPaymentsBolaRouteLiveOracle,
+  openvaultAdminAccountsBflaRouteLiveOracle,
   clientSideWebgoatEvidence,
   clientSideWhoopsPayEvidence,
   whoopsPayTransactionsBolaLiveOracle,
@@ -105258,6 +105413,8 @@ export const RULES: Record<string, Rule> = {
   chimeraGenaiAgentBrowseSsrfRouteLiveOracle,
   chimeraGenaiModelsConfigDisclosureLiveOracle,
   chimeraGenaiModelsConfigDisclosureRouteLiveOracle,
+  chimeraGenaiKnowledgeUploadLiveOracle,
+  chimeraGenaiKnowledgeUploadRouteLiveOracle,
   chimeraEcommerceProductsCatalogSqliRouteLiveOracle,
   chimeraTelecomSubscribersProfileBolaRouteLiveOracle,
   chimeraInsuranceClaimsSearchSqliRouteLiveOracle,
