@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T07:05:00.000Z",
+  "updated_at": "2026-09-01T08:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
@@ -11427,6 +11427,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/admin/system/execute",
+      "source": "atlas-crew/Chimera admin domain — command injection oracle POST /api/v1/admin/system/execute (api-reference.md; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/admin/files/read",
+      "source": "atlas-crew/Chimera admin domain — path traversal oracle POST /api/v1/admin/files/read (api-reference.md; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/integrations/webhook/register",
+      "source": "atlas-crew/Chimera integrations — SSRF webhook registration oracle POST /api/integrations/webhook/register (api-reference.md; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/admin/data/deserialize",
+      "source": "atlas-crew/Chimera admin domain — insecure deserialization oracle POST /api/v1/admin/data/deserialize (api-reference.md; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/hipaa/transfer/encrypted",
+      "source": "atlas-crew/Chimera HIPAA domain — SSRF encrypted transfer oracle POST /api/hipaa/transfer/encrypted (vulnerability-inventory.md; web search 08 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crapi2.apisec.ai/workshop/api/mechanic/mechanic_report?report_id=1",
       "source": "OWASP crAPI2 Challenge 2 — sequential mechanic report BOLA oracle GET /workshop/api/mechanic/mechanic_report (OWASPLA 2025 guide; web search 07 UTC)",
