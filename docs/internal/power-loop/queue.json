@@ -11428,6 +11428,31 @@
   ],
   "priority_discovery_urls": [
     {
+      "url": "https://chimera.atlascrew.dev/api/v1/ecommerce/products",
+      "source": "atlas-crew/Chimera CHM-ECOM-002 — SQLi catalog oracle GET /api/v1/ecommerce/products (vulnerability-inventory; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/telecom/subscribers/1/profile",
+      "source": "atlas-crew/Chimera CHM-TELCO-001 — BOLA/IDOR oracle GET /api/v1/telecom/subscribers/{subscriber_id}/profile (vulnerability-inventory; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/insurance/claims/search?q=test",
+      "source": "atlas-crew/Chimera CHM-INS-002 — SQLi oracle GET /api/v1/insurance/claims/search?q= (vulnerability-inventory; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/genai/models/config",
+      "source": "atlas-crew/Chimera CHM-AI-003 — model config exposure oracle GET /api/v1/genai/models/config (vulnerability-inventory; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/diagnostics/webhook",
+      "source": "atlas-crew/Chimera CHM-ADMIN-002 — SSRF webhook oracle POST /api/v1/diagnostics/webhook (vulnerability-inventory; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://chimera.atlascrew.dev/api/v1/diagnostics/ping",
       "source": "atlas-crew/Chimera CHM-ADMIN-001 — RCE oracle POST /api/v1/diagnostics/ping (vuln_registry + vulnerability-inventory; web search 01 UTC)",
       "auth": "public_demo"
