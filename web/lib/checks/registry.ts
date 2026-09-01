@@ -12564,7 +12564,8 @@ function fabraixChallengeIdFromScan(ctx: RuleContext): string {
   const slug = hint.match(/\/challenges\/([a-z0-9-]+)/i)?.[1]?.toLowerCase();
   if (slug && FABRAIX_LIVE_CHALLENGE_IDS.has(slug)) return slug;
   if (slug === "data-exfil-002" || slug === "data-exfiltration-001") return "data-exfil-001";
-  if (slug === "indirect-prompt-injection-001") return "access-code-001";
+  if (slug === "indirect-prompt-injection-001" || slug === "prompt-injection-001") return "access-code-001";
+  if (slug === "tool-poisoning-001") return "biosafety-001";
   return "access-code-001";
 }
 
@@ -12686,6 +12687,42 @@ const fabraixIndirectPromptInjectionRouteLiveOracle: Rule = async (ctx) => {
       challengeRoute: "indirect-prompt-injection-001",
       scannedUrl: pageUrl,
       note: "Fabraix /challenges/indirect-prompt-injection-001 route scan — indirect prompt-injection challenge route on discovery queue; live session maps to access-code-001 Gatekeeper backend until dedicated indirect challenge ships"
+    }
+  };
+};
+
+const fabraixPromptInjection001RouteLiveOracle: Rule = async (ctx) => {
+  if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenges\/prompt-injection-001/i.test(pageUrl)) return NEGATIVE;
+  const probe = await probeFabraixPlaygroundSession(ctx, "access-code-001");
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      ...probe,
+      challengeRoute: "prompt-injection-001",
+      scannedUrl: pageUrl,
+      note: "Fabraix /challenges/prompt-injection-001 route scan — direct prompt-injection challenge maps to access-code-001 Gatekeeper backend (Kai agent persona)"
+    }
+  };
+};
+
+const fabraixToolPoisoning001RouteLiveOracle: Rule = async (ctx) => {
+  if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenges\/tool-poisoning-001/i.test(pageUrl)) return NEGATIVE;
+  const probe = await probeFabraixPlaygroundSession(ctx, "biosafety-001");
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      ...probe,
+      challengeRoute: "tool-poisoning-001",
+      scannedUrl: pageUrl,
+      note: "Fabraix /challenges/tool-poisoning-001 route scan — MCP tool-poisoning challenge maps to biosafety-001 Biosafety Officer backend (Wren agent persona)"
     }
   };
 };
@@ -15868,6 +15905,35 @@ const burpbountyGraphqlQueryRouteLiveOracle = burpBountyRouteLiveOracle(
   /\/graphql(?:\/query)?\/?$/i,
   burpbountyGraphqlQueryLiveOracle,
   "Burp Bounty Lab /graphql route scan — POST { __typename } returns Query typename JSON — GraphQL endpoint profile oracle"
+);
+
+const BURPBOUNTY_WP_CONFIG_PATHS = ["/wp/wp-config.php", "/wp-config.php"] as const;
+
+const burpbountyWpConfigLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  for (const path of BURPBOUNTY_WP_CONFIG_PATHS) {
+    const probeUrl = new URL(path, ctx.origin).toString();
+    const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (!/define\s*\(\s*['"]DB_PASSWORD['"]/i.test(doc.body)) continue;
+    if (!/define\s*\(\s*['"]DB_NAME['"]/i.test(doc.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: probeUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "Burp Bounty Lab GET /wp/wp-config.php returns live WordPress configuration with database credentials — wp-config exposure profile oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const burpbountyWpConfigRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/wp\/wp-config\.php|\/wp-config\.php/i,
+  burpbountyWpConfigLiveOracle,
+  "Burp Bounty Lab /wp/wp-config.php route scan — live WordPress configuration exposes DB_PASSWORD and table_prefix — wp-config exposure profile oracle"
 );
 
 const burpbountyWpLfiCveLiveOracle: Rule = async (ctx) => {
@@ -109446,6 +109512,8 @@ export const RULES: Record<string, Rule> = {
   burpbountyRceEvalRouteLiveOracle,
   burpbountyAiCompletionsRouteLiveOracle,
   burpbountyFortiosRemoteLoginRouteLiveOracle,
+  burpbountyWpConfigLiveOracle,
+  burpbountyWpConfigRouteLiveOracle,
   burpbountyWeblogicConsoleRouteLiveOracle,
   burpbountyGraphqlQueryRouteLiveOracle,
   burpbountyF5BashCveRouteLiveOracle,
@@ -109561,6 +109629,8 @@ export const RULES: Record<string, Rule> = {
   fabraixDataExfil002RouteLiveOracle,
   fabraixDataExfil001RouteLiveOracle,
   fabraixIndirectPromptInjectionRouteLiveOracle,
+  fabraixPromptInjection001RouteLiveOracle,
+  fabraixToolPoisoning001RouteLiveOracle,
   ratdoStoredXssLiveOracle,
   ratdoIdorEditLiveOracle,
   ratdoCsrfLiveOracle,

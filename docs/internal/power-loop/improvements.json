@@ -7379,6 +7379,24 @@
       "slug": "chimera-admin-users-export-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/admin/users/export — unauthenticated bulk user data exfiltration from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/admin/users/export findings 7→8 (+chimera-admin-users-export-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-tool-poisoning-001-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST api.fabraix.com/v1/playground/sessions/start challenge_id=biosafety-001 (The Biosafety Officer) from /challenges/tool-poisoning-001; playground.fabraix.com/challenges/tool-poisoning-001 findings 6→7 (+fabraix-tool-poisoning-001-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-prompt-injection-001-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST api.fabraix.com/v1/playground/sessions/start challenge_id=access-code-001 (The Gatekeeper) from /challenges/prompt-injection-001; playground.fabraix.com/challenges/prompt-injection-001 findings 6→7 (+fabraix-prompt-injection-001-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-wp-config-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /wp/wp-config.php returns define('DB_PASSWORD','sup3r_s3cr3t_p4ssw0rd') + table_prefix; burpbountylab.com/wp/wp-config.php findings 98→100 (+burpbounty-wp-config-live-oracle +burpbounty-wp-config-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
