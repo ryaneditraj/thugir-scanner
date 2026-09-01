@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T06:26:00.000Z",
+  "updated_at": "2026-09-01T07:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
@@ -11427,6 +11427,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://crapi2.apisec.ai/workshop/api/mechanic/mechanic_report?report_id=1",
+      "source": "OWASP crAPI2 Challenge 2 — sequential mechanic report BOLA oracle GET /workshop/api/mechanic/mechanic_report (OWASPLA 2025 guide; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/v2/community/posts/recent",
+      "source": "OWASP crAPI2 Challenge 4 — PII/vehicle UUID disclosure oracle GET /identity/api/v2/community/posts/recent (allthewriteups crAPI walkthrough; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/workshop/api/merchant/contact_mechanic",
+      "source": "OWASP crAPI2 Challenge 11 — SSRF oracle POST /workshop/api/merchant/contact_mechanic (OWASPLA 2025 guide; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-staging.up.railway.app/users/v1/_debug",
+      "source": "apisec-inc/urban-VAmPI — excessive data exposure oracle GET /users/v1/_debug dumps all users+passwords (Railway staging; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/patients/1",
+      "source": "atlas-crew/Chimera healthcare domain — patient record BOLA oracle GET /api/v1/healthcare/patients/{id} (vuln_registry; web search 07 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crapi2.apisec.ai/identity/api/v2/vehicle/1/location",
       "source": "OWASP crAPI2 Challenge 1 — vehicle GPS BOLA oracle GET /identity/api/v2/vehicle/{id}/location (OWASPLA 2025 guide; web search 06 UTC)",
