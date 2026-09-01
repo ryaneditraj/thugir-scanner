@@ -3981,6 +3981,8 @@ const DEEP_RULES = new Set<string>([
   "burpbountyRceEvalRouteLiveOracle",
   "burpbountyAiCompletionsRouteLiveOracle",
   "burpbountyFortiosRemoteLoginRouteLiveOracle",
+  "burpbountyWpConfigLiveOracle",
+  "burpbountyWpConfigRouteLiveOracle",
   "burpbountyWeblogicConsoleRouteLiveOracle",
   "burpbountyGraphqlQueryRouteLiveOracle",
   "burpbountySqliUserRouteLiveOracle",
@@ -4097,6 +4099,8 @@ const DEEP_RULES = new Set<string>([
   "fabraixDataExfil002RouteLiveOracle",
   "fabraixDataExfil001RouteLiveOracle",
   "fabraixIndirectPromptInjectionRouteLiveOracle",
+  "fabraixPromptInjection001RouteLiveOracle",
+  "fabraixToolPoisoning001RouteLiveOracle",
   "promptShieldPromptInjectionDefenseLiveOracle",
   "promptShieldPromptInjectionDefenseRouteLiveOracle",
   "ratdoStoredXssLiveOracle",
@@ -15128,6 +15132,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("fabraix-indirect")
       )
         return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/prompt-injection-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-prompt-injection-001")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/tool-poisoning-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-tool-poisoning-001")
+      )
+        return -4;
       if (/prompt-shield1\.vercel\.app/i.test(origin) && p.slug.startsWith("prompt-shield")) return -4;
       if (
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
@@ -15692,6 +15708,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/burpbountylab\.com/i.test(origin) && /\/rce\/eval\b/i.test(targetInput) && p.slug === "burpbounty-rce-eval-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/ai\/v1\/completions\b/i.test(targetInput) && p.slug === "burpbounty-ai-completions-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?forti(?:os)?(?:\/remote\/login)?\/?$/i.test(targetInput) && p.slug === "burpbounty-fortios-remote-login-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/wp\/wp-config\.php/i.test(targetInput) && p.slug.startsWith("burpbounty-wp-config")) return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?weblogic(?:\/console\/login\/LoginForm\.jsp)?\/?$/i.test(targetInput) && p.slug === "burpbounty-weblogic-console-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/graphql(?:\/query)?\/?$/i.test(targetInput) && p.slug === "burpbounty-graphql-query-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/mgmt\/tm\/util\/bash\b/i.test(targetInput) && p.slug === "burpbounty-f5-bash-cve-route-live-oracle") return -3;

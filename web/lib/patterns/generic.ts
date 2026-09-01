@@ -58473,6 +58473,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-wp-config-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab WordPress wp-config.php exposure live oracle",
+    description:
+      "GET /wp/wp-config.php returns live WordPress configuration with DB_PASSWORD and table_prefix — the Burp Bounty wp-config exposure profile oracle.",
+    impactOneline:
+      "Live wp-config.php probe confirms database credential disclosure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWpConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block public access to wp-config.php and rotate exposed database credentials.",
+      steps: [
+        "Deny web access to wp-config.php via web server rules.",
+        "Move configuration outside the web root or use environment variables.",
+        "Rotate database passwords after any wp-config exposure."
+      ]
+    },
+    fixPrompt:
+      "Our /wp/wp-config.php endpoint exposes DB_PASSWORD and table_prefix. Show WordPress configuration hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-wp-config-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab wp-config route live oracle",
+    description:
+      "When scanning /wp/wp-config.php, GET returns live WordPress configuration with database credentials — route-specific wp-config exposure profile oracle.",
+    impactOneline:
+      "Route-specific wp-config oracle confirms database credential disclosure when scanning Burp Bounty Lab WordPress config routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWpConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block public access to wp-config.php and rotate exposed database credentials.",
+      steps: [
+        "Deny web access to wp-config.php via web server rules.",
+        "Move configuration outside the web root or use environment variables.",
+        "Rotate database passwords after any wp-config exposure."
+      ]
+    },
+    fixPrompt:
+      "Our /wp/wp-config.php route scan confirms database credential exposure. Show WordPress configuration hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-sharefile-cve-live-oracle",
     platform: "generic",
     category: "Path traversal",
@@ -76016,6 +76068,60 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Fabraix /challenges/indirect-prompt-injection-001 route scan confirms unauthenticated agent sessions. Show indirect prompt-injection defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-prompt-injection-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix prompt-injection-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/prompt-injection-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the direct prompt-injection challenge — maps to access-code-001 Gatekeeper backend.",
+    impactOneline:
+      "Route-scoped Fabraix prompt-injection-001 scans should confirm unauthenticated agent red-team sessions on the discovery queue challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixPromptInjection001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/prompt-injection-001 route scan confirms unauthenticated Gatekeeper agent sessions. Show direct prompt-injection defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-tool-poisoning-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix tool-poisoning-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/tool-poisoning-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the MCP tool-poisoning challenge — maps to biosafety-001 Biosafety Officer backend.",
+    impactOneline:
+      "Route-scoped Fabraix tool-poisoning-001 scans should confirm unauthenticated agent red-team sessions on the discovery queue challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixToolPoisoning001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/tool-poisoning-001 route scan confirms unauthenticated Biosafety Officer agent sessions. Show MCP tool-poisoning defenses for agentic AI deployments.",
     version: 1,
     enabled: true
   },
