@@ -1821,6 +1821,12 @@ const DEEP_RULES = new Set<string>([
   "chimeraCartUpdateRouteLiveOracle",
   "chimeraLoyaltyPointsTransferRouteLiveOracle",
   "chimeraAdminOrdersOverrideRouteLiveOracle",
+  "chimeraGenaiChatPromptInjectionLiveOracle",
+  "chimeraGenaiChatPromptInjectionRouteLiveOracle",
+  "chimeraGenaiAgentBrowseSsrfLiveOracle",
+  "chimeraGenaiAgentBrowseSsrfRouteLiveOracle",
+  "chimeraGenaiModelsConfigDisclosureLiveOracle",
+  "chimeraGenaiModelsConfigDisclosureRouteLiveOracle",
   "chimeraSwaggerRouteLiveOracle",
   "chimeraApiReferenceRouteLiveOracle",
   "chimeraFedrampOpenapiExtensionsRouteLiveOracle",
@@ -12475,6 +12481,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/admin\/orders\/override\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-admin-orders-override")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/genai\/chat\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-genai-chat")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/genai\/agent\/browse\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-genai-agent-browse")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/genai\/models\/config\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-genai-models-config")
       )
         return -3;
       if (

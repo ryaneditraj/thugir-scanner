@@ -19312,6 +19312,14 @@ GET /api/v1/saas/tenants/{tenant_id}/projects
 PUT /api/cart/update                         # Cart update with negative quantities
 POST /api/loyalty/points/transfer             # Loyalty manipulation (CHM-LOYAL-001)
 POST /api/admin/orders/override               # Administrative order manipulation
+CHM-AI-001 Prompt Injection (Direct/Indirect)
+POST /api/v1/genai/chat
+CHM-AI-002 Server-Side Request Forgery (SSRF) via Agent
+POST /api/v1/genai/agent/browse
+CHM-AI-003 Sensitive Data Exposure (Model Config)
+GET /api/v1/genai/models/config
+CHM-AI-004 Unrestricted File Upload (RAG)
+POST /api/v1/genai/knowledge/upload
 POST /api/v1/healthcare/records                # Second-order SQLi
 GET /api/v1/healthcare/records/search?q=       # SQL Injection (Search, CHM-HEALTH-001)
 GET /api/v1/healthcare/records/{record_id}     # BOLA/IDOR (CHM-HEALTH-002)
@@ -19358,7 +19366,7 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001|CHM-BANK-001|CHM-BANK-002/i.test(corpus)
+    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001|CHM-BANK-001|CHM-BANK-002|CHM-AI-001|CHM-AI-002/i.test(corpus)
   ) {
     const invDoc = await ctx.probe.get(new URL("/vulnerability-inventory", ctx.origin).toString(), {
       maxBytes: 400_000,
@@ -19382,7 +19390,7 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit|telecom\/sim-swap|energy\/scada\/commands|energy-utilities\/dispatch|gov\/benefits\/search|saas\/tenants|cart\/update|loyalty\/points\/transfer|admin\/orders\/override/i.test(
+    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit|telecom\/sim-swap|energy\/scada\/commands|energy-utilities\/dispatch|gov\/benefits\/search|saas\/tenants|cart\/update|loyalty\/points\/transfer|admin\/orders\/override|genai\/chat|genai\/agent\/browse/i.test(
       corpus
     )
   ) {
@@ -20269,6 +20277,126 @@ const chimeraAdminOrdersOverrideRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "POST /api/admin/orders/override — Administrative order manipulation",
       note: "chimera.atlascrew.dev /api/admin/orders/override route scan — Chimera endpoints catalog documents administrative order override without authorization (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific admin order fraud training oracle"
+    }
+  };
+};
+
+async function chimeraGenaiChatPromptInjectionProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const chatOk =
+    /genai\/chat/i.test(corpus) &&
+    (/CHM-AI-001/i.test(corpus) ||
+      /Prompt Injection/i.test(corpus) ||
+      /POST\s+\/api\/v1\/genai\/chat/i.test(corpus)) &&
+    (/LLM|GenAI|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!chatOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-AI-001/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet: "POST /api/v1/genai/chat — Prompt Injection (Direct/Indirect, CHM-AI-001)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents direct/indirect GenAI prompt injection on /api/v1/genai/chat (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — GenAI prompt injection training oracle"
+    }
+  };
+}
+
+const chimeraGenaiChatPromptInjectionLiveOracle: Rule = async (ctx) =>
+  chimeraGenaiChatPromptInjectionProbe(ctx);
+
+const chimeraGenaiChatPromptInjectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/genai\/chat\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraGenaiChatPromptInjectionProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/genai/chat route scan — CHM-AI-001 documents direct/indirect GenAI prompt injection (Jekyll docs corpus fallback) — route-specific LLM prompt injection training oracle"
+    }
+  };
+};
+
+async function chimeraGenaiAgentBrowseSsrfProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const agentOk =
+    /genai\/agent\/browse/i.test(corpus) &&
+    (/CHM-AI-002/i.test(corpus) ||
+      /SSRF via Agent/i.test(corpus) ||
+      /POST\s+\/api\/v1\/genai\/agent\/browse/i.test(corpus)) &&
+    (/LLM|GenAI|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!agentOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-AI-002/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet: "POST /api/v1/genai/agent/browse — Server-Side Request Forgery (SSRF) via Agent (CHM-AI-002)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents agent-driven SSRF on /api/v1/genai/agent/browse (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — GenAI agent SSRF training oracle"
+    }
+  };
+}
+
+const chimeraGenaiAgentBrowseSsrfLiveOracle: Rule = async (ctx) =>
+  chimeraGenaiAgentBrowseSsrfProbe(ctx);
+
+const chimeraGenaiAgentBrowseSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/genai\/agent\/browse\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraGenaiAgentBrowseSsrfProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/genai/agent/browse route scan — CHM-AI-002 documents SSRF via autonomous agent URL fetch (Jekyll docs corpus fallback) — route-specific GenAI agent SSRF training oracle"
+    }
+  };
+};
+
+async function chimeraGenaiModelsConfigDisclosureProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const configOk =
+    /genai\/models\/config/i.test(corpus) &&
+    (/CHM-AI-003/i.test(corpus) ||
+      /Sensitive Data Exposure \(Model Config\)/i.test(corpus) ||
+      /GET\s+\/api\/v1\/genai\/models\/config/i.test(corpus)) &&
+    (/LLM|GenAI|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!configOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-AI-003/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      snippet: "GET /api/v1/genai/models/config — Sensitive Data Exposure (Model Config, CHM-AI-003)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents unauthenticated GenAI model configuration disclosure (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — GenAI model config exposure training oracle"
+    }
+  };
+}
+
+const chimeraGenaiModelsConfigDisclosureLiveOracle: Rule = async (ctx) =>
+  chimeraGenaiModelsConfigDisclosureProbe(ctx);
+
+const chimeraGenaiModelsConfigDisclosureRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/genai\/models\/config\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraGenaiModelsConfigDisclosureProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/genai/models/config route scan — CHM-AI-003 documents sensitive GenAI model configuration exposure (Jekyll docs corpus fallback) — route-specific model config disclosure training oracle"
     }
   };
 };
@@ -104984,6 +105112,12 @@ export const RULES: Record<string, Rule> = {
   chimeraCartUpdateRouteLiveOracle,
   chimeraLoyaltyPointsTransferRouteLiveOracle,
   chimeraAdminOrdersOverrideRouteLiveOracle,
+  chimeraGenaiChatPromptInjectionLiveOracle,
+  chimeraGenaiChatPromptInjectionRouteLiveOracle,
+  chimeraGenaiAgentBrowseSsrfLiveOracle,
+  chimeraGenaiAgentBrowseSsrfRouteLiveOracle,
+  chimeraGenaiModelsConfigDisclosureLiveOracle,
+  chimeraGenaiModelsConfigDisclosureRouteLiveOracle,
   chimeraHealthcareRecordsSecondOrderSqliRouteLiveOracle,
   chimeraHealthcareRecordsSearchSqliRouteLiveOracle,
   chimeraHealthcareRecordsBolaRouteLiveOracle,

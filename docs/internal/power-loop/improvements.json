@@ -7127,6 +7127,24 @@
       "slug": "chimera-admin-orders-override-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/admin/orders/override — Administrative order manipulation from endpoints-catalog corpus; chimera.atlascrew.dev/api/admin/orders/override findings 7→8 (+chimera-admin-orders-override-route-live-oracle); benchmark juice-shop 36 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-genai-chat-prompt-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-AI-001 POST /api/v1/genai/chat — Prompt Injection (Direct/Indirect) from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/genai/chat findings 7→8 (+chimera-genai-chat-prompt-injection-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-genai-agent-browse-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-AI-002 POST /api/v1/genai/agent/browse — Server-Side Request Forgery (SSRF) via Agent from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/genai/agent/browse findings 7→8 (+chimera-genai-agent-browse-ssrf-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-genai-models-config-disclosure-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-AI-003 GET /api/v1/genai/models/config — Sensitive Data Exposure (Model Config) from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/genai/models/config findings 7→8 (+chimera-genai-models-config-disclosure-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

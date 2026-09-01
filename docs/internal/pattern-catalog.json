@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-01T01:04:53.777Z",
-  "total": 3013,
-  "uniqueSlugs": 3005,
+  "generatedAt": "2026-09-01T02:07:18.583Z",
+  "total": 3016,
+  "uniqueSlugs": 3008,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2995,
+    "generic": 2998,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2928,
+    "deep": 2931,
     "continuous": 0
   },
   "byCategory": {
@@ -32,8 +32,8 @@
     "Open redirect": 26,
     "general": 20,
     "SSRF": 19,
-    "Server-side request forgery": 98,
-    "Sensitive data exposure": 82,
+    "Server-side request forgery": 99,
+    "Sensitive data exposure": 83,
     "AI security": 121,
     "Business logic": 35,
     "AI / LLM security": 4,
@@ -45,7 +45,7 @@
     "API security": 3,
     "Path traversal": 3,
     "Denial of service": 7,
-    "Prompt injection": 12,
+    "Prompt injection": 13,
     "Cryptographic failure": 2,
     "XSS": 3,
     "Session management": 2,
@@ -378,6 +378,9 @@
     "chimera-claims-submit-route-live-oracle",
     "chimera-energy-scada-commands-route-live-oracle",
     "chimera-fedramp-openapi-extensions-route-live-oracle",
+    "chimera-genai-agent-browse-ssrf-route-live-oracle",
+    "chimera-genai-chat-prompt-injection-route-live-oracle",
+    "chimera-genai-models-config-disclosure-route-live-oracle",
     "chimera-gov-benefits-search-sqli-route-live-oracle",
     "chimera-healthcare-imaging-idor-route-live-oracle",
     "chimera-healthcare-records-bola-route-live-oracle",

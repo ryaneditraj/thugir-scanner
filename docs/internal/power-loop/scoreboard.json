@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T02:06:00.000Z",
+  "updated_at": "2026-09-01T02:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -17,24 +17,22 @@
   },
   "total_sites_scanned": 2959,
   "total_findings": 30563,
-  "critical_findings": 55,
+  "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2056,
   "discovery_findings": 25381,
-  "improvements_shipped": 1172,
-  "last_run": "2026-09-01T02:06:00.000Z",
+  "improvements_shipped": 1175,
+  "last_run": "2026-09-01T02:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_status": "error — unreachable (Heroku cold/degraded)",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 601,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,49 +48,41 @@
           ]
         }
       },
-      "note": "Primary heroku unreachable; staging fallback 6/6 rich pass (52 findings, secret-resend + resend-key + iac-terraform-tls-key present)"
+      "note": "Stable 6/6 rich pass (52 findings) — no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 56,
-      "focus": "CHM-ECOM-002 catalog SQLi + CHM-TELCO-001 subscriber BOLA + CHM-INS-002 claims SQLi + CHM-AI-003 model config + CHM-ADMIN-002 webhook SSRF; drained 01 UTC priority block (CHM-ADMIN-001/AI-001/AI-002)",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 24,
+      "focus": "Chimera CHM-AI-001/002/003 genai route oracles shipped (chat prompt injection, agent browse SSRF, models config disclosure)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[]) — primary heroku unreachable",
-      "chimera.atlascrew.dev/api/v1/ecommerce/products: 7 findings — generic chimera bundle only (CHM-ECOM-002 route oracle absent)",
-      "chimera.atlascrew.dev/api/v1/telecom/subscribers/1/profile: 7 findings — generic bundle only (CHM-TELCO-001 route oracle absent)",
-      "chimera.atlascrew.dev/api/v1/insurance/claims/search: 7 findings — generic bundle only (CHM-INS-002 route oracle absent)",
-      "chimera.atlascrew.dev/api/v1/genai/models/config: 7 findings — generic bundle only (CHM-AI-003 route oracle absent)",
-      "chimera.atlascrew.dev/api/v1/diagnostics/webhook: 7 findings — generic bundle only (CHM-ADMIN-002 route oracle absent)",
-      "chimera.atlascrew.dev/api/v1/diagnostics/ping: 7 findings — generic bundle only (CHM-ADMIN-001 route oracle absent)",
-      "chimera.atlascrew.dev/api/v1/genai/chat: 7 findings — generic bundle only (CHM-AI-001 route oracle absent)",
-      "chimera.atlascrew.dev/api/v1/genai/agent/browse: 7 findings — generic bundle only (CHM-AI-002 route oracle absent)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
+      "chimera.atlascrew.dev/api/v1/genai/chat: 7→8 findings — +chimera-genai-chat-prompt-injection-route-live-oracle (CHM-AI-001)",
+      "chimera.atlascrew.dev/api/v1/genai/agent/browse: 7→8 findings — +chimera-genai-agent-browse-ssrf-route-live-oracle (CHM-AI-002)",
+      "chimera.atlascrew.dev/api/v1/genai/models/config: 7→8 findings — +chimera-genai-models-config-disclosure-route-live-oracle (CHM-AI-003)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com primary oracle unreachable — staging fallback required for 6/6 recall",
       "CHM-ECOM-002 ecommerce/products catalog SQLi route oracle absent — generic bundle only",
       "CHM-TELCO-001 telecom/subscribers/{id}/profile BOLA route oracle absent — generic bundle only",
       "CHM-INS-002 insurance/claims/search SQLi route oracle absent — generic bundle only",
-      "CHM-AI-003 genai/models/config exposure route oracle absent — generic bundle only",
       "CHM-ADMIN-002 diagnostics/webhook SSRF route oracle absent — generic bundle only",
       "CHM-ADMIN-001 diagnostics/ping RCE route oracle absent — generic bundle only",
-      "CHM-AI-001 genai/chat prompt-injection route oracle absent — generic bundle only",
-      "CHM-AI-002 genai/agent/browse agent SSRF route oracle absent — generic bundle only"
+      "CHM-AI-004 genai/knowledge/upload unrestricted file upload route oracle absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 52,
+    "juice-shop.herokuapp.com": 52,
+    "chimera.atlascrew.dev/api/v1/genai/chat": 8,
+    "chimera.atlascrew.dev/api/v1/genai/agent/browse": 8,
+    "chimera.atlascrew.dev/api/v1/genai/models/config": 8,
     "chimera.atlascrew.dev/api/v1/ecommerce/products": 7,
     "chimera.atlascrew.dev/api/v1/telecom/subscribers/1/profile": 7,
-    "chimera.atlascrew.dev/api/v1/insurance/claims/search?q=test": 7,
-    "chimera.atlascrew.dev/api/v1/genai/models/config": 7,
+    "chimera.atlascrew.dev/api/v1/insurance/claims/search": 7,
     "chimera.atlascrew.dev/api/v1/diagnostics/webhook": 7,
-    "chimera.atlascrew.dev/api/v1/diagnostics/ping": 7,
-    "chimera.atlascrew.dev/api/v1/genai/chat": 7,
-    "chimera.atlascrew.dev/api/v1/genai/agent/browse": 7
+    "chimera.atlascrew.dev/api/v1/diagnostics/ping": 7
   }
 }
