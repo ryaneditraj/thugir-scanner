@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-01T19:25:20.795Z",
-  "total": 3062,
-  "uniqueSlugs": 3054,
+  "generatedAt": "2026-09-01T20:19:52.920Z",
+  "total": 3064,
+  "uniqueSlugs": 3056,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3044,
+    "generic": 3046,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2977,
+    "deep": 2979,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 621,
+    "Broken access control": 622,
     "Exposed secret": 117,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 137,
     "Security misconfiguration": 220,
     "Broken authentication": 195,
-    "Injection": 494,
+    "Injection": 495,
     "Cross-site scripting": 791,
     "Open redirect": 26,
     "general": 20,
@@ -374,6 +374,7 @@
     "bypass403-waf-route-live-oracle",
     "chimera-admin-attack-xxe-route-live-oracle",
     "chimera-admin-deserialize-route-live-oracle",
+    "chimera-admin-diagnostics-hub-route-live-oracle",
     "chimera-admin-execute-rce-route-live-oracle",
     "chimera-admin-files-read-path-traversal-route-live-oracle",
     "chimera-admin-orders-override-route-live-oracle",
@@ -1236,6 +1237,7 @@
     "fauxbank-authenticated-sqli-search",
     "fauxbank-csrf-transfer-probe",
     "fauxbank-idor-accounts-probe",
+    "fauxbank-lab-route-live-oracle",
     "fauxbank-loans-negative-amount-live-oracle",
     "fauxbank-loans-request-live-oracle",
     "fauxbank-loans-route-live-oracle",

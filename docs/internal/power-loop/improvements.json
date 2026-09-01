@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-ssrf-short-path-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: istEduSsrfRedirectRouteLiveOracle path matcher extended to /ssrf alias (priority queue URL); GET /api/redirect?url=//https:/// returns 302 bypass; ist-edu-bd.vercel.app/ssrf findings 10→11 (+ist-edu-ssrf-redirect-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /lab OWASP guided pentest hub with seeded fictional accounts + intentionally weak credentials; pentest-fauxbank.vercel.app/lab findings 14 (+fauxbank-lab-route-live-oracle with client-side-fauxbank-lab-evidence); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-admin-diagnostics-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-ADMIN-001 POST /api/v1/diagnostics/ping RCE + CHM-ADMIN-002 POST /api/v1/diagnostics/webhook SSRF from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/admin/diagnostics findings 7→8 (+chimera-admin-diagnostics-hub-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:playground.fabraix.com",
       "slug": "fabraix-access-code-001-route-live-oracle",
       "status": "shipped",
