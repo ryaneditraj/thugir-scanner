@@ -76488,6 +76488,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-loyalty-transactions-export-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera loyalty transactions export route live oracle",
+    description:
+      "When scanning /api/loyalty/transactions/export on chimera.atlascrew.dev, the vulnerability inventory documents BOLA/IDOR on loyalty transaction export via customer_id — route-specific loyalty BOLA training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents cross-customer loyalty transaction export without authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraLoyaltyTransactionsExportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on loyalty transaction exports and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Bind exported transaction data to the authenticated customer account.",
+        "Reject customer_id parameters that do not match the session owner.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/loyalty/transactions/export route documents cross-customer transaction BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-admin-orders-override-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -77060,6 +77086,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-admin-users-export-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Chimera admin users export route live oracle",
+    description:
+      "When scanning /api/v1/admin/users/export on chimera.atlascrew.dev, the vulnerability inventory documents unauthenticated bulk user data export — route-specific admin data exfiltration training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional unauthenticated admin user export for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminUsersExportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication on bulk export endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce role-based access control on all /admin/users/export endpoints.",
+        "Audit and rate-limit bulk data export operations.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/users/export route documents unauthenticated bulk user export. Show admin authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-integrations-webhook-register-ssrf-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -77602,6 +77654,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our chimera /api/v1/ecommerce/products route documents CHM-ECOM-002 catalog SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-ecommerce-products-search-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Chimera ecommerce products search XSS route live oracle",
+    description:
+      "When scanning /api/v1/ecommerce/products/search on chimera.atlascrew.dev, the vulnerability inventory documents reflected XSS on the product search query parameter — route-specific ecommerce search XSS training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional reflected XSS on ecommerce product search for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraEcommerceProductsSearchXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode search output and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "HTML-encode user-supplied search query parameters in API responses.",
+        "Set Content-Type: application/json and avoid reflecting raw query strings in HTML.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/ecommerce/products/search route documents reflected XSS. Show output encoding remediation.",
     version: 1,
     enabled: true
   },

@@ -19311,6 +19311,7 @@ Cross-Tenant IDOR (CHM-SAAS-001)
 GET /api/v1/saas/tenants/{tenant_id}/projects
 PUT /api/cart/update                         # Cart update with negative quantities
 POST /api/loyalty/points/transfer             # Loyalty manipulation (CHM-LOYAL-001)
+GET /api/loyalty/transactions/export?customer_id=  # BOLA / IDOR (Transactions)
 POST /api/admin/orders/override               # Administrative order manipulation
 CHM-AI-001 Prompt Injection (Direct/Indirect)
 POST /api/v1/genai/chat
@@ -19322,6 +19323,7 @@ CHM-AI-004 Unrestricted File Upload (RAG)
 POST /api/v1/genai/knowledge/upload
 CHM-ECOM-002 SQL Injection (Catalog)
 GET /api/v1/ecommerce/products
+GET /api/v1/ecommerce/products/search?query=  # Reflected XSS (Search)
 CHM-TELCO-001 BOLA / IDOR (Subscriber Profile)
 GET /api/v1/telecom/subscribers/{subscriber_id}/profile
 CHM-INS-002 SQL Injection (Claims Search)
@@ -19334,6 +19336,7 @@ CHM-ADMIN-003 XML External Entity (XXE)
 POST /api/v1/admin/attack/xxe
 XXE in legacy import behavior
 POST /api/v1/admin/files/read              # Path traversal
+GET /api/v1/admin/users/export             # Data exfiltration
 POST /api/integrations/webhook/register     # SSRF via webhook
 CHM-ENERGY-001 Server-Side Request Forgery (SSRF)
 POST /api/v1/energy-utilities/assets/calibration
@@ -20303,6 +20306,30 @@ const chimeraLoyaltyPointsTransferRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const chimeraLoyaltyTransactionsExportRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/loyalty\/transactions\/export\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const exportOk =
+    /loyalty\/transactions\/export/i.test(corpus) &&
+    (/BOLA\s*\/\s*IDOR\s*\(Transactions\)/i.test(corpus) ||
+      /GET\s+\/api\/loyalty\/transactions\/export/i.test(corpus) ||
+      /customer_id=/i.test(corpus)) &&
+    (/loyalty|BOLA|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!exportOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /BOLA\s*\/\s*IDOR\s*\(Transactions\)/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet:
+        "GET /api/loyalty/transactions/export?customer_id= — BOLA / IDOR (Transactions)",
+      note: "chimera.atlascrew.dev /api/loyalty/transactions/export route scan — Chimera vulnerability inventory documents cross-customer loyalty transaction export without authorization (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific loyalty BOLA training oracle"
+    }
+  };
+};
+
 const chimeraAdminOrdersOverrideRouteLiveOracle: Rule = async (ctx) => {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -20865,6 +20892,29 @@ const chimeraAdminFilesReadPathTraversalRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const chimeraAdminUsersExportRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/users\/export\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const exportOk =
+    /admin\/users\/export/i.test(corpus) &&
+    (/Export all users|Data Exfiltration|Mass data exfiltration/i.test(corpus) ||
+      /GET\s+\/api\/v1\/admin\/users\/export/i.test(corpus) ||
+      /curl http:\/\/localhost:8080\/api\/v1\/admin\/users\/export/i.test(corpus)) &&
+    (/admin|exfiltration|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!exportOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Export all users|Data Exfiltration/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/v1/admin/users/export — unauthenticated bulk user data exfiltration",
+      note: "chimera.atlascrew.dev /api/v1/admin/users/export route scan — Chimera vulnerability inventory documents unauthenticated admin user export for data exfiltration (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific admin data export training oracle"
+    }
+  };
+};
+
 async function chimeraIntegrationsWebhookRegisterSsrfProbe(ctx: RuleContext): Promise<RuleResult> {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const corpus = await chimeraDocsCorpus(ctx);
@@ -21233,6 +21283,30 @@ const chimeraEcommerceProductsCatalogSqliRouteLiveOracle: Rule = async (ctx) => 
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/ecommerce/products route scan — CHM-ECOM-002 documents SQL injection on ecommerce product catalog (Jekyll docs corpus fallback) — route-specific ecommerce catalog SQLi training oracle"
+    }
+  };
+};
+
+const chimeraEcommerceProductsSearchXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/ecommerce\/products\/search\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const xssOk =
+    /ecommerce\/products\/search/i.test(corpus) &&
+    (/Reflected XSS \(Search\)/i.test(corpus) ||
+      /GET\s+\/api\/v1\/ecommerce\/products\/search/i.test(corpus) ||
+      /query=/i.test(corpus)) &&
+    (/ecommerce|XSS|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!xssOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Reflected XSS \(Search\)/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet:
+        "GET /api/v1/ecommerce/products/search?query= — Reflected XSS (Search)",
+      note: "chimera.atlascrew.dev /api/v1/ecommerce/products/search route scan — Chimera vulnerability inventory documents reflected XSS on ecommerce product search (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific ecommerce search XSS training oracle"
     }
   };
 };
@@ -106470,6 +106544,7 @@ export const RULES: Record<string, Rule> = {
   chimeraSaasTenantsBolaRouteLiveOracle,
   chimeraCartUpdateRouteLiveOracle,
   chimeraLoyaltyPointsTransferRouteLiveOracle,
+  chimeraLoyaltyTransactionsExportRouteLiveOracle,
   chimeraAdminOrdersOverrideRouteLiveOracle,
   chimeraMobileInstantTransferRouteLiveOracle,
   chimeraInventoryReserveRouteLiveOracle,
@@ -106494,6 +106569,7 @@ export const RULES: Record<string, Rule> = {
   chimeraAdminExecuteRceRouteLiveOracle,
   chimeraAdminDeserializeRouteLiveOracle,
   chimeraAdminFilesReadPathTraversalRouteLiveOracle,
+  chimeraAdminUsersExportRouteLiveOracle,
   chimeraIntegrationsWebhookRegisterSsrfRouteLiveOracle,
   chimeraHipaaTransferSsrfRouteLiveOracle,
   chimeraEnergyUtilitiesCalibrationSsrfLiveOracle,
@@ -106506,6 +106582,7 @@ export const RULES: Record<string, Rule> = {
   chimeraIcsScadaSystemsDiscoveryRouteLiveOracle,
   chimeraInsurancePoliciesBolaRouteLiveOracle,
   chimeraEcommerceProductsCatalogSqliRouteLiveOracle,
+  chimeraEcommerceProductsSearchXssRouteLiveOracle,
   chimeraTelecomSubscribersProfileBolaRouteLiveOracle,
   chimeraInsuranceClaimsSearchSqliRouteLiveOracle,
   chimeraHealthcareRecordsSecondOrderSqliRouteLiveOracle,
