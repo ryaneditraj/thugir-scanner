@@ -7355,6 +7355,24 @@
       "slug": "juice-shop-iac-terraform-mirror-fallback",
       "status": "shipped",
       "validation": "SOURCE: benchmark:juice-shop EVIDENCE: /infrastructure/terraform/networking.tf Heroku stub on primary cold start; probeJuiceShopIacTerraformTlsKey now tries Escape.tech + staging mirrors; re-scan primary Heroku 47→52 findings (+juice-shop-iac-terraform-tls-key-live-oracle) 6/6 recall maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-ecommerce-products-search-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/ecommerce/products/search?query= — CHM-ECOM-001 Reflected XSS (Search) from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/ecommerce/products/search findings 7→8 (+chimera-ecommerce-products-search-xss-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-loyalty-transactions-export-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/loyalty/transactions/export?customer_id= — BOLA/IDOR (Transactions) from vulnerability-inventory corpus; chimera.atlascrew.dev/api/loyalty/transactions/export findings 7→8 (+chimera-loyalty-transactions-export-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-admin-users-export-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/admin/users/export — unauthenticated bulk user data exfiltration from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/admin/users/export findings 7→8 (+chimera-admin-users-export-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
