@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-01T20:05:00.000Z",
+  "updated_at": "2026-09-01T21:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://bypass403.vercel.app/",
+      "source": "Karthikdude/bypass403 — interactive 403 bypass lab with 60+ protected endpoints (GitHub homepage)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://playground.fabraix.com/challenges/access-code-001",
+      "source": "fabraix/playground — agentic access-code reveal sink challenge (GitHub challenges/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/ssrf",
+      "source": "DaniSam-STU/security-lab — interactive SSRF lab page with live exploit UI (seclab.vercel.app/labs/ssrf)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/command-injection",
+      "source": "zahidoverflow/damn-vulnerable-web-university — DVWU command-injection lab route oracle (ist-edu-bd.vercel.app/command-injection)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/",
+      "source": "kOaDT/oss-oopssec-store — CSRF admin order update walkthrough oracle (GitHub Pages)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting/",
       "source": "kOaDT/oss-oopssec-store — login brute-force no rate-limit walkthrough oracle (GitHub Pages)",

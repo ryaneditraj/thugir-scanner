@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T20:15:00.000Z",
+  "updated_at": "2026-09-01T21:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2811,
-  "total_findings": 28221,
+  "total_sites_scanned": 2820,
+  "total_findings": 28380,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1986,
-  "discovery_findings": 23457,
+  "discovery_urls_added": 1991,
+  "discovery_findings": 23564,
   "improvements_shipped": 1175,
-  "last_run": "2026-09-01T20:15:00.000Z",
+  "last_run": "2026-09-01T21:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
@@ -49,35 +49,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 37 live oracles); secret-resend + juice-shop-resend-key-live-oracle present"
+      "note": "Stable 6/6 first-pass recall (52 findings, 37 live oracles); secret-resend + juice-shop-resend-key-live-oracle + juice-shop-iac-terraform-tls-key-live-oracle present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_validated": 3,
-      "findings_delta": "+ist-edu-ssrf +fauxbank-lab +chimera-admin-diagnostics hub route oracles",
-      "focus": "IST Edu /ssrf short-path alias + FauxBank /lab hub + Chimera admin diagnostics hub",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings_total": 107,
+      "focus": "403 bypass lab + Fabraix access-code-001 + SecLab SSRF + DVWU command-injection + OopsSec CSRF walkthrough",
+      "drained": "wrongsecrets challenge-20/21/22"
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 37 live oracles)",
-      "ist-edu-bd.vercel.app/ssrf: 11 findings — ist-edu-ssrf-redirect-route-live-oracle (GET /api/redirect?url= //https:/// bypass)",
-      "pentest-fauxbank.vercel.app/lab: 14 findings — fauxbank-lab-route-live-oracle (OWASP guided pentest hub)",
-      "chimera.atlascrew.dev/api/v1/admin/diagnostics: 8 findings — chimera-admin-diagnostics-hub-route-live-oracle (CHM-ADMIN-001 ping RCE + CHM-ADMIN-002 webhook SSRF)"
+      "bypass403.vercel.app: 9 findings — bypass403-admin/api-admin/waf/debug/secure 403-bypass live oracles",
+      "playground.fabraix.com/challenges/access-code-001: 7 findings — fabraix-access-code-001-route-live-oracle",
+      "seclab.vercel.app/labs/ssrf: 7 findings — seclab-ssrf-vulnerable-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/: 17 findings — oopssec-csrf-admin-order-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses",
-      "IST Edu /ssrf short-path alias now fires SSRF redirect route oracle (was /labs/ssrf only)"
+      "ist-edu-bd.vercel.app/command-injection: route-specific command-injection live oracle absent (generic sqli/lfi only)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
-    "ist-edu-bd.vercel.app/ssrf": 11,
-    "pentest-fauxbank.vercel.app/lab": 14,
-    "chimera.atlascrew.dev/api/v1/admin/diagnostics": 8,
-    "koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass/": 10,
-    "koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass/": 10,
-    "wrongsecrets.herokuapp.com/challenge/challenge-25": 19,
-    "playground.fabraix.com/challenges/tool-poisoning-001": 7
+    "koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/": 17,
+    "bypass403.vercel.app": 9,
+    "ist-edu-bd.vercel.app/command-injection": 10,
+    "playground.fabraix.com/challenges/access-code-001": 7,
+    "seclab.vercel.app/labs/ssrf": 7,
+    "wrongsecrets.herokuapp.com/challenge/challenge-20": 19,
+    "koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass/": 10
   }
 }
