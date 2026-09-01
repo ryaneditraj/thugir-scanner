@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T03:16:00.000Z",
+  "updated_at": "2026-09-01T04:08:07.759Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2970,
-  "total_findings": 30647,
+  "total_sites_scanned": 2979,
+  "total_findings": 30756,
   "critical_findings": 61,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2061,
-  "discovery_findings": 25465,
+  "discovery_urls_added": 2066,
+  "discovery_findings": 25523,
   "improvements_shipped": 1178,
-  "last_run": "2026-09-01T03:16:00.000Z",
+  "last_run": "2026-09-01T04:08:07.759Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,49 +48,45 @@
           ]
         }
       },
-      "note": "Stable 6/6 rich pass (52 findings, 37 live oracles) — no category misses; secret-resend present"
+      "note": "Stable 6/6 rich pass (51 findings, 36 live oracles) — no category misses; secret-resend + resend-key + iac-terraform-tls-key present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 60,
-      "focus": "OpenVault Bank API oracles (payments BOLA, admin/accounts BFLA, accounts exposure, auth/token enumeration) + Chimera CHM-AI-004 knowledge/upload + drained CHM-ECOM/TELCO/INS gap routes (engine shipped route oracles post-scan)",
-      "improvements_shipped_this_run": 3
+      "findings": 58,
+      "focus": "Chimera CHM-ENERGY-001/002 (SSRF calibration + BOLA outages), CHM-ADMIN-003 XXE, CHM-ICS-002 controller BOLA, OpenVault users enumeration + drained CHM-AI-003/models/config + CHM-ADMIN-001/002 diagnostics",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 37 live oracles, gap=[])",
-      "openvaultbank.com/api/v1/payments: 8 findings — client-side-openvault-learn-evidence + thugir-dir-discovery (generic bundle; no payments BOLA route oracle)",
-      "openvaultbank.com/api/v1/admin/accounts: 8 findings — OpenVault learn/cheatsheet evidence; BFLA route oracle absent",
-      "openvaultbank.com/api/v1/accounts: 8 findings — excessive data exposure route oracle absent",
-      "openvaultbank.com/api/v1/auth/token: 8 findings — login enumeration route oracle absent",
-      "chimera.atlascrew.dev/api/v1/genai/knowledge/upload: 7 findings — CHM-AI-004 unrestricted file upload route oracle absent",
-      "chimera.atlascrew.dev/api/v1/ecommerce/products: 7 findings pre-engine — CHM-ECOM-002 route oracle shipped in parallel engine commit",
-      "chimera.atlascrew.dev/api/v1/telecom/subscribers/1/profile: 7 findings pre-engine — CHM-TELCO-001 route oracle shipped in parallel engine commit",
-      "chimera.atlascrew.dev/api/v1/insurance/claims/search: 7 findings pre-engine — CHM-INS-002 route oracle shipped in parallel engine commit"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 36 live oracles, gap=[])",
+      "chimera.atlascrew.dev/api/v1/energy-utilities/assets/calibration: 7 findings — CHM-ENERGY-001 SSRF route oracle absent (generic chimera bundle only)",
+      "chimera.atlascrew.dev/api/v1/energy-utilities/outages/1: 7 findings — CHM-ENERGY-002 BOLA route oracle absent",
+      "chimera.atlascrew.dev/api/v1/admin/attack/xxe: 7 findings — CHM-ADMIN-003 XXE route oracle absent",
+      "chimera.atlascrew.dev/api/ics/controllers/status: 7 findings — CHM-ICS-002 ICS BOLA route oracle absent",
+      "openvaultbank.com/api/v1/users: 8 findings — client-side-openvault-learn-evidence; users enumeration route oracle absent",
+      "chimera.atlascrew.dev/api/v1/genai/models/config: 8 findings — chimera-genai-models-config-disclosure-route-live-oracle confirmed",
+      "chimera.atlascrew.dev/api/v1/diagnostics/webhook: 7 findings — CHM-ADMIN-002 SSRF route oracle absent",
+      "chimera.atlascrew.dev/api/v1/diagnostics/ping: 7 findings — CHM-ADMIN-001 RCE route oracle absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "OpenVault Bank: no route-specific oracles for payments BOLA, admin/accounts BFLA, accounts exposure, or auth/token enumeration — only client-side learn/cheatsheet evidence",
-      "CHM-AI-004 genai/knowledge/upload unrestricted file upload route oracle absent",
-      "CHM-ADMIN-002 diagnostics/webhook SSRF route oracle absent — not scanned this run (48h cooldown)",
-      "CHM-ADMIN-001 diagnostics/ping RCE route oracle absent — not scanned this run (48h cooldown)"
+      "CHM-ENERGY-001/002 energy-utilities SSRF + outages BOLA: route-specific oracles absent (generic chimera bundle only)",
+      "CHM-ADMIN-003 admin/attack/xxe: XXE route oracle absent",
+      "CHM-ICS-002 ics/controllers/status: ICS BOLA route oracle absent",
+      "OpenVault Bank /api/v1/users: user enumeration route oracle absent — only client-side learn/cheatsheet evidence",
+      "CHM-ADMIN-001/002 diagnostics/ping RCE + diagnostics/webhook SSRF: route-specific oracles still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "openvaultbank.com/api/v1/payments": 8,
-    "openvaultbank.com/api/v1/admin/accounts": 8,
-    "openvaultbank.com/api/v1/accounts": 8,
-    "openvaultbank.com/api/v1/auth/token": 8,
-    "chimera.atlascrew.dev/api/v1/genai/knowledge/upload": 7,
-    "chimera.atlascrew.dev/api/v1/ecommerce/products": 8,
-    "chimera.atlascrew.dev/api/v1/telecom/subscribers/1/profile": 8,
-    "chimera.atlascrew.dev/api/v1/insurance/claims/search": 8,
-    "chimera.atlascrew.dev/api/v1/genai/chat": 8,
-    "chimera.atlascrew.dev/api/v1/genai/agent/browse": 8,
+    "juice-shop.herokuapp.com": 51,
+    "chimera.atlascrew.dev/api/v1/energy-utilities/assets/calibration": 7,
+    "chimera.atlascrew.dev/api/v1/energy-utilities/outages/1": 7,
+    "chimera.atlascrew.dev/api/v1/admin/attack/xxe": 7,
+    "chimera.atlascrew.dev/api/ics/controllers/status": 7,
+    "openvaultbank.com/api/v1/users": 8,
     "chimera.atlascrew.dev/api/v1/genai/models/config": 8,
     "chimera.atlascrew.dev/api/v1/diagnostics/webhook": 7,
-    "chimera.atlascrew.dev/api/v1/diagnostics/ping": 7
+    "chimera.atlascrew.dev/api/v1/diagnostics/ping": 7,
   }
 }
