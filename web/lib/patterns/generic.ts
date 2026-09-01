@@ -76540,6 +76540,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-healthcare-patients-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera healthcare patients BOLA route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/patients/{patient_id} on chimera.atlascrew.dev, CHM-HEALTH-002 patient-record BOLA documents cross-patient PHI reads via predictable patient_id without ownership checks — route-specific healthcare access control training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional healthcare patient-record BOLA for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcarePatientsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind healthcare patient reads to the authenticated principal and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Scope GET /api/v1/healthcare/patients/{patient_id} queries with owner_id = authenticated user.",
+        "Return 404 for patients the caller does not own instead of leaking PHI.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/patients/{patient_id} route documents patient-record BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-healthcare-imaging-idor-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -77056,6 +77082,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our openvaultbank /api/v1/accounts/{id}/transactions route documents transaction history BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-profile-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OpenVault Bank profile mass-assignment route live oracle",
+    description:
+      "When scanning /api/v1/profile on openvaultbank.com, /cheatsheet documents privilege escalation via mass assignment on PUT /api/v1/profile unlocking GET /api/v1/admin/users — route-specific profile mass-assignment training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional profile mass-assignment privilege escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultProfileMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject client-supplied role and balance fields on profile updates and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Whitelist allowed profile fields and block role, is_admin, and balance mutations from customer tokens.",
+        "Enforce server-side authorization before returning admin user rosters.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/profile route documents privilege escalation via mass assignment. Show profile field whitelisting remediation.",
     version: 1,
     enabled: true
   },
