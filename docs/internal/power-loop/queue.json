@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T03:05:00.000Z",
+  "updated_at": "2026-09-01T05:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
@@ -11427,6 +11427,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://openvaultbank.com/api/v1/accounts/1/transactions",
+      "source": "OpenVault Bank — BOLA transaction history oracle GET /api/v1/accounts/{id}/transactions (cheatsheet vuln #2; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://openvaultbank.com/api/v1/payments/1",
+      "source": "OpenVault Bank — BOLA payment records oracle GET /api/v1/payments/{id} (cheatsheet vuln #3; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://openvaultbank.com/api/v1/profile",
+      "source": "OpenVault Bank — privilege escalation via mass assignment oracle PUT /api/v1/profile (cheatsheet vuln #7; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://openvaultbank.com/api/v1/auth/reset-request",
+      "source": "OpenVault Bank — sensitive data exposure on password reset oracle POST /api/v1/auth/reset-request (cheatsheet vuln #11; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://openvaultbank.com/api/v1/health",
+      "source": "OpenVault Bank — security misconfiguration health endpoint oracle GET /api/v1/health (cheatsheet vuln #10; web search 05 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/energy-utilities/assets/calibration",
       "source": "atlas-crew/Chimera CHM-ENERGY-001 — SSRF calibration oracle POST /api/v1/energy-utilities/assets/calibration (vuln_registry; web search 04 UTC)",
