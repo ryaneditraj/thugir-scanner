@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-01T07:28:37.526Z",
-  "total": 3031,
-  "uniqueSlugs": 3023,
+  "generatedAt": "2026-09-01T08:11:05.396Z",
+  "total": 3033,
+  "uniqueSlugs": 3025,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3013,
+    "generic": 3015,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2946,
+    "deep": 2948,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 614,
+    "Broken access control": 616,
     "Exposed secret": 115,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -391,6 +391,7 @@
     "chimera-genai-models-config-disclosure-route-live-oracle",
     "chimera-gov-benefits-search-sqli-route-live-oracle",
     "chimera-healthcare-imaging-idor-route-live-oracle",
+    "chimera-healthcare-patients-bola-route-live-oracle",
     "chimera-healthcare-records-bola-route-live-oracle",
     "chimera-healthcare-records-emergency-access-route-live-oracle",
     "chimera-healthcare-records-export-route-live-oracle",
@@ -2086,6 +2087,7 @@
     "openvault-admin-accounts-bfla-route-live-oracle",
     "openvault-auth-token-enumeration-route-live-oracle",
     "openvault-payments-bola-route-live-oracle",
+    "openvault-profile-mass-assignment-route-live-oracle",
     "openvault-transactions-bola-route-live-oracle",
     "openvault-users-enumeration-route-live-oracle",
     "owasp-andreabrioschi-top10-2025-hub-live-oracle",

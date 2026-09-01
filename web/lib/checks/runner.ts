@@ -1631,6 +1631,7 @@ const DEEP_RULES = new Set<string>([
   "openvaultAuthTokenEnumerationRouteLiveOracle",
   "openvaultUsersEnumerationRouteLiveOracle",
   "openvaultTransactionsBolaRouteLiveOracle",
+  "openvaultProfileMassAssignmentRouteLiveOracle",
   "clientSideCookiejarLabEvidence",
   "clientSideWebgoatEvidence",
   "clientSideSessionHijackEvidence",
@@ -1807,6 +1808,7 @@ const DEEP_RULES = new Set<string>([
   "chimeraHealthcareRecordsSecondOrderSqliRouteLiveOracle",
   "chimeraHealthcareRecordsSearchSqliRouteLiveOracle",
   "chimeraHealthcareRecordsBolaRouteLiveOracle",
+  "chimeraHealthcarePatientsBolaRouteLiveOracle",
   "chimeraHealthcareImagingIdorRouteLiveOracle",
   "chimeraHealthcareRecordsPhiExposureRouteLiveOracle",
   "chimeraHipaaRecordsPatientIdorRouteLiveOracle",
@@ -12593,6 +12595,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /openvaultbank\.com/i.test(origin) &&
         /\/api\/v1\/accounts\/\d+\/transactions\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-transactions-bola")
+      )
+        return -3;
+      if (
+        /openvaultbank\.com/i.test(origin) &&
+        /\/api\/v1\/profile\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-profile-mass-assignment")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/healthcare\/patients\/[^/]+\/?$/i.test(targetInput) &&
+        p.slug.startsWith("chimera-healthcare-patients-bola")
       )
         return -3;
       if (

@@ -19342,6 +19342,7 @@ GET /api/ics/controllers/status
 POST /api/v1/healthcare/records                # Second-order SQLi
 GET /api/v1/healthcare/records/search?q=       # SQL Injection (Search, CHM-HEALTH-001)
 GET /api/v1/healthcare/records/{record_id}     # BOLA/IDOR (CHM-HEALTH-002)
+GET /api/v1/healthcare/patients/{patient_id}   # BOLA/IDOR (Patient Records)
 GET /api/v1/healthcare/records                 # PHI Data Exposure (CHM-HEALTH-003)
 GET /api/v1/healthcare/imaging/{record_id}/download  # Imaging IDOR download
 Business Logic Manipulation (Points)
@@ -20963,6 +20964,45 @@ const chimeraHealthcareRecordsBolaRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/healthcare/records/{record_id} route scan — CHM-HEALTH-002 documents BOLA/IDOR on healthcare record access (Jekyll docs corpus fallback) — route-specific healthcare BOLA training oracle"
+    }
+  };
+};
+
+async function chimeraHealthcarePatientsBolaProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const bolaOk =
+    /healthcare\/patients\/(?:\{patient_id\}|<patient_id>|\{id\}|\d+)/i.test(corpus) &&
+    (/CHM-HEALTH-002|Patient Records|patient record BOLA/i.test(corpus) ||
+      /Broken Object Level Authorization \(BOLA\/IDOR\)/i.test(corpus) ||
+      /GET \/api\/v1\/healthcare\/patients/i.test(corpus)) &&
+    (/bola_protection|changing the (?:record|patient) ID|No authorization check/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!bolaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-HEALTH-002|Patient Records/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/healthcare/patients/{patient_id} — Broken Object Level Authorization (BOLA/IDOR, Patient Records)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents healthcare patient record BOLA via predictable patient_id without ownership checks (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — healthcare patient BOLA training oracle"
+    }
+  };
+}
+
+const chimeraHealthcarePatientsBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/healthcare\/patients\/[^/]+\/?$/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraHealthcarePatientsBolaProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/healthcare/patients/{patient_id} route scan — CHM-HEALTH-002 patient-record BOLA via predictable patient_id (Jekyll docs corpus fallback) — route-specific healthcare patient BOLA training oracle"
     }
   };
 };
@@ -41781,6 +41821,10 @@ PUT /api/v1/profile
 GET /api/v1/admin/users
 Broken Object-Level Authorization (BOLA)
 GET /accounts/{id}/transactions
+Security Misconfiguration — Health Endpoint
+GET /api/v1/health
+Sensitive Data Exposure on Password Reset
+POST /api/v1/auth/reset-request
 `;
 
 async function openvaultDocsCorpus(ctx: RuleContext): Promise<string> {
@@ -41991,6 +42035,44 @@ const openvaultTransactionsBolaRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "openvaultbank.com /api/v1/accounts/{id}/transactions route scan — /learn documents BOLA via account ID manipulation on transaction history — route-specific transaction BOLA training oracle"
+    }
+  };
+};
+
+async function openvaultProfileMassAssignmentProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const corpus = await openvaultDocsCorpus(ctx);
+  const profileOk =
+    /\/api\/v1\/profile|PUT\s+\/api\/v1\/profile/i.test(corpus) &&
+    (/Mass Assignment|Privilege Escalation via Mass Assignment|role.*admin|account balance/i.test(corpus) ||
+      /PUT\s+\/api\/v1\/profile/i.test(corpus) ||
+      /GET\s+\/api\/v1\/admin\/users/i.test(corpus)) &&
+    (/OpenVault Bank|deliberately vulnerable banking/i.test(corpus));
+  if (!profileOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Privilege Escalation via Mass Assignment|PUT\s+\/api\/v1\/profile/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet:
+        "PUT /api/v1/profile — Privilege Escalation via Mass Assignment (role/admin or balance fields)",
+      note: "openvaultbank.com — OpenVault Bank /learn documents privilege escalation via mass assignment on PUT /api/v1/profile unlocking admin user roster — profile mass-assignment training oracle"
+    }
+  };
+}
+
+const openvaultProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/profile\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await openvaultProfileMassAssignmentProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "openvaultbank.com /api/v1/profile route scan — /cheatsheet documents privilege escalation via mass assignment on PUT /api/v1/profile — route-specific profile mass-assignment training oracle"
     }
   };
 };
@@ -94756,9 +94838,9 @@ const crapiVehicleRouteLiveOracle: Rule = async (ctx) => {
 const crapiVehicleLocationRouteLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  const uuidMatch = pageUrl.match(/\/vehicle\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/location/i);
-  if (!uuidMatch) return NEGATIVE;
-  const targetUuid = uuidMatch[1]!;
+  const idMatch = pageUrl.match(/\/vehicle\/([^/]+)\/location/i);
+  if (!idMatch || /^vehicles$/i.test(idMatch[1]!)) return NEGATIVE;
+  const targetUuid = idMatch[1]!;
   const jwt = await tryCrapiLabJwt(ctx);
   if (!jwt) return NEGATIVE;
   const authHeaders = { Authorization: `Bearer ${jwt}` };
@@ -94791,7 +94873,7 @@ const crapiVehicleLocationRouteLiveOracle: Rule = async (ctx) => {
   if (locDoc.status < 200 || locDoc.status >= 400) {
     const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_VEHICLE_LOCATION_ROUTE_FALLBACK}`;
     if (
-      /\/identity\/api\/v2\/vehicle\/[0-9a-f-]{36}\/location/i.test(corpus) &&
+      /\/identity\/api\/v2\/vehicle\/[^/]+\/location/i.test(corpus) &&
       /latitude|longitude|vehicleid|BOLA|API1/i.test(corpus)
     ) {
       return {
@@ -95632,6 +95714,7 @@ excessive data exposure API3:2023
 
 const CRAPI_VEHICLE_LOCATION_ROUTE_FALLBACK = `
 GET /identity/api/v2/vehicle/{vehicleId}/location
+GET /identity/api/v2/vehicle/1/location
 community posts leak vehicleid UUIDs
 returns latitude longitude fullName without object-level authorization
 BOLA API1:2023
@@ -105633,6 +105716,7 @@ export const RULES: Record<string, Rule> = {
   openvaultAuthTokenEnumerationRouteLiveOracle,
   openvaultUsersEnumerationRouteLiveOracle,
   openvaultTransactionsBolaRouteLiveOracle,
+  openvaultProfileMassAssignmentRouteLiveOracle,
   clientSideWebgoatEvidence,
   clientSideWhoopsPayEvidence,
   whoopsPayTransactionsBolaLiveOracle,
@@ -105814,6 +105898,7 @@ export const RULES: Record<string, Rule> = {
   chimeraHealthcareRecordsSecondOrderSqliRouteLiveOracle,
   chimeraHealthcareRecordsSearchSqliRouteLiveOracle,
   chimeraHealthcareRecordsBolaRouteLiveOracle,
+  chimeraHealthcarePatientsBolaRouteLiveOracle,
   chimeraHealthcareImagingIdorRouteLiveOracle,
   chimeraHealthcareRecordsPhiExposureRouteLiveOracle,
   chimeraHipaaRecordsPatientIdorRouteLiveOracle,
