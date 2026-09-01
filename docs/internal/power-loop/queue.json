@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T23:00:00.000Z",
+  "updated_at": "2026-09-01T00:09:00.000Z",
   "discovery_urls": [
     {
       "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
@@ -12225,6 +12225,31 @@
     {
       "url": "https://chimera.atlascrew.dev/api/admin/orders/override",
       "source": "atlas-crew/Chimera — administrative order manipulation oracle POST /api/admin/orders/override (endpoints-catalog; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/create",
+      "source": "Aikido Zen live demo — SQL injection pet creation oracle (zen-demo-java.fly.dev; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/execute",
+      "source": "Aikido Zen live demo — shell injection command execution oracle (zen-demo-java.fly.dev; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/request",
+      "source": "Aikido Zen live demo — SSRF page fetch oracle (zen-demo-java.fly.dev; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-java.fly.dev/pages/read",
+      "source": "Aikido Zen live demo — path traversal file read oracle (zen-demo-java.fly.dev; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/v2/vehicle/1",
+      "source": "OWASP crAPI2 Challenge 1 — BOLA vehicle details oracle GET /identity/api/v2/vehicle/{id} (OWASPLA 2025 guide; web search 00 UTC)",
       "auth": "public_demo"
     }
   ]
