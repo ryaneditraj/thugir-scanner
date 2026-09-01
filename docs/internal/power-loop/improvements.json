@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-access-code-001-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST api.fabraix.com/v1/playground/sessions/start challenge_id=access-code-001 (The Gatekeeper) from /challenges/access-code-001; playground.fabraix.com/challenges/access-code-001 findings 6→7 (+fabraix-access-code-001-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-data-exfiltration-001-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: fabraixDataExfil001RouteLiveOracle path matcher extended to /challenges/data-exfil-001 alias; playground.fabraix.com/challenges/data-exfil-001 findings 6→7 (+fabraix-data-exfiltration-001-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-guardrail-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenges/01-guardrail-bypass guardrail bypass markers + access-code-001 live session probe; playground.fabraix.com/challenges/01-guardrail-bypass findings 6→7 (+fabraix-guardrail-bypass-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnerable-chatbot-demo.vercel.app",
       "slug": "vulnerable-chatbot-prompt-injection-route-live-oracle",
       "status": "shipped",

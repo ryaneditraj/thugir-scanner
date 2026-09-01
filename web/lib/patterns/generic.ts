@@ -76024,7 +76024,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Fabraix data-exfiltration-001 challenge route live oracle",
     description:
-      "When scanning /challenges/data-exfiltration-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the data-exfil challenge (Iris + SentinelID verify_identity) — route-specific exfil oracle.",
+      "When scanning /challenges/data-exfiltration-001 or /challenges/data-exfil-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the data-exfil challenge (Iris + SentinelID verify_identity) — route-specific exfil oracle.",
     impactOneline:
       "Route-scoped Fabraix data-exfiltration-001 scans should confirm unauthenticated agent sessions targeting verify_identity outbound exfiltration.",
     detectorKind: "rule_ref",
@@ -76041,6 +76041,60 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Fabraix /challenges/data-exfiltration-001 route scan confirms unauthenticated exfil challenge sessions. Show verify_identity outbound host allowlisting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-access-code-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix access-code-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/access-code-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the Gatekeeper access-code extraction challenge — maps to access-code-001 backend.",
+    impactOneline:
+      "Route-scoped Fabraix access-code-001 scans should confirm unauthenticated Gatekeeper agent red-team sessions on the canonical challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixAccessCode001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Protect classified access codes with server-side authorization, not prompt secrecy alone.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/access-code-001 route scan confirms unauthenticated Gatekeeper agent sessions. Show access-code protection for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-guardrail-bypass-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix guardrail-bypass challenge route live oracle",
+    description:
+      "When scanning /challenges/01-guardrail-bypass, Fabraix documents guardrail scoring and bypass objectives — live session probe maps to access-code-001 Gatekeeper backend when API available.",
+    impactOneline:
+      "Route-scoped Fabraix 01-guardrail-bypass scans should confirm guardrail bypass training challenge markers and unauthenticated agent sessions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixGuardrailBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — layer guardrails and auth on agent session endpoints in production.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Score and block guardrail bypass attempts with layered input/output filters.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/01-guardrail-bypass route scan confirms guardrail bypass training objectives. Show guardrail hardening for agentic AI deployments.",
     version: 1,
     enabled: true
   },
