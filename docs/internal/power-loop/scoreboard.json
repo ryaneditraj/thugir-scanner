@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T00:09:00.000Z",
+  "updated_at": "2026-09-01T00:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2046,
   "discovery_findings": 25281,
-  "improvements_shipped": 1162,
-  "last_run": "2026-09-01T00:09:00.000Z",
+  "improvements_shipped": 1169,
+  "last_run": "2026-09-01T00:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "00",
     "benchmark": {
@@ -48,38 +48,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 rich pass (52 findings, 37 live oracles) — resend-key + iac-terraform-tls-key + secret-resend present"
+      "note": "Stable 6/6 rich pass (52 findings, 37 live oracles) — no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 168,
-      "focus": "Aikido Zen injection oracles (SQLi/shell/SSRF/path) + crAPI2 vehicle BOLA + queue drain (brokencrystals render.dot SSTI, pwnshop chat/init, UCU OWASP CTF, goof login)",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 78,
+      "focus": "Chimera CHM-BANK-001/002 banking route oracles + FinBot finstripe/systemutils reset-tools route oracles (learning_gaps from 23 UTC run)",
+      "improvements_shipped_this_run": 4
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "brokencrystals.com/render.dot: 91 findings — SSTI doT + full Broken Crystals bundle",
-      "pwnshop.ctfsecurity.com/chat/init: 45 findings — LLM chat-init email enumeration oracle",
-      "zen-demo-java.fly.dev/pages/create: 8 findings — zen-demo-java SQLi/shell/SSRF/path traversal live oracles",
-      "ucu-owasp-ctf.vercel.app/injection/: 4 findings — UCU OWASP CTF injection route oracle",
-      "vwad.owasp.org/app/goof/login: 7 findings — NodeGoof NoSQL auth-bypass hub"
+      "chimera.atlascrew.dev/api/v1/banking/accounts: 8 findings — +chimera-banking-accounts-bola-route-live-oracle CHM-BANK-002",
+      "chimera.atlascrew.dev/api/v1/banking/transfer: 8 findings — +chimera-banking-transfer-business-logic-route-live-oracle CHM-BANK-001",
+      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finstripe/reset-tools: 31 findings — +finbot-darklab-finstripe-reset-tools-route-live-oracle",
+      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/systemutils/reset-tools: 31 findings — +finbot-darklab-systemutils-reset-tools-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "crapi2.apisec.ai/identity/api/v2/vehicle/1: queued but not reached in 8-URL limit — BOLA oracle pending",
-      "zen-demo-java execute/request/read pages: oracles detected via /pages/create crawl but dedicated route scans pending",
-      "ucu-owasp-ctf labs: thin passes (4-5 findings) — route-specific oracles only, no exploit-chain depth"
+      "Chimera CHM-BANK-001/002 banking route oracles shipped — closed",
+      "FinBot finstripe/systemutils reset-tools route oracles shipped — closed"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
-    "brokencrystals.com/render.dot": 91,
-    "pwnshop.ctfsecurity.com/chat/init": 45,
-    "zen-demo-java.fly.dev/pages/create": 8,
-    "ucu-owasp-ctf.vercel.app/injection/": 4,
-    "ucu-owasp-ctf.vercel.app/access/": 5,
-    "vwad.owasp.org/app/goof/login": 7
+    "chimera.atlascrew.dev/api/v1/banking/accounts": 8,
+    "chimera.atlascrew.dev/api/v1/banking/transfer": 8,
+    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finstripe/reset-tools": 31,
+    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/systemutils/reset-tools": 31
   }
 }

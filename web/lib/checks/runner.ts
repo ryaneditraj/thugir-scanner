@@ -1808,6 +1808,8 @@ const DEEP_RULES = new Set<string>([
   "chimeraHealthcareRecordsEmergencyAccessRouteLiveOracle",
   "chimeraClaimsAmountsInflateRouteLiveOracle",
   "chimeraBankingAccountsSearchSqliRouteLiveOracle",
+  "chimeraBankingAccountsBolaRouteLiveOracle",
+  "chimeraBankingTransferBusinessLogicRouteLiveOracle",
   "chimeraInsurancePoliciesLookupSqliRouteLiveOracle",
   "chimeraTransactionsHistorySqliLiveOracle",
   "chimeraTransactionsHistorySqliRouteLiveOracle",
@@ -2986,6 +2988,10 @@ const DEEP_RULES = new Set<string>([
   "finbotDarklabFindriveServerRouteLiveOracle",
   "finbotDarklabFindriveResetToolsLiveOracle",
   "finbotDarklabFindriveResetToolsRouteLiveOracle",
+  "finbotDarklabFinstripeResetToolsLiveOracle",
+  "finbotDarklabFinstripeResetToolsRouteLiveOracle",
+  "finbotDarklabSystemutilsResetToolsLiveOracle",
+  "finbotDarklabSystemutilsResetToolsRouteLiveOracle",
   "finbotCtfStatsLiveOracle",
   "finbotCtfStatsRouteLiveOracle",
   "finbotVendorInvoicesLiveOracle",
@@ -12387,6 +12393,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/banking\/accounts\b/i.test(targetInput) &&
+        !/\/search|\/enumerate|\/bulk/i.test(targetInput) &&
+        p.slug.startsWith("chimera-banking-accounts-bola")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/banking\/transfer\b/i.test(targetInput) &&
+        !/\/bulk/i.test(targetInput) &&
+        p.slug.startsWith("chimera-banking-transfer")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/insurance\/policies\/lookup\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-insurance-policies-lookup")
       )
@@ -15880,6 +15900,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /owasp-finbot-ctf\.org/i.test(origin) &&
         /\/darklab\/api\/v1\/supply-chain\/servers\/findrive\/reset-tools\b/i.test(targetInput) &&
         p.slug.startsWith("finbot-darklab-findrive-reset-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/finstripe\/reset-tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-finstripe-reset-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/systemutils\/reset-tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-systemutils-reset-tools")
       )
         return -5;
       if (

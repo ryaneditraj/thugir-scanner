@@ -2,6 +2,30 @@
   "candidates": [
     {
       "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-banking-accounts-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-BANK-002 GET /api/v1/banking/accounts — BOLA/IDOR (Accounts) per vulnerability-inventory; chimera.atlascrew.dev/api/v1/banking/accounts findings 7→8 (+chimera-banking-accounts-bola-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-banking-transfer-business-logic-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-BANK-001 POST /api/v1/banking/transfer — Business Logic Manipulation (Transfer) + race condition per vulnerability-inventory; chimera.atlascrew.dev/api/v1/banking/transfer findings 7→8 (+chimera-banking-transfer-business-logic-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-finstripe-reset-tools-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /darklab/api/v1/supply-chain/servers/finstripe/reset-tools returns HTTP 403 csrf_error (writable MCP tool-reset route confirmed); owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finstripe/reset-tools findings 28→31 (+finbot-darklab-finstripe-reset-tools-route-live-oracle +live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-darklab-systemutils-reset-tools-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /darklab/api/v1/supply-chain/servers/systemutils/reset-tools returns HTTP 403 csrf_error (writable MCP tool-reset route confirmed); owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/systemutils/reset-tools findings 28→31 (+finbot-darklab-systemutils-reset-tools-route-live-oracle +live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
       "slug": "chimera-hipaa-records-patient-idor-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/hipaa/records/patient — Patient lookup (IDOR) per Chimera api-reference.md; chimera.atlascrew.dev/api/hipaa/records/patient findings 7→8 (+chimera-hipaa-records-patient-idor-route-live-oracle); benchmark juice-shop 48 findings 6/6 maintained"

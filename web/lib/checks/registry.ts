@@ -19291,6 +19291,8 @@ Patient search by SSN (classic SQLi, USE_DATABASE=true)
 GET /api/v1/patients/search
 Account search by number (UNION-based SQLi, USE_DATABASE=true)
 GET /api/v1/banking/accounts/search
+GET /api/v1/banking/accounts                     # BOLA/IDOR (CHM-BANK-002)
+POST /api/v1/banking/transfer                    # Business Logic Manipulation (CHM-BANK-001)
 Policy lookup by number (blind boolean SQLi, USE_DATABASE=true)
 GET /api/v1/insurance/policies/lookup
 Transaction history by account (time-based blind SQLi, USE_DATABASE=true)
@@ -19356,7 +19358,7 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001/i.test(corpus)
+    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001|CHM-BANK-001|CHM-BANK-002/i.test(corpus)
   ) {
     const invDoc = await ctx.probe.get(new URL("/vulnerability-inventory", ctx.origin).toString(), {
       maxBytes: 400_000,
@@ -19851,6 +19853,92 @@ const chimeraBankingAccountsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/banking/accounts/search route scan — Chimera vuln-api README documents UNION-based SQLi via account_number query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific banking SQLi training oracle"
+    }
+  };
+};
+
+async function chimeraBankingAccountsBolaProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const bolaOk =
+    /(?:GET\s+)?\/api\/v1\/banking\/accounts\b/i.test(corpus) &&
+    (/CHM-BANK-002/i.test(corpus) ||
+      /BOLA\s*\/\s*IDOR\s*\(Accounts\)/i.test(corpus) ||
+      /View any user['’]s accounts/i.test(corpus)) &&
+    (/\/banking\/accounts\b/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!bolaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-BANK-002/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/banking/accounts — BOLA/IDOR (Accounts, CHM-BANK-002) — view any user's accounts without authorization",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents banking account BOLA via predictable account identifiers (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — banking BOLA training oracle"
+    }
+  };
+}
+
+const chimeraBankingAccountsBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/api\/v1\/banking\/accounts\b/i.test(pageUrl) ||
+    /\/search|\/enumerate|\/bulk/i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
+  const hit = await chimeraBankingAccountsBolaProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/banking/accounts route scan — CHM-BANK-002 documents BOLA/IDOR on banking account listing (Jekyll docs corpus fallback) — route-specific banking BOLA training oracle"
+    }
+  };
+};
+
+async function chimeraBankingTransferBusinessLogicProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const transferOk =
+    /(?:POST\s+)?\/api\/v1\/banking\/transfer\b/i.test(corpus) &&
+    (/CHM-BANK-001/i.test(corpus) ||
+      /Business Logic Manipulation \(Transfer\)/i.test(corpus) ||
+      /Race Condition in Transfers/i.test(corpus)) &&
+    (/source_balance|transfer manipulation|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!transferOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-BANK-001/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "POST /api/v1/banking/transfer — Business Logic Manipulation (Transfer, CHM-BANK-001) — race condition / balance check bypass",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents banking transfer business logic flaws (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — banking transfer fraud training oracle"
+    }
+  };
+}
+
+const chimeraBankingTransferBusinessLogicRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/banking\/transfer\b/i.test(pageUrl) || /\/bulk\b/i.test(pageUrl)) {
+    return NEGATIVE;
+  }
+  const hit = await chimeraBankingTransferBusinessLogicProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/banking/transfer route scan — CHM-BANK-001 documents business logic manipulation on banking transfers (Jekyll docs corpus fallback) — route-specific banking transfer fraud training oracle"
     }
   };
 };
@@ -100607,6 +100695,54 @@ const finbotDarklabFindriveResetToolsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const finbotDarklabFinstripeResetToolsLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabServerResetTools(ctx, "finstripe");
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabFinstripeResetToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/servers\/finstripe\/reset-tools\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabServerResetTools(ctx, "finstripe");
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "OWASP FinBot FinStripe /reset-tools route scan — public MCP tool-reset write API for supply-chain poisoning labs"
+    }
+  };
+};
+
+const finbotDarklabSystemutilsResetToolsLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const result = await probeFinbotDarklabServerResetTools(ctx, "systemutils");
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotDarklabSystemutilsResetToolsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/darklab\/api\/v1\/supply-chain\/servers\/systemutils\/reset-tools\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotDarklabServerResetTools(ctx, "systemutils");
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "OWASP FinBot SystemUtils /reset-tools route scan — public MCP tool-reset write API for supply-chain poisoning labs"
+    }
+  };
+};
+
 async function probeFinbotCtfStats(ctx: RuleContext): Promise<RuleResult | null> {
   const statsUrl = new URL("/ctf/api/v1/stats", ctx.origin).toString();
   const doc = await ctx.probe.get(statsUrl, { maxBytes: 8192, timeoutMs: 20000 });
@@ -104794,6 +104930,8 @@ export const RULES: Record<string, Rule> = {
   chimeraHealthcareRecordsExportRouteLiveOracle,
   chimeraClaimsAmountsInflateRouteLiveOracle,
   chimeraBankingAccountsSearchSqliRouteLiveOracle,
+  chimeraBankingAccountsBolaRouteLiveOracle,
+  chimeraBankingTransferBusinessLogicRouteLiveOracle,
   chimeraInsurancePoliciesLookupSqliRouteLiveOracle,
   chimeraTransactionsHistorySqliLiveOracle,
   chimeraTransactionsHistorySqliRouteLiveOracle,
@@ -106387,6 +106525,10 @@ export const RULES: Record<string, Rule> = {
   finbotDarklabFindriveServerRouteLiveOracle,
   finbotDarklabFindriveResetToolsLiveOracle,
   finbotDarklabFindriveResetToolsRouteLiveOracle,
+  finbotDarklabFinstripeResetToolsLiveOracle,
+  finbotDarklabFinstripeResetToolsRouteLiveOracle,
+  finbotDarklabSystemutilsResetToolsLiveOracle,
+  finbotDarklabSystemutilsResetToolsRouteLiveOracle,
   finbotCtfStatsLiveOracle,
   finbotCtfStatsRouteLiveOracle,
   finbotVendorInvoicesLiveOracle,
