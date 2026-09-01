@@ -1862,6 +1862,9 @@ const DEEP_RULES = new Set<string>([
   "chimeraEnergyUtilitiesOutagesBolaRouteLiveOracle",
   "chimeraIcsControllersStatusBolaLiveOracle",
   "chimeraIcsControllersStatusBolaRouteLiveOracle",
+  "chimeraOtModbusCommandInjectionRouteLiveOracle",
+  "chimeraIcsScadaSystemsDiscoveryRouteLiveOracle",
+  "chimeraInsurancePoliciesBolaRouteLiveOracle",
   "chimeraEcommerceProductsCatalogSqliRouteLiveOracle",
   "chimeraTelecomSubscribersProfileBolaRouteLiveOracle",
   "chimeraInsuranceClaimsSearchSqliRouteLiveOracle",
@@ -12634,6 +12637,25 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/ics\/controllers\/status\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-ics-controllers-status-bola")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/ot\/protocols\/modbus\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-ot-modbus")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/ics\/scada\/systems\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-ics-scada-systems")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/insurance\/policies\/(?:\d+|\{)/i.test(targetInput) &&
+        !/\/lookup\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-insurance-policies-bola")
       )
         return -3;
       if (

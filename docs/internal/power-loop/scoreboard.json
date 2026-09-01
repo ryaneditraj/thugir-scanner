@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T12:10:00.000Z",
+  "updated_at": "2026-09-01T13:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3079,
-  "total_findings": 32016,
+  "total_sites_scanned": 3080,
+  "total_findings": 32067,
   "critical_findings": 74,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2101,
   "discovery_findings": 26289,
-  "improvements_shipped": 1206,
-  "last_run": "2026-09-01T12:10:00.000Z",
+  "improvements_shipped": 1209,
+  "last_run": "2026-09-01T13:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "12",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,50 +48,38 @@
           ]
         }
       },
-      "note": "Primary Heroku oracle stable 6/6 rich pass (52 findings, secret-resend present)"
+      "note": "Primary Heroku oracle stable 6/6 (51 findings, gap=[])"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 107,
-      "focus": "Chimera ICS modbus/scada + insurance BOLA + loyalty IDOR + crAPI vehicles; concurrent run shipped gov/cases + cards/export + biometric oracles",
-      "improvements_shipped_this_run": 4
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 24,
+      "focus": "Chimera ICS/OT modbus + scada/systems + insurance policies BOLA route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "crapi.apisec.ai/identity/api/v2/user/vehicles: 12 findings (+crapi-user-vehicles-route-live-oracle)",
-      "chimera.atlascrew.dev/api/v1/gov/cases: 7→8 (+chimera-gov-cases-bola-route-live-oracle)",
-      "chimera.atlascrew.dev/api/cards/data/export: 7→8 (+chimera-cards-data-export-route-live-oracle)",
-      "chimera.atlascrew.dev/api/mobile/v2/auth/biometric/verify: 7→8 (+chimera-mobile-biometric-verify-route-live-oracle)",
-      "chimera.atlascrew.dev/api/ot/protocols/modbus: 7 findings (generic chimera bundle)",
-      "duck-store.escape.tech/api/v1/mcp/coupons: 39 findings (drained from priority queue)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
+      "chimera.atlascrew.dev/api/ot/protocols/modbus: 7→8 (+chimera-ot-modbus-command-injection-route-live-oracle, CHM-ICS-001)",
+      "chimera.atlascrew.dev/api/ics/scada/systems: 7→8 (+chimera-ics-scada-systems-discovery-route-live-oracle, CHM-ICS-003)",
+      "chimera.atlascrew.dev/api/v1/insurance/policies/1: 7→8 (+chimera-insurance-policies-bola-route-live-oracle, CHM-INS-001)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "chimera modbus + scada/systems + insurance/policies/1 + loyalty/transactions/export: route-specific oracles absent (generic chimera bundle only)",
-      "chimera gov/permits + gov/access-cards + healthcare/claims/submit + lab-results/export: route-specific oracles still absent"
+      "chimera loyalty/transactions/export + gov/permits + gov/access-cards + healthcare/claims/submit + lab-results/export: route-specific oracles still absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "crapi.apisec.ai/identity/api/v2/user/vehicles": 12,
+    "juice-shop.herokuapp.com": 51,
+    "chimera.atlascrew.dev/api/ot/protocols/modbus": 8,
+    "chimera.atlascrew.dev/api/ics/scada/systems": 8,
+    "chimera.atlascrew.dev/api/v1/insurance/policies/1": 8,
     "duck-store.escape.tech/api/v1/mcp/coupons": 39,
     "chimera.atlascrew.dev/api/v1/gov/cases": 8,
     "chimera.atlascrew.dev/api/cards/data/export": 8,
     "chimera.atlascrew.dev/api/mobile/v2/auth/biometric/verify": 8,
-    "chimera.atlascrew.dev/api/ot/protocols/modbus": 7,
-    "chimera.atlascrew.dev/api/ics/scada/systems": 7,
-    "chimera.atlascrew.dev/api/v1/insurance/policies/1": 7,
     "chimera.atlascrew.dev/api/loyalty/transactions/export?customer_id=1": 7,
-    "chimera.atlascrew.dev/api/mobile/v2/transfers/instant": 8,
-    "chimera.atlascrew.dev/api/inventory/reserve": 8,
-    "chimera.atlascrew.dev/api/sanctions/check": 8,
-    "vulnbank.org/api/v1/transactions/1": 32,
-    "chimera.atlascrew.dev/api/v1/telecom/subscribers/1/sim-swap": 8,
-    "chimera.atlascrew.dev/api/mobile/v2/auth/session/transfer": 7,
-    "chimera.atlascrew.dev/api/v1/users/profile?user_id=1": 7,
     "chimera.atlascrew.dev/api/v1/gov/permits": 7,
     "chimera.atlascrew.dev/api/v1/healthcare/claims/submit": 7,
     "chimera.atlascrew.dev/api/v1/healthcare/lab-results/export": 7

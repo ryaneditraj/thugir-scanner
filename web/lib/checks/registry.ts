@@ -19339,8 +19339,14 @@ CHM-ENERGY-001 Server-Side Request Forgery (SSRF)
 POST /api/v1/energy-utilities/assets/calibration
 CHM-ENERGY-002 BOLA / IDOR (Outages)
 GET /api/v1/energy-utilities/outages/{outage_id}
+CHM-ICS-001 Remote Command Injection (Modbus)
+POST /api/ot/protocols/modbus
 CHM-ICS-002 BOLA / IDOR (Controller Status)
 GET /api/ics/controllers/status
+CHM-ICS-003 Unauthorized System Discovery
+GET /api/ics/scada/systems
+CHM-INS-001 BOLA / IDOR (Policies)
+GET /api/v1/insurance/policies/{policy_id}
 POST /api/v1/healthcare/records                # Second-order SQLi
 GET /api/v1/healthcare/records/search?q=       # SQL Injection (Search, CHM-HEALTH-001)
 GET /api/v1/healthcare/records/{record_id}     # BOLA/IDOR (CHM-HEALTH-002)
@@ -21058,6 +21064,129 @@ const chimeraIcsControllersStatusBolaRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/ics/controllers/status route scan — CHM-ICS-002 documents BOLA on ICS controller status (Jekyll docs corpus fallback) — route-specific ICS/OT controller status BOLA training oracle"
+    }
+  };
+};
+
+async function chimeraOtModbusCommandInjectionProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const modbusOk =
+    /ot\/protocols\/modbus/i.test(corpus) &&
+    (/CHM-ICS-001/i.test(corpus) ||
+      /Remote Command Injection \(Modbus\)/i.test(corpus) ||
+      /POST\s+\/api\/ot\/protocols\/modbus/i.test(corpus)) &&
+    (/ics_ot|ICS\/OT|Modbus protocol|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!modbusOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-ICS-001/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet:
+        "POST /api/ot/protocols/modbus — Remote Command Injection (Modbus, CHM-ICS-001)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents Modbus protocol command injection on OT endpoints (Jekyll docs corpus fallback) — ICS/OT Modbus command injection training oracle"
+    }
+  };
+}
+
+const chimeraOtModbusCommandInjectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/ot\/protocols\/modbus\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraOtModbusCommandInjectionProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/ot/protocols/modbus route scan — CHM-ICS-001 documents remote command injection on Modbus protocol operations (Jekyll docs corpus fallback) — route-specific ICS/OT Modbus command injection training oracle"
+    }
+  };
+};
+
+async function chimeraIcsScadaSystemsDiscoveryProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const scadaOk =
+    /ics\/scada\/systems/i.test(corpus) &&
+    (/CHM-ICS-003/i.test(corpus) ||
+      /Unauthorized System Discovery/i.test(corpus) ||
+      /SCADA systems inventory/i.test(corpus) ||
+      /GET\s+\/api\/ics\/scada\/systems/i.test(corpus)) &&
+    (/ics_ot|ICS\/OT|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!scadaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-ICS-003/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/ics/scada/systems — Unauthorized System Discovery (CHM-ICS-003)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents unauthenticated SCADA systems inventory disclosure (Jekyll docs corpus fallback) — ICS/OT SCADA system discovery training oracle"
+    }
+  };
+}
+
+const chimeraIcsScadaSystemsDiscoveryRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/ics\/scada\/systems\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraIcsScadaSystemsDiscoveryProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/ics/scada/systems route scan — CHM-ICS-003 documents unauthorized SCADA systems inventory discovery (Jekyll docs corpus fallback) — route-specific ICS/OT SCADA discovery training oracle"
+    }
+  };
+};
+
+async function chimeraInsurancePoliciesBolaProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const bolaOk =
+    /insurance\/policies\/(?:\{[^}]+\}|\d+)/i.test(corpus) &&
+    (/CHM-INS-001/i.test(corpus) ||
+      /BOLA\s*\/\s*IDOR\s*\(Policies\)/i.test(corpus) ||
+      /Policy details/i.test(corpus) ||
+      /GET\s+\/api\/v1\/insurance\/policies/i.test(corpus)) &&
+    (/insurance|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!bolaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-INS-001/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/insurance/policies/{policy_id} — BOLA / IDOR (Policies, CHM-INS-001)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents insurance policy BOLA via predictable policy identifiers (Jekyll docs corpus fallback) — insurance policy BOLA training oracle"
+    }
+  };
+}
+
+const chimeraInsurancePoliciesBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/api\/v1\/insurance\/policies\/(?:\d+|\{[^}]+\})/i.test(pageUrl) ||
+    /\/lookup\b/i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
+  const hit = await chimeraInsurancePoliciesBolaProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/insurance/policies/{id} route scan — CHM-INS-001 documents BOLA on insurance policy details (Jekyll docs corpus fallback) — route-specific insurance policy BOLA training oracle"
     }
   };
 };
@@ -106373,6 +106502,9 @@ export const RULES: Record<string, Rule> = {
   chimeraEnergyUtilitiesOutagesBolaRouteLiveOracle,
   chimeraIcsControllersStatusBolaLiveOracle,
   chimeraIcsControllersStatusBolaRouteLiveOracle,
+  chimeraOtModbusCommandInjectionRouteLiveOracle,
+  chimeraIcsScadaSystemsDiscoveryRouteLiveOracle,
+  chimeraInsurancePoliciesBolaRouteLiveOracle,
   chimeraEcommerceProductsCatalogSqliRouteLiveOracle,
   chimeraTelecomSubscribersProfileBolaRouteLiveOracle,
   chimeraInsuranceClaimsSearchSqliRouteLiveOracle,
