@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T08:05:00.000Z",
+  "updated_at": "2026-09-01T09:25:00.000Z",
   "discovery_urls": [
     {
       "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
@@ -11427,6 +11427,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/mobile/v2/auth/biometric/verify",
+      "source": "atlas-crew/Chimera mobile domain — biometric auth bypass oracle POST /api/mobile/v2/auth/biometric/verify (endpoints-catalog + mobile/routes.py; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/mobile/v2/auth/session/transfer",
+      "source": "atlas-crew/Chimera mobile domain — session hijacking oracle POST /api/mobile/v2/auth/session/transfer (endpoints-catalog; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/users/profile?user_id=1",
+      "source": "atlas-crew/Chimera database mode — error-based SQLi oracle GET /api/v1/users/profile (vuln-api README; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/claims/search?policy_id=1&order_by=id",
+      "source": "atlas-crew/Chimera database mode — ORDER BY SQLi oracle GET /api/v1/claims/search (vuln-api README; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/transactions/1",
+      "source": "Commando-X/vuln-bank — BOLA transaction history oracle GET /api/v1/transactions/{account_number} (meli.traleor.com walkthrough; web search 09 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/admin/system/execute",
       "source": "atlas-crew/Chimera admin domain — command injection oracle POST /api/v1/admin/system/execute (api-reference.md; web search 08 UTC)",
