@@ -1,33 +1,53 @@
 {
-  "updated_at": "2026-09-01T13:05:00.000Z",
+  "updated_at": "2026-09-01T14:25:36.746Z",
   "priority_discovery_urls": [
     {
-      "url": "https://chimera.atlascrew.dev/api/v1/diagnostics/ping",
-      "source": "atlas-crew/Chimera — CHM-ADMIN-001 command injection RCE oracle POST /api/v1/diagnostics/ping (vuln_registry + AdminDashboard)",
+      "url": "https://dvga.tools.escape.tech/graphql",
+      "source": "Escape.tech DVGA — GraphQL introspection + batching/SQLi filter oracles (public benchmark; dvga.tools.escape.tech)",
       "auth": "public_demo"
     },
     {
-      "url": "https://chimera.atlascrew.dev/api/v1/diagnostics/webhook",
-      "source": "atlas-crew/Chimera — CHM-ADMIN-002 SSRF oracle POST /api/v1/diagnostics/webhook (vuln_registry)",
+      "url": "https://chimera.atlascrew.dev/api/v1/genai/chat",
+      "source": "atlas-crew/Chimera — CHM-AI-001 prompt injection oracle POST /api/v1/genai/chat (vuln_registry)",
       "auth": "public_demo"
     },
     {
-      "url": "https://chimera.atlascrew.dev/api/v1/admin/attack/xxe",
-      "source": "atlas-crew/Chimera — CHM-ADMIN-003 XXE legacy import oracle POST /api/v1/admin/attack/xxe (vulnerability-inventory.md)",
+      "url": "https://chimera.atlascrew.dev/api/v1/genai/agent/browse",
+      "source": "atlas-crew/Chimera — CHM-AI-002 SSRF via agent oracle POST /api/v1/genai/agent/browse (vuln_registry)",
       "auth": "public_demo"
     },
     {
-      "url": "https://nodegoat-websec.herokuapp.com/benefits",
-      "source": "OWASP NodeGoat — benefits form BAC oracle (missing function-level access control; improvements.json nodegoat-benefits-bac-live-oracle)",
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/accounts",
+      "source": "atlas-crew/Chimera — CHM-BANK-002 BOLA/IDOR oracle GET /api/v1/banking/accounts (vulnerability-inventory)",
       "auth": "public_demo"
     },
     {
-      "url": "https://nodegoat-websec.herokuapp.com/allocations",
-      "source": "OWASP NodeGoat — cross-user allocations IDOR oracle GET /allocations/:id?threshold=0 (improvements.json nodegoat-allocations-route-live-oracle)",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-65",
+      "source": "OWASP WrongSecrets — Challenge 65 plain Java CLI JAR binary oracle (Heroku demo README: challenges 54-66)",
       "auth": "public_demo"
     }
   ],
   "discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/accounts",
+      "source": "atlas-crew/Chimera — CHM-BANK-002 BOLA/IDOR oracle GET /api/v1/banking/accounts (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/genai/agent/browse",
+      "source": "atlas-crew/Chimera — CHM-AI-002 SSRF via agent oracle POST /api/v1/genai/agent/browse (vuln_registry)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/genai/chat",
+      "source": "atlas-crew/Chimera — CHM-AI-001 prompt injection oracle POST /api/v1/genai/chat (vuln_registry)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/graphql",
+      "source": "Escape.tech DVGA — GraphQL introspection + batching/SQLi filter oracles (public benchmark; dvga.tools.escape.tech)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-55",
       "source": "OWASP WrongSecrets — Challenge 55 SSH private key in .ssh/wrongsecrets.keys oracle (Heroku demo README: challenges 54-66 available)",
