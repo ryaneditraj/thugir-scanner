@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-challenges-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /challenges hub lists agent red-team catalog + POST api.fabraix.com/v1/playground/sessions/start returns sessionId; playground.fabraix.com/challenges findings 4→5 (+fabraix-challenges-hub-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-playground-home-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: playground.fabraix.com/ home route scan confirms unauthenticated POST /v1/playground/sessions/start; findings 4→5 (+fabraix-playground-home-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:fabraix.com",
+      "slug": "fabraix-playground-landing-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: fabraix.com/playground marketing landing links to playground.fabraix.com + live session probe; fabraix.com/playground findings 3→5 (+fabraix-playground-landing-route-live-oracle +fabraix-playground-session-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:ist-edu-bd.vercel.app",
       "slug": "ist-edu-ssrf-short-path-alias",
       "status": "shipped",

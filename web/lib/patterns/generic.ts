@@ -76232,6 +76232,87 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fabraix-challenges-hub-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix challenges hub route live oracle",
+    description:
+      "When scanning playground.fabraix.com/challenges, the challenge catalog lists agent red-team scenarios and POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated sessions — route-specific hub oracle.",
+    impactOneline:
+      "Route-scoped Fabraix /challenges hub scans should confirm the published agentic red-team challenge catalog and unauthenticated session creation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixChallengesHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges hub route scan confirms unauthenticated agent session creation from the challenge catalog. Show route-specific agent red-team API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-playground-home-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix playground home route live oracle",
+    description:
+      "When scanning playground.fabraix.com/, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent red-team sessions from the landing page — route-specific home oracle.",
+    impactOneline:
+      "Route-scoped Fabraix playground home scans should confirm unauthenticated agent session creation from the public landing page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixPlaygroundHomeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix playground.fabraix.com home route scan confirms unauthenticated session creation. Show route-specific agent red-team API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-playground-landing-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix playground landing route live oracle",
+    description:
+      "When scanning fabraix.com/playground, the marketing landing links to playground.fabraix.com and POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions — route-specific landing oracle.",
+    impactOneline:
+      "Route-scoped fabraix.com/playground scans should confirm the public agent red-team playground entry point and unauthenticated session creation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixPlaygroundLandingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our fabraix.com/playground landing route scan confirms unauthenticated agent session creation. Show route-specific agent red-team API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "prompt-shield-prompt-injection-defense-live-oracle",
     platform: "generic",
     category: "AI security",

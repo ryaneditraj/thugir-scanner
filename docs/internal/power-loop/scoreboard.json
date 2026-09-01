@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T21:10:00.000Z",
+  "updated_at": "2026-09-01T21:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2820,
-  "total_findings": 28380,
+  "total_sites_scanned": 2828,
+  "total_findings": 28393,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1991,
-  "discovery_findings": 23564,
-  "improvements_shipped": 1175,
-  "last_run": "2026-09-01T21:10:00.000Z",
+  "discovery_findings": 23625,
+  "improvements_shipped": 1178,
+  "last_run": "2026-09-01T21:25:00.000Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
@@ -49,37 +49,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 37 live oracles); secret-resend + juice-shop-resend-key-live-oracle + juice-shop-iac-terraform-tls-key-live-oracle present"
+      "note": "Stable 6/6 first-pass recall (52 findings, 37 live oracles); secret-resend + juice-shop-resend-key-live-oracle present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings_total": 107,
-      "focus": "403 bypass lab + Fabraix access-code-001 + SecLab SSRF + DVWU command-injection + OopsSec CSRF walkthrough",
-      "drained": "wrongsecrets challenge-20/21/22"
+      "urls_validated": 8,
+      "findings_delta": "+fabraix-challenges-hub +fabraix-playground-home +fabraix-playground-landing route oracles",
+      "focus": "Fabraix /challenges hub + playground home + fabraix.com/playground landing route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 37 live oracles)",
+      "playground.fabraix.com/challenges: 5 findings — fabraix-challenges-hub-route-live-oracle (agent red-team challenge catalog hub)",
+      "playground.fabraix.com/: 5 findings — fabraix-playground-home-route-live-oracle (unauthenticated session from landing)",
+      "fabraix.com/playground: 5 findings — fabraix-playground-landing-route-live-oracle (marketing landing + live session probe)",
       "bypass403.vercel.app: 9 findings — bypass403-admin/api-admin/waf/debug/secure 403-bypass live oracles",
-      "playground.fabraix.com/challenges/access-code-001: 7 findings — fabraix-access-code-001-route-live-oracle",
-      "seclab.vercel.app/labs/ssrf: 7 findings — seclab-ssrf-vulnerable-route-live-oracle",
       "koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/: 17 findings — oopssec-csrf-admin-order-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses",
+      "Fabraix /challenges hub + playground home + fabraix.com/playground landing now have route-specific oracles",
       "ist-edu-bd.vercel.app/command-injection: route-specific command-injection live oracle absent (generic sqli/lfi only)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "playground.fabraix.com/challenges": 5,
+    "playground.fabraix.com/": 5,
+    "fabraix.com/playground": 5,
     "koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/": 17,
     "bypass403.vercel.app": 9,
-    "ist-edu-bd.vercel.app/command-injection": 10,
     "playground.fabraix.com/challenges/access-code-001": 7,
     "seclab.vercel.app/labs/ssrf": 7,
-    "wrongsecrets.herokuapp.com/challenge/challenge-20": 19,
-    "koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass/": 10
+    "wrongsecrets.herokuapp.com/challenge/challenge-20": 19
   }
 }
