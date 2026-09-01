@@ -1847,6 +1847,8 @@ const DEEP_RULES = new Set<string>([
   "chimeraAdminAttackXxeRouteLiveOracle",
   "chimeraAdminExecuteRceRouteLiveOracle",
   "chimeraAdminDeserializeRouteLiveOracle",
+  "chimeraAdminFilesReadPathTraversalRouteLiveOracle",
+  "chimeraIntegrationsWebhookRegisterSsrfRouteLiveOracle",
   "chimeraHipaaTransferSsrfRouteLiveOracle",
   "chimeraEnergyUtilitiesCalibrationSsrfLiveOracle",
   "chimeraEnergyUtilitiesCalibrationSsrfRouteLiveOracle",
@@ -3417,6 +3419,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideAtlasCrewHubEvidence",
   "clientSideAtlasCrewInfernoLabEvidence",
   "apparatusRedteamAutopilotRouteLiveOracle",
+  "apparatusChaosEngineeringRouteLiveOracle",
   "crucibleScenarioCatalogRouteLiveOracle",
   "pentestForgeJuiceShopLabRouteLiveOracle",
   "pentestForgeTomcatLabRouteLiveOracle",
@@ -12575,6 +12578,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/files\/read\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-files-read")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/integrations\/webhook\/register\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-integrations-webhook-register")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/hipaa\/transfer\/encrypted\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-hipaa-transfer")
       )
@@ -14732,6 +14747,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (
         /apparatus\.atlascrew\.dev/i.test(origin) &&
         p.slug.startsWith("apparatus-redteam-autopilot")
+      )
+        return -3;
+      if (
+        /apparatus\.atlascrew\.dev/i.test(origin) &&
+        p.slug.startsWith("apparatus-chaos-engineering")
       )
         return -3;
       if (

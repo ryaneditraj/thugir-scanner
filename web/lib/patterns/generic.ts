@@ -41040,6 +41040,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "apparatus-chaos-engineering-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Apparatus chaos engineering route live oracle",
+    description:
+      "When scanning apparatus.atlascrew.dev, Apparatus docs document /api/chaos/cpu-spike, memory-spike, and latency-inject fault injection — route-specific chaos engineering training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Apparatus documents unauthenticated chaos engineering APIs for resilience testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "apparatusChaosEngineeringRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep Apparatus chaos APIs on isolated lab networks with authentication.",
+      steps: [
+        "Require authentication before starting chaos engineering experiments.",
+        "Do not expose Apparatus chaos API servers to the public internet.",
+        "Segment inferno lab subnets from production VPCs."
+      ]
+    },
+    fixPrompt:
+      "Our apparatus route documents chaos engineering APIs. Show how to restrict fault injection to authenticated lab networks.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crucible-scenario-catalog-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -77004,6 +77030,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our chimera /api/admin/attack/deserialize route documents pickle RCE. Show secure deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-files-read-path-traversal-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin files read path traversal route live oracle",
+    description:
+      "When scanning /api/v1/admin/files/read on chimera.atlascrew.dev, api-reference documents unauthenticated path traversal file read — route-specific path traversal training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional admin path traversal file read for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminFilesReadPathTraversalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate file paths and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Reject path traversal sequences in file read parameters.",
+        "Require admin authentication before any file read operations.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/files/read route documents path traversal. Show secure file access remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-integrations-webhook-register-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Chimera integrations webhook register SSRF route live oracle",
+    description:
+      "When scanning /api/integrations/webhook/register on chimera.atlascrew.dev, api-reference documents SSRF via webhook callback registration — route-specific integrations SSRF training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SSRF on webhook registration for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraIntegrationsWebhookRegisterSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate webhook callback URLs and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Block private IP ranges and cloud metadata endpoints in webhook callback URLs.",
+        "Require authentication before registering webhook endpoints.",
+        "Do not expose Chimera integrations API to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/integrations/webhook/register route documents SSRF via webhook. Show outbound URL validation remediation.",
     version: 1,
     enabled: true
   },
