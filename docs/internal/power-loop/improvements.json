@@ -7289,6 +7289,24 @@
       "slug": "apparatus-chaos-engineering-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: tutorial-chaos-engineering documents POST /api/chaos/cpu-spike, memory-spike, latency-inject fault injection; apparatus.atlascrew.dev/ findings 8→9 (+apparatus-chaos-engineering-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-mobile-instant-transfer-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: endpoints-catalog POST /api/mobile/v2/transfers/instant — Fraudulent transfers; chimera.atlascrew.dev/api/mobile/v2/transfers/instant findings 7→8 (+chimera-mobile-instant-transfer-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-inventory-reserve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: endpoints-catalog POST /api/inventory/reserve — Inventory reservation bypass; chimera.atlascrew.dev/api/inventory/reserve findings 7→8 (+chimera-inventory-reserve-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-sanctions-check-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: endpoints-catalog GET /api/sanctions/check — Sanctions screening; chimera.atlascrew.dev/api/sanctions/check findings 7→8 (+chimera-sanctions-check-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
