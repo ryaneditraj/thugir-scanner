@@ -2170,6 +2170,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideFabraixChallengeEvidence",
   "clientSideAgenticAiCtfEvidence",
   "clientSideVulnerableChatbotDemoEvidence",
+  "vulnerableChatbotPromptInjectionLiveOracle",
+  "vulnerableChatbotPromptInjectionRouteLiveOracle",
   "clientSideWrongSecretsEvidence",
   "clientSideWrongSecretsChallengeEvidence",
   "clientSideMaestroAgenticAiEvidence",
@@ -14890,6 +14892,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/(?:api\/(?:v\d+\/)?)?chat(?:\/query)?\b/i.test(targetInput) &&
         !/\/chat\/init\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-chat-prompt-injection")
+      )
+        return -3;
+      if (
+        /vulnerable-chatbot-demo\.vercel\.app/i.test(origin) &&
+        /\/api\/chat\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnerable-chatbot-prompt-injection")
       )
         return -3;
       if (
