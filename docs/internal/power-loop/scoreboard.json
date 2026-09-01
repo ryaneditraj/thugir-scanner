@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T11:15:00.000Z",
+  "updated_at": "2026-09-01T12:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3062,
-  "total_findings": 31885,
-  "critical_findings": 71,
+  "total_sites_scanned": 3063,
+  "total_findings": 31909,
+  "critical_findings": 74,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2096,
-  "discovery_findings": 26182,
-  "improvements_shipped": 1202,
-  "last_run": "2026-09-01T11:15:00.000Z",
+  "discovery_findings": 26206,
+  "improvements_shipped": 1205,
+  "last_run": "2026-09-01T12:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
+      "probes_run": 593,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,41 @@
           ]
         }
       },
-      "note": "Primary Heroku oracle stable 6/6 rich pass (52 findings)"
+      "note": "Primary Heroku oracle stable 6/6 rich pass (52 findings, secret-resend present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
       "findings": 24,
-      "focus": "Chimera mobile instant-transfer + inventory/reserve + sanctions/check route oracles",
+      "focus": "Chimera gov/cases BOLA + cards/data/export PCI exposure + mobile biometric bypass route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "chimera.atlascrew.dev/api/mobile/v2/transfers/instant: 7→8 (+chimera-mobile-instant-transfer-route-live-oracle)",
-      "chimera.atlascrew.dev/api/inventory/reserve: 7→8 (+chimera-inventory-reserve-route-live-oracle)",
-      "chimera.atlascrew.dev/api/sanctions/check: 7→8 (+chimera-sanctions-check-route-live-oracle)"
+      "chimera.atlascrew.dev/api/v1/gov/cases: 7→8 (+chimera-gov-cases-bola-route-live-oracle)",
+      "chimera.atlascrew.dev/api/cards/data/export: 7→8 (+chimera-cards-data-export-route-live-oracle)",
+      "chimera.atlascrew.dev/api/mobile/v2/auth/biometric/verify: 7→8 (+chimera-mobile-biometric-verify-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "chimera gov/cases + gov/permits + gov/access-cards + healthcare/claims/submit + lab-results/export: route-specific oracles absent (generic chimera bundle only)",
-      "chimera cards/data/export + biometric/verify + session/transfer + users/profile: route-specific oracles still absent"
+      "chimera gov/permits + gov/access-cards + healthcare/claims/submit + lab-results/export: route-specific oracles still absent",
+      "chimera session/transfer + users/profile: route-specific oracles still absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "chimera.atlascrew.dev/api/v1/gov/cases": 8,
+    "chimera.atlascrew.dev/api/cards/data/export": 8,
+    "chimera.atlascrew.dev/api/mobile/v2/auth/biometric/verify": 8,
     "chimera.atlascrew.dev/api/mobile/v2/transfers/instant": 8,
     "chimera.atlascrew.dev/api/inventory/reserve": 8,
     "chimera.atlascrew.dev/api/sanctions/check": 8,
     "vulnbank.org/api/v1/transactions/1": 32,
     "chimera.atlascrew.dev/api/v1/telecom/subscribers/1/sim-swap": 8,
-    "chimera.atlascrew.dev/api/cards/data/export": 7,
-    "chimera.atlascrew.dev/api/mobile/v2/auth/biometric/verify": 7,
     "chimera.atlascrew.dev/api/mobile/v2/auth/session/transfer": 7,
     "chimera.atlascrew.dev/api/v1/users/profile?user_id=1": 7,
-    "chimera.atlascrew.dev/api/v1/gov/cases": 7,
     "chimera.atlascrew.dev/api/v1/gov/permits": 7,
     "chimera.atlascrew.dev/api/v1/healthcare/claims/submit": 7,
     "chimera.atlascrew.dev/api/v1/healthcare/lab-results/export": 7,
