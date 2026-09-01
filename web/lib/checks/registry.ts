@@ -19320,6 +19320,16 @@ CHM-AI-003 Sensitive Data Exposure (Model Config)
 GET /api/v1/genai/models/config
 CHM-AI-004 Unrestricted File Upload (RAG)
 POST /api/v1/genai/knowledge/upload
+CHM-ECOM-002 SQL Injection (Catalog)
+GET /api/v1/ecommerce/products
+CHM-TELCO-001 BOLA / IDOR (Subscriber Profile)
+GET /api/v1/telecom/subscribers/{subscriber_id}/profile
+CHM-INS-002 SQL Injection (Claims Search)
+GET /api/v1/insurance/claims/search?q=
+CHM-ADMIN-001 Remote Command Execution (Ping)
+POST /api/v1/diagnostics/ping
+CHM-ADMIN-002 Server-Side Request Forgery (Webhook)
+POST /api/v1/diagnostics/webhook
 POST /api/v1/healthcare/records                # Second-order SQLi
 GET /api/v1/healthcare/records/search?q=       # SQL Injection (Search, CHM-HEALTH-001)
 GET /api/v1/healthcare/records/{record_id}     # BOLA/IDOR (CHM-HEALTH-002)
@@ -19366,7 +19376,7 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001|CHM-BANK-001|CHM-BANK-002|CHM-AI-001|CHM-AI-002/i.test(corpus)
+    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001|CHM-ADMIN-002|CHM-BANK-001|CHM-BANK-002|CHM-AI-001|CHM-AI-002|CHM-AI-003|CHM-AI-004|CHM-ECOM-002|CHM-TELCO-001|CHM-INS-002/i.test(corpus)
   ) {
     const invDoc = await ctx.probe.get(new URL("/vulnerability-inventory", ctx.origin).toString(), {
       maxBytes: 400_000,
@@ -20397,6 +20407,136 @@ const chimeraGenaiModelsConfigDisclosureRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/genai/models/config route scan — CHM-AI-003 documents sensitive GenAI model configuration exposure (Jekyll docs corpus fallback) — route-specific model config disclosure training oracle"
+    }
+  };
+};
+
+async function chimeraEcommerceProductsCatalogSqliProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const sqliOk =
+    /ecommerce\/products\b/i.test(corpus) &&
+    (/CHM-ECOM-002/i.test(corpus) ||
+      /SQL Injection \(Catalog\)/i.test(corpus) ||
+      /GET\s+\/api\/v1\/ecommerce\/products\b/i.test(corpus)) &&
+    (/Database Vuln/i.test(corpus) ||
+      /USE_DATABASE=true/i.test(corpus) ||
+      /SQL Injection/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-ECOM-002/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/ecommerce/products — SQL Injection (Catalog, CHM-ECOM-002, USE_DATABASE=true)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents classic SQLi on ecommerce product catalog listing (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — ecommerce catalog SQLi training oracle"
+    }
+  };
+}
+
+const chimeraEcommerceProductsCatalogSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/api\/v1\/ecommerce\/products\b/i.test(pageUrl) ||
+    /\/search\b/i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
+  const hit = await chimeraEcommerceProductsCatalogSqliProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/ecommerce/products route scan — CHM-ECOM-002 documents SQL injection on ecommerce product catalog (Jekyll docs corpus fallback) — route-specific ecommerce catalog SQLi training oracle"
+    }
+  };
+};
+
+async function chimeraTelecomSubscribersProfileBolaProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const bolaOk =
+    /telecom\/subscribers\/\{?subscriber_id\}?\/profile/i.test(corpus) &&
+    (/CHM-TELCO-001/i.test(corpus) ||
+      /BOLA\s*\/\s*IDOR\s*\(Subscriber Profile\)/i.test(corpus) ||
+      /GET\s+\/api\/v1\/telecom\/subscribers/i.test(corpus)) &&
+    (/telecom|subscriber|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!bolaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-TELCO-001/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/telecom/subscribers/{subscriber_id}/profile — BOLA/IDOR (Subscriber Profile, CHM-TELCO-001)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents telecom subscriber profile BOLA via predictable subscriber identifiers (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — telecom subscriber BOLA training oracle"
+    }
+  };
+}
+
+const chimeraTelecomSubscribersProfileBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/api\/v1\/telecom\/subscribers\/[^/]+\/profile\b/i.test(pageUrl) ||
+    /\/sim-swap\b/i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
+  const hit = await chimeraTelecomSubscribersProfileBolaProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/telecom/subscribers/{subscriber_id}/profile route scan — CHM-TELCO-001 documents BOLA/IDOR on telecom subscriber profiles (Jekyll docs corpus fallback) — route-specific telecom subscriber BOLA training oracle"
+    }
+  };
+};
+
+async function chimeraInsuranceClaimsSearchSqliProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const sqliOk =
+    /insurance\/claims\/search/i.test(corpus) &&
+    (/CHM-INS-002/i.test(corpus) ||
+      /SQL Injection \(Claims Search\)/i.test(corpus) ||
+      /GET\s+\/api\/v1\/insurance\/claims\/search/i.test(corpus)) &&
+    (/Database Vuln/i.test(corpus) ||
+      /USE_DATABASE=true/i.test(corpus) ||
+      /SQL Injection/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-INS-002/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/insurance/claims/search?q= — SQL Injection (Claims Search, CHM-INS-002, USE_DATABASE=true)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents classic SQLi via insurance claims search query parameter (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — insurance claims SQLi training oracle"
+    }
+  };
+}
+
+const chimeraInsuranceClaimsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/insurance\/claims\/search\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraInsuranceClaimsSearchSqliProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/insurance/claims/search route scan — CHM-INS-002 documents SQL injection on insurance claims search (Jekyll docs corpus fallback) — route-specific insurance claims SQLi training oracle"
     }
   };
 };
@@ -105118,6 +105258,9 @@ export const RULES: Record<string, Rule> = {
   chimeraGenaiAgentBrowseSsrfRouteLiveOracle,
   chimeraGenaiModelsConfigDisclosureLiveOracle,
   chimeraGenaiModelsConfigDisclosureRouteLiveOracle,
+  chimeraEcommerceProductsCatalogSqliRouteLiveOracle,
+  chimeraTelecomSubscribersProfileBolaRouteLiveOracle,
+  chimeraInsuranceClaimsSearchSqliRouteLiveOracle,
   chimeraHealthcareRecordsSecondOrderSqliRouteLiveOracle,
   chimeraHealthcareRecordsSearchSqliRouteLiveOracle,
   chimeraHealthcareRecordsBolaRouteLiveOracle,

@@ -76748,6 +76748,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-ecommerce-products-catalog-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera ecommerce products catalog SQLi route live oracle",
+    description:
+      "When scanning /api/v1/ecommerce/products on chimera.atlascrew.dev, CHM-ECOM-002 documents SQL injection on the ecommerce product catalog — route-specific catalog SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SQL injection on the ecommerce product catalog endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraEcommerceProductsCatalogSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries on catalog endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace dynamic SQL in product catalog queries with prepared statements.",
+        "Restrict catalog APIs to authenticated sessions with least-privilege scopes.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/ecommerce/products route documents CHM-ECOM-002 catalog SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-telecom-subscribers-profile-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera telecom subscriber profile BOLA route live oracle",
+    description:
+      "When scanning /api/v1/telecom/subscribers/{subscriber_id}/profile on chimera.atlascrew.dev, CHM-TELCO-001 documents BOLA/IDOR on telecom subscriber profiles — route-specific subscriber BOLA training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional subscriber profile BOLA via predictable identifiers for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraTelecomSubscribersProfileBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce subscriber-level authorization and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Verify the authenticated principal owns the requested subscriber_id before returning profile data.",
+        "Use non-enumerable subscriber identifiers instead of sequential IDs.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/telecom/subscribers/{subscriber_id}/profile route documents CHM-TELCO-001 subscriber BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-insurance-claims-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera insurance claims search SQLi route live oracle",
+    description:
+      "When scanning /api/v1/insurance/claims/search on chimera.atlascrew.dev, CHM-INS-002 documents SQL injection on insurance claims search — route-specific claims SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SQL injection on the insurance claims search endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraInsuranceClaimsSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries on claims search and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace dynamic SQL in claims search with prepared statements.",
+        "Validate and sanitize all query parameters before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/insurance/claims/search route documents CHM-INS-002 claims SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-dvla-evidence",
     platform: "generic",
     category: "Injection",

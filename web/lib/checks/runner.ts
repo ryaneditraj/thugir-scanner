@@ -1827,6 +1827,9 @@ const DEEP_RULES = new Set<string>([
   "chimeraGenaiAgentBrowseSsrfRouteLiveOracle",
   "chimeraGenaiModelsConfigDisclosureLiveOracle",
   "chimeraGenaiModelsConfigDisclosureRouteLiveOracle",
+  "chimeraEcommerceProductsCatalogSqliRouteLiveOracle",
+  "chimeraTelecomSubscribersProfileBolaRouteLiveOracle",
+  "chimeraInsuranceClaimsSearchSqliRouteLiveOracle",
   "chimeraSwaggerRouteLiveOracle",
   "chimeraApiReferenceRouteLiveOracle",
   "chimeraFedrampOpenapiExtensionsRouteLiveOracle",
@@ -12499,6 +12502,25 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/genai\/models\/config\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-genai-models-config")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/ecommerce\/products\b/i.test(targetInput) &&
+        !/\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-ecommerce-products-catalog")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/telecom\/subscribers\/[^/]+\/profile\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-telecom-subscribers-profile")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/insurance\/claims\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-insurance-claims-search")
       )
         return -3;
       if (

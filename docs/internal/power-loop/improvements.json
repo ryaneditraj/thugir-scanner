@@ -7145,6 +7145,24 @@
       "slug": "chimera-genai-models-config-disclosure-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: CHM-AI-003 GET /api/v1/genai/models/config — Sensitive Data Exposure (Model Config) from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/genai/models/config findings 7→8 (+chimera-genai-models-config-disclosure-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-ecommerce-products-catalog-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-ECOM-002 GET /api/v1/ecommerce/products — SQL Injection (Catalog) from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/ecommerce/products findings 7→8 (+chimera-ecommerce-products-catalog-sqli-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-telecom-subscribers-profile-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-TELCO-001 GET /api/v1/telecom/subscribers/{subscriber_id}/profile — BOLA/IDOR (Subscriber Profile) from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/telecom/subscribers/1/profile findings 7→8 (+chimera-telecom-subscribers-profile-bola-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-insurance-claims-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-INS-002 GET /api/v1/insurance/claims/search?q= — SQL Injection (Claims Search) from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/insurance/claims/search?q=test findings 7→8 (+chimera-insurance-claims-search-sqli-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
