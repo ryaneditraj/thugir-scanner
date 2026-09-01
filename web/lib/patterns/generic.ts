@@ -77086,6 +77086,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-mobile-instant-transfer-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "critical",
+    title: "Chimera mobile instant transfer route live oracle",
+    description:
+      "When scanning /api/mobile/v2/transfers/instant on chimera.atlascrew.dev, endpoints catalog documents fraudulent instant transfers without authorization — route-specific mobile banking business logic training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional fraudulent mobile instant transfers for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraMobileInstantTransferRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce transfer authorization and velocity limits on mobile banking endpoints.",
+      steps: [
+        "Require multi-factor authentication before instant transfers above threshold amounts.",
+        "Validate account ownership and available balance server-side before transfer execution.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/mobile/v2/transfers/instant route documents fraudulent transfers. Show mobile transfer authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-inventory-reserve-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Chimera inventory reserve route live oracle",
+    description:
+      "When scanning /api/inventory/reserve on chimera.atlascrew.dev, endpoints catalog documents inventory reservation bypass without stock validation — route-specific retail business logic training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional inventory reservation bypass for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraInventoryReserveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate inventory availability server-side before accepting reservations.",
+      steps: [
+        "Check real-time stock levels atomically when processing reservation requests.",
+        "Reject reservations that exceed available inventory quantities.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/inventory/reserve route documents inventory reservation bypass. Show server-side stock validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-sanctions-check-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Chimera sanctions check route live oracle",
+    description:
+      "When scanning /api/sanctions/check on chimera.atlascrew.dev, endpoints catalog documents sanctions screening without authorization — route-specific compliance business logic training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional sanctions screening bypass for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraSanctionsCheckRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication for compliance screening endpoints and enforce sanctions list checks.",
+      steps: [
+        "Restrict sanctions screening APIs to authenticated compliance officers.",
+        "Enforce mandatory sanctions list validation on all outbound transfers.",
+        "Do not expose Chimera compliance endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/sanctions/check route documents sanctions screening bypass. Show compliance endpoint authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-hipaa-transfer-ssrf-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",

@@ -20320,6 +20320,75 @@ const chimeraAdminOrdersOverrideRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const chimeraMobileInstantTransferRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/mobile\/v2\/transfers\/instant\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const transferOk =
+    /mobile\/v2\/transfers\/instant/i.test(corpus) &&
+    (/Fraudulent transfers/i.test(corpus) ||
+      /POST\s+\/api\/mobile\/v2\/transfers\/instant/i.test(corpus)) &&
+    (/Mobile|mobile|Business Logic|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!transferOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Fraudulent transfers/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/mobile/v2/transfers/instant — Fraudulent transfers (mobile banking business logic)",
+      note: "chimera.atlascrew.dev /api/mobile/v2/transfers/instant route scan — Chimera endpoints catalog documents fraudulent instant transfer without authorization (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific mobile transfer fraud training oracle"
+    }
+  };
+};
+
+const chimeraInventoryReserveRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/inventory\/reserve\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const reserveOk =
+    /inventory\/reserve/i.test(corpus) &&
+    (/Inventory reservation bypass/i.test(corpus) ||
+      /POST\s+\/api\/inventory\/reserve/i.test(corpus)) &&
+    (/retail|Business Logic|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!reserveOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Inventory reservation bypass/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/inventory/reserve — Inventory reservation bypass (retail business logic)",
+      note: "chimera.atlascrew.dev /api/inventory/reserve route scan — Chimera endpoints catalog documents inventory reservation bypass without stock validation (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific retail inventory fraud training oracle"
+    }
+  };
+};
+
+const chimeraSanctionsCheckRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/sanctions\/check\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const sanctionsOk =
+    /sanctions\/check/i.test(corpus) &&
+    (/Sanctions screening/i.test(corpus) ||
+      /GET\s+\/api\/sanctions\/check/i.test(corpus) ||
+      /sanctions screening/i.test(corpus)) &&
+    (/Compliance|AML|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!sanctionsOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Sanctions screening/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/sanctions/check — Sanctions screening bypass (compliance business logic)",
+      note: "chimera.atlascrew.dev /api/sanctions/check route scan — Chimera endpoints catalog documents sanctions screening without authorization (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific compliance sanctions bypass training oracle"
+    }
+  };
+};
+
 async function chimeraGenaiChatPromptInjectionProbe(ctx: RuleContext): Promise<RuleResult> {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const corpus = await chimeraDocsCorpus(ctx);
@@ -106199,6 +106268,9 @@ export const RULES: Record<string, Rule> = {
   chimeraCartUpdateRouteLiveOracle,
   chimeraLoyaltyPointsTransferRouteLiveOracle,
   chimeraAdminOrdersOverrideRouteLiveOracle,
+  chimeraMobileInstantTransferRouteLiveOracle,
+  chimeraInventoryReserveRouteLiveOracle,
+  chimeraSanctionsCheckRouteLiveOracle,
   chimeraGenaiChatPromptInjectionLiveOracle,
   chimeraGenaiChatPromptInjectionRouteLiveOracle,
   chimeraGenaiAgentBrowseSsrfLiveOracle,
