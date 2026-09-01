@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-31T23:09:09.913Z",
+  "updated_at": "2026-09-01T00:09:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2932,
-  "total_findings": 30139,
+  "total_sites_scanned": 2941,
+  "total_findings": 30359,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2041,
-  "discovery_findings": 25113,
+  "discovery_urls_added": 2046,
+  "discovery_findings": 25281,
   "improvements_shipped": 1162,
-  "last_run": "2026-08-31T23:09:09.913Z",
+  "last_run": "2026-09-01T00:09:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
@@ -54,31 +54,32 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 107,
-      "focus": "Chimera CHM-HEALTH-001 SQLi + CHM-BANK-001/002 banking + FinBot finstripe/systemutils reset-tools + queue drain (ai-security-platform, nodegoat)",
+      "findings": 168,
+      "focus": "Aikido Zen injection oracles (SQLi/shell/SSRF/path) + crAPI2 vehicle BOLA + queue drain (brokencrystals render.dot SSTI, pwnshop chat/init, UCU OWASP CTF, goof login)",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "chimera.atlascrew.dev/api/v1/healthcare/records/search?q=test: 8 findings — +chimera-healthcare-records-search-sqli-route-live-oracle CHM-HEALTH-001",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finstripe/reset-tools: 28 findings — generic FinBot Dark Lab bundle",
-      "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/systemutils/reset-tools: 28 findings — generic FinBot Dark Lab bundle",
-      "nodegoat-websec.herokuapp.com/allocations: 13 findings — nodegoat SSJS route oracles"
+      "brokencrystals.com/render.dot: 91 findings — SSTI doT + full Broken Crystals bundle",
+      "pwnshop.ctfsecurity.com/chat/init: 45 findings — LLM chat-init email enumeration oracle",
+      "zen-demo-java.fly.dev/pages/create: 8 findings — zen-demo-java SQLi/shell/SSRF/path traversal live oracles",
+      "ucu-owasp-ctf.vercel.app/injection/: 4 findings — UCU OWASP CTF injection route oracle",
+      "vwad.owasp.org/app/goof/login: 7 findings — NodeGoof NoSQL auth-bypass hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "chimera.atlascrew.dev/api/v1/banking/accounts: 7 findings — no CHM-BANK-002 BOLA route-specific oracle (generic chimera bundle only)",
-      "chimera.atlascrew.dev/api/v1/banking/transfer: 7 findings — no CHM-BANK-001 business-logic route oracle",
-      "finstripe/systemutils reset-tools: no route-specific reset-tools live oracles (generic finbot-darklab-* bundle only)"
+      "crapi2.apisec.ai/identity/api/v2/vehicle/1: queued but not reached in 8-URL limit — BOLA oracle pending",
+      "zen-demo-java execute/request/read pages: oracles detected via /pages/create crawl but dedicated route scans pending",
+      "ucu-owasp-ctf labs: thin passes (4-5 findings) — route-specific oracles only, no exploit-chain depth"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
-    "chimera.atlascrew.dev/api/v1/healthcare/records/search?q=test": 8,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/finstripe/reset-tools": 28,
-    "owasp-finbot-ctf.org/darklab/api/v1/supply-chain/servers/systemutils/reset-tools": 28,
-    "nodegoat-websec.herokuapp.com/allocations": 13,
-    "chimera.atlascrew.dev/api/v1/banking/accounts": 7,
-    "chimera.atlascrew.dev/api/v1/banking/transfer": 7
+    "brokencrystals.com/render.dot": 91,
+    "pwnshop.ctfsecurity.com/chat/init": 45,
+    "zen-demo-java.fly.dev/pages/create": 8,
+    "ucu-owasp-ctf.vercel.app/injection/": 4,
+    "ucu-owasp-ctf.vercel.app/access/": 5,
+    "vwad.owasp.org/app/goof/login": 7
   }
 }
