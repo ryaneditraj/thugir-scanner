@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T05:05:00.000Z",
+  "updated_at": "2026-09-01T06:26:00.000Z",
   "discovery_urls": [
     {
       "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
@@ -11427,6 +11427,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/v2/vehicle/1/location",
+      "source": "OWASP crAPI2 Challenge 1 — vehicle GPS BOLA oracle GET /identity/api/v2/vehicle/{id}/location (OWASPLA 2025 guide; web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/auth/forget-password",
+      "source": "OWASP crAPI2 — broken auth password-reset oracle POST /identity/api/auth/forget-password (allthewriteups crAPI walkthrough; web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/identity/api/auth/v2/check-otp",
+      "source": "OWASP crAPI2 Challenge 3 — OTP brute-force oracle POST /identity/api/auth/v2/check-otp (allthewriteups crAPI walkthrough; web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
+      "source": "Escape Duck Store — unauthenticated testimonial overwrite oracle PUT /api/v1/testimonials/{id} (escape.tech benchmarking blog; web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.apisec.ai/vapi/api5/users",
+      "source": "roottusk/vAPI API5 — broken function-level auth oracle GET /vapi/api5/users lists all users (Medium walkthrough; web search 06 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://openvaultbank.com/api/v1/accounts/1/transactions",
       "source": "OpenVault Bank — BOLA transaction history oracle GET /api/v1/accounts/{id}/transactions (cheatsheet vuln #2; web search 05 UTC)",
