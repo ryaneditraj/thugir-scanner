@@ -3984,6 +3984,10 @@ const DEEP_RULES = new Set<string>([
   "burpbountyAiCompletionsRouteLiveOracle",
   "burpbountyAiGatewayRouteLiveOracle",
   "burpbountyBackupListingRouteLiveOracle",
+  "burpbountyCouchdbAllDbsRouteLiveOracle",
+  "burpbountyCiscoCveRouteLiveOracle",
+  "burpbountyActuatorHeapdumpLiveOracle",
+  "burpbountyActuatorHeapdumpRouteLiveOracle",
   "burpbountyFortiosRemoteLoginRouteLiveOracle",
   "burpbountyWpConfigLiveOracle",
   "burpbountyWpConfigRouteLiveOracle",
@@ -4013,8 +4017,12 @@ const DEEP_RULES = new Set<string>([
   "burpbountyText4shellLiveOracle",
   "burpbountyPulseCveLiveOracle",
   "burpbountyCiscoCveLiveOracle",
+  "burpbountyCiscoCveRouteLiveOracle",
   "burpbountyN8nSettingsCveLiveOracle",
   "burpbountyCouchdbAllDbsLiveOracle",
+  "burpbountyCouchdbAllDbsRouteLiveOracle",
+  "burpbountyActuatorHeapdumpLiveOracle",
+  "burpbountyActuatorHeapdumpRouteLiveOracle",
   "burpbountyKubernetesApiLiveOracle",
   "burpbountyCitrixCveLiveOracle",
   "burpbountyCrowdCveLiveOracle",
@@ -15740,6 +15748,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/burpbountylab\.com/i.test(origin) && /\/ai\/(?:v1\/completions|chat\/completions)\b/i.test(targetInput) && p.slug === "burpbounty-ai-completions-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/ai\/gateway\b/i.test(targetInput) && p.slug === "burpbounty-ai-gateway-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/backup\/?$/i.test(targetInput) && p.slug === "burpbounty-backup-listing-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/couchdb\/_all_dbs\b/i.test(targetInput) && p.slug === "burpbounty-couchdb-all-dbs-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/cisco\/?$/i.test(targetInput) && p.slug === "burpbounty-cisco-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/actuator\/heapdump\b/i.test(targetInput) && p.slug.startsWith("burpbounty-actuator-heapdump")) return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?forti(?:os)?(?:\/remote\/login)?\/?$/i.test(targetInput) && p.slug === "burpbounty-fortios-remote-login-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/wp\/wp-config\.php/i.test(targetInput) && p.slug.startsWith("burpbounty-wp-config")) return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?weblogic(?:\/console\/login\/LoginForm\.jsp)?\/?$/i.test(targetInput) && p.slug === "burpbounty-weblogic-console-route-live-oracle") return -3;

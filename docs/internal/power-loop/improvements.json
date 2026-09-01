@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-couchdb-all-dbs-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/couchdb/_all_dbs returns JSON with _replicator and _users; burpbountylab.com/cve/couchdb/_all_dbs findings 99→101 (+burpbounty-couchdb-all-dbs-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-cisco-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/cisco/ returns <h1>Cisco</h1> appliance heading; burpbountylab.com/cve/cisco/ findings 99→101 (+burpbounty-cisco-cve-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-actuator-heapdump-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /actuator/heapdump returns Binary heap dump data; burpbountylab.com/actuator/heapdump findings 99→101 (+burpbounty-actuator-heapdump-live-oracle +burpbounty-actuator-heapdump-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-ai-gateway-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /ai/gateway returns Behind Kong + Envoy HTML disclosure; burpbountylab.com/ai/gateway findings 99→100 (+burpbounty-ai-gateway-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
