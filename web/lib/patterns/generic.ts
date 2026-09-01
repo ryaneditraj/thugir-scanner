@@ -58265,6 +58265,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-cisco-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/cisco/ route live oracle",
+    description:
+      "When scanning /cve/cisco/, GET returns a Cisco appliance heading — route-specific Cisco network appliance CVE profile oracle.",
+    impactOneline:
+      "Route-specific Cisco fingerprint probe confirms network appliance CVE oracle when scanning the Burp Bounty Lab /cve/cisco/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCiscoCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Cisco appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Cisco PSIRT advisories promptly on exposed appliances.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/cisco/ route scan exposes a Cisco appliance fingerprint. Show Cisco management interface hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-n8n-settings-cve-live-oracle",
     platform: "generic",
     category: "Information disclosure",
@@ -58313,6 +58339,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/couchdb/_all_dbs endpoint leaks database names without auth. Show CouchDB hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-couchdb-all-dbs-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/couchdb/_all_dbs route live oracle",
+    description:
+      "When scanning /cve/couchdb/_all_dbs, GET returns a JSON database list including _replicator and _users — route-specific CouchDB CVE profile oracle.",
+    impactOneline:
+      "Route-specific CouchDB _all_dbs probe confirms unauthenticated database enumeration when scanning the Burp Bounty Lab CouchDB CVE practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCouchdbAllDbsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose CouchDB _all_dbs without authentication on public networks.",
+      steps: [
+        "Require authentication for all CouchDB HTTP API routes.",
+        "Bind CouchDB to internal interfaces and apply network ACLs.",
+        "Isolate Burp Bounty Lab CouchDB CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/couchdb/_all_dbs route scan leaks database names without auth. Show CouchDB hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-actuator-heapdump-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab Spring Boot actuator heapdump live oracle",
+    description:
+      "GET /actuator/heapdump returns Binary heap dump data without authentication — the Burp Bounty Spring Boot actuator heapdump exposure profile oracle.",
+    impactOneline:
+      "Live actuator heapdump probe confirms unauthenticated JVM memory dump exposure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyActuatorHeapdumpLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable /actuator/heapdump on public Spring Boot deployments.",
+      steps: [
+        "Disable heapdump and other sensitive actuator endpoints in production.",
+        "Require authentication for all actuator routes exposed beyond internal networks.",
+        "Isolate Burp Bounty Lab actuator routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /actuator/heapdump endpoint returns Binary heap dump data without auth. Show Spring Boot actuator hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-actuator-heapdump-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /actuator/heapdump route live oracle",
+    description:
+      "When scanning /actuator/heapdump, GET returns Binary heap dump data without authentication — route-specific Spring Boot actuator heapdump exposure oracle.",
+    impactOneline:
+      "Route-specific actuator heapdump probe confirms JVM memory dump exposure when scanning the Burp Bounty Lab /actuator/heapdump practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyActuatorHeapdumpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable /actuator/heapdump on public Spring Boot deployments.",
+      steps: [
+        "Disable heapdump and other sensitive actuator endpoints in production.",
+        "Require authentication for all actuator routes exposed beyond internal networks.",
+        "Isolate Burp Bounty Lab actuator routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /actuator/heapdump route scan returns Binary heap dump data without auth. Show Spring Boot actuator hardening.",
     version: 1,
     enabled: true
   },

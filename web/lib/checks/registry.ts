@@ -15744,6 +15744,12 @@ const burpbountyCiscoCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyCiscoCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/cisco\/?$/i,
+  burpbountyCiscoCveLiveOracle,
+  "Burp Bounty Lab /cve/cisco/ route scan — Cisco appliance heading — Cisco network appliance CVE profile oracle"
+);
+
 const burpbountyN8nSettingsCveLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/cve/n8n/rest/settings", ctx.origin).toString();
@@ -15802,6 +15808,35 @@ const burpbountyCouchdbAllDbsLiveOracle: Rule = async (ctx) => {
     }
   };
 };
+
+const burpbountyCouchdbAllDbsRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/couchdb\/_all_dbs\b/i,
+  burpbountyCouchdbAllDbsLiveOracle,
+  "Burp Bounty Lab /cve/couchdb/_all_dbs route scan — CouchDB database list JSON with _replicator and _users — CouchDB CVE profile oracle"
+);
+
+const burpbountyActuatorHeapdumpLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/actuator/heapdump", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 512 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Binary heap dump data/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /actuator/heapdump returns Binary heap dump data — Spring Boot actuator heapdump exposure profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyActuatorHeapdumpRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/actuator\/heapdump\b/i,
+  burpbountyActuatorHeapdumpLiveOracle,
+  "Burp Bounty Lab /actuator/heapdump route scan — Binary heap dump data response — Spring Boot actuator heapdump exposure profile oracle"
+);
 
 const burpbountyKubernetesApiLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
@@ -109723,6 +109758,10 @@ export const RULES: Record<string, Rule> = {
   burpbountyAiCompletionsRouteLiveOracle,
   burpbountyAiGatewayRouteLiveOracle,
   burpbountyBackupListingRouteLiveOracle,
+  burpbountyCouchdbAllDbsRouteLiveOracle,
+  burpbountyCiscoCveRouteLiveOracle,
+  burpbountyActuatorHeapdumpLiveOracle,
+  burpbountyActuatorHeapdumpRouteLiveOracle,
   burpbountyFortiosRemoteLoginRouteLiveOracle,
   burpbountyWpConfigLiveOracle,
   burpbountyWpConfigRouteLiveOracle,
