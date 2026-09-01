@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T06:30:00.000Z",
+  "updated_at": "2026-09-01T06:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2992,
-  "total_findings": 30959,
+  "total_sites_scanned": 3002,
+  "total_findings": 31086,
   "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2071,
-  "discovery_findings": 25622,
+  "discovery_urls_added": 2076,
+  "discovery_findings": 25749,
   "improvements_shipped": 1187,
-  "last_run": "2026-09-01T06:30:00.000Z",
+  "last_run": "2026-09-01T06:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "06",
     "benchmark": {
-      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_url": "https://juice-shop-staging.herokuapp.com",
       "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 601,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,38 +48,48 @@
           ]
         }
       },
-      "note": "Stable 6/6 rich pass (52 findings, 37 live oracles) — no category misses"
+      "note": "Primary juice-shop.herokuapp.com 503 + 20min scan timeout; staging fallback 52 findings (37 live oracles) — 6/6 recall maintained"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 25,
-      "focus": "CHM-ADMIN-003 XXE + CHM-ENERGY-001 calibration SSRF + OpenVault users enumeration",
+      "urls_added": 5,
+      "urls_scanned": 13,
+      "findings": 152,
+      "focus": "crAPI2 vehicle GPS BOLA + OTP/forget-password + Duck Store testimonial BOLA + vAPI API5 BFLA list-users",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
+      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (52 findings) after primary Heroku 503 timeout",
       "chimera.atlascrew.dev/api/v1/admin/attack/xxe: 7→8 — chimera-admin-attack-xxe-route-live-oracle (CHM-ADMIN-003)",
       "chimera.atlascrew.dev/api/v1/energy-utilities/assets/calibration: 7→8 — chimera-energy-utilities-calibration-ssrf-route-live-oracle (CHM-ENERGY-001)",
-      "openvaultbank.com/api/v1/users: 8→9 — openvault-users-enumeration-route-live-oracle"
+      "openvaultbank.com/api/v1/users: 8→9 — openvault-users-enumeration-route-live-oracle",
+      "duck-store.escape.tech/api/v1/testimonials/1: 43 findings — duck-store-testimonials-bola-route-live-oracle",
+      "vapi.apisec.ai/vapi/api5/users: 17 findings — vapi-api5-route-live-oracle + vapi-api5-bfla-live-oracle",
+      "crapi2.apisec.ai/identity/api/auth/v2/check-otp: 9 findings — crapi-check-otp-route-live-oracle",
+      "crapi2.apisec.ai/identity/api/v2/vehicle/1/location: 13 findings — crAPI corpus oracles (vehicle location route oracle still absent)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "juice-shop.herokuapp.com Heroku 503 — benchmark depends on staging/demo fallbacks",
+      "crapi2 vehicle/1/location — dedicated vehicle-location route live oracle still absent",
       "CHM-ENERGY-002 outages BOLA + CHM-ICS-002 controller status Chimera route oracles still absent",
       "OpenVault Bank: transactions BOLA + profile mass-assignment + reset-request + health misconfig route oracles absent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
+    "juice-shop-staging.herokuapp.com": 52,
+    "duck-store.escape.tech/api/v1/testimonials/1": 43,
+    "vapi.apisec.ai/vapi/api5/users": 17,
+    "crapi2.apisec.ai/identity/api/v2/vehicle/1/location": 13,
+    "crapi2.apisec.ai/identity/api/auth/v2/check-otp": 9,
+    "crapi2.apisec.ai/identity/api/auth/forget-password": 8,
+    "openvaultbank.com/api/v1/users": 9,
     "chimera.atlascrew.dev/api/v1/admin/attack/xxe": 8,
     "chimera.atlascrew.dev/api/v1/energy-utilities/assets/calibration": 8,
-    "openvaultbank.com/api/v1/users": 9,
     "chimera.atlascrew.dev/api/v1/diagnostics/ping": 8,
     "chimera.atlascrew.dev/api/v1/diagnostics/webhook": 8,
     "openvaultbank.com/api/v1/auth/token": 9,
     "openvaultbank.com/api/v1/payments": 9,
-    "openvaultbank.com/api/v1/payments/1": 9,
     "openvaultbank.com/api/v1/admin/accounts": 9,
     "openvaultbank.com/api/v1/accounts/1/transactions": 8,
     "openvaultbank.com/api/v1/profile": 8,
