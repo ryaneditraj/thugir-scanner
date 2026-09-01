@@ -77242,6 +77242,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-ot-modbus-command-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera OT Modbus command injection route live oracle",
+    description:
+      "When scanning /api/ot/protocols/modbus on chimera.atlascrew.dev, vulnerability inventory documents CHM-ICS-001 remote command injection on Modbus protocol operations — route-specific ICS/OT Modbus command injection training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional Modbus protocol command injection for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraOtModbusCommandInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict Modbus protocol endpoints to authorized OT operators and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Validate and sanitize all Modbus command parameters server-side.",
+        "Segment OT protocol endpoints from public-facing API gateways.",
+        "Do not expose Chimera ICS/OT endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/ot/protocols/modbus route documents CHM-ICS-001 Modbus command injection. Show OT protocol input validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-ics-scada-systems-discovery-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "medium",
+    title: "Chimera ICS SCADA systems discovery route live oracle",
+    description:
+      "When scanning /api/ics/scada/systems on chimera.atlascrew.dev, vulnerability inventory documents CHM-ICS-003 unauthorized SCADA systems inventory discovery — route-specific ICS/OT SCADA discovery training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional unauthenticated SCADA systems inventory disclosure for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraIcsScadaSystemsDiscoveryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict SCADA systems inventory to authorized OT operators.",
+      steps: [
+        "Require authenticated OT operator sessions before listing SCADA systems.",
+        "Segment ICS/OT inventory endpoints from public API gateways.",
+        "Do not expose Chimera SCADA endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/ics/scada/systems route documents CHM-ICS-003 unauthorized system discovery. Show ICS/OT inventory access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-insurance-policies-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera insurance policies BOLA route live oracle",
+    description:
+      "When scanning /api/v1/insurance/policies/{id} on chimera.atlascrew.dev, vulnerability inventory documents CHM-INS-001 BOLA on insurance policy details — route-specific insurance policy BOLA training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional insurance policy BOLA for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraInsurancePoliciesBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce authorization on insurance policy detail endpoints.",
+      steps: [
+        "Validate policy ownership server-side before returning policy details.",
+        "Require authenticated sessions tied to the policyholder account.",
+        "Do not expose Chimera insurance endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/insurance/policies/{id} route documents CHM-INS-001 policy BOLA. Show policy-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-hipaa-transfer-ssrf-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",

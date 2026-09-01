@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-ot-modbus-command-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-ICS-001 POST /api/ot/protocols/modbus — Remote Command Injection (Modbus) per vulnerability-inventory corpus; chimera.atlascrew.dev/api/ot/protocols/modbus findings 7→8 (+chimera-ot-modbus-command-injection-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-ics-scada-systems-discovery-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-ICS-003 GET /api/ics/scada/systems — Unauthorized System Discovery per vulnerability-inventory corpus; chimera.atlascrew.dev/api/ics/scada/systems findings 7→8 (+chimera-ics-scada-systems-discovery-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-insurance-policies-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-INS-001 GET /api/v1/insurance/policies/{policy_id} — BOLA/IDOR (Policies) per vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/insurance/policies/1 findings 7→8 (+chimera-insurance-policies-bola-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
       "slug": "chimera-genai-knowledge-upload-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/genai/knowledge/upload — CHM-AI-004 Unrestricted File Upload (RAG) per vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/genai/knowledge/upload findings 7→8 (+chimera-genai-knowledge-upload-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
