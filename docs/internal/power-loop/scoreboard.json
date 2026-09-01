@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T07:45:00.000Z",
+  "updated_at": "2026-09-01T08:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3014,
-  "total_findings": 31255,
+  "total_sites_scanned": 3023,
+  "total_findings": 31398,
   "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2081,
-  "discovery_findings": 25866,
+  "discovery_urls_added": 2086,
+  "discovery_findings": 25957,
   "improvements_shipped": 1190,
-  "last_run": "2026-09-01T07:45:00.000Z",
+  "last_run": "2026-09-01T08:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
@@ -48,45 +48,44 @@
           ]
         }
       },
-      "note": "Primary Heroku oracle stable 6/6 (52 findings, 37 live oracles)"
+      "note": "Primary Heroku oracle stable 6/6 rich pass (52 findings, 39 live oracles)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 25,
-      "focus": "CHM-ENERGY-002 outages BOLA + CHM-ICS-002 controller status + OpenVault transactions BOLA",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 91,
+      "focus": "Chimera admin RCE/path-traversal/deserialization/SSRF routes + drained ginandjuice catalog SQLi + oopssec ssrf-metadata + chimera energy/scada/commands",
+      "improvements_shipped_this_run": 1
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings)",
-      "chimera.atlascrew.dev/api/v1/energy-utilities/outages/1: 7→8 — chimera-energy-utilities-outages-bola-route-live-oracle (CHM-ENERGY-002)",
-      "chimera.atlascrew.dev/api/ics/controllers/status: 7→8 — chimera-ics-controllers-status-bola-route-live-oracle (CHM-ICS-002)",
-      "openvaultbank.com/api/v1/accounts/1/transactions: 8→9 — openvault-transactions-bola-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles)",
+      "ginandjuice.shop/catalog?category=1: 44 findings — ginandjuice-catalog-category-sqli-route-live-oracle confirmed",
+      "chimera.atlascrew.dev/api/v1/energy/scada/commands: 8 findings — chimera-energy-scada-commands-route-live-oracle confirmed",
+      "chimera.atlascrew.dev/api/v1/admin/system/execute: 7 findings — generic chimera bundle only (RCE route oracle absent)",
+      "chimera.atlascrew.dev/api/v1/admin/files/read: 7 findings — path-traversal route oracle absent",
+      "chimera.atlascrew.dev/api/integrations/webhook/register: 7 findings — SSRF webhook route oracle absent",
+      "chimera.atlascrew.dev/api/v1/admin/data/deserialize: 7 findings — deserialization route oracle absent",
+      "chimera.atlascrew.dev/api/hipaa/transfer/encrypted: 7 findings — HIPAA SSRF route oracle absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "chimera admin routes (system/execute, files/read, data/deserialize, webhook/register, hipaa/transfer) — route-specific oracles absent (generic chimera bundle only)",
+      "koadt.github.io/oss-oopssec-store/posts/ssrf-metadata: SSRF route oracle absent (4 findings, headers only)",
       "crapi2 vehicle/1/location — dedicated vehicle-location route live oracle still absent",
-      "chimera healthcare/patients/1 — patient-record BOLA route oracle absent (generic chimera bundle only)",
-      "OpenVault Bank: profile mass-assignment + reset-request + health misconfig route oracles absent"
+      "chimera healthcare/patients/1 — patient-record BOLA route oracle absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "ginandjuice.shop/catalog": 44,
     "urban-vampi-staging.up.railway.app/users/v1/_debug": 17,
     "crapi2.apisec.ai/identity/api/v2/community/posts/recent": 16,
     "crapi2.apisec.ai/workshop/api/mechanic/mechanic_report": 14,
     "crapi2.apisec.ai/workshop/api/merchant/contact_mechanic": 14,
     "duck-store.escape.tech/api/v1/testimonials/1": 43,
     "vapi.apisec.ai/vapi/api5/users": 17,
-    "crapi2.apisec.ai/identity/api/v2/vehicle/1/location": 13,
-    "openvaultbank.com/api/v1/accounts/1/transactions": 9,
-    "openvaultbank.com/api/v1/users": 9,
-    "openvaultbank.com/api/v1/auth/token": 9,
-    "openvaultbank.com/api/v1/payments": 9,
-    "openvaultbank.com/api/v1/admin/accounts": 9,
-    "ist-edu-bd.vercel.app/api/search": 9,
-    "crapi2.apisec.ai/identity/api/auth/v2/check-otp": 9,
+    "chimera.atlascrew.dev/api/v1/energy/scada/commands": 8,
     "chimera.atlascrew.dev/api/v1/energy-utilities/outages/1": 8,
     "chimera.atlascrew.dev/api/ics/controllers/status": 8,
     "chimera.atlascrew.dev/api/v1/admin/attack/xxe": 8,
@@ -96,9 +95,6 @@
     "chimera.atlascrew.dev/api/v1/telecom/sim-swap": 8,
     "chimera.atlascrew.dev/api/v1/healthcare/patients/1": 7,
     "chimera.atlascrew.dev/api/v1/saas/tenants/1": 7,
-    "openvaultbank.com/api/v1/profile": 8,
-    "openvaultbank.com/api/v1/auth/reset-request": 8,
-    "openvaultbank.com/api/v1/health": 8,
-    "openvaultbank.com/api/v1/accounts": 8
+    "openvaultbank.com/api/v1/accounts/1/transactions": 9
   }
 }
