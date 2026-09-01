@@ -1628,6 +1628,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideOpenvaultCheatsheetEvidence",
   "openvaultPaymentsBolaRouteLiveOracle",
   "openvaultAdminAccountsBflaRouteLiveOracle",
+  "openvaultAuthTokenEnumerationRouteLiveOracle",
   "clientSideCookiejarLabEvidence",
   "clientSideWebgoatEvidence",
   "clientSideSessionHijackEvidence",
@@ -1831,6 +1832,10 @@ const DEEP_RULES = new Set<string>([
   "chimeraGenaiModelsConfigDisclosureRouteLiveOracle",
   "chimeraGenaiKnowledgeUploadLiveOracle",
   "chimeraGenaiKnowledgeUploadRouteLiveOracle",
+  "chimeraDiagnosticsPingRceLiveOracle",
+  "chimeraDiagnosticsPingRceRouteLiveOracle",
+  "chimeraDiagnosticsWebhookSsrfLiveOracle",
+  "chimeraDiagnosticsWebhookSsrfRouteLiveOracle",
   "chimeraEcommerceProductsCatalogSqliRouteLiveOracle",
   "chimeraTelecomSubscribersProfileBolaRouteLiveOracle",
   "chimeraInsuranceClaimsSearchSqliRouteLiveOracle",
@@ -12515,6 +12520,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/diagnostics\/ping\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-diagnostics-ping-rce")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/diagnostics\/webhook\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-diagnostics-webhook-ssrf")
+      )
+        return -3;
+      if (
         /openvaultbank\.com/i.test(origin) &&
         /\/api\/v1\/payments\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-payments-bola")
@@ -12524,6 +12541,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /openvaultbank\.com/i.test(origin) &&
         /\/api\/v1\/admin\/accounts\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-admin-accounts-bfla")
+      )
+        return -3;
+      if (
+        /openvaultbank\.com/i.test(origin) &&
+        /\/api\/v1\/auth\/token\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-auth-token-enumeration")
       )
         return -3;
       if (

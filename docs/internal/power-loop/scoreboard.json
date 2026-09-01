@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T05:16:36.283Z",
+  "updated_at": "2026-09-01T05:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 2988,
-  "total_findings": 30879,
-  "critical_findings": 64,
+  "total_findings": 30882,
+  "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2071,
-  "discovery_findings": 25594,
-  "improvements_shipped": 1181,
-  "last_run": "2026-09-01T05:16:36.283Z",
+  "discovery_findings": 25597,
+  "improvements_shipped": 1184,
+  "last_run": "2026-09-01T05:30:00.000Z",
   "last_run_summary": {
     "hour_utc": "05",
     "benchmark": {
@@ -48,38 +48,36 @@
           ]
         }
       },
-      "note": "Stable 6/6 rich pass (52 findings, 37 live oracles; secret-resend + resend-key + iac-terraform-tls-key present) — no category misses"
+      "note": "Stable 6/6 rich pass (52 findings, 37 live oracles) — no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 62,
-      "focus": "+5 OpenVault cheatsheet gaps (transactions BOLA, payments/{id}, profile mass-assignment, reset-request, health) + drained CHM-ENERGY-001/002 + CHM-ADMIN-003",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 25,
+      "focus": "CHM-ADMIN-001/002 diagnostics oracles + OpenVault auth/token login enumeration",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "openvaultbank.com/api/v1/payments/1: 9 findings — openvault-payments-bola-route-live-oracle confirmed on GET /payments/{id}",
-      "openvaultbank.com/api/v1/accounts/1/transactions: 8 findings — BOLA transaction-history route oracle absent",
-      "openvaultbank.com/api/v1/profile: 8 findings — mass-assignment privilege-escalation route oracle absent",
-      "openvaultbank.com/api/v1/auth/reset-request: 8 findings — password-reset data-exposure route oracle absent",
-      "openvaultbank.com/api/v1/health: 8 findings — health misconfig route oracle absent",
-      "chimera.atlascrew.dev/api/v1/energy-utilities/assets/calibration: 7 findings — CHM-ENERGY-001 SSRF route oracle absent",
-      "chimera.atlascrew.dev/api/v1/energy-utilities/outages/1: 7 findings — CHM-ENERGY-002 BOLA route oracle absent",
-      "chimera.atlascrew.dev/api/v1/admin/attack/xxe: 7 findings — CHM-ADMIN-003 XXE route oracle absent"
+      "chimera.atlascrew.dev/api/v1/diagnostics/ping: 7→8 — chimera-diagnostics-ping-rce-route-live-oracle (CHM-ADMIN-001)",
+      "chimera.atlascrew.dev/api/v1/diagnostics/webhook: 7→8 — chimera-diagnostics-webhook-ssrf-route-live-oracle (CHM-ADMIN-002)",
+      "openvaultbank.com/api/v1/auth/token: 8→9 — openvault-auth-token-enumeration-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "OpenVault Bank: transactions BOLA + profile mass-assignment + reset-request exposure + health misconfig route oracles absent",
-      "CHM-ENERGY-001/002 + CHM-ADMIN-003 Chimera route oracles still absent (generic chimera bundle only)",
-      "CHM-ICS-002 + CHM-ADMIN-001/002 + openvault users still queued — not drained this run (8-URL limit)"
+      "CHM-ADMIN-003 XXE + CHM-ENERGY-001/002 + CHM-ICS-002 Chimera route oracles still absent",
+      "OpenVault Bank: transactions BOLA + profile mass-assignment + reset-request + health misconfig route oracles absent",
+      "openvaultbank.com/api/v1/users user enumeration route oracle still absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
-    "openvaultbank.com/api/v1/payments/1": 9,
+    "chimera.atlascrew.dev/api/v1/diagnostics/ping": 8,
+    "chimera.atlascrew.dev/api/v1/diagnostics/webhook": 8,
+    "openvaultbank.com/api/v1/auth/token": 9,
     "openvaultbank.com/api/v1/payments": 9,
+    "openvaultbank.com/api/v1/payments/1": 9,
     "openvaultbank.com/api/v1/admin/accounts": 9,
     "openvaultbank.com/api/v1/accounts/1/transactions": 8,
     "openvaultbank.com/api/v1/profile": 8,
@@ -87,13 +85,9 @@
     "openvaultbank.com/api/v1/health": 8,
     "openvaultbank.com/api/v1/users": 8,
     "openvaultbank.com/api/v1/accounts": 8,
-    "openvaultbank.com/api/v1/auth/token": 8,
     "chimera.atlascrew.dev/api/v1/genai/knowledge/upload": 8,
     "chimera.atlascrew.dev/api/v1/energy-utilities/assets/calibration": 7,
     "chimera.atlascrew.dev/api/v1/energy-utilities/outages/1": 7,
-    "chimera.atlascrew.dev/api/v1/admin/attack/xxe": 7,
-    "chimera.atlascrew.dev/api/v1/genai/models/config": 8,
-    "chimera.atlascrew.dev/api/v1/diagnostics/webhook": 7,
-    "chimera.atlascrew.dev/api/v1/diagnostics/ping": 7
+    "chimera.atlascrew.dev/api/v1/admin/attack/xxe": 7
   }
 }
