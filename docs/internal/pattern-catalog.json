@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-01T16:18:50.889Z",
-  "total": 3054,
-  "uniqueSlugs": 3046,
+  "generatedAt": "2026-09-01T17:14:10.186Z",
+  "total": 3056,
+  "uniqueSlugs": 3048,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3036,
+    "generic": 3038,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2969,
+    "deep": 2971,
     "continuous": 0
   },
   "byCategory": {
@@ -34,7 +34,7 @@
     "SSRF": 19,
     "Server-side request forgery": 103,
     "Sensitive data exposure": 87,
-    "AI security": 121,
+    "AI security": 123,
     "Business logic": 37,
     "AI / LLM security": 4,
     "Cross-site request forgery": 10,
@@ -2692,6 +2692,8 @@
     "vulnerable-bounty-site-search-xss-live-oracle",
     "vulnerable-bounty-site-search-xss-route-live-oracle",
     "vulnerable-bounty-site-users-api-route-live-oracle",
+    "vulnerable-chatbot-prompt-injection-live-oracle",
+    "vulnerable-chatbot-prompt-injection-route-live-oracle",
     "vulnerable-web-site-clickjacking-route-live-oracle",
     "vulnerable-web-site-command-injection-route-live-oracle",
     "vulnerable-web-site-csrf-route-live-oracle",

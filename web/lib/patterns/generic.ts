@@ -21436,6 +21436,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnerable-chatbot-prompt-injection-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "ShopBot prompt injection live oracle",
+    description:
+      "POST /api/chat with a system-prompt extraction probe returns ShopBot instructions including sk-fake API key and admin123 DB password — the QualityMax intentionally vulnerable chatbot oracle.",
+    impactOneline:
+      "Direct prompt injection on ShopBot leaks system prompts, embedded API keys, and database credentials from the LLM context.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableChatbotPromptInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass unsanitized user input to LLM system prompts — ShopBot demo is intentional lab software.",
+      steps: [
+        "Strip jailbreak and system-prompt extraction phrases before sending user messages to the model.",
+        "Never embed API keys or database passwords in prompts reachable via prompt injection.",
+        "Run intentionally vulnerable chatbot demos only on isolated training subdomains."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/chat endpoint leaks the full ShopBot system prompt via a system-prompt extraction probe. Show prompt-injection hardening for LLM customer-support bots.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnerable-chatbot-prompt-injection-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "ShopBot /api/chat prompt-injection route live oracle",
+    description:
+      "When scanning /api/chat on vulnerable-chatbot-demo.vercel.app, POST with a system-prompt probe returns ShopBot instructions including sk-fake API key and admin123 DB password — route-specific LLM prompt-injection oracle.",
+    impactOneline:
+      "Route scans on ShopBot /api/chat confirm live LLM prompt injection leaking system prompts and embedded secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableChatbotPromptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass unsanitized user input to LLM system prompts — ShopBot demo is intentional lab software.",
+      steps: [
+        "Strip jailbreak and system-prompt extraction phrases before sending user messages to the model.",
+        "Never embed API keys or database passwords in prompts reachable via prompt injection.",
+        "Run intentionally vulnerable chatbot demos only on isolated training subdomains."
+      ]
+    },
+    fixPrompt:
+      "Our /api/chat route scan confirms POST /api/chat leaks the full ShopBot system prompt. Show route-specific prompt-injection hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-security-writeup-evidence",
     platform: "generic",
     category: "Cross-site scripting",
