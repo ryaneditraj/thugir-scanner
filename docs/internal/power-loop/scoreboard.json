@@ -15,14 +15,14 @@
       ]
     }
   },
-  "total_sites_scanned": 3063,
-  "total_findings": 31909,
+  "total_sites_scanned": 3079,
+  "total_findings": 32016,
   "critical_findings": 74,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2096,
-  "discovery_findings": 26206,
-  "improvements_shipped": 1205,
+  "discovery_urls_added": 2101,
+  "discovery_findings": 26289,
+  "improvements_shipped": 1206,
   "last_run": "2026-09-01T12:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "12",
@@ -52,30 +52,39 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 24,
-      "focus": "Chimera gov/cases BOLA + cards/data/export PCI exposure + mobile biometric bypass route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 107,
+      "focus": "Chimera ICS modbus/scada + insurance BOLA + loyalty IDOR + crAPI vehicles; concurrent run shipped gov/cases + cards/export + biometric oracles",
+      "improvements_shipped_this_run": 4
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
+      "crapi.apisec.ai/identity/api/v2/user/vehicles: 12 findings (+crapi-user-vehicles-route-live-oracle)",
       "chimera.atlascrew.dev/api/v1/gov/cases: 7→8 (+chimera-gov-cases-bola-route-live-oracle)",
       "chimera.atlascrew.dev/api/cards/data/export: 7→8 (+chimera-cards-data-export-route-live-oracle)",
-      "chimera.atlascrew.dev/api/mobile/v2/auth/biometric/verify: 7→8 (+chimera-mobile-biometric-verify-route-live-oracle)"
+      "chimera.atlascrew.dev/api/mobile/v2/auth/biometric/verify: 7→8 (+chimera-mobile-biometric-verify-route-live-oracle)",
+      "chimera.atlascrew.dev/api/ot/protocols/modbus: 7 findings (generic chimera bundle)",
+      "duck-store.escape.tech/api/v1/mcp/coupons: 39 findings (drained from priority queue)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "chimera gov/permits + gov/access-cards + healthcare/claims/submit + lab-results/export: route-specific oracles still absent",
-      "chimera session/transfer + users/profile: route-specific oracles still absent"
+      "chimera modbus + scada/systems + insurance/policies/1 + loyalty/transactions/export: route-specific oracles absent (generic chimera bundle only)",
+      "chimera gov/permits + gov/access-cards + healthcare/claims/submit + lab-results/export: route-specific oracles still absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "crapi.apisec.ai/identity/api/v2/user/vehicles": 12,
+    "duck-store.escape.tech/api/v1/mcp/coupons": 39,
     "chimera.atlascrew.dev/api/v1/gov/cases": 8,
     "chimera.atlascrew.dev/api/cards/data/export": 8,
     "chimera.atlascrew.dev/api/mobile/v2/auth/biometric/verify": 8,
+    "chimera.atlascrew.dev/api/ot/protocols/modbus": 7,
+    "chimera.atlascrew.dev/api/ics/scada/systems": 7,
+    "chimera.atlascrew.dev/api/v1/insurance/policies/1": 7,
+    "chimera.atlascrew.dev/api/loyalty/transactions/export?customer_id=1": 7,
     "chimera.atlascrew.dev/api/mobile/v2/transfers/instant": 8,
     "chimera.atlascrew.dev/api/inventory/reserve": 8,
     "chimera.atlascrew.dev/api/sanctions/check": 8,
@@ -85,12 +94,6 @@
     "chimera.atlascrew.dev/api/v1/users/profile?user_id=1": 7,
     "chimera.atlascrew.dev/api/v1/gov/permits": 7,
     "chimera.atlascrew.dev/api/v1/healthcare/claims/submit": 7,
-    "chimera.atlascrew.dev/api/v1/healthcare/lab-results/export": 7,
-    "chimera.atlascrew.dev/api/v1/gov/access-cards": 7,
-    "chimera.atlascrew.dev/api/v1/admin/files/read": 8,
-    "chimera.atlascrew.dev/api/integrations/webhook/register": 8,
-    "apparatus.atlascrew.dev/": 9,
-    "ginandjuice.shop/catalog": 44,
-    "mutillidae.lab.pentest-forge.com/index.php?page=sqlinjection.php": 3
+    "chimera.atlascrew.dev/api/v1/healthcare/lab-results/export": 7
   }
 }
