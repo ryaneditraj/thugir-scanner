@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-payments-amount-manipulate-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/payments/amount/manipulate — Payment amount manipulation per Chimera openapi/endpoints-catalog corpus; chimera.atlascrew.dev/api/payments/amount/manipulate findings 7→8 (+chimera-payments-amount-manipulate-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "vwad-goof-subpath-parent-listing-fetch",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: clientSideVwadGoofEvidence fetches parent https://vwad.owasp.org/app/goof/ when /app/goof/login subpath 404 omits Goof listing markers; vwad.owasp.org/app/goof/login findings 7→9 (+client-side-vwad-goof-evidence +vwad-goof-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "vwad-goof-chimera-payments-route-priorities",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for vwad-goof/* on /app/goof/* + chimera-payments-process/amount-manipulate on Chimera payment routes; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
       "slug": "chimera-banking-accounts-bola-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: CHM-BANK-002 GET /api/v1/banking/accounts — BOLA/IDOR (Accounts) per vulnerability-inventory; chimera.atlascrew.dev/api/v1/banking/accounts findings 7→8 (+chimera-banking-accounts-bola-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"

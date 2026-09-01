@@ -14900,6 +14900,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-payments-amount-manipulate-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "critical",
+    title: "Chimera payment amount manipulation route live oracle",
+    description:
+      "When scanning /api/payments/amount/manipulate on chimera.atlascrew.dev, the endpoints catalog documents payment amount manipulation without authorization checks — route-specific payment fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional payment amount manipulation flaws for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraPaymentsAmountManipulateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate payment amounts server-side and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce server-side amount validation independent of client-submitted values.",
+        "Require authentication and authorization on all payment manipulation endpoints.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/payments/amount/manipulate route documents payment amount manipulation flaws. Show server-side amount validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-wire-transfer-route-live-oracle",
     platform: "generic",
     category: "Business logic",

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-01T00:07:13.351Z",
-  "total": 3012,
-  "uniqueSlugs": 3004,
+  "generatedAt": "2026-09-01T01:04:53.777Z",
+  "total": 3013,
+  "uniqueSlugs": 3005,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 2994,
+    "generic": 2995,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2927,
+    "deep": 2928,
     "continuous": 0
   },
   "byCategory": {
@@ -35,7 +35,7 @@
     "Server-side request forgery": 98,
     "Sensitive data exposure": 82,
     "AI security": 121,
-    "Business logic": 34,
+    "Business logic": 35,
     "AI / LLM security": 4,
     "Cross-site request forgery": 10,
     "Authentication bypass": 4,
@@ -394,6 +394,7 @@
     "chimera-loyalty-points-transfer-route-live-oracle",
     "chimera-patients-search-sqli-live-oracle",
     "chimera-patients-search-sqli-route-live-oracle",
+    "chimera-payments-amount-manipulate-route-live-oracle",
     "chimera-payments-process-route-live-oracle",
     "chimera-saas-tenants-projects-idor-route-live-oracle",
     "chimera-swagger-route-live-oracle",
