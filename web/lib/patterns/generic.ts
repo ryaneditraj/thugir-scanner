@@ -77164,6 +77164,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-gov-cases-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera government cases BOLA route live oracle",
+    description:
+      "When scanning /api/v1/gov/cases on chimera.atlascrew.dev, api-reference documents citizen case creation and case-detail access without authorization — route-specific government BOLA training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional citizen case management BOLA for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGovCasesBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce authorization on government case management endpoints.",
+      steps: [
+        "Require authenticated citizen or caseworker identity before creating or viewing cases.",
+        "Validate case ownership server-side on every case detail request.",
+        "Do not expose Chimera government endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/gov/cases route documents citizen case BOLA. Show case-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-cards-data-export-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Chimera card data export route live oracle",
+    description:
+      "When scanning /api/cards/data/export on chimera.atlascrew.dev, endpoints catalog documents unauthenticated card data extraction — route-specific PCI data exposure training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional card data extraction for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraCardsDataExportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict card data export to authenticated PCI-compliant processes.",
+      steps: [
+        "Never expose raw card data via unauthenticated export endpoints.",
+        "Require strong authentication and audit logging for any card data access.",
+        "Do not expose Chimera payment endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/cards/data/export route documents card data extraction. Show PCI-compliant card data access remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-mobile-biometric-verify-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Chimera mobile biometric verify route live oracle",
+    description:
+      "When scanning /api/mobile/v2/auth/biometric/verify on chimera.atlascrew.dev, endpoints catalog documents biometric authentication bypass without device binding — route-specific mobile auth bypass training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional mobile biometric auth bypass for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraMobileBiometricVerifyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind biometric verification to registered device attestations.",
+      steps: [
+        "Validate device integrity and biometric attestation server-side before granting access.",
+        "Reject biometric verify requests from unregistered or untrusted devices.",
+        "Do not expose Chimera mobile auth endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/mobile/v2/auth/biometric/verify route documents biometric bypass. Show device-bound biometric auth remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-hipaa-transfer-ssrf-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
