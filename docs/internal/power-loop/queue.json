@@ -1,29 +1,29 @@
 {
-  "updated_at": "2026-09-01T14:25:36.746Z",
+  "updated_at": "2026-09-01T15:05:00.000Z",
   "priority_discovery_urls": [
     {
-      "url": "https://dvga.tools.escape.tech/graphql",
-      "source": "Escape.tech DVGA — GraphQL introspection + batching/SQLi filter oracles (public benchmark; dvga.tools.escape.tech)",
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/records/search?q=test",
+      "source": "atlas-crew/Chimera — CHM-HEALTH-001 SQL injection oracle GET /api/v1/healthcare/records/search (vulnerability-inventory)",
       "auth": "public_demo"
     },
     {
-      "url": "https://chimera.atlascrew.dev/api/v1/genai/chat",
-      "source": "atlas-crew/Chimera — CHM-AI-001 prompt injection oracle POST /api/v1/genai/chat (vuln_registry)",
+      "url": "https://chimera.atlascrew.dev/api/v1/ecommerce/products/search?query=test",
+      "source": "atlas-crew/Chimera — CHM-ECOM-001 reflected XSS oracle GET /api/v1/ecommerce/products/search (vuln_registry)",
       "auth": "public_demo"
     },
     {
-      "url": "https://chimera.atlascrew.dev/api/v1/genai/agent/browse",
-      "source": "atlas-crew/Chimera — CHM-AI-002 SSRF via agent oracle POST /api/v1/genai/agent/browse (vuln_registry)",
+      "url": "https://chimera.atlascrew.dev/api/v1/gov/benefits/search?q=test",
+      "source": "atlas-crew/Chimera — CHM-GOV-001 SQL injection oracle GET /api/v1/gov/benefits/search (vulnerability-inventory)",
       "auth": "public_demo"
     },
     {
-      "url": "https://chimera.atlascrew.dev/api/v1/banking/accounts",
-      "source": "atlas-crew/Chimera — CHM-BANK-002 BOLA/IDOR oracle GET /api/v1/banking/accounts (vulnerability-inventory)",
+      "url": "https://chimera.atlascrew.dev/api/v1/insurance/policies/1",
+      "source": "atlas-crew/Chimera — CHM-INS-001 BOLA/IDOR oracle GET /api/v1/insurance/policies/{policy_id} (vuln_registry)",
       "auth": "public_demo"
     },
     {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-65",
-      "source": "OWASP WrongSecrets — Challenge 65 plain Java CLI JAR binary oracle (Heroku demo README: challenges 54-66)",
+      "url": "https://chimera.atlascrew.dev/api/loyalty/transactions/export?customer_id=1",
+      "source": "atlas-crew/Chimera — CHM-LOYAL-002 BOLA/IDOR oracle GET /api/loyalty/transactions/export (vulnerability-inventory)",
       "auth": "public_demo"
     }
   ],
