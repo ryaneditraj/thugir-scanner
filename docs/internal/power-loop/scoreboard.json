@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T19:12:00.000Z",
+  "updated_at": "2026-09-01T19:25:20.732Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2797,
-  "total_findings": 27939,
+  "total_sites_scanned": 2801,
+  "total_findings": 28012,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1986,
-  "discovery_findings": 23343,
-  "improvements_shipped": 1169,
-  "last_run": "2026-09-01T19:12:00.000Z",
+  "discovery_findings": 23352,
+  "improvements_shipped": 1172,
+  "last_run": "2026-09-01T19:25:20.732Z",
   "last_run_summary": {
     "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 598,
+      "live_oracles": 38,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,43 +53,33 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 119,
-      "focus": "oopssec walkthrough oracles (brute-force, open-redirect, mass-assignment, password-reset, jwt-weak-secret) + drained ist-edu-bd, fauxbank, vaultapp, pentest-ground sqli, wrongsecrets 39/23/24",
-      "improvements_shipped_this_run": 0
+      "urls_validated": 3,
+      "findings_delta": "+3 Fabraix route oracles",
+      "focus": "Fabraix access-code-001 + data-exfil-001 alias + 01-guardrail-bypass route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 38 live oracles)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-39: 19 findings — wrongsecrets-challenge-39-aes-filename-key-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-23: 19 findings — wrongsecrets-challenge-23-base64-frontend-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-24: 19 findings — wrongsecrets-challenge-24-hmac-cryptography-route-live-oracle",
-      "pentest-fauxbank.vercel.app/lab: 16 findings — full fauxbank live-oracle suite (sqli, idor, csrf, stored-xss, admin)",
-      "ist-edu-bd.vercel.app/xss: 12 findings — ist-edu-search-sqli + idor route oracles",
-      "vaultapp-omega.vercel.app/api/documents/1: 14 findings — vaultapp IDOR oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 38 live oracles)",
+      "playground.fabraix.com/challenges/access-code-001: 7 findings — fabraix-access-code-001-route-live-oracle (Gatekeeper backend)",
+      "playground.fabraix.com/challenges/data-exfil-001: 7 findings — fabraix-data-exfiltration-001-route-live-oracle (Iris backend alias path)",
+      "playground.fabraix.com/challenges/01-guardrail-bypass: 7 findings — fabraix-guardrail-bypass-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "fabraix access-code-001 still not scanned — route-specific oracle gap (generic session oracles only on sibling challenges)",
-      "oopssec walkthrough URLs queued but not drained this run — queue order prioritized ist-edu-bd/fauxbank/vaultapp/wrongsecrets",
-      "securityweb-iota.vercel.app deploy 404 — alternate seclab hostname dead",
-      "playhacklab.com returns 404 — public demo unavailable"
+      "benchmark 6/6 stable — no category misses",
+      "Fabraix canonical challenge routes now have route-specific oracles (access-code-001, data-exfil-001, guardrail-bypass)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
-    "wrongsecrets.herokuapp.com/challenge/challenge-39": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-23": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-24": 19,
-    "pentest-fauxbank.vercel.app/lab": 16,
-    "ist-edu-bd.vercel.app/xss": 12,
-    "ist-edu-bd.vercel.app/idor": 11,
-    "vaultapp-omega.vercel.app/api/documents/1": 14,
+    "juice-shop.herokuapp.com": 52,
+    "playground.fabraix.com/challenges/access-code-001": 7,
+    "playground.fabraix.com/challenges/data-exfil-001": 7,
+    "playground.fabraix.com/challenges/01-guardrail-bypass": 7,
     "playground.fabraix.com/challenges/tool-poisoning-001": 7,
     "playground.fabraix.com/challenges/prompt-injection-001": 7,
     "burpbountylab.com/wp/wp-config.php": 100,
-    "duck-store.escape.tech/api/v1/users/me/profile": 33,
-    "demo.owasp-juice.shop/rest/memories": 27,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52
+    "wrongsecrets.herokuapp.com/challenge/challenge-39": 19,
+    "pentest-fauxbank.vercel.app/lab": 16,
+    "ist-edu-bd.vercel.app/xss": 12
   }
 }

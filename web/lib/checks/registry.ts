@@ -12658,17 +12658,72 @@ const fabraixDataExfil002RouteLiveOracle: Rule = async (ctx) => {
 const fabraixDataExfil001RouteLiveOracle: Rule = async (ctx) => {
   if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/challenges\/data-exfiltration-001/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/challenges\/(?:data-exfiltration-001|data-exfil-001)\b/i.test(pageUrl)) return NEGATIVE;
   const probe = await probeFabraixPlaygroundSession(ctx, "data-exfil-001");
+  if (!probe) return NEGATIVE;
+  const routeSlug = /\/challenges\/data-exfil-001\b/i.test(pageUrl)
+    ? "data-exfil-001"
+    : "data-exfiltration-001";
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      ...probe,
+      challengeRoute: routeSlug,
+      scannedUrl: pageUrl,
+      note: `Fabraix /challenges/${routeSlug} route scan — data-exfil challenge maps to data-exfil-001 backend (Iris support assistant + SentinelID verify_identity exfil oracle)`
+    }
+  };
+};
+
+const fabraixAccessCode001RouteLiveOracle: Rule = async (ctx) => {
+  if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenges\/access-code-001\b/i.test(pageUrl)) return NEGATIVE;
+  const probe = await probeFabraixPlaygroundSession(ctx, "access-code-001");
   if (!probe) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.93,
     evidence: {
       ...probe,
-      challengeRoute: "data-exfiltration-001",
+      challengeRoute: "access-code-001",
       scannedUrl: pageUrl,
-      note: "Fabraix /challenges/data-exfiltration-001 route scan — data-exfil challenge maps to data-exfil-001 backend (Iris support assistant + SentinelID verify_identity exfil oracle)"
+      note: "Fabraix /challenges/access-code-001 route scan — Gatekeeper access-code extraction challenge maps to access-code-001 backend (Kai agent persona)"
+    }
+  };
+};
+
+const fabraixGuardrailBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenges\/01-guardrail-bypass\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const guardrailOk =
+    /Blocked by guardrails/i.test(corpus) ||
+    (/Every message is scored by a guardrail/i.test(corpus) &&
+      /break its rules|guardrail bypass/i.test(corpus));
+  const probe = await probeFabraixPlaygroundSession(ctx, "access-code-001");
+  if (probe) {
+    return {
+      fired: true,
+      confidence: guardrailOk ? 0.93 : 0.9,
+      evidence: {
+        ...probe,
+        challengeRoute: "01-guardrail-bypass",
+        scannedUrl: pageUrl,
+        note: "Fabraix /challenges/01-guardrail-bypass route scan — guardrail bypass challenge maps to access-code-001 Gatekeeper backend for live session probe"
+      }
+    };
+  }
+  if (!guardrailOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "01-guardrail-bypass — AI guardrail bypass red-team challenge",
+      note: "Fabraix /challenges/01-guardrail-bypass route scan — walkthrough documents guardrail scoring and bypass objectives (Jekyll corpus fallback when live session probe unavailable)"
     }
   };
 };
@@ -109628,6 +109683,8 @@ export const RULES: Record<string, Rule> = {
   fabraixPlaygroundSessionRouteLiveOracle,
   fabraixDataExfil002RouteLiveOracle,
   fabraixDataExfil001RouteLiveOracle,
+  fabraixAccessCode001RouteLiveOracle,
+  fabraixGuardrailBypassRouteLiveOracle,
   fabraixIndirectPromptInjectionRouteLiveOracle,
   fabraixPromptInjection001RouteLiveOracle,
   fabraixToolPoisoning001RouteLiveOracle,

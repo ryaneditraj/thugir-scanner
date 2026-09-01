@@ -4098,6 +4098,8 @@ const DEEP_RULES = new Set<string>([
   "fabraixPlaygroundSessionRouteLiveOracle",
   "fabraixDataExfil002RouteLiveOracle",
   "fabraixDataExfil001RouteLiveOracle",
+  "fabraixAccessCode001RouteLiveOracle",
+  "fabraixGuardrailBypassRouteLiveOracle",
   "fabraixIndirectPromptInjectionRouteLiveOracle",
   "fabraixPromptInjection001RouteLiveOracle",
   "fabraixToolPoisoning001RouteLiveOracle",
