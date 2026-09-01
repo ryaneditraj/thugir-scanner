@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T19:25:20.732Z",
+  "updated_at": "2026-09-01T20:08:02.781Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2801,
-  "total_findings": 28012,
+  "total_sites_scanned": 2811,
+  "total_findings": 28218,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1986,
-  "discovery_findings": 23352,
+  "discovery_findings": 23454,
   "improvements_shipped": 1172,
-  "last_run": "2026-09-01T19:25:20.732Z",
+  "last_run": "2026-09-01T20:08:02.781Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 598,
-      "live_oracles": 38,
+      "probes_run": 596,
+      "live_oracles": 37,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,37 +49,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 38 live oracles); secret-resend + juice-shop-resend-key-live-oracle present"
+      "note": "Stable 6/6 first-pass recall (52 findings, 37 live oracles); secret-resend + juice-shop-resend-key-live-oracle + juice-shop-iac-terraform-tls-key-live-oracle present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_validated": 3,
-      "findings_delta": "+3 Fabraix route oracles",
-      "focus": "Fabraix access-code-001 + data-exfil-001 alias + 01-guardrail-bypass route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_prioritized": 5,
+      "urls_scanned": 8,
+      "findings": 102,
+      "focus": "OopsSec Store GitHub Pages walkthrough oracles (brute-force, open-redirect, mass-assignment, password-reset, jwt-weak-secret) + drained wrongsecrets 25/26/27",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 38 live oracles)",
-      "playground.fabraix.com/challenges/access-code-001: 7 findings — fabraix-access-code-001-route-live-oracle (Gatekeeper backend)",
-      "playground.fabraix.com/challenges/data-exfil-001: 7 findings — fabraix-data-exfiltration-001-route-live-oracle (Iris backend alias path)",
-      "playground.fabraix.com/challenges/01-guardrail-bypass: 7 findings — fabraix-guardrail-bypass-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 37 live oracles)",
+      "koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting/: 6 findings — oopssec-brute-force-no-rate-limit-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass/: 10 findings — oopssec-open-redirect-login-bypass-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/: 9 findings — oopssec-mass-assignment-admin-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/insecure-password-reset/: 10 findings — oopssec-insecure-password-reset-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass/: 10 findings — oopssec-jwt-weak-secret-admin-bypass-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-25: 19 findings — wrongsecrets-challenge-25-web3-smart-contract-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-26: 19 findings — wrongsecrets-challenge-26-web3-smart-contract-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-27: 19 findings — wrongsecrets-challenge-27-web3-smart-contract-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses",
-      "Fabraix canonical challenge routes now have route-specific oracles (access-code-001, data-exfil-001, guardrail-bypass)"
+      "OopsSec walkthrough pages are static GitHub Pages docs — route oracles confirm walkthrough text but cannot exercise live /api/auth/login endpoints"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass/": 10,
+    "koadt.github.io/oss-oopssec-store/posts/insecure-password-reset/": 10,
+    "koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass/": 10,
+    "wrongsecrets.herokuapp.com/challenge/challenge-25": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-26": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-27": 19,
     "playground.fabraix.com/challenges/access-code-001": 7,
     "playground.fabraix.com/challenges/data-exfil-001": 7,
-    "playground.fabraix.com/challenges/01-guardrail-bypass": 7,
-    "playground.fabraix.com/challenges/tool-poisoning-001": 7,
-    "playground.fabraix.com/challenges/prompt-injection-001": 7,
-    "burpbountylab.com/wp/wp-config.php": 100,
-    "wrongsecrets.herokuapp.com/challenge/challenge-39": 19,
-    "pentest-fauxbank.vercel.app/lab": 16,
-    "ist-edu-bd.vercel.app/xss": 12
+    "playground.fabraix.com/challenges/01-guardrail-bypass": 7
   }
 }
