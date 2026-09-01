@@ -15030,6 +15030,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-banking-accounts-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera banking accounts BOLA route live oracle",
+    description:
+      "When scanning /api/v1/banking/accounts on chimera.atlascrew.dev, CHM-BANK-002 documents BOLA/IDOR via predictable account identifiers without ownership checks — route-specific banking access control training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional banking account BOLA for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraBankingAccountsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on banking account endpoints.",
+      steps: [
+        "Verify the authenticated user owns each requested banking account before returning data.",
+        "Use unpredictable account identifiers instead of sequential IDs.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/banking/accounts route documents CHM-BANK-002 BOLA. Show object-level authorization remediation for banking accounts.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-banking-transfer-business-logic-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "critical",
+    title: "Chimera banking transfer business logic route live oracle",
+    description:
+      "When scanning /api/v1/banking/transfer on chimera.atlascrew.dev, CHM-BANK-001 documents business logic manipulation and race conditions on fund transfers — route-specific banking fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional banking transfer business logic flaws for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraBankingTransferBusinessLogicRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use atomic balance checks and server-side transfer validation.",
+      steps: [
+        "Wrap transfer operations in database transactions with row-level locking.",
+        "Re-validate account balances immediately before debiting funds.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/banking/transfer route documents CHM-BANK-001 transfer manipulation. Show atomic transfer and race-condition remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-insurance-policies-lookup-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -49982,6 +50034,60 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-darklab-finstripe-reset-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinStripe reset-tools write live oracle",
+    description:
+      "POST /darklab/api/v1/supply-chain/servers/finstripe/reset-tools resets FinStripe MCP tool overrides — writable supply-chain reset surface.",
+    impactOneline:
+      "Writable FinStripe MCP tool reset APIs let attackers manipulate agent payment tool catalogs during supply-chain poisoning labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinstripeResetToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinStripe MCP reset APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finstripe/reset-tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes POST /finstripe/reset-tools for MCP tool resets. Show how to protect agentic payment tool catalogs from unauthorized resets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finstripe-reset-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinStripe /reset-tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/finstripe/reset-tools, POST confirms writable MCP tool-reset API for supply-chain poisoning labs.",
+    impactOneline:
+      "Writable FinStripe MCP tool reset APIs let attackers manipulate agent payment tool catalogs during supply-chain poisoning labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinstripeResetToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinStripe MCP reset APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finstripe/reset-tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /finstripe/reset-tools route scan confirms writable MCP tool reset API. Show remediation for agentic supply-chain labs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-darklab-systemutils-tools-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -50032,6 +50138,60 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our FinBot /systemutils/tools route scan confirms writable MCP tool definitions. Show remediation for agentic supply-chain tool poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-systemutils-reset-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab SystemUtils reset-tools write live oracle",
+    description:
+      "POST /darklab/api/v1/supply-chain/servers/systemutils/reset-tools resets SystemUtils MCP tool overrides — writable supply-chain reset surface.",
+    impactOneline:
+      "Writable SystemUtils MCP tool reset APIs let attackers manipulate agent system-utility tool catalogs during supply-chain poisoning labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabSystemutilsResetToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict SystemUtils MCP reset APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/systemutils/reset-tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes POST /systemutils/reset-tools for MCP tool resets. Show how to protect agentic system-utility tool catalogs from unauthorized resets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-systemutils-reset-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab SystemUtils /reset-tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/systemutils/reset-tools, POST confirms writable MCP tool-reset API for supply-chain poisoning labs.",
+    impactOneline:
+      "Writable SystemUtils MCP tool reset APIs let attackers manipulate agent system-utility tool catalogs during supply-chain poisoning labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabSystemutilsResetToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict SystemUtils MCP reset APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/systemutils/reset-tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /systemutils/reset-tools route scan confirms writable MCP tool reset API. Show remediation for agentic supply-chain labs.",
     version: 1,
     enabled: true
   },
