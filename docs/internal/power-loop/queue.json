@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T09:25:00.000Z",
+  "updated_at": "2026-09-01T11:05:00.000Z",
   "discovery_urls": [
     {
       "url": "https://crapi.apisec.ai/community/api/v2/coupon/validate-coupon",
@@ -11427,6 +11427,31 @@
     }
   ],
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/gov/cases",
+      "source": "atlas-crew/Chimera CHM-GOV-002 — citizen case management BOLA oracle GET/POST /api/v1/gov/cases (api-reference.md; web search 11 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/gov/permits",
+      "source": "atlas-crew/Chimera — permit application fraud oracle POST /api/v1/gov/permits (endpoints-catalog government; web search 11 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/claims/submit",
+      "source": "atlas-crew/Chimera — healthcare insurance claim forgery oracle POST /api/v1/healthcare/claims/submit (api-reference.md HIPAA slice; web search 11 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/lab-results/export",
+      "source": "atlas-crew/Chimera — PHI lab-results bulk export oracle GET /api/v1/healthcare/lab-results/export (API-DOCUMENTATION.md; web search 11 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/gov/access-cards",
+      "source": "atlas-crew/Chimera — government access-card issuance oracle POST /api/v1/gov/access-cards (api-reference.md government domain; web search 11 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/mobile/v2/transfers/instant",
       "source": "atlas-crew/Chimera mobile domain — fraudulent instant transfer oracle POST /api/mobile/v2/transfers/instant (endpoints-catalog; web search 10 UTC)",
