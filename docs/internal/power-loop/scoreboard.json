@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T10:10:00.000Z",
+  "updated_at": "2026-09-01T10:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3047,
-  "total_findings": 31708,
+  "total_sites_scanned": 3050,
+  "total_findings": 31733,
   "critical_findings": 68,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2091,
-  "discovery_findings": 26056,
-  "improvements_shipped": 1196,
-  "last_run": "2026-09-01T10:10:00.000Z",
+  "discovery_findings": 26081,
+  "improvements_shipped": 1199,
+  "last_run": "2026-09-01T10:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,33 +48,30 @@
           ]
         }
       },
-      "note": "Primary Heroku oracle stable 6/6 rich pass (51 findings, 39 live oracles; secret-resend + jwt-alg-none + captcha-bypass present)"
+      "note": "Primary Heroku oracle stable 6/6 rich pass (52 findings)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 57,
-      "focus": "Chimera mobile instant-transfer + telecom subscriber SIM-swap + retail inventory/sanctions/cards-export oracles",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 25,
+      "focus": "Chimera admin files/read path traversal + integrations webhook/register SSRF + Apparatus chaos engineering route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, gap=[])",
-      "chimera.atlascrew.dev/api/v1/telecom/subscribers/1/sim-swap: 8 findings — chimera-telecom-sim-swap-route-live-oracle confirmed",
-      "chimera.atlascrew.dev/api/mobile/v2/transfers/instant: 7 findings — route-specific oracle absent (generic chimera bundle)",
-      "chimera.atlascrew.dev/api/inventory/reserve: 7 findings — route-specific oracle absent (generic chimera bundle)",
-      "chimera.atlascrew.dev/api/sanctions/check: 7 findings — route-specific oracle absent (generic chimera bundle)",
-      "chimera.atlascrew.dev/api/cards/data/export: 7 findings — route-specific oracle absent (generic chimera bundle)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
+      "chimera.atlascrew.dev/api/v1/admin/files/read: 7→8 (+chimera-admin-files-read-path-traversal-route-live-oracle)",
+      "chimera.atlascrew.dev/api/integrations/webhook/register: 7→8 (+chimera-integrations-webhook-register-ssrf-route-live-oracle)",
+      "apparatus.atlascrew.dev/: 8→9 (+apparatus-chaos-engineering-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on juice-shop",
-      "chimera mobile instant-transfer + inventory/reserve + sanctions/check + cards/data/export: route-specific oracles absent (generic chimera bundle only)",
-      "chimera mobile biometric/session-transfer + database-mode users/profile: route-specific oracles still absent (generic chimera bundle only)"
+      "chimera mobile instant-transfer + inventory/reserve + sanctions/check + cards/data/export: route-specific oracles absent (generic chimera bundle only)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
+    "juice-shop.herokuapp.com": 52,
     "chimera.atlascrew.dev/api/v1/telecom/subscribers/1/sim-swap": 8,
     "chimera.atlascrew.dev/api/mobile/v2/transfers/instant": 7,
     "chimera.atlascrew.dev/api/inventory/reserve": 7,
@@ -83,6 +80,9 @@
     "chimera.atlascrew.dev/api/mobile/v2/auth/biometric/verify": 7,
     "chimera.atlascrew.dev/api/mobile/v2/auth/session/transfer": 7,
     "chimera.atlascrew.dev/api/v1/users/profile?user_id=1": 7,
+    "chimera.atlascrew.dev/api/v1/admin/files/read": 8,
+    "chimera.atlascrew.dev/api/integrations/webhook/register": 8,
+    "apparatus.atlascrew.dev/": 9,
     "ginandjuice.shop/catalog": 44,
     "openvaultbank.com/api/v1/health": 9,
     "ist-edu-bd.vercel.app/api/search": 9

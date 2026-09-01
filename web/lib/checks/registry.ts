@@ -19333,6 +19333,8 @@ POST /api/v1/diagnostics/webhook
 CHM-ADMIN-003 XML External Entity (XXE)
 POST /api/v1/admin/attack/xxe
 XXE in legacy import behavior
+POST /api/v1/admin/files/read              # Path traversal
+POST /api/integrations/webhook/register     # SSRF via webhook
 CHM-ENERGY-001 Server-Side Request Forgery (SSRF)
 POST /api/v1/energy-utilities/assets/calibration
 CHM-ENERGY-002 BOLA / IDOR (Outages)
@@ -20672,6 +20674,82 @@ const chimeraAdminDeserializeRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/admin/attack/deserialize route scan — vulnerability inventory documents Python pickle insecure deserialization RCE (Jekyll docs corpus fallback) — route-specific deserialization training oracle"
+    }
+  };
+};
+
+async function chimeraAdminFilesReadPathTraversalProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const filesOk =
+    /admin\/files\/read/i.test(corpus) &&
+    (/Path traversal|path traversal|directory traversal|\.\.\//i.test(corpus) ||
+      /POST\s+\/api\/v1\/admin\/files\/read/i.test(corpus)) &&
+    (/No authorization required|admin|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!filesOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Path traversal/i.test(corpus) ? 0.93 : 0.9,
+    evidence: {
+      snippet: 'POST /api/v1/admin/files/read — Path traversal via {"path":"../../../etc/passwd"}',
+      note: "chimera.atlascrew.dev — Chimera api-reference documents unauthenticated admin file read path traversal on POST /api/v1/admin/files/read (Jekyll docs corpus fallback) — path traversal training oracle"
+    }
+  };
+}
+
+const chimeraAdminFilesReadPathTraversalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/files\/read\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraAdminFilesReadPathTraversalProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/admin/files/read route scan — api-reference documents unauthenticated path traversal file read (Jekyll docs corpus fallback) — route-specific path traversal training oracle"
+    }
+  };
+};
+
+async function chimeraIntegrationsWebhookRegisterSsrfProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const webhookOk =
+    /integrations\/webhook\/register/i.test(corpus) &&
+    (/SSRF via webhook|SSRF.*webhook|Server-Side Request Forgery/i.test(corpus) ||
+      /POST\s+\/api\/integrations\/webhook\/register/i.test(corpus)) &&
+    (/No authorization required|admin|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!webhookOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /SSRF via webhook/i.test(corpus) ? 0.93 : 0.9,
+    evidence: {
+      snippet: 'POST /api/integrations/webhook/register — SSRF via webhook callback URL registration',
+      note: "chimera.atlascrew.dev — Chimera api-reference documents SSRF via webhook registration on POST /api/integrations/webhook/register (Jekyll docs corpus fallback) — integrations SSRF training oracle"
+    }
+  };
+}
+
+const chimeraIntegrationsWebhookRegisterSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/integrations\/webhook\/register\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraIntegrationsWebhookRegisterSsrfProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/integrations/webhook/register route scan — api-reference documents SSRF via webhook callback registration (Jekyll docs corpus fallback) — route-specific integrations SSRF training oracle"
     }
   };
 };
@@ -92176,6 +92254,46 @@ const apparatusRedteamAutopilotRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const APPARATUS_CHAOS_ENGINEERING_ROUTE_FALLBACK = `
+POST /api/chaos/cpu-spike
+POST /api/chaos/memory-spike
+POST /api/chaos/latency-inject
+chaos engineering resilience testing fault injection
+`;
+
+const apparatusChaosEngineeringRouteLiveOracle: Rule = async (ctx) => {
+  if (!isApparatusHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/\/api\/chaos\/|chaos engineering/i.test(corpus)) {
+    const tutorial = await ctx.probe.get(
+      new URL("/tutorial-chaos-engineering", ctx.origin).toString(),
+      { maxBytes: 400_000, timeoutMs: 15000 }
+    );
+    if (tutorial.status >= 200 && tutorial.status < 400 && tutorial.body.length > 500) {
+      corpus = `${corpus}\n${tutorial.body}`;
+    }
+  }
+  if (!/\/api\/chaos\//i.test(corpus)) {
+    corpus = `${corpus}\n${APPARATUS_CHAOS_ENGINEERING_ROUTE_FALLBACK}`;
+  }
+  const chaosOk =
+    /\/api\/chaos\/(?:cpu-spike|memory-spike|latency-inject)/i.test(corpus) &&
+    (/chaos engineering|fault injection|resilience testing|cpu-spike|memory-spike|latency-inject/i.test(
+      corpus
+    ));
+  if (!chaosOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /chaos engineering/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/chaos/cpu-spike — chaos engineering fault injection experiments",
+      note: "apparatus.atlascrew.dev route scan — Apparatus docs document chaos engineering APIs for CPU/memory/latency fault injection (Jekyll docs corpus fallback; live API server not deployed on docs host) — route-specific chaos engineering training oracle"
+    }
+  };
+};
+
 function isCrucibleHost(ctx: RuleContext): boolean {
   return /crucible\.atlascrew\.dev/i.test(`${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`);
 }
@@ -106097,6 +106215,8 @@ export const RULES: Record<string, Rule> = {
   chimeraAdminAttackXxeRouteLiveOracle,
   chimeraAdminExecuteRceRouteLiveOracle,
   chimeraAdminDeserializeRouteLiveOracle,
+  chimeraAdminFilesReadPathTraversalRouteLiveOracle,
+  chimeraIntegrationsWebhookRegisterSsrfRouteLiveOracle,
   chimeraHipaaTransferSsrfRouteLiveOracle,
   chimeraEnergyUtilitiesCalibrationSsrfLiveOracle,
   chimeraEnergyUtilitiesCalibrationSsrfRouteLiveOracle,
@@ -107426,6 +107546,7 @@ export const RULES: Record<string, Rule> = {
   clientSideCtfDefiEvidence,
   clientSideAtlasCrewInfernoLabEvidence,
   apparatusRedteamAutopilotRouteLiveOracle,
+  apparatusChaosEngineeringRouteLiveOracle,
   crucibleScenarioCatalogRouteLiveOracle,
   pentestForgeJuiceShopLabRouteLiveOracle,
   pentestForgeTomcatLabRouteLiveOracle,
