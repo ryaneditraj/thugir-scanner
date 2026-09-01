@@ -1,29 +1,29 @@
 {
-  "updated_at": "2026-09-01T18:10:00.000Z",
+  "updated_at": "2026-09-01T20:05:00.000Z",
   "priority_discovery_urls": [
     {
-      "url": "https://ist-edu-bd.vercel.app/xss",
-      "source": "zahidoverflow/damn-vulnerable-web-university — DVWU reflected XSS lab route oracle (ist-edu-bd.vercel.app/xss)",
-      "auth": "oss_deploy"
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting/",
+      "source": "kOaDT/oss-oopssec-store — login brute-force no rate-limit walkthrough oracle (GitHub Pages)",
+      "auth": "public_demo"
     },
     {
-      "url": "https://ist-edu-bd.vercel.app/idor",
-      "source": "zahidoverflow/damn-vulnerable-web-university — DVWU IDOR student-records route oracle (ist-edu-bd.vercel.app/idor)",
-      "auth": "oss_deploy"
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass/",
+      "source": "kOaDT/oss-oopssec-store — open redirect login bypass walkthrough oracle (GitHub Pages)",
+      "auth": "public_demo"
     },
     {
-      "url": "https://pentest-fauxbank.vercel.app/lab",
-      "source": "alfredang/pentest FauxBank — guided OWASP pentest scenarios lab mode (pentest-fauxbank.vercel.app/lab)",
-      "auth": "oss_deploy"
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/",
+      "source": "kOaDT/oss-oopssec-store — signup mass-assignment admin privilege escalation walkthrough",
+      "auth": "public_demo"
     },
     {
-      "url": "https://vaultapp-omega.vercel.app/api/documents/1",
-      "source": "MRMcyber/vaultapp — VaultApp documents IDOR oracle (vaultapp-omega.vercel.app/api/documents/1)",
-      "auth": "oss_deploy"
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-password-reset/",
+      "source": "kOaDT/oss-oopssec-store — MD5 password reset token leak walkthrough oracle",
+      "auth": "public_demo"
     },
     {
-      "url": "https://pentest-ground.com:4280/vulnerabilities/sqli/",
-      "source": "pentest-ground DVWA — SQL injection lesson route oracle (pentest-ground.com:4280/vulnerabilities/sqli/)",
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass/",
+      "source": "kOaDT/oss-oopssec-store — JWT weak secret admin bypass walkthrough oracle",
       "auth": "public_demo"
     }
   ],
