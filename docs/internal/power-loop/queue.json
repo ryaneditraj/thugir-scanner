@@ -11428,6 +11428,31 @@
   ],
   "priority_discovery_urls": [
     {
+      "url": "https://chimera.atlascrew.dev/api/mobile/v2/transfers/instant",
+      "source": "atlas-crew/Chimera mobile domain — fraudulent instant transfer oracle POST /api/mobile/v2/transfers/instant (endpoints-catalog; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/telecom/subscribers/1/sim-swap",
+      "source": "atlas-crew/Chimera CHM-TELCO-002 — SIM swap business-logic oracle POST /api/v1/telecom/subscribers/{subscriber_id}/sim-swap (vuln_registry; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/inventory/reserve",
+      "source": "atlas-crew/Chimera — inventory reservation bypass oracle POST /api/inventory/reserve (endpoints-catalog retail; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/sanctions/check",
+      "source": "atlas-crew/Chimera compliance — sanctions screening bypass oracle GET /api/sanctions/check (endpoints-catalog; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/cards/data/export",
+      "source": "atlas-crew/Chimera payments — card data extraction oracle GET /api/cards/data/export (endpoints-catalog; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://chimera.atlascrew.dev/api/mobile/v2/auth/biometric/verify",
       "source": "atlas-crew/Chimera mobile domain — biometric auth bypass oracle POST /api/mobile/v2/auth/biometric/verify (endpoints-catalog + mobile/routes.py; web search 09 UTC)",
       "auth": "public_demo"
