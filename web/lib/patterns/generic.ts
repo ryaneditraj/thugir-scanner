@@ -76982,6 +76982,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-energy-utilities-outages-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Chimera energy utilities outages BOLA route live oracle",
+    description:
+      "When scanning /api/v1/energy-utilities/outages/{outage_id} on chimera.atlascrew.dev, CHM-ENERGY-002 documents BOLA on outage records — route-specific energy utilities outage BOLA training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional BOLA on energy utilities outage records for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraEnergyUtilitiesOutagesBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on outage records and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Verify the authenticated user owns or is authorized to view each outage record.",
+        "Use unpredictable outage identifiers instead of sequential IDs.",
+        "Do not expose Chimera energy utilities endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/energy-utilities/outages route documents CHM-ENERGY-002 BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-ics-controllers-status-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera ICS controllers status BOLA route live oracle",
+    description:
+      "When scanning /api/ics/controllers/status on chimera.atlascrew.dev, CHM-ICS-002 documents BOLA on ICS controller status — route-specific ICS/OT controller status BOLA training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional BOLA on ICS controller status endpoints for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraIcsControllersStatusBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict ICS controller status to authorized OT operators and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce role-based access control for ICS/OT controller status endpoints.",
+        "Segment OT networks from public-facing API gateways.",
+        "Do not expose Chimera ICS endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/ics/controllers/status route documents CHM-ICS-002 BOLA. Show ICS/OT access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-transactions-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OpenVault Bank transactions BOLA route live oracle",
+    description:
+      "When scanning /api/v1/accounts/{id}/transactions on openvaultbank.com, /learn documents BOLA via account ID manipulation on transaction history — route-specific transaction BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional transaction history IDOR via predictable account IDs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultTransactionsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify account ownership before returning transaction history and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Enforce object-level authorization so users can only read transactions for accounts they own.",
+        "Reject cross-account transaction history requests even with a valid customer token.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/accounts/{id}/transactions route documents transaction history BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-ecommerce-products-catalog-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",

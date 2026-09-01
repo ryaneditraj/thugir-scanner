@@ -19337,6 +19337,8 @@ CHM-ENERGY-001 Server-Side Request Forgery (SSRF)
 POST /api/v1/energy-utilities/assets/calibration
 CHM-ENERGY-002 BOLA / IDOR (Outages)
 GET /api/v1/energy-utilities/outages/{outage_id}
+CHM-ICS-002 BOLA / IDOR (Controller Status)
+GET /api/ics/controllers/status
 POST /api/v1/healthcare/records                # Second-order SQLi
 GET /api/v1/healthcare/records/search?q=       # SQL Injection (Search, CHM-HEALTH-001)
 GET /api/v1/healthcare/records/{record_id}     # BOLA/IDOR (CHM-HEALTH-002)
@@ -19383,7 +19385,7 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001|CHM-ADMIN-002|CHM-ADMIN-003|CHM-ENERGY-001|CHM-ENERGY-002|CHM-BANK-001|CHM-BANK-002|CHM-AI-001|CHM-AI-002|CHM-AI-003|CHM-AI-004|CHM-ECOM-002|CHM-TELCO-001|CHM-INS-002/i.test(corpus)
+    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001|CHM-ADMIN-002|CHM-ADMIN-003|CHM-ENERGY-001|CHM-ENERGY-002|CHM-ICS-002|CHM-BANK-001|CHM-BANK-002|CHM-AI-001|CHM-AI-002|CHM-AI-003|CHM-AI-004|CHM-ECOM-002|CHM-TELCO-001|CHM-INS-002/i.test(corpus)
   ) {
     const invDoc = await ctx.probe.get(new URL("/vulnerability-inventory", ctx.origin).toString(), {
       maxBytes: 400_000,
@@ -19407,7 +19409,7 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit|telecom\/sim-swap|energy\/scada\/commands|energy-utilities\/(?:dispatch|assets\/calibration|outages)|gov\/benefits\/search|saas\/tenants|cart\/update|loyalty\/points\/transfer|admin\/(?:orders\/override|attack\/xxe)|genai\/chat|genai\/agent\/browse/i.test(
+    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit|telecom\/sim-swap|energy\/scada\/commands|energy-utilities\/(?:dispatch|assets\/calibration|outages)|ics\/controllers\/status|gov\/benefits\/search|saas\/tenants|cart\/update|loyalty\/points\/transfer|admin\/(?:orders\/override|attack\/xxe)|genai\/chat|genai\/agent\/browse/i.test(
       corpus
     )
   ) {
@@ -20619,6 +20621,89 @@ const chimeraEnergyUtilitiesCalibrationSsrfRouteLiveOracle: Rule = async (ctx) =
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/energy-utilities/assets/calibration route scan — CHM-ENERGY-001 documents SSRF via calibration callback URL (Jekyll docs corpus fallback) — route-specific energy utilities SSRF training oracle"
+    }
+  };
+};
+
+async function chimeraEnergyUtilitiesOutagesBolaProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const bolaOk =
+    /energy-utilities\/outages/i.test(corpus) &&
+    (/CHM-ENERGY-002/i.test(corpus) ||
+      /BOLA\s*\/\s*IDOR\s*\(Outages\)/i.test(corpus) ||
+      /GET\s+\/api\/v1\/energy-utilities\/outages/i.test(corpus)) &&
+    (/Energy\s*&\s*Utilities|energy_utilities|ICS\/OT|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!bolaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-ENERGY-002/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/energy-utilities/outages/{outage_id} — BOLA / IDOR (Outages, CHM-ENERGY-002)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents BOLA on energy utilities outage records (Jekyll docs corpus fallback) — energy utilities outage BOLA training oracle"
+    }
+  };
+}
+
+const chimeraEnergyUtilitiesOutagesBolaLiveOracle: Rule = async (ctx) =>
+  chimeraEnergyUtilitiesOutagesBolaProbe(ctx);
+
+const chimeraEnergyUtilitiesOutagesBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/energy-utilities\/outages(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraEnergyUtilitiesOutagesBolaProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/energy-utilities/outages route scan — CHM-ENERGY-002 documents BOLA on outage records (Jekyll docs corpus fallback) — route-specific energy utilities outage BOLA training oracle"
+    }
+  };
+};
+
+async function chimeraIcsControllersStatusBolaProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const bolaOk =
+    /ics\/controllers\/status/i.test(corpus) &&
+    (/CHM-ICS-002/i.test(corpus) ||
+      /BOLA\s*\/\s*IDOR\s*\(Controller Status\)/i.test(corpus) ||
+      /GET\s+\/api\/ics\/controllers\/status/i.test(corpus)) &&
+    (/ics_ot|ICS\/OT|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!bolaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-ICS-002/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet: "GET /api/ics/controllers/status — BOLA / IDOR (Controller Status, CHM-ICS-002)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents BOLA on ICS controller status (Jekyll docs corpus fallback) — ICS/OT controller status BOLA training oracle"
+    }
+  };
+}
+
+const chimeraIcsControllersStatusBolaLiveOracle: Rule = async (ctx) =>
+  chimeraIcsControllersStatusBolaProbe(ctx);
+
+const chimeraIcsControllersStatusBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/ics\/controllers\/status\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraIcsControllersStatusBolaProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/ics/controllers/status route scan — CHM-ICS-002 documents BOLA on ICS controller status (Jekyll docs corpus fallback) — route-specific ICS/OT controller status BOLA training oracle"
     }
   };
 };
@@ -41694,6 +41779,8 @@ POST /auth/token
 Privilege Escalation via Mass Assignment
 PUT /api/v1/profile
 GET /api/v1/admin/users
+Broken Object-Level Authorization (BOLA)
+GET /accounts/{id}/transactions
 `;
 
 async function openvaultDocsCorpus(ctx: RuleContext): Promise<string> {
@@ -41866,6 +41953,44 @@ const openvaultUsersEnumerationRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "openvaultbank.com /api/v1/users route scan — /learn documents mass-assignment privilege escalation unlocking GET /api/v1/admin/users user roster — route-specific user enumeration training oracle"
+    }
+  };
+};
+
+async function openvaultTransactionsBolaProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const corpus = await openvaultDocsCorpus(ctx);
+  const transactionsOk =
+    /\/accounts\/\{?id\}?\/transactions|\/accounts\/\d+\/transactions/i.test(corpus) &&
+    (/Broken Object-Level Authorization|BOLA/i.test(corpus) ||
+      /manipulating object IDs/i.test(corpus) ||
+      /GET\s+\/accounts\/\{id\}\/transactions/i.test(corpus)) &&
+    (/OpenVault Bank|deliberately vulnerable banking/i.test(corpus));
+  if (!transactionsOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Broken Object-Level Authorization/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet:
+        "GET /accounts/{id}/transactions — Broken Object-Level Authorization (transaction history IDOR)",
+      note: "openvaultbank.com — OpenVault Bank /learn documents BOLA via account ID manipulation on transaction history — transaction BOLA training oracle"
+    }
+  };
+}
+
+const openvaultTransactionsBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/accounts\/\d+\/transactions\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await openvaultTransactionsBolaProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "openvaultbank.com /api/v1/accounts/{id}/transactions route scan — /learn documents BOLA via account ID manipulation on transaction history — route-specific transaction BOLA training oracle"
     }
   };
 };
@@ -105507,6 +105632,7 @@ export const RULES: Record<string, Rule> = {
   openvaultAdminAccountsBflaRouteLiveOracle,
   openvaultAuthTokenEnumerationRouteLiveOracle,
   openvaultUsersEnumerationRouteLiveOracle,
+  openvaultTransactionsBolaRouteLiveOracle,
   clientSideWebgoatEvidence,
   clientSideWhoopsPayEvidence,
   whoopsPayTransactionsBolaLiveOracle,
@@ -105678,6 +105804,10 @@ export const RULES: Record<string, Rule> = {
   chimeraAdminAttackXxeRouteLiveOracle,
   chimeraEnergyUtilitiesCalibrationSsrfLiveOracle,
   chimeraEnergyUtilitiesCalibrationSsrfRouteLiveOracle,
+  chimeraEnergyUtilitiesOutagesBolaLiveOracle,
+  chimeraEnergyUtilitiesOutagesBolaRouteLiveOracle,
+  chimeraIcsControllersStatusBolaLiveOracle,
+  chimeraIcsControllersStatusBolaRouteLiveOracle,
   chimeraEcommerceProductsCatalogSqliRouteLiveOracle,
   chimeraTelecomSubscribersProfileBolaRouteLiveOracle,
   chimeraInsuranceClaimsSearchSqliRouteLiveOracle,

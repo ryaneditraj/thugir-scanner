@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-01T06:07:28.224Z",
-  "total": 3028,
-  "uniqueSlugs": 3020,
+  "generatedAt": "2026-09-01T07:28:37.526Z",
+  "total": 3031,
+  "uniqueSlugs": 3023,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3010,
+    "generic": 3013,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2943,
+    "deep": 2946,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 611,
+    "Broken access control": 614,
     "Exposed secret": 115,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -383,6 +383,7 @@
     "chimera-ecommerce-products-catalog-sqli-route-live-oracle",
     "chimera-energy-scada-commands-route-live-oracle",
     "chimera-energy-utilities-calibration-ssrf-route-live-oracle",
+    "chimera-energy-utilities-outages-bola-route-live-oracle",
     "chimera-fedramp-openapi-extensions-route-live-oracle",
     "chimera-genai-agent-browse-ssrf-route-live-oracle",
     "chimera-genai-chat-prompt-injection-route-live-oracle",
@@ -399,6 +400,7 @@
     "chimera-hipaa-evidence-endpoints-route-live-oracle",
     "chimera-hipaa-records-bulk-export-route-live-oracle",
     "chimera-hipaa-records-patient-idor-route-live-oracle",
+    "chimera-ics-controllers-status-bola-route-live-oracle",
     "chimera-insurance-claims-search-sqli-route-live-oracle",
     "chimera-insurance-policies-lookup-sqli-route-live-oracle",
     "chimera-login-vulnerable-sqli-route-live-oracle",
@@ -2084,6 +2086,7 @@
     "openvault-admin-accounts-bfla-route-live-oracle",
     "openvault-auth-token-enumeration-route-live-oracle",
     "openvault-payments-bola-route-live-oracle",
+    "openvault-transactions-bola-route-live-oracle",
     "openvault-users-enumeration-route-live-oracle",
     "owasp-andreabrioschi-top10-2025-hub-live-oracle",
     "owasp-andreabrioschi-top10-2025-hub-route-live-oracle",
