@@ -7199,6 +7199,24 @@
       "slug": "openvault-auth-token-enumeration-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /learn documents distinguishable user-not-found vs incorrect-password errors on POST /auth/token; openvaultbank.com/api/v1/auth/token findings 8→9 (+openvault-auth-token-enumeration-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-admin-attack-xxe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-ADMIN-003 POST /api/v1/admin/attack/xxe — XML External Entity (Legacy Import) from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/admin/attack/xxe findings 7→8 (+chimera-admin-attack-xxe-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-energy-utilities-calibration-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-ENERGY-001 POST /api/v1/energy-utilities/assets/calibration — Server-Side Request Forgery (SSRF) from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/energy-utilities/assets/calibration findings 7→8 (+chimera-energy-utilities-calibration-ssrf-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:openvaultbank.com",
+      "slug": "openvault-users-enumeration-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /learn documents mass-assignment privilege escalation unlocking GET /api/v1/admin/users user roster with hashed passwords; openvaultbank.com/api/v1/users findings 8→9 (+openvault-users-enumeration-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

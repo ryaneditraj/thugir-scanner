@@ -76878,6 +76878,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-admin-attack-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Chimera admin attack XXE route live oracle",
+    description:
+      "When scanning /api/v1/admin/attack/xxe on chimera.atlascrew.dev, CHM-ADMIN-003 documents XXE in legacy import behavior — route-specific XXE training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional XXE on the admin legacy import endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminAttackXxeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Disable DTD and external entity processing in all XML parsers.",
+        "Use JSON or strictly schema-validated XML for configuration imports.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/attack/xxe route documents CHM-ADMIN-003 XXE. Show secure XML parser configuration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-energy-utilities-calibration-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Chimera energy utilities calibration SSRF route live oracle",
+    description:
+      "When scanning /api/v1/energy-utilities/assets/calibration on chimera.atlascrew.dev, CHM-ENERGY-001 documents SSRF via asset calibration callback URL — route-specific energy utilities SSRF training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SSRF on energy utilities asset calibration endpoints for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraEnergyUtilitiesCalibrationSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate outbound calibration callback URLs and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Block private IP ranges and metadata endpoints in outbound calibration fetches.",
+        "Use an allowlist of permitted callback hostnames for asset calibration webhooks.",
+        "Do not expose Chimera energy utilities endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/energy-utilities/assets/calibration route documents CHM-ENERGY-001 SSRF. Show outbound URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "openvault-auth-token-enumeration-route-live-oracle",
     platform: "generic",
     category: "Information disclosure",
@@ -76900,6 +76952,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our openvaultbank /api/v1/auth/token route documents login enumeration. Show generic authentication error remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-users-enumeration-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "OpenVault Bank users enumeration route live oracle",
+    description:
+      "When scanning /api/v1/users on openvaultbank.com, /learn documents mass-assignment privilege escalation unlocking GET /api/v1/admin/users with full user roster — route-specific user enumeration training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional user roster disclosure after mass-assignment privilege escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultUsersEnumerationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use allowlisted writable fields on profile updates and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Reject role and privilege fields in customer profile update requests.",
+        "Enforce admin role checks before returning user roster data.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/users route documents mass-assignment user roster disclosure. Show mass assignment and authorization remediation.",
     version: 1,
     enabled: true
   },

@@ -1629,6 +1629,7 @@ const DEEP_RULES = new Set<string>([
   "openvaultPaymentsBolaRouteLiveOracle",
   "openvaultAdminAccountsBflaRouteLiveOracle",
   "openvaultAuthTokenEnumerationRouteLiveOracle",
+  "openvaultUsersEnumerationRouteLiveOracle",
   "clientSideCookiejarLabEvidence",
   "clientSideWebgoatEvidence",
   "clientSideSessionHijackEvidence",
@@ -1836,6 +1837,10 @@ const DEEP_RULES = new Set<string>([
   "chimeraDiagnosticsPingRceRouteLiveOracle",
   "chimeraDiagnosticsWebhookSsrfLiveOracle",
   "chimeraDiagnosticsWebhookSsrfRouteLiveOracle",
+  "chimeraAdminAttackXxeLiveOracle",
+  "chimeraAdminAttackXxeRouteLiveOracle",
+  "chimeraEnergyUtilitiesCalibrationSsrfLiveOracle",
+  "chimeraEnergyUtilitiesCalibrationSsrfRouteLiveOracle",
   "chimeraEcommerceProductsCatalogSqliRouteLiveOracle",
   "chimeraTelecomSubscribersProfileBolaRouteLiveOracle",
   "chimeraInsuranceClaimsSearchSqliRouteLiveOracle",
@@ -12532,6 +12537,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/attack\/xxe\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-attack-xxe")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/energy-utilities\/assets\/calibration\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-energy-utilities-calibration-ssrf")
+      )
+        return -3;
+      if (
         /openvaultbank\.com/i.test(origin) &&
         /\/api\/v1\/payments\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-payments-bola")
@@ -12547,6 +12564,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /openvaultbank\.com/i.test(origin) &&
         /\/api\/v1\/auth\/token\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-auth-token-enumeration")
+      )
+        return -3;
+      if (
+        /openvaultbank\.com/i.test(origin) &&
+        /\/api\/v1\/users\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-users-enumeration")
       )
         return -3;
       if (
