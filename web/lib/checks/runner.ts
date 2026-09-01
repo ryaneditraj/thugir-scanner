@@ -1850,6 +1850,7 @@ const DEEP_RULES = new Set<string>([
   "chimeraDiagnosticsPingRceRouteLiveOracle",
   "chimeraDiagnosticsWebhookSsrfLiveOracle",
   "chimeraDiagnosticsWebhookSsrfRouteLiveOracle",
+  "chimeraAdminDiagnosticsHubRouteLiveOracle",
   "chimeraAdminAttackXxeLiveOracle",
   "chimeraAdminAttackXxeRouteLiveOracle",
   "chimeraAdminExecuteRceRouteLiveOracle",
@@ -1911,6 +1912,7 @@ const DEEP_RULES = new Set<string>([
   "fauxbankLoansNegativeAmountLiveOracle",
   "fauxbankAdminPanelLiveOracle",
   "fauxbankAdminRouteLiveOracle",
+  "fauxbankLabRouteLiveOracle",
   "webPentestPlaygroundFileUploadLiveOracle",
   "webPentestPlaygroundFileUploadRouteLiveOracle",
   "webPentestPlaygroundStoredXssLiveOracle",
@@ -12598,6 +12600,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/diagnostics\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-diagnostics-hub")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/admin\/attack\/xxe\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-admin-attack-xxe")
       )
@@ -15883,6 +15891,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/admin\b/i.test(targetInput) &&
         p.slug.startsWith("fauxbank-admin")
+      )
+        return -3;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/lab\/?(?:[#?]|$)/i.test(targetInput) &&
+        p.slug.startsWith("fauxbank-lab")
       )
         return -3;
       if (

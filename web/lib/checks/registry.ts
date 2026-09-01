@@ -20858,6 +20858,29 @@ const chimeraDiagnosticsWebhookSsrfRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const chimeraAdminDiagnosticsHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/diagnostics\b/i.test(pageUrl)) return NEGATIVE;
+  const pingHit = await chimeraDiagnosticsPingRceProbe(ctx);
+  const webhookHit = await chimeraDiagnosticsWebhookSsrfProbe(ctx);
+  if (!pingHit.fired && !webhookHit.fired) return NEGATIVE;
+  const markers = [
+    pingHit.fired ? "CHM-ADMIN-001 diagnostics/ping RCE" : null,
+    webhookHit.fired ? "CHM-ADMIN-002 diagnostics/webhook SSRF" : null
+  ].filter(Boolean) as string[];
+  return {
+    fired: true,
+    confidence: pingHit.fired && webhookHit.fired ? 0.93 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers,
+      snippet: (pingHit.fired ? pingHit.evidence.snippet : webhookHit.evidence.snippet) as string,
+      note: "chimera.atlascrew.dev /api/v1/admin/diagnostics route scan — vulnerability inventory documents CHM-ADMIN-001 ping RCE and CHM-ADMIN-002 webhook SSRF diagnostics endpoints (Jekyll docs corpus fallback) — route-specific admin diagnostics hub oracle"
+    }
+  };
+};
+
 async function chimeraAdminAttackXxeProbe(ctx: RuleContext): Promise<RuleResult> {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const corpus = await chimeraDocsCorpus(ctx);
@@ -40696,6 +40719,29 @@ const fauxbankAdminRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "FauxBank /admin route scan — admin/admin session exposes user directory and audit log — route-specific admin panel oracle"
+    }
+  };
+};
+
+const fauxbankLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/^\/lab\/?$/i.test(pathname)) return NEGATIVE;
+  const result = await clientSideFauxbankLabEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /lab route scan — OWASP guided pentest scenarios hub with seeded fictional accounts and intentionally weak credentials — route-specific training lab oracle"
     }
   };
 };
@@ -104086,7 +104132,7 @@ async function probeRedirectWhitelistBypass(ctx: RuleContext): Promise<RuleResul
 const istEduSsrfRedirectRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:labs\/ssrf|redirect)\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/(?:labs\/ssrf|ssrf|redirect)\b/i.test(pageUrl)) return NEGATIVE;
   const result = await probeRedirectWhitelistBypass(ctx);
   if (!result?.fired) return NEGATIVE;
   return {
@@ -104095,7 +104141,7 @@ const istEduSsrfRedirectRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "IST Edu /labs/ssrf route scan — GET /api/redirect?url= accepts //https:/// whitelist bypass while blocking internal metadata — SSRF/open redirect route oracle"
+      note: "IST Edu /labs/ssrf or /ssrf route scan — GET /api/redirect?url= accepts //https:/// whitelist bypass while blocking internal metadata — SSRF/open redirect route oracle"
     }
   };
 };
@@ -106705,6 +106751,7 @@ export const RULES: Record<string, Rule> = {
   fauxbankLoansNegativeAmountLiveOracle,
   fauxbankAdminPanelLiveOracle,
   fauxbankAdminRouteLiveOracle,
+  fauxbankLabRouteLiveOracle,
   webPentestPlaygroundFileUploadLiveOracle,
   webPentestPlaygroundFileUploadRouteLiveOracle,
   webPentestPlaygroundStoredXssLiveOracle,
@@ -106833,6 +106880,7 @@ export const RULES: Record<string, Rule> = {
   chimeraDiagnosticsPingRceRouteLiveOracle,
   chimeraDiagnosticsWebhookSsrfLiveOracle,
   chimeraDiagnosticsWebhookSsrfRouteLiveOracle,
+  chimeraAdminDiagnosticsHubRouteLiveOracle,
   chimeraAdminAttackXxeLiveOracle,
   chimeraAdminAttackXxeRouteLiveOracle,
   chimeraAdminExecuteRceRouteLiveOracle,

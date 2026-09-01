@@ -71734,7 +71734,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu redirect whitelist bypass SSRF route live oracle",
     description:
-      "GET /api/redirect?url= accepts //https:/// malformed bypass payloads with HTTP 302 while blocking AWS metadata — IST Edu SSRF/open redirect training oracle on /labs/ssrf.",
+      "When scanning /labs/ssrf or /ssrf on ist-edu-bd.vercel.app, GET /api/redirect?url= accepts //https:/// malformed bypass while blocking AWS metadata — IST Edu SSRF/open redirect training oracle.",
     impactOneline:
       "Broken redirect allow-lists let attackers chain open redirects toward internal or attacker-controlled targets.",
     detectorKind: "rule_ref",
@@ -71750,6 +71750,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/redirect route accepts //https:/// bypass while blocking metadata URLs. Show redirect allow-list hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-lab-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank /lab route live oracle",
+    description:
+      "When scanning /lab on pentest-fauxbank.vercel.app, the OWASP guided pentest scenarios hub documents seeded fictional accounts and intentionally weak credentials — route-specific FauxBank training lab oracle.",
+    impactOneline:
+      "Route scans on /lab need live confirmation that the FauxBank pentest training hub is reachable with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run FauxBank only on isolated pentest training infrastructure with clear disclaimers.",
+      steps: [
+        "Keep training labs off production domains and behind authentication where possible.",
+        "Rotate seeded demo credentials between training sessions.",
+        "Label all simulated vulnerabilities with visible training banners."
+      ]
+    },
+    fixPrompt:
+      "Our /lab route exposes the FauxBank OWASP pentest training hub with intentionally weak credentials. Show how to isolate training labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-diagnostics-hub-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin diagnostics hub route live oracle",
+    description:
+      "When scanning /api/v1/admin/diagnostics on chimera.atlascrew.dev, CHM-ADMIN-001 ping RCE and CHM-ADMIN-002 webhook SSRF diagnostics endpoints are catalogued — route-specific admin diagnostics hub training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional diagnostics RCE and SSRF flaws on the admin diagnostics hub for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminDiagnosticsHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict diagnostics endpoints to authenticated admin roles on private networks.",
+      steps: [
+        "Never pass user input to shell commands in diagnostics utilities.",
+        "Validate outbound webhook URLs against private IP and metadata blocklists.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/diagnostics route documents CHM-ADMIN-001 ping RCE and CHM-ADMIN-002 webhook SSRF. Show diagnostics endpoint hardening remediation.",
     version: 1,
     enabled: true
   },
