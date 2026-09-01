@@ -11428,6 +11428,31 @@
   ],
   "priority_discovery_urls": [
     {
+      "url": "https://chimera.atlascrew.dev/api/v1/energy-utilities/assets/calibration",
+      "source": "atlas-crew/Chimera CHM-ENERGY-001 — SSRF calibration oracle POST /api/v1/energy-utilities/assets/calibration (vuln_registry; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/energy-utilities/outages/1",
+      "source": "atlas-crew/Chimera CHM-ENERGY-002 — BOLA outages oracle GET /api/v1/energy-utilities/outages/{outage_id} (vuln_registry; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/admin/attack/xxe",
+      "source": "atlas-crew/Chimera CHM-ADMIN-003 — XXE legacy import oracle POST /api/v1/admin/attack/xxe (vuln_registry; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/ics/controllers/status",
+      "source": "atlas-crew/Chimera CHM-ICS-002 — BOLA ICS controller status oracle GET /api/ics/controllers/status (vuln_registry; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://openvaultbank.com/api/v1/users",
+      "source": "OpenVault Bank — user enumeration oracle GET /api/v1/users (cheatsheet vuln #2; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://openvaultbank.com/api/v1/payments",
       "source": "OpenVault Bank — unauthorized fund transfer oracle POST /api/v1/payments (cheatsheet vuln #4; web search 03 UTC)",
       "auth": "public_demo"
