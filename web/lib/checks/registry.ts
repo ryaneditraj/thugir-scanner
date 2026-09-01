@@ -12556,7 +12556,16 @@ const FABRAIX_LIVE_CHALLENGE_IDS = new Set(["access-code-001", "data-exfil-001",
 
 function isFabraixPlaygroundHost(ctx: RuleContext): boolean {
   const hint = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
-  return /playground\.fabraix\.com|api\.fabraix\.com/i.test(hint);
+  return /playground\.fabraix\.com|api\.fabraix\.com|fabraix\.com\/playground/i.test(hint);
+}
+
+function fabraixPathname(ctx: RuleContext): string {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  try {
+    return new URL(pageUrl).pathname.replace(/\/$/, "") || "/";
+  } catch {
+    return "";
+  }
 }
 
 function fabraixChallengeIdFromScan(ctx: RuleContext): string {
@@ -12778,6 +12787,92 @@ const fabraixToolPoisoning001RouteLiveOracle: Rule = async (ctx) => {
       challengeRoute: "tool-poisoning-001",
       scannedUrl: pageUrl,
       note: "Fabraix /challenges/tool-poisoning-001 route scan — MCP tool-poisoning challenge maps to biosafety-001 Biosafety Officer backend (Wren agent persona)"
+    }
+  };
+};
+
+const fabraixChallengesHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (fabraixPathname(ctx) !== "/challenges") return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const hubOk =
+    /Fabraix Playground|Test your prompt injection skills|Adversarial Verification for AI Agents/i.test(
+      corpus
+    ) || /\/challenges\/[a-z0-9-]+/i.test(corpus);
+  const probe = await probeFabraixPlaygroundSession(ctx);
+  if (probe) {
+    return {
+      fired: true,
+      confidence: hubOk ? 0.93 : 0.9,
+      evidence: {
+        ...probe,
+        scannedUrl: pageUrl,
+        note: "Fabraix /challenges hub route scan — challenge catalog lists agent red-team scenarios; POST /v1/playground/sessions/start creates unauthenticated sessions"
+      }
+    };
+  }
+  if (!hubOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "Fabraix Playground challenge hub — agent red-team catalog",
+      note: "Fabraix /challenges hub route scan — documents published agentic red-team challenge catalog (Jekyll corpus fallback when live session probe unavailable)"
+    }
+  };
+};
+
+const fabraixPlaygroundHomeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/playground\.fabraix\.com/i.test(pageUrl)) return NEGATIVE;
+  const pathname = fabraixPathname(ctx);
+  if (pathname !== "/" && pathname !== "") return NEGATIVE;
+  const probe = await probeFabraixPlaygroundSession(ctx);
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      ...probe,
+      scannedUrl: pageUrl,
+      note: "Fabraix playground.fabraix.com home route scan — POST /v1/playground/sessions/start creates unauthenticated agent red-team sessions from landing page"
+    }
+  };
+};
+
+const fabraixPlaygroundLandingRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/fabraix\.com\/playground/i.test(pageUrl)) return NEGATIVE;
+  const probe = await probeFabraixPlaygroundSession(ctx);
+  if (probe) {
+    return {
+      fired: true,
+      confidence: 0.91,
+      evidence: {
+        ...probe,
+        scannedUrl: pageUrl,
+        note: "Fabraix fabraix.com/playground landing route scan — marketing landing links to playground.fabraix.com; live session probe confirms unauthenticated agent red-team API"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  if (
+    !/playground\.fabraix\.com|Fabraix Playground|Adversarial Verification for AI Agents/i.test(
+      corpus
+    )
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "fabraix.com/playground — links to Fabraix Playground agent red-team challenges",
+      note: "Fabraix fabraix.com/playground landing route scan — documents public agent red-team playground entry point (corpus fallback when live session probe unavailable)"
     }
   };
 };
@@ -109736,6 +109831,9 @@ export const RULES: Record<string, Rule> = {
   fabraixIndirectPromptInjectionRouteLiveOracle,
   fabraixPromptInjection001RouteLiveOracle,
   fabraixToolPoisoning001RouteLiveOracle,
+  fabraixChallengesHubRouteLiveOracle,
+  fabraixPlaygroundHomeRouteLiveOracle,
+  fabraixPlaygroundLandingRouteLiveOracle,
   ratdoStoredXssLiveOracle,
   ratdoIdorEditLiveOracle,
   ratdoCsrfLiveOracle,

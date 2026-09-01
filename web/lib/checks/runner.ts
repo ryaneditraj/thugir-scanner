@@ -4105,6 +4105,9 @@ const DEEP_RULES = new Set<string>([
   "fabraixIndirectPromptInjectionRouteLiveOracle",
   "fabraixPromptInjection001RouteLiveOracle",
   "fabraixToolPoisoning001RouteLiveOracle",
+  "fabraixChallengesHubRouteLiveOracle",
+  "fabraixPlaygroundHomeRouteLiveOracle",
+  "fabraixPlaygroundLandingRouteLiveOracle",
   "promptShieldPromptInjectionDefenseLiveOracle",
   "promptShieldPromptInjectionDefenseRouteLiveOracle",
   "ratdoStoredXssLiveOracle",
@@ -15124,6 +15127,22 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (/demo\.aevum\.build/i.test(origin) && p.slug.startsWith("aevum-")) return -3;
       if (/playground\.fabraix\.com/i.test(origin) && p.slug.startsWith("fabraix-playground")) return -3;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/?$/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-challenges-hub")
+      )
+        return -4;
+      if (
+        /(?:playground\.fabraix\.com\/?$|fabraix\.com\/playground)/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-playground-home")
+      )
+        return -4;
+      if (
+        /fabraix\.com\/playground/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-playground-landing")
+      )
+        return -4;
       if (
         /playground\.fabraix\.com/i.test(origin) &&
         /\/challenges\/data-exfil-002/i.test(targetInput) &&

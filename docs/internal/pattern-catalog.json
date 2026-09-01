@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-01T20:19:52.920Z",
-  "total": 3064,
-  "uniqueSlugs": 3056,
+  "generatedAt": "2026-09-01T21:22:19.740Z",
+  "total": 3067,
+  "uniqueSlugs": 3059,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3046,
+    "generic": 3049,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2979,
+    "deep": 2982,
     "continuous": 0
   },
   "byCategory": {
@@ -34,7 +34,7 @@
     "SSRF": 19,
     "Server-side request forgery": 103,
     "Sensitive data exposure": 87,
-    "AI security": 127,
+    "AI security": 130,
     "Business logic": 37,
     "AI / LLM security": 4,
     "Cross-site request forgery": 10,
@@ -1222,10 +1222,13 @@
     "exposed-infra-artifacts",
     "exposed-source-maps",
     "fabraix-access-code-001-route-live-oracle",
+    "fabraix-challenges-hub-route-live-oracle",
     "fabraix-data-exfil-002-route-live-oracle",
     "fabraix-data-exfiltration-001-route-live-oracle",
     "fabraix-guardrail-bypass-route-live-oracle",
     "fabraix-indirect-prompt-injection-route-live-oracle",
+    "fabraix-playground-home-route-live-oracle",
+    "fabraix-playground-landing-route-live-oracle",
     "fabraix-playground-session-live-oracle",
     "fabraix-playground-session-route-live-oracle",
     "fabraix-prompt-injection-001-route-live-oracle",
