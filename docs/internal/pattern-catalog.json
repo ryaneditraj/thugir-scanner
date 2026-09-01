@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-01T21:22:19.740Z",
-  "total": 3067,
-  "uniqueSlugs": 3059,
+  "generatedAt": "2026-09-01T22:24:51.635Z",
+  "total": 3069,
+  "uniqueSlugs": 3061,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3049,
+    "generic": 3051,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2982,
+    "deep": 2984,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 137,
+    "Information disclosure": 139,
     "Security misconfiguration": 220,
     "Broken authentication": 195,
     "Injection": 495,
@@ -253,12 +253,14 @@
     "burpbounty-ai-completions-route-live-oracle",
     "burpbounty-ai-disclosure-live-oracle",
     "burpbounty-ai-gateway-live-oracle",
+    "burpbounty-ai-gateway-route-live-oracle",
     "burpbounty-ai-health-live-oracle",
     "burpbounty-ai-mcp-tools-live-oracle",
     "burpbounty-ai-metrics-live-oracle",
     "burpbounty-api-docs-live-oracle",
     "burpbounty-artica-cve-live-oracle",
     "burpbounty-backup-listing-live-oracle",
+    "burpbounty-backup-listing-route-live-oracle",
     "burpbounty-cisco-cve-live-oracle",
     "burpbounty-citrix-cve-live-oracle",
     "burpbounty-collab-forgot-live-oracle",

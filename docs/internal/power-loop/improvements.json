@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-gateway-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /ai/gateway returns Behind Kong + Envoy HTML disclosure; burpbountylab.com/ai/gateway findings 99→100 (+burpbounty-ai-gateway-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-backup-listing-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /backup/ returns Index of /backup/ listing db_backup.sql + site_backup.tar.gz; burpbountylab.com/backup/ findings 99→100 (+burpbounty-backup-listing-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ai-chat-completions-route-match",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: burpbountyAiCompletionsRouteLiveOracle route matcher extended to /ai/chat/completions alias; burpbountylab.com/ai/chat/completions findings 99→100 (+burpbounty-ai-completions-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:playground.fabraix.com",
       "slug": "fabraix-challenges-hub-route-live-oracle",
       "status": "shipped",

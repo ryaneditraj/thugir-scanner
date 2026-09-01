@@ -15135,9 +15135,9 @@ const burpbountyRceEvalRouteLiveOracle = burpBountyRouteLiveOracle(
 );
 
 const burpbountyAiCompletionsRouteLiveOracle = burpBountyRouteLiveOracle(
-  /\/ai\/v1\/completions\b/i,
+  /\/ai\/(?:v1\/completions|chat\/completions)\b/i,
   burpbountyAiCompletionsLiveOracle,
-  "Burp Bounty Lab /ai/v1/completions route scan — legacy text_completion JSON plus LLM gateway headers — OpenAI completions disclosure profile oracle"
+  "Burp Bounty Lab /ai/v1/completions or /ai/chat/completions route scan — legacy text_completion JSON plus LLM gateway headers — OpenAI completions disclosure profile oracle"
 );
 
 const burpbountySstiPreviewLiveOracle: Rule = async (ctx) => {
@@ -15558,6 +15558,18 @@ const burpbountyBackupListingLiveOracle: Rule = async (ctx) => {
     }
   };
 };
+
+const burpbountyAiGatewayRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/ai\/gateway\b/i,
+  burpbountyAiGatewayLiveOracle,
+  "Burp Bounty Lab /ai/gateway route scan — Behind Kong + Envoy reverse-proxy infrastructure disclosure — AI gateway profile oracle"
+);
+
+const burpbountyBackupListingRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/backup\/?$/i,
+  burpbountyBackupListingLiveOracle,
+  "Burp Bounty Lab /backup/ route scan — directory index listing db_backup.sql and site_backup.tar.gz — backup listing profile oracle"
+);
 
 const burpbountyAiMcpToolsLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
@@ -109709,6 +109721,8 @@ export const RULES: Record<string, Rule> = {
   burpbountyCrlfSetRouteLiveOracle,
   burpbountyRceEvalRouteLiveOracle,
   burpbountyAiCompletionsRouteLiveOracle,
+  burpbountyAiGatewayRouteLiveOracle,
+  burpbountyBackupListingRouteLiveOracle,
   burpbountyFortiosRemoteLoginRouteLiveOracle,
   burpbountyWpConfigLiveOracle,
   burpbountyWpConfigRouteLiveOracle,
