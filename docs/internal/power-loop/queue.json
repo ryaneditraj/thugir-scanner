@@ -1,29 +1,29 @@
 {
-  "updated_at": "2026-09-01T22:08:00.000Z",
+  "updated_at": "2026-09-01T23:08:00.000Z",
   "priority_discovery_urls": [
     {
-      "url": "https://bypass403.vercel.app/",
-      "source": "Karthikdude/bypass403 — interactive 403 bypass lab with 60+ protected endpoints (GitHub homepage)",
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass/",
+      "source": "kOaDT/oss-oopssec-store — weak JWT secret admin bypass walkthrough (ch.07 auth failures)",
       "auth": "public_demo"
     },
     {
-      "url": "https://playground.fabraix.com/challenges/access-code-001",
-      "source": "fabraix/playground — agentic access-code reveal sink challenge (GitHub challenges/)",
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/",
+      "source": "kOaDT/oss-oopssec-store — race-condition TOCTOU coupon abuse walkthrough (ch.03 client trust)",
       "auth": "public_demo"
     },
     {
-      "url": "https://seclab.vercel.app/labs/ssrf",
-      "source": "DaniSam-STU/security-lab — interactive SSRF lab page with live exploit UI (seclab.vercel.app/labs/ssrf)",
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection/",
+      "source": "kOaDT/oss-oopssec-store — second-order SQLi in admin reviews walkthrough (ch.05 SQLi)",
       "auth": "public_demo"
     },
     {
-      "url": "https://ist-edu-bd.vercel.app/command-injection",
-      "source": "ist-edu-bd VulnPortal — command-injection training route (Vercel OSS deploy)",
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/mcp-malicious-server/",
+      "source": "kOaDT/oss-oopssec-store — MCP malicious server indirect prompt injection walkthrough (ch.10 AI)",
       "auth": "public_demo"
     },
     {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/",
-      "source": "kOaDT/oss-oopssec-store — CSRF on admin order update walkthrough with vulnerable code oracle (GitHub Pages)",
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import/",
+      "source": "kOaDT/oss-oopssec-store — XXE in supplier order import walkthrough (ch.06 parsers)",
       "auth": "public_demo"
     }
   ],
