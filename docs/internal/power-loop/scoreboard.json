@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T01:08:00.000Z",
+  "updated_at": "2026-09-01T01:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2051,
   "discovery_findings": 25325,
-  "improvements_shipped": 1169,
-  "last_run": "2026-09-01T01:08:00.000Z",
+  "improvements_shipped": 1172,
+  "last_run": "2026-09-01T01:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "01",
     "benchmark": {
@@ -48,26 +48,20 @@
           ]
         }
       },
-      "note": "Stable 6/6 rich pass (52 findings, 37 live oracles; secret-resend + resend-key + iac-terraform-tls-key present) — no category misses"
+      "note": "Stable 6/6 rich pass (52 findings) — no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 44,
-      "focus": "Chimera CHM-ADMIN-001 diagnostics/ping + CHM-AI-001/002 genai chat/agent + CHM-ECOM-001 ecommerce search + CHM-SAAS-002 tenant mass-assignment + drained PentestForge Mutillidae/DVWA queue head",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 17,
+      "focus": "Chimera payment amount manipulation route oracle + VWAD Goof subpath parent-listing fetch",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "chimera.atlascrew.dev/api/v1/diagnostics/ping: 7 findings — generic chimera bundle only (no CHM-ADMIN-001 RCE route oracle)",
-      "chimera.atlascrew.dev/api/v1/genai/chat: 7 findings — generic chimera bundle only (no CHM-AI-001 prompt-injection route oracle)",
-      "chimera.atlascrew.dev/api/v1/genai/agent/browse: 7 findings — generic chimera bundle only (no CHM-AI-002 agent SSRF route oracle)",
-      "chimera.atlascrew.dev/api/v1/ecommerce/products/search: 7 findings — generic chimera bundle only (no CHM-ECOM-001 SQLi route oracle)",
-      "chimera.atlascrew.dev/api/v1/saas/tenants/1: 7 findings — generic chimera bundle only (no CHM-SAAS-002 mass-assignment route oracle)",
-      "mutillidae.lab.pentest-forge.com/index.php?page=user-info.php: 3 findings — pentest-forge-mutillidae-user-info-route-live-oracle confirmed",
-      "dvwa.lab.pentest-forge.com/vulnerabilities/sqli_blind/: 3 findings — pentest-forge-dvwa-sqli-blind-route-live-oracle confirmed",
-      "dvwa.lab.pentest-forge.com/vulnerabilities/xss_r/: 3 findings — pentest-forge-dvwa-xss-r-route-live-oracle confirmed"
+      "chimera.atlascrew.dev/api/payments/amount/manipulate: 8 findings — +chimera-payments-amount-manipulate-route-live-oracle",
+      "vwad.owasp.org/app/goof/login: 9 findings — +client-side-vwad-goof-evidence +vwad-goof-route-live-oracle (parent listing fetch)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -80,13 +74,12 @@
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "chimera.atlascrew.dev/api/payments/amount/manipulate": 8,
+    "vwad.owasp.org/app/goof/login": 9,
     "chimera.atlascrew.dev/api/v1/diagnostics/ping": 7,
     "chimera.atlascrew.dev/api/v1/genai/chat": 7,
     "chimera.atlascrew.dev/api/v1/genai/agent/browse": 7,
     "chimera.atlascrew.dev/api/v1/ecommerce/products/search?query=test": 7,
-    "chimera.atlascrew.dev/api/v1/saas/tenants/1": 7,
-    "mutillidae.lab.pentest-forge.com/index.php?page=user-info.php": 3,
-    "dvwa.lab.pentest-forge.com/vulnerabilities/sqli_blind/": 3,
-    "dvwa.lab.pentest-forge.com/vulnerabilities/xss_r/": 3
+    "chimera.atlascrew.dev/api/v1/saas/tenants/1": 7
   }
 }

@@ -19706,6 +19706,30 @@ const chimeraPaymentsProcessRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const chimeraPaymentsAmountManipulateRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/payments\/amount\/manipulate\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const manipulateOk =
+    /payments\/amount\/manipulate/i.test(corpus) &&
+    (/Payment amount manipulation/i.test(corpus) ||
+      /POST\s+\/api\/payments\/amount\/manipulate/i.test(corpus)) &&
+    (/Payment Processing|payments\/process|Business Logic/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!manipulateOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Payment amount manipulation/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet:
+        "POST /api/payments/amount/manipulate — Payment amount manipulation (business logic fraud training endpoint)",
+      note: "chimera.atlascrew.dev /api/payments/amount/manipulate route scan — Chimera endpoints catalog documents payment amount manipulation without authorization checks (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific payment fraud training oracle"
+    }
+  };
+};
+
 const chimeraWireTransferRouteLiveOracle: Rule = async (ctx) => {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -104579,7 +104603,7 @@ const vwadOopssecStoreRouteLiveOracle: Rule = async (ctx) => {
 const clientSideVwadGoofEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   if (!/vwad\.owasp\.org\/app\/goof/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.combined;
+  let corpus = ctx.combined;
   const hits: { label: string; sample: string }[] = [];
   const checks: { label: string; re: RegExp }[] = [
     {
@@ -104603,9 +104627,26 @@ const clientSideVwadGoofEvidence: Rule = async (ctx) => {
       re: /admin@snyk\.io|SuperSecretPassword/i
     }
   ];
-  for (const { label, re } of checks) {
-    const m = corpus.match(re);
-    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  const collectGoofHits = (text: string) => {
+    const found: { label: string; sample: string }[] = [];
+    for (const { label, re } of checks) {
+      const m = text.match(re);
+      if (m) found.push({ label, sample: m[0].slice(0, 100) });
+    }
+    return found;
+  };
+  hits.push(...collectGoofHits(corpus));
+  if (hits.length < 2 && /\/app\/goof\//i.test(pageUrl)) {
+    const parent = await ctx.probe.get("https://vwad.owasp.org/app/goof/", {
+      maxBytes: 65536,
+      timeoutMs: 15000
+    });
+    if (parent.status >= 200 && parent.status < 400 && parent.body.length > 200) {
+      corpus = `${corpus}\n${parent.body}`;
+      for (const hit of collectGoofHits(parent.body)) {
+        if (!hits.some((h) => h.label === hit.label)) hits.push(hit);
+      }
+    }
   }
   if (hits.length < 2) return NEGATIVE;
   return {
@@ -104925,6 +104966,7 @@ export const RULES: Record<string, Rule> = {
   chimeraVulnerabilityInventoryRouteLiveOracle,
   chimeraHipaaEvidenceEndpointsRouteLiveOracle,
   chimeraPaymentsProcessRouteLiveOracle,
+  chimeraPaymentsAmountManipulateRouteLiveOracle,
   chimeraWireTransferRouteLiveOracle,
   chimeraClaimsSubmitRouteLiveOracle,
   chimeraHealthcareRecordsExportRouteLiveOracle,

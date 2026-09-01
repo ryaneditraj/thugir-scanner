@@ -1795,6 +1795,7 @@ const DEEP_RULES = new Set<string>([
   "chimeraVulnerabilityInventoryRouteLiveOracle",
   "chimeraHipaaEvidenceEndpointsRouteLiveOracle",
   "chimeraPaymentsProcessRouteLiveOracle",
+  "chimeraPaymentsAmountManipulateRouteLiveOracle",
   "chimeraWireTransferRouteLiveOracle",
   "chimeraClaimsSubmitRouteLiveOracle",
   "chimeraHealthcareRecordsExportRouteLiveOracle",
@@ -11422,6 +11423,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /vwad\.owasp\.org\/app\/oopssec-store/i.test(home.finalUrl)
       ? ["https://koadt.github.io/oss-oopssec-store/"]
       : [];
+  const vwadGoofPrioritySeeds =
+    /vwad\.owasp\.org\/app\/goof/i.test(home.finalUrl)
+      ? ["https://vwad.owasp.org/app/goof/"]
+      : [];
   const ginAndJuiceLoginPrioritySeeds = /ginandjuice\.shop/i.test(home.finalUrl)
     ? [new URL("/login", home.finalUrl).toString()]
     : [];
@@ -11487,6 +11492,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vwadWrongsecretsLiveSeeds,
       ...vwadGinJuicePrioritySeeds,
       ...vwadOopssecPrioritySeeds,
+      ...vwadGoofPrioritySeeds,
       ...ginAndJuiceLoginPrioritySeeds,
       ...vwadGinJuiceLiveSeeds,
       ...vwadOopssecLiveSeeds,
@@ -12365,6 +12371,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/fedramp-openapi-extensions\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-fedramp-openapi-extensions")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/payments\/process\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-payments-process")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/payments\/amount\/manipulate\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-payments-amount-manipulate")
       )
         return -3;
       if (
@@ -14751,6 +14769,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /vwad\.owasp\.org/i.test(origin) &&
         /\/app\/oopssec-store\b/i.test(targetInput) &&
         (p.slug.startsWith("vwad-oopssec-store") || p.slug.startsWith("client-side-vwad-oopssec"))
+      )
+        return -3;
+      if (
+        /vwad\.owasp\.org/i.test(origin) &&
+        /\/app\/goof\b/i.test(targetInput) &&
+        (p.slug.startsWith("vwad-goof") || p.slug.startsWith("client-side-vwad-goof"))
       )
         return -3;
       if (
