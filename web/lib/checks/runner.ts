@@ -1630,6 +1630,7 @@ const DEEP_RULES = new Set<string>([
   "openvaultAdminAccountsBflaRouteLiveOracle",
   "openvaultAuthTokenEnumerationRouteLiveOracle",
   "openvaultUsersEnumerationRouteLiveOracle",
+  "openvaultTransactionsBolaRouteLiveOracle",
   "clientSideCookiejarLabEvidence",
   "clientSideWebgoatEvidence",
   "clientSideSessionHijackEvidence",
@@ -1841,6 +1842,10 @@ const DEEP_RULES = new Set<string>([
   "chimeraAdminAttackXxeRouteLiveOracle",
   "chimeraEnergyUtilitiesCalibrationSsrfLiveOracle",
   "chimeraEnergyUtilitiesCalibrationSsrfRouteLiveOracle",
+  "chimeraEnergyUtilitiesOutagesBolaLiveOracle",
+  "chimeraEnergyUtilitiesOutagesBolaRouteLiveOracle",
+  "chimeraIcsControllersStatusBolaLiveOracle",
+  "chimeraIcsControllersStatusBolaRouteLiveOracle",
   "chimeraEcommerceProductsCatalogSqliRouteLiveOracle",
   "chimeraTelecomSubscribersProfileBolaRouteLiveOracle",
   "chimeraInsuranceClaimsSearchSqliRouteLiveOracle",
@@ -12549,6 +12554,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/energy-utilities\/outages(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("chimera-energy-utilities-outages-bola")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/ics\/controllers\/status\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-ics-controllers-status-bola")
+      )
+        return -3;
+      if (
         /openvaultbank\.com/i.test(origin) &&
         /\/api\/v1\/payments\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-payments-bola")
@@ -12570,6 +12587,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /openvaultbank\.com/i.test(origin) &&
         /\/api\/v1\/users\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-users-enumeration")
+      )
+        return -3;
+      if (
+        /openvaultbank\.com/i.test(origin) &&
+        /\/api\/v1\/accounts\/\d+\/transactions\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-transactions-bola")
       )
         return -3;
       if (
