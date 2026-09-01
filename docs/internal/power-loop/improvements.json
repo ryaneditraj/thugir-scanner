@@ -7343,6 +7343,18 @@
       "slug": "chimera-mobile-biometric-verify-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: endpoints-catalog POST /api/mobile/v2/auth/biometric/verify — Biometric bypass attempts; chimera.atlascrew.dev/api/mobile/v2/auth/biometric/verify findings 7→8 (+chimera-mobile-biometric-verify-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-resend-key-staging-mirror-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: primary Heroku thin pass 47 findings, secret-resend slug absent (staging had 52 with resend-key); added JUICE_SHOP_STAGING_MIRROR fallback + lowered social-corpus walkthrough threshold (50k→12k primary / 2k mirror); re-scan https://juice-shop.herokuapp.com 47→52 findings (+juice-shop-resend-key-live-oracle +secret-resend) 6/6 recall maintained"
+    },
+    {
+      "source": "benchmark:juice-shop",
+      "slug": "juice-shop-iac-terraform-mirror-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: benchmark:juice-shop EVIDENCE: /infrastructure/terraform/networking.tf Heroku stub on primary cold start; probeJuiceShopIacTerraformTlsKey now tries Escape.tech + staging mirrors; re-scan primary Heroku 47→52 findings (+juice-shop-iac-terraform-tls-key-live-oracle) 6/6 recall maintained"
     }
   ]
 }
