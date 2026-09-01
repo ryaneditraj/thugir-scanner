@@ -3982,6 +3982,8 @@ const DEEP_RULES = new Set<string>([
   "burpbountyCrlfSetRouteLiveOracle",
   "burpbountyRceEvalRouteLiveOracle",
   "burpbountyAiCompletionsRouteLiveOracle",
+  "burpbountyAiGatewayRouteLiveOracle",
+  "burpbountyBackupListingRouteLiveOracle",
   "burpbountyFortiosRemoteLoginRouteLiveOracle",
   "burpbountyWpConfigLiveOracle",
   "burpbountyWpConfigRouteLiveOracle",
@@ -15735,7 +15737,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/burpbountylab\.com/i.test(origin) && /\/xxe\/parse\b/i.test(targetInput) && p.slug === "burpbounty-xxe-parse-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/crlf\/set\b/i.test(targetInput) && p.slug === "burpbounty-crlf-set-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/rce\/eval\b/i.test(targetInput) && p.slug === "burpbounty-rce-eval-route-live-oracle") return -3;
-      if (/burpbountylab\.com/i.test(origin) && /\/ai\/v1\/completions\b/i.test(targetInput) && p.slug === "burpbounty-ai-completions-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/ai\/(?:v1\/completions|chat\/completions)\b/i.test(targetInput) && p.slug === "burpbounty-ai-completions-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/ai\/gateway\b/i.test(targetInput) && p.slug === "burpbounty-ai-gateway-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/backup\/?$/i.test(targetInput) && p.slug === "burpbounty-backup-listing-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?forti(?:os)?(?:\/remote\/login)?\/?$/i.test(targetInput) && p.slug === "burpbounty-fortios-remote-login-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/wp\/wp-config\.php/i.test(targetInput) && p.slug.startsWith("burpbounty-wp-config")) return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?weblogic(?:\/console\/login\/LoginForm\.jsp)?\/?$/i.test(targetInput) && p.slug === "burpbounty-weblogic-console-route-live-oracle") return -3;

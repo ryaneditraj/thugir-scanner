@@ -56579,11 +56579,11 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Information disclosure",
     severityDefault: "medium",
-    title: "Burp Bounty Lab /ai/v1/completions route live oracle",
+    title: "Burp Bounty Lab AI completions route live oracle",
     description:
-      "When scanning /ai/v1/completions, GET returns legacy text_completion JSON plus X-AI-Backend, X-LLM-Provider, and X-MCP-Enabled headers — route-specific OpenAI completions disclosure profile oracle.",
+      "When scanning /ai/v1/completions or /ai/chat/completions, GET returns legacy text_completion JSON plus X-AI-Backend, X-LLM-Provider, and X-MCP-Enabled headers — route-specific OpenAI completions disclosure profile oracle.",
     impactOneline:
-      "Route-specific legacy completions oracle confirms LLM gateway header leakage when scanning the Burp Bounty Lab /ai/v1/completions practice endpoint.",
+      "Route-specific legacy completions oracle confirms LLM gateway header leakage when scanning Burp Bounty Lab AI completion practice endpoints.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "burpbountyAiCompletionsRouteLiveOracle" },
     tierRequired: "deep",
@@ -57979,6 +57979,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-ai-gateway-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab /ai/gateway route live oracle",
+    description:
+      "When scanning /ai/gateway, GET returns HTML disclosing Kong + Envoy reverse-proxy infrastructure behind the AI service — route-specific AI gateway disclosure oracle.",
+    impactOneline:
+      "Route-specific AI gateway probe confirms Kong/Envoy infrastructure disclosure when scanning the Burp Bounty Lab /ai/gateway practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAiGatewayRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Avoid exposing reverse-proxy vendor names and gateway topology on public AI routes.",
+      steps: [
+        "Return generic health responses without Kong/Envoy branding.",
+        "Strip gateway disclosure headers from public AI endpoints.",
+        "Place AI gateways behind authenticated API management layers."
+      ]
+    },
+    fixPrompt:
+      "Our /ai/gateway route scan discloses Kong + Envoy infrastructure. Show how to harden AI gateway health endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-backup-listing-live-oracle",
     platform: "generic",
     category: "Information disclosure",
@@ -58001,6 +58027,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /backup/ directory is browsable and lists db_backup.sql. Show how to disable directory listing and secure backup files.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-backup-listing-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /backup/ route live oracle",
+    description:
+      "When scanning /backup/, GET returns an HTML directory index listing db_backup.sql and site_backup.tar.gz without authentication — route-specific backup listing oracle.",
+    impactOneline:
+      "Route-specific backup listing probe confirms sensitive backup file enumeration when scanning the Burp Bounty Lab /backup/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyBackupListingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable directory listings and block public access to /backup/ paths.",
+      steps: [
+        "Turn off autoindex for backup directories at the web server.",
+        "Store backups outside the web root or behind authentication.",
+        "Remove db_backup.sql and site_backup.tar.gz from publicly reachable paths."
+      ]
+    },
+    fixPrompt:
+      "Our /backup/ route scan confirms browsable backup directory listing. Show how to disable directory listing and secure backup files.",
     version: 1,
     enabled: true
   },
