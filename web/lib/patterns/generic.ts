@@ -76826,6 +76826,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-diagnostics-ping-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera diagnostics ping RCE route live oracle",
+    description:
+      "When scanning /api/v1/diagnostics/ping on chimera.atlascrew.dev, CHM-ADMIN-001 documents remote command execution via ping diagnostics — route-specific RCE training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional command injection on the diagnostics ping endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraDiagnosticsPingRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Use parameterized APIs instead of shelling out to ping or similar utilities.",
+        "Restrict diagnostics endpoints to authenticated admin roles on private networks.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/diagnostics/ping route documents CHM-ADMIN-001 RCE. Show safe diagnostics and input validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-diagnostics-webhook-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Chimera diagnostics webhook SSRF route live oracle",
+    description:
+      "When scanning /api/v1/diagnostics/webhook on chimera.atlascrew.dev, CHM-ADMIN-002 documents SSRF via diagnostics webhook callback URL — route-specific SSRF training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SSRF on the diagnostics webhook endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraDiagnosticsWebhookSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate outbound webhook URLs and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Block private IP ranges and metadata endpoints in outbound webhook fetches.",
+        "Use an allowlist of permitted callback hostnames for diagnostics webhooks.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/diagnostics/webhook route documents CHM-ADMIN-002 SSRF. Show outbound URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-auth-token-enumeration-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "OpenVault Bank auth token login enumeration route live oracle",
+    description:
+      "When scanning /api/v1/auth/token on openvaultbank.com, /learn documents distinguishable login error messages enabling email enumeration — route-specific user enumeration training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional login enumeration via user-not-found vs wrong-password error messages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultAuthTokenEnumerationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic login failure messages and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Use a single generic error message for invalid username and invalid password.",
+        "Apply rate limiting and account lockout on authentication endpoints.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/auth/token route documents login enumeration. Show generic authentication error remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-ecommerce-products-catalog-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",

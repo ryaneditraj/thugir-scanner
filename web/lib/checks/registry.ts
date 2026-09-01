@@ -19330,6 +19330,9 @@ CHM-ADMIN-001 Remote Command Execution (Ping)
 POST /api/v1/diagnostics/ping
 CHM-ADMIN-002 Server-Side Request Forgery (Webhook)
 POST /api/v1/diagnostics/webhook
+CHM-ADMIN-003 XML External Entity (XXE)
+POST /api/v1/admin/attack/xxe
+XXE in legacy import behavior
 POST /api/v1/healthcare/records                # Second-order SQLi
 GET /api/v1/healthcare/records/search?q=       # SQL Injection (Search, CHM-HEALTH-001)
 GET /api/v1/healthcare/records/{record_id}     # BOLA/IDOR (CHM-HEALTH-002)
@@ -19376,7 +19379,7 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001|CHM-ADMIN-002|CHM-BANK-001|CHM-BANK-002|CHM-AI-001|CHM-AI-002|CHM-AI-003|CHM-AI-004|CHM-ECOM-002|CHM-TELCO-001|CHM-INS-002/i.test(corpus)
+    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001|CHM-ADMIN-002|CHM-ADMIN-003|CHM-BANK-001|CHM-BANK-002|CHM-AI-001|CHM-AI-002|CHM-AI-003|CHM-AI-004|CHM-ECOM-002|CHM-TELCO-001|CHM-INS-002/i.test(corpus)
   ) {
     const invDoc = await ctx.probe.get(new URL("/vulnerability-inventory", ctx.origin).toString(), {
       maxBytes: 400_000,
@@ -20447,6 +20450,85 @@ const chimeraGenaiKnowledgeUploadRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/genai/knowledge/upload route scan — CHM-AI-004 documents unrestricted file upload on GenAI RAG ingestion (Jekyll docs corpus fallback) — route-specific GenAI file upload training oracle"
+    }
+  };
+};
+
+async function chimeraDiagnosticsPingRceProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const pingOk =
+    /diagnostics\/ping/i.test(corpus) &&
+    (/CHM-ADMIN-001/i.test(corpus) ||
+      /Remote Command Execution/i.test(corpus) ||
+      /POST\s+\/api\/v1\/diagnostics\/ping/i.test(corpus)) &&
+    (/diagnostics|admin|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!pingOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-ADMIN-001/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet: "POST /api/v1/diagnostics/ping — Remote Command Execution (Ping, CHM-ADMIN-001)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents command injection on diagnostics ping endpoint (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — diagnostics RCE training oracle"
+    }
+  };
+}
+
+const chimeraDiagnosticsPingRceLiveOracle: Rule = async (ctx) => chimeraDiagnosticsPingRceProbe(ctx);
+
+const chimeraDiagnosticsPingRceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/diagnostics\/ping\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraDiagnosticsPingRceProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/diagnostics/ping route scan — CHM-ADMIN-001 documents remote command execution via ping diagnostics (Jekyll docs corpus fallback) — route-specific RCE training oracle"
+    }
+  };
+};
+
+async function chimeraDiagnosticsWebhookSsrfProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const webhookOk =
+    /diagnostics\/webhook/i.test(corpus) &&
+    (/CHM-ADMIN-002/i.test(corpus) ||
+      /Server-Side Request Forgery/i.test(corpus) ||
+      /POST\s+\/api\/v1\/diagnostics\/webhook/i.test(corpus)) &&
+    (/diagnostics|admin|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!webhookOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-ADMIN-002/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet: "POST /api/v1/diagnostics/webhook — Server-Side Request Forgery (Webhook, CHM-ADMIN-002)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents SSRF on diagnostics webhook callback endpoint (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — diagnostics SSRF training oracle"
+    }
+  };
+}
+
+const chimeraDiagnosticsWebhookSsrfLiveOracle: Rule = async (ctx) =>
+  chimeraDiagnosticsWebhookSsrfProbe(ctx);
+
+const chimeraDiagnosticsWebhookSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/diagnostics\/webhook\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraDiagnosticsWebhookSsrfProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/diagnostics/webhook route scan — CHM-ADMIN-002 documents SSRF via diagnostics webhook callback URL (Jekyll docs corpus fallback) — route-specific SSRF training oracle"
     }
   };
 };
@@ -41613,6 +41695,45 @@ const openvaultAdminAccountsBflaRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "openvaultbank.com /api/v1/admin/accounts route scan — /learn documents RBAC bypass on admin account listing — route-specific BFLA training oracle"
+    }
+  };
+};
+
+async function openvaultAuthTokenEnumerationProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const corpus = await openvaultDocsCorpus(ctx);
+  const enumOk =
+    /\/auth\/token\b/i.test(corpus) &&
+    (/Information Disclosure \/ Login Enumeration|Login Enumeration/i.test(corpus) ||
+      /user not found/i.test(corpus) ||
+      /incorrect password/i.test(corpus) ||
+      /POST\s+\/auth\/token/i.test(corpus)) &&
+    (/OpenVault Bank|deliberately vulnerable banking/i.test(corpus));
+  if (!enumOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /user not found/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet:
+        "POST /auth/token — Information Disclosure / Login Enumeration (distinguishable user-not-found vs incorrect-password errors)",
+      note: "openvaultbank.com — OpenVault Bank /learn documents login enumeration via distinguishable error messages on POST /auth/token — user enumeration training oracle"
+    }
+  };
+}
+
+const openvaultAuthTokenEnumerationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/auth\/token\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await openvaultAuthTokenEnumerationProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "openvaultbank.com /api/v1/auth/token route scan — /learn documents distinguishable login error messages enabling email enumeration — route-specific user enumeration training oracle"
     }
   };
 };
@@ -105252,6 +105373,7 @@ export const RULES: Record<string, Rule> = {
   clientSideOpenvaultCheatsheetEvidence,
   openvaultPaymentsBolaRouteLiveOracle,
   openvaultAdminAccountsBflaRouteLiveOracle,
+  openvaultAuthTokenEnumerationRouteLiveOracle,
   clientSideWebgoatEvidence,
   clientSideWhoopsPayEvidence,
   whoopsPayTransactionsBolaLiveOracle,
@@ -105415,6 +105537,10 @@ export const RULES: Record<string, Rule> = {
   chimeraGenaiModelsConfigDisclosureRouteLiveOracle,
   chimeraGenaiKnowledgeUploadLiveOracle,
   chimeraGenaiKnowledgeUploadRouteLiveOracle,
+  chimeraDiagnosticsPingRceLiveOracle,
+  chimeraDiagnosticsPingRceRouteLiveOracle,
+  chimeraDiagnosticsWebhookSsrfLiveOracle,
+  chimeraDiagnosticsWebhookSsrfRouteLiveOracle,
   chimeraEcommerceProductsCatalogSqliRouteLiveOracle,
   chimeraTelecomSubscribersProfileBolaRouteLiveOracle,
   chimeraInsuranceClaimsSearchSqliRouteLiveOracle,
