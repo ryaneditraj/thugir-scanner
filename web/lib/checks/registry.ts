@@ -20389,6 +20389,80 @@ const chimeraSanctionsCheckRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const chimeraGovCasesBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/gov\/cases\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const casesOk =
+    /gov\/cases/i.test(corpus) &&
+    (/Create case/i.test(corpus) ||
+      /Case details/i.test(corpus) ||
+      /POST\s+\/api\/v1\/gov\/cases/i.test(corpus)) &&
+    (/Government|government|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!casesOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Create case/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/v1/gov/cases — Create case (citizen case management BOLA)",
+      note: "chimera.atlascrew.dev /api/v1/gov/cases route scan — Chimera api-reference documents citizen case creation and case-detail access without authorization (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific government case management BOLA training oracle"
+    }
+  };
+};
+
+const chimeraCardsDataExportRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/cards\/data\/export\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const exportOk =
+    /cards\/data\/export/i.test(corpus) &&
+    (/Card data extraction/i.test(corpus) ||
+      /GET\s+\/api\/cards\/data\/export/i.test(corpus)) &&
+    (/Payment Processing|payments|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!exportOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Card data extraction/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/cards/data/export — Card data extraction (PCI-sensitive data exposure)",
+      note: "chimera.atlascrew.dev /api/cards/data/export route scan — Chimera endpoints catalog documents unauthenticated card data export (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific payment card data extraction training oracle"
+    }
+  };
+};
+
+const chimeraMobileBiometricVerifyRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/mobile\/v2\/auth\/biometric\/verify\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const biometricOk =
+    /biometric\/verify/i.test(corpus) &&
+    (/Biometric bypass/i.test(corpus) ||
+      /Biometric verification/i.test(corpus) ||
+      /POST\s+\/api\/mobile\/v2\/auth\/biometric\/verify/i.test(corpus)) &&
+    (/Mobile Banking|mobile|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!biometricOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Biometric bypass/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /api/mobile/v2/auth/biometric/verify — Biometric bypass attempts (mobile auth)",
+      note: "chimera.atlascrew.dev /api/mobile/v2/auth/biometric/verify route scan — Chimera endpoints catalog documents biometric authentication bypass without device binding (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific mobile biometric auth bypass training oracle"
+    }
+  };
+};
+
 async function chimeraGenaiChatPromptInjectionProbe(ctx: RuleContext): Promise<RuleResult> {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const corpus = await chimeraDocsCorpus(ctx);
@@ -106271,6 +106345,9 @@ export const RULES: Record<string, Rule> = {
   chimeraMobileInstantTransferRouteLiveOracle,
   chimeraInventoryReserveRouteLiveOracle,
   chimeraSanctionsCheckRouteLiveOracle,
+  chimeraGovCasesBolaRouteLiveOracle,
+  chimeraCardsDataExportRouteLiveOracle,
+  chimeraMobileBiometricVerifyRouteLiveOracle,
   chimeraGenaiChatPromptInjectionLiveOracle,
   chimeraGenaiChatPromptInjectionRouteLiveOracle,
   chimeraGenaiAgentBrowseSsrfLiveOracle,
