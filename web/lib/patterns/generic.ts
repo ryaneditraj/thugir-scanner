@@ -76384,6 +76384,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-saas-tenants-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Chimera SaaS tenant BOLA route live oracle",
+    description:
+      "When scanning /api/v1/saas/tenants/{tenant_id} on chimera.atlascrew.dev, CHM-SAAS-001 documents cross-tenant project enumeration without tenant isolation — route-specific SaaS tenant BOLA training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional cross-tenant access on SaaS tenant endpoints for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraSaasTenantsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce tenant isolation on all SaaS tenant routes and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Verify JWT tenant_id matches the requested tenant before returning tenant data.",
+        "Scope all SaaS queries by authenticated tenant context.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/saas/tenants/{tenant_id} route documents CHM-SAAS-001 cross-tenant BOLA. Show tenant isolation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-cart-update-route-live-oracle",
     platform: "generic",
     category: "Business logic",
@@ -76930,6 +76956,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-admin-execute-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin execute RCE route live oracle",
+    description:
+      "When scanning /api/v1/admin/execute on chimera.atlascrew.dev, vulnerability inventory documents unauthenticated direct command execution — route-specific admin RCE training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional admin command execution without authorization for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminExecuteRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose admin command execution endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Require admin authentication and authorization before any command execution.",
+        "Remove or sandbox admin execute endpoints from production deployments.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/execute route documents unauthenticated command execution. Show admin endpoint hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-deserialize-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin deserialize route live oracle",
+    description:
+      "When scanning /api/admin/attack/deserialize on chimera.atlascrew.dev, vulnerability inventory documents Python pickle insecure deserialization RCE — route-specific deserialization training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional pickle deserialization RCE for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminDeserializeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never deserialize untrusted pickle data and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace pickle deserialization with JSON or signed message formats.",
+        "Require authentication before accepting serialized admin payloads.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/admin/attack/deserialize route documents pickle RCE. Show secure deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-hipaa-transfer-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Chimera HIPAA transfer SSRF route live oracle",
+    description:
+      "When scanning /api/hipaa/transfer/encrypted on chimera.atlascrew.dev, vulnerability inventory documents SSRF to cloud metadata with encryption:none — route-specific HIPAA transfer SSRF training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SSRF on HIPAA PHI transfer endpoints for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHipaaTransferSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate HIPAA transfer destinations and enforce encryption in transit for all PHI transfers.",
+      steps: [
+        "Block private IP ranges and cloud metadata endpoints in transfer destination URLs.",
+        "Require authenticated authorization before initiating PHI transfers.",
+        "Do not expose Chimera HIPAA endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/hipaa/transfer/encrypted route documents SSRF and unencrypted PHI transfer. Show outbound URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-energy-utilities-calibration-ssrf-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -77108,6 +77212,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our openvaultbank /api/v1/profile route documents privilege escalation via mass assignment. Show profile field whitelisting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-health-misconfig-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "OpenVault Bank health misconfiguration route live oracle",
+    description:
+      "When scanning /api/v1/health on openvaultbank.com, /learn documents unauthenticated debug health endpoint exposing infrastructure status — route-specific security misconfiguration training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional health endpoint information disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultHealthMisconfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict health endpoints to internal monitoring and remove debug details from public responses.",
+      steps: [
+        "Require authentication or internal network access for /api/v1/health.",
+        "Return minimal liveness status without database or dependency details.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/health route documents debug health disclosure. Show health endpoint hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-reset-request-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "OpenVault Bank reset-request route live oracle",
+    description:
+      "When scanning /api/v1/auth/reset-request on openvaultbank.com, /learn documents password reset responses leaking reset tokens — route-specific sensitive data exposure training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional password reset token leakage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultResetRequestRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return password reset tokens in API responses and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Send reset tokens only via out-of-band email delivery.",
+        "Return generic success messages without token values in API responses.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/auth/reset-request route documents reset token leakage. Show password reset response hardening remediation.",
     version: 1,
     enabled: true
   },

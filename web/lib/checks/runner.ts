@@ -1632,6 +1632,8 @@ const DEEP_RULES = new Set<string>([
   "openvaultUsersEnumerationRouteLiveOracle",
   "openvaultTransactionsBolaRouteLiveOracle",
   "openvaultProfileMassAssignmentRouteLiveOracle",
+  "openvaultHealthMisconfigRouteLiveOracle",
+  "openvaultResetRequestRouteLiveOracle",
   "clientSideCookiejarLabEvidence",
   "clientSideWebgoatEvidence",
   "clientSideSessionHijackEvidence",
@@ -1825,6 +1827,7 @@ const DEEP_RULES = new Set<string>([
   "chimeraEnergyScadaCommandsRouteLiveOracle",
   "chimeraGovBenefitsSearchSqliRouteLiveOracle",
   "chimeraSaasTenantsProjectsIdorRouteLiveOracle",
+  "chimeraSaasTenantsBolaRouteLiveOracle",
   "chimeraCartUpdateRouteLiveOracle",
   "chimeraLoyaltyPointsTransferRouteLiveOracle",
   "chimeraAdminOrdersOverrideRouteLiveOracle",
@@ -1842,6 +1845,9 @@ const DEEP_RULES = new Set<string>([
   "chimeraDiagnosticsWebhookSsrfRouteLiveOracle",
   "chimeraAdminAttackXxeLiveOracle",
   "chimeraAdminAttackXxeRouteLiveOracle",
+  "chimeraAdminExecuteRceRouteLiveOracle",
+  "chimeraAdminDeserializeRouteLiveOracle",
+  "chimeraHipaaTransferSsrfRouteLiveOracle",
   "chimeraEnergyUtilitiesCalibrationSsrfLiveOracle",
   "chimeraEnergyUtilitiesCalibrationSsrfRouteLiveOracle",
   "chimeraEnergyUtilitiesOutagesBolaLiveOracle",
@@ -12491,6 +12497,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/saas\/tenants\/\d+\/?$/i.test(targetInput) &&
+        p.slug.startsWith("chimera-saas-tenants-bola")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/cart\/update\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-cart-update")
       )
@@ -12551,6 +12563,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/execute\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-execute")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/admin\/attack\/deserialize\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-deserialize")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/hipaa\/transfer\/encrypted\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-hipaa-transfer")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/energy-utilities\/assets\/calibration\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-energy-utilities-calibration-ssrf")
       )
@@ -12601,6 +12631,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /openvaultbank\.com/i.test(origin) &&
         /\/api\/v1\/profile\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-profile-mass-assignment")
+      )
+        return -3;
+      if (
+        /openvaultbank\.com/i.test(origin) &&
+        /\/api\/v1\/health\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-health-misconfig")
+      )
+        return -3;
+      if (
+        /openvaultbank\.com/i.test(origin) &&
+        /\/api\/v1\/auth\/reset-request\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-reset-request")
       )
         return -3;
       if (
