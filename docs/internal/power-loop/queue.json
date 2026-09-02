@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T02:05:00.000Z",
+  "updated_at": "2026-09-02T03:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/admin/users/export",
+      "source": "atlas-crew/Chimera — CHM-ADMIN-001 unauthenticated bulk user export (vulnerability-inventory; patterns.sql seed)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/loyalty/transactions/export",
+      "source": "atlas-crew/Chimera — CHM-LOYALTY-001 BOLA transactions export (vulnerability-inventory; patterns.sql seed)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/ecommerce/products/search",
+      "source": "atlas-crew/Chimera — CHM-ECOM-001 reflected XSS in product search (vulnerability-inventory; patterns.sql seed)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/webhook",
+      "source": "sampsonc/vulnlab.dev — semi-blind SSRF POST webhook lab (leaks status/headers; GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/gopher",
+      "source": "sampsonc/vulnlab.dev — gopher:// scheme SSRF to non-HTTP TCP via libcurl (GitHub README)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://burpbountylab.com/cve/traefik/",
       "source": "BurpBountyLab — Traefik CVE path disclosure oracle (queued; route oracle absent prior runs)",
