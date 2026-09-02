@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T04:05:00.000Z",
+  "updated_at": "2026-09-02T05:05:57.700Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-60",
+      "source": "OWASP WrongSecrets — Challenge 60 insecure MCP server prompt injection leaking env secrets (v1.13.1 README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-61",
+      "source": "OWASP WrongSecrets — Challenge 61 Telegram channel secrets with real API integration (v1.13.1 README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-62",
+      "source": "OWASP WrongSecrets — Challenge 62 secrets oracle (Heroku demo README: challenges 54-66 available)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/patients/search?ssn=test",
+      "source": "atlas-crew/Chimera vuln-api — classic SQLi GET /api/v1/patients/search?ssn= (USE_DATABASE=true README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/auth/login-vulnerable",
+      "source": "atlas-crew/Chimera vuln-api — auth bypass SQLi POST /api/v1/auth/login-vulnerable (README vulnerable endpoints)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
       "source": "OWASP WrongSecrets — Challenge 57 secrets oracle (Heroku demo README: challenges 54-66 available)",
