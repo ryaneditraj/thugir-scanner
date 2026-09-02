@@ -7807,18 +7807,37 @@ function extractVulnPortalAuthSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
-/** OpenVault Bank — seed /learn, /cheatsheet, and /api/v1 training routes from SPA shell. */
+/** OpenVault Bank — seed /learn, /cheatsheet, Railway API routes, and /api/v1 training routes from SPA shell. */
 function extractOpenvaultBankSeeds(html: string, pageUrl: string): string[] {
   if (!/OpenVault Bank|openvaultbank\.com/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/learn", "/cheatsheet", "/api/v1/users", "/api/v1/admin", "/api/v1/accounts", "/api/v1/payments", "/api/v1/admin/accounts", "/api/v1/auth/token"]) {
+  for (const p of [
+    "/learn",
+    "/cheatsheet",
+    "/api/v1/users",
+    "/api/v1/admin",
+    "/api/v1/accounts",
+    "/api/v1/payments",
+    "/api/v1/admin/accounts",
+    "/api/v1/auth/token",
+    "/api/v1/health",
+    "/api/v1/auth/reset-request",
+    "/api/v1/profile"
+  ]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
       out.add(u.toString());
     } catch {
       /* ignore */
+    }
+  }
+  const railway = html.match(/https:\/\/web-production-[a-z0-9]+\.up\.railway\.app\/api\/v1/i);
+  if (railway) {
+    const base = railway[0];
+    for (const suffix of ["/health", "/auth/reset-request", "/profile", "/auth/token"]) {
+      out.add(`${base}${suffix}`);
     }
   }
   return [...out];
@@ -12766,49 +12785,49 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
-        /openvaultbank\.com/i.test(origin) &&
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
         /\/api\/v1\/payments\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-payments-bola")
       )
         return -3;
       if (
-        /openvaultbank\.com/i.test(origin) &&
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
         /\/api\/v1\/admin\/accounts\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-admin-accounts-bfla")
       )
         return -3;
       if (
-        /openvaultbank\.com/i.test(origin) &&
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
         /\/api\/v1\/auth\/token\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-auth-token-enumeration")
       )
         return -3;
       if (
-        /openvaultbank\.com/i.test(origin) &&
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
         /\/api\/v1\/users\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-users-enumeration")
       )
         return -3;
       if (
-        /openvaultbank\.com/i.test(origin) &&
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
         /\/api\/v1\/accounts\/\d+\/transactions\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-transactions-bola")
       )
         return -3;
       if (
-        /openvaultbank\.com/i.test(origin) &&
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
         /\/api\/v1\/profile\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-profile-mass-assignment")
       )
         return -3;
       if (
-        /openvaultbank\.com/i.test(origin) &&
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
         /\/api\/v1\/health\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-health-misconfig")
       )
         return -3;
       if (
-        /openvaultbank\.com/i.test(origin) &&
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
         /\/api\/v1\/auth\/reset-request\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-reset-request")
       )

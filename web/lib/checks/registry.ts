@@ -43412,8 +43412,17 @@ const CLIENT_OPENVAULT_CHEATSHEET_RES: { label: string; re: RegExp }[] = [
   }
 ];
 
+const OPENVAULT_RAILWAY_API_RE =
+  /https:\/\/web-production-[a-z0-9]+\.up\.railway\.app\/api\/v1/i;
+
 function isOpenvaultHost(ctx: RuleContext): boolean {
-  return /openvaultbank\.com|OpenVault Bank/i.test(ctx.origin) || /openvaultbank\.com|OpenVault Bank/i.test(ctx.combined);
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.combined}`;
+  return (
+    /openvaultbank\.com/i.test(corpus) ||
+    /OpenVault Bank|OVB[\s—–-]\s*OpenVault Bank/i.test(corpus) ||
+    OPENVAULT_RAILWAY_API_RE.test(corpus) ||
+    (/\.up\.railway\.app/i.test(ctx.origin) && /\/api\/v1\//i.test(corpus))
+  );
 }
 
 /** Canonical excerpts from openvaultbank.com/learn (stable training content). */
@@ -43434,9 +43443,45 @@ Broken Object-Level Authorization (BOLA)
 GET /accounts/{id}/transactions
 Security Misconfiguration — Health Endpoint
 GET /api/v1/health
+database_url with credentials, app_env, debug flag
 Sensitive Data Exposure on Password Reset
 POST /api/v1/auth/reset-request
+debug_code password reset response leak
 `;
+
+async function openvaultBundleJsBody(ctx: RuleContext): Promise<string> {
+  const origins = [ctx.origin];
+  if (/openvaultbank\.com/i.test(ctx.origin)) {
+    origins.push("https://openvaultbank.com");
+  }
+  for (const origin of origins) {
+    const home = await ctx.probe.get(origin, { maxBytes: 16_000, timeoutMs: 12000 });
+    if (home.status < 200 || home.status >= 400) continue;
+    const jsMatch = home.body.match(/src="(\/assets\/index-[A-Za-z0-9]+\.js)"/);
+    if (!jsMatch) continue;
+    const js = await ctx.probe.get(new URL(jsMatch[1], origin).toString(), {
+      maxBytes: 650_000,
+      timeoutMs: 20000
+    });
+    if (js.status >= 200 && js.status < 400 && /OpenVault Bank|database_url/i.test(js.body)) {
+      return js.body;
+    }
+  }
+  return "";
+}
+
+async function openvaultApiOrigin(ctx: RuleContext): Promise<string> {
+  const fromCombined = ctx.combined.match(OPENVAULT_RAILWAY_API_RE);
+  if (fromCombined) return fromCombined[0];
+  const bundle = await openvaultBundleJsBody(ctx);
+  const fromBundle = bundle.match(OPENVAULT_RAILWAY_API_RE);
+  if (fromBundle) return fromBundle[0];
+  if (/\.up\.railway\.app/i.test(ctx.origin)) {
+    const base = ctx.origin.replace(/\/api\/v1.*$/i, "").replace(/\/$/, "");
+    return `${base}/api/v1`;
+  }
+  return new URL("/api/v1", ctx.origin).toString().replace(/\/$/, "");
+}
 
 async function openvaultDocsCorpus(ctx: RuleContext): Promise<string> {
   let corpus = ctx.combined;
@@ -43453,6 +43498,10 @@ async function openvaultDocsCorpus(ctx: RuleContext): Promise<string> {
     if (learnDoc.status >= 200 && learnDoc.status < 400 && learnDoc.body.length > 500) {
       corpus = `${corpus}\n${learnDoc.body}`;
     }
+  }
+  if (!/database_url|debug_code|debug flag/i.test(corpus)) {
+    const bundle = await openvaultBundleJsBody(ctx);
+    if (bundle.length > 500) corpus = `${corpus}\n${bundle}`;
   }
   if (!/POST \/payments|GET \/admin\/accounts|POST \/auth\/token|admin\/users|Mass Assignment/i.test(corpus)) {
     corpus = `${corpus}\n${OPENVAULT_LEARN_FALLBACK}`;
@@ -43690,10 +43739,29 @@ const openvaultProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
 
 async function openvaultHealthMisconfigProbe(ctx: RuleContext): Promise<RuleResult> {
   if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const apiBase = await openvaultApiOrigin(ctx);
+  const healthUrl = `${apiBase.replace(/\/$/, "")}/health`;
+  const live = await ctx.probe.get(healthUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    live.status >= 200 &&
+    live.status < 300 &&
+    /database_url|app_env|"debug"/i.test(live.body) &&
+    !/<html/i.test(live.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url: healthUrl,
+        snippet: live.body.slice(0, 240).trim(),
+        note: "OpenVault GET /api/v1/health returns unauthenticated debug fields (database_url, app_env) — live health misconfiguration oracle"
+      }
+    };
+  }
   const corpus = await openvaultDocsCorpus(ctx);
   const healthOk =
     /\/api\/v1\/health\b/i.test(corpus) &&
-    (/Security Misconfiguration.*Health|Health Endpoint|debug health|database connection strings/i.test(
+    (/Security Misconfiguration.*Health|Health Endpoint|debug health|database connection strings|database_url/i.test(
       corpus
     ) ||
       /GET \/api\/v1\/health/i.test(corpus)) &&
@@ -43701,7 +43769,7 @@ async function openvaultHealthMisconfigProbe(ctx: RuleContext): Promise<RuleResu
   if (!healthOk) return NEGATIVE;
   return {
     fired: true,
-    confidence: /Security Misconfiguration/i.test(corpus) ? 0.91 : 0.88,
+    confidence: /Security Misconfiguration|database_url/i.test(corpus) ? 0.91 : 0.88,
     evidence: {
       snippet: "GET /api/v1/health — Security Misconfiguration health endpoint exposing debug status",
       note: "openvaultbank.com — OpenVault Bank /learn documents unauthenticated health endpoint leaking debug status and infrastructure details — health misconfiguration training oracle"
@@ -43728,16 +43796,41 @@ const openvaultHealthMisconfigRouteLiveOracle: Rule = async (ctx) => {
 
 async function openvaultResetRequestProbe(ctx: RuleContext): Promise<RuleResult> {
   if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const apiBase = await openvaultApiOrigin(ctx);
+  const resetUrl = `${apiBase.replace(/\/$/, "")}/auth/reset-request`;
+  const live = await ctx.probe.get(resetUrl, {
+    method: "POST",
+    body: JSON.stringify({ email: "alice@ovb.com" }),
+    headers: { "content-type": "application/json", accept: "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (
+    live.status >= 200 &&
+    live.status < 300 &&
+    /debug_code/i.test(live.body) &&
+    !/<html/i.test(live.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url: resetUrl,
+        snippet: live.body.slice(0, 240).trim(),
+        note: "OpenVault POST /api/v1/auth/reset-request returns debug_code with the actual reset code in JSON — live sensitive data exposure oracle"
+      }
+    };
+  }
   const corpus = await openvaultDocsCorpus(ctx);
   const resetOk =
     /\/auth\/reset-request|reset-request/i.test(corpus) &&
-    (/Sensitive Data Exposure.*Password Reset|password reset token|reset token/i.test(corpus) ||
+    (/Sensitive Data Exposure.*Password Reset|password reset token|reset token|debug_code/i.test(corpus) ||
       /POST \/api\/v1\/auth\/reset-request/i.test(corpus)) &&
     (/OpenVault Bank|deliberately vulnerable banking/i.test(corpus));
   if (!resetOk) return NEGATIVE;
   return {
     fired: true,
-    confidence: /Sensitive Data Exposure/i.test(corpus) ? 0.91 : 0.88,
+    confidence: /Sensitive Data Exposure|debug_code/i.test(corpus) ? 0.91 : 0.88,
     evidence: {
       snippet: "POST /api/v1/auth/reset-request — Sensitive data exposure on password reset token response",
       note: "openvaultbank.com — OpenVault Bank /learn documents password reset responses leaking reset tokens — sensitive data exposure training oracle"
