@@ -15036,7 +15036,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Chimera banking account search SQLi route live oracle",
     description:
-      "When scanning /api/v1/banking/accounts/search on chimera.atlascrew.dev, the vuln-api README documents UNION-based SQLi via account_number query parameter when USE_DATABASE=true — route-specific banking SQLi training oracle (Jekyll docs corpus fallback).",
+      "When scanning /api/v1/banking/accounts or /api/v1/banking/accounts/search on chimera.atlascrew.dev, the vuln-api README documents UNION-based SQLi via account_number query parameter when USE_DATABASE=true — route-specific banking SQLi training oracle (Jekyll docs corpus fallback).",
     impactOneline:
       "Route-specific confirmation that Chimera documents intentional UNION-based SQL injection on the banking account search endpoint.",
     detectorKind: "rule_ref",
@@ -15114,7 +15114,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Chimera insurance policy lookup SQLi route live oracle",
     description:
-      "When scanning /api/v1/insurance/policies/lookup on chimera.atlascrew.dev, the vuln-api README documents blind boolean SQLi via policy_number query parameter when USE_DATABASE=true — route-specific insurance SQLi training oracle (Jekyll docs corpus fallback).",
+      "When scanning /api/v1/insurance/policies, /api/v1/insurance/policies/{id}, or /api/v1/insurance/policies/lookup on chimera.atlascrew.dev, the vuln-api README documents blind boolean SQLi via policy_number query parameter when USE_DATABASE=true — route-specific insurance SQLi training oracle (Jekyll docs corpus fallback).",
     impactOneline:
       "Route-specific confirmation that Chimera documents intentional blind boolean SQL injection on the insurance policy lookup endpoint.",
     detectorKind: "rule_ref",
@@ -27071,6 +27071,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our IST Edu /labs/ssti route confirms server-side template injection training. Show SSTI-safe templating remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-command-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "IST Edu command injection route live oracle",
+    description:
+      "When scanning /command-injection on ist-edu-bd.vercel.app, POST /api/portal SQLi bypass confirms the OS command injection training lab on the IST Edu vulnerability portal.",
+    impactOneline:
+      "Route-specific confirmation that IST Edu /command-injection documents command injection training scenarios with live injection oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduCommandInjectionLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands — IST Edu is intentional training software.",
+      steps: [
+        "Use allow-listed arguments and avoid shell invocation for user-controlled input.",
+        "Run subprocesses with fixed command arrays instead of shell string interpolation.",
+        "Run IST Edu labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our IST Edu /command-injection route confirms OS command injection training. Show safe subprocess and input validation remediation.",
     version: 1,
     enabled: true
   },

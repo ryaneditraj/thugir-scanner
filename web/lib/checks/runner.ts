@@ -3095,6 +3095,7 @@ const DEEP_RULES = new Set<string>([
   "istEduPathTraversalClientRouteLiveOracle",
   "istEduDeserializationLabRouteLiveOracle",
   "istEduSstiLabRouteLiveOracle",
+  "istEduCommandInjectionLabRouteLiveOracle",
   "istEduFileUploadLabRouteLiveOracle",
   "istEduGraphqlLabRouteLiveOracle",
   "dvwuSsrfRedirectLiveOracle",
@@ -12529,7 +12530,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
-        /\/api\/v1\/banking\/accounts\/search\b/i.test(targetInput) &&
+        /\/api\/v1\/banking\/accounts(?:\/search)?\b/i.test(targetInput) &&
+        !/\/enumerate|\/bulk/i.test(targetInput) &&
         p.slug.startsWith("chimera-banking-accounts-search")
       )
         return -3;
@@ -12549,7 +12551,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
-        /\/api\/v1\/insurance\/policies\/lookup\b/i.test(targetInput) &&
+        /\/api\/v1\/insurance\/policies(?:\/(?:lookup|\d+))?\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-insurance-policies-lookup")
       )
         return -3;

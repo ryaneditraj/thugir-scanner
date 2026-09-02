@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-02T14:10:00.000Z",
+  "updated_at": "2026-09-02T13:25:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,10 +22,10 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2026,
   "discovery_findings": 25792,
-  "improvements_shipped": 1266,
-  "last_run": "2026-09-02T14:10:00.000Z",
+  "improvements_shipped": 1269,
+  "last_run": "2026-09-02T13:25:00.000Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -49,43 +49,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall on primary Heroku (51 findings, 36 live oracles); secret-resend + juice-shop-resend-key-live-oracle + juice-shop-iac-terraform-tls-key-live-oracle present"
+      "note": "Stable 6/6 first-pass recall on primary Heroku (51 findings, 36 live oracles); secret-resend + juice-shop-resend-key-live-oracle present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 486,
-      "focus": "ist-edu-bd file-upload/xxe/jwt + brokencrystals process_numbers MCP eval + ldap injection + drained BurpBountyLab CVE traefik/solarwinds + .svn/entries",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 29,
+      "focus": "IST Edu command-injection + Chimera banking accounts search SQLi parent-route + Chimera insurance policies lookup SQLi parent-route",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 36 live oracles) first-pass primary Heroku",
-      "brokencrystals.com/api/process_numbers: 81 findings — brokencrystals-process-numbers-live-oracle + full BC suite",
-      "brokencrystals.com/api/ldap: 63 findings — brokencrystals-ldap-injection-live-oracle + config/SSRF/BFLA oracles",
-      "burpbountylab.com/cve/traefik/: 104 findings — burpbounty-traefik-cve-route-live-oracle + hub fingerprint",
-      "burpbountylab.com/cve/solarwinds/: 104 findings — burpbounty-solarwinds-cve-route-live-oracle",
-      "burpbountylab.com/.svn/entries: 104 findings — burpbounty-svn-entries-route-live-oracle",
-      "ist-edu-bd.vercel.app/file-upload: 10 findings — hub fingerprint (ist-edu-search-sqli-live-oracle); route-specific file-upload oracle absent",
-      "ist-edu-bd.vercel.app/xxe: 10 findings — hub fingerprint; route-specific XXE oracle absent",
-      "ist-edu-bd.vercel.app/jwt: 10 findings — hub fingerprint; route-specific JWT bypass oracle absent"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 36 live oracles)",
+      "ist-edu-bd.vercel.app/command-injection: 11 findings — ist-edu-command-injection-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/banking/accounts: 9 findings — chimera-banking-accounts-search-sqli-route-live-oracle + BOLA",
+      "chimera.atlascrew.dev/api/v1/insurance/policies/1: 9 findings — chimera-insurance-policies-lookup-sqli-route-live-oracle + BOLA"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable on primary Heroku — no category misses",
-      "ist-edu-bd file-upload/xxe/jwt routes: 10-finding hub fingerprint only — route-specific oracles needed for training-lab differentiation",
-      "brokencrystals /api/ldap and /api/process_numbers confirmed via live oracles — MCP eval RCE path validated"
+      "ist-edu-bd file-upload/xxe/jwt routes: route-specific oracles still needed for training-lab differentiation"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "ist-edu-bd.vercel.app/command-injection": 11,
+    "chimera.atlascrew.dev/api/v1/banking/accounts": 9,
+    "chimera.atlascrew.dev/api/v1/insurance/policies/1": 9,
     "burpbountylab.com/cve/traefik/": 104,
-    "burpbountylab.com/cve/solarwinds/": 104,
-    "burpbountylab.com/.svn/entries": 104,
-    "brokencrystals.com/api/process_numbers": 81,
-    "brokencrystals.com/api/ldap": 63,
-    "ist-edu-bd.vercel.app/file-upload": 10,
-    "ist-edu-bd.vercel.app/xxe": 10,
-    "ist-edu-bd.vercel.app/jwt": 10
+    "brokencrystals.com/api/process_numbers": 81
   }
 }
