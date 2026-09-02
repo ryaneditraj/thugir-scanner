@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-02T21:45:00.000Z",
+  "updated_at": "2026-09-02T22:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,19 +15,19 @@
       ]
     }
   },
-  "total_sites_scanned": 2948,
-  "total_findings": 32176,
+  "total_sites_scanned": 2951,
+  "total_findings": 32197,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2056,
-  "discovery_findings": 26607,
-  "improvements_shipped": 1286,
-  "last_run": "2026-09-02T21:45:00.000Z",
+  "discovery_findings": 26628,
+  "improvements_shipped": 1289,
+  "last_run": "2026-09-02T22:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "21",
+    "hour_utc": "22",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
@@ -49,45 +49,39 @@
           ]
         }
       },
-      "note": "Primary Heroku timeout 600s; staging fallback 6/6 (51 findings, 38 live oracles). Post-ship validation on primary Heroku also 6/6."
+      "note": "Stable 6/6 first-pass recall (51 findings, 38 live oracles) on primary Heroku."
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 232,
-      "focus": "Chimera gov SQLi/BOLA + telecom profile + pwnshop lab-stats + crAPI BFLA + Broken Crystals /api/ldap + /graphql + IST Edu /graphql short-path alias",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 66,
+      "focus": "secure-bank-bay /login SQLi SPA bundle fallback + pwnshop /lab-stats route oracle + chimera /api/v1/gov/records PII route oracle",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (51 findings) — primary Heroku timeout 600s",
-      "brokencrystals.com/api/ldap: 85 findings — brokencrystals-ldap-route-live-oracle shipped (was 63 without route oracle)",
-      "brokencrystals.com/graphql: 21 findings — brokencrystals-graphql-route-live-oracle + introspection oracle shipped",
-      "ist-edu-bd.vercel.app/graphql: 11 findings — ist-edu-graphql-lab-route-live-oracle via /graphql short-path alias",
-      "chimera.atlascrew.dev/api/v1/gov/benefits/search: 8 findings — chimera-gov-benefits-search-sqli-route-live-oracle",
-      "crapi.apisec.ai/identity/api/v2/admin/videos/1: 12 findings — crapi-admin-videos-bfla-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings)",
+      "secure-bank-bay.vercel.app/login: 11 findings — secure-bank-bay-sqli-login-route-live-oracle via SPA bundle fetch",
+      "pwnshop.ctfsecurity.com/lab-stats: 47 findings — pwnshop-lab-stats-route-live-oracle (README corpus fallback)",
+      "chimera.atlascrew.dev/api/v1/gov/records: 8 findings — chimera-gov-records-pii-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable on staging — primary Heroku cold-start timeout 600s",
-      "pwnshop lab-stats: 45 findings — no lab-stats-route-live-oracle",
-      "secure-bank-bay.vercel.app/login: SQLi route oracle in queue — not drained"
+      "benchmark 6/6 stable on primary Heroku",
+      "fabraix biosafety-001 route-specific oracle may need dedicated biosafety-002 backend when API ships",
+      "sekumart track.php / members.php / catalog.php route-specific oracles still absent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "pwnshop.ctfsecurity.com/lab-stats": 45,
+    "pwnshop.ctfsecurity.com/lab-stats": 47,
     "brokencrystals.com/api/ldap": 85,
     "brokencrystals.com/api/process_numbers": 81,
-    "crapi.apisec.ai/community/api/v2/community/posts/recent": 15,
-    "crapi.apisec.ai/identity/api/v2/admin/videos/1": 12,
-    "chimera.atlascrew.dev/api/v1/gov/benefits/search": 8,
-    "chimera.atlascrew.dev/api/v1/telecom/subscribers/1/profile": 8,
-    "chimera.atlascrew.dev/api/v1/gov/cases/CASE-001": 8,
-    "brokencrystals.com/graphql": 21,
-    "pentest-fauxbank.vercel.app/scanner": 17,
     "secure-bank-bay.vercel.app/login": 11,
-    "ist-edu-bd.vercel.app/graphql": 11,
-    "xss-payload-lab.vercel.app": 7
+    "chimera.atlascrew.dev/api/v1/gov/records": 8,
+    "chimera.atlascrew.dev/api/v1/gov/benefits/search": 8,
+    "crapi.apisec.ai/identity/api/v2/admin/videos/1": 12,
+    "brokencrystals.com/graphql": 21,
+    "ist-edu-bd.vercel.app/graphql": 11
   }
 }

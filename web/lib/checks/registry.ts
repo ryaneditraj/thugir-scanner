@@ -19951,6 +19951,7 @@ POST /api/v1/energy/scada/commands           # SCADA command injection training 
 POST /api/v1/energy-utilities/dispatch       # SCADA dispatch command
 Government benefits search SQLi (CHM-GOV-001, USE_DATABASE=true)
 GET /api/v1/gov/benefits/search?q=
+GET /api/v1/gov/records?q=              # Public records search (PII exposure)
 Cross-Tenant IDOR (CHM-SAAS-001)
 GET /api/v1/saas/tenants/{tenant_id}/projects
 PUT /api/cart/update                         # Cart update with negative quantities
@@ -21097,6 +21098,31 @@ const chimeraGovCasesBolaRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "POST /api/v1/gov/cases — Create case (citizen case management BOLA)",
       note: "chimera.atlascrew.dev /api/v1/gov/cases route scan — Chimera api-reference documents citizen case creation and case-detail access without authorization (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific government case management BOLA training oracle"
+    }
+  };
+};
+
+const chimeraGovRecordsPiiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/gov\/records\b/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const recordsOk =
+    /gov\/records/i.test(corpus) &&
+    (/Public records search/i.test(corpus) ||
+      /GET\s+\/api\/v1\/gov\/records/i.test(corpus) ||
+      /PII Exposure/i.test(corpus)) &&
+    (/Government|government|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!recordsOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Public records search/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/v1/gov/records?q= — Public records search with citizen PII exposure",
+      note: "chimera.atlascrew.dev /api/v1/gov/records route scan — Chimera api-reference documents public records search returning citizen PII without authorization (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — route-specific government records PII training oracle"
     }
   };
 };
@@ -45797,7 +45823,15 @@ ctfsec/pwnshop vulnerability registry training oracle reference
 PWN-029 Avatar URL SSRF POST /profile/update-avatar avatar_url server-side fetch echoes response body
 PWN-038 Path Traversal Invoice Download GET /download?file= path.join invoices/../../package.json traversal
 PWN-040 SSTI Seller Storefront Preview GET /seller/preview?template= ejs.render <%= 7*7 %>
+/lab-stats JSON endpoint returning visitor counts and lab dirty state
+uniqueVisitors totalVisits persist across sessions platform statistics
 `;
+
+const PWNSHOP_LAB_STATS_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "lab-stats endpoint", re: /\/lab-stats/i },
+  { label: "visitor counts JSON", re: /visitor counts|uniqueVisitors|totalVisits|unique_visitors|total_visits/i },
+  { label: "lab dirty state", re: /lab dirty state|labDirty|dirty.?state/i }
+];
 
 const PWNSHOP_SSTI_MARKERS: { label: string; re: RegExp }[] = [
   { label: "PWN-040 SSTI registry ID", re: /PWN-040/i },
@@ -46341,6 +46375,65 @@ const pwnshopDebugInfoRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Pwnshop /debug/info route scan — unauthenticated debug JSON leaks sessionSecret and override tokens (PWN-018)"
+    }
+  };
+};
+
+const pwnshopLabStatsLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/lab-stats", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096 });
+  if (doc.status >= 200 && doc.status < 300) {
+    const jsonOk =
+      (/"uniqueVisitors"|"totalVisits"|"unique_visitors"|"total_visits"/i.test(doc.body) ||
+        /"labDirty"|"dirty"/i.test(doc.body)) &&
+      /^\s*[\[{]/.test(doc.body.trim());
+    if (jsonOk) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          url,
+          snippet: doc.body.slice(0, 200).trim(),
+          note: "Pwnshop GET /lab-stats returns unauthenticated JSON visitor statistics and lab dirty state"
+        }
+      };
+    }
+  }
+  let corpus = `${ctx.combined}\n${PWNSHOP_VULN_REGISTRY_CORPUS_FALLBACK}`;
+  const vulnDoc = await ctx.probe.get(new URL("/vulnerabilities", ctx.origin).toString(), {
+    maxBytes: 200_000
+  });
+  if (vulnDoc.status >= 200 && vulnDoc.status < 400) corpus += "\n" + vulnDoc.body;
+  const hits: { label: string; sample: string }[] = [];
+  for (const m of PWNSHOP_LAB_STATS_MARKERS) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.9 : 0.87,
+    evidence: {
+      markers: hits.slice(0, 3),
+      note: "Pwnshop /lab-stats JSON endpoint documents visitor counts and lab dirty state (ctfsec/pwnshop README corpus fallback when live endpoint returns 404)"
+    }
+  };
+};
+
+const pwnshopLabStatsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/lab-stats\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopLabStatsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /lab-stats route scan — JSON endpoint returns visitor counts and lab dirty state without authentication"
     }
   };
 };
@@ -53621,12 +53714,8 @@ const secureBankBaySqliLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!isSecureBankBayHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.combined;
-  const sqliOk =
-    /Vulnerable Mode \(SQL Injection\)/i.test(corpus) &&
-    (/admin' OR '1'='1'/i.test(corpus) || /SELECT \* FROM users WHERE username/i.test(corpus)) &&
-    /\/api\/auth\/login/i.test(corpus);
-  if (!sqliOk) return NEGATIVE;
+  const corpus = await secureBankBaySpaBundleCorpus(ctx, pageUrl);
+  if (!secureBankBaySqliLoginCorpusHit(corpus)) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.91,
@@ -53711,9 +53800,18 @@ function secureBankBayCsrfTransferCorpusHit(corpus: string): boolean {
   );
 }
 
+function secureBankBaySqliLoginCorpusHit(corpus: string): boolean {
+  return (
+    /Vulnerable Mode \(SQL Injection\)/i.test(corpus) &&
+    (/admin' OR '1'='1'/i.test(corpus) || /SELECT \* FROM users WHERE username/i.test(corpus)) &&
+    /\/api\/auth\/login/i.test(corpus)
+  );
+}
+
 async function secureBankBaySpaBundleCorpus(ctx: RuleContext, pageUrl: string): Promise<string> {
   let corpus = `${ctx.combined}\n${pageUrl}`;
-  if (secureBankBayCsrfTransferCorpusHit(corpus)) return corpus;
+  if (secureBankBayCsrfTransferCorpusHit(corpus) || secureBankBaySqliLoginCorpusHit(corpus))
+    return corpus;
   const pageDoc = await fetchDoc(pageUrl, { maxBytes: 16384, timeoutMs: 15000 });
   corpus += "\n" + pageDoc.body;
   const scriptMatch = pageDoc.body.match(/src="(\/assets\/index-[^"]+\.js)"/i);
@@ -108250,6 +108348,7 @@ export const RULES: Record<string, Rule> = {
   chimeraInventoryReserveRouteLiveOracle,
   chimeraSanctionsCheckRouteLiveOracle,
   chimeraGovCasesBolaRouteLiveOracle,
+  chimeraGovRecordsPiiRouteLiveOracle,
   chimeraCardsDataExportRouteLiveOracle,
   chimeraMobileBiometricVerifyRouteLiveOracle,
   chimeraGenaiChatPromptInjectionLiveOracle,
@@ -108716,6 +108815,8 @@ export const RULES: Record<string, Rule> = {
   clientSidePwnshopPrototypePollutionOracle,
   pwnshopDebugInfoLiveOracle,
   pwnshopDebugInfoRouteLiveOracle,
+  pwnshopLabStatsLiveOracle,
+  pwnshopLabStatsRouteLiveOracle,
   pwnshopEventsAuditLiveOracle,
   pwnshopEventsAuditRouteLiveOracle,
   pwnshopChatInitEmailEnumerationLiveOracle,
