@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-02T10:45:00.000Z",
+  "updated_at": "2026-09-02T11:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2852,
-  "total_findings": 29887,
+  "total_sites_scanned": 2855,
+  "total_findings": 29951,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2006,
-  "discovery_findings": 24930,
-  "improvements_shipped": 1189,
-  "last_run": "2026-09-02T10:45:00.000Z",
+  "discovery_findings": 24942,
+  "improvements_shipped": 1192,
+  "last_run": "2026-09-02T11:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
@@ -49,30 +49,31 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 39 live oracles); secret-resend + juice-shop-resend-key-live-oracle present"
+      "note": "Stable 6/6 first-pass recall (52 findings, 39 live oracles); no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 60,
-      "focus": "SekuMart track/members/catalog route oracle gaps from 08 UTC run",
+      "urls_scanned": 2,
+      "findings": 15,
+      "focus": "Restful Booker auth/booking route oracle gaps from 10 UTC run",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles)",
-      "sekumart.sekuripy.hr/track.php: 16→20 findings — sekumart-track-blind-sqli-route-live-oracle (boolean blind SQLi)",
-      "sekumart.sekuripy.hr/members.php: 16→20 findings — sekumart-members-nosql-route-live-oracle (FLAG{n0sql_0p3rator_1nj3ct10n})",
-      "sekumart.sekuripy.hr/catalog.php: 16→20 findings — sekumart-catalog-orderby-sqli-route-live-oracle (ORDER BY SQLi)"
+      "restful-booker.herokuapp.com/auth: 3→7 findings — restful-booker-auth-weak-creds-route-live-oracle (POST /auth admin/password123 token)",
+      "restful-booker.herokuapp.com/booking: 3→8 findings — restful-booker-booking-unauth-access-route-live-oracle + restful-booker-booking-create-unauth-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses",
-      "SekuMart track/members/catalog route-specific oracles shipped; remaining openapi endpoints (login.php auth-bypass, apiv1.php JSON-body SQLi, category.php integer SQLi) still generic-host only"
+      "restful-booker route oracles shipped; remaining queue targets without route-specific oracles include restful-booker ping/health if added"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "restful-booker.herokuapp.com/auth": 7,
+    "restful-booker.herokuapp.com/booking": 8,
     "sekumart.sekuripy.hr/track.php": 20,
     "sekumart.sekuripy.hr/members.php": 20,
     "sekumart.sekuripy.hr/catalog.php": 20,
@@ -86,8 +87,6 @@
     "nodegoat-websec.herokuapp.com/profile": 20,
     "pwnshop.ctfsecurity.com/chat": 48,
     "wrongsecrets.herokuapp.com/challenge/challenge-52": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-54": 19,
-    "restful-booker.herokuapp.com/auth": 3,
-    "restful-booker.herokuapp.com/booking": 3
+    "wrongsecrets.herokuapp.com/challenge/challenge-54": 19
   }
 }
