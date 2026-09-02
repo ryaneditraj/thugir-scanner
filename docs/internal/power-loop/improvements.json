@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:openvaultbank.com",
+      "slug": "openvault-reset-confirm-rate-limit-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cheatsheet documents No Rate Limiting on Password Reset — POST /api/v1/auth/reset-confirm accepts 3-digit code brute-force without lockout; openvaultbank.com/api/v1/auth/reset-confirm findings 8→9 (+openvault-reset-confirm-rate-limit-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-scanner-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle documents Vulnerability scanner hub with fetch /api/scanner OWASP severity/module table; pentest-fauxbank.vercel.app/scanner findings 16→17 (+fauxbank-scanner-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:xss-payload-lab.vercel.app",
+      "slug": "xss-payload-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: static playground documents XSS Payload Lab context explorer + sandboxed payload preview + DOM sinks/CSP training; xss-payload-lab.vercel.app findings 7 with +xss-payload-lab-route-live-oracle (was generic client-side-xss-evidence only); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:openvaultbank.com",
       "slug": "openvault-admin-users-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /cheatsheet documents GET /api/v1/admin/users exposing every user's email and hashed password after mass-assignment role escalation; openvaultbank.com/api/v1/admin/users findings 8→9 (+openvault-admin-users-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
