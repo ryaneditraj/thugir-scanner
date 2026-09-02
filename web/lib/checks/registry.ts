@@ -39638,17 +39638,14 @@ async function probeRestfulBookerBookingEnumeration(ctx: RuleContext): Promise<{
   piiSnippet: string;
 } | null> {
   const listUrl = new URL("/booking", ctx.origin).toString();
-  const listDoc = await ctx.probe.get(listUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  const listDoc = await ctx.probe.get(listUrl, { maxBytes: 16384, timeoutMs: 15000 });
   if (listDoc.status < 200 || listDoc.status >= 300) return null;
-  let bookings: Array<{ bookingid?: number }>;
-  try {
-    bookings = JSON.parse(listDoc.body) as Array<{ bookingid?: number }>;
-  } catch {
-    return null;
-  }
-  if (!Array.isArray(bookings) || bookings.length < 3) return null;
-  const sampleId = bookings[0]?.bookingid;
-  if (typeof sampleId !== "number" || sampleId < 1) return null;
+  const idMatch = listDoc.body.match(/"bookingid"\s*:\s*(\d+)/i);
+  if (!idMatch) return null;
+  const sampleId = Number(idMatch[1]);
+  if (!Number.isFinite(sampleId) || sampleId < 1) return null;
+  const bookingCount = (listDoc.body.match(/"bookingid"/gi) || []).length;
+  if (bookingCount < 3) return null;
   const detailUrl = new URL(`/booking/${sampleId}`, ctx.origin).toString();
   const detailDoc = await ctx.probe.get(detailUrl, { maxBytes: 2048, timeoutMs: 15000 });
   if (detailDoc.status < 200 || detailDoc.status >= 300) return null;
@@ -39661,7 +39658,7 @@ async function probeRestfulBookerBookingEnumeration(ctx: RuleContext): Promise<{
     if (!detail.firstname || !detail.lastname) return null;
     return {
       listUrl,
-      bookingCount: bookings.length,
+      bookingCount,
       sampleBookingId: sampleId,
       piiSnippet: detailDoc.body.slice(0, 200).trim()
     };
