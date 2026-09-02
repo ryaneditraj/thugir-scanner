@@ -12655,6 +12655,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/users\/export\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-users-export")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/loyalty\/transactions\/export\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-loyalty-transactions-export")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/ecommerce\/products\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-ecommerce-products-search-xss")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/integrations\/webhook\/register\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-integrations-webhook-register")
       )

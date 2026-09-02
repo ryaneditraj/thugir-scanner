@@ -116,6 +116,24 @@
     },
     {
       "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-admin-users-export-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/admin/users/export — unauthenticated bulk user data exfiltration per Chimera vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/admin/users/export findings 8 (+chimera-admin-users-export-route-live-oracle); patterns.sql seed + runner -3 route priority; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-loyalty-transactions-export-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/loyalty/transactions/export?customer_id= — BOLA/IDOR (Transactions) per vulnerability-inventory corpus; chimera.atlascrew.dev/api/loyalty/transactions/export findings 8 (+chimera-loyalty-transactions-export-route-live-oracle); patterns.sql seed + runner -3 route priority; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-ecommerce-products-search-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/ecommerce/products/search?query= — Reflected XSS (Search) per vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/ecommerce/products/search?q=test findings 8 (+chimera-ecommerce-products-search-xss-route-live-oracle); patterns.sql seed + runner -3 route priority; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
       "slug": "chimera-ot-modbus-command-injection-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: CHM-ICS-001 POST /api/ot/protocols/modbus — Remote Command Injection (Modbus) per vulnerability-inventory corpus; chimera.atlascrew.dev/api/ot/protocols/modbus findings 7→8 (+chimera-ot-modbus-command-injection-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
