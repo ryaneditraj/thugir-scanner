@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-01T14:25:36.746Z",
+  "updated_at": "2026-09-02T10:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://restful-booker.herokuapp.com/auth",
+      "source": "mwinteringham/restful-booker — POST /auth token oracle; cookie-only auth + weak creds (public API testing playground)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://restful-booker.herokuapp.com/booking",
+      "source": "mwinteringham/restful-booker — CRUD booking API with intentional auth/status-code bugs (Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/profile",
+      "source": "OWASP NodeGoat — profile CSRF + unencrypted SSN + ReDoS oracle (public Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/contributions",
+      "source": "OWASP NodeGoat — contributions eval()/SSJS injection oracle (public Heroku demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/chat",
+      "source": "ctfsec/pwnshop — LLM chat prompt injection + Groq API chain oracle (PWN-035/036; public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://dvga.tools.escape.tech/graphql",
       "source": "Escape.tech DVGA — GraphQL introspection + batching/SQLi filter oracles (public benchmark; dvga.tools.escape.tech)",

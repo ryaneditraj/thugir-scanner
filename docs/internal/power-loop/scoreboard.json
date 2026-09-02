@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-01T14:30:26.751Z",
+  "updated_at": "2026-09-02T10:13:07.104Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,21 +15,19 @@
       ]
     }
   },
-  "total_sites_scanned": 2748,
-  "total_findings": 26980,
+  "total_sites_scanned": 2757,
+  "total_findings": 27175,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1961,
-  "discovery_findings": 22742,
+  "discovery_urls_added": 1966,
+  "discovery_findings": 22885,
   "improvements_shipped": 1161,
-  "last_run": "2026-09-01T14:30:26.751Z",
+  "last_run": "2026-09-02T10:13:07.104Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "10",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "primary_url": "https://juice-shop.herokuapp.com",
-      "primary_status": "timeout after 1200000ms",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
@@ -51,36 +49,34 @@
           ]
         }
       },
-      "note": "Primary Heroku timed out; staging fallback 6/6 (52 findings, 39 live oracles); secret-resend + juice-shop-resend-key-live-oracle present"
+      "note": "Primary Heroku 6/6 first-pass (52 findings, 39 live oracles); secret-resend + juice-shop-resend-key-live-oracle present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 118,
-      "focus": "DVGA GraphQL introspection + Chimera genai chat/agent-browse + banking BOLA + wrongsecrets challenge-65 Java CLI",
+      "findings": 143,
+      "focus": "restful-booker auth/booking + NodeGoat profile/contributions + pwnshop LLM chat + wrongsecrets 52/54/CTF drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles) — primary Heroku timeout",
-      "dvga.tools.escape.tech/graphql: 18 findings — dvga-my-pastes-idor-route-live-oracle, dvga-import-paste-ssrf-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/genai/chat: 8 findings — chimera-genai-chat-prompt-injection-route-live-oracle, client-side-chimera-vuln-lab-evidence",
-      "chimera.atlascrew.dev/api/v1/genai/agent/browse: 8 findings — chimera-genai-agent-browse-ssrf-route-live-oracle, client-side-chimera-vuln-lab-evidence",
-      "chimera.atlascrew.dev/api/v1/banking/accounts: 8 findings — chimera-banking-accounts-bola-route-live-oracle, client-side-chimera-vuln-lab-evidence",
-      "wrongsecrets.herokuapp.com/challenge/challenge-65: 19 findings — wrongsecrets-challenge-65-java-plain-cli-route-live-oracle, spring-boot-actuator-exposed",
-      "wrongsecrets.herokuapp.com/challenge/challenge-66: 19 findings — wrongsecrets-challenge-66-java-obfuscated-route-live-oracle, spring-boot-actuator-exposed",
-      "wrongsecrets.herokuapp.com/challenge/challenge-50: 19 findings — spring-boot-actuator-exposed, postmessage-dom-xss-evidence",
-      "wrongsecrets.herokuapp.com/challenge/challenge-51: 19 findings — spring-boot-actuator-exposed, postmessage-dom-xss-evidence"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles) — primary Heroku first pass",
+      "nodegoat-websec.herokuapp.com/profile: 20 findings — nodegoat-profile-csrf-route-live-oracle, nodegoat-profile-sensitive-data-route-live-oracle, nodegoat-profile-redos-route-live-oracle",
+      "nodegoat-websec.herokuapp.com/contributions: 17 findings — nodegoat-contributions-route-live-oracle, nodegoat-contributions-ssjs-live-oracle",
+      "pwnshop.ctfsecurity.com/chat: 48 findings — pwnshop-chat-prompt-injection-route-live-oracle, pwnshop-chat-order-idor-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-52: 19 findings — wrongsecrets-challenge-52-buildx-secrets-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-54: 19 findings — wrongsecrets-challenge-54-gitignore-secret-route-live-oracle",
+      "restful-booker.herokuapp.com/auth: 3 findings — thin fingerprint; route-specific token/auth oracles absent",
+      "restful-booker.herokuapp.com/booking: 3 findings — thin fingerprint; CRUD auth-bypass oracles absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com primary timed out (1200s) — staging fallback required for stable rich pass",
-      "benchmark 6/6 on staging fallback",
-      "Chimera genai chat/agent-browse + banking accounts: route-specific oracles confirmed (not generic bundle only)"
+      "restful-booker auth/booking: thin 3-finding pass — no route-specific cookie-auth or booking IDOR oracles",
+      "benchmark rich pass on primary Heroku — secret-resend slug now present"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 47,
+    "juice-shop.herokuapp.com": 52,
     "nodegoat-websec.herokuapp.com/benefits": 17,
     "nodegoat-websec.herokuapp.com/allocations": 12,
     "chimera.atlascrew.dev/api/v1/diagnostics/ping": 5,
@@ -101,6 +97,14 @@
     "wrongsecrets.herokuapp.com/challenge/challenge-66": 19,
     "wrongsecrets.herokuapp.com/challenge/challenge-50": 19,
     "wrongsecrets.herokuapp.com/challenge/challenge-51": 19,
-    "juice-shop-staging.herokuapp.com": 52
+    "juice-shop-staging.herokuapp.com": 52,
+    "restful-booker.herokuapp.com/auth": 3,
+    "restful-booker.herokuapp.com/booking": 3,
+    "nodegoat-websec.herokuapp.com/profile": 20,
+    "nodegoat-websec.herokuapp.com/contributions": 17,
+    "pwnshop.ctfsecurity.com/chat": 48,
+    "wrongsecrets.herokuapp.com/challenge/challenge-52": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-54": 19,
+    "wrongsecrets-ctf.herokuapp.com": 14
   }
 }
