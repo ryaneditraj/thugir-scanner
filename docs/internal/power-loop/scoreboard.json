@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-02T13:25:00.000Z",
+  "updated_at": "2026-09-02T16:13:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2888,
-  "total_findings": 30954,
+  "total_sites_scanned": 2897,
+  "total_findings": 31129,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2026,
-  "discovery_findings": 25792,
+  "discovery_urls_added": 2031,
+  "discovery_findings": 25916,
   "improvements_shipped": 1269,
-  "last_run": "2026-09-02T13:25:00.000Z",
+  "last_run": "2026-09-02T16:13:00.000Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -49,34 +49,36 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall on primary Heroku (51 findings, 36 live oracles); secret-resend + juice-shop-resend-key-live-oracle present"
+      "note": "Stable 6/6 first-pass recall on primary Heroku (51 findings, 36 live oracles); secret-resend + juice-shop-resend-key-live-oracle + juice-shop-iac-terraform-tls-key-live-oracle present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 29,
-      "focus": "IST Edu command-injection + Chimera banking accounts search SQLi parent-route + Chimera insurance policies lookup SQLi parent-route",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 124,
+      "focus": "pwnshop seller/preview SSTI + wrongsecrets 64/66 binary oracles + secure-bank-bay SQLi login + ai-security phishing + Chimera export/search routes",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 36 live oracles)",
-      "ist-edu-bd.vercel.app/command-injection: 11 findings — ist-edu-command-injection-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/banking/accounts: 9 findings — chimera-banking-accounts-search-sqli-route-live-oracle + BOLA",
-      "chimera.atlascrew.dev/api/v1/insurance/policies/1: 9 findings — chimera-insurance-policies-lookup-sqli-route-live-oracle + BOLA"
+      "pwnshop.ctfsecurity.com/seller/preview: 43 findings — pwnshop-seller-preview-ssti-route-live-oracle (PWN-040)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-64: 19 findings — wrongsecrets-challenge-64-swift-binary-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-66: 19 findings — wrongsecrets-challenge-66-java-obfuscated-route-live-oracle",
+      "secure-bank-bay.vercel.app/login: 11 findings — secure-bank-bay-sqli-login-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/phishing: 8 findings — ai-security-ai-phishing-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable on primary Heroku — no category misses",
-      "ist-edu-bd file-upload/xxe/jwt routes: route-specific oracles still needed for training-lab differentiation"
+      "Chimera admin/users/export + loyalty/transactions/export + ecommerce/products/search: thin 8-finding shared fingerprint without route-specific export/SQLi oracles"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "ist-edu-bd.vercel.app/command-injection": 11,
-    "chimera.atlascrew.dev/api/v1/banking/accounts": 9,
-    "chimera.atlascrew.dev/api/v1/insurance/policies/1": 9,
-    "burpbountylab.com/cve/traefik/": 104,
-    "brokencrystals.com/api/process_numbers": 81
+    "pwnshop.ctfsecurity.com/seller/preview": 43,
+    "wrongsecrets.herokuapp.com/challenge/challenge-64": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-66": 19,
+    "secure-bank-bay.vercel.app/login": 11,
+    "ai-security-platform-iota.vercel.app/challenges/phishing": 8
   }
 }

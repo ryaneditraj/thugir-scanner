@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T14:05:00.000Z",
+  "updated_at": "2026-09-02T16:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/seller/preview",
+      "source": "ctfsec/pwnshop — PWN-040 SSTI→RCE GET /seller/preview?template= (vulnerabilities index; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-64",
+      "source": "OWASP WrongSecrets — Challenge 64 Swift binary secrets oracle (Heroku demo README challenges 54-66; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-66",
+      "source": "OWASP WrongSecrets — Challenge 66 obfuscated Java CLI JAR binary oracle (Heroku demo; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://secure-bank-bay.vercel.app/login",
+      "source": "Areeeshaa/SecureBank — Attack Mode SQLi login bypass oracle (Vercel public demo; Medium/GitHub README 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/phishing",
+      "source": "ai-security-platform — CWE phishing / credential-harvesting challenge (14-exercise Next.js+Supabase lab; web search 16 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ist-edu-bd.vercel.app/file-upload",
       "source": "zahidoverflow/damn-vulnerable-web-university — unrestricted file upload route (Vercel live demo; web search 14 UTC)",
