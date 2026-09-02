@@ -58811,6 +58811,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-zoho-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/zoho/ route live oracle",
+    description:
+      "When scanning /cve/zoho/, GET confirms ManageEngine heading — route-specific Zoho ManageEngine CVE profile oracle.",
+    impactOneline:
+      "Route-specific Zoho oracle confirms ManageEngine fingerprint when scanning Burp Bounty Lab Zoho CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyZohoCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Zoho ManageEngine appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Zoho ManageEngine security advisories promptly.",
+        "Disable unused management services and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/zoho/ route scan confirms a ManageEngine fingerprint. Show Zoho ManageEngine hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-ruby-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -58837,6 +58863,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-ruby-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/ruby/ route live oracle",
+    description:
+      "When scanning /cve/ruby/, GET confirms Ruby on Rails App heading — route-specific Rails path-traversal CVE profile oracle.",
+    impactOneline:
+      "Route-specific Rails oracle confirms application fingerprint when scanning Burp Bounty Lab Ruby CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRubyCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Ruby on Rails and restrict file-serving endpoints that accept traversal sequences.",
+      steps: [
+        "Upgrade Rails to patched versions for known path-traversal CVEs.",
+        "Validate and canonicalize file paths before serving static assets.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/ruby/ route scan confirms a Ruby on Rails fingerprint. Show Rails path-traversal hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-wp-lfi-cve-live-oracle",
     platform: "generic",
     category: "Path traversal",
@@ -58859,6 +58911,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/wp/local-file-inclusion endpoint reads /etc/passwd via file=../../../etc/passwd. Show WordPress LFI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-wp-lfi-cve-route-live-oracle",
+    platform: "generic",
+    category: "Path traversal",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /cve/wp/local-file-inclusion route live oracle",
+    description:
+      "When scanning /cve/wp/local-file-inclusion, GET with file=../../../etc/passwd returns passwd contents — route-specific WordPress Duplicator LFI CVE profile oracle.",
+    impactOneline:
+      "Route-specific WordPress LFI oracle confirms arbitrary file read when scanning Burp Bounty Lab WP LFI CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWpLfiCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch WordPress plugins with known LFI flaws and block traversal sequences in file parameters.",
+      steps: [
+        "Upgrade Duplicator and other file-handling plugins to patched versions.",
+        "Reject file parameters containing ../ traversal sequences.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/wp/local-file-inclusion route scan confirms passwd disclosure via traversal. Show WordPress LFI remediation for route-specific scans.",
     version: 1,
     enabled: true
   },

@@ -7541,6 +7541,24 @@
       "slug": "burpbounty-crowd-cve-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/crowd/ returns <h1>Atlassian Crowd</h1>; burpbountylab.com/cve/crowd/ findings 100→104 (+burpbounty-crowd-cve-route-live-oracle +burpbounty-crowd-cve-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-zoho-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/zoho/ returns <h1>ManageEngine</h1> (BurpBountyLab modules/cves.py CVE-2021-40539); burpbountylab.com/cve/zoho/ route scan findings 104 (+burpbounty-zoho-cve-route-live-oracle +burpbounty-zoho-cve-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-ruby-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/ruby/ returns <h1>Ruby on Rails App</h1> (BurpBountyLab modules/cves.py); burpbountylab.com/cve/ruby/ route scan findings 104 (+burpbounty-ruby-cve-route-live-oracle +burpbounty-ruby-cve-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-wp-lfi-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/wp/local-file-inclusion?file=../../../etc/passwd returns root:x:0:0 passwd lines (BurpBountyLab modules/cves.py); burpbountylab.com/cve/wp/local-file-inclusion route scan findings 104 (+burpbounty-wp-lfi-cve-route-live-oracle +burpbounty-wp-lfi-cve-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

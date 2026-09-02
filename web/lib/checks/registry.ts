@@ -16246,6 +16246,24 @@ const burpbountyWpLfiCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyWpLfiCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/wp\/local-file-inclusion\b/i,
+  burpbountyWpLfiCveLiveOracle,
+  "Burp Bounty Lab /cve/wp/local-file-inclusion route scan — file=../../../etc/passwd returns passwd contents — WordPress Duplicator LFI CVE profile oracle"
+);
+
+const burpbountyZohoCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/zoho\/?$/i,
+  burpbountyZohoCveLiveOracle,
+  "Burp Bounty Lab /cve/zoho/ route scan — ManageEngine heading confirms Zoho ManageEngine CVE profile oracle"
+);
+
+const burpbountyRubyCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/ruby\/?$/i,
+  burpbountyRubyCveLiveOracle,
+  "Burp Bounty Lab /cve/ruby/ route scan — Ruby on Rails App heading confirms Rails path-traversal CVE profile oracle"
+);
+
 const burpbountySharefileCveLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/citrix/sharefile/download", ctx.origin);
@@ -109903,11 +109921,14 @@ export const RULES: Record<string, Rule> = {
   burpbountyFirebaseCveLiveOracle,
   burpbountyNetsweeperCveLiveOracle,
   burpbountyZohoCveLiveOracle,
+  burpbountyZohoCveRouteLiveOracle,
   burpbountyRubyCveLiveOracle,
+  burpbountyRubyCveRouteLiveOracle,
   burpbountyFortiosRemoteLoginLiveOracle,
   burpbountyWeblogicConsoleLiveOracle,
   burpbountyGraphqlQueryLiveOracle,
   burpbountyWpLfiCveLiveOracle,
+  burpbountyWpLfiCveRouteLiveOracle,
   burpbountySharefileCveLiveOracle,
   burpbountyArticaCveLiveOracle,
   burpbountyMagmiCveLiveOracle,
