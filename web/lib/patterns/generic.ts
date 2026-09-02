@@ -21436,6 +21436,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnerable-chatbot-prompt-injection-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "ShopBot prompt injection live oracle",
+    description:
+      "POST /api/chat with a system-prompt extraction probe returns ShopBot instructions including sk-fake API key and admin123 DB password — the QualityMax intentionally vulnerable chatbot oracle.",
+    impactOneline:
+      "Direct prompt injection on ShopBot leaks system prompts, embedded API keys, and database credentials from the LLM context.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableChatbotPromptInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass unsanitized user input to LLM system prompts — ShopBot demo is intentional lab software.",
+      steps: [
+        "Strip jailbreak and system-prompt extraction phrases before sending user messages to the model.",
+        "Never embed API keys or database passwords in prompts reachable via prompt injection.",
+        "Run intentionally vulnerable chatbot demos only on isolated training subdomains."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/chat endpoint leaks the full ShopBot system prompt via a system-prompt extraction probe. Show prompt-injection hardening for LLM customer-support bots.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnerable-chatbot-prompt-injection-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "ShopBot /api/chat prompt-injection route live oracle",
+    description:
+      "When scanning /api/chat on vulnerable-chatbot-demo.vercel.app, POST with a system-prompt probe returns ShopBot instructions including sk-fake API key and admin123 DB password — route-specific LLM prompt-injection oracle.",
+    impactOneline:
+      "Route scans on ShopBot /api/chat confirm live LLM prompt injection leaking system prompts and embedded secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableChatbotPromptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass unsanitized user input to LLM system prompts — ShopBot demo is intentional lab software.",
+      steps: [
+        "Strip jailbreak and system-prompt extraction phrases before sending user messages to the model.",
+        "Never embed API keys or database passwords in prompts reachable via prompt injection.",
+        "Run intentionally vulnerable chatbot demos only on isolated training subdomains."
+      ]
+    },
+    fixPrompt:
+      "Our /api/chat route scan confirms POST /api/chat leaks the full ShopBot system prompt. Show route-specific prompt-injection hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-security-writeup-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -56527,11 +56579,11 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Information disclosure",
     severityDefault: "medium",
-    title: "Burp Bounty Lab /ai/v1/completions route live oracle",
+    title: "Burp Bounty Lab AI completions route live oracle",
     description:
-      "When scanning /ai/v1/completions, GET returns legacy text_completion JSON plus X-AI-Backend, X-LLM-Provider, and X-MCP-Enabled headers — route-specific OpenAI completions disclosure profile oracle.",
+      "When scanning /ai/v1/completions or /ai/chat/completions, GET returns legacy text_completion JSON plus X-AI-Backend, X-LLM-Provider, and X-MCP-Enabled headers — route-specific OpenAI completions disclosure profile oracle.",
     impactOneline:
-      "Route-specific legacy completions oracle confirms LLM gateway header leakage when scanning the Burp Bounty Lab /ai/v1/completions practice endpoint.",
+      "Route-specific legacy completions oracle confirms LLM gateway header leakage when scanning Burp Bounty Lab AI completion practice endpoints.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "burpbountyAiCompletionsRouteLiveOracle" },
     tierRequired: "deep",
@@ -57797,6 +57849,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-tomcat-cve-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /cve/tomcat/ route live oracle",
+    description:
+      "When scanning /cve/tomcat/, GET returns Apache Tomcat and JSESSIONID=../groovy triggers PersistentManagerBase session deserialization — route-specific CVE-2020-9484 Tomcat profile oracle.",
+    impactOneline:
+      "Route-specific Tomcat session-deserialization probe confirms CVE-2020-9484-style oracle when scanning the Burp Bounty Lab /cve/tomcat/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyTomcatCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Tomcat and disable PersistentManager file-based session storage with untrusted paths.",
+      steps: [
+        "Patch Tomcat to a version that fixes CVE-2020-9484.",
+        "Avoid storing sessions in user-influenced directories.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/tomcat/ route scan swaps sessions when JSESSIONID contains path traversal. Show Tomcat CVE-2020-9484 mitigations.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-wp-login-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -57845,6 +57923,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /grafana/ endpoint exposes an unauthenticated Grafana dashboard shell. Show Grafana hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-grafana-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Grafana route live oracle",
+    description:
+      "When scanning /cve/grafana/ or /grafana/, GET returns a Grafana dashboard shell with title Grafana and LoadingGrafana markers — route-specific Grafana CVE/profile oracle.",
+    impactOneline:
+      "Route-specific Grafana dashboard probe confirms exposed monitoring UI when scanning the Burp Bounty Lab Grafana CVE practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyGrafanaCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose Grafana dashboards without authentication on public networks.",
+      steps: [
+        "Require SSO or strong credentials for Grafana.",
+        "Patch Grafana CVEs and restrict admin API access.",
+        "Isolate Burp Bounty Lab Grafana routes from production monitoring."
+      ]
+    },
+    fixPrompt:
+      "Our Grafana route scan exposes an unauthenticated Grafana dashboard shell. Show Grafana hardening and CVE patching.",
     version: 1,
     enabled: true
   },
@@ -57927,6 +58031,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-ai-gateway-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab /ai/gateway route live oracle",
+    description:
+      "When scanning /ai/gateway, GET returns HTML disclosing Kong + Envoy reverse-proxy infrastructure behind the AI service — route-specific AI gateway disclosure oracle.",
+    impactOneline:
+      "Route-specific AI gateway probe confirms Kong/Envoy infrastructure disclosure when scanning the Burp Bounty Lab /ai/gateway practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAiGatewayRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Avoid exposing reverse-proxy vendor names and gateway topology on public AI routes.",
+      steps: [
+        "Return generic health responses without Kong/Envoy branding.",
+        "Strip gateway disclosure headers from public AI endpoints.",
+        "Place AI gateways behind authenticated API management layers."
+      ]
+    },
+    fixPrompt:
+      "Our /ai/gateway route scan discloses Kong + Envoy infrastructure. Show how to harden AI gateway health endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-backup-listing-live-oracle",
     platform: "generic",
     category: "Information disclosure",
@@ -57949,6 +58079,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /backup/ directory is browsable and lists db_backup.sql. Show how to disable directory listing and secure backup files.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-backup-listing-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /backup/ route live oracle",
+    description:
+      "When scanning /backup/, GET returns an HTML directory index listing db_backup.sql and site_backup.tar.gz without authentication — route-specific backup listing oracle.",
+    impactOneline:
+      "Route-specific backup listing probe confirms sensitive backup file enumeration when scanning the Burp Bounty Lab /backup/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyBackupListingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable directory listings and block public access to /backup/ paths.",
+      steps: [
+        "Turn off autoindex for backup directories at the web server.",
+        "Store backups outside the web root or behind authentication.",
+        "Remove db_backup.sql and site_backup.tar.gz from publicly reachable paths."
+      ]
+    },
+    fixPrompt:
+      "Our /backup/ route scan confirms browsable backup directory listing. Show how to disable directory listing and secure backup files.",
     version: 1,
     enabled: true
   },
@@ -58135,6 +58291,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-pulse-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/pulse/ route live oracle",
+    description:
+      "When scanning /cve/pulse/, GET returns a Pulse Secure appliance heading — route-specific Pulse Connect Secure CVE profile oracle.",
+    impactOneline:
+      "Route-specific Pulse Secure fingerprint probe confirms VPN appliance CVE oracle when scanning the Burp Bounty Lab /cve/pulse/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyPulseCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Pulse Connect Secure and restrict VPN admin interfaces to trusted networks.",
+      steps: [
+        "Apply vendor security advisories for Pulse Connect Secure CVEs.",
+        "Require MFA and network segmentation for VPN management consoles.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/pulse/ route scan exposes a Pulse Secure appliance fingerprint. Show Pulse Connect Secure hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-cisco-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -58157,6 +58339,188 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/cisco/ endpoint exposes a Cisco appliance fingerprint. Show Cisco management interface hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-cisco-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/cisco/ route live oracle",
+    description:
+      "When scanning /cve/cisco/, GET returns a Cisco appliance heading — route-specific Cisco network appliance CVE profile oracle.",
+    impactOneline:
+      "Route-specific Cisco fingerprint probe confirms network appliance CVE oracle when scanning the Burp Bounty Lab /cve/cisco/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCiscoCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Cisco appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Cisco PSIRT advisories promptly on exposed appliances.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/cisco/ route scan exposes a Cisco appliance fingerprint. Show Cisco management interface hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-traefik-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Traefik CVE live oracle",
+    description:
+      "GET /cve/traefik/ returns a Traefik Dashboard heading — the Burp Bounty Traefik reverse-proxy CVE profile oracle.",
+    impactOneline:
+      "Live Traefik fingerprint probe confirms route-specific reverse-proxy CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyTraefikCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Traefik and restrict dashboard access to trusted networks.",
+      steps: [
+        "Apply Traefik security advisories for exposed dashboard and API routes.",
+        "Disable public dashboard access and enforce authentication.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/traefik/ endpoint exposes a Traefik Dashboard fingerprint. Show Traefik dashboard hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-traefik-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/traefik/ route live oracle",
+    description:
+      "When scanning /cve/traefik/, GET returns a Traefik Dashboard heading — route-specific Traefik reverse-proxy CVE profile oracle.",
+    impactOneline:
+      "Route-specific Traefik fingerprint probe confirms reverse-proxy CVE oracle when scanning the Burp Bounty Lab /cve/traefik/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyTraefikCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Traefik and restrict dashboard access to trusted networks.",
+      steps: [
+        "Apply Traefik security advisories for exposed dashboard and API routes.",
+        "Disable public dashboard access and enforce authentication.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/traefik/ route scan exposes a Traefik Dashboard fingerprint. Show Traefik dashboard hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-solarwinds-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab SolarWinds CVE live oracle",
+    description:
+      "GET /cve/solarwinds/ returns a SolarWinds Orion heading — the Burp Bounty SolarWinds Orion CVE profile oracle.",
+    impactOneline:
+      "Live SolarWinds fingerprint probe confirms route-specific Orion appliance CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySolarwindsCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch SolarWinds Orion and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply SolarWinds security advisories promptly on exposed Orion instances.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/solarwinds/ endpoint exposes a SolarWinds Orion fingerprint. Show SolarWinds Orion hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-solarwinds-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/solarwinds/ route live oracle",
+    description:
+      "When scanning /cve/solarwinds/, GET returns a SolarWinds Orion heading — route-specific SolarWinds Orion CVE profile oracle.",
+    impactOneline:
+      "Route-specific SolarWinds fingerprint probe confirms Orion appliance CVE oracle when scanning the Burp Bounty Lab /cve/solarwinds/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySolarwindsCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch SolarWinds Orion and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply SolarWinds security advisories promptly on exposed Orion instances.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/solarwinds/ route scan exposes a SolarWinds Orion fingerprint. Show SolarWinds Orion hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-svn-entries-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab SVN entries exposure live oracle",
+    description:
+      "GET /.svn/entries returns SVN metadata with committed-date and committed-rev — the Burp Bounty SVN repository exposure profile oracle.",
+    impactOneline:
+      "Live SVN entries probe confirms unauthenticated repository metadata disclosure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySvnEntriesLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block public access to .svn metadata directories.",
+      steps: [
+        "Remove .svn directories from web-accessible paths and deploy from clean checkouts.",
+        "Deny HTTP access to /.svn/* at the web server or WAF layer.",
+        "Isolate Burp Bounty Lab SVN exposure routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /.svn/entries endpoint leaks SVN metadata without auth. Show how to block .svn exposure and secure deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-svn-entries-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /.svn/entries route live oracle",
+    description:
+      "When scanning /.svn/entries, GET returns SVN metadata with committed-date and committed-rev — route-specific SVN repository exposure profile oracle.",
+    impactOneline:
+      "Route-specific SVN entries probe confirms repository metadata disclosure when scanning the Burp Bounty Lab /.svn/entries practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySvnEntriesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block public access to .svn metadata directories.",
+      steps: [
+        "Remove .svn directories from web-accessible paths and deploy from clean checkouts.",
+        "Deny HTTP access to /.svn/* at the web server or WAF layer.",
+        "Isolate Burp Bounty Lab SVN exposure routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /.svn/entries route scan leaks SVN metadata without auth. Show how to block .svn exposure and secure deployments.",
     version: 1,
     enabled: true
   },
@@ -58187,6 +58551,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-n8n-settings-cve-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/n8n/rest/settings route live oracle",
+    description:
+      "When scanning /cve/n8n/rest/settings, GET returns JSON with n8nVersion, releaseChannel, and authenticationMethod — route-specific n8n workflow automation CVE profile oracle.",
+    impactOneline:
+      "Route-specific n8n settings probe confirms unauthenticated workflow automation configuration disclosure when scanning the Burp Bounty Lab n8n CVE practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyN8nSettingsCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose n8n /rest/settings without authentication on public networks.",
+      steps: [
+        "Require authentication for all n8n REST API routes.",
+        "Patch n8n CVEs and restrict admin UI to internal networks.",
+        "Isolate Burp Bounty Lab n8n CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/n8n/rest/settings route scan leaks n8nVersion and authenticationMethod without auth. Show n8n hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-couchdb-all-dbs-live-oracle",
     platform: "generic",
     category: "Information disclosure",
@@ -58209,6 +58599,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/couchdb/_all_dbs endpoint leaks database names without auth. Show CouchDB hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-couchdb-all-dbs-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/couchdb/_all_dbs route live oracle",
+    description:
+      "When scanning /cve/couchdb/_all_dbs, GET returns a JSON database list including _replicator and _users — route-specific CouchDB CVE profile oracle.",
+    impactOneline:
+      "Route-specific CouchDB _all_dbs probe confirms unauthenticated database enumeration when scanning the Burp Bounty Lab CouchDB CVE practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCouchdbAllDbsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose CouchDB _all_dbs without authentication on public networks.",
+      steps: [
+        "Require authentication for all CouchDB HTTP API routes.",
+        "Bind CouchDB to internal interfaces and apply network ACLs.",
+        "Isolate Burp Bounty Lab CouchDB CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/couchdb/_all_dbs route scan leaks database names without auth. Show CouchDB hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-actuator-heapdump-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab Spring Boot actuator heapdump live oracle",
+    description:
+      "GET /actuator/heapdump returns Binary heap dump data without authentication — the Burp Bounty Spring Boot actuator heapdump exposure profile oracle.",
+    impactOneline:
+      "Live actuator heapdump probe confirms unauthenticated JVM memory dump exposure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyActuatorHeapdumpLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable /actuator/heapdump on public Spring Boot deployments.",
+      steps: [
+        "Disable heapdump and other sensitive actuator endpoints in production.",
+        "Require authentication for all actuator routes exposed beyond internal networks.",
+        "Isolate Burp Bounty Lab actuator routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /actuator/heapdump endpoint returns Binary heap dump data without auth. Show Spring Boot actuator hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-actuator-heapdump-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /actuator/heapdump route live oracle",
+    description:
+      "When scanning /actuator/heapdump, GET returns Binary heap dump data without authentication — route-specific Spring Boot actuator heapdump exposure oracle.",
+    impactOneline:
+      "Route-specific actuator heapdump probe confirms JVM memory dump exposure when scanning the Burp Bounty Lab /actuator/heapdump practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyActuatorHeapdumpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable /actuator/heapdump on public Spring Boot deployments.",
+      steps: [
+        "Disable heapdump and other sensitive actuator endpoints in production.",
+        "Require authentication for all actuator routes exposed beyond internal networks.",
+        "Isolate Burp Bounty Lab actuator routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /actuator/heapdump route scan returns Binary heap dump data without auth. Show Spring Boot actuator hardening.",
     version: 1,
     enabled: true
   },
@@ -58265,6 +58733,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-citrix-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/citrix/ route live oracle",
+    description:
+      "When scanning /cve/citrix/, GET returns a Citrix appliance heading — route-specific Citrix ADC CVE profile oracle.",
+    impactOneline:
+      "Route-specific Citrix fingerprint probe confirms ADC appliance CVE oracle when scanning the Burp Bounty Lab /cve/citrix/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCitrixCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Citrix ADC appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Citrix security advisories for ADC and Gateway CVEs.",
+        "Disable unused management services and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/citrix/ route scan exposes a Citrix appliance fingerprint. Show Citrix ADC hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-crowd-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -58287,6 +58781,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/crowd/ endpoint exposes an Atlassian Crowd fingerprint. Show Crowd hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-crowd-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/crowd/ route live oracle",
+    description:
+      "When scanning /cve/crowd/, GET returns an Atlassian Crowd heading — route-specific Crowd identity management CVE profile oracle.",
+    impactOneline:
+      "Route-specific Crowd fingerprint probe confirms identity management CVE oracle when scanning the Burp Bounty Lab /cve/crowd/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCrowdCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Atlassian Crowd and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Atlassian Crowd security advisories promptly.",
+        "Disable unused management services and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/crowd/ route scan exposes an Atlassian Crowd fingerprint. Show Crowd hardening and CVE patching.",
     version: 1,
     enabled: true
   },
@@ -58317,6 +58837,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-firebase-cve-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/firebase/ route live oracle",
+    description:
+      "When scanning /cve/firebase/, GET .json returns user records and config.debug=true — route-specific Firebase realtime database CVE profile oracle.",
+    impactOneline:
+      "Route-specific Firebase oracle confirms unauthenticated user data disclosure when scanning Burp Bounty Lab Firebase CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyFirebaseCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose Firebase realtime database JSON without authentication on public networks.",
+      steps: [
+        "Require authentication for all Firebase database reads and writes.",
+        "Disable debug mode in production Firebase configurations.",
+        "Isolate Burp Bounty Lab Firebase CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/firebase/ route scan confirms user email and debug config disclosure. Show Firebase realtime DB hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-netsweeper-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -58339,6 +58885,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/netsweeper/ endpoint exposes a Netsweeper WebAdmin fingerprint. Show Netsweeper hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-netsweeper-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/netsweeper/ route live oracle",
+    description:
+      "When scanning /cve/netsweeper/, GET confirms Netsweeper WebAdmin heading — route-specific Netsweeper web filter CVE profile oracle.",
+    impactOneline:
+      "Route-specific Netsweeper oracle confirms WebAdmin fingerprint when scanning Burp Bounty Lab Netsweeper CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyNetsweeperCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Netsweeper appliances and restrict WebAdmin to trusted networks.",
+      steps: [
+        "Apply Netsweeper security advisories for WebAdmin CVEs.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/netsweeper/ route scan confirms a Netsweeper WebAdmin fingerprint. Show Netsweeper hardening for route-specific scans.",
     version: 1,
     enabled: true
   },
@@ -58369,6 +58941,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-zoho-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/zoho/ route live oracle",
+    description:
+      "When scanning /cve/zoho/, GET confirms ManageEngine heading — route-specific Zoho ManageEngine CVE profile oracle.",
+    impactOneline:
+      "Route-specific Zoho oracle confirms ManageEngine fingerprint when scanning Burp Bounty Lab Zoho CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyZohoCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Zoho ManageEngine appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Zoho ManageEngine security advisories promptly.",
+        "Disable unused management services and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/zoho/ route scan confirms a ManageEngine fingerprint. Show Zoho ManageEngine hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-ruby-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -58391,6 +58989,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/ruby/ endpoint exposes a Ruby on Rails fingerprint. Show Rails path-traversal hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ruby-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/ruby/ route live oracle",
+    description:
+      "When scanning /cve/ruby/, GET confirms Ruby on Rails App heading — route-specific Rails path-traversal CVE profile oracle.",
+    impactOneline:
+      "Route-specific Rails oracle confirms application fingerprint when scanning Burp Bounty Lab Ruby CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRubyCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Ruby on Rails and restrict file-serving endpoints that accept traversal sequences.",
+      steps: [
+        "Upgrade Rails to patched versions for known path-traversal CVEs.",
+        "Validate and canonicalize file paths before serving static assets.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/ruby/ route scan confirms a Ruby on Rails fingerprint. Show Rails path-traversal hardening for route-specific scans.",
     version: 1,
     enabled: true
   },
@@ -58421,6 +59045,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-wp-lfi-cve-route-live-oracle",
+    platform: "generic",
+    category: "Path traversal",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /cve/wp/local-file-inclusion route live oracle",
+    description:
+      "When scanning /cve/wp/local-file-inclusion, GET with file=../../../etc/passwd returns passwd contents — route-specific WordPress Duplicator LFI CVE profile oracle.",
+    impactOneline:
+      "Route-specific WordPress LFI oracle confirms arbitrary file read when scanning Burp Bounty Lab WP LFI CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWpLfiCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch WordPress plugins with known LFI flaws and block traversal sequences in file parameters.",
+      steps: [
+        "Upgrade Duplicator and other file-handling plugins to patched versions.",
+        "Reject file parameters containing ../ traversal sequences.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/wp/local-file-inclusion route scan confirms passwd disclosure via traversal. Show WordPress LFI remediation for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-wp-config-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab WordPress wp-config.php exposure live oracle",
+    description:
+      "GET /wp/wp-config.php returns live WordPress configuration with DB_PASSWORD and table_prefix — the Burp Bounty wp-config exposure profile oracle.",
+    impactOneline:
+      "Live wp-config.php probe confirms database credential disclosure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWpConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block public access to wp-config.php and rotate exposed database credentials.",
+      steps: [
+        "Deny web access to wp-config.php via web server rules.",
+        "Move configuration outside the web root or use environment variables.",
+        "Rotate database passwords after any wp-config exposure."
+      ]
+    },
+    fixPrompt:
+      "Our /wp/wp-config.php endpoint exposes DB_PASSWORD and table_prefix. Show WordPress configuration hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-wp-config-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab wp-config route live oracle",
+    description:
+      "When scanning /wp/wp-config.php, GET returns live WordPress configuration with database credentials — route-specific wp-config exposure profile oracle.",
+    impactOneline:
+      "Route-specific wp-config oracle confirms database credential disclosure when scanning Burp Bounty Lab WordPress config routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWpConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block public access to wp-config.php and rotate exposed database credentials.",
+      steps: [
+        "Deny web access to wp-config.php via web server rules.",
+        "Move configuration outside the web root or use environment variables.",
+        "Rotate database passwords after any wp-config exposure."
+      ]
+    },
+    fixPrompt:
+      "Our /wp/wp-config.php route scan confirms database credential exposure. Show WordPress configuration hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-sharefile-cve-live-oracle",
     platform: "generic",
     category: "Path traversal",
@@ -58443,6 +59145,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /citrix/sharefile/download endpoint reads win.ini via path=../../../windows/win.ini. Show ShareFile path-traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-sharefile-cve-route-live-oracle",
+    platform: "generic",
+    category: "Path traversal",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /citrix/sharefile route live oracle",
+    description:
+      "When scanning /citrix/sharefile/, GET download?path=../../../windows/win.ini returns win.ini contents — route-specific Citrix ShareFile path-traversal CVE profile oracle.",
+    impactOneline:
+      "Route-specific ShareFile oracle confirms arbitrary file read when scanning Burp Bounty Lab ShareFile CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySharefileCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Citrix ShareFile and validate path parameters before serving files.",
+      steps: [
+        "Apply Citrix ShareFile security advisories for path-traversal CVEs.",
+        "Canonicalize and reject download paths containing ../ traversal sequences.",
+        "Isolate Burp Bounty Lab ShareFile routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /citrix/sharefile route scan confirms win.ini disclosure via traversal. Show ShareFile path-traversal remediation for route-specific scans.",
     version: 1,
     enabled: true
   },
@@ -58473,6 +59201,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-artica-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/artica/ route live oracle",
+    description:
+      "When scanning /cve/artica/, GET fw.login.php returns Artica Web Proxy login with apikey field — route-specific Artica proxy CVE profile oracle.",
+    impactOneline:
+      "Route-specific Artica oracle confirms proxy appliance fingerprint when scanning Burp Bounty Lab Artica CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyArticaCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Artica Web Proxy appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Artica security advisories for proxy management CVEs.",
+        "Disable unused management services and enforce strong API keys.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/artica/ route scan confirms an Artica Web Proxy login with apikey field. Show Artica proxy hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-magmi-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -58495,6 +59249,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/magmi/ endpoint exposes MAGMI Utils JS. Show Magento MAGMI plugin hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-magmi-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/magmi/ route live oracle",
+    description:
+      "When scanning /cve/magmi/, GET returns MAGMI Utils JS — route-specific Magento MAGMI plugin CVE profile oracle.",
+    impactOneline:
+      "Route-specific MAGMI oracle confirms Magento plugin fingerprint when scanning Burp Bounty Lab MAGMI CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyMagmiCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch or remove MAGMI Magento plugins and restrict web access to admin utilities.",
+      steps: [
+        "Upgrade MAGMI to patched versions or uninstall unused Magento plugins.",
+        "Block public access to MAGMI web utilities behind authentication.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/magmi/ route scan confirms MAGMI Utils JS exposure. Show Magento MAGMI plugin hardening for route-specific scans.",
     version: 1,
     enabled: true
   },
@@ -58573,6 +59353,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /webadmin/tools/systemstatus_remote.php endpoint exposes Netsweeper system status. Show appliance hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-netsweeper-systemstatus-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /webadmin/tools/systemstatus_remote.php route live oracle",
+    description:
+      "When scanning /webadmin/tools/systemstatus_remote.php, GET confirms System Status heading — route-specific Netsweeper systemstatus CVE profile oracle.",
+    impactOneline:
+      "Route-specific Netsweeper systemstatus oracle confirms webadmin fingerprint when scanning Burp Bounty Lab systemstatus CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyNetsweeperSystemstatusCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Netsweeper appliances and restrict webadmin tools to trusted management networks.",
+      steps: [
+        "Apply Netsweeper security advisories for systemstatus_remote.php CVEs.",
+        "Block public access to /webadmin/tools/ management endpoints.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /webadmin/tools/systemstatus_remote.php route scan confirms Netsweeper system status exposure. Show appliance hardening for route-specific scans.",
     version: 1,
     enabled: true
   },
@@ -71630,7 +72436,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu redirect whitelist bypass SSRF route live oracle",
     description:
-      "GET /api/redirect?url= accepts //https:/// malformed bypass payloads with HTTP 302 while blocking AWS metadata — IST Edu SSRF/open redirect training oracle on /labs/ssrf.",
+      "When scanning /labs/ssrf or /ssrf on ist-edu-bd.vercel.app, GET /api/redirect?url= accepts //https:/// malformed bypass while blocking AWS metadata — IST Edu SSRF/open redirect training oracle.",
     impactOneline:
       "Broken redirect allow-lists let attackers chain open redirects toward internal or attacker-controlled targets.",
     detectorKind: "rule_ref",
@@ -71646,6 +72452,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/redirect route accepts //https:/// bypass while blocking metadata URLs. Show redirect allow-list hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-lab-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank /lab route live oracle",
+    description:
+      "When scanning /lab on pentest-fauxbank.vercel.app, the OWASP guided pentest scenarios hub documents seeded fictional accounts and intentionally weak credentials — route-specific FauxBank training lab oracle.",
+    impactOneline:
+      "Route scans on /lab need live confirmation that the FauxBank pentest training hub is reachable with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run FauxBank only on isolated pentest training infrastructure with clear disclaimers.",
+      steps: [
+        "Keep training labs off production domains and behind authentication where possible.",
+        "Rotate seeded demo credentials between training sessions.",
+        "Label all simulated vulnerabilities with visible training banners."
+      ]
+    },
+    fixPrompt:
+      "Our /lab route exposes the FauxBank OWASP pentest training hub with intentionally weak credentials. Show how to isolate training labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-diagnostics-hub-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin diagnostics hub route live oracle",
+    description:
+      "When scanning /api/v1/admin/diagnostics on chimera.atlascrew.dev, CHM-ADMIN-001 ping RCE and CHM-ADMIN-002 webhook SSRF diagnostics endpoints are catalogued — route-specific admin diagnostics hub training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional diagnostics RCE and SSRF flaws on the admin diagnostics hub for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminDiagnosticsHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict diagnostics endpoints to authenticated admin roles on private networks.",
+      steps: [
+        "Never pass user input to shell commands in diagnostics utilities.",
+        "Validate outbound webhook URLs against private IP and metadata blocklists.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/diagnostics route documents CHM-ADMIN-001 ping RCE and CHM-ADMIN-002 webhook SSRF. Show diagnostics endpoint hardening remediation.",
     version: 1,
     enabled: true
   },
@@ -75920,7 +76778,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Fabraix data-exfiltration-001 challenge route live oracle",
     description:
-      "When scanning /challenges/data-exfiltration-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the data-exfil challenge (Iris + SentinelID verify_identity) — route-specific exfil oracle.",
+      "When scanning /challenges/data-exfiltration-001 or /challenges/data-exfil-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the data-exfil challenge (Iris + SentinelID verify_identity) — route-specific exfil oracle.",
     impactOneline:
       "Route-scoped Fabraix data-exfiltration-001 scans should confirm unauthenticated agent sessions targeting verify_identity outbound exfiltration.",
     detectorKind: "rule_ref",
@@ -75937,6 +76795,60 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Fabraix /challenges/data-exfiltration-001 route scan confirms unauthenticated exfil challenge sessions. Show verify_identity outbound host allowlisting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-access-code-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix access-code-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/access-code-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the Gatekeeper access-code extraction challenge — maps to access-code-001 backend.",
+    impactOneline:
+      "Route-scoped Fabraix access-code-001 scans should confirm unauthenticated Gatekeeper agent red-team sessions on the canonical challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixAccessCode001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Protect classified access codes with server-side authorization, not prompt secrecy alone.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/access-code-001 route scan confirms unauthenticated Gatekeeper agent sessions. Show access-code protection for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-guardrail-bypass-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix guardrail-bypass challenge route live oracle",
+    description:
+      "When scanning /challenges/01-guardrail-bypass, Fabraix documents guardrail scoring and bypass objectives — live session probe maps to access-code-001 Gatekeeper backend when API available.",
+    impactOneline:
+      "Route-scoped Fabraix 01-guardrail-bypass scans should confirm guardrail bypass training challenge markers and unauthenticated agent sessions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixGuardrailBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — layer guardrails and auth on agent session endpoints in production.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Score and block guardrail bypass attempts with layered input/output filters.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/01-guardrail-bypass route scan confirms guardrail bypass training objectives. Show guardrail hardening for agentic AI deployments.",
     version: 1,
     enabled: true
   },
@@ -75964,6 +76876,249 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Fabraix /challenges/indirect-prompt-injection-001 route scan confirms unauthenticated agent sessions. Show indirect prompt-injection defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-prompt-injection-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix prompt-injection-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/prompt-injection-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the direct prompt-injection challenge — maps to access-code-001 Gatekeeper backend.",
+    impactOneline:
+      "Route-scoped Fabraix prompt-injection-001 scans should confirm unauthenticated agent red-team sessions on the discovery queue challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixPromptInjection001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/prompt-injection-001 route scan confirms unauthenticated Gatekeeper agent sessions. Show direct prompt-injection defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-biosafety-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix biosafety-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/biosafety-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for The Biosafety Officer challenge (Wren + release_restricted_protocol Tier-4 archive oracle).",
+    impactOneline:
+      "Route-scoped Fabraix biosafety-001 scans should confirm unauthenticated agent red-team sessions targeting restricted tool invocation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixBiosafety001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/biosafety-001 route scan confirms unauthenticated biosafety challenge sessions. Show restricted-tool invocation defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-tool-poisoning-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix tool-poisoning-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/tool-poisoning-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the MCP tool-poisoning challenge — maps to biosafety-001 Biosafety Officer backend.",
+    impactOneline:
+      "Route-scoped Fabraix tool-poisoning-001 scans should confirm unauthenticated agent red-team sessions on the discovery queue challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixToolPoisoning001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/tool-poisoning-001 route scan confirms unauthenticated Biosafety Officer agent sessions. Show MCP tool-poisoning defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-tool-poisoning-002-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix tool-poisoning-002 challenge route live oracle",
+    description:
+      "When scanning /challenges/tool-poisoning-002, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the v2 MCP tool-poisoning challenge — maps to biosafety-001 Biosafety Officer backend.",
+    impactOneline:
+      "Route-scoped Fabraix tool-poisoning-002 scans should confirm unauthenticated agent red-team sessions on the hardened v2 tool-poisoning challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixToolPoisoning002RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/tool-poisoning-002 route scan confirms unauthenticated Biosafety Officer agent sessions. Show hardened MCP tool-poisoning defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-jailbreak-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix jailbreak-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/jailbreak-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the LLM jailbreak / guardrail bypass challenge — maps to access-code-001 Gatekeeper backend.",
+    impactOneline:
+      "Route-scoped Fabraix jailbreak-001 scans should confirm unauthenticated agent red-team sessions on the jailbreak challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixJailbreak001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/jailbreak-001 route scan confirms unauthenticated Gatekeeper agent sessions. Show jailbreak and guardrail-bypass defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-jwt-verifier-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix jwt-verifier-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/jwt-verifier-001 or /challenges/jwt-verifier, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the JWT verifier / alg:none challenge — maps to jwt-verifier-001 Maintainer backend.",
+    impactOneline:
+      "Route-scoped Fabraix jwt-verifier scans should confirm unauthenticated agent red-team sessions on the JWT algorithm-confusion challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixJwtVerifier001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/jwt-verifier-001 route scan confirms unauthenticated Maintainer agent sessions. Show JWT alg:none and algorithm-confusion defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-challenges-hub-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix challenges hub route live oracle",
+    description:
+      "When scanning playground.fabraix.com/challenges, the challenge catalog lists agent red-team scenarios and POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated sessions — route-specific hub oracle.",
+    impactOneline:
+      "Route-scoped Fabraix /challenges hub scans should confirm the published agentic red-team challenge catalog and unauthenticated session creation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixChallengesHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges hub route scan confirms unauthenticated agent session creation from the challenge catalog. Show route-specific agent red-team API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-playground-home-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix playground home route live oracle",
+    description:
+      "When scanning playground.fabraix.com/, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent red-team sessions from the landing page — route-specific home oracle.",
+    impactOneline:
+      "Route-scoped Fabraix playground home scans should confirm unauthenticated agent session creation from the public landing page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixPlaygroundHomeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix playground.fabraix.com home route scan confirms unauthenticated session creation. Show route-specific agent red-team API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-playground-landing-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix playground landing route live oracle",
+    description:
+      "When scanning fabraix.com/playground, the marketing landing links to playground.fabraix.com and POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions — route-specific landing oracle.",
+    impactOneline:
+      "Route-scoped fabraix.com/playground scans should confirm the public agent red-team playground entry point and unauthenticated session creation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixPlaygroundLandingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our fabraix.com/playground landing route scan confirms unauthenticated agent session creation. Show route-specific agent red-team API hardening.",
     version: 1,
     enabled: true
   },
