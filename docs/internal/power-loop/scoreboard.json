@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-02T05:20:00.000Z",
+  "updated_at": "2026-09-02T06:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2811,
-  "total_findings": 28703,
+  "total_sites_scanned": 2739,
+  "total_findings": 26852,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1996,
-  "discovery_findings": 24052,
+  "discovery_urls_added": 1961,
+  "discovery_findings": 22780,
   "improvements_shipped": 1176,
-  "last_run": "2026-09-02T05:20:00.000Z",
+  "last_run": "2026-09-02T06:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -52,32 +52,34 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 313,
-      "focus": "BurpBountyLab ShareFile/Firebase/Netsweeper CVE route oracles — closed 11 UTC learning gap",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 127,
+      "focus": "fabraix tool-poisoning-002 + jailbreak-001, wrongsecrets 53/47, vulnshop /api/v1/products + drained wrongsecrets 27/20/21",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings)",
-      "burpbountylab.com/citrix/sharefile/: 104 findings — burpbounty-sharefile-cve-route-live-oracle +burpbounty-sharefile-cve-live-oracle",
-      "burpbountylab.com/cve/firebase/.json: 105 findings — burpbounty-firebase-cve-route-live-oracle +burpbounty-firebase-cve-live-oracle",
-      "burpbountylab.com/cve/netsweeper/: 104 findings — burpbounty-netsweeper-cve-route-live-oracle +burpbounty-netsweeper-cve-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, secret-resend slug present)",
+      "playground.fabraix.com/challenges/tool-poisoning-002: 6 findings — fabraix session oracles only, no route-specific tool-poisoning oracle",
+      "playground.fabraix.com/challenges/jailbreak-001: 6 findings — fabraix session oracles only, no route-specific jailbreak oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-53: 19 findings — wrongsecrets-challenge-53-debugging-container-route-live-oracle confirmed",
+      "wrongsecrets.herokuapp.com/challenge/challenge-47: 19 findings — wrongsecrets-challenge-47-vault-template-hardcoded-route-live-oracle confirmed",
+      "vulnshop.vercel.app/api/v1/products: 20 findings — vulnshop-products-sqli-route-live-oracle confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable — no category misses",
-      "BurpBountyLab Artica/MAGMI CVE routes still lack route-specific oracles (next run candidates)"
+      "fabraix tool-poisoning-002 + jailbreak-001: generic fabraix session oracles only — route-specific AI challenge oracles absent",
+      "benchmark 6/6 stable — no category misses; secret-resend gap closed this run"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "burpbountylab.com/citrix/sharefile/": 104,
-    "burpbountylab.com/cve/firebase/.json": 105,
-    "burpbountylab.com/cve/netsweeper/": 104,
-    "burpbountylab.com/cve/zoho/": 104,
-    "burpbountylab.com/cve/ruby/": 104,
-    "burpbountylab.com/cve/wp/local-file-inclusion": 104,
-    "wrongsecrets.herokuapp.com/challenge/challenge-60": 19
+    "playground.fabraix.com/challenges/tool-poisoning-002": 6,
+    "playground.fabraix.com/challenges/jailbreak-001": 6,
+    "wrongsecrets.herokuapp.com/challenge/challenge-53": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-47": 19,
+    "vulnshop.vercel.app/api/v1/products": 20,
+    "wrongsecrets.herokuapp.com/challenge/challenge-27": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-20": 19
   }
 }

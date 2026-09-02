@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T05:05:57.700Z",
+  "updated_at": "2026-09-02T06:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://playground.fabraix.com/challenges/tool-poisoning-002",
+      "source": "fabraix/playground — AI agent tool-poisoning challenge v2 with hardened guardrails (GitHub challenges/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://playground.fabraix.com/challenges/jailbreak-001",
+      "source": "fabraix/playground — LLM jailbreak / guardrail bypass challenge (GitHub challenges/)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-53",
+      "source": "OWASP WrongSecrets — Challenge 53 debugging container secrets oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-47",
+      "source": "OWASP WrongSecrets — Challenge 47 Vault template hardcoded secret oracle (official Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/products",
+      "source": "nr-yolo/Vulnshop — product catalog SQLi/filter oracle GET /api/v1/products (README vulnerable API)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-60",
       "source": "OWASP WrongSecrets — Challenge 60 insecure MCP server prompt injection leaking env secrets (v1.13.1 README)",
