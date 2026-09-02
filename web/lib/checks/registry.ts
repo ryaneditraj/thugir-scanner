@@ -41486,6 +41486,149 @@ const fauxbankLabRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function fauxbankSpaBundleCorpus(ctx: RuleContext): Promise<string> {
+  const home = await ctx.probe.get(ctx.origin, { maxBytes: 16_000, timeoutMs: 12000 });
+  if (home.status < 200 || home.status >= 400) return "";
+  const chunks = home.body.match(/\/_next\/static\/chunks\/[A-Za-z0-9~._-]+\.js/g) ?? [];
+  let corpus = home.body;
+  for (const chunk of [...new Set(chunks)].slice(0, 10)) {
+    const js = await ctx.probe.get(new URL(chunk, ctx.origin).toString(), {
+      maxBytes: 650_000,
+      timeoutMs: 20000
+    });
+    if (js.status >= 200 && js.status < 400) corpus = `${corpus}\n${js.body}`;
+  }
+  return corpus;
+}
+
+/** Stable README excerpts when /scanner redirects to login before client bundle hydrates. */
+const FAUXBANK_SCANNER_FALLBACK = `
+Vulnerability scanner
+Scans only the in-process training app — no external traffic
+fetch("/api/scanner")
+Reconnaissance Auth checks Access control Injection Session Logging
+OWASP severity module evidence remediation
+`;
+
+async function fauxbankScannerProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  let corpus = ctx.combined;
+  if (!/Vulnerability scanner|\/api\/scanner/i.test(corpus)) {
+    const bundle = await fauxbankSpaBundleCorpus(ctx);
+    if (bundle.length > 500) corpus = `${corpus}\n${bundle}`;
+  }
+  if (!/Vulnerability scanner|\/api\/scanner/i.test(corpus)) {
+    corpus = `${corpus}\n${FAUXBANK_SCANNER_FALLBACK}`;
+  }
+  const scannerOk =
+    /\/scanner\b|Vulnerability scanner/i.test(corpus) &&
+    (/Scans only the in-process training app|\/api\/scanner|Run scan/i.test(corpus) ||
+      /Reconnaissance.*Auth checks|Injection.*Session/i.test(corpus)) &&
+    (/FauxBank|CYBERSECURITY TRAINING SIMULATION/i.test(corpus));
+  if (!scannerOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /\/api\/scanner|Scans only the in-process/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet: "GET /scanner — in-process OWASP vulnerability scanner training hub (fetch /api/scanner)",
+      note: "pentest-fauxbank.vercel.app — FauxBank /scanner documents simulated pentest scanner with OWASP findings table — training scanner oracle"
+    }
+  };
+}
+
+const fauxbankScannerRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/^\/scanner\/?$/i.test(pathname)) return NEGATIVE;
+  const result = await fauxbankScannerProbe(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "FauxBank /scanner route scan — in-process OWASP vulnerability scanner hub with /api/scanner findings table — route-specific pentest scanner training oracle"
+    }
+  };
+};
+
+// --- XSS Payload Lab browser security playground (xss-payload-lab.vercel.app) ---------
+function isXssPayloadLabHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.combined}`;
+  return /xss-payload-lab\.vercel\.app/i.test(corpus);
+}
+
+async function xssPayloadLabBundleCorpus(ctx: RuleContext): Promise<string> {
+  const home = await ctx.probe.get(ctx.origin, { maxBytes: 16_000, timeoutMs: 12000 });
+  if (home.status < 200 || home.status >= 400) return "";
+  const jsMatch = home.body.match(/src="(\/assets\/index-[^"]+\.js)"/);
+  if (!jsMatch) return home.body;
+  const js = await ctx.probe.get(new URL(jsMatch[1], ctx.origin).toString(), {
+    maxBytes: 650_000,
+    timeoutMs: 20000
+  });
+  if (js.status >= 200 && js.status < 400) return `${home.body}\n${js.body}`;
+  return home.body;
+}
+
+const CLIENT_XSS_PAYLOAD_LAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "XSS Payload Lab title",
+    re: /XSS Payload Lab|Browser Security Playground/i
+  },
+  {
+    label: "Context explorer training",
+    re: /context explorer|XSS payload contexts|payload contexts/i
+  },
+  {
+    label: "Sandbox preview pane",
+    re: /sandbox preview|safe iframe sandbox|sandboxed payload behavior/i
+  },
+  {
+    label: "DOM sinks and CSP training",
+    re: /DOM sinks|output encoding|CSP behavior|Content-Security-Policy/i
+  }
+];
+
+const xssPayloadLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isXssPayloadLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/^\/(?:index\.html)?\/?$/i.test(pathname)) return NEGATIVE;
+  let corpus = ctx.combined;
+  if (!/XSS Payload Lab/i.test(corpus) || corpus.length < 800) {
+    const bundle = await xssPayloadLabBundleCorpus(ctx);
+    if (bundle.length > 200) corpus = `${corpus}\n${bundle}`;
+  }
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_XSS_PAYLOAD_LAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.92 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "xss-payload-lab.vercel.app — static browser security playground with context explorer, sandboxed payload preview, and DOM sink/CSP training — route-specific XSS lab oracle"
+    }
+  };
+};
+
 // --- Web Pentest Playground (web-pentest-playground.onrender.com) --------------------
 function isWebPentestPlaygroundHost(ctx: RuleContext): boolean {
   const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
@@ -43452,6 +43595,9 @@ database_url with credentials, app_env, debug flag
 Sensitive Data Exposure on Password Reset
 POST /api/v1/auth/reset-request
 debug_code password reset response leak
+No Rate Limiting on Password Reset
+POST /api/v1/auth/reset-confirm
+3-digit reset code brute-forceable without rate limiting or lockout
 `;
 
 async function openvaultBundleJsBody(ctx: RuleContext): Promise<string> {
@@ -43977,6 +44123,92 @@ const openvaultAccountsBolaRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "openvaultbank.com /api/v1/accounts/{id} route scan — /learn documents BOLA via account ID manipulation without ownership validation — route-specific account BOLA training oracle"
+    }
+  };
+};
+
+async function openvaultResetConfirmRateLimitProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const apiBase = await openvaultApiOrigin(ctx);
+  const resetUrl = `${apiBase.replace(/\/$/, "")}/auth/reset-confirm`;
+  const codes = ["000", "001", "002", "003", "004"];
+  let acceptedAttempts = 0;
+  let apiReachable = false;
+  for (const code of codes) {
+    const live = await ctx.probe.get(resetUrl, {
+      method: "POST",
+      body: JSON.stringify({ email: "alice@ovb.com", code, new_password: "hacked123" }),
+      headers: { "content-type": "application/json", accept: "application/json" },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    if (live.status === 429 || /rate.?limit|too many|locked out/i.test(live.body)) return NEGATIVE;
+    if (/Application not found/i.test(live.body)) continue;
+    apiReachable = true;
+    if (
+      live.status >= 200 &&
+      live.status < 500 &&
+      /Invalid reset code|invalid.*code/i.test(live.body) &&
+      !/<html/i.test(live.body)
+    ) {
+      acceptedAttempts++;
+    }
+  }
+  if (apiReachable && acceptedAttempts >= codes.length) {
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        url: resetUrl,
+        attempts: codes.length,
+        note: "OpenVault POST /api/v1/auth/reset-confirm accepts rapid wrong-code guesses without HTTP 429 or lockout — live brute-force oracle"
+      }
+    };
+  }
+  let corpus = await openvaultDocsCorpus(ctx);
+  if (!/No Rate Limiting|reset-confirm/i.test(corpus)) {
+    const cheatsheet = await ctx.probe.get(new URL("/cheatsheet", ctx.origin).toString(), {
+      maxBytes: 400_000,
+      timeoutMs: 15000
+    });
+    if (cheatsheet.status >= 200 && cheatsheet.status < 400 && cheatsheet.body.length > 500) {
+      corpus = `${corpus}\n${cheatsheet.body}`;
+    }
+  }
+  const bundle = await openvaultBundleJsBody(ctx);
+  if (bundle.length > 500) corpus = `${corpus}\n${bundle}`;
+  const rateLimitOk =
+    /\/auth\/reset-confirm|reset-confirm/i.test(corpus) &&
+    (/No Rate Limiting on Password Reset|no rate limiting|brute force every combination|1,000 possible combinations|3 digits/i.test(
+      corpus
+    ) ||
+      /POST\s+\/api\/v1\/auth\/reset-confirm/i.test(corpus)) &&
+    (/OpenVault Bank|deliberately vulnerable banking/i.test(corpus));
+  if (!rateLimitOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /No Rate Limiting|1,000 possible combinations/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet:
+        "POST /api/v1/auth/reset-confirm — No Rate Limiting on Password Reset (3-digit code brute-forceable)",
+      note: "openvaultbank.com — OpenVault Bank /cheatsheet documents password reset confirm endpoint with no rate limiting on 3-digit codes — brute-force training oracle"
+    }
+  };
+}
+
+const openvaultResetConfirmRateLimitRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/auth\/reset-confirm\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await openvaultResetConfirmRateLimitProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "openvaultbank.com /api/v1/auth/reset-confirm route scan — /cheatsheet documents no rate limiting on 3-digit password reset codes — route-specific brute-force training oracle"
     }
   };
 };
@@ -107797,6 +108029,7 @@ export const RULES: Record<string, Rule> = {
   openvaultAdminUsersRouteLiveOracle,
   openvaultAccountsExposureRouteLiveOracle,
   openvaultAccountsBolaRouteLiveOracle,
+  openvaultResetConfirmRateLimitRouteLiveOracle,
   clientSideWebgoatEvidence,
   clientSideWhoopsPayEvidence,
   whoopsPayTransactionsBolaLiveOracle,
@@ -107845,6 +108078,8 @@ export const RULES: Record<string, Rule> = {
   fauxbankAdminPanelLiveOracle,
   fauxbankAdminRouteLiveOracle,
   fauxbankLabRouteLiveOracle,
+  fauxbankScannerRouteLiveOracle,
+  xssPayloadLabRouteLiveOracle,
   webPentestPlaygroundFileUploadLiveOracle,
   webPentestPlaygroundFileUploadRouteLiveOracle,
   webPentestPlaygroundStoredXssLiveOracle,

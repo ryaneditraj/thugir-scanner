@@ -1637,6 +1637,7 @@ const DEEP_RULES = new Set<string>([
   "openvaultAdminUsersRouteLiveOracle",
   "openvaultAccountsExposureRouteLiveOracle",
   "openvaultAccountsBolaRouteLiveOracle",
+  "openvaultResetConfirmRateLimitRouteLiveOracle",
   "clientSideCookiejarLabEvidence",
   "clientSideWebgoatEvidence",
   "clientSideSessionHijackEvidence",
@@ -1916,6 +1917,8 @@ const DEEP_RULES = new Set<string>([
   "fauxbankAdminPanelLiveOracle",
   "fauxbankAdminRouteLiveOracle",
   "fauxbankLabRouteLiveOracle",
+  "fauxbankScannerRouteLiveOracle",
+  "xssPayloadLabRouteLiveOracle",
   "webPentestPlaygroundFileUploadLiveOracle",
   "webPentestPlaygroundFileUploadRouteLiveOracle",
   "webPentestPlaygroundStoredXssLiveOracle",
@@ -12831,6 +12834,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/auth\/reset-confirm\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-reset-confirm")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
         /\/api\/v1\/auth\/reset-request\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-reset-request")
       )
@@ -16188,6 +16197,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("graphqlbook-")
       )
         return -4;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/scanner\b/i.test(targetInput) &&
+        p.slug.startsWith("fauxbank-scanner")
+      )
+        return -3;
+      if (
+        /xss-payload-lab\.vercel\.app/i.test(origin) &&
+        /^\/(?:index\.html)?\/?(?:\?|#|$)/i.test(targetInput) &&
+        p.slug.startsWith("xss-payload-lab")
+      )
+        return -3;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/transactions\b/i.test(targetInput) &&

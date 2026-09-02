@@ -79099,6 +79099,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "openvault-reset-confirm-rate-limit-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "OpenVault Bank reset-confirm rate-limit route live oracle",
+    description:
+      "When scanning /api/v1/auth/reset-confirm on openvaultbank.com, /cheatsheet documents no rate limiting on 3-digit password reset codes enabling brute-force — route-specific password reset brute-force training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional missing rate limiting on password reset confirm.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultResetConfirmRateLimitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Lock accounts after failed reset attempts and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Lock the account after 5 failed reset-confirm attempts.",
+        "Add cooldown periods between password reset confirm requests.",
+        "Use reset codes longer than 3 digits and run OpenVault Bank only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/auth/reset-confirm route documents brute-forceable 3-digit reset codes with no rate limiting. Show password reset rate-limit remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-scanner-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "FauxBank /scanner route live oracle",
+    description:
+      "When scanning /scanner on pentest-fauxbank.vercel.app, the in-process OWASP vulnerability scanner hub documents fetch /api/scanner with severity/module/evidence table — route-specific pentest scanner training oracle.",
+    impactOneline:
+      "Route scans on /scanner need live confirmation that the FauxBank simulated pentest scanner hub is reachable with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankScannerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run FauxBank only on isolated pentest training infrastructure with clear disclaimers.",
+      steps: [
+        "Keep training labs off production domains and behind authentication where possible.",
+        "Label all simulated scanner findings with visible training banners.",
+        "Do not expose in-process scanner APIs on production banking domains."
+      ]
+    },
+    fixPrompt:
+      "Our /scanner route exposes the FauxBank OWASP pentest scanner hub with in-process /api/scanner findings. Show how to isolate training scanner tools from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-payload-lab-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "XSS Payload Lab route live oracle",
+    description:
+      "When scanning xss-payload-lab.vercel.app, the static browser security playground documents XSS payload contexts, sandboxed preview, DOM sinks, and CSP behavior — route-specific XSS training lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that XSS Payload Lab documents intentional XSS context training with sandboxed payload preview.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssPayloadLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "XSS Payload Lab is intentional browser security training — use context-aware output encoding in production apps.",
+      steps: [
+        "Encode user input based on the output context (HTML, attribute, JavaScript, URL).",
+        "Use a strict Content-Security-Policy to block inline script execution.",
+        "Run intentionally vulnerable XSS labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our xss-payload-lab route documents XSS context explorer and sandboxed payload preview. Show context-aware output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-ecommerce-products-catalog-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",
