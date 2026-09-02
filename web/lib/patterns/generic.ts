@@ -76907,6 +76907,33 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fabraix-biosafety-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix biosafety-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/biosafety-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for The Biosafety Officer challenge (Wren + release_restricted_protocol Tier-4 archive oracle).",
+    impactOneline:
+      "Route-scoped Fabraix biosafety-001 scans should confirm unauthenticated agent red-team sessions targeting restricted tool invocation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixBiosafety001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/biosafety-001 route scan confirms unauthenticated biosafety challenge sessions. Show restricted-tool invocation defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "fabraix-tool-poisoning-001-route-live-oracle",
     platform: "generic",
     category: "AI security",

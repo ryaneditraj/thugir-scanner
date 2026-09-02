@@ -2,6 +2,12 @@
   "candidates": [
     {
       "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-biosafety-001-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST api.fabraix.com/v1/playground/sessions/start challenge_id=biosafety-001 (The Biosafety Officer, Wren release_restricted_protocol oracle) from /challenges/biosafety-001; playground.fabraix.com/challenges/biosafety-001 findings 6→7 (+fabraix-biosafety-001-route-live-oracle); benchmark juice-shop-staging 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
       "slug": "fabraix-tool-poisoning-002-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST api.fabraix.com/v1/playground/sessions/start challenge_id=biosafety-001 (The Biosafety Officer) from /challenges/tool-poisoning-002; playground.fabraix.com/challenges/tool-poisoning-002 findings 6→7 (+fabraix-tool-poisoning-002-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"

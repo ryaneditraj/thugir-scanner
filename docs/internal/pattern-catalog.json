@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-02T08:05:19.563Z",
-  "total": 3097,
-  "uniqueSlugs": 3089,
+  "generatedAt": "2026-09-02T09:21:41.121Z",
+  "total": 3098,
+  "uniqueSlugs": 3090,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3079,
+    "generic": 3080,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3012,
+    "deep": 3013,
     "continuous": 0
   },
   "byCategory": {
@@ -34,7 +34,7 @@
     "SSRF": 19,
     "Server-side request forgery": 103,
     "Sensitive data exposure": 88,
-    "AI security": 133,
+    "AI security": 134,
     "Business logic": 37,
     "AI / LLM security": 4,
     "Cross-site request forgery": 10,
@@ -1249,6 +1249,7 @@
     "exposed-infra-artifacts",
     "exposed-source-maps",
     "fabraix-access-code-001-route-live-oracle",
+    "fabraix-biosafety-001-route-live-oracle",
     "fabraix-challenges-hub-route-live-oracle",
     "fabraix-data-exfil-002-route-live-oracle",
     "fabraix-data-exfiltration-001-route-live-oracle",
