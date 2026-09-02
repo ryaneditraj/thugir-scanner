@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-01T23:08:00.000Z",
+  "updated_at": "2026-09-02T00:06:30.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://brokencrystals.com/api/products/latest",
+      "source": "NeuraLegion/brokencrystals — business constraint bypass via limit param (README public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/insurance/policies/1",
+      "source": "atlas-crew/Chimera — CHM-INS-001 BOLA/IDOR on insurance policies (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/transfer",
+      "source": "atlas-crew/Chimera — CHM-BANK-001 business logic transfer manipulation (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/records/123",
+      "source": "atlas-crew/Chimera — CHM-HEALTH-002 PHI records BOLA/IDOR (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/genai/knowledge/upload",
+      "source": "atlas-crew/Chimera — CHM-AI-004 unrestricted RAG file upload (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass/",
       "source": "kOaDT/oss-oopssec-store — weak JWT secret admin bypass walkthrough (ch.07 auth failures)",
@@ -10585,6 +10610,31 @@
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting/",
       "source": "kOaDT/oss-oopssec-store — brute-force no rate-limiting walkthrough with login oracle docs (GitHub Pages)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/products/latest",
+      "source": "NeuraLegion/brokencrystals — business constraint bypass via limit param (README public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/insurance/policies/1",
+      "source": "atlas-crew/Chimera — CHM-INS-001 BOLA/IDOR on insurance policies (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/transfer",
+      "source": "atlas-crew/Chimera — CHM-BANK-001 business logic transfer manipulation (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/records/123",
+      "source": "atlas-crew/Chimera — CHM-HEALTH-002 PHI records BOLA/IDOR (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/genai/knowledge/upload",
+      "source": "atlas-crew/Chimera — CHM-AI-004 unrestricted RAG file upload (vulnerability-inventory)",
       "auth": "public_demo"
     }
   ]
