@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T06:05:00.000Z",
+  "updated_at": "2026-09-02T07:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+      "source": "OWASP WrongSecrets — Challenge 63 hardcoded AES encryption key oracle (v1.13.1 README; Heroku demo 54-66)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/debug/info",
+      "source": "ctfsec/pwnshop — PWN-018 public debug endpoint leaks session secret + DB creds (vulnerabilities index)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
+      "source": "ctfsec/pwnshop — PWN unauthenticated audit log API GET /api/v1/events (vulnerabilities index A01)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/search/",
+      "source": "NeuraLegion/brokencrystals — excessive data exposure GET /api/users/search/ cardNumber leak (README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/download",
+      "source": "ctfsec/pwnshop — path traversal file download lab PWN-038 GET /download (GitHub README)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://playground.fabraix.com/challenges/tool-poisoning-002",
       "source": "fabraix/playground — AI agent tool-poisoning challenge v2 with hardened guardrails (GitHub challenges/)",
