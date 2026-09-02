@@ -7655,6 +7655,24 @@
       "slug": "burpbounty-netsweeper-cve-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/netsweeper/ returns <h1>Netsweeper WebAdmin</h1> (BurpBountyLab modules/cves.py); burpbountylab.com/cve/netsweeper/ route scan findings 100→104 (+burpbounty-netsweeper-cve-route-live-oracle +burpbounty-netsweeper-cve-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:restful-booker.herokuapp.com",
+      "slug": "restful-booker-auth-weak-creds-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /auth with admin/password123 returns {\"token\":\"...\"}; restful-booker.herokuapp.com/auth findings 3→7 (+restful-booker-auth-weak-creds-live-oracle +restful-booker-auth-weak-creds-route-live-oracle +restful-booker-booking-unauth-access-live-oracle +restful-booker-booking-create-unauth-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:restful-booker.herokuapp.com",
+      "slug": "restful-booker-booking-unauth-access-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /booking enumerates 900+ bookingids and GET /booking/1 returns Sally Ericsson PII without auth; restful-booker.herokuapp.com/booking findings 3→8 (+restful-booker-booking-unauth-access-live-oracle +restful-booker-booking-unauth-access-route-live-oracle +restful-booker-booking-create-unauth-live-oracle +restful-booker-booking-create-unauth-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:restful-booker.herokuapp.com",
+      "slug": "restful-booker-booking-create-unauth-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /booking creates reservation without authentication (bookingid returned); restful-booker.herokuapp.com/booking route scan confirms unauthenticated write oracle; benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
