@@ -15750,6 +15750,79 @@ const burpbountyCiscoCveRouteLiveOracle = burpBountyRouteLiveOracle(
   "Burp Bounty Lab /cve/cisco/ route scan — Cisco appliance heading — Cisco network appliance CVE profile oracle"
 );
 
+const burpbountyTraefikCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/traefik/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*Traefik Dashboard\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /cve/traefik/ returns Traefik Dashboard heading — Traefik reverse-proxy CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountyTraefikCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/traefik\/?$/i,
+  burpbountyTraefikCveLiveOracle,
+  "Burp Bounty Lab /cve/traefik/ route scan — Traefik Dashboard heading — Traefik reverse-proxy CVE profile oracle"
+);
+
+const burpbountySolarwindsCveLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/cve/solarwinds/", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 1024 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/<h1>\s*SolarWinds Orion\s*<\/h1>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 160).trim(),
+      note: "Burp Bounty Lab GET /cve/solarwinds/ returns SolarWinds Orion heading — SolarWinds Orion CVE profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountySolarwindsCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/solarwinds\/?$/i,
+  burpbountySolarwindsCveLiveOracle,
+  "Burp Bounty Lab /cve/solarwinds/ route scan — SolarWinds Orion heading — SolarWinds Orion CVE profile oracle"
+);
+
+const burpbountySvnEntriesLiveOracle: Rule = async (ctx) => {
+  if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/.svn/entries", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 2048 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const svnOk =
+    /^dir$/m.test(doc.body) &&
+    /committed-date=/i.test(doc.body) &&
+    /committed-rev=/i.test(doc.body);
+  if (!svnOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Burp Bounty Lab GET /.svn/entries returns SVN metadata with committed-date and committed-rev — SVN repository exposure profile oracle distinct from generic hub fingerprinting"
+    }
+  };
+};
+
+const burpbountySvnEntriesRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/\.svn\/entries\b/i,
+  burpbountySvnEntriesLiveOracle,
+  "Burp Bounty Lab /.svn/entries route scan — SVN metadata with committed-date and committed-rev — SVN repository exposure profile oracle"
+);
+
 const burpbountyN8nSettingsCveLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/cve/n8n/rest/settings", ctx.origin).toString();
@@ -109760,6 +109833,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyBackupListingRouteLiveOracle,
   burpbountyCouchdbAllDbsRouteLiveOracle,
   burpbountyCiscoCveRouteLiveOracle,
+  burpbountyTraefikCveRouteLiveOracle,
+  burpbountySolarwindsCveRouteLiveOracle,
+  burpbountySvnEntriesRouteLiveOracle,
   burpbountyActuatorHeapdumpLiveOracle,
   burpbountyActuatorHeapdumpRouteLiveOracle,
   burpbountyFortiosRemoteLoginRouteLiveOracle,
@@ -109795,6 +109871,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyText4shellLiveOracle,
   burpbountyPulseCveLiveOracle,
   burpbountyCiscoCveLiveOracle,
+  burpbountyTraefikCveLiveOracle,
+  burpbountySolarwindsCveLiveOracle,
+  burpbountySvnEntriesLiveOracle,
   burpbountyN8nSettingsCveLiveOracle,
   burpbountyCouchdbAllDbsLiveOracle,
   burpbountyKubernetesApiLiveOracle,

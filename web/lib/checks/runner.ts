@@ -3986,6 +3986,12 @@ const DEEP_RULES = new Set<string>([
   "burpbountyBackupListingRouteLiveOracle",
   "burpbountyCouchdbAllDbsRouteLiveOracle",
   "burpbountyCiscoCveRouteLiveOracle",
+  "burpbountyTraefikCveLiveOracle",
+  "burpbountyTraefikCveRouteLiveOracle",
+  "burpbountySolarwindsCveLiveOracle",
+  "burpbountySolarwindsCveRouteLiveOracle",
+  "burpbountySvnEntriesLiveOracle",
+  "burpbountySvnEntriesRouteLiveOracle",
   "burpbountyActuatorHeapdumpLiveOracle",
   "burpbountyActuatorHeapdumpRouteLiveOracle",
   "burpbountyFortiosRemoteLoginRouteLiveOracle",
@@ -4018,6 +4024,12 @@ const DEEP_RULES = new Set<string>([
   "burpbountyPulseCveLiveOracle",
   "burpbountyCiscoCveLiveOracle",
   "burpbountyCiscoCveRouteLiveOracle",
+  "burpbountyTraefikCveLiveOracle",
+  "burpbountyTraefikCveRouteLiveOracle",
+  "burpbountySolarwindsCveLiveOracle",
+  "burpbountySolarwindsCveRouteLiveOracle",
+  "burpbountySvnEntriesLiveOracle",
+  "burpbountySvnEntriesRouteLiveOracle",
   "burpbountyN8nSettingsCveLiveOracle",
   "burpbountyCouchdbAllDbsLiveOracle",
   "burpbountyCouchdbAllDbsRouteLiveOracle",
@@ -15750,6 +15762,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/burpbountylab\.com/i.test(origin) && /\/backup\/?$/i.test(targetInput) && p.slug === "burpbounty-backup-listing-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/cve\/couchdb\/_all_dbs\b/i.test(targetInput) && p.slug === "burpbounty-couchdb-all-dbs-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/cve\/cisco\/?$/i.test(targetInput) && p.slug === "burpbounty-cisco-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/traefik\/?$/i.test(targetInput) && p.slug === "burpbounty-traefik-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/solarwinds\/?$/i.test(targetInput) && p.slug === "burpbounty-solarwinds-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/\.svn\/entries\b/i.test(targetInput) && p.slug === "burpbounty-svn-entries-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/actuator\/heapdump\b/i.test(targetInput) && p.slug.startsWith("burpbounty-actuator-heapdump")) return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?forti(?:os)?(?:\/remote\/login)?\/?$/i.test(targetInput) && p.slug === "burpbounty-fortios-remote-login-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/wp\/wp-config\.php/i.test(targetInput) && p.slug.startsWith("burpbounty-wp-config")) return -3;

@@ -58291,6 +58291,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-traefik-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Traefik CVE live oracle",
+    description:
+      "GET /cve/traefik/ returns a Traefik Dashboard heading — the Burp Bounty Traefik reverse-proxy CVE profile oracle.",
+    impactOneline:
+      "Live Traefik fingerprint probe confirms route-specific reverse-proxy CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyTraefikCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Traefik and restrict dashboard access to trusted networks.",
+      steps: [
+        "Apply Traefik security advisories for exposed dashboard and API routes.",
+        "Disable public dashboard access and enforce authentication.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/traefik/ endpoint exposes a Traefik Dashboard fingerprint. Show Traefik dashboard hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-traefik-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/traefik/ route live oracle",
+    description:
+      "When scanning /cve/traefik/, GET returns a Traefik Dashboard heading — route-specific Traefik reverse-proxy CVE profile oracle.",
+    impactOneline:
+      "Route-specific Traefik fingerprint probe confirms reverse-proxy CVE oracle when scanning the Burp Bounty Lab /cve/traefik/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyTraefikCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Traefik and restrict dashboard access to trusted networks.",
+      steps: [
+        "Apply Traefik security advisories for exposed dashboard and API routes.",
+        "Disable public dashboard access and enforce authentication.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/traefik/ route scan exposes a Traefik Dashboard fingerprint. Show Traefik dashboard hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-solarwinds-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab SolarWinds CVE live oracle",
+    description:
+      "GET /cve/solarwinds/ returns a SolarWinds Orion heading — the Burp Bounty SolarWinds Orion CVE profile oracle.",
+    impactOneline:
+      "Live SolarWinds fingerprint probe confirms route-specific Orion appliance CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySolarwindsCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch SolarWinds Orion and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply SolarWinds security advisories promptly on exposed Orion instances.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/solarwinds/ endpoint exposes a SolarWinds Orion fingerprint. Show SolarWinds Orion hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-solarwinds-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/solarwinds/ route live oracle",
+    description:
+      "When scanning /cve/solarwinds/, GET returns a SolarWinds Orion heading — route-specific SolarWinds Orion CVE profile oracle.",
+    impactOneline:
+      "Route-specific SolarWinds fingerprint probe confirms Orion appliance CVE oracle when scanning the Burp Bounty Lab /cve/solarwinds/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySolarwindsCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch SolarWinds Orion and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply SolarWinds security advisories promptly on exposed Orion instances.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/solarwinds/ route scan exposes a SolarWinds Orion fingerprint. Show SolarWinds Orion hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-svn-entries-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab SVN entries exposure live oracle",
+    description:
+      "GET /.svn/entries returns SVN metadata with committed-date and committed-rev — the Burp Bounty SVN repository exposure profile oracle.",
+    impactOneline:
+      "Live SVN entries probe confirms unauthenticated repository metadata disclosure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySvnEntriesLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block public access to .svn metadata directories.",
+      steps: [
+        "Remove .svn directories from web-accessible paths and deploy from clean checkouts.",
+        "Deny HTTP access to /.svn/* at the web server or WAF layer.",
+        "Isolate Burp Bounty Lab SVN exposure routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /.svn/entries endpoint leaks SVN metadata without auth. Show how to block .svn exposure and secure deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-svn-entries-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /.svn/entries route live oracle",
+    description:
+      "When scanning /.svn/entries, GET returns SVN metadata with committed-date and committed-rev — route-specific SVN repository exposure profile oracle.",
+    impactOneline:
+      "Route-specific SVN entries probe confirms repository metadata disclosure when scanning the Burp Bounty Lab /.svn/entries practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySvnEntriesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block public access to .svn metadata directories.",
+      steps: [
+        "Remove .svn directories from web-accessible paths and deploy from clean checkouts.",
+        "Deny HTTP access to /.svn/* at the web server or WAF layer.",
+        "Isolate Burp Bounty Lab SVN exposure routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /.svn/entries route scan leaks SVN metadata without auth. Show how to block .svn exposure and secure deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-n8n-settings-cve-live-oracle",
     platform: "generic",
     category: "Information disclosure",
