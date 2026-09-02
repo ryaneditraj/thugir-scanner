@@ -4009,8 +4009,10 @@ const DEEP_RULES = new Set<string>([
   "burpbountyXmlrpcLiveOracle",
   "burpbountySqliUserEnumLiveOracle",
   "burpbountyTomcatCveLiveOracle",
+  "burpbountyTomcatCveRouteLiveOracle",
   "burpbountyWpLoginLiveOracle",
   "burpbountyGrafanaCveLiveOracle",
+  "burpbountyGrafanaCveRouteLiveOracle",
   "burpbountyPassiveApiPathLiveOracle",
   "burpbountyDwrInterfaceLiveOracle",
   "burpbountyAiGatewayLiveOracle",
@@ -4032,6 +4034,7 @@ const DEEP_RULES = new Set<string>([
   "burpbountySvnEntriesLiveOracle",
   "burpbountySvnEntriesRouteLiveOracle",
   "burpbountyN8nSettingsCveLiveOracle",
+  "burpbountyN8nSettingsCveRouteLiveOracle",
   "burpbountyCouchdbAllDbsLiveOracle",
   "burpbountyCouchdbAllDbsRouteLiveOracle",
   "burpbountyActuatorHeapdumpLiveOracle",
@@ -15793,6 +15796,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/burpbountylab\.com/i.test(origin) && /\/cve\/couchdb\/_all_dbs\b/i.test(targetInput) && p.slug === "burpbounty-couchdb-all-dbs-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/cve\/cisco\/?$/i.test(targetInput) && p.slug === "burpbounty-cisco-cve-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/cve\/traefik\/?$/i.test(targetInput) && p.slug === "burpbounty-traefik-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/tomcat\/?$/i.test(targetInput) && p.slug === "burpbounty-tomcat-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?grafana\/?$/i.test(targetInput) && p.slug === "burpbounty-grafana-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/n8n\/rest\/settings\b/i.test(targetInput) && p.slug === "burpbounty-n8n-settings-cve-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/cve\/solarwinds\/?$/i.test(targetInput) && p.slug === "burpbounty-solarwinds-cve-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/cve\/pulse\/?$/i.test(targetInput) && p.slug === "burpbounty-pulse-cve-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/cve\/citrix\/?$/i.test(targetInput) && p.slug === "burpbounty-citrix-cve-route-live-oracle") return -3;

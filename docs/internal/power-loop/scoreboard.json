@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-02T07:15:00.000Z",
+  "updated_at": "2026-09-02T07:00:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,17 +22,17 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2001,
   "discovery_findings": 24743,
-  "improvements_shipped": 1179,
-  "last_run": "2026-09-02T07:15:00.000Z",
+  "improvements_shipped": 1182,
+  "last_run": "2026-09-02T07:00:00.000Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 603,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,35 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 36 live oracles); secret-resend + juice-shop-resend-key-live-oracle + juice-shop-iac-terraform-tls-key-live-oracle present"
+      "note": "Stable 6/6 first-pass recall (52 findings)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 267,
-      "focus": "wrongsecrets-63 hardcoded AES + pwnshop debug/events/download + brokencrystals users/search excessive exposure",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 312,
+      "focus": "BurpBountyLab Tomcat/Grafana/n8n-settings CVE route oracles — closed 06 UTC learning gap",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 36 live oracles)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-63: 19 findings — wrongsecrets-challenge-63-hardcoded-aes-key-route-live-oracle",
-      "pwnshop.ctfsecurity.com/debug/info: 47 findings — pwnshop-debug-info-route-live-oracle",
-      "pwnshop.ctfsecurity.com/api/v1/events: 26 findings — pwnshop-events-audit-route-live-oracle",
-      "brokencrystals.com/api/users/search/: 80 findings — brokencrystals-users-search-route-live-oracle",
-      "pwnshop.ctfsecurity.com/download: 48 findings — pwnshop-download-path-traversal-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings)",
+      "burpbountylab.com/cve/tomcat/: 104 findings — burpbounty-tomcat-cve-route-live-oracle +burpbounty-tomcat-cve-live-oracle",
+      "burpbountylab.com/grafana/: 104 findings — burpbounty-grafana-cve-route-live-oracle +burpbounty-grafana-cve-live-oracle",
+      "burpbountylab.com/cve/n8n/rest/settings: 104 findings — burpbounty-n8n-settings-cve-route-live-oracle +burpbounty-n8n-settings-cve-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses",
-      "fabraix tool-poisoning-002 + jailbreak-001 route-specific AI oracles still absent (generic session oracles only)"
+      "fabraix tool-poisoning-002 + jailbreak-001 route-specific AI oracles absent (API challenge IDs not yet published)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
+    "juice-shop.herokuapp.com": 52,
+    "burpbountylab.com/cve/tomcat/": 104,
+    "burpbountylab.com/grafana/": 104,
+    "burpbountylab.com/cve/n8n/rest/settings": 104,
     "brokencrystals.com/api/users/search/": 80,
     "pwnshop.ctfsecurity.com/download": 48,
-    "pwnshop.ctfsecurity.com/debug/info": 47,
-    "pwnshop.ctfsecurity.com/api/v1/events": 26,
-    "wrongsecrets.herokuapp.com/challenge/challenge-63": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-22": 19,
-    "dvwu.vercel.app/labs/path-traversal": 15,
-    "dvwu.vercel.app/labs/command-injection": 13
+    "pwnshop.ctfsecurity.com/debug/info": 47
   }
 }

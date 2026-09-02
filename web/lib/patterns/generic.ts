@@ -57849,6 +57849,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-tomcat-cve-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /cve/tomcat/ route live oracle",
+    description:
+      "When scanning /cve/tomcat/, GET returns Apache Tomcat and JSESSIONID=../groovy triggers PersistentManagerBase session deserialization — route-specific CVE-2020-9484 Tomcat profile oracle.",
+    impactOneline:
+      "Route-specific Tomcat session-deserialization probe confirms CVE-2020-9484-style oracle when scanning the Burp Bounty Lab /cve/tomcat/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyTomcatCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Tomcat and disable PersistentManager file-based session storage with untrusted paths.",
+      steps: [
+        "Patch Tomcat to a version that fixes CVE-2020-9484.",
+        "Avoid storing sessions in user-influenced directories.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/tomcat/ route scan swaps sessions when JSESSIONID contains path traversal. Show Tomcat CVE-2020-9484 mitigations.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-wp-login-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -57897,6 +57923,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /grafana/ endpoint exposes an unauthenticated Grafana dashboard shell. Show Grafana hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-grafana-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Grafana route live oracle",
+    description:
+      "When scanning /cve/grafana/ or /grafana/, GET returns a Grafana dashboard shell with title Grafana and LoadingGrafana markers — route-specific Grafana CVE/profile oracle.",
+    impactOneline:
+      "Route-specific Grafana dashboard probe confirms exposed monitoring UI when scanning the Burp Bounty Lab Grafana CVE practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyGrafanaCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose Grafana dashboards without authentication on public networks.",
+      steps: [
+        "Require SSO or strong credentials for Grafana.",
+        "Patch Grafana CVEs and restrict admin API access.",
+        "Isolate Burp Bounty Lab Grafana routes from production monitoring."
+      ]
+    },
+    fixPrompt:
+      "Our Grafana route scan exposes an unauthenticated Grafana dashboard shell. Show Grafana hardening and CVE patching.",
     version: 1,
     enabled: true
   },
@@ -58495,6 +58547,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/n8n/rest/settings endpoint leaks n8nVersion and authenticationMethod without auth. Show n8n hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-n8n-settings-cve-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/n8n/rest/settings route live oracle",
+    description:
+      "When scanning /cve/n8n/rest/settings, GET returns JSON with n8nVersion, releaseChannel, and authenticationMethod — route-specific n8n workflow automation CVE profile oracle.",
+    impactOneline:
+      "Route-specific n8n settings probe confirms unauthenticated workflow automation configuration disclosure when scanning the Burp Bounty Lab n8n CVE practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyN8nSettingsCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose n8n /rest/settings without authentication on public networks.",
+      steps: [
+        "Require authentication for all n8n REST API routes.",
+        "Patch n8n CVEs and restrict admin UI to internal networks.",
+        "Isolate Burp Bounty Lab n8n CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/n8n/rest/settings route scan leaks n8nVersion and authenticationMethod without auth. Show n8n hardening and CVE patching.",
     version: 1,
     enabled: true
   },

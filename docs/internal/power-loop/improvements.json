@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-tomcat-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/tomcat/ returns Apache Tomcat and JSESSIONID=../groovy triggers PersistentManagerBase session swap; burpbountylab.com/cve/tomcat/ findings 104 (+burpbounty-tomcat-cve-route-live-oracle +burpbounty-tomcat-cve-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-grafana-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /grafana/ returns title Grafana with LoadingGrafana dashboard shell; burpbountylab.com/grafana/ findings 104 (+burpbounty-grafana-cve-route-live-oracle +burpbounty-grafana-cve-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-n8n-settings-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/n8n/rest/settings returns JSON n8nVersion, releaseChannel, authenticationMethod; burpbountylab.com/cve/n8n/rest/settings findings 104 (+burpbounty-n8n-settings-cve-route-live-oracle +burpbounty-n8n-settings-cve-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-artica-cve-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/artica/fw.login.php returns Artica Web Proxy login with apikey field; burpbountylab.com/cve/artica/fw.login.php findings 104 (+burpbounty-artica-cve-route-live-oracle +burpbounty-artica-cve-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
