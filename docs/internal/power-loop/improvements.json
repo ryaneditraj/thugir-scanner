@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-traefik-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/traefik/ returns <h1>Traefik Dashboard</h1>; burpbountylab.com/cve/traefik/ findings 100→104 (+burpbounty-traefik-cve-route-live-oracle +burpbounty-traefik-cve-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-solarwinds-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/solarwinds/ returns <h1>SolarWinds Orion</h1>; burpbountylab.com/cve/solarwinds/ findings 100→104 (+burpbounty-solarwinds-cve-route-live-oracle +burpbounty-solarwinds-cve-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-svn-entries-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /.svn/entries returns committed-date= and committed-rev= SVN metadata; burpbountylab.com/.svn/entries findings 100→104 (+burpbounty-svn-entries-route-live-oracle +burpbounty-svn-entries-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-couchdb-all-dbs-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/couchdb/_all_dbs returns JSON with _replicator and _users; burpbountylab.com/cve/couchdb/_all_dbs findings 99→101 (+burpbounty-couchdb-all-dbs-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"

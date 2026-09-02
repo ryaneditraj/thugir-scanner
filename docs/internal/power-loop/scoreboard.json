@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-02T00:08:00.000Z",
+  "updated_at": "2026-09-02T00:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,23 +16,23 @@
     }
   },
   "total_sites_scanned": 2774,
-  "total_findings": 27481,
+  "total_findings": 27493,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1976,
-  "discovery_findings": 23089,
-  "improvements_shipped": 1164,
-  "last_run": "2026-09-02T00:08:00.000Z",
+  "discovery_findings": 23101,
+  "improvements_shipped": 1167,
+  "last_run": "2026-09-02T00:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 596,
+      "probes_run": 590,
       "live_oracles": 38,
       "benchmark_recall": {
         "juice-shop": {
@@ -49,49 +49,47 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 38 live oracles); secret-resend + juice-shop-resend-key-live-oracle + juice-shop-iac-terraform-tls-key-live-oracle present"
+      "note": "Stable 6/6 first-pass recall (52 findings, 38 live oracles); secret-resend + juice-shop-resend-key-live-oracle present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 150,
-      "focus": "Broken Crystals business-constraint bypass + Chimera insurance/banking/healthcare/genai route oracle validation",
-      "new_urls": [
-        "brokencrystals.com/api/products/latest",
-        "chimera.atlascrew.dev/api/v1/insurance/policies/1",
-        "chimera.atlascrew.dev/api/v1/banking/transfer",
-        "chimera.atlascrew.dev/api/v1/healthcare/records/123",
-        "chimera.atlascrew.dev/api/v1/genai/knowledge/upload"
-      ]
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 312,
+      "focus": "BurpBountyLab Traefik/SolarWinds/SVN route oracle validation",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 38 live oracles) stable on primary Heroku",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings) maintained after engine evolve",
+      "burpbountylab.com/cve/traefik/: 100→104 (+burpbounty-traefik-cve-route-live-oracle +burpbounty-traefik-cve-live-oracle)",
+      "burpbountylab.com/cve/solarwinds/: 100→104 (+burpbounty-solarwinds-cve-route-live-oracle +burpbounty-solarwinds-cve-live-oracle)",
+      "burpbountylab.com/.svn/entries: 100→104 (+burpbounty-svn-entries-route-live-oracle +burpbounty-svn-entries-live-oracle)",
       "brokencrystals.com/api/products/latest: 86 findings (+brokencrystals-products-latest-limit-bypass-route-live-oracle)",
-      "chimera.atlascrew.dev/api/v1/insurance/policies/1: 8 findings (+chimera-insurance-policies-bola-route-live-oracle)",
-      "chimera.atlascrew.dev/api/v1/banking/transfer: 8 findings (+chimera-banking-transfer-business-logic-route-live-oracle)",
-      "chimera.atlascrew.dev/api/v1/healthcare/records/123: 8 findings (+chimera-healthcare-records-bola-route-live-oracle)",
-      "chimera.atlascrew.dev/api/v1/genai/knowledge/upload: 8 findings (+chimera-genai-knowledge-upload-route-live-oracle)"
+      "chimera.atlascrew.dev/api/v1/insurance/policies/1: 8 findings (+chimera-insurance-policies-bola-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "bypass403.vercel.app: intermittent scan timeout — lab completes in ~9s on retest",
-      "BurpBountyLab Traefik/SolarWinds/SVN route oracles still absent (queued, not yet drained)"
+      "ist-edu-bd.vercel.app/command-injection: route-specific oracle rejected (no CMDI API on deployed SPA)",
+      "Chimera admin diagnostics RCE/SSRF/XXE routes still lack route-specific oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
+    "juice-shop.herokuapp.com": 52,
+    "burpbountylab.com/cve/traefik/": 104,
+    "burpbountylab.com/cve/solarwinds/": 104,
+    "burpbountylab.com/.svn/entries": 104,
     "brokencrystals.com/api/products/latest": 86,
     "chimera.atlascrew.dev/api/v1/insurance/policies/1": 8,
     "chimera.atlascrew.dev/api/v1/banking/transfer": 8,
     "chimera.atlascrew.dev/api/v1/healthcare/records/123": 8,
     "chimera.atlascrew.dev/api/v1/genai/knowledge/upload": 8,
-    "koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass": 10,
-    "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse": 13,
-    "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection": 9,
     "burpbountylab.com/cve/couchdb/_all_dbs": 101,
     "burpbountylab.com/cve/cisco/": 101,
     "burpbountylab.com/actuator/heapdump": 101,
+    "koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass": 10,
+    "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse": 13,
+    "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection": 9,
     "dvga.tools.escape.tech/graphql": 18,
     "duck-store.escape.tech/api/v1/users/me/profile": 33,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
