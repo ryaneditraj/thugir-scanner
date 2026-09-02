@@ -72144,6 +72144,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-lab-stats-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Pwnshop /lab-stats visitor statistics route live oracle",
+    description:
+      "When scanning /lab-stats on pwnshop.ctfsecurity.com, GET returns unauthenticated JSON with visitor counts and lab dirty state — route-specific platform statistics training oracle (ctfsec/pwnshop README corpus fallback when live endpoint returns 404).",
+    impactOneline:
+      "Route-specific scans should confirm unauthenticated lab statistics JSON exposes visitor metrics and dirty-state indicators.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopLabStatsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate or remove lab statistics endpoints — Pwnshop is intentional lab software.",
+      steps: [
+        "Require admin authentication before returning visitor statistics.",
+        "Do not expose lab dirty-state indicators on public endpoints.",
+        "Run Pwnshop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /lab-stats route returns visitor counts without auth. Show route-specific statistics endpoint remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dvwu-portal-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -78679,6 +78705,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our chimera /api/v1/gov/cases route documents citizen case BOLA. Show case-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-gov-records-pii-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Chimera government public records PII route live oracle",
+    description:
+      "When scanning /api/v1/gov/records on chimera.atlascrew.dev, api-reference documents public records search returning citizen PII without authorization — route-specific government records PII training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional public records PII exposure for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGovRecordsPiiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce authorization and redact PII from government records search endpoints.",
+      steps: [
+        "Require authenticated citizen or caseworker identity before returning records search results.",
+        "Redact SSN and other sensitive fields from public records API responses.",
+        "Do not expose Chimera government endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/gov/records route documents public records PII exposure. Show records search authorization remediation.",
     version: 1,
     enabled: true
   },

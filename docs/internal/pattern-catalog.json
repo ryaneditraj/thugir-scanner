@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-02T21:31:44.781Z",
-  "total": 3121,
-  "uniqueSlugs": 3113,
+  "generatedAt": "2026-09-02T22:10:51.988Z",
+  "total": 3123,
+  "uniqueSlugs": 3115,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3103,
+    "generic": 3105,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3036,
+    "deep": 3038,
     "continuous": 0
   },
   "byCategory": {
@@ -24,7 +24,7 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 147,
+    "Information disclosure": 148,
     "Security misconfiguration": 237,
     "Broken authentication": 199,
     "Injection": 504,
@@ -33,7 +33,7 @@
     "general": 20,
     "SSRF": 19,
     "Server-side request forgery": 103,
-    "Sensitive data exposure": 89,
+    "Sensitive data exposure": 90,
     "AI security": 134,
     "Business logic": 37,
     "AI / LLM security": 4,
@@ -430,6 +430,7 @@
     "chimera-genai-models-config-disclosure-route-live-oracle",
     "chimera-gov-benefits-search-sqli-route-live-oracle",
     "chimera-gov-cases-bola-route-live-oracle",
+    "chimera-gov-records-pii-route-live-oracle",
     "chimera-healthcare-imaging-idor-route-live-oracle",
     "chimera-healthcare-patients-bola-route-live-oracle",
     "chimera-healthcare-records-bola-route-live-oracle",
@@ -2267,6 +2268,7 @@
     "pwnshop-export-orders-csv-route-live-oracle",
     "pwnshop-forgot-password-email-enumeration-live-oracle",
     "pwnshop-forgot-password-email-enumeration-route-live-oracle",
+    "pwnshop-lab-stats-route-live-oracle",
     "pwnshop-less-imports-ssti-route-live-oracle",
     "pwnshop-mail-idor-route-live-oracle",
     "pwnshop-mail-inbox-idor-live-oracle",
