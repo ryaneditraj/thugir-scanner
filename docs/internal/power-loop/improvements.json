@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:openvaultbank.com",
+      "slug": "openvault-admin-users-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /cheatsheet documents GET /api/v1/admin/users exposing every user's email and hashed password after mass-assignment role escalation; openvaultbank.com/api/v1/admin/users findings 8→9 (+openvault-admin-users-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:openvaultbank.com",
+      "slug": "openvault-accounts-exposure-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /learn documents Excessive Data Exposure on GET /accounts returning SSN last-4 and routing numbers regardless of token scope; openvaultbank.com/api/v1/accounts findings 8→9 (+openvault-accounts-exposure-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:openvaultbank.com",
+      "slug": "openvault-accounts-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /learn documents BOLA on GET /accounts/{id} — authenticated but no ownership check on account ID; openvaultbank.com/api/v1/accounts/1 findings 8→9 (+openvault-accounts-bola-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:web-production-16ec6a.up.railway.app",
       "slug": "openvault-railway-host-api-origin",
       "status": "shipped",

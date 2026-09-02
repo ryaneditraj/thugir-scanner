@@ -79021,6 +79021,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "openvault-admin-users-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "OpenVault Bank admin users route live oracle",
+    description:
+      "When scanning /api/v1/admin/users on openvaultbank.com, /cheatsheet documents admin user roster with emails and hashed passwords after mass-assignment privilege escalation — route-specific admin user enumeration training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional admin user roster disclosure with hashed passwords.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultAdminUsersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce admin role checks and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Require admin role claims before returning user roster data on /admin/users.",
+        "Reject role and privilege fields in customer profile update requests.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/admin/users route documents admin user roster with hashed passwords. Show authorization and mass-assignment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-accounts-exposure-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "OpenVault Bank accounts excessive data exposure route live oracle",
+    description:
+      "When scanning /api/v1/accounts on openvaultbank.com, /learn documents excessive data exposure returning SSN last-4 and routing numbers regardless of token scope — route-specific accounts exposure training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional excessive data exposure on the accounts listing endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultAccountsExposureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope API responses to token claims and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Return only fields authorized by the authenticated user's token scope.",
+        "Strip SSN, routing numbers, and other sensitive fields from list endpoints.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/accounts route documents excessive data exposure. Show response field scoping remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-accounts-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "OpenVault Bank accounts BOLA route live oracle",
+    description:
+      "When scanning /api/v1/accounts/{id} on openvaultbank.com, /learn documents broken object-level authorization via account ID manipulation without ownership validation — route-specific account BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional account BOLA on GET /accounts/{id}.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultAccountsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate account ownership on object-level reads and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Bind account ID parameters to the authenticated user's owned accounts.",
+        "Return 403 when the requested account does not belong to the token subject.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/accounts/{id} route documents account BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-ecommerce-products-catalog-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",

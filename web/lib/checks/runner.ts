@@ -1634,6 +1634,9 @@ const DEEP_RULES = new Set<string>([
   "openvaultProfileMassAssignmentRouteLiveOracle",
   "openvaultHealthMisconfigRouteLiveOracle",
   "openvaultResetRequestRouteLiveOracle",
+  "openvaultAdminUsersRouteLiveOracle",
+  "openvaultAccountsExposureRouteLiveOracle",
+  "openvaultAccountsBolaRouteLiveOracle",
   "clientSideCookiejarLabEvidence",
   "clientSideWebgoatEvidence",
   "clientSideSessionHijackEvidence",
@@ -12830,6 +12833,26 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
         /\/api\/v1\/auth\/reset-request\b/i.test(targetInput) &&
         p.slug.startsWith("openvault-reset-request")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/admin\/users\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-admin-users")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/accounts\/\d+\b/i.test(targetInput) &&
+        !/\/transactions\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-accounts-bola")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/accounts\/?(?:\?|#|$)/i.test(targetInput) &&
+        !/\/accounts\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("openvault-accounts-exposure")
       )
         return -3;
       if (
