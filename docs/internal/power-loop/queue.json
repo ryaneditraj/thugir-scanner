@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T08:05:00.000Z",
+  "updated_at": "2026-09-02T09:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://playground.fabraix.com/challenges/biosafety-001",
+      "source": "fabraix/playground — Biosafety Officer reveal_restricted_protocol sink challenge (GitHub challenges/biosafety-001)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://playground.fabraix.com/challenges/jwt-verifier-001",
+      "source": "fabraix/playground — JWT verifier agent guardrail bypass challenge (GitHub challenges/jwt-verifier-001)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/admin/attack/xxe",
+      "source": "atlas-crew/Chimera — CHM-ADMIN-003 XXE attack lab POST /api/v1/admin/attack/xxe (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/seller/storefront",
+      "source": "ctfsec/pwnshop — seller storefront SSTI preview GET /seller/storefront?template= (PWN-040 README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi2.apisec.ai/workshop/api/shop/orders/all",
+      "source": "OWASP crAPI — API3 excessive data exposure GET /workshop/api/shop/orders/all (APIsec workshop guide)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://sekumart.sekuripy.hr/search.php?q=test",
       "source": "SekuriPy sekumart — sqlmap playground product search string SQLi + reflected XSS (openapi.json /search.php)",
