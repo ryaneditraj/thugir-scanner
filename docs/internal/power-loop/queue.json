@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T18:05:00.000Z",
+  "updated_at": "2026-09-02T19:07:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://openvaultbank.com/api/v1/payments",
+      "source": "OpenVault Bank — unauthorized fund transfer POST /payments via source account ID manipulation (openvaultbank.com/cheatsheet #4; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://openvaultbank.com/api/v1/auth/token",
+      "source": "OpenVault Bank — login enumeration distinguishable user-not-found vs bad-password on POST /auth/token (openvaultbank.com/cheatsheet #9; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://openvaultbank.com/api/v1/auth/reset-confirm",
+      "source": "OpenVault Bank — no rate limiting on password reset confirm POST /auth/reset-confirm (openvaultbank.com/cheatsheet #12; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/scanner",
+      "source": "alfredang/pentest-fauxbank — simulated pentest scanner hub (OWASP Top 10 training simulation; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://xss-payload-lab.vercel.app/",
+      "source": "XSS Payload Lab — browser security playground with context explorer + sandbox preview (vercel public demo; web search 19 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://openvaultbank.com/api/v1/admin/accounts",
       "source": "OpenVault Bank — BFLA admin accounts endpoint GET /admin/accounts (openvaultbank.com/cheatsheet #5; web search 18 UTC)",
