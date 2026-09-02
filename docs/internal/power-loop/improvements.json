@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-tool-poisoning-002-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST api.fabraix.com/v1/playground/sessions/start challenge_id=biosafety-001 (The Biosafety Officer) from /challenges/tool-poisoning-002; playground.fabraix.com/challenges/tool-poisoning-002 findings 6→7 (+fabraix-tool-poisoning-002-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-jailbreak-001-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST api.fabraix.com/v1/playground/sessions/start challenge_id=access-code-001 (The Gatekeeper) from /challenges/jailbreak-001; playground.fabraix.com/challenges/jailbreak-001 findings 6→7 (+fabraix-jailbreak-001-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-jwt-verifier-001-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST api.fabraix.com/v1/playground/sessions/start challenge_id=jwt-verifier-001 (The Maintainer, Iris SDK persona) from /challenges/jwt-verifier-001; playground.fabraix.com/challenges/jwt-verifier-001 findings 6→7 (+fabraix-jwt-verifier-001-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-tomcat-cve-route-live-oracle",
       "status": "shipped",

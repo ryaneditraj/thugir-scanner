@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-02T07:04:11.655Z",
-  "total": 3094,
-  "uniqueSlugs": 3086,
+  "generatedAt": "2026-09-02T08:05:19.563Z",
+  "total": 3097,
+  "uniqueSlugs": 3089,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3076,
+    "generic": 3079,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3009,
+    "deep": 3012,
     "continuous": 0
   },
   "byCategory": {
@@ -34,7 +34,7 @@
     "SSRF": 19,
     "Server-side request forgery": 103,
     "Sensitive data exposure": 88,
-    "AI security": 130,
+    "AI security": 133,
     "Business logic": 37,
     "AI / LLM security": 4,
     "Cross-site request forgery": 10,
@@ -1254,12 +1254,15 @@
     "fabraix-data-exfiltration-001-route-live-oracle",
     "fabraix-guardrail-bypass-route-live-oracle",
     "fabraix-indirect-prompt-injection-route-live-oracle",
+    "fabraix-jailbreak-001-route-live-oracle",
+    "fabraix-jwt-verifier-001-route-live-oracle",
     "fabraix-playground-home-route-live-oracle",
     "fabraix-playground-landing-route-live-oracle",
     "fabraix-playground-session-live-oracle",
     "fabraix-playground-session-route-live-oracle",
     "fabraix-prompt-injection-001-route-live-oracle",
     "fabraix-tool-poisoning-001-route-live-oracle",
+    "fabraix-tool-poisoning-002-route-live-oracle",
     "fauxbank-accounts-route-live-oracle",
     "fauxbank-admin-panel-live-oracle",
     "fauxbank-admin-route-live-oracle",

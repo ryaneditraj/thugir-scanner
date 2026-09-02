@@ -12552,7 +12552,12 @@ const attpAgentRevokeUnauthRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const FABRAIX_API_ORIGIN = "https://api.fabraix.com";
-const FABRAIX_LIVE_CHALLENGE_IDS = new Set(["access-code-001", "data-exfil-001", "biosafety-001"]);
+const FABRAIX_LIVE_CHALLENGE_IDS = new Set([
+  "access-code-001",
+  "data-exfil-001",
+  "biosafety-001",
+  "jwt-verifier-001"
+]);
 
 function isFabraixPlaygroundHost(ctx: RuleContext): boolean {
   const hint = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
@@ -12573,8 +12578,15 @@ function fabraixChallengeIdFromScan(ctx: RuleContext): string {
   const slug = hint.match(/\/challenges\/([a-z0-9-]+)/i)?.[1]?.toLowerCase();
   if (slug && FABRAIX_LIVE_CHALLENGE_IDS.has(slug)) return slug;
   if (slug === "data-exfil-002" || slug === "data-exfiltration-001") return "data-exfil-001";
-  if (slug === "indirect-prompt-injection-001" || slug === "prompt-injection-001") return "access-code-001";
-  if (slug === "tool-poisoning-001") return "biosafety-001";
+  if (
+    slug === "indirect-prompt-injection-001" ||
+    slug === "prompt-injection-001" ||
+    slug === "jailbreak-001"
+  ) {
+    return "access-code-001";
+  }
+  if (slug === "tool-poisoning-001" || slug === "tool-poisoning-002") return "biosafety-001";
+  if (slug === "jwt-verifier" || slug === "jwt-verifier-001") return "jwt-verifier-001";
   return "access-code-001";
 }
 
@@ -12787,6 +12799,64 @@ const fabraixToolPoisoning001RouteLiveOracle: Rule = async (ctx) => {
       challengeRoute: "tool-poisoning-001",
       scannedUrl: pageUrl,
       note: "Fabraix /challenges/tool-poisoning-001 route scan — MCP tool-poisoning challenge maps to biosafety-001 Biosafety Officer backend (Wren agent persona)"
+    }
+  };
+};
+
+const fabraixToolPoisoning002RouteLiveOracle: Rule = async (ctx) => {
+  if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenges\/tool-poisoning-002/i.test(pageUrl)) return NEGATIVE;
+  const probe = await probeFabraixPlaygroundSession(ctx, "biosafety-001");
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      ...probe,
+      challengeRoute: "tool-poisoning-002",
+      scannedUrl: pageUrl,
+      note: "Fabraix /challenges/tool-poisoning-002 route scan — v2 MCP tool-poisoning challenge maps to biosafety-001 Biosafety Officer backend until dedicated biosafety-002 API ships"
+    }
+  };
+};
+
+const fabraixJailbreak001RouteLiveOracle: Rule = async (ctx) => {
+  if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenges\/jailbreak-001/i.test(pageUrl)) return NEGATIVE;
+  const probe = await probeFabraixPlaygroundSession(ctx, "access-code-001");
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      ...probe,
+      challengeRoute: "jailbreak-001",
+      scannedUrl: pageUrl,
+      note: "Fabraix /challenges/jailbreak-001 route scan — LLM jailbreak / guardrail bypass challenge maps to access-code-001 Gatekeeper backend until dedicated jailbreak-001 API ships"
+    }
+  };
+};
+
+const fabraixJwtVerifier001RouteLiveOracle: Rule = async (ctx) => {
+  if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenges\/jwt-verifier(?:-001)?\b/i.test(pageUrl)) return NEGATIVE;
+  const probe = await probeFabraixPlaygroundSession(ctx, "jwt-verifier-001");
+  if (!probe) return NEGATIVE;
+  const routeSlug =
+    /\/challenges\/jwt-verifier\b/i.test(pageUrl) && !/\/jwt-verifier-001\b/i.test(pageUrl)
+      ? "jwt-verifier"
+      : "jwt-verifier-001";
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      ...probe,
+      challengeRoute: routeSlug,
+      scannedUrl: pageUrl,
+      note: `Fabraix /challenges/${routeSlug} route scan — JWT verifier / alg:none challenge maps to jwt-verifier-001 Maintainer backend (Iris SDK persona)`
     }
   };
 };
@@ -110068,6 +110138,9 @@ export const RULES: Record<string, Rule> = {
   fabraixIndirectPromptInjectionRouteLiveOracle,
   fabraixPromptInjection001RouteLiveOracle,
   fabraixToolPoisoning001RouteLiveOracle,
+  fabraixToolPoisoning002RouteLiveOracle,
+  fabraixJailbreak001RouteLiveOracle,
+  fabraixJwtVerifier001RouteLiveOracle,
   fabraixChallengesHubRouteLiveOracle,
   fabraixPlaygroundHomeRouteLiveOracle,
   fabraixPlaygroundLandingRouteLiveOracle,

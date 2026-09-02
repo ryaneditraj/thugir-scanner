@@ -76934,6 +76934,87 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fabraix-tool-poisoning-002-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix tool-poisoning-002 challenge route live oracle",
+    description:
+      "When scanning /challenges/tool-poisoning-002, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the v2 MCP tool-poisoning challenge — maps to biosafety-001 Biosafety Officer backend.",
+    impactOneline:
+      "Route-scoped Fabraix tool-poisoning-002 scans should confirm unauthenticated agent red-team sessions on the hardened v2 tool-poisoning challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixToolPoisoning002RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/tool-poisoning-002 route scan confirms unauthenticated Biosafety Officer agent sessions. Show hardened MCP tool-poisoning defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-jailbreak-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix jailbreak-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/jailbreak-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the LLM jailbreak / guardrail bypass challenge — maps to access-code-001 Gatekeeper backend.",
+    impactOneline:
+      "Route-scoped Fabraix jailbreak-001 scans should confirm unauthenticated agent red-team sessions on the jailbreak challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixJailbreak001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/jailbreak-001 route scan confirms unauthenticated Gatekeeper agent sessions. Show jailbreak and guardrail-bypass defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-jwt-verifier-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix jwt-verifier-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/jwt-verifier-001 or /challenges/jwt-verifier, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the JWT verifier / alg:none challenge — maps to jwt-verifier-001 Maintainer backend.",
+    impactOneline:
+      "Route-scoped Fabraix jwt-verifier scans should confirm unauthenticated agent red-team sessions on the JWT algorithm-confusion challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixJwtVerifier001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/jwt-verifier-001 route scan confirms unauthenticated Maintainer agent sessions. Show JWT alg:none and algorithm-confusion defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "fabraix-challenges-hub-route-live-oracle",
     platform: "generic",
     category: "AI security",
