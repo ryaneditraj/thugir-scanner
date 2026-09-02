@@ -79227,5 +79227,161 @@ export const genericPatterns: Pattern[] = [
       "Our PentestForge Mutillidae sqlinjection.php route concatenates username into SQL. Show classic SQLi remediation with parameterized queries.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "restful-booker-auth-weak-creds-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Restful Booker weak credential token oracle",
+    description:
+      "POST /auth on restful-booker.herokuapp.com returns an API token for default admin/password123 credentials — intentional API testing playground weak authentication.",
+    impactOneline:
+      "Default admin credentials issue bearer tokens, enabling authenticated booking modification on the Restful Booker demo API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restfulBookerAuthWeakCredsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restful Booker is intentional API training — enforce strong credentials and rate-limit auth in production APIs.",
+      steps: [
+        "Reject default or well-known credentials at account creation.",
+        "Rate-limit POST /auth and monitor for credential stuffing.",
+        "Use short-lived tokens with refresh rotation for API authentication."
+      ]
+    },
+    fixPrompt:
+      "Our Restful Booker scan confirms POST /auth issues tokens for admin/password123. Show strong credential policy and auth hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "restful-booker-auth-weak-creds-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Restful Booker /auth weak credential route live oracle",
+    description:
+      "When scanning /auth on restful-booker.herokuapp.com, POST /auth returns an API token for default admin/password123 credentials.",
+    impactOneline:
+      "Route-scoped Restful Booker /auth scans should confirm weak default credentials issue bearer tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restfulBookerAuthWeakCredsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restful Booker is intentional API training — enforce strong credentials on auth endpoints.",
+      steps: [
+        "Reject default credentials and enforce password complexity.",
+        "Rate-limit authentication endpoints.",
+        "Use short-lived API tokens with rotation."
+      ]
+    },
+    fixPrompt:
+      "Our Restful Booker /auth route scan confirms weak default credentials issue API tokens. Show auth endpoint hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "restful-booker-booking-unauth-access-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Restful Booker unauthenticated booking access oracle",
+    description:
+      "GET /booking lists reservation IDs and GET /booking/{id} returns guest PII (firstname, lastname, totalprice) without authentication on restful-booker.herokuapp.com.",
+    impactOneline:
+      "Unauthenticated callers can enumerate and read guest booking details — broken object level authorization on the demo booking API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restfulBookerBookingUnauthAccessLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restful Booker is intentional API training — require authentication for booking reads in production.",
+      steps: [
+        "Require valid session or bearer token for GET /booking and GET /booking/{id}.",
+        "Authorize each booking read against the authenticated principal.",
+        "Avoid exposing sequential booking IDs without access controls."
+      ]
+    },
+    fixPrompt:
+      "Our Restful Booker scan confirms unauthenticated booking enumeration and PII reads. Show BOLA remediation with per-object authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "restful-booker-booking-unauth-access-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Restful Booker /booking unauthenticated access route live oracle",
+    description:
+      "When scanning /booking on restful-booker.herokuapp.com, GET /booking enumerates reservations and GET /booking/{id} returns guest PII without authentication.",
+    impactOneline:
+      "Route-scoped Restful Booker /booking scans should confirm unauthenticated booking enumeration and guest PII disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restfulBookerBookingUnauthAccessRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restful Booker is intentional API training — gate booking reads behind authentication.",
+      steps: [
+        "Require authentication for all booking read endpoints.",
+        "Enforce per-booking authorization checks.",
+        "Rate-limit unauthenticated enumeration attempts."
+      ]
+    },
+    fixPrompt:
+      "Our Restful Booker /booking route scan confirms unauthenticated booking reads. Show BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "restful-booker-booking-create-unauth-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Restful Booker unauthenticated booking creation oracle",
+    description:
+      "POST /booking on restful-booker.herokuapp.com creates new reservations without authentication — unauthenticated write on the demo booking API.",
+    impactOneline:
+      "Anonymous callers can create bookings, enabling spam reservations and integrity abuse on the Restful Booker playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restfulBookerBookingCreateUnauthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restful Booker is intentional API training — require authentication for booking creation in production.",
+      steps: [
+        "Require valid session or bearer token before POST /booking.",
+        "Validate booking payloads server-side and rate-limit anonymous writes.",
+        "Monitor for mass booking creation abuse."
+      ]
+    },
+    fixPrompt:
+      "Our Restful Booker scan confirms unauthenticated POST /booking creates reservations. Show write-access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "restful-booker-booking-create-unauth-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Restful Booker /booking unauthenticated creation route live oracle",
+    description:
+      "When scanning /booking on restful-booker.herokuapp.com, POST /booking creates reservations without authentication.",
+    impactOneline:
+      "Route-scoped Restful Booker /booking scans should confirm unauthenticated booking creation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restfulBookerBookingCreateUnauthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restful Booker is intentional API training — gate booking writes behind authentication.",
+      steps: [
+        "Require authentication before accepting POST /booking.",
+        "Validate and sanitize all booking fields server-side.",
+        "Rate-limit anonymous write attempts."
+      ]
+    },
+    fixPrompt:
+      "Our Restful Booker /booking route scan confirms unauthenticated reservation creation. Show write-access control remediation.",
+    version: 1,
+    enabled: true
   }
 ];
