@@ -4091,6 +4091,12 @@ const DEEP_RULES = new Set<string>([
   "sekumartDirectoryXPathRouteLiveOracle",
   "sekumartOpenapiSqliLiveOracle",
   "sekumartOpenapiSqliRouteLiveOracle",
+  "sekumartTrackBlindSqliLiveOracle",
+  "sekumartTrackBlindSqliRouteLiveOracle",
+  "sekumartCatalogOrderBySqliLiveOracle",
+  "sekumartCatalogOrderBySqliRouteLiveOracle",
+  "sekumartMembersNosqlLiveOracle",
+  "sekumartMembersNosqlRouteLiveOracle",
   "clientSideBreakTheFlaskEvidence",
   "clientSideFlaskVulnappEvidence",
   "clientSideFlaskVulnappStoredXssEvidence",
@@ -9338,7 +9344,14 @@ function brokencrystalsJwtApiSeeds(pageUrl: string): string[] {
 function sekumartApiSeeds(pageUrl: string): string[] {
   if (!/sekumart\.sekuripy\.hr/i.test(pageUrl)) return [];
   const pageOrigin = new URL(pageUrl).origin;
-  const paths = ["/openapi.json", "/product.php?id=1", "/search.php?q=test"];
+  const paths = [
+    "/openapi.json",
+    "/product.php?id=1",
+    "/search.php?q=test",
+    "/track.php?order=SK-1001",
+    "/members.php?user=ada",
+    "/catalog.php?sort=id"
+  ];
   const out = new Set<string>();
   for (const p of paths) {
     try {

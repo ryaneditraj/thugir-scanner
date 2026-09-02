@@ -60059,6 +60059,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sekumart-track-blind-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart track.php blind SQLi live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/track.php?order=SK-1001' AND '1'='1 returns shipped while AND '1'='2 returns no match — the SekuriPy sqlmap playground boolean blind SQLi training oracle.",
+    impactOneline:
+      "Unsanitized order parameter in track.php enables boolean blind SQL injection on the SekuMart order tracking page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartTrackBlindSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — use parameterized queries for order lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements for order tracking.",
+        "Validate order codes against an allowlist format before querying.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart track.php concatenates order into SQL enabling blind SQLi. Show parameterized query remediation for PHP order tracking.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-track-blind-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /track.php route blind SQLi live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/track.php, GET ?order= boolean blind payloads differentiate shipped vs no-match — route-specific sqlmap blind training oracle.",
+    impactOneline:
+      "Route scans on /track.php should confirm live boolean blind SQL injection for sqlmap --technique=B practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartTrackBlindSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — use parameterized queries.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Validate order code format before querying.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /track.php route has boolean blind SQLi on the order parameter. Show prepared statement remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-catalog-orderby-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart catalog.php ORDER BY SQLi live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/catalog.php?sort=id' triggers mysqli_sql_exception in catalog_low.php — the SekuriPy sqlmap playground ORDER BY SQLi training oracle.",
+    impactOneline:
+      "Unsanitized sort parameter in catalog.php enables ORDER BY clause SQL injection on the SekuMart product catalog.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartCatalogOrderBySqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — whitelist sort columns instead of concatenating ORDER BY.",
+      steps: [
+        "Map sort query values to a fixed allowlist of column names.",
+        "Never concatenate user input into ORDER BY clauses.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart catalog.php concatenates sort into ORDER BY causing mysqli errors. Show allowlist-based sort remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-catalog-orderby-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /catalog.php route ORDER BY SQLi live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/catalog.php, GET ?sort=id' returns mysqli_sql_exception — route-specific ORDER BY SQLi sqlmap training oracle.",
+    impactOneline:
+      "Route scans on /catalog.php should confirm live ORDER BY SQL injection for sqlmap --technique=E practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartCatalogOrderBySqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — whitelist sort columns.",
+      steps: [
+        "Map sort values to a fixed allowlist of column names.",
+        "Never concatenate user input into ORDER BY.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /catalog.php route has ORDER BY SQLi on the sort parameter. Show allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-members-nosql-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart members.php NoSQL injection live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/members.php?user[$ne]=nobody dumps hidden svc-loyalty FLAG{n0sql_0p3rator_1nj3ct10n} — the SekuriPy sqlmap --nosql playground operator injection training oracle.",
+    impactOneline:
+      "Unsanitized user parameter in members.php enables MongoDB-style operator injection dumping loyalty tier records.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartMembersNosqlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — validate input types and reject operator objects.",
+      steps: [
+        "Treat user as a plain string; reject array/object query parameters.",
+        "Use typed query builders that do not accept operator injection.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart members.php accepts MongoDB operators in the user parameter. Show typed query remediation for NoSQL injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-members-nosql-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /members.php route NoSQL injection live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/members.php, GET ?user[$ne]=nobody dumps svc-loyalty FLAG — route-specific sqlmap --nosql training oracle.",
+    impactOneline:
+      "Route scans on /members.php should confirm live NoSQL operator injection for sqlmap --nosql practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartMembersNosqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — reject operator objects in query parameters.",
+      steps: [
+        "Treat user as a plain string; reject array/object parameters.",
+        "Use typed query builders for document store lookups.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /members.php route accepts NoSQL operators in user. Show typed query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pc-parts-store-stored-xss-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
