@@ -91597,11 +91597,11 @@ Client-side Cross-Site Scripting (XSS) /challenges/xss CWE-79 Injecting maliciou
 Client-side Open Redirect /challenges/open-redirect CWE-601 Unvalidated redirects that route users to attacker-controlled URLs
 Auth & API IDOR /challenges/idor CWE-639 Accessing objects by predictable IDs without authorization checks
 Auth & API Cookie Auth Bypass /challenges/admin-console /challenges/cookie-auth client-writable admin cookie
-Auth & API Brute Force /challenges/rate-limiting No rate limiting allows unlimited login attempts
+Auth & API Brute Force /challenges/rate-limiting /challenges/brute-force No rate limiting allows unlimited login attempts
 Auth & API Password Storage /challenges/insecure-passwords /challenges/password-storage CWE-521 plaintext password weak hash storage
-Backend & Config Security Headers /challenges/security-headers CWE-200 Missing CSP X-Frame-Options HSTS
+Backend & Config Security Headers /challenges/security-headers /challenges/missing-headers CWE-200 Missing CSP X-Frame-Options HSTS
 Backend & Config Leaked Secrets /challenges/leaked-config CWE-200 Environment variables and API keys exposed
-Backend & Config Supabase RLS /challenges/supabase-data /challenges/weak-rls /challenges/weak-supabase-rls weak RLS misconfiguration
+Backend & Config Supabase RLS /challenges/supabase-data /challenges/supabase-rls /challenges/weak-rls /challenges/weak-supabase-rls weak RLS misconfiguration
 Legal / Social AI-Assisted Phishing /challenges/ai-phishing Phishing CWE-1021 AI-generated cloned login pages and email spoofing attacks
 Legal / Social Deceptive Privacy Policy /challenges/privacy-policy /challenges/deceptive-privacy Dark Patterns CWE-1021 Burying harmful data-sale and plaintext-storage clauses
 Supply Chain /challenges/supply-chain Supply Chain Attack dependency tampering
@@ -91659,22 +91659,22 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform privacy-policy challenge — deceptive privacy policy buries harmful data-sale and plaintext-storage clauses"
   },
   "api-security": {
-    routeRe: /\/challenges\/(?:api-security|rate-limiting)\b/i,
+    routeRe: /\/challenges\/(?:api-security|rate-limiting|brute-force)\b/i,
     markers: [
       { label: "Auth & API challenge category", re: /Auth\s*&\s*API/i },
       { label: "IDOR CWE-639 training module", re: /IDOR[\s\S]{0,48}CWE-639/i },
       {
         label: "Rate limiting bypass module",
-        re: /No rate limiting allows unlimited login attempts|Brute Force|\/challenges\/rate-limiting/i
+        re: /No rate limiting allows unlimited login attempts|Brute Force|\/challenges\/(?:rate-limiting|brute-force)/i
       },
       { label: "Cookie Auth Bypass challenge", re: /Cookie Auth Bypass|\/challenges\/admin-console/i }
     ],
     note: "AI Security Platform Auth & API challenge hub — IDOR, cookie auth bypass, and brute-force rate limiting modules in the Next.js workshop"
   },
   "rate-limiting": {
-    routeRe: /\/challenges\/rate-limiting\b/i,
+    routeRe: /\/challenges\/(?:rate-limiting|brute-force)\b/i,
     markers: [
-      { label: "Rate limiting challenge route", re: /\/challenges\/rate-limiting/i },
+      { label: "Rate limiting challenge route", re: /\/challenges\/(?:rate-limiting|brute-force)/i },
       {
         label: "Brute Force training module",
         re: /No rate limiting allows unlimited login attempts|Brute Force/i
@@ -91736,11 +91736,11 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform leaked-config/leaked-secrets challenge — environment variables and API keys exposed in client bundles (CWE-200)"
   },
   "supabase-data": {
-    routeRe: /\/challenges\/(?:supabase-data|weak-rls|weak-supabase-rls)\b/i,
+    routeRe: /\/challenges\/(?:supabase-data|supabase-rls|weak-rls|weak-supabase-rls)\b/i,
     markers: [
       {
         label: "Supabase RLS challenge route",
-        re: /\/challenges\/(?:supabase-data|weak-rls|weak-supabase-rls)/i
+        re: /\/challenges\/(?:supabase-data|supabase-rls|weak-rls|weak-supabase-rls)/i
       },
       { label: "Supabase RLS training module", re: /Supabase RLS|weak RLS|Row Level Security/i },
       { label: "Backend & Config challenge category", re: /Backend\s*&\s*Config/i }
@@ -91803,9 +91803,9 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform hacked-npm-packages challenge — malicious postinstall scripts and compromised npm typosquats"
   },
   "security-headers": {
-    routeRe: /\/challenges\/security-headers\b/i,
+    routeRe: /\/challenges\/(?:security-headers|missing-headers)\b/i,
     markers: [
-      { label: "Security Headers challenge route", re: /\/challenges\/security-headers/i },
+      { label: "Security Headers challenge route", re: /\/challenges\/(?:security-headers|missing-headers)/i },
       { label: "Security Headers training module", re: /Security Headers|CSP|X-Frame-Options|HSTS/i },
       { label: "Backend & Config challenge category", re: /Backend\s*&\s*Config/i }
     ],
@@ -92167,7 +92167,7 @@ async function aiSecurityExtractSignInActionId(ctx: RuleContext): Promise<string
 const aiSecurityRateLimitingBruteforceLiveOracle: Rule = async (ctx) => {
   if (!isAiSecurityPlatformHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/challenges\/rate-limiting|\/login\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/challenges\/(?:rate-limiting|brute-force)|\/login\b/i.test(pageUrl)) return NEGATIVE;
 
   const actionId = await aiSecurityExtractSignInActionId(ctx);
   if (!actionId) return NEGATIVE;

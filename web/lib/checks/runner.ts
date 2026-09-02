@@ -13667,7 +13667,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/(?:supabase-data|weak-rls|weak-supabase-rls)\b/i.test(targetInput) &&
+        /\/challenges\/(?:supabase-data|supabase-rls|weak-rls|weak-supabase-rls)\b/i.test(targetInput) &&
         p.slug === "ai-security-supabase-data-route-live-oracle"
       )
         return -3;
@@ -13691,7 +13691,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/security-headers\b/i.test(targetInput) &&
+        /\/challenges\/(?:security-headers|missing-headers)\b/i.test(targetInput) &&
         p.slug === "ai-security-security-headers-route-live-oracle"
       )
         return -3;
@@ -13709,7 +13709,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/rate-limiting\b/i.test(targetInput) &&
+        /\/challenges\/(?:rate-limiting|brute-force)\b/i.test(targetInput) &&
         (p.slug === "ai-security-rate-limiting-bruteforce-live-oracle" ||
           p.slug === "ai-security-rate-limiting-route-live-oracle")
       )
