@@ -15407,6 +15407,12 @@ const burpbountyTomcatCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyTomcatCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/tomcat\/?$/i,
+  burpbountyTomcatCveLiveOracle,
+  "Burp Bounty Lab /cve/tomcat/ route scan — Apache Tomcat and JSESSIONID=../groovy triggers PersistentManagerBase session deserialization — CVE-2020-9484 Tomcat profile oracle"
+);
+
 const burpbountyWpLoginLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/wp/wp-login.php", ctx.origin).toString();
@@ -15461,6 +15467,12 @@ const burpbountyGrafanaCveLiveOracle: Rule = async (ctx) => {
   }
   return NEGATIVE;
 };
+
+const burpbountyGrafanaCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/(?:cve\/)?grafana\/?$/i,
+  burpbountyGrafanaCveLiveOracle,
+  "Burp Bounty Lab Grafana route scan — title Grafana with home dashboard shell — Grafana CVE/profile oracle"
+);
 
 const burpbountyPassiveApiPathLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
@@ -15857,6 +15869,12 @@ const burpbountyN8nSettingsCveLiveOracle: Rule = async (ctx) => {
     }
   };
 };
+
+const burpbountyN8nSettingsCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/n8n\/rest\/settings\b/i,
+  burpbountyN8nSettingsCveLiveOracle,
+  "Burp Bounty Lab /cve/n8n/rest/settings route scan — n8nVersion, releaseChannel, and authenticationMethod JSON — n8n settings CVE profile oracle"
+);
 
 const burpbountyCouchdbAllDbsLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
@@ -109929,8 +109947,10 @@ export const RULES: Record<string, Rule> = {
   burpbountyXmlrpcLiveOracle,
   burpbountySqliUserEnumLiveOracle,
   burpbountyTomcatCveLiveOracle,
+  burpbountyTomcatCveRouteLiveOracle,
   burpbountyWpLoginLiveOracle,
   burpbountyGrafanaCveLiveOracle,
+  burpbountyGrafanaCveRouteLiveOracle,
   burpbountyPassiveApiPathLiveOracle,
   burpbountyDwrInterfaceLiveOracle,
   burpbountyAiGatewayLiveOracle,
@@ -109948,6 +109968,7 @@ export const RULES: Record<string, Rule> = {
   burpbountySolarwindsCveLiveOracle,
   burpbountySvnEntriesLiveOracle,
   burpbountyN8nSettingsCveLiveOracle,
+  burpbountyN8nSettingsCveRouteLiveOracle,
   burpbountyCouchdbAllDbsLiveOracle,
   burpbountyKubernetesApiLiveOracle,
   burpbountyCitrixCveLiveOracle,
