@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-02T03:10:41.479Z",
-  "total": 3082,
-  "uniqueSlugs": 3074,
+  "generatedAt": "2026-09-02T04:24:14.861Z",
+  "total": 3085,
+  "uniqueSlugs": 3077,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3064,
+    "generic": 3067,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2997,
+    "deep": 3000,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 144,
-    "Security misconfiguration": 228,
+    "Security misconfiguration": 230,
     "Broken authentication": 195,
     "Injection": 495,
     "Cross-site scripting": 791,
@@ -43,7 +43,7 @@
     "Command injection": 2,
     "XML external entity injection": 1,
     "API security": 3,
-    "Path traversal": 3,
+    "Path traversal": 4,
     "Denial of service": 7,
     "Prompt injection": 13,
     "Cryptographic failure": 2,
@@ -316,6 +316,7 @@
     "burpbounty-redirect-out-live-oracle",
     "burpbounty-redirect-pp-live-oracle",
     "burpbounty-ruby-cve-live-oracle",
+    "burpbounty-ruby-cve-route-live-oracle",
     "burpbounty-sharefile-cve-live-oracle",
     "burpbounty-solarwinds-cve-live-oracle",
     "burpbounty-solarwinds-cve-route-live-oracle",
@@ -356,6 +357,7 @@
     "burpbounty-wp-config-live-oracle",
     "burpbounty-wp-config-route-live-oracle",
     "burpbounty-wp-lfi-cve-live-oracle",
+    "burpbounty-wp-lfi-cve-route-live-oracle",
     "burpbounty-wp-login-live-oracle",
     "burpbounty-xmlrpc-live-oracle",
     "burpbounty-xss-attribute-live-oracle",
@@ -371,6 +373,7 @@
     "burpbounty-xxe-soap-live-oracle",
     "burpbounty-xxe-upload-live-oracle",
     "burpbounty-zoho-cve-live-oracle",
+    "burpbounty-zoho-cve-route-live-oracle",
     "bypass403-admin-live-oracle",
     "bypass403-admin-route-live-oracle",
     "bypass403-api-admin-live-oracle",
