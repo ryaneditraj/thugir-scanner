@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-02T22:18:30.681Z",
+  "updated_at": "2026-09-02T23:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2960,
-  "total_findings": 32278,
+  "total_sites_scanned": 2968,
+  "total_findings": 32499,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2061,
-  "discovery_findings": 26794,
-  "improvements_shipped": 1289,
-  "last_run": "2026-09-02T22:18:30.681Z",
+  "discovery_urls_added": 2066,
+  "discovery_findings": 26964,
+  "improvements_shipped": 1294,
+  "last_run": "2026-09-02T23:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
+      "probes_run": 596,
       "live_oracles": 36,
       "benchmark_recall": {
         "juice-shop": {
@@ -54,44 +54,40 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 198,
-      "focus": "zen-demo-python injection labs + pwnshop order IDOR + secure-bank-bay SQLi + pwnshop lab-stats + chimera gov records + wrongsecrets-64",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 170,
+      "focus": "pwnshop track/forgot-password/profile + wrongsecrets-66 + fabraix jailbreak-001 + drained secure-bank-bay + ai-security phishing",
+      "improvements_shipped_this_run": 5
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 36 live oracles)",
-      "zen-demo-python.fly.dev/pages/execute: 10 findings — zen-demo-java-execute-route-live-oracle",
-      "zen-demo-python.fly.dev/pages/request: 10 findings — zen-demo-java-request-route-live-oracle",
-      "zen-demo-python.fly.dev/pages/create: 10 findings — zen-demo-java-create-route-live-oracle",
-      "zen-demo-python.fly.dev/pages/read: 10 findings — zen-demo-java-read-path-traversal-live-oracle",
-      "pwnshop.ctfsecurity.com/order/1: 48 findings — pwnshop-order-idor-route-live-oracle (PWN-001)",
-      "secure-bank-bay.vercel.app/login: 11 findings — secure-bank-bay-sqli-login-route-live-oracle",
-      "pwnshop.ctfsecurity.com/lab-stats: 47 findings — pwnshop-lab-stats-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/gov/records: 8 findings — chimera-gov-records-pii-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-64: 19 findings — wrongsecrets-challenge-64-swift-binary-route-live-oracle"
+      "pwnshop.ctfsecurity.com/track/1: 49 findings — pwnshop-track-idor-route-live-oracle (PWN-002)",
+      "pwnshop.ctfsecurity.com/forgot-password: 25 findings — pwnshop-otp-not-invalidated-route-live-oracle (PWN-024)",
+      "pwnshop.ctfsecurity.com/profile: 51 findings — pwnshop-wallet-topup-route-live-oracle (PWN-042)",
+      "wrongsecrets.herokuapp.com/challenge/challenge-66: 19 findings — wrongsecrets-challenge-66-java-obfuscated-route-live-oracle",
+      "playground.fabraix.com/challenges/jailbreak-001: 7 findings — fabraix-jailbreak-001-route-live-oracle",
+      "secure-bank-bay.vercel.app/login: 11 findings — secure-bank-bay-sqli-login-route-live-oracle (re-scan)",
+      "ai-security-platform-iota.vercel.app/challenges/phishing: 8 findings (queue drain)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "zen-demo-java.fly.dev unreachable from cloud agent",
-      "koadt challenges.json: static JSON feed — no per-challenge route oracles",
-      "fabraix biosafety-001 route-specific oracle may need dedicated biosafety-002 backend when API ships"
+      "zen-demo-java.fly.dev unreachable from cloud agent (error on drain)",
+      "fabraix jailbreak-001: session route oracle present but no dedicated guardrail-bypass exploitation oracle",
+      "wrongsecrets-66: route oracle confirms walkthrough; binary obfuscation extraction not testable server-side"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "pwnshop.ctfsecurity.com/profile": 51,
+    "pwnshop.ctfsecurity.com/track/1": 49,
     "pwnshop.ctfsecurity.com/order/1": 48,
     "pwnshop.ctfsecurity.com/lab-stats": 47,
-    "brokencrystals.com/api/ldap": 85,
-    "koadt.github.io/oss-oopssec-store/challenges.json": 25,
+    "pwnshop.ctfsecurity.com/forgot-password": 25,
+    "wrongsecrets.herokuapp.com/challenge/challenge-66": 19,
     "wrongsecrets.herokuapp.com/challenge/challenge-64": 19,
-    "zen-demo-python.fly.dev/pages/execute": 10,
-    "zen-demo-python.fly.dev/pages/request": 10,
-    "zen-demo-python.fly.dev/pages/create": 10,
-    "zen-demo-python.fly.dev/pages/read": 10,
     "secure-bank-bay.vercel.app/login": 11,
+    "playground.fabraix.com/challenges/jailbreak-001": 7,
     "chimera.atlascrew.dev/api/v1/gov/records": 8,
-    "crapi.apisec.ai/identity/api/v2/admin/videos/1": 12,
-    "brokencrystals.com/graphql": 21
+    "brokencrystals.com/api/ldap": 85
   }
 }
