@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-02T20:06:34.643Z",
-  "total": 3119,
-  "uniqueSlugs": 3111,
+  "generatedAt": "2026-09-02T21:31:44.781Z",
+  "total": 3121,
+  "uniqueSlugs": 3113,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3101,
+    "generic": 3103,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3034,
+    "deep": 3036,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 147,
-    "Security misconfiguration": 235,
+    "Security misconfiguration": 237,
     "Broken authentication": 199,
     "Injection": 504,
     "Cross-site scripting": 792,
@@ -151,6 +151,8 @@
     "brokencrystals-google-metadata-ssrf-live-oracle",
     "brokencrystals-goto-open-redirect-live-oracle",
     "brokencrystals-goto-open-redirect-route-live-oracle",
+    "brokencrystals-graphql-introspection-live-oracle",
+    "brokencrystals-graphql-route-live-oracle",
     "brokencrystals-hidden-upload-live-oracle",
     "brokencrystals-hidden-upload-route-live-oracle",
     "brokencrystals-home-dom-xss-live-oracle",

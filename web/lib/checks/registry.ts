@@ -95578,7 +95578,7 @@ const brokencrystalsLdapInjectionLiveOracle: Rule = async (ctx) => {
 const brokencrystalsLdapRouteLiveOracle: Rule = async (ctx) => {
   if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/users\/ldap/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/api\/(?:users\/)?ldap\b/i.test(pageUrl)) return NEGATIVE;
   const result = await brokencrystalsLdapInjectionLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -95587,7 +95587,57 @@ const brokencrystalsLdapRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "Broken Crystals /api/users/ldap route scan — GET with attacker-controlled query returns LDAP directory entries or naming errors — LDAP injection oracle"
+      note: "Broken Crystals /api/ldap or /api/users/ldap route scan — GET with attacker-controlled query returns LDAP directory entries or naming errors — LDAP injection oracle"
+    }
+  };
+};
+
+const brokencrystalsGraphqlIntrospectionLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/graphql", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: JSON.stringify({ query: "{ __schema { types { name } } }" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: { data?: { __schema?: { types?: { name?: string }[] } } } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as {
+      data?: { __schema?: { types?: { name?: string }[] } };
+    };
+  } catch {
+    return NEGATIVE;
+  }
+  const typeNames = parsed?.data?.__schema?.types?.map((t) => t.name).filter(Boolean) ?? [];
+  if (!typeNames.includes("Query") || !typeNames.includes("Mutation")) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: probeUrl,
+      typeCount: typeNames.length,
+      snippet: doc.body.slice(0, 240).trim(),
+      note: "Broken Crystals POST /graphql with introspection query returns Query/Mutation schema types — GraphQL introspection oracle"
+    }
+  };
+};
+
+const brokencrystalsGraphqlRouteLiveOracle: Rule = async (ctx) => {
+  if (!/brokencrystals\.com/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/graphql\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await brokencrystalsGraphqlIntrospectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Broken Crystals /graphql route scan — POST introspection query returns Query/Mutation schema types — GraphQL introspection route oracle"
     }
   };
 };
@@ -105639,7 +105689,13 @@ const istEduDeserializationLabRouteLiveOracle: Rule = async (ctx) => {
 const istEduGraphqlLabRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/labs\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/)?graphql\/?$/i.test(pathname)) return NEGATIVE;
   const injection = await probeIstEduLabRouteInjection(ctx);
   if (injection?.fired) {
     return {
@@ -109633,6 +109689,8 @@ export const RULES: Record<string, Rule> = {
   brokencrystalsGoogleMetadataSsrfLiveOracle,
   brokencrystalsLdapInjectionLiveOracle,
   brokencrystalsLdapRouteLiveOracle,
+  brokencrystalsGraphqlIntrospectionLiveOracle,
+  brokencrystalsGraphqlRouteLiveOracle,
   brokencrystalsHiddenUploadLiveOracle,
   brokencrystalsHiddenUploadRouteLiveOracle,
   brokencrystalsApiUploadParseXxeLiveOracle,

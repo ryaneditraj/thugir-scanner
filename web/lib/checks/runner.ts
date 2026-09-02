@@ -3523,6 +3523,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsGetMetadataRouteLiveOracle",
   "brokencrystalsLdapInjectionLiveOracle",
   "brokencrystalsLdapRouteLiveOracle",
+  "brokencrystalsGraphqlIntrospectionLiveOracle",
+  "brokencrystalsGraphqlRouteLiveOracle",
   "brokencrystalsHiddenUploadLiveOracle",
   "brokencrystalsHiddenUploadRouteLiveOracle",
   "brokencrystalsApiUploadParseXxeLiveOracle",
@@ -13608,7 +13610,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ist-edu-bd\.vercel\.app/i.test(origin) &&
-        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|csrf|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|open-redirect|ssti|graphql|deserialization|file-upload)|files|newsletter)\b/i.test(
+        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|csrf|api\/comments|(?:labs\/)?(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|open-redirect|ssti|graphql|deserialization|file-upload|jwt)|files|newsletter)\b/i.test(
           targetInput
         ) &&
         p.slug.startsWith("ist-edu-")
@@ -15225,8 +15227,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
-        /\/api\/users\/ldap\b/i.test(targetInput) &&
+        /\/api\/(?:users\/)?ldap\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-ldap")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/graphql\/?$/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-graphql")
       )
         return -3;
       if (
