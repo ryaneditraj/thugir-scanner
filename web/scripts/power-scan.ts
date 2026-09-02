@@ -44,16 +44,21 @@ const BENCHMARK_RETRY_DELAY_MS = 12000;
 const BENCHMARK_FINAL_RETRY_DELAY_MS = 25000;
 /** demo.owasp-juice.shop/rest/recycles/* and similar routes can hang >25min on deep crawl. */
 const DISCOVERY_SCAN_TIMEOUT_MS = Number(process.env.POWER_SCAN_TIMEOUT_MS || "1200000");
+/** Heroku cold-start on juice-shop.herokuapp.com can stall >10min — fail fast to staging fallback. */
+const BENCHMARK_SCAN_TIMEOUT_MS = Number(
+  process.env.BENCHMARK_SCAN_TIMEOUT_MS || process.env.POWER_SCAN_BENCHMARK_TIMEOUT_MS || "600000"
+);
 
 async function runDeepScanWithTimeout(
   url: string,
-  opts?: { maxScripts?: number }
+  opts?: { maxScripts?: number; timeoutMs?: number }
 ): Promise<Awaited<ReturnType<typeof runDeepScan>>> {
+  const timeoutMs = opts?.timeoutMs ?? DISCOVERY_SCAN_TIMEOUT_MS;
   let timer: ReturnType<typeof setTimeout> | undefined;
   const timeout = new Promise<never>((_, reject) => {
     timer = setTimeout(
-      () => reject(new Error(`scan timeout after ${DISCOVERY_SCAN_TIMEOUT_MS}ms`)),
-      DISCOVERY_SCAN_TIMEOUT_MS
+      () => reject(new Error(`scan timeout after ${timeoutMs}ms`)),
+      timeoutMs
     );
   });
   try {
@@ -216,7 +221,10 @@ async function scanOne(
   };
 
   try {
-    const deep = await runDeepScanWithTimeout(entry.url, { maxScripts: 24 });
+    const deep = await runDeepScanWithTimeout(entry.url, {
+      maxScripts: 24,
+      timeoutMs: kind === "benchmark" ? BENCHMARK_SCAN_TIMEOUT_MS : DISCOVERY_SCAN_TIMEOUT_MS
+    });
     let findings = [...deep.findings];
 
     // AI deep probe (requires API keys in env — skips gracefully if disabled)

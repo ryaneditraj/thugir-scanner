@@ -1850,6 +1850,7 @@ const DEEP_RULES = new Set<string>([
   "chimeraDiagnosticsPingRceRouteLiveOracle",
   "chimeraDiagnosticsWebhookSsrfLiveOracle",
   "chimeraDiagnosticsWebhookSsrfRouteLiveOracle",
+  "chimeraAdminDiagnosticsHubRouteLiveOracle",
   "chimeraAdminAttackXxeLiveOracle",
   "chimeraAdminAttackXxeRouteLiveOracle",
   "chimeraAdminExecuteRceRouteLiveOracle",
@@ -1911,6 +1912,7 @@ const DEEP_RULES = new Set<string>([
   "fauxbankLoansNegativeAmountLiveOracle",
   "fauxbankAdminPanelLiveOracle",
   "fauxbankAdminRouteLiveOracle",
+  "fauxbankLabRouteLiveOracle",
   "webPentestPlaygroundFileUploadLiveOracle",
   "webPentestPlaygroundFileUploadRouteLiveOracle",
   "webPentestPlaygroundStoredXssLiveOracle",
@@ -2170,6 +2172,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideFabraixChallengeEvidence",
   "clientSideAgenticAiCtfEvidence",
   "clientSideVulnerableChatbotDemoEvidence",
+  "vulnerableChatbotPromptInjectionLiveOracle",
+  "vulnerableChatbotPromptInjectionRouteLiveOracle",
   "clientSideWrongSecretsEvidence",
   "clientSideWrongSecretsChallengeEvidence",
   "clientSideMaestroAgenticAiEvidence",
@@ -3978,7 +3982,21 @@ const DEEP_RULES = new Set<string>([
   "burpbountyCrlfSetRouteLiveOracle",
   "burpbountyRceEvalRouteLiveOracle",
   "burpbountyAiCompletionsRouteLiveOracle",
+  "burpbountyAiGatewayRouteLiveOracle",
+  "burpbountyBackupListingRouteLiveOracle",
+  "burpbountyCouchdbAllDbsRouteLiveOracle",
+  "burpbountyCiscoCveRouteLiveOracle",
+  "burpbountyTraefikCveLiveOracle",
+  "burpbountyTraefikCveRouteLiveOracle",
+  "burpbountySolarwindsCveLiveOracle",
+  "burpbountySolarwindsCveRouteLiveOracle",
+  "burpbountySvnEntriesLiveOracle",
+  "burpbountySvnEntriesRouteLiveOracle",
+  "burpbountyActuatorHeapdumpLiveOracle",
+  "burpbountyActuatorHeapdumpRouteLiveOracle",
   "burpbountyFortiosRemoteLoginRouteLiveOracle",
+  "burpbountyWpConfigLiveOracle",
+  "burpbountyWpConfigRouteLiveOracle",
   "burpbountyWeblogicConsoleRouteLiveOracle",
   "burpbountyGraphqlQueryRouteLiveOracle",
   "burpbountySqliUserRouteLiveOracle",
@@ -3991,8 +4009,10 @@ const DEEP_RULES = new Set<string>([
   "burpbountyXmlrpcLiveOracle",
   "burpbountySqliUserEnumLiveOracle",
   "burpbountyTomcatCveLiveOracle",
+  "burpbountyTomcatCveRouteLiveOracle",
   "burpbountyWpLoginLiveOracle",
   "burpbountyGrafanaCveLiveOracle",
+  "burpbountyGrafanaCveRouteLiveOracle",
   "burpbountyPassiveApiPathLiveOracle",
   "burpbountyDwrInterfaceLiveOracle",
   "burpbountyAiGatewayLiveOracle",
@@ -4004,26 +4024,49 @@ const DEEP_RULES = new Set<string>([
   "burpbountySpringCloudConfigLiveOracle",
   "burpbountyText4shellLiveOracle",
   "burpbountyPulseCveLiveOracle",
+  "burpbountyPulseCveRouteLiveOracle",
   "burpbountyCiscoCveLiveOracle",
+  "burpbountyCiscoCveRouteLiveOracle",
+  "burpbountyTraefikCveLiveOracle",
+  "burpbountyTraefikCveRouteLiveOracle",
+  "burpbountySolarwindsCveLiveOracle",
+  "burpbountySolarwindsCveRouteLiveOracle",
+  "burpbountySvnEntriesLiveOracle",
+  "burpbountySvnEntriesRouteLiveOracle",
   "burpbountyN8nSettingsCveLiveOracle",
+  "burpbountyN8nSettingsCveRouteLiveOracle",
   "burpbountyCouchdbAllDbsLiveOracle",
+  "burpbountyCouchdbAllDbsRouteLiveOracle",
+  "burpbountyActuatorHeapdumpLiveOracle",
+  "burpbountyActuatorHeapdumpRouteLiveOracle",
   "burpbountyKubernetesApiLiveOracle",
   "burpbountyCitrixCveLiveOracle",
+  "burpbountyCitrixCveRouteLiveOracle",
   "burpbountyCrowdCveLiveOracle",
+  "burpbountyCrowdCveRouteLiveOracle",
   "burpbountyFirebaseCveLiveOracle",
+  "burpbountyFirebaseCveRouteLiveOracle",
   "burpbountyNetsweeperCveLiveOracle",
+  "burpbountyNetsweeperCveRouteLiveOracle",
   "burpbountyZohoCveLiveOracle",
+  "burpbountyZohoCveRouteLiveOracle",
   "burpbountyRubyCveLiveOracle",
+  "burpbountyRubyCveRouteLiveOracle",
   "burpbountyFortiosRemoteLoginLiveOracle",
   "burpbountyWeblogicConsoleLiveOracle",
   "burpbountyGraphqlQueryLiveOracle",
   "burpbountyWpLfiCveLiveOracle",
+  "burpbountyWpLfiCveRouteLiveOracle",
   "burpbountySharefileCveLiveOracle",
+  "burpbountySharefileCveRouteLiveOracle",
   "burpbountyArticaCveLiveOracle",
+  "burpbountyArticaCveRouteLiveOracle",
   "burpbountyMagmiCveLiveOracle",
+  "burpbountyMagmiCveRouteLiveOracle",
   "burpbountyF5BashCveLiveOracle",
   "burpbountyF5BashCveRouteLiveOracle",
   "burpbountyNetsweeperSystemstatusCveLiveOracle",
+  "burpbountyNetsweeperSystemstatusCveRouteLiveOracle",
   "clientSideBugbaitEvidence",
   "clientSideArtemisKitEvidence",
   "clientSideRailsgoatEvidence",
@@ -4094,7 +4137,18 @@ const DEEP_RULES = new Set<string>([
   "fabraixPlaygroundSessionRouteLiveOracle",
   "fabraixDataExfil002RouteLiveOracle",
   "fabraixDataExfil001RouteLiveOracle",
+  "fabraixAccessCode001RouteLiveOracle",
+  "fabraixGuardrailBypassRouteLiveOracle",
   "fabraixIndirectPromptInjectionRouteLiveOracle",
+  "fabraixPromptInjection001RouteLiveOracle",
+  "fabraixBiosafety001RouteLiveOracle",
+  "fabraixToolPoisoning001RouteLiveOracle",
+  "fabraixToolPoisoning002RouteLiveOracle",
+  "fabraixJailbreak001RouteLiveOracle",
+  "fabraixJwtVerifier001RouteLiveOracle",
+  "fabraixChallengesHubRouteLiveOracle",
+  "fabraixPlaygroundHomeRouteLiveOracle",
+  "fabraixPlaygroundLandingRouteLiveOracle",
   "promptShieldPromptInjectionDefenseLiveOracle",
   "promptShieldPromptInjectionDefenseRouteLiveOracle",
   "ratdoStoredXssLiveOracle",
@@ -12590,6 +12644,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/diagnostics\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-diagnostics-hub")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/admin\/attack\/xxe\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-admin-attack-xxe")
       )
@@ -12610,6 +12670,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/admin\/files\/read\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-admin-files-read")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/users\/export\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-users-export")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/loyalty\/transactions\/export\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-loyalty-transactions-export")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/ecommerce\/products\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-ecommerce-products-search-xss")
       )
         return -3;
       if (
@@ -12996,6 +13074,17 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
         /\/ftp\b/i.test(targetInput) &&
         p.slug.startsWith("juice-shop-forgotten-backup")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        p.slug.startsWith("juice-shop-resend-key")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/infrastructure\/terraform\//i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-iac-terraform")
       )
         return -3;
       if (
@@ -14882,6 +14971,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /vulnerable-chatbot-demo\.vercel\.app/i.test(origin) &&
+        /\/api\/chat\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnerable-chatbot-prompt-injection")
+      )
+        return -3;
+      if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/fetch\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-api-fetch")
@@ -15093,6 +15188,22 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/playground\.fabraix\.com/i.test(origin) && p.slug.startsWith("fabraix-playground")) return -3;
       if (
         /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/?$/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-challenges-hub")
+      )
+        return -4;
+      if (
+        /(?:playground\.fabraix\.com\/?$|fabraix\.com\/playground)/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-playground-home")
+      )
+        return -4;
+      if (
+        /fabraix\.com\/playground/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-playground-landing")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
         /\/challenges\/data-exfil-002/i.test(targetInput) &&
         p.slug.startsWith("fabraix-data-exfil")
       )
@@ -15107,6 +15218,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /playground\.fabraix\.com/i.test(origin) &&
         /\/challenges\/indirect-prompt-injection-001/i.test(targetInput) &&
         p.slug.startsWith("fabraix-indirect")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/prompt-injection-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-prompt-injection-001")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/biosafety-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-biosafety")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/tool-poisoning-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-tool-poisoning-001")
       )
         return -4;
       if (/prompt-shield1\.vercel\.app/i.test(origin) && p.slug.startsWith("prompt-shield")) return -4;
@@ -15671,8 +15800,29 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/burpbountylab\.com/i.test(origin) && /\/xxe\/parse\b/i.test(targetInput) && p.slug === "burpbounty-xxe-parse-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/crlf\/set\b/i.test(targetInput) && p.slug === "burpbounty-crlf-set-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/rce\/eval\b/i.test(targetInput) && p.slug === "burpbounty-rce-eval-route-live-oracle") return -3;
-      if (/burpbountylab\.com/i.test(origin) && /\/ai\/v1\/completions\b/i.test(targetInput) && p.slug === "burpbounty-ai-completions-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/ai\/(?:v1\/completions|chat\/completions)\b/i.test(targetInput) && p.slug === "burpbounty-ai-completions-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/ai\/gateway\b/i.test(targetInput) && p.slug === "burpbounty-ai-gateway-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/backup\/?$/i.test(targetInput) && p.slug === "burpbounty-backup-listing-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/couchdb\/_all_dbs\b/i.test(targetInput) && p.slug === "burpbounty-couchdb-all-dbs-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/cisco\/?$/i.test(targetInput) && p.slug === "burpbounty-cisco-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/traefik\/?$/i.test(targetInput) && p.slug === "burpbounty-traefik-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/tomcat\/?$/i.test(targetInput) && p.slug === "burpbounty-tomcat-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?grafana\/?$/i.test(targetInput) && p.slug === "burpbounty-grafana-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/n8n\/rest\/settings\b/i.test(targetInput) && p.slug === "burpbounty-n8n-settings-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/solarwinds\/?$/i.test(targetInput) && p.slug === "burpbounty-solarwinds-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/pulse\/?$/i.test(targetInput) && p.slug === "burpbounty-pulse-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/citrix\/?$/i.test(targetInput) && p.slug === "burpbounty-citrix-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/crowd\/?$/i.test(targetInput) && p.slug === "burpbounty-crowd-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/zoho\/?$/i.test(targetInput) && p.slug === "burpbounty-zoho-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/ruby\/?$/i.test(targetInput) && p.slug === "burpbounty-ruby-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/wp\/local-file-inclusion\b/i.test(targetInput) && p.slug === "burpbounty-wp-lfi-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/citrix\/sharefile\b/i.test(targetInput) && p.slug === "burpbounty-sharefile-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/firebase(?:\/\.json)?\/?$/i.test(targetInput) && p.slug === "burpbounty-firebase-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/netsweeper\/?$/i.test(targetInput) && p.slug === "burpbounty-netsweeper-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/\.svn\/entries\b/i.test(targetInput) && p.slug === "burpbounty-svn-entries-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/actuator\/heapdump\b/i.test(targetInput) && p.slug.startsWith("burpbounty-actuator-heapdump")) return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?forti(?:os)?(?:\/remote\/login)?\/?$/i.test(targetInput) && p.slug === "burpbounty-fortios-remote-login-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/wp\/wp-config\.php/i.test(targetInput) && p.slug.startsWith("burpbounty-wp-config")) return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?weblogic(?:\/console\/login\/LoginForm\.jsp)?\/?$/i.test(targetInput) && p.slug === "burpbounty-weblogic-console-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/graphql(?:\/query)?\/?$/i.test(targetInput) && p.slug === "burpbounty-graphql-query-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/mgmt\/tm\/util\/bash\b/i.test(targetInput) && p.slug === "burpbounty-f5-bash-cve-route-live-oracle") return -3;
@@ -15845,6 +15995,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/admin\b/i.test(targetInput) &&
         p.slug.startsWith("fauxbank-admin")
+      )
+        return -3;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/lab\/?(?:[#?]|$)/i.test(targetInput) &&
+        p.slug.startsWith("fauxbank-lab")
       )
         return -3;
       if (
