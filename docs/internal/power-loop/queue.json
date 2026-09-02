@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T16:05:00.000Z",
+  "updated_at": "2026-09-02T17:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://web-production-16ec6a.up.railway.app/api/v1/health",
+      "source": "OpenVault Bank — unauthenticated /health leaks database_url + debug flags (openvaultbank.com/cheatsheet #10; web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-production-16ec6a.up.railway.app/api/v1/debug",
+      "source": "OpenVault Bank — /debug endpoint exposes admin hints + BOLA confirmation (CTF@CIT 2026 writeup; web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://openvaultbank.com/api/v1/profile",
+      "source": "OpenVault Bank — PUT /profile privilege escalation via mass assignment (openvaultbank.com/cheatsheet #7)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/metadata",
+      "source": "sampsonc/vulnlab.dev — mock AWS IMDSv1 metadata SSRF lab GET /metadata (ssrf.vulnlab.dev index; web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ssrf.vulnlab.dev/blind",
+      "source": "sampsonc/vulnlab.dev — fully blind SSRF OOB callback lab GET /blind (ssrf.vulnlab.dev README; web search 17 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/seller/preview",
       "source": "ctfsec/pwnshop — PWN-040 SSTI→RCE GET /seller/preview?template= (vulnerabilities index; web search 16 UTC)",
