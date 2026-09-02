@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T10:14:03.062Z",
+  "updated_at": "2026-09-02T11:05:40.769Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/brute-force",
+      "source": "ai-security-platform — CWE-307 brute-force / no rate-limiting challenge (14-exercise Next.js+Supabase lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supabase-rls",
+      "source": "ai-security-platform — CWE-732 weak Supabase RLS exposing all rows challenge (14-exercise lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/hacked-npm",
+      "source": "ai-security-platform — CWE-1104 hacked npm supply-chain (axios RAT, React RCE) challenge (web search 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/missing-headers",
+      "source": "ai-security-platform — CWE-693 missing CSP/HSTS/X-Frame-Options challenge (14-exercise lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/insecure-passwords",
+      "source": "ai-security-platform — CWE-256 plaintext/MD5 password storage challenge (14-exercise lab)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://restful-booker.herokuapp.com/auth",
       "source": "mwinteringham/restful-booker — POST /auth token oracle; cookie-only auth + weak creds (public API testing playground)",
@@ -10777,5 +10802,6 @@
       "source": "kOaDT/oss-oopssec-store — brute-force no rate-limiting walkthrough with login oracle docs (GitHub Pages)",
       "auth": "public_demo"
     }
-  ]
+  ],
+  "discovery_urls_added": 5
 }
