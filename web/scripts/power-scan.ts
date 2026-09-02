@@ -546,8 +546,14 @@ async function main() {
       ...benchmarkRecall
     };
   }
-  const shipped = loadJson<{ shipped: unknown[] }>(resolve(LOOP, "improvements.json"), { shipped: [] });
-  score.improvements_shipped = shipped.shipped?.length ?? Number(score.improvements_shipped || 0);
+  const shipped = loadJson<{ candidates?: { status: string }[]; shipped?: unknown[] }>(
+    resolve(LOOP, "improvements.json"),
+    { candidates: [] }
+  );
+  score.improvements_shipped =
+    shipped.candidates?.filter((c) => c.status === "shipped").length ??
+    shipped.shipped?.length ??
+    Number(score.improvements_shipped || 0);
   writeFileSync(scorePath, JSON.stringify(score, null, 2));
 
   console.log(JSON.stringify({ ok: true, scanned: ok, findings, limit }));

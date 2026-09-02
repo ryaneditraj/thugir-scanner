@@ -31,6 +31,17 @@ interface PowerResult {
 type PowerRule = (ctx: PowerCtx) => Promise<PowerResult>;
 
 const BYPASS403_HOST_RE = /bypass403\.vercel\.app/i;
+const AI_SECURITY_PLATFORM_HOST_RE = /ai-security-platform-iota\.vercel\.app/i;
+
+/** AI Security Platform login-gated challenge shells — Next.js redirect pages embed coincidental '49' in chunks. */
+function aiSecurityPlatformLoginGatedReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!AI_SECURITY_PLATFORM_HOST_RE.test(pageUrl)) return false;
+  return /\/challenges\/(?:brute-force|supabase-rls|missing-headers|rate-limiting|supabase-data|security-headers)\b/i.test(
+    pageUrl
+  );
+}
+
 const WSL_HOST_RE = /web-security-learning-labs\.vercel\.app/i;
 const SECRESEARCHLAB_HOST_RE = /secresearchlab\.web\.app/i;
 const SUPPORT_RELIABILITY_LAB_HOST_RE = /support-reliability-lab\.vercel\.app/i;
@@ -348,6 +359,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (ctfChallange3ReflexionSuppressed(ctx)) return NEGATIVE;
   if (the0xPwnLabXssReflexionSuppressed(ctx)) return NEGATIVE;
   if (povzaydXssLabsReflexionSuppressed(ctx)) return NEGATIVE;
+  if (aiSecurityPlatformLoginGatedReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 
