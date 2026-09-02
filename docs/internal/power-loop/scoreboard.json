@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-02T03:09:37.394Z",
+  "updated_at": "2026-09-02T03:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2801,
-  "total_findings": 28410,
+  "total_sites_scanned": 2793,
+  "total_findings": 28295,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1996,
-  "discovery_findings": 23861,
+  "discovery_urls_added": 1986,
+  "discovery_findings": 23747,
   "improvements_shipped": 1170,
-  "last_run": "2026-09-02T03:09:37.394Z",
+  "last_run": "2026-09-02T03:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
     "benchmark": {
@@ -33,7 +33,7 @@
       "gap": [],
       "pages_crawled": 6,
       "probes_run": 596,
-      "live_oracles": 39,
+      "live_oracles": 38,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,47 +49,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 39 live oracles); secret-resend + juice-shop-resend-key-live-oracle + juice-shop-iac-terraform-tls-key-live-oracle present"
+      "note": "Stable 6/6 first-pass recall (52 findings, 38 live oracles); secret-resend + juice-shop-resend-key-live-oracle present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 114,
-      "focus": "Chimera admin-users-export + loyalty-transactions-export + ecommerce-search-xss + ssrf.vulnlab webhook/gopher + drained wrongsecrets 35/36/37",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 312,
+      "focus": "BurpBountyLab pulse/citrix/crowd CVE route oracles — live oracles existed but route wrappers absent",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles)",
-      "chimera.atlascrew.dev/api/v1/admin/users/export: 8 findings (+chimera-admin-users-export-route-live-oracle)",
-      "chimera.atlascrew.dev/api/loyalty/transactions/export: 8 findings (+chimera-loyalty-transactions-export-route-live-oracle)",
-      "chimera.atlascrew.dev/api/v1/ecommerce/products/search: 8 findings (+chimera-ecommerce-products-search-xss-route-live-oracle)",
-      "ssrf.vulnlab.dev/webhook: 17 findings (+ssrf-vulnlab-webhook-route-live-oracle — previously absent)",
-      "ssrf.vulnlab.dev/gopher: 16 findings (+ssrf-vulnlab-gopher-route-live-oracle — previously absent)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-35: 19 findings (+wrongsecrets-challenge-35-documentation-route-live-oracle)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-36: 19 findings (+wrongsecrets-challenge-36-advanced-c-route-live-oracle)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-37: 19 findings (+wrongsecrets-challenge-37-cicd-route-live-oracle)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 38 live oracles)",
+      "burpbountylab.com/cve/pulse/: 104 findings (+burpbounty-pulse-cve-route-live-oracle — previously absent on route scan)",
+      "burpbountylab.com/cve/citrix/: 104 findings (+burpbounty-citrix-cve-route-live-oracle — previously absent on route scan)",
+      "burpbountylab.com/cve/crowd/: 104 findings (+burpbounty-crowd-cve-route-live-oracle — previously absent on route scan)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "scoreboard.json had merge conflicts — resolved before discovery scan",
-      "ssrf.vulnlab webhook/gopher route oracles now confirmed — prior gap closed this run"
+      "benchmark 6/6 stable — no category misses",
+      "BurpBountyLab pulse/citrix/crowd route oracles now confirmed — prior gap closed this run"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
-    "chimera.atlascrew.dev/api/v1/admin/users/export": 8,
-    "chimera.atlascrew.dev/api/loyalty/transactions/export": 8,
-    "chimera.atlascrew.dev/api/v1/ecommerce/products/search": 8,
-    "ssrf.vulnlab.dev/webhook": 17,
-    "ssrf.vulnlab.dev/gopher": 16,
-    "wrongsecrets.herokuapp.com/challenge/challenge-35": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-36": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-37": 19,
+    "burpbountylab.com/cve/pulse/": 104,
+    "burpbountylab.com/cve/citrix/": 104,
+    "burpbountylab.com/cve/crowd/": 104,
     "burpbountylab.com/cve/traefik/": 104,
+    "burpbountylab.com/cve/solarwinds/": 104,
+    "burpbountylab.com/.svn/entries": 103,
     "pwnshop.ctfsecurity.com/apply-coupon": 48,
+    "wrongsecrets.herokuapp.com/challenge/challenge-41": 19,
     "brokencrystals.com/api/products/latest": 86,
     "duck-store.escape.tech/api/v1/users/": 39,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "juice-shop-staging.herokuapp.com": 52
   }
 }

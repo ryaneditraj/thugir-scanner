@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-02T02:16:01.940Z",
-  "total": 3079,
-  "uniqueSlugs": 3071,
+  "generatedAt": "2026-09-02T03:10:41.479Z",
+  "total": 3082,
+  "uniqueSlugs": 3074,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3061,
+    "generic": 3064,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 2994,
+    "deep": 2997,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 144,
-    "Security misconfiguration": 225,
+    "Security misconfiguration": 228,
     "Broken authentication": 195,
     "Injection": 495,
     "Cross-site scripting": 791,
@@ -266,6 +266,7 @@
     "burpbounty-cisco-cve-live-oracle",
     "burpbounty-cisco-cve-route-live-oracle",
     "burpbounty-citrix-cve-live-oracle",
+    "burpbounty-citrix-cve-route-live-oracle",
     "burpbounty-collab-forgot-live-oracle",
     "burpbounty-cors-live-oracle",
     "burpbounty-couchdb-all-dbs-live-oracle",
@@ -273,6 +274,7 @@
     "burpbounty-crlf-set-live-oracle",
     "burpbounty-crlf-set-route-live-oracle",
     "burpbounty-crowd-cve-live-oracle",
+    "burpbounty-crowd-cve-route-live-oracle",
     "burpbounty-dom-xss-live-oracle",
     "burpbounty-drupal-user-disclosure-live-oracle",
     "burpbounty-dwr-interface-live-oracle",
@@ -299,6 +301,7 @@
     "burpbounty-pt-read-live-oracle",
     "burpbounty-pt-readwin-live-oracle",
     "burpbounty-pulse-cve-live-oracle",
+    "burpbounty-pulse-cve-route-live-oracle",
     "burpbounty-rce-echo-live-oracle",
     "burpbounty-rce-eval-live-oracle",
     "burpbounty-rce-eval-route-live-oracle",
