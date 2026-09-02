@@ -7829,6 +7829,24 @@
       "slug": "chimera-gov-records-pii-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/v1/gov/records?q=test — api-reference documents Public records search with citizen PII; chimera.atlascrew.dev/api/v1/gov/records findings 7→8 (+chimera-gov-records-pii-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-challenges-json-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges.json returns version=1 totalChallenges=36 with challenge slugs/walkthrough metadata; parse uses home.body not merged crawl corpus; koadt.github.io/oss-oopssec-store/challenges.json findings 25→26 (+oopssec-challenges-json-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zen-demo-python.fly.dev",
+      "slug": "zen-demo-python-execute-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/execute on zen-demo-python.fly.dev returns /bin/sh not found for invalid-command-here; zen-demo-python.fly.dev/pages/execute findings 10→11 (+zen-demo-python-execute-route-live-oracle); create/request/read routes each 10→11 with python-specific route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-access-code-runner-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for fabraix-access-code/guardrail/jwt-verifier on /challenges/* route scans; playground.fabraix.com/challenges/access-code-001 fabraix-access-code-001-route-live-oracle confirmed; benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
