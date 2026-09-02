@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T12:15:00.000Z",
+  "updated_at": "2026-09-02T13:05:00.955Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/records",
+      "source": "atlas-crew/Chimera — CHM-HEALTH-003 PHI data exposure GET /api/v1/healthcare/records (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/saas/tenants/1/projects",
+      "source": "atlas-crew/Chimera — CHM-SAAS-001 cross-tenant IDOR GET /api/v1/saas/tenants/{tenant_id}/projects (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/energy-utilities/assets/calibration",
+      "source": "atlas-crew/Chimera — CHM-ENERGY-001 SSRF POST /api/v1/energy-utilities/assets/calibration (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/diagnostics/ping",
+      "source": "atlas-crew/Chimera — CHM-ADMIN-001 remote command execution POST /api/v1/diagnostics/ping (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/genai/models/config",
+      "source": "atlas-crew/Chimera — CHM-AI-003 sensitive model config GET /api/v1/genai/models/config (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/banking/accounts",
       "source": "atlas-crew/Chimera — CHM-BANK-002 BOLA/IDOR oracle GET /api/v1/banking/accounts (vulnerability-inventory; web search 2026)",
