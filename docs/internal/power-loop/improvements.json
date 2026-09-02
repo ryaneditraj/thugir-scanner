@@ -7709,6 +7709,24 @@
       "slug": "chimera-insurance-policies-lookup-sqli-parent-route-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Jekyll docs corpus documents GET /api/v1/insurance/policies/lookup blind boolean SQLi; chimera.atlascrew.dev/api/v1/insurance/policies/1 findings 8→9 (+chimera-insurance-policies-lookup-sqli-route-live-oracle alongside BOLA oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-file-upload-short-path-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: istEduFileUploadLabRouteLiveOracle path matcher extended to /file-upload alias (priority queue URL); SPA bundle documents SVG/img stored-XSS upload payloads; ist-edu-bd.vercel.app/file-upload findings 10→11 (+ist-edu-file-upload-lab-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-deserialization-short-path-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: istEduDeserializationLabRouteLiveOracle path matcher extended to /deserialization alias; POST /api/portal SQLi bypass confirms lab entry; ist-edu-bd.vercel.app/deserialization findings 10→11 (+ist-edu-deserialization-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-ssti-short-path-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: istEduSstiLabRouteLiveOracle path matcher extended to /ssti alias; POST /api/portal SQLi bypass confirms SSTI lab entry; ist-edu-bd.vercel.app/ssti findings 10→11 (+ist-edu-ssti-lab-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

@@ -8553,6 +8553,9 @@ function extractIstEduVulnPortalSeeds(html: string, pageUrl: string): string[] {
     "/labs/idor",
     "/labs/open-redirect",
     "/labs/path-traversal",
+    "/file-upload",
+    "/deserialization",
+    "/ssti",
     "/files",
     "/api/comments",
     "/newsletter"

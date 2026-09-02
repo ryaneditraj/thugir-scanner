@@ -105151,7 +105151,13 @@ async function probeIstEduLabRouteInjection(ctx: RuleContext): Promise<RuleResul
 const istEduDeserializationLabRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/labs\/deserialization\b/i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/)?deserialization\/?$/i.test(pathname)) return NEGATIVE;
   const injection = await probeIstEduLabRouteInjection(ctx);
   if (injection?.fired) {
     return {
@@ -105235,7 +105241,13 @@ const istEduGraphqlLabRouteLiveOracle: Rule = async (ctx) => {
 const istEduSstiLabRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/labs\/ssti\b/i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/)?ssti\/?$/i.test(pathname)) return NEGATIVE;
   const injection = await probeIstEduLabRouteInjection(ctx);
   if (injection?.fired) {
     return {
@@ -105297,7 +105309,13 @@ const istEduCommandInjectionLabRouteLiveOracle: Rule = async (ctx) => {
 const istEduFileUploadLabRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/labs\/file-upload\b/i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/(?:labs\/)?file-upload\/?$/i.test(pathname)) return NEGATIVE;
   const bundle = await istEduVulnPortalBundleCorpus(ctx);
   if (!bundle) return NEGATIVE;
   if (

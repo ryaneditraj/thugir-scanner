@@ -27055,7 +27055,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "IST Edu SSTI lab route live oracle",
     description:
-      "When scanning /labs/ssti, POST /api/portal SQLi bypass confirms the server-side template injection training lab on the IST Edu vulnerability portal.",
+      "When scanning /labs/ssti or /ssti, POST /api/portal SQLi bypass confirms the server-side template injection training lab on the IST Edu vulnerability portal.",
     impactOneline:
       "Route-specific confirmation that IST Edu /labs/ssti documents SSTI training scenarios with live injection oracle.",
     detectorKind: "rule_ref",
@@ -50890,7 +50890,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "IST Edu insecure deserialization lab route live oracle",
     description:
-      "When scanning /labs/deserialization on ist-edu-bd.vercel.app, confirm the insecure deserialization training lab route with live IST Edu injection oracle — route-specific deserialization lab oracle.",
+      "When scanning /labs/deserialization or /deserialization on ist-edu-bd.vercel.app, confirm the insecure deserialization training lab route with live IST Edu injection oracle — route-specific deserialization lab oracle.",
     impactOneline:
       "Route-specific confirmation that IST Edu exposes an insecure deserialization training lab entry on the discovery queue.",
     detectorKind: "rule_ref",
@@ -50916,7 +50916,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu file-upload lab route live oracle",
     description:
-      "When scanning /labs/file-upload on ist-edu-bd.vercel.app, the SPA bundle documents SVG/img stored-XSS upload bypass payloads — route-specific unrestricted file upload training oracle.",
+      "When scanning /labs/file-upload or /file-upload on ist-edu-bd.vercel.app, the SPA bundle documents SVG/img stored-XSS upload bypass payloads — route-specific unrestricted file upload training oracle.",
     impactOneline:
       "Route-specific confirmation that IST Edu /labs/file-upload documents dangerous upload bypass payloads in the client bundle.",
     detectorKind: "rule_ref",
