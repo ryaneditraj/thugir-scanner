@@ -27029,7 +27029,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu GraphQL lab route live oracle",
     description:
-      "When scanning /labs/graphql, POST /api/portal SQLi bypass or live GraphQL introspection confirms the GraphQL injection training lab on the IST Edu vulnerability portal.",
+      "When scanning /graphql or /labs/graphql, POST /api/portal SQLi bypass or live GraphQL introspection confirms the GraphQL injection training lab on the IST Edu vulnerability portal.",
     impactOneline:
       "Route-specific confirmation that IST Edu /labs/graphql documents GraphQL or SQL injection training scenarios.",
     detectorKind: "rule_ref",
@@ -27044,7 +27044,7 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our IST Edu /labs/graphql route confirms injection or introspection exposure. Show GraphQL hardening remediation.",
+      "Our IST Edu /graphql or /labs/graphql route confirms injection or introspection exposure. Show GraphQL hardening remediation.",
     version: 1,
     enabled: true
   },
@@ -43074,7 +43074,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Broken Crystals LDAP injection route live oracle",
     description:
-      "When scanning /api/users/ldap, GET with attacker-controlled query returns LDAP directory entries or javax.naming naming errors — route-specific LDAP injection oracle.",
+      "When scanning /api/ldap or /api/users/ldap, GET with attacker-controlled query returns LDAP directory entries or javax.naming naming errors — route-specific LDAP injection oracle.",
     impactOneline:
       "Route-specific confirmation that Broken Crystals passes unsanitized LDAP filter fragments to the directory service.",
     detectorKind: "rule_ref",
@@ -43089,7 +43089,59 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our /api/users/ldap route scan confirms LDAP injection via query parameter. Show LDAP filter sanitization remediation.",
+      "Our /api/ldap or /api/users/ldap route scan confirms LDAP injection via query parameter. Show LDAP filter sanitization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-graphql-introspection-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Broken Crystals GraphQL introspection oracle",
+    description:
+      "POST /graphql with { __schema { types { name } } } returns Query and Mutation schema types without authentication — the Broken Crystals GraphQL introspection oracle.",
+    impactOneline:
+      "Unauthenticated GraphQL introspection exposes the full API schema, queries, and mutations to attackers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsGraphqlIntrospectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production — Broken Crystals is intentional lab software.",
+      steps: [
+        "Disable introspection on public GraphQL endpoints.",
+        "Require authentication before exposing schema metadata.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /graphql endpoint returns full schema introspection without authentication. Show GraphQL introspection hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-graphql-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Broken Crystals GraphQL introspection route live oracle",
+    description:
+      "When scanning /graphql, POST introspection query returns Query/Mutation schema types — route-specific GraphQL introspection oracle on Broken Crystals.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals exposes unauthenticated GraphQL schema introspection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsGraphqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production — Broken Crystals is intentional lab software.",
+      steps: [
+        "Disable introspection on public GraphQL endpoints.",
+        "Require authentication before exposing schema metadata.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql route scan confirms unauthenticated schema introspection. Show GraphQL hardening remediation.",
     version: 1,
     enabled: true
   },
