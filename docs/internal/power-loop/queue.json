@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T03:05:00.000Z",
+  "updated_at": "2026-09-02T04:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
+      "source": "OWASP WrongSecrets — Challenge 57 secrets oracle (Heroku demo README: challenges 54-66 available)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-58",
+      "source": "OWASP WrongSecrets — Challenge 58 JDBC credential leak via error-demo (Heroku demo README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-59",
+      "source": "OWASP WrongSecrets — Challenge 59 secrets oracle (Heroku demo README: challenges 54-66 available)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/wallet/add-funds",
+      "source": "nr-yolo/Vulnshop — race condition wallet add-funds oracle POST /api/v1/wallet/add-funds (README #35)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/products",
+      "source": "Escape duck-store vulnerabilities — negative product price business logic POST /api/v1/admin/products (public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/admin/users/export",
       "source": "atlas-crew/Chimera — CHM-ADMIN-001 unauthenticated bulk user export (vulnerability-inventory; patterns.sql seed)",
