@@ -7793,6 +7793,24 @@
       "slug": "ist-edu-jwt-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal admin' OR '1'='1 bypass confirms JWT training lab on /jwt route; ist-edu-bd.vercel.app/jwt findings 10→11 (+ist-edu-jwt-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-ldap-short-path-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: brokencrystalsLdapRouteLiveOracle path matcher extended to /api/ldap alias; GET /api/users/ldap?query= returns LDAP entries or javax.naming errors; brokencrystals.com/api/ldap findings 63→85 (+brokencrystals-ldap-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:brokencrystals.com",
+      "slug": "brokencrystals-graphql-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql { __schema { types { name } } } returns Query/Mutation types; brokencrystals.com/graphql findings 0→21 (+brokencrystals-graphql-introspection-live-oracle +brokencrystals-graphql-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-graphql-short-path-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: istEduGraphqlLabRouteLiveOracle path matcher extended to /graphql alias; POST /api/portal SQLi bypass confirms GraphQL lab entry; ist-edu-bd.vercel.app/graphql findings 10→11 (+ist-edu-graphql-lab-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
