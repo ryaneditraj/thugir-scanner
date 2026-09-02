@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-artica-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/artica/fw.login.php returns Artica Web Proxy login with apikey field; burpbountylab.com/cve/artica/fw.login.php findings 104 (+burpbounty-artica-cve-route-live-oracle +burpbounty-artica-cve-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-magmi-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/magmi/ returns MAGMI Utils JS with var magmi=; burpbountylab.com/cve/magmi/ findings 104 (+burpbounty-magmi-cve-route-live-oracle +burpbounty-magmi-cve-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-netsweeper-systemstatus-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /webadmin/tools/systemstatus_remote.php returns <h1>System Status</h1>; burpbountylab.com/webadmin/tools/systemstatus_remote.php findings 104 (+burpbounty-netsweeper-systemstatus-cve-route-live-oracle +burpbounty-netsweeper-systemstatus-cve-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
       "slug": "burpbounty-traefik-cve-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/traefik/ returns <h1>Traefik Dashboard</h1>; burpbountylab.com/cve/traefik/ findings 100→104 (+burpbounty-traefik-cve-route-live-oracle +burpbounty-traefik-cve-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"

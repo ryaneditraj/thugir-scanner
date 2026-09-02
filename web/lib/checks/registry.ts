@@ -16324,6 +16324,12 @@ const burpbountyArticaCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyArticaCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/artica\//i,
+  burpbountyArticaCveLiveOracle,
+  "Burp Bounty Lab /cve/artica/ route scan — Artica Web Proxy login with apikey field confirms Artica proxy CVE profile oracle"
+);
+
 const burpbountyMagmiCveLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/cve/magmi/", ctx.origin).toString();
@@ -16342,6 +16348,12 @@ const burpbountyMagmiCveLiveOracle: Rule = async (ctx) => {
     }
   };
 };
+
+const burpbountyMagmiCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/magmi\/?$/i,
+  burpbountyMagmiCveLiveOracle,
+  "Burp Bounty Lab /cve/magmi/ route scan — MAGMI Utils JS confirms Magento MAGMI plugin CVE profile oracle"
+);
 
 const burpbountyF5BashCveLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
@@ -16396,6 +16408,12 @@ const burpbountyNetsweeperSystemstatusCveLiveOracle: Rule = async (ctx) => {
     }
   };
 };
+
+const burpbountyNetsweeperSystemstatusCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/webadmin\/tools\/systemstatus_remote\.php\b/i,
+  burpbountyNetsweeperSystemstatusCveLiveOracle,
+  "Burp Bounty Lab /webadmin/tools/systemstatus_remote.php route scan — System Status heading confirms Netsweeper systemstatus CVE profile oracle"
+);
 
 // --- BugBait vulnerable Node.js training app (bugbait.io) -----------------------------
 const CLIENT_BUGBAIT_RES: { label: string; re: RegExp }[] = [
@@ -109952,9 +109970,12 @@ export const RULES: Record<string, Rule> = {
   burpbountySharefileCveLiveOracle,
   burpbountySharefileCveRouteLiveOracle,
   burpbountyArticaCveLiveOracle,
+  burpbountyArticaCveRouteLiveOracle,
   burpbountyMagmiCveLiveOracle,
+  burpbountyMagmiCveRouteLiveOracle,
   burpbountyF5BashCveLiveOracle,
   burpbountyNetsweeperSystemstatusCveLiveOracle,
+  burpbountyNetsweeperSystemstatusCveRouteLiveOracle,
   clientSideBugbaitEvidence,
   clientSideArtemisKitEvidence,
   clientSideRailsgoatEvidence,

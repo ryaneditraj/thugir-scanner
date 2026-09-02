@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-02T05:07:01.450Z",
-  "total": 3088,
-  "uniqueSlugs": 3080,
+  "generatedAt": "2026-09-02T06:06:22.914Z",
+  "total": 3091,
+  "uniqueSlugs": 3083,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3070,
+    "generic": 3073,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3003,
+    "deep": 3006,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 144,
-    "Security misconfiguration": 231,
+    "Security misconfiguration": 234,
     "Broken authentication": 195,
     "Injection": 495,
     "Cross-site scripting": 791,
@@ -261,6 +261,7 @@
     "burpbounty-ai-metrics-live-oracle",
     "burpbounty-api-docs-live-oracle",
     "burpbounty-artica-cve-live-oracle",
+    "burpbounty-artica-cve-route-live-oracle",
     "burpbounty-backup-listing-live-oracle",
     "burpbounty-backup-listing-route-live-oracle",
     "burpbounty-cisco-cve-live-oracle",
@@ -291,10 +292,12 @@
     "burpbounty-graphql-query-route-live-oracle",
     "burpbounty-kubernetes-api-live-oracle",
     "burpbounty-magmi-cve-live-oracle",
+    "burpbounty-magmi-cve-route-live-oracle",
     "burpbounty-n8n-settings-cve-live-oracle",
     "burpbounty-netsweeper-cve-live-oracle",
     "burpbounty-netsweeper-cve-route-live-oracle",
     "burpbounty-netsweeper-systemstatus-cve-live-oracle",
+    "burpbounty-netsweeper-systemstatus-cve-route-live-oracle",
     "burpbounty-passive-api-path-live-oracle",
     "burpbounty-passive-secrets-live-oracle",
     "burpbounty-phpinfo-live-oracle",
