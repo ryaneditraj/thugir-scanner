@@ -12785,6 +12785,24 @@ const fabraixPromptInjection001RouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const fabraixBiosafety001RouteLiveOracle: Rule = async (ctx) => {
+  if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenges\/biosafety-001/i.test(pageUrl)) return NEGATIVE;
+  const probe = await probeFabraixPlaygroundSession(ctx, "biosafety-001");
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      ...probe,
+      challengeRoute: "biosafety-001",
+      scannedUrl: pageUrl,
+      note: "Fabraix /challenges/biosafety-001 route scan — The Biosafety Officer challenge (Wren + release_restricted_protocol Tier-4 archive oracle) creates unauthenticated agent sessions via biosafety-001 backend"
+    }
+  };
+};
+
 const fabraixToolPoisoning001RouteLiveOracle: Rule = async (ctx) => {
   if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -110137,6 +110155,7 @@ export const RULES: Record<string, Rule> = {
   fabraixGuardrailBypassRouteLiveOracle,
   fabraixIndirectPromptInjectionRouteLiveOracle,
   fabraixPromptInjection001RouteLiveOracle,
+  fabraixBiosafety001RouteLiveOracle,
   fabraixToolPoisoning001RouteLiveOracle,
   fabraixToolPoisoning002RouteLiveOracle,
   fabraixJailbreak001RouteLiveOracle,

@@ -4141,6 +4141,7 @@ const DEEP_RULES = new Set<string>([
   "fabraixGuardrailBypassRouteLiveOracle",
   "fabraixIndirectPromptInjectionRouteLiveOracle",
   "fabraixPromptInjection001RouteLiveOracle",
+  "fabraixBiosafety001RouteLiveOracle",
   "fabraixToolPoisoning001RouteLiveOracle",
   "fabraixToolPoisoning002RouteLiveOracle",
   "fabraixJailbreak001RouteLiveOracle",
@@ -15223,6 +15224,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /playground\.fabraix\.com/i.test(origin) &&
         /\/challenges\/prompt-injection-001/i.test(targetInput) &&
         p.slug.startsWith("fabraix-prompt-injection-001")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/biosafety-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-biosafety")
       )
         return -4;
       if (
