@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T11:05:40.769Z",
+  "updated_at": "2026-09-02T12:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/accounts",
+      "source": "atlas-crew/Chimera — CHM-BANK-002 BOLA/IDOR oracle GET /api/v1/banking/accounts (vulnerability-inventory; web search 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/admin/attack/xxe",
+      "source": "atlas-crew/Chimera — CHM-ADMIN-003 XXE attack lab POST /api/v1/admin/attack/xxe (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-65",
+      "source": "OWASP WrongSecrets — Challenge 65 plain Java CLI JAR binary oracle (Heroku demo README: challenges 54-66)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/xss",
+      "source": "ai-security-platform — CWE-79 reflected/stored XSS challenge (14-exercise Next.js+Supabase lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/injection/",
+      "source": "UCU OWASP Top 10 CTF 2025 — /injection/ SQLi + command injection challenge (web search 2026)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/brute-force",
       "source": "ai-security-platform — CWE-307 brute-force / no rate-limiting challenge (14-exercise Next.js+Supabase lab)",
