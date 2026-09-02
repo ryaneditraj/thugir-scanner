@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T01:06:00.000Z",
+  "updated_at": "2026-09-02T02:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "http://burpbountylab.com/cve/traefik/",
+      "source": "BurpBountyLab — Traefik CVE path disclosure oracle (queued; route oracle absent prior runs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/cve/solarwinds/",
+      "source": "BurpBountyLab — SolarWinds CVE lab path oracle (queued; route oracle absent prior runs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://burpbountylab.com/.svn/entries",
+      "source": "BurpBountyLab — SVN metadata exposure oracle GET /.svn/entries (queued; not drained)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/apply-coupon",
+      "source": "ctfsec/pwnshop — coupon category-restriction bypass oracle POST /apply-coupon (PWN-016; Show HN 2025 lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vwad.owasp.org/app/voice-goat/",
+      "source": "OWASP VWAD — redcaller/voice-goat voice-agent LLM attack lab (Show HN 2026)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/api/v1/users/",
       "source": "Escape duck-store vulnerabilities — user enumeration GET /api/v1/users/ (public demo)",
