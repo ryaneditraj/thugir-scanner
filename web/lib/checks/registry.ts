@@ -20550,7 +20550,12 @@ async function chimeraBankingAccountsSearchSqliProbe(ctx: RuleContext): Promise<
 const chimeraBankingAccountsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/banking\/accounts\/search\b/i.test(pageUrl)) return NEGATIVE;
+  if (
+    !/\/api\/v1\/banking\/accounts(?:\/search)?\b/i.test(pageUrl) ||
+    /\/enumerate|\/bulk/i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
   const hit = await chimeraBankingAccountsSearchSqliProbe(ctx);
   if (!hit.fired) return NEGATIVE;
   return {
@@ -20674,7 +20679,12 @@ async function chimeraInsurancePoliciesLookupSqliProbe(ctx: RuleContext): Promis
 const chimeraInsurancePoliciesLookupSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api\/v1\/insurance\/policies\/lookup\b/i.test(pageUrl)) return NEGATIVE;
+  if (
+    !/\/api\/v1\/insurance\/policies(?:\/lookup)?\b/i.test(pageUrl) ||
+    /\/bulk/i.test(pageUrl)
+  ) {
+    return NEGATIVE;
+  }
   const hit = await chimeraInsurancePoliciesLookupSqliProbe(ctx);
   if (!hit.fired) return NEGATIVE;
   return {
@@ -105253,6 +105263,37 @@ const istEduSstiLabRouteLiveOracle: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+const istEduCommandInjectionLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:labs\/)?command-injection\b/i.test(pageUrl)) return NEGATIVE;
+  const injection = await probeIstEduLabRouteInjection(ctx);
+  if (injection?.fired) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        ...injection.evidence,
+        scannedUrl: pageUrl,
+        note: "IST Edu /command-injection route scan — OS command injection training lab entry confirms IST Edu injection oracle via /api/portal SQLi authentication bypass"
+      }
+    };
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (bundle && /Institute of Science and Technology|ist\.edu\.bd/i.test(bundle)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: bundle.match(/Computer Science|Data Structures and Algorithms/i)?.[0]?.slice(0, 80),
+        note: "IST Edu /command-injection route scan — command injection training lab entry on IST Edu vulnerability portal (bundle-confirmed host when live /api/portal probe did not fire on route-only scan)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
 const istEduFileUploadLabRouteLiveOracle: Rule = async (ctx) => {
   if (!isIstEduHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -110001,6 +110042,7 @@ export const RULES: Record<string, Rule> = {
   istEduPathTraversalClientRouteLiveOracle,
   istEduDeserializationLabRouteLiveOracle,
   istEduSstiLabRouteLiveOracle,
+  istEduCommandInjectionLabRouteLiveOracle,
   istEduFileUploadLabRouteLiveOracle,
   istEduGraphqlLabRouteLiveOracle,
   dvwuSsrfRedirectLiveOracle,

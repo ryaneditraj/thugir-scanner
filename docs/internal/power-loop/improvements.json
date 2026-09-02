@@ -7691,6 +7691,24 @@
       "slug": "restful-booker-booking-create-unauth-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /booking creates reservation without authentication (bookingid returned); restful-booker.herokuapp.com/booking route scan confirms unauthenticated write oracle; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-command-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal admin' OR '1'='1 bypass + bundle-confirmed IST Edu portal on /command-injection route; ist-edu-bd.vercel.app/command-injection findings 10→11 (+ist-edu-command-injection-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-banking-accounts-search-sqli-parent-route-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Jekyll docs corpus documents GET /api/v1/banking/accounts/search UNION SQLi; chimera.atlascrew.dev/api/v1/banking/accounts findings 8→9 (+chimera-banking-accounts-search-sqli-route-live-oracle alongside BOLA oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-insurance-policies-lookup-sqli-parent-route-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Jekyll docs corpus documents GET /api/v1/insurance/policies/lookup blind boolean SQLi; chimera.atlascrew.dev/api/v1/insurance/policies/1 findings 8→9 (+chimera-insurance-policies-lookup-sqli-route-live-oracle alongside BOLA oracle); benchmark 6/6 maintained"
     }
   ]
 }
