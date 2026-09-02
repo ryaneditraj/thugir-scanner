@@ -58759,6 +58759,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-firebase-cve-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/firebase/ route live oracle",
+    description:
+      "When scanning /cve/firebase/, GET .json returns user records and config.debug=true — route-specific Firebase realtime database CVE profile oracle.",
+    impactOneline:
+      "Route-specific Firebase oracle confirms unauthenticated user data disclosure when scanning Burp Bounty Lab Firebase CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyFirebaseCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose Firebase realtime database JSON without authentication on public networks.",
+      steps: [
+        "Require authentication for all Firebase database reads and writes.",
+        "Disable debug mode in production Firebase configurations.",
+        "Isolate Burp Bounty Lab Firebase CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/firebase/ route scan confirms user email and debug config disclosure. Show Firebase realtime DB hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-netsweeper-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -58781,6 +58807,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/netsweeper/ endpoint exposes a Netsweeper WebAdmin fingerprint. Show Netsweeper hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-netsweeper-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/netsweeper/ route live oracle",
+    description:
+      "When scanning /cve/netsweeper/, GET confirms Netsweeper WebAdmin heading — route-specific Netsweeper web filter CVE profile oracle.",
+    impactOneline:
+      "Route-specific Netsweeper oracle confirms WebAdmin fingerprint when scanning Burp Bounty Lab Netsweeper CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyNetsweeperCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Netsweeper appliances and restrict WebAdmin to trusted networks.",
+      steps: [
+        "Apply Netsweeper security advisories for WebAdmin CVEs.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/netsweeper/ route scan confirms a Netsweeper WebAdmin fingerprint. Show Netsweeper hardening for route-specific scans.",
     version: 1,
     enabled: true
   },
@@ -59015,6 +59067,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /citrix/sharefile/download endpoint reads win.ini via path=../../../windows/win.ini. Show ShareFile path-traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-sharefile-cve-route-live-oracle",
+    platform: "generic",
+    category: "Path traversal",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /citrix/sharefile route live oracle",
+    description:
+      "When scanning /citrix/sharefile/, GET download?path=../../../windows/win.ini returns win.ini contents — route-specific Citrix ShareFile path-traversal CVE profile oracle.",
+    impactOneline:
+      "Route-specific ShareFile oracle confirms arbitrary file read when scanning Burp Bounty Lab ShareFile CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySharefileCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Citrix ShareFile and validate path parameters before serving files.",
+      steps: [
+        "Apply Citrix ShareFile security advisories for path-traversal CVEs.",
+        "Canonicalize and reject download paths containing ../ traversal sequences.",
+        "Isolate Burp Bounty Lab ShareFile routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /citrix/sharefile route scan confirms win.ini disclosure via traversal. Show ShareFile path-traversal remediation for route-specific scans.",
     version: 1,
     enabled: true
   },

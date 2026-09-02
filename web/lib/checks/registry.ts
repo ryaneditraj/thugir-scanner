@@ -16286,6 +16286,24 @@ const burpbountySharefileCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountySharefileCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/citrix\/sharefile\b/i,
+  burpbountySharefileCveLiveOracle,
+  "Burp Bounty Lab /citrix/sharefile route scan — path=../../../windows/win.ini returns win.ini contents — Citrix ShareFile path-traversal CVE profile oracle"
+);
+
+const burpbountyFirebaseCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/firebase(?:\/\.json)?\/?$/i,
+  burpbountyFirebaseCveLiveOracle,
+  "Burp Bounty Lab /cve/firebase/ route scan — .json returns users with admin email and config.debug=true — Firebase realtime DB CVE profile oracle"
+);
+
+const burpbountyNetsweeperCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/netsweeper\/?$/i,
+  burpbountyNetsweeperCveLiveOracle,
+  "Burp Bounty Lab /cve/netsweeper/ route scan — Netsweeper WebAdmin heading confirms Netsweeper CVE profile oracle"
+);
+
 const burpbountyArticaCveLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/cve/artica/fw.login.php", ctx.origin).toString();
@@ -109919,7 +109937,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyCrowdCveLiveOracle,
   burpbountyCrowdCveRouteLiveOracle,
   burpbountyFirebaseCveLiveOracle,
+  burpbountyFirebaseCveRouteLiveOracle,
   burpbountyNetsweeperCveLiveOracle,
+  burpbountyNetsweeperCveRouteLiveOracle,
   burpbountyZohoCveLiveOracle,
   burpbountyZohoCveRouteLiveOracle,
   burpbountyRubyCveLiveOracle,
@@ -109930,6 +109950,7 @@ export const RULES: Record<string, Rule> = {
   burpbountyWpLfiCveLiveOracle,
   burpbountyWpLfiCveRouteLiveOracle,
   burpbountySharefileCveLiveOracle,
+  burpbountySharefileCveRouteLiveOracle,
   burpbountyArticaCveLiveOracle,
   burpbountyMagmiCveLiveOracle,
   burpbountyF5BashCveLiveOracle,
