@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-brute-force-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/brute-force returns HTTP 307 Location /login?next=%2Fchallenges%2Fbrute-force; routeRe alias maps brute-force→rate-limiting; ai-security-platform-iota.vercel.app/challenges/brute-force findings 7→6 (+ai-security-rate-limiting-route-live-oracle +ai-security-rate-limiting-bruteforce-live-oracle +ai-security-api-security-route-live-oracle, -generic hub); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-supabase-rls-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/supabase-rls returns HTTP 307 Location /login?next=%2Fchallenges%2Fsupabase-rls; routeRe alias maps supabase-rls→supabase-data; ai-security-platform-iota.vercel.app/challenges/supabase-rls findings 8→4 (+ai-security-supabase-data-route-live-oracle, -reflexion-escalated-ssti false positive); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-missing-headers-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges/missing-headers returns HTTP 307 Location /login?next=%2Fchallenges%2Fmissing-headers; routeRe alias maps missing-headers→security-headers; ai-security-platform-iota.vercel.app/challenges/missing-headers findings 4→4 (+ai-security-security-headers-route-live-oracle, -reflexion-escalated-ssti false positive); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:sekumart.sekuripy.hr",
       "slug": "sekumart-track-blind-sqli-route-live-oracle",
       "status": "shipped",

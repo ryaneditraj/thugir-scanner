@@ -39408,7 +39408,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "AI Security Platform supabase-data challenge route live oracle",
     description:
-      "When scanning /challenges/supabase-data or /challenges/weak-supabase-rls, the platform catalog documents Supabase Row Level Security bypass exposing data without authentication — route-specific RLS training oracle.",
+      "When scanning /challenges/supabase-data, /challenges/supabase-rls, or /challenges/weak-supabase-rls, the platform catalog documents Supabase Row Level Security bypass exposing data without authentication — route-specific RLS training oracle.",
     impactOneline:
       "Route-specific oracle confirms Supabase RLS training module without relying on shared AI Security Platform hub fingerprinting.",
     detectorKind: "rule_ref",
@@ -39423,7 +39423,7 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our /challenges/supabase-data or /challenges/weak-supabase-rls route documents unauthenticated PostgREST access. Show Supabase RLS policy hardening.",
+      "Our /challenges/supabase-data, /challenges/supabase-rls, or /challenges/weak-supabase-rls route documents unauthenticated PostgREST access. Show Supabase RLS policy hardening.",
     version: 1,
     enabled: true
   },
@@ -39512,7 +39512,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "medium",
     title: "AI Security Platform security-headers challenge route live oracle",
     description:
-      "When scanning /challenges/security-headers, the platform catalog documents missing CSP, HSTS, and X-Frame-Options misconfigurations — route-specific security headers oracle.",
+      "When scanning /challenges/security-headers or /challenges/missing-headers, the platform catalog documents missing CSP, HSTS, and X-Frame-Options misconfigurations — route-specific security headers oracle.",
     impactOneline:
       "Route-specific oracle confirms security-headers training module without relying on shared Backend & Config hub fingerprinting.",
     detectorKind: "rule_ref",
@@ -39538,7 +39538,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "AI Security Platform rate-limiting challenge route live oracle",
     description:
-      "When scanning /challenges/rate-limiting, the platform catalog documents missing login throttling that allows unlimited brute-force attempts — route-specific rate-limiting oracle.",
+      "When scanning /challenges/rate-limiting or /challenges/brute-force, the platform catalog documents missing login throttling that allows unlimited brute-force attempts — route-specific rate-limiting oracle.",
     impactOneline:
       "Route-specific oracle confirms rate-limiting training module without relying on shared Auth & API hub fingerprinting.",
     detectorKind: "rule_ref",
