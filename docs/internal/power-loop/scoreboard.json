@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-02T13:08:20.211Z",
+  "updated_at": "2026-09-02T14:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2879,
-  "total_findings": 30417,
+  "total_sites_scanned": 2888,
+  "total_findings": 30954,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2021,
-  "discovery_findings": 25306,
+  "discovery_urls_added": 2026,
+  "discovery_findings": 25792,
   "improvements_shipped": 1266,
-  "last_run": "2026-09-02T13:08:20.211Z",
+  "last_run": "2026-09-02T14:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "13",
+    "hour_utc": "14",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -55,36 +55,37 @@
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 163,
-      "focus": "Chimera healthcare PHI + SaaS cross-tenant IDOR + energy SSRF + diagnostics RCE + genai model config + drained duck-store users/cart/admin",
+      "findings": 486,
+      "focus": "ist-edu-bd file-upload/xxe/jwt + brokencrystals process_numbers MCP eval + ldap injection + drained BurpBountyLab CVE traefik/solarwinds + .svn/entries",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 36 live oracles) first-pass primary Heroku",
-      "chimera.atlascrew.dev/api/v1/healthcare/records: 9 findings — chimera-healthcare-records-phi-exposure-route-live-oracle + second-order-sqli",
-      "chimera.atlascrew.dev/api/v1/saas/tenants/1/projects: 8 findings — chimera-saas-tenants-projects-idor-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/energy-utilities/assets/calibration: 8 findings — chimera-energy-utilities-calibration-ssrf-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/diagnostics/ping: 8 findings — chimera-diagnostics-ping-rce-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/genai/models/config: 8 findings — chimera-genai-models-config-disclosure-route-live-oracle",
-      "duck-store.escape.tech/api/v1/users/: 42 findings — duck-store-users-route-live-oracle + enumeration route oracle",
-      "duck-store.escape.tech/api/v1/cart/add: 40 findings — duck-store-cart-negative-quantity-route-live-oracle",
-      "duck-store.escape.tech/api/v1/admin/users: 40 findings — duck-store-admin-users-bfla-route-live-oracle"
+      "brokencrystals.com/api/process_numbers: 81 findings — brokencrystals-process-numbers-live-oracle + full BC suite",
+      "brokencrystals.com/api/ldap: 63 findings — brokencrystals-ldap-injection-live-oracle + config/SSRF/BFLA oracles",
+      "burpbountylab.com/cve/traefik/: 104 findings — burpbounty-traefik-cve-route-live-oracle + hub fingerprint",
+      "burpbountylab.com/cve/solarwinds/: 104 findings — burpbounty-solarwinds-cve-route-live-oracle",
+      "burpbountylab.com/.svn/entries: 104 findings — burpbounty-svn-entries-route-live-oracle",
+      "ist-edu-bd.vercel.app/file-upload: 10 findings — hub fingerprint (ist-edu-search-sqli-live-oracle); route-specific file-upload oracle absent",
+      "ist-edu-bd.vercel.app/xxe: 10 findings — hub fingerprint; route-specific XXE oracle absent",
+      "ist-edu-bd.vercel.app/jwt: 10 findings — hub fingerprint; route-specific JWT bypass oracle absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable on primary Heroku — no category misses",
-      "Chimera healthcare/saas/energy/diagnostics/genai routes confirmed via new route oracles; generic chimera-patients-search-sqli still fires on every Chimera host"
+      "ist-edu-bd file-upload/xxe/jwt routes: 10-finding hub fingerprint only — route-specific oracles needed for training-lab differentiation",
+      "brokencrystals /api/ldap and /api/process_numbers confirmed via live oracles — MCP eval RCE path validated"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
-    "duck-store.escape.tech/api/v1/users/": 42,
-    "duck-store.escape.tech/api/v1/cart/add": 40,
-    "duck-store.escape.tech/api/v1/admin/users": 40,
-    "chimera.atlascrew.dev/api/v1/healthcare/records": 9,
-    "chimera.atlascrew.dev/api/v1/saas/tenants/1/projects": 8,
-    "chimera.atlascrew.dev/api/v1/energy-utilities/assets/calibration": 8,
-    "chimera.atlascrew.dev/api/v1/diagnostics/ping": 8,
-    "chimera.atlascrew.dev/api/v1/genai/models/config": 8
+    "burpbountylab.com/cve/traefik/": 104,
+    "burpbountylab.com/cve/solarwinds/": 104,
+    "burpbountylab.com/.svn/entries": 104,
+    "brokencrystals.com/api/process_numbers": 81,
+    "brokencrystals.com/api/ldap": 63,
+    "ist-edu-bd.vercel.app/file-upload": 10,
+    "ist-edu-bd.vercel.app/xxe": 10,
+    "ist-edu-bd.vercel.app/jwt": 10
   }
 }
