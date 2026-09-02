@@ -59123,6 +59123,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-artica-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/artica/ route live oracle",
+    description:
+      "When scanning /cve/artica/, GET fw.login.php returns Artica Web Proxy login with apikey field — route-specific Artica proxy CVE profile oracle.",
+    impactOneline:
+      "Route-specific Artica oracle confirms proxy appliance fingerprint when scanning Burp Bounty Lab Artica CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyArticaCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Artica Web Proxy appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Artica security advisories for proxy management CVEs.",
+        "Disable unused management services and enforce strong API keys.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/artica/ route scan confirms an Artica Web Proxy login with apikey field. Show Artica proxy hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-magmi-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -59145,6 +59171,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/magmi/ endpoint exposes MAGMI Utils JS. Show Magento MAGMI plugin hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-magmi-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/magmi/ route live oracle",
+    description:
+      "When scanning /cve/magmi/, GET returns MAGMI Utils JS — route-specific Magento MAGMI plugin CVE profile oracle.",
+    impactOneline:
+      "Route-specific MAGMI oracle confirms Magento plugin fingerprint when scanning Burp Bounty Lab MAGMI CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyMagmiCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch or remove MAGMI Magento plugins and restrict web access to admin utilities.",
+      steps: [
+        "Upgrade MAGMI to patched versions or uninstall unused Magento plugins.",
+        "Block public access to MAGMI web utilities behind authentication.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/magmi/ route scan confirms MAGMI Utils JS exposure. Show Magento MAGMI plugin hardening for route-specific scans.",
     version: 1,
     enabled: true
   },
@@ -59223,6 +59275,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /webadmin/tools/systemstatus_remote.php endpoint exposes Netsweeper system status. Show appliance hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-netsweeper-systemstatus-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /webadmin/tools/systemstatus_remote.php route live oracle",
+    description:
+      "When scanning /webadmin/tools/systemstatus_remote.php, GET confirms System Status heading — route-specific Netsweeper systemstatus CVE profile oracle.",
+    impactOneline:
+      "Route-specific Netsweeper systemstatus oracle confirms webadmin fingerprint when scanning Burp Bounty Lab systemstatus CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyNetsweeperSystemstatusCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Netsweeper appliances and restrict webadmin tools to trusted management networks.",
+      steps: [
+        "Apply Netsweeper security advisories for systemstatus_remote.php CVEs.",
+        "Block public access to /webadmin/tools/ management endpoints.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /webadmin/tools/systemstatus_remote.php route scan confirms Netsweeper system status exposure. Show appliance hardening for route-specific scans.",
     version: 1,
     enabled: true
   },
