@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T20:06:00.000Z",
+  "updated_at": "2026-09-02T21:02:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/gov/benefits/search?q=test",
+      "source": "Chimera CHM-GOV-001 — SQL injection in benefits search GET /gov/benefits/search?q= (atlas-crew/Chimera vuln_registry; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/telecom/subscribers/1/profile",
+      "source": "Chimera CHM-TELCO-001 — BOLA subscriber profile GET /telecom/subscribers/{id}/profile (atlas-crew/Chimera api-reference; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/gov/cases/CASE-001",
+      "source": "Chimera government — IDOR case details GET /gov/cases/{case_id} leaks SSN without auth (atlas-crew/Chimera government routes; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/lab-stats",
+      "source": "ctfsec/pwnshop — JSON lab-stats endpoint visitor counts + dirty state (PWN public demo; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/gov/records?q=test",
+      "source": "Chimera government — public records search GET /gov/records with PII exposure (atlas-crew/Chimera api-reference; web search 21 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crapi.apisec.ai/identity/api/v2/admin/videos/1",
       "source": "OWASP crAPI APIsec hosted — BFLA privilege-tier path substitution DELETE /admin/videos/{id} vs /user/videos/{id} (ASTF TRACEABILITY.md; web search 20 UTC)",
