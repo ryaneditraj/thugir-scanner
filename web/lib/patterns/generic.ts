@@ -27101,6 +27101,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ist-edu-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "IST Edu XXE route live oracle",
+    description:
+      "When scanning /xxe on ist-edu-bd.vercel.app, GET /api/notices?file= path traversal or POST /api/portal SQLi bypass confirms the XML external entity training lab on the IST Edu vulnerability portal.",
+    impactOneline:
+      "Route-specific confirmation that IST Edu /xxe documents XXE or file-read training scenarios with live injection oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduXxeLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity processing in XML parsers — IST Edu is intentional training software.",
+      steps: [
+        "Disable DTD and external entity resolution in all XML parsers.",
+        "Use JSON or other safe formats instead of XML where possible.",
+        "Run IST Edu labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our IST Edu /xxe route confirms XML external entity or file-read training. Show XXE-safe parser configuration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-jwt-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "IST Edu JWT route live oracle",
+    description:
+      "When scanning /jwt on ist-edu-bd.vercel.app, POST /api/portal SQLi bypass confirms the JWT algorithm-confusion training lab on the IST Edu vulnerability portal.",
+    impactOneline:
+      "Route-specific confirmation that IST Edu /jwt documents JWT weak-verification training scenarios with live injection oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduJwtLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject JWT alg:none and enforce HMAC/RSA signature verification — IST Edu is intentional training software.",
+      steps: [
+        "Use a standards-compliant JWT library that rejects the none algorithm.",
+        "Pin expected signing algorithms and validate issuer/audience claims.",
+        "Run IST Edu labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our IST Edu /jwt route confirms JWT algorithm-confusion training. Show JWT verification hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-hidden-admin-manager-route-live-oracle",
     platform: "generic",
     category: "Broken access control",

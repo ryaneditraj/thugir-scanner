@@ -7727,6 +7727,19 @@
       "slug": "ist-edu-ssti-short-path-alias",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: istEduSstiLabRouteLiveOracle path matcher extended to /ssti alias; POST /api/portal SQLi bypass confirms SSTI lab entry; ist-edu-bd.vercel.app/ssti findings 10→11 (+ist-edu-ssti-lab-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-xxe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/notices?file=../../../etc/passwd returns root:x passwd lines on /xxe route scan; ist-edu-bd.vercel.app/xxe findings 10→11 (+ist-edu-xxe-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-jwt-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/portal admin' OR '1'='1 bypass confirms JWT training lab on /jwt route; ist-edu-bd.vercel.app/jwt findings 10→11 (+ist-edu-jwt-route-live-oracle); benchmark 6/6 maintained"
+    }
     }
   ]
 }

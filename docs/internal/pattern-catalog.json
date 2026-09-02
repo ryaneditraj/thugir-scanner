@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-02T16:16:19.379Z",
-  "total": 3111,
-  "uniqueSlugs": 3103,
+  "generatedAt": "2026-09-02T17:20:33.856Z",
+  "total": 3113,
+  "uniqueSlugs": 3105,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3093,
+    "generic": 3095,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3026,
+    "deep": 3028,
     "continuous": 0
   },
   "byCategory": {
@@ -26,8 +26,8 @@
     "Information exposure": 1,
     "Information disclosure": 145,
     "Security misconfiguration": 235,
-    "Broken authentication": 197,
-    "Injection": 503,
+    "Broken authentication": 198,
+    "Injection": 504,
     "Cross-site scripting": 791,
     "Open redirect": 26,
     "general": 20,
@@ -1947,6 +1947,7 @@
     "ist-edu-files-client-lfi-route-live-oracle",
     "ist-edu-graphql-lab-route-live-oracle",
     "ist-edu-idor-route-live-oracle",
+    "ist-edu-jwt-route-live-oracle",
     "ist-edu-newsletter-crlf-route-live-oracle",
     "ist-edu-notices-lfi-route-live-oracle",
     "ist-edu-open-redirect-route-live-oracle",
@@ -1960,6 +1961,7 @@
     "ist-edu-sqli-route-live-oracle",
     "ist-edu-ssrf-redirect-route-live-oracle",
     "ist-edu-ssti-lab-route-live-oracle",
+    "ist-edu-xxe-route-live-oracle",
     "javaseclab-csrf-vul-live-oracle",
     "javaseclab-csrf-vul-route-live-oracle",
     "javaseclab-druid-basic-json-route-live-oracle",

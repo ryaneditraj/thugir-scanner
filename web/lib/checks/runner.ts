@@ -3097,6 +3097,8 @@ const DEEP_RULES = new Set<string>([
   "istEduSstiLabRouteLiveOracle",
   "istEduCommandInjectionLabRouteLiveOracle",
   "istEduFileUploadLabRouteLiveOracle",
+  "istEduXxeLabRouteLiveOracle",
+  "istEduJwtLabRouteLiveOracle",
   "istEduGraphqlLabRouteLiveOracle",
   "dvwuSsrfRedirectLiveOracle",
   "dvwuSsrfRedirectRouteLiveOracle",
