@@ -7559,6 +7559,24 @@
       "slug": "burpbounty-wp-lfi-cve-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/wp/local-file-inclusion?file=../../../etc/passwd returns root:x:0:0 passwd lines (BurpBountyLab modules/cves.py); burpbountylab.com/cve/wp/local-file-inclusion route scan findings 104 (+burpbounty-wp-lfi-cve-route-live-oracle +burpbounty-wp-lfi-cve-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-sharefile-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /citrix/sharefile/download?path=../../../windows/win.ini returns [fonts]/[extensions] win.ini contents (BurpBountyLab modules/cves.py); burpbountylab.com/citrix/sharefile/ route scan findings 100→104 (+burpbounty-sharefile-cve-route-live-oracle +burpbounty-sharefile-cve-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-firebase-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/firebase/.json returns users with admin email and config.debug=true (BurpBountyLab modules/cves.py); burpbountylab.com/cve/firebase/.json route scan findings 100→105 (+burpbounty-firebase-cve-route-live-oracle +burpbounty-firebase-cve-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-netsweeper-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/netsweeper/ returns <h1>Netsweeper WebAdmin</h1> (BurpBountyLab modules/cves.py); burpbountylab.com/cve/netsweeper/ route scan findings 100→104 (+burpbounty-netsweeper-cve-route-live-oracle +burpbounty-netsweeper-cve-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
