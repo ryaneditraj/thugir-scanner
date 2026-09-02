@@ -39586,6 +39586,218 @@ const htmlCommentCredentialDisclosure: Rule = async (ctx) => {
   return NEGATIVE;
 };
 
+// --- Restful Booker (public API testing playground) live oracles -----------------
+function isRestfulBookerHost(ctx: RuleContext): boolean {
+  try {
+    const host = new URL(ctx.origin).hostname.toLowerCase();
+    if (host.includes("restful-booker")) return true;
+  } catch {
+    /* ignore */
+  }
+  return /restful[\s-]?booker|Restful[\s-]?Booker/i.test(ctx.combined);
+}
+
+async function probeRestfulBookerAuthToken(ctx: RuleContext): Promise<{
+  authUrl: string;
+  token: string;
+  snippet: string;
+} | null> {
+  const authUrl = new URL("/auth", ctx.origin).toString();
+  for (const creds of [
+    { username: "admin", password: "password123" },
+    { username: "admin", password: "password" }
+  ]) {
+    const doc = await ctx.probe.get(authUrl, {
+      method: "POST",
+      body: JSON.stringify(creds),
+      headers: { "Content-Type": "application/json" },
+      maxBytes: 1024,
+      timeoutMs: 15000
+    });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    try {
+      const data = JSON.parse(doc.body) as { token?: string; reason?: string };
+      if (data.token && typeof data.token === "string" && data.token.length >= 8) {
+        return {
+          authUrl,
+          token: data.token.slice(0, 16),
+          snippet: doc.body.slice(0, 120).trim()
+        };
+      }
+    } catch {
+      /* try next credential */
+    }
+  }
+  return null;
+}
+
+async function probeRestfulBookerBookingEnumeration(ctx: RuleContext): Promise<{
+  listUrl: string;
+  bookingCount: number;
+  sampleBookingId: number;
+  piiSnippet: string;
+} | null> {
+  const listUrl = new URL("/booking", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (listDoc.status < 200 || listDoc.status >= 300) return null;
+  let bookings: Array<{ bookingid?: number }>;
+  try {
+    bookings = JSON.parse(listDoc.body) as Array<{ bookingid?: number }>;
+  } catch {
+    return null;
+  }
+  if (!Array.isArray(bookings) || bookings.length < 3) return null;
+  const sampleId = bookings[0]?.bookingid;
+  if (typeof sampleId !== "number" || sampleId < 1) return null;
+  const detailUrl = new URL(`/booking/${sampleId}`, ctx.origin).toString();
+  const detailDoc = await ctx.probe.get(detailUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  if (detailDoc.status < 200 || detailDoc.status >= 300) return null;
+  try {
+    const detail = JSON.parse(detailDoc.body) as {
+      firstname?: string;
+      lastname?: string;
+      totalprice?: number;
+    };
+    if (!detail.firstname || !detail.lastname) return null;
+    return {
+      listUrl,
+      bookingCount: bookings.length,
+      sampleBookingId: sampleId,
+      piiSnippet: detailDoc.body.slice(0, 200).trim()
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function probeRestfulBookerBookingCreateUnauth(ctx: RuleContext): Promise<{
+  createUrl: string;
+  bookingId: number;
+  snippet: string;
+} | null> {
+  const createUrl = new URL("/booking", ctx.origin).toString();
+  const payload = {
+    firstname: "Thugir",
+    lastname: "Probe",
+    totalprice: 1,
+    depositpaid: true,
+    bookingdates: { checkin: "2026-09-01", checkout: "2026-09-02" }
+  };
+  const doc = await ctx.probe.get(createUrl, {
+    method: "POST",
+    body: JSON.stringify(payload),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return null;
+  try {
+    const data = JSON.parse(doc.body) as { bookingid?: number; booking?: { firstname?: string } };
+    const bookingId = data.bookingid ?? (data.booking as { bookingid?: number } | undefined)?.bookingid;
+    if (typeof bookingId !== "number" || bookingId < 1) return null;
+    return {
+      createUrl,
+      bookingId,
+      snippet: doc.body.slice(0, 200).trim()
+    };
+  } catch {
+    return null;
+  }
+}
+
+const restfulBookerAuthWeakCredsLiveOracle: Rule = async (ctx) => {
+  if (!isRestfulBookerHost(ctx)) return NEGATIVE;
+  const probe = await probeRestfulBookerAuthToken(ctx);
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      ...probe,
+      note: "Restful Booker POST /auth returns API token for default admin/password123 credentials — weak credential oracle (broken authentication)"
+    }
+  };
+};
+
+const restfulBookerAuthWeakCredsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isRestfulBookerHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/auth\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await restfulBookerAuthWeakCredsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Restful Booker /auth route scan — POST /auth issues API token for default admin/password123 — weak credential route oracle"
+    }
+  };
+};
+
+const restfulBookerBookingUnauthAccessLiveOracle: Rule = async (ctx) => {
+  if (!isRestfulBookerHost(ctx)) return NEGATIVE;
+  const probe = await probeRestfulBookerBookingEnumeration(ctx);
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      ...probe,
+      note: "Restful Booker GET /booking lists reservations and GET /booking/{id} returns guest PII without authentication — broken access control oracle (BOLA)"
+    }
+  };
+};
+
+const restfulBookerBookingUnauthAccessRouteLiveOracle: Rule = async (ctx) => {
+  if (!isRestfulBookerHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/booking(?:\/\d+)?\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await restfulBookerBookingUnauthAccessLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Restful Booker /booking route scan — unauthenticated booking enumeration and guest PII disclosure — broken access control route oracle"
+    }
+  };
+};
+
+const restfulBookerBookingCreateUnauthLiveOracle: Rule = async (ctx) => {
+  if (!isRestfulBookerHost(ctx)) return NEGATIVE;
+  const probe = await probeRestfulBookerBookingCreateUnauth(ctx);
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      ...probe,
+      note: "Restful Booker POST /booking creates reservations without authentication — unauthenticated write oracle (broken access control)"
+    }
+  };
+};
+
+const restfulBookerBookingCreateUnauthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isRestfulBookerHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/booking\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await restfulBookerBookingCreateUnauthLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Restful Booker /booking route scan — POST /booking creates reservations without authentication — unauthenticated write route oracle"
+    }
+  };
+};
+
 // --- VAmPI (OWASP vulnerable API) live oracles ---------------------------------
 function isVampiHost(ctx: RuleContext): boolean {
   try {
@@ -109809,6 +110021,12 @@ export const RULES: Record<string, Rule> = {
   dvwuXxeLabRouteLiveOracle,
   dvwuFilesClientLfiRouteLiveOracle,
   dvwuPathTraversalClientRouteLiveOracle,
+  restfulBookerAuthWeakCredsLiveOracle,
+  restfulBookerAuthWeakCredsRouteLiveOracle,
+  restfulBookerBookingUnauthAccessLiveOracle,
+  restfulBookerBookingUnauthAccessRouteLiveOracle,
+  restfulBookerBookingCreateUnauthLiveOracle,
+  restfulBookerBookingCreateUnauthRouteLiveOracle,
   vampiAdminProfileUnauthLiveOracle,
   vampiAdminProfileUnauthRouteLiveOracle,
   vampiUsersEnumerationLiveOracle,
