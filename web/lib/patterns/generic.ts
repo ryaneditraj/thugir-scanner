@@ -56030,6 +56030,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "oopssec-challenges-json-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "OopsSec Store challenges.json route live oracle",
+    description:
+      "When scanning /challenges.json on koadt.github.io/oss-oopssec-store, the machine-readable feed exposes totalChallenges, difficulty tiers, and per-challenge slugs with walkthrough metadata — route-specific CTF oracle index.",
+    impactOneline:
+      "OopsSec Store challenges.json discloses the full machine-readable CTF challenge catalog for unauthenticated reconnaissance on training infrastructure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecChallengesJsonRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — gate machine-readable challenge feeds on isolated lab infrastructure.",
+      steps: [
+        "Require authentication before exposing the full CTF challenge JSON feed.",
+        "Run OopsSec Store only on isolated training infrastructure.",
+        "Do not publish walkthrough metadata in public JSON feeds on production-like hosts."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges.json route exposes a machine-readable CTF oracle index. Show route-specific access control for training JSON feeds.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-gandalf-evidence",
     platform: "generic",
     category: "AI security",
@@ -61095,6 +61121,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /pages/read route scan confirms path traversal via /api/read. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-python-execute-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Aikido Zen Python /pages/execute route shell injection oracle",
+    description:
+      "When scanning /pages/execute on zen-demo-python.fly.dev, POST /api/execute spawns userCommand via subprocess and returns /bin/sh not found error — Python-variant route-specific shell injection oracle.",
+    impactOneline:
+      "Route-scoped scans of zen-demo-python /pages/execute confirm shell injection via the /api/execute JSON API on the Python WAF playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoPythonExecuteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — never pass user input to shell in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Use allow-listed command APIs instead of arbitrary shell execution.",
+        "Keep Aikido Zen WAF rules enabled to block obvious injection payloads in production."
+      ]
+    },
+    fixPrompt:
+      "Our zen-demo-python /pages/execute route confirms shell injection via /api/execute. Show route-specific remediation for Python subprocess APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-python-create-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Aikido Zen Python /pages/create route SQLi oracle",
+    description:
+      "When scanning /pages/create on zen-demo-python.fly.dev, POST /api/create with SQLi payload triggers blocked SQL Injection — Python-variant route-specific SQLi oracle.",
+    impactOneline:
+      "Route-scoped scans of zen-demo-python /pages/create confirm SQL injection via the /api/create JSON API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoPythonCreateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — use parameterized queries in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Use prepared statements for all database queries.",
+        "Keep Aikido Zen WAF rules enabled to block SQL injection in production."
+      ]
+    },
+    fixPrompt:
+      "Our zen-demo-python /pages/create route confirms SQL injection via /api/create. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-python-request-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Aikido Zen Python /pages/request route SSRF oracle",
+    description:
+      "When scanning /pages/request on zen-demo-python.fly.dev, POST /api/request with internal URL triggers SSRF block — Python-variant route-specific SSRF oracle.",
+    impactOneline:
+      "Route-scoped scans of zen-demo-python /pages/request confirm SSRF via the /api/request JSON API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoPythonRequestRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — allowlist outbound fetch destinations in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Block SSRF to internal IPs and metadata endpoints.",
+        "Keep Aikido Zen WAF rules enabled to block SSRF in production."
+      ]
+    },
+    fixPrompt:
+      "Our zen-demo-python /pages/request route confirms SSRF via /api/request. Show route-specific URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-python-read-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Aikido Zen Python /pages/read route path traversal oracle",
+    description:
+      "When scanning /pages/read on zen-demo-python.fly.dev, GET /api/read with traversal path triggers blocked Path Traversal — Python-variant route-specific path traversal oracle.",
+    impactOneline:
+      "Route-scoped scans of zen-demo-python /pages/read confirm path traversal via the /api/read endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoPythonReadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — canonicalize and jail file paths in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Resolve paths against a chrooted base directory and reject .. segments.",
+        "Keep Aikido Zen WAF rules enabled to block path traversal in production."
+      ]
+    },
+    fixPrompt:
+      "Our zen-demo-python /pages/read route confirms path traversal via /api/read. Show route-specific path canonicalization remediation.",
     version: 1,
     enabled: true
   },

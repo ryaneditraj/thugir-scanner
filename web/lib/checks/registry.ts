@@ -5926,6 +5926,44 @@ const oopssecStoreHomeRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const oopssecChallengesJsonRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/challenges\.json/i.test(pageUrl)) return NEGATIVE;
+  const raw = ctx.home.body.trim();
+  let parsed: {
+    version?: number;
+    totalChallenges?: number;
+    challenges?: { slug?: string; title?: string; difficulty?: string }[];
+    site?: string;
+  };
+  try {
+    parsed = JSON.parse(raw) as typeof parsed;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!parsed.version || !parsed.totalChallenges || !Array.isArray(parsed.challenges)) return NEGATIVE;
+  if (parsed.challenges.length < 10) return NEGATIVE;
+  const sample = parsed.challenges[0];
+  if (!sample?.slug || !sample?.title) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      totalChallenges: parsed.totalChallenges,
+      challengeCount: parsed.challenges.length,
+      sampleChallenge: sample.slug,
+      snippet: JSON.stringify({
+        version: parsed.version,
+        totalChallenges: parsed.totalChallenges,
+        site: parsed.site
+      }).slice(0, 200),
+      note: "OopsSec Store /challenges.json route scan — machine-readable CTF oracle index with challenge slugs, difficulties, and walkthrough metadata"
+    }
+  };
+};
+
 // --- OopsSec Store race-condition coupon abuse walkthrough (posts/race-condition-coupon-abuse) -
 const CLIENT_OOPSSEC_RACE_CONDITION_RES: { label: string; re: RegExp }[] = [
   {
@@ -12187,6 +12225,78 @@ const zenDemoReadRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Aikido Zen /pages/read route scan — GET /api/read traversal path triggers blocked Path Traversal — route-specific read-file path traversal oracle"
+    }
+  };
+};
+
+function isZenDemoPythonHost(ctx: RuleContext): boolean {
+  return /zen-demo-python\.fly\.dev/i.test(ctx.origin);
+}
+
+const zenDemoPythonExecuteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZenDemoPythonHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/pages\/execute\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeZenDemoExecuteShellInjection(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Aikido Zen Python /pages/execute route scan — POST /api/execute spawns userCommand via subprocess — route-specific shell injection oracle on zen-demo-python.fly.dev"
+    }
+  };
+};
+
+const zenDemoPythonCreateRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZenDemoPythonHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/pages\/create\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeZenDemoCreateSqli(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Aikido Zen Python /pages/create route scan — POST /api/create with SQLi payload triggers blocked SQL Injection — route-specific SQLi oracle on zen-demo-python.fly.dev"
+    }
+  };
+};
+
+const zenDemoPythonRequestRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZenDemoPythonHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/pages\/request\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeZenDemoRequestSsrf(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Aikido Zen Python /pages/request route scan — POST /api/request with internal URL triggers SSRF block — route-specific SSRF oracle on zen-demo-python.fly.dev"
+    }
+  };
+};
+
+const zenDemoPythonReadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZenDemoPythonHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/pages\/read\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeZenDemoReadPathTraversal(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Aikido Zen Python /pages/read route scan — GET /api/read with traversal path triggers blocked Path Traversal — route-specific path traversal oracle on zen-demo-python.fly.dev"
     }
   };
 };
@@ -110884,6 +110994,7 @@ export const RULES: Record<string, Rule> = {
   clientSideOopssecStoreEvidence,
   oopssecRoadmapRouteLiveOracle,
   oopssecStoreHomeRouteLiveOracle,
+  oopssecChallengesJsonRouteLiveOracle,
   clientSideOopssecRaceConditionEvidence,
   clientSideOopssecXffSqliEvidence,
   clientSideOopssecBolaWishlistEvidence,
@@ -111244,6 +111355,10 @@ export const RULES: Record<string, Rule> = {
   zenDemoRequestRouteLiveOracle,
   zenDemoReadPathTraversalLiveOracle,
   zenDemoReadRouteLiveOracle,
+  zenDemoPythonExecuteRouteLiveOracle,
+  zenDemoPythonCreateRouteLiveOracle,
+  zenDemoPythonRequestRouteLiveOracle,
+  zenDemoPythonReadRouteLiveOracle,
   codeBreakingPuzzleRouteLiveOracle,
   codeBreakingEasyRouteLiveOracle,
   codeBreakingMediumRouteLiveOracle,

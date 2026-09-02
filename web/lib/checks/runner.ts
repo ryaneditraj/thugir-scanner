@@ -2437,6 +2437,7 @@ const DEEP_RULES = new Set<string>([
   "oopssecMaliciousFileUploadStoredXssRouteLiveOracle",
   "oopssecRoadmapRouteLiveOracle",
   "oopssecStoreHomeRouteLiveOracle",
+  "oopssecChallengesJsonRouteLiveOracle",
   "clientSideVoidsecShoppingCartEvidence",
   "voidsecShoppingCartRouteLiveOracle",
   "clientSideDvmcpEvidence",
@@ -4147,6 +4148,10 @@ const DEEP_RULES = new Set<string>([
   "zenDemoRequestRouteLiveOracle",
   "zenDemoReadPathTraversalLiveOracle",
   "zenDemoReadRouteLiveOracle",
+  "zenDemoPythonExecuteRouteLiveOracle",
+  "zenDemoPythonCreateRouteLiveOracle",
+  "zenDemoPythonRequestRouteLiveOracle",
+  "zenDemoPythonReadRouteLiveOracle",
   "codeBreakingPuzzleRouteLiveOracle",
   "codeBreakingEasyRouteLiveOracle",
   "codeBreakingMediumRouteLiveOracle",
@@ -13684,6 +13689,30 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /zen-demo-python\.fly\.dev/i.test(origin) &&
+        /\/pages\/execute\b/i.test(targetInput) &&
+        p.slug.startsWith("zen-demo-python-execute")
+      )
+        return -4;
+      if (
+        /zen-demo-python\.fly\.dev/i.test(origin) &&
+        /\/pages\/create\b/i.test(targetInput) &&
+        p.slug.startsWith("zen-demo-python-create")
+      )
+        return -4;
+      if (
+        /zen-demo-python\.fly\.dev/i.test(origin) &&
+        /\/pages\/request\b/i.test(targetInput) &&
+        p.slug.startsWith("zen-demo-python-request")
+      )
+        return -4;
+      if (
+        /zen-demo-python\.fly\.dev/i.test(origin) &&
+        /\/pages\/read\b/i.test(targetInput) &&
+        p.slug.startsWith("zen-demo-python-read")
+      )
+        return -4;
+      if (
         /code-breaking\.fly\.dev/i.test(origin) &&
         /\/easy\/[\w-]+/i.test(targetInput) &&
         p.slug.startsWith("code-breaking-easy")
@@ -15272,6 +15301,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("oopssec-")
       )
         return -3;
+      if (
+        /koadt\.github\.io|oss-oopssec-store/i.test(origin) &&
+        /\/challenges\.json/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-challenges-json")
+      )
+        return -4;
       if (/demo\.aevum\.build/i.test(origin) && p.slug.startsWith("aevum-")) return -3;
       if (/playground\.fabraix\.com/i.test(origin) && p.slug.startsWith("fabraix-playground")) return -3;
       if (
@@ -15306,6 +15341,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /playground\.fabraix\.com/i.test(origin) &&
         /\/challenges\/indirect-prompt-injection-001/i.test(targetInput) &&
         p.slug.startsWith("fabraix-indirect")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/access-code-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-access-code")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/01-guardrail-bypass/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-guardrail")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/jwt-verifier-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-jwt-verifier")
       )
         return -4;
       if (
