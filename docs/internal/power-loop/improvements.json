@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-track-blind-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /track.php?order=SK-1001' AND '1'='1 returns shipped while AND '1'='2 returns no order match (boolean blind SQLi); sekumart.sekuripy.hr/track.php findings 16→20 (+sekumart-track-blind-sqli-live-oracle +sekumart-track-blind-sqli-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-members-nosql-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /members.php?user[$ne]=nobody dumps svc-loyalty FLAG{n0sql_0p3rator_1nj3ct10n}; sekumart.sekuripy.hr/members.php findings 16→20 (+sekumart-members-nosql-live-oracle +sekumart-members-nosql-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sekumart.sekuripy.hr",
+      "slug": "sekumart-catalog-orderby-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /catalog.php?sort=id' triggers mysqli_sql_exception in catalog_low.php (ORDER BY SQLi); sekumart.sekuripy.hr/catalog.php findings 16→20 (+sekumart-catalog-orderby-sqli-live-oracle +sekumart-catalog-orderby-sqli-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:playground.fabraix.com",
       "slug": "fabraix-biosafety-001-route-live-oracle",
       "status": "shipped",

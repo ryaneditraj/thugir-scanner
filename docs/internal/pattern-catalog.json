@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-02T09:21:41.121Z",
-  "total": 3098,
-  "uniqueSlugs": 3090,
+  "generatedAt": "2026-09-02T10:05:13.310Z",
+  "total": 3104,
+  "uniqueSlugs": 3096,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3080,
+    "generic": 3086,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3013,
+    "deep": 3019,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 145,
     "Security misconfiguration": 235,
     "Broken authentication": 195,
-    "Injection": 496,
+    "Injection": 502,
     "Cross-site scripting": 791,
     "Open redirect": 26,
     "general": 20,
@@ -2383,8 +2383,12 @@
     "securebank-blog-messages-xss-route-live-oracle",
     "securebank-blog-transfer-csrf-route-live-oracle",
     "security-question-disclosure",
+    "sekumart-catalog-orderby-sqli-live-oracle",
+    "sekumart-catalog-orderby-sqli-route-live-oracle",
     "sekumart-directory-xpath-live-oracle",
     "sekumart-directory-xpath-route-live-oracle",
+    "sekumart-members-nosql-live-oracle",
+    "sekumart-members-nosql-route-live-oracle",
     "sekumart-openapi-sqli-live-oracle",
     "sekumart-openapi-sqli-route-live-oracle",
     "sekumart-product-sqli-live-oracle",
@@ -2393,6 +2397,8 @@
     "sekumart-search-sqli-route-live-oracle",
     "sekumart-search-xss-live-oracle",
     "sekumart-search-xss-route-live-oracle",
+    "sekumart-track-blind-sqli-live-oracle",
+    "sekumart-track-blind-sqli-route-live-oracle",
     "sensitive-api-password-leakage",
     "sensitive-api-token-leakage",
     "server-side-eval-evidence",
