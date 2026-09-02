@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T21:02:00.000Z",
+  "updated_at": "2026-09-02T22:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://zen-demo-python.fly.dev/pages/execute",
+      "source": "Aikido Zen WAF playground — shell/command injection demo POST /pages/execute (fly.dev Python variant; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-python.fly.dev/pages/request",
+      "source": "Aikido Zen WAF playground — SSRF/outbound request injection demo /pages/request (fly.dev; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-python.fly.dev/pages/create",
+      "source": "Aikido Zen WAF playground — SQLi/file-create injection demo /pages/create (fly.dev; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zen-demo-python.fly.dev/pages/read",
+      "source": "Aikido Zen WAF playground — path traversal / file read injection demo /pages/read (fly.dev; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/order/1",
+      "source": "ctfsec/pwnshop — PWN-001 authenticated order IDOR oracle GET /order/:id (vulnerabilities index; web search 22 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/gov/benefits/search?q=test",
       "source": "Chimera CHM-GOV-001 — SQL injection in benefits search GET /gov/benefits/search?q= (atlas-crew/Chimera vuln_registry; web search 21 UTC)",
