@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T07:05:00.000Z",
+  "updated_at": "2026-09-02T08:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://sekumart.sekuripy.hr/search.php?q=test",
+      "source": "SekuriPy sekumart — sqlmap playground product search string SQLi + reflected XSS (openapi.json /search.php)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sekumart.sekuripy.hr/directory.php",
+      "source": "SekuriPy sekumart — staff directory XPath injection oracle GET /directory.php?q= (openapi.json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sekumart.sekuripy.hr/track.php?order=SK-1001",
+      "source": "SekuriPy sekumart — order tracking blind SQLi oracle GET /track.php?order= (openapi.json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sekumart.sekuripy.hr/members.php?user=ada",
+      "source": "SekuriPy sekumart — loyalty lookup NoSQL operator injection GET /members.php?user= (openapi.json)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sekumart.sekuripy.hr/catalog.php?sort=id",
+      "source": "SekuriPy sekumart — sortable catalog ORDER BY SQLi oracle GET /catalog.php?sort= (openapi.json)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
       "source": "OWASP WrongSecrets — Challenge 63 hardcoded AES encryption key oracle (v1.13.1 README; Heroku demo 54-66)",
