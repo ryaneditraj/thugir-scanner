@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T13:05:00.955Z",
+  "updated_at": "2026-09-02T14:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ist-edu-bd.vercel.app/file-upload",
+      "source": "zahidoverflow/damn-vulnerable-web-university — unrestricted file upload route (Vercel live demo; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/xxe",
+      "source": "zahidoverflow/damn-vulnerable-web-university — XXE document parser route (Vercel live demo; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/jwt",
+      "source": "zahidoverflow/damn-vulnerable-web-university — JWT alg-none / weak-secret bypass route (Vercel live demo; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/process_numbers",
+      "source": "NeuraLegion/brokencrystals — MCP process_numbers eval() RCE oracle (Bright Security MCP exploitation blog 2025)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/ldap",
+      "source": "NeuraLegion/brokencrystals — LDAP injection GET /api/ldap?query= oracle (context7 llms.txt public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/healthcare/records",
       "source": "atlas-crew/Chimera — CHM-HEALTH-003 PHI data exposure GET /api/v1/healthcare/records (vulnerability-inventory)",
@@ -10853,5 +10878,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 5
+  "discovery_urls_added": 10
 }
