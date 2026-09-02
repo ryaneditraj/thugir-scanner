@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T00:06:30.000Z",
+  "updated_at": "2026-09-02T01:06:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/users/",
+      "source": "Escape duck-store vulnerabilities — user enumeration GET /api/v1/users/ (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/cart/add",
+      "source": "Escape duck-store vulnerabilities — negative quantity business logic POST /api/v1/cart/add",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/users",
+      "source": "Escape duck-store vulnerabilities — broken access control GET /api/v1/admin/users",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
+      "source": "Escape duck-store vulnerabilities — 100% discount coupon abuse POST /api/v1/orders/checkout",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/nonexistent?redirect=https://example.com",
+      "source": "Escape duck-store vulnerabilities — open redirect GET /nonexistent?redirect= (public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://brokencrystals.com/api/products/latest",
       "source": "NeuraLegion/brokencrystals — business constraint bypass via limit param (README public demo)",
@@ -10635,6 +10660,31 @@
     {
       "url": "https://chimera.atlascrew.dev/api/v1/genai/knowledge/upload",
       "source": "atlas-crew/Chimera — CHM-AI-004 unrestricted RAG file upload (vulnerability-inventory)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/users/",
+      "source": "Escape duck-store vulnerabilities — user enumeration GET /api/v1/users/ (public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/cart/add",
+      "source": "Escape duck-store vulnerabilities — negative quantity business logic POST /api/v1/cart/add",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/users",
+      "source": "Escape duck-store vulnerabilities — broken access control GET /api/v1/admin/users",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
+      "source": "Escape duck-store vulnerabilities — 100% discount coupon abuse POST /api/v1/orders/checkout",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/nonexistent?redirect=https://example.com",
+      "source": "Escape duck-store vulnerabilities — open redirect GET /nonexistent?redirect= (public demo)",
       "auth": "public_demo"
     }
   ]
