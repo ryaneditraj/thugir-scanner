@@ -43434,11 +43434,16 @@ Broken Function-Level Authorization (RBAC Bypass)
 GET /admin/accounts
 Excessive Data Exposure
 GET /accounts
+SSN last 4 digits and routing numbers returned regardless of token scope
+Broken Object-Level Authorization (BOLA)
+GET /accounts/{id}
+manipulating object IDs without ownership check
 Information Disclosure / Login Enumeration
 POST /auth/token
 Privilege Escalation via Mass Assignment
 PUT /api/v1/profile
 GET /api/v1/admin/users
+every user in the system including hashed passwords
 Broken Object-Level Authorization (BOLA)
 GET /accounts/{id}/transactions
 Security Misconfiguration — Health Endpoint
@@ -43851,6 +43856,127 @@ const openvaultResetRequestRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "openvaultbank.com /api/v1/auth/reset-request route scan — /learn documents password reset token leakage — route-specific sensitive data exposure training oracle"
+    }
+  };
+};
+
+async function openvaultAdminUsersEnumerationProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const corpus = await openvaultDocsCorpus(ctx);
+  const adminUsersOk =
+    /\/api\/v1\/admin\/users|GET\s+\/api\/v1\/admin\/users/i.test(corpus) &&
+    (/hashed password|every user in the system|user roster|emails.*hashed/i.test(corpus) ||
+      /role.*admin.*unlock/i.test(corpus) ||
+      /Privilege Escalation via Mass Assignment/i.test(corpus)) &&
+    (/OpenVault Bank|deliberately vulnerable banking/i.test(corpus));
+  if (!adminUsersOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /every user in the system|hashed password/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/admin/users — admin user roster with emails and hashed passwords after mass-assignment privilege escalation",
+      note: "openvaultbank.com — OpenVault Bank /cheatsheet documents GET /api/v1/admin/users exposing every user's email and hashed password after role escalation — admin user enumeration training oracle"
+    }
+  };
+}
+
+const openvaultAdminUsersRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/users\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await openvaultAdminUsersEnumerationProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "openvaultbank.com /api/v1/admin/users route scan — /cheatsheet documents admin user roster with hashed passwords after mass-assignment escalation — route-specific admin user enumeration training oracle"
+    }
+  };
+};
+
+async function openvaultAccountsExposureProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const corpus = await openvaultDocsCorpus(ctx);
+  const exposureOk =
+    /(?:GET\s+)?\/accounts\b/i.test(corpus) &&
+    (/Excessive Data Exposure/i.test(corpus) ||
+      /SSN last 4|routing numbers|regardless of the token/i.test(corpus) ||
+      /sensitive fields.*returned/i.test(corpus)) &&
+    (/OpenVault Bank|deliberately vulnerable banking/i.test(corpus));
+  if (!exposureOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Excessive Data Exposure|SSN last 4/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet:
+        "GET /accounts — Excessive Data Exposure (SSN last 4 digits and routing numbers returned regardless of token scope)",
+      note: "openvaultbank.com — OpenVault Bank /learn documents excessive data exposure on GET /accounts returning sensitive fields beyond token scope — accounts exposure training oracle"
+    }
+  };
+}
+
+const openvaultAccountsExposureRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  try {
+    const path = new URL(pageUrl).pathname.replace(/\/$/, "");
+    if (!/^\/api\/v1\/accounts$/i.test(path)) return NEGATIVE;
+  } catch {
+    if (!/\/api\/v1\/accounts\/?(?:\?|#|$)/i.test(pageUrl) || /\/accounts\/\d+/i.test(pageUrl)) return NEGATIVE;
+  }
+  const hit = await openvaultAccountsExposureProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "openvaultbank.com /api/v1/accounts route scan — /learn documents excessive data exposure returning SSN and routing fields beyond token scope — route-specific accounts exposure training oracle"
+    }
+  };
+};
+
+async function openvaultAccountsBolaProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const corpus = await openvaultDocsCorpus(ctx);
+  const bolaOk =
+    /\/accounts\/\{id\}|\/accounts\/\d+|GET\s+\/accounts\/\{id\}/i.test(corpus) &&
+    (/Broken Object-Level Authorization|BOLA/i.test(corpus) ||
+      /account belongs to you|manipulating object IDs/i.test(corpus) ||
+      /never checks that the account belongs/i.test(corpus)) &&
+    (/OpenVault Bank|deliberately vulnerable banking/i.test(corpus));
+  if (!bolaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Broken Object-Level Authorization|never checks that the account belongs/i.test(corpus)
+      ? 0.92
+      : 0.88,
+    evidence: {
+      snippet:
+        "GET /accounts/{id} — Broken Object-Level Authorization (authenticated but no ownership check on account ID)",
+      note: "openvaultbank.com — OpenVault Bank /learn documents BOLA via account ID manipulation on GET /accounts/{id} — account BOLA training oracle"
+    }
+  };
+}
+
+const openvaultAccountsBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOpenvaultHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/accounts\/\d+\b/i.test(pageUrl) || /\/transactions\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await openvaultAccountsBolaProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "openvaultbank.com /api/v1/accounts/{id} route scan — /learn documents BOLA via account ID manipulation without ownership validation — route-specific account BOLA training oracle"
     }
   };
 };
@@ -107668,6 +107794,9 @@ export const RULES: Record<string, Rule> = {
   openvaultProfileMassAssignmentRouteLiveOracle,
   openvaultHealthMisconfigRouteLiveOracle,
   openvaultResetRequestRouteLiveOracle,
+  openvaultAdminUsersRouteLiveOracle,
+  openvaultAccountsExposureRouteLiveOracle,
+  openvaultAccountsBolaRouteLiveOracle,
   clientSideWebgoatEvidence,
   clientSideWhoopsPayEvidence,
   whoopsPayTransactionsBolaLiveOracle,
