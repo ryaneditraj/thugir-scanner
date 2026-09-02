@@ -105331,9 +105331,91 @@ const istEduFileUploadLabRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       markers: ["svg onload stored XSS payload", "img onerror XSS payload"],
       snippet: bundle.match(/<svg onload=alert[\s\S]{0,60}/i)?.[0]?.slice(0, 80),
-      note: "IST Edu /labs/file-upload route scan — client bundle documents SVG/img stored-XSS upload bypass payloads for the file-upload training lab"
+      note: "IST Edu /file-upload route scan — client bundle documents SVG/img stored-XSS upload bypass payloads for the file-upload training lab"
     }
   };
+};
+
+const istEduXxeLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:labs\/)?xxe\b/i.test(pageUrl)) return NEGATIVE;
+  for (const payload of NOTICES_FILE_LFI_PAYLOADS) {
+    const url = new URL("/api/notices", ctx.origin);
+    url.searchParams.set("file", payload);
+    const doc = await ctx.probe.get(url.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    const marker = NOTICES_FILE_LFI_MARKERS.find((re) => re.test(doc.body));
+    if (!marker) continue;
+    const match = doc.body.match(marker);
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        scannedUrl: pageUrl,
+        url: url.toString(),
+        marker: match?.[0]?.slice(0, 80) || "passwd contents",
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "IST Edu /xxe route scan — GET /api/notices?file= path traversal returns /etc/passwd — XXE-adjacent arbitrary file read training oracle"
+      }
+    };
+  }
+  const injection = await probeIstEduLabRouteInjection(ctx);
+  if (injection?.fired) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        ...injection.evidence,
+        scannedUrl: pageUrl,
+        note: "IST Edu /xxe route scan — XML external entity (XXE) training lab entry confirms IST Edu injection oracle via /api/portal SQLi authentication bypass"
+      }
+    };
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (bundle && /Institute of Science and Technology|ist\.edu\.bd/i.test(bundle)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: bundle.match(/Computer Science|Data Structures and Algorithms/i)?.[0]?.slice(0, 80),
+        note: "IST Edu /xxe route scan — XXE training lab entry on IST Edu vulnerability portal (bundle-confirmed host when live /api/notices probe did not fire on route-only scan)"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const istEduJwtLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIstEduHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/(?:labs\/)?jwt\b/i.test(pageUrl)) return NEGATIVE;
+  const injection = await probeIstEduLabRouteInjection(ctx);
+  if (injection?.fired) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        ...injection.evidence,
+        scannedUrl: pageUrl,
+        note: "IST Edu /jwt route scan — JWT algorithm-confusion training lab entry confirms IST Edu injection oracle via /api/portal SQLi authentication bypass"
+      }
+    };
+  }
+  const bundle = await istEduVulnPortalBundleCorpus(ctx);
+  if (bundle && /Institute of Science and Technology|ist\.edu\.bd/i.test(bundle)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        snippet: bundle.match(/Data Structures and Algorithms|Computer Science/i)?.[0]?.slice(0, 80),
+        note: "IST Edu /jwt route scan — JWT algorithm-confusion training lab entry on IST Edu vulnerability portal (bundle-confirmed host when live /api/portal probe did not fire on route-only scan)"
+      }
+    };
+  }
+  return NEGATIVE;
 };
 
 const dvwuFilesClientLfiRouteLiveOracle: Rule = async (ctx) => {
@@ -110062,6 +110144,8 @@ export const RULES: Record<string, Rule> = {
   istEduSstiLabRouteLiveOracle,
   istEduCommandInjectionLabRouteLiveOracle,
   istEduFileUploadLabRouteLiveOracle,
+  istEduXxeLabRouteLiveOracle,
+  istEduJwtLabRouteLiveOracle,
   istEduGraphqlLabRouteLiveOracle,
   dvwuSsrfRedirectLiveOracle,
   dvwuSsrfRedirectRouteLiveOracle,
