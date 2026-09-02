@@ -7523,6 +7523,24 @@
       "slug": "burpbounty-wp-config-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /wp/wp-config.php returns define('DB_PASSWORD','sup3r_s3cr3t_p4ssw0rd') + table_prefix; burpbountylab.com/wp/wp-config.php findings 98→100 (+burpbounty-wp-config-live-oracle +burpbounty-wp-config-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-pulse-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/pulse/ returns <h1>Pulse Secure</h1>; burpbountylab.com/cve/pulse/ findings 100→104 (+burpbounty-pulse-cve-route-live-oracle +burpbounty-pulse-cve-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-citrix-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/citrix/ returns <h1>Citrix</h1>; burpbountylab.com/cve/citrix/ findings 100→104 (+burpbounty-citrix-cve-route-live-oracle +burpbounty-citrix-cve-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:burpbountylab.com",
+      "slug": "burpbounty-crowd-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /cve/crowd/ returns <h1>Atlassian Crowd</h1>; burpbountylab.com/cve/crowd/ findings 100→104 (+burpbounty-crowd-cve-route-live-oracle +burpbounty-crowd-cve-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

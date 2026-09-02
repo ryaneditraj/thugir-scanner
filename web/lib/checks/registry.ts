@@ -15727,6 +15727,12 @@ const burpbountyPulseCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyPulseCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/pulse\/?$/i,
+  burpbountyPulseCveLiveOracle,
+  "Burp Bounty Lab /cve/pulse/ route scan — Pulse Secure heading — Pulse Connect Secure CVE profile oracle"
+);
+
 const burpbountyCiscoCveLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/cve/cisco/", ctx.origin).toString();
@@ -15972,6 +15978,12 @@ const burpbountyCitrixCveLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const burpbountyCitrixCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/citrix\/?$/i,
+  burpbountyCitrixCveLiveOracle,
+  "Burp Bounty Lab /cve/citrix/ route scan — Citrix heading — Citrix ADC CVE profile oracle"
+);
+
 const burpbountyCrowdCveLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
   const probeUrl = new URL("/cve/crowd/", ctx.origin).toString();
@@ -15988,6 +16000,12 @@ const burpbountyCrowdCveLiveOracle: Rule = async (ctx) => {
     }
   };
 };
+
+const burpbountyCrowdCveRouteLiveOracle = burpBountyRouteLiveOracle(
+  /\/cve\/crowd\/?$/i,
+  burpbountyCrowdCveLiveOracle,
+  "Burp Bounty Lab /cve/crowd/ route scan — Atlassian Crowd heading — Crowd identity management CVE profile oracle"
+);
 
 const burpbountyFirebaseCveLiveOracle: Rule = async (ctx) => {
   if (!isBurpBountyLabHost(ctx)) return NEGATIVE;
@@ -109870,6 +109888,7 @@ export const RULES: Record<string, Rule> = {
   burpbountySpringCloudConfigLiveOracle,
   burpbountyText4shellLiveOracle,
   burpbountyPulseCveLiveOracle,
+  burpbountyPulseCveRouteLiveOracle,
   burpbountyCiscoCveLiveOracle,
   burpbountyTraefikCveLiveOracle,
   burpbountySolarwindsCveLiveOracle,
@@ -109878,7 +109897,9 @@ export const RULES: Record<string, Rule> = {
   burpbountyCouchdbAllDbsLiveOracle,
   burpbountyKubernetesApiLiveOracle,
   burpbountyCitrixCveLiveOracle,
+  burpbountyCitrixCveRouteLiveOracle,
   burpbountyCrowdCveLiveOracle,
+  burpbountyCrowdCveRouteLiveOracle,
   burpbountyFirebaseCveLiveOracle,
   burpbountyNetsweeperCveLiveOracle,
   burpbountyZohoCveLiveOracle,

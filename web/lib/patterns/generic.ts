@@ -58239,6 +58239,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-pulse-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/pulse/ route live oracle",
+    description:
+      "When scanning /cve/pulse/, GET returns a Pulse Secure appliance heading — route-specific Pulse Connect Secure CVE profile oracle.",
+    impactOneline:
+      "Route-specific Pulse Secure fingerprint probe confirms VPN appliance CVE oracle when scanning the Burp Bounty Lab /cve/pulse/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyPulseCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Pulse Connect Secure and restrict VPN admin interfaces to trusted networks.",
+      steps: [
+        "Apply vendor security advisories for Pulse Connect Secure CVEs.",
+        "Require MFA and network segmentation for VPN management consoles.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/pulse/ route scan exposes a Pulse Secure appliance fingerprint. Show Pulse Connect Secure hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-cisco-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -58629,6 +58655,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-citrix-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/citrix/ route live oracle",
+    description:
+      "When scanning /cve/citrix/, GET returns a Citrix appliance heading — route-specific Citrix ADC CVE profile oracle.",
+    impactOneline:
+      "Route-specific Citrix fingerprint probe confirms ADC appliance CVE oracle when scanning the Burp Bounty Lab /cve/citrix/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCitrixCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Citrix ADC appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Citrix security advisories for ADC and Gateway CVEs.",
+        "Disable unused management services and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/citrix/ route scan exposes a Citrix appliance fingerprint. Show Citrix ADC hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-crowd-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -58651,6 +58703,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/crowd/ endpoint exposes an Atlassian Crowd fingerprint. Show Crowd hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-crowd-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/crowd/ route live oracle",
+    description:
+      "When scanning /cve/crowd/, GET returns an Atlassian Crowd heading — route-specific Crowd identity management CVE profile oracle.",
+    impactOneline:
+      "Route-specific Crowd fingerprint probe confirms identity management CVE oracle when scanning the Burp Bounty Lab /cve/crowd/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCrowdCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Atlassian Crowd and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Atlassian Crowd security advisories promptly.",
+        "Disable unused management services and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/crowd/ route scan exposes an Atlassian Crowd fingerprint. Show Crowd hardening and CVE patching.",
     version: 1,
     enabled: true
   },
