@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T22:05:00.000Z",
+  "updated_at": "2026-09-02T23:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/track/1",
+      "source": "ctfsec/pwnshop — PWN-002 unauthenticated order tracking IDOR GET /track/:order_id (vulnerabilities index; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/forgot-password",
+      "source": "ctfsec/pwnshop — PWN-037 username enumeration POST /forgot-password distinct error messages (vulnerabilities index; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/profile",
+      "source": "ctfsec/pwnshop — PWN-042 Vulnbank wallet funding credited-amount override POST /profile (GitHub README; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-66",
+      "source": "OWASP WrongSecrets — challenge-66 Swift/ARM binary secret extraction lab (public Heroku demo; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://playground.fabraix.com/challenges/jailbreak-001",
+      "source": "fabraix/playground — LLM guardrail jailbreak challenge with published system prompt (GitHub challenges/; web search 23 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://zen-demo-python.fly.dev/pages/execute",
       "source": "Aikido Zen WAF playground — shell/command injection demo POST /pages/execute (fly.dev Python variant; web search 22 UTC)",
@@ -11053,5 +11078,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 10
+  "discovery_urls_added": 15
 }
