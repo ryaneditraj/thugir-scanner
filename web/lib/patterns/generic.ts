@@ -76096,6 +76096,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-logging-auth-events-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 missing auth audit logging live oracle",
+    description:
+      "POST attacks/auth_events/login_insecure.php on owaspsecure.com succeeds without meaningful auth audit logging — A09 security logging failure training oracle.",
+    impactOneline:
+      "Missing auth audit trails on owaspsecure.com hide credential stuffing and privilege abuse during incident response.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingAuthEventsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Log authentication outcomes with user, IP, timestamp, and correlation IDs.",
+      steps: [
+        "Emit structured audit events for login success, failure, and privileged actions.",
+        "Include user id, source IP, user-agent, and outcome in every auth log line.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com login_insecure.php succeeds without audit logging. Show structured auth audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-auth-events-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route auth events live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 1 login confirms missing audit trail — route-specific A09 logging failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live missing auth audit logging, not only client-side evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingAuthEventsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Log authentication outcomes with user, IP, timestamp, and correlation IDs.",
+      steps: [
+        "Emit structured audit events for login success, failure, and privileged actions.",
+        "Include user id, source IP, user-agent, and outcome in every auth log line.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms login without audit trail. Show route-level auth audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-pii-secrets-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A09 sensitive data in logs live oracle",
+    description:
+      "POST attacks/pii_in_logs/capture_insecure.php on owaspsecure.com writes passwords, tokens, and SSNs to app.log in cleartext — A09 sensitive logging training oracle.",
+    impactOneline:
+      "Cleartext secrets in logs on owaspsecure.com turn operator log access into a secondary data breach.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingPiiSecretsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact secrets and PII from application logs before write or ship.",
+      steps: [
+        "Never log passwords, tokens, or full SSNs — hash or mask sensitive fields.",
+        "Add log scrubbers for Bearer tokens and credit-card/SSN patterns.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com capture_insecure.php writes raw secrets to app.log. Show log redaction and PII scrubbing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-pii-secrets-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A09 logging route PII in logs live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 2 confirms raw secrets/PII written to app.log — route-specific A09 sensitive logging oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live secret leakage into logs, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingPiiSecretsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact secrets and PII from application logs before write or ship.",
+      steps: [
+        "Never log passwords, tokens, or full SSNs — hash or mask sensitive fields.",
+        "Add log scrubbers for Bearer tokens and credit-card/SSN patterns.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms secrets written to app.log. Show route-level log redaction remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-threshold-alerts-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 missing threshold alerts live oracle",
+    description:
+      "POST attacks/threshold_alerts/fail_insecure.php on owaspsecure.com records repeated auth failures without threshold alerting — A09 monitoring failure training oracle.",
+    impactOneline:
+      "Missing brute-force alerts on owaspsecure.com let credential-stuffing attacks continue undetected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingThresholdAlertsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Alert on repeated authentication failures and anomalous access patterns.",
+      steps: [
+        "Define SIEM thresholds for failed logins per user/IP within a sliding window.",
+        "Page on-call when brute-force or credential-stuffing patterns exceed baseline.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com fail_insecure.php never triggers alerts on repeated failures. Show threshold alerting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-threshold-alerts-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route threshold alerts live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 4 confirms repeated failures never trigger alerts — route-specific A09 monitoring failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live missing threshold alerting, not only client-side evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingThresholdAlertsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Alert on repeated authentication failures and anomalous access patterns.",
+      steps: [
+        "Define SIEM thresholds for failed logins per user/IP within a sliding window.",
+        "Page on-call when brute-force or credential-stuffing patterns exceed baseline.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms no alerts on repeated failures. Show route-level SIEM threshold remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "web-pentest-playground-login-sqli-live-oracle",
     platform: "generic",
     category: "Injection",

@@ -43404,6 +43404,140 @@ const owaspsecureIntegrityUnserializeRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const owaspsecureLoggingAuthEventsLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const loginUrl = owaspsecureAttackUrl(ctx, "attacks/auth_events/login_insecure.php");
+  const postBody = new URLSearchParams({
+    username: "alice",
+    password: "password123"
+  }).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Login \(INSECURE\)|success not audited/i.test(doc.body)) return NEGATIVE;
+  if (!/No useful log written/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: loginUrl,
+      snippet: doc.body.match(/No useful log written[\s\S]{0,60}/i)?.[0]?.slice(0, 100) ?? "login success not audited",
+      note: "owaspsecure.com POST attacks/auth_events/login_insecure.php succeeds without meaningful auth audit logging — A09 logging failure training oracle"
+    }
+  };
+};
+
+const owaspsecureLoggingAuthEventsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a09_logging\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureLoggingAuthEventsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a09_logging route scan — Attack 1 login succeeds without audit trail (live logging failure oracle)"
+    }
+  };
+};
+
+const owaspsecureLoggingPiiSecretsLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const captureUrl = owaspsecureAttackUrl(ctx, "attacks/pii_in_logs/capture_insecure.php");
+  const postBody = new URLSearchParams({
+    username: "alice",
+    password: "hunter2",
+    token: "Bearer eyJhbGciOiJIUzI1NiJ9",
+    ssn: "123-45-6789"
+  }).toString();
+  const doc = await ctx.probe.get(captureUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Captured \(INSECURE\)|raw secrets\/PII/i.test(doc.body)) return NEGATIVE;
+  if (!/wrote[\s\S]{0,30}app\.log/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: captureUrl,
+      snippet: doc.body.match(/raw secrets\/PII[\s\S]{0,60}/i)?.[0]?.slice(0, 100) ?? "secrets written to app.log",
+      note: "owaspsecure.com POST attacks/pii_in_logs/capture_insecure.php writes passwords, tokens, and SSNs to app.log — A09 sensitive logging training oracle"
+    }
+  };
+};
+
+const owaspsecureLoggingPiiSecretsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a09_logging\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureLoggingPiiSecretsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a09_logging route scan — Attack 2 endpoint writes raw secrets/PII to app.log (live sensitive logging oracle)"
+    }
+  };
+};
+
+const owaspsecureLoggingThresholdAlertsLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const failUrl = owaspsecureAttackUrl(ctx, "attacks/threshold_alerts/fail_insecure.php");
+  const postBody = new URLSearchParams({ count: "10" }).toString();
+  const doc = await ctx.probe.get(failUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Failures written \(INSECURE\)|No thresholds or alerting/i.test(doc.body)) return NEGATIVE;
+  if (!/(?:&quot;|")count(?:&quot;|")\s*:\s*10/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: failUrl,
+      snippet: doc.body.match(/No thresholds or alerting[\s\S]{0,60}/i)?.[0]?.slice(0, 100) ?? "brute-force not alerted",
+      note: "owaspsecure.com POST attacks/threshold_alerts/fail_insecure.php records repeated failures without threshold alerts — A09 monitoring failure training oracle"
+    }
+  };
+};
+
+const owaspsecureLoggingThresholdAlertsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a09_logging\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureLoggingThresholdAlertsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a09_logging route scan — Attack 4 repeated auth failures never trigger alerts (live monitoring failure oracle)"
+    }
+  };
+};
+
 // --- Guardmarly SAST demo (ansede.onrender.com) --------------------------------------
 const GUARDMARLY_SCAN_PROBE_CODE = `from flask import Flask, request
 app = Flask(__name__)
@@ -109827,6 +109961,12 @@ export const RULES: Record<string, Rule> = {
   owaspsecureDesignReauthEmailRouteLiveOracle,
   owaspsecureIntegrityUnserializeLiveOracle,
   owaspsecureIntegrityUnserializeRouteLiveOracle,
+  owaspsecureLoggingAuthEventsLiveOracle,
+  owaspsecureLoggingAuthEventsRouteLiveOracle,
+  owaspsecureLoggingPiiSecretsLiveOracle,
+  owaspsecureLoggingPiiSecretsRouteLiveOracle,
+  owaspsecureLoggingThresholdAlertsLiveOracle,
+  owaspsecureLoggingThresholdAlertsRouteLiveOracle,
   guardmarlyScanLiveOracle,
   guardmarlyScanRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,
