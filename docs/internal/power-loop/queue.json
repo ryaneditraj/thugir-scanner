@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T05:18:54.490Z",
+  "updated_at": "2026-09-03T06:17:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://ist-edu-bd.vercel.app/ssrf",
@@ -11226,7 +11226,32 @@
       "url": "https://chimera.atlascrew.dev/api/v1/genai/rag/query?q=test",
       "source": "AtlasCrew Chimera — GenAI RAG query injection / prompt-leak oracle (public API demo; web search 03 UTC)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/path-traversal",
+      "source": "DaniSam-STU/security-lab — interactive path-traversal lab page with live exploit UI (seclab.vercel.app; web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/api/path-traversal-vulnerable",
+      "source": "DaniSam-STU/security-lab — live path-traversal API route oracle (seclab.vercel.app; web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/open-redirect",
+      "source": "DaniSam-STU/security-lab — interactive open-redirect lab page with live exploit UI (seclab.vercel.app; web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/users/1",
+      "source": "MRMcyber/vaultapp — IDOR user-profile API oracle (vaultapp-omega.vercel.app OSS deploy; web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/notes/1",
+      "source": "MRMcyber/vaultapp — IDOR private-notes API oracle (vaultapp-omega.vercel.app OSS deploy; web search 06 UTC)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 25
+  "discovery_urls_added": 30
 }
