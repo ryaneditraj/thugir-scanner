@@ -40130,6 +40130,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-vulnerable-npm-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "AI Security Platform vulnerable-npm challenge route live oracle",
+    description:
+      "When scanning /challenges/vulnerable-npm, the platform catalog documents malicious postinstall scripts and compromised npm typosquats via the hacked-npm-packages training module — route-specific supply-chain oracle.",
+    impactOneline:
+      "Route-specific oracle confirms vulnerable-npm alias maps to hacked-npm-packages supply-chain training without hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityVulnerableNpmRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — verify package provenance and block malicious postinstall scripts.",
+      steps: [
+        "Review postinstall scripts before adding new npm packages.",
+        "Use npm provenance and signed package verification where available.",
+        "Monitor for typosquatting when adding dependencies."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/vulnerable-npm route documents compromised npm packages. Show supply-chain verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-ai-phishing-route-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -61047,6 +61073,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "webverselabs-fixture-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "WebVerse Pro Fixture lab route live oracle",
+    description:
+      "When scanning /labs/fixture on webverselabs-pro.com, the ScoutLens fixture lab documents BOLA on scouting APIs plus wkhtmltopdf SSRF via wildcard allowlist bypass — route-specific SSRF+SQLi PDF template training oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebVerse Pro Fixture medium lab documents chained BOLA and SSRF exploitation paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webverselabsFixtureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WebVerse Pro labs are intentional training — restrict PDF renderers and enforce object-level authorization.",
+      steps: [
+        "Validate PDF renderer URL allowlists against DNS rebinding and wildcard bypass.",
+        "Authorize scouting report API access per authenticated user.",
+        "Run WebVerse Pro labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/fixture route documents BOLA plus wkhtmltopdf SSRF wildcard bypass. Show SSRF allowlist and BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-aikido-zen-demo-evidence",
     platform: "generic",
     category: "Security misconfiguration",
@@ -77142,7 +77194,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "medium",
     title: "SecLab /labs/* dead route live oracle",
     description:
-      "seclab.vercel.app /labs/sqli and sibling navigation routes serve Angular SPA stubs without live SQLi/XSS lab UI — live training APIs are on /api/sqli-vulnerable and /api/sqli/search instead.",
+      "seclab.vercel.app /labs/sqli, /labs/command-injection, and sibling navigation routes serve Angular SPA stubs without live lab UI — live training APIs are on /api/*-vulnerable routes instead.",
     impactOneline:
       "Advertised /labs/* training pages are Angular stubs — scanners should probe /api/*-vulnerable routes for live SQLi/XSS confirmation.",
     detectorKind: "rule_ref",

@@ -14152,6 +14152,36 @@ const clientSideBugforgeLabEvidence: Rule = async (ctx) => {
   };
 };
 
+function isWebverselabsProHost(ctx: RuleContext): boolean {
+  return /webverselabs-pro\.com/i.test(ctx.origin);
+}
+
+const webverselabsFixtureRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWebverselabsProHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/fixture\b/i.test(pageUrl)) return NEGATIVE;
+  let corpus = ctx.combined;
+  if (!/ScoutLens|wkhtmltopdf SSRF/i.test(corpus)) {
+    const doc = await ctx.probe.get(pageUrl, { maxBytes: 200_000, timeoutMs: 20000 });
+    if (doc.status >= 200 && doc.status < 400) corpus = `${corpus}\n${doc.body}`;
+  }
+  const fixtureOk =
+    /Fixture — WebVerse Pro Lab|ScoutLens/i.test(corpus) &&
+    (/wkhtmltopdf SSRF/i.test(corpus) || /wildcard allowlist bypass/i.test(corpus)) &&
+    (/postgresql|sqlite/i.test(corpus) || /\bssrf\b/i.test(corpus));
+  if (!fixtureOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet:
+        "BOLA scouting API leaks analytics subdomain enabling wkhtmltopdf SSRF wildcard allowlist bypass",
+      note: "webverselabs-pro.com /labs/fixture route scan — ScoutLens fixture lab documents BOLA + wkhtmltopdf SSRF via wildcard allowlist bypass (medium SSRF+SQLi PDF template lab) — route-specific training oracle"
+    }
+  };
+};
+
 // --- Burp Bounty Lab — intentionally vulnerable scanner profile testbed -----------
 const CLIENT_BURP_BOUNTY_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -88929,7 +88959,9 @@ const seclabLabsDeadRouteLiveOracle: Rule = async (ctx) => {
     return NEGATIVE;
   }
   if (!SECLAB_NEXTJS_HOST_RE.test(host) && !SECLAB_NEXTJS_HOST_RE.test(ctx.origin)) return NEGATIVE;
-  const routeMatch = pageUrl.match(/\/labs\/(sqli|xss|csrf|idor|ssrf|ssti)\b/i);
+  const routeMatch = pageUrl.match(
+    /\/labs\/(sqli|xss|csrf|idor|ssrf|ssti|command-injection|cmdi)(?:\/|$|\?)/i
+  );
   if (!routeMatch) return NEGATIVE;
   const labRoute = routeMatch[1].toLowerCase();
   const doc = await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
@@ -88950,7 +88982,7 @@ const seclabLabsDeadRouteLiveOracle: Rule = async (ctx) => {
 const seclabLabsDeadRouteRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!SECLAB_NEXTJS_HOST_RE.test(pageUrl) && !SECLAB_NEXTJS_HOST_RE.test(ctx.origin)) return NEGATIVE;
-  if (!/\/labs\/(sqli|xss|csrf|idor|ssrf|ssti)\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/labs\/(?:sqli|xss|csrf|idor|ssrf|ssti|command-injection|cmdi)(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
   const result = await seclabLabsDeadRouteLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -92926,7 +92958,7 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
     note: "AI Security Platform vulnerable-deps challenge — known CVE dependencies and typosquatting in npm supply chain"
   },
   "hacked-npm-packages": {
-    routeRe: /\/challenges\/(?:hacked-npm-packages|hacked-npm)\b/i,
+    routeRe: /\/challenges\/(?:hacked-npm-packages|hacked-npm|vulnerable-npm)\b/i,
     markers: [
       { label: "Hacked npm packages challenge route", re: /\/challenges\/(?:hacked-npm-packages|hacked-npm)/i },
       {
@@ -93044,6 +93076,9 @@ const aiSecurityVulnerableDepsRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "vulnerable-deps");
 
 const aiSecurityHackedNpmPackagesRouteLiveOracle: Rule = (ctx) =>
+  aiSecurityCatalogOrLoginGatedRouteOracle(ctx, "hacked-npm-packages");
+
+const aiSecurityVulnerableNpmRouteLiveOracle: Rule = (ctx) =>
   aiSecurityCatalogOrLoginGatedRouteOracle(ctx, "hacked-npm-packages");
 
 const aiSecuritySecurityHeadersRouteLiveOracle: Rule = (ctx) =>
@@ -110236,6 +110271,7 @@ export const RULES: Record<string, Rule> = {
   aiSecuritySupplyChainRouteLiveOracle,
   aiSecurityVulnerableDepsRouteLiveOracle,
   aiSecurityHackedNpmPackagesRouteLiveOracle,
+  aiSecurityVulnerableNpmRouteLiveOracle,
   aiSecuritySecurityHeadersRouteLiveOracle,
   aiSecurityInsecurePasswordsRouteLiveOracle,
   aiSecurityAiPhishingRouteLiveOracle,
@@ -111819,6 +111855,7 @@ export const RULES: Record<string, Rule> = {
   clientSideNorthStarAgiCtfEvidence,
   clientSideWafWorkshopEvidence,
   clientSideBugforgeLabEvidence,
+  webverselabsFixtureRouteLiveOracle,
   clientSideAikidoZenDemoEvidence,
   zenDemoExecuteShellInjectionLiveOracle,
   zenDemoExecuteRouteLiveOracle,
