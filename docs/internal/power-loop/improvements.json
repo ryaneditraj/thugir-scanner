@@ -7961,6 +7961,24 @@
       "slug": "seclab-command-injection-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /labs/command-injection returns Angular <app-root> SPA stub — seclabCommandInjectionRouteLiveOracle + runner -4 priority; seclab.vercel.app/labs/command-injection findings 4→6 (+seclab-command-injection-route-live-oracle +seclab-labs-dead-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-path-traversal-labs-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /labs/path-traversal probes /api/path-traversal?file=../../../etc/passwd — Angular SPA stub dead-route oracle; seclab.vercel.app/labs/path-traversal findings 4→5 (+seclab-path-traversal-labs-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-open-redirect-labs-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /labs/open-redirect probes /api/open-redirect-vulnerable — Angular SPA stub dead-route oracle (README lists open redirect as planned); seclab.vercel.app/labs/open-redirect findings 4→5 (+seclab-open-redirect-labs-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:todoer.site",
+      "slug": "todoer-tasks-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/tasks/1 returns HTTP 401 Authentication required with Access-Control-Allow-Origin reflecting arbitrary Origin + credentials:true; todoer.site/api/todos/1 findings 4→6 (+todoer-tasks-idor-live-oracle +todoer-tasks-idor-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

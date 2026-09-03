@@ -4173,6 +4173,10 @@ const DEEP_RULES = new Set<string>([
   "bugforgeIdorRouteLiveOracle",
   "bugforgeGraphqlRouteLiveOracle",
   "webverselabsFixtureRouteLiveOracle",
+  "todoerTasksIdorLiveOracle",
+  "todoerTasksIdorRouteLiveOracle",
+  "seclabPathTraversalLabsRouteLiveOracle",
+  "seclabOpenRedirectLabsRouteLiveOracle",
   "clientSideAikidoZenDemoEvidence",
   "zenDemoExecuteShellInjectionLiveOracle",
   "zenDemoExecuteRouteLiveOracle",
@@ -8941,7 +8945,9 @@ function extractSecLabPlaygroundSeeds(html: string, pageUrl: string): string[] {
     "/api/csrf-vulnerable",
     "/api/users-vulnerable",
     "/api/idor-vulnerable",
-    "/api/path-traversal"
+    "/api/path-traversal",
+    "/labs/path-traversal",
+    "/labs/open-redirect"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -14660,6 +14666,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/api\/path-traversal\b/i.test(targetInput) &&
         p.slug.startsWith("seclab-path-traversal")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/path-traversal\b/i.test(targetInput) &&
+        p.slug === "seclab-path-traversal-labs-route-live-oracle"
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/open-redirect\b/i.test(targetInput) &&
+        p.slug === "seclab-open-redirect-labs-route-live-oracle"
+      )
+        return -3;
+      if (
+        /todoer\.site/i.test(origin) &&
+        /\/api\/(?:tasks|todos)\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("todoer-tasks-idor")
       )
         return -3;
       if (

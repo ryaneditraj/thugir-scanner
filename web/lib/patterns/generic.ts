@@ -41846,6 +41846,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-path-traversal-labs-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecLab /labs/path-traversal route live oracle",
+    description:
+      "When scanning seclab.vercel.app /labs/path-traversal, GET /api/path-traversal?file=../../../etc/passwd reads local files — or the API route serves an Angular SPA shell instead of the documented Next.js path-traversal training API.",
+    impactOneline:
+      "Route-specific path-traversal lab oracle on the /labs/path-traversal discovery queue URL confirms live LFI or flags dead API stubs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabPathTraversalLabsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab path-traversal API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/path-traversal on production.",
+        "Canonicalize and validate file paths before reads.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/path-traversal route scan confirms /api/path-traversal is a dead Angular stub or exposes live LFI. Show path traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "seclab-open-redirect-labs-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "SecLab /labs/open-redirect route live oracle",
+    description:
+      "When scanning seclab.vercel.app /labs/open-redirect, GET /api/open-redirect-vulnerable redirects to attacker URLs — or the route serves an Angular SPA shell instead of the documented Next.js open-redirect training API.",
+    impactOneline:
+      "Route-specific open-redirect lab oracle on the /labs/open-redirect discovery queue URL confirms live redirect or flags dead API stubs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabOpenRedirectLabsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab open-redirect API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/open-redirect-vulnerable on production.",
+        "Validate redirect targets against an allowlist.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/open-redirect route scan confirms open-redirect API is a dead Angular stub or exposes live redirect. Show redirect validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "seclab-ssrf-vulnerable-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -61173,6 +61225,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /labs/fixture route documents BOLA plus wkhtmltopdf SSRF wildcard bypass. Show SSRF allowlist and BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "todoer-tasks-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Todoer task API BOLA/IDOR live oracle",
+    description:
+      "todoer.site GET /api/tasks/:id reflects arbitrary Origin with Access-Control-Allow-Credentials while exposing sequential task IDs behind session auth — CORS credential theft plus BOLA training surface.",
+    impactOneline:
+      "Live confirmation that Todoer task APIs enable cross-origin credential theft and sequential ID access testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "todoerTasksIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict CORS to trusted origins and enforce object-level authorization on task APIs.",
+      steps: [
+        "Never reflect arbitrary Origin when Access-Control-Allow-Credentials is true.",
+        "Authorize task reads against the authenticated session user.",
+        "Use non-sequential task identifiers."
+      ]
+    },
+    fixPrompt:
+      "Our /api/tasks/:id reflects arbitrary Origin with credentials and may allow cross-user task access. Show CORS and BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "todoer-tasks-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Todoer /api/tasks/:id route live oracle",
+    description:
+      "When scanning todoer.site /api/tasks/:id or /api/todos/:id discovery URLs, confirms CORS origin reflection with credentials on the task API plus auth-gated BOLA/IDOR training surface.",
+    impactOneline:
+      "Route-specific Todoer task API oracle confirms CORS misconfiguration and sequential task ID access control testing target.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "todoerTasksIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict CORS to trusted origins and enforce object-level authorization on task APIs.",
+      steps: [
+        "Never reflect arbitrary Origin when Access-Control-Allow-Credentials is true.",
+        "Authorize task reads against the authenticated session user.",
+        "Use non-sequential task identifiers."
+      ]
+    },
+    fixPrompt:
+      "Our /api/tasks/:id route scan confirms CORS credential reflection and BOLA surface. Show authorization and CORS remediation.",
     version: 1,
     enabled: true
   },
