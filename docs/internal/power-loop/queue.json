@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T02:18:00.000Z",
+  "updated_at": "2026-09-03T03:20:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://web-pentest-playground.onrender.com/login",
@@ -11151,7 +11151,32 @@
       "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api/",
       "source": "kOaDT/oss-oopssec-store — JWT algorithm confusion partner API walkthrough (GitHub Pages; web search 02 UTC)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/csrf",
+      "source": "SecureBank FAST-NUCES attack lab — external CSRF prize-voucher attack page (securebank-blog.vercel.app; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/xss/",
+      "source": "UCU OWASP Top 10 CTF 2025 — XSS challenge route (Vercel public demo; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-67",
+      "source": "OWASP WrongSecrets — challenge-67 secrets-management oracle (Heroku public demo; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-68",
+      "source": "OWASP WrongSecrets — challenge-68 secrets-management oracle (Heroku public demo; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/genai/rag/query?q=test",
+      "source": "AtlasCrew Chimera — GenAI RAG query injection / prompt-leak oracle (public API demo; web search 03 UTC)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 20
+  "discovery_urls_added": 25
 }
