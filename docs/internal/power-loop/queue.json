@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T18:20:00.000Z",
+  "updated_at": "2026-09-03T19:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/information-disclosure-api-error/",
+      "source": "kOaDT/oss-oopssec-store challenges.json — verbose API error debug disclosure walkthrough (ch.02 recon; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs/",
+      "source": "kOaDT/oss-oopssec-store challenges.json — plaintext password in SIEM logs walkthrough (ch.03 recon; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews/",
+      "source": "kOaDT/oss-oopssec-store challenges.json — stored XSS in product reviews walkthrough (ch.13 XSS; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain/",
+      "source": "kOaDT/oss-oopssec-store challenges.json — npm typosquat → AI rules backdoor chain walkthrough (ch.34-35 supply chain; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-68",
+      "source": "OWASP WrongSecrets — challenge-68 secrets-management oracle (Heroku public demo; web search 19 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection/",
       "source": "kOaDT/oss-oopssec-store — second-order SQLi in admin reviews walkthrough (ch.05 SQLi)",
