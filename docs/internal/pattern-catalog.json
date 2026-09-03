@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-03T15:06:38.184Z",
-  "total": 3171,
-  "uniqueSlugs": 3163,
+  "generatedAt": "2026-09-03T16:07:22.529Z",
+  "total": 3177,
+  "uniqueSlugs": 3169,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3153,
+    "generic": 3159,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3086,
+    "deep": 3092,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 150,
-    "Security misconfiguration": 246,
+    "Security misconfiguration": 250,
     "Broken authentication": 202,
     "Injection": 517,
     "Cross-site scripting": 793,
@@ -33,7 +33,7 @@
     "general": 20,
     "SSRF": 19,
     "Server-side request forgery": 108,
-    "Sensitive data exposure": 92,
+    "Sensitive data exposure": 94,
     "AI security": 134,
     "Business logic": 37,
     "AI / LLM security": 4,
@@ -2204,6 +2204,12 @@
     "owaspsecure-injection-sqli-login-route-live-oracle",
     "owaspsecure-integrity-unserialize-live-oracle",
     "owaspsecure-integrity-unserialize-route-live-oracle",
+    "owaspsecure-logging-auth-events-live-oracle",
+    "owaspsecure-logging-auth-events-route-live-oracle",
+    "owaspsecure-logging-pii-secrets-live-oracle",
+    "owaspsecure-logging-pii-secrets-route-live-oracle",
+    "owaspsecure-logging-threshold-alerts-live-oracle",
+    "owaspsecure-logging-threshold-alerts-route-live-oracle",
     "owaspsecure-misconfig-default-creds-live-oracle",
     "owaspsecure-misconfig-default-creds-route-live-oracle",
     "owaspsecure-misconfig-phpinfo-live-oracle",
