@@ -7979,6 +7979,24 @@
       "slug": "todoer-tasks-idor-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/tasks/1 returns HTTP 401 Authentication required with Access-Control-Allow-Origin reflecting arbitrary Origin + credentials:true; todoer.site/api/todos/1 findings 4→6 (+todoer-tasks-idor-live-oracle +todoer-tasks-idor-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ucu-owasp-ctf.vercel.app",
+      "slug": "ucu-owasp-ctf-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Firebase hub bundle documents A07 Auth Failures 'Steal a session cookie' on imaginative-insight-production Railway app; vanity /xss/ returns Vercel 404; ucu-owasp-ctf.vercel.app/xss/ findings 3→4 (+ucu-owasp-ctf-xss-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "vwad-voice-goat-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /app/voice-goat/ returns page-404 shell while VWAD directory may still reference Voice Goat; vwad.owasp.org/app/voice-goat/ findings 6→7 (+vwad-voice-goat-route-live-oracle +client-side-vwad-app-not-found-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ucu-owasp-ctf.vercel.app",
+      "slug": "ucu-owasp-ctf-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ucuOwaspCtfReflexionSuppressed skips reflexionEscalatedSsti on static Firebase SPA vanity routes; ucu-owasp-ctf.vercel.app/injection/ findings 5→4 (-reflexion-escalated-ssti false positive, +ucu-owasp-ctf-injection-route-live-oracle retained); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

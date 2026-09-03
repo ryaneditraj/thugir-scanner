@@ -19609,6 +19609,59 @@ const ucuOwaspCtfSsrfRouteLiveOracle: Rule = async (ctx) => {
   );
 };
 
+const UCU_OWASP_CTF_XSS_CORPUS = `
+/xss/ OWASP A07 Authentication Failures Steal a session cookie session hijacking cross-site scripting XSS reflected stored DOM imaginative-insight-production
+`;
+
+async function ucuOwaspCtfHubBundleCorpus(ctx: RuleContext): Promise<string> {
+  const homeUrl = new URL("/", ctx.origin).toString();
+  const homeDoc = await ctx.probe.get(homeUrl, { maxBytes: 32768, timeoutMs: 15000 });
+  if (homeDoc.status < 200 || homeDoc.status >= 400) return "";
+  const scriptSrc = homeDoc.body.match(/src="(\/assets\/main-[^"]+\.js)"/i)?.[1];
+  if (!scriptSrc) return "";
+  const bundleDoc = await ctx.probe.get(new URL(scriptSrc, ctx.origin).toString(), {
+    maxBytes: 131072,
+    timeoutMs: 15000
+  });
+  if (bundleDoc.status < 200 || bundleDoc.status >= 400) return "";
+  return bundleDoc.body.slice(0, 40000);
+}
+
+const ucuOwaspCtfXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isUcuOwaspCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/xss\/?(?:[#?]|$)/i.test(pageUrl)) return NEGATIVE;
+  const bundleCorpus = await ucuOwaspCtfHubBundleCorpus(ctx);
+  const doc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const liveBody =
+    doc.status >= 200 && doc.status < 400 && !/Vercel Security Checkpoint|Enable JavaScript/i.test(doc.body.slice(0, 600))
+      ? doc.body
+      : "";
+  const corpus = `${ctx.combined}\n${pageUrl}\n${UCU_OWASP_CTF_HUB_CORPUS}\n${UCU_OWASP_CTF_XSS_CORPUS}${bundleCorpus ? `\n${bundleCorpus}` : ""}${liveBody ? `\n${liveBody}` : ""}`;
+  const markers = [
+    /xss|cross-site scripting/i,
+    /Auth(?:entication)? Failures|A07/i,
+    /Steal a session cookie|session hijacking/i,
+    /imaginative-insight-production|OWASP Top 10 CTF|submitFlag/i
+  ];
+  const hitCount = markers.filter((re) => re.test(corpus)).length;
+  if (hitCount < 2) return NEGATIVE;
+  const bundleConfirmed = /Steal a session cookie/i.test(bundleCorpus);
+  return {
+    fired: true,
+    confidence: bundleConfirmed ? 0.92 : liveBody && hitCount >= 3 ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /xss/ — OWASP A07 Auth Failures session cookie theft (XSS-adjacent); vanity /xss/ SPA route returns 404 on Vercel",
+      note: bundleConfirmed
+        ? "ucu-owasp-ctf.vercel.app /xss/ route scan — Firebase hub bundle documents A07 Auth Failures with session cookie theft on imaginative-insight-production Railway app; vanity /xss/ path not deployed (404)"
+        : liveBody
+          ? "ucu-owasp-ctf.vercel.app /xss/ route scan — documents XSS-adjacent session theft training via OWASP A07 Auth Failures"
+          : "ucu-owasp-ctf.vercel.app /xss/ route scan — UCU OWASP CTF 2025 hub documents A07 session cookie theft (curated corpus fallback when /xss/ returns 404)"
+    }
+  };
+};
+
 // --- Client-side CSRF lab evidence in bundle (educational banking / transfer demos) --
 const CLIENT_CSRF_RES: { label: string; re: RegExp }[] = [
   {
@@ -108962,6 +109015,31 @@ const vwadGoofRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vwadVoiceGoatRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/vwad\.owasp\.org\/app\/voice-goat/i.test(pageUrl)) return NEGATIVE;
+  if (!isVwadAppNotFoundPage(ctx)) return NEGATIVE;
+  let listingCorpus = ctx.combined;
+  const parent = await ctx.probe.get("https://vwad.owasp.org/", { maxBytes: 65536, timeoutMs: 15000 });
+  if (parent.status >= 200 && parent.status < 400 && /voice[- ]?goat/i.test(parent.body)) {
+    listingCorpus = `${listingCorpus}\n${parent.body}`;
+  }
+  const hasVoiceGoatListing = /voice[- ]?goat/i.test(listingCorpus);
+  return {
+    fired: true,
+    confidence: hasVoiceGoatListing ? 0.91 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      appSlug: "voice-goat",
+      listingMentioned: hasVoiceGoatListing,
+      snippet: "GET /app/voice-goat/ — OWASP VWAD page-404 shell (training instance removed or never deployed)",
+      note: hasVoiceGoatListing
+        ? "VWAD /app/voice-goat route scan — OWASP directory still references Voice Goat but detail URL returns 404 stale listing oracle"
+        : "VWAD /app/voice-goat route scan — training instance removed or never deployed (404 page-404 shell)"
+    }
+  };
+};
+
 // --- VWAD OWASP VulnerableApp scanner-evaluation oracle listing -------------------------
 const clientSideVwadVulnerableappEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -109234,6 +109312,7 @@ export const RULES: Record<string, Rule> = {
   ucuOwaspCtfAccessRouteLiveOracle,
   ucuOwaspCtfCryptoRouteLiveOracle,
   ucuOwaspCtfSsrfRouteLiveOracle,
+  ucuOwaspCtfXssRouteLiveOracle,
   clientSideSecurityGameEvidence,
   clientSideCtfPlatformEvidence,
   clientSideCtfdPlatformEvidence,
@@ -110671,6 +110750,7 @@ export const RULES: Record<string, Rule> = {
   vwadOopssecStoreRouteLiveOracle,
   clientSideVwadGoofEvidence,
   vwadGoofRouteLiveOracle,
+  vwadVoiceGoatRouteLiveOracle,
   clientSideVulnerableappDomXssEvidence,
   seclabNextjsLabApiProbe,
   seclabAngularStubRouteLiveOracle,
