@@ -14322,6 +14322,74 @@ const webverselabsFixtureRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const TODOER_SITE_HOST_RE = /(?:^|\.)todoer\.site$/i;
+const TODOER_CORS_PROBE_ORIGIN = "https://evil-todoer-cors-probe.example";
+
+function isTodoerSiteHost(ctx: RuleContext): boolean {
+  try {
+    return TODOER_SITE_HOST_RE.test(new URL(ctx.origin).hostname.toLowerCase());
+  } catch {
+    return TODOER_SITE_HOST_RE.test(ctx.origin);
+  }
+}
+
+async function todoerTasksApiProbe(ctx: RuleContext, taskId = "1"): Promise<RuleResult> {
+  if (!isTodoerSiteHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const probePaths = new Set<string>([`/api/tasks/${taskId}`]);
+  if (/\/api\/todos\/\d+/i.test(pageUrl)) probePaths.add(`/api/todos/${taskId}`);
+  for (const path of probePaths) {
+    const probeUrl = new URL(path, ctx.origin).toString();
+    const doc = await ctx.probe.get(probeUrl, {
+      headers: { Origin: TODOER_CORS_PROBE_ORIGIN },
+      maxBytes: 4096,
+      timeoutMs: 15000
+    });
+    const corsReflects =
+      doc.headers["access-control-allow-origin"] === TODOER_CORS_PROBE_ORIGIN &&
+      /true/i.test(String(doc.headers["access-control-allow-credentials"] || ""));
+    const authGated = doc.status === 401 && /Authentication required/i.test(doc.body);
+    const idorSurface =
+      authGated || (doc.status >= 200 && doc.status < 300 && /"id"\s*:|"title"\s*:|"user/i.test(doc.body));
+    if (!corsReflects || (!authGated && !idorSurface)) continue;
+    return {
+      fired: true,
+      confidence: authGated && corsReflects ? 0.93 : 0.9,
+      evidence: {
+        url: probeUrl,
+        status: doc.status,
+        corsOrigin: doc.headers["access-control-allow-origin"],
+        corsCredentials: doc.headers["access-control-allow-credentials"],
+        snippet: doc.body.slice(0, 160).trim(),
+        note: authGated
+          ? "todoer.site GET /api/tasks/:id reflects arbitrary Origin with Access-Control-Allow-Credentials:true while requiring auth — CORS credential theft + BOLA/IDOR training surface on sequential task IDs"
+          : "todoer.site GET /api/tasks/:id returns task JSON without ownership check and reflects arbitrary Origin with credentials — live BOLA/IDOR + CORS misconfiguration oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+}
+
+const todoerTasksIdorLiveOracle: Rule = async (ctx) => todoerTasksApiProbe(ctx);
+
+const todoerTasksIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTodoerSiteHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/(?:tasks|todos)\/\d+/i.test(pageUrl)) return NEGATIVE;
+  const idMatch = pageUrl.match(/\/(\d+)(?:[/?#]|$)/);
+  const hit = await todoerTasksApiProbe(ctx, idMatch?.[1] || "1");
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "todoer.site /api/tasks/:id route scan — sequential task IDs behind session auth with CORS origin reflection + credentials enabled — route-specific BOLA/IDOR training oracle"
+    }
+  };
+};
+
 // --- Burp Bounty Lab — intentionally vulnerable scanner profile testbed -----------
 const CLIENT_BURP_BOUNTY_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -95872,6 +95940,101 @@ const seclabPathTraversalRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const seclabPathTraversalLabsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/path-traversal\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL("/api/path-traversal?file=../../../etc/passwd", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 300 &&
+    /"safe"\s*:\s*false/.test(doc.body) &&
+    (/root:|\/etc\/passwd|path traversal|directory traversal/i.test(doc.body) ||
+      /No authentication or authorization/i.test(doc.body)) &&
+    !isSecLabAngularStubShell(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app /labs/path-traversal route scan — GET /api/path-traversal reads ../../../etc/passwd via user-controlled file parameter — live path traversal training API oracle"
+      }
+    };
+  }
+  if (!isSecLabAngularStubShell(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: doc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /labs/path-traversal route scan — /api/path-traversal serves Angular SPA shell instead of documented Next.js path-traversal training API — dead lab route oracle (README lists path traversal as planned, not deployed)"
+    }
+  };
+};
+
+const seclabOpenRedirectLabsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/open-redirect\b/i.test(pageUrl)) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const probeUrl = new URL(
+    `/api/open-redirect-vulnerable?url=${encodeURIComponent(OPEN_REDIRECT_PROBE)}`,
+    ctx.origin
+  ).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (
+    (doc.status === 301 || doc.status === 302 || doc.status === 303 || doc.status === 307 || doc.status === 308) &&
+    new RegExp(OPEN_REDIRECT_PROBE_HOST.replace(/\./g, "\\."), "i").test(doc.headers.location || doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: (doc.headers.location || doc.body).slice(0, 200).trim(),
+        note: "seclab.vercel.app /labs/open-redirect route scan — GET /api/open-redirect-vulnerable redirects to attacker-controlled URL — live open redirect training API oracle"
+      }
+    };
+  }
+  const stubDoc =
+    isSecLabAngularStubShell(doc.body) && doc.body.length > 40
+      ? doc
+      : await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /labs/open-redirect route scan — Angular SPA stub without live open-redirect training API (README lists open redirect as planned, not deployed) — dead lab route oracle"
+    }
+  };
+};
+
 const seclabSsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const isLabsSsrfHub = /\/labs\/ssrf\b/i.test(pageUrl);
@@ -110520,6 +110683,8 @@ export const RULES: Record<string, Rule> = {
   seclabIdorLabsRouteLiveOracle,
   seclabIdorVulnerableRouteLiveOracle,
   seclabPathTraversalRouteLiveOracle,
+  seclabPathTraversalLabsRouteLiveOracle,
+  seclabOpenRedirectLabsRouteLiveOracle,
   seclabSsrfVulnerableRouteLiveOracle,
   vulnerableWebSiteLoginRouteLiveOracle,
   vulnerableWebSiteCsrfRouteLiveOracle,
@@ -112017,6 +112182,8 @@ export const RULES: Record<string, Rule> = {
   bugforgeIdorRouteLiveOracle,
   bugforgeGraphqlRouteLiveOracle,
   webverselabsFixtureRouteLiveOracle,
+  todoerTasksIdorLiveOracle,
+  todoerTasksIdorRouteLiveOracle,
   clientSideAikidoZenDemoEvidence,
   zenDemoExecuteShellInjectionLiveOracle,
   zenDemoExecuteRouteLiveOracle,
