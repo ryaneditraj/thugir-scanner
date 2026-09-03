@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T12:08:27.971Z",
+  "updated_at": "2026-09-03T13:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://owaspsecure.com/demo/a03_injection/insecure.php",
+      "source": "owaspsecure.com OWASP Top 10 demo hub — A03 injection insecure lab (SQLi login bypass, time-based SQLi, stored/reflected/DOM XSS; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a05_misconfig/insecure.php",
+      "source": "owaspsecure.com OWASP Top 10 demo hub — A05 security misconfiguration insecure lab (phpinfo, .env readable, debug on; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a07_auth/insecure.php",
+      "source": "owaspsecure.com OWASP Top 10 demo hub — A07 identification & authentication failures insecure lab (no rate limit, weak session; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a10_ssrf/insecure.php",
+      "source": "owaspsecure.com OWASP Top 10 demo hub — A10 SSRF insecure lab (open fetcher vs allowlist; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182/",
+      "source": "kOaDT/oss-oopssec-store challenges.json — React2Shell CVE-2025-55182 RSC deserialization RCE walkthrough (ch.11 supply chain; web search 13 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owaspsecure.com/demo/a02_crypto/insecure.php",
       "source": "owaspsecure.com OWASP Top 10 demo hub — A02 cryptographic failures insecure lab (plaintext/MD5/IV reuse; web search 12 UTC)",
