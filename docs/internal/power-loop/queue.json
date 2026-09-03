@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T06:17:00.000Z",
+  "updated_at": "2026-09-03T07:20:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor",
+      "source": "OWASP FinBot CTF — vendor portal agentic AI prompt-injection / policy-bypass oracle (owasp-finbot-ctf.org; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/darklab",
+      "source": "OWASP FinBot CTF — darklab MCP tool-poisoning adversary portal (owasp-finbot-ctf.org; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vault-notes-frontend-gules.vercel.app/",
+      "source": "Raghavtripathii/vault-notes-vapt — passcode-gated deliberately vulnerable notes app with SQLi/IDOR/XSS (Vercel deploy; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://appsec-ci-pipeline.onrender.com/login",
+      "source": "gauthamram57/appsec-ci-pipeline — Django SQLi login bypass route (Render OSS deploy; web search 07 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://todoer.site/api/todos/1",
+      "source": "Entit-y/Todoer — IDOR oracle GET /api/todos/:id intentionally vulnerable task manager (Nimbus Vault practice target; web search 07 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ist-edu-bd.vercel.app/ssrf",
       "source": "ist-edu-bd VulnPortal — SSRF training route with server-side fetch oracle (Vercel OSS deploy; web search 05 UTC)",
@@ -11253,5 +11278,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 30
+  "discovery_urls_added": 35
 }
