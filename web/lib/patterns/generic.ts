@@ -28531,6 +28531,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "securebank-blog-csrf-attack-page-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "SecureBank blog CSRF attack page route live oracle",
+    description:
+      "When scanning /csrf on securebank-blog.vercel.app, the Attack Mode demo hosts a fake prize voucher page that auto-submits a hidden bank transfer form using the victim session cookie — route-specific CSRF attack-page training oracle (Vercel checkpoint uses curated blog corpus fallback).",
+    impactOneline:
+      "Educational SecureBank CSRF attack page exposes intentional cross-site transfer form POST patterns for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBlogCsrfAttackPageRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational attack/secure mode toggles must never ship to production deployments.",
+      steps: [
+        "Include a unique CSRF token in every state-changing form.",
+        "Validate the CSRF token server-side before processing transfers.",
+        "Host vulnerable demos on isolated lab subdomains with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our securebank-blog /csrf route hosts a fake prize voucher page that posts hidden bank transfers. Show CSRF token remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-bugbountyhunter-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -75364,6 +75390,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /login route scan accepts SQLi auth bypass. Show route-level parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-pentest-playground-register-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "medium",
+    title: "Web Pentest Playground open registration live oracle",
+    description:
+      "POST /register creates an account without email verification (redirects to /login) and new credentials authenticate to /dashboard — the Web Pentest Playground weak open-registration oracle.",
+    impactOneline:
+      "Open registration without verification allows automated account creation and immediate authenticated access.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundRegisterLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require email verification and rate-limit registration — Web Pentest Playground is intentional training software.",
+      steps: [
+        "Require email verification before activating new accounts.",
+        "Apply CAPTCHA and rate limits on registration endpoints.",
+        "Run Web Pentest Playground only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /register endpoint creates accounts without verification and auto-logs users in. Show email verification and rate-limit remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-pentest-playground-register-route-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "medium",
+    title: "Web Pentest Playground /register route live oracle",
+    description:
+      "When scanning /register, POST registration succeeds without verification and new credentials authenticate to /dashboard — route-specific weak registration oracle.",
+    impactOneline:
+      "Route-scoped scans should flag open registration without verification on Web Pentest Playground /register.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundRegisterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require email verification and rate-limit registration.",
+      steps: [
+        "Require email verification before activating new accounts.",
+        "Apply CAPTCHA and rate limits on registration endpoints.",
+        "Run Web Pentest Playground only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /register route scan confirms open registration without verification. Show route-level email verification remediation.",
     version: 1,
     enabled: true
   },

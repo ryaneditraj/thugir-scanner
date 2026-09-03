@@ -6715,16 +6715,11 @@ const clientSideOopssecJwtAlgConfusionEvidence: Rule = async (ctx) => {
 const oopssecJwtAlgConfusionRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/posts\/jwt-algorithm-confusion-partner-api/i.test(pageUrl)) return NEGATIVE;
-  let result = await clientSideOopssecJwtAlgConfusionEvidence(ctx);
-  if (!result.fired) {
-    const doc = await ctx.probe.get(pageUrl, { maxBytes: 196_608, timeoutMs: 20000 });
-    if (doc.status >= 200 && doc.status < 400) {
-      result = await clientSideOopssecJwtAlgConfusionEvidence({
-        ...ctx,
-        combined: `${ctx.combined}\n${doc.body}`
-      });
-    }
-  }
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecJwtAlgConfusionEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -42336,6 +42331,76 @@ const webPentestPlaygroundLoginSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const webPentestPlaygroundRegisterLiveOracle: Rule = async (ctx) => {
+  if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
+  const registerUrl = new URL("/register", ctx.origin).toString();
+  const getDoc = await ctx.probe.get(registerUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (!/Register/i.test(getDoc.body) || !/<form/i.test(getDoc.body)) return NEGATIVE;
+  const username = `thugir_reg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const password = "ThugirProbe123!";
+  const postDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const registerLocation = postDoc.headers["location"] || "";
+  if (
+    ![301, 302, 303, 307, 308].includes(postDoc.status) ||
+    !/\/login/i.test(registerLocation)
+  ) {
+    return NEGATIVE;
+  }
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  const cookie = webPentestPlaygroundSessionCookieFromDoc(loginDoc);
+  const loginLocation = loginDoc.headers["location"] || "";
+  if (
+    !cookie ||
+    ![301, 302, 303, 307, 308].includes(loginDoc.status) ||
+    !/\/dashboard/i.test(loginLocation)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: registerUrl,
+      username,
+      registerRedirect: registerLocation,
+      loginRedirect: loginLocation,
+      note: "Web Pentest Playground POST /register creates account without email verification (redirects to /login) and new credentials authenticate to /dashboard — open registration weak-auth oracle"
+    }
+  };
+};
+
+const webPentestPlaygroundRegisterRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWebPentestPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/register(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const result = await webPentestPlaygroundRegisterLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Web Pentest Playground /register route scan — open registration without verification creates account and new credentials authenticate to /dashboard — route-specific weak registration oracle"
+    }
+  };
+};
+
 async function webPentestPlaygroundAdminSessionCookie(ctx: RuleContext): Promise<string | null> {
   const adminUrl = new URL("/admin", ctx.origin).toString();
   const doc = await ctx.probe.get(adminUrl, {
@@ -53949,6 +54014,7 @@ Attack 2: Cross-Site Scripting (XSS)
 messages page lets users post text. In attack mode, whatever you type gets stored as raw HTML and rendered directly.
 Attack 3: CSRF — The Invisible Request
 Fake page posts a transfer form that silently sends a bank transfer request using your session cookie without a CSRF token.
+The CSRF demo hosts a fake prize voucher page at /csrf that auto-submits a hidden bank transfer form using the victim session cookie.
 We also built two roles: admin and user. The /admin route checks the role stored in the session and returns a 403 error for anyone who isn't an admin.
 `;
 
@@ -54066,6 +54132,55 @@ const secureBankBlogAdminRbacRouteLiveOracle: Rule = async (ctx) => {
       note: checkpointFallback
         ? "securebank-blog.vercel.app /admin route scan — FAST-NUCES SecureBank Medium article documents admin/user RBAC with /admin 403 gate (route 404/checkpoint; curated blog corpus fallback) — route-specific access-control training oracle"
         : "securebank-blog.vercel.app /admin route scan — Medium blog article documents admin/user RBAC with /admin 403 gate (route returns 404; corpus fetched from /) — route-specific access-control training oracle"
+    }
+  };
+};
+
+const secureBankBlogCsrfAttackPageRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSecureBankBlogHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/csrf\b/i.test(pageUrl)) return NEGATIVE;
+  const doc = await ctx.probe.get(pageUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const liveBody =
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    !secureBankBlogCheckpointBlocked(doc.body) &&
+    doc.body.length > 200
+      ? doc.body
+      : "";
+  const corpus = await secureBankBlogRouteCorpus(
+    liveBody ? { ...ctx, combined: `${ctx.combined}\n${liveBody}` } : ctx
+  );
+  const checkpointFallback = secureBankBlogRouteCheckpointFallback(pageUrl, ctx.combined);
+  const liveFormOk =
+    !!liveBody &&
+    /<form[\s\S]{0,2000}(?:transfer|\/api\/)/i.test(liveBody) &&
+    (/(?:prize|voucher|claim)/i.test(liveBody) ||
+      /type=["']hidden["']/i.test(liveBody) ||
+      /session cookie/i.test(liveBody));
+  const corpusOk =
+    /Attack 3:\s*CSRF/i.test(corpus) &&
+    (/\/csrf/i.test(corpus) ||
+      /prize voucher/i.test(corpus) ||
+      /fake prize voucher page/i.test(corpus)) &&
+    (/Fake page posts a transfer form/i.test(corpus) ||
+      /silently sends a bank transfer request/i.test(corpus) ||
+      /session cookie without a CSRF token/i.test(corpus));
+  if (!liveFormOk && !corpusOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: liveFormOk ? 0.92 : checkpointFallback ? 0.88 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: liveFormOk
+        ? liveBody.match(/<form[\s\S]{0,160}/i)?.[0]?.slice(0, 160) ??
+          "fake prize voucher page posts hidden bank transfer form"
+        : "fake prize voucher page at /csrf auto-submits hidden bank transfer form using victim session cookie",
+      note: liveFormOk
+        ? "securebank-blog.vercel.app /csrf route scan — live fake prize voucher page posts hidden bank transfer form without CSRF token — route-specific CSRF attack-page training oracle"
+        : checkpointFallback
+          ? "securebank-blog.vercel.app /csrf route scan — FAST-NUCES SecureBank Medium article documents Attack Mode CSRF prize-voucher attack page (Vercel checkpoint; curated blog corpus fallback) — route-specific CSRF training oracle"
+          : "securebank-blog.vercel.app /csrf route scan — Medium blog article documents Attack Mode CSRF prize-voucher attack page posting hidden transfer form (route returns 404; corpus fetched from /) — route-specific CSRF training oracle"
     }
   };
 };
@@ -108709,6 +108824,8 @@ export const RULES: Record<string, Rule> = {
   webPentestPlaygroundViewUsersRouteLiveOracle,
   webPentestPlaygroundLoginSqliLiveOracle,
   webPentestPlaygroundLoginSqliRouteLiveOracle,
+  webPentestPlaygroundRegisterLiveOracle,
+  webPentestPlaygroundRegisterRouteLiveOracle,
   appsecCiStoredXssCommentsLiveOracle,
   appsecCiStoredXssCommentsRouteLiveOracle,
   appsecCiDjangoAdminLiveOracle,
@@ -109456,6 +109573,7 @@ export const RULES: Record<string, Rule> = {
   secureBankBlogLoginSqliRouteLiveOracle,
   secureBankBlogMessagesXssRouteLiveOracle,
   secureBankBlogAdminRbacRouteLiveOracle,
+  secureBankBlogCsrfAttackPageRouteLiveOracle,
   secureBankBlogTransferCsrfRouteLiveOracle,
   sqlInjectionLabLoginRouteLiveOracle,
   secureBankBaySqliLoginRouteLiveOracle,
