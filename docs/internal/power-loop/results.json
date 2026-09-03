@@ -32419,7 +32419,7 @@
           ]
         }
       },
-      "notes": "No teacher tools available. 20 UTC run: stable 6/6 first-pass recall (52 findings, 39 live oracles; secret-resend present). Discovery queued: +5 URLs (owaspsecure A03 blind-time + second-order attack routes, oopssec XFF SQLi + insecure-password-reset + weak-MD5). Gaps: owaspsecure sql_blind_time + sql_second_order still without route-specific oracles; oopssec XFF SQLi + password-reset + MD5 queued for drain.",
+      "notes": "No teacher tools available. 20 UTC run: stable 6/6 first-pass recall (52 findings, 39 live oracles; secret-resend present). Discovery: +5 URLs (owaspsecure A03 blind-time + second-order attack routes, oopssec XFF SQLi + insecure-password-reset + weak-MD5) + drained react2shell + owaspsecure A02/A04 → 73 discovery findings across 8 URLs. Route oracles confirmed: oopssec-xff-sqli-route-live-oracle, oopssec-insecure-password-reset-route-live-oracle. Gaps: owaspsecure sql_blind_time + sql_second_order still generic A03 bundle without route-specific oracles; oopssec weak-md5 thin 8-finding hub without crypto route oracle.",
       "scanned_at": "2026-09-03T20:18:00.000Z"
     },
     {
