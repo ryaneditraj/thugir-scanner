@@ -16174,6 +16174,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fauxbank-instructor-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "FauxBank instructor API exposes vulnerability toggles",
+    description:
+      "GET /api/instructor with admin session returns switches object toggling idor, sqli, xss, csrf, and weakAuth lesson vulnerabilities — instructor dashboard training oracle.",
+    impactOneline:
+      "Instructor APIs that expose live vulnerability toggles can accidentally weaken lab isolation or leak training configuration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankInstructorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict instructor APIs to authenticated trainer roles and avoid exposing live vulnerability toggles in production.",
+      steps: [
+        "Require trainer/instructor role for GET /api/instructor.",
+        "Audit vulnerability toggle endpoints for authorization bypass.",
+        "Run FauxBank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/instructor returns vulnerability toggles for idor, sqli, and csrf lessons. Show instructor API authorization hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-instructor-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "FauxBank /instructor route live oracle",
+    description:
+      "When scanning /instructor, admin session GET /api/instructor returns vulnerability toggles for OWASP lesson switches — route-specific instructor dashboard oracle.",
+    impactOneline:
+      "Route-specific confirmation that FauxBank /instructor documents the instructor dashboard with live vulnerability toggles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankInstructorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict instructor dashboard routes and APIs to authenticated trainer roles.",
+      steps: [
+        "Require admin or trainer role before rendering /instructor.",
+        "Authorize GET /api/instructor against instructor role claims.",
+        "Run FauxBank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /instructor route scan confirms GET /api/instructor exposes vulnerability toggles. Show route-specific instructor authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-challenge-evidence",
     platform: "generic",
     category: "Injection",
@@ -16534,6 +16586,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our WebSec.fr level19 lab exposes microtime-seeded PHP rand() captcha and generate_random_text() CSRF tokens in a password-reset flow. Show secure token generation and CSRF defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level14-php-eval-blacklist-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level14 PHP eval blacklist route live oracle",
+    description:
+      "When scanning /level14/, source.php confirms 25-char restricted PHP eval with incomplete function blacklist — $blacklist{index} bypass oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level14 documents a PHP eval challenge with blacklist self-reference bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel14PhpEvalBlacklistRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate training labs from production; never eval user-controlled code.",
+      steps: [
+        "Serve WebSec challenge sources only on isolated lab infrastructure.",
+        "Remove eval() on any user-controlled input in production code.",
+        "Blocklist the blacklist variable itself and use allowlists instead of regex filters."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level14 route scan exposes 25-char PHP eval with incomplete function blacklist. Show secure alternatives to eval and allowlist-based validation.",
     version: 1,
     enabled: true
   },

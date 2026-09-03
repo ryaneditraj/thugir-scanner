@@ -1938,6 +1938,8 @@ const DEEP_RULES = new Set<string>([
   "fauxbankLoansNegativeAmountLiveOracle",
   "fauxbankAdminPanelLiveOracle",
   "fauxbankAdminRouteLiveOracle",
+  "fauxbankInstructorLiveOracle",
+  "fauxbankInstructorRouteLiveOracle",
   "fauxbankLabRouteLiveOracle",
   "fauxbankScannerRouteLiveOracle",
   "xssPayloadLabRouteLiveOracle",
@@ -1997,6 +1999,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecFibonacciEvalChallengeEvidence",
   "clientSideWebsecTimingAttackChallengeEvidence",
   "clientSideWebsecPasswordResetPrngChallengeEvidence",
+  "websecLevel14PhpEvalBlacklistRouteLiveOracle",
   "websecLevel19PasswordResetRouteLiveOracle",
   "websecLevel17TimingAttackRouteLiveOracle",
   "websecLevel17TimingAttackLiveOracle",
@@ -12511,6 +12514,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /websec\.fr/i.test(origin) &&
+        /\/level14\/?$/i.test(targetInput) &&
+        p.slug.startsWith("websec-level14-")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
         /\/level19\/?$/i.test(targetInput) &&
         (p.slug.startsWith("websec-level19-") ||
           p.slug === "client-side-websec-password-reset-prng-challenge-evidence")
@@ -15733,9 +15742,9 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/forgot-password\b/i.test(targetInput) &&
-        p.slug.startsWith("pwnshop-forgot-password-email-enumeration-route")
+        p.slug.startsWith("pwnshop-forgot-password-email-enumeration")
       )
-        return -3;
+        return -4;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:reset-password|forgot-password|login|verify-otp)\b/i.test(targetInput) &&
@@ -16185,6 +16194,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/admin\b/i.test(targetInput) &&
         p.slug.startsWith("fauxbank-admin")
+      )
+        return -3;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/instructor\/?(?:[#?]|$)/i.test(targetInput) &&
+        p.slug.startsWith("fauxbank-instructor")
       )
         return -3;
       if (
