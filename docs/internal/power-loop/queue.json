@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T22:20:00.000Z",
+  "updated_at": "2026-09-03T23:20:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php",
+      "source": "webspoilt/vulnforge-academy — Level 16 file-upload bypass challenge (Medium tier file upload; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
+      "source": "webspoilt/vulnforge-academy — Level 17 file-upload validation bypass challenge (Medium tier; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level18.php",
+      "source": "webspoilt/vulnforge-academy — Level 18 file-upload extension bypass challenge (Medium tier; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/chatbot/respond",
+      "source": "OWASP Juice Shop v20 — LLM chatbot prompt-injection API endpoint (demo.owasp-juice.shop; OWASP blog 2026)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/mcp",
+      "source": "NeuraLegion/brokencrystals — MCP JSON-RPC tool-calling endpoint with prompt injection/SSRF/LFI oracles (public benchmark)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/weak-supabase-rls",
       "source": "ai-security-platform — CWE-732 weak Supabase RLS exposing all rows challenge (14-exercise Next.js+Supabase lab; web search 22 UTC)",
