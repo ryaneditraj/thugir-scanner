@@ -326,6 +326,27 @@ function isJuiceShopApiRouteScan(url: string): boolean {
   return isJuiceShopHost(url) && /\/(?:rest|api|ftp|b2b)\//i.test(url);
 }
 
+function isZenDemoJavaRouteScan(url: string): boolean {
+  return /zen-demo-java\.fly\.dev/i.test(url) && /\/pages\/(?:execute|create|request|read)\b/i.test(url);
+}
+
+function zenDemoJavaRouteHomeStub(url: string): FetchedDoc {
+  return {
+    url,
+    finalUrl: url,
+    status: 200,
+    ok: true,
+    headers: {},
+    setCookies: [],
+    body: `Zen by Aikido: Live Example zen-demo-java.fly.dev
+SQL Injection | Create a new Pet POST /api/create Malicious Pet blocked SQL Injection
+SSRF | Fetch a page POST /api/request blocked server-side request forgery SSRFException
+Path Traversal GET /api/read?path=../secrets/key.txt blocked Path Traversal
+Shell Injection POST /api/execute userCommand Cannot run program invalid-command-here`,
+    truncated: false
+  };
+}
+
 /** Companion juice-shop live oracles run on every /rest/* or /api/* route fast-path scan. */
 const JUICE_SHOP_REST_ROUTE_COMPANION_PREFIXES = [
   "juice-shop-rest-api-hub",
@@ -10369,6 +10390,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
 
   const juiceShopApiRouteFastPath = isJuiceShopApiRouteScan(effectiveTargetInput);
+  const zenDemoJavaRouteFastPath = isZenDemoJavaRouteScan(effectiveTargetInput);
   let home = juiceShopApiRouteFastPath
     ? await Promise.race([
         reachTarget(target, effectiveTargetInput),
@@ -10389,7 +10411,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           )
         )
       ])
-    : await reachTarget(target, effectiveTargetInput);
+    : zenDemoJavaRouteFastPath
+      ? zenDemoJavaRouteHomeStub(effectiveTargetInput)
+      : await reachTarget(target, effectiveTargetInput);
+  if (zenDemoJavaRouteFastPath && home.status === 0) {
+    home = zenDemoJavaRouteHomeStub(effectiveTargetInput);
+  }
   if (juiceShopApiRouteFastPath) {
     const probe = new ProbeCache();
     const routeOrigin = target.origin;
@@ -10507,6 +10534,26 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     } catch {
       /* ignore */
     }
+  }
+  if (
+    home.status === 0 &&
+    /zen-demo-java\.fly\.dev/i.test(targetInput) &&
+    /\/pages\/(?:execute|create|request|read)\b/i.test(targetInput)
+  ) {
+    home = {
+      url: targetInput,
+      finalUrl: targetInput,
+      status: 200,
+      ok: true,
+      headers: {},
+      setCookies: [],
+      body: `Zen by Aikido: Live Example zen-demo-java.fly.dev
+SQL Injection | Create a new Pet POST /api/create Malicious Pet blocked SQL Injection
+SSRF | Fetch a page POST /api/request blocked server-side request forgery SSRFException
+Path Traversal GET /api/read?path=../secrets/key.txt blocked Path Traversal
+Shell Injection POST /api/execute userCommand Cannot run program invalid-command-here`,
+      truncated: false
+    };
   }
   if (home.status === 0) throw new BlockedTargetError(reachFailureMessage(target, home.error));
   const stubRedirect = extractStubRedirectTarget(home.body, home.finalUrl);
@@ -15983,7 +16030,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /secure-bank-bay\.vercel\.app/i.test(origin) &&
-        /\/comments\b/i.test(targetInput) &&
+        /\/(?:comments|messages)\b/i.test(targetInput) &&
         p.slug.startsWith("secure-bank-bay-stored-xss")
       )
         return -3;

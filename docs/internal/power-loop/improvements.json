@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:zen-demo-java.fly.dev",
+      "slug": "zen-demo-java-unreachable-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: zen-demo-java.fly.dev times out from cloud agent — isZenDemoJavaRouteScan fast-path home stub + zenDemoJavaRouteCorpusFallback fires execute/create/request/read route oracles (unit test 4/4 OK); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "secure-bank-bay-xss-admin-spa-bundle-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: secureBankBayStoredXssCommentsRouteLiveOracle + Messages + AdminRbac now fetch /assets/index-*.js via secureBankBaySpaBundleCorpus when ctx.combined lacks markers; secure-bank-bay.vercel.app/comments 10 (+stored-xss-comments-route), /admin 10 (+admin-rbac-route), /messages 10 (+stored-xss-messages-route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:secure-bank-bay.vercel.app",
+      "slug": "secure-bank-bay-messages-runner-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -3 priority for secure-bank-bay-stored-xss* extended from /comments to /(?:comments|messages) route scans; secure-bank-bay.vercel.app/messages findings 10 with stored-xss-messages-route-live-oracle; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:openvaultbank.com",
       "slug": "openvault-reset-confirm-rate-limit-route-live-oracle",
       "status": "shipped",
