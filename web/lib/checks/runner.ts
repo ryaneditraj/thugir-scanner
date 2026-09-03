@@ -16259,6 +16259,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/mail(?:\/\d+)?\/?$/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-mail")
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/profile\/upload-avatar/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-mail")
       )
@@ -16734,6 +16740,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
+        /\/mcp\/tools\/list_coupons/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-mcp-coupons")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
         /\/mcp\/tools(?:\/|$)/i.test(targetInput) &&
         !/\/mcp\/tools\/list_coupons/i.test(targetInput) &&
         p.slug.startsWith("duck-store-mcp-tools")
@@ -16893,6 +16905,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       if (/juicesec\.mrdinesh\.workers\.dev/i.test(origin) && p.slug.startsWith("client-side-juicesec")) return -2;
       if (/vulnerable-web-application-jecw\.vercel\.app/i.test(origin) && p.slug.startsWith("buggybuy-")) return -2;
       if (/appsec-ci-pipeline\.onrender\.com/i.test(origin) && p.slug.startsWith("appsec-ci-")) return -2;
+      if (
+        /appsec-ci-pipeline\.onrender\.com/i.test(origin) &&
+        /\/comments\/?$/i.test(targetInput) &&
+        p.slug.startsWith("appsec-ci-stored-xss-comments")
+      )
+        return -4;
       if (
         /dvga2\.tools\.escape\.tech/i.test(origin) &&
         p.slug.startsWith("dvga2-expert-hardened-mode")
