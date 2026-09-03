@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-03T05:30:32.883Z",
-  "total": 3138,
-  "uniqueSlugs": 3130,
+  "generatedAt": "2026-09-03T06:04:03.390Z",
+  "total": 3141,
+  "uniqueSlugs": 3133,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3120,
+    "generic": 3123,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3053,
+    "deep": 3056,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 628,
+    "Broken access control": 630,
     "Exposed secret": 117,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -32,7 +32,7 @@
     "Open redirect": 26,
     "general": 20,
     "SSRF": 19,
-    "Server-side request forgery": 105,
+    "Server-side request forgery": 106,
     "Sensitive data exposure": 90,
     "AI security": 134,
     "Business logic": 37,
@@ -250,6 +250,9 @@
     "brokencrystals-v1-userinfo-disclosure-route-live-oracle",
     "brokencrystals-vendor-directory-listing-live-oracle",
     "brokencrystals-vendor-directory-listing-route-live-oracle",
+    "bugforge-graphql-route-live-oracle",
+    "bugforge-idor-route-live-oracle",
+    "bugforge-ssrf-route-live-oracle",
     "buggybuy-api-bola-live-oracle",
     "buggybuy-api-bola-route-live-oracle",
     "burpbounty-actuator-heapdump-live-oracle",

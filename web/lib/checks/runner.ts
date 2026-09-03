@@ -4168,6 +4168,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideNorthStarAgiCtfEvidence",
   "clientSideWafWorkshopEvidence",
   "clientSideBugforgeLabEvidence",
+  "bugforgeSsrfRouteLiveOracle",
+  "bugforgeIdorRouteLiveOracle",
+  "bugforgeGraphqlRouteLiveOracle",
   "webverselabsFixtureRouteLiveOracle",
   "clientSideAikidoZenDemoEvidence",
   "zenDemoExecuteShellInjectionLiveOracle",
@@ -13687,6 +13690,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         p.slug.startsWith("ist-edu-")
       )
         return -3;
+      if (
+        /bugforge\.io/i.test(origin) &&
+        /\/labs\/(?:ssrf|idor|graphql)\b/i.test(targetInput) &&
+        p.slug.startsWith("bugforge-")
+      )
+        return -4;
       if (
         /appsecmaster\.net/i.test(origin) &&
         /\/labs\/ssrf\b/i.test(targetInput) &&

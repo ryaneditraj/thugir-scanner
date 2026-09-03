@@ -7925,6 +7925,24 @@
       "slug": "oopssec-jwt-alg-confusion-walkthrough-fetch-unify",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: oopssecJwtAlgConfusionRouteLiveOracle now uses oopssecWalkthroughEvidenceWithFetch for trailing-slash Astro walkthrough fetch parity; koadt.github.io/.../jwt-algorithm-confusion-partner-api findings 7 maintained (+oopssec-jwt-alg-confusion-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugforge.io",
+      "slug": "bugforge-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bugforge.io/labs/ssrf 301→app.bugforge.io; MesaNet WAF & SSRF allowlist-bypass corpus; bugforge.io/labs/ssrf findings 6→7 (+bugforge-ssrf-route-live-oracle +client-side-bugforge-lab-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugforge.io",
+      "slug": "bugforge-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bugforge.io/labs/idor 301→app.bugforge.io; Tanuki/Ottergram IDOR parameter-tampering corpus; bugforge.io/labs/idor findings 6→7 (+bugforge-idor-route-live-oracle +client-side-bugforge-lab-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugforge.io",
+      "slug": "bugforge-graphql-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bugforge.io/labs/graphql 301→app.bugforge.io; Ottergram GraphQL introspection + user(id:N) IDOR corpus; bugforge.io/labs/graphql findings 6→7 (+bugforge-graphql-route-live-oracle +client-side-bugforge-lab-evidence); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
