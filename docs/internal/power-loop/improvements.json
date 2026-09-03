@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-sqli-blind-time-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/sql_blind_time/count_insecure.php?id=1 returns count=1 vs id=1 OR 1=1 returns count=4; owaspsecure.com/demo/a03_injection/insecure.php findings 13→17 (+owaspsecure-injection-sqli-blind-time-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-sqli-second-order-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/sql_second_order/admin_view_insecure.php?needle=%' OR 1=1 -- exfiltrates admin_inj@example.com + bob_inj@example.com via stored bio LIKE concat; owaspsecure.com/demo/a03_injection/insecure.php findings 13→17 (+owaspsecure-injection-sqli-second-order-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-race-condition-coupon-walkthrough-fetch-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: oopssecRaceConditionCouponRouteLiveOracle now uses oopssecWalkthroughEvidenceWithFetch for Astro walkthrough body fetch parity with xff-sqli oracle; koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/ findings 13 (+oopssec-race-condition-coupon-route-live-oracle +client-side-oopssec-race-condition-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:koadt.github.io/oss-oopssec-store",
       "slug": "oopssec-plaintext-password-logs-route-live-oracle",
       "status": "shipped",

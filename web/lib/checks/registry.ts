@@ -6640,7 +6640,11 @@ const oopssecStoredXssReviewsRouteLiveOracle: Rule = async (ctx) => {
 const oopssecRaceConditionCouponRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/posts\/race-condition-coupon-abuse/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecRaceConditionEvidence(ctx);
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecRaceConditionEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -43793,6 +43797,89 @@ const owaspsecureInjectionUnionSearchRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "owaspsecure.com /demo/a03_injection route scan — Attack 2 UNION search exfiltrates a03_users via shape-compatible UNION SELECT (live SQLi oracle)"
+    }
+  };
+};
+
+const owaspsecureInjectionSqliBlindTimeLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const countBase = owaspsecureAttackUrl(ctx, "attacks/sql_blind_time/count_insecure.php");
+  const baselineUrl = `${countBase}?${new URLSearchParams({ id: "1" }).toString()}`;
+  const probeUrl = `${countBase}?${new URLSearchParams({ id: "1 OR 1=1" }).toString()}`;
+  const baseline = await ctx.probe.get(baselineUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  const probe = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (baseline.status < 200 || baseline.status >= 400) return NEGATIVE;
+  if (probe.status < 200 || probe.status >= 400) return NEGATIVE;
+  const baselineCount = Number(baseline.body.match(/"count"\s*:\s*(\d+)/)?.[1]);
+  const probeCount = Number(probe.body.match(/"count"\s*:\s*(\d+)/)?.[1]);
+  if (!Number.isFinite(baselineCount) || !Number.isFinite(probeCount)) return NEGATIVE;
+  if (probeCount <= baselineCount) return NEGATIVE;
+  if (!/WHERE id =/i.test(probe.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      baselineCount,
+      probeCount,
+      snippet: probe.body.slice(0, 120),
+      note: "owaspsecure.com GET attacks/sql_blind_time/count_insecure.php accepts boolean SQLi via concatenated id parameter — A03 blind injection training oracle"
+    }
+  };
+};
+
+const owaspsecureInjectionSqliBlindTimeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a03_injection\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureInjectionSqliBlindTimeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a03_injection route scan — Attack 3 blind/time SQLi flips COUNT via id=1 OR 1=1 boolean probe (live SQLi oracle)"
+    }
+  };
+};
+
+const owaspsecureInjectionSqliSecondOrderLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const adminBase = owaspsecureAttackUrl(ctx, "attacks/sql_second_order/admin_view_insecure.php");
+  const viewUrl = `${adminBase}?${new URLSearchParams({ needle: "%' OR 1=1 -- " }).toString()}`;
+  const doc = await ctx.probe.get(viewUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/WHERE p\.bio LIKE/i.test(doc.body)) return NEGATIVE;
+  if (!/admin_inj@example\.com/i.test(doc.body)) return NEGATIVE;
+  if (!/bob_inj@example\.com/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: viewUrl,
+      snippet:
+        doc.body.match(/admin_inj@example\.com[\s\S]{0,60}/i)?.[0]?.slice(0, 100) ??
+        "second-order SQLi exfiltrated multiple users",
+      note: "owaspsecure.com GET attacks/sql_second_order/admin_view_insecure.php builds dynamic SQL from stored profile bio — A03 second-order injection training oracle"
+    }
+  };
+};
+
+const owaspsecureInjectionSqliSecondOrderRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a03_injection\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureInjectionSqliSecondOrderLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a03_injection route scan — Attack 4 second-order SQLi detonates stored bio payload in admin_view LIKE query (live SQLi oracle)"
     }
   };
 };
@@ -110394,6 +110481,10 @@ export const RULES: Record<string, Rule> = {
   owaspsecureBacFunctionLevelPromoteRouteLiveOracle,
   owaspsecureInjectionUnionSearchLiveOracle,
   owaspsecureInjectionUnionSearchRouteLiveOracle,
+  owaspsecureInjectionSqliBlindTimeLiveOracle,
+  owaspsecureInjectionSqliBlindTimeRouteLiveOracle,
+  owaspsecureInjectionSqliSecondOrderLiveOracle,
+  owaspsecureInjectionSqliSecondOrderRouteLiveOracle,
   owaspsecureBacFileDorLiveOracle,
   owaspsecureBacFileDorRouteLiveOracle,
   owaspsecureBacMassAssignmentLiveOracle,
