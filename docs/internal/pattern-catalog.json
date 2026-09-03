@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-03T09:13:44.468Z",
-  "total": 3148,
-  "uniqueSlugs": 3140,
+  "generatedAt": "2026-09-03T10:30:39.347Z",
+  "total": 3152,
+  "uniqueSlugs": 3144,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3130,
+    "generic": 3134,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3063,
+    "deep": 3067,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 150,
     "Security misconfiguration": 240,
     "Broken authentication": 199,
-    "Injection": 511,
+    "Injection": 515,
     "Cross-site scripting": 793,
     "Open redirect": 27,
     "general": 20,
@@ -431,8 +431,10 @@
     "chimera-fedramp-openapi-extensions-route-live-oracle",
     "chimera-genai-agent-browse-ssrf-route-live-oracle",
     "chimera-genai-chat-prompt-injection-route-live-oracle",
+    "chimera-genai-graphql-route-live-oracle",
     "chimera-genai-knowledge-upload-route-live-oracle",
     "chimera-genai-models-config-disclosure-route-live-oracle",
+    "chimera-genai-rag-query-route-live-oracle",
     "chimera-gov-benefits-search-sqli-route-live-oracle",
     "chimera-gov-cases-bola-route-live-oracle",
     "chimera-gov-records-pii-route-live-oracle",
@@ -1933,6 +1935,8 @@
     "graphqlbook-internal-user-search-bola-route-live-oracle",
     "graphqlbook-register-admin-mass-assignment-live-oracle",
     "graphqlbook-register-admin-mass-assignment-route-live-oracle",
+    "guardmarly-scan-live-oracle",
+    "guardmarly-scan-route-live-oracle",
     "hack-health-a01-brute-force-route-live-oracle",
     "hack-health-a03-sql-injection-route-live-oracle",
     "hacksplaining-session-fixation-live-oracle",

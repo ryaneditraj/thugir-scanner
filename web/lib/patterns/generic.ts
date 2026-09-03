@@ -78969,6 +78969,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-genai-graphql-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera GenAI GraphQL introspection route live oracle",
+    description:
+      "When scanning /api/v1/genai/graphql on chimera.atlascrew.dev, vuln-api genai/routes.py documents GraphQL introspection and depth/complexity DoS — route-specific GenAI GraphQL training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional GenAI GraphQL introspection and depth DoS for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGenaiGraphqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Disable __schema introspection on public GraphQL endpoints.",
+        "Enforce query depth and complexity limits before execution.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/genai/graphql route documents GraphQL introspection and depth DoS. Show query cost analysis and introspection lockdown remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-genai-rag-query-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera GenAI RAG query route live oracle",
+    description:
+      "When scanning /api/v1/genai/rag/query on chimera.atlascrew.dev, the queued GenAI RAG query alias maps to documented /api/v1/genai/graphql introspection + depth DoS training content — route-specific GenAI query oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents GenAI query-layer GraphQL abuse patterns for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGenaiRagQueryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Treat GenAI query endpoints like GraphQL APIs and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Apply query depth and complexity limits on GenAI retrieval/query endpoints.",
+        "Disable schema introspection on any GenAI query interfaces exposed to users.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/genai/rag/query route documents GenAI query-layer GraphQL abuse. Show retrieval query validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "guardmarly-scan-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Guardmarly SAST scan API live oracle",
+    description:
+      "ansede.onrender.com hosts Guardmarly — a zero-dependency SAST scanner with POST /scan returning CWE-639 IDOR, CWE-89 SQLi, and CWE-798 hardcoded-secret findings on embedded probe code.",
+    impactOneline:
+      "Live confirmation that Guardmarly's public SAST demo API detects IDOR, SQL injection, and hardcoded secrets in submitted source code.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "guardmarlyScanLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Guardmarly is an intentional SAST training demo — gate /scan behind auth on production deployments.",
+      steps: [
+        "Require authentication before accepting arbitrary code submissions to /scan.",
+        "Rate-limit scan API usage to prevent abuse.",
+        "Run SAST demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Guardmarly /scan API documents live SAST detection of IDOR, SQLi, and hardcoded secrets. Show secure API access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "guardmarly-scan-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Guardmarly SAST scan route live oracle",
+    description:
+      "When scanning /scan on anside.onrender.com, POST /scan returns CWE-639 IDOR, CWE-89 SQLi, and CWE-798 hardcoded-secret findings — route-specific SAST training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Guardmarly's /scan endpoint performs live static analysis with IDOR, SQLi, and secret detection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "guardmarlyScanRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Guardmarly is an intentional SAST training demo — gate /scan behind auth on production deployments.",
+      steps: [
+        "Require authentication before accepting arbitrary code submissions to /scan.",
+        "Rate-limit scan API usage to prevent abuse.",
+        "Run SAST demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Guardmarly /scan route documents live SAST detection. Show API authentication and rate-limiting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "openvault-payments-bola-route-live-oracle",
     platform: "generic",
     category: "Broken access control",

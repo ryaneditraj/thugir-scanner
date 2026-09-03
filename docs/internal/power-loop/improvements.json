@@ -7997,6 +7997,24 @@
       "slug": "ucu-owasp-ctf-reflexion-ssti-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: ucuOwaspCtfReflexionSuppressed skips reflexionEscalatedSsti on static Firebase SPA vanity routes; ucu-owasp-ctf.vercel.app/injection/ findings 5→4 (-reflexion-escalated-ssti false positive, +ucu-owasp-ctf-injection-route-live-oracle retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ansede.onrender.com",
+      "slug": "guardmarly-scan-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST https://ansede.onrender.com/scan returns CWE-862 missing-auth + CWE-89 SQLi + CWE-798 hardcoded secret on Flask probe payload; anside.onrender.com/scan findings 2→4 (+guardmarly-scan-live-oracle +guardmarly-scan-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-genai-graphql-rag-query-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: atlas-crew/Chimera genai/routes.py documents POST /api/v1/genai/graphql introspection + depth DoS; queued /api/v1/genai/rag/query alias maps to same corpus; graphql findings 7→8 (+chimera-genai-graphql-route-live-oracle), rag/query 7→8 (+chimera-genai-rag-query-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-aes-cbc-padding-oracle-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: oopssecAesCbcPaddingOracleRouteLiveOracle accepts vanity /posts/aes-cbc-padding-oracle/ 404 slug and fetches canonical forged-share-token walkthrough; koadt.github.io/.../aes-cbc-padding-oracle/ findings 4→5 (+oopssec-aes-cbc-padding-oracle-route-live-oracle); benchmark 6/6 maintained"
     }
   ]
 }

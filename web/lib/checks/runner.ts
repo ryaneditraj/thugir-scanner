@@ -1873,6 +1873,9 @@ const DEEP_RULES = new Set<string>([
   "chimeraGenaiModelsConfigDisclosureRouteLiveOracle",
   "chimeraGenaiKnowledgeUploadLiveOracle",
   "chimeraGenaiKnowledgeUploadRouteLiveOracle",
+  "chimeraGenaiGraphqlLiveOracle",
+  "chimeraGenaiGraphqlRouteLiveOracle",
+  "chimeraGenaiRagQueryRouteLiveOracle",
   "chimeraDiagnosticsPingRceLiveOracle",
   "chimeraDiagnosticsPingRceRouteLiveOracle",
   "chimeraDiagnosticsWebhookSsrfLiveOracle",
@@ -1987,6 +1990,8 @@ const DEEP_RULES = new Set<string>([
   "appsecCiStoredXssCommentsRouteLiveOracle",
   "appsecCiDjangoAdminLiveOracle",
   "appsecCiDjangoAdminRouteLiveOracle",
+  "guardmarlyScanLiveOracle",
+  "guardmarlyScanRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
   "clientSideWebsecChallengeEvidence",
   "clientSideWebsecCryptoChallengeEvidence",
@@ -10394,6 +10399,11 @@ function canonicalDeepScanTarget(raw: string): string {
       u.hostname = "vaultapp-omega.vercel.app";
       return u.toString();
     }
+    if (/^(?:www\.)?ansede\.onrender\.com$/i.test(u.hostname)) {
+      u.protocol = "https:";
+      u.hostname = "ansede.onrender.com";
+      return u.toString();
+    }
   } catch {
     /* ignore */
   }
@@ -12772,6 +12782,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         p.slug.startsWith("chimera-genai-knowledge-upload")
       )
         return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/genai\/(?:graphql|rag\/query)\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-genai-graphql")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/genai\/rag\/query\b/i.test(targetInput) &&
+        p.slug === "chimera-genai-rag-query-route-live-oracle"
+      )
+        return -4;
+      if (
+        /^(?:www\.)?ansede\.onrender\.com$/i.test(new URL(origin).hostname) &&
+        /\/scan\b/i.test(targetInput) &&
+        p.slug.startsWith("guardmarly-scan")
+      )
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/diagnostics\/ping\b/i.test(targetInput) &&

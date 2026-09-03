@@ -20539,6 +20539,8 @@ CHM-AI-003 Sensitive Data Exposure (Model Config)
 GET /api/v1/genai/models/config
 CHM-AI-004 Unrestricted File Upload (RAG)
 POST /api/v1/genai/knowledge/upload
+POST /api/v1/genai/graphql
+GraphQL Introspection Depth/Complexity DoS __schema batching attack
 CHM-ECOM-002 SQL Injection (Catalog)
 GET /api/v1/ecommerce/products
 GET /api/v1/ecommerce/products/search?query=  # Reflected XSS (Search)
@@ -20639,7 +20641,7 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit|telecom\/sim-swap|energy\/scada\/commands|energy-utilities\/(?:dispatch|assets\/calibration|outages)|ics\/controllers\/status|gov\/benefits\/search|saas\/tenants|cart\/update|loyalty\/points\/transfer|admin\/(?:orders\/override|attack\/xxe)|genai\/chat|genai\/agent\/browse/i.test(
+    !/login-vulnerable|patients\/search|banking\/accounts\/search|insurance\/policies\/lookup|transactions\/history|payments\/process|transfers\/wire|claims\/submit|telecom\/sim-swap|energy\/scada\/commands|energy-utilities\/(?:dispatch|assets\/calibration|outages)|ics\/controllers\/status|gov\/benefits\/search|saas\/tenants|cart\/update|loyalty\/points\/transfer|admin\/(?:orders\/override|attack\/xxe)|genai\/(?:chat|graphql|agent\/browse)/i.test(
       corpus
     )
   ) {
@@ -21905,6 +21907,62 @@ const chimeraGenaiKnowledgeUploadRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/genai/knowledge/upload route scan — CHM-AI-004 documents unrestricted file upload on GenAI RAG ingestion (Jekyll docs corpus fallback) — route-specific GenAI file upload training oracle"
+    }
+  };
+};
+
+async function chimeraGenaiGraphqlProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const graphqlOk =
+    /genai\/graphql/i.test(corpus) &&
+    (/GraphQL Introspection|Depth\/Complexity DoS|__schema/i.test(corpus) ||
+      /POST\s+\/api\/v1\/genai\/graphql/i.test(corpus)) &&
+    (/LLM|GenAI|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!graphqlOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /__schema|GraphQL Introspection/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "POST /api/v1/genai/graphql — GraphQL introspection + depth/complexity DoS via __schema and nested query batching",
+      note: "chimera.atlascrew.dev — Chimera vuln-api genai/routes.py documents GraphQL introspection and depth DoS on /api/v1/genai/graphql (Jekyll docs + openapi corpus fallback; live vuln-api not deployed on docs host) — GenAI GraphQL training oracle"
+    }
+  };
+}
+
+const chimeraGenaiGraphqlLiveOracle: Rule = async (ctx) => chimeraGenaiGraphqlProbe(ctx);
+
+const chimeraGenaiGraphqlRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/genai\/graphql\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraGenaiGraphqlProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/genai/graphql route scan — genai/routes.py documents GraphQL introspection and depth/complexity DoS (Jekyll docs corpus fallback) — route-specific GenAI GraphQL training oracle"
+    }
+  };
+};
+
+const chimeraGenaiRagQueryRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/genai\/rag\/query\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraGenaiGraphqlProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: Math.max(0.86, (hit.confidence ?? 0.88) - 0.02),
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/genai/rag/query route scan — queued GenAI RAG query alias maps to documented /api/v1/genai/graphql introspection + depth DoS training oracle (Jekyll docs corpus fallback; rag/query not deployed on docs host)"
     }
   };
 };
@@ -30109,10 +30167,23 @@ const clientSideOopssecAesCbcPaddingOracleEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_AES_CBC_PADDING_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/aes-cbc-padding-oracle-forged-share-token/";
+
 const oopssecAesCbcPaddingOracleRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/aes-cbc-padding-oracle-forged-share-token/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecAesCbcPaddingOracleEvidence(ctx);
+  const routeOk =
+    /\/posts\/aes-cbc-padding-oracle(?:-forged-share-token)?\/?$/i.test(pageUrl) ||
+    /\/posts\/aes-cbc-padding-oracle-forged-share-token/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/aes-cbc-padding-oracle\/?$/i.test(pageUrl)
+    ? OOPSSEC_AES_CBC_PADDING_CANONICAL_POST
+    : pageUrl;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    fetchUrl,
+    clientSideOopssecAesCbcPaddingOracleEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -30120,7 +30191,9 @@ const oopssecAesCbcPaddingOracleRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/aes-cbc-padding-oracle-forged-share-token route scan — walkthrough documents PKCS#7 padding oracle on /api/documents/share?token= enabling forged share-token decryption"
+      note: /\/posts\/aes-cbc-padding-oracle\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/aes-cbc-padding-oracle route scan — vanity slug 404; canonical forged-share-token walkthrough documents PKCS#7 padding oracle on /api/documents/share?token="
+        : "OopsSec Store /posts/aes-cbc-padding-oracle-forged-share-token route scan — walkthrough documents PKCS#7 padding oracle on /api/documents/share?token= enabling forged share-token decryption"
     }
   };
 };
@@ -42929,6 +43002,79 @@ const appsecCiDjangoAdminRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "AppSec CI Pipeline /admin/ route scan — Django administration login panel reachable without network restriction — route-specific admin exposure oracle"
+    }
+  };
+};
+
+// --- Guardmarly SAST demo (ansede.onrender.com) --------------------------------------
+const GUARDMARLY_SCAN_PROBE_CODE = `from flask import Flask, request
+app = Flask(__name__)
+API_KEY="sk_live_guardmarly_probe"
+@app.route("/invoice/<id>")
+def get_invoice(id):
+    return db.query(f"SELECT * FROM invoices WHERE id={id}")`;
+
+function isGuardmarlyHost(ctx: RuleContext): boolean {
+  try {
+    return /^(?:www\.)?ansede\.onrender\.com$/i.test(new URL(ctx.origin).hostname);
+  } catch {
+    return /ansede\.onrender\.com/i.test(ctx.origin);
+  }
+}
+
+async function guardmarlyScanProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isGuardmarlyHost(ctx)) return NEGATIVE;
+  const scanUrl = "https://ansede.onrender.com/scan";
+  const doc = await ctx.probe.get(scanUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code: GUARDMARLY_SCAN_PROBE_CODE }),
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let parsed: { findings?: { cwe?: string; title?: string }[] } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as { findings?: { cwe?: string; title?: string }[] };
+  } catch {
+    return NEGATIVE;
+  }
+  const findings = parsed?.findings ?? [];
+  const cwes = findings.map((f) => f.cwe).filter(Boolean);
+  const accessHit = cwes.includes("CWE-639") || cwes.includes("CWE-862");
+  const sqliHit = cwes.includes("CWE-89");
+  const secretHit = cwes.includes("CWE-798");
+  if (!accessHit || !sqliHit || !secretHit) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: findings.length >= 2 ? 0.92 : 0.88,
+    evidence: {
+      url: scanUrl,
+      snippet: findings
+        .slice(0, 3)
+        .map((f) => f.title)
+        .filter(Boolean)
+        .join("; "),
+      note: "ansede.onrender.com POST /scan — Guardmarly zero-dependency SAST demo returns CWE-639 IDOR + CWE-89 SQLi + CWE-798 hardcoded secret findings on embedded probe code"
+    }
+  };
+}
+
+const guardmarlyScanLiveOracle: Rule = async (ctx) => guardmarlyScanProbe(ctx);
+
+const guardmarlyScanRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGuardmarlyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/scan\/?$/i.test(pageUrl)) return NEGATIVE;
+  const hit = await guardmarlyScanProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "ansede.onrender.com /scan route scan — Guardmarly live SAST API flags CWE-639 IDOR, CWE-89 SQLi, and CWE-798 hardcoded secrets on probe payload — route-specific SAST training oracle"
     }
   };
 };
@@ -109263,6 +109409,8 @@ export const RULES: Record<string, Rule> = {
   appsecCiStoredXssCommentsRouteLiveOracle,
   appsecCiDjangoAdminLiveOracle,
   appsecCiDjangoAdminRouteLiveOracle,
+  guardmarlyScanLiveOracle,
+  guardmarlyScanRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,
   fauxbankProfileRouteLiveOracle,
   clientSidePrototypePollutionEvidence,
@@ -109373,6 +109521,9 @@ export const RULES: Record<string, Rule> = {
   chimeraGenaiModelsConfigDisclosureRouteLiveOracle,
   chimeraGenaiKnowledgeUploadLiveOracle,
   chimeraGenaiKnowledgeUploadRouteLiveOracle,
+  chimeraGenaiGraphqlLiveOracle,
+  chimeraGenaiGraphqlRouteLiveOracle,
+  chimeraGenaiRagQueryRouteLiveOracle,
   chimeraDiagnosticsPingRceLiveOracle,
   chimeraDiagnosticsPingRceRouteLiveOracle,
   chimeraDiagnosticsWebhookSsrfLiveOracle,
