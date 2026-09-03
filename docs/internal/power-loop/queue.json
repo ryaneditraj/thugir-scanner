@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T21:18:00.000Z",
+  "updated_at": "2026-09-03T22:20:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/weak-supabase-rls",
+      "source": "ai-security-platform — CWE-732 weak Supabase RLS exposing all rows challenge (14-exercise Next.js+Supabase lab; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level15.php",
+      "source": "webspoilt/vulnforge-academy — Level 15 SSRF challenge (GitHub README Medium tier; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-69",
+      "source": "OWASP WrongSecrets — challenge-69 secrets-management oracle (Heroku public demo; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach/",
+      "source": "kOaDT/oss-oopssec-store — IDOR order privacy breach walkthrough (ch.08 access control; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access/",
+      "source": "kOaDT/oss-oopssec-store — BOLA wishlist access walkthrough (ch.08 access control; web search 22 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/self-xss-csrf-profile-takeover/",
       "source": "kOaDT/oss-oopssec-store challenges.json — Self-XSS + CSRF profile takeover chain walkthrough (ch.14/16 XSS; web search 21 UTC)",
