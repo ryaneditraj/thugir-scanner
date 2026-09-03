@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T14:16:55.726Z",
+  "updated_at": "2026-09-03T15:20:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api/",
+      "source": "kOaDT/oss-oopssec-store — path traversal documents API walkthrough (challenges.json #8; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/",
+      "source": "kOaDT/oss-oopssec-store — mass assignment admin signup walkthrough (challenges.json #10; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/",
+      "source": "kOaDT/oss-oopssec-store — product search SQLi walkthrough (challenges.json #18; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss/",
+      "source": "kOaDT/oss-oopssec-store — malicious SVG upload stored XSS walkthrough (challenges.json #21; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-67",
+      "source": "OWASP WrongSecrets — Challenge 67 secrets oracle (Heroku demo README: challenges 67-72; web search 15 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection/",
       "source": "kOaDT/oss-oopssec-store — second-order SQLi in admin reviews walkthrough (ch.05 SQLi)",
