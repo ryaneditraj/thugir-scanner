@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T19:20:00.000Z",
+  "updated_at": "2026-09-03T20:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2762,
-  "total_findings": 27100,
+  "total_sites_scanned": 2765,
+  "total_findings": 27120,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1966,
-  "discovery_findings": 22987,
-  "improvements_shipped": 1347,
-  "last_run": "2026-09-03T19:20:00.000Z",
+  "discovery_findings": 23007,
+  "improvements_shipped": 1350,
+  "last_run": "2026-09-03T20:20:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
@@ -48,41 +48,38 @@
           ]
         }
       },
-      "note": "Rich 6/6 first-pass recall (52 findings, 39 juice-shop live oracles); secret-resend present"
+      "note": "Stable 6/6 first-pass recall (52 findings, 41 juice-shop live oracles); secret-resend present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 36,
-      "focus": "oopssec plaintext-password-in-logs + owaspsecure A01 UUID IDOR + A10 internal SSRF health",
+      "urls_scanned": 2,
+      "findings": 30,
+      "focus": "owaspsecure A03 blind/time + second-order SQLi + oopssec race-condition coupon walkthrough fetch",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles) — rich pass, secret-resend present",
-      "koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs: 8→10 findings — oopssec-plaintext-password-logs-route-live-oracle shipped",
-      "owaspsecure.com/demo/a01_bac/insecure.php: 13→15 findings — owaspsecure-bac-idor-uuid-route-live-oracle shipped (public_id=bob-note-1)",
-      "owaspsecure.com/demo/a10_ssrf/insecure.php: 9→11 findings — owaspsecure-ssrf-internal-health-route-live-oracle shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 41 live oracles) — stable rich pass",
+      "owaspsecure.com/demo/a03_injection/insecure.php: 13→17 findings — owaspsecure-injection-sqli-blind-time + second-order route oracles shipped",
+      "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/: 13 findings — oopssec-race-condition-coupon-route-live-oracle reliable via walkthrough fetch"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "owaspsecure A03 sql_blind_time + sql_second_order + socket_probe attacks still without route oracles",
-      "wrongsecrets challenge-68 undeployed on Heroku — route oracle confirms undeployed state only",
-      "oopssec jwt-algorithm-confusion + race-condition-coupon + x-forwarded-for-sql still queued for next drain"
+      "owaspsecure A03 XSS stored + login bypass already covered; all five A03 attack tiers now have live route oracles",
+      "oopssec jwt-algorithm-confusion + x-forwarded-for-sql queued for next drain",
+      "wrongsecrets challenge-68 undeployed on Heroku — route oracle confirms undeployed state only"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "owaspsecure.com/demo/a03_injection/insecure.php": 17,
+    "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse": 13,
     "koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs": 10,
     "owaspsecure.com/demo/a01_bac/insecure.php": 15,
     "owaspsecure.com/demo/a10_ssrf/insecure.php": 11,
     "koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews": 17,
     "wrongsecrets.herokuapp.com/challenge/challenge-68": 18,
-    "koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain": 14,
-    "koadt.github.io/oss-oopssec-store/posts/information-disclosure-api-error": 8,
-    "owaspsecure.com/demo/a05_misconfig/insecure.php": 8,
     "duck-store.escape.tech/api/v1/users/me/profile": 33,
-    "demo.owasp-juice.shop/rest/memories": 27,
-    "pwnshop.ctfsecurity.com/verify-otp": 27
+    "demo.owasp-juice.shop/rest/memories": 27
   }
 }

@@ -2021,6 +2021,10 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureBacFunctionLevelPromoteRouteLiveOracle",
   "owaspsecureInjectionUnionSearchLiveOracle",
   "owaspsecureInjectionUnionSearchRouteLiveOracle",
+  "owaspsecureInjectionSqliBlindTimeLiveOracle",
+  "owaspsecureInjectionSqliBlindTimeRouteLiveOracle",
+  "owaspsecureInjectionSqliSecondOrderLiveOracle",
+  "owaspsecureInjectionSqliSecondOrderRouteLiveOracle",
   "owaspsecureBacFileDorLiveOracle",
   "owaspsecureBacFileDorRouteLiveOracle",
   "owaspsecureBacMassAssignmentLiveOracle",
@@ -16988,6 +16992,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a03_injection\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-injection-union-search")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a03_injection\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-injection-sqli-blind-time")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a03_injection\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-injection-sqli-second-order")
       )
         return -4;
       if (

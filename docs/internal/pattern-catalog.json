@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-03T19:20:18.160Z",
-  "total": 3195,
-  "uniqueSlugs": 3187,
+  "generatedAt": "2026-09-03T20:13:38.159Z",
+  "total": 3199,
+  "uniqueSlugs": 3191,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3177,
+    "generic": 3181,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3110,
+    "deep": 3114,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 150,
     "Security misconfiguration": 250,
     "Broken authentication": 202,
-    "Injection": 521,
+    "Injection": 525,
     "Cross-site scripting": 795,
     "Open redirect": 27,
     "general": 20,
@@ -2212,8 +2212,12 @@
     "owaspsecure-crypto-password-md5-route-live-oracle",
     "owaspsecure-design-reauth-email-live-oracle",
     "owaspsecure-design-reauth-email-route-live-oracle",
+    "owaspsecure-injection-sqli-blind-time-live-oracle",
+    "owaspsecure-injection-sqli-blind-time-route-live-oracle",
     "owaspsecure-injection-sqli-login-live-oracle",
     "owaspsecure-injection-sqli-login-route-live-oracle",
+    "owaspsecure-injection-sqli-second-order-live-oracle",
+    "owaspsecure-injection-sqli-second-order-route-live-oracle",
     "owaspsecure-injection-union-search-live-oracle",
     "owaspsecure-injection-union-search-route-live-oracle",
     "owaspsecure-injection-xss-stored-live-oracle",
