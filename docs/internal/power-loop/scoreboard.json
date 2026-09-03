@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T02:30:00.000Z",
+  "updated_at": "2026-09-03T02:55:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2081,
   "discovery_findings": 27374,
-  "improvements_shipped": 1296,
-  "last_run": "2026-09-03T02:30:00.000Z",
+  "improvements_shipped": 1299,
+  "last_run": "2026-09-03T02:55:00.000Z",
   "last_run_summary": {
     "hour_utc": "02",
     "benchmark": {
@@ -56,17 +56,17 @@
       "urls_added": 5,
       "urls_scanned": 7,
       "findings": 182,
-      "focus": "fauxbank instructor + websec level14 + vulnforge level14 + oopssec prompt-injection/jwt-confusion walkthroughs + drained nextjs CVE middleware bypass, vulnbank v2/forgot-password, pwnshop track/forgot-password/profile, wrongsecrets-66, fabraix jailbreak-001",
-      "improvements_shipped_this_run": 0
+      "focus": "sql-injection-lab login false-positive fix + dedicated oracle; code-breaking puzzle language oracles; fauxbank instructor + websec level14 + vulnforge level14 + oopssec walkthroughs + drained nextjs CVE middleware bypass, vulnbank v2/forgot-password, pwnshop track/forgot-password/profile, wrongsecrets-66, fabraix jailbreak-001",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 38 live oracles)",
+      "sql-injection-lab.vercel.app/login: 5 findings — sql-injection-lab-login-route-live-oracle (pygoat-sql false positive removed)",
+      "code-breaking.fly.dev/puzzle/1/: 6 findings — code-breaking-puzzle-language-route-live-oracle (PHP function)",
+      "code-breaking.fly.dev/puzzle/6/: 6 findings — code-breaking-puzzle-language-route-live-oracle (Java javacon)",
       "vulnbank.org/v2/forgot-password: 33 findings — vulnbank-v2-forgot-password-route-live-oracle + enumeration oracle",
       "pwnshop.ctfsecurity.com/track/1: 47 findings — pwnshop track IDOR hub",
-      "pwnshop.ctfsecurity.com/profile: 49 findings — profile route oracle set",
-      "wrongsecrets.herokuapp.com/challenge/challenge-66: 19 findings — wrongsecrets-challenge-66-java-obfuscated-route-live-oracle",
-      "playground.fabraix.com/challenges/jailbreak-001: 7 findings — fabraix-playground-session-route-live-oracle",
-      "nextjs-cve-2024-34351.deno.dev: 3 findings — CVE-2025-29927 middleware bypass evidence"
+      "pwnshop.ctfsecurity.com/profile: 49 findings — profile route oracle set"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -77,12 +77,14 @@
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "sql-injection-lab.vercel.app/login": 5,
+    "code-breaking.fly.dev/puzzle/1/": 6,
+    "code-breaking.fly.dev/puzzle/6/": 6,
     "vulnbank.org/v2/forgot-password": 33,
     "pwnshop.ctfsecurity.com/track/1": 47,
     "pwnshop.ctfsecurity.com/profile": 49,
     "wrongsecrets.herokuapp.com/challenge/challenge-66": 19,
     "playground.fabraix.com/challenges/jailbreak-001": 7,
-    "nextjs-cve-2024-34351.deno.dev": 3,
-    "pwnshop.ctfsecurity.com/forgot-password": 24
+    "brokencrystals.com/api/ldap": 85
   }
 }

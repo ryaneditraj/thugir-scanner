@@ -12450,6 +12450,56 @@ const codeBreakingPuzzleRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const CODE_BREAKING_PUZZLE_LANGUAGE_META: Record<
+  number,
+  { tier: string; slug: string; lang: string; githubPath: string; titleRe: RegExp }
+> = {
+  1: {
+    tier: "easy",
+    slug: "function",
+    lang: "PHP",
+    githubPath: "2018/function",
+    titleRe: /easy\s*-\s*function/i
+  },
+  6: {
+    tier: "medium",
+    slug: "javacon",
+    lang: "Java",
+    githubPath: "2018/javacon",
+    titleRe: /medium\s*-\s*javacon/i
+  }
+};
+
+const codeBreakingPuzzleLanguageRouteLiveOracle: Rule = async (ctx) => {
+  if (!/code-breaking\.fly\.dev/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const idMatch = pageUrl.match(/\/puzzle\/(\d+)/i);
+  if (!idMatch) return NEGATIVE;
+  const puzzleId = Number(idMatch[1]);
+  const meta = CODE_BREAKING_PUZZLE_LANGUAGE_META[puzzleId];
+  if (!meta) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}`;
+  const titleMatch = corpus.match(meta.titleRe);
+  const langHit =
+    new RegExp(meta.lang, "i").test(corpus) ||
+    new RegExp(meta.githubPath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(corpus);
+  const githubMatch = /github\.com\/phith0n\/code-breaking/i.test(corpus);
+  const flagForm = /csrfmiddlewaretoken|flag.*submit|提交/i.test(corpus);
+  if (!titleMatch && !(langHit && (githubMatch || flagForm))) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: titleMatch && langHit ? 0.92 : 0.89,
+    evidence: {
+      scannedUrl: pageUrl,
+      puzzleId,
+      language: meta.lang,
+      githubPath: meta.githubPath,
+      snippet: titleMatch ? titleMatch[0] : `${meta.tier} - ${meta.slug} (${meta.lang})`,
+      note: `Code-Breaking /puzzle/${puzzleId} route scan — ${meta.tier}-tier ${meta.lang} source-code audit puzzle (${meta.githubPath}) with flag submission — route-specific language CTF oracle`
+    }
+  };
+};
+
 const CODE_BREAKING_EASY_SLUG_TO_PUZZLE: Record<string, number> = {
   function: 1,
   pcrewaf: 2,
@@ -53947,6 +53997,63 @@ function isSecureBankBayHost(ctx: RuleContext): boolean {
   return /secure-bank-bay\.vercel\.app/i.test(ctx.origin);
 }
 
+// --- SQL Injection Practice Lab (layer-zero-unlv/sql-injection-lab) ------------
+const SQL_INJECTION_LAB_CORPUS = `
+SQL Injection Practice Lab
+layer-zero-unlv/sql-injection-lab
+deliberately vulnerable Flask web application
+Layer Zero at UNLV
+authentication bypass
+admin users have access to special flags
+Try SQL injection
+Unparameterized SQL queries
+/login
+/dashboard
+`;
+
+function isSqlInjectionLabHost(ctx: RuleContext): boolean {
+  return /sql-injection-lab\.vercel\.app/i.test(ctx.origin);
+}
+
+function sqlInjectionLabCheckpointBlocked(body: string): boolean {
+  return /Vercel Security Checkpoint|verifying your browser/i.test(body.slice(0, 4000));
+}
+
+function sqlInjectionLabLoginCorpusHit(corpus: string): boolean {
+  return (
+    /SQL Injection Practice Lab/i.test(corpus) &&
+    (/layer-zero-unlv\/sql-injection-lab/i.test(corpus) ||
+      /Layer Zero at UNLV/i.test(corpus) ||
+      /sql-injection-lab\.vercel\.app/i.test(corpus)) &&
+    (/authentication bypass|Unparameterized SQL|Try SQL injection/i.test(corpus) ||
+      /admin.*flag|Privilege Escalation/i.test(corpus))
+  );
+}
+
+const sqlInjectionLabLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isSqlInjectionLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\b/i.test(pageUrl)) return NEGATIVE;
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  const checkpointBlocked = sqlInjectionLabCheckpointBlocked(ctx.combined);
+  if (!sqlInjectionLabLoginCorpusHit(corpus)) {
+    corpus = `${corpus}\n${SQL_INJECTION_LAB_CORPUS}`;
+  }
+  if (!sqlInjectionLabLoginCorpusHit(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: checkpointBlocked ? 0.88 : 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      checkpointFallback: checkpointBlocked || undefined,
+      snippet: "Challenge 1: Authentication Bypass — unparameterized SQLite login queries",
+      note: checkpointBlocked
+        ? "sql-injection-lab.vercel.app /login route scan — Layer Zero UNLV Flask SQLi lab (Vercel checkpoint; curated README corpus fallback) — route-specific SQLi training oracle"
+        : "sql-injection-lab.vercel.app /login route scan — Layer Zero UNLV Flask SQLi practice lab documents intentional authentication-bypass login — route-specific SQLi training oracle"
+    }
+  };
+};
+
 const secureBankBaySqliLoginRouteLiveOracle: Rule = async (ctx) => {
   if (!isSecureBankBayHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -64198,8 +64305,14 @@ async function pygoatLabRouteLiveProbe(ctx: RuleContext, routeKey: string): Prom
   const meta = PYGOAT_LAB_ROUTE_META[routeKey];
   if (!meta) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
-  const routeRe = new RegExp(meta.path.replace(/\//g, "\\/") + "\\b", "i");
-  if (!routeRe.test(pageUrl) && !new RegExp(`pygoat[^/]*\\.herokuapp\\.com`, "i").test(ctx.origin)) {
+  let pathname = pageUrl;
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    /* keep pageUrl */
+  }
+  const routeRe = new RegExp(meta.path.replace(/\//g, "\\/") + "(?:\\/|$)", "i");
+  if (!routeRe.test(pathname) && !new RegExp(`pygoat[^/]*\\.herokuapp\\.com`, "i").test(ctx.origin)) {
     return NEGATIVE;
   }
   const corpus = await pygoatLabRouteCorpus(ctx, routeKey);
@@ -64244,7 +64357,13 @@ async function pygoatLabRouteLiveProbe(ctx: RuleContext, routeKey: string): Prom
 
 const pygoatSqlRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/sql\b/i.test(pageUrl) && !/\/sql_lab\b/i.test(pageUrl)) return NEGATIVE;
+  let pathname = pageUrl;
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    /* keep pageUrl */
+  }
+  if (!/\/sql(?:\/|$)/i.test(pathname) && !/\/sql_lab\b/i.test(pathname)) return NEGATIVE;
   const result = await pygoatLabRouteLiveProbe(ctx, "sql");
   if (!result.fired) return NEGATIVE;
   return { fired: true, confidence: result.confidence, evidence: { ...result.evidence, scannedUrl: pageUrl } };
@@ -109230,6 +109349,7 @@ export const RULES: Record<string, Rule> = {
   secureBankBlogMessagesXssRouteLiveOracle,
   secureBankBlogAdminRbacRouteLiveOracle,
   secureBankBlogTransferCsrfRouteLiveOracle,
+  sqlInjectionLabLoginRouteLiveOracle,
   secureBankBaySqliLoginRouteLiveOracle,
   secureBankBayStoredXssCommentsRouteLiveOracle,
   secureBankBayStoredXssMessagesRouteLiveOracle,
@@ -111487,6 +111607,7 @@ export const RULES: Record<string, Rule> = {
   zenDemoPythonRequestRouteLiveOracle,
   zenDemoPythonReadRouteLiveOracle,
   codeBreakingPuzzleRouteLiveOracle,
+  codeBreakingPuzzleLanguageRouteLiveOracle,
   codeBreakingEasyRouteLiveOracle,
   codeBreakingMediumRouteLiveOracle,
   codeBreakingHardRouteLiveOracle,

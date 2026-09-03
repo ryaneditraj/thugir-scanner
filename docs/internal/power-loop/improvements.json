@@ -7871,6 +7871,24 @@
       "slug": "ist-edu-xxe-lfi-mislabel-fix",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: removed xxe from istEduFilesClientLfiRouteLiveOracle pathname regex so /xxe route scans fire ist-edu-xxe-route-live-oracle (GET /api/notices?file= passwd) instead of LFI mislabel; ist-edu-bd.vercel.app/xxe findings 10→11; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sql-injection-lab.vercel.app",
+      "slug": "pygoat-sql-route-pathname-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pygoatSqlRouteLiveOracle and pygoatLabRouteLiveProbe now match /sql on URL pathname only (not hostname //sql-injection); sql-injection-lab.vercel.app/login no longer fires pygoat-sql-route-live-oracle false positive; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sql-injection-lab.vercel.app",
+      "slug": "sql-injection-lab-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: layer-zero-unlv/sql-injection-lab README corpus confirms Flask auth-bypass SQLi login lab; sql-injection-lab.vercel.app/login findings 5 (+sql-injection-lab-login-route-live-oracle, -pygoat-sql-route-live-oracle false positive); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:code-breaking.fly.dev",
+      "slug": "code-breaking-puzzle-language-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: puzzle/1 easy-function (PHP 2018/function) and puzzle/6 medium-javacon (Java 2018/javacon) tier titles; code-breaking.fly.dev/puzzle/1 findings 5→6 (+code-breaking-puzzle-language-route-live-oracle); puzzle/6 findings 5→6 (+code-breaking-puzzle-language-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
