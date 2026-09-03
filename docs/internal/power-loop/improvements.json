@@ -8105,6 +8105,24 @@
       "slug": "owaspsecure-integrity-unserialize-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/unserialize/insecure.php accepts O:8:\"stdClass\":0:{} and returns unserialized_type object:stdClass; owaspsecure.com/demo/a08_integrity/insecure.php findings 4→6 (+owaspsecure-integrity-unserialize-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-logging-auth-events-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/auth_events/login_insecure.php returns No useful log written (success not audited); owaspsecure.com/demo/a09_logging/insecure.php findings 5→11 (+owaspsecure-logging-auth-events-live-oracle +route +pii-secrets +threshold-alerts live/route oracles); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-logging-pii-secrets-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/pii_in_logs/capture_insecure.php writes raw secrets/PII to app.log; owaspsecure.com/demo/a09_logging/insecure.php findings include +owaspsecure-logging-pii-secrets-live-oracle +route; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-logging-threshold-alerts-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/threshold_alerts/fail_insecure.php records 10 failures with No thresholds or alerting; owaspsecure.com/demo/a09_logging/insecure.php findings include +owaspsecure-logging-threshold-alerts-live-oracle +route; benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

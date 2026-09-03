@@ -1,21 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-09-03T10:08:17.981Z",
-      "url": "https://damn-vulnerable-startup.fly.dev/challenges/owasp",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-09-03T10:08:17.981Z",
-      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
       "run_id": "2026-09-03T10:08:17.961Z",
       "url": "https://damn-vulnerable-startup.fly.dev/challenges/terminal",
       "auth": "public_demo",
