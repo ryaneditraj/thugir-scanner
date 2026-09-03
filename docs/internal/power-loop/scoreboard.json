@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T01:30:00.745Z",
+  "updated_at": "2026-09-03T02:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,25 +15,25 @@
       ]
     }
   },
-  "total_sites_scanned": 2987,
-  "total_findings": 32829,
+  "total_sites_scanned": 2995,
+  "total_findings": 33062,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2076,
-  "discovery_findings": 27192,
-  "improvements_shipped": 1295,
-  "last_run": "2026-09-03T01:30:00.745Z",
+  "discovery_urls_added": 2081,
+  "discovery_findings": 27374,
+  "improvements_shipped": 1296,
+  "last_run": "2026-09-03T02:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 50,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 559,
-      "live_oracles": 36,
+      "probes_run": 597,
+      "live_oracles": 38,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -49,44 +49,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall on primary Heroku (50 findings, 36 live oracles; secret-resend + juice-shop-resend-key-live-oracle + juice-shop-iac-terraform-tls-key-live-oracle present)"
+      "note": "Stable 6/6 first-pass recall on primary Heroku (51 findings, 38 live oracles; secret-resend + juice-shop-resend-key-live-oracle + juice-shop-iac-terraform-tls-key-live-oracle present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 52,
-      "focus": "web-pentest-playground login/register + sql-injection-lab login + code-breaking puzzles 1/6 + drained UCU OWASP CTF access/ssrf/crypto",
+      "urls_scanned": 7,
+      "findings": 182,
+      "focus": "fauxbank instructor + websec level14 + vulnforge level14 + oopssec prompt-injection/jwt-confusion walkthroughs + drained nextjs CVE middleware bypass, vulnbank v2/forgot-password, pwnshop track/forgot-password/profile, wrongsecrets-66, fabraix jailbreak-001",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 36 live oracles)",
-      "web-pentest-playground.onrender.com/login: 13 findings — web-pentest-playground-login-sqli-route-live-oracle + admin-sqli + stored-xss",
-      "web-pentest-playground.onrender.com/register: 12 findings — web-pentest-playground-file-upload-live-oracle (RCE)",
-      "sql-injection-lab.vercel.app/login: 5 findings — post-login-sql-bypass + pygoat-sql-route-live-oracle",
-      "code-breaking.fly.dev/puzzle/1/: 5 findings — code-breaking-puzzle-route-live-oracle (PHP audit CTF)",
-      "code-breaking.fly.dev/puzzle/6/: 5 findings — code-breaking-puzzle-route-live-oracle (Java audit CTF)",
-      "ucu-owasp-ctf.vercel.app/access/: 4 findings — ucu-owasp-ctf-access-route-live-oracle",
-      "ucu-owasp-ctf.vercel.app/ssrf/: 4 findings — ucu-owasp-ctf-ssrf-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 38 live oracles)",
+      "vulnbank.org/v2/forgot-password: 33 findings — vulnbank-v2-forgot-password-route-live-oracle + enumeration oracle",
+      "pwnshop.ctfsecurity.com/track/1: 47 findings — pwnshop track IDOR hub",
+      "pwnshop.ctfsecurity.com/profile: 49 findings — profile route oracle set",
+      "wrongsecrets.herokuapp.com/challenge/challenge-66: 19 findings — wrongsecrets-challenge-66-java-obfuscated-route-live-oracle",
+      "playground.fabraix.com/challenges/jailbreak-001: 7 findings — fabraix-playground-session-route-live-oracle",
+      "nextjs-cve-2024-34351.deno.dev: 3 findings — CVE-2025-29927 middleware bypass evidence"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "sql-injection-lab.vercel.app/login: thin 5-finding pass — no dedicated sql-injection-lab-login-route-live-oracle",
-      "code-breaking puzzles 1/6: shared 5-finding hub fingerprint — no per-puzzle language-specific oracles",
-      "ucu-owasp-ctf.vercel.app/crypto/: 4 findings — route oracle absent (access/ssrf oracles present)"
+      "newly queued URLs (fauxbank/instructor, websec level14, vulnforge level14, oopssec walkthroughs) not drained this run — queue depth ahead of 8-url limit",
+      "zen-demo-java.fly.dev: unreachable timeout — Aikido Zen Java playground offline",
+      "pwnshop.ctfsecurity.com/forgot-password: 24 findings — hub fingerprint without dedicated forgot-password route oracle"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 50,
-    "web-pentest-playground.onrender.com/login": 13,
-    "web-pentest-playground.onrender.com/register": 12,
-    "sql-injection-lab.vercel.app/login": 5,
-    "code-breaking.fly.dev/puzzle/1/": 5,
-    "code-breaking.fly.dev/puzzle/6/": 5,
-    "ucu-owasp-ctf.vercel.app/access/": 4,
-    "ucu-owasp-ctf.vercel.app/ssrf/": 4,
-    "ucu-owasp-ctf.vercel.app/crypto/": 4,
-    "pwnshop.ctfsecurity.com/track/1": 50,
-    "brokencrystals.com/api/ldap": 85
+    "juice-shop.herokuapp.com": 51,
+    "vulnbank.org/v2/forgot-password": 33,
+    "pwnshop.ctfsecurity.com/track/1": 47,
+    "pwnshop.ctfsecurity.com/profile": 49,
+    "wrongsecrets.herokuapp.com/challenge/challenge-66": 19,
+    "playground.fabraix.com/challenges/jailbreak-001": 7,
+    "nextjs-cve-2024-34351.deno.dev": 3,
+    "pwnshop.ctfsecurity.com/forgot-password": 24
   }
 }

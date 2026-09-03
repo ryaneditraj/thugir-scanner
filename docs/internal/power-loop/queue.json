@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T01:19:00.000Z",
+  "updated_at": "2026-09-03T02:18:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://web-pentest-playground.onrender.com/login",
@@ -11126,7 +11126,32 @@
       "url": "https://koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting/",
       "source": "kOaDT/oss-oopssec-store — brute-force no rate-limiting walkthrough with login oracle docs (GitHub Pages)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/instructor",
+      "source": "alfredang/pentest-fauxbank — instructor dashboard with vulnerability toggles (Vercel OWASP training sim; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level14/",
+      "source": "websec.fr — Level 14 XSS/CTF challenge (public security training site; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php",
+      "source": "webspoilt/vulnforge-academy — Level 14 SSRF challenge (Vercel OSS deploy; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/prompt-injection-ai-assistant/",
+      "source": "kOaDT/oss-oopssec-store — prompt injection AI assistant walkthrough (GitHub Pages; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api/",
+      "source": "kOaDT/oss-oopssec-store — JWT algorithm confusion partner API walkthrough (GitHub Pages; web search 02 UTC)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 15
+  "discovery_urls_added": 20
 }
