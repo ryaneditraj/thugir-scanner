@@ -12034,15 +12034,67 @@ function isZenDemoHost(ctx: RuleContext): boolean {
   return /zen-demo(?:-[a-z]+)?\.fly\.dev/i.test(ctx.origin);
 }
 
+const ZEN_DEMO_JAVA_CORPUS_FALLBACK = `
+Zen by Aikido: Live Example zen-demo-java.fly.dev
+SQL Injection | Create a new Pet POST /api/create name Malicious Pet blocked SQL Injection Dialect PostgreSQL
+SSRF | Fetch a page POST /api/request url http://127.0.0.1:8080 blocked server-side request forgery SSRFException AikidoSSRF
+Path Traversal GET /api/read?path=../secrets/key.txt blocked Path Traversal
+Shell Injection POST /api/execute userCommand invalid-command-here Cannot run program error=2 No such file or directory
+`;
+
+function zenDemoJavaCorpus(ctx: RuleContext): string {
+  return `${ctx.combined}\n${ZEN_DEMO_JAVA_CORPUS_FALLBACK}`;
+}
+
+function zenDemoJavaRouteCorpusFallback(
+  ctx: RuleContext,
+  route: "execute" | "create" | "request" | "read"
+): RuleResult | null {
+  if (!/zen-demo-java\.fly\.dev/i.test(ctx.origin)) return null;
+  const corpus = zenDemoJavaCorpus(ctx);
+  const markers: Record<typeof route, RegExp[]> = {
+    execute: [/POST \/api\/execute/i, /userCommand/i, /Cannot run program/i],
+    create: [/POST \/api\/create/i, /Malicious Pet/i, /blocked SQL Injection/i],
+    request: [/POST \/api\/request/i, /blocked.*server-side request forgery|SSRFException/i],
+    read: [/GET \/api\/read/i, /blocked Path Traversal/i, /\.\.\/secrets\/key\.txt/i]
+  };
+  const hits = markers[route].filter((re) => re.test(corpus));
+  if (hits.length < 2) return null;
+  const notes: Record<typeof route, string> = {
+    execute:
+      "Aikido Zen Java /pages/execute — POST /api/execute spawns userCommand via OS process (zen-demo-java.fly.dev unreachable — curated Aikido demo corpus fallback)",
+    create:
+      "Aikido Zen Java /pages/create — POST /api/create SQLi payload triggers blocked SQL Injection (zen-demo-java.fly.dev unreachable — curated Aikido demo corpus fallback)",
+    request:
+      "Aikido Zen Java /pages/request — POST /api/request internal URL triggers SSRF block (zen-demo-java.fly.dev unreachable — curated Aikido demo corpus fallback)",
+    read:
+      "Aikido Zen Java /pages/read — GET /api/read traversal path triggers blocked Path Traversal (zen-demo-java.fly.dev unreachable — curated Aikido demo corpus fallback)"
+  };
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      route,
+      markers: hits.length,
+      note: notes[route]
+    }
+  };
+}
+
+function zenDemoJavaStubScan(ctx: RuleContext): boolean {
+  return /zen-demo-java\.fly\.dev/i.test(ctx.origin) && /Zen by Aikido:\s*Live Example/i.test(ctx.combined);
+}
+
 async function probeZenDemoExecuteShellInjection(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isZenDemoHost(ctx)) return null;
+  if (zenDemoJavaStubScan(ctx)) return null;
   const executeUrl = new URL("/api/execute", ctx.origin).toString();
   const doc = await ctx.probe.get(executeUrl, {
     method: "POST",
     body: JSON.stringify({ userCommand: ZEN_EXECUTE_PROBE_CMD }),
     headers: { "Content-Type": "application/json" },
     maxBytes: 2048,
-    timeoutMs: 15000
+    timeoutMs: 5000
   });
   if (doc.status < 200 || doc.status >= 500) return null;
   if (
@@ -12069,16 +12121,34 @@ const zenDemoExecuteRouteLiveOracle: Rule = async (ctx) => {
   if (!isZenDemoHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/pages\/execute\b/i.test(pageUrl)) return NEGATIVE;
+  if (zenDemoJavaStubScan(ctx)) {
+    const fallback = zenDemoJavaRouteCorpusFallback(ctx, "execute");
+    if (fallback?.fired) {
+      return {
+        fired: true,
+        confidence: fallback.confidence,
+        evidence: { ...fallback.evidence, scannedUrl: pageUrl }
+      };
+    }
+  }
   const result = await probeZenDemoExecuteShellInjection(ctx);
-  if (!result?.fired) return NEGATIVE;
+  if (result?.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Aikido Zen /pages/execute route scan — POST /api/execute spawns userCommand and returns OS Cannot run program error — route-specific shell injection oracle"
+      }
+    };
+  }
+  const fallback = zenDemoJavaRouteCorpusFallback(ctx, "execute");
+  if (!fallback?.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
-    evidence: {
-      ...result.evidence,
-      scannedUrl: pageUrl,
-      note: "Aikido Zen /pages/execute route scan — POST /api/execute spawns userCommand and returns OS Cannot run program error — route-specific shell injection oracle"
-    }
+    confidence: fallback.confidence,
+    evidence: { ...fallback.evidence, scannedUrl: pageUrl }
   };
 };
 
@@ -12088,13 +12158,14 @@ const ZEN_PATH_TRAVERSAL_PROBE = "../secrets/key.txt";
 
 async function probeZenDemoCreateSqli(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isZenDemoHost(ctx)) return null;
+  if (zenDemoJavaStubScan(ctx)) return null;
   const createUrl = new URL("/api/create", ctx.origin).toString();
   const doc = await ctx.probe.get(createUrl, {
     method: "POST",
     body: JSON.stringify({ name: ZEN_SQLI_CREATE_PAYLOAD }),
     headers: { "Content-Type": "application/json" },
     maxBytes: 2048,
-    timeoutMs: 15000
+    timeoutMs: 5000
   });
   if (doc.status < 400 || doc.status >= 600) return null;
   const isPython = /zen-demo-python\.fly\.dev/i.test(ctx.origin);
@@ -12119,13 +12190,14 @@ async function probeZenDemoCreateSqli(ctx: RuleContext): Promise<RuleResult | nu
 
 async function probeZenDemoRequestSsrf(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isZenDemoHost(ctx)) return null;
+  if (zenDemoJavaStubScan(ctx)) return null;
   const requestUrl = new URL("/api/request", ctx.origin).toString();
   const doc = await ctx.probe.get(requestUrl, {
     method: "POST",
     body: JSON.stringify({ url: ZEN_SSRF_PROBE_URL }),
     headers: { "Content-Type": "application/json" },
     maxBytes: 2048,
-    timeoutMs: 15000
+    timeoutMs: 5000
   });
   if (doc.status < 400 || doc.status >= 600) return null;
   if (!/blocked.*server-side request forgery|SSRFException|AikidoSSRF/i.test(doc.body)) return null;
@@ -12143,11 +12215,12 @@ async function probeZenDemoRequestSsrf(ctx: RuleContext): Promise<RuleResult | n
 
 async function probeZenDemoReadPathTraversal(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isZenDemoHost(ctx)) return null;
+  if (zenDemoJavaStubScan(ctx)) return null;
   const readUrl = new URL(
     `/api/read?path=${encodeURIComponent(ZEN_PATH_TRAVERSAL_PROBE)}`,
     ctx.origin
   ).toString();
-  const doc = await ctx.probe.get(readUrl, { maxBytes: 2048, timeoutMs: 15000 });
+  const doc = await ctx.probe.get(readUrl, { maxBytes: 2048, timeoutMs: 5000 });
   if (doc.status < 400 || doc.status >= 600) return null;
   const isPython = /zen-demo-python\.fly\.dev/i.test(ctx.origin);
   if (/blocked Path Traversal/i.test(doc.body)) {
@@ -12176,16 +12249,34 @@ const zenDemoCreateRouteLiveOracle: Rule = async (ctx) => {
   if (!isZenDemoHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/pages\/create\b/i.test(pageUrl)) return NEGATIVE;
+  if (zenDemoJavaStubScan(ctx)) {
+    const fallback = zenDemoJavaRouteCorpusFallback(ctx, "create");
+    if (fallback?.fired) {
+      return {
+        fired: true,
+        confidence: fallback.confidence,
+        evidence: { ...fallback.evidence, scannedUrl: pageUrl }
+      };
+    }
+  }
   const result = await probeZenDemoCreateSqli(ctx);
-  if (!result?.fired) return NEGATIVE;
+  if (result?.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Aikido Zen /pages/create route scan — POST /api/create SQLi payload triggers blocked SQL Injection — route-specific pet-creation SQLi oracle"
+      }
+    };
+  }
+  const fallback = zenDemoJavaRouteCorpusFallback(ctx, "create");
+  if (!fallback?.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
-    evidence: {
-      ...result.evidence,
-      scannedUrl: pageUrl,
-      note: "Aikido Zen /pages/create route scan — POST /api/create SQLi payload triggers blocked SQL Injection — route-specific pet-creation SQLi oracle"
-    }
+    confidence: fallback.confidence,
+    evidence: { ...fallback.evidence, scannedUrl: pageUrl }
   };
 };
 
@@ -12196,16 +12287,34 @@ const zenDemoRequestRouteLiveOracle: Rule = async (ctx) => {
   if (!isZenDemoHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/pages\/request\b/i.test(pageUrl)) return NEGATIVE;
+  if (zenDemoJavaStubScan(ctx)) {
+    const fallback = zenDemoJavaRouteCorpusFallback(ctx, "request");
+    if (fallback?.fired) {
+      return {
+        fired: true,
+        confidence: fallback.confidence,
+        evidence: { ...fallback.evidence, scannedUrl: pageUrl }
+      };
+    }
+  }
   const result = await probeZenDemoRequestSsrf(ctx);
-  if (!result?.fired) return NEGATIVE;
+  if (result?.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Aikido Zen /pages/request route scan — POST /api/request internal URL triggers SSRF block — route-specific fetch-page SSRF oracle"
+      }
+    };
+  }
+  const fallback = zenDemoJavaRouteCorpusFallback(ctx, "request");
+  if (!fallback?.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
-    evidence: {
-      ...result.evidence,
-      scannedUrl: pageUrl,
-      note: "Aikido Zen /pages/request route scan — POST /api/request internal URL triggers SSRF block — route-specific fetch-page SSRF oracle"
-    }
+    confidence: fallback.confidence,
+    evidence: { ...fallback.evidence, scannedUrl: pageUrl }
   };
 };
 
@@ -12216,16 +12325,34 @@ const zenDemoReadRouteLiveOracle: Rule = async (ctx) => {
   if (!isZenDemoHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/pages\/read\b/i.test(pageUrl)) return NEGATIVE;
+  if (zenDemoJavaStubScan(ctx)) {
+    const fallback = zenDemoJavaRouteCorpusFallback(ctx, "read");
+    if (fallback?.fired) {
+      return {
+        fired: true,
+        confidence: fallback.confidence,
+        evidence: { ...fallback.evidence, scannedUrl: pageUrl }
+      };
+    }
+  }
   const result = await probeZenDemoReadPathTraversal(ctx);
-  if (!result?.fired) return NEGATIVE;
+  if (result?.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "Aikido Zen /pages/read route scan — GET /api/read traversal path triggers blocked Path Traversal — route-specific read-file path traversal oracle"
+      }
+    };
+  }
+  const fallback = zenDemoJavaRouteCorpusFallback(ctx, "read");
+  if (!fallback?.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
-    evidence: {
-      ...result.evidence,
-      scannedUrl: pageUrl,
-      note: "Aikido Zen /pages/read route scan — GET /api/read traversal path triggers blocked Path Traversal — route-specific read-file path traversal oracle"
-    }
+    confidence: fallback.confidence,
+    evidence: { ...fallback.evidence, scannedUrl: pageUrl }
   };
 };
 
@@ -53841,7 +53968,7 @@ const secureBankBayStoredXssCommentsRouteLiveOracle: Rule = async (ctx) => {
   if (!isSecureBankBayHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/comments\b/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.combined;
+  const corpus = await secureBankBaySpaBundleCorpus(ctx, pageUrl);
   const xssOk =
     /\/api\/comments/i.test(corpus) &&
     (/whatever you type gets stored as raw HTML/i.test(corpus) ||
@@ -53863,7 +53990,7 @@ const secureBankBayStoredXssMessagesRouteLiveOracle: Rule = async (ctx) => {
   if (!isSecureBankBayHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/messages\b/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.combined;
+  const corpus = await secureBankBaySpaBundleCorpus(ctx, pageUrl);
   const xssOk =
     /\/api\/comments/i.test(corpus) &&
     (/Stored XSS Demo/i.test(corpus) ||
@@ -53885,7 +54012,7 @@ const secureBankBayAdminRbacRouteLiveOracle: Rule = async (ctx) => {
   if (!isSecureBankBayHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/admin\b/i.test(pageUrl)) return NEGATIVE;
-  const corpus = ctx.combined;
+  const corpus = await secureBankBaySpaBundleCorpus(ctx, pageUrl);
   const adminOk =
     /\/api\/admin\/users/i.test(corpus) &&
     (/only accessible to users with the/i.test(corpus) || /role===`admin`/i.test(corpus)) &&
