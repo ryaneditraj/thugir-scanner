@@ -11276,7 +11276,32 @@
       "url": "https://vaultapp-omega.vercel.app/api/notes/1",
       "source": "MRMcyber/vaultapp — IDOR private-notes API oracle (vaultapp-omega.vercel.app OSS deploy; web search 06 UTC)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/1",
+      "source": "Escape Duck Store vulnerabilities — unauthenticated testimonials PUT BOLA oracle (duck-store.escape.tech/vulnerabilities; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/coupons",
+      "source": "Escape Duck Store vulnerabilities — coupon information disclosure GET /api/v1/orders/coupons (public demo; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/mcp/tools/list_coupons",
+      "source": "Escape Duck Store vulnerabilities — MCP coupon disclosure POST /mcp/tools/list_coupons (public demo; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/register",
+      "source": "Escape Duck Store vulnerabilities — referral code abuse POST /api/v1/auth/register (public demo; web search 08 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://appsec-ci-pipeline.onrender.com/comments",
+      "source": "gauthamram57/appsec-ci-pipeline — stored XSS comment form oracle (Render OSS deploy; web search 08 UTC)",
+      "auth": "oss_deploy"
     }
   ],
-  "discovery_urls_added": 35
+  "discovery_urls_added": 40
 }
