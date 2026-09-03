@@ -8087,6 +8087,24 @@
       "slug": "owaspsecure-crypto-password-md5-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/passwords/signup_insecure.php stores plaintext + MD5 hash (Insecure signup stored: plaintext + MD5); owaspsecure.com/demo/a02_crypto/insecure.php findings 4→6 (+owaspsecure-crypto-password-md5-live-oracle +route); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-auth-session-fixation-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/session_fixation/begin.php returns Pre-login session created with SID; owaspsecure.com/demo/a07_auth/insecure.php findings 4→6 (+owaspsecure-auth-session-fixation-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-design-reauth-email-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/reauth_sensitive/change_email_insecure.php changes email without re-auth (no_recent_reauth:true); owaspsecure.com/demo/a04_insecure_design/insecure.php findings 7→9 (+owaspsecure-design-reauth-email-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-integrity-unserialize-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/unserialize/insecure.php accepts O:8:\"stdClass\":0:{} and returns unserialized_type object:stdClass; owaspsecure.com/demo/a08_integrity/insecure.php findings 4→6 (+owaspsecure-integrity-unserialize-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
