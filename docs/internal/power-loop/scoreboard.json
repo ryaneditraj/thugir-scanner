@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T17:20:00.000Z",
+  "updated_at": "2026-09-03T18:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3135,
-  "total_findings": 35391,
-  "critical_findings": 55,
+  "total_sites_scanned": 3138,
+  "total_findings": 35417,
+  "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2154,
-  "discovery_findings": 28689,
-  "improvements_shipped": 1341,
-  "last_run": "2026-09-03T17:20:00.000Z",
+  "discovery_findings": 28715,
+  "improvements_shipped": 1344,
+  "last_run": "2026-09-03T18:45:00.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 593,
+      "probes_run": 598,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,29 +53,28 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 29,
-      "focus": "oopssec sql-injection-writeup + owaspsecure A03 stored XSS + owaspsecure A01 function-level promote",
+      "urls_scanned": 2,
+      "findings": 26,
+      "focus": "owaspsecure A03 UNION search SQLi + A01 file DOR + mass-assignment live route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings; secret-resend present)",
-      "koadt.github.io/.../sql-injection-writeup: 7→9 findings — oopssec-orders-search-sqli-route-live-oracle",
-      "owaspsecure.com/demo/a03_injection/insecure.php: 9→11 findings — owaspsecure-injection-xss-stored-live-oracle +route",
-      "owaspsecure.com/demo/a01_bac/insecure.php: 7→9 findings — owaspsecure-bac-function-level-promote-live-oracle +route",
-      "owaspsecure.com/demo/a09_logging/insecure.php: 11 findings — owaspsecure-logging auth-events + PII + threshold-alerts route oracles"
+      "owaspsecure.com/demo/a03_injection/insecure.php: 11→13 findings — owaspsecure-injection-union-search-live-oracle +route",
+      "owaspsecure.com/demo/a01_bac/insecure.php: 9→13 findings — owaspsecure-bac-file-dor + mass-assignment live/route oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "wrongsecrets challenge-68 still queued for drain",
-      "owaspsecure A01 BAC idor-uuid + file_dor routes still queued"
+      "owaspsecure A01 idor-uuid public_id seed value not yet confirmed for live oracle",
+      "wrongsecrets challenge-68 returns WHOOOOPS error page on Heroku",
+      "damn-vulnerable-startup.fly.dev + zen-demo-java.fly.dev unreachable from cloud agent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
     "koadt.github.io/oss-oopssec-store/posts/sql-injection-writeup": 9,
-    "owaspsecure.com/demo/a03_injection/insecure.php": 11,
-    "owaspsecure.com/demo/a01_bac/insecure.php": 9,
+    "owaspsecure.com/demo/a03_injection/insecure.php": 13,
+    "owaspsecure.com/demo/a01_bac/insecure.php": 13,
     "owaspsecure.com/demo/a09_logging/insecure.php": 11,
     "owaspsecure.com/demo/a10_ssrf/insecure.php": 9,
     "owaspsecure.com/demo/a04_insecure_design/insecure.php": 9,
@@ -84,7 +83,6 @@
     "owaspsecure.com/demo/a02_crypto/insecure.php": 6,
     "owaspsecure.com/demo/a08_integrity/insecure.php": 6,
     "koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182": 7,
-    "juice-shop-staging.herokuapp.com": 52,
     "juice-shop.demo.escape.tech": 53
   }
 }
