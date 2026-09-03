@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-03T06:04:03.390Z",
-  "total": 3141,
-  "uniqueSlugs": 3133,
+  "generatedAt": "2026-09-03T07:45:40.374Z",
+  "total": 3142,
+  "uniqueSlugs": 3134,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3123,
+    "generic": 3124,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3056,
+    "deep": 3057,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 149,
     "Security misconfiguration": 240,
     "Broken authentication": 199,
-    "Injection": 509,
+    "Injection": 510,
     "Cross-site scripting": 792,
     "Open redirect": 26,
     "general": 20,
@@ -2358,6 +2358,7 @@
     "sec-research-lab-xss-playground-route-live-oracle",
     "sec-research-lab-xxe-lab-route-live-oracle",
     "seclab-angular-stub-route-live-oracle",
+    "seclab-command-injection-route-live-oracle",
     "seclab-csrf-vulnerable-route-live-oracle",
     "seclab-idor-labs-route-live-oracle",
     "seclab-idor-vulnerable-route-live-oracle",

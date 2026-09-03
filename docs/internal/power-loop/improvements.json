@@ -7943,6 +7943,24 @@
       "slug": "bugforge-graphql-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: bugforge.io/labs/graphql 301→app.bugforge.io; Ottergram GraphQL introspection + user(id:N) IDOR corpus; bugforge.io/labs/graphql findings 6→7 (+bugforge-graphql-route-live-oracle +client-side-bugforge-lab-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-vulnerable-npm-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: AI_SECURITY_PLATFORM_CHALLENGE_META hacked-npm-packages marker regex extended to /challenges/vulnerable-npm; runner -3 priority on vulnerable-npm route scans; ai-security-platform-iota.vercel.app/challenges/vulnerable-npm findings 7→6 (+ai-security-vulnerable-npm-route-live-oracle +hacked-npm-packages-route); benchmark juice-shop 53 findings 6/6 maintained (Escape.tech fallback)"
+    },
+    {
+      "source": "discovery:webverselabs-pro.com",
+      "slug": "webverselabs-fixture-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /labs/fixture ScoutLens meta documents wkhtmltopdf SSRF wildcard allowlist bypass + BOLA scouting APIs; runner -3 priority; webverselabs-pro.com/labs/fixture findings 6 (+webverselabs-fixture-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-command-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /labs/command-injection returns Angular <app-root> SPA stub — seclabCommandInjectionRouteLiveOracle + runner -4 priority; seclab.vercel.app/labs/command-injection findings 4→6 (+seclab-command-injection-route-live-oracle +seclab-labs-dead-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

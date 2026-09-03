@@ -89136,6 +89136,23 @@ const seclabLabsDeadRouteRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const seclabCommandInjectionRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/command-injection\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await seclabLabsDeadRouteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note:
+        "seclab.vercel.app /labs/command-injection route scan — Angular SPA stub documents planned OS command injection lab UI; live CWE-78 training APIs are on /api/*-vulnerable routes per DaniSam-STU/security-lab README"
+    }
+  };
+};
+
 const VULNERABLE_BOUNTY_SITE_HOST_RE = /vulnerable-bounty-site\.vercel\.app/i;
 
 function isVulnerableBountySiteHost(ctx: RuleContext): boolean {
@@ -93100,7 +93117,7 @@ const AI_SECURITY_PLATFORM_CHALLENGE_META: Record<string, AiSecurityPlatformChal
   "hacked-npm-packages": {
     routeRe: /\/challenges\/(?:hacked-npm-packages|hacked-npm|vulnerable-npm)\b/i,
     markers: [
-      { label: "Hacked npm packages challenge route", re: /\/challenges\/(?:hacked-npm-packages|hacked-npm)/i },
+      { label: "Hacked npm packages challenge route", re: /\/challenges\/(?:hacked-npm-packages|hacked-npm|vulnerable-npm)/i },
       {
         label: "Hacked npm Packages training module",
         re: /Hacked npm Packages|malicious package|compromised npm|postinstall/i
@@ -110369,6 +110386,7 @@ export const RULES: Record<string, Rule> = {
   riglabsCyberLabDeadRouteRouteLiveOracle,
   seclabLabsDeadRouteLiveOracle,
   seclabLabsDeadRouteRouteLiveOracle,
+  seclabCommandInjectionRouteLiveOracle,
   vulnerableBountySiteSearchXssLiveOracle,
   vulnerableBountySiteSearchXssRouteLiveOracle,
   vulnerableBountySiteUsersApiRouteLiveOracle,

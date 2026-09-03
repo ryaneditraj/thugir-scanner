@@ -3293,6 +3293,7 @@ const DEEP_RULES = new Set<string>([
   "riglabsCyberLabDeadRouteRouteLiveOracle",
   "seclabLabsDeadRouteLiveOracle",
   "seclabLabsDeadRouteRouteLiveOracle",
+  "seclabCommandInjectionRouteLiveOracle",
   "vulnerableBountySiteSearchXssLiveOracle",
   "vulnerableBountySiteSearchXssRouteLiveOracle",
   "vulnerableBountySiteUsersApiRouteLiveOracle",
@@ -13873,6 +13874,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/vulnerable-npm\b/i.test(targetInput) &&
+        p.slug === "ai-security-vulnerable-npm-route-live-oracle"
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
         /\/challenges\/(?:rate-limiting|brute-force)\b/i.test(targetInput) &&
         (p.slug === "ai-security-rate-limiting-bruteforce-live-oracle" ||
           p.slug === "ai-security-rate-limiting-route-live-oracle")
@@ -14665,6 +14672,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/api\/ssrf(?:-vulnerable|(?:[/?#]|$))/i.test(targetInput) &&
         p.slug.startsWith("seclab-ssrf-vulnerable")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/command-injection\b/i.test(targetInput) &&
+        p.slug === "seclab-command-injection-route-live-oracle"
+      )
+        return -4;
+      if (
+        /webverselabs-pro\.com/i.test(origin) &&
+        /\/labs\/fixture\b/i.test(targetInput) &&
+        p.slug === "webverselabs-fixture-route-live-oracle"
       )
         return -3;
       if (

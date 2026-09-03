@@ -77318,6 +77318,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-command-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecLab command-injection lab route live oracle",
+    description:
+      "When scanning /labs/command-injection on seclab.vercel.app, the Angular SPA stub documents the planned OS command injection lab — route-specific CWE-78 training oracle (DaniSam-STU/security-lab README corpus).",
+    impactOneline:
+      "Route scans on /labs/command-injection confirm advertised command injection lab is an Angular stub pointing scanners to /api/*-vulnerable live endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabCommandInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy live command injection lab UI on /labs/command-injection or redirect to working /api/* training endpoints.",
+      steps: [
+        "Wire /labs/command-injection to documented OS command injection APIs in DaniSam-STU/security-lab README.",
+        "Remove /labs/command-injection from discovery queues until live UI deploys.",
+        "Run training labs only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/command-injection route scan hits an Angular stub. Show route-specific deployment fixes for the command injection lab UI.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnerable-bounty-site-search-xss-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
