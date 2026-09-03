@@ -12514,7 +12514,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /websec\.fr/i.test(origin) &&
-        /\/level14\/?$/i.test(targetInput) &&
+        /\/level14(?:\/index\.php)?\/?$/i.test(targetInput) &&
         p.slug.startsWith("websec-level14-")
       )
         return -3;
