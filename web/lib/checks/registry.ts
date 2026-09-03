@@ -24967,6 +24967,49 @@ const clientSideWebsecPasswordResetPrngChallengeEvidence: Rule = async (ctx) => 
   };
 };
 
+const websecLevel14PhpEvalBlacklistRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level14\/?$/i.test(pathname)) return NEGATIVE;
+  const markers: string[] = [];
+  const sourceUrl = new URL("/level14/source.php", ctx.origin).toString();
+  const source = await fetchDoc(sourceUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const sourceCorpus = source.body;
+  if (/substr\s*\(\s*\$code\s*,\s*0\s*,\s*25\s*\)/i.test(sourceCorpus)) markers.push("25-char-code-restriction");
+  if (/get_defined_functions[\s\S]{0,400}\$blacklist|blacklist\s*=\s*array_merge/i.test(sourceCorpus))
+    markers.push("function-blacklist-array");
+  if (
+    /foreach\s*\(\s*\$blacklist[\s\S]{0,200}preg_match[\s\S]{0,200}\$blacklisted[\s\S]{0,200}\$code/i.test(
+      sourceCorpus
+    )
+  )
+    markers.push("preg-match-blacklist-loop");
+  if (/eval\s*\(\s*\$code\s*\)/i.test(sourceCorpus)) markers.push("eval-user-code");
+  if (
+    /Because sometimes using eval is secure|Level\s+Fourteen|#WebSec[\s\S]{0,40}14/i.test(
+      `${ctx.combined}\n${sourceCorpus}`
+    )
+  )
+    markers.push("level14-eval-challenge");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      sourceUrl,
+      markers,
+      note: "WebSec.fr /level14 route scan — 25-char restricted PHP eval with incomplete function blacklist ($blacklist{index} bypass) — route-specific PHP eval oracle"
+    }
+  };
+};
+
 const websecLevel19PasswordResetRouteLiveOracle: Rule = async (ctx) => {
   if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -41422,6 +41465,7 @@ GET /api/profile returns ssnFake and fullName/email PII in JSON without field-le
 POST /api/loans accepts negative amount values and persists them as pending loans
 Lesson 7 | Missing CSRF on transfers | /api/transfer
 POST /api/transfer executes authenticated fund transfers without a CSRF token
+/instructor dashboard | GET /api/instructor returns vulnerability toggles (idor, sqli, xss, csrf, weakAuth) for admin/trainer roles
 Seeded fictional accounts alice/password for customer-session probes
 `;
 
@@ -41772,6 +41816,66 @@ const fauxbankAdminRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "FauxBank /admin route scan — admin/admin session exposes user directory and audit log — route-specific admin panel oracle"
+    }
+  };
+};
+
+const fauxbankInstructorLiveOracle: Rule = async (ctx) => {
+  const cookie = await ensureFauxbankAdminSession(ctx);
+  if (!cookie) return NEGATIVE;
+  const url = new URL("/api/instructor", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 8192, headers: { Cookie: cookie } });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/"switches"\s*:\s*\{/.test(doc.body)) return NEGATIVE;
+  const required = ["idor", "sqli", "csrf", "weakAuth"] as const;
+  const missing = required.filter((k) => !new RegExp(`"${k}"\\s*:\\s*true`, "i").test(doc.body));
+  if (missing.length > 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url,
+      snippet: doc.body.slice(0, 320).trim(),
+      note: "GET /api/instructor with admin session returns vulnerability toggles (idor, sqli, xss, csrf, weakAuth) — instructor dashboard training oracle"
+    }
+  };
+};
+
+const fauxbankInstructorRouteLiveOracle: Rule = async (ctx) => {
+  if (!looksLikeFauxbankLab(ctx.origin, ctx.combined, ctx.scanUrl)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/^\/instructor\/?$/i.test(pathname)) return NEGATIVE;
+  const result = await fauxbankInstructorLiveOracle(ctx);
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "FauxBank /instructor route scan — admin session exposes GET /api/instructor vulnerability toggles for OWASP lesson switches — route-specific instructor dashboard oracle"
+      }
+    };
+  }
+  if (!(await fauxbankRouteNeedsCorpusFallback(ctx, pageUrl))) return NEGATIVE;
+  const corpus = await fauxbankRouteCorpus(ctx);
+  const instructorOk =
+    /\/instructor|GET \/api\/instructor/i.test(corpus) &&
+    /vulnerability toggles|idor.*sqli.*csrf|instructor dashboard/i.test(corpus);
+  if (!instructorOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET /api/instructor returns vulnerability toggles (idor, sqli, xss, csrf, weakAuth) for admin/trainer roles",
+      note: "FauxBank /instructor route scan — README documents instructor dashboard with OWASP vulnerability toggles; live admin session probe blocked — curated corpus fallback"
     }
   };
 };
@@ -108587,6 +108691,8 @@ export const RULES: Record<string, Rule> = {
   fauxbankLoansNegativeAmountLiveOracle,
   fauxbankAdminPanelLiveOracle,
   fauxbankAdminRouteLiveOracle,
+  fauxbankInstructorLiveOracle,
+  fauxbankInstructorRouteLiveOracle,
   fauxbankLabRouteLiveOracle,
   fauxbankScannerRouteLiveOracle,
   xssPayloadLabRouteLiveOracle,
@@ -108803,6 +108909,7 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecFibonacciEvalChallengeEvidence,
   clientSideWebsecTimingAttackChallengeEvidence,
   clientSideWebsecPasswordResetPrngChallengeEvidence,
+  websecLevel14PhpEvalBlacklistRouteLiveOracle,
   websecLevel19PasswordResetRouteLiveOracle,
   websecLevel17TimingAttackRouteLiveOracle,
   websecLevel17TimingAttackLiveOracle,
