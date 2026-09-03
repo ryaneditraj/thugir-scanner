@@ -61073,6 +61073,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "bugforge-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Bugforge SSRF lab route live oracle",
+    description:
+      "When scanning /labs/ssrf on bugforge.io or app.bugforge.io, the SSRF learning-path module documents on-demand lab instances for WAF bypass and allowlist SSRF chains (MesaNet, FurHire writeups) — route-specific SSRF training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/ssrf documents SSRF exploitation training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge SSRF labs are intentional training — restrict server-side fetchers and validate URL allowlists.",
+      steps: [
+        "Block internal IP ranges and metadata endpoints in server-side fetchers.",
+        "Validate URL allowlists against DNS rebinding and wildcard bypass.",
+        "Run Bugforge lab instances only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/ssrf route documents MesaNet-style allowlist SSRF labs. Show SSRF allowlist and gateway hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugforge-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Bugforge IDOR lab route live oracle",
+    description:
+      "When scanning /labs/idor on bugforge.io or app.bugforge.io, the IDOR learning-path module documents parameter-tampering labs (Tanuki, Ottergram, Copy Pasta writeups) — route-specific IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/idor documents IDOR parameter-tampering training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge IDOR labs are intentional training — enforce object-level authorization on every API route.",
+      steps: [
+        "Authorize object access against the authenticated user's ownership.",
+        "Avoid predictable sequential identifiers without access checks.",
+        "Run Bugforge lab instances only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/idor route documents Tanuki-style parameter-tampering IDOR labs. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugforge-graphql-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Bugforge GraphQL lab route live oracle",
+    description:
+      "When scanning /labs/graphql on bugforge.io or app.bugforge.io, the GraphQL learning-path module documents introspection and authorization flaws (Ottergram, Sokudo writeups) — route-specific GraphQL training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/graphql documents GraphQL introspection and IDOR training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeGraphqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge GraphQL labs are intentional training — disable introspection in production and enforce field-level authorization.",
+      steps: [
+        "Disable GraphQL introspection on production API endpoints.",
+        "Authorize every query field and argument against the authenticated principal.",
+        "Run Bugforge lab instances only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/graphql route documents Ottergram-style GraphQL introspection and IDOR labs. Show GraphQL authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "webverselabs-fixture-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",

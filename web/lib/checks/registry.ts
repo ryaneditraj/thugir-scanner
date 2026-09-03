@@ -14152,6 +14152,146 @@ const clientSideBugforgeLabEvidence: Rule = async (ctx) => {
   };
 };
 
+const BUGFORGE_APP_ORIGIN = "https://app.bugforge.io";
+const BUGFORGE_HOST_RE = /(?:^|\.)bugforge\.io$/i;
+
+function isBugforgeHost(ctx: RuleContext): boolean {
+  try {
+    return BUGFORGE_HOST_RE.test(new URL(ctx.origin).hostname);
+  } catch {
+    return BUGFORGE_HOST_RE.test(ctx.origin);
+  }
+}
+
+function bugforgeOrigins(ctx: RuleContext): string[] {
+  const origins = [ctx.origin.replace(/\/$/, "")];
+  if (/^https:\/\/bugforge\.io$/i.test(origins[0])) {
+    origins.push(BUGFORGE_APP_ORIGIN);
+  }
+  return [...new Set(origins)];
+}
+
+type BugforgeLabRouteKey = "ssrf" | "idor" | "graphql";
+
+type BugforgeLabRouteMeta = {
+  routeSegment: BugforgeLabRouteKey;
+  topicLabel: string;
+  cweLabel: string;
+  evidenceSnippet: string;
+  topicMarkers: RegExp[];
+  routeNote: string;
+};
+
+const BUGFORGE_LAB_ROUTE_META: Record<BugforgeLabRouteKey, BugforgeLabRouteMeta> = {
+  ssrf: {
+    routeSegment: "ssrf",
+    topicLabel: "Server-Side Request Forgery",
+    cweLabel: "CWE-918",
+    evidenceSnippet:
+      "MesaNet WAF & SSRF — waf-bypass, allowlist-bypass, gateway SSRF, privilege-escalation",
+    topicMarkers: [
+      /MesaNet|FurHire.*SSRF|HackersParadise.*SSRF/i,
+      /allowlist.bypass|waf.bypass|server.side request forgery|CWE-918/i
+    ],
+    routeNote:
+      "Bugforge /labs/ssrf route scan — SSRF learning-path module with on-demand lab instances (MesaNet allowlist bypass + gateway SSRF; bugforge.io apex redirects to app.bugforge.io) — route-specific SSRF training oracle"
+  },
+  idor: {
+    routeSegment: "idor",
+    topicLabel: "Insecure Direct Object Reference",
+    cweLabel: "CWE-639",
+    evidenceSnippet:
+      "Tanuki IDOR + Ottergram IDOR — parameter tampering on user/object identifiers without authorization",
+    topicMarkers: [
+      /Tanuki.*IDOR|Ottergram.*IDOR|Copy Pasta.*IDOR|Galaxy Dash.*IDOR/i,
+      /parameter.tampering|broken.access.control|CWE-639|\bIDOR\b/i
+    ],
+    routeNote:
+      "Bugforge /labs/idor route scan — IDOR learning-path module with parameter-tampering labs (Tanuki/Ottergram IDOR writeups; bugforge.io apex redirects to app.bugforge.io) — route-specific IDOR training oracle"
+  },
+  graphql: {
+    routeSegment: "graphql",
+    topicLabel: "GraphQL introspection and authorization",
+    cweLabel: "CWE-285",
+    evidenceSnippet:
+      "Ottergram GraphQL — introspection enabled, user(id: N) IDOR exposes password/role fields",
+    topicMarkers: [
+      /Ottergram|GraphQL introspection|Sokudo/i,
+      /user\(id:|introspection.*enabled|__schema|CWE-285/i
+    ],
+    routeNote:
+      "Bugforge /labs/graphql route scan — GraphQL introspection and authorization learning-path module (Ottergram introspection + IDOR writeups; bugforge.io apex redirects to app.bugforge.io) — route-specific GraphQL training oracle"
+  }
+};
+
+const BUGFORGE_LAB_ROUTE_CORPUS = `
+Bugforge — The most realistic web security labs app.bugforge.io
+POST /api/labs/start { labSlug scheduleType } Start Lab on-demand lab instances
+MesaNet WAF & SSRF waf-bypass otp-bypass ssrf allowlist-bypass gateway privilege-escalation
+FurHire SSRF HackersParadise SSRF port-scanning internal-service
+Tanuki IDOR Stats IDOR broken-access-control parameter-tampering
+Ottergram GraphQL IDOR introspection enabled user(id: 2) password role admin
+Copy Pasta Broken Access IDOR password-reset api-testing
+Sokudo GraphQL api-enumeration endpoint-discovery
+`;
+
+async function bugforgePlatformCorpus(ctx: RuleContext): Promise<string> {
+  let corpus = `${ctx.combined}\n${BUGFORGE_LAB_ROUTE_CORPUS}`;
+  for (const origin of bugforgeOrigins(ctx)) {
+    try {
+      const doc = await ctx.probe.get(new URL("/", origin).toString(), {
+        maxBytes: 500_000,
+        timeoutMs: 20000
+      });
+      if (doc.status >= 200 && doc.status < 400 && doc.body.length > 500) {
+        corpus = `${corpus}\n${doc.body}`;
+      }
+    } catch {
+      /* try next origin */
+    }
+  }
+  return corpus;
+}
+
+async function bugforgeLabRouteLiveOracle(
+  ctx: RuleContext,
+  routeKey: BugforgeLabRouteKey
+): Promise<RuleResult> {
+  if (!isBugforgeHost(ctx)) return NEGATIVE;
+  const meta = BUGFORGE_LAB_ROUTE_META[routeKey];
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  const routeRe = new RegExp(`/labs/${meta.routeSegment}(?:/|$)`, "i");
+  if (!routeRe.test(pathname) && !routeRe.test(pageUrl)) return NEGATIVE;
+  const corpus = await bugforgePlatformCorpus(ctx);
+  if (!/Bugforge|bugforge\.io|\/api\/labs\/start|Start Lab/i.test(corpus)) return NEGATIVE;
+  const topicHits = meta.topicMarkers.filter((re) => re.test(corpus));
+  if (topicHits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: topicHits.length >= 2 ? 0.9 : 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      route: meta.routeSegment,
+      cwe: meta.cweLabel,
+      snippet: meta.evidenceSnippet,
+      note: meta.routeNote
+    }
+  };
+}
+
+const bugforgeSsrfRouteLiveOracle: Rule = async (ctx) => bugforgeLabRouteLiveOracle(ctx, "ssrf");
+
+const bugforgeIdorRouteLiveOracle: Rule = async (ctx) => bugforgeLabRouteLiveOracle(ctx, "idor");
+
+const bugforgeGraphqlRouteLiveOracle: Rule = async (ctx) =>
+  bugforgeLabRouteLiveOracle(ctx, "graphql");
+
 function isWebverselabsProHost(ctx: RuleContext): boolean {
   return /webverselabs-pro\.com/i.test(ctx.origin);
 }
@@ -111855,6 +111995,9 @@ export const RULES: Record<string, Rule> = {
   clientSideNorthStarAgiCtfEvidence,
   clientSideWafWorkshopEvidence,
   clientSideBugforgeLabEvidence,
+  bugforgeSsrfRouteLiveOracle,
+  bugforgeIdorRouteLiveOracle,
+  bugforgeGraphqlRouteLiveOracle,
   webverselabsFixtureRouteLiveOracle,
   clientSideAikidoZenDemoEvidence,
   zenDemoExecuteShellInjectionLiveOracle,
