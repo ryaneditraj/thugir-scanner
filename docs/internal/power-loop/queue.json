@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T00:06:00.000Z",
+  "updated_at": "2026-09-03T01:19:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://web-pentest-playground.onrender.com/login",
+      "source": "adarsh-s-r/web-pentest-playground — auth/login SQLi practice route (Render deploy; web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://web-pentest-playground.onrender.com/register",
+      "source": "adarsh-s-r/web-pentest-playground — registration weak-auth route (Render deploy; web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sql-injection-lab.vercel.app/login",
+      "source": "layer-zero-unlv/sql-injection-lab — Flask SQLi auth-bypass login endpoint (Vercel deploy; web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://code-breaking.fly.dev/puzzle/1/",
+      "source": "phith0n/code-breaking — easy PHP function audit puzzle with source (fly.dev CTF; web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://code-breaking.fly.dev/puzzle/6/",
+      "source": "phith0n/code-breaking — medium Java con audit puzzle with source (fly.dev CTF; web search 01 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ucu-owasp-ctf.vercel.app/access/",
       "source": "allaboutapps/owasp-ctf-2025 — OWASP A01 broken access control + path traversal lab (GitHub README; web search 00 UTC)",
