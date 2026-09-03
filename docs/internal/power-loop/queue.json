@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T07:20:00.000Z",
+  "updated_at": "2026-09-03T09:12:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ansede.onrender.com/scan",
+      "source": "mattybellx/Ansede — browser SAST playground with baked-in IDOR/SQLi/XSS/secret demo snippets (Show HN-style OSS; Render deploy; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/testimonials",
+      "source": "Escape Duck Store vulnerabilities — testimonials SPA stored-XSS + PUT BOLA page oracle (duck-store.escape.tech/vulnerabilities; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://damn-vulnerable-startup.fly.dev/challenges/login",
+      "source": "0xSV1/DVS DeployBro — A05 SQLi login bypass challenge route (Fly.io public demo back online Sep 2026; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://damn-vulnerable-startup.fly.dev/challenges/terminal",
+      "source": "0xSV1/DVS DeployBro — interactive terminal privilege-escalation / command-injection challenge (Fly.io; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://damn-vulnerable-startup.fly.dev/challenges/owasp",
+      "source": "0xSV1/DVS DeployBro — OWASP Top 10 (2025) challenge hub with 55 embedded vulns (Fly.io; web search 09 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owasp-finbot-ctf.org/vendor",
       "source": "OWASP FinBot CTF — vendor portal agentic AI prompt-injection / policy-bypass oracle (owasp-finbot-ctf.org; web search 07 UTC)",
@@ -11303,5 +11328,5 @@
       "auth": "oss_deploy"
     }
   ],
-  "discovery_urls_added": 40
+  "discovery_urls_added": 45
 }
