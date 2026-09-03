@@ -8015,6 +8015,24 @@
       "slug": "oopssec-aes-cbc-padding-oracle-route-alias",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: oopssecAesCbcPaddingOracleRouteLiveOracle accepts vanity /posts/aes-cbc-padding-oracle/ 404 slug and fetches canonical forged-share-token walkthrough; koadt.github.io/.../aes-cbc-padding-oracle/ findings 4→5 (+oopssec-aes-cbc-padding-oracle-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:appsec-ci-pipeline.onrender.com",
+      "slug": "appsec-ci-stored-xss-comments-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /comments/ stores <thugir-canary> HTML without encoding (Django CSRF token); runner -4 priority on /comments/ route scans; appsec-ci-pipeline.onrender.com/comments/ first drain 8 findings (+appsec-ci-stored-xss-comments-live-oracle +appsec-ci-stored-xss-comments-route-live-oracle +appsec-ci-django-admin-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-mcp-coupons-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /mcp/tools/list_coupons JSON-RPC tools/call returns VIP50/EMPLOYEE75/INTERNAL100 with is_public:false via SSE; runner -4 priority on /mcp/tools/list_coupons (separate from generic mcp-tools); duck-store.escape.tech/mcp/tools/list_coupons first drain 40 findings (+duck-store-mcp-coupons-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-mail-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /mail/{id} inbox token leaks other users' PwnMail messages (PWN-004); runner -4 priority on /mail/:id route scans (deprioritize pwnshop-mail on /profile/upload-avatar retained); pwnshop.ctfsecurity.com/mail/1 first drain 45 findings (+pwnshop-mail-inbox-idor-live-oracle +pwnshop-mail-idor-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
