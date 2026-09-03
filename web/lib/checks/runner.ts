@@ -2489,6 +2489,8 @@ const DEEP_RULES = new Set<string>([
   "oopssecPathTraversalRouteLiveOracle",
   "clientSideOopssecCsrfAdminOrderEvidence",
   "oopssecCsrfAdminOrderRouteLiveOracle",
+  "clientSideOopssecSelfXssCsrfProfileEvidence",
+  "oopssecSelfXssCsrfProfileRouteLiveOracle",
   "oopssecSsrfRouteLiveOracle",
   "oopssecPromptInjectionRouteLiveOracle",
   "oopssecMiddlewareBypassRouteLiveOracle",
@@ -14031,6 +14033,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       )
         return -4;
       if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/self-xss-csrf-profile-takeover/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-self-xss-csrf-profile")
+      )
+        return -4;
+      if (
         /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
         /\/lab-xss\/lab-1\/?/i.test(targetInput) &&
         p.slug.startsWith("the0x-pwn-xss-query-param")
@@ -16996,13 +17004,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /owaspsecure\.com/i.test(origin) &&
-        /\/demo\/a03_injection\b/i.test(targetInput) &&
+        /\/demo\/a03_injection(?:\/insecure\.php|\/attacks\/sql_blind_time)/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-injection-sqli-blind-time")
       )
         return -4;
       if (
         /owaspsecure\.com/i.test(origin) &&
-        /\/demo\/a03_injection\b/i.test(targetInput) &&
+        /\/demo\/a03_injection(?:\/insecure\.php|\/attacks\/sql_second_order)/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-injection-sqli-second-order")
       )
         return -4;
