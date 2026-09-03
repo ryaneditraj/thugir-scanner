@@ -1997,6 +1997,12 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureSsrfFetchRouteLiveOracle",
   "owaspsecureBacIdorNumericLiveOracle",
   "owaspsecureBacIdorNumericRouteLiveOracle",
+  "owaspsecureMisconfigPhpinfoLiveOracle",
+  "owaspsecureMisconfigPhpinfoRouteLiveOracle",
+  "owaspsecureMisconfigDefaultCredsLiveOracle",
+  "owaspsecureMisconfigDefaultCredsRouteLiveOracle",
+  "owaspsecureCryptoPasswordMd5LiveOracle",
+  "owaspsecureCryptoPasswordMd5RouteLiveOracle",
   "guardmarlyScanLiveOracle",
   "guardmarlyScanRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
@@ -16946,6 +16952,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a01_bac\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-bac-idor-numeric")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a05_misconfig\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-misconfig-")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a02_crypto\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-crypto-password-md5")
       )
         return -4;
       if (
