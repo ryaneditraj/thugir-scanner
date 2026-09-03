@@ -7339,7 +7339,11 @@ const clientSideOopssecPlaintextPasswordLogsEvidence: Rule = async (ctx) => {
 const oopssecPlaintextPasswordLogsRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/posts\/plaintext-password-in-logs/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecPlaintextPasswordLogsEvidence(ctx);
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecPlaintextPasswordLogsEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -43436,7 +43440,11 @@ const owaspsecureMisconfigPhpinfoLiveOracle: Rule = async (ctx) => {
 const owaspsecureMisconfigPhpinfoRouteLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/demo\/a05_misconfig\b/i.test(pageUrl)) return NEGATIVE;
+  if (
+    !/\/demo\/a05_misconfig(?:\/insecure\.php|\/attacks\/phpinfo_exposed)/i.test(pageUrl) &&
+    !/\/attacks\/phpinfo_exposed\.php/i.test(pageUrl)
+  )
+    return NEGATIVE;
   const result = await owaspsecureMisconfigPhpinfoLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -43478,7 +43486,11 @@ const owaspsecureMisconfigDefaultCredsLiveOracle: Rule = async (ctx) => {
 const owaspsecureMisconfigDefaultCredsRouteLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/demo\/a05_misconfig\b/i.test(pageUrl)) return NEGATIVE;
+  if (
+    !/\/demo\/a05_misconfig(?:\/insecure\.php|\/attacks\/default_creds_panel)/i.test(pageUrl) &&
+    !/\/attacks\/default_creds_panel\.php/i.test(pageUrl)
+  )
+    return NEGATIVE;
   const result = await owaspsecureMisconfigDefaultCredsLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -43524,7 +43536,11 @@ const owaspsecureCryptoPasswordMd5LiveOracle: Rule = async (ctx) => {
 const owaspsecureCryptoPasswordMd5RouteLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/demo\/a02_crypto(?:\/insecure\.php|\/?$)/i.test(pageUrl)) return NEGATIVE;
+  if (
+    !/\/demo\/a02_crypto(?:\/insecure\.php|\/attacks\/passwords)/i.test(pageUrl) &&
+    !/\/attacks\/passwords\/signup_insecure\.php/i.test(pageUrl)
+  )
+    return NEGATIVE;
   const result = await owaspsecureCryptoPasswordMd5LiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
