@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-02T23:05:00.000Z",
+  "updated_at": "2026-09-03T00:06:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/access/",
+      "source": "allaboutapps/owasp-ctf-2025 — OWASP A01 broken access control + path traversal lab (GitHub README; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/ssrf/",
+      "source": "allaboutapps/owasp-ctf-2025 — OWASP A10 SSRF + misconfig lab flag-server:8080 (GitHub README; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/crypto/",
+      "source": "allaboutapps/owasp-ctf-2025 — OWASP A02 cryptographic failures + weak random lab (GitHub README; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://nextjs-cve-2024-34351.deno.dev/",
+      "source": "azu/nextjs-CVE-2024-34351 — public Server Actions SSRF PoC host (GHSA-fr5h-rqp8-mj6g; web search 00 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnbank.org/v2/forgot-password",
+      "source": "Vulnbank v2 — PIN-leak / username enumeration on forgot-password flow (prior power-loop learning gap; web search 00 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/track/1",
       "source": "ctfsec/pwnshop — PWN-002 unauthenticated order tracking IDOR GET /track/:order_id (vulnerabilities index; web search 23 UTC)",
