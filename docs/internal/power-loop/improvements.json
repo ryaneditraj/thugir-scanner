@@ -8141,6 +8141,24 @@
       "slug": "owaspsecure-bac-function-level-promote-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/function_level/promote_insecure.php returns Promoted user_id=2 to admin (insecure); owaspsecure.com/demo/a01_bac/insecure.php findings 7→9 (+owaspsecure-bac-function-level-promote-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-union-search-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/sql_union_search/search_insecure.php?q=%' UNION SELECT id,email,0 FROM a03_users -- exfiltrates admin_inj@example.com; owaspsecure.com/demo/a03_injection/insecure.php findings 11→13 (+owaspsecure-injection-union-search-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-bac-file-dor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/file_dor.php?id=2&mode=insecure returns report_admin.txt for user_id=1 without owner check; owaspsecure.com/demo/a01_bac/insecure.php findings 9→13 (+owaspsecure-bac-file-dor-live-oracle +route +owaspsecure-bac-mass-assignment-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-bac-mass-assignment-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/mass_assignment.php accepts is_admin=1 and returns &quot;is_admin&quot;: 1 JSON; owaspsecure.com/demo/a01_bac/insecure.php findings 9→13 (+owaspsecure-bac-mass-assignment-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

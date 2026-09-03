@@ -2019,6 +2019,12 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureInjectionXssStoredRouteLiveOracle",
   "owaspsecureBacFunctionLevelPromoteLiveOracle",
   "owaspsecureBacFunctionLevelPromoteRouteLiveOracle",
+  "owaspsecureInjectionUnionSearchLiveOracle",
+  "owaspsecureInjectionUnionSearchRouteLiveOracle",
+  "owaspsecureBacFileDorLiveOracle",
+  "owaspsecureBacFileDorRouteLiveOracle",
+  "owaspsecureBacMassAssignmentLiveOracle",
+  "owaspsecureBacMassAssignmentRouteLiveOracle",
   "guardmarlyScanLiveOracle",
   "guardmarlyScanRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
@@ -16974,6 +16980,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a03_injection\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-injection-union-search")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a10_ssrf\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-ssrf-fetch")
       )
@@ -16988,6 +17000,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a01_bac\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-bac-function-level-promote")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a01_bac\b/i.test(targetInput) &&
+        (p.slug.startsWith("owaspsecure-bac-file-dor") ||
+          p.slug.startsWith("owaspsecure-bac-mass-assignment"))
       )
         return -4;
       if (

@@ -76357,6 +76357,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-injection-union-search-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 UNION search SQLi live oracle",
+    description:
+      "GET attacks/sql_union_search/search_insecure.php on owaspsecure.com accepts UNION SELECT payloads that exfiltrate a03_users emails — A03 injection training oracle.",
+    impactOneline:
+      "Shape-compatible UNION injection on owaspsecure.com product search leaks user emails from other tables.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionUnionSearchLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and block UNION in search filters.",
+      steps: [
+        "Replace string-concatenated LIKE clauses with prepared statements.",
+        "Validate search input against strict allowlists before query execution.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our sql_union_search/search_insecure.php concatenates q into LIKE and allows UNION SELECT. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-union-search-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 injection route UNION search live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, Attack 2 UNION search exfiltrates a03_users via shape-compatible UNION SELECT — route-specific A03 injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm live UNION SQLi, not only login bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionUnionSearchRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and block UNION in search filters.",
+      steps: [
+        "Replace string-concatenated LIKE clauses with prepared statements.",
+        "Validate search input against strict allowlists before query execution.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms UNION search SQLi. Show route-level parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "owaspsecure-bac-function-level-promote-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -76405,6 +76457,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /demo/a01_bac route scan confirms unauthenticated admin promotion. Show route-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-file-dor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 file DOR live oracle",
+    description:
+      "GET attacks/file_dor.php?id= on owaspsecure.com returns another user's private report file by numeric id without owner check — A01 direct object reference training oracle.",
+    impactOneline:
+      "Numeric file DOR on owaspsecure.com exposes private per-user report files across user boundaries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacFileDorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize file access against the authenticated session owner.",
+      steps: [
+        "Verify file.user_id matches the session user before serving downloads.",
+        "Use non-guessable file tokens instead of sequential numeric ids.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our file_dor.php returns private files by id without owner check. Show authorization remediation for file downloads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-file-dor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 BAC route file DOR live oracle",
+    description:
+      "When scanning /demo/a01_bac/insecure.php on owaspsecure.com, GET file_dor.php confirms live direct object reference on private files — route-specific A01 broken access control oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A01 lab should confirm live file DOR, not only numeric note IDOR.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacFileDorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize file access against the authenticated session owner.",
+      steps: [
+        "Verify file.user_id matches the session user before serving downloads.",
+        "Use non-guessable file tokens instead of sequential numeric ids.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a01_bac route scan confirms file DOR on private reports. Show route-level file authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "owaspsecure.com A01 mass-assignment live oracle",
+    description:
+      "POST attacks/mass_assignment.php on owaspsecure.com accepts client-supplied is_admin=1 without field allowlist — A01 mass-assignment training oracle.",
+    impactOneline:
+      "Unrestricted mass assignment on owaspsecure.com enables privilege escalation via is_admin field injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist updatable profile fields server-side.",
+      steps: [
+        "Reject unknown POST fields instead of blindly applying them to user records.",
+        "Never accept role or privilege flags from client requests.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our mass_assignment.php accepts is_admin=1 from POST body. Show allowlist-based mass-assignment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "owaspsecure.com A01 BAC route mass-assignment live oracle",
+    description:
+      "When scanning /demo/a01_bac/insecure.php on owaspsecure.com, POST mass_assignment.php confirms live is_admin=1 acceptance — route-specific A01 broken access control oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A01 lab should confirm live mass assignment, not only IDOR and promote oracles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist updatable profile fields server-side.",
+      steps: [
+        "Reject unknown POST fields instead of blindly applying them to user records.",
+        "Never accept role or privilege flags from client requests.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a01_bac route scan confirms mass assignment via is_admin=1. Show route-level field allowlist remediation.",
     version: 1,
     enabled: true
   },
