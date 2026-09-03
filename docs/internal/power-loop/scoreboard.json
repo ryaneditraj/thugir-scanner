@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T10:30:00.000Z",
+  "updated_at": "2026-09-03T11:18:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3064,
-  "total_findings": 34315,
+  "total_sites_scanned": 3069,
+  "total_findings": 34448,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2121,
-  "discovery_findings": 28175,
+  "discovery_urls_added": 2126,
+  "discovery_findings": 28256,
   "improvements_shipped": 1320,
-  "last_run": "2026-09-03T10:30:00.000Z",
+  "last_run": "2026-09-03T11:18:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 541,
+      "probes_run": 596,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings) — no benchmark category misses"
+      "note": "Stable 6/6 first-pass recall (52 findings, 39 juice-shop live oracles) — secret-resend + juice-shop-resend-key-live-oracle present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 25,
-      "focus": "Guardmarly SAST /scan + Chimera genai/graphql + genai/rag/query alias + OopsSec AES padding vanity slug",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 81,
+      "focus": "owaspsecure.com OWASP Top 10 insecure side-by-side labs (A01/A03/A05/A07/A10) + SekuMart sekuripy.hr SQLi/XPath/NoSQL drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings) — no category misses",
-      "ansede.onrender.com/scan: 4 findings — guardmarly-scan-route-live-oracle shipped (CWE-862+CWE-89+CWE-798 live SAST probe)",
-      "chimera.atlascrew.dev/api/v1/genai/graphql: 8 findings — chimera-genai-graphql-route-live-oracle shipped",
-      "chimera.atlascrew.dev/api/v1/genai/rag/query: 8 findings — chimera-genai-rag-query-route-live-oracle alias shipped",
-      "koadt.github.io/.../aes-cbc-padding-oracle/: 5 findings — oopssec-aes-cbc-padding-oracle-route-alias shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles) — secret-resend present",
+      "sekumart.sekuripy.hr/search.php?q=test: 21 findings — sekumart-search-sqli-route-live-oracle + sekumart-search-xss-route-live-oracle",
+      "sekumart.sekuripy.hr/directory.php: 20 findings — sekumart-directory-xpath-route-live-oracle",
+      "sekumart.sekuripy.hr/track.php?order=SK-1001: 20 findings — sekumart-track-blind-sqli-live-oracle",
+      "sekumart.sekuripy.hr/members.php?user=ada: 20 findings — sekumart-members-nosql-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "damn-vulnerable-startup.fly.dev/challenges/* unreachable from cloud agent",
-      "appsec-ci /login 404 — Django SQLi login route not deployed on current Render instance",
-      "chimera genai/rag/query not in vuln-api source — alias maps to graphql introspection corpus",
-      "zen-demo-java.fly.dev unreachable (DNS/offline)"
+      "zen-demo-java.fly.dev unreachable (DNS/offline)",
+      "owaspsecure.com insecure labs queued but not yet drained (priority queue backlog)",
+      "SekuMart routes share ~20-finding hub fingerprint — route oracles confirm walkthrough endpoints but overlap on generic SQLi/XSS checks"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "sekumart.sekuripy.hr/search.php?q=test": 21,
+    "sekumart.sekuripy.hr/directory.php": 20,
+    "sekumart.sekuripy.hr/track.php?order=SK-1001": 20,
+    "sekumart.sekuripy.hr/members.php?user=ada": 20,
     "ansede.onrender.com/scan": 4,
     "chimera.atlascrew.dev/api/v1/genai/graphql": 8,
-    "chimera.atlascrew.dev/api/v1/genai/rag/query": 8,
-    "koadt.github.io/oss-oopssec-store/posts/aes-cbc-padding-oracle-forged-share-token/": 12,
-    "koadt.github.io/oss-oopssec-store/posts/aes-cbc-padding-oracle/": 5,
-    "duck-store.escape.tech/testimonials": 47,
-    "pwnshop.ctfsecurity.com/apply-coupon": 46
+    "duck-store.escape.tech/testimonials": 47
   }
 }
