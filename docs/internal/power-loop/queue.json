@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T16:20:00.000Z",
+  "updated_at": "2026-09-03T17:10:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass/",
@@ -11491,7 +11491,32 @@
       "url": "https://owaspsecure.com/demo/a10_ssrf/insecure.php",
       "source": "owaspsecure.com OWASP Top 10 demo hub — A10 SSRF open-fetcher insecure lab (web search 11 UTC)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://web-pentest-playground.onrender.com/upload",
+      "source": "Adarsh-S-R/web-pentest-playground — insecure file upload route (Render OSS deploy; web search 17 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-pentest-playground.onrender.com/redirect",
+      "source": "Adarsh-S-R/web-pentest-playground — open redirect /redirect?url= oracle (Render OSS deploy; web search 17 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://web-pentest-playground.onrender.com/comment",
+      "source": "Adarsh-S-R/web-pentest-playground — stored XSS comment form (Render OSS deploy; web search 17 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level15.php",
+      "source": "webspoilt/vulnforge-academy — Level 15 SSRF challenge (GitHub README levels 13-15; web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php",
+      "source": "webspoilt/vulnforge-academy — Level 20 Nightmare multi-vector chain challenge (GitHub README; web search 17 UTC)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 60
+  "discovery_urls_added": 65
 }
