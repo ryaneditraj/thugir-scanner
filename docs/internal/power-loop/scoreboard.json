@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T18:45:00.000Z",
+  "updated_at": "2026-09-03T18:24:25.881Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3138,
-  "total_findings": 35417,
-  "critical_findings": 58,
+  "total_sites_scanned": 2749,
+  "total_findings": 26902,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2154,
-  "discovery_findings": 28715,
-  "improvements_shipped": 1344,
-  "last_run": "2026-09-03T18:45:00.000Z",
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 1961,
+  "discovery_findings": 22893,
+  "improvements_shipped": 1161,
+  "last_run": "2026-09-03T18:24:25.881Z",
   "last_run_summary": {
     "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 48,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 598,
+      "probes_run": 591,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,49 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall on primary Heroku (52 findings, 39 live oracles; secret-resend present)"
+      "note": "Rich 6/6 first-pass recall (48 findings, 34 juice-shop live oracles); secret-resend slug still absent"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 26,
-      "focus": "owaspsecure A03 UNION search SQLi + A01 file DOR + mass-assignment live route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 120,
+      "focus": "wrongsecrets challenges 50-52/55-56/64-66 SSH/binary/Docker secrets oracles + pwnshop chat-query/SSTI storefront + duck-store testimonials BOLA/XSS + wrongsecrets mcp62",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings; secret-resend present)",
-      "owaspsecure.com/demo/a03_injection/insecure.php: 11→13 findings — owaspsecure-injection-union-search-live-oracle +route",
-      "owaspsecure.com/demo/a01_bac/insecure.php: 9→13 findings — owaspsecure-bac-file-dor + mass-assignment live/route oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (48 findings, 34 live oracles) — rich pass, no category misses",
+      "wrongsecrets.herokuapp.com/challenge/challenge-55: 15 findings — wrongsecrets-challenge-55-ssh-bastion-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-56: 15 findings — wrongsecrets-challenge-56-project-spec-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-64: 15 findings — wrongsecrets-challenge-64-swift-binary-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-65: 15 findings — wrongsecrets-challenge-65-java-plain-cli-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-66: 15 findings — wrongsecrets-challenge-66-java-obfuscated-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-50: 15 findings — wrongsecrets-challenge-50-dotnet-binary-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-51: 15 findings — wrongsecrets-challenge-51-docker-secrets-route-live-oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-52: 15 findings — wrongsecrets-challenge-52-buildx-secrets-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "owaspsecure A01 idor-uuid public_id seed value not yet confirmed for live oracle",
-      "wrongsecrets challenge-68 returns WHOOOOPS error page on Heroku",
-      "damn-vulnerable-startup.fly.dev + zen-demo-java.fly.dev unreachable from cloud agent"
+      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
+      "new queue URLs (challenge-63, pwnshop chat-query/storefront, duck-store testimonials, mcp62) queued for next drain — limit=8 filled by wrongsecrets 50-52/55-56/64-66",
+      "wrongsecrets binary/SSH challenges 50-52/64-66: route oracles confirm walkthrough text; cloud execution of binary reverse-engineering not testable on Heroku"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "koadt.github.io/oss-oopssec-store/posts/sql-injection-writeup": 9,
-    "owaspsecure.com/demo/a03_injection/insecure.php": 13,
-    "owaspsecure.com/demo/a01_bac/insecure.php": 13,
-    "owaspsecure.com/demo/a09_logging/insecure.php": 11,
-    "owaspsecure.com/demo/a10_ssrf/insecure.php": 9,
-    "owaspsecure.com/demo/a04_insecure_design/insecure.php": 9,
-    "owaspsecure.com/demo/a05_misconfig/insecure.php": 8,
-    "owaspsecure.com/demo/a07_auth/insecure.php": 6,
-    "owaspsecure.com/demo/a02_crypto/insecure.php": 6,
-    "owaspsecure.com/demo/a08_integrity/insecure.php": 6,
-    "koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182": 7,
-    "juice-shop.demo.escape.tech": 53
+    "juice-shop.herokuapp.com": 48,
+    "wrongsecrets.herokuapp.com/challenge/challenge-55": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-56": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-64": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-65": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-66": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-50": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-51": 15,
+    "wrongsecrets.herokuapp.com/challenge/challenge-52": 15,
+    "duck-store.escape.tech/api/v1/users/me/profile": 33,
+    "demo.owasp-juice.shop/rest/memories": 27,
+    "duck-store.escape.tech/api/v1/products/filter/by-color": 31,
+    "pwnshop.ctfsecurity.com/verify-otp": 27,
+    "vulnbank.org/sup3r_s3cr3t_admin": 20,
+    "brokencrystals.com/userlogin?logobgcolor=red": 52
   }
 }
