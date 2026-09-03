@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-03T01:25:57.188Z",
-  "total": 3128,
-  "uniqueSlugs": 3120,
+  "generatedAt": "2026-09-03T02:42:20.014Z",
+  "total": 3130,
+  "uniqueSlugs": 3122,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3110,
+    "generic": 3112,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3043,
+    "deep": 3045,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 149,
     "Security misconfiguration": 237,
     "Broken authentication": 199,
-    "Injection": 506,
+    "Injection": 508,
     "Cross-site scripting": 792,
     "Open redirect": 26,
     "general": 20,
@@ -1038,6 +1038,7 @@
     "code-breaking-easy-route-live-oracle",
     "code-breaking-hard-route-live-oracle",
     "code-breaking-medium-route-live-oracle",
+    "code-breaking-puzzle-language-route-live-oracle",
     "code-breaking-puzzle-route-live-oracle",
     "command-injection-form-probe",
     "compass-demo-angularjs-route-live-oracle",
@@ -2426,6 +2427,7 @@
     "sql-error-disclosure",
     "sql-injection-challenge-login-sqli-live-oracle",
     "sql-injection-challenge-login-sqli-route-live-oracle",
+    "sql-injection-lab-login-route-live-oracle",
     "sqli-header-error-disclosure",
     "sqli-query-param-injection",
     "sqli-vulnlab-blind-bool-live-oracle",

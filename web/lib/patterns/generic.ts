@@ -685,6 +685,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "code-breaking-puzzle-language-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Code-Breaking puzzle language route live oracle",
+    description:
+      "When scanning /puzzle/{id} on code-breaking.fly.dev, language-specific source-code audit puzzles (PHP function, Java javacon) are confirmed with tier titles and GitHub source paths — route-specific language CTF oracle.",
+    impactOneline:
+      "Route-scoped scans of /puzzle routes should distinguish language-specific audit puzzles beyond generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "codeBreakingPuzzleLanguageRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Code-Breaking is intentional training — isolate puzzle instances from production codebases.",
+      steps: [
+        "Run source-audit CTF puzzles only on dedicated lab infrastructure.",
+        "Require authentication before serving downloadable challenge source archives.",
+        "Use puzzle findings to train reviewers without copying vulnerable patterns into production."
+      ]
+    },
+    fixPrompt:
+      "Our Code-Breaking /puzzle route scan confirms language-specific source audit CTF content. Show how to isolate challenge instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "command-injection-form-probe",
     platform: "generic",
     category: "Injection",
@@ -51634,6 +51660,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /login route documents Attack Mode SQLi against /api/auth/login. Show parameterized query remediation for Node banking APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sql-injection-lab-login-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "SQL Injection Lab login route live oracle",
+    description:
+      "When scanning /login on sql-injection-lab.vercel.app, the Layer Zero UNLV Flask practice lab documents intentional authentication-bypass SQL injection with admin flag capture — route-specific SQLi training oracle.",
+    impactOneline:
+      "Educational Flask SQLi lab exposes intentional login bypass patterns for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqlInjectionLabLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SQL Injection Lab is intentional training software — use parameterized queries in production.",
+      steps: [
+        "Never concatenate user input into SQL queries.",
+        "Use parameterized queries or ORM bindings for all authentication.",
+        "Run practice labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login route documents intentional SQLi auth bypass. Show parameterized query remediation for Flask login handlers.",
     version: 1,
     enabled: true
   },
