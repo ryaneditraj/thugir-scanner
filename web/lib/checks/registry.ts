@@ -43162,6 +43162,129 @@ const owaspsecureBacIdorNumericRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const owaspsecureMisconfigPhpinfoLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const phpinfoUrl = owaspsecureAttackUrl(ctx, "attacks/phpinfo_exposed.php");
+  const doc = await ctx.probe.get(phpinfoUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/phpinfo\(\)|PHP Version|Configuration/i.test(doc.body)) return NEGATIVE;
+  if (!/<title>PHP [\d.]+ - phpinfo\(\)<\/title>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: phpinfoUrl,
+      snippet: doc.body.match(/<title>PHP [\d.]+ - phpinfo\(\)<\/title>/i)?.[0]?.slice(0, 80) ?? "phpinfo() exposed",
+      note: "owaspsecure.com GET attacks/phpinfo_exposed.php returns full phpinfo() output — A05 security misconfiguration training oracle"
+    }
+  };
+};
+
+const owaspsecureMisconfigPhpinfoRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a05_misconfig\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureMisconfigPhpinfoLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a05_misconfig route scan — Attack 1 phpinfo() exposure confirms live server configuration leak (misconfig oracle)"
+    }
+  };
+};
+
+const owaspsecureMisconfigDefaultCredsLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const loginUrl = owaspsecureAttackUrl(ctx, "attacks/default_creds_panel.php");
+  const postBody = new URLSearchParams({ u: "admin", p: "admin" }).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Welcome,\s*<strong>admin<\/strong>|admin\/admin/i.test(doc.body)) return NEGATIVE;
+  if (!/Default Credentials Panel|Logged in using/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: loginUrl,
+      snippet: doc.body.match(/Welcome,[\s\S]{0,80}/i)?.[0]?.slice(0, 100) ?? "default admin/admin login",
+      note: "owaspsecure.com POST attacks/default_creds_panel.php accepts admin/admin default credentials — A05 security misconfiguration training oracle"
+    }
+  };
+};
+
+const owaspsecureMisconfigDefaultCredsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a05_misconfig\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureMisconfigDefaultCredsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a05_misconfig route scan — Attack 5 default admin/admin credentials grant panel access (live misconfig oracle)"
+    }
+  };
+};
+
+const owaspsecureCryptoPasswordMd5LiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const signupUrl = owaspsecureAttackUrl(ctx, "attacks/passwords/signup_insecure.php");
+  const probeEmail = `thugir-probe-${Date.now()}@example.com`;
+  const postBody = new URLSearchParams({
+    email: probeEmail,
+    password: "weakpassword"
+  }).toString();
+  const doc = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Insecure signup stored|plaintext \+ MD5/i.test(doc.body)) return NEGATIVE;
+  if (!/md5=[a-f0-9]{32}/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: signupUrl,
+      snippet: doc.body.match(/Insecure signup stored[\s\S]{0,100}/i)?.[0]?.slice(0, 120) ?? "plaintext+MD5 password storage",
+      note: "owaspsecure.com POST attacks/passwords/signup_insecure.php stores plaintext and MD5 password hashes — A02 cryptographic failure training oracle"
+    }
+  };
+};
+
+const owaspsecureCryptoPasswordMd5RouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a02_crypto\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureCryptoPasswordMd5LiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a02_crypto route scan — Attack 1 insecure signup stores plaintext and MD5 password hashes (live crypto failure oracle)"
+    }
+  };
+};
+
 // --- Guardmarly SAST demo (ansede.onrender.com) --------------------------------------
 const GUARDMARLY_SCAN_PROBE_CODE = `from flask import Flask, request
 app = Flask(__name__)
@@ -109573,6 +109696,12 @@ export const RULES: Record<string, Rule> = {
   owaspsecureSsrfFetchRouteLiveOracle,
   owaspsecureBacIdorNumericLiveOracle,
   owaspsecureBacIdorNumericRouteLiveOracle,
+  owaspsecureMisconfigPhpinfoLiveOracle,
+  owaspsecureMisconfigPhpinfoRouteLiveOracle,
+  owaspsecureMisconfigDefaultCredsLiveOracle,
+  owaspsecureMisconfigDefaultCredsRouteLiveOracle,
+  owaspsecureCryptoPasswordMd5LiveOracle,
+  owaspsecureCryptoPasswordMd5RouteLiveOracle,
   guardmarlyScanLiveOracle,
   guardmarlyScanRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,

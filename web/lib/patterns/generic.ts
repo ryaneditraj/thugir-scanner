@@ -75784,6 +75784,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-misconfig-phpinfo-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A05 phpinfo exposure live oracle",
+    description:
+      "GET attacks/phpinfo_exposed.php on owaspsecure.com returns full phpinfo() output with PHP version and server configuration — A05 security misconfiguration training oracle.",
+    impactOneline:
+      "Exposed phpinfo() on owaspsecure.com leaks server paths, extensions, and environment details useful for targeted attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigPhpinfoLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove phpinfo() from production and restrict diagnostic endpoints.",
+      steps: [
+        "Delete or block phpinfo() endpoints in production deployments.",
+        "Replace with minimal health checks that omit sensitive configuration.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com phpinfo_exposed.php returns full phpinfo() output. Show how to remove or restrict diagnostic endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-phpinfo-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A05 misconfig route phpinfo live oracle",
+    description:
+      "When scanning /demo/a05_misconfig/insecure.php on owaspsecure.com, Attack 1 phpinfo() exposure confirms live server configuration leak — route-specific A05 misconfiguration oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A05 lab should confirm live phpinfo exposure, not only directory probing noise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigPhpinfoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove phpinfo() from production and restrict diagnostic endpoints.",
+      steps: [
+        "Delete or block phpinfo() endpoints in production deployments.",
+        "Replace with minimal health checks that omit sensitive configuration.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a05_misconfig route scan confirms phpinfo() exposure. Show route-level diagnostic endpoint remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-default-creds-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A05 default credentials live oracle",
+    description:
+      "POST attacks/default_creds_panel.php on owaspsecure.com accepts admin/admin default credentials and grants panel access — A05 security misconfiguration training oracle.",
+    impactOneline:
+      "Default admin credentials on owaspsecure.com enable immediate privileged access without credential guessing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigDefaultCredsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable default credentials and enforce password change on first login.",
+      steps: [
+        "Remove shipped default admin passwords from all deployments.",
+        "Force password change on first login for administrative accounts.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com default_creds_panel.php accepts admin/admin. Show default credential remediation for admin panels.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-default-creds-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A05 misconfig route default creds live oracle",
+    description:
+      "When scanning /demo/a05_misconfig/insecure.php on owaspsecure.com, Attack 5 default admin/admin credentials grant panel access — route-specific A05 misconfiguration oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A05 lab should confirm live default credential acceptance, not only generic misconfig headers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigDefaultCredsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable default credentials and enforce password change on first login.",
+      steps: [
+        "Remove shipped default admin passwords from all deployments.",
+        "Force password change on first login for administrative accounts.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a05_misconfig route scan confirms default admin credentials work. Show route-level default credential remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-password-md5-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 insecure password storage live oracle",
+    description:
+      "POST attacks/passwords/signup_insecure.php on owaspsecure.com stores passwords as plaintext and MD5 hashes — A02 cryptographic failure training oracle.",
+    impactOneline:
+      "Plaintext and MD5 password storage on owaspsecure.com enables trivial credential recovery after database leaks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoPasswordMd5LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hash passwords with bcrypt or argon2 and never store plaintext credentials.",
+      steps: [
+        "Replace MD5/plaintext storage with bcrypt or argon2 password hashing.",
+        "Use per-user salts and adaptive work factors.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com signup_insecure.php stores plaintext and MD5 passwords. Show bcrypt/argon2 password hashing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-password-md5-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 crypto route password storage live oracle",
+    description:
+      "When scanning /demo/a02_crypto/insecure.php on owaspsecure.com, Attack 1 insecure signup stores plaintext and MD5 password hashes — route-specific A02 cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 lab should confirm live weak password storage, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoPasswordMd5RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hash passwords with bcrypt or argon2 and never store plaintext credentials.",
+      steps: [
+        "Replace MD5/plaintext storage with bcrypt or argon2 password hashing.",
+        "Use per-user salts and adaptive work factors.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto route scan confirms plaintext and MD5 password storage. Show route-level password hashing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "web-pentest-playground-login-sqli-live-oracle",
     platform: "generic",
     category: "Injection",

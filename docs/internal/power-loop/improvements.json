@@ -8069,6 +8069,24 @@
       "slug": "owaspsecure-bac-idor-numeric-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/idor_numeric.php?id=1 returns Alice Note JSON without owner check; owaspsecure.com/demo/a01_bac/insecure.php findings 7→9 (+owaspsecure-bac-idor-numeric-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-misconfig-phpinfo-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/phpinfo_exposed.php returns PHP phpinfo() title and configuration dump; owaspsecure.com/demo/a05_misconfig/insecure.php findings 4→8 (+owaspsecure-misconfig-phpinfo-live-oracle +route +owaspsecure-misconfig-default-creds-live-oracle +route); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-misconfig-default-creds-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/default_creds_panel.php accepts admin/admin and returns Welcome admin panel; owaspsecure.com/demo/a05_misconfig/insecure.php findings 4→8 (+owaspsecure-misconfig-default-creds-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-crypto-password-md5-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/passwords/signup_insecure.php stores plaintext + MD5 hash (Insecure signup stored: plaintext + MD5); owaspsecure.com/demo/a02_crypto/insecure.php findings 4→6 (+owaspsecure-crypto-password-md5-live-oracle +route); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
