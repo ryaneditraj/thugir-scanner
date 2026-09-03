@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T22:35:00.000Z",
+  "updated_at": "2026-09-03T23:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2789,
-  "total_findings": 27548,
+  "total_sites_scanned": 2793,
+  "total_findings": 27575,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1981,
-  "discovery_findings": 23280,
-  "improvements_shipped": 1356,
-  "last_run": "2026-09-03T22:35:00.000Z",
+  "discovery_findings": 23307,
+  "improvements_shipped": 1359,
+  "last_run": "2026-09-03T23:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
@@ -53,31 +53,31 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 26,
-      "focus": "oopssec weak-MD5 admin compromise walkthrough; owaspsecure A02 predictable tokens + data-at-rest attack paths",
+      "urls_scanned": 4,
+      "findings": 32,
+      "focus": "oopssec plaintext-password SIEM walkthrough fetch; owaspsecure A02 MD5 + A05 misconfig attack-path route aliases",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "koadt.github.io/.../weak-md5-hashing-admin-compromise: 8→10 (+oopssec-weak-md5-hashing-admin-route-live-oracle +client-side evidence)",
-      "owaspsecure.com/.../tokens/gen_insecure.php: 7→8 (+owaspsecure-crypto-predictable-tokens-live-oracle +route)",
-      "owaspsecure.com/.../data_at_rest/dump.php: 8 (+owaspsecure-crypto-data-at-rest-live-oracle +route)",
+      "koadt.github.io/.../plaintext-password-in-logs: 8→10 (+oopssec-plaintext-password-logs-route-live-oracle reliable via walkthrough fetch)",
+      "owaspsecure.com/.../passwords/signup_insecure.php: 8 (+owaspsecure-crypto-password-md5-route-live-oracle on attack path)",
+      "owaspsecure.com/.../phpinfo_exposed.php + default_creds_panel.php: 7 each (+A05 misconfig route oracles on attack paths)",
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "oopssec plaintext-password-in-logs: thin hub without SIEM-log route oracle (shipped in prior run but still thin on some scans)",
       "wrongsecrets challenge-67/68 undeployed on Heroku (404)",
-      "damn-vulnerable-startup.fly.dev + zen-demo-java.fly.dev unreachable from cloud agent"
+      "damn-vulnerable-startup.fly.dev + zen-demo-java.fly.dev unreachable from cloud agent",
+      "oopssec stored-xss-reviews + self-xss-csrf-profile still missing walkthrough fetch parity"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
+    "koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs": 10,
+    "owaspsecure.com/demo/a02_crypto/attacks/passwords/signup_insecure.php": 8,
+    "owaspsecure.com/demo/a05_misconfig/attacks/phpinfo_exposed.php": 7,
+    "owaspsecure.com/demo/a05_misconfig/attacks/default_creds_panel.php": 7,
     "koadt.github.io/oss-oopssec-store/posts/weak-md5-hashing-admin-compromise": 10,
-    "owaspsecure.com/demo/a02_crypto/attacks/tokens/gen_insecure.php": 8,
-    "owaspsecure.com/demo/a02_crypto/attacks/data_at_rest/dump.php": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-69": 18,
-    "koadt.github.io/oss-oopssec-store/posts/self-xss-csrf-profile-takeover": 16,
-    "pwnshop.ctfsecurity.com/debug/info": 48
+    "wrongsecrets.herokuapp.com/challenge/challenge-69": 18
   }
 }

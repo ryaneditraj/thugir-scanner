@@ -8231,6 +8231,24 @@
       "slug": "owaspsecure-crypto-data-at-rest-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST signup/login then GET attacks/data_at_rest/dump.php exposes plaintext SSN rows (999-99-9999) in ssn_plain column; owaspsecure.com/demo/a02_crypto/attacks/data_at_rest/dump.php findings 8 (+owaspsecure-crypto-data-at-rest-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-plaintext-password-logs-walkthrough-fetch-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: oopssecPlaintextPasswordLogsRouteLiveOracle now uses oopssecWalkthroughEvidenceWithFetch for Astro walkthrough body fetch parity; koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs/ findings 8→10 (+oopssec-plaintext-password-logs-route-live-oracle +client-side-oopssec-plaintext-password-logs-evidence reliable); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-crypto-password-md5-attack-path-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: owaspsecureCryptoPasswordMd5RouteLiveOracle routeRe extended to /demo/a02_crypto/attacks/passwords/* and /attacks/passwords/signup_insecure.php; owaspsecure.com/demo/a02_crypto/attacks/passwords/signup_insecure.php findings 8 (+owaspsecure-crypto-password-md5-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-misconfig-attack-path-route-aliases",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: owaspsecureMisconfigPhpinfoRouteLiveOracle + owaspsecureMisconfigDefaultCredsRouteLiveOracle routeRe extended to /demo/a05_misconfig/attacks/phpinfo_exposed.php and /attacks/default_creds_panel.php; phpinfo_exposed.php findings 7 (+route), default_creds_panel.php findings 7 (+route); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
