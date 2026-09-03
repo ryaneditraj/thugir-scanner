@@ -76461,6 +76461,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-injection-sqli-blind-time-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 blind/time SQLi live oracle",
+    description:
+      "GET attacks/sql_blind_time/count_insecure.php on owaspsecure.com concatenates id into COUNT queries — boolean probe id=1 OR 1=1 inflates product count — A03 blind injection training oracle.",
+    impactOneline:
+      "Concatenated id filters on owaspsecure.com enable boolean-based SQL inference without error messages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliBlindTimeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and cast id parameters to integers.",
+      steps: [
+        "Bind id as an integer parameter instead of concatenating into SQL.",
+        "Reject non-numeric id values before query execution.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our sql_blind_time/count_insecure.php concatenates id into COUNT. Show parameterized integer binding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-sqli-blind-time-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 injection route blind/time SQLi live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, Attack 3 blind/time SQLi confirms boolean count inflation via id=1 OR 1=1 — route-specific A03 injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm live blind SQLi, not only login bypass and UNION search.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliBlindTimeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and cast id parameters to integers.",
+      steps: [
+        "Bind id as an integer parameter instead of concatenating into SQL.",
+        "Reject non-numeric id values before query execution.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms blind SQLi via COUNT inflation. Show route-level parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-sqli-second-order-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 second-order SQLi live oracle",
+    description:
+      "GET attacks/sql_second_order/admin_view_insecure.php on owaspsecure.com builds LIKE filters from stored profile bio fields — needle=%' OR 1=1 -- detonates stored SQL fragments — A03 second-order injection training oracle.",
+    impactOneline:
+      "Stored profile fields on owaspsecure.com detonate later in admin queries built via string concatenation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliSecondOrderLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate stored user content and parameterize all downstream queries.",
+      steps: [
+        "Sanitize profile bio on write and escape on read.",
+        "Use prepared statements when filtering stored fields in admin views.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our sql_second_order/admin_view_insecure.php concatenates stored bio into LIKE. Show second-order SQLi remediation with parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-sqli-second-order-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 injection route second-order SQLi live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, Attack 4 second-order SQLi exfiltrates multiple a03_users via stored bio payload in admin_view — route-specific A03 injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm live second-order SQLi, not only first-order injection vectors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliSecondOrderRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate stored user content and parameterize all downstream queries.",
+      steps: [
+        "Sanitize profile bio on write and escape on read.",
+        "Use prepared statements when filtering stored fields in admin views.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms second-order SQLi in admin_view. Show route-level stored-field validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "owaspsecure-bac-function-level-promote-live-oracle",
     platform: "generic",
     category: "Broken access control",
