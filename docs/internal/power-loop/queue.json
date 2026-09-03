@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T03:20:00.000Z",
+  "updated_at": "2026-09-03T04:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supply-chain",
+      "source": "ai-security-platform — CWE-494 typosquatted packages + malicious postinstall supply-chain challenge (14-exercise lab; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/vulnerable-npm",
+      "source": "ai-security-platform — CWE-1104 outdated npm dependencies with known CVEs challenge (14-exercise lab; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/deceptive-privacy",
+      "source": "ai-security-platform — deceptive privacy policy / silent consent challenge (14-exercise lab; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/cookie-auth",
+      "source": "ai-security-platform — CWE-784 client-writable cookie admin bypass challenge (14-exercise lab; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/command-injection",
+      "source": "DaniSam-STU/security-lab — interactive command-injection lab page with live exploit UI (seclab.vercel.app; web search 04 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://web-pentest-playground.onrender.com/login",
       "source": "adarsh-s-r/web-pentest-playground — auth/login SQLi practice route (Render deploy; web search 01 UTC)",
