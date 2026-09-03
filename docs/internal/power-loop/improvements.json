@@ -8051,6 +8051,24 @@
       "slug": "restful-booker-runner-priority",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for restful-booker-* on /auth and /booking route scans; restful-booker.herokuapp.com/auth findings 3→7 (+restful-booker-auth-weak-creds-live-oracle +route +booking-unauth-access +booking-create-unauth); /booking findings 3→8 (+restful-booker-booking-unauth-access-route-live-oracle +booking-create-unauth-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-sqli-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/sql_login/login_insecure.php accepts tautology SQLi and returns OK (insecure login); owaspsecure.com/demo/a03_injection/insecure.php findings 7→9 (+owaspsecure-injection-sqli-login-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-ssrf-fetch-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/fetch_insecure.php?url=https://example.com/ returns Example Domain body; owaspsecure.com/demo/a10_ssrf/insecure.php findings 7→9 (+owaspsecure-ssrf-fetch-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-bac-idor-numeric-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/idor_numeric.php?id=1 returns Alice Note JSON without owner check; owaspsecure.com/demo/a01_bac/insecure.php findings 7→9 (+owaspsecure-bac-idor-numeric-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

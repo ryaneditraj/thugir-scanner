@@ -75628,6 +75628,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-injection-sqli-login-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 SQL login bypass live oracle",
+    description:
+      "POST attacks/sql_login/login_insecure.php on owaspsecure.com accepts tautology SQLi (email=' OR '1'='1'--) and returns insecure login success with echoed query — A03 injection training oracle.",
+    impactOneline:
+      "String-concatenated SQL login enables authentication bypass on the owaspsecure.com injection demo lab.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Hash passwords with bcrypt/argon2 instead of plaintext comparison.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com login_insecure.php accepts SQL tautology bypass. Show parameterized query remediation for PHP login.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-sqli-login-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 injection route SQLi live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, Attack 1 POST login_insecure.php confirms live SQL authentication bypass — route-specific A03 injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm live SQLi, not only client-side evidence markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Hash passwords with bcrypt/argon2 instead of plaintext comparison.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms SQL login bypass. Show route-level parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-fetch-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF fetch live oracle",
+    description:
+      "GET attacks/fetch_insecure.php?url= on owaspsecure.com fetches attacker-controlled URLs server-side and returns the response body — A10 SSRF training oracle.",
+    impactOneline:
+      "Open server-side fetchers on owaspsecure.com enable SSRF against internal and external targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfFetchLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and allowlist outbound fetch targets.",
+      steps: [
+        "Block private IP ranges and link-local addresses in URL fetchers.",
+        "Use an allowlist of permitted fetch destinations.",
+        "Run owaspsecure.com SSRF labs only on isolated training networks."
+      ]
+    },
+    fixPrompt:
+      "Our fetch_insecure.php echoes example.com via server-side fetch. Show SSRF URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-fetch-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF route live oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, GET fetch_insecure.php confirms live open fetcher SSRF — route-specific A10 SSRF oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm live SSRF fetch, not only client-side XXE evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfFetchRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and allowlist outbound fetch targets.",
+      steps: [
+        "Block private IP ranges and link-local addresses in URL fetchers.",
+        "Use an allowlist of permitted fetch destinations.",
+        "Run owaspsecure.com SSRF labs only on isolated training networks."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms open fetcher SSRF. Show route-level URL allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-idor-numeric-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 numeric IDOR live oracle",
+    description:
+      "GET attacks/idor_numeric.php?id=1 on owaspsecure.com returns another user's private note JSON without owner authorization — A01 broken access control training oracle.",
+    impactOneline:
+      "Numeric IDOR on owaspsecure.com exposes private notes across user boundaries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacIdorNumericLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize object access against the authenticated session owner.",
+      steps: [
+        "Verify note.user_id matches the session user before returning records.",
+        "Use non-guessable UUIDs instead of sequential numeric identifiers.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our idor_numeric.php returns private notes by id without owner check. Show authorization remediation for object access.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-idor-numeric-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 BAC route IDOR live oracle",
+    description:
+      "When scanning /demo/a01_bac/insecure.php on owaspsecure.com, GET idor_numeric.php confirms live numeric IDOR — route-specific A01 broken access control oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A01 lab should confirm live BOLA/IDOR, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacIdorNumericRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize object access against the authenticated session owner.",
+      steps: [
+        "Verify note.user_id matches the session user before returning records.",
+        "Use non-guessable UUIDs instead of sequential numeric identifiers.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a01_bac route scan confirms numeric IDOR. Show route-level object authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "web-pentest-playground-login-sqli-live-oracle",
     platform: "generic",
     category: "Injection",

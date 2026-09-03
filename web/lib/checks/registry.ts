@@ -43032,6 +43032,136 @@ const appsecCiLoginRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- owaspsecure.com OWASP Top 10 side-by-side demo labs --------------------------------
+function isOwaspsecureHost(ctx: RuleContext): boolean {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  return /owaspsecure\.com/i.test(corpus);
+}
+
+function owaspsecureAttackUrl(ctx: RuleContext, attackPath: string): string {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  const demoMatch = pageUrl.match(/(https?:\/\/owaspsecure\.com\/demo\/a\d+_[^/]+)/i);
+  const base = demoMatch?.[1] ?? new URL("/demo", ctx.origin).toString();
+  return new URL(attackPath.replace(/^\//, ""), `${base}/`).toString();
+}
+
+const owaspsecureInjectionSqliLoginLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const loginUrl = owaspsecureAttackUrl(ctx, "attacks/sql_login/login_insecure.php");
+  const postBody = new URLSearchParams({
+    email: "' OR '1'='1'-- ",
+    password: "probe"
+  }).toString();
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/OK \(insecure login\)|logged in as/i.test(doc.body)) return NEGATIVE;
+  if (!/WHERE email/i.test(doc.body) || !/1.{0,6}=.{0,6}1/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: loginUrl,
+      snippet: doc.body.match(/OK \(insecure login\)[^\n<]*/i)?.[0]?.slice(0, 120) ?? "SQL login bypass confirmed",
+      note: "owaspsecure.com POST attacks/sql_login/login_insecure.php accepts tautology SQLi payload and returns insecure login success — A03 injection training oracle"
+    }
+  };
+};
+
+const owaspsecureInjectionSqliLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a03_injection\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureInjectionSqliLoginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a03_injection route scan — Attack 1 SQL login bypass via string-concatenated query (live POST oracle)"
+    }
+  };
+};
+
+const owaspsecureSsrfFetchLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const fetchUrl = owaspsecureAttackUrl(
+    ctx,
+    "attacks/fetch_insecure.php?url=https://example.com/"
+  );
+  const doc = await ctx.probe.get(fetchUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Example Domain|iana\.org\/domains\/example/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: fetchUrl,
+      snippet: doc.body.match(/Example Domain[\s\S]{0,80}/i)?.[0]?.slice(0, 100) ?? "example.com echoed",
+      note: "owaspsecure.com GET attacks/fetch_insecure.php fetches attacker-controlled URL server-side — A10 SSRF training oracle"
+    }
+  };
+};
+
+const owaspsecureSsrfFetchRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a10_ssrf\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureSsrfFetchLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a10_ssrf route scan — open fetcher returns example.com body without allowlist (live SSRF oracle)"
+    }
+  };
+};
+
+const owaspsecureBacIdorNumericLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const idorUrl = owaspsecureAttackUrl(ctx, "attacks/idor_numeric.php?id=1");
+  const doc = await ctx.probe.get(idorUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/fetched by id only|no owner check/i.test(doc.body)) return NEGATIVE;
+  if (!/"title"\s*:|Alice Note/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: idorUrl,
+      snippet: doc.body.match(/\{[\s\S]{0,120}title[\s\S]{0,80}\}/i)?.[0]?.slice(0, 120) ?? "note JSON returned",
+      note: "owaspsecure.com GET attacks/idor_numeric.php returns another user's note by numeric id without owner check — A01 broken access control training oracle"
+    }
+  };
+};
+
+const owaspsecureBacIdorNumericRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a01_bac\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureBacIdorNumericLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a01_bac route scan — numeric IDOR returns private note JSON without authorization (live BOLA oracle)"
+    }
+  };
+};
+
 // --- Guardmarly SAST demo (ansede.onrender.com) --------------------------------------
 const GUARDMARLY_SCAN_PROBE_CODE = `from flask import Flask, request
 app = Flask(__name__)
@@ -109437,6 +109567,12 @@ export const RULES: Record<string, Rule> = {
   appsecCiDjangoAdminLiveOracle,
   appsecCiDjangoAdminRouteLiveOracle,
   appsecCiLoginRouteLiveOracle,
+  owaspsecureInjectionSqliLoginLiveOracle,
+  owaspsecureInjectionSqliLoginRouteLiveOracle,
+  owaspsecureSsrfFetchLiveOracle,
+  owaspsecureSsrfFetchRouteLiveOracle,
+  owaspsecureBacIdorNumericLiveOracle,
+  owaspsecureBacIdorNumericRouteLiveOracle,
   guardmarlyScanLiveOracle,
   guardmarlyScanRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,
