@@ -1,56 +1,6 @@
 {
-  "updated_at": "2026-09-03T17:10:00.000Z",
+  "updated_at": "2026-09-03T18:20:00.000Z",
   "priority_discovery_urls": [
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass/",
-      "source": "kOaDT/oss-oopssec-store — open redirect login bypass walkthrough (challenges.json #5; web search 16 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach/",
-      "source": "kOaDT/oss-oopssec-store — IDOR order privacy breach walkthrough (challenges.json #4; web search 16 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access/",
-      "source": "kOaDT/oss-oopssec-store — BOLA wishlist access walkthrough (challenges.json #6; web search 16 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/sql-injection-writeup/",
-      "source": "kOaDT/oss-oopssec-store — order search SQLi walkthrough (challenges.json #17; web search 16 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/client-side-price-manipulation/",
-      "source": "kOaDT/oss-oopssec-store — client-side price manipulation checkout walkthrough (challenges.json #9; web search 16 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api/",
-      "source": "kOaDT/oss-oopssec-store — path traversal documents API walkthrough (challenges.json #8; web search 15 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/",
-      "source": "kOaDT/oss-oopssec-store — mass assignment admin signup walkthrough (challenges.json #10; web search 15 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/",
-      "source": "kOaDT/oss-oopssec-store — product search SQLi walkthrough (challenges.json #18; web search 15 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss/",
-      "source": "kOaDT/oss-oopssec-store — malicious SVG upload stored XSS walkthrough (challenges.json #21; web search 15 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-67",
-      "source": "OWASP WrongSecrets — Challenge 67 secrets oracle (Heroku demo README: challenges 67-72; web search 15 UTC)",
-      "auth": "public_demo"
-    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection/",
       "source": "kOaDT/oss-oopssec-store — second-order SQLi in admin reviews walkthrough (ch.05 SQLi)",
@@ -11493,30 +11443,30 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://web-pentest-playground.onrender.com/upload",
-      "source": "Adarsh-S-R/web-pentest-playground — insecure file upload route (Render OSS deploy; web search 17 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://web-pentest-playground.onrender.com/redirect",
-      "source": "Adarsh-S-R/web-pentest-playground — open redirect /redirect?url= oracle (Render OSS deploy; web search 17 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://web-pentest-playground.onrender.com/comment",
-      "source": "Adarsh-S-R/web-pentest-playground — stored XSS comment form (Render OSS deploy; web search 17 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level15.php",
-      "source": "webspoilt/vulnforge-academy — Level 15 SSRF challenge (GitHub README levels 13-15; web search 17 UTC)",
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-63",
+      "source": "OWASP WrongSecrets — Challenge 63 MCP secrets oracle (Heroku demo README: challenges 59-66 available)",
       "auth": "public_demo"
     },
     {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php",
-      "source": "webspoilt/vulnforge-academy — Level 20 Nightmare multi-vector chain challenge (GitHub README; web search 17 UTC)",
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/chat/query",
+      "source": "ctfsec/pwnshop — AI chatbot prompt-injection API oracle PWN-031/032 (GitHub README Key URLs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/seller/storefront",
+      "source": "ctfsec/pwnshop — seller storefront SSTI entry point PWN-040 (GitHub README)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials",
+      "source": "Escape Duck Store — stored XSS + unauthenticated PUT BOLA testimonials API (vulnerabilities index)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/mcp62",
+      "source": "OWASP WrongSecrets — MCP Google Drive privilege escalation endpoint challenge-62 (Heroku demo)",
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 65
+  "discovery_urls_added": 60
 }
