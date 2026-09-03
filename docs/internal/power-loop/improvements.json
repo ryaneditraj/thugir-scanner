@@ -8195,6 +8195,24 @@
       "slug": "owaspsecure-bac-mass-assignment-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/mass_assignment.php accepts is_admin=1 and returns &quot;is_admin&quot;: 1 JSON; owaspsecure.com/demo/a01_bac/insecure.php findings 9→13 (+owaspsecure-bac-mass-assignment-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-sqli-blind-time-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET count_insecure.php?id=1 AND SLEEP(2) returns ms>=2000; attack-path route alias + SLEEP timing probe (OR 1=1 triggers CDN); owaspsecure.com/demo/a03_injection/attacks/sql_blind_time/count_insecure.php findings 14→13 (+owaspsecure-injection-sqli-blind-time-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-sqli-second-order-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET admin_view_insecure.php?needle=%' OR 1=1 -- exfiltrates admin_inj + bob_inj emails; attack-path route alias for /attacks/sql_second_order/ scans; owaspsecure.com/demo/a03_injection/attacks/sql_second_order/admin_view_insecure.php findings 14→13 (+owaspsecure-injection-sqli-second-order-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-self-xss-csrf-profile-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/self-xss-csrf-profile-takeover documents dangerouslySetInnerHTML bio + POST /api/user/profile without CSRF; koadt.github.io/.../self-xss-csrf-profile-takeover/ findings 14→16 (+oopssec-self-xss-csrf-profile-route-live-oracle +client-side-oopssec-self-xss-csrf-profile-evidence); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

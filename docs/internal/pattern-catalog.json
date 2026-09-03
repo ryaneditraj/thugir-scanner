@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-03T20:13:38.159Z",
-  "total": 3199,
-  "uniqueSlugs": 3191,
+  "generatedAt": "2026-09-03T21:28:49.567Z",
+  "total": 3201,
+  "uniqueSlugs": 3193,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3181,
+    "generic": 3183,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3114,
+    "deep": 3116,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 250,
     "Broken authentication": 202,
     "Injection": 525,
-    "Cross-site scripting": 795,
+    "Cross-site scripting": 797,
     "Open redirect": 27,
     "general": 20,
     "SSRF": 19,
@@ -769,6 +769,7 @@
     "client-side-oopssec-race-condition-evidence",
     "client-side-oopssec-react2shell-evidence",
     "client-side-oopssec-second-order-sqli-evidence",
+    "client-side-oopssec-self-xss-csrf-profile-evidence",
     "client-side-oopssec-ssrf-evidence",
     "client-side-oopssec-store-evidence",
     "client-side-oopssec-stored-xss-reviews-evidence",
@@ -2161,6 +2162,7 @@
     "oopssec-react2shell-route-live-oracle",
     "oopssec-roadmap-route-live-oracle",
     "oopssec-second-order-sqli-route-live-oracle",
+    "oopssec-self-xss-csrf-profile-route-live-oracle",
     "oopssec-session-fixation-route-live-oracle",
     "oopssec-ssrf-route-live-oracle",
     "oopssec-store-home-route-live-oracle",

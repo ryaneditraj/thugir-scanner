@@ -55537,6 +55537,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-self-xss-csrf-profile-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "OopsSec Store Self-XSS + CSRF profile takeover walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/self-xss-csrf-profile-takeover documents Self-XSS via dangerouslySetInnerHTML bio rendering chained with missing CSRF on POST /api/user/profile.",
+    impactOneline:
+      "Public walkthrough teaches profile takeover by planting stored XSS in victim profiles via cross-site profile update requests.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecSelfXssCsrfProfileEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize bio HTML and require CSRF tokens on profile updates.",
+      steps: [
+        "Render profile bios as text nodes or sanitize with DOMPurify instead of dangerouslySetInnerHTML.",
+        "Require CSRF tokens on POST /api/user/profile.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our profile bio uses dangerouslySetInnerHTML and POST /api/user/profile lacks CSRF protection. Show sanitization and CSRF token fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-self-xss-csrf-profile-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "OopsSec Store Self-XSS + CSRF profile route live oracle",
+    description:
+      "When scanning /posts/self-xss-csrf-profile-takeover, the walkthrough documents Self-XSS in profile bio plus missing CSRF on POST /api/user/profile — route-specific attack-chain oracle.",
+    impactOneline:
+      "OopsSec profile takeover chains stored Self-XSS with cross-site profile updates lacking CSRF defenses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecSelfXssCsrfProfileRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize bio HTML and require CSRF tokens on profile updates.",
+      steps: [
+        "Render profile bios as text nodes or sanitize with DOMPurify instead of dangerouslySetInnerHTML.",
+        "Require CSRF tokens on POST /api/user/profile.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/self-xss-csrf-profile-takeover route documents Self-XSS + CSRF profile takeover. Show route-level sanitization and CSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-ssrf-evidence",
     platform: "generic",
     category: "Server-side request forgery",
@@ -76467,7 +76519,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "owaspsecure.com A03 blind/time SQLi live oracle",
     description:
-      "GET attacks/sql_blind_time/count_insecure.php on owaspsecure.com concatenates id into COUNT queries — boolean probe id=1 OR 1=1 inflates product count — A03 blind injection training oracle.",
+      "GET attacks/sql_blind_time/count_insecure.php on owaspsecure.com concatenates id into COUNT queries — id=1 AND SLEEP(2) delays ~2s in the ms field — A03 time-based blind injection training oracle.",
     impactOneline:
       "Concatenated id filters on owaspsecure.com enable boolean-based SQL inference without error messages.",
     detectorKind: "rule_ref",
@@ -76493,7 +76545,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "owaspsecure.com A03 injection route blind/time SQLi live oracle",
     description:
-      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, Attack 3 blind/time SQLi confirms boolean count inflation via id=1 OR 1=1 — route-specific A03 injection oracle.",
+      "When scanning /demo/a03_injection/insecure.php or /attacks/sql_blind_time/ on owaspsecure.com, Attack 3 blind/time SQLi confirms SLEEP(2) timing differential — route-specific A03 injection oracle.",
     impactOneline:
       "Route scans on owaspsecure A03 lab should confirm live blind SQLi, not only login bypass and UNION search.",
     detectorKind: "rule_ref",
@@ -76545,7 +76597,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "owaspsecure.com A03 injection route second-order SQLi live oracle",
     description:
-      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, Attack 4 second-order SQLi exfiltrates multiple a03_users via stored bio payload in admin_view — route-specific A03 injection oracle.",
+      "When scanning /demo/a03_injection/insecure.php or /attacks/sql_second_order/ on owaspsecure.com, Attack 4 second-order SQLi exfiltrates multiple a03_users via stored bio payload in admin_view — route-specific A03 injection oracle.",
     impactOneline:
       "Route scans on owaspsecure A03 lab should confirm live second-order SQLi, not only first-order injection vectors.",
     detectorKind: "rule_ref",

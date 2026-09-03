@@ -6988,6 +6988,66 @@ const oopssecCsrfAdminOrderRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store Self-XSS + CSRF profile takeover (posts/self-xss-csrf-profile-takeover) -----
+const CLIENT_OOPSSEC_SELF_XSS_CSRF_PROFILE_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Self-XSS profile takeover title",
+    re: /Profile Takeover:\s*Chaining Self-XSS with CSRF/i
+  },
+  {
+    label: "dangerouslySetInnerHTML bio rendering",
+    re: /dangerouslySetInnerHTML|bio with React's/i
+  },
+  {
+    label: "POST /api/user/profile without CSRF",
+    re: /POST \/api\/user\/profile|doesn't require a CSRF token|missing CSRF protection on profile update/i
+  },
+  {
+    label: "CSRF profile takeover exploit page",
+    re: /\/exploits\/csrf-profile-takeover\.html|csrf-profile-takeover/i
+  },
+  {
+    label: "Self-XSS CSRF profile walkthrough route",
+    re: /\/posts\/self-xss-csrf-profile-takeover/i
+  }
+];
+
+const clientSideOopssecSelfXssCsrfProfileEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_SELF_XSS_CSRF_PROFILE_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/Self-XSS|\/api\/user\/profile|dangerouslySetInnerHTML/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents Self-XSS in profile bio chained with missing CSRF on POST /api/user/profile — profile takeover attack chain"
+    }
+  };
+};
+
+const oopssecSelfXssCsrfProfileRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/self-xss-csrf-profile-takeover/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecSelfXssCsrfProfileEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/self-xss-csrf-profile-takeover route scan — Self-XSS via dangerouslySetInnerHTML bio plus missing CSRF on POST /api/user/profile enables cross-user profile takeover"
+    }
+  };
+};
+
 // --- OopsSec Store SSRF walkthrough (posts/ssrf-internal-page-access) ------------------
 const CLIENT_OOPSSEC_SSRF_RES: { label: string; re: RegExp }[] = [
   {
@@ -43805,25 +43865,26 @@ const owaspsecureInjectionSqliBlindTimeLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const countBase = owaspsecureAttackUrl(ctx, "attacks/sql_blind_time/count_insecure.php");
   const baselineUrl = `${countBase}?${new URLSearchParams({ id: "1" }).toString()}`;
-  const probeUrl = `${countBase}?${new URLSearchParams({ id: "1 OR 1=1" }).toString()}`;
+  const probeUrl = `${countBase}?${new URLSearchParams({ id: "1 AND SLEEP(2)" }).toString()}`;
   const baseline = await ctx.probe.get(baselineUrl, { maxBytes: 4096, timeoutMs: 15000 });
-  const probe = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  const probe = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 20000 });
   if (baseline.status < 200 || baseline.status >= 400) return NEGATIVE;
   if (probe.status < 200 || probe.status >= 400) return NEGATIVE;
-  const baselineCount = Number(baseline.body.match(/"count"\s*:\s*(\d+)/)?.[1]);
-  const probeCount = Number(probe.body.match(/"count"\s*:\s*(\d+)/)?.[1]);
-  if (!Number.isFinite(baselineCount) || !Number.isFinite(probeCount)) return NEGATIVE;
-  if (probeCount <= baselineCount) return NEGATIVE;
-  if (!/WHERE id =/i.test(probe.body)) return NEGATIVE;
+  if (/Checking your browser before accessing/i.test(probe.body)) return NEGATIVE;
+  const baselineMs = Number(baseline.body.match(/"ms"\s*:\s*(\d+)/)?.[1] ?? 0);
+  const probeMs = Number(probe.body.match(/"ms"\s*:\s*(\d+)/)?.[1] ?? 0);
+  if (!Number.isFinite(baselineMs) || !Number.isFinite(probeMs)) return NEGATIVE;
+  if (probeMs < 1500 || probeMs - baselineMs < 1200) return NEGATIVE;
+  if (!/SLEEP\(2\)/i.test(probe.body)) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.92,
     evidence: {
       url: probeUrl,
-      baselineCount,
-      probeCount,
+      baselineMs,
+      probeMs,
       snippet: probe.body.slice(0, 120),
-      note: "owaspsecure.com GET attacks/sql_blind_time/count_insecure.php accepts boolean SQLi via concatenated id parameter — A03 blind injection training oracle"
+      note: "owaspsecure.com GET attacks/sql_blind_time/count_insecure.php delays ~2s when id injects AND SLEEP(2) — A03 time-based blind injection training oracle"
     }
   };
 };
@@ -43831,7 +43892,7 @@ const owaspsecureInjectionSqliBlindTimeLiveOracle: Rule = async (ctx) => {
 const owaspsecureInjectionSqliBlindTimeRouteLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/demo\/a03_injection\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/demo\/a03_injection(?:\/insecure\.php|\/attacks\/sql_blind_time)/i.test(pageUrl)) return NEGATIVE;
   const result = await owaspsecureInjectionSqliBlindTimeLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -43840,7 +43901,7 @@ const owaspsecureInjectionSqliBlindTimeRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "owaspsecure.com /demo/a03_injection route scan — Attack 3 blind/time SQLi flips COUNT via id=1 OR 1=1 boolean probe (live SQLi oracle)"
+      note: "owaspsecure.com A03 blind/time SQLi route scan — Attack 3 count_insecure.php confirms SLEEP(2) timing differential (live SQLi oracle)"
     }
   };
 };
@@ -43870,7 +43931,7 @@ const owaspsecureInjectionSqliSecondOrderLiveOracle: Rule = async (ctx) => {
 const owaspsecureInjectionSqliSecondOrderRouteLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/demo\/a03_injection\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/demo\/a03_injection(?:\/insecure\.php|\/attacks\/sql_second_order)/i.test(pageUrl)) return NEGATIVE;
   const result = await owaspsecureInjectionSqliSecondOrderLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -43879,7 +43940,7 @@ const owaspsecureInjectionSqliSecondOrderRouteLiveOracle: Rule = async (ctx) => 
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "owaspsecure.com /demo/a03_injection route scan — Attack 4 second-order SQLi detonates stored bio payload in admin_view LIKE query (live SQLi oracle)"
+      note: "owaspsecure.com A03 second-order SQLi route scan — admin_view_insecure.php detonates stored bio payload in LIKE query (live SQLi oracle)"
     }
   };
 };
@@ -113173,6 +113234,8 @@ export const RULES: Record<string, Rule> = {
   oopssecPathTraversalRouteLiveOracle,
   clientSideOopssecCsrfAdminOrderEvidence,
   oopssecCsrfAdminOrderRouteLiveOracle,
+  clientSideOopssecSelfXssCsrfProfileEvidence,
+  oopssecSelfXssCsrfProfileRouteLiveOracle,
   clientSideOopssecSsrfEvidence,
   oopssecSsrfRouteLiveOracle,
   clientSideOopssecPromptInjectionEvidence,
