@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T04:15:00.000Z",
+  "updated_at": "2026-09-03T05:18:54.490Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ist-edu-bd.vercel.app/ssrf",
+      "source": "ist-edu-bd VulnPortal — SSRF training route with server-side fetch oracle (Vercel OSS deploy; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugforge.io/labs/ssrf",
+      "source": "bugforge.io — Tanuki-style SSRF hands-on lab module (public browser lab; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugforge.io/labs/idor",
+      "source": "bugforge.io — IDOR parameter-tampering lab module (public browser lab; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugforge.io/labs/graphql",
+      "source": "bugforge.io — GraphQL introspection / authorization lab module (public browser lab; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://webverselabs-pro.com/labs/fixture",
+      "source": "webverselabs-pro — Fixture medium SSRF+SQLi PDF template lab (7s26simon writeup; web search 05 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/supply-chain",
       "source": "ai-security-platform — CWE-494 typosquatted packages + malicious postinstall supply-chain challenge (14-exercise lab; web search 04 UTC)",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T04:33:10.266Z",
+  "updated_at": "2026-09-03T05:21:38.204Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3011,
-  "total_findings": 33335,
+  "total_sites_scanned": 3019,
+  "total_findings": 33439,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2091,
-  "discovery_findings": 27542,
+  "discovery_urls_added": 2096,
+  "discovery_findings": 27594,
   "improvements_shipped": 1305,
-  "last_run": "2026-09-03T04:33:10.266Z",
+  "last_run": "2026-09-03T05:21:38.204Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
-      "oracle_url": "https://juice-shop.demo.escape.tech",
-      "oracle_findings": 54,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 609,
+      "probes_run": 596,
       "live_oracles": 39,
       "benchmark_recall": {
         "juice-shop": {
@@ -49,30 +49,27 @@
           ]
         }
       },
-      "note": "Heroku primary+staging 503; Escape.tech fallback 6/6 (54 findings, 39 live oracles; secret-resend present)"
+      "note": "Primary Heroku stable 6/6 first pass (52 findings, 39 live oracles; no fallback needed)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 89,
-      "focus": "ai-security supply-chain/npm/privacy/cookie-auth + seclab command-injection queued; drained wrongsecrets 61/62 + securebank-blog /csrf + web-pentest-playground /register",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 52,
+      "focus": "ist-edu-bd SSRF + bugforge SSRF/IDOR/GraphQL + webverselabs fixture; drained chimera patients/search + login-vulnerable",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.demo.escape.tech: benchmark recall 6/6 (54 findings, 39 live oracles; Heroku+staging 503 fallback)",
-      "web-pentest-playground.onrender.com/register: 14 findings — web-pentest-playground-register-live-oracle + route oracle",
-      "securebank-blog.vercel.app/csrf: 4 findings — securebank-blog-csrf-attack-page-route-live-oracle",
-      "ai-security-platform-iota.vercel.app/challenges/supply-chain: 8 findings — ai-security-supply-chain-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-61: 19 findings — wrongsecrets-challenge-61-telegram-secrets-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-62: 19 findings — wrongsecrets-challenge-62-mcp-google-sa-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles; primary Heroku stable)",
+      "ist-edu-bd.vercel.app/ssrf: 11 findings — ist-edu-ssrf-redirect-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/patients/search: 8 findings — chimera-patients-search-sqli-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/auth/login-vulnerable: 9 findings — chimera-login-vulnerable-sqli-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "Heroku juice-shop primary+staging 503 — Escape.tech fallback required for stable benchmark",
-      "seclab.vercel.app/labs/command-injection: no dedicated route oracle (hub fingerprint only)",
-      "ai-security-platform vulnerable-npm challenge: no route-specific oracle",
-      "wrongsecrets 67/68 + chimera genai RAG + vulnforge level14 SSRF still queued ahead of drain limit",
+      "bugforge.io lab modules (ssrf/idor/graphql): hub fingerprint only, no route-specific oracles",
+      "webverselabs-pro.com/labs/fixture: no SSRF/SQLi route oracle despite medium lab writeup",
+      "wrongsecrets 67/68 + chimera genai RAG + seclab command-injection + ai-security vulnerable-npm still queued",
       "zen-demo-java.fly.dev: unreachable from cloud agent"
     ]
   },
@@ -84,6 +81,10 @@
     "ai-security-platform-iota.vercel.app/challenges/supply-chain": 8,
     "securebank-blog.vercel.app/csrf": 4,
     "pwnshop.ctfsecurity.com/forgot-password": 54,
-    "brokencrystals.com/api/ldap": 85
+    "brokencrystals.com/api/ldap": 85,
+    "juice-shop.herokuapp.com": 52,
+    "ist-edu-bd.vercel.app/ssrf": 11,
+    "chimera.atlascrew.dev/api/v1/patients/search?ssn=test": 8,
+    "chimera.atlascrew.dev/api/v1/auth/login-vulnerable": 9
   }
 }
