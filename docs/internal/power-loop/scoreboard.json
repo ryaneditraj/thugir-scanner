@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T06:20:00.000Z",
+  "updated_at": "2026-09-03T07:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3031,
-  "total_findings": 33697,
+  "total_sites_scanned": 3039,
+  "total_findings": 33854,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2101,
-  "discovery_findings": 27768,
+  "discovery_urls_added": 2106,
+  "discovery_findings": 27873,
   "improvements_shipped": 1308,
-  "last_run": "2026-09-03T06:20:00.000Z",
+  "last_run": "2026-09-03T07:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
@@ -49,41 +49,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall on primary Heroku (52 findings, 39 live oracles); secret-resend + juice-shop-resend-key-live-oracle present; no category misses"
+      "note": "Stable 6/6 first-pass recall on primary Heroku (52 findings, 39 live oracles); secret-resend + juice-shop-resend-key-live-oracle + juice-shop-iac-terraform-tls-key-live-oracle present; fixed results.json malformed teacher_delta entry blocking saves"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 7,
-      "findings": 132,
-      "focus": "wrongsecrets 57/58/59 route oracles + duck-store admin/products BFLA + chimera admin/users export + loyalty transactions export",
+      "findings": 105,
+      "focus": "FinBot vendor+darklab agentic AI MCP oracles + vault-notes JWT leak + appsec-ci login + todoer IDOR + chimera products/search + ssrf.vulnlab webhook",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles)",
-      "wrongsecrets.herokuapp.com/challenge/challenge-57: 19 findings — wrongsecrets-challenge-57-browser-llm-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-58: 19 findings — wrongsecrets-challenge-58-database-connection-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-59: 19 findings — wrongsecrets-challenge-59-slack-webhook-route-live-oracle",
-      "duck-store.escape.tech/api/v1/admin/products: 40 findings — duck-store-admin-products-negative-price-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/admin/users/export: 8 findings — chimera-admin-users-export-route-live-oracle",
-      "chimera.atlascrew.dev/api/loyalty/transactions/export: 8 findings — chimera-loyalty-transactions-export-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles; secret-resend present)",
+      "owasp-finbot-ctf.org/vendor: 31 findings — finbot-vendor-chat-route-live-oracle + finbot-darklab MCP tool-poisoning oracles",
+      "owasp-finbot-ctf.org/darklab: 31 findings — finbot-darklab-supply-chain-route-live-oracle + TaxCalc/FinMail/FinDrive MCP write oracles",
+      "vault-notes-frontend-gules.vercel.app: 7 findings — vault-notes-jwt-secret-leak-route-live-oracle (critical)",
+      "appsec-ci-pipeline.onrender.com/login: 7 findings — appsec-ci-stored-xss-comments-live-oracle",
+      "chimera.atlascrew.dev/api/v1/ecommerce/products/search: 8 findings — chimera ecommerce search hub",
+      "ssrf.vulnlab.dev/webhook: 17 findings — ssrf-vulnlab webhook SSRF oracle cluster"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark 6/6 stable on primary Heroku — no category misses",
-      "seclab path-traversal/open-redirect + vaultapp IDOR API oracles queued but not yet drained",
-      "securebank CSRF + ucu-owasp XSS + wrongsecrets 67/68 + chimera genai RAG still queued",
+      "benchmark 6/6 stable — no category misses; secret-resend slug now present",
+      "todoer.site/api/todos/1: thin 4-finding pass without IDOR route oracle",
+      "seclab path-traversal/open-redirect + vaultapp IDOR APIs + securebank CSRF + ucu-owasp XSS + wrongsecrets 67/68 + chimera genai RAG still queued",
       "zen-demo-java.fly.dev unreachable (DNS/offline)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
-    "duck-store.escape.tech/api/v1/admin/products": 40,
-    "wrongsecrets.herokuapp.com/challenge/challenge-57": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-58": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-59": 19,
-    "vulnshop.vercel.app/api/v1/wallet/add-funds": 19,
-    "chimera.atlascrew.dev/api/v1/admin/users/export": 8,
-    "chimera.atlascrew.dev/api/loyalty/transactions/export": 8
+    "owasp-finbot-ctf.org/vendor": 31,
+    "owasp-finbot-ctf.org/darklab": 31,
+    "ssrf.vulnlab.dev/webhook": 17,
+    "vault-notes-frontend-gules.vercel.app": 7,
+    "appsec-ci-pipeline.onrender.com/login": 7,
+    "chimera.atlascrew.dev/api/v1/ecommerce/products/search": 8
   }
 }
