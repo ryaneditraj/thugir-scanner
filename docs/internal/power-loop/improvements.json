@@ -8213,6 +8213,24 @@
       "slug": "oopssec-self-xss-csrf-profile-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /posts/self-xss-csrf-profile-takeover documents dangerouslySetInnerHTML bio + POST /api/user/profile without CSRF; koadt.github.io/.../self-xss-csrf-profile-takeover/ findings 14→16 (+oopssec-self-xss-csrf-profile-route-live-oracle +client-side-oopssec-self-xss-csrf-profile-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-weak-md5-hashing-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/weak-md5-hashing-admin-compromise documents SQLi users-table dump + unsalted MD5 hash 21232f297a57a5a743894a0e4a801fc3 enabling admin@oss.com login (OSS{w34k_md5_h4sh1ng}); koadt.github.io/oss-oopssec-store/posts/weak-md5-hashing-admin-compromise/ findings 8→10 (+oopssec-weak-md5-hashing-admin-route-live-oracle +client-side-oopssec-weak-md5-hashing-admin-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-crypto-predictable-tokens-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST signup/login then GET attacks/tokens/gen_insecure.php returns Insecure token minted using uniqid()/mt_rand()/time() with session token JSON; owaspsecure.com/demo/a02_crypto/attacks/tokens/gen_insecure.php findings 7→8 (+owaspsecure-crypto-predictable-tokens-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-crypto-data-at-rest-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST signup/login then GET attacks/data_at_rest/dump.php exposes plaintext SSN rows (999-99-9999) in ssn_plain column; owaspsecure.com/demo/a02_crypto/attacks/data_at_rest/dump.php findings 8 (+owaspsecure-crypto-data-at-rest-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
