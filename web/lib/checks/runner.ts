@@ -1991,6 +1991,12 @@ const DEEP_RULES = new Set<string>([
   "appsecCiDjangoAdminLiveOracle",
   "appsecCiDjangoAdminRouteLiveOracle",
   "appsecCiLoginRouteLiveOracle",
+  "owaspsecureInjectionSqliLoginLiveOracle",
+  "owaspsecureInjectionSqliLoginRouteLiveOracle",
+  "owaspsecureSsrfFetchLiveOracle",
+  "owaspsecureSsrfFetchRouteLiveOracle",
+  "owaspsecureBacIdorNumericLiveOracle",
+  "owaspsecureBacIdorNumericRouteLiveOracle",
   "guardmarlyScanLiveOracle",
   "guardmarlyScanRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
@@ -16922,6 +16928,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /restful-booker/i.test(origin) &&
         /\/(?:auth|booking)\/?$/i.test(targetInput) &&
         p.slug.startsWith("restful-booker-")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a03_injection\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-injection-sqli-login")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a10_ssrf\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-ssrf-fetch")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a01_bac\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-bac-idor-numeric")
       )
         return -4;
       if (
