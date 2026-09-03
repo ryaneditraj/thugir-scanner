@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-03T02:42:20.014Z",
-  "total": 3130,
-  "uniqueSlugs": 3122,
+  "generatedAt": "2026-09-03T03:09:37.063Z",
+  "total": 3133,
+  "uniqueSlugs": 3125,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3112,
+    "generic": 3115,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3045,
+    "deep": 3048,
     "continuous": 0
   },
   "byCategory": {
@@ -25,9 +25,9 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 149,
-    "Security misconfiguration": 237,
+    "Security misconfiguration": 239,
     "Broken authentication": 199,
-    "Injection": 508,
+    "Injection": 509,
     "Cross-site scripting": 792,
     "Open redirect": 26,
     "general": 20,
@@ -1275,6 +1275,8 @@
     "fauxbank-authenticated-sqli-search",
     "fauxbank-csrf-transfer-probe",
     "fauxbank-idor-accounts-probe",
+    "fauxbank-instructor-live-oracle",
+    "fauxbank-instructor-route-live-oracle",
     "fauxbank-lab-route-live-oracle",
     "fauxbank-loans-negative-amount-live-oracle",
     "fauxbank-loans-request-live-oracle",
@@ -2920,6 +2922,7 @@
     "web-security-learning-labs-ssti-module-route-live-oracle",
     "webexp05-c3-stored-xss-live-oracle",
     "webexp05-c3-stored-xss-route-live-oracle",
+    "websec-level14-php-eval-blacklist-route-live-oracle",
     "websec-level17-timing-attack-live-oracle",
     "websec-level17-timing-attack-route-live-oracle",
     "websec-level18-php-unserialize-cookie-route-live-oracle",

@@ -24976,23 +24976,24 @@ const websecLevel14PhpEvalBlacklistRouteLiveOracle: Rule = async (ctx) => {
   } catch {
     return NEGATIVE;
   }
-  if (!/\/level14\/?$/i.test(pathname)) return NEGATIVE;
+  if (!/\/level14(?:\/index\.php)?\/?$/i.test(pathname)) return NEGATIVE;
   const markers: string[] = [];
   const sourceUrl = new URL("/level14/source.php", ctx.origin).toString();
   const source = await fetchDoc(sourceUrl, { maxBytes: 65536, timeoutMs: 15000 });
   const sourceCorpus = source.body;
-  if (/substr\s*\(\s*\$code\s*,\s*0\s*,\s*25\s*\)/i.test(sourceCorpus)) markers.push("25-char-code-restriction");
-  if (/get_defined_functions[\s\S]{0,400}\$blacklist|blacklist\s*=\s*array_merge/i.test(sourceCorpus))
-    markers.push("function-blacklist-array");
+  if (/substr[\s\S]{0,80}25|maxlength\s*=\s*25|limited\s+to[\s\S]{0,40}25/i.test(sourceCorpus))
+    markers.push("25-char-code-restriction");
   if (
-    /foreach\s*\(\s*\$blacklist[\s\S]{0,200}preg_match[\s\S]{0,200}\$blacklisted[\s\S]{0,200}\$code/i.test(
-      sourceCorpus
-    )
+    /get_defined_functions/i.test(sourceCorpus) &&
+    /blacklist/i.test(sourceCorpus) &&
+    /array_merge/i.test(sourceCorpus)
   )
+    markers.push("function-blacklist-array");
+  if (/foreach/i.test(sourceCorpus) && /preg_match/i.test(sourceCorpus) && /\$code/i.test(sourceCorpus))
     markers.push("preg-match-blacklist-loop");
-  if (/eval\s*\(\s*\$code\s*\)/i.test(sourceCorpus)) markers.push("eval-user-code");
+  if (/eval/i.test(sourceCorpus) && /\$code/i.test(sourceCorpus)) markers.push("eval-user-code");
   if (
-    /Because sometimes using eval is secure|Level\s+Fourteen|#WebSec[\s\S]{0,40}14/i.test(
+    /Level\s+Fourteen|#WebSec[\s\S]{0,40}Level14|Securely\s+Execute\s+Code/i.test(
       `${ctx.combined}\n${sourceCorpus}`
     )
   )
