@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-plaintext-password-logs-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/plaintext-password-in-logs documents POST /api/auth/login debug logging plaintext passwords readable via /monitoring/siem with default root:admin creds + OSS{pl41nt3xt_p4ssw0rd_1n_l0gs}; koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs/ findings 8→10 (+oopssec-plaintext-password-logs-route-live-oracle +client-side-oopssec-plaintext-password-logs-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-bac-idor-uuid-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/idor_uuid.php?public_id=bob-note-1 returns Bob Note JSON with public_id used without owner check; owaspsecure.com/demo/a01_bac/insecure.php findings 13→15 (+owaspsecure-bac-idor-uuid-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-ssrf-internal-health-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/fetch_insecure.php?url=attacks/internal/health.json returns internal-gateway health JSON; owaspsecure.com/demo/a10_ssrf/insecure.php findings 9→11 (+owaspsecure-ssrf-internal-health-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:zen-demo-java.fly.dev",
       "slug": "zen-demo-java-unreachable-corpus-fallback",
       "status": "shipped",

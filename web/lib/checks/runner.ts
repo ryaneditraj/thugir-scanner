@@ -2025,6 +2025,10 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureBacFileDorRouteLiveOracle",
   "owaspsecureBacMassAssignmentLiveOracle",
   "owaspsecureBacMassAssignmentRouteLiveOracle",
+  "owaspsecureBacIdorUuidLiveOracle",
+  "owaspsecureBacIdorUuidRouteLiveOracle",
+  "owaspsecureSsrfInternalHealthLiveOracle",
+  "owaspsecureSsrfInternalHealthRouteLiveOracle",
   "guardmarlyScanLiveOracle",
   "guardmarlyScanRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
@@ -2486,6 +2490,8 @@ const DEEP_RULES = new Set<string>([
   "oopssecMiddlewareBypassRouteLiveOracle",
   "clientSideOopssecInformationDisclosureEvidence",
   "oopssecInformationDisclosureApiErrorRouteLiveOracle",
+  "clientSideOopssecPlaintextPasswordLogsEvidence",
+  "oopssecPlaintextPasswordLogsRouteLiveOracle",
   "clientSideOopssecNextPublicEnvEvidence",
   "oopssecNextPublicEnvRouteLiveOracle",
   "clientSideOopssecSupplyChainEvidence",
@@ -16992,8 +16998,20 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a10_ssrf\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-ssrf-internal-health")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a01_bac\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-bac-idor-numeric")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a01_bac\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-bac-idor-uuid")
       )
         return -4;
       if (
