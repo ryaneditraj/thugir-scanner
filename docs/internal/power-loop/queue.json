@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T15:20:00.000Z",
+  "updated_at": "2026-09-03T16:20:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass/",
+      "source": "kOaDT/oss-oopssec-store — open redirect login bypass walkthrough (challenges.json #5; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach/",
+      "source": "kOaDT/oss-oopssec-store — IDOR order privacy breach walkthrough (challenges.json #4; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access/",
+      "source": "kOaDT/oss-oopssec-store — BOLA wishlist access walkthrough (challenges.json #6; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/sql-injection-writeup/",
+      "source": "kOaDT/oss-oopssec-store — order search SQLi walkthrough (challenges.json #17; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/client-side-price-manipulation/",
+      "source": "kOaDT/oss-oopssec-store — client-side price manipulation checkout walkthrough (challenges.json #9; web search 16 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api/",
       "source": "kOaDT/oss-oopssec-store — path traversal documents API walkthrough (challenges.json #8; web search 15 UTC)",
