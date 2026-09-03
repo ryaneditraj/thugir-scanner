@@ -164,6 +164,12 @@ function povzaydXssLabsReflexionSuppressed(ctx: PowerCtx): boolean {
   return /povzayd\.github\.io\/XSS-LABS/i.test(pageUrl);
 }
 
+/** UCU OWASP CTF hub is a static Firebase SPA — vanity /injection|/xss|/access routes return Vercel 404, not SSTI. */
+function ucuOwaspCtfReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /ucu-owasp-ctf\.vercel\.app/i.test(pageUrl);
+}
+
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
 
 // --- Directory wordlist (compact subset) ------------------------------------
@@ -359,6 +365,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (ctfChallange3ReflexionSuppressed(ctx)) return NEGATIVE;
   if (the0xPwnLabXssReflexionSuppressed(ctx)) return NEGATIVE;
   if (povzaydXssLabsReflexionSuppressed(ctx)) return NEGATIVE;
+  if (ucuOwaspCtfReflexionSuppressed(ctx)) return NEGATIVE;
   if (aiSecurityPlatformLoginGatedReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];

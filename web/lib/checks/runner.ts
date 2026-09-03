@@ -1683,6 +1683,7 @@ const DEEP_RULES = new Set<string>([
   "ucuOwaspCtfAccessRouteLiveOracle",
   "ucuOwaspCtfCryptoRouteLiveOracle",
   "ucuOwaspCtfSsrfRouteLiveOracle",
+  "ucuOwaspCtfXssRouteLiveOracle",
   "clientSideSecurityGameEvidence",
   "clientSideCtfPlatformEvidence",
   "clientSideCtfdPlatformEvidence",
@@ -3499,6 +3500,7 @@ const DEEP_RULES = new Set<string>([
   "vwadOopssecStoreRouteLiveOracle",
   "clientSideVwadGoofEvidence",
   "vwadGoofRouteLiveOracle",
+  "vwadVoiceGoatRouteLiveOracle",
   "clientSideVulnerableappDomXssEvidence",
   "seclabNextjsLabApiProbe",
   "seclabAngularStubRouteLiveOracle",
@@ -12456,6 +12458,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /ucu-owasp-ctf\.vercel\.app/i.test(origin) &&
         /\/ssrf\/?/i.test(targetInput) &&
         p.slug.startsWith("ucu-owasp-ctf-ssrf")
+      )
+        return -4;
+      if (
+        /ucu-owasp-ctf\.vercel\.app/i.test(origin) &&
+        /\/xss\/?/i.test(targetInput) &&
+        p.slug.startsWith("ucu-owasp-ctf-xss")
       )
         return -4;
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;

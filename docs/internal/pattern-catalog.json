@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-03T08:08:50.159Z",
-  "total": 3146,
-  "uniqueSlugs": 3138,
+  "generatedAt": "2026-09-03T09:13:44.468Z",
+  "total": 3148,
+  "uniqueSlugs": 3140,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3128,
+    "generic": 3130,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3061,
+    "deep": 3063,
     "continuous": 0
   },
   "byCategory": {
@@ -24,11 +24,11 @@
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 149,
+    "Information disclosure": 150,
     "Security misconfiguration": 240,
     "Broken authentication": 199,
     "Injection": 511,
-    "Cross-site scripting": 792,
+    "Cross-site scripting": 793,
     "Open redirect": 27,
     "general": 20,
     "SSRF": 19,
@@ -2593,6 +2593,7 @@
     "ucu-owasp-ctf-crypto-route-live-oracle",
     "ucu-owasp-ctf-injection-route-live-oracle",
     "ucu-owasp-ctf-ssrf-route-live-oracle",
+    "ucu-owasp-ctf-xss-route-live-oracle",
     "unauthenticated-admin-endpoint",
     "unprotected-webhook-endpoint",
     "v0-openapi-routes-exposed",
@@ -2913,6 +2914,7 @@
     "vulnweb-search-sqli-route-live-oracle",
     "vwad-goof-route-live-oracle",
     "vwad-oopssec-store-route-live-oracle",
+    "vwad-voice-goat-route-live-oracle",
     "weak-api-default-credentials",
     "web-pentest-playground-admin-dashboard-route-live-oracle",
     "web-pentest-playground-admin-sqli-live-oracle",

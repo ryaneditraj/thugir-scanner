@@ -63076,6 +63076,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vwad-voice-goat-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "low",
+    title: "OWASP VWAD Voice Goat stale listing route live oracle",
+    description:
+      "When scanning vwad.owasp.org/app/voice-goat/, the OWASP VWAD directory may still reference Voice Goat but the detail URL returns the site-wide 404 shell — route-specific stale listing oracle.",
+    impactOneline:
+      "Stale VWAD Voice Goat URLs mislead scanners into false positives from sibling app crawls on the 404 page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vwadVoiceGoatRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or update stale VWAD listings when training apps go offline.",
+      steps: [
+        "Open a VWAD GitHub issue to delist removed training instances.",
+        "Do not link production security tools to VWAD URLs without verifying the app still loads.",
+        "Gate scanner benchmarks on live oracle checks, not directory metadata alone."
+      ]
+    },
+    fixPrompt:
+      "Our VWAD Voice Goat listing returns 404. Show how to delist stale entries and avoid false-positive scans from sibling app crawls.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vwad-vulnerableapp-evidence",
     platform: "generic",
     category: "Injection",
@@ -80135,6 +80161,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our ucu-owasp-ctf /ssrf/ route documents SSRF to internal flag-server. Show SSRF defense-in-depth remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ucu-owasp-ctf-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "UCU OWASP CTF XSS-adjacent auth failures lab route live oracle",
+    description:
+      "When scanning /xss/ on ucu-owasp-ctf.vercel.app, the UCU OWASP Top 10 CTF 2025 Firebase hub documents OWASP A07 Authentication Failures with session cookie theft on external Railway challenge apps — vanity /xss/ SPA route returns 404.",
+    impactOneline:
+      "Route-specific confirmation that UCU CTF documents XSS-adjacent session hijacking drills even when the /xss/ vanity path is not deployed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ucuOwaspCtfXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use HttpOnly/Secure/SameSite cookies and server-side session validation.",
+      steps: [
+        "Set HttpOnly and Secure flags on session cookies.",
+        "Enforce SameSite=Lax or Strict on authentication cookies.",
+        "Run CTF labs on isolated Docker networks only."
+      ]
+    },
+    fixPrompt:
+      "Our ucu-owasp-ctf /xss/ route documents A07 session cookie theft. Show secure cookie and session management remediation.",
     version: 1,
     enabled: true
   },
