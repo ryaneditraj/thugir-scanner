@@ -75602,6 +75602,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "appsec-ci-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "AppSec CI Pipeline /login dead-route live oracle",
+    description:
+      "When scanning /login on appsec-ci-pipeline.onrender.com, the SQLi login bypass route returns HTTP 404 on the current Render deploy — route-specific dead-login oracle redirecting scanners to /comments/ stored XSS and /admin/ Django panel labs.",
+    impactOneline:
+      "Route-scoped scans should document removed login bypass routes and point to active training surfaces on partial deploys.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecCiLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep training route catalogs aligned with deployed endpoints.",
+      steps: [
+        "Remove or redirect dead /login routes to active lab entrypoints.",
+        "Document which CWE challenges are live on each deploy.",
+        "Use health checks to detect route drift between README and production."
+      ]
+    },
+    fixPrompt:
+      "Our AppSec CI Pipeline /login route returns 404 while /comments/ stored XSS remains live. Show how to document partial training deploys.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "web-pentest-playground-login-sqli-live-oracle",
     platform: "generic",
     category: "Injection",

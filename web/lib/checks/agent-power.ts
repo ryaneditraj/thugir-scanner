@@ -170,6 +170,12 @@ function ucuOwaspCtfReflexionSuppressed(ctx: PowerCtx): boolean {
   return /ucu-owasp-ctf\.vercel\.app/i.test(pageUrl);
 }
 
+/** AppSec CI Pipeline /login returns plain HTTP 404 — reflexion probes echo canaries on the error page. */
+function appsecCiLoginReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /appsec-ci-pipeline\.onrender\.com\/login\/?$/i.test(pageUrl);
+}
+
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
 
 // --- Directory wordlist (compact subset) ------------------------------------
@@ -271,6 +277,7 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
   if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
+  if (appsecCiLoginReflexionSuppressed(ctx)) return NEGATIVE;
   const suffix = "pwr";
   const base = xssCanary(suffix);
   const params = ["q", "search", "query", "name", "id", "term"];

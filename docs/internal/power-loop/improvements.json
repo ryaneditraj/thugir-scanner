@@ -8033,6 +8033,24 @@
       "slug": "pwnshop-mail-idor-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /mail/{id} inbox token leaks other users' PwnMail messages (PWN-004); runner -4 priority on /mail/:id route scans (deprioritize pwnshop-mail on /profile/upload-avatar retained); pwnshop.ctfsecurity.com/mail/1 first drain 45 findings (+pwnshop-mail-inbox-idor-live-oracle +pwnshop-mail-idor-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:appsec-ci-pipeline.onrender.com",
+      "slug": "appsec-ci-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /login returns HTTP 404 on current Render deploy; appsecCiLoginRouteLiveOracle documents dead SQLi login route and points to live POST /comments/ stored XSS + GET /admin/ Django panel; appsec-ci-pipeline.onrender.com/login findings 7→6 (+appsec-ci-login-route-live-oracle, -pwnshop-otp-not-invalidated false positive, -reflexion-escalated-xss false positive); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-otp-corpus-host-guard",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: pwnshopOtpNotInvalidatedLiveOracle corpus fallback now requires isPwnshopHost(ctx) — prevents PWN-024 markers from firing on unrelated /login routes (appsec-ci, web-pentest-playground); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:restful-booker.herokuapp.com",
+      "slug": "restful-booker-runner-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for restful-booker-* on /auth and /booking route scans; restful-booker.herokuapp.com/auth findings 3→7 (+restful-booker-auth-weak-creds-live-oracle +route +booking-unauth-access +booking-create-unauth); /booking findings 3→8 (+restful-booker-booking-unauth-access-route-live-oracle +booking-create-unauth-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

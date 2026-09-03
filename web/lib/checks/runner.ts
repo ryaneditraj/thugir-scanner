@@ -1990,6 +1990,7 @@ const DEEP_RULES = new Set<string>([
   "appsecCiStoredXssCommentsRouteLiveOracle",
   "appsecCiDjangoAdminLiveOracle",
   "appsecCiDjangoAdminRouteLiveOracle",
+  "appsecCiLoginRouteLiveOracle",
   "guardmarlyScanLiveOracle",
   "guardmarlyScanRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
@@ -16907,8 +16908,20 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       if (/appsec-ci-pipeline\.onrender\.com/i.test(origin) && p.slug.startsWith("appsec-ci-")) return -2;
       if (
         /appsec-ci-pipeline\.onrender\.com/i.test(origin) &&
+        /\/login\/?$/i.test(targetInput) &&
+        p.slug.startsWith("appsec-ci-login")
+      )
+        return -4;
+      if (
+        /appsec-ci-pipeline\.onrender\.com/i.test(origin) &&
         /\/comments\/?$/i.test(targetInput) &&
         p.slug.startsWith("appsec-ci-stored-xss-comments")
+      )
+        return -4;
+      if (
+        /restful-booker/i.test(origin) &&
+        /\/(?:auth|booking)\/?$/i.test(targetInput) &&
+        p.slug.startsWith("restful-booker-")
       )
         return -4;
       if (

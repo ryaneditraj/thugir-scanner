@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-03T11:33:46.394Z",
-  "total": 3152,
-  "uniqueSlugs": 3144,
+  "generatedAt": "2026-09-03T12:40:53.967Z",
+  "total": 3153,
+  "uniqueSlugs": 3145,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3134,
+    "generic": 3135,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3067,
+    "deep": 3068,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 150,
     "Security misconfiguration": 240,
-    "Broken authentication": 199,
+    "Broken authentication": 200,
     "Injection": 515,
     "Cross-site scripting": 793,
     "Open redirect": 27,
@@ -97,6 +97,7 @@
     "apparatus-redteam-autopilot-route-live-oracle",
     "appsec-ci-django-admin-live-oracle",
     "appsec-ci-django-admin-route-live-oracle",
+    "appsec-ci-login-route-live-oracle",
     "appsec-ci-stored-xss-comments-live-oracle",
     "appsec-ci-stored-xss-comments-route-live-oracle",
     "appsecmaster-ci-pipeline-route-live-oracle",
