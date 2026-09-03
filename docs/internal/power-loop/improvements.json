@@ -7907,6 +7907,24 @@
       "slug": "websec-level14-php-eval-blacklist-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /level14/source.php documents 25-char PHP eval with get_defined_functions blacklist and preg_match loop — $blacklist{index} bypass; websec.fr/level14/ findings 5→6 (+websec-level14-php-eval-blacklist-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:web-pentest-playground.onrender.com",
+      "slug": "web-pentest-playground-register-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /register creates account without verification (302 /login) and new credentials authenticate to /dashboard; web-pentest-playground.onrender.com/register findings 12→14 (+web-pentest-playground-register-live-oracle +web-pentest-playground-register-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:securebank-blog.vercel.app",
+      "slug": "securebank-blog-csrf-attack-page-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /csrf fake prize voucher page auto-submits hidden bank transfer form without CSRF token (Vercel checkpoint uses curated blog corpus fallback); securebank-blog.vercel.app/csrf findings 3→4 (+securebank-blog-csrf-attack-page-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-jwt-alg-confusion-walkthrough-fetch-unify",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: oopssecJwtAlgConfusionRouteLiveOracle now uses oopssecWalkthroughEvidenceWithFetch for trailing-slash Astro walkthrough fetch parity; koadt.github.io/.../jwt-algorithm-confusion-partner-api findings 7 maintained (+oopssec-jwt-alg-confusion-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

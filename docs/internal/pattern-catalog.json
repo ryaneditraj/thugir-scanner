@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-03T03:09:37.063Z",
-  "total": 3133,
-  "uniqueSlugs": 3125,
+  "generatedAt": "2026-09-03T04:30:21.709Z",
+  "total": 3136,
+  "uniqueSlugs": 3128,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3115,
+    "generic": 3118,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3048,
+    "deep": 3051,
     "continuous": 0
   },
   "byCategory": {
@@ -37,7 +37,7 @@
     "AI security": 134,
     "Business logic": 37,
     "AI / LLM security": 4,
-    "Cross-site request forgery": 10,
+    "Cross-site request forgery": 11,
     "Authentication bypass": 4,
     "Insecure file upload": 2,
     "Command injection": 2,
@@ -49,6 +49,7 @@
     "Cryptographic failure": 2,
     "XSS": 3,
     "Session management": 2,
+    "Authentication": 2,
     "Unrestricted file upload": 1,
     "Cryptographic failures": 1
   },
@@ -2401,6 +2402,7 @@
     "secure-nextjs-lesson-login-csrf-route-live-oracle",
     "secure-nextjs-lesson-protected-route-live-oracle",
     "securebank-blog-admin-rbac-route-live-oracle",
+    "securebank-blog-csrf-attack-page-route-live-oracle",
     "securebank-blog-login-sqli-route-live-oracle",
     "securebank-blog-messages-xss-route-live-oracle",
     "securebank-blog-transfer-csrf-route-live-oracle",
@@ -2912,6 +2914,8 @@
     "web-pentest-playground-login-sqli-route-live-oracle",
     "web-pentest-playground-open-redirect-live-oracle",
     "web-pentest-playground-open-redirect-route-live-oracle",
+    "web-pentest-playground-register-live-oracle",
+    "web-pentest-playground-register-route-live-oracle",
     "web-pentest-playground-stored-xss-live-oracle",
     "web-pentest-playground-stored-xss-route-live-oracle",
     "web-pentest-playground-view-users-route-live-oracle",

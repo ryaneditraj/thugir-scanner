@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T04:18:00.000Z",
+  "updated_at": "2026-09-03T04:33:10.266Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2091,
   "discovery_findings": 27542,
-  "improvements_shipped": 1302,
-  "last_run": "2026-09-03T04:18:00.000Z",
+  "improvements_shipped": 1305,
+  "last_run": "2026-09-03T04:33:10.266Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -54,16 +54,16 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 65,
-      "focus": "ai-security supply-chain/npm/privacy/cookie-auth + seclab command-injection queued; drained wrongsecrets 61/62",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 11,
+      "findings": 89,
+      "focus": "ai-security supply-chain/npm/privacy/cookie-auth + seclab command-injection queued; drained wrongsecrets 61/62 + securebank-blog /csrf + web-pentest-playground /register",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.demo.escape.tech: benchmark recall 6/6 (54 findings, 39 live oracles; Heroku+staging 503 fallback)",
+      "web-pentest-playground.onrender.com/register: 14 findings — web-pentest-playground-register-live-oracle + route oracle",
+      "securebank-blog.vercel.app/csrf: 4 findings — securebank-blog-csrf-attack-page-route-live-oracle",
       "ai-security-platform-iota.vercel.app/challenges/supply-chain: 8 findings — ai-security-supply-chain-route-live-oracle",
-      "ai-security-platform-iota.vercel.app/challenges/deceptive-privacy: 4 findings — ai-security-privacy-policy-route-live-oracle",
-      "ai-security-platform-iota.vercel.app/challenges/cookie-auth: 4 findings — ai-security-cookie-auth-route-live-oracle",
       "wrongsecrets.herokuapp.com/challenge/challenge-61: 19 findings — wrongsecrets-challenge-61-telegram-secrets-route-live-oracle",
       "wrongsecrets.herokuapp.com/challenge/challenge-62: 19 findings — wrongsecrets-challenge-62-mcp-google-sa-route-live-oracle"
     ],
@@ -72,19 +72,17 @@
       "Heroku juice-shop primary+staging 503 — Escape.tech fallback required for stable benchmark",
       "seclab.vercel.app/labs/command-injection: no dedicated route oracle (hub fingerprint only)",
       "ai-security-platform vulnerable-npm challenge: no route-specific oracle",
-      "securebank CSRF + ucu-owasp XSS + wrongsecrets 67/68 + chimera genai RAG still queued ahead of drain limit",
+      "wrongsecrets 67/68 + chimera genai RAG + vulnforge level14 SSRF still queued ahead of drain limit",
       "zen-demo-java.fly.dev: unreachable from cloud agent"
     ]
   },
   "discovery_highlights": {
     "juice-shop.demo.escape.tech": 54,
+    "web-pentest-playground.onrender.com/register": 14,
     "wrongsecrets.herokuapp.com/challenge/challenge-61": 19,
     "wrongsecrets.herokuapp.com/challenge/challenge-62": 19,
     "ai-security-platform-iota.vercel.app/challenges/supply-chain": 8,
-    "ai-security-platform-iota.vercel.app/challenges/vulnerable-npm": 7,
-    "ai-security-platform-iota.vercel.app/challenges/deceptive-privacy": 4,
-    "ai-security-platform-iota.vercel.app/challenges/cookie-auth": 4,
-    "seclab.vercel.app/labs/command-injection": 4,
+    "securebank-blog.vercel.app/csrf": 4,
     "pwnshop.ctfsecurity.com/forgot-password": 54,
     "brokencrystals.com/api/ldap": 85
   }
