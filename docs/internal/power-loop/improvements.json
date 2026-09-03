@@ -7865,6 +7865,12 @@
       "slug": "fabraix-access-code-runner-priority",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for fabraix-access-code/guardrail/jwt-verifier on /challenges/* route scans; playground.fabraix.com/challenges/access-code-001 fabraix-access-code-001-route-live-oracle confirmed; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-xxe-lfi-mislabel-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: removed xxe from istEduFilesClientLfiRouteLiveOracle pathname regex so /xxe route scans fire ist-edu-xxe-route-live-oracle (GET /api/notices?file= passwd) instead of LFI mislabel; ist-edu-bd.vercel.app/xxe findings 10→11; benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
