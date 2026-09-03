@@ -2015,6 +2015,10 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureLoggingPiiSecretsRouteLiveOracle",
   "owaspsecureLoggingThresholdAlertsLiveOracle",
   "owaspsecureLoggingThresholdAlertsRouteLiveOracle",
+  "owaspsecureInjectionXssStoredLiveOracle",
+  "owaspsecureInjectionXssStoredRouteLiveOracle",
+  "owaspsecureBacFunctionLevelPromoteLiveOracle",
+  "owaspsecureBacFunctionLevelPromoteRouteLiveOracle",
   "guardmarlyScanLiveOracle",
   "guardmarlyScanRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
@@ -2458,6 +2462,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideOopssecMcpMaliciousServerEvidence",
   "oopssecMcpMaliciousServerRouteLiveOracle",
   "oopssecProductSearchSqliRouteLiveOracle",
+  "clientSideOopssecOrdersSearchSqliEvidence",
+  "oopssecOrdersSearchSqliRouteLiveOracle",
   "oopssecStoredXssReviewsRouteLiveOracle",
   "oopssecRaceConditionCouponRouteLiveOracle",
   "oopssecPriceManipulationRouteLiveOracle",
@@ -13992,6 +13998,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/sql-injection-writeup/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-orders-search-sqli")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
         /\/posts\/jwt-weak-secret-admin-bypass/i.test(targetInput) &&
         p.slug.startsWith("oopssec-jwt-weak-secret")
       )
@@ -16956,6 +16968,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a03_injection\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-injection-xss-stored")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a10_ssrf\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-ssrf-fetch")
       )
@@ -16964,6 +16982,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a01_bac\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-bac-idor-numeric")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a01_bac\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-bac-function-level-promote")
       )
         return -4;
       if (
