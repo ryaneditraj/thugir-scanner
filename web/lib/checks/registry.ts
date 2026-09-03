@@ -7642,6 +7642,71 @@ const oopssecInsecurePasswordResetRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store weak MD5 admin compromise walkthrough (posts/weak-md5-hashing-admin-compromise) -
+const CLIENT_OOPSSEC_WEAK_MD5_HASHING_ADMIN_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Weak MD5 admin compromise walkthrough title",
+    re: /Chaining SQL Injection and Weak MD5 Hashing to Compromise the Admin Account/i
+  },
+  {
+    label: "Admin MD5 password hash in users table",
+    re: /21232f297a57a5a743894a0e4a801fc3|admin@oss\.com[\s\S]{0,120}ADMIN/i
+  },
+  {
+    label: "Unsalted MD5 password hashing code",
+    re: /crypto\.createHash\("md5"\)\.update\(password\)\.digest\("hex"\)|raw MD5|unsalted MD5/i
+  },
+  {
+    label: "Admin login and /admin panel flag",
+    re: /admin@oss\.com[\s\S]{0,80}Password:\s*admin|OSS\{w34k_md5_h4sh1ng\}|\/admin/i
+  },
+  {
+    label: "Weak MD5 hashing walkthrough route",
+    re: /\/posts\/weak-md5-hashing-admin-compromise/i
+  }
+];
+
+const clientSideOopssecWeakMd5HashingAdminEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_WEAK_MD5_HASHING_ADMIN_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|weak MD5|admin@oss\.com|21232f297a57a5a743894a0e4a801fc3/i.test(ctx.combined))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents chaining SQLi credential dump with unsalted MD5 admin hash 21232f297a57a5a743894a0e4a801fc3 (password admin) to access /admin"
+    }
+  };
+};
+
+const oopssecWeakMd5HashingAdminRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/weak-md5-hashing-admin-compromise/i.test(pageUrl)) return NEGATIVE;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecWeakMd5HashingAdminEvidence
+  );
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/weak-md5-hashing-admin-compromise route scan — walkthrough documents SQLi users-table dump + unsalted MD5 admin hash enabling admin@oss.com login and OSS{w34k_md5_h4sh1ng} flag"
+    }
+  };
+};
+
 // --- OopsSec Store open-redirect login bypass walkthrough (posts/open-redirect-login-bypass) -
 const CLIENT_OOPSSEC_OPEN_REDIRECT_LOGIN_BYPASS_RES: { label: string; re: RegExp }[] = [
   {
@@ -43459,7 +43524,7 @@ const owaspsecureCryptoPasswordMd5LiveOracle: Rule = async (ctx) => {
 const owaspsecureCryptoPasswordMd5RouteLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/demo\/a02_crypto\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/demo\/a02_crypto(?:\/insecure\.php|\/?$)/i.test(pageUrl)) return NEGATIVE;
   const result = await owaspsecureCryptoPasswordMd5LiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -43469,6 +43534,129 @@ const owaspsecureCryptoPasswordMd5RouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "owaspsecure.com /demo/a02_crypto route scan — Attack 1 insecure signup stores plaintext and MD5 password hashes (live crypto failure oracle)"
+    }
+  };
+};
+
+async function owaspsecureCryptoSessionCookie(ctx: RuleContext): Promise<string | null> {
+  const signupUrl = owaspsecureAttackUrl(ctx, "attacks/passwords/signup_insecure.php");
+  const loginUrl = owaspsecureAttackUrl(ctx, "attacks/passwords/login_insecure.php");
+  const email = `thugir-probe-${Date.now()}@example.com`;
+  const signup = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: new URLSearchParams({ email, password: "weakpassword" }).toString(),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const signupCookie =
+    signup.setCookies.find((c) => /^PHPSESSID=/i.test(c))?.split(";")[0] ?? null;
+  const loginHeaders: Record<string, string> = {
+    "Content-Type": "application/x-www-form-urlencoded"
+  };
+  if (signupCookie) loginHeaders.Cookie = signupCookie;
+  const login = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: new URLSearchParams({ email, password: "weakpassword" }).toString(),
+    headers: loginHeaders,
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const loginCookie =
+    login.setCookies.find((c) => /^PHPSESSID=/i.test(c))?.split(";")[0] ?? signupCookie;
+  if (!loginCookie || !/OK \(insecure login\)/i.test(login.body)) return null;
+  return loginCookie;
+}
+
+const owaspsecureCryptoPredictableTokensLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const sessionCookie = await owaspsecureCryptoSessionCookie(ctx);
+  if (!sessionCookie) return NEGATIVE;
+  const tokenUrl = owaspsecureAttackUrl(ctx, "attacks/tokens/gen_insecure.php");
+  const doc = await ctx.probe.get(tokenUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Cookie: sessionCookie }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Insecure token minted using uniqid\(\)\/mt_rand\(\)\/time\(\)/i.test(doc.body)) return NEGATIVE;
+  if (!/(?:&quot;token&quot;|"token")\s*:/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: tokenUrl,
+      snippet:
+        doc.body.match(/"token"\s*:\s*"[^"]+"/i)?.[0]?.slice(0, 120) ??
+        "predictable uniqid/mt_rand token",
+      note: "owaspsecure.com GET attacks/tokens/gen_insecure.php mints predictable tokens via uniqid()/mt_rand()/time() — A02 cryptographic failure training oracle"
+    }
+  };
+};
+
+const owaspsecureCryptoPredictableTokensRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/demo\/a02_crypto(?:\/insecure\.php|\/attacks\/tokens)/i.test(pageUrl) &&
+    !/\/attacks\/tokens\/gen_insecure\.php/i.test(pageUrl)
+  )
+    return NEGATIVE;
+  const result = await owaspsecureCryptoPredictableTokensLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com A02 token-generation attack path — predictable uniqid()/mt_rand()/time() session tokens after insecure signup/login (live crypto failure route oracle)"
+    }
+  };
+};
+
+const owaspsecureCryptoDataAtRestLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const sessionCookie = await owaspsecureCryptoSessionCookie(ctx);
+  if (!sessionCookie) return NEGATIVE;
+  const dumpUrl = owaspsecureAttackUrl(ctx, "attacks/data_at_rest/dump.php");
+  const doc = await ctx.probe.get(dumpUrl, {
+    maxBytes: 8192,
+    timeoutMs: 15000,
+    headers: { Cookie: sessionCookie }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/ssn_plain|DB dump/i.test(doc.body)) return NEGATIVE;
+  if (!/\d{3}-\d{2}-\d{4}/.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: dumpUrl,
+      snippet:
+        doc.body.match(/\d{3}-\d{2}-\d{4}/)?.[0]?.slice(0, 80) ?? "plaintext SSN rows in dump",
+      note: "owaspsecure.com GET attacks/data_at_rest/dump.php exposes plaintext SSN values in ssn_plain column — A02 data-at-rest cryptographic failure training oracle"
+    }
+  };
+};
+
+const owaspsecureCryptoDataAtRestRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/demo\/a02_crypto(?:\/insecure\.php|\/attacks\/data_at_rest)/i.test(pageUrl) &&
+    !/\/attacks\/data_at_rest\/dump\.php/i.test(pageUrl)
+  )
+    return NEGATIVE;
+  const result = await owaspsecureCryptoDataAtRestLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com A02 data-at-rest attack path — plaintext SSN rows exposed via dump.php without encryption (live crypto failure route oracle)"
     }
   };
 };
@@ -110524,6 +110712,10 @@ export const RULES: Record<string, Rule> = {
   owaspsecureMisconfigDefaultCredsRouteLiveOracle,
   owaspsecureCryptoPasswordMd5LiveOracle,
   owaspsecureCryptoPasswordMd5RouteLiveOracle,
+  owaspsecureCryptoPredictableTokensLiveOracle,
+  owaspsecureCryptoPredictableTokensRouteLiveOracle,
+  owaspsecureCryptoDataAtRestLiveOracle,
+  owaspsecureCryptoDataAtRestRouteLiveOracle,
   owaspsecureAuthSessionFixationLiveOracle,
   owaspsecureAuthSessionFixationRouteLiveOracle,
   owaspsecureDesignReauthEmailLiveOracle,
@@ -113254,6 +113446,8 @@ export const RULES: Record<string, Rule> = {
   oopssecGiftCardRandomnessRouteLiveOracle,
   clientSideOopssecInsecurePasswordResetEvidence,
   oopssecInsecurePasswordResetRouteLiveOracle,
+  clientSideOopssecWeakMd5HashingAdminEvidence,
+  oopssecWeakMd5HashingAdminRouteLiveOracle,
   clientSideOopssecOpenRedirectLoginBypassEvidence,
   oopssecOpenRedirectLoginBypassRouteLiveOracle,
   clientSideOopssecMassAssignmentAdminEvidence,

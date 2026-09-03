@@ -56057,6 +56057,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-weak-md5-hashing-admin-evidence",
+    platform: "generic",
+    category: "Cryptographic failure",
+    severityDefault: "critical",
+    title: "OopsSec Store weak MD5 admin compromise walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/weak-md5-hashing-admin-compromise documents chaining SQLi users-table dump with unsalted MD5 admin hash 21232f297a57a5a743894a0e4a801fc3 to log in as admin@oss.com and capture OSS{w34k_md5_h4sh1ng}.",
+    impactOneline:
+      "Public walkthrough teaches instant MD5 rainbow-table recovery of admin credentials after SQL injection credential exfiltration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecWeakMd5HashingAdminEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use bcrypt or argon2 for password hashing with per-user salts; fix SQL injection in order search.",
+      steps: [
+        "Replace crypto.createHash('md5') with bcrypt.hash(password, 12).",
+        "Parameterize POST /api/orders/search status filter queries.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our OopsSec Store walkthrough documents unsalted MD5 admin password hashing after SQLi. Show bcrypt remediation and parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-weak-md5-hashing-admin-route-live-oracle",
+    platform: "generic",
+    category: "Cryptographic failure",
+    severityDefault: "critical",
+    title: "OopsSec Store weak MD5 admin compromise route live oracle",
+    description:
+      "When scanning /posts/weak-md5-hashing-admin-compromise, the walkthrough documents SQLi credential dump plus unsalted MD5 admin hash enabling admin@oss.com login — route-specific cryptographic failure oracle.",
+    impactOneline:
+      "OopsSec weak-MD5 chain ends with trivial admin hash crack and unauthenticated /admin access after SQL injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecWeakMd5HashingAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use bcrypt or argon2 for password hashing; parameterize order search SQL.",
+      steps: [
+        "Replace MD5 password hashing with bcrypt.hash(password, 12).",
+        "Parameterize POST /api/orders/search status filter.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/weak-md5-hashing-admin-compromise route documents MD5 admin hash cracking. Show route-specific bcrypt and SQLi remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-open-redirect-login-bypass-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -76093,6 +76145,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /demo/a02_crypto route scan confirms plaintext and MD5 password storage. Show route-level password hashing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-predictable-tokens-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A02 predictable session tokens live oracle",
+    description:
+      "GET attacks/tokens/gen_insecure.php on owaspsecure.com mints session tokens via uniqid()/mt_rand()/time() after insecure signup/login — A02 cryptographic failure training oracle.",
+    impactOneline:
+      "Predictable session tokens on owaspsecure.com enable token guessing after observing generation patterns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoPredictableTokensLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Generate session tokens with cryptographically secure random bytes.",
+      steps: [
+        "Replace uniqid()/mt_rand() token minting with random_bytes(32).",
+        "Use server-side session stores instead of predictable client tokens.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com gen_insecure.php mints predictable tokens. Show crypto.random_bytes remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-predictable-tokens-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A02 predictable tokens attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/tokens/gen_insecure.php on owaspsecure.com, Attack 2 mints predictable session tokens via uniqid()/mt_rand()/time() — route-specific A02 cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 token attack path should confirm live predictable token generation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoPredictableTokensRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Generate session tokens with cryptographically secure random bytes.",
+      steps: [
+        "Replace uniqid()/mt_rand() token minting with random_bytes(32).",
+        "Use server-side session stores instead of predictable client tokens.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto token attack path confirms predictable token minting. Show route-level secure random remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-data-at-rest-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 plaintext data-at-rest live oracle",
+    description:
+      "GET attacks/data_at_rest/dump.php on owaspsecure.com exposes plaintext SSN values in ssn_plain column — A02 data-at-rest cryptographic failure training oracle.",
+    impactOneline:
+      "Plaintext SSN storage on owaspsecure.com enables bulk PII exfiltration from the data-at-rest lab dump endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoDataAtRestLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encrypt sensitive data at rest with per-record keys and authenticated encryption.",
+      steps: [
+        "Replace plaintext ssn_plain storage with AES-GCM ciphertext columns.",
+        "Use envelope encryption with a KMS-managed master key.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com data_at_rest dump.php exposes plaintext SSNs. Show encryption-at-rest remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-data-at-rest-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 data-at-rest attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/data_at_rest/dump.php on owaspsecure.com, Attack 3 exposes plaintext SSN rows — route-specific A02 data-at-rest cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 data-at-rest attack path should confirm live plaintext PII dump.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoDataAtRestRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encrypt sensitive data at rest with per-record keys and authenticated encryption.",
+      steps: [
+        "Replace plaintext ssn_plain storage with AES-GCM ciphertext columns.",
+        "Use envelope encryption with a KMS-managed master key.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto data-at-rest attack path confirms plaintext SSN dump. Show route-level encryption remediation.",
     version: 1,
     enabled: true
   },
