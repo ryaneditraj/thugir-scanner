@@ -2003,6 +2003,12 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureMisconfigDefaultCredsRouteLiveOracle",
   "owaspsecureCryptoPasswordMd5LiveOracle",
   "owaspsecureCryptoPasswordMd5RouteLiveOracle",
+  "owaspsecureAuthSessionFixationLiveOracle",
+  "owaspsecureAuthSessionFixationRouteLiveOracle",
+  "owaspsecureDesignReauthEmailLiveOracle",
+  "owaspsecureDesignReauthEmailRouteLiveOracle",
+  "owaspsecureIntegrityUnserializeLiveOracle",
+  "owaspsecureIntegrityUnserializeRouteLiveOracle",
   "guardmarlyScanLiveOracle",
   "guardmarlyScanRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
@@ -16964,6 +16970,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a02_crypto\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-crypto-password-md5")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a07_auth\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-auth-session-fixation")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a04_insecure_design\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-design-reauth-email")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a08_integrity\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-integrity-unserialize")
       )
         return -4;
       if (

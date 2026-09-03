@@ -43285,6 +43285,125 @@ const owaspsecureCryptoPasswordMd5RouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const owaspsecureAuthSessionFixationLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const beginUrl = owaspsecureAttackUrl(ctx, "attacks/session_fixation/begin.php");
+  const doc = await ctx.probe.get(beginUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Pre-login session created|session created \(or reused\)/i.test(doc.body)) return NEGATIVE;
+  if (!/SID:\s*[a-z0-9]+/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: beginUrl,
+      snippet: doc.body.match(/SID:\s*[a-z0-9]+/i)?.[0]?.slice(0, 80) ?? "pre-login session SID issued",
+      note: "owaspsecure.com GET attacks/session_fixation/begin.php issues a pre-login session ID without rotation — A07 session fixation training oracle"
+    }
+  };
+};
+
+const owaspsecureAuthSessionFixationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a07_auth\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureAuthSessionFixationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a07_auth route scan — Attack 2 session fixation begin issues reusable pre-login SID (live auth failure oracle)"
+    }
+  };
+};
+
+const owaspsecureDesignReauthEmailLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const changeUrl = owaspsecureAttackUrl(ctx, "attacks/reauth_sensitive/change_email_insecure.php");
+  const postBody = new URLSearchParams({ new_email: "attacker@evil.com" }).toString();
+  const doc = await ctx.probe.get(changeUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Email changed \(INSECURE\)|no_recent_reauth/i.test(doc.body)) return NEGATIVE;
+  if (!/newEmail[\s\S]{0,40}attacker@evil\.com/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: changeUrl,
+      snippet: doc.body.match(/Email changed \(INSECURE\)[\s\S]{0,80}/i)?.[0]?.slice(0, 120) ?? "email changed without reauth",
+      note: "owaspsecure.com POST attacks/reauth_sensitive/change_email_insecure.php changes email without password re-auth or CSRF — A04 insecure design training oracle"
+    }
+  };
+};
+
+const owaspsecureDesignReauthEmailRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a04_insecure_design\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureDesignReauthEmailLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a04_insecure_design route scan — Attack 2 sensitive email change without re-auth (live insecure design oracle)"
+    }
+  };
+};
+
+const owaspsecureIntegrityUnserializeLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const unserializeUrl = owaspsecureAttackUrl(ctx, "attacks/unserialize/insecure.php");
+  const postBody = new URLSearchParams({ data: 'O:8:"stdClass":0:{}' }).toString();
+  const doc = await ctx.probe.get(unserializeUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Unserialize \(INSECURE\)|unserialized_type/i.test(doc.body)) return NEGATIVE;
+  if (!/object:stdClass|DemoGadget/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: unserializeUrl,
+      snippet: doc.body.match(/unserialized_type[\s\S]{0,60}/i)?.[0]?.slice(0, 100) ?? "unsafe PHP unserialize accepted",
+      note: "owaspsecure.com POST attacks/unserialize/insecure.php accepts attacker-controlled serialized objects — A08 software integrity failure training oracle"
+    }
+  };
+};
+
+const owaspsecureIntegrityUnserializeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a08_integrity\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureIntegrityUnserializeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a08_integrity route scan — Attack 2 unsafe PHP unserialize accepts attacker objects (live integrity failure oracle)"
+    }
+  };
+};
+
 // --- Guardmarly SAST demo (ansede.onrender.com) --------------------------------------
 const GUARDMARLY_SCAN_PROBE_CODE = `from flask import Flask, request
 app = Flask(__name__)
@@ -109702,6 +109821,12 @@ export const RULES: Record<string, Rule> = {
   owaspsecureMisconfigDefaultCredsRouteLiveOracle,
   owaspsecureCryptoPasswordMd5LiveOracle,
   owaspsecureCryptoPasswordMd5RouteLiveOracle,
+  owaspsecureAuthSessionFixationLiveOracle,
+  owaspsecureAuthSessionFixationRouteLiveOracle,
+  owaspsecureDesignReauthEmailLiveOracle,
+  owaspsecureDesignReauthEmailRouteLiveOracle,
+  owaspsecureIntegrityUnserializeLiveOracle,
+  owaspsecureIntegrityUnserializeRouteLiveOracle,
   guardmarlyScanLiveOracle,
   guardmarlyScanRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,

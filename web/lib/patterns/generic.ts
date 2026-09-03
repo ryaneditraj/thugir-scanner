@@ -75940,6 +75940,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-auth-session-fixation-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A07 session fixation live oracle",
+    description:
+      "GET attacks/session_fixation/begin.php on owaspsecure.com issues a pre-login session ID without rotation — A07 authentication failure training oracle.",
+    impactOneline:
+      "Reusable pre-login session IDs on owaspsecure.com enable session fixation before authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureAuthSessionFixationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Regenerate session IDs on login and set secure cookie flags.",
+      steps: [
+        "Call session_regenerate_id(true) after successful authentication.",
+        "Set HttpOnly, Secure, and SameSite on session cookies.",
+        "Run owaspsecure.com auth labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com session_fixation/begin.php reuses pre-login SIDs. Show session regeneration and secure cookie remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-auth-session-fixation-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A07 auth route session fixation live oracle",
+    description:
+      "When scanning /demo/a07_auth/insecure.php on owaspsecure.com, Attack 2 session fixation begin confirms live pre-login SID issuance — route-specific A07 authentication oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A07 lab should confirm live session fixation, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureAuthSessionFixationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Regenerate session IDs on login and set secure cookie flags.",
+      steps: [
+        "Call session_regenerate_id(true) after successful authentication.",
+        "Set HttpOnly, Secure, and SameSite on session cookies.",
+        "Run owaspsecure.com auth labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a07_auth route scan confirms session fixation via pre-login SID. Show route-level session hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-reauth-email-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 sensitive email change live oracle",
+    description:
+      "POST attacks/reauth_sensitive/change_email_insecure.php on owaspsecure.com changes account email without password re-auth or CSRF — A04 insecure design training oracle.",
+    impactOneline:
+      "Missing re-authentication on sensitive account changes on owaspsecure.com enables account takeover via email hijack.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignReauthEmailLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require step-up authentication and CSRF protection for sensitive account changes.",
+      steps: [
+        "Prompt for current password before email or MFA changes.",
+        "Validate CSRF tokens on all state-changing account settings endpoints.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com change_email_insecure.php accepts email changes without re-auth. Show step-up authentication remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-reauth-email-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route reauth live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 2 sensitive email change confirms missing re-auth — route-specific A04 insecure design oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live missing re-auth on sensitive changes, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignReauthEmailRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require step-up authentication and CSRF protection for sensitive account changes.",
+      steps: [
+        "Prompt for current password before email or MFA changes.",
+        "Validate CSRF tokens on all state-changing account settings endpoints.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms email change without re-auth. Show route-level step-up auth remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-unserialize-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 unsafe unserialize live oracle",
+    description:
+      "POST attacks/unserialize/insecure.php on owaspsecure.com accepts attacker-controlled serialized PHP objects — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Unsafe PHP unserialize on owaspsecure.com enables gadget-chain remote code execution when matching classes exist.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityUnserializeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never unserialize untrusted input; use JSON or signed data formats.",
+      steps: [
+        "Replace PHP unserialize with json_decode for structured data.",
+        "If serialization is required, use allowlisted classes and signed payloads.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com unserialize/insecure.php accepts attacker objects. Show safe deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-unserialize-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route unserialize live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 2 unsafe unserialize confirms live object deserialization — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live unsafe unserialize, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityUnserializeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never unserialize untrusted input; use JSON or signed data formats.",
+      steps: [
+        "Replace PHP unserialize with json_decode for structured data.",
+        "If serialization is required, use allowlisted classes and signed payloads.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms unsafe PHP unserialize. Show route-level safe deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "web-pentest-playground-login-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
