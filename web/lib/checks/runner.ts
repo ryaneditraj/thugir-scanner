@@ -2003,6 +2003,10 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureMisconfigDefaultCredsRouteLiveOracle",
   "owaspsecureCryptoPasswordMd5LiveOracle",
   "owaspsecureCryptoPasswordMd5RouteLiveOracle",
+  "owaspsecureCryptoPredictableTokensLiveOracle",
+  "owaspsecureCryptoPredictableTokensRouteLiveOracle",
+  "owaspsecureCryptoDataAtRestLiveOracle",
+  "owaspsecureCryptoDataAtRestRouteLiveOracle",
   "owaspsecureAuthSessionFixationLiveOracle",
   "owaspsecureAuthSessionFixationRouteLiveOracle",
   "owaspsecureDesignReauthEmailLiveOracle",
@@ -2506,6 +2510,8 @@ const DEEP_RULES = new Set<string>([
   "oopssecGiftCardRandomnessRouteLiveOracle",
   "clientSideOopssecInsecurePasswordResetEvidence",
   "oopssecInsecurePasswordResetRouteLiveOracle",
+  "clientSideOopssecWeakMd5HashingAdminEvidence",
+  "oopssecWeakMd5HashingAdminRouteLiveOracle",
   "clientSideOopssecOpenRedirectLoginBypassEvidence",
   "oopssecOpenRedirectLoginBypassRouteLiveOracle",
   "clientSideOopssecMassAssignmentAdminEvidence",
@@ -9842,6 +9848,7 @@ function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
     "/posts/x-forwarded-for-sql-injection/",
     "/posts/x-forwarded-for-sql-injection",
     "/posts/sql-injection-writeup/",
+    "/posts/weak-md5-hashing-admin-compromise/",
     "/posts/product-search-sql-injection/",
     "/posts/client-side-price-manipulation/",
     "/posts/client-side-price-manipulation",
@@ -14016,6 +14023,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/insecure-password-reset/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-insecure-password-reset")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/weak-md5-hashing-admin-compromise/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-weak-md5-hashing-admin")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
         /\/posts\/sql-injection-writeup/i.test(targetInput) &&
         p.slug.startsWith("oopssec-orders-search-sqli")
       )
@@ -17061,6 +17080,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a02_crypto\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-crypto-password-md5")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a02_crypto(?:\/insecure\.php|\/attacks\/tokens)/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-crypto-predictable-tokens")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a02_crypto(?:\/insecure\.php|\/attacks\/data_at_rest)/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-crypto-data-at-rest")
       )
         return -4;
       if (
