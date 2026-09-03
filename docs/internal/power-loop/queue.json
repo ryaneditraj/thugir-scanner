@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T11:12:00.000Z",
+  "updated_at": "2026-09-03T12:08:27.971Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://owaspsecure.com/demo/a02_crypto/insecure.php",
+      "source": "owaspsecure.com OWASP Top 10 demo hub — A02 cryptographic failures insecure lab (plaintext/MD5/IV reuse; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a04_insecure_design/insecure.php",
+      "source": "owaspsecure.com OWASP Top 10 demo hub — A04 insecure design insecure lab (weak reset/CSRF/coupon logic; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a08_integrity/insecure.php",
+      "source": "owaspsecure.com OWASP Top 10 demo hub — A08 software/data integrity insecure lab (unserialize/plugin RCE; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a09_logging/insecure.php",
+      "source": "owaspsecure.com OWASP Top 10 demo hub — A09 logging/monitoring failures insecure lab (web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a01_bac/insecure.php",
+      "source": "owaspsecure.com OWASP Top 10 demo hub — A01 broken access control insecure lab (IDOR/mass-assignment; web search 12 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927/",
       "source": "kOaDT/oss-oopssec-store challenges.json — CVE-2025-29927 Next.js middleware auth bypass walkthrough (chapter 03; web search 10 UTC)",
@@ -11378,5 +11403,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 55
+  "discovery_urls_added": 60
 }
