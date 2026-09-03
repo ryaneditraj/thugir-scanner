@@ -43006,6 +43006,32 @@ const appsecCiDjangoAdminRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const appsecCiLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecCiPipelineHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/login\/?$/i.test(pageUrl)) return NEGATIVE;
+  const loginUrl = new URL("/login", ctx.origin).toString();
+  const doc = await ctx.probe.get(loginUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  const missingLogin =
+    doc.status === 404 ||
+    (/not found|page not found/i.test(doc.body) && doc.body.length < 256);
+  if (!missingLogin) return NEGATIVE;
+  const commentsHit = await appsecCiStoredXssCommentsLiveOracle(ctx);
+  return {
+    fired: true,
+    confidence: commentsHit.fired ? 0.91 : 0.88,
+    evidence: {
+      url: loginUrl,
+      status: doc.status,
+      activeLabs: commentsHit.fired
+        ? "POST /comments/ stored XSS (live); GET /admin/ Django admin panel"
+        : "POST /comments/ stored XSS; GET /admin/ Django admin panel",
+      snippet: doc.body.trim().slice(0, 80) || `HTTP ${doc.status}`,
+      note: "AppSec CI Pipeline /login route scan — SQLi login bypass route removed on current Render deploy (HTTP 404); route-specific dead-login oracle pointing scanners to /comments/ stored XSS and /admin/ exposure labs"
+    }
+  };
+};
+
 // --- Guardmarly SAST demo (ansede.onrender.com) --------------------------------------
 const GUARDMARLY_SCAN_PROBE_CODE = `from flask import Flask, request
 app = Flask(__name__)
@@ -50062,6 +50088,7 @@ async function probePwnshopOtpNotInvalidated(ctx: RuleContext): Promise<RuleResu
 const pwnshopOtpNotInvalidatedLiveOracle: Rule = async (ctx) => {
   const hit = await probePwnshopOtpNotInvalidated(ctx);
   if (hit?.fired) return hit;
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/(?:reset-password|forgot-password|verify-otp|login)\b/i.test(pageUrl)) return NEGATIVE;
   const corpus = `${ctx.combined}\n${pageUrl}\n${PWNSHOP_OTP_NOT_INVALIDATED_ROUTE_FALLBACK}`;
@@ -109409,6 +109436,7 @@ export const RULES: Record<string, Rule> = {
   appsecCiStoredXssCommentsRouteLiveOracle,
   appsecCiDjangoAdminLiveOracle,
   appsecCiDjangoAdminRouteLiveOracle,
+  appsecCiLoginRouteLiveOracle,
   guardmarlyScanLiveOracle,
   guardmarlyScanRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,

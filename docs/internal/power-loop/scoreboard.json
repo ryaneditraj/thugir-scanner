@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T12:09:30.000Z",
+  "updated_at": "2026-09-03T12:45:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3075,
-  "total_findings": 34525,
+  "total_sites_scanned": 3076,
+  "total_findings": 34596,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2131,
-  "discovery_findings": 28281,
-  "improvements_shipped": 1323,
-  "last_run": "2026-09-03T12:09:30.000Z",
+  "discovery_findings": 28302,
+  "improvements_shipped": 1326,
+  "last_run": "2026-09-03T12:45:00.000Z",
   "last_run_summary": {
     "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,38 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 39 live oracles; secret-resend present) — no benchmark category misses"
+      "note": "Stable 6/6 first-pass recall (51 findings) — no benchmark category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 25,
-      "focus": "owaspsecure.com OWASP Top 10 insecure labs A01/A02/A04/A08/A09 (web search 12 UTC)",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 6,
+      "findings": 46,
+      "focus": "Engine evolve: appsec-ci /login dead-route oracle + pwnshop OTP host guard + restful-booker runner priority; owaspsecure.com A01/A02/A04/A08/A09 labs",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings) — no category misses",
-      "owaspsecure.com/demo/a04_insecure_design/insecure.php: 7 findings — dangerous-html-sinks + client-side-xss-evidence on insecure-design lab",
-      "owaspsecure.com/demo/a01_bac/insecure.php: 5 findings — thugir-dir-discovery hub on BAC lab",
-      "owaspsecure.com/demo/a02_crypto/insecure.php: 4 findings — thin misconfig hub without plaintext-password oracle",
-      "owaspsecure.com/demo/a08_integrity/insecure.php: 4 findings — thin hub without unserialize/plugin-loader oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings) — no category misses",
+      "appsec-ci-pipeline.onrender.com/login: 7→6 findings — appsec-ci-login-route-live-oracle (+dead /login 404 oracle); removed pwnshop-otp + reflexion-escalated-xss false positives",
+      "restful-booker.herokuapp.com/auth: 3→7 findings — restful-booker-runner-priority ensures weak-creds + booking BOLA oracles on route scans",
+      "restful-booker.herokuapp.com/booking: 3→8 findings — restful-booker-booking-unauth-access-route-live-oracle + create-unauth-route-live-oracle",
+      "sekumart.sekuripy.hr/search.php?q=test: 21 findings — sekumart-search-sqli-route-live-oracle + sekumart-search-xss-route-live-oracle",
+      "owaspsecure.com/demo/a04_insecure_design/insecure.php: 7 findings — dangerous-html-sinks + client-side-xss-evidence on insecure-design lab"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark 6/6 stable — no category misses on primary Heroku",
       "owaspsecure.com labs: thin 4-7 finding hub fingerprint — missing route-specific SQLi/IDOR/unserialize/SSRF live oracles",
-      "owaspsecure a03/a05/a07/a10 still queued for next drain",
-      "damn-vulnerable-startup.fly.dev/challenges/* unreachable from cloud agent (3 errors)",
-      "duck-store /api/v1/orders/coupons + /api/v1/auth/register still queued"
+      "damn-vulnerable-startup.fly.dev/challenges/* unreachable from cloud agent",
+      "chimera.atlascrew.dev/api/v1/gov/benefits/search + /gov/records queued — route oracles shipped, pending queue drain"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
+    "juice-shop.herokuapp.com": 51,
+    "appsec-ci-pipeline.onrender.com/login": 6,
+    "restful-booker.herokuapp.com/auth": 7,
+    "restful-booker.herokuapp.com/booking": 8,
+    "sekumart.sekuripy.hr/search.php?q=test": 21,
     "owaspsecure.com/demo/a04_insecure_design/insecure.php": 7,
-    "owaspsecure.com/demo/a09_logging/insecure.php": 5,
-    "owaspsecure.com/demo/a01_bac/insecure.php": 5,
-    "owaspsecure.com/demo/a02_crypto/insecure.php": 4,
-    "owaspsecure.com/demo/a08_integrity/insecure.php": 4
+    "appsec-ci-pipeline.onrender.com/comments/": 8,
+    "duck-store.escape.tech/mcp/tools/list_coupons": 40,
+    "pwnshop.ctfsecurity.com/mail/1": 45
   }
 }
