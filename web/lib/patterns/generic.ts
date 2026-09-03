@@ -55745,6 +55745,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-plaintext-password-logs-evidence",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "OopsSec Store plaintext password in logs walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/plaintext-password-in-logs documents POST /api/auth/login debug logging plaintext passwords readable via /monitoring/siem with default credentials.",
+    impactOneline:
+      "Public walkthrough teaches CWE-532 logging of cleartext credentials on a hidden SIEM dashboard protected by weak default creds.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecPlaintextPasswordLogsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never log passwords and protect monitoring dashboards with strong authentication.",
+      steps: [
+        "Remove debug logging of credentials from authentication routes.",
+        "Restrict /monitoring/siem to authenticated administrators with MFA.",
+        "Host OopsSec logging walkthroughs on localhost only."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/login logs plaintext passwords to /monitoring/siem. Show secure logging and SIEM access remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-plaintext-password-logs-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "OopsSec Store plaintext password in logs route live oracle",
+    description:
+      "When scanning /posts/plaintext-password-in-logs, the walkthrough documents debug login logging and /monitoring/siem SIEM exposure — route-specific sensitive data oracle.",
+    impactOneline:
+      "OopsSec SIEM dashboard leaks cleartext passwords from auth debug logs when reachable with default credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecPlaintextPasswordLogsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never log passwords and protect monitoring dashboards with strong authentication.",
+      steps: [
+        "Remove debug logging of credentials from authentication routes.",
+        "Restrict /monitoring/siem to authenticated administrators with MFA.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/plaintext-password-in-logs route scan confirms SIEM password logging. Show route-level logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-next-public-env-evidence",
     platform: "generic",
     category: "Exposed secret",
@@ -76561,6 +76613,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /demo/a01_bac route scan confirms mass assignment via is_admin=1. Show route-level field allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-idor-uuid-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 UUID IDOR live oracle",
+    description:
+      "GET attacks/idor_uuid.php on owaspsecure.com returns another user's note by guessable public_id without owner check — A01 broken access control training oracle.",
+    impactOneline:
+      "UUID-only authorization on owaspsecure.com still permits IDOR when public_id values are predictable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacIdorUuidLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize object access against the authenticated session owner, not only public_id lookup.",
+      steps: [
+        "Verify note.user_id matches the session user before returning records.",
+        "Use non-guessable public_id tokens instead of predictable slugs.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our idor_uuid.php returns notes by guessable public_id without owner check. Show authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-idor-uuid-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 BAC route UUID IDOR live oracle",
+    description:
+      "When scanning /demo/a01_bac/insecure.php on owaspsecure.com, GET idor_uuid.php confirms live public_id IDOR — route-specific A01 broken access control oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A01 lab should confirm live UUID IDOR, not only numeric idor_numeric oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacIdorUuidRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize object access against the authenticated session owner.",
+      steps: [
+        "Verify note.user_id matches the session user before returning records.",
+        "Use non-guessable public_id tokens instead of predictable slugs.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a01_bac route scan confirms UUID IDOR via public_id. Show route-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-health-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF internal health live oracle",
+    description:
+      "GET attacks/fetch_insecure.php on owaspsecure.com fetches attacks/internal/health.json and returns internal-gateway JSON — A10 SSRF training oracle beyond public URL fetch.",
+    impactOneline:
+      "Open fetcher on owaspsecure.com reaches internal-only health endpoints without network segmentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalHealthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side requests to internal paths and enforce URL allowlists.",
+      steps: [
+        "Deny fetcher requests targeting same-origin internal/admin paths.",
+        "Segment internal health endpoints on non-routable networks.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our fetch_insecure.php reaches internal/health.json. Show SSRF allowlist and network segmentation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-health-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF route internal health live oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, open fetcher returns internal-gateway health JSON — route-specific A10 SSRF oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm internal SSRF, not only example.com fetch oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalHealthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side requests to internal paths and enforce URL allowlists.",
+      steps: [
+        "Deny fetcher requests targeting same-origin internal/admin paths.",
+        "Segment internal health endpoints on non-routable networks.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms internal health SSRF. Show route-level fetch allowlist remediation.",
     version: 1,
     enabled: true
   },

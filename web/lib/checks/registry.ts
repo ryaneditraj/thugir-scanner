@@ -7228,6 +7228,66 @@ const oopssecInformationDisclosureApiErrorRouteLiveOracle: Rule = async (ctx) =>
   };
 };
 
+// --- OopsSec Store plaintext password in logs (posts/plaintext-password-in-logs) ---------
+const CLIENT_OOPSSEC_PLAINTEXT_PASSWORD_LOGS_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Plaintext password in logs walkthrough title",
+    re: /Plaintext Password Exposure|Exploiting Server Logs via a Hidden SIEM/i
+  },
+  {
+    label: "POST /api/auth/login password logging",
+    re: /POST \/api\/auth\/login|\[auth\] login attempt|password=iloveduck/i
+  },
+  {
+    label: "Hidden SIEM dashboard /monitoring/siem",
+    re: /\/monitoring\/siem|SIEM Console — Internal Monitoring System/i
+  },
+  {
+    label: "Default SIEM credentials root:admin",
+    re: /root.*admin|Bypassing SIEM authentication|default credentials/i
+  },
+  {
+    label: "Plaintext password logs walkthrough route",
+    re: /\/posts\/plaintext-password-in-logs/i
+  }
+];
+
+const clientSideOopssecPlaintextPasswordLogsEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_PLAINTEXT_PASSWORD_LOGS_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|\/monitoring\/siem|\[auth\]|plaintext password/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents debug login logging plaintext passwords to /monitoring/siem with default root:admin credentials"
+    }
+  };
+};
+
+const oopssecPlaintextPasswordLogsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/plaintext-password-in-logs/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideOopssecPlaintextPasswordLogsEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/plaintext-password-in-logs route scan — walkthrough documents POST /api/auth/login logging plaintext passwords readable via /monitoring/siem"
+    }
+  };
+};
+
 // --- OopsSec Store NEXT_PUBLIC_ env leak (posts/next-public-env-variable-leak) ---------
 const CLIENT_OOPSSEC_NEXT_PUBLIC_ENV_RES: { label: string; re: RegExp }[] = [
   {
@@ -43814,6 +43874,87 @@ const owaspsecureBacMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "owaspsecure.com /demo/a01_bac route scan — Attack 4 mass_assignment.php accepts is_admin=1 from POST body (live mass-assignment oracle)"
+    }
+  };
+};
+
+const OWASPSECURE_IDOR_UUID_PUBLIC_IDS = ["bob-note-1", "alice-note-1", "note-public-1"];
+
+const owaspsecureBacIdorUuidLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  for (const publicId of OWASPSECURE_IDOR_UUID_PUBLIC_IDS) {
+    const idorUrl = owaspsecureAttackUrl(ctx, `attacks/idor_uuid.php?public_id=${encodeURIComponent(publicId)}`);
+    const doc = await ctx.probe.get(idorUrl, { maxBytes: 4096, timeoutMs: 15000 });
+    if (doc.status < 200 || doc.status >= 400) continue;
+    if (!/public_id used without owner check|no owner check/i.test(doc.body)) continue;
+    if (!/"title"\s*:|Bob Note|Alice Note/i.test(doc.body)) continue;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: idorUrl,
+        publicId,
+        snippet: doc.body.match(/\{[\s\S]{0,120}title[\s\S]{0,80}\}/i)?.[0]?.slice(0, 120) ?? "note JSON returned",
+        note: "owaspsecure.com GET attacks/idor_uuid.php returns another user's note by guessable public_id without owner check — A01 broken access control training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const owaspsecureBacIdorUuidRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a01_bac\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureBacIdorUuidLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a01_bac route scan — Attack 2 idor_uuid.php fetches notes by guessable public_id without authorization (live UUID IDOR oracle)"
+    }
+  };
+};
+
+const owaspsecureSsrfInternalHealthLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const internalUrl = owaspsecureAttackUrl(ctx, "attacks/internal/health.json");
+  const fetchUrl = owaspsecureAttackUrl(
+    ctx,
+    `attacks/fetch_insecure.php?url=${encodeURIComponent(internalUrl)}`
+  );
+  const doc = await ctx.probe.get(fetchUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/internal-gateway|"service"\s*:\s*"internal-gateway"/i.test(doc.body)) return NEGATIVE;
+  if (!/"status"\s*:\s*"ok"/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: fetchUrl,
+      internalUrl,
+      snippet: doc.body.match(/\{[\s\S]{0,120}internal-gateway[\s\S]{0,80}\}/i)?.[0]?.slice(0, 120) ?? "internal health JSON echoed",
+      note: "owaspsecure.com GET attacks/fetch_insecure.php reaches attacks/internal/health.json — A10 SSRF training oracle beyond public example.com fetch"
+    }
+  };
+};
+
+const owaspsecureSsrfInternalHealthRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a10_ssrf\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureSsrfInternalHealthLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a10_ssrf route scan — open fetcher returns internal-gateway health.json body (live internal SSRF oracle)"
     }
   };
 };
@@ -110257,6 +110398,10 @@ export const RULES: Record<string, Rule> = {
   owaspsecureBacFileDorRouteLiveOracle,
   owaspsecureBacMassAssignmentLiveOracle,
   owaspsecureBacMassAssignmentRouteLiveOracle,
+  owaspsecureBacIdorUuidLiveOracle,
+  owaspsecureBacIdorUuidRouteLiveOracle,
+  owaspsecureSsrfInternalHealthLiveOracle,
+  owaspsecureSsrfInternalHealthRouteLiveOracle,
   guardmarlyScanLiveOracle,
   guardmarlyScanRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,
@@ -112945,6 +113090,8 @@ export const RULES: Record<string, Rule> = {
   oopssecMiddlewareBypassRouteLiveOracle,
   clientSideOopssecInformationDisclosureEvidence,
   oopssecInformationDisclosureApiErrorRouteLiveOracle,
+  clientSideOopssecPlaintextPasswordLogsEvidence,
+  oopssecPlaintextPasswordLogsRouteLiveOracle,
   clientSideOopssecNextPublicEnvEvidence,
   oopssecNextPublicEnvRouteLiveOracle,
   clientSideOopssecSupplyChainEvidence,
