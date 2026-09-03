@@ -8123,6 +8123,24 @@
       "slug": "owaspsecure-logging-threshold-alerts-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/threshold_alerts/fail_insecure.php records 10 failures with No thresholds or alerting; owaspsecure.com/demo/a09_logging/insecure.php findings include +owaspsecure-logging-threshold-alerts-live-oracle +route; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-orders-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/sql-injection-writeup documents UNION-based SQLi via unsanitized status filter in POST /api/orders/search (OSS{sql_1nj3ct10n_vuln3r4b1l1ty}); koadt.github.io/oss-oopssec-store/posts/sql-injection-writeup/ findings 7→9 (+oopssec-orders-search-sqli-route-live-oracle +client-side-oopssec-orders-search-sqli-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-xss-stored-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/xss_stored/xss_demo.php?mode=raw stores raw HTML in session comments (redirect:manual + PHPSESSID cookie replay); owaspsecure.com/demo/a03_injection/insecure.php findings 9→11 (+owaspsecure-injection-xss-stored-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-bac-function-level-promote-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/function_level/promote_insecure.php returns Promoted user_id=2 to admin (insecure); owaspsecure.com/demo/a01_bac/insecure.php findings 7→9 (+owaspsecure-bac-function-level-promote-live-oracle +route); benchmark 6/6 maintained"
     }
   ]
 }

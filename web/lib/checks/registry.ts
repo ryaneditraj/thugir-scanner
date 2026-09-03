@@ -6448,6 +6448,70 @@ const oopssecProductSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- OopsSec Store orders-search SQLi walkthrough (posts/sql-injection-writeup) ---------
+const CLIENT_OOPSSEC_ORDERS_SEARCH_SQLI_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "Orders search SQLi walkthrough title",
+    re: /SQL Injection:\s*From Dropdown to Database Dump|From Dropdown to Database Dump/i
+  },
+  {
+    label: "POST /api/orders/search status filter",
+    re: /\/api\/orders\/search|order status filter|status string from a dropdown/i
+  },
+  {
+    label: "UNION SELECT users credential extraction",
+    re: /UNION SELECT id, email, password, role|dump the entire users table/i
+  },
+  {
+    label: "Orders search SQLi walkthrough route",
+    re: /\/posts\/sql-injection-writeup/i
+  },
+  {
+    label: "Orders search SQLi flag",
+    re: /OSS\{sql_1nj3ct10n_vuln3r4b1l1ty\}/i
+  }
+];
+
+const clientSideOopssecOrdersSearchSqliEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_OOPSSEC_ORDERS_SEARCH_SQLI_RES) {
+    const m = ctx.combined.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  if (!/OopsSec Store|orders\/search|order status|SQL injection/i.test(ctx.combined)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.91 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "OopsSec Store walkthrough documents UNION-based SQL injection via unsanitized status filter in POST /api/orders/search"
+    }
+  };
+};
+
+const oopssecOrdersSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/posts\/sql-injection-writeup/i.test(pageUrl)) return NEGATIVE;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecOrdersSearchSqliEvidence
+  );
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OopsSec Store /posts/sql-injection-writeup route scan — walkthrough documents UNION-based SQLi via unsanitized status filter in POST /api/orders/search"
+    }
+  };
+};
+
 // --- OopsSec Store second-order SQLi walkthrough (posts/second-order-sql-injection) -----
 const CLIENT_OOPSSEC_SECOND_ORDER_SQLI_RES: { label: string; re: RegExp }[] = [
   {
@@ -43534,6 +43598,101 @@ const owaspsecureLoggingThresholdAlertsRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "owaspsecure.com /demo/a09_logging route scan — Attack 4 repeated auth failures never trigger alerts (live monitoring failure oracle)"
+    }
+  };
+};
+
+const owaspsecureInjectionXssStoredLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const xssUrl = owaspsecureAttackUrl(ctx, "attacks/xss_stored/xss_demo.php?mode=raw");
+  const probe = `thugir-xss-${Date.now()}`;
+  const postBody = new URLSearchParams({ action: "add", content: probe }).toString();
+  const postDoc = await ctx.probe.get(xssUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if ((postDoc.status < 200 || postDoc.status >= 500) && postDoc.status !== 302) return NEGATIVE;
+  const sessionCookie =
+    postDoc.setCookies.find((c) => /^PHPSESSID=/i.test(c))?.split(";")[0] ?? null;
+  if (!sessionCookie) return NEGATIVE;
+  const followUrl = postDoc.finalUrl || xssUrl;
+  const doc = await ctx.probe.get(followUrl, {
+    maxBytes: 16384,
+    timeoutMs: 15000,
+    headers: { Cookie: sessionCookie }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!doc.body.includes(probe)) return NEGATIVE;
+  if (!/Stored XSS|Session .?Comments.?/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: xssUrl,
+      snippet: doc.body.match(new RegExp(`.{0,40}${probe}.{0,40}`))?.[0]?.slice(0, 120) ?? probe,
+      note: "owaspsecure.com POST attacks/xss_stored/xss_demo.php stores attacker HTML in session comments without sanitization — A03 stored XSS training oracle"
+    }
+  };
+};
+
+const owaspsecureInjectionXssStoredRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a03_injection\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureInjectionXssStoredLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a03_injection route scan — Attack stored XSS demo persists raw HTML in session comments (live XSS oracle)"
+    }
+  };
+};
+
+const owaspsecureBacFunctionLevelPromoteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const promoteUrl = owaspsecureAttackUrl(ctx, "attacks/function_level/promote_insecure.php");
+  const postBody = new URLSearchParams({ user_id: "2", role: "admin" }).toString();
+  const doc = await ctx.probe.get(promoteUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Promoted user_id=2 to admin \(insecure\)/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: promoteUrl,
+      snippet: doc.body.match(/Promoted user_id=2 to admin \(insecure\)/i)?.[0]?.slice(0, 100) ?? "vertical privilege escalation",
+      note: "owaspsecure.com POST attacks/function_level/promote_insecure.php grants admin role without authorization check — A01 function-level access control training oracle"
+    }
+  };
+};
+
+const owaspsecureBacFunctionLevelPromoteRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a01_bac\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureBacFunctionLevelPromoteLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a01_bac route scan — Attack function-level promote grants admin without authorization (live vertical privilege escalation oracle)"
     }
   };
 };
@@ -109967,6 +110126,10 @@ export const RULES: Record<string, Rule> = {
   owaspsecureLoggingPiiSecretsRouteLiveOracle,
   owaspsecureLoggingThresholdAlertsLiveOracle,
   owaspsecureLoggingThresholdAlertsRouteLiveOracle,
+  owaspsecureInjectionXssStoredLiveOracle,
+  owaspsecureInjectionXssStoredRouteLiveOracle,
+  owaspsecureBacFunctionLevelPromoteLiveOracle,
+  owaspsecureBacFunctionLevelPromoteRouteLiveOracle,
   guardmarlyScanLiveOracle,
   guardmarlyScanRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,
@@ -112620,6 +112783,8 @@ export const RULES: Record<string, Rule> = {
   clientSideOopssecXffSqliEvidence,
   clientSideOopssecBolaWishlistEvidence,
   clientSideOopssecProductSearchSqliEvidence,
+  clientSideOopssecOrdersSearchSqliEvidence,
+  oopssecOrdersSearchSqliRouteLiveOracle,
   clientSideOopssecSecondOrderSqliEvidence,
   oopssecSecondOrderSqliRouteLiveOracle,
   clientSideOopssecStoredXssReviewsEvidence,

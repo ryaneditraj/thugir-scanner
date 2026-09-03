@@ -22505,6 +22505,59 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-orders-search-sqli-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store orders-search SQLi walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/sql-injection-writeup documents UNION-based SQL injection via unsanitized status filter in POST /api/orders/search — order dropdown to database dump.",
+    impactOneline:
+      "Public walkthrough teaches SQL injection against e-commerce order status filters that concatenate user input into raw SQL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecOrdersSearchSqliEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Never concatenate order status filters into SQL; use parameterized queries or allowlisted enum values.",
+      steps: [
+        "Replace string-interpolated status filters with Prisma findMany and bound parameters.",
+        "Use allowlists for dropdown status values instead of interpolating POST body strings.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/orders/search endpoint concatenates the status filter into raw SQL. Show parameterized query fixes for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-orders-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store orders-search SQLi route live oracle",
+    description:
+      "When scanning /posts/sql-injection-writeup, the walkthrough documents UNION-based SQLi via unsanitized status filter in POST /api/orders/search — route-specific live oracle.",
+    impactOneline:
+      "OopsSec order search drops dropdown status into raw SQL, enabling UNION SELECT credential extraction from the users table.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecOrdersSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never concatenate order status filters into SQL; use parameterized queries or allowlisted enum values.",
+      steps: [
+        "Replace string-interpolated status filters with Prisma findMany and bound parameters.",
+        "Use allowlists for dropdown status values instead of interpolating POST body strings.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/sql-injection-writeup route scan confirms order status SQLi. Show parameterized query fixes for /api/orders/search.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-second-order-sqli-evidence",
     platform: "generic",
     category: "Injection",
@@ -76248,6 +76301,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /demo/a09_logging route scan confirms no alerts on repeated failures. Show route-level SIEM threshold remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-xss-stored-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 stored XSS live oracle",
+    description:
+      "POST attacks/xss_stored/xss_demo.php?mode=raw on owaspsecure.com stores attacker-controlled HTML in session comments without sanitization — A03 stored XSS training oracle.",
+    impactOneline:
+      "Unsanitized stored comments on owaspsecure.com enable persistent XSS against other users viewing the demo.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionXssStoredLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize all user HTML before storage and on output.",
+      steps: [
+        "Use a strict HTML sanitizer or encode output with htmlspecialchars.",
+        "Apply Content-Security-Policy to block inline script execution.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our xss_demo.php stores raw HTML in session comments. Show output encoding and CSP remediation for stored XSS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-xss-stored-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 injection route stored XSS live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, POST xss_stored/xss_demo.php confirms live stored XSS — route-specific A03 injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm live stored XSS, not only client-side evidence markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionXssStoredRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize all user HTML before storage and on output.",
+      steps: [
+        "Use a strict HTML sanitizer or encode output with htmlspecialchars.",
+        "Apply Content-Security-Policy to block inline script execution.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms stored XSS in session comments. Show route-level output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-function-level-promote-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "owaspsecure.com A01 function-level promote live oracle",
+    description:
+      "POST attacks/function_level/promote_insecure.php on owaspsecure.com grants admin role to arbitrary user_id without authorization — A01 function-level access control training oracle.",
+    impactOneline:
+      "Missing function-level authorization on owaspsecure.com enables vertical privilege escalation to admin.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacFunctionLevelPromoteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce role checks on every privileged function endpoint.",
+      steps: [
+        "Require authenticated admin session before role-promotion endpoints execute.",
+        "Use server-side authorization middleware on all privileged actions.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our promote_insecure.php grants admin without authorization. Show function-level access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-function-level-promote-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "owaspsecure.com A01 BAC route function-level promote live oracle",
+    description:
+      "When scanning /demo/a01_bac/insecure.php on owaspsecure.com, POST function_level/promote_insecure.php confirms live vertical privilege escalation — route-specific A01 broken access control oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A01 lab should confirm live function-level privilege escalation, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacFunctionLevelPromoteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce role checks on every privileged function endpoint.",
+      steps: [
+        "Require authenticated admin session before role-promotion endpoints execute.",
+        "Use server-side authorization middleware on all privileged actions.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a01_bac route scan confirms unauthenticated admin promotion. Show route-level authorization remediation.",
     version: 1,
     enabled: true
   },
