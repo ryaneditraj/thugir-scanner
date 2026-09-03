@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T09:12:00.000Z",
+  "updated_at": "2026-09-03T10:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927/",
+      "source": "kOaDT/oss-oopssec-store challenges.json — CVE-2025-29927 Next.js middleware auth bypass walkthrough (chapter 03; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access/",
+      "source": "kOaDT/oss-oopssec-store challenges.json — SSRF via support form internal page access walkthrough (chapter 08; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/",
+      "source": "kOaDT/oss-oopssec-store challenges.json — BFLA live-stream hijack walkthrough (chapter 02; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/next-public-env-variable-leak/",
+      "source": "kOaDT/oss-oopssec-store challenges.json — NEXT_PUBLIC_ env secret leak walkthrough (chapter 01 recon; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/aes-cbc-padding-oracle-forged-share-token/",
+      "source": "kOaDT/oss-oopssec-store challenges.json — AES-CBC padding oracle forged share token walkthrough (chapter 09 crypto; web search 10 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ansede.onrender.com/scan",
       "source": "mattybellx/Ansede — browser SAST playground with baked-in IDOR/SQLi/XSS/secret demo snippets (Show HN-style OSS; Render deploy; web search 09 UTC)",
@@ -11328,5 +11353,5 @@
       "auth": "oss_deploy"
     }
   ],
-  "discovery_urls_added": 45
+  "discovery_urls_added": 50
 }

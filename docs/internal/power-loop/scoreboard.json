@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T09:25:00.000Z",
+  "updated_at": "2026-09-03T10:08:18.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3057,
-  "total_findings": 34214,
+  "total_sites_scanned": 3063,
+  "total_findings": 34311,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2116,
-  "discovery_findings": 28130,
+  "discovery_urls_added": 2121,
+  "discovery_findings": 28175,
   "improvements_shipped": 1317,
-  "last_run": "2026-09-03T09:25:00.000Z",
+  "last_run": "2026-09-03T10:08:18.000Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 52,
@@ -50,35 +50,35 @@
       },
       "note": "Stable 6/6 first-pass recall on primary Heroku (52 findings, 39 juice-shop live oracles; secret-resend present)"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 6,
-      "findings": 83,
-      "focus": "ucu-owasp XSS vanity route + VWAD voice-goat stale listing + duck-store testimonials SPA + oopssec JWT/race walkthroughs",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 5,
+      "findings": 45,
+      "focus": "oopssec challenges.json walkthroughs — CVE-2025-29927 middleware bypass, SSRF support form, BFLA live-stream hijack, NEXT_PUBLIC_ env leak, AES-CBC padding oracle",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles)",
-      "ucu-owasp-ctf.vercel.app/xss/: +ucu-owasp-ctf-xss-route-live-oracle (3→4) — A07 session cookie theft via Firebase hub bundle",
-      "vwad.owasp.org/app/voice-goat/: +vwad-voice-goat-route-live-oracle (6→7) — stale 404 listing oracle",
-      "ucu-owasp-ctf.vercel.app/injection/: reflexion-escalated-ssti FP suppressed (5→4)",
-      "duck-store.escape.tech/testimonials: 47 findings — full duck-store oracle cluster on testimonials SPA",
-      "koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass: 10 findings — oopssec JWT walkthrough route oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles; secret-resend present)",
+      "koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927/: 9 findings — oopssec-middleware-bypass-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access/: 7 findings — oopssec-ssrf-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/: 8 findings — oopssec-live-stream-bfla-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/next-public-env-variable-leak/: 9 findings — oopssec-next-public-env-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/aes-cbc-padding-oracle-forged-share-token/: 12 findings — oopssec-aes-cbc-padding-oracle-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "damn-vulnerable-startup.fly.dev/challenges/* — Fly.io 500/timeout from cloud agent",
+      "damn-vulnerable-startup.fly.dev/challenges/* unreachable from cloud agent (3 errors this run)",
       "duck-store coupons/MCP/register APIs + appsec-ci comments + vaultapp IDOR + wrongsecrets 67/68 + securebank CSRF still queued",
       "zen-demo-java.fly.dev unreachable (DNS/offline)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 52,
-    "ucu-owasp-ctf.vercel.app/xss/": 4,
-    "vwad.owasp.org/app/voice-goat/": 7,
-    "duck-store.escape.tech/testimonials": 47,
-    "duck-store.escape.tech/api/v1/testimonials/1": 43,
-    "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse": 13
+    "koadt.github.io/oss-oopssec-store/posts/aes-cbc-padding-oracle-forged-share-token/": 12,
+    "koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927/": 9,
+    "koadt.github.io/oss-oopssec-store/posts/next-public-env-variable-leak/": 9,
+    "koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/": 8,
+    "koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access/": 7
   }
 }
