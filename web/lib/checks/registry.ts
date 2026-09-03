@@ -105917,7 +105917,7 @@ const istEduFilesClientLfiRouteLiveOracle: Rule = async (ctx) => {
   } catch {
     return NEGATIVE;
   }
-  if (!/\/(?:labs\/(?:lfi|path-traversal|xxe|cmdi)|files|notices)\/?$/i.test(pathname)) return NEGATIVE;
+  if (!/\/(?:labs\/(?:lfi|path-traversal|cmdi)|files|notices)\/?$/i.test(pathname)) return NEGATIVE;
   const bundle = await istEduVulnPortalBundleCorpus(ctx);
   if (!bundle) return NEGATIVE;
   if (!/Document Library/i.test(bundle)) return NEGATIVE;
