@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T19:10:00.000Z",
+  "updated_at": "2026-09-03T20:18:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://owaspsecure.com/demo/a03_injection/attacks/sql_blind_time/count_insecure.php",
+      "source": "owaspsecure.com A03 injection — boolean/time-based blind SQLi count oracle (attacks/sql_blind_time; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a03_injection/attacks/sql_second_order/admin_view_insecure.php",
+      "source": "owaspsecure.com A03 injection — second-order SQLi admin view oracle (stored bio detonation; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection/",
+      "source": "kOaDT/oss-oopssec-store challenges.json — X-Forwarded-For header SQLi walkthrough (ch.05 SQLi; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-password-reset/",
+      "source": "kOaDT/oss-oopssec-store challenges.json — insecure password reset token oracle (ch.07 auth; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/weak-md5-hashing-admin-compromise/",
+      "source": "kOaDT/oss-oopssec-store challenges.json — weak MD5 password hashing admin compromise walkthrough (ch.09 crypto; web search 20 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/information-disclosure-api-error/",
       "source": "kOaDT/oss-oopssec-store challenges.json — verbose API error debug disclosure walkthrough (ch.02 recon; web search 19 UTC)",
