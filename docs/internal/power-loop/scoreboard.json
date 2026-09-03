@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T20:22:00.000Z",
+  "updated_at": "2026-09-03T21:21:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2771,
-  "total_findings": 27225,
+  "total_sites_scanned": 2780,
+  "total_findings": 27409,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1971,
-  "discovery_findings": 23060,
+  "discovery_urls_added": 1976,
+  "discovery_findings": 23193,
   "improvements_shipped": 1350,
-  "last_run": "2026-09-03T20:22:00.000Z",
+  "last_run": "2026-09-03T21:21:00.000Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,43 +48,41 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 41 juice-shop live oracles); secret-resend present"
+      "note": "Stable 6/6 first-pass recall (51 findings, 40 juice-shop live oracles); secret-resend present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 73,
-      "focus": "owaspsecure A03 blind-time + second-order attack routes + oopssec XFF SQLi + insecure-password-reset + weak-MD5 (+ bonus drain a02_crypto/a04_insecure_design/react2shell)",
-      "improvements_shipped_this_run": 3
+      "findings": 133,
+      "focus": "oopssec self-xss-csrf + jwt-alg-confusion + xxe-supplier-import + insecure-randomness-gift-card + pwnshop debug/info (+ drain owaspsecure blind-time/second-order + oopssec XFF SQLi)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 41 live oracles) — stable rich pass",
-      "owaspsecure.com/demo/a03_injection/insecure.php: 13→17 findings — owaspsecure-injection-sqli-blind-time + second-order route oracles shipped",
-      "owaspsecure.com/demo/a03_injection/attacks/sql_blind_time/count_insecure.php: 10 findings — route-specific blind-time oracle now live",
-      "koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection: 11 findings — oopssec-xff-sqli-route-live-oracle confirmed",
-      "koadt.github.io/oss-oopssec-store/posts/insecure-password-reset: 11 findings — oopssec-insecure-password-reset-route-live-oracle confirmed",
-      "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse: 13 findings — oopssec-race-condition-coupon-route-live-oracle via walkthrough fetch"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 40 live oracles) — stable rich pass",
+      "pwnshop.ctfsecurity.com/debug/info: 48 findings — pwnshop-debug-info-live-oracle + events-audit + prototype-pollution-search-filters",
+      "koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api: 7 findings — oopssec-jwt-alg-confusion-route-live-oracle confirmed",
+      "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import: 10 findings — oopssec-xxe-supplier-import-route-live-oracle confirmed",
+      "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card: 15 findings — oopssec-gift-card-randomness-route-live-oracle confirmed",
+      "koadt.github.io/oss-oopssec-store/posts/self-xss-csrf-profile-takeover: 14 findings — client-side CSRF evidence only, no chain route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "oopssec weak-md5-hashing-admin-compromise thin 8-finding hub without crypto route oracle",
-      "oopssec jwt-algorithm-confusion + self-xss-csrf still queued for next drain",
-      "wrongsecrets challenge-68 undeployed on Heroku — route oracle confirms undeployed state only"
+      "oopssec self-xss-csrf-profile-takeover thin 14-finding hub without route-specific self-xss+CSRF chain oracle",
+      "owaspsecure sql_blind_time + sql_second_order still generic A03 bundle (14 findings each) without route-specific oracles",
+      "oopssec weak-md5-hashing-admin-compromise still queued — thin crypto hub without route oracle"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "owaspsecure.com/demo/a03_injection/insecure.php": 17,
-    "owaspsecure.com/demo/a03_injection/attacks/sql_blind_time/count_insecure.php": 10,
-    "owaspsecure.com/demo/a03_injection/attacks/sql_second_order/admin_view_insecure.php": 10,
+    "juice-shop.herokuapp.com": 51,
+    "pwnshop.ctfsecurity.com/debug/info": 48,
+    "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card": 15,
+    "koadt.github.io/oss-oopssec-store/posts/self-xss-csrf-profile-takeover": 14,
+    "owaspsecure.com/demo/a03_injection/attacks/sql_blind_time/count_insecure.php": 14,
+    "owaspsecure.com/demo/a03_injection/attacks/sql_second_order/admin_view_insecure.php": 14,
+    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import": 10,
+    "koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api": 7,
     "koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection": 11,
-    "koadt.github.io/oss-oopssec-store/posts/insecure-password-reset": 11,
-    "koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse": 13,
-    "koadt.github.io/oss-oopssec-store/posts/weak-md5-hashing-admin-compromise": 8,
-    "owaspsecure.com/demo/a01_bac/insecure.php": 15,
-    "owaspsecure.com/demo/a10_ssrf/insecure.php": 11,
-    "duck-store.escape.tech/api/v1/users/me/profile": 33,
-    "demo.owasp-juice.shop/rest/memories": 27
+    "duck-store.escape.tech/api/v1/users/me/profile": 33
   }
 }
