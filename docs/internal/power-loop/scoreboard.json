@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T02:55:00.000Z",
+  "updated_at": "2026-09-03T03:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2995,
-  "total_findings": 33062,
+  "total_sites_scanned": 2998,
+  "total_findings": 33141,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2081,
-  "discovery_findings": 27374,
-  "improvements_shipped": 1299,
-  "last_run": "2026-09-03T02:55:00.000Z",
+  "discovery_findings": 27453,
+  "improvements_shipped": 1302,
+  "last_run": "2026-09-03T03:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "02",
+    "hour_utc": "03",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 51,
@@ -49,42 +49,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall on primary Heroku (51 findings, 38 live oracles; secret-resend + juice-shop-resend-key-live-oracle + juice-shop-iac-terraform-tls-key-live-oracle present)"
+      "note": "Stable 6/6 first-pass recall on primary Heroku (51 findings, 38 live oracles)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 182,
-      "focus": "sql-injection-lab login false-positive fix + dedicated oracle; code-breaking puzzle language oracles; fauxbank instructor + websec level14 + vulnforge level14 + oopssec walkthroughs + drained nextjs CVE middleware bypass, vulnbank v2/forgot-password, pwnshop track/forgot-password/profile, wrongsecrets-66, fabraix jailbreak-001",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 78,
+      "focus": "pwnshop forgot-password runner priority; fauxbank instructor dashboard; websec level14 PHP eval blacklist",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 38 live oracles)",
-      "sql-injection-lab.vercel.app/login: 5 findings — sql-injection-lab-login-route-live-oracle (pygoat-sql false positive removed)",
-      "code-breaking.fly.dev/puzzle/1/: 6 findings — code-breaking-puzzle-language-route-live-oracle (PHP function)",
-      "code-breaking.fly.dev/puzzle/6/: 6 findings — code-breaking-puzzle-language-route-live-oracle (Java javacon)",
-      "vulnbank.org/v2/forgot-password: 33 findings — vulnbank-v2-forgot-password-route-live-oracle + enumeration oracle",
-      "pwnshop.ctfsecurity.com/track/1: 47 findings — pwnshop track IDOR hub",
-      "pwnshop.ctfsecurity.com/profile: 49 findings — profile route oracle set"
+      "pwnshop.ctfsecurity.com/forgot-password: 54 findings — pwnshop-forgot-password-email-enumeration live+route oracles (was 24 thin pass)",
+      "pentest-fauxbank.vercel.app/instructor: 18 findings — fauxbank-instructor-live-oracle + route oracle",
+      "websec.fr/level14/: 6 findings — websec-level14-php-eval-blacklist-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "newly queued URLs (fauxbank/instructor, websec level14, vulnforge level14, oopssec walkthroughs) not drained this run — queue depth ahead of 8-url limit",
-      "zen-demo-java.fly.dev: unreachable timeout — Aikido Zen Java playground offline",
-      "pwnshop.ctfsecurity.com/forgot-password: 24 findings — hub fingerprint without dedicated forgot-password route oracle"
+      "queued oopssec prompt-injection + jwt-algorithm-confusion walkthroughs still pending drain (oracles exist)",
+      "vulnforge-academy level14 SSRF oracle exists — queue drain pending"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 51,
+    "pwnshop.ctfsecurity.com/forgot-password": 54,
+    "pentest-fauxbank.vercel.app/instructor": 18,
+    "websec.fr/level14/": 6,
     "sql-injection-lab.vercel.app/login": 5,
-    "code-breaking.fly.dev/puzzle/1/": 6,
-    "code-breaking.fly.dev/puzzle/6/": 6,
-    "vulnbank.org/v2/forgot-password": 33,
-    "pwnshop.ctfsecurity.com/track/1": 47,
-    "pwnshop.ctfsecurity.com/profile": 49,
-    "wrongsecrets.herokuapp.com/challenge/challenge-66": 19,
-    "playground.fabraix.com/challenges/jailbreak-001": 7,
-    "brokencrystals.com/api/ldap": 85
+    "code-breaking.fly.dev/puzzle/1/": 6
   }
 }

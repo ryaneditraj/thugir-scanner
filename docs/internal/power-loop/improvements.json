@@ -7889,6 +7889,24 @@
       "slug": "code-breaking-puzzle-language-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: puzzle/1 easy-function (PHP 2018/function) and puzzle/6 medium-javacon (Java 2018/javacon) tier titles; code-breaking.fly.dev/puzzle/1 findings 5→6 (+code-breaking-puzzle-language-route-live-oracle); puzzle/6 findings 5→6 (+code-breaking-puzzle-language-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-forgot-password-runner-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for pwnshop-forgot-password-email-enumeration live+route on /forgot-password route scans; pwnshop.ctfsecurity.com/forgot-password findings 24→54 (+pwnshop-forgot-password-email-enumeration-live-oracle +route); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-instructor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/instructor with admin/admin session returns switches{idor,sqli,xss,csrf,weakAuth}; pentest-fauxbank.vercel.app/instructor findings 18 (+fauxbank-instructor-live-oracle +fauxbank-instructor-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level14-php-eval-blacklist-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level14/source.php documents 25-char PHP eval with get_defined_functions blacklist and preg_match loop — $blacklist{index} bypass; websec.fr/level14/ findings 5→6 (+websec-level14-php-eval-blacklist-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }
