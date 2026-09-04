@@ -2034,6 +2034,12 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureDesignMagicLinkRouteLiveOracle",
   "owaspsecureIntegrityUnserializeLiveOracle",
   "owaspsecureIntegrityUnserializeRouteLiveOracle",
+  "owaspsecureIntegritySignedUpdateLiveOracle",
+  "owaspsecureIntegritySignedUpdateRouteLiveOracle",
+  "owaspsecureIntegrityPluginUploadLiveOracle",
+  "owaspsecureIntegrityPluginUploadRouteLiveOracle",
+  "owaspsecureIntegrityCicdDeployLiveOracle",
+  "owaspsecureIntegrityCicdDeployRouteLiveOracle",
   "owaspsecureLoggingAuthEventsLiveOracle",
   "owaspsecureLoggingAuthEventsRouteLiveOracle",
   "owaspsecureLoggingPiiSecretsLiveOracle",
@@ -17213,7 +17219,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       if (
         /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a08_integrity\b/i.test(targetInput) &&
-        p.slug.startsWith("owaspsecure-integrity-unserialize")
+        p.slug.startsWith("owaspsecure-integrity-")
       )
         return -4;
       if (

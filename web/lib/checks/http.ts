@@ -225,7 +225,7 @@ async function fetchDocOnce(
     timeoutMs?: number;
     maxBytes?: number;
     method?: string;
-    body?: string;
+    body?: string | Uint8Array;
     headers?: Record<string, string>;
     redirect?: RequestRedirect;
   }
@@ -248,7 +248,7 @@ async function fetchDocOnce(
       method: opts.method ?? "GET",
       redirect: opts.redirect ?? "follow",
       signal: controller.signal,
-      body: opts.body,
+      body: opts.body as BodyInit | undefined,
       headers: { "User-Agent": userAgent, Accept: "*/*", ...(opts.headers ?? {}) }
     };
     const res = await fetch(url, fetchOpts);
@@ -310,7 +310,7 @@ export async function fetchDoc(
     timeoutMs?: number;
     maxBytes?: number;
     method?: string;
-    body?: string;
+    body?: string | Uint8Array;
     headers?: Record<string, string>;
     /** When "manual", redirect responses are returned without following Location. */
     redirect?: RequestRedirect;

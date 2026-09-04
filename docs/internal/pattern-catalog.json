@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-04T11:04:36.423Z",
-  "total": 3259,
-  "uniqueSlugs": 3251,
+  "generatedAt": "2026-09-04T12:11:22.233Z",
+  "total": 3265,
+  "uniqueSlugs": 3257,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3241,
+    "generic": 3247,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3174,
+    "deep": 3180,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 152,
-    "Security misconfiguration": 265,
+    "Security misconfiguration": 271,
     "Broken authentication": 205,
     "Injection": 528,
     "Cross-site scripting": 798,
@@ -2257,6 +2257,12 @@
     "owaspsecure-injection-union-search-route-live-oracle",
     "owaspsecure-injection-xss-stored-live-oracle",
     "owaspsecure-injection-xss-stored-route-live-oracle",
+    "owaspsecure-integrity-cicd-deploy-live-oracle",
+    "owaspsecure-integrity-cicd-deploy-route-live-oracle",
+    "owaspsecure-integrity-plugin-upload-live-oracle",
+    "owaspsecure-integrity-plugin-upload-route-live-oracle",
+    "owaspsecure-integrity-signed-update-live-oracle",
+    "owaspsecure-integrity-signed-update-route-live-oracle",
     "owaspsecure-integrity-unserialize-live-oracle",
     "owaspsecure-integrity-unserialize-route-live-oracle",
     "owaspsecure-logging-admin-action-live-oracle",

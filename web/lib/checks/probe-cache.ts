@@ -32,10 +32,14 @@ async function fetchWithGithackFallback(url: string, opts: FetchOpts): Promise<F
 function cacheKey(url: string, opts: FetchOpts = {}): string {
   const method = opts.method ?? "GET";
   const body = opts.body ?? "";
+  const bodyKey =
+    typeof body === "string"
+      ? body
+      : Buffer.from(body).toString("base64");
   const hdr = opts.headers ? JSON.stringify(opts.headers) : "";
   const maxBytes = opts.maxBytes ?? "";
   const redirect = opts.redirect ?? "";
-  return `${method}:${url}:${body}:${hdr}:${maxBytes}:${redirect}`;
+  return `${method}:${url}:${bodyKey}:${hdr}:${maxBytes}:${redirect}`;
 }
 
 /** Dedupes identical HTTP probes within a single scan (Cycle 16–17). */
