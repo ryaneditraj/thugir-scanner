@@ -8519,6 +8519,24 @@
       "slug": "owaspsecure-voc-unpinned-latest-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/pinned_versions/demo_insecure.html loads lodash@latest from cdn.jsdelivr.net without integrity attribute; owaspsecure.com/demo/a06_voc/insecure.php findings 5→19 (+owaspsecure-voc-unpinned-latest-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-portal-hub-live-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isDvwuTierSpecificLabRoute suppresses dvwu-portal-sqli/search-sqli/ssrf-redirect live oracles on /labs/jwt|ssti|file-upload|xxe|deserialization routes; dvwu.vercel.app/labs/jwt findings 13→10 (-dvwu-portal-sqli-live-oracle -dvwu-search-sqli-live-oracle -dvwu-ssrf-redirect-live-oracle, +dvwu-jwt-lab-route-live-oracle retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:dvwu.vercel.app",
+      "slug": "dvwu-file-upload-xxe-deserialization-priority-queue",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended dvwu.vercel.app/labs/file-upload + /labs/xxe + /labs/deserialization to priority_discovery_urls front; runner -4 priority for dvwu-file-upload-lab/dvwu-xxe/dvwu-deserialization on matching routes; file-upload 0→10 (+dvwu-file-upload-lab-route-live-oracle), xxe 0→12 (+dvwu-xxe-lab-route-live-oracle), deserialization 0→10 (+dvwu-deserialization-lab-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-debug-events-runner-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended pwnshop.ctfsecurity.com/debug/info + /api/v1/events to priority_discovery_urls; runner -4 priority for pwnshop-debug-info on /debug/info; pwnshop.ctfsecurity.com/debug/info findings 0→48 (+pwnshop-debug-info-live-oracle +route), /api/v1/events 0→26 (+pwnshop-events-audit-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

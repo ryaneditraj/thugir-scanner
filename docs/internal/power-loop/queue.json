@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T15:18:00.000Z",
+  "updated_at": "2026-09-04T16:03:42.827Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://dvwu.vercel.app/labs/file-upload",
+      "source": "zahidoverflow/dvwu — file-upload stored XSS lab route (scoreboard gap 16 UTC; portal-hub suppression)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/xxe",
+      "source": "zahidoverflow/dvwu — XXE training lab route (scoreboard gap 16 UTC; portal-hub suppression)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/deserialization",
+      "source": "zahidoverflow/dvwu — insecure deserialization lab route (scoreboard gap 16 UTC; portal-hub suppression)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/debug/info",
+      "source": "ctfsec/pwnshop — PWN-018 debug endpoint (priority drain 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
+      "source": "ctfsec/pwnshop — PWN-005 audit log API (priority drain 16 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/genai/models/config",
       "source": "atlas-crew/Chimera — CHM-AI-003 genai model config disclosure oracle (GitHub vuln-api genai routes; scoreboard gap 15 UTC)",
@@ -27,18 +52,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://pwnshop.ctfsecurity.com/debug/info",
-      "source": "ctfsec/pwnshop — PWN-018 public debug endpoint leaks session secret + DB creds (vulnerabilities index; web search 14 UTC)",
-      "auth": "public_demo"
-    },
-    {
       "url": "https://pwnshop.ctfsecurity.com/chat",
       "source": "ctfsec/pwnshop — LLM chat prompt injection + Groq API chain oracle PWN-035/036 (vulnerabilities index; web search 14 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
-      "source": "ctfsec/pwnshop — PWN-005 unauthenticated audit log API GET /api/v1/events (vulnerabilities index; web search 14 UTC)",
       "auth": "public_demo"
     },
     {
@@ -10658,31 +10673,6 @@
     {
       "url": "https://ist-edu-bd.vercel.app/idor",
       "source": "zahidoverflow/damn-vulnerable-web-university — IDOR training route (Vercel live demo)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/file-upload",
-      "source": "zahidoverflow/dvwu — file upload training lab route (Vercel live demo; /labs/* portal)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/xxe",
-      "source": "zahidoverflow/dvwu — XXE training lab route (Vercel live demo; /labs/* portal)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/deserialization",
-      "source": "zahidoverflow/dvwu — insecure deserialization training lab route (Vercel live demo)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/jwt",
-      "source": "zahidoverflow/dvwu — JWT attacks training lab route (Vercel live demo)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://dvwu.vercel.app/labs/ssti",
-      "source": "zahidoverflow/dvwu — SSTI training lab route (Vercel live demo)",
       "auth": "public_demo"
     }
   ],

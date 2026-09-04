@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T15:22:00.000Z",
+  "updated_at": "2026-09-04T16:29:05.287Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3122,
-  "total_findings": 35290,
+  "total_sites_scanned": 3136,
+  "total_findings": 35559,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1993,
-  "discovery_findings": 28763,
-  "improvements_shipped": 1404,
-  "last_run": "2026-09-04T15:22:00.000Z",
+  "discovery_findings": 28879,
+  "improvements_shipped": 1407,
+  "last_run": "2026-09-04T16:29:05.287Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,46 +48,45 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall on primary Heroku (53 findings, 40 live oracles; secret-resend present)"
+      "note": "Stable 6/6 first-pass recall on primary Heroku (52 findings, 40 live oracles; secret-resend present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 74,
-      "focus": "Chimera genai models/config + SecureBank CSRF + UCU OWASP CTF XSS + DVWU jwt/ssti labs + drained oopssec mass-assignment/product-search/malicious-file-upload",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 5,
+      "findings": 116,
+      "focus": "DVWU file-upload/xxe/deserialization lab drain + portal-hub suppression + pwnshop debug/events priority",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; secret-resend present)",
-      "chimera.atlascrew.dev/api/v1/genai/models/config: 8 findings — chimera-genai-models-config-disclosure-route-live-oracle",
-      "securebank-blog.vercel.app/csrf: 4 findings — securebank-blog-csrf-attack-page-route-live-oracle",
-      "ucu-owasp-ctf.vercel.app/xss/: 4 findings — ucu-owasp-ctf-xss-route-live-oracle",
-      "dvwu.vercel.app/labs/jwt: 13 findings — dvwu-jwt-lab-route-live-oracle",
-      "dvwu.vercel.app/labs/ssti: 13 findings — dvwu-ssti-lab-route-live-oracle",
-      "koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/: 9 findings — oopssec-mass-assignment-admin-route-live-oracle",
-      "koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/: 10 findings — oopssec-product-search-sqli-route-live-oracle",
-      "koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss/: 13 findings — oopssec-malicious-file-upload-stored-xss-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 40 live oracles)",
+      "dvwu.vercel.app/labs/file-upload: 10 findings — dvwu-file-upload-lab-route-live-oracle (hub oracles suppressed)",
+      "dvwu.vercel.app/labs/xxe: 12 findings — dvwu-xxe-lab-route-live-oracle",
+      "dvwu.vercel.app/labs/deserialization: 10 findings — dvwu-deserialization-lab-route-live-oracle",
+      "dvwu.vercel.app/labs/jwt: 13→10 findings — portal-hub live oracles suppressed on tier-specific lab routes",
+      "pwnshop.ctfsecurity.com/debug/info: 48 findings — pwnshop-debug-info-live-oracle +route",
+      "pwnshop.ctfsecurity.com/api/v1/events: 26 findings — pwnshop-events-audit-live-oracle +route"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "dvwu xxe/deserialization/file-upload labs still queued at tail",
-      "oopssec walkthrough corpus-only — no live oopssec-store deploy to hit real API routes",
-      "DVWU jwt/ssti routes share portal hub fingerprints (sqli/ssrf) beyond tier-specific lab oracles"
+      "dvwu open-redirect/graphql labs still queued at tail",
+      "qa.brokencrystals.com chat/goto/aws routes queued but not yet drained",
+      "generic sql-error-disclosure + notices-file-lfi-probe still fire on DVWU lab shells alongside tier-specific oracles"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 53,
+    "juice-shop.herokuapp.com": 52,
+    "dvwu.vercel.app/labs/file-upload": 10,
+    "dvwu.vercel.app/labs/xxe": 12,
+    "dvwu.vercel.app/labs/deserialization": 10,
+    "dvwu.vercel.app/labs/jwt": 10,
+    "pwnshop.ctfsecurity.com/debug/info": 48,
+    "pwnshop.ctfsecurity.com/api/v1/events": 26,
     "chimera.atlascrew.dev/api/v1/genai/models/config": 8,
     "securebank-blog.vercel.app/csrf": 4,
     "ucu-owasp-ctf.vercel.app/xss": 4,
-    "dvwu.vercel.app/labs/jwt": 13,
     "dvwu.vercel.app/labs/ssti": 13,
     "koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss": 13,
-    "koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection": 10,
-    "koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation": 9,
-    "pwnshop.ctfsecurity.com/debug/info": 49,
-    "pwnshop.ctfsecurity.com/chat": 40,
     "qa.brokencrystals.com/api/chat": 88,
     "owaspsecure.com/demo/a06_voc/insecure.php": 19
   }
