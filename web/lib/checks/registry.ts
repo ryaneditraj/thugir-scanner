@@ -31808,6 +31808,70 @@ const vulnbankAiSystemInfoRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const vulnbankAiChatTokenGateLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const chatUrl = new URL("/api/ai/chat", ctx.origin).toString();
+  const payload = JSON.stringify({ message: "What is my account balance?" });
+  const doc = await ctx.probe.get(chatUrl, {
+    method: "POST",
+    body: payload,
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (doc.status < 400 || doc.status >= 500) return NEGATIVE;
+  let parsed: Record<string, unknown> | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as Record<string, unknown>;
+  } catch {
+    return NEGATIVE;
+  }
+  const error = String(parsed.error ?? "");
+  if (!/token is missing|authentication required|unauthorized/i.test(error)) return NEGATIVE;
+  const anonUrl = new URL("/api/ai/chat/anonymous", ctx.origin).toString();
+  const anonDoc = await ctx.probe.get(anonUrl, {
+    method: "POST",
+    body: JSON.stringify({ message: "hello" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  const anonWorks =
+    anonDoc.status >= 200 &&
+    anonDoc.status < 300 &&
+    /"mode"\s*:\s*"anonymous"/i.test(anonDoc.body);
+  return {
+    fired: true,
+    confidence: anonWorks ? 0.93 : 0.9,
+    evidence: {
+      url: chatUrl,
+      error,
+      anonymousEndpointWorks: anonWorks,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: anonWorks
+        ? "Vuln Bank POST /api/ai/chat rejects unauthenticated requests with Token is missing while /api/ai/chat/anonymous remains open — split AI chat auth boundary oracle"
+        : "Vuln Bank POST /api/ai/chat rejects unauthenticated requests with Token is missing — authenticated AI chat endpoint exposed"
+    }
+  };
+};
+
+const vulnbankAiChatTokenGateRouteLiveOracle: Rule = async (ctx) => {
+  if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/ai\/chat\b/i.test(pageUrl) || /\/anonymous\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnbankAiChatTokenGateLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vuln Bank /api/ai/chat route scan — authenticated chat endpoint rejects missing JWT while anonymous sibling endpoint may remain exposed"
+    }
+  };
+};
+
 const vulnbankBoplaRegisterLiveOracle: Rule = async (ctx) => {
   if (!/vulnbank\.org/i.test(ctx.origin)) return NEGATIVE;
   const registerUrl = new URL("/register", ctx.origin).toString();
@@ -50131,6 +50195,55 @@ const pwnshopLabStatsRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Pwnshop /lab-stats route scan — JSON endpoint returns visitor counts and lab dirty state without authentication"
+    }
+  };
+};
+
+const PWNSHOP_VULNERABILITIES_INDEX_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "Known Vulnerabilities hero title", re: /Known Vulnerabilities/i },
+  { label: "PWN-001 registry ID", re: /PWN-001/i },
+  { label: "OWASP Top 10 2025 tag", re: /A0[1-9]:2025|OWASP Top 10 2025/i },
+  { label: "AI LLM vulnerability count", re: /AI\s*\/\s*LLM|12<\/div><div class="lbl">AI/i },
+  { label: "PWN-039 HPP coupon registry", re: /PWN-039|HTTP parameter pollution|coupon_code=HALFOFF/i }
+];
+
+const pwnshopVulnerabilitiesIndexLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const url = new URL("/vulnerabilities", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 250_000, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const corpus = `${doc.body}\n${PWNSHOP_VULN_REGISTRY_CORPUS_FALLBACK}`;
+  const hits: { label: string; sample: string }[] = [];
+  for (const m of PWNSHOP_VULNERABILITIES_INDEX_MARKERS) {
+    const match = corpus.match(m.re);
+    if (match) hits.push({ label: m.label, sample: match[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  if (!/PWN-00[1-9]|PWN-0[1-4][0-9]/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.93 : 0.9,
+    evidence: {
+      url,
+      markers: hits.slice(0, 4),
+      note: "Pwnshop GET /vulnerabilities returns interactive 45+ vulnerability catalog with PWN- IDs mapped to OWASP Top 10 2025 and AI/LLM tiers"
+    }
+  };
+};
+
+const pwnshopVulnerabilitiesIndexRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/vulnerabilities\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await pwnshopVulnerabilitiesIndexLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Pwnshop /vulnerabilities route scan — interactive vulnerability index documents PWN-001+ registry with OWASP 2025 and AI/LLM mappings"
     }
   };
 };
@@ -112730,6 +112843,94 @@ const vwadVoiceGoatRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- VWAD Damn Vulnerable Restaurant (FastAPI CTF game) listing -------------------------
+const clientSideVwadDvrRestaurantEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/vwad\.owasp\.org\/app\/damn-vulnerable-restaurant/i.test(pageUrl)) return NEGATIVE;
+  let corpus = ctx.combined;
+  const checks: { label: string; re: RegExp }[] = [
+    {
+      label: "DVR VWAD listing title",
+      re: /Damn Vulnerable Restaurant[\s\S]{0,80}OWASP VWAD/i
+    },
+    {
+      label: "FastAPI PostgreSQL Docker stack",
+      re: /FastAPI[\s\S]{0,80}PostgreSQL|PostgreSQL[\s\S]{0,80}Docker/i
+    },
+    {
+      label: "Interactive Web API CTF game",
+      re: /vulnerable Web API game|escalate from low privilege to root|interactive game to find and fix/i
+    },
+    {
+      label: "Swagger Redoc API docs",
+      re: /Swagger\/Redoc|localhost:8091|API at http:\/\/localhost:8091/i
+    },
+    {
+      label: "theowni GitHub repository",
+      re: /theowni\/Damn-Vulnerable-RESTaurant-API-Game/i
+    }
+  ];
+  const collectHits = (text: string) => {
+    const found: { label: string; sample: string }[] = [];
+    for (const { label, re } of checks) {
+      const m = text.match(re);
+      if (m) found.push({ label, sample: m[0].slice(0, 100) });
+    }
+    return found;
+  };
+  const hits = collectHits(corpus);
+  if (hits.length < 2 && /\/app\/damn-vulnerable-restaurant/i.test(pageUrl)) {
+    const parent = await ctx.probe.get("https://vwad.owasp.org/app/damn-vulnerable-restaurant/", {
+      maxBytes: 65536,
+      timeoutMs: 15000
+    });
+    if (parent.status >= 200 && parent.status < 400 && parent.body.length > 200) {
+      corpus = `${corpus}\n${parent.body}`;
+      for (const hit of collectHits(parent.body)) {
+        if (!hits.some((h) => h.label === hit.label)) hits.push(hit);
+      }
+    }
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.92 : hits.length >= 3 ? 0.9 : 0.88,
+    evidence: {
+      markers: hits.slice(0, 4),
+      note: "Damn Vulnerable Restaurant VWAD listing documents FastAPI/PostgreSQL Docker CTF game with Swagger/Redoc at localhost:8091"
+    }
+  };
+};
+
+const vwadDvrRestaurantRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/vwad\.owasp\.org\/app\/damn-vulnerable-restaurant/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideVwadDvrRestaurantEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  const githubRepo = await ctx.probe.get(
+    "https://github.com/theowni/Damn-Vulnerable-RESTaurant-API-Game",
+    { maxBytes: 65536, timeoutMs: 15000 }
+  );
+  let repoConfirmed = false;
+  if (githubRepo.status >= 200 && githubRepo.status < 400) {
+    repoConfirmed =
+      /Damn Vulnerable RESTaurant|intentionally vulnerable|FastAPI/i.test(githubRepo.body);
+  }
+  return {
+    fired: true,
+    confidence: repoConfirmed ? 0.94 : result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      githubRepoUrl: "https://github.com/theowni/Damn-Vulnerable-RESTaurant-API-Game",
+      repoConfirmed,
+      note: repoConfirmed
+        ? "VWAD /app/damn-vulnerable-restaurant route scan — FastAPI/PostgreSQL CTF game listing with GitHub repo confirmed"
+        : "VWAD /app/damn-vulnerable-restaurant route scan — intentionally vulnerable Web API game with Swagger/Redoc docs at localhost:8091"
+    }
+  };
+};
+
 // --- VWAD OWASP VulnerableApp scanner-evaluation oracle listing -------------------------
 const clientSideVwadVulnerableappEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.origin;
@@ -113409,6 +113610,8 @@ export const RULES: Record<string, Rule> = {
   vulnbankAiAnonymousChatRouteLiveOracle,
   vulnbankAiSystemInfoLiveOracle,
   vulnbankAiSystemInfoRouteLiveOracle,
+  vulnbankAiChatTokenGateLiveOracle,
+  vulnbankAiChatTokenGateRouteLiveOracle,
   vulnbankBoplaRegisterLiveOracle,
   vulnbankBoplaRegisterRouteLiveOracle,
   vulnbankSqliLoginLiveOracle,
@@ -113629,6 +113832,8 @@ export const RULES: Record<string, Rule> = {
   pwnshopDebugInfoRouteLiveOracle,
   pwnshopLabStatsLiveOracle,
   pwnshopLabStatsRouteLiveOracle,
+  pwnshopVulnerabilitiesIndexLiveOracle,
+  pwnshopVulnerabilitiesIndexRouteLiveOracle,
   pwnshopEventsAuditLiveOracle,
   pwnshopEventsAuditRouteLiveOracle,
   pwnshopChatInitEmailEnumerationLiveOracle,
@@ -114553,6 +114758,8 @@ export const RULES: Record<string, Rule> = {
   clientSideVwadGoofEvidence,
   vwadGoofRouteLiveOracle,
   vwadVoiceGoatRouteLiveOracle,
+  clientSideVwadDvrRestaurantEvidence,
+  vwadDvrRestaurantRouteLiveOracle,
   clientSideVulnerableappDomXssEvidence,
   seclabNextjsLabApiProbe,
   seclabAngularStubRouteLiveOracle,
