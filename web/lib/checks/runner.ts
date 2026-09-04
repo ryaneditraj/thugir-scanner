@@ -2001,8 +2001,91 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureMisconfigPhpinfoRouteLiveOracle",
   "owaspsecureMisconfigDefaultCredsLiveOracle",
   "owaspsecureMisconfigDefaultCredsRouteLiveOracle",
+  "owaspsecureMisconfigExposedConfigLiveOracle",
+  "owaspsecureMisconfigExposedConfigRouteLiveOracle",
+  "owaspsecureMisconfigVerboseErrorLiveOracle",
+  "owaspsecureMisconfigVerboseErrorRouteLiveOracle",
   "owaspsecureCryptoPasswordMd5LiveOracle",
   "owaspsecureCryptoPasswordMd5RouteLiveOracle",
+  "owaspsecureCryptoPredictableTokensLiveOracle",
+  "owaspsecureCryptoPredictableTokensRouteLiveOracle",
+  "owaspsecureCryptoDataAtRestLiveOracle",
+  "owaspsecureCryptoDataAtRestRouteLiveOracle",
+  "owaspsecureCryptoIvReuseLiveOracle",
+  "owaspsecureCryptoIvReuseRouteLiveOracle",
+  "owaspsecureCryptoKeyRotationLiveOracle",
+  "owaspsecureCryptoKeyRotationRouteLiveOracle",
+  "owaspsecureCryptoSavePlainLiveOracle",
+  "owaspsecureCryptoSavePlainRouteLiveOracle",
+  "owaspsecureAuthSessionFixationLiveOracle",
+  "owaspsecureAuthSessionFixationRouteLiveOracle",
+  "owaspsecureAuthMfaBypassLiveOracle",
+  "owaspsecureAuthMfaBypassRouteLiveOracle",
+  "owaspsecureDesignPasswordResetLiveOracle",
+  "owaspsecureDesignPasswordResetRouteLiveOracle",
+  "owaspsecureDesignPasswordResetAttackPathRouteLiveOracle",
+  "owaspsecureDesignReauthEmailLiveOracle",
+  "owaspsecureDesignReauthEmailRouteLiveOracle",
+  "owaspsecureDesignCouponLogicLiveOracle",
+  "owaspsecureDesignCouponLogicRouteLiveOracle",
+  "owaspsecureDesignCsrfSettingsLiveOracle",
+  "owaspsecureDesignCsrfSettingsRouteLiveOracle",
+  "owaspsecureDesignMagicLinkLiveOracle",
+  "owaspsecureDesignMagicLinkRouteLiveOracle",
+  "owaspsecureIntegrityUnserializeLiveOracle",
+  "owaspsecureIntegrityUnserializeRouteLiveOracle",
+  "owaspsecureIntegritySignedUpdateLiveOracle",
+  "owaspsecureIntegritySignedUpdateRouteLiveOracle",
+  "owaspsecureIntegrityPluginUploadLiveOracle",
+  "owaspsecureIntegrityPluginUploadRouteLiveOracle",
+  "owaspsecureIntegrityCicdDeployLiveOracle",
+  "owaspsecureIntegrityCicdDeployRouteLiveOracle",
+  "owaspsecureIntegrityRemoteConfigLiveOracle",
+  "owaspsecureIntegrityRemoteConfigRouteLiveOracle",
+  "owaspsecureLoggingAuthEventsLiveOracle",
+  "owaspsecureLoggingAuthEventsRouteLiveOracle",
+  "owaspsecureLoggingPiiSecretsLiveOracle",
+  "owaspsecureLoggingPiiSecretsRouteLiveOracle",
+  "owaspsecureLoggingThresholdAlertsLiveOracle",
+  "owaspsecureLoggingThresholdAlertsRouteLiveOracle",
+  "owaspsecureLoggingAdminActionLiveOracle",
+  "owaspsecureLoggingAdminActionRouteLiveOracle",
+  "owaspsecureLoggingStructureTimeLiveOracle",
+  "owaspsecureLoggingStructureTimeRouteLiveOracle",
+  "owaspsecureLoggingIntegrityChainLiveOracle",
+  "owaspsecureLoggingIntegrityChainRouteLiveOracle",
+  "owaspsecureInjectionXssStoredLiveOracle",
+  "owaspsecureInjectionXssStoredRouteLiveOracle",
+  "owaspsecureBacFunctionLevelPromoteLiveOracle",
+  "owaspsecureBacFunctionLevelPromoteRouteLiveOracle",
+  "owaspsecureInjectionUnionSearchLiveOracle",
+  "owaspsecureInjectionUnionSearchRouteLiveOracle",
+  "owaspsecureInjectionSqliBlindTimeLiveOracle",
+  "owaspsecureInjectionSqliBlindTimeRouteLiveOracle",
+  "owaspsecureInjectionSqliSecondOrderLiveOracle",
+  "owaspsecureInjectionSqliSecondOrderRouteLiveOracle",
+  "owaspsecureInjectionStoreBioLiveOracle",
+  "owaspsecureInjectionStoreBioRouteLiveOracle",
+  "owaspsecureBacFileDorLiveOracle",
+  "owaspsecureBacFileDorRouteLiveOracle",
+  "owaspsecureBacMassAssignmentLiveOracle",
+  "owaspsecureBacMassAssignmentRouteLiveOracle",
+  "owaspsecureBacIdorUuidLiveOracle",
+  "owaspsecureBacIdorUuidRouteLiveOracle",
+  "owaspsecureSsrfInternalHealthLiveOracle",
+  "owaspsecureSsrfInternalHealthRouteLiveOracle",
+  "owaspsecureSsrfSocketProbeLiveOracle",
+  "owaspsecureSsrfSocketProbeRouteLiveOracle",
+  "owaspsecureSsrfInternalHealthDirectLiveOracle",
+  "owaspsecureSsrfInternalHealthDirectRouteLiveOracle",
+  "owaspsecureSsrfInternalAdminLiveOracle",
+  "owaspsecureSsrfInternalAdminRouteLiveOracle",
+  "owaspsecureSsrfInternalIndexDirectLiveOracle",
+  "owaspsecureSsrfInternalIndexDirectRouteLiveOracle",
+  "owaspsecureVocOutdatedJqueryLiveOracle",
+  "owaspsecureVocOutdatedJqueryRouteLiveOracle",
+  "owaspsecureVocCdnNoSriLiveOracle",
+  "owaspsecureVocCdnNoSriRouteLiveOracle",
   "guardmarlyScanLiveOracle",
   "guardmarlyScanRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
@@ -2446,6 +2529,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideOopssecMcpMaliciousServerEvidence",
   "oopssecMcpMaliciousServerRouteLiveOracle",
   "oopssecProductSearchSqliRouteLiveOracle",
+  "clientSideOopssecOrdersSearchSqliEvidence",
+  "oopssecOrdersSearchSqliRouteLiveOracle",
   "oopssecStoredXssReviewsRouteLiveOracle",
   "oopssecRaceConditionCouponRouteLiveOracle",
   "oopssecPriceManipulationRouteLiveOracle",
@@ -2457,11 +2542,15 @@ const DEEP_RULES = new Set<string>([
   "oopssecPathTraversalRouteLiveOracle",
   "clientSideOopssecCsrfAdminOrderEvidence",
   "oopssecCsrfAdminOrderRouteLiveOracle",
+  "clientSideOopssecSelfXssCsrfProfileEvidence",
+  "oopssecSelfXssCsrfProfileRouteLiveOracle",
   "oopssecSsrfRouteLiveOracle",
   "oopssecPromptInjectionRouteLiveOracle",
   "oopssecMiddlewareBypassRouteLiveOracle",
   "clientSideOopssecInformationDisclosureEvidence",
   "oopssecInformationDisclosureApiErrorRouteLiveOracle",
+  "clientSideOopssecPlaintextPasswordLogsEvidence",
+  "oopssecPlaintextPasswordLogsRouteLiveOracle",
   "clientSideOopssecNextPublicEnvEvidence",
   "oopssecNextPublicEnvRouteLiveOracle",
   "clientSideOopssecSupplyChainEvidence",
@@ -2470,6 +2559,8 @@ const DEEP_RULES = new Set<string>([
   "oopssecGiftCardRandomnessRouteLiveOracle",
   "clientSideOopssecInsecurePasswordResetEvidence",
   "oopssecInsecurePasswordResetRouteLiveOracle",
+  "clientSideOopssecWeakMd5HashingAdminEvidence",
+  "oopssecWeakMd5HashingAdminRouteLiveOracle",
   "clientSideOopssecOpenRedirectLoginBypassEvidence",
   "oopssecOpenRedirectLoginBypassRouteLiveOracle",
   "clientSideOopssecMassAssignmentAdminEvidence",
@@ -2765,6 +2856,8 @@ const DEEP_RULES = new Set<string>([
   "juiceShopProductsReviewsExposureRouteLiveOracle",
   "juiceShopAdminConfigLiveOracle",
   "juiceShopAdminConfigRouteLiveOracle",
+  "juiceShopSnippetsLiveOracle",
+  "juiceShopSnippetsRouteLiveOracle",
   "juiceShopLoginSqliLiveOracle",
   "juiceShopLoginRouteLiveOracle",
   "juiceShopChatbotApiLiveOracle",
@@ -3072,6 +3165,8 @@ const DEEP_RULES = new Set<string>([
   "finbotAdminCopilotRouteLiveOracle",
   "finbotHowItWorksLiveOracle",
   "finbotHowItWorksRouteLiveOracle",
+  "finbotPortalsLiveOracle",
+  "finbotPortalsRouteLiveOracle",
   "finbotDarklabSupplyChainLiveOracle",
   "finbotDarklabSupplyChainRouteLiveOracle",
   "finbotDarklabSupplyChainStatsLiveOracle",
@@ -3197,6 +3292,7 @@ const DEEP_RULES = new Set<string>([
   "bingoctfAuthGatedCtfRouteLiveOracle",
   "wrongsecretsChallengeLiveOracle",
   "wrongsecretsChallengeRouteLiveOracle",
+  "wrongsecretsChallenge0OpeningRouteLiveOracle",
   "wrongsecretsChallenge1GitHardcodedRouteLiveOracle",
   "wrongsecretsChallenge2ApplicationPropertiesRouteLiveOracle",
   "wrongsecretsChallenge3DockerEnvRouteLiveOracle",
@@ -3440,6 +3536,7 @@ const DEEP_RULES = new Set<string>([
   "aiSecurityCookieAuthRouteLiveOracle",
   "aiSecuritySupplyChainRouteLiveOracle",
   "aiSecurityVulnerableDepsRouteLiveOracle",
+  "aiSecurityHackedNpmPackagesLiveOracle",
   "aiSecurityHackedNpmPackagesRouteLiveOracle",
   "aiSecurityVulnerableNpmRouteLiveOracle",
   "aiSecuritySecurityHeadersRouteLiveOracle",
@@ -3975,6 +4072,7 @@ const DEEP_RULES = new Set<string>([
   "vulnforgeAcademyLevelIdorRouteLiveOracle",
   "vulnforgeAcademyLevelAuthRouteLiveOracle",
   "vulnforgeAcademyLevelFileUploadRouteLiveOracle",
+  "vulnforgeAcademyLevel16DoubleExtensionRouteLiveOracle",
   "vulnforgeAcademyLevel17ContentTypeRouteLiveOracle",
   "vulnforgeAcademyLevel18ExtensionBypassRouteLiveOracle",
   "vulnforgeAcademyLevelRceRouteLiveOracle",
@@ -4192,7 +4290,13 @@ const DEEP_RULES = new Set<string>([
   "bugforgeSsrfRouteLiveOracle",
   "bugforgeIdorRouteLiveOracle",
   "bugforgeGraphqlRouteLiveOracle",
+  "bugforgeXssRouteLiveOracle",
+  "bugforgeAuthRouteLiveOracle",
+  "bugforgeCsrfRouteLiveOracle",
+  "bugforgeSqliRouteLiveOracle",
   "webverselabsFixtureRouteLiveOracle",
+  "webverselabsOrbitdeskRouteLiveOracle",
+  "nosqlInjectionLabRouteLiveOracle",
   "todoerTasksIdorLiveOracle",
   "todoerTasksIdorRouteLiveOracle",
   "seclabPathTraversalLabsRouteLiveOracle",
@@ -9806,6 +9910,7 @@ function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
     "/posts/x-forwarded-for-sql-injection/",
     "/posts/x-forwarded-for-sql-injection",
     "/posts/sql-injection-writeup/",
+    "/posts/weak-md5-hashing-admin-compromise/",
     "/posts/product-search-sql-injection/",
     "/posts/client-side-price-manipulation/",
     "/posts/client-side-price-manipulation",
@@ -13980,6 +14085,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/insecure-password-reset/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-insecure-password-reset")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/weak-md5-hashing-admin-compromise/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-weak-md5-hashing-admin")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/sql-injection-writeup/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-orders-search-sqli")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
         /\/posts\/jwt-weak-secret-admin-bypass/i.test(targetInput) &&
         p.slug.startsWith("oopssec-jwt-weak-secret")
       )
@@ -13988,6 +14111,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
         /\/posts\/bola-wishlist-access/i.test(targetInput) &&
         p.slug.startsWith("oopssec-bola-wishlist")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/self-xss-csrf-profile-takeover/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-self-xss-csrf-profile")
       )
         return -4;
       if (
@@ -14754,9 +14883,27 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       )
         return -4;
       if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/snippets\/?(?:$|[?#])/i.test(targetInput) &&
+        !/\/snippets\/[A-Za-z0-9_-]+/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-snippets")
+      )
+        return -3;
+      if (
         /webverselabs-pro\.com/i.test(origin) &&
         /\/labs\/fixture\b/i.test(targetInput) &&
         p.slug === "webverselabs-fixture-route-live-oracle"
+      )
+        return -3;
+      if (
+        /webverselabs-pro\.com/i.test(origin) &&
+        /\/labs\/orbitdesk\b/i.test(targetInput) &&
+        p.slug === "webverselabs-orbitdesk-route-live-oracle"
+      )
+        return -3;
+      if (
+        /nosql-injection-lab\.vercel\.app/i.test(origin) &&
+        p.slug === "nosql-injection-lab-route-live-oracle"
       )
         return -3;
       if (
@@ -15548,6 +15695,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
         /\/level(?:s)?\/20\b|level20\.php|final-boss/i.test(targetInput) &&
         p.slug.startsWith("vulnforge-academy-level20-final-boss")
+      )
+        return -4;
+      if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level(?:s)?\/16\b|level16\.php/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level16-double-extension")
       )
         return -4;
       if (
@@ -16944,14 +17097,82 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a03_injection\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-injection-xss-stored")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a03_injection\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-injection-union-search")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a03_injection(?:\/insecure\.php|\/attacks\/sql_blind_time)/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-injection-sqli-blind-time")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a03_injection(?:\/insecure\.php|\/attacks\/sql_second_order)/i.test(targetInput) &&
+        (p.slug.startsWith("owaspsecure-injection-sqli-second-order") ||
+          p.slug.startsWith("owaspsecure-injection-store-bio"))
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a10_ssrf\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-ssrf-fetch")
       )
         return -4;
       if (
         /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a10_ssrf\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-ssrf-internal-health")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a10_ssrf\b/i.test(targetInput) &&
+        (p.slug.startsWith("owaspsecure-ssrf-socket-probe") ||
+          p.slug.startsWith("owaspsecure-ssrf-internal-health-direct") ||
+          p.slug.startsWith("owaspsecure-ssrf-internal-admin") ||
+          p.slug.startsWith("owaspsecure-ssrf-internal-index-direct"))
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a01_bac\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-bac-idor-numeric")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a01_bac\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-bac-idor-uuid")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a01_bac\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-bac-function-level-promote")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a01_bac\b/i.test(targetInput) &&
+        (p.slug.startsWith("owaspsecure-bac-file-dor") ||
+          p.slug.startsWith("owaspsecure-bac-mass-assignment"))
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a05_misconfig(?:\/insecure\.php|\/attacks\/exposed_config|\/attacks\/verbose_error)/i.test(
+          targetInput
+        ) &&
+        (p.slug.startsWith("owaspsecure-misconfig-exposed-config") ||
+          p.slug.startsWith("owaspsecure-misconfig-verbose-error"))
       )
         return -4;
       if (
@@ -16964,6 +17185,59 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a02_crypto\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-crypto-password-md5")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a02_crypto(?:\/insecure\.php|\/attacks\/tokens)/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-crypto-predictable-tokens")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a02_crypto(?:\/insecure\.php|\/attacks\/data_at_rest)/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-crypto-data-at-rest")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a07_auth\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-auth-session-fixation")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a07_auth\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-auth-mfa-bypass")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a04_insecure_design\b/i.test(targetInput) &&
+        (p.slug.startsWith("owaspsecure-design-password-reset") ||
+          p.slug.startsWith("owaspsecure-design-reauth-email") ||
+          p.slug.startsWith("owaspsecure-design-coupon-logic") ||
+          p.slug.startsWith("owaspsecure-design-csrf-settings") ||
+          p.slug.startsWith("owaspsecure-design-magic-link"))
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a08_integrity\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-integrity-")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a09_logging\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-logging-")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a06_voc\b/i.test(targetInput) &&
+        (p.slug.startsWith("owaspsecure-voc-outdated-jquery") ||
+          p.slug.startsWith("owaspsecure-voc-cdn-no-sri"))
       )
         return -4;
       if (

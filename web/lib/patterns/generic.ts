@@ -22505,6 +22505,59 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-orders-search-sqli-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store orders-search SQLi walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/sql-injection-writeup documents UNION-based SQL injection via unsanitized status filter in POST /api/orders/search — order dropdown to database dump.",
+    impactOneline:
+      "Public walkthrough teaches SQL injection against e-commerce order status filters that concatenate user input into raw SQL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecOrdersSearchSqliEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Never concatenate order status filters into SQL; use parameterized queries or allowlisted enum values.",
+      steps: [
+        "Replace string-interpolated status filters with Prisma findMany and bound parameters.",
+        "Use allowlists for dropdown status values instead of interpolating POST body strings.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/orders/search endpoint concatenates the status filter into raw SQL. Show parameterized query fixes for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-orders-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store orders-search SQLi route live oracle",
+    description:
+      "When scanning /posts/sql-injection-writeup, the walkthrough documents UNION-based SQLi via unsanitized status filter in POST /api/orders/search — route-specific live oracle.",
+    impactOneline:
+      "OopsSec order search drops dropdown status into raw SQL, enabling UNION SELECT credential extraction from the users table.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecOrdersSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never concatenate order status filters into SQL; use parameterized queries or allowlisted enum values.",
+      steps: [
+        "Replace string-interpolated status filters with Prisma findMany and bound parameters.",
+        "Use allowlists for dropdown status values instead of interpolating POST body strings.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/sql-injection-writeup route scan confirms order status SQLi. Show parameterized query fixes for /api/orders/search.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-second-order-sqli-evidence",
     platform: "generic",
     category: "Injection",
@@ -36032,6 +36085,56 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-0-opening-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "medium",
+    title: "OWASP WrongSecrets challenge-0 opening live oracle",
+    description:
+      "GET /challenge/challenge-0 documents the WrongSecrets intro onboarding walkthrough with The first answer submission UI — opening challenge training oracle.",
+    impactOneline:
+      "WrongSecrets challenge-0 exposes the onboarding walkthrough that teaches players how to submit answers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge0OpeningLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-0 is intentional — ensure production apps never embed tutorial answers in walkthrough pages.",
+      steps: [
+        "Keep training CTF instances isolated from production infrastructure.",
+        "Scan public challenge pages only on authorized training targets."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-0 route documents the opening onboarding walkthrough. Show how to isolate CTF training instances.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-0-opening-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "medium",
+    title: "OWASP WrongSecrets challenge-0 opening route live oracle",
+    description:
+      "When scanning /challenge/0 or /challenge/challenge-0, the walkthrough documents the WrongSecrets intro onboarding with The first answer — route-specific challenge-0 opening oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-0 Opening Challenge walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge0OpeningRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-0 is intentional — keep CTF training hubs isolated from production.",
+      steps: [
+        "Run WrongSecrets CTF instances only on isolated training infrastructure.",
+        "Do not expose challenge walkthrough pages on production domains."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-0 route documents the opening onboarding walkthrough. Show route-specific CTF isolation guidance.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-1-git-hardcoded-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -40100,6 +40203,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /challenges/vulnerable-deps route documents known CVE npm dependencies. Show dependency auditing and SCA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-hacked-npm-packages-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "AI Security Platform hacked-npm axios/React supply-chain live oracle",
+    description:
+      "GET /learn on ai-security-platform-iota.vercel.app documents real-world axios and React npm hijacks delivering remote access trojans — hacked-npm-packages supply-chain training oracle.",
+    impactOneline:
+      "Public learn content exposes real 2025-2026 npm supply-chain attack patterns (axios RAT, React RCE) used in the hacked-npm-packages challenge.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityHackedNpmPackagesLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — verify package provenance and block malicious postinstall scripts.",
+      steps: [
+        "Review postinstall scripts before adding new npm packages.",
+        "Use npm provenance and signed package verification where available.",
+        "Monitor for typosquatting when adding dependencies."
+      ]
+    },
+    fixPrompt:
+      "Our /learn page documents axios/React npm hijacks. Show supply-chain verification and postinstall script review.",
     version: 1,
     enabled: true
   },
@@ -50104,6 +50233,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-portals-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot four-portal hub live oracle",
+    description:
+      "GET /portals on owasp-finbot-ctf.org exposes Vendor, Admin, Dark Lab, and CTF portal cards — agentic AI security training entry point oracle.",
+    impactOneline:
+      "Public FinBot portal hubs enumerate four distinct agentic AI training surfaces without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotPortalsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — gate portal hubs behind auth in production deployments.",
+      steps: [
+        "Require authentication before exposing agentic training portal navigation.",
+        "Monitor portal hub access for reconnaissance patterns.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /portals page lists four agentic AI training portals publicly. Show how to protect production agentic platform entry points.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-portals-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot /portals four-portal hub route live oracle",
+    description:
+      "When scanning /portals on owasp-finbot-ctf.org, the four-portal hub confirms Vendor/Admin/Dark Lab/CTF training entry points — route-specific hub oracle distinct from /ctf or /darklab fingerprints.",
+    impactOneline:
+      "Route scans on FinBot /portals should confirm the four-portal hub layout, not only generic CTF supply-chain probes shared across portal routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotPortalsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — isolate portal hub navigation from production agent ecosystems.",
+      steps: [
+        "Validate portal hub links point only to authorized training environments.",
+        "Monitor cross-portal navigation for reconnaissance.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /portals route scan confirms four agentic AI training portals. Show how to protect production multi-portal agentic platforms.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-darklab-supply-chain-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -54912,6 +55093,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnforge-academy-level16-double-extension-upload-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnForge Academy level 16 double-extension upload route live oracle",
+    description:
+      "When scanning level16.php routes, VulnForge Academy documents double extension or null-byte tricks to bypass file extension validation — route-specific level 16 file upload training oracle (README corpus fallback).",
+    impactOneline:
+      "VulnForge Academy level 16 exposes intentional double-extension/null-byte upload bypass patterns distinct from generic levels 16–18 upload oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevel16DoubleExtensionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — validate uploads with allowlisted extensions and magic bytes, rejecting double extensions.",
+      steps: [
+        "Normalize filenames and reject double extensions like .php.jpg.",
+        "Strip null bytes and validate magic bytes server-side.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 16 route documents double-extension upload bypass. Show secure upload validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnforge-academy-level17-content-type-upload-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -55484,6 +55691,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-self-xss-csrf-profile-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "OopsSec Store Self-XSS + CSRF profile takeover walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/self-xss-csrf-profile-takeover documents Self-XSS via dangerouslySetInnerHTML bio rendering chained with missing CSRF on POST /api/user/profile.",
+    impactOneline:
+      "Public walkthrough teaches profile takeover by planting stored XSS in victim profiles via cross-site profile update requests.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecSelfXssCsrfProfileEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize bio HTML and require CSRF tokens on profile updates.",
+      steps: [
+        "Render profile bios as text nodes or sanitize with DOMPurify instead of dangerouslySetInnerHTML.",
+        "Require CSRF tokens on POST /api/user/profile.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our profile bio uses dangerouslySetInnerHTML and POST /api/user/profile lacks CSRF protection. Show sanitization and CSRF token fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-self-xss-csrf-profile-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "OopsSec Store Self-XSS + CSRF profile route live oracle",
+    description:
+      "When scanning /posts/self-xss-csrf-profile-takeover, the walkthrough documents Self-XSS in profile bio plus missing CSRF on POST /api/user/profile — route-specific attack-chain oracle.",
+    impactOneline:
+      "OopsSec profile takeover chains stored Self-XSS with cross-site profile updates lacking CSRF defenses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecSelfXssCsrfProfileRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize bio HTML and require CSRF tokens on profile updates.",
+      steps: [
+        "Render profile bios as text nodes or sanitize with DOMPurify instead of dangerouslySetInnerHTML.",
+        "Require CSRF tokens on POST /api/user/profile.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/self-xss-csrf-profile-takeover route documents Self-XSS + CSRF profile takeover. Show route-level sanitization and CSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-ssrf-evidence",
     platform: "generic",
     category: "Server-side request forgery",
@@ -55692,6 +55951,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-plaintext-password-logs-evidence",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "OopsSec Store plaintext password in logs walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/plaintext-password-in-logs documents POST /api/auth/login debug logging plaintext passwords readable via /monitoring/siem with default credentials.",
+    impactOneline:
+      "Public walkthrough teaches CWE-532 logging of cleartext credentials on a hidden SIEM dashboard protected by weak default creds.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecPlaintextPasswordLogsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never log passwords and protect monitoring dashboards with strong authentication.",
+      steps: [
+        "Remove debug logging of credentials from authentication routes.",
+        "Restrict /monitoring/siem to authenticated administrators with MFA.",
+        "Host OopsSec logging walkthroughs on localhost only."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/login logs plaintext passwords to /monitoring/siem. Show secure logging and SIEM access remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-plaintext-password-logs-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "OopsSec Store plaintext password in logs route live oracle",
+    description:
+      "When scanning /posts/plaintext-password-in-logs, the walkthrough documents debug login logging and /monitoring/siem SIEM exposure — route-specific sensitive data oracle.",
+    impactOneline:
+      "OopsSec SIEM dashboard leaks cleartext passwords from auth debug logs when reachable with default credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecPlaintextPasswordLogsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never log passwords and protect monitoring dashboards with strong authentication.",
+      steps: [
+        "Remove debug logging of credentials from authentication routes.",
+        "Restrict /monitoring/siem to authenticated administrators with MFA.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/plaintext-password-in-logs route scan confirms SIEM password logging. Show route-level logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-next-public-env-evidence",
     platform: "generic",
     category: "Exposed secret",
@@ -55896,6 +56207,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /posts/insecure-password-reset route documents predictable reset tokens. Show route-specific crypto.randomBytes remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-weak-md5-hashing-admin-evidence",
+    platform: "generic",
+    category: "Cryptographic failure",
+    severityDefault: "critical",
+    title: "OopsSec Store weak MD5 admin compromise walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/weak-md5-hashing-admin-compromise documents chaining SQLi users-table dump with unsalted MD5 admin hash 21232f297a57a5a743894a0e4a801fc3 to log in as admin@oss.com and capture OSS{w34k_md5_h4sh1ng}.",
+    impactOneline:
+      "Public walkthrough teaches instant MD5 rainbow-table recovery of admin credentials after SQL injection credential exfiltration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecWeakMd5HashingAdminEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use bcrypt or argon2 for password hashing with per-user salts; fix SQL injection in order search.",
+      steps: [
+        "Replace crypto.createHash('md5') with bcrypt.hash(password, 12).",
+        "Parameterize POST /api/orders/search status filter queries.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our OopsSec Store walkthrough documents unsalted MD5 admin password hashing after SQLi. Show bcrypt remediation and parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-weak-md5-hashing-admin-route-live-oracle",
+    platform: "generic",
+    category: "Cryptographic failure",
+    severityDefault: "critical",
+    title: "OopsSec Store weak MD5 admin compromise route live oracle",
+    description:
+      "When scanning /posts/weak-md5-hashing-admin-compromise, the walkthrough documents SQLi credential dump plus unsalted MD5 admin hash enabling admin@oss.com login — route-specific cryptographic failure oracle.",
+    impactOneline:
+      "OopsSec weak-MD5 chain ends with trivial admin hash crack and unauthenticated /admin access after SQL injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecWeakMd5HashingAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use bcrypt or argon2 for password hashing; parameterize order search SQL.",
+      steps: [
+        "Replace MD5 password hashing with bcrypt.hash(password, 12).",
+        "Parameterize POST /api/orders/search status filter.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/weak-md5-hashing-admin-compromise route documents MD5 admin hash cracking. Show route-specific bcrypt and SQLi remediation.",
     version: 1,
     enabled: true
   },
@@ -61203,6 +61566,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "bugforge-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Bugforge XSS lab route live oracle",
+    description:
+      "When scanning /labs/xss on bugforge.io or app.bugforge.io, the XSS learning-path module documents stored and reflected XSS labs (Ottergram stored XSS JWT theft writeups) — route-specific XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/xss documents cross-site scripting training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge XSS labs are intentional training — encode output and use context-aware sanitization.",
+      steps: [
+        "Replace unsafe .html() sinks with text encoding or strict allowlist sanitizers.",
+        "Set Content-Security-Policy to block inline script execution.",
+        "Run Bugforge lab instances only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/xss route documents Ottergram-style stored XSS labs. Show output encoding and CSP remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugforge-auth-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Bugforge auth lab route live oracle",
+    description:
+      "When scanning /labs/auth on bugforge.io or app.bugforge.io, the broken authentication learning-path module documents JWT refresh brute force, weak timestamp tokens, and missing bearer checks (FurHire, Sokudo, Ottergram writeups) — route-specific auth training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/auth documents broken authentication training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeAuthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge auth labs are intentional training — bind sessions to cryptographically secure tokens and enforce bearer validation.",
+      steps: [
+        "Use unpredictable refresh tokens with rotation and rate limiting.",
+        "Reject JWT alg:none and validate signatures on every request.",
+        "Require bearer tokens on all state-changing API routes."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/auth route documents FurHire-style refresh_token and Sokudo weak-token labs. Show authentication hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugforge-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "Bugforge CSRF lab route live oracle",
+    description:
+      "When scanning /labs/csrf on bugforge.io or app.bugforge.io, the CSRF learning-path module documents token validation bypass, SameSite restrictions, and Referer defenses — route-specific CSRF training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/csrf documents cross-site request forgery training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge CSRF labs are intentional training — require anti-CSRF tokens on all state-changing requests.",
+      steps: [
+        "Bind CSRF tokens to the user session and reject missing or mismatched tokens.",
+        "Set SameSite=Strict or Lax on session cookies for sensitive actions.",
+        "Validate Referer/Origin headers on state-changing POST endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/csrf route documents CSRF token validation bypass labs. Show anti-CSRF token and SameSite cookie remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugforge-sqli-route-live-oracle",
+    platform: "generic",
+    category: "SQL injection",
+    severityDefault: "high",
+    title: "Bugforge SQLi lab route live oracle",
+    description:
+      "When scanning /labs/sqli on bugforge.io or app.bugforge.io, the SQL injection learning-path module documents login bypass and UNION search labs (Cheesy Does it, MedNode writeups) — route-specific SQLi training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/sqli documents SQL injection training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge SQLi labs are intentional training — use parameterized queries and prepared statements.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries.",
+        "Apply least-privilege database accounts for application connections.",
+        "Run Bugforge lab instances only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/sqli route documents Cheesy Does it-style login SQLi labs. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "webverselabs-fixture-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -61225,6 +61692,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /labs/fixture route documents BOLA plus wkhtmltopdf SSRF wildcard bypass. Show SSRF allowlist and BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "webverselabs-orbitdesk-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "WebVerse Pro OrbitDesk lab route live oracle",
+    description:
+      "When scanning /labs/orbitdesk on webverselabs-pro.com, the OrbitDesk hard lab documents a five-stage chain — weak reset token, GraphQL IDOR, signed-URL path traversal, SSRF via /api/v2/integrations/test, diagnostics RCE.",
+    impactOneline:
+      "Route-specific confirmation that WebVerse Pro OrbitDesk documents multi-stage GraphQL + SSRF exploitation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webverselabsOrbitdeskRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WebVerse Pro labs are intentional training — harden JWT secrets, GraphQL authz, and outbound fetch controls.",
+      steps: [
+        "Rotate leaked AUTH_SECRET and enforce strong signing keys.",
+        "Authorize GraphQL resolvers per object ownership.",
+        "Block server-side fetch to internal hostnames from integration test endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/orbitdesk route documents GraphQL IDOR plus SSRF via integrations/test. Show JWT hardening and SSRF egress controls.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nosql-injection-lab-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "NoSQL Injection Lab route live oracle",
+    description:
+      "When scanning nosql-injection-lab.vercel.app, the educational SPA documents MongoDB operator injection ($ne, $regex, $gt) bypassing Express login via JSON body-parser — route-specific NoSQL injection training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the NoSQL Injection Lab documents operator-based authentication bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nosqlInjectionLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cast user inputs to expected types and sanitize MongoDB query operators.",
+      steps: [
+        "Reject object-typed password fields — require strict string validation.",
+        "Use mongo-sanitize or equivalent to strip $-prefixed operator keys.",
+        "Prefer parameterized ODM queries with explicit schemas."
+      ]
+    },
+    fixPrompt:
+      "Our nosql-injection-lab route documents $ne/$regex operator bypass. Show type casting and mongo-sanitize remediation.",
     version: 1,
     enabled: true
   },
@@ -66244,6 +66763,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Juice Shop /rest/chatbot/respond route exposes an unauthenticated /rest/chat LLM proxy. Show chatbot auth hardening and prompt-injection defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-snippets-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop vulnerable code snippets API live oracle",
+    description:
+      "GET /snippets/:challengeKey returns vulnerable source code plus vulnLines array without auth — Vulnerable Code Snippets API oracle (help.owasp-juice.shop integration).",
+    impactOneline:
+      "Public code-snippet endpoints expose exact vulnerable lines for many Juice Shop challenges.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopSnippetsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Juice Shop is intentional security training — restrict snippet APIs to authorized lab instances.",
+      steps: [
+        "Require authentication before returning challenge source snippets.",
+        "Disable snippet endpoints in production deployments.",
+        "Scope scanner targets to authorized OWASP Juice Shop lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /snippets/:challengeKey returns vulnerable source with vulnLines. Show how to disable or protect code-snippet APIs outside training environments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-snippets-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop /snippets route live oracle",
+    description:
+      "When scanning /snippets, GET /snippets/:challengeKey returns vulnerable source with vulnLines JSON — route-specific Vulnerable Code Snippets API oracle.",
+    impactOneline:
+      "Route-scoped scans on /snippets should confirm the code-snippet challenge API is exposed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopSnippetsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Juice Shop is intentional security training — restrict snippet APIs to authorized lab instances.",
+      steps: [
+        "Require authentication before returning challenge source snippets.",
+        "Disable snippet endpoints in production deployments.",
+        "Scope scanner targets to authorized OWASP Juice Shop lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /snippets route scan confirms the Vulnerable Code Snippets API. Show route-level access controls for snippet endpoints.",
     version: 1,
     enabled: true
   },
@@ -75888,6 +76459,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-misconfig-exposed-config-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A05 exposed config live oracle",
+    description:
+      "GET attacks/exposed_config/insecure/config.php on owaspsecure.com returns DB_PASSWORD, API_KEY, and SERVICE_TOKEN from webroot — A05 security misconfiguration training oracle.",
+    impactOneline:
+      "Webroot config.php on owaspsecure.com exposes database credentials and API keys without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigExposedConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Move configuration files outside the webroot and deny direct HTTP access to secrets.",
+      steps: [
+        "Store .env and config.php outside public_html.",
+        "Deny direct access via web server rules.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com exposed config.php leaks DB_PASSWORD and API_KEY. Show webroot secret isolation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-exposed-config-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A05 misconfig route exposed config live oracle",
+    description:
+      "When scanning /demo/a05_misconfig/insecure.php or /attacks/exposed_config/ on owaspsecure.com, Attack 4 config.php leaks credentials from webroot — route-specific A05 misconfiguration oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A05 lab should confirm live exposed config.php, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigExposedConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Move configuration files outside the webroot and deny direct HTTP access to secrets.",
+      steps: [
+        "Store .env and config.php outside public_html.",
+        "Deny direct access via web server rules.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a05_misconfig route scan confirms exposed config.php credentials. Show route-level secret isolation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-verbose-error-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A05 verbose error live oracle",
+    description:
+      "GET attacks/verbose_error_insecure.php on owaspsecure.com enables display_errors and leaks PHP stack traces with server filesystem paths — A05 security misconfiguration training oracle.",
+    impactOneline:
+      "Verbose PHP error pages on owaspsecure.com disclose stack traces and absolute server paths useful for targeted exploitation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigVerboseErrorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable display_errors in production and log detailed errors server-side only.",
+      steps: [
+        "Set display_errors=Off in production php.ini.",
+        "Return generic user-facing error messages.",
+        "Log stack traces to protected server-side log files."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com verbose_error_insecure.php leaks stack traces and paths. Show production error handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-verbose-error-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A05 misconfig route verbose error live oracle",
+    description:
+      "When scanning /demo/a05_misconfig/insecure.php or /attacks/verbose_error_insecure.php on owaspsecure.com, Attack 2 verbose errors leak stack traces and paths — route-specific A05 misconfiguration oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A05 lab should confirm live verbose error disclosure, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigVerboseErrorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable display_errors in production and log detailed errors server-side only.",
+      steps: [
+        "Set display_errors=Off in production php.ini.",
+        "Return generic user-facing error messages.",
+        "Log stack traces to protected server-side log files."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a05_misconfig route scan confirms verbose PHP error disclosure. Show route-level error handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "owaspsecure-crypto-password-md5-live-oracle",
     platform: "generic",
     category: "Sensitive data exposure",
@@ -75936,6 +76611,2060 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /demo/a02_crypto route scan confirms plaintext and MD5 password storage. Show route-level password hashing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-predictable-tokens-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A02 predictable session tokens live oracle",
+    description:
+      "GET attacks/tokens/gen_insecure.php on owaspsecure.com mints session tokens via uniqid()/mt_rand()/time() after insecure signup/login — A02 cryptographic failure training oracle.",
+    impactOneline:
+      "Predictable session tokens on owaspsecure.com enable token guessing after observing generation patterns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoPredictableTokensLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Generate session tokens with cryptographically secure random bytes.",
+      steps: [
+        "Replace uniqid()/mt_rand() token minting with random_bytes(32).",
+        "Use server-side session stores instead of predictable client tokens.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com gen_insecure.php mints predictable tokens. Show crypto.random_bytes remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-predictable-tokens-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A02 predictable tokens attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/tokens/gen_insecure.php on owaspsecure.com, Attack 2 mints predictable session tokens via uniqid()/mt_rand()/time() — route-specific A02 cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 token attack path should confirm live predictable token generation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoPredictableTokensRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Generate session tokens with cryptographically secure random bytes.",
+      steps: [
+        "Replace uniqid()/mt_rand() token minting with random_bytes(32).",
+        "Use server-side session stores instead of predictable client tokens.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto token attack path confirms predictable token minting. Show route-level secure random remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-data-at-rest-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 plaintext data-at-rest live oracle",
+    description:
+      "GET attacks/data_at_rest/dump.php on owaspsecure.com exposes plaintext SSN values in ssn_plain column — A02 data-at-rest cryptographic failure training oracle.",
+    impactOneline:
+      "Plaintext SSN storage on owaspsecure.com enables bulk PII exfiltration from the data-at-rest lab dump endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoDataAtRestLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encrypt sensitive data at rest with per-record keys and authenticated encryption.",
+      steps: [
+        "Replace plaintext ssn_plain storage with AES-GCM ciphertext columns.",
+        "Use envelope encryption with a KMS-managed master key.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com data_at_rest dump.php exposes plaintext SSNs. Show encryption-at-rest remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-data-at-rest-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 data-at-rest attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/data_at_rest/dump.php on owaspsecure.com, Attack 3 exposes plaintext SSN rows — route-specific A02 data-at-rest cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 data-at-rest attack path should confirm live plaintext PII dump.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoDataAtRestRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encrypt sensitive data at rest with per-record keys and authenticated encryption.",
+      steps: [
+        "Replace plaintext ssn_plain storage with AES-GCM ciphertext columns.",
+        "Use envelope encryption with a KMS-managed master key.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto data-at-rest attack path confirms plaintext SSN dump. Show route-level encryption remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-iv-reuse-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A02 static IV encryption live oracle",
+    description:
+      "POST attacks/iv_reuse/encrypt_static_insecure.php on owaspsecure.com encrypts with a fixed key and IV (nonce reuse) — A02 cryptographic failure training oracle.",
+    impactOneline:
+      "Static IV encryption on owaspsecure.com enables ciphertext pattern analysis and key recovery attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoIvReuseLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Generate a unique random IV per encryption operation and never reuse keys with static nonces.",
+      steps: [
+        "Use random_bytes(12) for AES-GCM IVs on every encrypt call.",
+        "Store IV alongside ciphertext and rotate keys with version metadata.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com encrypt_static_insecure.php uses a fixed IV. Show per-operation random IV remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-iv-reuse-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A02 IV-reuse attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/iv_reuse/ on owaspsecure.com, Attack 4 confirms static IV encryption with nonce reuse — route-specific A02 cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 IV-reuse attack path should confirm live static-IV encryption.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoIvReuseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Generate a unique random IV per encryption operation and never reuse keys with static nonces.",
+      steps: [
+        "Use random_bytes(12) for AES-GCM IVs on every encrypt call.",
+        "Store IV alongside ciphertext and rotate keys with version metadata.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto IV-reuse attack path confirms static IV encryption. Show route-level nonce remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-key-rotation-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 hard-coded key live oracle",
+    description:
+      "GET attacks/key_rotation/rotate_insecure.php on owaspsecure.com exposes a hard-coded encryption key with null key_version and no rotation workflow — A02 cryptographic failure training oracle.",
+    impactOneline:
+      "Hard-coded encryption keys on owaspsecure.com prevent safe key rotation after compromise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoKeyRotationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Store encryption keys in a KMS with versioned rotation and envelope encryption.",
+      steps: [
+        "Move active_key out of source code into a secrets manager.",
+        "Add key_version column and support decrypt-with-old re-encrypt-with-new workflows.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com rotate_insecure.php uses a hard-coded key with no rotation. Show KMS key versioning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-key-rotation-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 key-rotation attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/key_rotation/ on owaspsecure.com, Attack 5 confirms hard-coded key with null key_version — route-specific A02 cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 key-rotation attack path should confirm live hard-coded key exposure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoKeyRotationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Store encryption keys in a KMS with versioned rotation and envelope encryption.",
+      steps: [
+        "Move active_key out of source code into a secrets manager.",
+        "Add key_version column and support decrypt-with-old re-encrypt-with-new workflows.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto key-rotation attack path confirms hard-coded keys. Show route-level KMS rotation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-save-plain-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 plaintext SSN save live oracle",
+    description:
+      "POST attacks/data_at_rest/save_plain.php on owaspsecure.com stores SSN values as plaintext without encryption — A02 data-at-rest cryptographic failure training oracle.",
+    impactOneline:
+      "Plaintext SSN writes on owaspsecure.com confirm unencrypted PII storage at rest.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoSavePlainLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encrypt sensitive data at rest with per-record keys and authenticated encryption.",
+      steps: [
+        "Replace plaintext ssn_plain column writes with AES-GCM ciphertext.",
+        "Use envelope encryption with a KMS-managed master key.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com save_plain.php stores plaintext SSNs. Show encryption-at-rest remediation for the save path.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-save-plain-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 save-plain attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/data_at_rest/save_plain.php on owaspsecure.com, Attack 3 confirms plaintext SSN storage on write — route-specific A02 data-at-rest cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 save-plain attack path should confirm live unencrypted PII writes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoSavePlainRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encrypt sensitive data at rest with per-record keys and authenticated encryption.",
+      steps: [
+        "Replace plaintext ssn_plain column writes with AES-GCM ciphertext.",
+        "Use envelope encryption with a KMS-managed master key.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto save-plain attack path confirms plaintext SSN writes. Show route-level encryption remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-outdated-jquery-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 outdated jQuery live oracle",
+    description:
+      "GET attacks/outdated_jquery/demo_insecure.html on owaspsecure.com loads jQuery 1.12.4 with unsafe .html() sink — A06 vulnerable components training oracle.",
+    impactOneline:
+      "Outdated jQuery 1.x on owaspsecure.com enables XSS gadgets via deprecated DOM manipulation patterns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocOutdatedJqueryLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade to supported library versions and avoid unsafe HTML sinks.",
+      steps: [
+        "Replace jQuery 1.x with a maintained 3.x release.",
+        "Use .text() or a strict sanitizer instead of .html() on untrusted input.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com outdated_jquery demo loads jQuery 1.12.4 with .html() sinks. Show dependency upgrade and output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-outdated-jquery-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 VOC route outdated jQuery live oracle",
+    description:
+      "When scanning /demo/a06_voc/insecure.php on owaspsecure.com, Attack 1 outdated jQuery demo confirms live jQuery 1.12.4 with unsafe .html() sink — route-specific A06 vulnerable components oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A06 VOC lab should confirm live outdated jQuery exposure, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocOutdatedJqueryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade to supported library versions and avoid unsafe HTML sinks.",
+      steps: [
+        "Replace jQuery 1.x with a maintained 3.x release.",
+        "Use .text() or a strict sanitizer instead of .html() on untrusted input.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a06_voc route scan confirms outdated jQuery 1.12.4. Show route-level dependency upgrade remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-cdn-no-sri-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 CDN without SRI live oracle",
+    description:
+      "GET attacks/cdn_no_sri/demo_insecure.html on owaspsecure.com loads malicious_cdn/jquery.min.js without Subresource Integrity — A06 vulnerable components training oracle.",
+    impactOneline:
+      "CDN scripts without SRI on owaspsecure.com allow supply-chain tampering if the CDN path is compromised.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocCdnNoSriLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin third-party scripts with Subresource Integrity hashes.",
+      steps: [
+        "Add integrity and crossorigin attributes to all CDN script tags.",
+        "Self-host critical libraries when SRI is not available.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com cdn_no_sri demo loads scripts without integrity checks. Show SRI pinning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-cdn-no-sri-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 VOC route CDN-no-SRI live oracle",
+    description:
+      "When scanning /demo/a06_voc/insecure.php on owaspsecure.com, Attack 2 CDN-without-SRI demo confirms compromised script execution — route-specific A06 vulnerable components oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A06 VOC lab should confirm live missing SRI on CDN scripts, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocCdnNoSriRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin third-party scripts with Subresource Integrity hashes.",
+      steps: [
+        "Add integrity and crossorigin attributes to all CDN script tags.",
+        "Self-host critical libraries when SRI is not available.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a06_voc route scan confirms CDN scripts without SRI. Show route-level integrity pinning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-auth-session-fixation-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A07 session fixation live oracle",
+    description:
+      "GET attacks/session_fixation/begin.php on owaspsecure.com issues a pre-login session ID without rotation — A07 authentication failure training oracle.",
+    impactOneline:
+      "Reusable pre-login session IDs on owaspsecure.com enable session fixation before authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureAuthSessionFixationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Regenerate session IDs on login and set secure cookie flags.",
+      steps: [
+        "Call session_regenerate_id(true) after successful authentication.",
+        "Set HttpOnly, Secure, and SameSite on session cookies.",
+        "Run owaspsecure.com auth labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com session_fixation/begin.php reuses pre-login SIDs. Show session regeneration and secure cookie remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-auth-session-fixation-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A07 auth route session fixation live oracle",
+    description:
+      "When scanning /demo/a07_auth/insecure.php on owaspsecure.com, Attack 2 session fixation begin confirms live pre-login SID issuance — route-specific A07 authentication oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A07 lab should confirm live session fixation, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureAuthSessionFixationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Regenerate session IDs on login and set secure cookie flags.",
+      steps: [
+        "Call session_regenerate_id(true) after successful authentication.",
+        "Set HttpOnly, Secure, and SameSite on session cookies.",
+        "Run owaspsecure.com auth labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a07_auth route scan confirms session fixation via pre-login SID. Show route-level session hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-auth-mfa-bypass-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "owaspsecure.com A07 weak MFA bypass live oracle",
+    description:
+      "GET attacks/mfa_flow/begin_insecure.php?mfa=ok on owaspsecure.com bypasses MFA and POST verify_insecure.php accepts universal code 000000 — A07 authentication failure training oracle.",
+    impactOneline:
+      "Bypassable MFA and universal OTP codes on owaspsecure.com enable account takeover without possession factors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureAuthMfaBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind MFA to per-user secrets, reject bypass query params, and block universal OTP codes.",
+      steps: [
+        "Require TOTP/WebAuthn verification with per-user secrets and rate limiting.",
+        "Reject MFA bypass flags in query strings and enforce server-side MFA state.",
+        "Run owaspsecure.com auth labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com MFA flow accepts ?mfa=ok bypass and code 000000. Show MFA hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-auth-mfa-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "owaspsecure.com A07 auth route MFA bypass live oracle",
+    description:
+      "When scanning /demo/a07_auth/insecure.php on owaspsecure.com, Attack 4 MFA flow confirms ?mfa=ok bypass and universal code 000000 acceptance — route-specific A07 authentication oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A07 lab should confirm live weak MFA bypass, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureAuthMfaBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind MFA to per-user secrets, reject bypass query params, and block universal OTP codes.",
+      steps: [
+        "Require TOTP/WebAuthn verification with per-user secrets and rate limiting.",
+        "Reject MFA bypass flags in query strings and enforce server-side MFA state.",
+        "Run owaspsecure.com auth labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a07_auth route scan confirms MFA bypass via ?mfa=ok and universal code 000000. Show route-level MFA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-password-reset-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 predictable password-reset live oracle",
+    description:
+      "GET attacks/reset_flow/generate_insecure.php on owaspsecure.com mints predictable email|timestamp reset tokens with no TTL and reusable reset.php acceptance — A04 insecure design training oracle.",
+    impactOneline:
+      "Predictable reusable password-reset tokens on owaspsecure.com enable account takeover without out-of-band delivery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignPasswordResetLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically random single-use reset tokens with short TTL and server-side storage.",
+      steps: [
+        "Generate reset tokens with random_bytes() instead of email|timestamp concatenation.",
+        "Store hashed tokens server-side with expiry and invalidate after first use.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com generate_insecure.php mints predictable reusable reset tokens. Show secure password-reset token remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-password-reset-route-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route password-reset live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 1 password reset flow confirms predictable email|timestamp tokens with no TTL and reusable reset links — route-specific A04 insecure design oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live password-reset design flaws, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignPasswordResetRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically random single-use reset tokens with short TTL and server-side storage.",
+      steps: [
+        "Generate reset tokens with random_bytes() instead of email|timestamp concatenation.",
+        "Store hashed tokens server-side with expiry and invalidate after first use.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms predictable reusable password-reset tokens. Show route-level reset-flow remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-password-reset-attack-path-route-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 reset_flow attack-path route live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/attacks/reset_flow/ on owaspsecure.com, generate_insecure.php mints predictable email|timestamp tokens accepted by reset.php without TTL or single-use binding — route-specific A04 password-reset oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 reset_flow attack paths should confirm live predictable password-reset tokens, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignPasswordResetAttackPathRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically random single-use reset tokens with short TTL and server-side storage.",
+      steps: [
+        "Generate reset tokens with random_bytes() instead of email|timestamp concatenation.",
+        "Store hashed tokens server-side with expiry and invalidate after first use.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design/attacks/reset_flow route scan confirms predictable reusable reset tokens. Show attack-path password-reset remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-reauth-email-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 sensitive email change live oracle",
+    description:
+      "POST attacks/reauth_sensitive/change_email_insecure.php on owaspsecure.com changes account email without password re-auth or CSRF — A04 insecure design training oracle.",
+    impactOneline:
+      "Missing re-authentication on sensitive account changes on owaspsecure.com enables account takeover via email hijack.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignReauthEmailLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require step-up authentication and CSRF protection for sensitive account changes.",
+      steps: [
+        "Prompt for current password before email or MFA changes.",
+        "Validate CSRF tokens on all state-changing account settings endpoints.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com change_email_insecure.php accepts email changes without re-auth. Show step-up authentication remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-reauth-email-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route reauth live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 2 sensitive email change confirms missing re-auth — route-specific A04 insecure design oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live missing re-auth on sensitive changes, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignReauthEmailRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require step-up authentication and CSRF protection for sensitive account changes.",
+      steps: [
+        "Prompt for current password before email or MFA changes.",
+        "Validate CSRF tokens on all state-changing account settings endpoints.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms email change without re-auth. Show route-level step-up auth remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-coupon-logic-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 coupon logic live oracle",
+    description:
+      "POST attacks/coupon_logic/cart_insecure.php on owaspsecure.com re-applies SAVE50 without one-time or cap limits — A04 insecure design training oracle.",
+    impactOneline:
+      "Unlimited coupon re-application on owaspsecure.com enables negative cart totals and payment bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignCouponLogicLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce one-time coupon redemption and cap total discounts.",
+      steps: [
+        "Track coupon usage per user and reject repeat applications.",
+        "Cap discount amounts so totals cannot go negative.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com cart_insecure.php re-applies SAVE50 without limits. Show coupon logic remediation with one-time redemption and discount caps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-coupon-logic-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route coupon live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 5 coupon logic accepts unlimited SAVE50 re-application — route-specific A04 insecure design oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live coupon abuse, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignCouponLogicRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce one-time coupon redemption and cap total discounts.",
+      steps: [
+        "Track coupon usage per user and reject repeat applications.",
+        "Cap discount amounts so totals cannot go negative.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms unlimited coupon re-application. Show route-level coupon logic remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-csrf-settings-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 CSRF settings change live oracle",
+    description:
+      "POST attacks/csrf_settings/change_settings_insecure.php on owaspsecure.com accepts cross-site POSTs without CSRF token or origin checks — A04 insecure design training oracle.",
+    impactOneline:
+      "Missing CSRF protection on owaspsecure.com settings endpoints enables cross-site state changes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignCsrfSettingsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens and validate Origin/Referer on state-changing POST endpoints.",
+      steps: [
+        "Issue per-session CSRF tokens for all settings forms.",
+        "Reject POST requests with missing or invalid Origin/Referer headers.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com change_settings_insecure.php accepts cross-site POSTs without CSRF protection. Show CSRF token and origin validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-csrf-settings-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route CSRF live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 3 CSRF settings change confirms missing token and origin checks — route-specific A04 CSRF oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live CSRF on settings changes, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignCsrfSettingsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens and validate Origin/Referer on state-changing POST endpoints.",
+      steps: [
+        "Issue per-session CSRF tokens for all settings forms.",
+        "Reject POST requests with missing or invalid Origin/Referer headers.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms CSRF on settings changes. Show route-level CSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-magic-link-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 reusable magic link live oracle",
+    description:
+      "POST attacks/magic_link/link_insecure.php on owaspsecure.com mints reusable magic-login links with no expiry or single-use binding — A04 insecure design training oracle.",
+    impactOneline:
+      "Reusable magic links on owaspsecure.com enable permanent account access for anyone who obtains the URL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignMagicLinkLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use single-use, short-lived magic links bound to the requesting device or session.",
+      steps: [
+        "Store magic-link tokens server-side with expiry and single-use flags.",
+        "Invalidate tokens after first successful login.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com magic_link/link_insecure.php mints reusable login links. Show single-use expiring magic link remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-magic-link-route-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route magic link live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 4 magic link never expires and is reusable — route-specific A04 authentication oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live reusable magic links, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignMagicLinkRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use single-use, short-lived magic links bound to the requesting device or session.",
+      steps: [
+        "Store magic-link tokens server-side with expiry and single-use flags.",
+        "Invalidate tokens after first successful login.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms reusable magic links. Show route-level single-use magic link remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-unserialize-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 unsafe unserialize live oracle",
+    description:
+      "POST attacks/unserialize/insecure.php on owaspsecure.com accepts attacker-controlled serialized PHP objects — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Unsafe PHP unserialize on owaspsecure.com enables gadget-chain remote code execution when matching classes exist.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityUnserializeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never unserialize untrusted input; use JSON or signed data formats.",
+      steps: [
+        "Replace PHP unserialize with json_decode for structured data.",
+        "If serialization is required, use allowlisted classes and signed payloads.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com unserialize/insecure.php accepts attacker objects. Show safe deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-unserialize-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route unserialize live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 2 unsafe unserialize confirms live object deserialization — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live unsafe unserialize, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityUnserializeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never unserialize untrusted input; use JSON or signed data formats.",
+      steps: [
+        "Replace PHP unserialize with json_decode for structured data.",
+        "If serialization is required, use allowlisted classes and signed payloads.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms unsafe PHP unserialize. Show route-level safe deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-signed-update-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 unsigned update install live oracle",
+    description:
+      "GET attacks/signed_updates/insecure_install.php on owaspsecure.com installs update packages without sha256 or signature validation — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Blind update installation on owaspsecure.com enables supply-chain compromise via unsigned zip payloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegritySignedUpdateLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify update packages with cryptographic signatures before installation.",
+      steps: [
+        "Require signed manifests with sha256 hashes for every update artifact.",
+        "Reject packages missing valid publisher signatures.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com insecure_install.php installs updates without signature checks. Show signed update verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-signed-update-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route signed-update live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 1 confirms unsigned update installation — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live unsigned update installs, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegritySignedUpdateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify update packages with cryptographic signatures before installation.",
+      steps: [
+        "Require signed manifests with sha256 hashes for every update artifact.",
+        "Reject packages missing valid publisher signatures.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms unsigned update installs. Show route-level signed update verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-plugin-upload-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 plugin upload RCE live oracle",
+    description:
+      "POST attacks/plugin_loader/upload_insecure.php on owaspsecure.com uploads and includes attacker-controlled PHP from webroot — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Unvalidated plugin uploads on owaspsecure.com execute arbitrary PHP code straight from the uploads directory.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityPluginUploadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never include uploaded files; validate extensions and store outside webroot.",
+      steps: [
+        "Block executable extensions and scan uploads with an allowlist.",
+        "Store uploads outside the webroot and serve via controlled handlers.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com plugin_loader/upload_insecure.php executes uploaded PHP. Show safe plugin upload remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-plugin-upload-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route plugin-upload live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 4 plugin loader confirms uploaded PHP execution — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live plugin upload RCE, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityPluginUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never include uploaded files; validate extensions and store outside webroot.",
+      steps: [
+        "Block executable extensions and scan uploads with an allowlist.",
+        "Store uploads outside the webroot and serve via controlled handlers.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms plugin upload RCE. Show route-level upload validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-cicd-deploy-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 CI/CD unsigned deploy live oracle",
+    description:
+      "POST attacks/cicd/deploy_insecure.php on owaspsecure.com unzips build artifacts without manifest or signature checks — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Unsigned CI/CD deploys on owaspsecure.com let attackers push malicious build artifacts directly into the app.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityCicdDeployLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify CI/CD artifacts against signed manifests before deployment.",
+      steps: [
+        "Require signed build manifests and hash verification on every deploy.",
+        "Reject archives that fail signature or provenance checks.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com cicd/deploy_insecure.php deploys unsigned zips. Show signed CI/CD artifact verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-cicd-deploy-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route cicd-deploy live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 5 CI/CD deploy confirms unsigned artifact extraction — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live unsigned CI/CD deploys, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityCicdDeployRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify CI/CD artifacts against signed manifests before deployment.",
+      steps: [
+        "Require signed build manifests and hash verification on every deploy.",
+        "Reject archives that fail signature or provenance checks.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms unsigned CI/CD deploys. Show route-level artifact verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-remote-config-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 remote config blind apply live oracle",
+    description:
+      "GET attacks/remote_config/config_insecure.php on owaspsecure.com fetches remote JSON and applies featureFlags without signature/HMAC — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Unsigned remote config on owaspsecure.com lets attackers swap feature flags and API endpoints via a poisoned config URL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityRemoteConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify remote configuration with signatures or allowlisted sources before applying.",
+      steps: [
+        "Require HMAC or signature verification on every remote config fetch.",
+        "Allowlist trusted config origins and reject arbitrary src URLs.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com remote_config/config_insecure.php applies JSON blindly. Show signed remote configuration verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-remote-config-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route remote-config live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 3 remote config confirms blind JSON apply without signature — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live unsigned remote config apply, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityRemoteConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify remote configuration with signatures or allowlisted sources before applying.",
+      steps: [
+        "Require HMAC or signature verification on every remote config fetch.",
+        "Allowlist trusted config origins and reject arbitrary src URLs.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms unsigned remote config apply. Show route-level config integrity verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-auth-events-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 missing auth audit logging live oracle",
+    description:
+      "POST attacks/auth_events/login_insecure.php on owaspsecure.com succeeds without meaningful auth audit logging — A09 security logging failure training oracle.",
+    impactOneline:
+      "Missing auth audit trails on owaspsecure.com hide credential stuffing and privilege abuse during incident response.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingAuthEventsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Log authentication outcomes with user, IP, timestamp, and correlation IDs.",
+      steps: [
+        "Emit structured audit events for login success, failure, and privileged actions.",
+        "Include user id, source IP, user-agent, and outcome in every auth log line.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com login_insecure.php succeeds without audit logging. Show structured auth audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-auth-events-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route auth events live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 1 login confirms missing audit trail — route-specific A09 logging failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live missing auth audit logging, not only client-side evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingAuthEventsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Log authentication outcomes with user, IP, timestamp, and correlation IDs.",
+      steps: [
+        "Emit structured audit events for login success, failure, and privileged actions.",
+        "Include user id, source IP, user-agent, and outcome in every auth log line.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms login without audit trail. Show route-level auth audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-pii-secrets-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A09 sensitive data in logs live oracle",
+    description:
+      "POST attacks/pii_in_logs/capture_insecure.php on owaspsecure.com writes passwords, tokens, and SSNs to app.log in cleartext — A09 sensitive logging training oracle.",
+    impactOneline:
+      "Cleartext secrets in logs on owaspsecure.com turn operator log access into a secondary data breach.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingPiiSecretsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact secrets and PII from application logs before write or ship.",
+      steps: [
+        "Never log passwords, tokens, or full SSNs — hash or mask sensitive fields.",
+        "Add log scrubbers for Bearer tokens and credit-card/SSN patterns.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com capture_insecure.php writes raw secrets to app.log. Show log redaction and PII scrubbing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-pii-secrets-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A09 logging route PII in logs live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 2 confirms raw secrets/PII written to app.log — route-specific A09 sensitive logging oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live secret leakage into logs, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingPiiSecretsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact secrets and PII from application logs before write or ship.",
+      steps: [
+        "Never log passwords, tokens, or full SSNs — hash or mask sensitive fields.",
+        "Add log scrubbers for Bearer tokens and credit-card/SSN patterns.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms secrets written to app.log. Show route-level log redaction remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-threshold-alerts-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 missing threshold alerts live oracle",
+    description:
+      "POST attacks/threshold_alerts/fail_insecure.php on owaspsecure.com records repeated auth failures without threshold alerting — A09 monitoring failure training oracle.",
+    impactOneline:
+      "Missing brute-force alerts on owaspsecure.com let credential-stuffing attacks continue undetected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingThresholdAlertsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Alert on repeated authentication failures and anomalous access patterns.",
+      steps: [
+        "Define SIEM thresholds for failed logins per user/IP within a sliding window.",
+        "Page on-call when brute-force or credential-stuffing patterns exceed baseline.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com fail_insecure.php never triggers alerts on repeated failures. Show threshold alerting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-threshold-alerts-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route threshold alerts live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 4 confirms repeated failures never trigger alerts — route-specific A09 monitoring failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live missing threshold alerting, not only client-side evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingThresholdAlertsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Alert on repeated authentication failures and anomalous access patterns.",
+      steps: [
+        "Define SIEM thresholds for failed logins per user/IP within a sliding window.",
+        "Page on-call when brute-force or credential-stuffing patterns exceed baseline.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms no alerts on repeated failures. Show route-level SIEM threshold remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-admin-action-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 privileged action audit logging live oracle",
+    description:
+      "POST attacks/auth_events/admin_action_insecure.php on owaspsecure.com performs privileged delete_user without actor or correlation audit logging — A09 privileged-action logging failure training oracle.",
+    impactOneline:
+      "Missing privileged-action audit trails on owaspsecure.com hide destructive admin abuse during incident response.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingAdminActionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Log privileged actions with actor identity, target object, and correlation IDs.",
+      steps: [
+        "Emit structured audit events for every admin or destructive action.",
+        "Include actor user id, action type, target resource, and corr_id in every privileged log line.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com admin_action_insecure.php performs delete_user without actor audit logging. Show privileged-action audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-admin-action-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route admin action live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 1 admin_action confirms privileged delete without actor/correlation audit trail — route-specific A09 logging failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live missing privileged-action audit logging, not only client-side evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingAdminActionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Log privileged actions with actor identity, target object, and correlation IDs.",
+      steps: [
+        "Emit structured audit events for every admin or destructive action.",
+        "Include actor user id, action type, target resource, and corr_id in every privileged log line.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms admin delete without audit trail. Show route-level privileged-action audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-structure-time-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 unstructured log format live oracle",
+    description:
+      "POST attacks/structure_time/write_insecure.php on owaspsecure.com writes free-form local-time log lines without structured timestamps — A09 log structure failure training oracle.",
+    impactOneline:
+      "Unstructured free-form logs on owaspsecure.com break SIEM parsing and cross-event correlation during investigations.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingStructureTimeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Emit structured JSON logs with UTC timestamps and consistent field names.",
+      steps: [
+        "Replace free-form log strings with structured JSON containing timestamp, level, and event fields.",
+        "Use UTC ISO-8601 timestamps for cross-region correlation.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com write_insecure.php writes brittle free-form log lines. Show structured logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-structure-time-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route structure/time live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 3 confirms free-form unstructured log lines — route-specific A09 log structure failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live unstructured logging, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingStructureTimeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Emit structured JSON logs with UTC timestamps and consistent field names.",
+      steps: [
+        "Replace free-form log strings with structured JSON containing timestamp, level, and event fields.",
+        "Use UTC ISO-8601 timestamps for cross-region correlation.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms brittle free-form logs. Show route-level structured logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-integrity-chain-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 log integrity chain live oracle",
+    description:
+      "POST attacks/integrity_chain/append_insecure.php on owaspsecure.com appends plain-text log lines without signatures or hash chains — A09 log integrity failure training oracle.",
+    impactOneline:
+      "Tamper-undetectable logs on owaspsecure.com let attackers cover tracks by editing or deleting audit entries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingIntegrityChainLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect audit logs with hash chains, signatures, or append-only WORM storage.",
+      steps: [
+        "Sign each log entry or maintain a Merkle/hash chain for tamper detection.",
+        "Ship logs to immutable append-only storage (WORM bucket or SIEM with write-once policy).",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com append_insecure.php writes tamper-undetectable plain-text logs. Show log integrity chain remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-integrity-chain-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route integrity chain live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 5 confirms append-only logs without integrity protection — route-specific A09 log integrity failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live missing log integrity chains, not only client-side evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingIntegrityChainRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect audit logs with hash chains, signatures, or append-only WORM storage.",
+      steps: [
+        "Sign each log entry or maintain a Merkle/hash chain for tamper detection.",
+        "Ship logs to immutable append-only storage (WORM bucket or SIEM with write-once policy).",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms tamper-undetectable logs. Show route-level log integrity chain remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-xss-stored-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 stored XSS live oracle",
+    description:
+      "POST attacks/xss_stored/xss_demo.php?mode=raw on owaspsecure.com stores attacker-controlled HTML in session comments without sanitization — A03 stored XSS training oracle.",
+    impactOneline:
+      "Unsanitized stored comments on owaspsecure.com enable persistent XSS against other users viewing the demo.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionXssStoredLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize all user HTML before storage and on output.",
+      steps: [
+        "Use a strict HTML sanitizer or encode output with htmlspecialchars.",
+        "Apply Content-Security-Policy to block inline script execution.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our xss_demo.php stores raw HTML in session comments. Show output encoding and CSP remediation for stored XSS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-xss-stored-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 injection route stored XSS live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, POST xss_stored/xss_demo.php confirms live stored XSS — route-specific A03 injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm live stored XSS, not only client-side evidence markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionXssStoredRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize all user HTML before storage and on output.",
+      steps: [
+        "Use a strict HTML sanitizer or encode output with htmlspecialchars.",
+        "Apply Content-Security-Policy to block inline script execution.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms stored XSS in session comments. Show route-level output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-union-search-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 UNION search SQLi live oracle",
+    description:
+      "GET attacks/sql_union_search/search_insecure.php on owaspsecure.com accepts UNION SELECT payloads that exfiltrate a03_users emails — A03 injection training oracle.",
+    impactOneline:
+      "Shape-compatible UNION injection on owaspsecure.com product search leaks user emails from other tables.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionUnionSearchLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and block UNION in search filters.",
+      steps: [
+        "Replace string-concatenated LIKE clauses with prepared statements.",
+        "Validate search input against strict allowlists before query execution.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our sql_union_search/search_insecure.php concatenates q into LIKE and allows UNION SELECT. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-union-search-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 injection route UNION search live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, Attack 2 UNION search exfiltrates a03_users via shape-compatible UNION SELECT — route-specific A03 injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm live UNION SQLi, not only login bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionUnionSearchRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and block UNION in search filters.",
+      steps: [
+        "Replace string-concatenated LIKE clauses with prepared statements.",
+        "Validate search input against strict allowlists before query execution.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms UNION search SQLi. Show route-level parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-sqli-blind-time-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 blind/time SQLi live oracle",
+    description:
+      "GET attacks/sql_blind_time/count_insecure.php on owaspsecure.com concatenates id into COUNT queries — id=1 AND SLEEP(2) delays ~2s in the ms field — A03 time-based blind injection training oracle.",
+    impactOneline:
+      "Concatenated id filters on owaspsecure.com enable boolean-based SQL inference without error messages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliBlindTimeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and cast id parameters to integers.",
+      steps: [
+        "Bind id as an integer parameter instead of concatenating into SQL.",
+        "Reject non-numeric id values before query execution.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our sql_blind_time/count_insecure.php concatenates id into COUNT. Show parameterized integer binding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-sqli-blind-time-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 injection route blind/time SQLi live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php or /attacks/sql_blind_time/ on owaspsecure.com, Attack 3 blind/time SQLi confirms SLEEP(2) timing differential — route-specific A03 injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm live blind SQLi, not only login bypass and UNION search.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliBlindTimeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and cast id parameters to integers.",
+      steps: [
+        "Bind id as an integer parameter instead of concatenating into SQL.",
+        "Reject non-numeric id values before query execution.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms blind SQLi via COUNT inflation. Show route-level parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-sqli-second-order-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 second-order SQLi live oracle",
+    description:
+      "GET attacks/sql_second_order/admin_view_insecure.php on owaspsecure.com builds LIKE filters from stored profile bio fields — needle=%' OR 1=1 -- detonates stored SQL fragments — A03 second-order injection training oracle.",
+    impactOneline:
+      "Stored profile fields on owaspsecure.com detonate later in admin queries built via string concatenation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliSecondOrderLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate stored user content and parameterize all downstream queries.",
+      steps: [
+        "Sanitize profile bio on write and escape on read.",
+        "Use prepared statements when filtering stored fields in admin views.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our sql_second_order/admin_view_insecure.php concatenates stored bio into LIKE. Show second-order SQLi remediation with parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-sqli-second-order-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 injection route second-order SQLi live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php or /attacks/sql_second_order/ on owaspsecure.com, Attack 4 second-order SQLi exfiltrates multiple a03_users via stored bio payload in admin_view — route-specific A03 injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm live second-order SQLi, not only first-order injection vectors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliSecondOrderRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate stored user content and parameterize all downstream queries.",
+      steps: [
+        "Sanitize profile bio on write and escape on read.",
+        "Use prepared statements when filtering stored fields in admin views.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms second-order SQLi in admin_view. Show route-level stored-field validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-function-level-promote-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "owaspsecure.com A01 function-level promote live oracle",
+    description:
+      "POST attacks/function_level/promote_insecure.php on owaspsecure.com grants admin role to arbitrary user_id without authorization — A01 function-level access control training oracle.",
+    impactOneline:
+      "Missing function-level authorization on owaspsecure.com enables vertical privilege escalation to admin.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacFunctionLevelPromoteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce role checks on every privileged function endpoint.",
+      steps: [
+        "Require authenticated admin session before role-promotion endpoints execute.",
+        "Use server-side authorization middleware on all privileged actions.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our promote_insecure.php grants admin without authorization. Show function-level access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-function-level-promote-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "owaspsecure.com A01 BAC route function-level promote live oracle",
+    description:
+      "When scanning /demo/a01_bac/insecure.php on owaspsecure.com, POST function_level/promote_insecure.php confirms live vertical privilege escalation — route-specific A01 broken access control oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A01 lab should confirm live function-level privilege escalation, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacFunctionLevelPromoteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce role checks on every privileged function endpoint.",
+      steps: [
+        "Require authenticated admin session before role-promotion endpoints execute.",
+        "Use server-side authorization middleware on all privileged actions.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a01_bac route scan confirms unauthenticated admin promotion. Show route-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-file-dor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 file DOR live oracle",
+    description:
+      "GET attacks/file_dor.php?id= on owaspsecure.com returns another user's private report file by numeric id without owner check — A01 direct object reference training oracle.",
+    impactOneline:
+      "Numeric file DOR on owaspsecure.com exposes private per-user report files across user boundaries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacFileDorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize file access against the authenticated session owner.",
+      steps: [
+        "Verify file.user_id matches the session user before serving downloads.",
+        "Use non-guessable file tokens instead of sequential numeric ids.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our file_dor.php returns private files by id without owner check. Show authorization remediation for file downloads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-file-dor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 BAC route file DOR live oracle",
+    description:
+      "When scanning /demo/a01_bac/insecure.php on owaspsecure.com, GET file_dor.php confirms live direct object reference on private files — route-specific A01 broken access control oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A01 lab should confirm live file DOR, not only numeric note IDOR.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacFileDorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize file access against the authenticated session owner.",
+      steps: [
+        "Verify file.user_id matches the session user before serving downloads.",
+        "Use non-guessable file tokens instead of sequential numeric ids.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a01_bac route scan confirms file DOR on private reports. Show route-level file authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "owaspsecure.com A01 mass-assignment live oracle",
+    description:
+      "POST attacks/mass_assignment.php on owaspsecure.com accepts client-supplied is_admin=1 without field allowlist — A01 mass-assignment training oracle.",
+    impactOneline:
+      "Unrestricted mass assignment on owaspsecure.com enables privilege escalation via is_admin field injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist updatable profile fields server-side.",
+      steps: [
+        "Reject unknown POST fields instead of blindly applying them to user records.",
+        "Never accept role or privilege flags from client requests.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our mass_assignment.php accepts is_admin=1 from POST body. Show allowlist-based mass-assignment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "owaspsecure.com A01 BAC route mass-assignment live oracle",
+    description:
+      "When scanning /demo/a01_bac/insecure.php on owaspsecure.com, POST mass_assignment.php confirms live is_admin=1 acceptance — route-specific A01 broken access control oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A01 lab should confirm live mass assignment, not only IDOR and promote oracles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist updatable profile fields server-side.",
+      steps: [
+        "Reject unknown POST fields instead of blindly applying them to user records.",
+        "Never accept role or privilege flags from client requests.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a01_bac route scan confirms mass assignment via is_admin=1. Show route-level field allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-idor-uuid-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 UUID IDOR live oracle",
+    description:
+      "GET attacks/idor_uuid.php on owaspsecure.com returns another user's note by guessable public_id without owner check — A01 broken access control training oracle.",
+    impactOneline:
+      "UUID-only authorization on owaspsecure.com still permits IDOR when public_id values are predictable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacIdorUuidLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize object access against the authenticated session owner, not only public_id lookup.",
+      steps: [
+        "Verify note.user_id matches the session user before returning records.",
+        "Use non-guessable public_id tokens instead of predictable slugs.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our idor_uuid.php returns notes by guessable public_id without owner check. Show authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-idor-uuid-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 BAC route UUID IDOR live oracle",
+    description:
+      "When scanning /demo/a01_bac/insecure.php on owaspsecure.com, GET idor_uuid.php confirms live public_id IDOR — route-specific A01 broken access control oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A01 lab should confirm live UUID IDOR, not only numeric idor_numeric oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacIdorUuidRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize object access against the authenticated session owner.",
+      steps: [
+        "Verify note.user_id matches the session user before returning records.",
+        "Use non-guessable public_id tokens instead of predictable slugs.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a01_bac route scan confirms UUID IDOR via public_id. Show route-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-health-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF internal health live oracle",
+    description:
+      "GET attacks/fetch_insecure.php on owaspsecure.com fetches attacks/internal/health.json and returns internal-gateway JSON — A10 SSRF training oracle beyond public URL fetch.",
+    impactOneline:
+      "Open fetcher on owaspsecure.com reaches internal-only health endpoints without network segmentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalHealthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side requests to internal paths and enforce URL allowlists.",
+      steps: [
+        "Deny fetcher requests targeting same-origin internal/admin paths.",
+        "Segment internal health endpoints on non-routable networks.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our fetch_insecure.php reaches internal/health.json. Show SSRF allowlist and network segmentation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-health-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF route internal health live oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, open fetcher returns internal-gateway health JSON — route-specific A10 SSRF oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm internal SSRF, not only example.com fetch oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalHealthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side requests to internal paths and enforce URL allowlists.",
+      steps: [
+        "Deny fetcher requests targeting same-origin internal/admin paths.",
+        "Segment internal health endpoints on non-routable networks.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms internal health SSRF. Show route-level fetch allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-socket-probe-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF socket probe live oracle",
+    description:
+      "GET attacks/socket_probe.php on owaspsecure.com performs server-side TCP port scans from attacker-controlled host:port parameters — A10 SSRF port-scanning training oracle.",
+    impactOneline:
+      "Server-side port scanning on owaspsecure.com lets attackers map internal services from the application network.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfSocketProbeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove server-side socket probes from user input and block outbound connections to internal networks.",
+      steps: [
+        "Never expose raw fsockopen/connect wrappers on attacker-controlled host:port pairs.",
+        "Enforce egress firewalls and network segmentation for application servers.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our socket_probe.php performs server-side port scans. Show SSRF egress control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-socket-probe-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF route socket probe live oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, Attack 4 socket_probe.php confirms server-side TCP reachability tests — route-specific A10 SSRF oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm live port-scanning SSRF, not only HTTP fetch oracles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfSocketProbeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove server-side socket probes from user input and block outbound connections to internal networks.",
+      steps: [
+        "Never expose raw fsockopen/connect wrappers on attacker-controlled host:port pairs.",
+        "Enforce egress firewalls and network segmentation for application servers.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms socket_probe port scanning. Show route-level SSRF egress remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-health-direct-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "owaspsecure.com A10 internal health direct exposure live oracle",
+    description:
+      "GET attacks/internal/health.json on owaspsecure.com returns internal-gateway JSON without authentication — A10 internal endpoint exposure training oracle.",
+    impactOneline:
+      "Directly reachable internal health endpoints on owaspsecure.com leak service topology without SSRF chaining.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalHealthDirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict internal health endpoints to private networks and require authentication.",
+      steps: [
+        "Move health checks off public web roots and bind to internal interfaces only.",
+        "Require service authentication for operational endpoints.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our attacks/internal/health.json is publicly reachable. Show internal endpoint access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-health-direct-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "owaspsecure.com A10 SSRF route internal health direct exposure oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, attacks/internal/health.json is directly reachable and returns internal-gateway status — route-specific A10 exposure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm internal health JSON is exposed without auth.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalHealthDirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict internal health endpoints to private networks and require authentication.",
+      steps: [
+        "Move health checks off public web roots and bind to internal interfaces only.",
+        "Require service authentication for operational endpoints.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms internal health.json is publicly reachable. Show route-level access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-admin-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "owaspsecure.com A10 SSRF internal admin live oracle",
+    description:
+      "GET attacks/fetch_insecure.php on owaspsecure.com fetches attacks/internal/admin.php and returns Internal Admin Panel secrets — A10 SSRF training oracle beyond health.json.",
+    impactOneline:
+      "Open fetcher on owaspsecure.com reaches internal admin panels and leaks fake credentials via SSRF.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalAdminLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side requests to internal admin paths and enforce URL allowlists.",
+      steps: [
+        "Deny fetcher requests targeting same-origin internal/admin paths.",
+        "Require authentication and network segmentation for admin panels.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our fetch_insecure.php reaches internal/admin.php and echoes SuperSecret123!. Show SSRF allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-admin-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "owaspsecure.com A10 SSRF route internal admin live oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, open fetcher returns Internal Admin Panel with SuperSecret123! — route-specific A10 SSRF oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm internal admin SSRF, not only health.json or example.com fetch.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side requests to internal admin paths and enforce URL allowlists.",
+      steps: [
+        "Deny fetcher requests targeting same-origin internal/admin paths.",
+        "Require authentication and network segmentation for admin panels.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms internal admin SSRF. Show route-level fetch allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-index-direct-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "owaspsecure.com A10 internal services index direct exposure live oracle",
+    description:
+      "GET attacks/internal/index.php on owaspsecure.com lists admin panel and health.json links without authentication — A10 internal endpoint exposure training oracle.",
+    impactOneline:
+      "Directly reachable internal services index on owaspsecure.com maps sensitive endpoints without SSRF chaining.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalIndexDirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict internal service indexes to private networks and require authentication.",
+      steps: [
+        "Remove internal endpoint catalogs from public web roots.",
+        "Bind operational endpoints to internal interfaces only.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our attacks/internal/index.php is publicly reachable. Show internal endpoint access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-index-direct-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "owaspsecure.com A10 SSRF route internal index direct exposure oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, attacks/internal/index.php is directly reachable and links admin/health endpoints — route-specific A10 exposure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm internal services index is exposed without auth.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalIndexDirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict internal service indexes to private networks and require authentication.",
+      steps: [
+        "Remove internal endpoint catalogs from public web roots.",
+        "Bind operational endpoints to internal interfaces only.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms internal services index is publicly reachable. Show route-level access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-store-bio-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 second-order bio writer live oracle",
+    description:
+      "POST attacks/sql_second_order/store_bio_insecure.php on owaspsecure.com persists attacker-controlled bio text without validation — A03 second-order SQLi writer training oracle.",
+    impactOneline:
+      "Unvalidated bio storage on owaspsecure.com enables second-order SQL injection when admin views concatenate stored values.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionStoreBioLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and parameterize all stored profile fields before persistence and query use.",
+      steps: [
+        "Sanitize bio input and use prepared statements in admin search queries.",
+        "Separate writer and reader authorization for profile updates.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our store_bio_insecure.php persists raw attacker bio for later admin_view detonation. Show second-order SQLi remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-store-bio-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 injection route store-bio live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, POST store_bio_insecure.php confirms raw bio persistence — route-specific A03 second-order injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm second-order writer step, not only admin_view detonation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionStoreBioRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and parameterize all stored profile fields before persistence and query use.",
+      steps: [
+        "Sanitize bio input and use prepared statements in admin search queries.",
+        "Separate writer and reader authorization for profile updates.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms store_bio raw persistence. Show route-level second-order SQLi remediation.",
     version: 1,
     enabled: true
   },
