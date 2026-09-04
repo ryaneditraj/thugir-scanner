@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T22:08:49.874829+00:00",
+  "updated_at": "2026-09-04T22:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 2803,
-  "total_findings": 28218,
+  "total_findings": 28220,
   "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2028,
-  "discovery_findings": 23823,
-  "improvements_shipped": 1422,
-  "last_run": "2026-09-04T22:08:49.874846+00:00",
+  "discovery_findings": 23825,
+  "improvements_shipped": 1425,
+  "last_run": "2026-09-04T22:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "22",
     "benchmark": {
@@ -50,41 +50,41 @@
       },
       "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles); secret-resend present"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 88,
-      "focus": "AI-Threatlab LLM/ASI walkthroughs + oopssec prompt-injection/info-disclosure + bugstore checkout/profile mass-assignment drain",
-      "improvements_shipped_this_run": 0
+      "findings": 90,
+      "focus": "VWAD DVR + Pwnshop vuln index + VulnBank AI chat oracles shipped; AI-Threatlab + oopssec walkthrough drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
-      "rootabhi1.github.io/AI-Threatlab: 5 findings \u2014 OWASP LLM/ASI interactive threat lab (new discovery)",
-      "koadt.github.io/oss-oopssec-store/posts/prompt-injection-ai-assistant: 6 findings \u2014 AI assistant prompt injection walkthrough",
-      "koadt.github.io/oss-oopssec-store/posts/information-disclosure-api-error: 8 findings \u2014 verbose API error secret disclosure walkthrough",
-      "bugstore.bugtraceai.com/api/checkout/process: 16 findings \u2014 bugstore-checkout-client-total live+route oracles",
-      "bugstore.bugtraceai.com/api/user/profile: 16 findings \u2014 bugstore-profile-mass-assignment live+route oracles",
-      "koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain: 14 findings \u2014 supply-chain poisoned rules route oracle"
+      "vwad.owasp.org/app/damn-vulnerable-restaurant/: 0→6 findings — vwad-dvr-restaurant-route-live-oracle",
+      "pwnshop.ctfsecurity.com/vulnerabilities: 49→50 findings — pwnshop-vulnerabilities-index live+route oracles",
+      "vulnbank.org/api/ai/chat: 0→34 findings — vulnbank-ai-chat-token-gate live+route oracles",
+      "rootabhi1.github.io/AI-Threatlab: 5 findings — OWASP LLM/ASI interactive threat lab",
+      "koadt.github.io/oss-oopssec-store/posts/prompt-injection-ai-assistant: 6 findings",
+      "bugstore.bugtraceai.com/api/checkout/process: 16 findings — bugstore-checkout-client-total oracles"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
-      "oopssec live-stream-hijack + next-public-env-variable-leak queued but not drained (8-URL limit)",
-      "AI-Threatlab: static walkthrough site \u2014 thin 5-finding fingerprint without route-specific oracles",
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "oopssec live-stream-hijack + next-public-env-variable-leak queued but not drained",
+      "AI-Threatlab: thin fingerprint without route-specific oracles",
       "qa.brokencrystals /api/file/aws + owaspsecure A09 + fabraix jailbreak-001 still in priority queue",
-      "pwnshop /vulnerabilities hub without vuln-index route oracle"
+      "pwnshop /checkout HPP coupon oracle needs authenticated OTP session for live probe"
     ]
   },
   "discovery_highlights": {
     "qa.brokencrystals.com/api/file/aws": 96,
     "juice-shop.herokuapp.com": 53,
-    "pwnshop.ctfsecurity.com/vulnerabilities": 49,
+    "pwnshop.ctfsecurity.com/vulnerabilities": 50,
     "pwnshop.ctfsecurity.com/debug/info": 48,
+    "vulnbank.org/api/ai/chat": 34,
     "preview.owasp-juice.shop/rest/products/search?q=test": 34,
     "pwnshop.ctfsecurity.com/checkout": 25,
     "bugstore.bugtraceai.com/api/checkout/process": 16,
     "bugstore.bugtraceai.com/api/user/profile": 16,
-    "bugstore.bugtraceai.com/api/auth/register": 16,
-    "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card": 16
+    "vwad.owasp.org/app/damn-vulnerable-restaurant": 6
   }
 }

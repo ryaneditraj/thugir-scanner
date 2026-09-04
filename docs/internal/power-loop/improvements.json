@@ -8627,6 +8627,24 @@
       "slug": "oopssec-gift-card-jwt-alg-confusion-priority-queue-drain",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: prepended koadt.github.io/.../insecure-randomness-gift-card + jwt-algorithm-confusion-partner-api to priority_discovery_urls front; corrected bugstore checkout URL to /api/checkout/process and signup to /api/auth/register; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vwad.owasp.org",
+      "slug": "vwad-dvr-restaurant-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET vwad.owasp.org/app/damn-vulnerable-restaurant/ documents FastAPI/PostgreSQL Docker CTF with Swagger at localhost:8091 + theowni/Damn-Vulnerable-RESTaurant-API-Game GitHub repo confirmed; vwad.owasp.org/app/damn-vulnerable-restaurant/ findings 0→6 (+vwad-dvr-restaurant-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-vulnerabilities-index-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /vulnerabilities returns PWN-001+ registry with OWASP 2025 + AI/LLM tier tags; pwnshop.ctfsecurity.com/vulnerabilities findings 49→50 (+pwnshop-vulnerabilities-index-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnbank.org",
+      "slug": "vulnbank-ai-chat-token-gate-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/ai/chat returns {\"error\":\"Token is missing\"} while POST /api/ai/chat/anonymous returns mode:anonymous success; vulnbank.org/api/ai/chat findings 0→34 (+vulnbank-ai-chat-token-gate-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

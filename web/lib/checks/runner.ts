@@ -2389,6 +2389,8 @@ const DEEP_RULES = new Set<string>([
   "pwnshopDebugInfoRouteLiveOracle",
   "pwnshopLabStatsLiveOracle",
   "pwnshopLabStatsRouteLiveOracle",
+  "pwnshopVulnerabilitiesIndexLiveOracle",
+  "pwnshopVulnerabilitiesIndexRouteLiveOracle",
   "pwnshopEventsAuditLiveOracle",
   "pwnshopEventsAuditRouteLiveOracle",
   "pwnshopChatInitEmailEnumerationLiveOracle",
@@ -3637,6 +3639,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideVwadGoofEvidence",
   "vwadGoofRouteLiveOracle",
   "vwadVoiceGoatRouteLiveOracle",
+  "clientSideVwadDvrRestaurantEvidence",
+  "vwadDvrRestaurantRouteLiveOracle",
   "clientSideVulnerableappDomXssEvidence",
   "seclabNextjsLabApiProbe",
   "seclabAngularStubRouteLiveOracle",
@@ -3866,6 +3870,8 @@ const DEEP_RULES = new Set<string>([
   "vulnbankAiAnonymousChatRouteLiveOracle",
   "vulnbankAiSystemInfoLiveOracle",
   "vulnbankAiSystemInfoRouteLiveOracle",
+  "vulnbankAiChatTokenGateLiveOracle",
+  "vulnbankAiChatTokenGateRouteLiveOracle",
   "vulnbankBoplaRegisterLiveOracle",
   "vulnbankBoplaRegisterRouteLiveOracle",
   "vulnbankSqliLoginLiveOracle",
@@ -11810,6 +11816,10 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
     /vwad\.owasp\.org\/app\/goof/i.test(home.finalUrl)
       ? ["https://vwad.owasp.org/app/goof/"]
       : [];
+  const vwadDvrRestaurantPrioritySeeds =
+    /vwad\.owasp\.org\/app\/damn-vulnerable-restaurant/i.test(home.finalUrl)
+      ? ["https://vwad.owasp.org/app/damn-vulnerable-restaurant/"]
+      : [];
   const ginAndJuiceLoginPrioritySeeds = /ginandjuice\.shop/i.test(home.finalUrl)
     ? [new URL("/login", home.finalUrl).toString()]
     : [];
@@ -11876,6 +11886,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       ...vwadGinJuicePrioritySeeds,
       ...vwadOopssecPrioritySeeds,
       ...vwadGoofPrioritySeeds,
+      ...vwadDvrRestaurantPrioritySeeds,
       ...ginAndJuiceLoginPrioritySeeds,
       ...vwadGinJuiceLiveSeeds,
       ...vwadOopssecLiveSeeds,
@@ -13623,6 +13634,31 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/debug\/info\b/i.test(targetInput) &&
         (p.slug.startsWith("pwnshop-debug-info") || p.slug.startsWith("pwnshop-lab-stats"))
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/vulnerabilities\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-vulnerabilities-index")
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/checkout\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-checkout-hpp-coupon")
+      )
+        return -4;
+      if (
+        /vulnbank\.org/i.test(origin) &&
+        /\/api\/ai\/chat\b/i.test(targetInput) &&
+        !/\/anonymous\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnbank-ai-chat-token-gate")
+      )
+        return -4;
+      if (
+        /vwad\.owasp\.org/i.test(origin) &&
+        /\/app\/damn-vulnerable-restaurant/i.test(targetInput) &&
+        p.slug.startsWith("vwad-dvr-restaurant")
       )
         return -4;
       if (

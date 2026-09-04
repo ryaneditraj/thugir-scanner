@@ -25363,6 +25363,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-vulnerabilities-index-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Pwnshop vulnerability index live oracle",
+    description:
+      "GET /vulnerabilities on pwnshop.ctfsecurity.com returns the interactive PWN-001+ registry catalog mapped to OWASP Top 10 2025 and AI/LLM tiers — training-lab vulnerability disclosure oracle.",
+    impactOneline:
+      "Unauthenticated /vulnerabilities index exposes full intentional vulnerability catalog for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopVulnerabilitiesIndexLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict vulnerability registry disclosure on production-facing Pwnshop deployments.",
+      steps: [
+        "Gate /vulnerabilities behind authenticated lab enrollment.",
+        "Run Pwnshop only in isolated lab environments.",
+        "Remove PWN- ID mappings from public HTML when not in training mode."
+      ]
+    },
+    fixPrompt:
+      "Our /vulnerabilities endpoint exposes the full PWN- registry. Show access control for training-lab vulnerability catalogs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-vulnerabilities-index-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Pwnshop /vulnerabilities route live oracle",
+    description:
+      "When scanning /vulnerabilities on pwnshop.ctfsecurity.com, the page documents 45+ intentional vulnerabilities with PWN- IDs and OWASP 2025 mappings — route-specific training oracle.",
+    impactOneline:
+      "Route-specific Pwnshop vulnerability index scans should confirm the interactive PWN- registry is exposed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopVulnerabilitiesIndexRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict /vulnerabilities route disclosure on Pwnshop training deployments.",
+      steps: [
+        "Gate vulnerability index behind authenticated lab enrollment.",
+        "Run Pwnshop only in isolated lab environments.",
+        "Remove PWN- ID mappings from public route scans when not in training mode."
+      ]
+    },
+    fixPrompt:
+      "Our /vulnerabilities route scan confirms the PWN- registry is exposed. Show route-specific access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-seller-preview-ssti-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -46397,6 +46449,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-ai-chat-token-gate-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Vuln Bank authenticated AI chat token gate oracle",
+    description:
+      "POST /api/ai/chat on vulnbank.org rejects unauthenticated requests with Token is missing while /api/ai/chat/anonymous may remain open — split AI chat auth boundary oracle.",
+    impactOneline:
+      "Parallel authenticated and anonymous AI chat endpoints create inconsistent auth boundaries for customer-support LLM features.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankAiChatTokenGateLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Unify AI chat authentication — Vuln Bank is intentional training software.",
+      steps: [
+        "Require consistent JWT validation on all /api/ai/chat variants.",
+        "Remove or hard-gate anonymous AI endpoints in production deployments.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/ai/chat returns Token is missing while /api/ai/chat/anonymous stays open. Show unified AI chat authentication remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-ai-chat-token-gate-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Vuln Bank /api/ai/chat route token gate live oracle",
+    description:
+      "When scanning vulnbank.org/api/ai/chat, POST without JWT returns Token is missing while anonymous sibling endpoint may remain exposed — route-specific AI auth boundary oracle.",
+    impactOneline:
+      "Route-specific /api/ai/chat scans should confirm authenticated chat rejects missing tokens while anonymous endpoints may bypass the same controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankAiChatTokenGateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Unify AI chat route authentication — Vuln Bank is intentional training software.",
+      steps: [
+        "Require consistent JWT validation on all /api/ai/chat routes.",
+        "Remove or hard-gate anonymous AI endpoints in production deployments.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/ai/chat route scan confirms Token is missing without JWT while anonymous chat may stay open. Show route-specific AI auth hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-bopla-register-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -63617,6 +63721,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VWAD Goof listing documents a vulnerable Node.js todo app with default credentials. Show route-specific training-platform access control.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vwad-dvr-restaurant-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP VWAD Damn Vulnerable Restaurant route live oracle",
+    description:
+      "When scanning vwad.owasp.org/app/damn-vulnerable-restaurant/, the VWAD listing documents theowni's FastAPI/PostgreSQL Docker CTF game with Swagger/Redoc at localhost:8091 — route-specific training oracle.",
+    impactOneline:
+      "VWAD DVR listing exposes offline FastAPI CTF deploy scope and GitHub repo for intentional Web API vulnerability training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vwadDvrRestaurantRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVR is intentional training — limit public disclosure of exploit catalog on VWAD-linked hosts.",
+      steps: [
+        "Gate DVR challenge details behind authenticated lab enrollment.",
+        "Run DVR only on isolated training infrastructure.",
+        "Do not expose Swagger/Redoc on public-facing hosts."
+      ]
+    },
+    fixPrompt:
+      "Our VWAD Damn Vulnerable Restaurant listing documents a FastAPI CTF game. Show route-specific training-platform access control.",
     version: 1,
     enabled: true
   },
