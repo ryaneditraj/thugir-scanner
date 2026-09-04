@@ -83984,5 +83984,109 @@ export const genericPatterns: Pattern[] = [
       "Our BugStore /api/orders route scan confirms unauthenticated order IDOR. Show route-specific BOLA remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "bugstore-checkout-client-total-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "BugStore checkout client-trusted total live oracle (V-023)",
+    description:
+      "POST /api/checkout/process on BugStore accepts attacker-controlled total=0.01 while cart total is higher — client-trusted payment total oracle.",
+    impactOneline:
+      "Trusting client-supplied checkout totals lets attackers pay pennies for full cart value on the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreCheckoutClientTotalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Recalculate order totals server-side from cart line items.",
+      steps: [
+        "Ignore client-supplied total fields during checkout.",
+        "Compute tax, shipping, and subtotal on the server from authoritative cart state.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore POST /api/checkout/process honors client total=0.01. Show server-side total validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-checkout-client-total-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "BugStore checkout client-trusted total route live oracle (V-023)",
+    description:
+      "When scanning /api/checkout/process on bugstore.bugtraceai.com, POST with total=0.01 confirms client-trusted payment — route-specific business-logic oracle.",
+    impactOneline:
+      "Route-specific BugStore checkout scans should confirm the server trusts attacker-controlled payment totals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreCheckoutClientTotalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Recalculate checkout totals server-side on BugStore checkout routes.",
+      steps: [
+        "Ignore client-supplied total fields during checkout.",
+        "Compute tax, shipping, and subtotal on the server from authoritative cart state.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore checkout route scan confirms client-trusted total manipulation. Show route-specific server-side total validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-profile-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "BugStore profile role mass-assignment live oracle (V-015)",
+    description:
+      "PUT /api/user/profile on BugStore accepts role:admin after registration — profile mass-assignment privilege escalation oracle.",
+    impactOneline:
+      "Mass-assigning admin role via profile update lets regular users escalate privileges on the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProfileMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block role and privilege fields from user-controlled profile updates.",
+      steps: [
+        "Use an allowlist of updatable profile fields.",
+        "Assign roles only through admin workflows with authorization checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore PUT /api/user/profile accepts role:admin mass-assignment. Show field allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-profile-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "BugStore profile mass-assignment route live oracle (V-015)",
+    description:
+      "When scanning /api/user/profile or /api/auth/register on bugstore.bugtraceai.com, PUT with role:admin confirms privilege escalation — route-specific mass-assignment oracle.",
+    impactOneline:
+      "Route-specific BugStore profile/auth scans should confirm role mass-assignment escalates users to admin.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProfileMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block role fields from BugStore profile update routes.",
+      steps: [
+        "Use an allowlist of updatable profile fields.",
+        "Assign roles only through admin workflows with authorization checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore profile route scan confirms role mass-assignment escalation. Show route-specific field allowlist remediation.",
+    version: 1,
+    enabled: true
   }
 ];
