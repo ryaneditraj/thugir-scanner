@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T20:05:00.000Z",
+  "updated_at": "2026-09-04T21:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card/",
+      "source": "kOaDT/oss-oopssec-store — LCG gift-card code prediction from millisecond timestamp walkthrough (scoreboard gap 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api/",
+      "source": "kOaDT/oss-oopssec-store — JWT HS256/RS256 algorithm confusion on partner API walkthrough (scoreboard gap 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain/",
+      "source": "kOaDT/oss-oopssec-store — npm typosquat → poisoned AI rules → runtime backdoor chain walkthrough (web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/vulnerabilities",
+      "source": "r007sec/pwnshop — interactive 45-vuln index mapped to OWASP Top 10 2025 + LLM Top 10 (GitHub homepage; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/checkout",
+      "source": "r007sec/pwnshop — checkout business-logic + Vulnbank card payment oracle (GitHub README key URLs; web search 21 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vwad.owasp.org/app/damn-vulnerable-restaurant/",
       "source": "OWASP VWAD — Damn Vulnerable RESTaurant API game (FastAPI CTF; web search 20 UTC)",
