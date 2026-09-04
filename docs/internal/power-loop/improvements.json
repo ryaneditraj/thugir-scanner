@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-logging-admin-action-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/auth_events/admin_action_insecure.php returns status performed with note no actor, no corr_id, no structure; owaspsecure.com/demo/a09_logging/insecure.php findings 4→21 (+owaspsecure-logging-admin-action-live-oracle +route +structure-time +integrity-chain live/route oracles); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-logging-structure-time-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/structure_time/write_insecure.php returns Wrote free-form line with brittle parsing & poor correlation note; owaspsecure.com/demo/a09_logging/insecure.php findings 4→21 (+owaspsecure-logging-structure-time-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-logging-integrity-chain-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/integrity_chain/append_insecure.php returns Appended (INSECURE) with Plain text, no signature or chain → tamper undetectable note; owaspsecure.com/demo/a09_logging/insecure.php findings 4→21 (+owaspsecure-logging-integrity-chain-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
       "slug": "owaspsecure-ssrf-internal-admin-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/fetch_insecure.php?url=https://owaspsecure.com/demo/a10_ssrf/attacks/internal/admin.php returns Internal Admin Panel with SuperSecret123!; owaspsecure.com/demo/a10_ssrf/insecure.php findings 16→20 (+owaspsecure-ssrf-internal-admin-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"

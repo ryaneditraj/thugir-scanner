@@ -77499,6 +77499,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-logging-admin-action-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 privileged action audit logging live oracle",
+    description:
+      "POST attacks/auth_events/admin_action_insecure.php on owaspsecure.com performs privileged delete_user without actor or correlation audit logging — A09 privileged-action logging failure training oracle.",
+    impactOneline:
+      "Missing privileged-action audit trails on owaspsecure.com hide destructive admin abuse during incident response.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingAdminActionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Log privileged actions with actor identity, target object, and correlation IDs.",
+      steps: [
+        "Emit structured audit events for every admin or destructive action.",
+        "Include actor user id, action type, target resource, and corr_id in every privileged log line.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com admin_action_insecure.php performs delete_user without actor audit logging. Show privileged-action audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-admin-action-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route admin action live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 1 admin_action confirms privileged delete without actor/correlation audit trail — route-specific A09 logging failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live missing privileged-action audit logging, not only client-side evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingAdminActionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Log privileged actions with actor identity, target object, and correlation IDs.",
+      steps: [
+        "Emit structured audit events for every admin or destructive action.",
+        "Include actor user id, action type, target resource, and corr_id in every privileged log line.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms admin delete without audit trail. Show route-level privileged-action audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-structure-time-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 unstructured log format live oracle",
+    description:
+      "POST attacks/structure_time/write_insecure.php on owaspsecure.com writes free-form local-time log lines without structured timestamps — A09 log structure failure training oracle.",
+    impactOneline:
+      "Unstructured free-form logs on owaspsecure.com break SIEM parsing and cross-event correlation during investigations.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingStructureTimeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Emit structured JSON logs with UTC timestamps and consistent field names.",
+      steps: [
+        "Replace free-form log strings with structured JSON containing timestamp, level, and event fields.",
+        "Use UTC ISO-8601 timestamps for cross-region correlation.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com write_insecure.php writes brittle free-form log lines. Show structured logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-structure-time-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route structure/time live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 3 confirms free-form unstructured log lines — route-specific A09 log structure failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live unstructured logging, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingStructureTimeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Emit structured JSON logs with UTC timestamps and consistent field names.",
+      steps: [
+        "Replace free-form log strings with structured JSON containing timestamp, level, and event fields.",
+        "Use UTC ISO-8601 timestamps for cross-region correlation.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms brittle free-form logs. Show route-level structured logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-integrity-chain-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 log integrity chain live oracle",
+    description:
+      "POST attacks/integrity_chain/append_insecure.php on owaspsecure.com appends plain-text log lines without signatures or hash chains — A09 log integrity failure training oracle.",
+    impactOneline:
+      "Tamper-undetectable logs on owaspsecure.com let attackers cover tracks by editing or deleting audit entries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingIntegrityChainLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect audit logs with hash chains, signatures, or append-only WORM storage.",
+      steps: [
+        "Sign each log entry or maintain a Merkle/hash chain for tamper detection.",
+        "Ship logs to immutable append-only storage (WORM bucket or SIEM with write-once policy).",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com append_insecure.php writes tamper-undetectable plain-text logs. Show log integrity chain remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-integrity-chain-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route integrity chain live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 5 confirms append-only logs without integrity protection — route-specific A09 log integrity failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live missing log integrity chains, not only client-side evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingIntegrityChainRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect audit logs with hash chains, signatures, or append-only WORM storage.",
+      steps: [
+        "Sign each log entry or maintain a Merkle/hash chain for tamper detection.",
+        "Ship logs to immutable append-only storage (WORM bucket or SIEM with write-once policy).",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms tamper-undetectable logs. Show route-level log integrity chain remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "owaspsecure-injection-xss-stored-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",

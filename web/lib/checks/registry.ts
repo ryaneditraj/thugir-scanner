@@ -44688,6 +44688,143 @@ const owaspsecureLoggingThresholdAlertsRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const owaspsecureLoggingAdminActionLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const adminUrl = owaspsecureAttackUrl(ctx, "attacks/auth_events/admin_action_insecure.php");
+  const postBody = new URLSearchParams({
+    action: "delete_user",
+    target: "bob"
+  }).toString();
+  const doc = await ctx.probe.get(adminUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Admin action \(INSECURE\)|"status"\s*:\s*"performed"/i.test(doc.body)) return NEGATIVE;
+  if (!/no actor, no corr_id|useless line to app\.log/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: adminUrl,
+      snippet:
+        doc.body.match(/no actor, no corr_id[\s\S]{0,60}/i)?.[0]?.slice(0, 100) ??
+        "privileged action without structured audit",
+      note: "owaspsecure.com POST attacks/auth_events/admin_action_insecure.php performs privileged delete_user without actor/correlation audit logging — A09 privileged-action logging failure training oracle"
+    }
+  };
+};
+
+const owaspsecureLoggingAdminActionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a09_logging\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureLoggingAdminActionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a09_logging route scan — Attack 1 admin_action performs privileged delete without actor/correlation audit trail (live logging failure oracle)"
+    }
+  };
+};
+
+const owaspsecureLoggingStructureTimeLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const writeUrl = owaspsecureAttackUrl(ctx, "attacks/structure_time/write_insecure.php");
+  const postBody = new URLSearchParams({ message: "user did something" }).toString();
+  const doc = await ctx.probe.get(writeUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Wrote free-form line \(INSECURE\)|free-form text/i.test(doc.body)) return NEGATIVE;
+  if (!/brittle parsing|poor correlation/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: writeUrl,
+      snippet:
+        doc.body.match(/brittle parsing[\s\S]{0,60}/i)?.[0]?.slice(0, 100) ??
+        "free-form unstructured log line",
+      note: "owaspsecure.com POST attacks/structure_time/write_insecure.php writes free-form local-time log lines without structured timestamps — A09 log structure failure training oracle"
+    }
+  };
+};
+
+const owaspsecureLoggingStructureTimeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a09_logging\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureLoggingStructureTimeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a09_logging route scan — Attack 3 structure_time writes brittle free-form log lines (live log structure failure oracle)"
+    }
+  };
+};
+
+const owaspsecureLoggingIntegrityChainLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const appendUrl = owaspsecureAttackUrl(ctx, "attacks/integrity_chain/append_insecure.php");
+  const postBody = new URLSearchParams({
+    message: "hello from insecure appender"
+  }).toString();
+  const doc = await ctx.probe.get(appendUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Appended \(INSECURE\)|Plain text, no signature/i.test(doc.body)) return NEGATIVE;
+  if (!/tamper undetectable|no signature or chain/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: appendUrl,
+      snippet:
+        doc.body.match(/tamper undetectable[\s\S]{0,60}/i)?.[0]?.slice(0, 100) ??
+        "append-only log without integrity chain",
+      note: "owaspsecure.com POST attacks/integrity_chain/append_insecure.php appends plain-text log lines without signatures or hash chains — A09 log integrity failure training oracle"
+    }
+  };
+};
+
+const owaspsecureLoggingIntegrityChainRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a09_logging\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureLoggingIntegrityChainLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a09_logging route scan — Attack 5 integrity_chain appends tamper-undetectable plain-text logs (live log integrity failure oracle)"
+    }
+  };
+};
+
 const owaspsecureInjectionXssStoredLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const xssUrl = owaspsecureAttackUrl(ctx, "attacks/xss_stored/xss_demo.php?mode=raw");
@@ -111929,6 +112066,12 @@ export const RULES: Record<string, Rule> = {
   owaspsecureLoggingPiiSecretsRouteLiveOracle,
   owaspsecureLoggingThresholdAlertsLiveOracle,
   owaspsecureLoggingThresholdAlertsRouteLiveOracle,
+  owaspsecureLoggingAdminActionLiveOracle,
+  owaspsecureLoggingAdminActionRouteLiveOracle,
+  owaspsecureLoggingStructureTimeLiveOracle,
+  owaspsecureLoggingStructureTimeRouteLiveOracle,
+  owaspsecureLoggingIntegrityChainLiveOracle,
+  owaspsecureLoggingIntegrityChainRouteLiveOracle,
   owaspsecureInjectionXssStoredLiveOracle,
   owaspsecureInjectionXssStoredRouteLiveOracle,
   owaspsecureBacFunctionLevelPromoteLiveOracle,
