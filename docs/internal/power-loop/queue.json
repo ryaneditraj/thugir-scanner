@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T16:03:42.827Z",
+  "updated_at": "2026-09-04T17:24:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://owaspsecure.com/demo/a01_bac/insecure.php",
@@ -9,6 +9,31 @@
     {
       "url": "https://owaspsecure.com/demo/a03_injection/insecure.php",
       "source": "owaspsecure.com OWASP Top 10 demo hub — A03 SQLi/XSS injection lab (scoreboard gap 17 UTC; thin 6-finding passes)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com",
+      "source": "BugTraceAI/BugStore — 32-vuln OWASP Top 10 shop playground (bugstore.bugtraceai.com homepage; web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/debug/vulns",
+      "source": "BugTraceAI/BugStore — Level-0 vulnerability catalog API oracle (/api/debug/vulns; GitHub README)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php",
+      "source": "webspoilt/vulnforge-academy — Level 14 SSRF challenge (README Medium tier; scoreboard gap 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/chat/query",
+      "source": "ctfsec/pwnshop — PWN-035/036 LLM prompt-injection POST /api/v1/chat/query (vulnerabilities index; web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://playhacklab.com/",
+      "source": "PlayHackLab — browser-based OWASP Top 10 hacking sandbox (public demo; web search 17 UTC)",
       "auth": "public_demo"
     },
     {
@@ -21307,5 +21332,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 1993
+  "discovery_urls_added": 1998
 }
