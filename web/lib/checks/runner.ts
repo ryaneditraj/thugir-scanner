@@ -2981,6 +2981,10 @@ const DEEP_RULES = new Set<string>([
   "duckStoreMcpInfoRouteLiveOracle",
   "duckStoreProductsFilterSqliLiveOracle",
   "duckStoreProductsFilterSqliRouteLiveOracle",
+  "bugstoreProductSearchSqliLiveOracle",
+  "bugstoreProductSearchSqliRouteLiveOracle",
+  "bugstoreProductImagePathTraversalLiveOracle",
+  "bugstoreProductImagePathTraversalRouteLiveOracle",
   "duckStoreCartNegativeQuantityLiveOracle",
   "duckStoreCartNegativeQuantityRouteLiveOracle",
   "duckStoreAdminUsersBflaLiveOracle",
@@ -13729,6 +13733,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/file(?:\/raw)?\b/i.test(targetInput) &&
         (p.slug.startsWith("brokencrystals-file") || p.slug.startsWith("brokencrystals-api-file"))
+      )
+        return -4;
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/products\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-product-search-sqli")
+      )
+        return -4;
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/products\/\d+\/image/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-product-image-path-traversal")
       )
         return -4;
       if (

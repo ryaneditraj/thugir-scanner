@@ -8555,6 +8555,24 @@
       "slug": "owaspsecure-a01-a03-priority-queue-drain",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: prepended owaspsecure.com/demo/a01_bac + a03_injection insecure.php hubs to priority_discovery_urls front; a01_bac route scan 4→15 findings with full BAC live+route oracle suite; a03_injection 6→23 with SQLi/XSS live oracles; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-product-search-sqli-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/products/?search=test returns HTTP 200 vs search=test' returns HTTP 500 Internal Server Error; OpenAPI V-001/V-012; bugstore.bugtraceai.com/api/products/?search=test findings 8→11 (+bugstore-product-search-sqli-live-oracle +route); benchmark juice-shop-staging 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-product-image-path-traversal-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/products/1/image?file=../../../etc/passwd returns /etc/passwd (root:x:0:0); OpenAPI V-014; bugstore.bugtraceai.com/api/products/1/image findings 8→12 (+bugstore-product-image-path-traversal-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:qa.brokencrystals.com",
+      "slug": "brokencrystals-file-aws-priority-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended qa.brokencrystals.com/api/file/aws to priority_discovery_urls front; GET ?path=http://169.254.169.254/latest/meta-data/ returns ami-id/instance-id; qa.brokencrystals.com/api/file/aws findings 0→96 (+brokencrystals-file-aws-route-live-oracle +brokencrystals-api-file-*); benchmark juice-shop-staging 52 findings 6/6 maintained"
     }
   ]
 }
