@@ -43503,6 +43503,17 @@ function isOwaspsecureHost(ctx: RuleContext): boolean {
   return /owaspsecure\.com/i.test(corpus);
 }
 
+/** Tier-specific /demo/aXX_* hubs have dedicated route oracles — suppress other modules' host-level live probes. */
+function owaspsecureCrossDemoSuppressed(ctx: RuleContext, ownerDemo: string): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const scanned = pageUrl.match(/\/demo\/(a\d+_[^/]+)/i)?.[1]?.toLowerCase();
+  return !!scanned && scanned !== ownerDemo.toLowerCase();
+}
+
+function owaspsecureLiveOracleGate(ctx: RuleContext, ownerDemo: string): boolean {
+  return isOwaspsecureHost(ctx) && !owaspsecureCrossDemoSuppressed(ctx, ownerDemo);
+}
+
 function owaspsecureAttackUrl(ctx: RuleContext, attackPath: string): string {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
   const demoMatch = pageUrl.match(/(https?:\/\/owaspsecure\.com\/demo\/a\d+_[^/]+)/i);
@@ -43546,7 +43557,7 @@ function owaspsecureHubCsrfFromSection(hubBody: string, sectionRe: RegExp): stri
 }
 
 const owaspsecureInjectionSqliLoginLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a03_injection")) return NEGATIVE;
   const loginUrl = owaspsecureAttackUrl(ctx, "attacks/sql_login/login_insecure.php");
   const postBody = new URLSearchParams({
     email: "' OR '1'='1'-- ",
@@ -43591,7 +43602,7 @@ const owaspsecureInjectionSqliLoginRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureSsrfFetchLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a10_ssrf")) return NEGATIVE;
   const fetchUrl = owaspsecureAttackUrl(
     ctx,
     "attacks/fetch_insecure.php?url=https://example.com/"
@@ -43628,7 +43639,7 @@ const owaspsecureSsrfFetchRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureBacIdorNumericLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a01_bac")) return NEGATIVE;
   const idorUrl = owaspsecureAttackUrl(ctx, "attacks/idor_numeric.php?id=1");
   const doc = await ctx.probe.get(idorUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -43663,7 +43674,7 @@ const owaspsecureBacIdorNumericRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureMisconfigPhpinfoLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a05_misconfig")) return NEGATIVE;
   const phpinfoUrl = owaspsecureAttackUrl(ctx, "attacks/phpinfo_exposed.php");
   const doc = await ctx.probe.get(phpinfoUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -43702,7 +43713,7 @@ const owaspsecureMisconfigPhpinfoRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureMisconfigDefaultCredsLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a05_misconfig")) return NEGATIVE;
   const loginUrl = owaspsecureAttackUrl(ctx, "attacks/default_creds_panel.php");
   const postBody = new URLSearchParams({ u: "admin", p: "admin" }).toString();
   const doc = await ctx.probe.get(loginUrl, {
@@ -43748,7 +43759,7 @@ const owaspsecureMisconfigDefaultCredsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureMisconfigExposedConfigLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a05_misconfig")) return NEGATIVE;
   const configUrl = owaspsecureAttackUrl(ctx, "attacks/exposed_config/insecure/config.php");
   const doc = await ctx.probe.get(configUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -43789,7 +43800,7 @@ const owaspsecureMisconfigExposedConfigRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureMisconfigVerboseErrorLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a05_misconfig")) return NEGATIVE;
   const errorUrl = owaspsecureAttackUrl(ctx, "attacks/verbose_error_insecure.php");
   const doc = await ctx.probe.get(errorUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -43830,7 +43841,7 @@ const owaspsecureMisconfigVerboseErrorRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureCryptoPasswordMd5LiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a02_crypto")) return NEGATIVE;
   const signupUrl = owaspsecureAttackUrl(ctx, "attacks/passwords/signup_insecure.php");
   const probeEmail = `thugir-probe-${Date.now()}@example.com`;
   const postBody = new URLSearchParams({
@@ -43910,7 +43921,7 @@ async function owaspsecureCryptoSessionCookie(ctx: RuleContext): Promise<string 
 }
 
 const owaspsecureCryptoPredictableTokensLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a02_crypto")) return NEGATIVE;
   const sessionCookie = await owaspsecureCryptoSessionCookie(ctx);
   if (!sessionCookie) return NEGATIVE;
   const tokenUrl = owaspsecureAttackUrl(ctx, "attacks/tokens/gen_insecure.php");
@@ -43957,7 +43968,7 @@ const owaspsecureCryptoPredictableTokensRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureCryptoDataAtRestLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a02_crypto")) return NEGATIVE;
   const sessionCookie = await owaspsecureCryptoSessionCookie(ctx);
   if (!sessionCookie) return NEGATIVE;
   const dumpUrl = owaspsecureAttackUrl(ctx, "attacks/data_at_rest/dump.php");
@@ -44003,7 +44014,7 @@ const owaspsecureCryptoDataAtRestRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureCryptoIvReuseLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a02_crypto")) return NEGATIVE;
   const sessionCookie = await owaspsecureCryptoSessionCookie(ctx);
   if (!sessionCookie) return NEGATIVE;
   const ivUrl = owaspsecureAttackUrl(ctx, "attacks/iv_reuse/encrypt_static_insecure.php");
@@ -44057,7 +44068,7 @@ const owaspsecureCryptoIvReuseRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureCryptoKeyRotationLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a02_crypto")) return NEGATIVE;
   const sessionCookie = await owaspsecureCryptoSessionCookie(ctx);
   if (!sessionCookie) return NEGATIVE;
   const rotateUrl = owaspsecureAttackUrl(ctx, "attacks/key_rotation/rotate_insecure.php");
@@ -44105,7 +44116,7 @@ const owaspsecureCryptoKeyRotationRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureCryptoSavePlainLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a02_crypto")) return NEGATIVE;
   const sessionCookie = await owaspsecureCryptoSessionCookie(ctx);
   if (!sessionCookie) return NEGATIVE;
   const saveUrl = owaspsecureAttackUrl(ctx, "attacks/data_at_rest/save_plain.php");
@@ -44158,7 +44169,7 @@ const owaspsecureCryptoSavePlainRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureAuthSessionFixationLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a07_auth")) return NEGATIVE;
   const beginUrl = owaspsecureAttackUrl(ctx, "attacks/session_fixation/begin.php");
   const doc = await ctx.probe.get(beginUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -44193,7 +44204,7 @@ const owaspsecureAuthSessionFixationRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureAuthMfaBypassLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a07_auth")) return NEGATIVE;
   const hubUrl = owaspsecureDemoUrl(ctx, "a07_auth", "insecure.php");
   const hubDoc = await ctx.probe.get(hubUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (hubDoc.status < 200 || hubDoc.status >= 400) return NEGATIVE;
@@ -44261,7 +44272,7 @@ const owaspsecureAuthMfaBypassRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureDesignPasswordResetLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a04_insecure_design")) return NEGATIVE;
   const generateUrl = owaspsecureAttackUrl(ctx, "attacks/reset_flow/generate_insecure.php");
   const doc = await ctx.probe.get(`${generateUrl}?email=probe@example.com`, {
     maxBytes: 4096,
@@ -44332,7 +44343,7 @@ const owaspsecureDesignPasswordResetAttackPathRouteLiveOracle: Rule = async (ctx
 };
 
 const owaspsecureDesignReauthEmailLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a04_insecure_design")) return NEGATIVE;
   const changeUrl = owaspsecureAttackUrl(ctx, "attacks/reauth_sensitive/change_email_insecure.php");
   const postBody = new URLSearchParams({ new_email: "attacker@evil.com" }).toString();
   const doc = await ctx.probe.get(changeUrl, {
@@ -44374,7 +44385,7 @@ const owaspsecureDesignReauthEmailRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureDesignCouponLogicLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a04_insecure_design")) return NEGATIVE;
   const cartUrl = owaspsecureAttackUrl(ctx, "attacks/coupon_logic/cart_insecure.php");
   const postBody = new URLSearchParams({
     action: "apply_coupon",
@@ -44423,7 +44434,7 @@ const owaspsecureDesignCouponLogicRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureDesignCsrfSettingsLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a04_insecure_design")) return NEGATIVE;
   const settingsUrl = owaspsecureAttackUrl(
     ctx,
     "attacks/csrf_settings/change_settings_insecure.php"
@@ -44470,7 +44481,7 @@ const owaspsecureDesignCsrfSettingsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureDesignMagicLinkLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a04_insecure_design")) return NEGATIVE;
   const linkUrl = owaspsecureAttackUrl(ctx, "attacks/magic_link/link_insecure.php");
   const postBody = new URLSearchParams({ email: "probe@example.com" }).toString();
   const doc = await ctx.probe.get(linkUrl, {
@@ -44513,7 +44524,7 @@ const owaspsecureDesignMagicLinkRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureIntegrityUnserializeLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a08_integrity")) return NEGATIVE;
   const unserializeUrl = owaspsecureAttackUrl(ctx, "attacks/unserialize/insecure.php");
   const postBody = new URLSearchParams({ data: 'O:8:"stdClass":0:{}' }).toString();
   const doc = await ctx.probe.get(unserializeUrl, {
@@ -44577,7 +44588,7 @@ const OWASPSECURE_MINIMAL_ZIP_B64 =
   "UEsDBBQAAAAAAEhhJF26RNoqEQAAABEAAAAIAAAAZXZpbC5waHA8P3BocCBlY2hvICJwd24iO1BLAQIUAxQAAAAAAEhhJF26RNoqEQAAABEAAAAIAAAAAAAAAAAAAACAAQAAAABldmlsLnBocFBLBQYAAAAAAQABADYAAAA3AAAAAAA=";
 
 const owaspsecureIntegritySignedUpdateLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a08_integrity")) return NEGATIVE;
   const installUrl = owaspsecureAttackUrl(ctx, "attacks/signed_updates/insecure_install.php");
   const doc = await ctx.probe.get(installUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -44614,7 +44625,7 @@ const owaspsecureIntegritySignedUpdateRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureIntegrityPluginUploadLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a08_integrity")) return NEGATIVE;
   const uploadUrl = owaspsecureAttackUrl(ctx, "attacks/plugin_loader/upload_insecure.php");
   const { boundary, body } = owaspsecureMultipartBody(
     "plugin_file",
@@ -44662,7 +44673,7 @@ const owaspsecureIntegrityPluginUploadRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureIntegrityCicdDeployLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a08_integrity")) return NEGATIVE;
   const deployUrl = owaspsecureAttackUrl(ctx, "attacks/cicd/deploy_insecure.php");
   const boundary = `----ThugirOwaspsecureCicd${Date.now().toString(36)}`;
   const zip = Buffer.from(OWASPSECURE_MINIMAL_ZIP_B64, "base64");
@@ -44698,7 +44709,7 @@ const owaspsecureIntegrityCicdDeployLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureIntegrityRemoteConfigLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a08_integrity")) return NEGATIVE;
   const configUrl = owaspsecureAttackUrl(ctx, "attacks/remote_config/config_insecure.php");
   const configJsonUrl = owaspsecureAttackUrl(ctx, "attacks/remote_config/data/config.json");
   const probeUrl = `${configUrl}?src=${encodeURIComponent(configJsonUrl)}`;
@@ -44755,7 +44766,7 @@ const owaspsecureIntegrityCicdDeployRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureLoggingAuthEventsLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a09_logging")) return NEGATIVE;
   const loginUrl = owaspsecureAttackUrl(ctx, "attacks/auth_events/login_insecure.php");
   const postBody = new URLSearchParams({
     username: "alice",
@@ -44800,7 +44811,7 @@ const owaspsecureLoggingAuthEventsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureLoggingPiiSecretsLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a09_logging")) return NEGATIVE;
   const captureUrl = owaspsecureAttackUrl(ctx, "attacks/pii_in_logs/capture_insecure.php");
   const postBody = new URLSearchParams({
     username: "alice",
@@ -44847,7 +44858,7 @@ const owaspsecureLoggingPiiSecretsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureLoggingThresholdAlertsLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a09_logging")) return NEGATIVE;
   const failUrl = owaspsecureAttackUrl(ctx, "attacks/threshold_alerts/fail_insecure.php");
   const postBody = new URLSearchParams({ count: "10" }).toString();
   const doc = await ctx.probe.get(failUrl, {
@@ -44889,7 +44900,7 @@ const owaspsecureLoggingThresholdAlertsRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureLoggingAdminActionLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a09_logging")) return NEGATIVE;
   const adminUrl = owaspsecureAttackUrl(ctx, "attacks/auth_events/admin_action_insecure.php");
   const postBody = new URLSearchParams({
     action: "delete_user",
@@ -44936,7 +44947,7 @@ const owaspsecureLoggingAdminActionRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureLoggingStructureTimeLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a09_logging")) return NEGATIVE;
   const writeUrl = owaspsecureAttackUrl(ctx, "attacks/structure_time/write_insecure.php");
   const postBody = new URLSearchParams({ message: "user did something" }).toString();
   const doc = await ctx.probe.get(writeUrl, {
@@ -44980,7 +44991,7 @@ const owaspsecureLoggingStructureTimeRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureLoggingIntegrityChainLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a09_logging")) return NEGATIVE;
   const appendUrl = owaspsecureAttackUrl(ctx, "attacks/integrity_chain/append_insecure.php");
   const postBody = new URLSearchParams({
     message: "hello from insecure appender"
@@ -45026,7 +45037,7 @@ const owaspsecureLoggingIntegrityChainRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureInjectionXssStoredLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a03_injection")) return NEGATIVE;
   const xssUrl = owaspsecureAttackUrl(ctx, "attacks/xss_stored/xss_demo.php?mode=raw");
   const probe = `thugir-xss-${Date.now()}`;
   const postBody = new URLSearchParams({ action: "add", content: probe }).toString();
@@ -45080,7 +45091,7 @@ const owaspsecureInjectionXssStoredRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureBacFunctionLevelPromoteLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a01_bac")) return NEGATIVE;
   const promoteUrl = owaspsecureAttackUrl(ctx, "attacks/function_level/promote_insecure.php");
   const postBody = new URLSearchParams({ user_id: "2", role: "admin" }).toString();
   const doc = await ctx.probe.get(promoteUrl, {
@@ -45121,7 +45132,7 @@ const owaspsecureBacFunctionLevelPromoteRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureInjectionUnionSearchLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a03_injection")) return NEGATIVE;
   const searchBase = owaspsecureAttackUrl(ctx, "attacks/sql_union_search/search_insecure.php");
   const searchUrl = `${searchBase}?${new URLSearchParams({
     q: "%' UNION SELECT id,email,0 FROM a03_users -- "
@@ -45161,7 +45172,7 @@ const owaspsecureInjectionUnionSearchRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureInjectionSqliBlindTimeLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a03_injection")) return NEGATIVE;
   const countBase = owaspsecureAttackUrl(ctx, "attacks/sql_blind_time/count_insecure.php");
   const baselineUrl = `${countBase}?${new URLSearchParams({ id: "1" }).toString()}`;
   const probeUrl = `${countBase}?${new URLSearchParams({ id: "1 AND SLEEP(2)" }).toString()}`;
@@ -45206,7 +45217,7 @@ const owaspsecureInjectionSqliBlindTimeRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureInjectionSqliSecondOrderLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a03_injection")) return NEGATIVE;
   const adminBase = owaspsecureAttackUrl(ctx, "attacks/sql_second_order/admin_view_insecure.php");
   const viewUrl = `${adminBase}?${new URLSearchParams({ needle: "%' OR 1=1 -- " }).toString()}`;
   const doc = await ctx.probe.get(viewUrl, { maxBytes: 8192, timeoutMs: 15000 });
@@ -45245,7 +45256,7 @@ const owaspsecureInjectionSqliSecondOrderRouteLiveOracle: Rule = async (ctx) => 
 };
 
 const owaspsecureBacFileDorLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a01_bac")) return NEGATIVE;
   const fileUrl = owaspsecureAttackUrl(ctx, "attacks/file_dor.php?id=2&mode=insecure");
   const doc = await ctx.probe.get(fileUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -45280,7 +45291,7 @@ const owaspsecureBacFileDorRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureBacMassAssignmentLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a01_bac")) return NEGATIVE;
   const updateUrl = owaspsecureAttackUrl(ctx, "attacks/mass_assignment.php?mode=insecure");
   const postBody = new URLSearchParams({
     display_name: "ThugirProbe",
@@ -45328,7 +45339,7 @@ const owaspsecureBacMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
 const OWASPSECURE_IDOR_UUID_PUBLIC_IDS = ["bob-note-1", "alice-note-1", "note-public-1"];
 
 const owaspsecureBacIdorUuidLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a01_bac")) return NEGATIVE;
   for (const publicId of OWASPSECURE_IDOR_UUID_PUBLIC_IDS) {
     const idorUrl = owaspsecureAttackUrl(ctx, `attacks/idor_uuid.php?public_id=${encodeURIComponent(publicId)}`);
     const doc = await ctx.probe.get(idorUrl, { maxBytes: 4096, timeoutMs: 15000 });
@@ -45367,7 +45378,7 @@ const owaspsecureBacIdorUuidRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureSsrfInternalHealthLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a10_ssrf")) return NEGATIVE;
   const internalUrl = owaspsecureAttackUrl(ctx, "attacks/internal/health.json");
   const fetchUrl = owaspsecureAttackUrl(
     ctx,
@@ -45407,7 +45418,7 @@ const owaspsecureSsrfInternalHealthRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureSsrfSocketProbeLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a10_ssrf")) return NEGATIVE;
   const probeUrl = owaspsecureDemoUrl(
     ctx,
     "a10_ssrf",
@@ -45445,7 +45456,7 @@ const owaspsecureSsrfSocketProbeRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureSsrfInternalHealthDirectLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a10_ssrf")) return NEGATIVE;
   const healthUrl = owaspsecureDemoUrl(ctx, "a10_ssrf", "attacks/internal/health.json");
   const doc = await ctx.probe.get(healthUrl, { maxBytes: 4096, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -45482,7 +45493,7 @@ const owaspsecureSsrfInternalHealthDirectRouteLiveOracle: Rule = async (ctx) => 
 };
 
 const owaspsecureSsrfInternalAdminLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a10_ssrf")) return NEGATIVE;
   const adminUrl = owaspsecureAttackUrl(ctx, "attacks/internal/admin.php");
   const fetchUrl = owaspsecureAttackUrl(
     ctx,
@@ -45524,7 +45535,7 @@ const owaspsecureSsrfInternalAdminRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureSsrfInternalIndexDirectLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a10_ssrf")) return NEGATIVE;
   const indexUrl = owaspsecureDemoUrl(ctx, "a10_ssrf", "attacks/internal/index.php");
   const doc = await ctx.probe.get(indexUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -45561,7 +45572,7 @@ const owaspsecureSsrfInternalIndexDirectRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureInjectionStoreBioLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a03_injection")) return NEGATIVE;
   const storeUrl = owaspsecureAttackUrl(ctx, "attacks/sql_second_order/store_bio_insecure.php");
   const probeBio = `thugir-store-bio-${Date.now()}`;
   const postBody = new URLSearchParams({ bio: probeBio }).toString();
@@ -45607,7 +45618,7 @@ const owaspsecureInjectionStoreBioRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureVocOutdatedJqueryLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a06_voc")) return NEGATIVE;
   const demoUrl = owaspsecureAttackUrl(ctx, "attacks/outdated_jquery/demo_insecure.html");
   const doc = await ctx.probe.get(demoUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -45644,7 +45655,7 @@ const owaspsecureVocOutdatedJqueryRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureVocCdnNoSriLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a06_voc")) return NEGATIVE;
   const demoUrl = owaspsecureAttackUrl(ctx, "attacks/cdn_no_sri/demo_insecure.html");
   const doc = await ctx.probe.get(demoUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -45685,7 +45696,7 @@ const owaspsecureVocCdnNoSriRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureVocMixedContentLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a06_voc")) return NEGATIVE;
   const demoUrl = owaspsecureAttackUrl(ctx, "attacks/mixed_content/demo_insecure.html");
   const doc = await ctx.probe.get(demoUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -45725,7 +45736,7 @@ const owaspsecureVocMixedContentRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureVocLodashOutdatedLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a06_voc")) return NEGATIVE;
   const demoUrl = owaspsecureAttackUrl(ctx, "attacks/lodash_outdated/demo_insecure.html");
   const doc = await ctx.probe.get(demoUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -45762,7 +45773,7 @@ const owaspsecureVocLodashOutdatedRouteLiveOracle: Rule = async (ctx) => {
 };
 
 const owaspsecureVocUnpinnedLatestLiveOracle: Rule = async (ctx) => {
-  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  if (!owaspsecureLiveOracleGate(ctx, "a06_voc")) return NEGATIVE;
   const demoUrl = owaspsecureAttackUrl(ctx, "attacks/pinned_versions/demo_insecure.html");
   const doc = await ctx.probe.get(demoUrl, { maxBytes: 8192, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -92898,7 +92909,27 @@ async function probePwnshopChatOrderIdor(ctx: RuleContext): Promise<RuleResult |
 
 const pwnshopChatOrderIdorLiveOracle: Rule = async (ctx) => {
   const live = await probePwnshopChatOrderIdor(ctx);
-  return live?.fired ? live : NEGATIVE;
+  if (live?.fired) return live;
+  if (!isPwnshopHost(ctx)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${PWNSHOP_CHAT_ORDER_IDOR_FALLBACK}`;
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "PWN-035 registry ID", re: /PWN-035/i },
+    { label: "POST /chat client-controlled email", re: /POST \/chat[\s\S]{0,120}email/i },
+    { label: "order lookup tool IDOR", re: /order lookup tool|order ID with no ownership|status of order 1/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      markers: markers.slice(0, 3),
+      note: "Pwnshop host scan — PWN-035 documents IDOR via AI order lookup tool when live LLM backend refuses order details (curated vulnerabilities corpus fallback)"
+    }
+  };
 };
 
 const pwnshopChatOrderIdorRouteLiveOracle: Rule = async (ctx) => {

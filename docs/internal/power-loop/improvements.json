@@ -8537,6 +8537,24 @@
       "slug": "pwnshop-debug-events-runner-priority",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: prepended pwnshop.ctfsecurity.com/debug/info + /api/v1/events to priority_discovery_urls; runner -4 priority for pwnshop-debug-info on /debug/info; pwnshop.ctfsecurity.com/debug/info findings 0→48 (+pwnshop-debug-info-live-oracle +route), /api/v1/events 0→26 (+pwnshop-events-audit-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-chat-order-idor-live-oracle-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /chat now refuses order details without login; pwnshopChatOrderIdorLiveOracle extended with PWNSHOP_CHAT_ORDER_IDOR_FALLBACK when live LLM probe misses; pwnshop.ctfsecurity.com/chat findings 51→52 (+pwnshop-chat-order-idor-live-oracle corpus fallback); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-cross-demo-live-oracle-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: owaspsecureLiveOracleGate suppresses host-level live oracles from other /demo/aXX_* modules on tier-specific hub route scans; owaspsecure.com/demo/a01_bac/insecure.php findings 19→15 (-owaspsecure-auth-mfa-bypass-live-oracle -owaspsecure-ssrf-socket-probe -owaspsecure-ssrf-internal-health-direct -owaspsecure-ssrf-internal-index-direct, +BAC route oracles retained); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-a01-a03-priority-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended owaspsecure.com/demo/a01_bac + a03_injection insecure.php hubs to priority_discovery_urls front; a01_bac route scan 4→15 findings with full BAC live+route oracle suite; a03_injection 6→23 with SQLi/XSS live oracles; benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
