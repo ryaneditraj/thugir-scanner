@@ -61464,6 +61464,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "bugforge-auth-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Bugforge auth lab route live oracle",
+    description:
+      "When scanning /labs/auth on bugforge.io or app.bugforge.io, the broken authentication learning-path module documents JWT refresh brute force, weak timestamp tokens, and missing bearer checks (FurHire, Sokudo, Ottergram writeups) — route-specific auth training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/auth documents broken authentication training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeAuthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge auth labs are intentional training — bind sessions to cryptographically secure tokens and enforce bearer validation.",
+      steps: [
+        "Use unpredictable refresh tokens with rotation and rate limiting.",
+        "Reject JWT alg:none and validate signatures on every request.",
+        "Require bearer tokens on all state-changing API routes."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/auth route documents FurHire-style refresh_token and Sokudo weak-token labs. Show authentication hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugforge-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "Bugforge CSRF lab route live oracle",
+    description:
+      "When scanning /labs/csrf on bugforge.io or app.bugforge.io, the CSRF learning-path module documents token validation bypass, SameSite restrictions, and Referer defenses — route-specific CSRF training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/csrf documents cross-site request forgery training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge CSRF labs are intentional training — require anti-CSRF tokens on all state-changing requests.",
+      steps: [
+        "Bind CSRF tokens to the user session and reject missing or mismatched tokens.",
+        "Set SameSite=Strict or Lax on session cookies for sensitive actions.",
+        "Validate Referer/Origin headers on state-changing POST endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/csrf route documents CSRF token validation bypass labs. Show anti-CSRF token and SameSite cookie remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugforge-sqli-route-live-oracle",
+    platform: "generic",
+    category: "SQL injection",
+    severityDefault: "high",
+    title: "Bugforge SQLi lab route live oracle",
+    description:
+      "When scanning /labs/sqli on bugforge.io or app.bugforge.io, the SQL injection learning-path module documents login bypass and UNION search labs (Cheesy Does it, MedNode writeups) — route-specific SQLi training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/sqli documents SQL injection training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge SQLi labs are intentional training — use parameterized queries and prepared statements.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries.",
+        "Apply least-privilege database accounts for application connections.",
+        "Run Bugforge lab instances only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/sqli route documents Cheesy Does it-style login SQLi labs. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "webverselabs-fixture-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
