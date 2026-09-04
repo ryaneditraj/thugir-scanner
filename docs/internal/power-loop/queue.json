@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T23:20:00.000Z",
+  "updated_at": "2026-09-04T00:16:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/transactions/history?account_id=1",
+      "source": "atlas-crew/Chimera vuln-api README — time-based blind SQLi via account_id GET /api/v1/transactions/history (USE_DATABASE=true; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/insurance/claims/search?q=test",
+      "source": "atlas-crew/Chimera vulnerability-inventory — CHM-INS-002 SQL injection claims search GET /api/v1/insurance/claims/search (web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/insurance/policies/lookup?policy_number=POL-001",
+      "source": "atlas-crew/Chimera vuln-api README — blind boolean SQLi policy lookup GET /api/v1/insurance/policies/lookup (web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/accounts/search?account_number=ACC-1001",
+      "source": "atlas-crew/Chimera vuln-api README — UNION-based SQLi accounts search GET /api/v1/banking/accounts/search (web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/snippets",
+      "source": "OWASP Juice Shop — vulnerable code snippets REST API for challenge oracle mapping (help.owasp-juice.shop integration docs; web search 00 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php",
       "source": "webspoilt/vulnforge-academy — Level 16 file-upload bypass challenge (Medium tier file upload; web search 23 UTC)",

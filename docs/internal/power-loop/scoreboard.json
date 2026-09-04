@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T00:30:00.000Z",
+  "updated_at": "2026-09-04T00:19:06.594Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2803,
-  "total_findings": 27833,
-  "critical_findings": 57,
+  "total_sites_scanned": 2811,
+  "total_findings": 27948,
+  "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1986,
-  "discovery_findings": 23462,
+  "discovery_urls_added": 1991,
+  "discovery_findings": 23576,
   "improvements_shipped": 1362,
-  "last_run": "2026-09-04T00:30:00.000Z",
+  "last_run": "2026-09-04T00:19:06.594Z",
   "last_run_summary": {
     "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 51,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 594,
+      "probes_run": 588,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,34 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (51 findings, 37 live oracles; secret-resend present)"
+      "note": "Stable 6/6 first-pass recall (52 findings, 40 live oracles; secret-resend + juice-shop-resend-key-live-oracle present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 19,
-      "focus": "vulnforge level16 double-extension upload + owaspsecure A05 exposed config + verbose error route oracles",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 114,
+      "focus": "Chimera SQLi endpoints (transactions/history, claims/search, policies/lookup, banking/accounts/search) + Juice Shop /snippets API; drained oopssec insecure-password-reset + weak-md5 + information-disclosure-api-error",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 37 live oracles; secret-resend present)",
-      "owaspsecure.com/demo/a05_misconfig/insecure.php: 8→12 findings — exposed-config + verbose-error live/route oracles",
-      "vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php: 6→7 findings — level16-double-extension-upload route oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 40 live oracles; secret-resend present)",
+      "demo.owasp-juice.shop/snippets: 52 findings — full Juice Shop live-oracle suite via snippets API hub",
+      "chimera.atlascrew.dev/api/v1/transactions/history: 8 findings — chimera-transactions-history-sqli-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/insurance/claims/search: 8 findings — chimera-insurance-claims-search-sqli-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/insurance/policies/lookup: 8 findings — chimera-insurance-policies-lookup-sqli-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/banking/accounts/search: 8 findings — chimera-banking-accounts-search-sqli-route-live-oracle",
+      "koadt.github.io/.../insecure-password-reset: 12 findings — oopssec password-reset route oracle",
+      "owaspsecure.com/demo/a05_misconfig/insecure.php: 12 findings — exposed-config + verbose-error route oracles (engine run)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "owaspsecure A07/A10 hub scans still queued (login rate, reset tokens, MFA bypass, remember-me need CSRF session)",
+      "Chimera SQLi endpoints share generic chimera-vuln-lab bundle — route-specific oracles confirmed but live SQLi proof may need USE_DATABASE=true on deploy",
+      "Juice Shop /snippets hub fires full oracle suite without snippet-specific route oracle",
       "vulnforge level16 live upload API blocked by Vercel 403 — corpus fallback oracle only",
       "wrongsecrets challenge-67/68 still undeployed on Heroku (404)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 51,
+    "juice-shop.herokuapp.com": 52,
+    "demo.owasp-juice.shop/snippets": 52,
+    "koadt.github.io/oss-oopssec-store/posts/insecure-password-reset": 12,
     "owaspsecure.com/demo/a05_misconfig/insecure.php": 12,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php": 7,
-    "brokencrystals.com/api/mcp": 87,
-    "wrongsecrets.herokuapp.com/challenge/challenge-69": 18,
-    "demo.owasp-juice.shop/rest/chatbot/respond": 17
+    "koadt.github.io/oss-oopssec-store/posts/weak-md5-hashing-admin-compromise": 10,
+    "chimera.atlascrew.dev/api/v1/transactions/history": 8,
+    "chimera.atlascrew.dev/api/v1/insurance/claims/search": 8,
+    "chimera.atlascrew.dev/api/v1/insurance/policies/lookup": 8,
+    "chimera.atlascrew.dev/api/v1/banking/accounts/search": 8
   }
 }
