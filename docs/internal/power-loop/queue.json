@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-03T14:16:55.726Z",
+  "updated_at": "2026-09-04T14:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/debug/info",
+      "source": "ctfsec/pwnshop — PWN-018 public debug endpoint leaks session secret + DB creds (vulnerabilities index; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/chat",
+      "source": "ctfsec/pwnshop — LLM chat prompt injection + Groq API chain oracle PWN-035/036 (vulnerabilities index; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
+      "source": "ctfsec/pwnshop — PWN-005 unauthenticated audit log API GET /api/v1/events (vulnerabilities index; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a06_voc/insecure.php",
+      "source": "owaspsecure.com OWASP Top 10 demo hub — A06 vulnerable/outdated components insecure lab (outdated jQuery, no SRI, unpinned CDN; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api/",
+      "source": "kOaDT/oss-oopssec-store — path-traversal documents API walkthrough ch.08 (challenges.json oracle)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection/",
       "source": "kOaDT/oss-oopssec-store — second-order SQLi in admin reviews walkthrough (ch.05 SQLi)",
@@ -11443,5 +11468,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 60
+  "discovery_urls_added": 65
 }
