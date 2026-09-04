@@ -55431,6 +55431,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-live-stream-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store live-stream BFLA walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/live-stream-hijack documents unprotected GET/POST /api/live/stream exposing RTMP ingest keys to any authenticated user.",
+    impactOneline:
+      "Public walkthrough teaches BFLA on live broadcast APIs where admin UI hides controls but the API never checks roles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecLiveStreamEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce server-side admin role checks on stream management APIs.",
+      steps: [
+        "Require admin role on POST /api/live/stream.",
+        "Do not return RTMP keys to non-admin users.",
+        "Host OopsSec walkthroughs on localhost-only training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/live/stream exposes RTMP keys to any authenticated user. Show BFLA remediation for broadcast APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-live-stream-bfla-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store live-stream BFLA live oracle",
+    description:
+      "OopsSec Store walkthrough corpus confirms GET/POST /api/live/stream BFLA with RTMP ingest key exposure — live walkthrough validation oracle.",
+    impactOneline:
+      "Walkthrough corpus validates unprotected live-stream API documented in Challenge 07 live-stream-hijack.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecLiveStreamBflaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — enforce server-side role checks on stream APIs.",
+      steps: [
+        "Require admin role on POST /api/live/stream.",
+        "Do not return RTMP ingest URLs to non-admin authenticated users.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our walkthrough confirms /api/live/stream BFLA. Show server-side role enforcement for stream management.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "oopssec-bola-wishlist-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -56181,6 +56233,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /checkout route leaks NEXT_PUBLIC_PAYMENT_SECRET in X-Payment-Auth. Show route-specific env leak remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-next-public-env-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OopsSec Store NEXT_PUBLIC_ env leak live oracle",
+    description:
+      "OopsSec Store walkthrough corpus validates NEXT_PUBLIC_PAYMENT_SECRET leaked as X-Payment-Auth on POST /api/orders with decodable OSS flag — live walkthrough validation oracle.",
+    impactOneline:
+      "Walkthrough corpus contains base64 payment secret proving NEXT_PUBLIC_ build-time client bundle exposure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecNextPublicEnvLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep payment credentials server-side; never use NEXT_PUBLIC_ for secrets.",
+      steps: [
+        "Proxy POST /api/orders through a server route that attaches auth headers.",
+        "Add CI grep for NEXT_PUBLIC_ secret-like variable names.",
+        "Rotate any credential ever built into client bundles."
+      ]
+    },
+    fixPrompt:
+      "Our walkthrough corpus exposes X-Payment-Auth payment secret. Show server-side secret handling remediation.",
     version: 1,
     enabled: true
   },
@@ -63747,6 +63825,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VWAD Damn Vulnerable Restaurant listing documents a FastAPI CTF game. Show route-specific training-platform access control.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ai-threatlab-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "AI-Threatlab OWASP LLM/ASI interactive lab disclosed",
+    description:
+      "rootabhi1.github.io/AI-Threatlab documents interactive OWASP LLM Top 10 (2025) and Agentic ASI Top 10 (2026) attack/defense walkthroughs with MITRE ATLAS mappings.",
+    impactOneline:
+      "Public AI security lab exposes LLM01 prompt injection and ASI agentic attack modules for reconnaissance and exploit rehearsal.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAiThreatlabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI-Threatlab is intentional training — isolate lab instances and gate behind authenticated sessions.",
+      steps: [
+        "Do not mirror AI-Threatlab attack patterns in production LLM agents.",
+        "Rate-limit unauthenticated enumeration of challenge modules.",
+        "Run agentic red-team labs only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host AI-Threatlab-style OWASP LLM/ASI walkthroughs. Show how to isolate AI security labs from production agents.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-threatlab-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "AI-Threatlab OWASP LLM/ASI route live oracle",
+    description:
+      "When scanning rootabhi1.github.io/AI-Threatlab/, the SPA embeds LLM01-LLM10 and ASI01-ASI10 interactive modules with MITRE ATLAS attack references — route-specific AI security training oracle.",
+    impactOneline:
+      "AI-Threatlab route scan confirms interactive agentic red-team curriculum with prompt injection and guardrail bypass modules.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiThreatlabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI-Threatlab is intentional training — isolate lab instances from production LLM deployments.",
+      steps: [
+        "Gate AI security walkthroughs behind authenticated lab enrollment.",
+        "Do not expose production agent APIs on the same origin as training labs.",
+        "Monitor for reconnaissance against public AI challenge catalogs."
+      ]
+    },
+    fixPrompt:
+      "Our AI-Threatlab route scan confirms OWASP LLM/ASI interactive modules. Show route-specific AI lab access control.",
     version: 1,
     enabled: true
   },

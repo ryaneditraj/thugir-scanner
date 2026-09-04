@@ -6119,7 +6119,11 @@ const clientSideOopssecLiveStreamEvidence: Rule = async (ctx) => {
 const oopssecLiveStreamBflaRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/posts\/live-stream-hijack/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecLiveStreamEvidence(ctx);
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecLiveStreamEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -7466,6 +7470,67 @@ const oopssecNextPublicEnvRouteLiveOracle: Rule = async (ctx) => {
       note: aliasFetch
         ? "OopsSec Store /posts/next-public-env-leak route scan — canonical walkthrough fetched from /posts/next-public-env-variable-leak documents NEXT_PUBLIC_PAYMENT_SECRET leaked via X-Payment-Auth on POST /api/orders"
         : "OopsSec Store /posts/next-public-env-variable-leak route scan — walkthrough documents NEXT_PUBLIC_PAYMENT_SECRET leaked via X-Payment-Auth on POST /api/orders"
+    }
+  };
+};
+
+const OOPSSEC_LIVE_STREAM_CANONICAL_PATH = "/posts/live-stream-hijack";
+
+async function oopssecLiveStreamCorpus(ctx: RuleContext): Promise<string> {
+  let corpus = ctx.combined;
+  if (!/\/api\/live\/stream|RTMP ingest URL/i.test(corpus)) {
+    const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+    const storeBase = oopssecStoreBaseFromUrl(pageUrl);
+    const canonicalUrl = storeBase
+      ? `${storeBase}${OOPSSEC_LIVE_STREAM_CANONICAL_PATH}/`
+      : new URL(OOPSSEC_LIVE_STREAM_CANONICAL_PATH, ctx.origin).toString();
+    const doc = await ctx.probe.get(canonicalUrl, { maxBytes: 200_000, timeoutMs: 15000 });
+    if (doc.status >= 200 && doc.status < 400 && doc.body.length > 500) corpus += `\n${doc.body}`;
+  }
+  return corpus;
+}
+
+const oopssecLiveStreamBflaLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await oopssecLiveStreamCorpus(ctx);
+  const result = await clientSideOopssecLiveStreamEvidence({ ...ctx, combined: corpus });
+  if (!result.fired) return NEGATIVE;
+  const rtmpMarker = corpus.match(/rtmp:\/\/[^\s"'<>]+|streamKey|stream key/i);
+  return {
+    fired: true,
+    confidence: rtmpMarker ? 0.92 : result.confidence,
+    evidence: {
+      ...result.evidence,
+      rtmpMarker: rtmpMarker?.[0]?.slice(0, 80),
+      note: "OopsSec Store walkthrough corpus confirms BFLA on GET/POST /api/live/stream — RTMP ingest key readable by any authenticated user"
+    }
+  };
+};
+
+const oopssecNextPublicEnvLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/oss-oopssec-store|koadt\.github\.io/i.test(pageUrl)) return NEGATIVE;
+  const corpus = await oopssecNextPublicEnvCorpus(ctx);
+  const secretMatch =
+    corpus.match(/X-Payment-Auth:\s*([A-Za-z0-9+/=]{16,})/i) ??
+    corpus.match(/NEXT_PUBLIC_PAYMENT_SECRET[\s\S]{0,120}([A-Za-z0-9+/=]{20,})/i);
+  if (!secretMatch?.[1]) return NEGATIVE;
+  const token = secretMatch[1].trim();
+  let decoded = "";
+  try {
+    decoded = Buffer.from(token, "base64").toString("utf8");
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/OSS\{[^}]+\}|public_env|payment/i.test(decoded)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      headerSample: `X-Payment-Auth: ${token.slice(0, 24)}…`,
+      decodedFlag: decoded.slice(0, 80),
+      note: "OopsSec Store walkthrough corpus exposes NEXT_PUBLIC_PAYMENT_SECRET as X-Payment-Auth on POST /api/orders — client bundle env leak training oracle"
     }
   };
 };
@@ -112843,6 +112908,85 @@ const vwadVoiceGoatRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- AI-Threatlab interactive OWASP LLM / Agentic ASI walkthrough (rootabhi1.github.io) -
+const CLIENT_AI_THREATLAB_RES: { label: string; re: RegExp }[] = [
+  {
+    label: "THREATLAB interactive title",
+    re: /THREATLAB|Interactive OWASP LLM/i
+  },
+  {
+    label: "OWASP LLM Top 10 2025",
+    re: /OWASP Top 10[\s\S]{0,40}2025|LLM Applications/i
+  },
+  {
+    label: "Agentic ASI Top 10 2026",
+    re: /Agentic[\s\S]{0,40}ASI Top 10[\s\S]{0,20}2026|Agentic AI Security/i
+  },
+  {
+    label: "LLM01 Prompt Injection module",
+    re: /"LLM01"|Prompt Injection/i
+  },
+  {
+    label: "ASI01-ASI10 challenge ids",
+    re: /"ASI(?:0[1-9]|10)"/
+  },
+  {
+    label: "MITRE ATLAS attack references",
+    re: /AML\.T0051|AML\.T0054|MITRE ATLAS/i
+  }
+];
+
+const clientSideAiThreatlabEvidence: Rule = async (ctx) => {
+  const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
+  if (!/rootabhi1\.github\.io\/AI-Threatlab/i.test(pageUrl)) return NEGATIVE;
+  let corpus = ctx.combined;
+  if (!/"LLM01"|"ASI01"|THREATLAB/i.test(corpus) || corpus.length < 5000) {
+    const indexUrl = pageUrl.replace(/\/AI-Threatlab\/.*$/i, "/AI-Threatlab/");
+    const doc = await ctx.probe.get(indexUrl.endsWith("/") ? indexUrl : `${indexUrl}/`, {
+      maxBytes: 512_000,
+      timeoutMs: 20000
+    });
+    if (doc.status >= 200 && doc.status < 400 && doc.body.length > 5000) {
+      corpus = `${corpus}\n${doc.body}`;
+    }
+  }
+  const hits: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_AI_THREATLAB_RES) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  const llmCount = (corpus.match(/"LLM\d{2}"/g) ?? []).length;
+  const asiCount = (corpus.match(/"ASI\d{2}"/g) ?? []).length;
+  if (llmCount < 3 && asiCount < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 5 && llmCount >= 5 ? 0.93 : 0.9,
+    evidence: {
+      markers: hits.slice(0, 5),
+      llmModules: llmCount,
+      asiModules: asiCount,
+      note: "AI-Threatlab documents interactive OWASP LLM Top 10 (2025) and Agentic ASI Top 10 (2026) attack/defense walkthroughs with MITRE ATLAS mappings"
+    }
+  };
+};
+
+const aiThreatlabRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/rootabhi1\.github\.io\/AI-Threatlab/i.test(pageUrl)) return NEGATIVE;
+  const result = await clientSideAiThreatlabEvidence(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "AI-Threatlab route scan — interactive OWASP LLM/ASI security lab with LLM01 prompt injection and ASI agentic attack modules"
+    }
+  };
+};
+
 // --- VWAD Damn Vulnerable Restaurant (FastAPI CTF game) listing -------------------------
 const clientSideVwadDvrRestaurantEvidence: Rule = async (ctx) => {
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
@@ -114760,6 +114904,8 @@ export const RULES: Record<string, Rule> = {
   vwadVoiceGoatRouteLiveOracle,
   clientSideVwadDvrRestaurantEvidence,
   vwadDvrRestaurantRouteLiveOracle,
+  clientSideAiThreatlabEvidence,
+  aiThreatlabRouteLiveOracle,
   clientSideVulnerableappDomXssEvidence,
   seclabNextjsLabApiProbe,
   seclabAngularStubRouteLiveOracle,
@@ -115943,7 +116089,9 @@ export const RULES: Record<string, Rule> = {
   oopssecSecondOrderSqliRouteLiveOracle,
   clientSideOopssecStoredXssReviewsEvidence,
   oopssecXffSqliRouteLiveOracle,
+  clientSideOopssecLiveStreamEvidence,
   oopssecLiveStreamBflaRouteLiveOracle,
+  oopssecLiveStreamBflaLiveOracle,
   oopssecBolaWishlistRouteLiveOracle,
   clientSideOopssecIdorOrderPrivacyEvidence,
   oopssecIdorOrderPrivacyRouteLiveOracle,
@@ -115978,6 +116126,7 @@ export const RULES: Record<string, Rule> = {
   oopssecPlaintextPasswordLogsRouteLiveOracle,
   clientSideOopssecNextPublicEnvEvidence,
   oopssecNextPublicEnvRouteLiveOracle,
+  oopssecNextPublicEnvLiveOracle,
   clientSideOopssecSupplyChainEvidence,
   oopssecSupplyChainPoisonedRulesRouteLiveOracle,
   clientSideOopssecGiftCardRandomnessEvidence,

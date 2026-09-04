@@ -134,6 +134,12 @@ function ginAndJuiceReflexionSuppressed(ctx: PowerCtx): boolean {
   return /\/api(?:\/|$)/i.test(pageUrl);
 }
 
+/** AI-Threatlab React SPA embeds coincidental '49' in bundled challenge JSON — suppress reflexion SSTI FPs. */
+function aiThreatlabReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /rootabhi1\.github\.io\/AI-Threatlab/i.test(pageUrl);
+}
+
 /** OopsSec Store GitHub Pages walkthroughs are static HTML — no server-side template engine. */
 function oopssecGitHubPagesReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
@@ -368,6 +374,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (securebankBlogReflexionSuppressed(ctx)) return NEGATIVE;
   if (ginAndJuiceReflexionSuppressed(ctx)) return NEGATIVE;
   if (oopssecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
+  if (aiThreatlabReflexionSuppressed(ctx)) return NEGATIVE;
   if (yogsecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
   if (ctfChallange3ReflexionSuppressed(ctx)) return NEGATIVE;
   if (the0xPwnLabXssReflexionSuppressed(ctx)) return NEGATIVE;
