@@ -8609,6 +8609,24 @@
       "slug": "finbot-portals-admin-oopssec-race-priority-drain",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: prepended owasp-finbot-ctf.org/portals + /admin + oopssec race-condition-coupon-abuse to priority_discovery_urls; runner -4 priority for finbot-admin-copilot-* on /admin and finbot-portals-* on /portals; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-checkout-client-total-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/checkout/process with total=0.01 while cart total=54.59 returns total_paid=0.01 (V-023 OpenAPI); bugstore.bugtraceai.com/api/checkout/process findings 10→16 (+bugstore-checkout-client-total-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-profile-mass-assignment-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: PUT /api/user/profile with role:admin after register returns user.role=admin (V-015 OpenAPI); bugstore.bugtraceai.com/api/user/profile findings 10→16 (+bugstore-profile-mass-assignment-live-oracle +route); /api/auth/register 10→16; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:queue",
+      "slug": "oopssec-gift-card-jwt-alg-confusion-priority-queue-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended koadt.github.io/.../insecure-randomness-gift-card + jwt-algorithm-confusion-partner-api to priority_discovery_urls front; corrected bugstore checkout URL to /api/checkout/process and signup to /api/auth/register; benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
