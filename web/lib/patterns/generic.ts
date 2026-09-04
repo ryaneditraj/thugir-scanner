@@ -76979,6 +76979,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-voc-mixed-content-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A06 mixed content live oracle",
+    description:
+      "GET attacks/mixed_content/demo_insecure.html on owaspsecure.com loads HTTP scripts and images on an HTTPS page — A06 vulnerable components training oracle.",
+    impactOneline:
+      "Mixed HTTP subresources on owaspsecure.com HTTPS pages enable downgrade and MITM tampering of active/passive content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocMixedContentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Serve all subresources over HTTPS and avoid mixed content.",
+      steps: [
+        "Upgrade every script, stylesheet, and image URL to https://.",
+        "Use Content-Security-Policy upgrade-insecure-requests on legacy pages.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com mixed_content demo loads HTTP scripts on HTTPS. Show mixed-content remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-mixed-content-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A06 VOC route mixed-content live oracle",
+    description:
+      "When scanning /demo/a06_voc/insecure.php on owaspsecure.com, Attack 3 mixed-content demo confirms HTTP subresources on HTTPS — route-specific A06 vulnerable components oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A06 VOC lab should confirm live mixed-content exposure, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocMixedContentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Serve all subresources over HTTPS and avoid mixed content.",
+      steps: [
+        "Upgrade every script, stylesheet, and image URL to https://.",
+        "Use Content-Security-Policy upgrade-insecure-requests on legacy pages.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a06_voc route scan confirms mixed HTTP/HTTPS subresources. Show route-level mixed-content remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-lodash-outdated-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 outdated Lodash live oracle",
+    description:
+      "GET attacks/lodash_outdated/demo_insecure.html on owaspsecure.com loads Lodash 4.17.15 with unsafe _.merge prototype pollution pattern — A06 vulnerable components training oracle.",
+    impactOneline:
+      "Outdated Lodash on owaspsecure.com enables prototype pollution via deep merge on untrusted JSON.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocLodashOutdatedLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Lodash and never deep-merge untrusted input.",
+      steps: [
+        "Upgrade to a patched Lodash release and audit merge usage.",
+        "Reject __proto__ and constructor.prototype keys in user JSON.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com lodash_outdated demo uses Lodash 4.17.15 with _.merge on untrusted input. Show dependency upgrade remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-lodash-outdated-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 VOC route outdated Lodash live oracle",
+    description:
+      "When scanning /demo/a06_voc/insecure.php on owaspsecure.com, Attack 4 outdated Lodash demo confirms Lodash 4.17.15 with prototype pollution merge sink — route-specific A06 vulnerable components oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A06 VOC lab should confirm live outdated Lodash exposure, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocLodashOutdatedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Lodash and never deep-merge untrusted input.",
+      steps: [
+        "Upgrade to a patched Lodash release and audit merge usage.",
+        "Reject __proto__ and constructor.prototype keys in user JSON.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a06_voc route scan confirms outdated Lodash 4.17.15. Show route-level dependency upgrade remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-unpinned-latest-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 unpinned @latest CDN live oracle",
+    description:
+      "GET attacks/pinned_versions/demo_insecure.html on owaspsecure.com loads lodash@latest from CDN without integrity hash — A06 vulnerable components training oracle.",
+    impactOneline:
+      "Floating @latest CDN tags on owaspsecure.com break reproducibility and enable silent supply-chain changes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocUnpinnedLatestLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin exact dependency versions and add SRI hashes.",
+      steps: [
+        "Replace @latest tags with locked semver versions in CDN URLs.",
+        "Add integrity and crossorigin attributes to third-party scripts.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com pinned_versions demo loads lodash@latest without integrity. Show version pinning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-unpinned-latest-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 VOC route unpinned @latest live oracle",
+    description:
+      "When scanning /demo/a06_voc/insecure.php on owaspsecure.com, Attack 5 unpinned @latest demo confirms lodash@latest CDN without SRI — route-specific A06 vulnerable components oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A06 VOC lab should confirm live unpinned CDN tags, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocUnpinnedLatestRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin exact dependency versions and add SRI hashes.",
+      steps: [
+        "Replace @latest tags with locked semver versions in CDN URLs.",
+        "Add integrity and crossorigin attributes to third-party scripts.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a06_voc route scan confirms unpinned lodash@latest CDN. Show route-level version pinning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "owaspsecure-auth-session-fixation-live-oracle",
     platform: "generic",
     category: "Broken authentication",

@@ -2086,6 +2086,12 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureVocOutdatedJqueryRouteLiveOracle",
   "owaspsecureVocCdnNoSriLiveOracle",
   "owaspsecureVocCdnNoSriRouteLiveOracle",
+  "owaspsecureVocMixedContentLiveOracle",
+  "owaspsecureVocMixedContentRouteLiveOracle",
+  "owaspsecureVocLodashOutdatedLiveOracle",
+  "owaspsecureVocLodashOutdatedRouteLiveOracle",
+  "owaspsecureVocUnpinnedLatestLiveOracle",
+  "owaspsecureVocUnpinnedLatestRouteLiveOracle",
   "guardmarlyScanLiveOracle",
   "guardmarlyScanRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
@@ -17261,7 +17267,10 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a06_voc\b/i.test(targetInput) &&
         (p.slug.startsWith("owaspsecure-voc-outdated-jquery") ||
-          p.slug.startsWith("owaspsecure-voc-cdn-no-sri"))
+          p.slug.startsWith("owaspsecure-voc-cdn-no-sri") ||
+          p.slug.startsWith("owaspsecure-voc-mixed-content") ||
+          p.slug.startsWith("owaspsecure-voc-lodash-outdated") ||
+          p.slug.startsWith("owaspsecure-voc-unpinned-latest"))
       )
         return -4;
       if (
