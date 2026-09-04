@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T23:09:39.064Z",
+  "updated_at": "2026-09-04T23:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2033,
   "discovery_findings": 23966,
-  "improvements_shipped": 1425,
-  "last_run": "2026-09-04T23:09:39.064Z",
+  "improvements_shipped": 1428,
+  "last_run": "2026-09-04T23:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
@@ -50,28 +50,25 @@
       },
       "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles); secret-resend present"
     },
-    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 141,
-      "focus": "OopsSec challenges 3/4/22/33/36 walkthroughs + pwnshop checkout/vuln-index + VWAD DVR queue drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 28,
+      "focus": "AI-Threatlab route oracle + OopsSec live-stream/next-public-env live oracles shipped",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; gap=[])",
-      "koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs: 10 findings \u2014 oopssec-plaintext-password-logs-route-live-oracle",
-      "koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach: 9 findings \u2014 oopssec-idor-order-privacy-route-live-oracle",
-      "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import: 11 findings \u2014 oopssec-xxe-supplier-import-route-live-oracle",
-      "koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182: 8 findings \u2014 oopssec-react2shell-route-live-oracle",
-      "pwnshop.ctfsecurity.com/checkout: 39 findings \u2014 pwnshop-checkout-hpp-coupon live+route oracles (PWN-039)",
-      "pwnshop.ctfsecurity.com/vulnerabilities: 51 findings \u2014 hub fingerprint + vuln-index oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
+      "rootabhi1.github.io/AI-Threatlab: 5→6 findings — ai-threatlab-route-live-oracle (+client-side evidence, -reflexion-escalated-ssti FP)",
+      "koadt.github.io/.../live-stream-hijack: 8→11 findings — oopssec-live-stream-bfla-live-oracle +client-side evidence",
+      "koadt.github.io/.../next-public-env-variable-leak: 9→11 findings — oopssec-next-public-env-live-oracle"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
-      "qa.brokencrystals /api/file/aws + owaspsecure A09 + fabraix jailbreak-001 still in priority queue (48h skip)",
-      "oopssec live-stream-hijack + next-public-env-variable-leak queued but 48h skip",
-      "AI-Threatlab: thin fingerprint without route-specific oracles",
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "owaspsecure A09 logging oracles present but prior scan predates full drain — re-queue for validation pass",
+      "fabraix jailbreak-001 maps to access-code-001 backend until dedicated API ships",
+      "qa.brokencrystals /api/file/aws already at 96 findings with route oracle",
       "OopsSec walkthroughs still queued: open-redirect, bola-wishlist, client-side-price, jwt-weak-secret, ssrf-internal-page"
     ]
   },
@@ -82,13 +79,10 @@
     "pwnshop.ctfsecurity.com/debug/info": 48,
     "vulnbank.org/api/ai/chat": 34,
     "preview.owasp-juice.shop/rest/products/search?q=test": 34,
+    "koadt.github.io/oss-oopssec-store/posts/next-public-env-variable-leak": 11,
+    "koadt.github.io/oss-oopssec-store/posts/live-stream-hijack": 11,
+    "rootabhi1.github.io/AI-Threatlab": 6,
     "pwnshop.ctfsecurity.com/checkout": 39,
-    "bugstore.bugtraceai.com/api/checkout/process": 16,
-    "bugstore.bugtraceai.com/api/user/profile": 16,
-    "vwad.owasp.org/app/damn-vulnerable-restaurant": 6,
-    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import": 11,
-    "koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs": 10,
-    "koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach": 9,
-    "koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182": 8
+    "vwad.owasp.org/app/damn-vulnerable-restaurant": 6
   }
 }

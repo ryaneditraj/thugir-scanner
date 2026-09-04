@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:rootabhi1.github.io/AI-Threatlab",
+      "slug": "ai-threatlab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: rootabhi1.github.io/AI-Threatlab SPA embeds LLM01-LLM10 + ASI01-ASI10 modules with AML.T0051/AML.T0054 MITRE ATLAS refs; rootabhi1.github.io/AI-Threatlab/ findings 5→6 (+client-side-ai-threatlab-evidence +ai-threatlab-route-live-oracle, -reflexion-escalated-ssti false positive); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-live-stream-bfla-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: walkthrough corpus at /posts/live-stream-hijack confirms GET/POST /api/live/stream BFLA with RTMP ingest key markers; koadt.github.io/.../live-stream-hijack/ findings 8→11 (+oopssec-live-stream-bfla-live-oracle +client-side-oopssec-live-stream-evidence +walkthrough fetch wrapper on route oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-next-public-env-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: walkthrough corpus X-Payment-Auth: T1NTe3B1YmxpY19zbnZpcjBubWVudF92NHJpNGJsM30= decodes to OSS{public_env_variable_v4ri4ble}; koadt.github.io/.../next-public-env-variable-leak/ findings 9→11 (+oopssec-next-public-env-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:bugstore.bugtraceai.com",
       "slug": "bugstore-admin-debug-stats-bac-route-live-oracle",
       "status": "shipped",
