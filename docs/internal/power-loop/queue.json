@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T14:20:00.000Z",
+  "updated_at": "2026-09-04T15:18:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/genai/models/config",
+      "source": "atlas-crew/Chimera — CHM-AI-003 genai model config disclosure oracle (GitHub vuln-api genai routes; scoreboard gap 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://securebank-blog.vercel.app/csrf",
+      "source": "FAST-NUCES SecureBank attack lab — CSRF fake voucher transfer attack page (Medium blog walkthrough; scoreboard gap 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ucu-owasp-ctf.vercel.app/xss/",
+      "source": "allaboutapps/owasp-ctf-2025 — A07 auth-failures session-cookie XSS hub (Firebase deploy; scoreboard gap 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/jwt",
+      "source": "zahidoverflow/dvwu — JWT attacks training lab route (Vercel live demo; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwu.vercel.app/labs/ssti",
+      "source": "zahidoverflow/dvwu — SSTI training lab route (Vercel live demo; web search 15 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/debug/info",
       "source": "ctfsec/pwnshop — PWN-018 public debug endpoint leaks session secret + DB creds (vulnerabilities index; web search 14 UTC)",
@@ -21282,5 +21307,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 1988
+  "discovery_urls_added": 1993
 }
