@@ -1,33 +1,58 @@
 {
-  "updated_at": "2026-09-04T08:30:00.000Z",
+  "updated_at": "2026-09-04T09:12:00.000Z",
   "priority_discovery_urls": [
     {
-      "url": "https://owaspsecure.com/demo/a01_bac/insecure.php",
-      "source": "OWASP Top 10 Demo Hub — A01 Broken Access Control insecure endpoints (owaspsecure.com/demo)",
+      "url": "https://owaspsecure.com/demo/a02_crypto/insecure.php",
+      "source": "OWASP Top 10 Demo Hub — A02 Cryptographic Failures insecure endpoints (owaspsecure.com/demo)",
       "auth": "public_demo"
     },
     {
-      "url": "https://owaspsecure.com/demo/a03_injection/insecure.php",
-      "source": "OWASP Top 10 Demo Hub — A03 Injection insecure SQLi/XSS endpoints (owaspsecure.com/demo)",
+      "url": "https://owaspsecure.com/demo/a04_insecure_design/insecure.php",
+      "source": "OWASP Top 10 Demo Hub — A04 Insecure Design insecure endpoints (owaspsecure.com/demo)",
       "auth": "public_demo"
     },
     {
-      "url": "https://owaspsecure.com/demo/a05_misconfig/insecure.php",
-      "source": "OWASP Top 10 Demo Hub — A05 Security Misconfiguration insecure endpoints (owaspsecure.com/demo)",
+      "url": "https://owaspsecure.com/demo/a06_voc/insecure.php",
+      "source": "OWASP Top 10 Demo Hub — A06 Vulnerable & Outdated Components insecure endpoints (owaspsecure.com/demo)",
       "auth": "public_demo"
     },
     {
-      "url": "https://owaspsecure.com/demo/a09_logging/insecure.php",
-      "source": "OWASP Top 10 Demo Hub — A09 Security Logging & Monitoring insecure endpoints (owaspsecure.com/demo)",
+      "url": "https://owaspsecure.com/demo/a07_auth/insecure.php",
+      "source": "OWASP Top 10 Demo Hub — A07 Identification & Authentication Failures insecure endpoints (owaspsecure.com/demo)",
       "auth": "public_demo"
     },
     {
-      "url": "https://owaspsecure.com/demo/a10_ssrf/insecure.php",
-      "source": "OWASP Top 10 Demo Hub — A10 SSRF insecure endpoints (owaspsecure.com/demo)",
+      "url": "https://owaspsecure.com/demo/a08_integrity/insecure.php",
+      "source": "OWASP Top 10 Demo Hub — A08 Software & Data Integrity Failures insecure endpoints (owaspsecure.com/demo)",
       "auth": "public_demo"
     }
   ],
   "discovery_urls": [
+    {
+      "url": "https://owaspsecure.com/demo/a02_crypto/insecure.php",
+      "source": "OWASP Top 10 Demo Hub — A02 Cryptographic Failures insecure endpoints (owaspsecure.com/demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a04_insecure_design/insecure.php",
+      "source": "OWASP Top 10 Demo Hub — A04 Insecure Design insecure endpoints (owaspsecure.com/demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a06_voc/insecure.php",
+      "source": "OWASP Top 10 Demo Hub — A06 Vulnerable & Outdated Components insecure endpoints (owaspsecure.com/demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a07_auth/insecure.php",
+      "source": "OWASP Top 10 Demo Hub — A07 Identification & Authentication Failures insecure endpoints (owaspsecure.com/demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a08_integrity/insecure.php",
+      "source": "OWASP Top 10 Demo Hub — A08 Software & Data Integrity Failures insecure endpoints (owaspsecure.com/demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-55",
       "source": "OWASP WrongSecrets — Challenge 55 SSH private key in .ssh/wrongsecrets.keys oracle (Heroku demo README: challenges 54-66 available)",
