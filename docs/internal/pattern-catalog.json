@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-04T19:41:42.495Z",
-  "total": 3281,
-  "uniqueSlugs": 3273,
+  "generatedAt": "2026-09-04T20:16:53.858Z",
+  "total": 3287,
+  "uniqueSlugs": 3279,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3263,
+    "generic": 3269,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3196,
+    "deep": 3202,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 644,
+    "Broken access control": 648,
     "Exposed secret": 119,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -27,7 +27,7 @@
     "Information disclosure": 152,
     "Security misconfiguration": 280,
     "Broken authentication": 205,
-    "Injection": 530,
+    "Injection": 532,
     "Cross-site scripting": 798,
     "Open redirect": 27,
     "general": 20,
@@ -262,6 +262,12 @@
     "bugforge-xss-route-live-oracle",
     "buggybuy-api-bola-live-oracle",
     "buggybuy-api-bola-route-live-oracle",
+    "bugstore-admin-debug-stats-bac-live-oracle",
+    "bugstore-admin-debug-stats-bac-route-live-oracle",
+    "bugstore-forum-thread-sqli-live-oracle",
+    "bugstore-forum-thread-sqli-route-live-oracle",
+    "bugstore-orders-idor-live-oracle",
+    "bugstore-orders-idor-route-live-oracle",
     "bugstore-product-image-path-traversal-live-oracle",
     "bugstore-product-image-path-traversal-route-live-oracle",
     "bugstore-product-search-sqli-live-oracle",

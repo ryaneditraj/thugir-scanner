@@ -2985,6 +2985,12 @@ const DEEP_RULES = new Set<string>([
   "bugstoreProductSearchSqliRouteLiveOracle",
   "bugstoreProductImagePathTraversalLiveOracle",
   "bugstoreProductImagePathTraversalRouteLiveOracle",
+  "bugstoreAdminDebugStatsBacLiveOracle",
+  "bugstoreAdminDebugStatsBacRouteLiveOracle",
+  "bugstoreForumThreadSqliLiveOracle",
+  "bugstoreForumThreadSqliRouteLiveOracle",
+  "bugstoreOrdersIdorLiveOracle",
+  "bugstoreOrdersIdorRouteLiveOracle",
   "duckStoreCartNegativeQuantityLiveOracle",
   "duckStoreCartNegativeQuantityRouteLiveOracle",
   "duckStoreAdminUsersBflaLiveOracle",
@@ -13746,6 +13752,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/products\/\d+\/image/i.test(targetInput) &&
         p.slug.startsWith("bugstore-product-image-path-traversal")
+      )
+        return -4;
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/admin\/vulnerable-debug-stats/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-admin-debug-stats-bac")
+      )
+        return -4;
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/forum\/threads/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-forum-thread-sqli")
+      )
+        return -4;
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/orders\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-orders-idor")
       )
         return -4;
       if (

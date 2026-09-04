@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-admin-debug-stats-bac-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/admin/vulnerable-debug-stats returns admin_emails=[admin@bugstore.com,admin2fa@bugstore.com] without auth (V-012); bugstore.bugtraceai.com/api/admin/vulnerable-debug-stats findings 10→14 (+bugstore-admin-debug-stats-bac-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-forum-thread-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/forum/threads/1' returns Database error with SELECT * FROM threads WHERE id = 1' pymysql syntax disclosure (V-001); bugstore.bugtraceai.com/api/forum/threads findings 10→14 (+bugstore-forum-thread-sqli-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-orders-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/orders/ and /api/orders/1 return shipping_address PII without authentication (V-009); bugstore.bugtraceai.com/api/orders/1 findings 10→14 (+bugstore-orders-idor-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:owaspsecure.com",
       "slug": "owaspsecure-integrity-remote-config-route-live-oracle",
       "status": "shipped",
