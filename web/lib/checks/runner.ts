@@ -3172,6 +3172,7 @@ const DEEP_RULES = new Set<string>([
   "finbotVendorSidecarRouteLiveOracle",
   "finbotVendorChatLiveOracle",
   "finbotVendorChatRouteLiveOracle",
+  "finbotAdminCopilotLiveOracle",
   "finbotAdminCopilotRouteLiveOracle",
   "finbotHowItWorksLiveOracle",
   "finbotHowItWorksRouteLiveOracle",
@@ -16113,6 +16114,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /owasp-finbot-ctf\.org/i.test(origin) &&
         /\/vendor(?:\/|$)/i.test(targetInput) &&
         p.slug.startsWith("finbot-vendor-chat")
+      )
+        return -4;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/admin(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("finbot-admin-copilot")
+      )
+        return -4;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/portals(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("finbot-portals")
       )
         return -4;
       if (
