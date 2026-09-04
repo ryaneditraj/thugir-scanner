@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-04T02:28:28.262Z",
-  "total": 3216,
-  "uniqueSlugs": 3208,
+  "generatedAt": "2026-09-04T03:10:13.517Z",
+  "total": 3222,
+  "uniqueSlugs": 3214,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3198,
+    "generic": 3204,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3131,
+    "deep": 3137,
     "continuous": 0
   },
   "byCategory": {
@@ -35,9 +35,9 @@
     "Server-side request forgery": 111,
     "Sensitive data exposure": 100,
     "AI security": 134,
-    "Business logic": 37,
+    "Business logic": 39,
     "AI / LLM security": 4,
-    "Cross-site request forgery": 11,
+    "Cross-site request forgery": 13,
     "Authentication bypass": 4,
     "Insecure file upload": 2,
     "Command injection": 2,
@@ -49,7 +49,7 @@
     "Cryptographic failure": 4,
     "XSS": 3,
     "Session management": 2,
-    "Authentication": 2,
+    "Authentication": 4,
     "Unrestricted file upload": 1,
     "Cryptographic failures": 1
   },
@@ -2221,6 +2221,12 @@
     "owaspsecure-crypto-password-md5-route-live-oracle",
     "owaspsecure-crypto-predictable-tokens-live-oracle",
     "owaspsecure-crypto-predictable-tokens-route-live-oracle",
+    "owaspsecure-design-coupon-logic-live-oracle",
+    "owaspsecure-design-coupon-logic-route-live-oracle",
+    "owaspsecure-design-csrf-settings-live-oracle",
+    "owaspsecure-design-csrf-settings-route-live-oracle",
+    "owaspsecure-design-magic-link-live-oracle",
+    "owaspsecure-design-magic-link-route-live-oracle",
     "owaspsecure-design-reauth-email-live-oracle",
     "owaspsecure-design-reauth-email-route-live-oracle",
     "owaspsecure-injection-sqli-blind-time-live-oracle",

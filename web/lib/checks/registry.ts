@@ -43976,6 +43976,145 @@ const owaspsecureDesignReauthEmailRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const owaspsecureDesignCouponLogicLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const cartUrl = owaspsecureAttackUrl(ctx, "attacks/coupon_logic/cart_insecure.php");
+  const postBody = new URLSearchParams({
+    action: "apply_coupon",
+    coupon: "SAVE50",
+    subtotal: "100"
+  }).toString();
+  const doc = await ctx.probe.get(cartUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Cart total \(INSECURE\)|mode.{0,12}insecure/i.test(doc.body)) return NEGATIVE;
+  if (!/SAVE50/i.test(doc.body)) return NEGATIVE;
+  if (!/no_one_time_coupon|allows_negative_total/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: cartUrl,
+      snippet:
+        doc.body.match(/SAVE50[\s\S]{0,80}no_one_time_coupon/i)?.[0]?.slice(0, 120) ??
+        "SAVE50 coupon applied without one-time cap",
+      note: "owaspsecure.com POST attacks/coupon_logic/cart_insecure.php re-applies SAVE50 without one-time or cap limits — A04 insecure design training oracle"
+    }
+  };
+};
+
+const owaspsecureDesignCouponLogicRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a04_insecure_design\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureDesignCouponLogicLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a04_insecure_design route scan — Attack 5 coupon logic accepts unlimited SAVE50 re-application (live insecure design oracle)"
+    }
+  };
+};
+
+const owaspsecureDesignCsrfSettingsLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const settingsUrl = owaspsecureAttackUrl(
+    ctx,
+    "attacks/csrf_settings/change_settings_insecure.php"
+  );
+  const postBody = new URLSearchParams({ theme: "dark" }).toString();
+  const doc = await ctx.probe.get(settingsUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Settings changed \(INSECURE\)|mode.{0,12}insecure/i.test(doc.body)) return NEGATIVE;
+  if (!/no_csrf_token|no_origin_referrer/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: settingsUrl,
+      snippet:
+        doc.body.match(/Settings changed \(INSECURE\)[\s\S]{0,80}/i)?.[0]?.slice(0, 120) ??
+        "settings changed without CSRF token",
+      note: "owaspsecure.com POST attacks/csrf_settings/change_settings_insecure.php accepts cross-site POSTs without CSRF token or origin checks — A04 insecure design training oracle"
+    }
+  };
+};
+
+const owaspsecureDesignCsrfSettingsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a04_insecure_design\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureDesignCsrfSettingsLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a04_insecure_design route scan — Attack 3 CSRF settings change without token or origin checks (live insecure design oracle)"
+    }
+  };
+};
+
+const owaspsecureDesignMagicLinkLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const linkUrl = owaspsecureAttackUrl(ctx, "attacks/magic_link/link_insecure.php");
+  const postBody = new URLSearchParams({ email: "probe@example.com" }).toString();
+  const doc = await ctx.probe.get(linkUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"link"\s*:|&quot;link&quot;/i.test(doc.body)) return NEGATIVE;
+  if (!/"token"\s*:|&quot;token&quot;/i.test(doc.body)) return NEGATIVE;
+  if (!/reusable|no_storage|not_bound/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: linkUrl,
+      snippet: doc.body.match(/"token"\s*:\s*"[^"]+"/i)?.[0]?.slice(0, 100) ?? "reusable magic link token minted",
+      note: "owaspsecure.com POST attacks/magic_link/link_insecure.php mints reusable magic-login links with no expiry or single-use binding — A04 insecure design training oracle"
+    }
+  };
+};
+
+const owaspsecureDesignMagicLinkRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a04_insecure_design\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureDesignMagicLinkLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a04_insecure_design route scan — Attack 4 magic link never expires and is reusable by anyone with the URL (live insecure design oracle)"
+    }
+  };
+};
+
 const owaspsecureIntegrityUnserializeLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const unserializeUrl = owaspsecureAttackUrl(ctx, "attacks/unserialize/insecure.php");
@@ -111037,6 +111176,12 @@ export const RULES: Record<string, Rule> = {
   owaspsecureAuthSessionFixationRouteLiveOracle,
   owaspsecureDesignReauthEmailLiveOracle,
   owaspsecureDesignReauthEmailRouteLiveOracle,
+  owaspsecureDesignCouponLogicLiveOracle,
+  owaspsecureDesignCouponLogicRouteLiveOracle,
+  owaspsecureDesignCsrfSettingsLiveOracle,
+  owaspsecureDesignCsrfSettingsRouteLiveOracle,
+  owaspsecureDesignMagicLinkLiveOracle,
+  owaspsecureDesignMagicLinkRouteLiveOracle,
   owaspsecureIntegrityUnserializeLiveOracle,
   owaspsecureIntegrityUnserializeRouteLiveOracle,
   owaspsecureLoggingAuthEventsLiveOracle,

@@ -2015,6 +2015,12 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureAuthSessionFixationRouteLiveOracle",
   "owaspsecureDesignReauthEmailLiveOracle",
   "owaspsecureDesignReauthEmailRouteLiveOracle",
+  "owaspsecureDesignCouponLogicLiveOracle",
+  "owaspsecureDesignCouponLogicRouteLiveOracle",
+  "owaspsecureDesignCsrfSettingsLiveOracle",
+  "owaspsecureDesignCsrfSettingsRouteLiveOracle",
+  "owaspsecureDesignMagicLinkLiveOracle",
+  "owaspsecureDesignMagicLinkRouteLiveOracle",
   "owaspsecureIntegrityUnserializeLiveOracle",
   "owaspsecureIntegrityUnserializeRouteLiveOracle",
   "owaspsecureLoggingAuthEventsLiveOracle",
@@ -17145,7 +17151,10 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       if (
         /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a04_insecure_design\b/i.test(targetInput) &&
-        p.slug.startsWith("owaspsecure-design-reauth-email")
+        (p.slug.startsWith("owaspsecure-design-reauth-email") ||
+          p.slug.startsWith("owaspsecure-design-coupon-logic") ||
+          p.slug.startsWith("owaspsecure-design-csrf-settings") ||
+          p.slug.startsWith("owaspsecure-design-magic-link"))
       )
         return -4;
       if (
