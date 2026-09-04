@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T02:08:00.000Z",
+  "updated_at": "2026-09-04T03:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api/",
+      "source": "kOaDT/oss-oopssec-store — path traversal documents API walkthrough GET /api/files?file=../flag.txt (challenges.json ch.08; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/client-side-price-manipulation/",
+      "source": "kOaDT/oss-oopssec-store — client-side price manipulation walkthrough POST /api/orders trusting client total (challenges.json ch.09; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/sql-injection-writeup/",
+      "source": "kOaDT/oss-oopssec-store — UNION SQLi order search walkthrough POST /api/orders/search (challenges.json ch.17; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/",
+      "source": "kOaDT/oss-oopssec-store — mass assignment admin signup walkthrough POST /api/auth/signup role=ADMIN (challenges.json ch.10; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss/",
+      "source": "kOaDT/oss-oopssec-store — SVG stored XSS file upload walkthrough /admin/products /api/uploads (challenges.json ch.21; web search 03 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach/",
       "source": "kOaDT/oss-oopssec-store — IDOR order privacy breach walkthrough GET /api/orders/:id (chapter 02 access control; web search 02 UTC)",
