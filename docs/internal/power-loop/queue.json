@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T05:12:00.000Z",
+  "updated_at": "2026-09-04T06:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://owaspsecure.com/demo/a06_voc/insecure.php",
+      "source": "owaspsecure.com A06 vulnerable components hub — outdated jQuery XSS, CDN without SRI, mixed content, unpinned lodash (web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugforge.io/labs/xss",
+      "source": "bugforge.io — reflected/stored XSS hands-on lab module (app.bugforge.io OSS deploy; web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugforge.io/labs/auth",
+      "source": "bugforge.io — broken authentication lab module (predictable tokens, session hijack; web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugforge.io/labs/csrf",
+      "source": "bugforge.io — CSRF request-forgery lab module (web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/documents/1",
+      "source": "MRMcyber/vaultapp — IDOR documents API oracle (vaultapp-omega.vercel.app OSS deploy; web search 06 UTC)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://owaspsecure.com/demo/a07_auth/insecure.php",
       "source": "owaspsecure.com A07 auth hub — MFA bypass, session fixation, brute-force rate limits (power-loop 05 UTC)",
