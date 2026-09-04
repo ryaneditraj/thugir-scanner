@@ -8592,6 +8592,5 @@
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: prepended owasp-finbot-ctf.org/portals + /admin + oopssec race-condition-coupon-abuse to priority_discovery_urls; runner -4 priority for finbot-admin-copilot-* on /admin and finbot-portals-* on /portals; benchmark juice-shop 53 findings 6/6 maintained"
     }
-    }
   ]
 }

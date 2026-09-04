@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T19:40:00.000Z",
+  "updated_at": "2026-09-04T20:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vwad.owasp.org/app/damn-vulnerable-restaurant/",
+      "source": "OWASP VWAD — Damn Vulnerable RESTaurant API game (FastAPI CTF; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://preview.owasp-juice.shop/rest/products/search?q=test",
+      "source": "Official preview.owasp-juice.shop — develop-preview product search SQLi/XSS oracle (web search 20 UTC)",
+      "auth": "benchmark"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/cart/checkout",
+      "source": "BugTraceAI/BugStore — checkout mass-assignment / business-logic oracle POST /api/cart/checkout (web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/ai/chat",
+      "source": "Commando-X/vuln-bank — AI customer-support chat prompt-injection oracle (web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/",
+      "source": "kOaDT/oss-oopssec-store — CSRF on admin order-update endpoint walkthrough (web search 20 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owasp-finbot-ctf.org/portals",
       "source": "OWASP FinBot CTF — four-portal hub scope validation after finbotScopedLiveOracleAllowed guards (scoreboard learning gap 19 UTC)",
