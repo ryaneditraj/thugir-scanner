@@ -13606,6 +13606,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/debug\/info\b/i.test(targetInput) &&
+        (p.slug.startsWith("pwnshop-debug-info") || p.slug.startsWith("pwnshop-lab-stats"))
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/debug\/info|\/api\/v1\/events|\/admin\/export-orders|\/logs\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-")
       )
@@ -15073,7 +15079,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/labs\/jwt\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-jwt")
       )
-        return -3;
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/xss\b/i.test(targetInput) &&
@@ -15085,7 +15091,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/labs\/deserialization\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-deserialization")
       )
-        return -3;
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/(?:command-injection|cmdi)\b/i.test(targetInput) &&
@@ -15097,13 +15103,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/labs\/xxe\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-xxe")
       )
-        return -3;
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/ssti\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-ssti")
       )
-        return -3;
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/idor\b/i.test(targetInput) &&
@@ -15115,7 +15121,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/labs\/file-upload\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-file-upload-lab")
       )
-        return -3;
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/mass-assignment\b/i.test(targetInput) &&
