@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T14:16:00.000Z",
+  "updated_at": "2026-09-04T14:20:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://pwnshop.ctfsecurity.com/debug/info",
@@ -23,7 +23,22 @@
     },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api/",
-      "source": "kOaDT/oss-oopssec-store — path-traversal documents API walkthrough ch.08 (challenges.json oracle)",
+      "source": "kOaDT/oss-oopssec-store — path traversal via /api/files?file=../flag.txt walkthrough (ch.04 access control; scoreboard gap 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/",
+      "source": "kOaDT/oss-oopssec-store — mass-assignment role:ADMIN via POST /api/auth/signup walkthrough (ch.04 access control; scoreboard gap 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/",
+      "source": "kOaDT/oss-oopssec-store — product-search SQLi via q= tautology walkthrough (ch.05 SQLi; scoreboard gap 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss/",
+      "source": "kOaDT/oss-oopssec-store — SVG upload stored XSS via /admin/products walkthrough (ch.06 XSS; scoreboard gap 14 UTC)",
       "auth": "public_demo"
     },
     {
