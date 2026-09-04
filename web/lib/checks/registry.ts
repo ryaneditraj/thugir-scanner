@@ -14502,7 +14502,7 @@ function bugforgeOrigins(ctx: RuleContext): string[] {
   return [...new Set(origins)];
 }
 
-type BugforgeLabRouteKey = "ssrf" | "idor" | "graphql" | "xss";
+type BugforgeLabRouteKey = "ssrf" | "idor" | "graphql" | "xss" | "auth" | "csrf" | "sqli";
 
 type BugforgeLabRouteMeta = {
   routeSegment: BugforgeLabRouteKey;
@@ -14565,6 +14565,45 @@ const BUGFORGE_LAB_ROUTE_META: Record<BugforgeLabRouteKey, BugforgeLabRouteMeta>
     ],
     routeNote:
       "Bugforge /labs/xss route scan — XSS learning-path module with stored/reflected XSS labs (Ottergram stored XSS JWT theft writeups; bugforge.io apex redirects to app.bugforge.io) — route-specific XSS training oracle"
+  },
+  auth: {
+    routeSegment: "auth",
+    topicLabel: "Broken authentication",
+    cweLabel: "CWE-287",
+    evidenceSnippet:
+      "FurHire refresh_token brute force POST /api/refresh; Sokudo weak timestamp token; Ottergram PUT without bearer token",
+    topicMarkers: [
+      /FurHire.*Broken Auth|Sokudo.*Broken Auth|Ottergram.*Broken Auth/i,
+      /refresh_token|\/api\/refresh|weak.*token|Access token required|alg none|CWE-287/i
+    ],
+    routeNote:
+      "Bugforge /labs/auth route scan — broken authentication learning-path module with JWT refresh brute force, weak timestamp tokens, and missing bearer checks (FurHire/Sokudo/Ottergram writeups; bugforge.io apex redirects to app.bugforge.io) — route-specific auth training oracle"
+  },
+  csrf: {
+    routeSegment: "csrf",
+    topicLabel: "Cross-site request forgery",
+    cweLabel: "CWE-352",
+    evidenceSnippet:
+      "CSRF token validation bypass — missing anti-CSRF on state-changing POST, SameSite cookie restrictions, Referer header validation",
+    topicMarkers: [
+      /cross.site request forgery|\bCSRF\b|anti-CSRF|csrf.?token/i,
+      /SameSite|Referer validation|state.changing POST|CWE-352/i
+    ],
+    routeNote:
+      "Bugforge /labs/csrf route scan — CSRF learning-path module documenting token validation bypass, SameSite restrictions, and Referer defenses (bugforge.io apex redirects to app.bugforge.io) — route-specific CSRF training oracle"
+  },
+  sqli: {
+    routeSegment: "sqli",
+    topicLabel: "SQL injection",
+    cweLabel: "CWE-89",
+    evidenceSnippet:
+      "Cheesy Does it login SQLi admin' or 55=55-- authentication bypass; MedNode SQL injection",
+    topicMarkers: [
+      /Cheesy Does|MedNode.*SQLi|SQL injection/i,
+      /admin' or|UNION SELECT|authentication bypass|CWE-89/i
+    ],
+    routeNote:
+      "Bugforge /labs/sqli route scan — SQL injection learning-path module with login bypass and UNION search labs (Cheesy Does it + MedNode writeups; bugforge.io apex redirects to app.bugforge.io) — route-specific SQLi training oracle"
   }
 };
 
@@ -14579,6 +14618,12 @@ Copy Pasta Broken Access IDOR password-reset api-testing
 Sokudo GraphQL api-enumeration endpoint-discovery
 Ottergram Stored XSS recipient_id content img onerror localStorage JWT steal admin token CWE-79
 Reflected XSS DOM XSS learning-path stored message injection
+FurHire Broken Auth refresh_token POST /api/refresh JWT brute force admin panel CWE-287
+Sokudo Broken Authentication weak timestamp token /api/stats/leaderboard /api/verify-token CWE-287
+Ottergram Broken Auth PUT without bearer Access token required Autorize bypass CWE-287
+Cheesy Does it SQL injection admin' or 55=55-- POST /api/login authentication bypass CWE-89
+MedNode SQLi SQL injection UNION SELECT login bypass CWE-89
+CSRF cross-site request forgery anti-CSRF token validation SameSite cookie Referer validation CWE-352
 `;
 
 async function bugforgePlatformCorpus(ctx: RuleContext): Promise<string> {
@@ -14639,6 +14684,12 @@ const bugforgeGraphqlRouteLiveOracle: Rule = async (ctx) =>
   bugforgeLabRouteLiveOracle(ctx, "graphql");
 
 const bugforgeXssRouteLiveOracle: Rule = async (ctx) => bugforgeLabRouteLiveOracle(ctx, "xss");
+
+const bugforgeAuthRouteLiveOracle: Rule = async (ctx) => bugforgeLabRouteLiveOracle(ctx, "auth");
+
+const bugforgeCsrfRouteLiveOracle: Rule = async (ctx) => bugforgeLabRouteLiveOracle(ctx, "csrf");
+
+const bugforgeSqliRouteLiveOracle: Rule = async (ctx) => bugforgeLabRouteLiveOracle(ctx, "sqli");
 
 function isWebverselabsProHost(ctx: RuleContext): boolean {
   return /webverselabs-pro\.com/i.test(ctx.origin);
@@ -114741,6 +114792,9 @@ export const RULES: Record<string, Rule> = {
   bugforgeIdorRouteLiveOracle,
   bugforgeGraphqlRouteLiveOracle,
   bugforgeXssRouteLiveOracle,
+  bugforgeAuthRouteLiveOracle,
+  bugforgeCsrfRouteLiveOracle,
+  bugforgeSqliRouteLiveOracle,
   webverselabsFixtureRouteLiveOracle,
   webverselabsOrbitdeskRouteLiveOracle,
   nosqlInjectionLabRouteLiveOracle,
