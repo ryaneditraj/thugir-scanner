@@ -44554,6 +44554,166 @@ const owaspsecureIntegrityUnserializeRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function owaspsecureMultipartBody(
+  fieldName: string,
+  filename: string,
+  contentType: string,
+  content: string
+): { boundary: string; body: string } {
+  const boundary = `----ThugirOwaspsecure${Date.now().toString(36)}`;
+  const body = [
+    `--${boundary}`,
+    `Content-Disposition: form-data; name="${fieldName}"; filename="${filename}"`,
+    `Content-Type: ${contentType}`,
+    "",
+    content,
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  return { boundary, body };
+}
+
+const OWASPSECURE_MINIMAL_ZIP_B64 =
+  "UEsDBBQAAAAAAEhhJF26RNoqEQAAABEAAAAIAAAAZXZpbC5waHA8P3BocCBlY2hvICJwd24iO1BLAQIUAxQAAAAAAEhhJF26RNoqEQAAABEAAAAIAAAAAAAAAAAAAACAAQAAAABldmlsLnBocFBLBQYAAAAAAQABADYAAAA3AAAAAAA=";
+
+const owaspsecureIntegritySignedUpdateLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const installUrl = owaspsecureAttackUrl(ctx, "attacks/signed_updates/insecure_install.php");
+  const doc = await ctx.probe.get(installUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Install \(INSECURE\)|installed_blindly/i.test(doc.body)) return NEGATIVE;
+  if (!/NONE \(no sha256, no signature\)|no sha256, no signature/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: installUrl,
+      snippet:
+        doc.body.match(/checks[\s\S]{0,80}/i)?.[0]?.slice(0, 100) ??
+        "update installed without signature checks",
+      note: "owaspsecure.com GET attacks/signed_updates/insecure_install.php installs update zip without sha256 or signature validation — A08 software integrity failure training oracle"
+    }
+  };
+};
+
+const owaspsecureIntegritySignedUpdateRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a08_integrity\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureIntegritySignedUpdateLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a08_integrity route scan — Attack 1 installs unsigned update packages without integrity checks (live integrity failure oracle)"
+    }
+  };
+};
+
+const owaspsecureIntegrityPluginUploadLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const uploadUrl = owaspsecureAttackUrl(ctx, "attacks/plugin_loader/upload_insecure.php");
+  const { boundary, body } = owaspsecureMultipartBody(
+    "plugin_file",
+    "evil.php",
+    "application/x-php",
+    "<?php echo 'thugir';"
+  );
+  const doc = await ctx.probe.get(uploadUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": `multipart/form-data; boundary=${boundary}` },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Upload & Include \(INSECURE\)|executed_from_webroot/i.test(doc.body)) return NEGATIVE;
+  if (!/Arbitrary code executed from uploads/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: uploadUrl,
+      snippet:
+        doc.body.match(/status[\s\S]{0,80}/i)?.[0]?.slice(0, 100) ?? "plugin executed from webroot",
+      note: "owaspsecure.com POST attacks/plugin_loader/upload_insecure.php uploads and includes attacker PHP from webroot — A08 software integrity failure training oracle"
+    }
+  };
+};
+
+const owaspsecureIntegrityPluginUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a08_integrity\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureIntegrityPluginUploadLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a08_integrity route scan — Attack 4 plugin loader executes uploaded PHP from webroot (live integrity failure oracle)"
+    }
+  };
+};
+
+const owaspsecureIntegrityCicdDeployLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const deployUrl = owaspsecureAttackUrl(ctx, "attacks/cicd/deploy_insecure.php");
+  const boundary = `----ThugirOwaspsecureCicd${Date.now().toString(36)}`;
+  const zip = Buffer.from(OWASPSECURE_MINIMAL_ZIP_B64, "base64");
+  const body = Buffer.concat([
+    Buffer.from(
+      `--${boundary}\r\nContent-Disposition: form-data; name="build"; filename="evil.zip"\r\nContent-Type: application/zip\r\n\r\n`,
+      "utf8"
+    ),
+    zip,
+    Buffer.from(`\r\n--${boundary}--\r\n`, "utf8")
+  ]);
+  const doc = await ctx.probe.get(deployUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": `multipart/form-data; boundary=${boundary}` },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Deploy \(INSECURE\)|deployed_without_checks/i.test(doc.body)) return NEGATIVE;
+  if (!/Unzipped all contents directly into app/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: deployUrl,
+      snippet:
+        doc.body.match(/status[\s\S]{0,80}/i)?.[0]?.slice(0, 100) ??
+        "CI/CD artifact deployed without verification",
+      note: "owaspsecure.com POST attacks/cicd/deploy_insecure.php unzips build artifacts without manifest or signature checks — A08 software integrity failure training oracle"
+    }
+  };
+};
+
+const owaspsecureIntegrityCicdDeployRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a08_integrity\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureIntegrityCicdDeployLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a08_integrity route scan — Attack 5 CI/CD deploy unzips unsigned artifacts into app (live integrity failure oracle)"
+    }
+  };
+};
+
 const owaspsecureLoggingAuthEventsLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const loginUrl = owaspsecureAttackUrl(ctx, "attacks/auth_events/login_insecure.php");
@@ -112060,6 +112220,12 @@ export const RULES: Record<string, Rule> = {
   owaspsecureDesignMagicLinkRouteLiveOracle,
   owaspsecureIntegrityUnserializeLiveOracle,
   owaspsecureIntegrityUnserializeRouteLiveOracle,
+  owaspsecureIntegritySignedUpdateLiveOracle,
+  owaspsecureIntegritySignedUpdateRouteLiveOracle,
+  owaspsecureIntegrityPluginUploadLiveOracle,
+  owaspsecureIntegrityPluginUploadRouteLiveOracle,
+  owaspsecureIntegrityCicdDeployLiveOracle,
+  owaspsecureIntegrityCicdDeployRouteLiveOracle,
   owaspsecureLoggingAuthEventsLiveOracle,
   owaspsecureLoggingAuthEventsRouteLiveOracle,
   owaspsecureLoggingPiiSecretsLiveOracle,

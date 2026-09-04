@@ -77343,6 +77343,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-integrity-signed-update-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 unsigned update install live oracle",
+    description:
+      "GET attacks/signed_updates/insecure_install.php on owaspsecure.com installs update packages without sha256 or signature validation — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Blind update installation on owaspsecure.com enables supply-chain compromise via unsigned zip payloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegritySignedUpdateLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify update packages with cryptographic signatures before installation.",
+      steps: [
+        "Require signed manifests with sha256 hashes for every update artifact.",
+        "Reject packages missing valid publisher signatures.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com insecure_install.php installs updates without signature checks. Show signed update verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-signed-update-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route signed-update live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 1 confirms unsigned update installation — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live unsigned update installs, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegritySignedUpdateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify update packages with cryptographic signatures before installation.",
+      steps: [
+        "Require signed manifests with sha256 hashes for every update artifact.",
+        "Reject packages missing valid publisher signatures.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms unsigned update installs. Show route-level signed update verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-plugin-upload-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 plugin upload RCE live oracle",
+    description:
+      "POST attacks/plugin_loader/upload_insecure.php on owaspsecure.com uploads and includes attacker-controlled PHP from webroot — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Unvalidated plugin uploads on owaspsecure.com execute arbitrary PHP code straight from the uploads directory.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityPluginUploadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never include uploaded files; validate extensions and store outside webroot.",
+      steps: [
+        "Block executable extensions and scan uploads with an allowlist.",
+        "Store uploads outside the webroot and serve via controlled handlers.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com plugin_loader/upload_insecure.php executes uploaded PHP. Show safe plugin upload remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-plugin-upload-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route plugin-upload live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 4 plugin loader confirms uploaded PHP execution — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live plugin upload RCE, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityPluginUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never include uploaded files; validate extensions and store outside webroot.",
+      steps: [
+        "Block executable extensions and scan uploads with an allowlist.",
+        "Store uploads outside the webroot and serve via controlled handlers.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms plugin upload RCE. Show route-level upload validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-cicd-deploy-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 CI/CD unsigned deploy live oracle",
+    description:
+      "POST attacks/cicd/deploy_insecure.php on owaspsecure.com unzips build artifacts without manifest or signature checks — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Unsigned CI/CD deploys on owaspsecure.com let attackers push malicious build artifacts directly into the app.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityCicdDeployLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify CI/CD artifacts against signed manifests before deployment.",
+      steps: [
+        "Require signed build manifests and hash verification on every deploy.",
+        "Reject archives that fail signature or provenance checks.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com cicd/deploy_insecure.php deploys unsigned zips. Show signed CI/CD artifact verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-cicd-deploy-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route cicd-deploy live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 5 CI/CD deploy confirms unsigned artifact extraction — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live unsigned CI/CD deploys, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityCicdDeployRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify CI/CD artifacts against signed manifests before deployment.",
+      steps: [
+        "Require signed build manifests and hash verification on every deploy.",
+        "Reject archives that fail signature or provenance checks.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms unsigned CI/CD deploys. Show route-level artifact verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "owaspsecure-logging-auth-events-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
