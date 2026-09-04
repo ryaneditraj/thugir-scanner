@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T10:12:00.000Z",
+  "updated_at": "2026-09-04T11:12:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/cookie-auth",
+      "source": "AI Security Platform — cookie-based auth bypass / admin console challenge (Vercel public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/ai-phishing",
+      "source": "AI Security Platform — AI-assisted phishing / cloned login pages CWE-1021 (Vercel public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/deceptive-privacy",
+      "source": "AI Security Platform — deceptive privacy policy / legal social engineering challenge (Vercel public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/insecure-passwords",
+      "source": "AI Security Platform — insecure password storage / weak hashing challenge (Vercel public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-67",
+      "source": "OWASP WrongSecrets — challenge-67 secrets management walkthrough (Heroku public demo)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/supabase-rls",
       "source": "AI Security Platform — Weak Supabase RLS / CWE-732 challenge (Vercel public demo)",

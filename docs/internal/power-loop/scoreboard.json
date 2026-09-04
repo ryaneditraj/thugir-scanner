@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T11:12:00.000Z",
+  "updated_at": "2026-09-04T11:14:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2760,
-  "total_findings": 27254,
+  "total_sites_scanned": 2768,
+  "total_findings": 27314,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1966,
-  "discovery_findings": 22902,
+  "discovery_urls_added": 1971,
+  "discovery_findings": 22909,
   "improvements_shipped": 1392,
-  "last_run": "2026-09-04T11:12:00.000Z",
+  "last_run": "2026-09-04T11:14:00.000Z",
   "last_run_summary": {
     "hour_utc": "11",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 599,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,34 +48,45 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (53 findings) — no category misses; secret-resend slug present"
+      "note": "Stable 6/6 recall (53 findings, 40 juice-shop live oracles) — secret-resend slug present; no category misses"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 21,
-      "focus": "owaspsecure A09 logging admin-action + structure-time + integrity-chain live oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 60,
+      "focus": "ai-security cookie-auth/ai-phishing/deceptive-privacy/insecure-passwords + wrongsecrets challenge-67 + drained supabase-rls/missing-headers/supply-chain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings)",
-      "owaspsecure.com/demo/a09_logging/insecure.php: 4→21 (+owaspsecure-logging-admin-action +structure-time +integrity-chain live/route oracles)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 juice-shop live oracles; secret-resend present)",
+      "ai-security-platform-iota.vercel.app/challenges/cookie-auth: 8 findings — ai-security-cookie-auth-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/ai-phishing: 8 findings — ai-security-ai-phishing-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/deceptive-privacy: 8 findings — ai-security-privacy-policy-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/insecure-passwords: 5 findings — ai-security-insecure-passwords-route-live-oracle + reflexion-escalated-ssti",
+      "wrongsecrets.herokuapp.com/challenge/challenge-67: 18 findings — undeployed-challenge oracle (Heroku catalog ends at 66)",
+      "ai-security-platform-iota.vercel.app/challenges/supabase-rls: 4 findings — ai-security-supabase-data-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/missing-headers: 4 findings — ai-security-security-headers-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/supply-chain: 5 findings — ai-security-supply-chain-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "owaspsecure A05 directory listing returns 403 from CDN — directory-listing oracle deferred",
-      "ai-security-platform + owasp-finbot priority queue URLs auth-gated (307 login) — route oracles already shipped"
+      "wrongsecrets challenge-67 undeployed on Heroku — only generic undeployed-challenge oracle fires",
+      "ai-security supabase-rls/missing-headers/supply-chain thin (4-5 findings) — shared hub fingerprint",
+      "owasp-finbot-ctf.org/vendor still queued — not drained this run (8-URL limit)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
+    "ai-security-platform-iota.vercel.app/challenges/cookie-auth": 8,
+    "ai-security-platform-iota.vercel.app/challenges/ai-phishing": 8,
+    "ai-security-platform-iota.vercel.app/challenges/deceptive-privacy": 8,
+    "wrongsecrets.herokuapp.com/challenge/challenge-67": 18,
+    "ai-security-platform-iota.vercel.app/challenges/insecure-passwords": 5,
+    "ai-security-platform-iota.vercel.app/challenges/supabase-rls": 4,
+    "ai-security-platform-iota.vercel.app/challenges/missing-headers": 4,
+    "ai-security-platform-iota.vercel.app/challenges/supply-chain": 5,
     "owaspsecure.com/demo/a09_logging/insecure.php": 21,
-    "owaspsecure.com/demo/a10_ssrf/insecure.php": 20,
-    "owaspsecure.com/demo/a03_injection/insecure.php": 23,
-    "owaspsecure.com/demo/a02_crypto/insecure.php": 19,
-    "owaspsecure.com/demo/a04_insecure_design/insecure.php": 21,
-    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-0": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-50": 19
+    "duck-store.escape.tech/api/v1/users/me/profile": 33
   }
 }
