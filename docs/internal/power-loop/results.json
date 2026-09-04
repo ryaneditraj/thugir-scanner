@@ -34455,7 +34455,7 @@
       "scanned_at": "2026-09-04T03:07:07.389Z"
     },
     {
-      "run_id": "2026-09-04T04:03:20.269Z",
+      "run_id": "2026-09-04T04:05:15.218Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
       "auth": "public_benchmark",
@@ -34839,7 +34839,7 @@
       "pages_crawled": 6,
       "probes_run": 595,
       "status": "ok",
-      "scanned_at": "2026-09-04T04:03:20.269Z"
+      "scanned_at": "2026-09-04T04:05:15.218Z"
     }
   ],
   "teacher_delta_runs": [
