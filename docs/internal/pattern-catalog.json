@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-04T08:06:03.891Z",
-  "total": 3245,
-  "uniqueSlugs": 3237,
+  "generatedAt": "2026-09-04T09:23:04.917Z",
+  "total": 3247,
+  "uniqueSlugs": 3239,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,18 +9,18 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3227,
+    "generic": 3229,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3160,
+    "deep": 3162,
     "continuous": 0
   },
   "byCategory": {
     "Broken access control": 644,
-    "Exposed secret": 117,
+    "Exposed secret": 119,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
@@ -3075,6 +3075,8 @@
     "whoopspay-transactions-bola-route-live-oracle",
     "windsurf-public-env-leak",
     "wizer-ctf-idor-task-manager-probe",
+    "wrongsecrets-challenge-0-opening-live-oracle",
+    "wrongsecrets-challenge-0-opening-route-live-oracle",
     "wrongsecrets-challenge-1-git-hardcoded-route-live-oracle",
     "wrongsecrets-challenge-10-csi-driver-route-live-oracle",
     "wrongsecrets-challenge-11-iam-escalation-route-live-oracle",

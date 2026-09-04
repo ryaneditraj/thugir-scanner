@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:wrongsecrets-ctf.herokuapp.com",
+      "slug": "wrongsecrets-challenge-0-opening-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-0 Opening Challenge walkthrough with The first answer onboarding text + data-cy answer-textbox; wrongsecrets-ctf.herokuapp.com/challenge/challenge-0 findings 14→15 (+wrongsecrets-challenge-0-opening-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets-ctf.herokuapp.com",
+      "slug": "wrongsecrets-challenge-1-git-hardcoded-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CTF condensed hub omits secret called password line — matcher extended to hardcoded secrets, such as a password; wrongsecrets-ctf.herokuapp.com/challenge/challenge-1 findings 14→15 (+wrongsecrets-challenge-1-git-hardcoded-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets-ctf.herokuapp.com",
+      "slug": "wrongsecrets-challenge-7-vault-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CTF hub A secret hidden in Vault + K8s/Minikube walkthrough without root-token paragraph; matcher accepts condensed or full root-token path; wrongsecrets-ctf.herokuapp.com/challenge/challenge-7 findings 14→15 (+wrongsecrets-challenge-7-vault-route-live-oracle); challenge-8 logging 14→15 (+wrongsecrets-challenge-8-logging-route-live-oracle accepts stdout-at-startup CTF text); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:bugforge.io",
       "slug": "bugforge-auth-route-live-oracle",
       "status": "shipped",

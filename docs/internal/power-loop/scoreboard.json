@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T08:28:00.000Z",
+  "updated_at": "2026-09-04T09:28:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2739,
-  "total_findings": 26757,
+  "total_sites_scanned": 2742,
+  "total_findings": 26916,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1961,
   "discovery_findings": 22721,
-  "improvements_shipped": 1161,
-  "last_run": "2026-09-04T08:28:00.000Z",
+  "improvements_shipped": 1386,
+  "last_run": "2026-09-04T09:28:00.000Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 15,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
-      "pages_crawled": 1,
-      "probes_run": 501,
+      "pages_crawled": 6,
+      "probes_run": 591,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,43 +48,38 @@
           ]
         }
       },
-      "note": "Thin 6/6 first-pass recall (15 findings, 6 live oracles, pages_crawled=1) — no category misses but far below typical 45-48 pass; secret-resend slug still absent"
+      "note": "Stable 6/6 recall (53 findings) — secret-resend slug still absent"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 68,
-      "focus": "owaspsecure A01/A03/A05/A09/A10 insecure demo hubs + wrongsecrets challenge-55/56/64",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 4,
+      "findings": 60,
+      "focus": "wrongsecrets-ctf challenge-0/1/7/8 condensed hub route oracle gaps",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (15 findings, 6 live oracles, pages=1) — thin pass, no category misses",
-      "owaspsecure.com/demo/a03_injection/insecure.php: 6 findings — client-side-sql-evidence + client-side-xss-evidence",
-      "owaspsecure.com/demo/a10_ssrf/insecure.php: 6 findings — client-side-xxe-evidence + thugir-sensitive-js-endpoints",
-      "wrongsecrets.herokuapp.com/challenge/challenge-55: 15 findings — wrongsecrets-challenge-55-ssh-bastion-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-56: 15 findings — route-specific live oracle confirmed",
-      "wrongsecrets.herokuapp.com/challenge/challenge-64: 15 findings — route-specific live oracle confirmed"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings)",
+      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-0: 14→15 (+wrongsecrets-challenge-0-opening-route-live-oracle)",
+      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-1: 14→15 (+wrongsecrets-challenge-1-git-hardcoded-route-live-oracle CTF hub tolerance)",
+      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-7: 14→15 (+wrongsecrets-challenge-7-vault-route-live-oracle CTF hub tolerance)",
+      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-8: 14→15 (+wrongsecrets-challenge-8-logging-route-live-oracle CTF hub tolerance)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark thin pass — 15 findings pages=1 vs typical 45-48; BENCHMARK_JUICE_SHOP_RICH_FINDINGS=15 prevented thin-pass fallback retry",
       "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "owaspsecure A01/A05/A09 hubs thin (3-4 findings) — no route-specific BAC/phpinfo/verbose-error/logging oracles",
-      "owaspsecure A03 has client-side SQLi/XSS evidence but no live SQLi bypass or stored XSS oracle",
-      "challenge-65/66 still queued for next drain"
+      "wrongsecrets-ctf challenge-2 through challenge-6 already covered; challenge-9+ require full Heroku catalog"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 15,
-    "owaspsecure.com/demo/a03_injection/insecure.php": 6,
-    "owaspsecure.com/demo/a10_ssrf/insecure.php": 6,
+    "juice-shop.herokuapp.com": 53,
+    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-0": 15,
+    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-1": 15,
+    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-7": 15,
+    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-8": 15,
     "wrongsecrets.herokuapp.com/challenge/challenge-55": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-56": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-64": 15,
     "duck-store.escape.tech/api/v1/users/me/profile": 33,
     "demo.owasp-juice.shop/rest/memories": 27,
-    "duck-store.escape.tech/api/v1/products/filter/by-color": 31,
     "pwnshop.ctfsecurity.com/verify-otp": 27,
     "vulnbank.org/sup3r_s3cr3t_admin": 20,
     "brokencrystals.com/userlogin?logobgcolor=red": 52
