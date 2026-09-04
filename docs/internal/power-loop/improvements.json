@@ -8267,6 +8267,24 @@
       "slug": "owaspsecure-misconfig-verbose-error-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/verbose_error_insecure.php leaks Fatal error stack trace with public_html/demo/a05_misconfig paths; owaspsecure.com/demo/a05_misconfig/insecure.php findings 8→12 (+owaspsecure-misconfig-verbose-error-live-oracle +route); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-snippets-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /snippets/loginAdminChallenge returns snippet JSON via juice-shop.demo.escape.tech mirror when primary Heroku stub; demo.owasp-juice.shop/snippets findings 52→54 (+juice-shop-snippets-live-oracle +juice-shop-snippets-route-live-oracle); benchmark juice-shop.herokuapp.com 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:webverselabs-pro.com",
+      "slug": "webverselabs-orbitdesk-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/orbitdesk documents GraphQL IDOR + SSRF via /api/v2/integrations/test five-stage chain; webverselabs-pro.com/labs/orbitdesk findings 6→7 (+webverselabs-orbitdesk-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nosql-injection-lab.vercel.app",
+      "slug": "nosql-injection-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle documents MongoDB $ne/$regex/$gt operator auth bypass via body-parser simulation; nosql-injection-lab.vercel.app/ findings 6→7 (+nosql-injection-lab-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
