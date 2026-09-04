@@ -106878,6 +106878,45 @@ function isFinbotCtfHost(ctx: RuleContext): boolean {
   return /owasp-finbot-ctf\.org/i.test(ctx.origin);
 }
 
+type FinbotPortalScope = "home" | "portals" | "ctf" | "vendor" | "admin" | "darklab" | "labs" | "how-it-works";
+
+const FINBOT_PORTAL_PATH_RES: Record<Exclude<FinbotPortalScope, "home">, RegExp> = {
+  portals: /\/portals(?:\/|$)/i,
+  ctf: /\/ctf(?:\/|$)/i,
+  vendor: /\/vendor(?:\/|$)/i,
+  admin: /\/admin(?:\/|$)/i,
+  darklab: /\/darklab(?:\/|$)/i,
+  labs: /\/labs(?:\/|$)/i,
+  "how-it-works": /\/how-it-works\b/i
+};
+
+function finbotScanPageUrl(ctx: RuleContext): string {
+  return ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+}
+
+function finbotScanPathname(ctx: RuleContext): string {
+  try {
+    return new URL(finbotScanPageUrl(ctx)).pathname || "/";
+  } catch {
+    return "/";
+  }
+}
+
+/** Route scans only fire portal-matching live oracles; home/root keeps broad discovery. */
+function finbotScopedLiveOracleAllowed(
+  ctx: RuleContext,
+  scopes: FinbotPortalScope[]
+): boolean {
+  const path = finbotScanPathname(ctx);
+  if (path === "/" || path === "") return scopes.includes("home");
+  for (const scope of scopes) {
+    if (scope === "home") continue;
+    if (FINBOT_PORTAL_PATH_RES[scope].test(finbotScanPageUrl(ctx))) return true;
+  }
+  return false;
+}
+
+
 function finbotSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
   return doc.setCookies.find((c) => /^finbot_session=/i.test(c))?.split(";")[0] ?? null;
 }
@@ -107014,6 +107053,7 @@ async function probeFinbotLabsGuardrailsWebhook(ctx: RuleContext): Promise<RuleR
 
 const finbotLabsGuardrailsWebhookLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["labs", "home"])) return NEGATIVE;
   const result = await probeFinbotLabsGuardrailsWebhook(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -107155,12 +107195,14 @@ async function probeFinbotCtfChallenges(ctx: RuleContext): Promise<RuleResult | 
 
 const finbotCtfChallengesLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["ctf", "home"])) return NEGATIVE;
   const result = await probeFinbotCtfChallenges(ctx);
   return result?.fired ? result : NEGATIVE;
 };
 
 const finbotCtfSidecarLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["ctf", "vendor", "home"])) return NEGATIVE;
   const result = await probeFinbotCtfSidecar(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -107290,6 +107332,7 @@ async function probeFinbotVendorChatAgent(ctx: RuleContext): Promise<RuleResult 
 
 const finbotVendorChatLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["vendor", "home"])) return NEGATIVE;
   const result = await probeFinbotVendorChatAgent(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -107311,12 +107354,9 @@ const finbotVendorChatRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
-const finbotAdminCopilotRouteLiveOracle: Rule = async (ctx) => {
-  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
-  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/admin(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+async function probeFinbotAdminCopilot(ctx: RuleContext): Promise<RuleResult | null> {
   const bootstrap = await finbotPageCsrfBootstrap(ctx, "/admin/");
-  if (!bootstrap) return NEGATIVE;
+  if (!bootstrap) return null;
   const chatUrl = new URL("/admin/api/v1/copilot/chat", ctx.origin).toString();
   const doc = await ctx.probe.get(chatUrl, {
     method: "POST",
@@ -107331,22 +107371,45 @@ const finbotAdminCopilotRouteLiveOracle: Rule = async (ctx) => {
     maxBytes: 16384,
     timeoutMs: 30000
   });
-  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
-  if (!/data:\s*\{/.test(doc.body)) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!/data:\s*\{/.test(doc.body)) return null;
   if (
     !/Vendor data|vendor details|compliance|generate executive|onboarding check|available tools/i.test(
       doc.body
     )
   ) {
-    return NEGATIVE;
+    return null;
   }
   return {
     fired: true,
     confidence: 0.91,
     evidence: {
-      scannedUrl: pageUrl,
       chatUrl,
       snippet: doc.body.slice(0, 240).trim(),
+      note: "OWASP FinBot POST /admin/api/v1/copilot/chat streams agentic Finance Co-Pilot capabilities (vendor data, reports, compliance) with session-only CSRF"
+    }
+  };
+}
+
+const finbotAdminCopilotLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["admin", "home"])) return NEGATIVE;
+  const result = await probeFinbotAdminCopilot(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const finbotAdminCopilotRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/admin(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeFinbotAdminCopilot(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
       note: "OWASP FinBot /admin route scan — POST /admin/api/v1/copilot/chat streams agentic Finance Co-Pilot capabilities (vendor data, reports, compliance) with session-only CSRF"
     }
   };
@@ -107354,6 +107417,7 @@ const finbotAdminCopilotRouteLiveOracle: Rule = async (ctx) => {
 
 const finbotPortalsLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["portals", "home"])) return NEGATIVE;
   const portalsUrl = new URL("/portals", ctx.origin).toString();
   const doc = await ctx.probe.get(portalsUrl, { maxBytes: 65536, timeoutMs: 20000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -107402,6 +107466,7 @@ const finbotPortalsRouteLiveOracle: Rule = async (ctx) => {
 
 const finbotHowItWorksLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["how-it-works", "portals", "home"])) return NEGATIVE;
   const howUrl = new URL("/how-it-works", ctx.origin).toString();
   const doc = await ctx.probe.get(howUrl, { maxBytes: 65536, timeoutMs: 20000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
@@ -107484,6 +107549,7 @@ async function probeFinbotDarklabSupplyChain(ctx: RuleContext): Promise<RuleResu
 
 const finbotDarklabSupplyChainLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabSupplyChain(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -107534,6 +107600,7 @@ async function probeFinbotDarklabSupplyChainStats(ctx: RuleContext): Promise<Rul
 
 const finbotDarklabSupplyChainStatsLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabSupplyChainStats(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -107592,6 +107659,7 @@ async function probeFinbotDarklabTaxcalcServer(ctx: RuleContext): Promise<RuleRe
 
 const finbotDarklabTaxcalcServerLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabTaxcalcServer(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -107693,6 +107761,7 @@ async function probeFinbotDarklabTaxcalcToolsWrite(
 
 const finbotDarklabTaxcalcToolsLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabTaxcalcToolsWrite(ctx, "PUT");
   return result?.fired ? result : NEGATIVE;
 };
@@ -107757,6 +107826,7 @@ async function probeFinbotDarklabTaxcalcResetTools(ctx: RuleContext): Promise<Ru
 
 const finbotDarklabTaxcalcResetToolsLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabTaxcalcResetTools(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -107797,6 +107867,7 @@ async function probeFinbotDarklabFinmailToolsWrite(ctx: RuleContext): Promise<Ru
 
 const finbotDarklabFinmailToolsLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabFinmailToolsWrite(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -107836,6 +107907,7 @@ async function probeFinbotDarklabFindriveToolsWrite(ctx: RuleContext): Promise<R
 
 const finbotDarklabFindriveToolsLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabFindriveToolsWrite(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -107878,6 +107950,7 @@ async function probeFinbotDarklabFinstripeToolsWrite(ctx: RuleContext): Promise<
 
 const finbotDarklabFinstripeToolsLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabFinstripeToolsWrite(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -107917,6 +107990,7 @@ async function probeFinbotDarklabSystemutilsToolsWrite(ctx: RuleContext): Promis
 
 const finbotDarklabSystemutilsToolsLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabSystemutilsToolsWrite(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -107955,6 +108029,7 @@ async function probeFinbotDarklabFinbankToolsWrite(ctx: RuleContext): Promise<Ru
 
 const finbotDarklabFinbankToolsLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabFinbankToolsWrite(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -108027,6 +108102,7 @@ async function probeFinbotDarklabFinmailServer(ctx: RuleContext): Promise<RuleRe
 
 const finbotDarklabFinmailServerLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabFinmailServer(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -108065,6 +108141,7 @@ async function probeFinbotDarklabFindriveServer(ctx: RuleContext): Promise<RuleR
 
 const finbotDarklabFindriveServerLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabFindriveServer(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -108132,6 +108209,7 @@ async function probeFinbotDarklabServerResetTools(
 
 const finbotDarklabFinmailResetToolsLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabServerResetTools(ctx, "finmail");
   return result?.fired ? result : NEGATIVE;
 };
@@ -108156,6 +108234,7 @@ const finbotDarklabFinmailResetToolsRouteLiveOracle: Rule = async (ctx) => {
 
 const finbotDarklabFindriveResetToolsLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabServerResetTools(ctx, "findrive");
   return result?.fired ? result : NEGATIVE;
 };
@@ -108180,6 +108259,7 @@ const finbotDarklabFindriveResetToolsRouteLiveOracle: Rule = async (ctx) => {
 
 const finbotDarklabFinstripeResetToolsLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabServerResetTools(ctx, "finstripe");
   return result?.fired ? result : NEGATIVE;
 };
@@ -108204,6 +108284,7 @@ const finbotDarklabFinstripeResetToolsRouteLiveOracle: Rule = async (ctx) => {
 
 const finbotDarklabSystemutilsResetToolsLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["darklab", "home"])) return NEGATIVE;
   const result = await probeFinbotDarklabServerResetTools(ctx, "systemutils");
   return result?.fired ? result : NEGATIVE;
 };
@@ -108257,6 +108338,7 @@ async function probeFinbotCtfStats(ctx: RuleContext): Promise<RuleResult | null>
 
 const finbotCtfStatsLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["ctf", "home"])) return NEGATIVE;
   const result = await probeFinbotCtfStats(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -108366,6 +108448,7 @@ async function probeFinbotVendorInvoiceAgent(ctx: RuleContext): Promise<RuleResu
 
 const finbotVendorInvoicesLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  if (!finbotScopedLiveOracleAllowed(ctx, ["vendor", "home"])) return NEGATIVE;
   const result = await probeFinbotVendorInvoiceAgent(ctx);
   return result?.fired ? result : NEGATIVE;
 };
@@ -114363,6 +114446,7 @@ export const RULES: Record<string, Rule> = {
   finbotVendorSidecarRouteLiveOracle,
   finbotVendorChatLiveOracle,
   finbotVendorChatRouteLiveOracle,
+  finbotAdminCopilotLiveOracle,
   finbotAdminCopilotRouteLiveOracle,
   finbotHowItWorksLiveOracle,
   finbotHowItWorksRouteLiveOracle,

@@ -50155,6 +50155,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-admin-copilot-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot admin copilot live oracle",
+    description:
+      "POST /admin/api/v1/copilot/chat streams Finance Co-Pilot agentic capabilities (vendor data, reports, compliance) with session-only CSRF — FinBot admin copilot live oracle.",
+    impactOneline:
+      "Agentic copilot chat APIs expose financial data access and report-generation tools on FinBot admin portals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotAdminCopilotLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot admin copilot is intentional agentic AI training — require strong authentication before exposing copilot chat APIs.",
+      steps: [
+        "Require authenticated admin sessions before /admin/api/v1/copilot/chat.",
+        "Scope copilot tool access to least-privilege financial data.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /admin/api/v1/copilot/chat streams agentic financial copilot capabilities. Show how to protect admin copilot APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-admin-copilot-route-live-oracle",
     platform: "generic",
     category: "AI security",

@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-09-04T19:05:00.000Z",
+  "updated_at": "2026-09-04T19:40:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://owasp-finbot-ctf.org/portals",
+      "source": "OWASP FinBot CTF — four-portal hub scope validation after finbotScopedLiveOracleAllowed guards (scoreboard learning gap 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/admin",
+      "source": "OWASP FinBot CTF — admin copilot live oracle + portal scope validation (scoreboard learning gap 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/",
+      "source": "kOaDT/oss-oopssec-store — race-condition TOCTOU coupon abuse walkthrough (ch.04 access control; priority drain 19 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-47",
       "source": "OWASP/wrongsecrets — Heroku demo challenge-47 Vault template hardcoded secret lab (official README deploy link; web search 19 UTC)",

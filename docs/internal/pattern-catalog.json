@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-04T18:03:13.357Z",
-  "total": 3280,
-  "uniqueSlugs": 3272,
+  "generatedAt": "2026-09-04T19:41:42.495Z",
+  "total": 3281,
+  "uniqueSlugs": 3273,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3262,
+    "generic": 3263,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3195,
+    "deep": 3196,
     "continuous": 0
   },
   "byCategory": {
@@ -34,7 +34,7 @@
     "SSRF": 19,
     "Server-side request forgery": 119,
     "Sensitive data exposure": 108,
-    "AI security": 136,
+    "AI security": 137,
     "Business logic": 39,
     "AI / LLM security": 4,
     "Cross-site request forgery": 14,
@@ -1312,6 +1312,7 @@
     "fauxbank-support-route-live-oracle",
     "fauxbank-transactions-route-live-oracle",
     "fauxbank-transfer-route-live-oracle",
+    "finbot-admin-copilot-live-oracle",
     "finbot-admin-copilot-route-live-oracle",
     "finbot-ctf-challenges-live-oracle",
     "finbot-ctf-challenges-route-live-oracle",

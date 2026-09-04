@@ -8573,6 +8573,25 @@
       "slug": "brokencrystals-file-aws-priority-queue-drain",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: prepended qa.brokencrystals.com/api/file/aws to priority_discovery_urls front; GET ?path=http://169.254.169.254/latest/meta-data/ returns ami-id/instance-id; qa.brokencrystals.com/api/file/aws findings 0→96 (+brokencrystals-file-aws-route-live-oracle +brokencrystals-api-file-*); benchmark juice-shop-staging 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-scoped-live-oracle-guards",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: finbotScopedLiveOracleAllowed gates portal-specific live oracles — /portals findings 33→11 (finbot 24→5, darklab bleed 15→0); /admin 32→9 (darklab 15→0); /ctf 33→12 (darklab 15→0); /darklab retains 17 darklab oracles; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-admin-copilot-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeFinbotAdminCopilot shared by live+route oracles; POST /admin/api/v1/copilot/chat streams Finance Co-Pilot vendor/compliance capabilities; owasp-finbot-ctf.org/admin findings 32→9 (+finbot-admin-copilot-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:queue",
+      "slug": "finbot-portals-admin-oopssec-race-priority-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended owasp-finbot-ctf.org/portals + /admin + oopssec race-condition-coupon-abuse to priority_discovery_urls; runner -4 priority for finbot-admin-copilot-* on /admin and finbot-portals-* on /portals; benchmark juice-shop 53 findings 6/6 maintained"
+    }
     }
   ]
 }
