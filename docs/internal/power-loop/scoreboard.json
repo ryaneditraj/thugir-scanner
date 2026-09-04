@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T06:10:00.000Z",
+  "updated_at": "2026-09-04T06:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -16,14 +16,14 @@
     }
   },
   "total_sites_scanned": 2867,
-  "total_findings": 28929,
+  "total_findings": 28948,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2021,
-  "discovery_findings": 24372,
-  "improvements_shipped": 1374,
-  "last_run": "2026-09-04T06:10:00.000Z",
+  "discovery_findings": 24391,
+  "improvements_shipped": 1377,
+  "last_run": "2026-09-04T06:12:00.000Z",
   "last_run_summary": {
     "hour_utc": "06",
     "benchmark": {
@@ -55,16 +55,16 @@
       "urls_added": 5,
       "urls_scanned": 8,
       "findings": 81,
-      "focus": "owaspsecure A06 VOC + A08/A09/A01 hub drain + bugforge xss/auth/csrf + vaultapp documents IDOR",
-      "improvements_shipped_this_run": 0
+      "focus": "owaspsecure A06 VOC + A08/A09/A01 hub drain + bugforge xss/auth/csrf + vaultapp documents IDOR (+ concurrent A02 crypto rescan 19 findings)",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; secret-resend present)",
       "vaultapp-omega.vercel.app/api/documents/1: 14 findings — vaultapp-documents-idor-route-live-oracle + 5 IDOR live oracles",
       "owaspsecure.com/demo/a01_bac/insecure.php: 18 findings — owaspsecure-bac-idor-numeric-route + mass-assignment + file-dor route oracles",
       "owaspsecure.com/demo/a09_logging/insecure.php: 14 findings — owaspsecure-logging-auth-events-route + PII-in-logs route oracles",
+      "owaspsecure.com/demo/a02_crypto/insecure.php: 19 findings — owaspsecure-crypto-iv-reuse + key-rotation + save-plain route oracles",
       "owaspsecure.com/demo/a08_integrity/insecure.php: 9 findings — owaspsecure-integrity-unserialize-route-live-oracle",
-      "owaspsecure.com/demo/a06_voc/insecure.php: 8 findings — thin hub (cross-hub A07/A10 bleed; no A06 jQuery/SRI route oracles)",
       "bugforge.io/labs/xss + /auth + /csrf: 6 findings each — shared bugforge-lab fingerprint without per-lab route oracles"
     ],
     "learning_gaps": [
@@ -72,12 +72,14 @@
       "benchmark stable 6/6 — no category misses on juice-shop primary Heroku",
       "owaspsecure A06 VOC hub thin without outdated-jQuery/CDN-SRI route-specific oracles",
       "bugforge xss/auth/csrf labs share identical 6-finding hub fingerprint — need route-specific XSS/CSRF/broken-auth oracles",
+      "owaspsecure A07 login_rate/reset_tokens DB-dependent attacks fail on production host (PDO access denied)",
       "ssrf-internal-page + finbot vendor still queued"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
     "owaspsecure.com/demo/a01_bac/insecure.php": 18,
+    "owaspsecure.com/demo/a02_crypto/insecure.php": 19,
     "vaultapp-omega.vercel.app/api/documents/1": 14,
     "owaspsecure.com/demo/a09_logging/insecure.php": 14,
     "owaspsecure.com/demo/a08_integrity/insecure.php": 9,
