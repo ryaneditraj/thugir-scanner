@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T23:04:08.593Z",
+  "updated_at": "2026-09-04T23:09:39.064Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2804,
-  "total_findings": 28273,
+  "total_sites_scanned": 2812,
+  "total_findings": 28414,
   "critical_findings": 60,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2028,
-  "discovery_findings": 23825,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 2033,
+  "discovery_findings": 23966,
   "improvements_shipped": 1425,
-  "last_run": "2026-09-04T23:04:08.593Z",
+  "last_run": "2026-09-04T23:09:39.064Z",
   "last_run_summary": {
-    "hour_utc": "22",
+    "hour_utc": "23",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -50,41 +50,45 @@
       },
       "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles); secret-resend present"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 90,
-      "focus": "VWAD DVR + Pwnshop vuln index + VulnBank AI chat oracles shipped; AI-Threatlab + oopssec walkthrough drain",
-      "improvements_shipped_this_run": 3
+      "findings": 141,
+      "focus": "OopsSec challenges 3/4/22/33/36 walkthroughs + pwnshop checkout/vuln-index + VWAD DVR queue drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
-      "vwad.owasp.org/app/damn-vulnerable-restaurant/: 0→6 findings — vwad-dvr-restaurant-route-live-oracle",
-      "pwnshop.ctfsecurity.com/vulnerabilities: 49→50 findings — pwnshop-vulnerabilities-index live+route oracles",
-      "vulnbank.org/api/ai/chat: 0→34 findings — vulnbank-ai-chat-token-gate live+route oracles",
-      "rootabhi1.github.io/AI-Threatlab: 5 findings — OWASP LLM/ASI interactive threat lab",
-      "koadt.github.io/oss-oopssec-store/posts/prompt-injection-ai-assistant: 6 findings",
-      "bugstore.bugtraceai.com/api/checkout/process: 16 findings — bugstore-checkout-client-total oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; gap=[])",
+      "koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs: 10 findings \u2014 oopssec-plaintext-password-logs-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach: 9 findings \u2014 oopssec-idor-order-privacy-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import: 11 findings \u2014 oopssec-xxe-supplier-import-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182: 8 findings \u2014 oopssec-react2shell-route-live-oracle",
+      "pwnshop.ctfsecurity.com/checkout: 39 findings \u2014 pwnshop-checkout-hpp-coupon live+route oracles (PWN-039)",
+      "pwnshop.ctfsecurity.com/vulnerabilities: 51 findings \u2014 hub fingerprint + vuln-index oracles"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "oopssec live-stream-hijack + next-public-env-variable-leak queued but not drained",
+      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "qa.brokencrystals /api/file/aws + owaspsecure A09 + fabraix jailbreak-001 still in priority queue (48h skip)",
+      "oopssec live-stream-hijack + next-public-env-variable-leak queued but 48h skip",
       "AI-Threatlab: thin fingerprint without route-specific oracles",
-      "qa.brokencrystals /api/file/aws + owaspsecure A09 + fabraix jailbreak-001 still in priority queue",
-      "pwnshop /checkout HPP coupon oracle needs authenticated OTP session for live probe"
+      "OopsSec walkthroughs still queued: open-redirect, bola-wishlist, client-side-price, jwt-weak-secret, ssrf-internal-page"
     ]
   },
   "discovery_highlights": {
     "qa.brokencrystals.com/api/file/aws": 96,
     "juice-shop.herokuapp.com": 53,
-    "pwnshop.ctfsecurity.com/vulnerabilities": 50,
+    "pwnshop.ctfsecurity.com/vulnerabilities": 51,
     "pwnshop.ctfsecurity.com/debug/info": 48,
     "vulnbank.org/api/ai/chat": 34,
     "preview.owasp-juice.shop/rest/products/search?q=test": 34,
-    "pwnshop.ctfsecurity.com/checkout": 25,
+    "pwnshop.ctfsecurity.com/checkout": 39,
     "bugstore.bugtraceai.com/api/checkout/process": 16,
     "bugstore.bugtraceai.com/api/user/profile": 16,
-    "vwad.owasp.org/app/damn-vulnerable-restaurant": 6
+    "vwad.owasp.org/app/damn-vulnerable-restaurant": 6,
+    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import": 11,
+    "koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs": 10,
+    "koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach": 9,
+    "koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182": 8
   }
 }
