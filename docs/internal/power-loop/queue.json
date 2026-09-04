@@ -1,174 +1,199 @@
 {
-  "updated_at": "2026-09-04T21:05:00.000Z",
+  "updated_at": "2026-09-04T22:06:36.000Z",
   "priority_discovery_urls": [
     {
+      "url": "https://rootabhi1.github.io/AI-Threatlab/",
+      "source": "rootabhi1/AI-Threatlab \u2014 OWASP LLM Top 10 (2025) + Agentic ASI Top 10 (2026) interactive attack/defense walkthroughs (web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/",
+      "source": "kOaDT/oss-oopssec-store \u2014 BFLA live stream hijack walkthrough (posts index scrape 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/prompt-injection-ai-assistant/",
+      "source": "kOaDT/oss-oopssec-store \u2014 AI assistant prompt injection + secret extraction walkthrough (posts index scrape 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/next-public-env-variable-leak/",
+      "source": "kOaDT/oss-oopssec-store \u2014 NEXT_PUBLIC_ client-side secret leak walkthrough (posts index scrape 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/information-disclosure-api-error/",
+      "source": "kOaDT/oss-oopssec-store \u2014 verbose API error message secret disclosure walkthrough (posts index scrape 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card/",
-      "source": "kOaDT/oss-oopssec-store — LCG gift-card code prediction from millisecond timestamp walkthrough (scoreboard gap 21 UTC; oracles shipped, queue drain)",
+      "source": "kOaDT/oss-oopssec-store \u2014 LCG gift-card code prediction from millisecond timestamp walkthrough (scoreboard gap 21 UTC; oracles shipped, queue drain)",
       "auth": "public_demo"
     },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api/",
-      "source": "kOaDT/oss-oopssec-store — JWT HS256/RS256 algorithm confusion on partner API walkthrough (scoreboard gap 21 UTC; oracles shipped, queue drain)",
+      "source": "kOaDT/oss-oopssec-store \u2014 JWT HS256/RS256 algorithm confusion on partner API walkthrough (scoreboard gap 21 UTC; oracles shipped, queue drain)",
       "auth": "public_demo"
     },
     {
       "url": "https://bugstore.bugtraceai.com/api/checkout/process",
-      "source": "BugTraceAI/BugStore — V-023 client-trusted checkout total oracle POST /api/checkout/process (corrected from /api/cart/checkout; web search 21 UTC)",
+      "source": "BugTraceAI/BugStore \u2014 V-023 client-trusted checkout total oracle POST /api/checkout/process (corrected from /api/cart/checkout; web search 21 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://bugstore.bugtraceai.com/api/user/profile",
-      "source": "BugTraceAI/BugStore — V-015 profile role mass-assignment oracle PUT /api/user/profile (web search 21 UTC)",
+      "source": "BugTraceAI/BugStore \u2014 V-015 profile role mass-assignment oracle PUT /api/user/profile (web search 21 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain/",
-      "source": "kOaDT/oss-oopssec-store — npm typosquat → poisoned AI rules → runtime backdoor chain walkthrough (web search 21 UTC)",
+      "source": "kOaDT/oss-oopssec-store \u2014 npm typosquat \u2192 poisoned AI rules \u2192 runtime backdoor chain walkthrough (web search 21 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://pwnshop.ctfsecurity.com/vulnerabilities",
-      "source": "r007sec/pwnshop — interactive 45-vuln index mapped to OWASP Top 10 2025 + LLM Top 10 (GitHub homepage; web search 21 UTC)",
+      "source": "r007sec/pwnshop \u2014 interactive 45-vuln index mapped to OWASP Top 10 2025 + LLM Top 10 (GitHub homepage; web search 21 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://pwnshop.ctfsecurity.com/checkout",
-      "source": "r007sec/pwnshop — checkout business-logic + Vulnbank card payment oracle (GitHub README key URLs; web search 21 UTC)",
+      "source": "r007sec/pwnshop \u2014 checkout business-logic + Vulnbank card payment oracle (GitHub README key URLs; web search 21 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://vwad.owasp.org/app/damn-vulnerable-restaurant/",
-      "source": "OWASP VWAD — Damn Vulnerable RESTaurant API game (FastAPI CTF; web search 20 UTC)",
+      "source": "OWASP VWAD \u2014 Damn Vulnerable RESTaurant API game (FastAPI CTF; web search 20 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://preview.owasp-juice.shop/rest/products/search?q=test",
-      "source": "Official preview.owasp-juice.shop — develop-preview product search SQLi/XSS oracle (web search 20 UTC)",
+      "source": "Official preview.owasp-juice.shop \u2014 develop-preview product search SQLi/XSS oracle (web search 20 UTC)",
       "auth": "benchmark"
     },
     {
       "url": "https://bugstore.bugtraceai.com/api/auth/register",
-      "source": "BugTraceAI/BugStore — V-015 profile role mass-assignment via register+profile PUT (corrected from /api/auth/signup; OpenAPI; web search 21 UTC)",
+      "source": "BugTraceAI/BugStore \u2014 V-015 profile role mass-assignment via register+profile PUT (corrected from /api/auth/signup; OpenAPI; web search 21 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://vulnbank.org/api/ai/chat",
-      "source": "Commando-X/vuln-bank — AI customer-support chat prompt-injection oracle (web search 20 UTC)",
+      "source": "Commando-X/vuln-bank \u2014 AI customer-support chat prompt-injection oracle (web search 20 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/",
-      "source": "kOaDT/oss-oopssec-store — CSRF on admin order-update endpoint walkthrough (web search 20 UTC)",
+      "source": "kOaDT/oss-oopssec-store \u2014 CSRF on admin order-update endpoint walkthrough (web search 20 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://owasp-finbot-ctf.org/portals",
-      "source": "OWASP FinBot CTF — four-portal hub scope validation after finbotScopedLiveOracleAllowed guards (scoreboard learning gap 19 UTC)",
+      "source": "OWASP FinBot CTF \u2014 four-portal hub scope validation after finbotScopedLiveOracleAllowed guards (scoreboard learning gap 19 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://owasp-finbot-ctf.org/admin",
-      "source": "OWASP FinBot CTF — admin copilot live oracle + portal scope validation (scoreboard learning gap 19 UTC)",
+      "source": "OWASP FinBot CTF \u2014 admin copilot live oracle + portal scope validation (scoreboard learning gap 19 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/",
-      "source": "kOaDT/oss-oopssec-store — race-condition TOCTOU coupon abuse walkthrough (ch.04 access control; priority drain 19 UTC)",
+      "source": "kOaDT/oss-oopssec-store \u2014 race-condition TOCTOU coupon abuse walkthrough (ch.04 access control; priority drain 19 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-47",
-      "source": "OWASP/wrongsecrets — Heroku demo challenge-47 Vault template hardcoded secret lab (official README deploy link; web search 19 UTC)",
+      "source": "OWASP/wrongsecrets \u2014 Heroku demo challenge-47 Vault template hardcoded secret lab (official README deploy link; web search 19 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-53",
-      "source": "OWASP/wrongsecrets — Heroku demo challenge-53 debugging-container secrets lab (official README deploy link; web search 19 UTC)",
+      "source": "OWASP/wrongsecrets \u2014 Heroku demo challenge-53 debugging-container secrets lab (official README deploy link; web search 19 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://vulnshop.vercel.app/api/products?search=test",
-      "source": "sr33jih/vulnshop — OWASP API Top 10 product search SQLi oracle GET /api/products?search= (Vercel deploy; web search 19 UTC)",
+      "source": "sr33jih/vulnshop \u2014 OWASP API Top 10 product search SQLi oracle GET /api/products?search= (Vercel deploy; web search 19 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://playground.fabraix.com/challenges/tool-poisoning-002",
-      "source": "fabraix/playground — Show HN AI agent tool-poisoning rug-pull challenge (GitHub challenges/; web search 19 UTC)",
+      "source": "fabraix/playground \u2014 Show HN AI agent tool-poisoning rug-pull challenge (GitHub challenges/; web search 19 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-44",
-      "source": "OWASP/wrongsecrets — Heroku demo challenge-44 secrets-in-K8s lab (official README deploy link; web search 18 UTC)",
+      "source": "OWASP/wrongsecrets \u2014 Heroku demo challenge-44 secrets-in-K8s lab (official README deploy link; web search 18 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-45",
-      "source": "OWASP/wrongsecrets — Heroku demo challenge-45 secrets lab (official README deploy link; web search 18 UTC)",
+      "source": "OWASP/wrongsecrets \u2014 Heroku demo challenge-45 secrets lab (official README deploy link; web search 18 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-46",
-      "source": "OWASP/wrongsecrets — Heroku demo challenge-46 secrets lab (official README deploy link; web search 18 UTC)",
+      "source": "OWASP/wrongsecrets \u2014 Heroku demo challenge-46 secrets lab (official README deploy link; web search 18 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://owaspsecure.com/demo/a09_logging/insecure.php",
-      "source": "owaspsecure.com OWASP Top 10 demo hub — A09 security logging & monitoring failures lab (web search 18 UTC)",
+      "source": "owaspsecure.com OWASP Top 10 demo hub \u2014 A09 security logging & monitoring failures lab (web search 18 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://playground.fabraix.com/challenges/jailbreak-001",
-      "source": "fabraix/playground — Show HN AI agent jailbreak/guardrail bypass challenge (GitHub challenges/; web search 18 UTC)",
+      "source": "fabraix/playground \u2014 Show HN AI agent jailbreak/guardrail bypass challenge (GitHub challenges/; web search 18 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://qa.brokencrystals.com/api/file/aws",
-      "source": "NeuraLegion/brokencrystals qa — AWS metadata SSRF oracle /api/file/aws (scoreboard gap 18 UTC; brokencrystals-file-aws-route-live-oracle priority drain)",
+      "source": "NeuraLegion/brokencrystals qa \u2014 AWS metadata SSRF oracle /api/file/aws (scoreboard gap 18 UTC; brokencrystals-file-aws-route-live-oracle priority drain)",
       "auth": "public_demo"
     },
     {
       "url": "https://bugstore.bugtraceai.com/api/products/1/image?file=images/product1.jpg",
-      "source": "BugTraceAI/BugStore — V-014 product image path traversal oracle (/api/products/{id}/image; OpenAPI + live /etc/passwd read)",
+      "source": "BugTraceAI/BugStore \u2014 V-014 product image path traversal oracle (/api/products/{id}/image; OpenAPI + live /etc/passwd read)",
       "auth": "public_demo"
     },
     {
       "url": "https://bugstore.bugtraceai.com/api/products/?search=test",
-      "source": "BugTraceAI/BugStore — V-001/V-012 product search SQLi oracle (/api/products search filter; HTTP 500 on test' payload)",
+      "source": "BugTraceAI/BugStore \u2014 V-001/V-012 product search SQLi oracle (/api/products search filter; HTTP 500 on test' payload)",
       "auth": "public_demo"
     },
     {
       "url": "https://owaspsecure.com/demo/a01_bac/insecure.php",
-      "source": "owaspsecure.com OWASP Top 10 demo hub — A01 broken access control IDOR/BOLA lab (scoreboard gap 17 UTC; thin 4-finding passes)",
+      "source": "owaspsecure.com OWASP Top 10 demo hub \u2014 A01 broken access control IDOR/BOLA lab (scoreboard gap 17 UTC; thin 4-finding passes)",
       "auth": "public_demo"
     },
     {
       "url": "https://owaspsecure.com/demo/a03_injection/insecure.php",
-      "source": "owaspsecure.com OWASP Top 10 demo hub — A03 SQLi/XSS injection lab (scoreboard gap 17 UTC; thin 6-finding passes)",
+      "source": "owaspsecure.com OWASP Top 10 demo hub \u2014 A03 SQLi/XSS injection lab (scoreboard gap 17 UTC; thin 6-finding passes)",
       "auth": "public_demo"
     },
     {
       "url": "https://bugstore.bugtraceai.com",
-      "source": "BugTraceAI/BugStore — 32-vuln OWASP Top 10 shop playground (bugstore.bugtraceai.com homepage; web search 17 UTC)",
+      "source": "BugTraceAI/BugStore \u2014 32-vuln OWASP Top 10 shop playground (bugstore.bugtraceai.com homepage; web search 17 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://bugstore.bugtraceai.com/api/debug/vulns",
-      "source": "BugTraceAI/BugStore — Level-0 vulnerability catalog API oracle (/api/debug/vulns; GitHub README)",
+      "source": "BugTraceAI/BugStore \u2014 Level-0 vulnerability catalog API oracle (/api/debug/vulns; GitHub README)",
       "auth": "public_demo"
     },
     {
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php",
-      "source": "webspoilt/vulnforge-academy — Level 14 SSRF challenge (README Medium tier; scoreboard gap 17 UTC)",
+      "source": "webspoilt/vulnforge-academy \u2014 Level 14 SSRF challenge (README Medium tier; scoreboard gap 17 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://pwnshop.ctfsecurity.com/api/v1/chat/query",
-      "source": "ctfsec/pwnshop — PWN-035/036 LLM prompt-injection POST /api/v1/chat/query (vulnerabilities index; web search 17 UTC)",
+      "source": "ctfsec/pwnshop \u2014 PWN-035/036 LLM prompt-injection POST /api/v1/chat/query (vulnerabilities index; web search 17 UTC)",
       "auth": "public_demo"
     },
     {
       "url": "https://playhacklab.com/",
-      "source": "PlayHackLab — browser-based OWASP Top 10 hacking sandbox (public demo; web search 17 UTC)",
+      "source": "PlayHackLab \u2014 browser-based OWASP Top 10 hacking sandbox (public demo; web search 17 UTC)",
       "auth": "public_demo"
     },
     {
