@@ -2013,6 +2013,8 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureCryptoDataAtRestRouteLiveOracle",
   "owaspsecureAuthSessionFixationLiveOracle",
   "owaspsecureAuthSessionFixationRouteLiveOracle",
+  "owaspsecureAuthMfaBypassLiveOracle",
+  "owaspsecureAuthMfaBypassRouteLiveOracle",
   "owaspsecureDesignPasswordResetLiveOracle",
   "owaspsecureDesignPasswordResetRouteLiveOracle",
   "owaspsecureDesignPasswordResetAttackPathRouteLiveOracle",
@@ -2050,6 +2052,10 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureBacIdorUuidRouteLiveOracle",
   "owaspsecureSsrfInternalHealthLiveOracle",
   "owaspsecureSsrfInternalHealthRouteLiveOracle",
+  "owaspsecureSsrfSocketProbeLiveOracle",
+  "owaspsecureSsrfSocketProbeRouteLiveOracle",
+  "owaspsecureSsrfInternalHealthDirectLiveOracle",
+  "owaspsecureSsrfInternalHealthDirectRouteLiveOracle",
   "guardmarlyScanLiveOracle",
   "guardmarlyScanRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
@@ -17089,6 +17095,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a10_ssrf\b/i.test(targetInput) &&
+        (p.slug.startsWith("owaspsecure-ssrf-socket-probe") ||
+          p.slug.startsWith("owaspsecure-ssrf-internal-health-direct"))
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a01_bac\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-bac-idor-numeric")
       )
@@ -17149,6 +17162,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a07_auth\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-auth-session-fixation")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a07_auth\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-auth-mfa-bypass")
       )
         return -4;
       if (

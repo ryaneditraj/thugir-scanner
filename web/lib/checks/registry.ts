@@ -43442,6 +43442,41 @@ function owaspsecureAttackUrl(ctx: RuleContext, attackPath: string): string {
   return new URL(attackPath.replace(/^\//, ""), `${base}/`).toString();
 }
 
+function owaspsecureDemoUrl(ctx: RuleContext, demoModule: string, attackPath: string): string {
+  const base = new URL(`/demo/${demoModule}/`, ctx.origin).toString();
+  return new URL(attackPath.replace(/^\//, ""), base).toString();
+}
+
+async function owaspsecureFetchHubCsrf(
+  ctx: RuleContext,
+  demoModule: string
+): Promise<string | null> {
+  const session = await owaspsecureDemoSessionBootstrap(ctx, demoModule);
+  return session?.csrf ?? null;
+}
+
+async function owaspsecureDemoSessionBootstrap(
+  ctx: RuleContext,
+  demoModule: string
+): Promise<{ csrf: string; cookie: string } | null> {
+  const hubUrl = owaspsecureDemoUrl(ctx, demoModule, "insecure.php");
+  const doc = await ctx.probe.get(hubUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  const csrfMatch = doc.body.match(/name=["']csrf["']\s+value=["']([^"']+)["']/i);
+  const csrf = csrfMatch?.[1];
+  const cookie =
+    doc.setCookies.find((c) => /^OWASPDEMOSESSID=/i.test(c))?.split(";")[0] ??
+    doc.setCookies.find((c) => /^PHPSESSID=/i.test(c))?.split(";")[0];
+  if (!csrf || !cookie) return null;
+  return { csrf, cookie };
+}
+
+function owaspsecureHubCsrfFromSection(hubBody: string, sectionRe: RegExp): string | null {
+  const section = hubBody.match(sectionRe)?.[0] ?? "";
+  const csrfMatch = section.match(/name=["']csrf["']\s+value=["']([^"']+)["']/i);
+  return csrfMatch?.[1] ?? null;
+}
+
 const owaspsecureInjectionSqliLoginLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const loginUrl = owaspsecureAttackUrl(ctx, "attacks/sql_login/login_insecure.php");
@@ -43930,6 +43965,74 @@ const owaspsecureAuthSessionFixationRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "owaspsecure.com /demo/a07_auth route scan — Attack 2 session fixation begin issues reusable pre-login SID (live auth failure oracle)"
+    }
+  };
+};
+
+const owaspsecureAuthMfaBypassLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const hubUrl = owaspsecureDemoUrl(ctx, "a07_auth", "insecure.php");
+  const hubDoc = await ctx.probe.get(hubUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (hubDoc.status < 200 || hubDoc.status >= 400) return NEGATIVE;
+  const cookie =
+    hubDoc.setCookies.find((c) => /^OWASPDEMOSESSID=/i.test(c))?.split(";")[0] ??
+    hubDoc.setCookies.find((c) => /^PHPSESSID=/i.test(c))?.split(";")[0];
+  const csrf = owaspsecureHubCsrfFromSection(
+    hubDoc.body,
+    /id="a4"[\s\S]{0,3500}/i
+  );
+  if (!cookie || !csrf) return NEGATIVE;
+  const beginUrl = owaspsecureDemoUrl(
+    ctx,
+    "a07_auth",
+    "attacks/mfa_flow/begin_insecure.php?mfa=ok"
+  );
+  const beginDoc = await ctx.probe.get(beginUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Cookie: cookie }
+  });
+  if (beginDoc.status < 200 || beginDoc.status >= 400) return NEGATIVE;
+  if (!/Insecure MFA begin|bypass enabled|mfa=ok/i.test(beginDoc.body)) return NEGATIVE;
+  const verifyUrl = owaspsecureDemoUrl(ctx, "a07_auth", "attacks/mfa_flow/verify_insecure.php");
+  const verifyBody = new URLSearchParams({ code: "000000", csrf }).toString();
+  const verifyDoc = await ctx.probe.get(verifyUrl, {
+    method: "POST",
+    body: verifyBody,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: cookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (verifyDoc.status < 200 || verifyDoc.status >= 400) return NEGATIVE;
+  if (!/Insecure MFA accepted|universal code 000000/i.test(verifyDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: verifyUrl,
+      snippet:
+        verifyDoc.body.match(/Reason:\s*[^\n<]+/i)?.[0]?.slice(0, 80) ?? "universal code 000000",
+      note: "owaspsecure.com MFA flow accepts ?mfa=ok bypass and universal code 000000 — A07 weak MFA training oracle"
+    }
+  };
+};
+
+const owaspsecureAuthMfaBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a07_auth\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureAuthMfaBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a07_auth route scan — Attack 4 MFA flow accepts ?mfa=ok bypass and universal code 000000 (live auth failure oracle)"
     }
   };
 };
@@ -44739,6 +44842,81 @@ const owaspsecureSsrfInternalHealthRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "owaspsecure.com /demo/a10_ssrf route scan — open fetcher returns internal-gateway health.json body (live internal SSRF oracle)"
+    }
+  };
+};
+
+const owaspsecureSsrfSocketProbeLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const probeUrl = owaspsecureDemoUrl(
+    ctx,
+    "a10_ssrf",
+    "attacks/socket_probe.php?host=127.0.0.1&port=80&mode=insecure"
+  );
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/INSECURE:\s*127\.0\.0\.1:80 appears OPEN/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      snippet: doc.body.match(/INSECURE:[^\n<]+/i)?.[0]?.slice(0, 100) ?? "127.0.0.1:80 appears OPEN",
+      note: "owaspsecure.com GET attacks/socket_probe.php performs server-side TCP port scan — A10 SSRF port-scanning training oracle"
+    }
+  };
+};
+
+const owaspsecureSsrfSocketProbeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a10_ssrf\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureSsrfSocketProbeLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a10_ssrf route scan — Attack 4 socket_probe.php confirms server-side port scanning from attacker-controlled host:port (live SSRF oracle)"
+    }
+  };
+};
+
+const owaspsecureSsrfInternalHealthDirectLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const healthUrl = owaspsecureDemoUrl(ctx, "a10_ssrf", "attacks/internal/health.json");
+  const doc = await ctx.probe.get(healthUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"service"\s*:\s*"internal-gateway"/i.test(doc.body)) return NEGATIVE;
+  if (!/"status"\s*:\s*"ok"/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: healthUrl,
+      snippet:
+        doc.body.match(/\{[\s\S]{0,120}internal-gateway[\s\S]{0,80}\}/i)?.[0]?.slice(0, 120) ??
+        '"service":"internal-gateway"',
+      note: "owaspsecure.com GET attacks/internal/health.json is directly reachable without authentication — A10 internal endpoint exposure training oracle"
+    }
+  };
+};
+
+const owaspsecureSsrfInternalHealthDirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a10_ssrf\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureSsrfInternalHealthDirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a10_ssrf route scan — internal health.json is directly reachable without auth, complementing fetch_insecure SSRF chain (live misconfig oracle)"
     }
   };
 };
@@ -111245,6 +111423,8 @@ export const RULES: Record<string, Rule> = {
   owaspsecureCryptoDataAtRestRouteLiveOracle,
   owaspsecureAuthSessionFixationLiveOracle,
   owaspsecureAuthSessionFixationRouteLiveOracle,
+  owaspsecureAuthMfaBypassLiveOracle,
+  owaspsecureAuthMfaBypassRouteLiveOracle,
   owaspsecureDesignPasswordResetLiveOracle,
   owaspsecureDesignPasswordResetRouteLiveOracle,
   owaspsecureDesignPasswordResetAttackPathRouteLiveOracle,
@@ -111282,6 +111462,10 @@ export const RULES: Record<string, Rule> = {
   owaspsecureBacIdorUuidRouteLiveOracle,
   owaspsecureSsrfInternalHealthLiveOracle,
   owaspsecureSsrfInternalHealthRouteLiveOracle,
+  owaspsecureSsrfSocketProbeLiveOracle,
+  owaspsecureSsrfSocketProbeRouteLiveOracle,
+  owaspsecureSsrfInternalHealthDirectLiveOracle,
+  owaspsecureSsrfInternalHealthDirectRouteLiveOracle,
   guardmarlyScanLiveOracle,
   guardmarlyScanRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,

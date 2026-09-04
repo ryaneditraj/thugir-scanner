@@ -8321,6 +8321,24 @@
       "slug": "owaspsecure-design-password-reset-attack-path-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /demo/a04_insecure_design/attacks/reset_flow/ attack path confirms live generate_insecure.php + reset.php predictable token chain; owaspsecure.com/demo/a04_insecure_design/insecure.php findings 15→18; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-auth-mfa-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/mfa_flow/begin_insecure.php?mfa=ok + POST verify_insecure.php code=000000 returns Insecure MFA accepted / universal code 000000; owaspsecure.com/demo/a07_auth/insecure.php findings 8→10 (+owaspsecure-auth-mfa-bypass-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-ssrf-socket-probe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/socket_probe.php?host=127.0.0.1&port=80 returns INSECURE: 127.0.0.1:80 appears OPEN; owaspsecure.com/demo/a10_ssrf/insecure.php findings 11→15 (+owaspsecure-ssrf-socket-probe-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-ssrf-internal-health-direct-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/internal/health.json returns {\"service\":\"internal-gateway\",\"status\":\"ok\"} without auth; owaspsecure.com/demo/a10_ssrf/insecure.php findings 11→15 (+owaspsecure-ssrf-internal-health-direct-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

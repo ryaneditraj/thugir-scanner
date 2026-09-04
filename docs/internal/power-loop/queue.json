@@ -1,6 +1,16 @@
 {
-  "updated_at": "2026-09-04T05:08:50.675Z",
+  "updated_at": "2026-09-04T05:12:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://owaspsecure.com/demo/a07_auth/insecure.php",
+      "source": "owaspsecure.com A07 auth hub — MFA bypass, session fixation, brute-force rate limits (power-loop 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a10_ssrf/insecure.php",
+      "source": "owaspsecure.com A10 SSRF hub — socket probe port scan, internal health direct exposure (power-loop 05 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/",
       "source": "kOaDT/oss-oopssec-store — CSRF admin order status update walkthrough POST /api/admin/orders (challenges.json ch.15; web search 05 UTC)",
