@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T03:08:00.000Z",
+  "updated_at": "2026-09-04T04:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://owaspsecure.com/demo/a04_insecure_design/insecure.php",
+      "source": "owaspsecure.com A04 insecure design — password-reset token forgery, CSRF settings, reusable magic link, coupon logic (web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a03_injection/insecure.php",
+      "source": "owaspsecure.com A03 injection hub — SQLi login bypass, blind/time SQLi, stored/reflected/DOM XSS (web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass/",
+      "source": "kOaDT/oss-oopssec-store — open redirect login bypass walkthrough GET /login?redirect= (challenges.json ch.05; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/",
+      "source": "kOaDT/oss-oopssec-store — product search SQLi walkthrough GET /api/products/search (challenges.json ch.18; web search 04 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/login/totp",
+      "source": "Escape Duck Store — 2FA bypass oracle POST /api/v1/auth/login/totp (vulnerabilities index; web search 04 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api/",
       "source": "kOaDT/oss-oopssec-store — path traversal documents API walkthrough GET /api/files?file=../flag.txt (challenges.json ch.08; web search 03 UTC)",
