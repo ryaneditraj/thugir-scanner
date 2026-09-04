@@ -88509,6 +88509,47 @@ const wrongsecretsChallengeRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const wrongsecretsChallenge0OpeningLiveOracle: Rule = async (ctx) => {
+  if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
+  const probeUrl = new URL("/challenge/challenge-0", ctx.origin).toString();
+  const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (
+    !/Opening Challenge|Welcome to OWASP WrongSecrets/i.test(body) ||
+    !/The first answer|Every challenge is about finding a secret/i.test(body) ||
+    !/data-cy="answer-textbox"/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        body.match(/The first answer[\s\S]{0,60}/i)?.[0]?.slice(0, 80) ?? "Opening challenge walkthrough",
+      note: "OWASP WrongSecrets challenge-0 documents the intro onboarding walkthrough with answer submission UI — opening challenge training oracle"
+    }
+  };
+};
+
+const wrongsecretsChallenge0OpeningRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?0\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await wrongsecretsChallenge0OpeningLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "WrongSecrets challenge-0 route scan — Opening Challenge confirms intro walkthrough with The first answer onboarding oracle"
+    }
+  };
+};
+
 const wrongsecretsChallenge1GitHardcodedLiveOracle: Rule = async (ctx) => {
   if (!/wrongsecrets/i.test(ctx.origin)) return NEGATIVE;
   const probeUrl = new URL("/challenge/challenge-1", ctx.origin).toString();
@@ -88518,7 +88559,7 @@ const wrongsecretsChallenge1GitHardcodedLiveOracle: Rule = async (ctx) => {
   if (
     !/challenge focuses on.*Git<\/strong>/i.test(body) ||
     !/grep -r password|git-secrets|Trufflehog/i.test(body) ||
-    !/secret called.*password|hardcoded string/i.test(body) ||
+    !/secret called.*password|hardcoded string|hardcoded secrets, such as a.*password/i.test(body) ||
     !/data-cy="answer-textbox"/i.test(body)
   ) {
     return NEGATIVE;
@@ -88768,9 +88809,13 @@ const wrongsecretsChallenge7VaultLiveOracle: Rule = async (ctx) => {
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const body = doc.body;
+  const vaultWalkthrough =
+    /Find the Secret in Vault using the logged root token/i.test(body) ||
+    (/A secret hidden in Vault/i.test(body) &&
+      /K8s\/Minikube|secret is no longer in K8s/i.test(body));
   if (
     !/challenge focuses on.*Vault|Vault<\/strong>/i.test(body) ||
-    !/Find the Secret in Vault using the logged root token/i.test(body) ||
+    !vaultWalkthrough ||
     !/data-cy="answer-textbox"/i.test(body)
   ) {
     return NEGATIVE;
@@ -88780,8 +88825,10 @@ const wrongsecretsChallenge7VaultLiveOracle: Rule = async (ctx) => {
     confidence: 0.93,
     evidence: {
       url: probeUrl,
-      snippet: body.match(/Find the Secret in Vault[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ?? "Vault metadata challenge",
-      note: "OWASP WrongSecrets challenge-7 documents Vault metadata secret retrieval using a logged root token — HashiCorp Vault secrets oracle"
+      snippet:
+        body.match(/Find the Secret in Vault[\s\S]{0,100}|A secret hidden in Vault[\s\S]{0,80}/i)?.[0]?.slice(0, 100) ??
+        "Vault challenge walkthrough",
+      note: "OWASP WrongSecrets challenge-7 documents HashiCorp Vault secret retrieval (root-token walkthrough or condensed K8s/Minikube CTF hub) — Vault secrets oracle"
     }
   };
 };
@@ -88808,9 +88855,13 @@ const wrongsecretsChallenge8LoggingLiveOracle: Rule = async (ctx) => {
   const doc = await fetchDoc(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
   if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
   const body = doc.body;
+  const loggingWalkthrough =
+    /docker logs|find the value for challenge\s*8/i.test(body) ||
+    (/log(?:ged)? it to standard out/i.test(body) &&
+      /logging of the application at startup/i.test(body));
   if (
     !/challenge focuses on.*Logging|Logging<\/strong>/i.test(body) ||
-    !/docker logs|find the value for challenge\s*8/i.test(body) ||
+    !loggingWalkthrough ||
     !/data-cy="answer-textbox"/i.test(body)
   ) {
     return NEGATIVE;
@@ -88820,8 +88871,10 @@ const wrongsecretsChallenge8LoggingLiveOracle: Rule = async (ctx) => {
     confidence: 0.93,
     evidence: {
       url: probeUrl,
-      snippet: body.match(/docker logs[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ?? "Logging challenge",
-      note: "OWASP WrongSecrets challenge-8 documents secrets leaked via docker logs — container logging exposure oracle"
+      snippet:
+        body.match(/docker logs[\s\S]{0,100}|log(?:ged)? it to standard out[\s\S]{0,80}/i)?.[0]?.slice(0, 100) ??
+        "Logging challenge walkthrough",
+      note: "OWASP WrongSecrets challenge-8 documents secrets leaked via container startup logs (docker logs walkthrough or condensed stdout CTF hub) — logging exposure oracle"
     }
   };
 };
@@ -113007,6 +113060,8 @@ export const RULES: Record<string, Rule> = {
   bingoctfAuthGatedCtfRouteLiveOracle,
   wrongsecretsChallengeLiveOracle,
   wrongsecretsChallengeRouteLiveOracle,
+  wrongsecretsChallenge0OpeningLiveOracle,
+  wrongsecretsChallenge0OpeningRouteLiveOracle,
   wrongsecretsChallenge1GitHardcodedLiveOracle,
   wrongsecretsChallenge1GitHardcodedRouteLiveOracle,
   wrongsecretsChallenge2ApplicationPropertiesLiveOracle,

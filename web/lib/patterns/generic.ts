@@ -36085,6 +36085,56 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-0-opening-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "medium",
+    title: "OWASP WrongSecrets challenge-0 opening live oracle",
+    description:
+      "GET /challenge/challenge-0 documents the WrongSecrets intro onboarding walkthrough with The first answer submission UI — opening challenge training oracle.",
+    impactOneline:
+      "WrongSecrets challenge-0 exposes the onboarding walkthrough that teaches players how to submit answers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge0OpeningLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-0 is intentional — ensure production apps never embed tutorial answers in walkthrough pages.",
+      steps: [
+        "Keep training CTF instances isolated from production infrastructure.",
+        "Scan public challenge pages only on authorized training targets."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-0 route documents the opening onboarding walkthrough. Show how to isolate CTF training instances.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-0-opening-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "medium",
+    title: "OWASP WrongSecrets challenge-0 opening route live oracle",
+    description:
+      "When scanning /challenge/0 or /challenge/challenge-0, the walkthrough documents the WrongSecrets intro onboarding with The first answer — route-specific challenge-0 opening oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-0 Opening Challenge walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge0OpeningRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-0 is intentional — keep CTF training hubs isolated from production.",
+      steps: [
+        "Run WrongSecrets CTF instances only on isolated training infrastructure.",
+        "Do not expose challenge walkthrough pages on production domains."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-0 route documents the opening onboarding walkthrough. Show route-specific CTF isolation guidance.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-1-git-hardcoded-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
