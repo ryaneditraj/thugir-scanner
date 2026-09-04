@@ -1,6 +1,11 @@
 {
-  "updated_at": "2026-09-04T11:12:00.000Z",
+  "updated_at": "2026-09-04T12:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://owaspsecure.com/demo/a08_integrity/insecure.php",
+      "source": "OWASP Top 10 Demo Hub — A08 Software Integrity failures (signed updates, plugin upload, CI/CD deploy)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ai-security-platform-iota.vercel.app/challenges/cookie-auth",
       "source": "AI Security Platform — cookie-based auth bypass / admin console challenge (Vercel public demo)",
