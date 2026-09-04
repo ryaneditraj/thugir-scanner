@@ -2001,6 +2001,10 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureMisconfigPhpinfoRouteLiveOracle",
   "owaspsecureMisconfigDefaultCredsLiveOracle",
   "owaspsecureMisconfigDefaultCredsRouteLiveOracle",
+  "owaspsecureMisconfigExposedConfigLiveOracle",
+  "owaspsecureMisconfigExposedConfigRouteLiveOracle",
+  "owaspsecureMisconfigVerboseErrorLiveOracle",
+  "owaspsecureMisconfigVerboseErrorRouteLiveOracle",
   "owaspsecureCryptoPasswordMd5LiveOracle",
   "owaspsecureCryptoPasswordMd5RouteLiveOracle",
   "owaspsecureCryptoPredictableTokensLiveOracle",
@@ -4017,6 +4021,7 @@ const DEEP_RULES = new Set<string>([
   "vulnforgeAcademyLevelIdorRouteLiveOracle",
   "vulnforgeAcademyLevelAuthRouteLiveOracle",
   "vulnforgeAcademyLevelFileUploadRouteLiveOracle",
+  "vulnforgeAcademyLevel16DoubleExtensionRouteLiveOracle",
   "vulnforgeAcademyLevel17ContentTypeRouteLiveOracle",
   "vulnforgeAcademyLevel18ExtensionBypassRouteLiveOracle",
   "vulnforgeAcademyLevelRceRouteLiveOracle",
@@ -15619,6 +15624,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level(?:s)?\/16\b|level16\.php/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level16-double-extension")
+      )
+        return -4;
+      if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
         /\/level(?:s)?\/17\b|level17\.php/i.test(targetInput) &&
         p.slug.startsWith("vulnforge-academy-level17-content-type")
       )
@@ -17068,6 +17079,15 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/demo\/a01_bac\b/i.test(targetInput) &&
         (p.slug.startsWith("owaspsecure-bac-file-dor") ||
           p.slug.startsWith("owaspsecure-bac-mass-assignment"))
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a05_misconfig(?:\/insecure\.php|\/attacks\/exposed_config|\/attacks\/verbose_error)/i.test(
+          targetInput
+        ) &&
+        (p.slug.startsWith("owaspsecure-misconfig-exposed-config") ||
+          p.slug.startsWith("owaspsecure-misconfig-verbose-error"))
       )
         return -4;
       if (

@@ -54965,6 +54965,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnforge-academy-level16-double-extension-upload-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnForge Academy level 16 double-extension upload route live oracle",
+    description:
+      "When scanning level16.php routes, VulnForge Academy documents double extension or null-byte tricks to bypass file extension validation — route-specific level 16 file upload training oracle (README corpus fallback).",
+    impactOneline:
+      "VulnForge Academy level 16 exposes intentional double-extension/null-byte upload bypass patterns distinct from generic levels 16–18 upload oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevel16DoubleExtensionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — validate uploads with allowlisted extensions and magic bytes, rejecting double extensions.",
+      steps: [
+        "Normalize filenames and reject double extensions like .php.jpg.",
+        "Strip null bytes and validate magic bytes server-side.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 16 route documents double-extension upload bypass. Show secure upload validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnforge-academy-level17-content-type-upload-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -76093,6 +76119,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /demo/a05_misconfig route scan confirms default admin credentials work. Show route-level default credential remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-exposed-config-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A05 exposed config live oracle",
+    description:
+      "GET attacks/exposed_config/insecure/config.php on owaspsecure.com returns DB_PASSWORD, API_KEY, and SERVICE_TOKEN from webroot — A05 security misconfiguration training oracle.",
+    impactOneline:
+      "Webroot config.php on owaspsecure.com exposes database credentials and API keys without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigExposedConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Move configuration files outside the webroot and deny direct HTTP access to secrets.",
+      steps: [
+        "Store .env and config.php outside public_html.",
+        "Deny direct access via web server rules.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com exposed config.php leaks DB_PASSWORD and API_KEY. Show webroot secret isolation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-exposed-config-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A05 misconfig route exposed config live oracle",
+    description:
+      "When scanning /demo/a05_misconfig/insecure.php or /attacks/exposed_config/ on owaspsecure.com, Attack 4 config.php leaks credentials from webroot — route-specific A05 misconfiguration oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A05 lab should confirm live exposed config.php, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigExposedConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Move configuration files outside the webroot and deny direct HTTP access to secrets.",
+      steps: [
+        "Store .env and config.php outside public_html.",
+        "Deny direct access via web server rules.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a05_misconfig route scan confirms exposed config.php credentials. Show route-level secret isolation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-verbose-error-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A05 verbose error live oracle",
+    description:
+      "GET attacks/verbose_error_insecure.php on owaspsecure.com enables display_errors and leaks PHP stack traces with server filesystem paths — A05 security misconfiguration training oracle.",
+    impactOneline:
+      "Verbose PHP error pages on owaspsecure.com disclose stack traces and absolute server paths useful for targeted exploitation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigVerboseErrorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable display_errors in production and log detailed errors server-side only.",
+      steps: [
+        "Set display_errors=Off in production php.ini.",
+        "Return generic user-facing error messages.",
+        "Log stack traces to protected server-side log files."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com verbose_error_insecure.php leaks stack traces and paths. Show production error handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-verbose-error-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A05 misconfig route verbose error live oracle",
+    description:
+      "When scanning /demo/a05_misconfig/insecure.php or /attacks/verbose_error_insecure.php on owaspsecure.com, Attack 2 verbose errors leak stack traces and paths — route-specific A05 misconfiguration oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A05 lab should confirm live verbose error disclosure, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigVerboseErrorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable display_errors in production and log detailed errors server-side only.",
+      steps: [
+        "Set display_errors=Off in production php.ini.",
+        "Return generic user-facing error messages.",
+        "Log stack traces to protected server-side log files."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a05_misconfig route scan confirms verbose PHP error disclosure. Show route-level error handling remediation.",
     version: 1,
     enabled: true
   },

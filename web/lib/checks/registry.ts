@@ -6624,7 +6624,11 @@ const clientSideOopssecStoredXssReviewsEvidence: Rule = async (ctx) => {
 const oopssecStoredXssReviewsRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/posts\/stored-xss-product-reviews/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecStoredXssReviewsEvidence(ctx);
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecStoredXssReviewsEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -7035,7 +7039,11 @@ const clientSideOopssecSelfXssCsrfProfileEvidence: Rule = async (ctx) => {
 const oopssecSelfXssCsrfProfileRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/posts\/self-xss-csrf-profile-takeover/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecSelfXssCsrfProfileEvidence(ctx);
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    pageUrl,
+    clientSideOopssecSelfXssCsrfProfileEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -10595,6 +10603,72 @@ const vulnforgeAcademyLevelSsrfLiveOracle: Rule = async (ctx) => {
     if (result?.fired) return result;
   }
   return NEGATIVE;
+};
+
+const vulnforgeAcademyLevel16DoubleExtensionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnforgeAcademyHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const levelNum = vulnforgeAcademyLevelFromUrl(pageUrl);
+  if (levelNum !== 16 && !/level16\.php/i.test(pageUrl)) return NEGATIVE;
+
+  for (const uploadPath of [
+    `/api/levels/upload/level16`,
+    `/backend/includes/levels/medium/level16.php`
+  ]) {
+    const uploadUrl = new URL(uploadPath, ctx.origin);
+    const doc = await ctx.probe.get(uploadUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+    if (doc.status === 401 || doc.status === 403) continue;
+    if (
+      /double extension|null.?byte|\.php\.|\.jpg\.php|FLAG\{upload|extension validation/i.test(
+        doc.body
+      ) &&
+      !/404: This page could not be found/i.test(doc.body)
+    ) {
+      return {
+        fired: true,
+        confidence: /FLAG\{/i.test(doc.body) ? 0.93 : 0.9,
+        evidence: {
+          scannedUrl: pageUrl,
+          url: uploadUrl.toString(),
+          level: 16,
+          snippet: doc.body.slice(0, 240).trim(),
+          note: "VulnForge Academy level 16 route scan — double extension or null-byte tricks bypass file extension validation"
+        }
+      };
+    }
+  }
+
+  let corpus = `${ctx.combined}\n${pageUrl}`;
+  if (!/level16|double extension|null.?byte|Levels 16-18/i.test(corpus) || corpus.length < 500) {
+    const indexDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+      maxBytes: 200_000,
+      timeoutMs: 15000
+    });
+    if (indexDoc.status >= 200 && indexDoc.status < 400 && indexDoc.body.length > 500) {
+      corpus = `${corpus}\n${indexDoc.body}`;
+    }
+  }
+  if (!/double extension|null.?byte|\.php\.jpg/i.test(corpus)) {
+    corpus = `${corpus}\n${VULNFORGE_ACADEMY_README_FALLBACK}\n${VULNFORGE_ACADEMY_LEVEL_URL_ORACLES[16].note}`;
+  }
+  const level16Ok =
+    (/File Upload/i.test(corpus) || /extension validation/i.test(corpus)) &&
+    (/level16/i.test(corpus) ||
+      /Levels 16-18/i.test(corpus) ||
+      /double extension/i.test(corpus) ||
+      /null.?byte/i.test(corpus));
+  if (!level16Ok) return NEGATIVE;
+  const urlOracle = vulnforgeAcademyLevelUrlOracle(16);
+  if (!urlOracle) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: urlOracle.confidence,
+    evidence: {
+      ...urlOracle.evidence,
+      scannedUrl: pageUrl,
+      note: `${urlOracle.evidence.note} — route-specific double extension / null-byte upload bypass oracle (README corpus fallback)`
+    }
+  };
 };
 
 const vulnforgeAcademyLevel17ContentTypeRouteLiveOracle: Rule = async (ctx) => {
@@ -43500,6 +43574,88 @@ const owaspsecureMisconfigDefaultCredsRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "owaspsecure.com /demo/a05_misconfig route scan — Attack 5 default admin/admin credentials grant panel access (live misconfig oracle)"
+    }
+  };
+};
+
+const owaspsecureMisconfigExposedConfigLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const configUrl = owaspsecureAttackUrl(ctx, "attacks/exposed_config/insecure/config.php");
+  const doc = await ctx.probe.get(configUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Exposed config|FAKE values/i.test(doc.body)) return NEGATIVE;
+  if (!/DB_PASSWORD=|API_KEY=|SERVICE_TOKEN=/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: configUrl,
+      snippet:
+        doc.body.match(/DB_PASSWORD=[^\n]+/i)?.[0]?.slice(0, 100) ??
+        "DB_PASSWORD and API_KEY exposed in webroot config.php",
+      note: "owaspsecure.com GET attacks/exposed_config/insecure/config.php returns database credentials and API keys from webroot — A05 security misconfiguration training oracle"
+    }
+  };
+};
+
+const owaspsecureMisconfigExposedConfigRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/demo\/a05_misconfig(?:\/insecure\.php|\/attacks\/exposed_config)/i.test(pageUrl) &&
+    !/\/attacks\/exposed_config\/insecure\/config\.php/i.test(pageUrl)
+  )
+    return NEGATIVE;
+  const result = await owaspsecureMisconfigExposedConfigLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a05_misconfig route scan — Attack 4 exposed config.php leaks DB_PASSWORD, API_KEY, and SERVICE_TOKEN from webroot (live misconfig oracle)"
+    }
+  };
+};
+
+const owaspsecureMisconfigVerboseErrorLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const errorUrl = owaspsecureAttackUrl(ctx, "attacks/verbose_error_insecure.php");
+  const doc = await ctx.probe.get(errorUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Verbose Errors \(Insecure\)|display_errors/i.test(doc.body)) return NEGATIVE;
+  if (!/Fatal error|Stack trace|public_html\/demo\/a05_misconfig/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: errorUrl,
+      snippet:
+        doc.body.match(/Fatal error:[\s\S]{0,120}/i)?.[0]?.slice(0, 120) ??
+        "verbose PHP stack trace with server filesystem paths",
+      note: "owaspsecure.com GET attacks/verbose_error_insecure.php enables display_errors and leaks stack traces with server paths — A05 security misconfiguration training oracle"
+    }
+  };
+};
+
+const owaspsecureMisconfigVerboseErrorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/demo\/a05_misconfig(?:\/insecure\.php|\/attacks\/verbose_error)/i.test(pageUrl) &&
+    !/\/attacks\/verbose_error_insecure\.php/i.test(pageUrl)
+  )
+    return NEGATIVE;
+  const result = await owaspsecureMisconfigVerboseErrorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a05_misconfig route scan — Attack 2 verbose error page leaks PHP stack traces and filesystem paths (live misconfig oracle)"
     }
   };
 };
@@ -110726,6 +110882,10 @@ export const RULES: Record<string, Rule> = {
   owaspsecureMisconfigPhpinfoRouteLiveOracle,
   owaspsecureMisconfigDefaultCredsLiveOracle,
   owaspsecureMisconfigDefaultCredsRouteLiveOracle,
+  owaspsecureMisconfigExposedConfigLiveOracle,
+  owaspsecureMisconfigExposedConfigRouteLiveOracle,
+  owaspsecureMisconfigVerboseErrorLiveOracle,
+  owaspsecureMisconfigVerboseErrorRouteLiveOracle,
   owaspsecureCryptoPasswordMd5LiveOracle,
   owaspsecureCryptoPasswordMd5RouteLiveOracle,
   owaspsecureCryptoPredictableTokensLiveOracle,
@@ -113570,6 +113730,7 @@ export const RULES: Record<string, Rule> = {
   vulnforgeAcademyLevelIdorRouteLiveOracle,
   vulnforgeAcademyLevelAuthRouteLiveOracle,
   vulnforgeAcademyLevelFileUploadRouteLiveOracle,
+  vulnforgeAcademyLevel16DoubleExtensionRouteLiveOracle,
   vulnforgeAcademyLevel18ExtensionBypassRouteLiveOracle,
   vulnforgeAcademyLevel17ContentTypeRouteLiveOracle,
   vulnforgeAcademyLevelRceRouteLiveOracle,
