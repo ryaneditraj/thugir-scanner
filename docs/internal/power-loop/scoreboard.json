@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T04:09:00.000Z",
+  "updated_at": "2026-09-04T05:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2839,
-  "total_findings": 28561,
+  "total_sites_scanned": 2856,
+  "total_findings": 28770,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2011,
-  "discovery_findings": 24188,
+  "discovery_urls_added": 2014,
+  "discovery_findings": 24266,
   "improvements_shipped": 1371,
-  "last_run": "2026-09-04T04:09:00.000Z",
+  "last_run": "2026-09-04T05:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,35 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles; secret-resend present)"
+      "note": "Stable 6/6 first-pass recall (53 findings, 38 live oracles; secret-resend present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 94,
-      "focus": "owaspsecure A04/A03 hubs, oopssec open-redirect + product-search SQLi, duck-store 2FA bypass",
+      "urls_added": 3,
+      "urls_scanned": 8,
+      "findings": 78,
+      "focus": "oopssec CSRF admin order + brute-force + prompt injection; owaspsecure A02/A05/A07/A10 hubs + react2shell",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; secret-resend present)",
-      "owaspsecure.com/demo/a04_insecure_design/insecure.php: 15 findings — coupon logic + CSRF settings + magic link route oracles (engine shipped password-reset oracles on remote)",
-      "owaspsecure.com/demo/a03_injection/insecure.php: 17 findings — SQLi login bypass + UNION search + blind/time + second-order route oracles",
-      "koadt.github.io/.../open-redirect-login-bypass: 11 findings — oopssec-open-redirect-login-bypass-route-live-oracle",
-      "duck-store.escape.tech/api/v1/auth/login/totp: 41 findings — duck-store-auth-totp-bypass-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 38 live oracles; secret-resend present)",
+      "koadt.github.io/.../csrf-admin-order-update: 18 findings — oopssec-csrf-admin-order-route-live-oracle",
+      "koadt.github.io/.../brute-force-no-rate-limiting: 7 findings — oopssec-brute-force-no-rate-limit-route-live-oracle",
+      "koadt.github.io/.../prompt-injection-ai-assistant: 6 findings — oopssec-prompt-injection-route-live-oracle",
+      "owaspsecure.com/demo/a10_ssrf/insecure.php: 11 findings — owaspsecure SSRF hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark stable 6/6 — no category misses on juice-shop primary Heroku",
-      "duck-store /login/totp 41-finding full suite hub — route oracle confirmed but rich cross-endpoint bleed"
+      "owaspsecure A02/A05/A07 hubs thin 6–12 finding fingerprint without per-route oracles; ssrf-internal-page + finbot vendor still queued"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "duck-store.escape.tech/api/v1/auth/login/totp": 41,
-    "owaspsecure.com/demo/a03_injection/insecure.php": 17,
-    "owaspsecure.com/demo/a04_insecure_design/insecure.php": 15,
-    "koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass": 11,
-    "koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection": 10
+    "koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update": 18,
+    "owaspsecure.com/demo/a05_misconfig/insecure.php": 12,
+    "owaspsecure.com/demo/a10_ssrf/insecure.php": 11,
+    "owaspsecure.com/demo/a02_crypto/insecure.php": 10,
+    "koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182": 8
   }
 }

@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-09-04T04:08:00.000Z",
+  "updated_at": "2026-09-04T05:08:50.675Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/",
+      "source": "kOaDT/oss-oopssec-store — CSRF admin order status update walkthrough POST /api/admin/orders (challenges.json ch.15; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting/",
+      "source": "kOaDT/oss-oopssec-store — brute-force login no rate limit walkthrough POST /api/auth/login (challenges.json ch.24; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/prompt-injection-ai-assistant/",
+      "source": "kOaDT/oss-oopssec-store — AI assistant prompt injection walkthrough POST /api/assistant/chat (challenges.json ch.32; web search 05 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owaspsecure.com/demo/a04_insecure_design/insecure.php",
       "source": "owaspsecure.com A04 insecure design — password-reset token forgery, CSRF settings, reusable magic link, coupon logic (web search 04 UTC)",
@@ -11718,5 +11733,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 60
+  "discovery_urls_added": 63
 }
