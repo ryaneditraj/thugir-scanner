@@ -43934,6 +43934,161 @@ const owaspsecureCryptoDataAtRestRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const owaspsecureCryptoIvReuseLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const sessionCookie = await owaspsecureCryptoSessionCookie(ctx);
+  if (!sessionCookie) return NEGATIVE;
+  const ivUrl = owaspsecureAttackUrl(ctx, "attacks/iv_reuse/encrypt_static_insecure.php");
+  const postBody = new URLSearchParams({ plaintext: "thugir-iv-probe" }).toString();
+  const doc = await ctx.probe.get(ivUrl, {
+    method: "POST",
+    body: postBody,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: sessionCookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/insecure_static_iv|fixed key and IV|nonce reuse/i.test(doc.body)) return NEGATIVE;
+  if (!/(?:&quot;iv_b64&quot;|"iv_b64")\s*:/i.test(doc.body)) return NEGATIVE;
+  if (!/(?:&quot;cipher_b64&quot;|"cipher_b64")\s*:/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: ivUrl,
+      snippet:
+        doc.body.match(/"iv_b64"\s*:\s*"[^"]+"/i)?.[0]?.slice(0, 120) ??
+        "static IV encryption confirmed",
+      note: "owaspsecure.com POST attacks/iv_reuse/encrypt_static_insecure.php uses fixed key and IV (nonce reuse) — A02 cryptographic failure training oracle"
+    }
+  };
+};
+
+const owaspsecureCryptoIvReuseRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/demo\/a02_crypto(?:\/insecure\.php|\/attacks\/iv_reuse)/i.test(pageUrl) &&
+    !/\/attacks\/iv_reuse\/encrypt_static_insecure\.php/i.test(pageUrl)
+  )
+    return NEGATIVE;
+  const result = await owaspsecureCryptoIvReuseLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com A02 IV-reuse attack path — Attack 4 encrypts with static IV enabling nonce reuse (live crypto failure route oracle)"
+    }
+  };
+};
+
+const owaspsecureCryptoKeyRotationLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const sessionCookie = await owaspsecureCryptoSessionCookie(ctx);
+  if (!sessionCookie) return NEGATIVE;
+  const rotateUrl = owaspsecureAttackUrl(ctx, "attacks/key_rotation/rotate_insecure.php");
+  const doc = await ctx.probe.get(rotateUrl, {
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { Cookie: sessionCookie }
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/hard-coded key|no version column|no rotation workflow/i.test(doc.body)) return NEGATIVE;
+  if (!/(?:&quot;active_key&quot;|"active_key")\s*:/i.test(doc.body)) return NEGATIVE;
+  if (!/(?:&quot;key_version&quot;|"key_version")\s*:\s*null/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: rotateUrl,
+      snippet:
+        doc.body.match(/"active_key"\s*:\s*"[^"]+"/i)?.[0]?.slice(0, 120) ??
+        "hard-coded key with null version",
+      note: "owaspsecure.com GET attacks/key_rotation/rotate_insecure.php exposes hard-coded encryption key with no version or rotation workflow — A02 cryptographic failure training oracle"
+    }
+  };
+};
+
+const owaspsecureCryptoKeyRotationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/demo\/a02_crypto(?:\/insecure\.php|\/attacks\/key_rotation)/i.test(pageUrl) &&
+    !/\/attacks\/key_rotation\/rotate_insecure\.php/i.test(pageUrl)
+  )
+    return NEGATIVE;
+  const result = await owaspsecureCryptoKeyRotationLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com A02 key-rotation attack path — Attack 5 uses hard-coded key with null key_version and no rotation workflow (live crypto failure route oracle)"
+    }
+  };
+};
+
+const owaspsecureCryptoSavePlainLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const sessionCookie = await owaspsecureCryptoSessionCookie(ctx);
+  if (!sessionCookie) return NEGATIVE;
+  const saveUrl = owaspsecureAttackUrl(ctx, "attacks/data_at_rest/save_plain.php");
+  const postBody = new URLSearchParams({ ssn: "123-45-6789" }).toString();
+  const doc = await ctx.probe.get(saveUrl, {
+    method: "POST",
+    body: postBody,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Cookie: sessionCookie
+    },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Saved insecure plaintext|insecure plaintext/i.test(doc.body)) return NEGATIVE;
+  if (!/user_id=\d+/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: saveUrl,
+      snippet:
+        doc.body.match(/Saved insecure plaintext[\s\S]{0,60}/i)?.[0]?.slice(0, 100) ??
+        "plaintext SSN saved",
+      note: "owaspsecure.com POST attacks/data_at_rest/save_plain.php stores SSN as plaintext without encryption — A02 data-at-rest cryptographic failure training oracle"
+    }
+  };
+};
+
+const owaspsecureCryptoSavePlainRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/demo\/a02_crypto(?:\/insecure\.php|\/attacks\/data_at_rest)/i.test(pageUrl) &&
+    !/\/attacks\/data_at_rest\/save_plain\.php/i.test(pageUrl)
+  )
+    return NEGATIVE;
+  const result = await owaspsecureCryptoSavePlainLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com A02 data-at-rest attack path — Attack 3 save_plain.php accepts plaintext SSN storage (live crypto failure route oracle)"
+    }
+  };
+};
+
 const owaspsecureAuthSessionFixationLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const beginUrl = owaspsecureAttackUrl(ctx, "attacks/session_fixation/begin.php");
@@ -111421,6 +111576,12 @@ export const RULES: Record<string, Rule> = {
   owaspsecureCryptoPredictableTokensRouteLiveOracle,
   owaspsecureCryptoDataAtRestLiveOracle,
   owaspsecureCryptoDataAtRestRouteLiveOracle,
+  owaspsecureCryptoIvReuseLiveOracle,
+  owaspsecureCryptoIvReuseRouteLiveOracle,
+  owaspsecureCryptoKeyRotationLiveOracle,
+  owaspsecureCryptoKeyRotationRouteLiveOracle,
+  owaspsecureCryptoSavePlainLiveOracle,
+  owaspsecureCryptoSavePlainRouteLiveOracle,
   owaspsecureAuthSessionFixationLiveOracle,
   owaspsecureAuthSessionFixationRouteLiveOracle,
   owaspsecureAuthMfaBypassLiveOracle,

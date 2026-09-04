@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T05:12:00.000Z",
+  "updated_at": "2026-09-04T06:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2858,
-  "total_findings": 28795,
+  "total_sites_scanned": 2859,
+  "total_findings": 28814,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2016,
-  "discovery_findings": 24291,
-  "improvements_shipped": 1374,
-  "last_run": "2026-09-04T05:12:00.000Z",
+  "discovery_findings": 24310,
+  "improvements_shipped": 1377,
+  "last_run": "2026-09-04T06:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "05",
+    "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,31 +48,31 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles; secret-resend present)"
+      "note": "Stable 6/6 first-pass recall (52 findings); secret-resend present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 2,
-      "urls_scanned": 2,
-      "findings": 25,
-      "focus": "owaspsecure A07 MFA bypass + A10 socket probe + internal health direct exposure",
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 19,
+      "focus": "owaspsecure A02 crypto hub — IV reuse, key rotation, save-plain attack paths",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; secret-resend present)",
-      "owaspsecure.com/demo/a07_auth/insecure.php: 10 findings — owaspsecure-auth-mfa-bypass-route-live-oracle (+session fixation)",
-      "owaspsecure.com/demo/a10_ssrf/insecure.php: 15 findings — owaspsecure-ssrf-socket-probe + internal-health-direct route oracles",
-      "koadt.github.io/.../csrf-admin-order-update: 18 findings — oopssec-csrf-admin-order-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings; secret-resend present)",
+      "owaspsecure.com/demo/a02_crypto/insecure.php: 19 findings — owaspsecure-crypto-iv-reuse + key-rotation + save-plain route oracles (10→19)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark stable 6/6 — no category misses on juice-shop primary Heroku",
       "owaspsecure A07 login_rate/reset_tokens DB-dependent attacks fail on production host (PDO access denied)",
-      "owaspsecure A02/A05 hubs still thin without per-route oracles; finbot vendor still queued"
+      "owaspsecure A05 directory_listing/.env return 403 on production host",
+      "ssrf-internal-page + finbot vendor still queued"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 53,
+    "juice-shop.herokuapp.com": 52,
+    "owaspsecure.com/demo/a02_crypto/insecure.php": 19,
     "owaspsecure.com/demo/a10_ssrf/insecure.php": 15,
     "owaspsecure.com/demo/a07_auth/insecure.php": 10,
     "koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update": 18,

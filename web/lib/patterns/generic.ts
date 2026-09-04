@@ -76487,6 +76487,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-crypto-iv-reuse-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A02 static IV encryption live oracle",
+    description:
+      "POST attacks/iv_reuse/encrypt_static_insecure.php on owaspsecure.com encrypts with a fixed key and IV (nonce reuse) — A02 cryptographic failure training oracle.",
+    impactOneline:
+      "Static IV encryption on owaspsecure.com enables ciphertext pattern analysis and key recovery attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoIvReuseLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Generate a unique random IV per encryption operation and never reuse keys with static nonces.",
+      steps: [
+        "Use random_bytes(12) for AES-GCM IVs on every encrypt call.",
+        "Store IV alongside ciphertext and rotate keys with version metadata.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com encrypt_static_insecure.php uses a fixed IV. Show per-operation random IV remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-iv-reuse-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A02 IV-reuse attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/iv_reuse/ on owaspsecure.com, Attack 4 confirms static IV encryption with nonce reuse — route-specific A02 cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 IV-reuse attack path should confirm live static-IV encryption.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoIvReuseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Generate a unique random IV per encryption operation and never reuse keys with static nonces.",
+      steps: [
+        "Use random_bytes(12) for AES-GCM IVs on every encrypt call.",
+        "Store IV alongside ciphertext and rotate keys with version metadata.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto IV-reuse attack path confirms static IV encryption. Show route-level nonce remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-key-rotation-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 hard-coded key live oracle",
+    description:
+      "GET attacks/key_rotation/rotate_insecure.php on owaspsecure.com exposes a hard-coded encryption key with null key_version and no rotation workflow — A02 cryptographic failure training oracle.",
+    impactOneline:
+      "Hard-coded encryption keys on owaspsecure.com prevent safe key rotation after compromise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoKeyRotationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Store encryption keys in a KMS with versioned rotation and envelope encryption.",
+      steps: [
+        "Move active_key out of source code into a secrets manager.",
+        "Add key_version column and support decrypt-with-old re-encrypt-with-new workflows.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com rotate_insecure.php uses a hard-coded key with no rotation. Show KMS key versioning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-key-rotation-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 key-rotation attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/key_rotation/ on owaspsecure.com, Attack 5 confirms hard-coded key with null key_version — route-specific A02 cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 key-rotation attack path should confirm live hard-coded key exposure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoKeyRotationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Store encryption keys in a KMS with versioned rotation and envelope encryption.",
+      steps: [
+        "Move active_key out of source code into a secrets manager.",
+        "Add key_version column and support decrypt-with-old re-encrypt-with-new workflows.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto key-rotation attack path confirms hard-coded keys. Show route-level KMS rotation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-save-plain-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 plaintext SSN save live oracle",
+    description:
+      "POST attacks/data_at_rest/save_plain.php on owaspsecure.com stores SSN values as plaintext without encryption — A02 data-at-rest cryptographic failure training oracle.",
+    impactOneline:
+      "Plaintext SSN writes on owaspsecure.com confirm unencrypted PII storage at rest.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoSavePlainLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encrypt sensitive data at rest with per-record keys and authenticated encryption.",
+      steps: [
+        "Replace plaintext ssn_plain column writes with AES-GCM ciphertext.",
+        "Use envelope encryption with a KMS-managed master key.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com save_plain.php stores plaintext SSNs. Show encryption-at-rest remediation for the save path.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-save-plain-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 save-plain attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/data_at_rest/save_plain.php on owaspsecure.com, Attack 3 confirms plaintext SSN storage on write — route-specific A02 data-at-rest cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 save-plain attack path should confirm live unencrypted PII writes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoSavePlainRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encrypt sensitive data at rest with per-record keys and authenticated encryption.",
+      steps: [
+        "Replace plaintext ssn_plain column writes with AES-GCM ciphertext.",
+        "Use envelope encryption with a KMS-managed master key.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto save-plain attack path confirms plaintext SSN writes. Show route-level encryption remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "owaspsecure-auth-session-fixation-live-oracle",
     platform: "generic",
     category: "Broken authentication",
