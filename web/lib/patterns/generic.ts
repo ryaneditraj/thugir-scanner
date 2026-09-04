@@ -76539,6 +76539,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-auth-mfa-bypass-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "owaspsecure.com A07 weak MFA bypass live oracle",
+    description:
+      "GET attacks/mfa_flow/begin_insecure.php?mfa=ok on owaspsecure.com bypasses MFA and POST verify_insecure.php accepts universal code 000000 — A07 authentication failure training oracle.",
+    impactOneline:
+      "Bypassable MFA and universal OTP codes on owaspsecure.com enable account takeover without possession factors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureAuthMfaBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind MFA to per-user secrets, reject bypass query params, and block universal OTP codes.",
+      steps: [
+        "Require TOTP/WebAuthn verification with per-user secrets and rate limiting.",
+        "Reject MFA bypass flags in query strings and enforce server-side MFA state.",
+        "Run owaspsecure.com auth labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com MFA flow accepts ?mfa=ok bypass and code 000000. Show MFA hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-auth-mfa-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "owaspsecure.com A07 auth route MFA bypass live oracle",
+    description:
+      "When scanning /demo/a07_auth/insecure.php on owaspsecure.com, Attack 4 MFA flow confirms ?mfa=ok bypass and universal code 000000 acceptance — route-specific A07 authentication oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A07 lab should confirm live weak MFA bypass, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureAuthMfaBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind MFA to per-user secrets, reject bypass query params, and block universal OTP codes.",
+      steps: [
+        "Require TOTP/WebAuthn verification with per-user secrets and rate limiting.",
+        "Reject MFA bypass flags in query strings and enforce server-side MFA state.",
+        "Run owaspsecure.com auth labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a07_auth route scan confirms MFA bypass via ?mfa=ok and universal code 000000. Show route-level MFA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "owaspsecure-design-password-reset-live-oracle",
     platform: "generic",
     category: "Authentication",
@@ -77497,6 +77549,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /demo/a10_ssrf route scan confirms internal health SSRF. Show route-level fetch allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-socket-probe-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF socket probe live oracle",
+    description:
+      "GET attacks/socket_probe.php on owaspsecure.com performs server-side TCP port scans from attacker-controlled host:port parameters — A10 SSRF port-scanning training oracle.",
+    impactOneline:
+      "Server-side port scanning on owaspsecure.com lets attackers map internal services from the application network.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfSocketProbeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove server-side socket probes from user input and block outbound connections to internal networks.",
+      steps: [
+        "Never expose raw fsockopen/connect wrappers on attacker-controlled host:port pairs.",
+        "Enforce egress firewalls and network segmentation for application servers.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our socket_probe.php performs server-side port scans. Show SSRF egress control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-socket-probe-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF route socket probe live oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, Attack 4 socket_probe.php confirms server-side TCP reachability tests — route-specific A10 SSRF oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm live port-scanning SSRF, not only HTTP fetch oracles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfSocketProbeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove server-side socket probes from user input and block outbound connections to internal networks.",
+      steps: [
+        "Never expose raw fsockopen/connect wrappers on attacker-controlled host:port pairs.",
+        "Enforce egress firewalls and network segmentation for application servers.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms socket_probe port scanning. Show route-level SSRF egress remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-health-direct-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "owaspsecure.com A10 internal health direct exposure live oracle",
+    description:
+      "GET attacks/internal/health.json on owaspsecure.com returns internal-gateway JSON without authentication — A10 internal endpoint exposure training oracle.",
+    impactOneline:
+      "Directly reachable internal health endpoints on owaspsecure.com leak service topology without SSRF chaining.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalHealthDirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict internal health endpoints to private networks and require authentication.",
+      steps: [
+        "Move health checks off public web roots and bind to internal interfaces only.",
+        "Require service authentication for operational endpoints.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our attacks/internal/health.json is publicly reachable. Show internal endpoint access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-health-direct-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "owaspsecure.com A10 SSRF route internal health direct exposure oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, attacks/internal/health.json is directly reachable and returns internal-gateway status — route-specific A10 exposure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm internal health JSON is exposed without auth.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalHealthDirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict internal health endpoints to private networks and require authentication.",
+      steps: [
+        "Move health checks off public web roots and bind to internal interfaces only.",
+        "Require service authentication for operational endpoints.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms internal health.json is publicly reachable. Show route-level access control remediation.",
     version: 1,
     enabled: true
   },
