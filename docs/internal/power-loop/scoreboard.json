@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T08:28:00.000Z",
+  "updated_at": "2026-09-04T09:19:01.691Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2739,
-  "total_findings": 26757,
+  "total_sites_scanned": 2748,
+  "total_findings": 26937,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1961,
-  "discovery_findings": 22721,
-  "improvements_shipped": 1161,
-  "last_run": "2026-09-04T08:28:00.000Z",
+  "discovery_urls_added": 1966,
+  "discovery_findings": 22849,
+  "improvements_shipped": 1383,
+  "last_run": "2026-09-04T09:19:01.691Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 15,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
-      "pages_crawled": 1,
-      "probes_run": 501,
+      "pages_crawled": 6,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,45 +48,46 @@
           ]
         }
       },
-      "note": "Thin 6/6 first-pass recall (15 findings, 6 live oracles, pages_crawled=1) — no category misses but far below typical 45-48 pass; secret-resend slug still absent"
+      "note": "Rich 6/6 first-pass recall (52 findings, 37 live oracles, pages=6) — secret-resend slug finally present alongside juice-shop-resend-key-live-oracle"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 68,
-      "focus": "owaspsecure A01/A03/A05/A09/A10 insecure demo hubs + wrongsecrets challenge-55/56/64",
+      "findings": 128,
+      "focus": "owaspsecure A02/A04/A06/A07/A08 insecure demo hubs + wrongsecrets challenge-50/65/66 drain",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (15 findings, 6 live oracles, pages=1) — thin pass, no category misses",
-      "owaspsecure.com/demo/a03_injection/insecure.php: 6 findings — client-side-sql-evidence + client-side-xss-evidence",
-      "owaspsecure.com/demo/a10_ssrf/insecure.php: 6 findings — client-side-xxe-evidence + thugir-sensitive-js-endpoints",
-      "wrongsecrets.herokuapp.com/challenge/challenge-55: 15 findings — wrongsecrets-challenge-55-ssh-bastion-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-56: 15 findings — route-specific live oracle confirmed",
-      "wrongsecrets.herokuapp.com/challenge/challenge-64: 15 findings — route-specific live oracle confirmed"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 37 live oracles) — secret-resend + juice-shop-resend-key-live-oracle finally hit",
+      "owaspsecure.com/demo/a02_crypto/insecure.php: 19 findings — crypto IV-reuse + save-plain + key-rotation live oracles",
+      "owaspsecure.com/demo/a04_insecure_design/insecure.php: 21 findings — password-reset + CSRF + coupon-logic + magic-link live oracles",
+      "owaspsecure.com/demo/a06_voc/insecure.php: 12 findings — outdated-jquery + CDN-no-SRI live oracles",
+      "owaspsecure.com/demo/a07_auth/insecure.php: 10 findings — session-fixation + MFA-bypass live oracles",
+      "owaspsecure.com/demo/a08_integrity/insecure.php: 9 findings — insecure unserialize live oracle",
+      "wrongsecrets.herokuapp.com/challenge/challenge-50: 19 findings — route-specific live oracle confirmed",
+      "wrongsecrets.herokuapp.com/challenge/challenge-65: 19 findings — plain Java CLI route live oracle confirmed",
+      "wrongsecrets.herokuapp.com/challenge/challenge-66: 19 findings — obfuscated Java CLI route live oracle confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark thin pass — 15 findings pages=1 vs typical 45-48; BENCHMARK_JUICE_SHOP_RICH_FINDINGS=15 prevented thin-pass fallback retry",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "owaspsecure A01/A05/A09 hubs thin (3-4 findings) — no route-specific BAC/phpinfo/verbose-error/logging oracles",
-      "owaspsecure A03 has client-side SQLi/XSS evidence but no live SQLi bypass or stored XSS oracle",
-      "challenge-65/66 still queued for next drain"
+      "owaspsecure A01/A03/A05/A09/A10 hubs scanned 08 UTC — still thin on live SQLi bypass and BAC route oracles vs A02/A04 richness",
+      "vulnforge-academy easy levels (1-12) still unscanned — only level13 SSRF + level19 RCE probed",
+      "DVS/DeployBro has no public hosted demo — local-only per GitHub README"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 15,
-    "owaspsecure.com/demo/a03_injection/insecure.php": 6,
-    "owaspsecure.com/demo/a10_ssrf/insecure.php": 6,
-    "wrongsecrets.herokuapp.com/challenge/challenge-55": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-56": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-64": 15,
-    "duck-store.escape.tech/api/v1/users/me/profile": 33,
-    "demo.owasp-juice.shop/rest/memories": 27,
+    "juice-shop.herokuapp.com": 52,
+    "owaspsecure.com/demo/a02_crypto/insecure.php": 19,
+    "owaspsecure.com/demo/a04_insecure_design/insecure.php": 21,
+    "owaspsecure.com/demo/a06_voc/insecure.php": 12,
+    "owaspsecure.com/demo/a07_auth/insecure.php": 10,
+    "owaspsecure.com/demo/a08_integrity/insecure.php": 9,
+    "wrongsecrets.herokuapp.com/challenge/challenge-50": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-65": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-66": 19,
     "duck-store.escape.tech/api/v1/products/filter/by-color": 31,
-    "pwnshop.ctfsecurity.com/verify-otp": 27,
-    "vulnbank.org/sup3r_s3cr3t_admin": 20,
-    "brokencrystals.com/userlogin?logobgcolor=red": 52
+    "demo.owasp-juice.shop/rest/memories": 27,
+    "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }
