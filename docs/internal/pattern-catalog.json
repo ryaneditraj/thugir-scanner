@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-04T10:38:37.025Z",
-  "total": 3253,
-  "uniqueSlugs": 3245,
+  "generatedAt": "2026-09-04T11:04:36.423Z",
+  "total": 3259,
+  "uniqueSlugs": 3251,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3235,
+    "generic": 3241,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3168,
+    "deep": 3174,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 152,
-    "Security misconfiguration": 259,
+    "Security misconfiguration": 265,
     "Broken authentication": 205,
     "Injection": 528,
     "Cross-site scripting": 798,
@@ -2259,10 +2259,16 @@
     "owaspsecure-injection-xss-stored-route-live-oracle",
     "owaspsecure-integrity-unserialize-live-oracle",
     "owaspsecure-integrity-unserialize-route-live-oracle",
+    "owaspsecure-logging-admin-action-live-oracle",
+    "owaspsecure-logging-admin-action-route-live-oracle",
     "owaspsecure-logging-auth-events-live-oracle",
     "owaspsecure-logging-auth-events-route-live-oracle",
+    "owaspsecure-logging-integrity-chain-live-oracle",
+    "owaspsecure-logging-integrity-chain-route-live-oracle",
     "owaspsecure-logging-pii-secrets-live-oracle",
     "owaspsecure-logging-pii-secrets-route-live-oracle",
+    "owaspsecure-logging-structure-time-live-oracle",
+    "owaspsecure-logging-structure-time-route-live-oracle",
     "owaspsecure-logging-threshold-alerts-live-oracle",
     "owaspsecure-logging-threshold-alerts-route-live-oracle",
     "owaspsecure-misconfig-default-creds-live-oracle",

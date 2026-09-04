@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T10:45:00.000Z",
+  "updated_at": "2026-09-04T11:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2758,
-  "total_findings": 27148,
+  "total_sites_scanned": 2760,
+  "total_findings": 27254,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1966,
-  "discovery_findings": 22849,
-  "improvements_shipped": 1389,
-  "last_run": "2026-09-04T10:45:00.000Z",
+  "discovery_findings": 22902,
+  "improvements_shipped": 1392,
+  "last_run": "2026-09-04T11:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "10",
+    "hour_utc": "11",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 591,
+      "probes_run": 599,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (53 findings) — no category misses"
+      "note": "Stable 6/6 recall (53 findings) — no category misses; secret-resend slug present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 2,
-      "findings": 43,
-      "focus": "owaspsecure A10 internal admin/index SSRF + A03 second-order store_bio writer",
+      "urls_scanned": 1,
+      "findings": 21,
+      "focus": "owaspsecure A09 logging admin-action + structure-time + integrity-chain live oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings)",
-      "owaspsecure.com/demo/a10_ssrf/insecure.php: 16→20 (+owaspsecure-ssrf-internal-admin + internal-index-direct live/route oracles)",
-      "owaspsecure.com/demo/a03_injection/insecure.php: 20→23 (+owaspsecure-injection-store-bio live/route oracles)"
+      "owaspsecure.com/demo/a09_logging/insecure.php: 4→21 (+owaspsecure-logging-admin-action +structure-time +integrity-chain live/route oracles)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "owaspsecure A01/A05/A09 discovery results stale — live oracles already shipped in prior runs"
+      "owaspsecure A05 directory listing returns 403 from CDN — directory-listing oracle deferred",
+      "ai-security-platform + owasp-finbot priority queue URLs auth-gated (307 login) — route oracles already shipped"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
+    "owaspsecure.com/demo/a09_logging/insecure.php": 21,
     "owaspsecure.com/demo/a10_ssrf/insecure.php": 20,
     "owaspsecure.com/demo/a03_injection/insecure.php": 23,
     "owaspsecure.com/demo/a02_crypto/insecure.php": 19,
     "owaspsecure.com/demo/a04_insecure_design/insecure.php": 21,
     "wrongsecrets-ctf.herokuapp.com/challenge/challenge-0": 15,
-    "wrongsecrets.herokuapp.com/challenge/challenge-50": 19,
-    "duck-store.escape.tech/api/v1/users/me/profile": 33,
-    "demo.owasp-juice.shop/rest/memories": 27
+    "wrongsecrets.herokuapp.com/challenge/challenge-50": 19
   }
 }
