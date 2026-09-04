@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T09:28:00.000Z",
+  "updated_at": "2026-09-04T10:16:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2748,
-  "total_findings": 26937,
+  "total_sites_scanned": 2757,
+  "total_findings": 27104,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1966,
-  "discovery_findings": 22849,
+  "discovery_urls_added": 1961,
+  "discovery_findings": 22767,
   "improvements_shipped": 1386,
-  "last_run": "2026-09-04T09:28:00.000Z",
+  "last_run": "2026-09-04T10:16:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 591,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,42 +48,44 @@
           ]
         }
       },
-      "note": "Stable 6/6 recall (53 findings) — secret-resend slug still absent"
+      "note": "Stable 6/6 recall (53 findings, 38 live oracles) — secret-resend slug present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 128,
-      "focus": "wrongsecrets-ctf challenge-0/1/7/8 condensed hub gaps + owaspsecure A02/A04/A06/A07/A08 hubs",
-      "improvements_shipped_this_run": 3
+      "findings": 114,
+      "focus": "ai-security-platform supabase-rls/missing-headers/supply-chain/hacked-npm + owasp-finbot-ctf vendor portal + wrongsecrets challenge-51/52/54",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings)",
-      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-0: 14→15 (+wrongsecrets-challenge-0-opening-route-live-oracle)",
-      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-1: 14→15 (+wrongsecrets-challenge-1-git-hardcoded-route-live-oracle CTF hub tolerance)",
-      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-7: 14→15 (+wrongsecrets-challenge-7-vault-route-live-oracle CTF hub tolerance)",
-      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-8: 14→15 (+wrongsecrets-challenge-8-logging-route-live-oracle CTF hub tolerance)",
-      "owaspsecure.com/demo/a02_crypto/insecure.php: 19 findings — crypto live oracles confirmed",
-      "owaspsecure.com/demo/a04_insecure_design/insecure.php: 21 findings — insecure design live oracles confirmed"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 38 live oracles)",
+      "ai-security-platform-iota.vercel.app/challenges/supabase-rls: 8 findings — ai-security-supabase-data-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/missing-headers: 8 findings — ai-security-security-headers-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/supply-chain: 5 findings — ai-security-supply-chain-route-live-oracle",
+      "ai-security-platform-iota.vercel.app/challenges/hacked-npm: 5 findings — ai-security-hacked-npm-packages-route-live-oracle",
+      "owasp-finbot-ctf.org/vendor: 31 findings — finbot-vendor-chat-route-live-oracle + Dark Lab MCP suite",
+      "wrongsecrets.herokuapp.com/challenge/challenge-51: 19 findings",
+      "wrongsecrets.herokuapp.com/challenge/challenge-52: 19 findings",
+      "wrongsecrets.herokuapp.com/challenge/challenge-54: 19 findings"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "secret-resend slug still absent on juice-shop benchmark (sensitive_data covered via other slugs)",
-      "wrongsecrets-ctf challenge-2 through challenge-6 already covered; challenge-9+ require full Heroku catalog"
+      "ai-security supply-chain/hacked-npm routes thin (5 findings) — shared hub fingerprint without per-challenge exploit oracles",
+      "wrongsecrets challenge-53 still queued — challenge-51/52/54 drained this run"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-0": 15,
-    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-1": 15,
-    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-7": 15,
-    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-8": 15,
-    "owaspsecure.com/demo/a02_crypto/insecure.php": 19,
-    "owaspsecure.com/demo/a04_insecure_design/insecure.php": 21,
-    "wrongsecrets.herokuapp.com/challenge/challenge-50": 19,
+    "owasp-finbot-ctf.org/vendor": 31,
+    "wrongsecrets.herokuapp.com/challenge/challenge-51": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-52": 19,
+    "wrongsecrets.herokuapp.com/challenge/challenge-54": 19,
+    "ai-security-platform-iota.vercel.app/challenges/supabase-rls": 8,
+    "ai-security-platform-iota.vercel.app/challenges/missing-headers": 8,
+    "ai-security-platform-iota.vercel.app/challenges/supply-chain": 5,
+    "ai-security-platform-iota.vercel.app/challenges/hacked-npm": 5,
     "duck-store.escape.tech/api/v1/users/me/profile": 33,
-    "demo.owasp-juice.shop/rest/memories": 27,
     "pwnshop.ctfsecurity.com/verify-otp": 27
   }
 }

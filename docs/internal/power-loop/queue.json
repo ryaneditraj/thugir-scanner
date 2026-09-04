@@ -1,33 +1,58 @@
 {
-  "updated_at": "2026-09-04T09:12:00.000Z",
+  "updated_at": "2026-09-04T10:12:00.000Z",
   "priority_discovery_urls": [
     {
-      "url": "https://owaspsecure.com/demo/a02_crypto/insecure.php",
-      "source": "OWASP Top 10 Demo Hub — A02 Cryptographic Failures insecure endpoints (owaspsecure.com/demo)",
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supabase-rls",
+      "source": "AI Security Platform — Weak Supabase RLS / CWE-732 challenge (Vercel public demo)",
       "auth": "public_demo"
     },
     {
-      "url": "https://owaspsecure.com/demo/a04_insecure_design/insecure.php",
-      "source": "OWASP Top 10 Demo Hub — A04 Insecure Design insecure endpoints (owaspsecure.com/demo)",
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/missing-headers",
+      "source": "AI Security Platform — missing security headers / CWE-693 challenge (Vercel public demo)",
       "auth": "public_demo"
     },
     {
-      "url": "https://owaspsecure.com/demo/a06_voc/insecure.php",
-      "source": "OWASP Top 10 Demo Hub — A06 Vulnerable & Outdated Components insecure endpoints (owaspsecure.com/demo)",
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supply-chain",
+      "source": "AI Security Platform — typosquatted npm supply-chain / CWE-494 challenge (Vercel public demo)",
       "auth": "public_demo"
     },
     {
-      "url": "https://owaspsecure.com/demo/a07_auth/insecure.php",
-      "source": "OWASP Top 10 Demo Hub — A07 Identification & Authentication Failures insecure endpoints (owaspsecure.com/demo)",
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/hacked-npm",
+      "source": "AI Security Platform — real 2025-2026 supply-chain attacks lab (axios RAT, React RCE) (Vercel public demo)",
       "auth": "public_demo"
     },
     {
-      "url": "https://owaspsecure.com/demo/a08_integrity/insecure.php",
-      "source": "OWASP Top 10 Demo Hub — A08 Software & Data Integrity Failures insecure endpoints (owaspsecure.com/demo)",
+      "url": "https://owasp-finbot-ctf.org/vendor",
+      "source": "OWASP FinBot CTF — vendor portal agentic AI policy bypass / prompt injection (owasp-finbot-ctf.org)",
       "auth": "public_demo"
     }
   ],
   "discovery_urls": [
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supabase-rls",
+      "source": "AI Security Platform — Weak Supabase RLS / CWE-732 challenge (Vercel public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/missing-headers",
+      "source": "AI Security Platform — missing security headers / CWE-693 challenge (Vercel public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/supply-chain",
+      "source": "AI Security Platform — typosquatted npm supply-chain / CWE-494 challenge (Vercel public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ai-security-platform-iota.vercel.app/challenges/hacked-npm",
+      "source": "AI Security Platform — real 2025-2026 supply-chain attacks lab (axios RAT, React RCE) (Vercel public demo)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor",
+      "source": "OWASP FinBot CTF — vendor portal agentic AI policy bypass / prompt injection (owasp-finbot-ctf.org)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owaspsecure.com/demo/a02_crypto/insecure.php",
       "source": "OWASP Top 10 Demo Hub — A02 Cryptographic Failures insecure endpoints (owaspsecure.com/demo)",
