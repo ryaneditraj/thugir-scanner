@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-crypto-iv-reuse-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/iv_reuse/encrypt_static_insecure.php returns insecure_static_iv mode with fixed iv_b64=ERERERERERERERER; owaspsecure.com/demo/a02_crypto/insecure.php findings 10→19 (+owaspsecure-crypto-iv-reuse-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-crypto-key-rotation-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/key_rotation/rotate_insecure.php returns hard-coded active_key with key_version=null and no rotation workflow; owaspsecure.com/demo/a02_crypto/insecure.php findings 10→19 (+owaspsecure-crypto-key-rotation-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-crypto-save-plain-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/data_at_rest/save_plain.php stores SSN as plaintext (Saved insecure plaintext for user_id=N); owaspsecure.com/demo/a02_crypto/insecure.php findings 10→19 (+owaspsecure-crypto-save-plain-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
       "slug": "owaspsecure-injection-sqli-blind-time-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/sql_blind_time/count_insecure.php?id=1 returns count=1 vs id=1 OR 1=1 returns count=4; owaspsecure.com/demo/a03_injection/insecure.php findings 13→17 (+owaspsecure-injection-sqli-blind-time-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"

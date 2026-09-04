@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-04T05:06:04.065Z",
-  "total": 3231,
-  "uniqueSlugs": 3223,
+  "generatedAt": "2026-09-04T06:03:55.095Z",
+  "total": 3237,
+  "uniqueSlugs": 3229,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3213,
+    "generic": 3219,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3146,
+    "deep": 3152,
     "continuous": 0
   },
   "byCategory": {
@@ -33,7 +33,7 @@
     "general": 20,
     "SSRF": 19,
     "Server-side request forgery": 115,
-    "Sensitive data exposure": 100,
+    "Sensitive data exposure": 106,
     "AI security": 134,
     "Business logic": 39,
     "AI / LLM security": 4,
@@ -2219,10 +2219,16 @@
     "owaspsecure-bac-mass-assignment-route-live-oracle",
     "owaspsecure-crypto-data-at-rest-live-oracle",
     "owaspsecure-crypto-data-at-rest-route-live-oracle",
+    "owaspsecure-crypto-iv-reuse-live-oracle",
+    "owaspsecure-crypto-iv-reuse-route-live-oracle",
+    "owaspsecure-crypto-key-rotation-live-oracle",
+    "owaspsecure-crypto-key-rotation-route-live-oracle",
     "owaspsecure-crypto-password-md5-live-oracle",
     "owaspsecure-crypto-password-md5-route-live-oracle",
     "owaspsecure-crypto-predictable-tokens-live-oracle",
     "owaspsecure-crypto-predictable-tokens-route-live-oracle",
+    "owaspsecure-crypto-save-plain-live-oracle",
+    "owaspsecure-crypto-save-plain-route-live-oracle",
     "owaspsecure-design-coupon-logic-live-oracle",
     "owaspsecure-design-coupon-logic-route-live-oracle",
     "owaspsecure-design-csrf-settings-live-oracle",
