@@ -14073,6 +14073,30 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/path-traversal-documents-api/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-path-traversal")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/mass-assignment-admin-privilege-escalation/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-mass-assignment-admin")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/product-search-sql-injection/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-product-search-sqli")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/malicious-file-upload-stored-xss/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-malicious-file-upload")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
         /\/posts\/race-condition-coupon-abuse/i.test(targetInput) &&
         p.slug.startsWith("oopssec-race-condition-coupon")
       )

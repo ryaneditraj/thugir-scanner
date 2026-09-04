@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T14:16:00.000Z",
+  "updated_at": "2026-09-04T14:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2800,
-  "total_findings": 28262,
+  "total_sites_scanned": 3103,
+  "total_findings": 35075,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1988,
-  "discovery_findings": 23642,
-  "improvements_shipped": 1398,
-  "last_run": "2026-09-04T14:16:00.000Z",
+  "discovery_urls_added": 2147,
+  "discovery_findings": 28675,
+  "improvements_shipped": 1401,
+  "last_run": "2026-09-04T14:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "14",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 594,
+      "probes_run": 603,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,25 +52,29 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
+      "urls_added": 4,
       "urls_scanned": 8,
-      "findings": 152,
-      "focus": "pwnshop debug/chat/events PWN-018/031/005 + owaspsecure A06 VOC + OopsSec path-traversal walkthrough",
-      "improvements_shipped_this_run": 0
+      "findings": 195,
+      "focus": "OopsSec queued walkthroughs (mass-assignment/product-search/file-upload) + pwnshop debug/chat/events drain + owaspsecure A06 VOC",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 40 live oracles; secret-resend present)",
-      "pwnshop.ctfsecurity.com/debug/info: 49 findings — pwnshop-debug-info-route-live-oracle + PWN-018 critical",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings)",
+      "pwnshop.ctfsecurity.com/debug/info: 49 findings — pwnshop-debug-info-route-live-oracle (PWN-018)",
       "pwnshop.ctfsecurity.com/chat: 40 findings — pwnshop-chat-prompt-injection-route-live-oracle (PWN-031)",
       "pwnshop.ctfsecurity.com/api/v1/events: 26 findings — pwnshop-events-audit-route-live-oracle (PWN-005)",
       "koadt.github.io/.../path-traversal-documents-api: 11 findings — oopssec-path-traversal-route-live-oracle",
-      "owaspsecure.com/demo/a06_voc/insecure.php: 5 findings — thin hub fingerprint, no outdated-jQuery/SRI route oracle"
+      "koadt.github.io/.../mass-assignment-admin-privilege-escalation: 9 findings — oopssec-mass-assignment-admin-route-live-oracle",
+      "koadt.github.io/.../product-search-sql-injection: 10 findings — oopssec-product-search-sqli-route-live-oracle",
+      "koadt.github.io/.../malicious-file-upload-stored-xss: 13 findings — oopssec-malicious-file-upload-stored-xss-route-live-oracle",
+      "owaspsecure.com/demo/a06_voc/insecure.php: 5 findings — thin hub fingerprint, missing outdated-jQuery/SRI route oracle",
+      "owaspsecure.com/demo/a08_integrity/insecure.php: 18 findings — integrity remote-config + unsigned-update oracles (parallel 13 UTC run)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "oopssec path-traversal/mass-assignment/product-search/malicious-file-upload now priority-queued with -4 runner priority",
       "owaspsecure.com A06 VOC thin pass — 5 findings, missing outdated-jQuery/no-SRI/unpinned-CDN route oracles",
-      "oopssec mass-assignment/product-search-sql-injection/malicious-file-upload walkthroughs still queued",
-      "damn-vulnerable-startup.fly.dev + zen-demo-java.fly.dev unreachable from cloud agent",
+      "finbot portals/ctf/darklab still share overlapping supply-chain probe fingerprints beyond portals hub oracle",
       "pwnshop chat prompt-injection oracle model-dependent — Groq model may decline jailbreak extraction"
     ]
   },
@@ -78,15 +82,16 @@
     "pwnshop.ctfsecurity.com/debug/info": 49,
     "pwnshop.ctfsecurity.com/chat": 40,
     "pwnshop.ctfsecurity.com/api/v1/events": 26,
-    "qa.brokencrystals.com/api/chat": 87,
-    "brokencrystals.com/api/users/one/regular_user/info": 79,
-    "qa.brokencrystals.com/api/file/aws": 75,
+    "qa.brokencrystals.com/api/chat": 88,
+    "brokencrystals.com/api/users/one/regular_user/info": 86,
     "juice-shop.herokuapp.com": 52,
-    "owasp-finbot-ctf.org/portals": 33,
+    "koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss": 13,
     "koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api": 11,
-    "qa.brokencrystals.com/api/goto": 37,
+    "koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection": 10,
+    "koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation": 9,
+    "owaspsecure.com/demo/a08_integrity/insecure.php": 18,
+    "owasp-finbot-ctf.org/portals": 33,
     "vulnbank.org/api/v1/transactions": 32,
-    "owaspsecure.com/demo/a06_voc/insecure.php": 5,
-    "owaspsecure.com/demo/a08_integrity/insecure.php": 18
+    "owaspsecure.com/demo/a06_voc/insecure.php": 5
   }
 }

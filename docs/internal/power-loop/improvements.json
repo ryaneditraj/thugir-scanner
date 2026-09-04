@@ -8483,6 +8483,24 @@
       "slug": "owaspsecure-ssrf-internal-health-direct-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/internal/health.json returns {\"service\":\"internal-gateway\",\"status\":\"ok\"} without auth; owaspsecure.com/demo/a10_ssrf/insecure.php findings 11→15 (+owaspsecure-ssrf-internal-health-direct-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-path-traversal-runner-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended path-traversal-documents-api to priority_discovery_urls; runner -4 priority for oopssec-path-traversal-* on /posts/path-traversal-documents-api; koadt.github.io/.../path-traversal-documents-api/ findings 11 (+oopssec-path-traversal-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-mass-assignment-admin-runner-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended mass-assignment-admin-privilege-escalation to priority_discovery_urls; runner -4 priority for oopssec-mass-assignment-admin-* on matching post route; koadt.github.io/.../mass-assignment-admin-privilege-escalation/ findings 9 (+oopssec-mass-assignment-admin-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-product-search-malicious-upload-runner-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended product-search-sql-injection + malicious-file-upload-stored-xss to priority_discovery_urls; runner -4 priority for oopssec-product-search-sqli-* and oopssec-malicious-file-upload-* on matching post routes; product-search 10 findings (+oopssec-product-search-sqli-route-live-oracle), malicious-file-upload 13 findings (+oopssec-malicious-file-upload-stored-xss-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
