@@ -44697,6 +44697,46 @@ const owaspsecureIntegrityCicdDeployLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const owaspsecureIntegrityRemoteConfigLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const configUrl = owaspsecureAttackUrl(ctx, "attacks/remote_config/config_insecure.php");
+  const configJsonUrl = owaspsecureAttackUrl(ctx, "attacks/remote_config/data/config.json");
+  const probeUrl = `${configUrl}?src=${encodeURIComponent(configJsonUrl)}`;
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Remote Config \(INSECURE\)|applied_blindly/i.test(doc.body)) return NEGATIVE;
+  if (!/No signature\/HMAC\/allowlist used/i.test(doc.body)) return NEGATIVE;
+  if (!/featureFlags|minPasswordLength/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: probeUrl,
+      snippet:
+        doc.body.match(/applied_blindly[\s\S]{0,120}/i)?.[0]?.slice(0, 120) ??
+        "remote config applied without signature",
+      note: "owaspsecure.com GET attacks/remote_config/config_insecure.php fetches remote JSON and applies featureFlags without signature/HMAC — A08 software integrity failure training oracle"
+    }
+  };
+};
+
+const owaspsecureIntegrityRemoteConfigRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a08_integrity\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureIntegrityRemoteConfigLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a08_integrity route scan — Attack 3 remote config loads JSON from untrusted src without signature verification (live integrity failure oracle)"
+    }
+  };
+};
+
 const owaspsecureIntegrityCicdDeployRouteLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -95964,7 +96004,7 @@ Legal / Social AI-Assisted Phishing /challenges/ai-phishing Phishing CWE-1021 AI
 Legal / Social Deceptive Privacy Policy /challenges/privacy-policy /challenges/deceptive-privacy Dark Patterns CWE-1021 Burying harmful data-sale and plaintext-storage clauses
 Supply Chain /challenges/supply-chain Supply Chain Attack dependency tampering
 Supply Chain Vulnerable npm Deps /challenges/vulnerable-deps CVE known vulnerable dependencies typosquat
-Supply Chain Hacked npm Packages /challenges/hacked-npm-packages malicious package compromised npm postinstall
+Supply Chain Hacked npm Packages /challenges/hacked-npm-packages malicious package compromised npm postinstall axios React remote access trojans credential stealers
 14 challenges · OWASP Top 10 aligned
 `;
 
@@ -96265,6 +96305,39 @@ const aiSecuritySupplyChainRouteLiveOracle: Rule = (ctx) =>
 
 const aiSecurityVulnerableDepsRouteLiveOracle: Rule = (ctx) =>
   aiSecurityPlatformChallengeRouteOracle(ctx, "vulnerable-deps");
+
+const aiSecurityHackedNpmPackagesLiveOracle: Rule = async (ctx) => {
+  if (!isAiSecurityPlatformHost(ctx)) return NEGATIVE;
+  const learnUrl = new URL("/learn", AI_SECURITY_PLATFORM_HOME).toString();
+  const doc = await ctx.probe.get(learnUrl, { maxBytes: 131072, timeoutMs: 15000 });
+  let corpus = doc.status >= 200 && doc.status < 400 ? doc.body : "";
+  if (!/axios|hacked-npm|remote access trojan/i.test(corpus)) {
+    corpus = await aiSecurityPlatformFetchCatalog(ctx);
+  }
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of [
+    { label: "Hacked npm packages challenge route", re: /\/challenges\/(?:hacked-npm-packages|hacked-npm)/i },
+    {
+      label: "axios/React supply-chain hijack corpus",
+      re: /axios,\s*React[\s\S]{0,80}remote access trojan|hijacked or cloned to deliver remote access trojan/i
+    },
+    { label: "Supply Chain challenge category", re: /Supply Chain/i },
+    { label: "malicious postinstall scripts", re: /malicious package|compromised npm|postinstall/i }
+  ]) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      learnUrl,
+      markers: markers.slice(0, 4),
+      note: "AI Security Platform /learn documents real-world axios/React npm hijacks delivering remote access trojans — hacked-npm-packages supply-chain training oracle"
+    }
+  };
+};
 
 const aiSecurityHackedNpmPackagesRouteLiveOracle: Rule = (ctx) =>
   aiSecurityCatalogOrLoginGatedRouteOracle(ctx, "hacked-npm-packages");
@@ -107044,6 +107117,54 @@ const finbotAdminCopilotRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const finbotPortalsLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const portalsUrl = new URL("/portals", ctx.origin).toString();
+  const doc = await ctx.probe.get(portalsUrl, { maxBytes: 65536, timeoutMs: 20000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const markers: { label: string; sample: string }[] = [];
+  const portalChecks = [
+    { label: "Four Portals hub headline", re: /Four Portals[\s\S]{0,40}One Platform/i },
+    { label: "Vendor Portal link", re: /href="\/vendor"/i },
+    { label: "Vendor Portal title", re: /Vendor Portal/i },
+    { label: "Admin Portal link", re: /href="\/admin"/i },
+    { label: "Admin Portal title", re: /Admin Portal/i },
+    { label: "Dark Lab portal link", re: /href="\/darklab"/i },
+    { label: "CTF portal link", re: /href="\/ctf"/i }
+  ];
+  for (const { label, re } of portalChecks) {
+    const m = doc.body.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 6) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      portalsUrl,
+      markers: markers.slice(0, 5),
+      note: "OWASP FinBot GET /portals exposes four-portal hub (Vendor, Admin, Dark Lab, CTF) — agentic AI security training entry point oracle"
+    }
+  };
+};
+
+const finbotPortalsRouteLiveOracle: Rule = async (ctx) => {
+  if (!isFinbotCtfHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/portals(?:\/|$)/i.test(pageUrl)) return NEGATIVE;
+  const result = await finbotPortalsLiveOracle(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "OWASP FinBot /portals route scan — four-portal hub confirms Vendor/Admin/Dark Lab/CTF training entry points (route-specific hub oracle, distinct from /ctf or /darklab fingerprints)"
+    }
+  };
+};
+
 const finbotHowItWorksLiveOracle: Rule = async (ctx) => {
   if (!isFinbotCtfHost(ctx)) return NEGATIVE;
   const howUrl = new URL("/how-it-works", ctx.origin).toString();
@@ -112226,6 +112347,8 @@ export const RULES: Record<string, Rule> = {
   owaspsecureIntegrityPluginUploadRouteLiveOracle,
   owaspsecureIntegrityCicdDeployLiveOracle,
   owaspsecureIntegrityCicdDeployRouteLiveOracle,
+  owaspsecureIntegrityRemoteConfigLiveOracle,
+  owaspsecureIntegrityRemoteConfigRouteLiveOracle,
   owaspsecureLoggingAuthEventsLiveOracle,
   owaspsecureLoggingAuthEventsRouteLiveOracle,
   owaspsecureLoggingPiiSecretsLiveOracle,
@@ -113686,6 +113809,7 @@ export const RULES: Record<string, Rule> = {
   aiSecurityCookieAuthRouteLiveOracle,
   aiSecuritySupplyChainRouteLiveOracle,
   aiSecurityVulnerableDepsRouteLiveOracle,
+  aiSecurityHackedNpmPackagesLiveOracle,
   aiSecurityHackedNpmPackagesRouteLiveOracle,
   aiSecurityVulnerableNpmRouteLiveOracle,
   aiSecuritySecurityHeadersRouteLiveOracle,
@@ -113986,6 +114110,8 @@ export const RULES: Record<string, Rule> = {
   finbotAdminCopilotRouteLiveOracle,
   finbotHowItWorksLiveOracle,
   finbotHowItWorksRouteLiveOracle,
+  finbotPortalsLiveOracle,
+  finbotPortalsRouteLiveOracle,
   finbotDarklabSupplyChainLiveOracle,
   finbotDarklabSupplyChainRouteLiveOracle,
   finbotDarklabSupplyChainStatsLiveOracle,
