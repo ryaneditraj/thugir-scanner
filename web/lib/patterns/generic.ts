@@ -76591,6 +76591,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-design-coupon-logic-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 coupon logic live oracle",
+    description:
+      "POST attacks/coupon_logic/cart_insecure.php on owaspsecure.com re-applies SAVE50 without one-time or cap limits — A04 insecure design training oracle.",
+    impactOneline:
+      "Unlimited coupon re-application on owaspsecure.com enables negative cart totals and payment bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignCouponLogicLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce one-time coupon redemption and cap total discounts.",
+      steps: [
+        "Track coupon usage per user and reject repeat applications.",
+        "Cap discount amounts so totals cannot go negative.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com cart_insecure.php re-applies SAVE50 without limits. Show coupon logic remediation with one-time redemption and discount caps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-coupon-logic-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route coupon live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 5 coupon logic accepts unlimited SAVE50 re-application — route-specific A04 insecure design oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live coupon abuse, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignCouponLogicRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce one-time coupon redemption and cap total discounts.",
+      steps: [
+        "Track coupon usage per user and reject repeat applications.",
+        "Cap discount amounts so totals cannot go negative.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms unlimited coupon re-application. Show route-level coupon logic remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-csrf-settings-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 CSRF settings change live oracle",
+    description:
+      "POST attacks/csrf_settings/change_settings_insecure.php on owaspsecure.com accepts cross-site POSTs without CSRF token or origin checks — A04 insecure design training oracle.",
+    impactOneline:
+      "Missing CSRF protection on owaspsecure.com settings endpoints enables cross-site state changes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignCsrfSettingsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens and validate Origin/Referer on state-changing POST endpoints.",
+      steps: [
+        "Issue per-session CSRF tokens for all settings forms.",
+        "Reject POST requests with missing or invalid Origin/Referer headers.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com change_settings_insecure.php accepts cross-site POSTs without CSRF protection. Show CSRF token and origin validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-csrf-settings-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route CSRF live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 3 CSRF settings change confirms missing token and origin checks — route-specific A04 CSRF oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live CSRF on settings changes, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignCsrfSettingsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens and validate Origin/Referer on state-changing POST endpoints.",
+      steps: [
+        "Issue per-session CSRF tokens for all settings forms.",
+        "Reject POST requests with missing or invalid Origin/Referer headers.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms CSRF on settings changes. Show route-level CSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-magic-link-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 reusable magic link live oracle",
+    description:
+      "POST attacks/magic_link/link_insecure.php on owaspsecure.com mints reusable magic-login links with no expiry or single-use binding — A04 insecure design training oracle.",
+    impactOneline:
+      "Reusable magic links on owaspsecure.com enable permanent account access for anyone who obtains the URL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignMagicLinkLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use single-use, short-lived magic links bound to the requesting device or session.",
+      steps: [
+        "Store magic-link tokens server-side with expiry and single-use flags.",
+        "Invalidate tokens after first successful login.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com magic_link/link_insecure.php mints reusable login links. Show single-use expiring magic link remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-magic-link-route-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route magic link live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 4 magic link never expires and is reusable — route-specific A04 authentication oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live reusable magic links, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignMagicLinkRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use single-use, short-lived magic links bound to the requesting device or session.",
+      steps: [
+        "Store magic-link tokens server-side with expiry and single-use flags.",
+        "Invalidate tokens after first successful login.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms reusable magic links. Show route-level single-use magic link remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "owaspsecure-integrity-unserialize-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",

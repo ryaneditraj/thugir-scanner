@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T03:11:00.000Z",
+  "updated_at": "2026-09-04T03:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,8 +22,8 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2006,
   "discovery_findings": 24094,
-  "improvements_shipped": 1365,
-  "last_run": "2026-09-04T03:11:00.000Z",
+  "improvements_shipped": 1368,
+  "last_run": "2026-09-04T03:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "03",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 607,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,36 +52,31 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 90,
-      "focus": "oopssec challenges.json walkthroughs (path-traversal, price-manipulation, SQLi, mass-assignment, SVG upload) + drained seclab path-traversal + owasp-finbot-ctf admin",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 1,
+      "findings": 15,
+      "focus": "owaspsecure A04 insecure design — coupon logic, CSRF settings, reusable magic link route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; secret-resend present)",
+      "owaspsecure.com/demo/a04_insecure_design/insecure.php: 9→15 findings — coupon logic + CSRF settings + magic link live/route oracles",
       "koadt.github.io/.../path-traversal-documents-api: 11 findings — oopssec-path-traversal-route-live-oracle",
-      "koadt.github.io/.../client-side-price-manipulation: 9 findings — oopssec-price-manipulation-route-live-oracle",
-      "koadt.github.io/.../sql-injection-writeup: 9 findings — oopssec-orders-search-sqli-route-live-oracle",
-      "koadt.github.io/.../mass-assignment-admin-privilege-escalation: 9 findings — oopssec-mass-assignment-admin-route-live-oracle",
-      "koadt.github.io/.../malicious-file-upload-stored-xss: 13 findings — oopssec-malicious-file-upload-stored-xss-route-live-oracle",
-      "seclab.vercel.app/labs/path-traversal: 5 findings — seclab-path-traversal-labs-route-live-oracle",
       "owasp-finbot-ctf.org/admin: 29 findings — finbot-ctf-challenges-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark stable 6/6 — no category misses on juice-shop primary Heroku",
-      "owasp-finbot-ctf /admin: 29-finding AI hub without per-challenge route oracles",
+      "owaspsecure A04 password-reset-flow still lacks route oracle",
       "oopssec walkthrough pages are static docs — route oracles confirm text but live API exploitation needs hosted OopsSec Store instance"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
+    "owaspsecure.com/demo/a04_insecure_design/insecure.php": 15,
     "koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss": 13,
     "koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api": 11,
     "owasp-finbot-ctf.org/admin": 29,
-    "koadt.github.io/oss-oopssec-store/posts/sql-injection-writeup": 9,
-    "koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation": 9,
     "seclab.vercel.app/labs/path-traversal": 5
   }
 }

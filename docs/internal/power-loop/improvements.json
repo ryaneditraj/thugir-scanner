@@ -8285,6 +8285,24 @@
       "slug": "nosql-injection-lab-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle documents MongoDB $ne/$regex/$gt operator auth bypass via body-parser simulation; nosql-injection-lab.vercel.app/ findings 6→7 (+nosql-injection-lab-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-design-coupon-logic-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/coupon_logic/cart_insecure.php action=apply_coupon&coupon=SAVE50 returns no_one_time_coupon + allows_negative_total; owaspsecure.com/demo/a04_insecure_design/insecure.php findings 9→15 (+owaspsecure-design-coupon-logic-live-oracle +route +csrf-settings +magic-link live/route oracles); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-design-csrf-settings-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/csrf_settings/change_settings_insecure.php theme=dark returns no_csrf_token + no_origin_referrer weaknesses; owaspsecure.com/demo/a04_insecure_design/insecure.php findings 9→15 (+owaspsecure-design-csrf-settings-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-design-magic-link-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/magic_link/link_insecure.php returns reusable token JSON with no_storage + not_bound notes; owaspsecure.com/demo/a04_insecure_design/insecure.php findings 9→15 (+owaspsecure-design-magic-link-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
