@@ -1,29 +1,29 @@
 {
-  "updated_at": "2026-09-04T07:15:00.000Z",
+  "updated_at": "2026-09-04T08:30:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://owaspsecure.com/demo/a01_bac/insecure.php",
-      "source": "owaspsecure.com OWASP Top 10 demo hub — A01 BAC IDOR/mass-assignment/file-DOR oracle (web search)",
+      "source": "OWASP Top 10 Demo Hub — A01 Broken Access Control insecure endpoints (owaspsecure.com/demo)",
       "auth": "public_demo"
     },
     {
       "url": "https://owaspsecure.com/demo/a03_injection/insecure.php",
-      "source": "owaspsecure.com OWASP Top 10 demo hub — A03 SQLi/XSS/stored-XSS injection oracle (web search)",
+      "source": "OWASP Top 10 Demo Hub — A03 Injection insecure SQLi/XSS endpoints (owaspsecure.com/demo)",
       "auth": "public_demo"
     },
     {
-      "url": "https://owaspsecure.com/demo/a06_voc/insecure.php",
-      "source": "owaspsecure.com OWASP Top 10 demo hub — A06 vulnerable/outdated components jQuery/SRI oracle (web search)",
+      "url": "https://owaspsecure.com/demo/a05_misconfig/insecure.php",
+      "source": "OWASP Top 10 Demo Hub — A05 Security Misconfiguration insecure endpoints (owaspsecure.com/demo)",
       "auth": "public_demo"
     },
     {
       "url": "https://owaspsecure.com/demo/a09_logging/insecure.php",
-      "source": "owaspsecure.com OWASP Top 10 demo hub — A09 logging/monitoring failures auth-events PII oracle (web search)",
+      "source": "OWASP Top 10 Demo Hub — A09 Security Logging & Monitoring insecure endpoints (owaspsecure.com/demo)",
       "auth": "public_demo"
     },
     {
       "url": "https://owaspsecure.com/demo/a10_ssrf/insecure.php",
-      "source": "owaspsecure.com OWASP Top 10 demo hub — A10 SSRF internal-IP/redirect/port-scan oracle (web search)",
+      "source": "OWASP Top 10 Demo Hub — A10 SSRF insecure endpoints (owaspsecure.com/demo)",
       "auth": "public_demo"
     }
   ],
