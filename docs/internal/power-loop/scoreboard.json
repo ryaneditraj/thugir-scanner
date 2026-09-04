@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T21:08:00.000Z",
+  "updated_at": "2026-09-04T21:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2791,
-  "total_findings": 28029,
-  "critical_findings": 58,
+  "total_sites_scanned": 2794,
+  "total_findings": 28077,
+  "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2023,
-  "discovery_findings": 23687,
-  "improvements_shipped": 1419,
-  "last_run": "2026-09-04T21:08:00.000Z",
+  "discovery_findings": 23735,
+  "improvements_shipped": 1422,
+  "last_run": "2026-09-04T21:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
@@ -52,39 +52,40 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 163,
-      "focus": "OopsSec gift-card randomness + JWT alg-confusion + supply-chain poisoned-rules walkthroughs; Pwnshop vuln index + checkout drain",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 48,
+      "focus": "BugStore V-023 checkout client-trusted total + V-015 profile role mass-assignment live oracles; oopssec gift-card + JWT alg-confusion priority queue drain",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; secret-resend present)",
+      "bugstore.bugtraceai.com/api/checkout/process: 10→16 findings — bugstore-checkout-client-total live+route oracles (V-023)",
+      "bugstore.bugtraceai.com/api/user/profile: 10→16 findings — bugstore-profile-mass-assignment live+route oracles (V-015)",
+      "bugstore.bugtraceai.com/api/auth/register: 10→16 findings — profile mass-assignment route oracle via register+profile PUT",
       "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card: 16 findings — oopssec-gift-card-randomness-route-live-oracle",
       "koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api: 7 findings — oopssec-jwt-alg-confusion-route-live-oracle",
-      "koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain: 14 findings — oopssec-supply-chain-poisoned-rules-route-live-oracle",
-      "pwnshop.ctfsecurity.com/vulnerabilities: 49 findings — hub fingerprint + pwnshop live oracles (debug/events/chat); no vuln-index route oracle",
-      "pwnshop.ctfsecurity.com/checkout: 25 findings — pwnshop-cart-checkout-route-live-oracle + wallet-topup oracles",
-      "preview.owasp-juice.shop/rest/products/search?q=test: 34 findings — juice-shop-products-search-sqli-route-live-oracle",
-      "bugstore.bugtraceai.com/api/cart/checkout: 13 findings — hub fingerprint; checkout mass-assignment route oracle still absent"
+      "pwnshop.ctfsecurity.com/vulnerabilities: 49 findings — hub fingerprint + pwnshop live oracles",
+      "pwnshop.ctfsecurity.com/checkout: 25 findings — pwnshop-cart-checkout-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "pwnshop /vulnerabilities: 49-finding hub without dedicated vuln-index route oracle",
-      "bugstore /api/cart/checkout: no checkout mass-assignment route oracle yet",
-      "qa.brokencrystals.com/api/file/aws + owaspsecure A09 + fabraix jailbreak-001 still in priority queue",
-      "vwad damn-vulnerable-restaurant: Collections offline — directory metadata only (5 findings)"
+      "bugstore /api/reviews mass-assignment (V-020) needs authenticated session",
+      "vwad damn-vulnerable-restaurant: Collections offline — directory metadata only",
+      "wrongsecrets challenge-47/53 + fabraix tool-poisoning-002 still in priority queue"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
+    "bugstore.bugtraceai.com/api/checkout/process": 16,
+    "bugstore.bugtraceai.com/api/user/profile": 16,
+    "bugstore.bugtraceai.com/api/auth/register": 16,
     "pwnshop.ctfsecurity.com/vulnerabilities": 49,
     "preview.owasp-juice.shop/rest/products/search?q=test": 34,
     "pwnshop.ctfsecurity.com/checkout": 25,
     "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card": 16,
-    "bugstore.bugtraceai.com/api/cart/checkout": 13,
-    "koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain": 14,
-    "koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api": 7,
+    "bugstore.bugtraceai.com/api/admin/vulnerable-debug-stats": 14,
     "qa.brokencrystals.com/api/file/aws": 96,
     "pwnshop.ctfsecurity.com/debug/info": 48
   }

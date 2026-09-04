@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-04T20:16:53.858Z",
-  "total": 3287,
-  "uniqueSlugs": 3279,
+  "generatedAt": "2026-09-04T21:12:13.474Z",
+  "total": 3291,
+  "uniqueSlugs": 3283,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3269,
+    "generic": 3273,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3202,
+    "deep": 3206,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 648,
+    "Broken access control": 650,
     "Exposed secret": 119,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -35,7 +35,7 @@
     "Server-side request forgery": 119,
     "Sensitive data exposure": 108,
     "AI security": 137,
-    "Business logic": 39,
+    "Business logic": 41,
     "AI / LLM security": 4,
     "Cross-site request forgery": 14,
     "Authentication bypass": 4,
@@ -264,6 +264,8 @@
     "buggybuy-api-bola-route-live-oracle",
     "bugstore-admin-debug-stats-bac-live-oracle",
     "bugstore-admin-debug-stats-bac-route-live-oracle",
+    "bugstore-checkout-client-total-live-oracle",
+    "bugstore-checkout-client-total-route-live-oracle",
     "bugstore-forum-thread-sqli-live-oracle",
     "bugstore-forum-thread-sqli-route-live-oracle",
     "bugstore-orders-idor-live-oracle",
@@ -272,6 +274,8 @@
     "bugstore-product-image-path-traversal-route-live-oracle",
     "bugstore-product-search-sqli-live-oracle",
     "bugstore-product-search-sqli-route-live-oracle",
+    "bugstore-profile-mass-assignment-live-oracle",
+    "bugstore-profile-mass-assignment-route-live-oracle",
     "burpbounty-actuator-heapdump-live-oracle",
     "burpbounty-actuator-heapdump-route-live-oracle",
     "burpbounty-admin-panel-live-oracle",
