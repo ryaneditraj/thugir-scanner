@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-04T06:03:55.095Z",
-  "total": 3237,
-  "uniqueSlugs": 3229,
+  "generatedAt": "2026-09-04T07:08:29.352Z",
+  "total": 3242,
+  "uniqueSlugs": 3234,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3219,
+    "generic": 3224,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3152,
+    "deep": 3157,
     "continuous": 0
   },
   "byCategory": {
@@ -25,10 +25,10 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 152,
-    "Security misconfiguration": 255,
+    "Security misconfiguration": 259,
     "Broken authentication": 204,
     "Injection": 526,
-    "Cross-site scripting": 797,
+    "Cross-site scripting": 798,
     "Open redirect": 27,
     "general": 20,
     "SSRF": 19,
@@ -254,6 +254,7 @@
     "bugforge-graphql-route-live-oracle",
     "bugforge-idor-route-live-oracle",
     "bugforge-ssrf-route-live-oracle",
+    "bugforge-xss-route-live-oracle",
     "buggybuy-api-bola-live-oracle",
     "buggybuy-api-bola-route-live-oracle",
     "burpbounty-actuator-heapdump-live-oracle",
@@ -2274,6 +2275,10 @@
     "owaspsecure-ssrf-internal-health-route-live-oracle",
     "owaspsecure-ssrf-socket-probe-live-oracle",
     "owaspsecure-ssrf-socket-probe-route-live-oracle",
+    "owaspsecure-voc-cdn-no-sri-live-oracle",
+    "owaspsecure-voc-cdn-no-sri-route-live-oracle",
+    "owaspsecure-voc-outdated-jquery-live-oracle",
+    "owaspsecure-voc-outdated-jquery-route-live-oracle",
     "pc-parts-store-api-login-token-route-live-oracle",
     "pc-parts-store-checkout-idor-live-oracle",
     "pc-parts-store-checkout-idor-route-live-oracle",

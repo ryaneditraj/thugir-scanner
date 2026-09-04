@@ -61438,6 +61438,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "bugforge-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Bugforge XSS lab route live oracle",
+    description:
+      "When scanning /labs/xss on bugforge.io or app.bugforge.io, the XSS learning-path module documents stored and reflected XSS labs (Ottergram stored XSS JWT theft writeups) — route-specific XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/xss documents cross-site scripting training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge XSS labs are intentional training — encode output and use context-aware sanitization.",
+      steps: [
+        "Replace unsafe .html() sinks with text encoding or strict allowlist sanitizers.",
+        "Set Content-Security-Policy to block inline script execution.",
+        "Run Bugforge lab instances only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/xss route documents Ottergram-style stored XSS labs. Show output encoding and CSP remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "webverselabs-fixture-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -76639,6 +76665,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /demo/a02_crypto save-plain attack path confirms plaintext SSN writes. Show route-level encryption remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-outdated-jquery-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 outdated jQuery live oracle",
+    description:
+      "GET attacks/outdated_jquery/demo_insecure.html on owaspsecure.com loads jQuery 1.12.4 with unsafe .html() sink — A06 vulnerable components training oracle.",
+    impactOneline:
+      "Outdated jQuery 1.x on owaspsecure.com enables XSS gadgets via deprecated DOM manipulation patterns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocOutdatedJqueryLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade to supported library versions and avoid unsafe HTML sinks.",
+      steps: [
+        "Replace jQuery 1.x with a maintained 3.x release.",
+        "Use .text() or a strict sanitizer instead of .html() on untrusted input.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com outdated_jquery demo loads jQuery 1.12.4 with .html() sinks. Show dependency upgrade and output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-outdated-jquery-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 VOC route outdated jQuery live oracle",
+    description:
+      "When scanning /demo/a06_voc/insecure.php on owaspsecure.com, Attack 1 outdated jQuery demo confirms live jQuery 1.12.4 with unsafe .html() sink — route-specific A06 vulnerable components oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A06 VOC lab should confirm live outdated jQuery exposure, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocOutdatedJqueryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade to supported library versions and avoid unsafe HTML sinks.",
+      steps: [
+        "Replace jQuery 1.x with a maintained 3.x release.",
+        "Use .text() or a strict sanitizer instead of .html() on untrusted input.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a06_voc route scan confirms outdated jQuery 1.12.4. Show route-level dependency upgrade remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-cdn-no-sri-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 CDN without SRI live oracle",
+    description:
+      "GET attacks/cdn_no_sri/demo_insecure.html on owaspsecure.com loads malicious_cdn/jquery.min.js without Subresource Integrity — A06 vulnerable components training oracle.",
+    impactOneline:
+      "CDN scripts without SRI on owaspsecure.com allow supply-chain tampering if the CDN path is compromised.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocCdnNoSriLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin third-party scripts with Subresource Integrity hashes.",
+      steps: [
+        "Add integrity and crossorigin attributes to all CDN script tags.",
+        "Self-host critical libraries when SRI is not available.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com cdn_no_sri demo loads scripts without integrity checks. Show SRI pinning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-cdn-no-sri-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 VOC route CDN-no-SRI live oracle",
+    description:
+      "When scanning /demo/a06_voc/insecure.php on owaspsecure.com, Attack 2 CDN-without-SRI demo confirms compromised script execution — route-specific A06 vulnerable components oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A06 VOC lab should confirm live missing SRI on CDN scripts, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocCdnNoSriRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin third-party scripts with Subresource Integrity hashes.",
+      steps: [
+        "Add integrity and crossorigin attributes to all CDN script tags.",
+        "Self-host critical libraries when SRI is not available.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a06_voc route scan confirms CDN scripts without SRI. Show route-level integrity pinning remediation.",
     version: 1,
     enabled: true
   },
