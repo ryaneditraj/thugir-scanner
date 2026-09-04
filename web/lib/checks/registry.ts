@@ -43934,6 +43934,77 @@ const owaspsecureAuthSessionFixationRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const owaspsecureDesignPasswordResetLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const generateUrl = owaspsecureAttackUrl(ctx, "attacks/reset_flow/generate_insecure.php");
+  const doc = await ctx.probe.get(`${generateUrl}?email=probe@example.com`, {
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/"token"\s*:/i.test(doc.body)) return NEGATIVE;
+  if (!/"link"\s*:/i.test(doc.body)) return NEGATIVE;
+  if (!/predictable|email\|timestamp|no TTL|reusable/i.test(doc.body)) return NEGATIVE;
+  const tokenMatch = doc.body.match(/"token"\s*:\s*"([^"]+)"/i);
+  if (!tokenMatch?.[1] || !/^probe@example\.com\|\d+$/i.test(tokenMatch[1])) return NEGATIVE;
+  const resetUrl = owaspsecureAttackUrl(
+    ctx,
+    `attacks/reset_flow/reset.php?token=${encodeURIComponent(tokenMatch[1])}`
+  );
+  const resetDoc = await ctx.probe.get(resetUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (resetDoc.status < 200 || resetDoc.status >= 400) return NEGATIVE;
+  if (!/Password reset allowed|predictable token accepted/i.test(resetDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: generateUrl,
+      snippet:
+        doc.body.match(/"notes"\s*:\s*"[^"]+"/i)?.[0]?.slice(0, 120) ??
+        `"token":"${tokenMatch[1]}"`,
+      note: "owaspsecure.com GET attacks/reset_flow/generate_insecure.php mints predictable email|timestamp reset tokens with no TTL and reusable reset.php acceptance — A04 insecure design training oracle"
+    }
+  };
+};
+
+const owaspsecureDesignPasswordResetRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a04_insecure_design\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureDesignPasswordResetLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a04_insecure_design route scan — Attack 1 password reset flow uses predictable email|timestamp tokens with no TTL and reusable reset links (live insecure design oracle)"
+    }
+  };
+};
+
+const owaspsecureDesignPasswordResetAttackPathRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (
+    !/\/demo\/a04_insecure_design(?:\/insecure\.php|\/attacks\/reset_flow)/i.test(pageUrl) &&
+    !/\/attacks\/reset_flow\/(?:generate_insecure|reset)\.php/i.test(pageUrl)
+  )
+    return NEGATIVE;
+  const result = await owaspsecureDesignPasswordResetLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com A04 reset_flow attack path — predictable email|timestamp password-reset tokens accepted without TTL or single-use binding (route-specific insecure design oracle)"
+    }
+  };
+};
+
 const owaspsecureDesignReauthEmailLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const changeUrl = owaspsecureAttackUrl(ctx, "attacks/reauth_sensitive/change_email_insecure.php");
@@ -111174,6 +111245,9 @@ export const RULES: Record<string, Rule> = {
   owaspsecureCryptoDataAtRestRouteLiveOracle,
   owaspsecureAuthSessionFixationLiveOracle,
   owaspsecureAuthSessionFixationRouteLiveOracle,
+  owaspsecureDesignPasswordResetLiveOracle,
+  owaspsecureDesignPasswordResetRouteLiveOracle,
+  owaspsecureDesignPasswordResetAttackPathRouteLiveOracle,
   owaspsecureDesignReauthEmailLiveOracle,
   owaspsecureDesignReauthEmailRouteLiveOracle,
   owaspsecureDesignCouponLogicLiveOracle,

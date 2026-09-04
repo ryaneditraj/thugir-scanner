@@ -8303,6 +8303,24 @@
       "slug": "owaspsecure-design-magic-link-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/magic_link/link_insecure.php returns reusable token JSON with no_storage + not_bound notes; owaspsecure.com/demo/a04_insecure_design/insecure.php findings 9→15 (+owaspsecure-design-magic-link-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-design-password-reset-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/reset_flow/generate_insecure.php?email=probe@example.com returns JSON token probe@example.com|<timestamp> with notes predictable (email|timestamp), no TTL, reusable; reset.php accepts token with Password reset allowed; owaspsecure.com/demo/a04_insecure_design/insecure.php findings 15→18 (+owaspsecure-design-password-reset-live-oracle +route +attack-path); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-design-password-reset-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /demo/a04_insecure_design route scan Attack 1 confirms predictable email|timestamp reset tokens with reusable reset.php acceptance; owaspsecure.com/demo/a04_insecure_design/insecure.php findings 15→18; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-design-password-reset-attack-path-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /demo/a04_insecure_design/attacks/reset_flow/ attack path confirms live generate_insecure.php + reset.php predictable token chain; owaspsecure.com/demo/a04_insecure_design/insecure.php findings 15→18; benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

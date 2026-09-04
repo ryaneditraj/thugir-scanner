@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T03:15:00.000Z",
+  "updated_at": "2026-09-04T04:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2833,
-  "total_findings": 28414,
+  "total_sites_scanned": 2834,
+  "total_findings": 28470,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2006,
-  "discovery_findings": 24094,
-  "improvements_shipped": 1368,
-  "last_run": "2026-09-04T03:15:00.000Z",
+  "discovery_findings": 24107,
+  "improvements_shipped": 1371,
+  "last_run": "2026-09-04T04:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -54,29 +54,26 @@
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 1,
-      "findings": 15,
-      "focus": "owaspsecure A04 insecure design — coupon logic, CSRF settings, reusable magic link route oracles",
+      "findings": 18,
+      "focus": "owaspsecure A04 password-reset-flow — predictable email|timestamp tokens with no TTL and reusable reset links",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; secret-resend present)",
-      "owaspsecure.com/demo/a04_insecure_design/insecure.php: 9→15 findings — coupon logic + CSRF settings + magic link live/route oracles",
-      "koadt.github.io/.../path-traversal-documents-api: 11 findings — oopssec-path-traversal-route-live-oracle",
-      "owasp-finbot-ctf.org/admin: 29 findings — finbot-ctf-challenges-live-oracle"
+      "owaspsecure.com/demo/a04_insecure_design/insecure.php: 15→18 findings — password-reset live + route + attack-path oracles",
+      "owaspsecure.com/demo/a04_insecure_design/insecure.php: Attack 1 GET generate_insecure.php returns predictable email|timestamp token accepted by reset.php"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark stable 6/6 — no category misses on juice-shop primary Heroku",
-      "owaspsecure A04 password-reset-flow still lacks route oracle",
-      "oopssec walkthrough pages are static docs — route oracles confirm text but live API exploitation needs hosted OopsSec Store instance"
+      "owasp-finbot-ctf /admin 29-finding hub without per-challenge route oracles"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "owaspsecure.com/demo/a04_insecure_design/insecure.php": 15,
-    "koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss": 13,
-    "koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api": 11,
+    "owaspsecure.com/demo/a04_insecure_design/insecure.php": 18,
     "owasp-finbot-ctf.org/admin": 29,
+    "koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api": 11,
     "seclab.vercel.app/labs/path-traversal": 5
   }
 }

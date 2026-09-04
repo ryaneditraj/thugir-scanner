@@ -76539,6 +76539,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-design-password-reset-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 predictable password-reset live oracle",
+    description:
+      "GET attacks/reset_flow/generate_insecure.php on owaspsecure.com mints predictable email|timestamp reset tokens with no TTL and reusable reset.php acceptance — A04 insecure design training oracle.",
+    impactOneline:
+      "Predictable reusable password-reset tokens on owaspsecure.com enable account takeover without out-of-band delivery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignPasswordResetLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically random single-use reset tokens with short TTL and server-side storage.",
+      steps: [
+        "Generate reset tokens with random_bytes() instead of email|timestamp concatenation.",
+        "Store hashed tokens server-side with expiry and invalidate after first use.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com generate_insecure.php mints predictable reusable reset tokens. Show secure password-reset token remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-password-reset-route-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route password-reset live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 1 password reset flow confirms predictable email|timestamp tokens with no TTL and reusable reset links — route-specific A04 insecure design oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live password-reset design flaws, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignPasswordResetRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically random single-use reset tokens with short TTL and server-side storage.",
+      steps: [
+        "Generate reset tokens with random_bytes() instead of email|timestamp concatenation.",
+        "Store hashed tokens server-side with expiry and invalidate after first use.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms predictable reusable password-reset tokens. Show route-level reset-flow remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-password-reset-attack-path-route-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 reset_flow attack-path route live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/attacks/reset_flow/ on owaspsecure.com, generate_insecure.php mints predictable email|timestamp tokens accepted by reset.php without TTL or single-use binding — route-specific A04 password-reset oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 reset_flow attack paths should confirm live predictable password-reset tokens, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignPasswordResetAttackPathRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically random single-use reset tokens with short TTL and server-side storage.",
+      steps: [
+        "Generate reset tokens with random_bytes() instead of email|timestamp concatenation.",
+        "Store hashed tokens server-side with expiry and invalidate after first use.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design/attacks/reset_flow route scan confirms predictable reusable reset tokens. Show attack-path password-reset remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "owaspsecure-design-reauth-email-live-oracle",
     platform: "generic",
     category: "Broken access control",
