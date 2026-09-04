@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T18:05:00.000Z",
+  "updated_at": "2026-09-04T18:28:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-44",
+      "source": "OWASP/wrongsecrets — Heroku demo challenge-44 secrets-in-K8s lab (official README deploy link; web search 18 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-45",
+      "source": "OWASP/wrongsecrets — Heroku demo challenge-45 secrets lab (official README deploy link; web search 18 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-46",
+      "source": "OWASP/wrongsecrets — Heroku demo challenge-46 secrets lab (official README deploy link; web search 18 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a09_logging/insecure.php",
+      "source": "owaspsecure.com OWASP Top 10 demo hub — A09 security logging & monitoring failures lab (web search 18 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://playground.fabraix.com/challenges/jailbreak-001",
+      "source": "fabraix/playground — Show HN AI agent jailbreak/guardrail bypass challenge (GitHub challenges/; web search 18 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://qa.brokencrystals.com/api/file/aws",
       "source": "NeuraLegion/brokencrystals qa — AWS metadata SSRF oracle /api/file/aws (scoreboard gap 18 UTC; brokencrystals-file-aws-route-live-oracle priority drain)",
