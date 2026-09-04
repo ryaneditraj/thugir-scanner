@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T00:16:00.000Z",
+  "updated_at": "2026-09-04T01:20:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927/",
+      "source": "kOaDT/oss-oopssec-store — Next.js CVE-2025-29927 middleware auth bypass walkthrough (chapter 02; web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/",
+      "source": "kOaDT/oss-oopssec-store — BFLA live-stream hijack walkthrough (chapter 02 access control; web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/mail/1",
+      "source": "ctfsec/pwnshop vulnerabilities — PWN-004 inbox IDOR GET /mail/:user_id exposes OTP/reset tokens (web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/wishlist/1",
+      "source": "ctfsec/pwnshop README — PWN-003 unauthenticated wishlist IDOR GET /wishlist/:user_id (web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/partners/partnerLogin",
+      "source": "NeuraLegion/brokencrystals — XPATH injection boolean-based auth bypass POST /api/partners/partnerLogin (README public benchmark; web search 01 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/transactions/history?account_id=1",
       "source": "atlas-crew/Chimera vuln-api README — time-based blind SQLi via account_id GET /api/v1/transactions/history (USE_DATABASE=true; web search 00 UTC)",
