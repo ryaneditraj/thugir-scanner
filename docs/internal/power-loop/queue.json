@@ -1,6 +1,21 @@
 {
-  "updated_at": "2026-09-04T17:24:00.000Z",
+  "updated_at": "2026-09-04T18:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://qa.brokencrystals.com/api/file/aws",
+      "source": "NeuraLegion/brokencrystals qa — AWS metadata SSRF oracle /api/file/aws (scoreboard gap 18 UTC; brokencrystals-file-aws-route-live-oracle priority drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/products/1/image?file=images/product1.jpg",
+      "source": "BugTraceAI/BugStore — V-014 product image path traversal oracle (/api/products/{id}/image; OpenAPI + live /etc/passwd read)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/products/?search=test",
+      "source": "BugTraceAI/BugStore — V-001/V-012 product search SQLi oracle (/api/products search filter; HTTP 500 on test' payload)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owaspsecure.com/demo/a01_bac/insecure.php",
       "source": "owaspsecure.com OWASP Top 10 demo hub — A01 broken access control IDOR/BOLA lab (scoreboard gap 17 UTC; thin 4-finding passes)",

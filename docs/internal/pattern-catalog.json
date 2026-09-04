@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-04T17:23:35.012Z",
-  "total": 3276,
-  "uniqueSlugs": 3268,
+  "generatedAt": "2026-09-04T18:03:13.357Z",
+  "total": 3280,
+  "uniqueSlugs": 3272,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3258,
+    "generic": 3262,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3191,
+    "deep": 3195,
     "continuous": 0
   },
   "byCategory": {
@@ -27,13 +27,13 @@
     "Information disclosure": 152,
     "Security misconfiguration": 280,
     "Broken authentication": 205,
-    "Injection": 528,
+    "Injection": 530,
     "Cross-site scripting": 798,
     "Open redirect": 27,
     "general": 20,
     "SSRF": 19,
     "Server-side request forgery": 119,
-    "Sensitive data exposure": 106,
+    "Sensitive data exposure": 108,
     "AI security": 136,
     "Business logic": 39,
     "AI / LLM security": 4,
@@ -262,6 +262,10 @@
     "bugforge-xss-route-live-oracle",
     "buggybuy-api-bola-live-oracle",
     "buggybuy-api-bola-route-live-oracle",
+    "bugstore-product-image-path-traversal-live-oracle",
+    "bugstore-product-image-path-traversal-route-live-oracle",
+    "bugstore-product-search-sqli-live-oracle",
+    "bugstore-product-search-sqli-route-live-oracle",
     "burpbounty-actuator-heapdump-live-oracle",
     "burpbounty-actuator-heapdump-route-live-oracle",
     "burpbounty-admin-panel-live-oracle",

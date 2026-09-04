@@ -83698,5 +83698,109 @@ export const genericPatterns: Pattern[] = [
       "Our Restful Booker /booking route scan confirms unauthenticated reservation creation. Show write-access control remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "bugstore-product-search-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore product search SQL injection live oracle (V-001/V-012)",
+    description:
+      "GET /api/products/?search=test' triggers HTTP 500 Internal Server Error vs baseline 200 on BugStore — concatenated product search SQL injection oracle.",
+    impactOneline:
+      "SQL injection in product search lets attackers extract database contents from the BugTraceAI BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProductSearchSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BugStore is intentional training software — use parameterized queries for product search.",
+      steps: [
+        "Replace string-concatenated search filters with prepared statements.",
+        "Return generic errors without revealing SQL failure modes.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore GET /api/products search parameter is vulnerable to SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-product-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore product search SQLi route live oracle (V-001/V-012)",
+    description:
+      "When scanning /api/products on bugstore.bugtraceai.com, GET /api/products/?search=test' confirms HTTP 500 vs baseline 200 — route-specific SQL injection oracle.",
+    impactOneline:
+      "Route-specific BugStore catalog scans should surface SQL injection in the search filter endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProductSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for BugStore product search SQL.",
+      steps: [
+        "Replace string-concatenated search filters with prepared statements.",
+        "Return generic errors without revealing SQL failure modes.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/products route scan confirms SQLi on the search parameter. Show route-specific parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-product-image-path-traversal-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "BugStore product image path traversal live oracle (V-014)",
+    description:
+      "GET /api/products/1/image?file=../../../etc/passwd returns /etc/passwd contents on BugStore — product image path traversal oracle.",
+    impactOneline:
+      "Path traversal in product image serving lets attackers read arbitrary server files from the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProductImagePathTraversalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BugStore is intentional training software — canonicalize and block traversal in image paths.",
+      steps: [
+        "Resolve paths against a fixed images directory and reject .. segments.",
+        "Use an allowlist of filenames instead of user-controlled paths.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/products/{id}/image file parameter reads /etc/passwd via traversal. Show safe path handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-product-image-path-traversal-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "BugStore product image path traversal route live oracle (V-014)",
+    description:
+      "When scanning /api/products/{id}/image on bugstore.bugtraceai.com, GET with file=../../../etc/passwd returns passwd contents — route-specific path traversal oracle.",
+    impactOneline:
+      "Route-specific BugStore image endpoint scans should confirm arbitrary file read via the file query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProductImagePathTraversalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block traversal sequences in BugStore image file paths.",
+      steps: [
+        "Resolve paths against a fixed images directory and reject .. segments.",
+        "Use an allowlist of filenames instead of user-controlled paths.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/products/{id}/image route scan confirms path traversal. Show route-specific safe path handling.",
+    version: 1,
+    enabled: true
   }
 ];

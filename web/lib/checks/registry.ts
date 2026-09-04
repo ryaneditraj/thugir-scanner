@@ -99561,6 +99561,96 @@ const clientSideSecCodeEducationalEvidence: Rule = async (ctx) => {
   };
 };
 
+// --- BugStore deliberately vulnerable shop (bugstore.bugtraceai.com) ------------------
+function isBugstoreHost(ctx: RuleContext): boolean {
+  return /bugstore\.bugtraceai\.com/i.test(ctx.origin);
+}
+
+const bugstoreProductSearchSqliLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const baselineUrl = new URL("/api/products/", ctx.origin);
+  baselineUrl.searchParams.set("search", "test");
+  const baselineDoc = await ctx.probe.get(baselineUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (baselineDoc.status !== 200) return NEGATIVE;
+  const sqliUrl = new URL("/api/products/", ctx.origin);
+  sqliUrl.searchParams.set("search", "test'");
+  const sqliDoc = await ctx.probe.get(sqliUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (sqliDoc.status !== 500) return NEGATIVE;
+  if (!/Internal Server Error/i.test(sqliDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      baselineUrl: baselineUrl.toString(),
+      sqliUrl: sqliUrl.toString(),
+      baselineStatus: baselineDoc.status,
+      sqliStatus: sqliDoc.status,
+      snippet: sqliDoc.body.slice(0, 120).trim(),
+      note: "BugStore GET /api/products/?search=test' triggers HTTP 500 vs baseline 200 — product search SQL injection oracle (V-001/V-012)"
+    }
+  };
+};
+
+const bugstoreProductSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isProductsApi = /\/api\/products\b/i.test(pageUrl);
+  const isHub = /bugstore\.bugtraceai\.com\/?(?:[#?]|$)/i.test(pageUrl);
+  if (!isProductsApi && !isHub) return NEGATIVE;
+  const result = await bugstoreProductSearchSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: isProductsApi
+        ? "BugStore /api/products route scan — search query SQL injection confirmed via HTTP 500 on test' payload (V-001/V-012)"
+        : "BugStore hub route scan — GET /api/products/?search=test' confirms product search SQL injection oracle (V-001/V-012)"
+    }
+  };
+};
+
+const bugstoreProductImagePathTraversalLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/api/products/1/image", ctx.origin);
+  probeUrl.searchParams.set("file", "../../../etc/passwd");
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const passwdOk =
+    /root:x:0:0:root:/i.test(doc.body) &&
+    /daemon:x:1:1:daemon:/i.test(doc.body) &&
+    /\/bin\/bash/i.test(doc.body);
+  if (!passwdOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: probeUrl.toString(),
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "BugStore GET /api/products/1/image?file=../../../etc/passwd returns /etc/passwd — product image path traversal oracle (V-014)"
+    }
+  };
+};
+
+const bugstoreProductImagePathTraversalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/products\/\d+\/image/i.test(pageUrl)) return NEGATIVE;
+  const result = await bugstoreProductImagePathTraversalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "BugStore /api/products/{id}/image route scan — file query parameter path traversal reads /etc/passwd (V-014)"
+    }
+  };
+};
+
 // --- Broken Crystals API security benchmark (brokencrystals.com) ----------------------
 const CLIENT_BROKENCRYSTALS_RES: { label: string; re: RegExp }[] = [
   {
@@ -114390,6 +114480,10 @@ export const RULES: Record<string, Rule> = {
   duckStoreMcpInfoRouteLiveOracle,
   duckStoreProductsFilterSqliLiveOracle,
   duckStoreProductsFilterSqliRouteLiveOracle,
+  bugstoreProductSearchSqliLiveOracle,
+  bugstoreProductSearchSqliRouteLiveOracle,
+  bugstoreProductImagePathTraversalLiveOracle,
+  bugstoreProductImagePathTraversalRouteLiveOracle,
   duckStoreCartNegativeQuantityLiveOracle,
   duckStoreCartNegativeQuantityRouteLiveOracle,
   duckStoreAdminUsersBflaLiveOracle,
