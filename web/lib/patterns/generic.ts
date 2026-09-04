@@ -78071,6 +78071,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owaspsecure-ssrf-internal-admin-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "owaspsecure.com A10 SSRF internal admin live oracle",
+    description:
+      "GET attacks/fetch_insecure.php on owaspsecure.com fetches attacks/internal/admin.php and returns Internal Admin Panel secrets — A10 SSRF training oracle beyond health.json.",
+    impactOneline:
+      "Open fetcher on owaspsecure.com reaches internal admin panels and leaks fake credentials via SSRF.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalAdminLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side requests to internal admin paths and enforce URL allowlists.",
+      steps: [
+        "Deny fetcher requests targeting same-origin internal/admin paths.",
+        "Require authentication and network segmentation for admin panels.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our fetch_insecure.php reaches internal/admin.php and echoes SuperSecret123!. Show SSRF allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-admin-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "owaspsecure.com A10 SSRF route internal admin live oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, open fetcher returns Internal Admin Panel with SuperSecret123! — route-specific A10 SSRF oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm internal admin SSRF, not only health.json or example.com fetch.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side requests to internal admin paths and enforce URL allowlists.",
+      steps: [
+        "Deny fetcher requests targeting same-origin internal/admin paths.",
+        "Require authentication and network segmentation for admin panels.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms internal admin SSRF. Show route-level fetch allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-index-direct-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "owaspsecure.com A10 internal services index direct exposure live oracle",
+    description:
+      "GET attacks/internal/index.php on owaspsecure.com lists admin panel and health.json links without authentication — A10 internal endpoint exposure training oracle.",
+    impactOneline:
+      "Directly reachable internal services index on owaspsecure.com maps sensitive endpoints without SSRF chaining.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalIndexDirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict internal service indexes to private networks and require authentication.",
+      steps: [
+        "Remove internal endpoint catalogs from public web roots.",
+        "Bind operational endpoints to internal interfaces only.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our attacks/internal/index.php is publicly reachable. Show internal endpoint access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-index-direct-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "owaspsecure.com A10 SSRF route internal index direct exposure oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, attacks/internal/index.php is directly reachable and links admin/health endpoints — route-specific A10 exposure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm internal services index is exposed without auth.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalIndexDirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict internal service indexes to private networks and require authentication.",
+      steps: [
+        "Remove internal endpoint catalogs from public web roots.",
+        "Bind operational endpoints to internal interfaces only.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms internal services index is publicly reachable. Show route-level access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-store-bio-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 second-order bio writer live oracle",
+    description:
+      "POST attacks/sql_second_order/store_bio_insecure.php on owaspsecure.com persists attacker-controlled bio text without validation — A03 second-order SQLi writer training oracle.",
+    impactOneline:
+      "Unvalidated bio storage on owaspsecure.com enables second-order SQL injection when admin views concatenate stored values.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionStoreBioLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and parameterize all stored profile fields before persistence and query use.",
+      steps: [
+        "Sanitize bio input and use prepared statements in admin search queries.",
+        "Separate writer and reader authorization for profile updates.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our store_bio_insecure.php persists raw attacker bio for later admin_view detonation. Show second-order SQLi remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-store-bio-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 injection route store-bio live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, POST store_bio_insecure.php confirms raw bio persistence — route-specific A03 second-order injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm second-order writer step, not only admin_view detonation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionStoreBioRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and parameterize all stored profile fields before persistence and query use.",
+      steps: [
+        "Sanitize bio input and use prepared statements in admin search queries.",
+        "Separate writer and reader authorization for profile updates.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms store_bio raw persistence. Show route-level second-order SQLi remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "web-pentest-playground-login-sqli-live-oracle",
     platform: "generic",
     category: "Injection",

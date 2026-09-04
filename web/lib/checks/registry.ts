@@ -45144,6 +45144,131 @@ const owaspsecureSsrfInternalHealthDirectRouteLiveOracle: Rule = async (ctx) => 
   };
 };
 
+const owaspsecureSsrfInternalAdminLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const adminUrl = owaspsecureAttackUrl(ctx, "attacks/internal/admin.php");
+  const fetchUrl = owaspsecureAttackUrl(
+    ctx,
+    `attacks/fetch_insecure.php?url=${encodeURIComponent(adminUrl)}`
+  );
+  const doc = await ctx.probe.get(fetchUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Internal Admin Panel/i.test(doc.body)) return NEGATIVE;
+  if (!/SuperSecret123!/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: fetchUrl,
+      adminUrl,
+      snippet:
+        doc.body.match(/Internal Admin Panel[\s\S]{0,80}/i)?.[0]?.slice(0, 120) ??
+        "internal admin panel echoed via fetcher",
+      note: "owaspsecure.com GET attacks/fetch_insecure.php reaches attacks/internal/admin.php and returns fake secrets — A10 SSRF training oracle beyond health.json"
+    }
+  };
+};
+
+const owaspsecureSsrfInternalAdminRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a10_ssrf\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureSsrfInternalAdminLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a10_ssrf route scan — open fetcher returns Internal Admin Panel with SuperSecret123! (live internal admin SSRF oracle)"
+    }
+  };
+};
+
+const owaspsecureSsrfInternalIndexDirectLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const indexUrl = owaspsecureDemoUrl(ctx, "a10_ssrf", "attacks/internal/index.php");
+  const doc = await ctx.probe.get(indexUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Internal Services/i.test(doc.body)) return NEGATIVE;
+  if (!/internal\/admin\.php|internal\/health\.json/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: indexUrl,
+      snippet:
+        doc.body.match(/Internal Services[\s\S]{0,100}/i)?.[0]?.slice(0, 120) ??
+        "internal services index exposed",
+      note: "owaspsecure.com GET attacks/internal/index.php lists admin panel and health.json without authentication — A10 internal endpoint exposure training oracle"
+    }
+  };
+};
+
+const owaspsecureSsrfInternalIndexDirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a10_ssrf\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureSsrfInternalIndexDirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a10_ssrf route scan — internal services index is directly reachable and links admin/health endpoints (live exposure oracle)"
+    }
+  };
+};
+
+const owaspsecureInjectionStoreBioLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const storeUrl = owaspsecureAttackUrl(ctx, "attacks/sql_second_order/store_bio_insecure.php");
+  const probeBio = `thugir-store-bio-${Date.now()}`;
+  const postBody = new URLSearchParams({ bio: probeBio }).toString();
+  const doc = await ctx.probe.get(storeUrl, {
+    method: "POST",
+    body: postBody,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Saved \(insecure writer\)|raw bio persisted with no validation/i.test(doc.body)) return NEGATIVE;
+  if (!/alice_inj@example\.com/i.test(doc.body)) return NEGATIVE;
+  if (!doc.body.includes(probeBio)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: storeUrl,
+      snippet:
+        doc.body.match(/Bio preview:[\s\S]{0,80}/i)?.[0]?.slice(0, 100) ?? "raw bio persisted",
+      note: "owaspsecure.com POST attacks/sql_second_order/store_bio_insecure.php persists attacker-controlled bio without validation — A03 second-order SQLi writer training oracle"
+    }
+  };
+};
+
+const owaspsecureInjectionStoreBioRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a03_injection(?:\/insecure\.php|\/attacks\/sql_second_order)/i.test(pageUrl))
+    return NEGATIVE;
+  const result = await owaspsecureInjectionStoreBioLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com A03 second-order SQLi route scan — store_bio_insecure.php writes raw attacker bio for later admin_view detonation (live injection oracle)"
+    }
+  };
+};
+
 const owaspsecureVocOutdatedJqueryLiveOracle: Rule = async (ctx) => {
   if (!isOwaspsecureHost(ctx)) return NEGATIVE;
   const demoUrl = owaspsecureAttackUrl(ctx, "attacks/outdated_jquery/demo_insecure.html");
@@ -111826,6 +111951,12 @@ export const RULES: Record<string, Rule> = {
   owaspsecureSsrfSocketProbeRouteLiveOracle,
   owaspsecureSsrfInternalHealthDirectLiveOracle,
   owaspsecureSsrfInternalHealthDirectRouteLiveOracle,
+  owaspsecureSsrfInternalAdminLiveOracle,
+  owaspsecureSsrfInternalAdminRouteLiveOracle,
+  owaspsecureSsrfInternalIndexDirectLiveOracle,
+  owaspsecureSsrfInternalIndexDirectRouteLiveOracle,
+  owaspsecureInjectionStoreBioLiveOracle,
+  owaspsecureInjectionStoreBioRouteLiveOracle,
   owaspsecureVocOutdatedJqueryLiveOracle,
   owaspsecureVocOutdatedJqueryRouteLiveOracle,
   owaspsecureVocCdnNoSriLiveOracle,
