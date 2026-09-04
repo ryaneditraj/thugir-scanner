@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T12:46:05.471Z",
+  "updated_at": "2026-09-04T13:22:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://qa.brokencrystals.com/api/chat",
+      "source": "NeuraLegion/brokencrystals qa — LLM chat endpoint with insecure output handling / XSS oracle (context7 docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://qa.brokencrystals.com/api/goto?url=https://example.com",
+      "source": "NeuraLegion/brokencrystals qa — unvalidated redirect oracle /api/goto (context7 docs)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://qa.brokencrystals.com/api/file/aws?path=https://httpbin.org/get",
+      "source": "NeuraLegion/brokencrystals qa — AWS metadata SSRF oracle /api/file/aws (README cloud endpoints)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnbank.org/api/v1/transactions",
+      "source": "vulnbank.org — unauthenticated transaction history BOLA oracle (public demo API)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/users/one/regular_user/info",
+      "source": "NeuraLegion/brokencrystals — user info disclosure / BOPLA oracle (README API endpoints)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://dvwu.vercel.app/labs/open-redirect",
       "source": "zahidoverflow/dvwu — open redirect training lab route (Vercel live demo)",
