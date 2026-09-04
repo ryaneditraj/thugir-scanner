@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T22:06:36.000Z",
+  "updated_at": "2026-09-04T23:05:11.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs/",
+      "source": "kOaDT/oss-oopssec-store \u2014 Challenge 3 plaintext password in SIEM logs walkthrough (challenges.json scrape 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach/",
+      "source": "kOaDT/oss-oopssec-store \u2014 Challenge 4 IDOR order privacy breach walkthrough (challenges.json scrape 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import/",
+      "source": "kOaDT/oss-oopssec-store \u2014 Challenge 22 XXE supplier order import walkthrough (challenges.json scrape 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/mcp-malicious-server/",
+      "source": "kOaDT/oss-oopssec-store \u2014 Challenge 33 malicious MCP server agent poisoning walkthrough (challenges.json scrape 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182/",
+      "source": "kOaDT/oss-oopssec-store \u2014 Challenge 36 React2Shell CVE-2025-55182 RSC walkthrough (challenges.json scrape 23 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://rootabhi1.github.io/AI-Threatlab/",
       "source": "rootabhi1/AI-Threatlab \u2014 OWASP LLM Top 10 (2025) + Agentic ASI Top 10 (2026) interactive attack/defense walkthroughs (web search 22 UTC)",
