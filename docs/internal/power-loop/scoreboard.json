@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T04:15:00.000Z",
+  "updated_at": "2026-09-04T04:09:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2834,
-  "total_findings": 28470,
+  "total_sites_scanned": 2839,
+  "total_findings": 28561,
   "critical_findings": 55,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2006,
-  "discovery_findings": 24107,
+  "discovery_urls_added": 2011,
+  "discovery_findings": 24188,
   "improvements_shipped": 1371,
-  "last_run": "2026-09-04T04:15:00.000Z",
+  "last_run": "2026-09-04T04:09:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -32,7 +32,7 @@
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 607,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -52,28 +52,31 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 1,
-      "findings": 18,
-      "focus": "owaspsecure A04 password-reset-flow — predictable email|timestamp tokens with no TTL and reusable reset links",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 94,
+      "focus": "owaspsecure A04/A03 hubs, oopssec open-redirect + product-search SQLi, duck-store 2FA bypass",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; secret-resend present)",
-      "owaspsecure.com/demo/a04_insecure_design/insecure.php: 15→18 findings — password-reset live + route + attack-path oracles",
-      "owaspsecure.com/demo/a04_insecure_design/insecure.php: Attack 1 GET generate_insecure.php returns predictable email|timestamp token accepted by reset.php"
+      "owaspsecure.com/demo/a04_insecure_design/insecure.php: 15 findings — coupon logic + CSRF settings + magic link route oracles (engine shipped password-reset oracles on remote)",
+      "owaspsecure.com/demo/a03_injection/insecure.php: 17 findings — SQLi login bypass + UNION search + blind/time + second-order route oracles",
+      "koadt.github.io/.../open-redirect-login-bypass: 11 findings — oopssec-open-redirect-login-bypass-route-live-oracle",
+      "duck-store.escape.tech/api/v1/auth/login/totp: 41 findings — duck-store-auth-totp-bypass-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark stable 6/6 — no category misses on juice-shop primary Heroku",
-      "owasp-finbot-ctf /admin 29-finding hub without per-challenge route oracles"
+      "duck-store /login/totp 41-finding full suite hub — route oracle confirmed but rich cross-endpoint bleed"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "owaspsecure.com/demo/a04_insecure_design/insecure.php": 18,
-    "owasp-finbot-ctf.org/admin": 29,
-    "koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api": 11,
-    "seclab.vercel.app/labs/path-traversal": 5
+    "duck-store.escape.tech/api/v1/auth/login/totp": 41,
+    "owaspsecure.com/demo/a03_injection/insecure.php": 17,
+    "owaspsecure.com/demo/a04_insecure_design/insecure.php": 15,
+    "koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass": 11,
+    "koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection": 10
   }
 }
