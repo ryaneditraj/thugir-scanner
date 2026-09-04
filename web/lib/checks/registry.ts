@@ -45684,6 +45684,120 @@ const owaspsecureVocCdnNoSriRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const owaspsecureVocMixedContentLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const demoUrl = owaspsecureAttackUrl(ctx, "attacks/mixed_content/demo_insecure.html");
+  const doc = await ctx.probe.get(demoUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/Mixed Content/i.test(doc.body)) return NEGATIVE;
+  const httpSubresource =
+    /http:\/\/code\.jquery\.com\/jquery-3\.7\.1\.min\.js/i.test(doc.body) ||
+    /http:\/\/http\.badssl\.com\/logo\.svg/i.test(doc.body);
+  if (!httpSubresource) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: demoUrl,
+      snippet:
+        doc.body.match(/http:\/\/[^\s"'<>]+/i)?.[0]?.slice(0, 100) ??
+        "HTTP subresource on HTTPS page",
+      note: "owaspsecure.com GET attacks/mixed_content/demo_insecure.html loads HTTP scripts/images on an HTTPS page — A06 vulnerable components training oracle"
+    }
+  };
+};
+
+const owaspsecureVocMixedContentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a06_voc\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureVocMixedContentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a06_voc route scan — Attack 3 mixed HTTP/HTTPS subresources (live vulnerable-components oracle)"
+    }
+  };
+};
+
+const owaspsecureVocLodashOutdatedLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const demoUrl = owaspsecureAttackUrl(ctx, "attacks/lodash_outdated/demo_insecure.html");
+  const doc = await ctx.probe.get(demoUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/lodash-4\.17\.15\.min\.js/i.test(doc.body)) return NEGATIVE;
+  if (!/prototype pollution|__proto__|\.merge|defaultsDeep/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: demoUrl,
+      snippet:
+        doc.body.match(/lodash-4\.17\.15\.min\.js/i)?.[0]?.slice(0, 80) ??
+        "lodash-4.17.15.min.js outdated branch",
+      note: "owaspsecure.com GET attacks/lodash_outdated/demo_insecure.html loads Lodash 4.17.15 with unsafe _.merge prototype pollution pattern — A06 vulnerable components training oracle"
+    }
+  };
+};
+
+const owaspsecureVocLodashOutdatedRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a06_voc\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureVocLodashOutdatedLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a06_voc route scan — Attack 4 outdated Lodash 4.17.15 with prototype pollution merge sink (live vulnerable-components oracle)"
+    }
+  };
+};
+
+const owaspsecureVocUnpinnedLatestLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const demoUrl = owaspsecureAttackUrl(ctx, "attacks/pinned_versions/demo_insecure.html");
+  const doc = await ctx.probe.get(demoUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/lodash@latest/i.test(doc.body)) return NEGATIVE;
+  if (/integrity\s*=/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: demoUrl,
+      snippet:
+        doc.body.match(/lodash@latest[^\s"'<>]*/i)?.[0]?.slice(0, 100) ??
+        "lodash@latest unpinned CDN script",
+      note: "owaspsecure.com GET attacks/pinned_versions/demo_insecure.html loads lodash@latest without integrity hash — A06 vulnerable components training oracle"
+    }
+  };
+};
+
+const owaspsecureVocUnpinnedLatestRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a06_voc\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureVocUnpinnedLatestLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a06_voc route scan — Attack 5 unpinned lodash@latest CDN without SRI (live vulnerable-components oracle)"
+    }
+  };
+};
+
 // --- Guardmarly SAST demo (ansede.onrender.com) --------------------------------------
 const GUARDMARLY_SCAN_PROBE_CODE = `from flask import Flask, request
 app = Flask(__name__)
@@ -112393,6 +112507,12 @@ export const RULES: Record<string, Rule> = {
   owaspsecureVocOutdatedJqueryRouteLiveOracle,
   owaspsecureVocCdnNoSriLiveOracle,
   owaspsecureVocCdnNoSriRouteLiveOracle,
+  owaspsecureVocMixedContentLiveOracle,
+  owaspsecureVocMixedContentRouteLiveOracle,
+  owaspsecureVocLodashOutdatedLiveOracle,
+  owaspsecureVocLodashOutdatedRouteLiveOracle,
+  owaspsecureVocUnpinnedLatestLiveOracle,
+  owaspsecureVocUnpinnedLatestRouteLiveOracle,
   guardmarlyScanLiveOracle,
   guardmarlyScanRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,

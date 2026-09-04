@@ -8501,6 +8501,24 @@
       "slug": "oopssec-product-search-malicious-upload-runner-priority",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: prepended product-search-sql-injection + malicious-file-upload-stored-xss to priority_discovery_urls; runner -4 priority for oopssec-product-search-sqli-* and oopssec-malicious-file-upload-* on matching post routes; product-search 10 findings (+oopssec-product-search-sqli-route-live-oracle), malicious-file-upload 13 findings (+oopssec-malicious-file-upload-stored-xss-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-voc-mixed-content-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/mixed_content/demo_insecure.html loads http://code.jquery.com/jquery-3.7.1.min.js and http://http.badssl.com/logo.svg on HTTPS page; owaspsecure.com/demo/a06_voc/insecure.php findings 5→19 (+owaspsecure-voc-mixed-content-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-voc-lodash-outdated-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/lodash_outdated/demo_insecure.html loads lodash-4.17.15.min.js with _.merge/__proto__ prototype pollution sink; owaspsecure.com/demo/a06_voc/insecure.php findings 5→19 (+owaspsecure-voc-lodash-outdated-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-voc-unpinned-latest-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/pinned_versions/demo_insecure.html loads lodash@latest from cdn.jsdelivr.net without integrity attribute; owaspsecure.com/demo/a06_voc/insecure.php findings 5→19 (+owaspsecure-voc-unpinned-latest-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

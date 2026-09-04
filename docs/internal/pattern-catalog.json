@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-04T14:18:43.035Z",
-  "total": 3270,
-  "uniqueSlugs": 3262,
+  "generatedAt": "2026-09-04T15:05:39.999Z",
+  "total": 3276,
+  "uniqueSlugs": 3268,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3252,
+    "generic": 3258,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3185,
+    "deep": 3191,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 152,
-    "Security misconfiguration": 274,
+    "Security misconfiguration": 280,
     "Broken authentication": 205,
     "Injection": 528,
     "Cross-site scripting": 798,
@@ -2304,8 +2304,14 @@
     "owaspsecure-ssrf-socket-probe-route-live-oracle",
     "owaspsecure-voc-cdn-no-sri-live-oracle",
     "owaspsecure-voc-cdn-no-sri-route-live-oracle",
+    "owaspsecure-voc-lodash-outdated-live-oracle",
+    "owaspsecure-voc-lodash-outdated-route-live-oracle",
+    "owaspsecure-voc-mixed-content-live-oracle",
+    "owaspsecure-voc-mixed-content-route-live-oracle",
     "owaspsecure-voc-outdated-jquery-live-oracle",
     "owaspsecure-voc-outdated-jquery-route-live-oracle",
+    "owaspsecure-voc-unpinned-latest-live-oracle",
+    "owaspsecure-voc-unpinned-latest-route-live-oracle",
     "pc-parts-store-api-login-token-route-live-oracle",
     "pc-parts-store-checkout-idor-live-oracle",
     "pc-parts-store-checkout-idor-route-live-oracle",
