@@ -15,14 +15,14 @@
       ]
     }
   },
-  "total_sites_scanned": 3103,
-  "total_findings": 35039,
-  "critical_findings": 55,
+  "total_sites_scanned": 2800,
+  "total_findings": 28262,
+  "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2144,
-  "discovery_findings": 28588,
-  "improvements_shipped": 1332,
+  "discovery_urls_added": 1988,
+  "discovery_findings": 23642,
+  "improvements_shipped": 1398,
   "last_run": "2026-09-04T14:16:00.000Z",
   "last_run_summary": {
     "hour_utc": "14",
@@ -61,7 +61,7 @@
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 40 live oracles; secret-resend present)",
       "pwnshop.ctfsecurity.com/debug/info: 49 findings — pwnshop-debug-info-route-live-oracle + PWN-018 critical",
-      "pwnshop.ctfsecurity.com/chat: 40 findings — pwnshop-chat-prompt-injection-route-live-oracle (PWN-031) + chat order IDOR route",
+      "pwnshop.ctfsecurity.com/chat: 40 findings — pwnshop-chat-prompt-injection-route-live-oracle (PWN-031)",
       "pwnshop.ctfsecurity.com/api/v1/events: 26 findings — pwnshop-events-audit-route-live-oracle (PWN-005)",
       "koadt.github.io/.../path-traversal-documents-api: 11 findings — oopssec-path-traversal-route-live-oracle",
       "owaspsecure.com/demo/a06_voc/insecure.php: 5 findings — thin hub fingerprint, no outdated-jQuery/SRI route oracle"
@@ -75,16 +75,18 @@
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
     "pwnshop.ctfsecurity.com/debug/info": 49,
     "pwnshop.ctfsecurity.com/chat": 40,
     "pwnshop.ctfsecurity.com/api/v1/events": 26,
+    "qa.brokencrystals.com/api/chat": 87,
+    "brokencrystals.com/api/users/one/regular_user/info": 79,
+    "qa.brokencrystals.com/api/file/aws": 75,
+    "juice-shop.herokuapp.com": 52,
+    "owasp-finbot-ctf.org/portals": 33,
     "koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api": 11,
+    "qa.brokencrystals.com/api/goto": 37,
+    "vulnbank.org/api/v1/transactions": 32,
     "owaspsecure.com/demo/a06_voc/insecure.php": 5,
-    "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection": 9,
-    "koadt.github.io/oss-oopssec-store/posts/mcp-malicious-server": 7,
-    "seclab.vercel.app/labs/path-traversal": 5,
-    "juice-shop.demo.escape.tech": 53,
-    "owasp-finbot-ctf.org/admin": 31
+    "owaspsecure.com/demo/a08_integrity/insecure.php": 18
   }
 }

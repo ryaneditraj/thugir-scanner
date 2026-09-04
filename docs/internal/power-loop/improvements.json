@@ -1,6 +1,186 @@
 {
   "candidates": [
     {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-integrity-remote-config-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/remote_config/config_insecure.php?src=<config.json> returns status applied_blindly with warning No signature/HMAC/allowlist used; owaspsecure.com/demo/a08_integrity/insecure.php findings 16→18 (+owaspsecure-integrity-remote-config-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-portals-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /portals returns Four Portals hub with href=/vendor /admin /darklab /ctf portal cards; owasp-finbot-ctf.org/portals findings 31→33 (+finbot-portals-live-oracle +finbot-portals-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ai-security-platform-iota.vercel.app",
+      "slug": "ai-security-hacked-npm-packages-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /learn documents axios/React npm hijacks delivering remote access trojans; ai-security-platform-iota.vercel.app/challenges/hacked-npm findings 9→6 (+ai-security-hacked-npm-packages-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-integrity-signed-update-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/signed_updates/insecure_install.php returns status installed_blindly with checks NONE (no sha256, no signature); owaspsecure.com/demo/a08_integrity/insecure.php findings 9→16 (+owaspsecure-integrity-signed-update-live-oracle +route +plugin-upload +cicd-deploy live/route oracles); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-integrity-plugin-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/plugin_loader/upload_insecure.php with plugin_file=evil.php returns executed_from_webroot + Arbitrary code executed from uploads; owaspsecure.com/demo/a08_integrity/insecure.php findings 9→16 (+owaspsecure-integrity-plugin-upload-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-integrity-cicd-deploy-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/cicd/deploy_insecure.php with build=evil.zip returns deployed_without_checks + Unzipped all contents directly into app; owaspsecure.com/demo/a08_integrity/insecure.php findings 9→16 (+owaspsecure-integrity-cicd-deploy-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-logging-admin-action-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/auth_events/admin_action_insecure.php returns status performed with note no actor, no corr_id, no structure; owaspsecure.com/demo/a09_logging/insecure.php findings 4→21 (+owaspsecure-logging-admin-action-live-oracle +route +structure-time +integrity-chain live/route oracles); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-logging-structure-time-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/structure_time/write_insecure.php returns Wrote free-form line with brittle parsing & poor correlation note; owaspsecure.com/demo/a09_logging/insecure.php findings 4→21 (+owaspsecure-logging-structure-time-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-logging-integrity-chain-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/integrity_chain/append_insecure.php returns Appended (INSECURE) with Plain text, no signature or chain → tamper undetectable note; owaspsecure.com/demo/a09_logging/insecure.php findings 4→21 (+owaspsecure-logging-integrity-chain-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-ssrf-internal-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/fetch_insecure.php?url=https://owaspsecure.com/demo/a10_ssrf/attacks/internal/admin.php returns Internal Admin Panel with SuperSecret123!; owaspsecure.com/demo/a10_ssrf/insecure.php findings 16→20 (+owaspsecure-ssrf-internal-admin-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-ssrf-internal-index-direct-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/internal/index.php lists admin.php + health.json without auth; owaspsecure.com/demo/a10_ssrf/insecure.php findings 16→20 (+owaspsecure-ssrf-internal-index-direct-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-store-bio-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/sql_second_order/store_bio_insecure.php persists raw bio (Saved insecure writer) for alice_inj@example.com; owaspsecure.com/demo/a03_injection/insecure.php findings 20→23 (+owaspsecure-injection-store-bio-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets-ctf.herokuapp.com",
+      "slug": "wrongsecrets-challenge-0-opening-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge/challenge-0 Opening Challenge walkthrough with The first answer onboarding text + data-cy answer-textbox; wrongsecrets-ctf.herokuapp.com/challenge/challenge-0 findings 14→15 (+wrongsecrets-challenge-0-opening-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets-ctf.herokuapp.com",
+      "slug": "wrongsecrets-challenge-1-git-hardcoded-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CTF condensed hub omits secret called password line — matcher extended to hardcoded secrets, such as a password; wrongsecrets-ctf.herokuapp.com/challenge/challenge-1 findings 14→15 (+wrongsecrets-challenge-1-git-hardcoded-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets-ctf.herokuapp.com",
+      "slug": "wrongsecrets-challenge-7-vault-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CTF hub A secret hidden in Vault + K8s/Minikube walkthrough without root-token paragraph; matcher accepts condensed or full root-token path; wrongsecrets-ctf.herokuapp.com/challenge/challenge-7 findings 14→15 (+wrongsecrets-challenge-7-vault-route-live-oracle); challenge-8 logging 14→15 (+wrongsecrets-challenge-8-logging-route-live-oracle accepts stdout-at-startup CTF text); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugforge.io",
+      "slug": "bugforge-auth-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bugforge.io/labs/auth 301→app.bugforge.io; FurHire refresh_token POST /api/refresh + Sokudo weak timestamp + Ottergram bearer-bypass corpus; bugforge.io/labs/auth findings 6→7 (+bugforge-auth-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugforge.io",
+      "slug": "bugforge-csrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bugforge.io/labs/csrf 301→app.bugforge.io; CSRF token validation bypass + SameSite + Referer defense corpus; bugforge.io/labs/csrf findings 6→7 (+bugforge-csrf-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugforge.io",
+      "slug": "bugforge-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bugforge.io/labs/sqli 301→app.bugforge.io; Cheesy Does it admin' or 55=55-- login bypass + MedNode SQLi corpus; bugforge.io/labs/sqli findings 6→7 (+bugforge-sqli-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-voc-outdated-jquery-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/outdated_jquery/demo_insecure.html loads jquery-1.12.4.min.js with unsafe .html() sink; owaspsecure.com/demo/a06_voc/insecure.php findings 8→12 (+owaspsecure-voc-outdated-jquery-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-voc-cdn-no-sri-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/cdn_no_sri/demo_insecure.html loads malicious_cdn/jquery.min.js without integrity; script sets __cdnPwned; owaspsecure.com/demo/a06_voc/insecure.php findings 8→12 (+owaspsecure-voc-cdn-no-sri-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugforge.io",
+      "slug": "bugforge-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bugforge.io/labs/xss 301→app.bugforge.io; Ottergram Stored XSS recipient_id onerror localStorage corpus; bugforge.io/labs/xss findings 6→7 (+bugforge-xss-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-crypto-iv-reuse-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/iv_reuse/encrypt_static_insecure.php returns insecure_static_iv mode with fixed iv_b64=ERERERERERERERER; owaspsecure.com/demo/a02_crypto/insecure.php findings 10→19 (+owaspsecure-crypto-iv-reuse-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-crypto-key-rotation-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/key_rotation/rotate_insecure.php returns hard-coded active_key with key_version=null and no rotation workflow; owaspsecure.com/demo/a02_crypto/insecure.php findings 10→19 (+owaspsecure-crypto-key-rotation-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-crypto-save-plain-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/data_at_rest/save_plain.php stores SSN as plaintext (Saved insecure plaintext for user_id=N); owaspsecure.com/demo/a02_crypto/insecure.php findings 10→19 (+owaspsecure-crypto-save-plain-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-sqli-blind-time-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/sql_blind_time/count_insecure.php?id=1 returns count=1 vs id=1 OR 1=1 returns count=4; owaspsecure.com/demo/a03_injection/insecure.php findings 13→17 (+owaspsecure-injection-sqli-blind-time-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-sqli-second-order-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/sql_second_order/admin_view_insecure.php?needle=%' OR 1=1 -- exfiltrates admin_inj@example.com + bob_inj@example.com via stored bio LIKE concat; owaspsecure.com/demo/a03_injection/insecure.php findings 13→17 (+owaspsecure-injection-sqli-second-order-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-race-condition-coupon-walkthrough-fetch-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: oopssecRaceConditionCouponRouteLiveOracle now uses oopssecWalkthroughEvidenceWithFetch for Astro walkthrough body fetch parity with xff-sqli oracle; koadt.github.io/oss-oopssec-store/posts/race-condition-coupon-abuse/ findings 13 (+oopssec-race-condition-coupon-route-live-oracle +client-side-oopssec-race-condition-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-plaintext-password-logs-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/plaintext-password-in-logs documents POST /api/auth/login debug logging plaintext passwords readable via /monitoring/siem with default root:admin creds + OSS{pl41nt3xt_p4ssw0rd_1n_l0gs}; koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs/ findings 8→10 (+oopssec-plaintext-password-logs-route-live-oracle +client-side-oopssec-plaintext-password-logs-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-bac-idor-uuid-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/idor_uuid.php?public_id=bob-note-1 returns Bob Note JSON with public_id used without owner check; owaspsecure.com/demo/a01_bac/insecure.php findings 13→15 (+owaspsecure-bac-idor-uuid-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-ssrf-internal-health-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/fetch_insecure.php?url=attacks/internal/health.json returns internal-gateway health JSON; owaspsecure.com/demo/a10_ssrf/insecure.php findings 9→11 (+owaspsecure-ssrf-internal-health-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:zen-demo-java.fly.dev",
       "slug": "zen-demo-java-unreachable-corpus-fallback",
       "status": "shipped",
@@ -8087,6 +8267,222 @@
       "slug": "owaspsecure-crypto-password-md5-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/passwords/signup_insecure.php stores plaintext + MD5 hash (Insecure signup stored: plaintext + MD5); owaspsecure.com/demo/a02_crypto/insecure.php findings 4→6 (+owaspsecure-crypto-password-md5-live-oracle +route); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-auth-session-fixation-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/session_fixation/begin.php returns Pre-login session created with SID; owaspsecure.com/demo/a07_auth/insecure.php findings 4→6 (+owaspsecure-auth-session-fixation-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-design-reauth-email-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/reauth_sensitive/change_email_insecure.php changes email without re-auth (no_recent_reauth:true); owaspsecure.com/demo/a04_insecure_design/insecure.php findings 7→9 (+owaspsecure-design-reauth-email-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-integrity-unserialize-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/unserialize/insecure.php accepts O:8:\"stdClass\":0:{} and returns unserialized_type object:stdClass; owaspsecure.com/demo/a08_integrity/insecure.php findings 4→6 (+owaspsecure-integrity-unserialize-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-logging-auth-events-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/auth_events/login_insecure.php returns No useful log written (success not audited); owaspsecure.com/demo/a09_logging/insecure.php findings 5→11 (+owaspsecure-logging-auth-events-live-oracle +route +pii-secrets +threshold-alerts live/route oracles); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-logging-pii-secrets-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/pii_in_logs/capture_insecure.php writes raw secrets/PII to app.log; owaspsecure.com/demo/a09_logging/insecure.php findings include +owaspsecure-logging-pii-secrets-live-oracle +route; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-logging-threshold-alerts-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/threshold_alerts/fail_insecure.php records 10 failures with No thresholds or alerting; owaspsecure.com/demo/a09_logging/insecure.php findings include +owaspsecure-logging-threshold-alerts-live-oracle +route; benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-orders-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/sql-injection-writeup documents UNION-based SQLi via unsanitized status filter in POST /api/orders/search (OSS{sql_1nj3ct10n_vuln3r4b1l1ty}); koadt.github.io/oss-oopssec-store/posts/sql-injection-writeup/ findings 7→9 (+oopssec-orders-search-sqli-route-live-oracle +client-side-oopssec-orders-search-sqli-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-xss-stored-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/xss_stored/xss_demo.php?mode=raw stores raw HTML in session comments (redirect:manual + PHPSESSID cookie replay); owaspsecure.com/demo/a03_injection/insecure.php findings 9→11 (+owaspsecure-injection-xss-stored-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-bac-function-level-promote-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/function_level/promote_insecure.php returns Promoted user_id=2 to admin (insecure); owaspsecure.com/demo/a01_bac/insecure.php findings 7→9 (+owaspsecure-bac-function-level-promote-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-union-search-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/sql_union_search/search_insecure.php?q=%' UNION SELECT id,email,0 FROM a03_users -- exfiltrates admin_inj@example.com; owaspsecure.com/demo/a03_injection/insecure.php findings 11→13 (+owaspsecure-injection-union-search-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-bac-file-dor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/file_dor.php?id=2&mode=insecure returns report_admin.txt for user_id=1 without owner check; owaspsecure.com/demo/a01_bac/insecure.php findings 9→13 (+owaspsecure-bac-file-dor-live-oracle +route +owaspsecure-bac-mass-assignment-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-bac-mass-assignment-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/mass_assignment.php accepts is_admin=1 and returns &quot;is_admin&quot;: 1 JSON; owaspsecure.com/demo/a01_bac/insecure.php findings 9→13 (+owaspsecure-bac-mass-assignment-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-sqli-blind-time-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET count_insecure.php?id=1 AND SLEEP(2) returns ms>=2000; attack-path route alias + SLEEP timing probe (OR 1=1 triggers CDN); owaspsecure.com/demo/a03_injection/attacks/sql_blind_time/count_insecure.php findings 14→13 (+owaspsecure-injection-sqli-blind-time-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-sqli-second-order-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET admin_view_insecure.php?needle=%' OR 1=1 -- exfiltrates admin_inj + bob_inj emails; attack-path route alias for /attacks/sql_second_order/ scans; owaspsecure.com/demo/a03_injection/attacks/sql_second_order/admin_view_insecure.php findings 14→13 (+owaspsecure-injection-sqli-second-order-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-self-xss-csrf-profile-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/self-xss-csrf-profile-takeover documents dangerouslySetInnerHTML bio + POST /api/user/profile without CSRF; koadt.github.io/.../self-xss-csrf-profile-takeover/ findings 14→16 (+oopssec-self-xss-csrf-profile-route-live-oracle +client-side-oopssec-self-xss-csrf-profile-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-weak-md5-hashing-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/weak-md5-hashing-admin-compromise documents SQLi users-table dump + unsalted MD5 hash 21232f297a57a5a743894a0e4a801fc3 enabling admin@oss.com login (OSS{w34k_md5_h4sh1ng}); koadt.github.io/oss-oopssec-store/posts/weak-md5-hashing-admin-compromise/ findings 8→10 (+oopssec-weak-md5-hashing-admin-route-live-oracle +client-side-oopssec-weak-md5-hashing-admin-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-crypto-predictable-tokens-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST signup/login then GET attacks/tokens/gen_insecure.php returns Insecure token minted using uniqid()/mt_rand()/time() with session token JSON; owaspsecure.com/demo/a02_crypto/attacks/tokens/gen_insecure.php findings 7→8 (+owaspsecure-crypto-predictable-tokens-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-crypto-data-at-rest-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST signup/login then GET attacks/data_at_rest/dump.php exposes plaintext SSN rows (999-99-9999) in ssn_plain column; owaspsecure.com/demo/a02_crypto/attacks/data_at_rest/dump.php findings 8 (+owaspsecure-crypto-data-at-rest-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-plaintext-password-logs-walkthrough-fetch-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: oopssecPlaintextPasswordLogsRouteLiveOracle now uses oopssecWalkthroughEvidenceWithFetch for Astro walkthrough body fetch parity; koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs/ findings 8→10 (+oopssec-plaintext-password-logs-route-live-oracle +client-side-oopssec-plaintext-password-logs-evidence reliable); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-crypto-password-md5-attack-path-route-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: owaspsecureCryptoPasswordMd5RouteLiveOracle routeRe extended to /demo/a02_crypto/attacks/passwords/* and /attacks/passwords/signup_insecure.php; owaspsecure.com/demo/a02_crypto/attacks/passwords/signup_insecure.php findings 8 (+owaspsecure-crypto-password-md5-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-misconfig-attack-path-route-aliases",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: owaspsecureMisconfigPhpinfoRouteLiveOracle + owaspsecureMisconfigDefaultCredsRouteLiveOracle routeRe extended to /demo/a05_misconfig/attacks/phpinfo_exposed.php and /attacks/default_creds_panel.php; phpinfo_exposed.php findings 7 (+route), default_creds_panel.php findings 7 (+route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level16-double-extension-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level 16 README corpus documents double extension/null-byte upload bypass; vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php findings 6→7 (+vulnforge-academy-level16-double-extension-upload-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-misconfig-exposed-config-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/exposed_config/insecure/config.php returns DB_PASSWORD=SuperSecretPassword123! + API_KEY + SERVICE_TOKEN; owaspsecure.com/demo/a05_misconfig/insecure.php findings 8→12 (+owaspsecure-misconfig-exposed-config-live-oracle +route); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-misconfig-verbose-error-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/verbose_error_insecure.php leaks Fatal error stack trace with public_html/demo/a05_misconfig paths; owaspsecure.com/demo/a05_misconfig/insecure.php findings 8→12 (+owaspsecure-misconfig-verbose-error-live-oracle +route); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.owasp-juice.shop",
+      "slug": "juice-shop-snippets-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /snippets/loginAdminChallenge returns snippet JSON via juice-shop.demo.escape.tech mirror when primary Heroku stub; demo.owasp-juice.shop/snippets findings 52→54 (+juice-shop-snippets-live-oracle +juice-shop-snippets-route-live-oracle); benchmark juice-shop.herokuapp.com 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:webverselabs-pro.com",
+      "slug": "webverselabs-orbitdesk-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /labs/orbitdesk documents GraphQL IDOR + SSRF via /api/v2/integrations/test five-stage chain; webverselabs-pro.com/labs/orbitdesk findings 6→7 (+webverselabs-orbitdesk-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nosql-injection-lab.vercel.app",
+      "slug": "nosql-injection-lab-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: SPA bundle documents MongoDB $ne/$regex/$gt operator auth bypass via body-parser simulation; nosql-injection-lab.vercel.app/ findings 6→7 (+nosql-injection-lab-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-design-coupon-logic-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/coupon_logic/cart_insecure.php action=apply_coupon&coupon=SAVE50 returns no_one_time_coupon + allows_negative_total; owaspsecure.com/demo/a04_insecure_design/insecure.php findings 9→15 (+owaspsecure-design-coupon-logic-live-oracle +route +csrf-settings +magic-link live/route oracles); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-design-csrf-settings-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/csrf_settings/change_settings_insecure.php theme=dark returns no_csrf_token + no_origin_referrer weaknesses; owaspsecure.com/demo/a04_insecure_design/insecure.php findings 9→15 (+owaspsecure-design-csrf-settings-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-design-magic-link-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/magic_link/link_insecure.php returns reusable token JSON with no_storage + not_bound notes; owaspsecure.com/demo/a04_insecure_design/insecure.php findings 9→15 (+owaspsecure-design-magic-link-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-design-password-reset-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/reset_flow/generate_insecure.php?email=probe@example.com returns JSON token probe@example.com|<timestamp> with notes predictable (email|timestamp), no TTL, reusable; reset.php accepts token with Password reset allowed; owaspsecure.com/demo/a04_insecure_design/insecure.php findings 15→18 (+owaspsecure-design-password-reset-live-oracle +route +attack-path); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-design-password-reset-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /demo/a04_insecure_design route scan Attack 1 confirms predictable email|timestamp reset tokens with reusable reset.php acceptance; owaspsecure.com/demo/a04_insecure_design/insecure.php findings 15→18; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-design-password-reset-attack-path-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /demo/a04_insecure_design/attacks/reset_flow/ attack path confirms live generate_insecure.php + reset.php predictable token chain; owaspsecure.com/demo/a04_insecure_design/insecure.php findings 15→18; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-auth-mfa-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/mfa_flow/begin_insecure.php?mfa=ok + POST verify_insecure.php code=000000 returns Insecure MFA accepted / universal code 000000; owaspsecure.com/demo/a07_auth/insecure.php findings 8→10 (+owaspsecure-auth-mfa-bypass-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-ssrf-socket-probe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/socket_probe.php?host=127.0.0.1&port=80 returns INSECURE: 127.0.0.1:80 appears OPEN; owaspsecure.com/demo/a10_ssrf/insecure.php findings 11→15 (+owaspsecure-ssrf-socket-probe-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-ssrf-internal-health-direct-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/internal/health.json returns {\"service\":\"internal-gateway\",\"status\":\"ok\"} without auth; owaspsecure.com/demo/a10_ssrf/insecure.php findings 11→15 (+owaspsecure-ssrf-internal-health-direct-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
