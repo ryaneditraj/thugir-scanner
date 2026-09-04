@@ -83828,5 +83828,161 @@ export const genericPatterns: Pattern[] = [
       "Our BugStore /api/products/{id}/image route scan confirms path traversal. Show route-specific safe path handling.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "bugstore-admin-debug-stats-bac-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore admin debug stats broken access control live oracle (V-012)",
+    description:
+      "GET /api/admin/vulnerable-debug-stats on BugStore returns admin_emails and session stats without authentication — debug endpoint broken access control oracle.",
+    impactOneline:
+      "Unauthenticated access to admin debug stats exposes administrator emails and operational metrics from the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAdminDebugStatsBacLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication before exposing debug statistics.",
+      steps: [
+        "Protect /api/admin/* routes with role-based access control.",
+        "Remove or redact admin_emails from debug responses.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/admin/vulnerable-debug-stats endpoint leaks admin emails without auth. Show access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-admin-debug-stats-bac-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore admin debug stats BAC route live oracle (V-012)",
+    description:
+      "When scanning /api/admin/vulnerable-debug-stats on bugstore.bugtraceai.com, unauthenticated GET confirms admin_emails disclosure — route-specific broken access control oracle.",
+    impactOneline:
+      "Route-specific BugStore admin debug scans should confirm unauthenticated exposure of administrator contact data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAdminDebugStatsBacRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication on BugStore debug stats routes.",
+      steps: [
+        "Protect /api/admin/* routes with role-based access control.",
+        "Remove or redact admin_emails from debug responses.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/admin/vulnerable-debug-stats route scan confirms unauthenticated admin stats exposure. Show route-specific access control fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-forum-thread-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore forum thread_id SQL injection live oracle (V-001)",
+    description:
+      "GET /api/forum/threads/1' on BugStore discloses SQL syntax error with SELECT * FROM threads WHERE id query fragment — forum thread_id SQL injection oracle.",
+    impactOneline:
+      "SQL injection in forum thread_id lets attackers extract database contents from the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreForumThreadSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for BugStore forum thread lookups.",
+      steps: [
+        "Replace string-concatenated thread_id filters with prepared statements.",
+        "Return generic errors without revealing SQL failure modes.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/forum/threads/{id} parameter is vulnerable to SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-forum-thread-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore forum thread SQLi route live oracle (V-001)",
+    description:
+      "When scanning /api/forum/threads on bugstore.bugtraceai.com, GET /api/forum/threads/1' confirms disclosed SQL syntax error — route-specific forum SQL injection oracle.",
+    impactOneline:
+      "Route-specific BugStore forum scans should surface SQL injection in the thread_id path parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreForumThreadSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for BugStore forum thread lookups.",
+      steps: [
+        "Replace string-concatenated thread_id filters with prepared statements.",
+        "Return generic errors without revealing SQL failure modes.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/forum/threads route scan confirms thread_id SQLi. Show route-specific parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-orders-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore orders IDOR live oracle (V-009)",
+    description:
+      "GET /api/orders/ and /api/orders/{id} on BugStore return customer order PII including shipping_address without authentication — order IDOR/BOLA oracle.",
+    impactOneline:
+      "Missing authorization on BugStore order endpoints lets anyone read other customers' order details and shipping addresses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreOrdersIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce owner-scoped authorization on BugStore order reads.",
+      steps: [
+        "Require authenticated sessions and verify order.user_id matches the caller.",
+        "Avoid exposing full order lists without admin role checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/orders endpoints expose other users' orders without auth. Show BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-orders-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore orders IDOR route live oracle (V-009)",
+    description:
+      "When scanning /api/orders on bugstore.bugtraceai.com, unauthenticated GET confirms cross-customer order PII exposure — route-specific IDOR oracle.",
+    impactOneline:
+      "Route-specific BugStore order API scans should confirm broken object-level authorization on order reads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreOrdersIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce owner-scoped authorization on BugStore order routes.",
+      steps: [
+        "Require authenticated sessions and verify order.user_id matches the caller.",
+        "Avoid exposing full order lists without admin role checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/orders route scan confirms unauthenticated order IDOR. Show route-specific BOLA remediation.",
+    version: 1,
+    enabled: true
   }
 ];

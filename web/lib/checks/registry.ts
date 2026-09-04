@@ -99651,6 +99651,163 @@ const bugstoreProductImagePathTraversalRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const bugstoreAdminDebugStatsBacLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const url = new URL("/api/admin/vulnerable-debug-stats", ctx.origin).toString();
+  const doc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let data: { admin_emails?: string[]; active_sessions?: number; db_size_estimate?: string };
+  try {
+    data = JSON.parse(doc.body) as { admin_emails?: string[]; active_sessions?: number; db_size_estimate?: string };
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(data?.admin_emails) || data.admin_emails.length < 1) return NEGATIVE;
+  if (!/admin@bugstore\.com/i.test(data.admin_emails.join(" "))) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "BugStore GET /api/admin/vulnerable-debug-stats returns admin_emails and session stats without authentication — broken access control oracle (V-012)"
+    }
+  };
+};
+
+const bugstoreAdminDebugStatsBacRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isAdminStats = /\/api\/admin\/vulnerable-debug-stats/i.test(pageUrl);
+  const isHub = /bugstore\.bugtraceai\.com\/?(?:[#?]|$)/i.test(pageUrl);
+  if (!isAdminStats && !isHub) return NEGATIVE;
+  const result = await bugstoreAdminDebugStatsBacLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: isAdminStats
+        ? "BugStore /api/admin/vulnerable-debug-stats route scan — unauthenticated debug endpoint leaks admin_emails (V-012)"
+        : "BugStore hub route scan — GET /api/admin/vulnerable-debug-stats confirms unauthenticated admin debug stats exposure (V-012)"
+    }
+  };
+};
+
+const bugstoreForumThreadSqliLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const baselineUrl = new URL("/api/forum/threads/1", ctx.origin).toString();
+  const baselineDoc = await ctx.probe.get(baselineUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (baselineDoc.status !== 200) return NEGATIVE;
+  const sqliUrl = new URL("/api/forum/threads/1'", ctx.origin).toString();
+  const sqliDoc = await ctx.probe.get(sqliUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (sqliDoc.status < 400 || sqliDoc.status >= 600) return NEGATIVE;
+  const sqlErr =
+    /Database error|SQL syntax|pymysql\.err\.ProgrammingError|SELECT \* FROM threads WHERE id/i.test(
+      sqliDoc.body
+    );
+  if (!sqlErr) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      baselineUrl,
+      sqliUrl,
+      baselineStatus: baselineDoc.status,
+      sqliStatus: sqliDoc.status,
+      snippet: sqliDoc.body.slice(0, 200).trim(),
+      note: "BugStore GET /api/forum/threads/1' discloses SQL syntax error with query fragment — forum thread_id SQL injection oracle (V-001)"
+    }
+  };
+};
+
+const bugstoreForumThreadSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isForum = /\/api\/forum\/threads/i.test(pageUrl);
+  const isHub = /bugstore\.bugtraceai\.com\/?(?:[#?]|$)/i.test(pageUrl);
+  if (!isForum && !isHub) return NEGATIVE;
+  const result = await bugstoreForumThreadSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: isForum
+        ? "BugStore /api/forum/threads route scan — thread_id parameter SQL injection confirmed via disclosed syntax error (V-001)"
+        : "BugStore hub route scan — GET /api/forum/threads/1' confirms forum thread_id SQL injection oracle (V-001)"
+    }
+  };
+};
+
+const bugstoreOrdersIdorLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const listUrl = new URL("/api/orders/", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (listDoc.status !== 200) return NEGATIVE;
+  let orders: Array<{ id?: number; user_id?: number; shipping_address?: string; total?: number }>;
+  try {
+    orders = JSON.parse(listDoc.body) as typeof orders;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(orders) || orders.length < 1) return NEGATIVE;
+  const orderId = orders[0]?.id;
+  if (!orderId) return NEGATIVE;
+  const detailUrl = new URL(`/api/orders/${orderId}`, ctx.origin).toString();
+  const detailDoc = await ctx.probe.get(detailUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (detailDoc.status !== 200) return NEGATIVE;
+  let detail: { id?: number; shipping_address?: string; total?: number; status?: string };
+  try {
+    detail = JSON.parse(detailDoc.body) as {
+      id?: number;
+      shipping_address?: string;
+      total?: number;
+      status?: string;
+    };
+  } catch {
+    return NEGATIVE;
+  }
+  if (detail?.id !== orderId) return NEGATIVE;
+  if (!detail.shipping_address || typeof detail.total !== "number") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: orders.length >= 2 ? 0.93 : 0.9,
+    evidence: {
+      listUrl,
+      detailUrl,
+      orderCount: orders.length,
+      snippet: detailDoc.body.slice(0, 200).trim(),
+      note: "BugStore GET /api/orders/ and /api/orders/{id} return customer order PII without authentication — IDOR/BOLA oracle (V-009)"
+    }
+  };
+};
+
+const bugstoreOrdersIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isOrders = /\/api\/orders\b/i.test(pageUrl);
+  const isHub = /bugstore\.bugtraceai\.com\/?(?:[#?]|$)/i.test(pageUrl);
+  if (!isOrders && !isHub) return NEGATIVE;
+  const result = await bugstoreOrdersIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: isOrders
+        ? "BugStore /api/orders route scan — unauthenticated order list and detail expose shipping_address PII (V-009)"
+        : "BugStore hub route scan — GET /api/orders/ confirms unauthenticated order IDOR oracle (V-009)"
+    }
+  };
+};
+
 // --- Broken Crystals API security benchmark (brokencrystals.com) ----------------------
 const CLIENT_BROKENCRYSTALS_RES: { label: string; re: RegExp }[] = [
   {
@@ -114568,6 +114725,12 @@ export const RULES: Record<string, Rule> = {
   bugstoreProductSearchSqliRouteLiveOracle,
   bugstoreProductImagePathTraversalLiveOracle,
   bugstoreProductImagePathTraversalRouteLiveOracle,
+  bugstoreAdminDebugStatsBacLiveOracle,
+  bugstoreAdminDebugStatsBacRouteLiveOracle,
+  bugstoreForumThreadSqliLiveOracle,
+  bugstoreForumThreadSqliRouteLiveOracle,
+  bugstoreOrdersIdorLiveOracle,
+  bugstoreOrdersIdorRouteLiveOracle,
   duckStoreCartNegativeQuantityLiveOracle,
   duckStoreCartNegativeQuantityRouteLiveOracle,
   duckStoreAdminUsersBflaLiveOracle,
