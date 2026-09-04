@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T01:20:00.000Z",
+  "updated_at": "2026-09-04T02:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach/",
+      "source": "kOaDT/oss-oopssec-store — IDOR order privacy breach walkthrough GET /api/orders/:id (chapter 02 access control; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access/",
+      "source": "kOaDT/oss-oopssec-store — BOLA wishlist access walkthrough GET /api/wishlist/:userId (web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/config",
+      "source": "NeuraLegion/brokencrystals — exposed secrets/config endpoint GET /api/config (README + issue #783; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/file/aws",
+      "source": "NeuraLegion/brokencrystals — AWS metadata SSRF oracle via /api/file/aws (README cloud provider endpoints; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/events",
+      "source": "ctfsec/pwnshop — PWN-005 unauthenticated audit log GET /api/v1/events (vulnerabilities index; web search 02 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927/",
       "source": "kOaDT/oss-oopssec-store — Next.js CVE-2025-29927 middleware auth bypass walkthrough (chapter 02; web search 01 UTC)",
