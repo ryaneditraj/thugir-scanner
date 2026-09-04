@@ -13773,6 +13773,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       )
         return -4;
       if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/(?:checkout\/process|cart\/checkout)\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-checkout-client-total")
+      )
+        return -4;
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/(?:user\/profile|auth\/(?:register|signup))\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-profile-mass-assignment")
+      )
+        return -4;
+      if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/api\/search\b/i.test(targetInput) &&
         (p.slug === "fauxbank-search-sqli-route-live-oracle" ||

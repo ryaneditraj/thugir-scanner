@@ -3,12 +3,22 @@
   "priority_discovery_urls": [
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card/",
-      "source": "kOaDT/oss-oopssec-store — LCG gift-card code prediction from millisecond timestamp walkthrough (scoreboard gap 21 UTC)",
+      "source": "kOaDT/oss-oopssec-store — LCG gift-card code prediction from millisecond timestamp walkthrough (scoreboard gap 21 UTC; oracles shipped, queue drain)",
       "auth": "public_demo"
     },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api/",
-      "source": "kOaDT/oss-oopssec-store — JWT HS256/RS256 algorithm confusion on partner API walkthrough (scoreboard gap 21 UTC)",
+      "source": "kOaDT/oss-oopssec-store — JWT HS256/RS256 algorithm confusion on partner API walkthrough (scoreboard gap 21 UTC; oracles shipped, queue drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/checkout/process",
+      "source": "BugTraceAI/BugStore — V-023 client-trusted checkout total oracle POST /api/checkout/process (corrected from /api/cart/checkout; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/user/profile",
+      "source": "BugTraceAI/BugStore — V-015 profile role mass-assignment oracle PUT /api/user/profile (web search 21 UTC)",
       "auth": "public_demo"
     },
     {
@@ -37,8 +47,8 @@
       "auth": "benchmark"
     },
     {
-      "url": "https://bugstore.bugtraceai.com/api/cart/checkout",
-      "source": "BugTraceAI/BugStore — checkout mass-assignment / business-logic oracle POST /api/cart/checkout (web search 20 UTC)",
+      "url": "https://bugstore.bugtraceai.com/api/auth/register",
+      "source": "BugTraceAI/BugStore — V-015 profile role mass-assignment via register+profile PUT (corrected from /api/auth/signup; OpenAPI; web search 21 UTC)",
       "auth": "public_demo"
     },
     {
@@ -84,11 +94,6 @@
     {
       "url": "https://playground.fabraix.com/challenges/tool-poisoning-002",
       "source": "fabraix/playground — Show HN AI agent tool-poisoning rug-pull challenge (GitHub challenges/; web search 19 UTC)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://bugstore.bugtraceai.com/api/auth/signup",
-      "source": "BugTraceAI/BugStore — V-003 mass-assignment role escalation oracle POST /api/auth/signup (OpenAPI; web search 19 UTC)",
       "auth": "public_demo"
     },
     {
