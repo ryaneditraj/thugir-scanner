@@ -84,5 +84,17 @@
       "pwnshop debug/chat/events still queued \u2014 not drained this run (48h skip on higher-priority URLs)"
     ]
   },
-  "discovery_highlights": {}
+  "discovery_highlights": {
+    "qa.brokencrystals.com/api/chat": 87,
+    "brokencrystals.com/api/users/one/regular_user/info": 79,
+    "qa.brokencrystals.com/api/file/aws": 75,
+    "juice-shop.herokuapp.com": 53,
+    "owasp-finbot-ctf.org/portals": 33,
+    "qa.brokencrystals.com/api/goto": 37,
+    "vulnbank.org/api/v1/transactions": 32,
+    "owaspsecure.com/demo/a08_integrity/insecure.php": 18,
+    "wrongsecrets.herokuapp.com/challenge/challenge-52": 19,
+    "wrongsecrets-ctf.herokuapp.com": 14,
+    "ai-security-platform-iota.vercel.app/challenges/hacked-npm": 6
+  }
 }
