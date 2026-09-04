@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T20:20:00.000Z",
+  "updated_at": "2026-09-04T21:08:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2782,
-  "total_findings": 27813,
+  "total_sites_scanned": 2791,
+  "total_findings": 28029,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2018,
-  "discovery_findings": 23524,
+  "discovery_urls_added": 2023,
+  "discovery_findings": 23687,
   "improvements_shipped": 1419,
-  "last_run": "2026-09-04T20:20:00.000Z",
+  "last_run": "2026-09-04T21:08:00.000Z",
   "last_run_summary": {
-    "hour_utc": "20",
+    "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 616,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,45 +53,38 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 174,
-      "focus": "BugStore V-012 admin debug stats BAC + V-001 forum thread SQLi + V-009 orders IDOR live oracles; VWAD RESTaurant + vulnbank AI chat + oopssec CSRF drain",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 163,
+      "focus": "OopsSec gift-card randomness + JWT alg-confusion + supply-chain poisoned-rules walkthroughs; Pwnshop vuln index + checkout drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; secret-resend present)",
-      "bugstore.bugtraceai.com/api/admin/vulnerable-debug-stats: 10→14 findings — bugstore-admin-debug-stats-bac live+route oracles (V-012)",
-      "bugstore.bugtraceai.com/api/forum/threads: 10→14 findings — bugstore-forum-thread-sqli live+route oracles (V-001)",
-      "bugstore.bugtraceai.com/api/orders/1: 10→14 findings — bugstore-orders-idor live+route oracles (V-009)",
-      "preview.owasp-juice.shop/rest/products/search?q=test: 34 findings — juice-shop-products-search-sqli-route-live-oracle + 8 live oracles",
-      "vulnbank.org/api/ai/chat: 32 findings — vulnbank-ai-anonymous-chat-route-live-oracle + merchant-sqli + transactions-bola",
-      "koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update: 18 findings — oopssec-csrf-admin-order-route-live-oracle",
-      "owasp-finbot-ctf.org/portals: 11 findings — finbot-portals-route-live-oracle (scoped, no darklab bleed)",
-      "owasp-finbot-ctf.org/admin: 9 findings — finbot-admin-copilot-route-live-oracle",
-      "bugstore.bugtraceai.com/api/cart/checkout: 10 findings — hub fingerprint; route-specific checkout oracle still absent",
-      "vwad.owasp.org/app/damn-vulnerable-restaurant: 5 findings — VWAD directory metadata only (hosted API offline)"
+      "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card: 16 findings — oopssec-gift-card-randomness-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api: 7 findings — oopssec-jwt-alg-confusion-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain: 14 findings — oopssec-supply-chain-poisoned-rules-route-live-oracle",
+      "pwnshop.ctfsecurity.com/vulnerabilities: 49 findings — hub fingerprint + pwnshop live oracles (debug/events/chat); no vuln-index route oracle",
+      "pwnshop.ctfsecurity.com/checkout: 25 findings — pwnshop-cart-checkout-route-live-oracle + wallet-topup oracles",
+      "preview.owasp-juice.shop/rest/products/search?q=test: 34 findings — juice-shop-products-search-sqli-route-live-oracle",
+      "bugstore.bugtraceai.com/api/cart/checkout: 13 findings — hub fingerprint; checkout mass-assignment route oracle still absent"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "pwnshop /vulnerabilities: 49-finding hub without dedicated vuln-index route oracle",
       "bugstore /api/cart/checkout: no checkout mass-assignment route oracle yet",
-      "bugstore /api/auth/signup queue URL maps to /api/auth/register — V-003 mass-assignment not in OpenAPI; V-020 reviews mass-assignment needs auth",
-      "vwad damn-vulnerable-restaurant: Collections offline — only directory page reachable",
-      "oopssec insecure-randomness-gift-card + JWT algorithm confusion posts still unqueued",
-      "wrongsecrets challenge-47/53 + vulnshop API still in priority queue"
+      "qa.brokencrystals.com/api/file/aws + owaspsecure A09 + fabraix jailbreak-001 still in priority queue",
+      "vwad damn-vulnerable-restaurant: Collections offline — directory metadata only (5 findings)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "bugstore.bugtraceai.com/api/admin/vulnerable-debug-stats": 14,
-    "bugstore.bugtraceai.com/api/forum/threads": 14,
-    "bugstore.bugtraceai.com/api/orders/1": 14,
+    "pwnshop.ctfsecurity.com/vulnerabilities": 49,
     "preview.owasp-juice.shop/rest/products/search?q=test": 34,
-    "vulnbank.org/api/ai/chat": 32,
-    "koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update": 18,
-    "owasp-finbot-ctf.org/portals": 11,
-    "bugstore.bugtraceai.com/api/cart/checkout": 10,
-    "owasp-finbot-ctf.org/admin": 9,
-    "vwad.owasp.org/app/damn-vulnerable-restaurant": 5,
+    "pwnshop.ctfsecurity.com/checkout": 25,
+    "koadt.github.io/oss-oopssec-store/posts/insecure-randomness-gift-card": 16,
+    "bugstore.bugtraceai.com/api/cart/checkout": 13,
+    "koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain": 14,
+    "koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api": 7,
     "qa.brokencrystals.com/api/file/aws": 96,
     "pwnshop.ctfsecurity.com/debug/info": 48
   }
