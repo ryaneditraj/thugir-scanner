@@ -40207,6 +40207,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-hacked-npm-packages-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "AI Security Platform hacked-npm axios/React supply-chain live oracle",
+    description:
+      "GET /learn on ai-security-platform-iota.vercel.app documents real-world axios and React npm hijacks delivering remote access trojans — hacked-npm-packages supply-chain training oracle.",
+    impactOneline:
+      "Public learn content exposes real 2025-2026 npm supply-chain attack patterns (axios RAT, React RCE) used in the hacked-npm-packages challenge.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityHackedNpmPackagesLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — verify package provenance and block malicious postinstall scripts.",
+      steps: [
+        "Review postinstall scripts before adding new npm packages.",
+        "Use npm provenance and signed package verification where available.",
+        "Monitor for typosquatting when adding dependencies."
+      ]
+    },
+    fixPrompt:
+      "Our /learn page documents axios/React npm hijacks. Show supply-chain verification and postinstall script review.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-hacked-npm-packages-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -50203,6 +50229,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our FinBot /how-it-works route documents MCP tool-poisoning with public supply-chain APIs. Show how to protect agentic supply-chain surfaces in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-portals-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot four-portal hub live oracle",
+    description:
+      "GET /portals on owasp-finbot-ctf.org exposes Vendor, Admin, Dark Lab, and CTF portal cards — agentic AI security training entry point oracle.",
+    impactOneline:
+      "Public FinBot portal hubs enumerate four distinct agentic AI training surfaces without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotPortalsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — gate portal hubs behind auth in production deployments.",
+      steps: [
+        "Require authentication before exposing agentic training portal navigation.",
+        "Monitor portal hub access for reconnaissance patterns.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /portals page lists four agentic AI training portals publicly. Show how to protect production agentic platform entry points.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-portals-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot /portals four-portal hub route live oracle",
+    description:
+      "When scanning /portals on owasp-finbot-ctf.org, the four-portal hub confirms Vendor/Admin/Dark Lab/CTF training entry points — route-specific hub oracle distinct from /ctf or /darklab fingerprints.",
+    impactOneline:
+      "Route scans on FinBot /portals should confirm the four-portal hub layout, not only generic CTF supply-chain probes shared across portal routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotPortalsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — isolate portal hub navigation from production agent ecosystems.",
+      steps: [
+        "Validate portal hub links point only to authorized training environments.",
+        "Monitor cross-portal navigation for reconnaissance.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /portals route scan confirms four agentic AI training portals. Show how to protect production multi-portal agentic platforms.",
     version: 1,
     enabled: true
   },
@@ -77495,6 +77573,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /demo/a08_integrity route scan confirms unsigned CI/CD deploys. Show route-level artifact verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-remote-config-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 remote config blind apply live oracle",
+    description:
+      "GET attacks/remote_config/config_insecure.php on owaspsecure.com fetches remote JSON and applies featureFlags without signature/HMAC — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Unsigned remote config on owaspsecure.com lets attackers swap feature flags and API endpoints via a poisoned config URL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityRemoteConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify remote configuration with signatures or allowlisted sources before applying.",
+      steps: [
+        "Require HMAC or signature verification on every remote config fetch.",
+        "Allowlist trusted config origins and reject arbitrary src URLs.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com remote_config/config_insecure.php applies JSON blindly. Show signed remote configuration verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-remote-config-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route remote-config live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 3 remote config confirms blind JSON apply without signature — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live unsigned remote config apply, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityRemoteConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify remote configuration with signatures or allowlisted sources before applying.",
+      steps: [
+        "Require HMAC or signature verification on every remote config fetch.",
+        "Allowlist trusted config origins and reject arbitrary src URLs.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms unsigned remote config apply. Show route-level config integrity verification remediation.",
     version: 1,
     enabled: true
   },
