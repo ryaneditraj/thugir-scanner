@@ -2062,6 +2062,10 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureSsrfSocketProbeRouteLiveOracle",
   "owaspsecureSsrfInternalHealthDirectLiveOracle",
   "owaspsecureSsrfInternalHealthDirectRouteLiveOracle",
+  "owaspsecureVocOutdatedJqueryLiveOracle",
+  "owaspsecureVocOutdatedJqueryRouteLiveOracle",
+  "owaspsecureVocCdnNoSriLiveOracle",
+  "owaspsecureVocCdnNoSriRouteLiveOracle",
   "guardmarlyScanLiveOracle",
   "guardmarlyScanRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
@@ -4262,6 +4266,7 @@ const DEEP_RULES = new Set<string>([
   "bugforgeSsrfRouteLiveOracle",
   "bugforgeIdorRouteLiveOracle",
   "bugforgeGraphqlRouteLiveOracle",
+  "bugforgeXssRouteLiveOracle",
   "webverselabsFixtureRouteLiveOracle",
   "webverselabsOrbitdeskRouteLiveOracle",
   "nosqlInjectionLabRouteLiveOracle",
@@ -17196,6 +17201,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a09_logging\b/i.test(targetInput) &&
         p.slug.startsWith("owaspsecure-logging-")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a06_voc\b/i.test(targetInput) &&
+        (p.slug.startsWith("owaspsecure-voc-outdated-jquery") ||
+          p.slug.startsWith("owaspsecure-voc-cdn-no-sri"))
       )
         return -4;
       if (

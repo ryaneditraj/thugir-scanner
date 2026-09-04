@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T06:12:00.000Z",
+  "updated_at": "2026-09-04T07:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2867,
-  "total_findings": 28948,
+  "total_sites_scanned": 2869,
+  "total_findings": 28970,
   "critical_findings": 56,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2021,
-  "discovery_findings": 24391,
-  "improvements_shipped": 1377,
-  "last_run": "2026-09-04T06:12:00.000Z",
+  "discovery_findings": 24413,
+  "improvements_shipped": 1380,
+  "last_run": "2026-09-04T07:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -52,39 +52,35 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 81,
-      "focus": "owaspsecure A06 VOC + A08/A09/A01 hub drain + bugforge xss/auth/csrf + vaultapp documents IDOR (+ concurrent A02 crypto rescan 19 findings)",
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 19,
+      "focus": "owaspsecure A06 VOC outdated-jQuery + CDN-no-SRI route oracles + bugforge /labs/xss route oracle",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; secret-resend present)",
-      "vaultapp-omega.vercel.app/api/documents/1: 14 findings — vaultapp-documents-idor-route-live-oracle + 5 IDOR live oracles",
-      "owaspsecure.com/demo/a01_bac/insecure.php: 18 findings — owaspsecure-bac-idor-numeric-route + mass-assignment + file-dor route oracles",
-      "owaspsecure.com/demo/a09_logging/insecure.php: 14 findings — owaspsecure-logging-auth-events-route + PII-in-logs route oracles",
-      "owaspsecure.com/demo/a02_crypto/insecure.php: 19 findings — owaspsecure-crypto-iv-reuse + key-rotation + save-plain route oracles",
-      "owaspsecure.com/demo/a08_integrity/insecure.php: 9 findings — owaspsecure-integrity-unserialize-route-live-oracle",
-      "bugforge.io/labs/xss + /auth + /csrf: 6 findings each — shared bugforge-lab fingerprint without per-lab route oracles"
+      "owaspsecure.com/demo/a06_voc/insecure.php: 12 findings — owaspsecure-voc-outdated-jquery + cdn-no-sri live+route oracles (was 8)",
+      "bugforge.io/labs/xss: 7 findings — bugforge-xss-route-live-oracle (was 6 shared hub fingerprint)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "benchmark stable 6/6 — no category misses on juice-shop primary Heroku",
-      "owaspsecure A06 VOC hub thin without outdated-jQuery/CDN-SRI route-specific oracles",
-      "bugforge xss/auth/csrf labs share identical 6-finding hub fingerprint — need route-specific XSS/CSRF/broken-auth oracles",
+      "bugforge /labs/auth and /labs/csrf still share hub fingerprint without route-specific oracles",
+      "owaspsecure A06 VOC lodash/mixed-content/unpinned-latest attacks still without live oracles",
       "owaspsecure A07 login_rate/reset_tokens DB-dependent attacks fail on production host (PDO access denied)",
       "ssrf-internal-page + finbot vendor still queued"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
+    "owaspsecure.com/demo/a06_voc/insecure.php": 12,
+    "bugforge.io/labs/xss": 7,
     "owaspsecure.com/demo/a01_bac/insecure.php": 18,
     "owaspsecure.com/demo/a02_crypto/insecure.php": 19,
     "vaultapp-omega.vercel.app/api/documents/1": 14,
     "owaspsecure.com/demo/a09_logging/insecure.php": 14,
     "owaspsecure.com/demo/a08_integrity/insecure.php": 9,
-    "owaspsecure.com/demo/a06_voc/insecure.php": 8,
-    "bugforge.io/labs/xss": 6,
     "bugforge.io/labs/auth": 6,
     "bugforge.io/labs/csrf": 6
   }

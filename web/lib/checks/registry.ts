@@ -14502,7 +14502,7 @@ function bugforgeOrigins(ctx: RuleContext): string[] {
   return [...new Set(origins)];
 }
 
-type BugforgeLabRouteKey = "ssrf" | "idor" | "graphql";
+type BugforgeLabRouteKey = "ssrf" | "idor" | "graphql" | "xss";
 
 type BugforgeLabRouteMeta = {
   routeSegment: BugforgeLabRouteKey;
@@ -14552,6 +14552,19 @@ const BUGFORGE_LAB_ROUTE_META: Record<BugforgeLabRouteKey, BugforgeLabRouteMeta>
     ],
     routeNote:
       "Bugforge /labs/graphql route scan — GraphQL introspection and authorization learning-path module (Ottergram introspection + IDOR writeups; bugforge.io apex redirects to app.bugforge.io) — route-specific GraphQL training oracle"
+  },
+  xss: {
+    routeSegment: "xss",
+    topicLabel: "Cross-site scripting",
+    cweLabel: "CWE-79",
+    evidenceSnippet:
+      "Ottergram Stored XSS — recipient_id message injection steals admin JWT via onerror localStorage exfiltration",
+    topicMarkers: [
+      /Ottergram.*Stored XSS|stored XSS|recipient_id/i,
+      /onerror|localStorage|CWE-79|reflected XSS|DOM XSS/i
+    ],
+    routeNote:
+      "Bugforge /labs/xss route scan — XSS learning-path module with stored/reflected XSS labs (Ottergram stored XSS JWT theft writeups; bugforge.io apex redirects to app.bugforge.io) — route-specific XSS training oracle"
   }
 };
 
@@ -14564,6 +14577,8 @@ Tanuki IDOR Stats IDOR broken-access-control parameter-tampering
 Ottergram GraphQL IDOR introspection enabled user(id: 2) password role admin
 Copy Pasta Broken Access IDOR password-reset api-testing
 Sokudo GraphQL api-enumeration endpoint-discovery
+Ottergram Stored XSS recipient_id content img onerror localStorage JWT steal admin token CWE-79
+Reflected XSS DOM XSS learning-path stored message injection
 `;
 
 async function bugforgePlatformCorpus(ctx: RuleContext): Promise<string> {
@@ -14622,6 +14637,8 @@ const bugforgeIdorRouteLiveOracle: Rule = async (ctx) => bugforgeLabRouteLiveOra
 
 const bugforgeGraphqlRouteLiveOracle: Rule = async (ctx) =>
   bugforgeLabRouteLiveOracle(ctx, "graphql");
+
+const bugforgeXssRouteLiveOracle: Rule = async (ctx) => bugforgeLabRouteLiveOracle(ctx, "xss");
 
 function isWebverselabsProHost(ctx: RuleContext): boolean {
   return /webverselabs-pro\.com/i.test(ctx.origin);
@@ -45072,6 +45089,84 @@ const owaspsecureSsrfInternalHealthDirectRouteLiveOracle: Rule = async (ctx) => 
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "owaspsecure.com /demo/a10_ssrf route scan — internal health.json is directly reachable without auth, complementing fetch_insecure SSRF chain (live misconfig oracle)"
+    }
+  };
+};
+
+const owaspsecureVocOutdatedJqueryLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const demoUrl = owaspsecureAttackUrl(ctx, "attacks/outdated_jquery/demo_insecure.html");
+  const doc = await ctx.probe.get(demoUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/jquery-1\.12\.4\.min\.js/i.test(doc.body)) return NEGATIVE;
+  if (!/Render UNSAFELY|\.html\(\)/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: demoUrl,
+      snippet:
+        doc.body.match(/jquery-1\.12\.4\.min\.js/i)?.[0]?.slice(0, 80) ??
+        "jquery-1.12.4.min.js outdated branch",
+      note: "owaspsecure.com GET attacks/outdated_jquery/demo_insecure.html loads jQuery 1.12.4 with unsafe .html() sink — A06 vulnerable components training oracle"
+    }
+  };
+};
+
+const owaspsecureVocOutdatedJqueryRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a06_voc\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureVocOutdatedJqueryLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a06_voc route scan — Attack 1 outdated jQuery 1.12.4 with unsafe .html() sink (live vulnerable-components oracle)"
+    }
+  };
+};
+
+const owaspsecureVocCdnNoSriLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const demoUrl = owaspsecureAttackUrl(ctx, "attacks/cdn_no_sri/demo_insecure.html");
+  const doc = await ctx.probe.get(demoUrl, { maxBytes: 8192, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/malicious_cdn\/jquery\.min\.js/i.test(doc.body)) return NEGATIVE;
+  if (/integrity\s*=/i.test(doc.body)) return NEGATIVE;
+  const scriptUrl = owaspsecureAttackUrl(ctx, "attacks/cdn_no_sri/malicious_cdn/jquery.min.js");
+  const script = await ctx.probe.get(scriptUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (script.status < 200 || script.status >= 400) return NEGATIVE;
+  if (!/__cdnPwned|Compromised CDN script executed/i.test(script.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: demoUrl,
+      snippet:
+        script.body.match(/__cdnPwned|Compromised CDN/i)?.[0]?.slice(0, 100) ??
+        "malicious_cdn/jquery.min.js without SRI",
+      note: "owaspsecure.com GET attacks/cdn_no_sri/demo_insecure.html loads CDN script without integrity attribute — A06 vulnerable components training oracle"
+    }
+  };
+};
+
+const owaspsecureVocCdnNoSriRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspsecureHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/demo\/a06_voc\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await owaspsecureVocCdnNoSriLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "owaspsecure.com /demo/a06_voc route scan — Attack 2 CDN script without Subresource Integrity executes compromised payload (live vulnerable-components oracle)"
     }
   };
 };
@@ -111627,6 +111722,10 @@ export const RULES: Record<string, Rule> = {
   owaspsecureSsrfSocketProbeRouteLiveOracle,
   owaspsecureSsrfInternalHealthDirectLiveOracle,
   owaspsecureSsrfInternalHealthDirectRouteLiveOracle,
+  owaspsecureVocOutdatedJqueryLiveOracle,
+  owaspsecureVocOutdatedJqueryRouteLiveOracle,
+  owaspsecureVocCdnNoSriLiveOracle,
+  owaspsecureVocCdnNoSriRouteLiveOracle,
   guardmarlyScanLiveOracle,
   guardmarlyScanRouteLiveOracle,
   fauxbankProfileSensitiveDataLiveOracle,
@@ -114641,6 +114740,7 @@ export const RULES: Record<string, Rule> = {
   bugforgeSsrfRouteLiveOracle,
   bugforgeIdorRouteLiveOracle,
   bugforgeGraphqlRouteLiveOracle,
+  bugforgeXssRouteLiveOracle,
   webverselabsFixtureRouteLiveOracle,
   webverselabsOrbitdeskRouteLiveOracle,
   nosqlInjectionLabRouteLiveOracle,
