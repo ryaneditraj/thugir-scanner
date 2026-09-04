@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T17:02:00.000Z",
+  "updated_at": "2026-09-04T17:30:11.067Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2738,
-  "total_findings": 26750,
-  "critical_findings": 55,
+  "total_sites_scanned": 2746,
+  "total_findings": 26959,
+  "critical_findings": 58,
   "teacher_delta_count": 0,
-  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1958,
-  "discovery_findings": 22700,
+  "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+  "discovery_urls_added": 2000,
+  "discovery_findings": 22909,
   "improvements_shipped": 1410,
-  "last_run": "2026-09-04T17:02:00.000Z",
+  "last_run": "2026-09-04T17:30:11.067Z",
   "last_run_summary": {
     "hour_utc": "17",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 599,
+      "probes_run": 589,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,35 +48,43 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 40 live oracles; secret-resend present)"
+      "note": "Stable 6/6 first-pass recall on primary Heroku (53 findings, 40 live oracles; secret-resend present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 2,
-      "urls_scanned": 3,
-      "findings": 82,
-      "focus": "pwnshop chat PWN-035 IDOR corpus fallback + owaspsecure A01/A03 cross-demo suppression + priority queue drain",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 219,
+      "focus": "BugStore + vulnforge level14 SSRF + pwnshop chat/query prompt-injection + playhacklab + qa.brokencrystals goto open-redirect drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 40 live oracles)",
-      "pwnshop.ctfsecurity.com/chat: 52 findings (+pwnshop-chat-order-idor-live-oracle corpus fallback when LLM refuses order lookup)",
-      "owaspsecure.com/demo/a01_bac/insecure.php: 15 findings (cross-demo a07/a10 bleed suppressed; BAC route oracles retained)",
-      "owaspsecure.com/demo/a03_injection/insecure.php: 23 findings (full SQLi/XSS live+route oracle suite on priority drain)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; secret-resend present)",
+      "qa.brokencrystals.com/api/goto: 82 findings — brokencrystals-goto-open-redirect-route-live-oracle + hub fingerprint",
+      "pwnshop.ctfsecurity.com/api/v1/chat/query: 50 findings — pwnshop-chat-prompt-injection-route-live-oracle + order-idor route",
+      "pwnshop.ctfsecurity.com/chat: 49 findings — pwnshop-chat-prompt-injection + chat-init route oracles",
+      "vulnforge-academy.vercel.app/.../level14.php: 6 findings — vulnforge-academy-level-ssrf-route-live-oracle",
+      "bugstore.bugtraceai.com: 11 findings — no route-specific BugStore oracles yet (hub fingerprint)",
+      "playhacklab.com: 2 findings — thin pass, no live oracles"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "pwnshop chat live IDOR probe blocked by LLM guardrail — corpus fallback bridges route oracle",
-      "owaspsecure cross-demo host-level oracles bled a07 MFA + a10 SSRF onto unrelated demo hubs — now suppressed per-module"
+      "bugstore.bugtraceai.com: 32-vuln catalog present but no bugstore-* route-specific live oracles",
+      "playhacklab.com: thin 2-finding fingerprint — needs route-specific lab oracles",
+      "qa.brokencrystals.com/api/file/aws SSRF route still queued (goto drained this run)",
+      "oopssec mass-assignment/product-search/malicious-file-upload walkthroughs still queued"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "pwnshop.ctfsecurity.com/chat": 52,
-    "owaspsecure.com/demo/a01_bac/insecure.php": 15,
-    "owaspsecure.com/demo/a03_injection/insecure.php": 23,
-    "owaspsecure.com/demo/a06_voc/insecure.php": 19,
-    "dvwu.vercel.app/labs/file-upload": 10,
-    "pwnshop.ctfsecurity.com/debug/info": 48
+    "juice-shop.herokuapp.com": 53,
+    "qa.brokencrystals.com/api/goto": 82,
+    "pwnshop.ctfsecurity.com/api/v1/chat/query": 50,
+    "pwnshop.ctfsecurity.com/chat": 49,
+    "bugstore.bugtraceai.com": 11,
+    "koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api": 11,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level14.php": 6,
+    "bugstore.bugtraceai.com/api/debug/vulns": 8,
+    "playhacklab.com": 2,
+    "qa.brokencrystals.com/api/chat": 88
   }
 }
