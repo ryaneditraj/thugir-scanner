@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T19:40:00.000Z",
+  "updated_at": "2026-09-04T20:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2773,
-  "total_findings": 27536,
+  "total_sites_scanned": 2782,
+  "total_findings": 27801,
   "critical_findings": 58,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2013,
-  "discovery_findings": 23380,
+  "discovery_urls_added": 2018,
+  "discovery_findings": 23512,
   "improvements_shipped": 1416,
-  "last_run": "2026-09-04T19:40:00.000Z",
+  "last_run": "2026-09-04T20:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 603,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,44 @@
           ]
         }
       },
-      "note": "6/6 recall via staging fallback (primary Heroku timeout); 53 findings, 40 live oracles"
+      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles); secret-resend + juice-shop-resend-key-live-oracle present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 4,
-      "findings": 56,
-      "focus": "finbot portal-scoped live oracle guards + admin copilot live oracle + priority queue drain",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 132,
+      "focus": "VWAD RESTaurant + preview juice-shop product search + bugstore checkout + vulnbank AI chat + oopssec CSRF walkthrough + finbot portals/admin drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (53 findings; primary Heroku timeout)",
-      "owasp-finbot-ctf.org/portals: 33→11 findings — finbotScopedLiveOracleAllowed removes darklab/ctf/vendor bleed (darklab 15→0)",
-      "owasp-finbot-ctf.org/admin: 32→9 findings — +finbot-admin-copilot-live-oracle, darklab bleed 15→0",
-      "owasp-finbot-ctf.org/ctf: 33→12 findings — darklab bleed 15→0, retains ctf challenges/sidecar/stats oracles"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; secret-resend present)",
+      "preview.owasp-juice.shop/rest/products/search?q=test: 34 findings — juice-shop-products-search-sqli-route-live-oracle + 8 live oracles",
+      "vulnbank.org/api/ai/chat: 32 findings — vulnbank-ai-anonymous-chat-route-live-oracle + merchant-sqli + transactions-bola",
+      "koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update: 18 findings — oopssec-csrf-admin-order-route-live-oracle",
+      "owasp-finbot-ctf.org/portals: 11 findings — finbot-portals-route-live-oracle (scoped, no darklab bleed)",
+      "owasp-finbot-ctf.org/admin: 9 findings — finbot-admin-copilot-route-live-oracle",
+      "bugstore.bugtraceai.com/api/cart/checkout: 10 findings — hub fingerprint; route-specific checkout oracle still absent",
+      "vwad.owasp.org/app/damn-vulnerable-restaurant: 5 findings — VWAD directory metadata only (hosted API offline)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "finbot portals/ctf/admin/darklab live-oracle bleed resolved via finbotScopedLiveOracleAllowed",
-      "oopssec race-condition-coupon-abuse priority-queued with existing route oracle",
-      "wrongsecrets challenge-47/53 + vulnshop API still in priority queue"
+      "improvements.json had trailing brace JSON corruption — fixed this run",
+      "bugstore /api/cart/checkout: no checkout mass-assignment route oracle yet",
+      "vwad damn-vulnerable-restaurant: Collections offline — only directory page reachable",
+      "oopssec insecure-randomness-gift-card + JWT algorithm confusion posts still unqueued"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
+    "preview.owasp-juice.shop/rest/products/search?q=test": 34,
+    "vulnbank.org/api/ai/chat": 32,
+    "koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update": 18,
     "owasp-finbot-ctf.org/portals": 11,
+    "bugstore.bugtraceai.com/api/cart/checkout": 10,
     "owasp-finbot-ctf.org/admin": 9,
-    "owasp-finbot-ctf.org/ctf": 12,
-    "owasp-finbot-ctf.org/darklab": 24,
+    "vwad.owasp.org/app/damn-vulnerable-restaurant": 5,
     "qa.brokencrystals.com/api/file/aws": 96,
-    "pwnshop.ctfsecurity.com/debug/info": 48,
-    "vulnshop.vercel.app/api/products": 20,
-    "bugstore.bugtraceai.com/api/products": 12,
-    "koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection": 10
+    "pwnshop.ctfsecurity.com/debug/info": 48
   }
 }
