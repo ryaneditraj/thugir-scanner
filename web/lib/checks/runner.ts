@@ -3270,6 +3270,8 @@ const DEEP_RULES = new Set<string>([
   "bingoctfAuthGatedCtfRouteLiveOracle",
   "wrongsecretsChallengeLiveOracle",
   "wrongsecretsChallengeRouteLiveOracle",
+  "wrongsecretsChallenge0OpeningLiveOracle",
+  "wrongsecretsChallenge0OpeningRouteLiveOracle",
   "wrongsecretsChallenge1GitHardcodedRouteLiveOracle",
   "wrongsecretsChallenge2ApplicationPropertiesRouteLiveOracle",
   "wrongsecretsChallenge3DockerEnvRouteLiveOracle",
