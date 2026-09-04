@@ -61464,6 +61464,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "webverselabs-orbitdesk-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "WebVerse Pro OrbitDesk lab route live oracle",
+    description:
+      "When scanning /labs/orbitdesk on webverselabs-pro.com, the OrbitDesk hard lab documents a five-stage chain — weak reset token, GraphQL IDOR, signed-URL path traversal, SSRF via /api/v2/integrations/test, diagnostics RCE.",
+    impactOneline:
+      "Route-specific confirmation that WebVerse Pro OrbitDesk documents multi-stage GraphQL + SSRF exploitation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webverselabsOrbitdeskRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WebVerse Pro labs are intentional training — harden JWT secrets, GraphQL authz, and outbound fetch controls.",
+      steps: [
+        "Rotate leaked AUTH_SECRET and enforce strong signing keys.",
+        "Authorize GraphQL resolvers per object ownership.",
+        "Block server-side fetch to internal hostnames from integration test endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/orbitdesk route documents GraphQL IDOR plus SSRF via integrations/test. Show JWT hardening and SSRF egress controls.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nosql-injection-lab-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "NoSQL Injection Lab route live oracle",
+    description:
+      "When scanning nosql-injection-lab.vercel.app, the educational SPA documents MongoDB operator injection ($ne, $regex, $gt) bypassing Express login via JSON body-parser — route-specific NoSQL injection training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the NoSQL Injection Lab documents operator-based authentication bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nosqlInjectionLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cast user inputs to expected types and sanitize MongoDB query operators.",
+      steps: [
+        "Reject object-typed password fields — require strict string validation.",
+        "Use mongo-sanitize or equivalent to strip $-prefixed operator keys.",
+        "Prefer parameterized ODM queries with explicit schemas."
+      ]
+    },
+    fixPrompt:
+      "Our nosql-injection-lab route documents $ne/$regex operator bypass. Show type casting and mongo-sanitize remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "todoer-tasks-idor-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -66479,6 +66531,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Juice Shop /rest/chatbot/respond route exposes an unauthenticated /rest/chat LLM proxy. Show chatbot auth hardening and prompt-injection defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-snippets-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop vulnerable code snippets API live oracle",
+    description:
+      "GET /snippets/:challengeKey returns vulnerable source code plus vulnLines array without auth — Vulnerable Code Snippets API oracle (help.owasp-juice.shop integration).",
+    impactOneline:
+      "Public code-snippet endpoints expose exact vulnerable lines for many Juice Shop challenges.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopSnippetsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Juice Shop is intentional security training — restrict snippet APIs to authorized lab instances.",
+      steps: [
+        "Require authentication before returning challenge source snippets.",
+        "Disable snippet endpoints in production deployments.",
+        "Scope scanner targets to authorized OWASP Juice Shop lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /snippets/:challengeKey returns vulnerable source with vulnLines. Show how to disable or protect code-snippet APIs outside training environments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-snippets-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop /snippets route live oracle",
+    description:
+      "When scanning /snippets, GET /snippets/:challengeKey returns vulnerable source with vulnLines JSON — route-specific Vulnerable Code Snippets API oracle.",
+    impactOneline:
+      "Route-scoped scans on /snippets should confirm the code-snippet challenge API is exposed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopSnippetsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Juice Shop is intentional security training — restrict snippet APIs to authorized lab instances.",
+      steps: [
+        "Require authentication before returning challenge source snippets.",
+        "Disable snippet endpoints in production deployments.",
+        "Scope scanner targets to authorized OWASP Juice Shop lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /snippets route scan confirms the Vulnerable Code Snippets API. Show route-level access controls for snippet endpoints.",
     version: 1,
     enabled: true
   },

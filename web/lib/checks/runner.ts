@@ -2811,6 +2811,8 @@ const DEEP_RULES = new Set<string>([
   "juiceShopProductsReviewsExposureRouteLiveOracle",
   "juiceShopAdminConfigLiveOracle",
   "juiceShopAdminConfigRouteLiveOracle",
+  "juiceShopSnippetsLiveOracle",
+  "juiceShopSnippetsRouteLiveOracle",
   "juiceShopLoginSqliLiveOracle",
   "juiceShopLoginRouteLiveOracle",
   "juiceShopChatbotApiLiveOracle",
@@ -4240,6 +4242,8 @@ const DEEP_RULES = new Set<string>([
   "bugforgeIdorRouteLiveOracle",
   "bugforgeGraphqlRouteLiveOracle",
   "webverselabsFixtureRouteLiveOracle",
+  "webverselabsOrbitdeskRouteLiveOracle",
+  "nosqlInjectionLabRouteLiveOracle",
   "todoerTasksIdorLiveOracle",
   "todoerTasksIdorRouteLiveOracle",
   "seclabPathTraversalLabsRouteLiveOracle",
@@ -14826,9 +14830,27 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       )
         return -4;
       if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/snippets\/?(?:$|[?#])/i.test(targetInput) &&
+        !/\/snippets\/[A-Za-z0-9_-]+/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-snippets")
+      )
+        return -3;
+      if (
         /webverselabs-pro\.com/i.test(origin) &&
         /\/labs\/fixture\b/i.test(targetInput) &&
         p.slug === "webverselabs-fixture-route-live-oracle"
+      )
+        return -3;
+      if (
+        /webverselabs-pro\.com/i.test(origin) &&
+        /\/labs\/orbitdesk\b/i.test(targetInput) &&
+        p.slug === "webverselabs-orbitdesk-route-live-oracle"
+      )
+        return -3;
+      if (
+        /nosql-injection-lab\.vercel\.app/i.test(origin) &&
+        p.slug === "nosql-injection-lab-route-live-oracle"
       )
         return -3;
       if (

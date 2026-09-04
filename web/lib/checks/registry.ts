@@ -14653,6 +14653,72 @@ const webverselabsFixtureRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const webverselabsOrbitdeskRouteLiveOracle: Rule = async (ctx) => {
+  if (!isWebverselabsProHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/labs\/orbitdesk\b/i.test(pageUrl)) return NEGATIVE;
+  let corpus = ctx.combined;
+  if (!/OrbitDesk|integrations\/test|GraphQL/i.test(corpus)) {
+    const doc = await ctx.probe.get(pageUrl, { maxBytes: 200_000, timeoutMs: 20000 });
+    if (doc.status >= 200 && doc.status < 400) corpus = `${corpus}\n${doc.body}`;
+  }
+  const orbitdeskOk =
+    /OrbitDesk/i.test(corpus) &&
+    (/GraphQL/i.test(corpus) || /identity service/i.test(corpus)) &&
+    (/SSRF/i.test(corpus) ||
+      /integrations\/test|internal ops console|path traversal|command injection/i.test(corpus));
+  if (!orbitdeskOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet:
+        "OrbitDesk client portal — GraphQL IDOR + SSRF via /api/v2/integrations/test + path traversal chain",
+      note: "webverselabs-pro.com /labs/orbitdesk route scan — OrbitDesk hard lab documents five-stage chain (weak reset token, GraphQL IDOR, signed-URL path traversal, SSRF integrations/test, diagnostics RCE) — route-specific multi-stage training oracle"
+    }
+  };
+};
+
+const NOSQL_INJECTION_LAB_HOST_RE = /nosql-injection-lab\.vercel\.app/i;
+
+function nosqlInjectionLabCorpusHit(corpus: string): boolean {
+  return (
+    NOSQL_INJECTION_LAB_HOST_RE.test(corpus) &&
+    /NoSQL Injection(?: Educational)? Lab|Plateforme Pédagogique/i.test(corpus) &&
+    /[$]ne|[$]regex|[$]gt/.test(corpus) &&
+    /MongoDB|findOne|body-parser/i.test(corpus)
+  );
+}
+
+const nosqlInjectionLabRouteLiveOracle: Rule = async (ctx) => {
+  if (!NOSQL_INJECTION_LAB_HOST_RE.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let corpus = ctx.combined;
+  if (!nosqlInjectionLabCorpusHit(corpus)) {
+    const doc = await ctx.probe.get(pageUrl || ctx.origin, { maxBytes: 8192, timeoutMs: 20000 });
+    if (doc.status >= 200 && doc.status < 400) {
+      corpus = `${corpus}\n${doc.body}`;
+      const assetMatch = doc.body.match(/\/assets\/index-[A-Za-z0-9_-]+\.js/);
+      if (assetMatch) {
+        const assetUrl = new URL(assetMatch[0], ctx.origin).toString();
+        const assetDoc = await ctx.probe.get(assetUrl, { maxBytes: 250_000, timeoutMs: 20000 });
+        if (assetDoc.status >= 200 && assetDoc.status < 400) corpus = `${corpus}\n${assetDoc.body}`;
+      }
+    }
+  }
+  if (!nosqlInjectionLabCorpusHit(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl || ctx.origin,
+      snippet: "NoSQL Injection Lab — $ne/$regex/$gt operator auth bypass via JSON body-parser simulation",
+      note: "nosql-injection-lab.vercel.app route scan — educational SPA documents MongoDB operator injection ($ne, $regex, $gt) bypassing Express login — route-specific NoSQL injection training oracle"
+    }
+  };
+};
+
 const TODOER_SITE_HOST_RE = /(?:^|\.)todoer\.site$/i;
 const TODOER_CORS_PROBE_ORIGIN = "https://evil-todoer-cors-probe.example";
 
@@ -85138,6 +85204,81 @@ const juiceShopAdminConfigRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const JUICE_SHOP_SNIPPET_CHALLENGE_KEYS = [
+  "loginAdminChallenge",
+  "weakPasswordChallenge",
+  "noSqlReviewsChallenge"
+];
+
+async function probeJuiceShopSnippets(ctx: RuleContext): Promise<RuleResult> {
+  const corpus = `${ctx.origin}\n${ctx.scanUrl || ""}\n${ctx.home.finalUrl || ""}`;
+  if (!JUICE_SHOP_HOST_RE.test(corpus)) return NEGATIVE;
+  for (const key of JUICE_SHOP_SNIPPET_CHALLENGE_KEYS) {
+    const { doc, url, mirror } = await juiceShopMirrorProbeDoc(ctx, `/snippets/${key}`, {
+      maxBytes: 32768,
+      ok: (d) => {
+        if (d.status < 200 || d.status >= 300 || HEROKU_STUB_RE.test(d.body)) return false;
+        try {
+          const parsed = JSON.parse(d.body) as { snippet?: string; vulnLines?: number[] };
+          return typeof parsed.snippet === "string" && parsed.snippet.length > 40;
+        } catch {
+          return false;
+        }
+      }
+    });
+    if (doc.status < 200 || doc.status >= 300) continue;
+    let parsed: { snippet?: string; vulnLines?: number[] };
+    try {
+      parsed = JSON.parse(doc.body) as { snippet?: string; vulnLines?: number[] };
+    } catch {
+      continue;
+    }
+    if (typeof parsed.snippet !== "string" || parsed.snippet.length < 40) {
+      continue;
+    }
+    const vulnLineCount = Array.isArray(parsed.vulnLines) ? parsed.vulnLines.length : 0;
+    return {
+      fired: true,
+      confidence: vulnLineCount >= 1 ? 0.93 : 0.9,
+      evidence: {
+        url,
+        challengeKey: key,
+        vulnLineCount,
+        snippet: parsed.snippet.slice(0, 180).trim(),
+        note: mirror
+          ? `Juice Shop GET /snippets/${key} returns vulnerable source snippet JSON — Vulnerable Code Snippets API oracle (Heroku stub on primary; confirmed via juice-shop.demo.escape.tech mirror${vulnLineCount ? `; vulnLines=${vulnLineCount}` : "; snippet-only response"})`
+          : `Juice Shop GET /snippets/${key} returns vulnerable source code snippet${vulnLineCount ? ` with vulnLines array (${vulnLineCount} lines)` : ""} — Vulnerable Code Snippets API oracle (help.owasp-juice.shop integration)`
+      }
+    };
+  }
+  return NEGATIVE;
+}
+
+const juiceShopSnippetsLiveOracle: Rule = async (ctx) => probeJuiceShopSnippets(ctx);
+
+const juiceShopSnippetsRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!JUICE_SHOP_HOST_RE.test(`${ctx.origin}\n${pageUrl}`)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/^\/snippets\/?$/i.test(pathname)) return NEGATIVE;
+  const result = await probeJuiceShopSnippets(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Juice Shop /snippets route scan — GET /snippets/:challengeKey returns vulnerable source with vulnLines JSON — route-specific Vulnerable Code Snippets API oracle"
+    }
+  };
+};
+
 async function probeJuiceShopJwtAlgNone(
   ctx: RuleContext,
   origin: string,
@@ -112088,6 +112229,8 @@ export const RULES: Record<string, Rule> = {
   juiceShopProductsReviewsExposureRouteLiveOracle,
   juiceShopAdminConfigLiveOracle,
   juiceShopAdminConfigRouteLiveOracle,
+  juiceShopSnippetsLiveOracle,
+  juiceShopSnippetsRouteLiveOracle,
   juiceShopLoginSqliLiveOracle,
   juiceShopLoginRouteLiveOracle,
   juiceShopChatbotApiLiveOracle,
@@ -113935,6 +114078,8 @@ export const RULES: Record<string, Rule> = {
   bugforgeIdorRouteLiveOracle,
   bugforgeGraphqlRouteLiveOracle,
   webverselabsFixtureRouteLiveOracle,
+  webverselabsOrbitdeskRouteLiveOracle,
+  nosqlInjectionLabRouteLiveOracle,
   todoerTasksIdorLiveOracle,
   todoerTasksIdorRouteLiveOracle,
   clientSideAikidoZenDemoEvidence,
