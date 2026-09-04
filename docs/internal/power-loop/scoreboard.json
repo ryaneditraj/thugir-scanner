@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T23:30:33.046Z",
+  "updated_at": "2026-09-04T00:30:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2802,
-  "total_findings": 27782,
-  "critical_findings": 55,
+  "total_sites_scanned": 2803,
+  "total_findings": 27833,
+  "critical_findings": 57,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1986,
   "discovery_findings": 23462,
-  "improvements_shipped": 1359,
-  "last_run": "2026-09-03T23:30:33.046Z",
+  "improvements_shipped": 1362,
+  "last_run": "2026-09-04T00:30:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 51,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,41 +48,34 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 37 live oracles; secret-resend present)"
+      "note": "Stable 6/6 first-pass recall (51 findings, 37 live oracles; secret-resend present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 155,
-      "focus": "vulnforge file-upload levels 16-18 + Juice Shop v20 chatbot/respond + brokencrystals /api/mcp MCP hub; drained weak-supabase-rls + level15 + wrongsecrets-69",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 2,
+      "findings": 19,
+      "focus": "vulnforge level16 double-extension upload + owaspsecure A05 exposed config + verbose error route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 37 live oracles; secret-resend present)",
-      "brokencrystals.com/api/mcp: 87 findings — brokencrystals-mcp-route-live-oracle + full MCP tool suite",
-      "demo.owasp-juice.shop/rest/chatbot/respond: 17 findings — juice-shop-chatbot-respond-route-live-oracle",
-      "vulnforge-academy level16/17/18: 6/7/7 findings — file-upload + level17 Content-Type + level18 extension bypass route oracles",
-      "wrongsecrets.herokuapp.com/challenge/challenge-69: 18 findings",
-      "ai-security-platform weak-supabase-rls: 8 findings (generic host fingerprint)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (51 findings, 37 live oracles; secret-resend present)",
+      "owaspsecure.com/demo/a05_misconfig/insecure.php: 8→12 findings — exposed-config + verbose-error live/route oracles",
+      "vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php: 6→7 findings — level16-double-extension-upload route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "vulnforge level16 thin 6-finding hub without level-specific upload bypass oracle beyond shared file-upload route",
-      "ai-security weak-supabase-rls still generic-host fingerprint without Supabase RLS route oracle",
-      "wrongsecrets challenge-67/68 still undeployed on Heroku (404)",
-      "oopssec self-xss-csrf + stored-xss-reviews still thin without chain route oracles"
+      "owaspsecure A07/A10 hub scans still queued (login rate, reset tokens, MFA bypass, remember-me need CSRF session)",
+      "vulnforge level16 live upload API blocked by Vercel 403 — corpus fallback oracle only",
+      "wrongsecrets challenge-67/68 still undeployed on Heroku (404)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
+    "juice-shop.herokuapp.com": 51,
+    "owaspsecure.com/demo/a05_misconfig/insecure.php": 12,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php": 7,
     "brokencrystals.com/api/mcp": 87,
     "wrongsecrets.herokuapp.com/challenge/challenge-69": 18,
-    "demo.owasp-juice.shop/rest/chatbot/respond": 17,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php": 7,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level18.php": 7,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php": 6,
-    "ai-security-platform-iota.vercel.app/challenges/weak-supabase-rls": 8,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level15.php": 5
+    "demo.owasp-juice.shop/rest/chatbot/respond": 17
   }
 }

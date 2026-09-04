@@ -8249,6 +8249,24 @@
       "slug": "owaspsecure-misconfig-attack-path-route-aliases",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: owaspsecureMisconfigPhpinfoRouteLiveOracle + owaspsecureMisconfigDefaultCredsRouteLiveOracle routeRe extended to /demo/a05_misconfig/attacks/phpinfo_exposed.php and /attacks/default_creds_panel.php; phpinfo_exposed.php findings 7 (+route), default_creds_panel.php findings 7 (+route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnforge-academy.vercel.app",
+      "slug": "vulnforge-academy-level16-double-extension-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: level 16 README corpus documents double extension/null-byte upload bypass; vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php findings 6→7 (+vulnforge-academy-level16-double-extension-upload-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-misconfig-exposed-config-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/exposed_config/insecure/config.php returns DB_PASSWORD=SuperSecretPassword123! + API_KEY + SERVICE_TOKEN; owaspsecure.com/demo/a05_misconfig/insecure.php findings 8→12 (+owaspsecure-misconfig-exposed-config-live-oracle +route); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-misconfig-verbose-error-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/verbose_error_insecure.php leaks Fatal error stack trace with public_html/demo/a05_misconfig paths; owaspsecure.com/demo/a05_misconfig/insecure.php findings 8→12 (+owaspsecure-misconfig-verbose-error-live-oracle +route); benchmark juice-shop 51 findings 6/6 maintained"
     }
   ]
 }

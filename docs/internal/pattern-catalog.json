@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-03T23:07:52.667Z",
-  "total": 3207,
-  "uniqueSlugs": 3199,
+  "generatedAt": "2026-09-04T00:11:00.901Z",
+  "total": 3212,
+  "uniqueSlugs": 3204,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3189,
+    "generic": 3194,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3122,
+    "deep": 3127,
     "continuous": 0
   },
   "byCategory": {
@@ -25,7 +25,7 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 150,
-    "Security misconfiguration": 250,
+    "Security misconfiguration": 255,
     "Broken authentication": 202,
     "Injection": 525,
     "Cross-site scripting": 797,
@@ -2240,8 +2240,12 @@
     "owaspsecure-logging-threshold-alerts-route-live-oracle",
     "owaspsecure-misconfig-default-creds-live-oracle",
     "owaspsecure-misconfig-default-creds-route-live-oracle",
+    "owaspsecure-misconfig-exposed-config-live-oracle",
+    "owaspsecure-misconfig-exposed-config-route-live-oracle",
     "owaspsecure-misconfig-phpinfo-live-oracle",
     "owaspsecure-misconfig-phpinfo-route-live-oracle",
+    "owaspsecure-misconfig-verbose-error-live-oracle",
+    "owaspsecure-misconfig-verbose-error-route-live-oracle",
     "owaspsecure-ssrf-fetch-live-oracle",
     "owaspsecure-ssrf-fetch-route-live-oracle",
     "owaspsecure-ssrf-internal-health-live-oracle",
@@ -2855,6 +2859,7 @@
     "vulnforge-academy-level-ssrf-route-live-oracle",
     "vulnforge-academy-level-ssti-route-live-oracle",
     "vulnforge-academy-level-xss-route-live-oracle",
+    "vulnforge-academy-level16-double-extension-upload-route-live-oracle",
     "vulnforge-academy-level17-content-type-upload-route-live-oracle",
     "vulnforge-academy-level18-extension-bypass-route-live-oracle",
     "vulnforge-academy-level20-final-boss-route-live-oracle",
