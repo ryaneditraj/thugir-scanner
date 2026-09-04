@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T18:28:00.000Z",
+  "updated_at": "2026-09-04T19:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-47",
+      "source": "OWASP/wrongsecrets — Heroku demo challenge-47 Vault template hardcoded secret lab (official README deploy link; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-53",
+      "source": "OWASP/wrongsecrets — Heroku demo challenge-53 debugging-container secrets lab (official README deploy link; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/products?search=test",
+      "source": "sr33jih/vulnshop — OWASP API Top 10 product search SQLi oracle GET /api/products?search= (Vercel deploy; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://playground.fabraix.com/challenges/tool-poisoning-002",
+      "source": "fabraix/playground — Show HN AI agent tool-poisoning rug-pull challenge (GitHub challenges/; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/auth/signup",
+      "source": "BugTraceAI/BugStore — V-003 mass-assignment role escalation oracle POST /api/auth/signup (OpenAPI; web search 19 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-44",
       "source": "OWASP/wrongsecrets — Heroku demo challenge-44 secrets-in-K8s lab (official README deploy link; web search 18 UTC)",
