@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-04T03:10:13.517Z",
-  "total": 3222,
-  "uniqueSlugs": 3214,
+  "generatedAt": "2026-09-04T04:03:18.418Z",
+  "total": 3225,
+  "uniqueSlugs": 3217,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3204,
+    "generic": 3207,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3137,
+    "deep": 3140,
     "continuous": 0
   },
   "byCategory": {
@@ -49,7 +49,7 @@
     "Cryptographic failure": 4,
     "XSS": 3,
     "Session management": 2,
-    "Authentication": 4,
+    "Authentication": 7,
     "Unrestricted file upload": 1,
     "Cryptographic failures": 1
   },
@@ -2227,6 +2227,9 @@
     "owaspsecure-design-csrf-settings-route-live-oracle",
     "owaspsecure-design-magic-link-live-oracle",
     "owaspsecure-design-magic-link-route-live-oracle",
+    "owaspsecure-design-password-reset-attack-path-route-live-oracle",
+    "owaspsecure-design-password-reset-live-oracle",
+    "owaspsecure-design-password-reset-route-live-oracle",
     "owaspsecure-design-reauth-email-live-oracle",
     "owaspsecure-design-reauth-email-route-live-oracle",
     "owaspsecure-injection-sqli-blind-time-live-oracle",
