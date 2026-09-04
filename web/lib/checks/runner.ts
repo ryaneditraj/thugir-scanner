@@ -2050,6 +2050,8 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureInjectionSqliBlindTimeRouteLiveOracle",
   "owaspsecureInjectionSqliSecondOrderLiveOracle",
   "owaspsecureInjectionSqliSecondOrderRouteLiveOracle",
+  "owaspsecureInjectionStoreBioLiveOracle",
+  "owaspsecureInjectionStoreBioRouteLiveOracle",
   "owaspsecureBacFileDorLiveOracle",
   "owaspsecureBacFileDorRouteLiveOracle",
   "owaspsecureBacMassAssignmentLiveOracle",
@@ -2062,6 +2064,10 @@ const DEEP_RULES = new Set<string>([
   "owaspsecureSsrfSocketProbeRouteLiveOracle",
   "owaspsecureSsrfInternalHealthDirectLiveOracle",
   "owaspsecureSsrfInternalHealthDirectRouteLiveOracle",
+  "owaspsecureSsrfInternalAdminLiveOracle",
+  "owaspsecureSsrfInternalAdminRouteLiveOracle",
+  "owaspsecureSsrfInternalIndexDirectLiveOracle",
+  "owaspsecureSsrfInternalIndexDirectRouteLiveOracle",
   "owaspsecureVocOutdatedJqueryLiveOracle",
   "owaspsecureVocOutdatedJqueryRouteLiveOracle",
   "owaspsecureVocCdnNoSriLiveOracle",
@@ -17093,7 +17099,8 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       if (
         /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a03_injection(?:\/insecure\.php|\/attacks\/sql_second_order)/i.test(targetInput) &&
-        p.slug.startsWith("owaspsecure-injection-sqli-second-order")
+        (p.slug.startsWith("owaspsecure-injection-sqli-second-order") ||
+          p.slug.startsWith("owaspsecure-injection-store-bio"))
       )
         return -4;
       if (
@@ -17112,7 +17119,9 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /owaspsecure\.com/i.test(origin) &&
         /\/demo\/a10_ssrf\b/i.test(targetInput) &&
         (p.slug.startsWith("owaspsecure-ssrf-socket-probe") ||
-          p.slug.startsWith("owaspsecure-ssrf-internal-health-direct"))
+          p.slug.startsWith("owaspsecure-ssrf-internal-health-direct") ||
+          p.slug.startsWith("owaspsecure-ssrf-internal-admin") ||
+          p.slug.startsWith("owaspsecure-ssrf-internal-index-direct"))
       )
         return -4;
       if (

@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-ssrf-internal-admin-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/fetch_insecure.php?url=https://owaspsecure.com/demo/a10_ssrf/attacks/internal/admin.php returns Internal Admin Panel with SuperSecret123!; owaspsecure.com/demo/a10_ssrf/insecure.php findings 16→20 (+owaspsecure-ssrf-internal-admin-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-ssrf-internal-index-direct-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET attacks/internal/index.php lists admin.php + health.json without auth; owaspsecure.com/demo/a10_ssrf/insecure.php findings 16→20 (+owaspsecure-ssrf-internal-index-direct-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspsecure.com",
+      "slug": "owaspsecure-injection-store-bio-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST attacks/sql_second_order/store_bio_insecure.php persists raw bio (Saved insecure writer) for alice_inj@example.com; owaspsecure.com/demo/a03_injection/insecure.php findings 20→23 (+owaspsecure-injection-store-bio-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:wrongsecrets-ctf.herokuapp.com",
       "slug": "wrongsecrets-challenge-0-opening-route-live-oracle",
       "status": "shipped",
