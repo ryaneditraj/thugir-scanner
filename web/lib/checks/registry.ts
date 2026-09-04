@@ -108718,6 +108718,14 @@ function isDvwuHost(ctx: RuleContext): boolean {
   return /dvwu\.vercel\.app/i.test(ctx.origin) || /dvwu\.vercel\.app/i.test(pageUrl);
 }
 
+/** Tier-specific DVWU /labs/* routes have dedicated live oracles — suppress portal hub fingerprints. */
+function isDvwuTierSpecificLabRoute(ctx: RuleContext): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  return /\/labs\/(?:jwt|ssti|file-upload|xxe|deserialization|xss|command-injection|cmdi|idor|csrf|ssrf|lfi|path-traversal|open-redirect|graphql|mass-assignment|race-condition)\b/i.test(
+    pageUrl
+  );
+}
+
 async function probeDvwuPortalSqli(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isDvwuHost(ctx)) return null;
   const portalUrl = new URL("/api/portal", ctx.origin).toString();
@@ -108741,7 +108749,10 @@ async function probeDvwuPortalSqli(ctx: RuleContext): Promise<RuleResult | null>
   };
 }
 
-const dvwuPortalSqliLiveOracle: Rule = async (ctx) => (await probeDvwuPortalSqli(ctx)) ?? NEGATIVE;
+const dvwuPortalSqliLiveOracle: Rule = async (ctx) => {
+  if (isDvwuTierSpecificLabRoute(ctx)) return NEGATIVE;
+  return (await probeDvwuPortalSqli(ctx)) ?? NEGATIVE;
+};
 
 const dvwuPortalSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
@@ -108779,7 +108790,10 @@ async function probeDvwuSearchSqli(ctx: RuleContext): Promise<RuleResult | null>
   };
 }
 
-const dvwuSearchSqliLiveOracle: Rule = async (ctx) => (await probeDvwuSearchSqli(ctx)) ?? NEGATIVE;
+const dvwuSearchSqliLiveOracle: Rule = async (ctx) => {
+  if (isDvwuTierSpecificLabRoute(ctx)) return NEGATIVE;
+  return (await probeDvwuSearchSqli(ctx)) ?? NEGATIVE;
+};
 
 const dvwuSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
@@ -109671,6 +109685,7 @@ const istEduRedirectRouteLiveOracle: Rule = async (ctx) => {
 
 const dvwuSsrfRedirectLiveOracle: Rule = async (ctx) => {
   if (!isDvwuHost(ctx)) return NEGATIVE;
+  if (isDvwuTierSpecificLabRoute(ctx)) return NEGATIVE;
   const result = await probeRedirectWhitelistBypass(ctx);
   return result?.fired ? result : NEGATIVE;
 };
