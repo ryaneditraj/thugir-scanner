@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T13:22:00.000Z",
+  "updated_at": "2026-09-05T13:28:49.681Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3183,
-  "total_findings": 36672,
+  "total_sites_scanned": 3192,
+  "total_findings": 36809,
   "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2083,
-  "discovery_findings": 29404,
+  "discovery_urls_added": 2088,
+  "discovery_findings": 29488,
   "improvements_shipped": 1468,
-  "last_run": "2026-09-05T13:22:00.000Z",
+  "last_run": "2026-09-05T13:28:49.681Z",
   "last_run_summary": {
     "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 594,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,39 +48,45 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 39 live oracles; secret-resend present)"
+      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles; secret-resend + juice-shop-resend-key present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 63,
-      "focus": "BugStore admin/users roster truncation + route-oracle probe order + VulnShop template SSTI SPA corpus fallback",
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 84,
+      "focus": "Chimera Attack Simulation (token/forge, system/execute, diagnostics/resolve, config/import XXE, data/deserialize) + drained bugstore admin/users + oopssec sql-injection/self-xss-csrf walkthroughs; parallel run shipped BugStore route-oracle ordering + roster truncation fixes",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, gap=[])",
-      "bugstore.bugtraceai.com/api/admin/users: 21 findings — bugstore-admin-users-bac-live-oracle +route (25KB roster exceeded 16KB maxBytes)",
-      "bugstore.bugtraceai.com/api/forum/posts: 20 findings — bugstore-forum-posts-stored-xss-route-live-oracle via route-before-live priority",
-      "vulnshop.vercel.app/template?name={{7*7}}: 22 findings — vulnshop-template-ssti-live-oracle via README corpus fallback"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; gap=[]; secret-resend present)",
+      "chimera.atlascrew.dev/api/v1/auth/token/forge: 7 findings — thin generic Chimera hub (no token-forge route oracle)",
+      "chimera.atlascrew.dev/api/v1/admin/system/execute: 7 findings — thin generic hub (no command-injection route oracle)",
+      "chimera.atlascrew.dev/api/v1/diagnostics/resolve: 7 findings — thin generic hub (no DNS-resolve route oracle)",
+      "chimera.atlascrew.dev/api/v1/admin/config/import: 7 findings — thin generic hub (no XXE route oracle)",
+      "chimera.atlascrew.dev/api/v1/admin/data/deserialize: 7 findings — thin generic hub (no deserialization route oracle)",
+      "bugstore.bugtraceai.com/api/admin/users: 20 findings — bugstore-admin-users-bac-route-live-oracle (engine roster truncation fix)",
+      "koadt.github.io/.../self-xss-csrf-profile-takeover: 18 findings — oopssec-self-xss-csrf-profile-route-live-oracle",
+      "koadt.github.io/.../sql-injection-writeup: 11 findings — oopssec-orders-search-sqli-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "chimera gov API routes return GitHub Pages 404 — route oracles rely on Jekyll corpus fallback",
+      "Chimera Attack Simulation routes return thin 7-finding generic hub — route-specific live oracles needed for token/forge, system/execute, config/import, diagnostics/resolve, data/deserialize",
+      "oopssec react2shell/public-env/jwt-alg vanity slugs still queued",
       "qa.brokencrystals.com/api/file/aws still queued (48h skip)",
       "r2s-arena.fly.dev unreachable from cloud agent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "bugstore.bugtraceai.com/api/admin/users": 21,
-    "bugstore.bugtraceai.com/api/forum/posts": 20,
-    "vulnshop.vercel.app/template": 22,
+    "juice-shop.herokuapp.com": 53,
+    "bugstore.bugtraceai.com/api/admin/users": 20,
+    "koadt.github.io/oss-oopssec-store/posts/self-xss-csrf-profile-takeover": 18,
     "brokencrystals.com/api/products/latest": 86,
-    "qa.brokencrystals.com/api/users/one/admin/photo": 92,
     "pwnshop.ctfsecurity.com/account/delete": 49,
     "bugstore.bugtraceai.com/graphql": 23,
-    "vulnshop.vercel.app/run-diagnostic": 21,
-    "chimera.atlascrew.dev/api/v1/gov/benefits/search": 8
+    "bugstore.bugtraceai.com/api/forum/posts": 20,
+    "vulnshop.vercel.app/template": 22,
+    "chimera.atlascrew.dev/api/v1/auth/token/forge": 7,
+    "chimera.atlascrew.dev/api/v1/admin/system/execute": 7
   }
 }
