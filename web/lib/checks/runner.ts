@@ -1960,6 +1960,9 @@ const DEEP_RULES = new Set<string>([
   "truscaDemoReadOnlyHealthLiveOracle",
   "truscaDemoHubRouteLiveOracle",
   "aisecurityframeworkLlmTop10HubRouteLiveOracle",
+  "graphqlComplexityDosLiveOracle",
+  "graphqlComplexityPlaygroundHubRouteLiveOracle",
+  "graphqlComplexityDosRouteLiveOracle",
   "vampiGithubPagesOpenApiRouteLiveOracle",
   "fauxbankLabRouteLiveOracle",
   "fauxbankScannerRouteLiveOracle",
@@ -2646,6 +2649,7 @@ const DEEP_RULES = new Set<string>([
   "zerohealthChatbotHistoryRouteLiveOracle",
   "zerohealthLabResultsRouteLiveOracle",
   "zerohealthChatbotChatRouteLiveOracle",
+  "zerohealthEnhancedChatRouteLiveOracle",
   "zerohealthReportsGenerateRouteLiveOracle",
   "zerohealthFilesRouteLiveOracle",
   "zerohealthUsersRouteLiveOracle",
@@ -13060,6 +13064,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       )
         return -3;
       if (
+        /graphql-complexity-playground-production\.up\.railway\.app/i.test(origin) &&
+        /^https?:\/\/[^/]+\/?$/i.test(targetInput) &&
+        p.slug.startsWith("graphql-complexity-playground-hub")
+      )
+        return -3;
+      if (
+        /graphql-complexity-playground-production\.up\.railway\.app/i.test(origin) &&
+        /\/graphql\b/i.test(targetInput) &&
+        p.slug.startsWith("graphql-complexity-dos")
+      )
+        return -4;
+      if (
+        /zerohealth\.aliyu\.dev/i.test(origin) &&
+        /\/api\/chatbot\/enhanced-chat\b/i.test(targetInput) &&
+        p.slug === "zerohealth-enhanced-chat-route-live-oracle"
+      )
+        return -4;
+      if (
         /vampi-production\.up\.railway\.app/i.test(origin) &&
         /\/users\/v1\/_debug\b/i.test(targetInput) &&
         p.slug.startsWith("vampi-debug-password")
@@ -14429,7 +14451,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
-        /\/posts\/jwt-weak-secret-admin-bypass/i.test(targetInput) &&
+        /\/posts\/(?:jwt-weak-secret-admin-bypass|weak-jwt-secret)\/?$/i.test(targetInput) &&
         p.slug.startsWith("oopssec-jwt-weak-secret")
       )
         return -4;

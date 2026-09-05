@@ -15,14 +15,14 @@
       ]
     }
   },
-  "total_sites_scanned": 3279,
-  "total_findings": 38089,
+  "total_sites_scanned": 3274,
+  "total_findings": 38026,
   "critical_findings": 76,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2108,
-  "discovery_findings": 30160,
-  "improvements_shipped": 1447,
+  "discovery_findings": 30174,
+  "improvements_shipped": 1450,
   "last_run": "2026-09-05T20:22:00.000Z",
   "last_run_summary": {
     "hour_utc": "20",
@@ -53,25 +53,24 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 96,
-      "focus": "BugStore cart/add + orders IDOR + reviews XSS + seclab SSRF/XXE labs + Chimera login/patients/saas drain",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 11,
+      "findings": 116,
+      "focus": "BugStore cart/orders/reviews + seclab SSRF/XXE + Chimera login/patients/saas drain; parallel run also hit graphql-complexity + zerohealth enhanced-chat",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 38 live oracles) — primary Heroku first pass",
       "bugstore.bugtraceai.com/api/orders/1: 21 findings — bugstore-orders-idor-route-live-oracle shipped",
       "bugstore.bugtraceai.com/api/cart/add: 20 findings — bugstore checkout/cart hub with 12 live oracles",
-      "bugstore.bugtraceai.com/api/reviews/create: 20 findings — bugstore forum/reviews XSS hub",
-      "seclab.vercel.app/labs/ssrf: 7 findings — seclab-ssrf-vulnerable-route-live-oracle",
+      "graphql-complexity-playground-production.up.railway.app/: 8 findings — graphql-complexity-dos-live-oracle (parallel 20 UTC run)",
       "chimera.atlascrew.dev/api/v1/saas/tenants/1/projects: 8 findings — chimera-saas-tenants-projects-idor-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/patients/search?ssn=test: 8 findings — chimera-patients-search-sqli-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/auth/login-vulnerable: 8 findings — chimera-login-vulnerable-sqli-route-live-oracle"
+      "seclab.vercel.app/labs/ssrf: 7 findings — seclab-ssrf-vulnerable-route-live-oracle",
+      "zerohealth.aliyu.dev/api/chatbot/enhanced-chat: 6 findings — zerohealth-enhanced-chat-route-live-oracle (parallel run)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "seclab.vercel.app/labs/xxe: 4 findings — thin hub without XXE route live oracle",
-      "bugstore routes share hub fingerprint — route-specific oracles need deeper POST body probes on /api/cart/add and /api/reviews/create",
+      "bugstore routes share hub fingerprint — route-specific oracles need deeper POST body probes",
       "oopssec react2shell/weak-jwt vanity slugs still queued; qa.brokencrystals.com/api/file/aws 48h skip",
       "r2s-arena.fly.dev still unreachable from cloud agent"
     ]
@@ -81,10 +80,12 @@
     "bugstore.bugtraceai.com/api/orders/1": 21,
     "bugstore.bugtraceai.com/api/cart/add": 20,
     "bugstore.bugtraceai.com/api/reviews/create": 20,
+    "graphql-complexity-playground-production.up.railway.app": 8,
     "chimera.atlascrew.dev/api/v1/auth/login-vulnerable": 8,
     "chimera.atlascrew.dev/api/v1/patients/search?ssn=test": 8,
     "chimera.atlascrew.dev/api/v1/saas/tenants/1/projects": 8,
     "seclab.vercel.app/labs/ssrf": 7,
+    "zerohealth.aliyu.dev/api/chatbot/enhanced-chat": 6,
     "seclab.vercel.app/labs/xxe": 4
   }
 }
