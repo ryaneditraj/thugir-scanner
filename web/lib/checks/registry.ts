@@ -6244,12 +6244,21 @@ const clientSideOopssecIdorOrderPrivacyEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_IDOR_ORDER_PRIVACY_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach/";
+
 const oopssecIdorOrderPrivacyRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/idor-order-privacy-breach/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/posts\/idor-order-privacy-breach/i.test(pageUrl) ||
+    /\/posts\/insecure-direct-object-reference\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/insecure-direct-object-reference\/?$/i.test(pageUrl)
+    ? OOPSSEC_IDOR_ORDER_PRIVACY_CANONICAL_POST
+    : pageUrl;
   const result = await oopssecWalkthroughEvidenceWithFetch(
     ctx,
-    pageUrl,
+    fetchUrl,
     clientSideOopssecIdorOrderPrivacyEvidence
   );
   if (!result.fired) return NEGATIVE;
@@ -6259,7 +6268,9 @@ const oopssecIdorOrderPrivacyRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/idor-order-privacy-breach route scan — walkthrough documents missing ownership check on GET /orders/ORD-* exposing other customers' PII"
+      note: /\/posts\/insecure-direct-object-reference\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/insecure-direct-object-reference route scan — vanity slug 404; canonical idor-order-privacy-breach walkthrough documents missing ownership check on GET /orders/ORD-* exposing other customers' PII"
+        : "OopsSec Store /posts/idor-order-privacy-breach route scan — walkthrough documents missing ownership check on GET /orders/ORD-* exposing other customers' PII"
     }
   };
 };
@@ -6856,12 +6867,21 @@ const clientSideOopssecJwtWeakSecretEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_JWT_WEAK_SECRET_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/jwt-weak-secret-admin-bypass/";
+
 const oopssecJwtWeakSecretAdminBypassRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/jwt-weak-secret-admin-bypass/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/posts\/jwt-weak-secret-admin-bypass/i.test(pageUrl) ||
+    /\/posts\/weak-jwt-secret\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/weak-jwt-secret\/?$/i.test(pageUrl)
+    ? OOPSSEC_JWT_WEAK_SECRET_CANONICAL_POST
+    : pageUrl;
   const result = await oopssecWalkthroughEvidenceWithFetch(
     ctx,
-    pageUrl,
+    fetchUrl,
     clientSideOopssecJwtWeakSecretEvidence
   );
   if (!result.fired) return NEGATIVE;
@@ -6871,7 +6891,9 @@ const oopssecJwtWeakSecretAdminBypassRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/jwt-weak-secret-admin-bypass route scan — walkthrough documents cracking JWT_SECRET with hashcat and forging role:ADMIN to access restricted /admin endpoints"
+      note: /\/posts\/weak-jwt-secret\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/weak-jwt-secret route scan — vanity slug 404; canonical jwt-weak-secret-admin-bypass walkthrough documents cracking JWT_SECRET with hashcat and forging role:ADMIN to access restricted /admin endpoints"
+        : "OopsSec Store /posts/jwt-weak-secret-admin-bypass route scan — walkthrough documents cracking JWT_SECRET with hashcat and forging role:ADMIN to access restricted /admin endpoints"
     }
   };
 };
@@ -106526,7 +106548,9 @@ const vapiApi5RouteLiveOracle: Rule = async (ctx) => {
 const vapiApi1RouteLiveOracle: Rule = async (ctx) => {
   if (!isVapiHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/api1\/user/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/api1\/user/i.test(pageUrl) || /\/api\/v1\/users\/\d+/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
   const result = await vapiApi1BolaLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -106535,7 +106559,9 @@ const vapiApi1RouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "vAPI /api1/user route scan — GET /api1/user/1 with new user token returns Michaels flag — BOLA oracle (API1)"
+      note: /\/api\/v1\/users\/\d+/i.test(pageUrl)
+        ? "vAPI /api/v1/users/{id} route scan — GET /vapi/api1/user/1 with new user token returns Michaels flag — BOLA oracle (API1)"
+        : "vAPI /api1/user route scan — GET /api1/user/1 with new user token returns Michaels flag — BOLA oracle (API1)"
     }
   };
 };
