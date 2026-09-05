@@ -29130,6 +29130,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-hub-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Zero Health security lab hub route live oracle",
+    description:
+      "When scanning zerohealth.aliyu.dev/, the Zero Health security lab documents intentionally vulnerable healthcare modules including JWT bypass, IDOR, XSS, SQLi, and LLM prompt injection — route-specific training hub oracle.",
+    impactOneline:
+      "Route-specific confirmation that Zero Health hub catalogs healthcare-themed vulnerability training modules.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — never deploy to production healthcare networks.",
+      steps: [
+        "Run Zero Health only in isolated Docker containers on lab networks.",
+        "Enforce JWT validation and HIPAA-compliant access controls in production healthcare apps.",
+        "Do not expose medical data APIs without authentication."
+      ]
+    },
+    fixPrompt:
+      "Our zerohealth.aliyu.dev hub route scan confirms intentionally vulnerable healthcare training modules. Show HIPAA-compliant access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zero-health-vercel-dashboard-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "low",
+    title: "Zero Health Vercel dashboard deployment identity route live oracle",
+    description:
+      "When scanning zero-health.vercel.app/, the host serves a benign Next.js Google Health API dashboard — NOT the aligorithm/Zero-Health security lab — suppressing reflexion SSTI/SQLi/XSS false positives.",
+    impactOneline:
+      "Route-specific confirmation that zero-health.vercel.app is a non-vulnerable dashboard deployment distinct from the Zero Health security lab.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zeroHealthVercelDashboardRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use zerohealth.aliyu.dev for Zero Health security lab training — zero-health.vercel.app is a different product.",
+      steps: [
+        "Remove zero-health.vercel.app from vulnerability discovery queues when targeting the Zero Health security lab.",
+        "Point security training scans to zerohealth.aliyu.dev instead.",
+        "Do not treat reflexion probe hits on static Next.js dashboards as confirmed injection."
+      ]
+    },
+    fixPrompt:
+      "Our zero-health.vercel.app route is a benign Google Health API dashboard, not the Zero Health security lab. Show how to avoid false-positive reflexion findings on static SPAs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "zerohealth-file-upload-route-live-oracle",
     platform: "generic",
     category: "Insecure file upload",
