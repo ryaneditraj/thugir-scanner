@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T10:20:00.000Z",
+  "updated_at": "2026-09-05T11:12:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vulnshop.vercel.app/template?name={{7*7}}",
+      "source": "chethan-vinayak/vulnshop — SSTI oracle GET /template?name= (README vuln #6; web search 11 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/xml-import",
+      "source": "chethan-vinayak/vulnshop — XXE oracle POST /api/xml-import (README A03 injection; web search 11 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://qa.brokencrystals.com/api/users/one/admin/photo",
+      "source": "NeuraLegion/brokencrystals — unrestricted avatar upload / EICAR AV-bypass oracle PUT /api/users/one/admin/photo (README; web search 11 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/aes-cbc-padding-oracle-forged-share-token/",
+      "source": "kOaDT/oss-oopssec-store — AES-CBC padding oracle share-token walkthrough (roadmap ch.09; web search 11 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/run-diagnostic?cmd=id",
+      "source": "chethan-vinayak/vulnshop — command injection oracle GET /run-diagnostic?cmd= (README A03; web search 11 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://pwnshop.ctfsecurity.com/profile/update-avatar",
       "source": "ctfsec/pwnshop — PWN-029 SSRF avatar URL fetched server-side POST /profile/update-avatar (vulnerabilities index; web search 10 UTC)",
