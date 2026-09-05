@@ -545,6 +545,12 @@ async function fetchBrokencrystalsJwkPrivatePem(): Promise<string | null> {
   }
 }
 
+/** Warm Broken Crystals x5u/x5c/jku rogue JWT builders before route-oracle probes run. */
+export async function primeBrokencrystalsJwtSigningKeys(): Promise<boolean> {
+  const pem = await fetchBrokencrystalsJwkPrivatePem();
+  return pem !== null && pem.includes("BEGIN");
+}
+
 /** Forge a JWT whose jku header points at the public rogue JWK set (Broken Crystals JKU oracle). */
 export async function buildBrokencrystalsJkuRogueJwt(
   payload: Record<string, unknown>

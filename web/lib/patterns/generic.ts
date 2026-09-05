@@ -685,6 +685,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "code-breaking-puzzle-language-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Code-Breaking puzzle language route live oracle",
+    description:
+      "When scanning /puzzle/{id} on code-breaking.fly.dev, language-specific source-code audit puzzles (PHP function, Java javacon) are confirmed with tier titles and GitHub source paths — route-specific language CTF oracle.",
+    impactOneline:
+      "Route-scoped scans of /puzzle routes should distinguish language-specific audit puzzles beyond generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "codeBreakingPuzzleLanguageRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Code-Breaking is intentional training — isolate puzzle instances from production codebases.",
+      steps: [
+        "Run source-audit CTF puzzles only on dedicated lab infrastructure.",
+        "Require authentication before serving downloadable challenge source archives.",
+        "Use puzzle findings to train reviewers without copying vulnerable patterns into production."
+      ]
+    },
+    fixPrompt:
+      "Our Code-Breaking /puzzle route scan confirms language-specific source audit CTF content. Show how to isolate challenge instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "command-injection-form-probe",
     platform: "generic",
     category: "Injection",
@@ -13707,6 +13733,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nextjs-rsc-cve-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Next.js RSC CVE server-action live oracle",
+    description:
+      "Live probe confirms CVE-2025-66478 / CVE-2025-55182 HackerOne demo markers (Run Server Action, VERCEL_PLATFORM_PROTECTION, vulnerable Next.js 15/16) on intentional RSC labs.",
+    impactOneline:
+      "Public Next.js RSC CVE lab exposes reachable server-action RCE chain for platform-protection bypass testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nextjsRscCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Next.js/React; remove public CVE demos.",
+      steps: [
+        "Upgrade Next.js and React to patched RSC releases.",
+        "Remove HackerOne/react2shell demo deployments from public URLs.",
+        "Auth-gate or disable server actions on production domains."
+      ]
+    },
+    fixPrompt:
+      "Our Next.js app hosts a CVE-2025-66478 RSC lab with Run Server Action. Show patched versions and how to remove public RCE demos.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nextjs-rsc-cve-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Next.js RSC CVE route live oracle",
+    description:
+      "When scanning nextjs-cve-hackerone.vercel.app or similar RSC CVE demos, route scan confirms CVE-2025-66478 banner plus server-action lab markers — route-specific RSC training oracle.",
+    impactOneline:
+      "Route-specific Next.js RSC CVE demo confirms intentional server-action exploitation surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nextjsRscCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Next.js/React; remove public CVE demos.",
+      steps: [
+        "Upgrade Next.js and React to patched RSC releases.",
+        "Remove HackerOne/react2shell demo deployments from public URLs.",
+        "Auth-gate or disable server actions on production domains."
+      ]
+    },
+    fixPrompt:
+      "Our Next.js RSC CVE route scan confirms CVE-2025-66478 demo markers. Show patched versions and demo isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-cve-55182-saas-poc-evidence",
     platform: "generic",
     category: "Injection",
@@ -14744,6 +14822,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-patients-search-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera patient SSN search SQLi live oracle",
+    description:
+      "On chimera.atlascrew.dev, Chimera openapi documents classic SQLi via GET /api/v1/patients/search?ssn= when USE_DATABASE=true — host-level SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Chimera docs disclose classic SQL injection on the patient SSN search endpoint for WAF honeypot training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraPatientsSearchSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries.",
+        "Validate and sanitize all query parameters before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera patient search API documents classic SQLi via SSN parameter. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-patients-search-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -14770,6 +14874,422 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-vulnerability-matrix-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Chimera vulnerability matrix route live oracle",
+    description:
+      "When scanning /vulnerability-matrix on chimera.atlascrew.dev, the CHM-ID vulnerability matrix catalogs 456+ intentional API flaws — route-specific honeypot inventory oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera /vulnerability-matrix documents an unauthenticated CHM-ID vulnerability inventory for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraVulnerabilityMatrixRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict vulnerability matrix pages to internal red-team networks.",
+      steps: [
+        "Require authentication before exposing CHM-ID vulnerability registries.",
+        "Do not publish honeypot vulnerability inventories on public hosts.",
+        "Keep Chimera vuln-api instances on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /vulnerability-matrix route exposes 456+ intentional API vulnerabilities. Show how to restrict vulnerability inventories to internal networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-vulnerability-inventory-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Chimera vulnerability inventory route live oracle",
+    description:
+      "When scanning /vulnerability-inventory on chimera.atlascrew.dev, the Registered CHM-ID catalog with reconciliation notes documents intentional API flaws — route-specific honeypot inventory oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera /vulnerability-inventory documents an unauthenticated CHM-ID vulnerability registry for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraVulnerabilityInventoryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict vulnerability inventory pages to internal red-team networks.",
+      steps: [
+        "Require authentication before exposing CHM-ID vulnerability registries.",
+        "Do not publish honeypot vulnerability inventories on public hosts.",
+        "Keep Chimera vuln-api instances on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /vulnerability-inventory route exposes a Registered CHM-ID vulnerability catalog. Show how to restrict vulnerability inventories to internal networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-hipaa-evidence-endpoints-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Chimera HIPAA evidence endpoints route live oracle",
+    description:
+      "When scanning /hipaa-evidence-endpoints on chimera.atlascrew.dev, healthcare routes document unauthenticated patient record export and X-Skip-Audit audit suppression — route-specific HIPAA compliance training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera /hipaa-evidence-endpoints documents healthcare PHI export and audit-log suppression training routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHipaaEvidenceEndpointsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict HIPAA evidence endpoint catalogs to internal red-team networks.",
+      steps: [
+        "Require authentication and role checks before exporting patient records.",
+        "Reject X-Skip-Audit headers and always log PHI access.",
+        "Keep Chimera healthcare training routes on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /hipaa-evidence-endpoints route documents unauthenticated patient export and audit suppression. Show HIPAA-compliant access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-payments-process-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Chimera primary payment processing route live oracle",
+    description:
+      "When scanning /api/payments/process on chimera.atlascrew.dev, the endpoints catalog documents primary payment processing with amount manipulation flaws — route-specific payment fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional payment processing and amount manipulation vulnerabilities for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraPaymentsProcessRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate payment amounts server-side and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce server-side amount validation independent of client-submitted values.",
+        "Require authentication and authorization on all payment processing endpoints.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/payments/process route documents payment amount manipulation flaws. Show server-side amount validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-payments-amount-manipulate-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "critical",
+    title: "Chimera payment amount manipulation route live oracle",
+    description:
+      "When scanning /api/payments/amount/manipulate on chimera.atlascrew.dev, the endpoints catalog documents payment amount manipulation without authorization checks — route-specific payment fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional payment amount manipulation flaws for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraPaymentsAmountManipulateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate payment amounts server-side and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce server-side amount validation independent of client-submitted values.",
+        "Require authentication and authorization on all payment manipulation endpoints.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/payments/amount/manipulate route documents payment amount manipulation flaws. Show server-side amount validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-wire-transfer-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "critical",
+    title: "Chimera wire transfer route live oracle",
+    description:
+      "When scanning /api/v1/transfers/wire on chimera.atlascrew.dev, the endpoints catalog documents wire transfer initiation without authorization checks — route-specific wire fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional wire transfer business logic flaws for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraWireTransferRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require multi-factor authorization for wire transfers and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce step-up authentication and dual approval for wire transfers.",
+        "Validate transfer amounts and beneficiary accounts server-side.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/transfers/wire route documents wire transfer fraud flaws. Show authorization and dual-approval remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-claims-submit-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Chimera insurance claims submission route live oracle",
+    description:
+      "When scanning /api/claims/submit on chimera.atlascrew.dev, the endpoints catalog documents unauthenticated claims submission and insurance fraud scenarios — route-specific claims fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional insurance claims submission flaws for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraClaimsSubmitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and fraud controls on claims submission endpoints.",
+      steps: [
+        "Enforce authenticated sessions and role checks before accepting claims.",
+        "Validate claim amounts and supporting evidence server-side.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/claims/submit route documents unauthenticated claims submission flaws. Show authorization and fraud-detection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-healthcare-records-export-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Chimera HIPAA patient records export route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/records/export on chimera.atlascrew.dev, HIPAA evidence routes document bulk PHI export with X-Skip-Audit audit suppression — route-specific healthcare compliance training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents unauthenticated patient record export and audit bypass for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcareRecordsExportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict PHI export endpoints and reject audit-suppression headers.",
+      steps: [
+        "Require authentication and HIPAA role checks before exporting patient records.",
+        "Reject X-Skip-Audit headers and always log PHI access.",
+        "Keep Chimera healthcare training routes on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/records/export route documents PHI bulk export with audit suppression. Show HIPAA-compliant access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-claims-amounts-inflate-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "critical",
+    title: "Chimera claims amount inflation route live oracle",
+    description:
+      "When scanning /api/claims/amounts/inflate on chimera.atlascrew.dev, the endpoints catalog documents claims amount manipulation without authorization checks — route-specific insurance fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional claims amount inflation flaws for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraClaimsAmountsInflateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate claim amounts server-side and require authorization for adjustments.",
+      steps: [
+        "Enforce server-side claim amount validation independent of client-submitted values.",
+        "Require multi-party approval for claim amount modifications.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/claims/amounts/inflate route documents claims amount manipulation flaws. Show authorization and amount-validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-banking-accounts-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera banking account search SQLi route live oracle",
+    description:
+      "When scanning /api/v1/banking/accounts or /api/v1/banking/accounts/search on chimera.atlascrew.dev, the vuln-api README documents UNION-based SQLi via account_number query parameter when USE_DATABASE=true — route-specific banking SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional UNION-based SQL injection on the banking account search endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraBankingAccountsSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries on account search endpoints.",
+        "Validate account_number format server-side before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/banking/accounts/search route documents UNION-based SQLi via account_number. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-banking-accounts-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera banking accounts BOLA route live oracle",
+    description:
+      "When scanning /api/v1/banking/accounts on chimera.atlascrew.dev, CHM-BANK-002 documents BOLA/IDOR via predictable account identifiers without ownership checks — route-specific banking access control training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional banking account BOLA for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraBankingAccountsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on banking account endpoints.",
+      steps: [
+        "Verify the authenticated user owns each requested banking account before returning data.",
+        "Use unpredictable account identifiers instead of sequential IDs.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/banking/accounts route documents CHM-BANK-002 BOLA. Show object-level authorization remediation for banking accounts.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-banking-beneficiaries-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera banking beneficiaries BOLA route live oracle",
+    description:
+      "When scanning /api/v1/banking/beneficiaries/{beneficiary_id} on chimera.atlascrew.dev, the openapi documents Beneficiary lookup (IDOR) via predictable beneficiary identifiers without ownership checks — route-specific banking beneficiary access control training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional banking beneficiary IDOR for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraBankingBeneficiariesBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on banking beneficiary endpoints.",
+      steps: [
+        "Verify the authenticated user owns each requested beneficiary before returning data.",
+        "Use unpredictable beneficiary identifiers instead of sequential IDs.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/banking/beneficiaries route documents Beneficiary lookup (IDOR). Show object-level authorization remediation for banking beneficiaries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-banking-transfer-business-logic-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "critical",
+    title: "Chimera banking transfer business logic route live oracle",
+    description:
+      "When scanning /api/v1/banking/transfer on chimera.atlascrew.dev, CHM-BANK-001 documents business logic manipulation and race conditions on fund transfers — route-specific banking fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional banking transfer business logic flaws for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraBankingTransferBusinessLogicRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use atomic balance checks and server-side transfer validation.",
+      steps: [
+        "Wrap transfer operations in database transactions with row-level locking.",
+        "Re-validate account balances immediately before debiting funds.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/banking/transfer route documents CHM-BANK-001 transfer manipulation. Show atomic transfer and race-condition remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-insurance-policies-lookup-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera insurance policy lookup SQLi route live oracle",
+    description:
+      "When scanning /api/v1/insurance/policies, /api/v1/insurance/policies/{id}, or /api/v1/insurance/policies/lookup on chimera.atlascrew.dev, the vuln-api README documents blind boolean SQLi via policy_number query parameter when USE_DATABASE=true — route-specific insurance SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional blind boolean SQL injection on the insurance policy lookup endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraInsurancePoliciesLookupSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries on policy lookup endpoints.",
+        "Validate policy_number format server-side before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/insurance/policies/lookup route documents blind boolean SQLi via policy_number. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-transactions-history-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera transaction history SQLi live oracle",
+    description:
+      "On chimera.atlascrew.dev, Chimera vuln-api README documents time-based blind SQLi via GET /api/v1/transactions/history?account_id= when USE_DATABASE=true — host-level SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Chimera docs disclose time-based blind SQL injection on the transaction history endpoint for WAF honeypot training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraTransactionsHistorySqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries on transaction history endpoints.",
+        "Validate account_id format server-side before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our Chimera transaction history endpoint documents time-based blind SQLi via account_id. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-transactions-history-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera transaction history SQLi route live oracle",
+    description:
+      "When scanning /api/v1/transactions/history on chimera.atlascrew.dev, the vuln-api README documents time-based blind SQLi via account_id query parameter when USE_DATABASE=true — route-specific transaction history SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional time-based blind SQL injection on the transaction history endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraTransactionsHistorySqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries on transaction history endpoints.",
+        "Validate account_id format server-side before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/transactions/history route documents time-based blind SQLi via account_id. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-swagger-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -14792,6 +15312,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our chimera /swagger route exposes 456+ intentional API vulnerabilities. Show how to restrict API documentation to internal networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-api-reference-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Chimera OpenAPI reference route live oracle",
+    description:
+      "When scanning /api-reference on chimera.atlascrew.dev, the OpenAPI reference documents /openapi.yaml, Swagger UI, and FedRAMP annotation slice with x-fedramp-controls — route-specific WAF testing corpus oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera /api-reference documents machine-readable FedRAMP OpenAPI extensions for vulnerability assessment tooling.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraApiReferenceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict OpenAPI reference pages and FedRAMP annotation slices to internal red-team networks.",
+      steps: [
+        "Require authentication before exposing OpenAPI reference documentation.",
+        "Do not publish FedRAMP control-mapping extensions on public hosts.",
+        "Keep Chimera vuln-api instances on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api-reference route exposes OpenAPI specs with FedRAMP annotation slices. Show how to restrict API reference docs to internal networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-fedramp-openapi-extensions-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Chimera FedRAMP OpenAPI extensions route live oracle",
+    description:
+      "When scanning /fedramp-openapi-extensions on chimera.atlascrew.dev, FedRAMP Rev. 5 extension contract documents x-fedramp-controls, x-vulnerability-class, x-expected-defense, and x-evidence-types — route-specific compliance training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera /fedramp-openapi-extensions documents machine-readable FedRAMP OpenAPI producer contract for assessment tooling.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraFedrampOpenapiExtensionsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict FedRAMP OpenAPI extension documentation to internal red-team networks.",
+      steps: [
+        "Require authentication before exposing FedRAMP control-mapping contracts.",
+        "Do not publish x-fedramp-controls extension schemas on public hosts.",
+        "Keep Chimera compliance training routes on isolated lab networks."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /fedramp-openapi-extensions route exposes FedRAMP Rev. 5 OpenAPI extension contract. Show how to restrict compliance training docs to internal networks.",
     version: 1,
     enabled: true
   },
@@ -14844,6 +15416,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our HackHealth /cybersecurity/a03/sqlInjection route documents intentional login SQLi. Show parameterized query fixes for the attack lab.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hack-health-a01-brute-force-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "HackHealth A01 brute-force route live oracle",
+    description:
+      "When scanning /cybersecurity/a01/bruteForce on hack-health-tutorial.vercel.app, the Nextra A01 Broken Access Control tutorial documents CWE-307 brute-force / credential stuffing against the login API — route-specific BAC training oracle (Vercel checkpoint corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation of HackHealth A01 brute-force tutorial enables targeted scanner calibration for educational BAC labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hackHealthA01BruteForceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce login rate limiting and restrict tutorial labs to local dev.",
+      steps: [
+        "Add account lockout and CAPTCHA after repeated failed login attempts.",
+        "Host HackHealth attack tutorials on localhost only, not public Vercel deploys.",
+        "Monitor and alert on brute-force patterns against authentication endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our HackHealth /cybersecurity/a01/bruteForce route documents CWE-307 brute-force attacks. Show rate-limiting and account lockout remediation.",
     version: 1,
     enabled: true
   },
@@ -15264,6 +15862,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vwad-oopssec-store-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP VWAD OopsSec Store offline CTF listing disclosed",
+    description:
+      "OopsSec Store VWAD listing links koadt.github.io/oss-oopssec-store GitHub Pages CTF with 35 flags across 11 OWASP Top 10 chapters in a Next.js e-commerce SPA.",
+    impactOneline:
+      "Public VWAD registry advertises offline-deployable CTF labs with live GitHub Pages demo URLs for unauthenticated practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadOopssecStoreEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — isolate lab instances from production networks.",
+      steps: [
+        "Deploy OopsSec Store only on isolated lab networks.",
+        "Require authentication when exposing CTF challenge catalogs publicly.",
+        "Monitor VWAD-linked GitHub Pages instances for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our OopsSec Store instance is listed in OWASP VWAD with a public GitHub Pages demo. Show how to isolate CTF training labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vwad-oopssec-store-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP VWAD OopsSec Store route live oracle",
+    description:
+      "When scanning vwad.owasp.org/app/oopssec-store/, the VWAD listing links koadt.github.io/oss-oopssec-store and confirms the live 35-flag CTF roadmap — route-specific OopsSec Store training oracle.",
+    impactOneline:
+      "VWAD OopsSec Store listing exposes offline-deploy CTF scope and live GitHub Pages demo URL to unauthenticated visitors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vwadOopssecStoreRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — limit public disclosure of challenge scope on VWAD-linked hosts.",
+      steps: [
+        "Gate challenge catalog details behind authenticated lab enrollment.",
+        "Run OopsSec Store only on isolated training infrastructure.",
+        "Avoid publishing full CTF scope on VWAD listings without access controls."
+      ]
+    },
+    fixPrompt:
+      "Our VWAD OopsSec Store listing links a public GitHub Pages CTF with 35 flags. Show route-specific training-platform access control.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sensitive-api-password-leakage",
     platform: "generic",
     category: "Sensitive data exposure",
@@ -15446,6 +16096,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fauxbank-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "FauxBank /api/search authenticated SQLi route live oracle",
+    description:
+      "When scanning /api/search on pentest-fauxbank.vercel.app, GET returns injected:true for OR 1=1 payload after admin login — route-specific authenticated SQLi oracle.",
+    impactOneline:
+      "Route-specific scans on FauxBank search APIs need live SQLi confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all search endpoints.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Validate and escape search terms server-side.",
+        "Add integration tests that reject injection payloads."
+      ]
+    },
+    fixPrompt:
+      "Our FauxBank /api/search route returns injected:true for OR 1=1 payloads after login. Show route-specific parameterized query fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "fauxbank-support-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -15572,6 +16248,344 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /admin route scan confirms default admin/admin exposes user directory. Show route-specific admin hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ghostbank-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Ghostbank BOLA training app disclosed",
+    description:
+      "ghostbank.net documents Ghost Security's fictional banking SPA with intentional BOLA/IDOR on POST /api/v3/transfer via account_from manipulation.",
+    impactOneline:
+      "Public Ghostbank demo teaches Broken Object Level Authorization fund-transfer exploitation for Reaper training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideGhostbankEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Ghostbank is intentional training — enforce server-side account ownership checks in production banking APIs.",
+      steps: [
+        "Verify account_from belongs to the authenticated user before processing transfers.",
+        "Use non-enumerable account identifiers instead of sequential integers.",
+        "Run Ghostbank only on isolated training networks."
+      ]
+    },
+    fixPrompt:
+      "We host Ghostbank-style BOLA training. Show how to enforce object-level authorization on fund transfer APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ghostbank-transfer-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Ghostbank transfer BOLA live oracle",
+    description:
+      "On api.ghostbank.net, POST /api/v3/transfer accepts account_from manipulation allowing transfers from other customers' accounts — BOLA training oracle (Reaper walkthrough corpus fallback).",
+    impactOneline:
+      "Ghostbank documents intentional BOLA on fund transfers when authenticated users change account_from.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ghostbankTransferBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce account ownership on transfer endpoints and keep Ghostbank on isolated training networks.",
+      steps: [
+        "Validate account_from matches the authenticated customer's accounts.",
+        "Reject cross-account transfers without explicit authorization.",
+        "Do not deploy Ghostbank training endpoints on production banking infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Ghostbank /api/v3/transfer documents BOLA via account_from. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ghostbank-transfer-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Ghostbank transfer BOLA route live oracle",
+    description:
+      "When scanning /api/v3/transfer on api.ghostbank.net, Reaper walkthrough documents BOLA via account_from manipulation — route-specific transfer BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Ghostbank documents intentional transfer BOLA for Reaper training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ghostbankTransferBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce account ownership on transfer endpoints and keep Ghostbank on isolated training networks.",
+      steps: [
+        "Validate account_from matches the authenticated customer's accounts.",
+        "Reject cross-account transfers without explicit authorization.",
+        "Do not deploy Ghostbank training endpoints on production banking infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Ghostbank /api/v3/transfer route scan documents BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ghostbank-hub-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Ghostbank hub route live oracle",
+    description:
+      "When scanning ghostbank.net/, the Ghost Security fictional banking SPA documents BOLA training on POST /api/v3/transfer — route-specific hub training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Ghostbank hub documents intentional transfer BOLA for Reaper training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ghostbankHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run Ghostbank only on isolated training networks; enforce BOLA checks in production banking APIs.",
+      steps: [
+        "Gate Ghostbank demo behind training authentication.",
+        "Validate account ownership on all fund transfer endpoints.",
+        "Never expose sequential account IDs in production APIs."
+      ]
+    },
+    fixPrompt:
+      "Our ghostbank.net hub route scan confirms BOLA training scope. Show production transfer authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "trusca-demo-read-only-health-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "TRUSCA live demo read-only health fingerprint",
+    description:
+      "GET /health on trusca-demo.duckdns.org exposes demo_read_only and demo_sandbox_scans flags — public read-only SCA training deployment oracle.",
+    impactOneline:
+      "Public demo deployments advertising read-only mode still expose seeded credentials and sandbox carve-outs documented in live-demo guides.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "truscaDemoReadOnlyHealthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict public demo instances to read-only with documented seeded accounts and nightly dataset resets.",
+      steps: [
+        "Keep DEMO_READ_ONLY enforced on all write endpoints except documented sandbox carve-outs.",
+        "Rotate seeded demo passwords if the instance is internet-facing.",
+        "Do not upload proprietary SBOMs to public demo sandboxes."
+      ]
+    },
+    fixPrompt:
+      "Our TRUSCA /health endpoint exposes demo_read_only flags. Show how to harden public demo deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "trusca-demo-hub-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "TRUSCA live demo hub route live oracle",
+    description:
+      "When scanning trusca-demo.duckdns.org/, the TRUSCA read-only live demo documents seeded accounts and public /health demo_read_only fingerprint — route-specific SCA training hub oracle.",
+    impactOneline:
+      "Route-specific confirmation that TRUSCA hub is a public read-only demo with seeded credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "truscaDemoHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate public TRUSCA demos behind documented seeded accounts and nightly resets.",
+      steps: [
+        "Enforce DEMO_READ_ONLY on all non-sandbox writes.",
+        "Surface demo_read_only banner in the SPA.",
+        "Reset demo datasets on a nightly schedule."
+      ]
+    },
+    fixPrompt:
+      "Our trusca-demo.duckdns.org hub route scan confirms read-only live demo. Show public demo hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "aisecurityframework-llm-top10-hub-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "AI Security Framework OWASP LLM Top 10 hub route live oracle",
+    description:
+      "When scanning aisecurityframework.netlify.app/, the hub documents OWASP LLM Top 10 controls including LLM01 Prompt Injection and attack-surface mapping — route-specific AI security methodology oracle.",
+    impactOneline:
+      "Route-specific confirmation that the AI Security Framework hub catalogs LLM attack vectors and assessment controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aisecurityframeworkLlmTop10HubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply OWASP LLM Top 10 controls to production AI systems.",
+      steps: [
+        "Implement prompt injection detection and input sanitization.",
+        "Map AI attack surfaces across data, model, deployment, and infrastructure layers.",
+        "Monitor for model drift and adversarial attacks."
+      ]
+    },
+    fixPrompt:
+      "Our aisecurityframework.netlify.app hub documents OWASP LLM Top 10. Show LLM01 prompt injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graphql-complexity-dos-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "GraphQL Complexity Playground rejects over-limit queries",
+    description:
+      "POST /graphql on graphql-complexity-playground rejects deeply nested queries when estimated complexity exceeds max 10 — GraphQL DoS/complexity-limit training oracle.",
+    impactOneline:
+      "Unbounded GraphQL query complexity enables resource exhaustion; enforce complexity limits before execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlComplexityDosLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce GraphQL query complexity and depth limits in production APIs.",
+      steps: [
+        "Calculate query cost before execution using a complexity analyzer.",
+        "Reject queries exceeding configured max complexity.",
+        "Monitor for nested alias/batching DoS patterns."
+      ]
+    },
+    fixPrompt:
+      "Our GraphQL endpoint rejected an over-complexity query. Show graphql-complexity limit enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graphql-complexity-playground-hub-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "GraphQL Complexity Playground hub route live oracle",
+    description:
+      "When scanning graphql-complexity-playground/, the hub documents max-complexity-10 DoS protection with nested query examples — route-specific GraphQL complexity training hub oracle.",
+    impactOneline:
+      "Route-specific confirmation that the playground demonstrates GraphQL complexity-limit defenses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlComplexityPlaygroundHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply graphql-complexity limits to all production GraphQL endpoints.",
+      steps: [
+        "Integrate complexity estimation middleware.",
+        "Document safe query depth for clients.",
+        "Block batching abuse alongside complexity limits."
+      ]
+    },
+    fixPrompt:
+      "Our GraphQL Complexity Playground hub confirms DoS training scope. Show production complexity enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graphql-complexity-dos-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "GraphQL Complexity Playground DoS route live oracle",
+    description:
+      "When scanning /graphql on graphql-complexity-playground, live probe confirms complexity-limit rejection of deeply nested queries — route-specific GraphQL DoS oracle.",
+    impactOneline:
+      "Route-specific confirmation that /graphql enforces complexity limits against expensive nested queries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlComplexityDosRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject over-complex GraphQL queries at the API gateway or resolver layer.",
+      steps: [
+        "Return HTTP 400 with complexity error for over-limit queries.",
+        "Log rejected query complexity for monitoring.",
+        "Tune limits per authenticated role."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql route scan confirmed complexity-limit DoS protection. Show resolver-level enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-github-pages-openapi-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "VAmPI GitHub Pages OpenAPI route live oracle",
+    description:
+      "When scanning VAmPI GitHub Pages hub, OpenAPI docs catalog /users/v1/_debug excessive data exposure and BOLA training endpoints — route-specific API security lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that VAmPI docs document intentional debug password disclosure and BOLA flaws.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiGithubPagesOpenApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run VAmPI only on isolated training infrastructure; remove debug endpoints in production.",
+      steps: [
+        "Delete /users/v1/_debug outside development.",
+        "Strip password fields from API serializers.",
+        "Enforce object-level authorization on user and book routes."
+      ]
+    },
+    fixPrompt:
+      "Our VAmPI GitHub Pages route scan documents /users/v1/_debug excessive data exposure. Show debug endpoint remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-instructor-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "FauxBank instructor API exposes vulnerability toggles",
+    description:
+      "GET /api/instructor with admin session returns switches object toggling idor, sqli, xss, csrf, and weakAuth lesson vulnerabilities — instructor dashboard training oracle.",
+    impactOneline:
+      "Instructor APIs that expose live vulnerability toggles can accidentally weaken lab isolation or leak training configuration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankInstructorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict instructor APIs to authenticated trainer roles and avoid exposing live vulnerability toggles in production.",
+      steps: [
+        "Require trainer/instructor role for GET /api/instructor.",
+        "Audit vulnerability toggle endpoints for authorization bypass.",
+        "Run FauxBank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/instructor returns vulnerability toggles for idor, sqli, and csrf lessons. Show instructor API authorization hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-instructor-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "FauxBank /instructor route live oracle",
+    description:
+      "When scanning /instructor, admin session GET /api/instructor returns vulnerability toggles for OWASP lesson switches — route-specific instructor dashboard oracle.",
+    impactOneline:
+      "Route-specific confirmation that FauxBank /instructor documents the instructor dashboard with live vulnerability toggles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankInstructorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict instructor dashboard routes and APIs to authenticated trainer roles.",
+      steps: [
+        "Require admin or trainer role before rendering /instructor.",
+        "Authorize GET /api/instructor against instructor role claims.",
+        "Run FauxBank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /instructor route scan confirms GET /api/instructor exposes vulnerability toggles. Show route-specific instructor authorization fixes.",
     version: 1,
     enabled: true
   },
@@ -15910,6 +16924,509 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our WebSec.fr level17 lab exposes strcasecmp($_POST['flag'], $flag) with sleep_rand() and UTF-16 charset header. Show how to retire public source disclosure and use constant-time comparisons.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-password-reset-prng-challenge-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "WebSec.fr password-reset PRNG/CSRF lab disclosed",
+    description:
+      "WebSec.fr level19 emails the flag on password recovery after captcha validation; anti-CSRF tokens and captcha strings come from generate_random_text() backed by PHP rand() seeded with microtime().",
+    impactOneline:
+      "Public challenge source documents predictable PRNG seeding and CSRF-token generation in a password-reset flow.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecPasswordResetPrngChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host password-reset labs offline; use cryptographically secure random and proper CSRF defenses in production.",
+      steps: [
+        "Move WebSec-style password-reset labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Use random_bytes() for tokens and CSPRNG for captcha; enforce CSRF on all state-changing POSTs."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level19 lab exposes microtime-seeded PHP rand() captcha and generate_random_text() CSRF tokens in a password-reset flow. Show secure token generation and CSRF defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level14-php-eval-blacklist-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level14 PHP eval blacklist route live oracle",
+    description:
+      "When scanning /level14/, source.php confirms 25-char restricted PHP eval with incomplete function blacklist — $blacklist{index} bypass oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level14 documents a PHP eval challenge with blacklist self-reference bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel14PhpEvalBlacklistRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate training labs from production; never eval user-controlled code.",
+      steps: [
+        "Serve WebSec challenge sources only on isolated lab infrastructure.",
+        "Remove eval() on any user-controlled input in production code.",
+        "Blocklist the blacklist variable itself and use allowlists instead of regex filters."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level14 route scan exposes 25-char PHP eval with incomplete function blacklist. Show secure alternatives to eval and allowlist-based validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level19-password-reset-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "WebSec.fr level19 password-reset route live oracle",
+    description:
+      "When scanning /level19/, disclosed sources confirm password recovery emails the flag after captcha validation using microtime-seeded PHP rand() and generate_random_text() anti-CSRF tokens.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level19 documents a predictable PRNG password-reset challenge.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel19PasswordResetRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate training labs from production; use CSPRNG and CSRF tokens in real password-reset flows.",
+      steps: [
+        "Serve WebSec challenge sources only on isolated lab infrastructure.",
+        "Replace rand()/microtime() seeding with random_bytes() for captcha and CSRF tokens.",
+        "Require authenticated sessions before password-reset state changes."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level19 route scan exposes password-reset captcha and CSRF tokens from predictable PHP rand(). Show CSPRNG and CSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level17-timing-attack-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "WebSec.fr level17 timing-attack route live oracle",
+    description:
+      "When scanning /level17/, source.php confirms strcasecmp($_POST['flag'], $flag) with sleep_rand() jitter and UTF-16 charset misdirection — timing side-channel flag oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level17 documents a timing-attack flag-guessing challenge.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel17TimingAttackRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate training labs from production; use constant-time comparisons for secrets.",
+      steps: [
+        "Serve WebSec challenge sources only on isolated lab infrastructure.",
+        "Replace strcasecmp/== secret checks with hash_equals or constant-time MAC verification.",
+        "Remove misleading charset tricks that do not mitigate timing leaks."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level17 route scan exposes strcasecmp flag checks with sleep_rand() jitter. Show constant-time comparison remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level17-timing-attack-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "WebSec.fr level17 timing-attack live oracle",
+    description:
+      "POST /level17/ accepts flag guesses while source.php confirms strcasecmp($_POST['flag'], $flag) with sleep_rand() jitter — timing side-channel live oracle.",
+    impactOneline:
+      "Interactive flag-guessing endpoint uses non-constant-time secret comparison vulnerable to timing analysis.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel17TimingAttackLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use constant-time comparisons and rate-limit authentication attempts.",
+      steps: [
+        "Replace strcasecmp with hash_equals for secret comparisons.",
+        "Apply rate limits on flag or password guess endpoints.",
+        "Serve WebSec challenges only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level17 POST handler compares secrets with strcasecmp and sleep_rand jitter. Show constant-time comparison and rate limiting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level18-php-unserialize-cookie-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level18 PHP unserialize cookie route live oracle",
+    description:
+      "When scanning /level18/, disclosed sources confirm unserialize($_COOKIE['obj']) with hash_equals flag oracle — attacker-controlled serialized cookie gadget.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level18 documents a PHP unserialize cookie injection challenge.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel18PhpUnserializeCookieRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate training labs from production; never unserialize untrusted cookie data.",
+      steps: [
+        "Serve WebSec challenge sources only on isolated lab infrastructure.",
+        "Replace unserialize() on cookies with signed JSON or server-side session storage.",
+        "Use hash_equals only after validating object type and structure."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level18 route scan exposes unserialize($_COOKIE['obj']) with hash_equals flag oracle. Show secure session handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level20-php-unserialize-filter-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level20 PHP unserialize filter route live oracle",
+    description:
+      "When scanning /level20/, disclosed sources confirm sanitize() preg_match filters before unserialize($_COOKIE['data']) — Flag __destruct POP chain bypass.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level20 documents a PHP unserialize filter-bypass challenge.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel20PhpUnserializeFilterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate training labs from production; never unserialize untrusted data with regex filters.",
+      steps: [
+        "Serve WebSec challenge sources only on isolated lab infrastructure.",
+        "Avoid unserialize() on user-controlled input; use json_decode with strict schemas.",
+        "Remove __destruct gadgets and POP chains from production object graphs."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level20 route scan exposes sanitize() preg_match before unserialize($_COOKIE['data']). Show secure deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level21-aes-session-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "WebSec.fr level21 AES session forgery route live oracle",
+    description:
+      "When scanning /level21/, GET source1.php + source2.php confirm mcrypt AES session cookies with weak admin registration filter and SQLi in verify_credentials — route-specific session forgery oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level21 exposes forgeable mcrypt session cookies and SQL injection in credential verification.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel21AesSessionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host AES session labs offline; use signed server-side sessions and parameterized queries in production.",
+      steps: [
+        "Move WebSec-style crypto labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Replace mcrypt cookie sessions with HMAC-signed tokens or server-side session stores.",
+        "Use prepared statements — never concatenate usernames into SQL."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level21 route exposes mcrypt AES session cookies and SQL concatenation in verify_credentials. Show secure session and parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level22-oop-eval-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level22 OOP eval route live oracle",
+    description:
+      "When scanning /level22/, GET source.php confirms 21-char restricted PHP eval with OOP class A flag parts and strcmp/strncmp removed from function blacklist — route-specific OOP eval oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level22 exposes restricted eval with OOP gadget chains and blacklist bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel22OopEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host eval labs offline; never expose eval() on user-controlled input in production.",
+      steps: [
+        "Move WebSec-style eval labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Ban eval() and dynamic function invocation on attacker-controlled strings.",
+        "Use safe interpreters or sandboxed runtimes instead of PHP eval sinks."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level22 route exposes 21-char eval with OOP class A and strcmp removed from blacklist. Show secure alternatives to eval sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level23-maze-filter-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level23 maze filter-bypass route live oracle",
+    description:
+      "When scanning /level23/, GET source1.php + source2.php confirm checkCode() whitelist/blacklist preg filters on maze solver PHP with Maze class move/is_wall/solve gadgets — route-specific PHP filter-bypass oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level23 exposes bypassable PHP keyword filters on attacker-controlled maze solver code.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel23MazeFilterBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host code-filter labs offline; never evaluate attacker-controlled code in production.",
+      steps: [
+        "Move WebSec-style filter-bypass labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Never eval or include attacker-controlled PHP fragments.",
+        "Use safe interpreters with hard sandbox boundaries instead of regex filters."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level23 route exposes bypassable preg whitelist/blacklist filters on maze solver code. Show secure alternatives to dynamic code execution.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level24-cloud-storage-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level24 cloud storage route live oracle",
+    description:
+      "When scanning /level24/, GET source.php confirms session-scoped open_basedir sandbox with chdir plus file_put_contents on attacker-controlled filename/data — weak <? and script filters only — route-specific sandboxed file-write oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level24 exposes sandboxed arbitrary file write with bypassable PHP tag filters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel24CloudStorageRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host file-write labs offline; never expose writable upload directories with weak content filters in production.",
+      steps: [
+        "Move WebSec-style file-write labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Reject user-controlled filenames and validate file contents with strict allowlists.",
+        "Disable open_basedir bypass via chdir and never write attacker-controlled paths."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level24 route exposes open_basedir sandbox bypass via chdir and file_put_contents with weak <?/script filters. Show secure file upload remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level25-lfi-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level25 LFI route live oracle",
+    description:
+      "When scanning /level25/, GET source.php confirms include($_GET['page'].'.txt') with stripos flag substring filter — route-specific local file inclusion oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level25 exposes page-parameter LFI with bypassable flag filter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel25LfiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host LFI labs offline; never include user-controlled paths in production.",
+      steps: [
+        "Move WebSec-style file inclusion labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Never concatenate user input into include/require paths; use strict allowlists."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level25 route exposes include($_GET['page'].'.txt') with stripos flag filter. Show secure file inclusion remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level27-aspect-backdoor-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "WebSec.fr level27 Acunetix aspect backdoor route live oracle",
+    description:
+      "When scanning /level27/, GET source2.php confirms acu_phpaspect.php instrumentation gated by HTTP_ACUNETIX_ASPECT headers — route-specific hidden backdoor oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level27 exposes Acunetix-style aspect instrumentation backdoor in production code.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel27AspectBackdoorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host instrumentation backdoor labs offline; remove scanner instrumentation from production deploys.",
+      steps: [
+        "Move WebSec-style instrumentation labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Audit for acu_phpaspect.php or similar scanner hooks before production release.",
+        "Strip HTTP_ACUNETIX_ASPECT header gates from application code."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level27 route exposes acu_phpaspect.php with HTTP_ACUNETIX_ASPECT header gate. Show how to remove instrumentation backdoors from production deploys.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level26-shell-exec-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level26 shell_exec blacklist bypass route live oracle",
+    description:
+      "When scanning /level26/, GET source.php confirms shell_exec on 40-char POST code after character/word/function blacklist filtering — route-specific /bin/sh command injection training oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level26 exposes blacklist-bypassable shell_exec on attacker-controlled command input.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel26ShellExecRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host shell injection labs offline; never pass user input to shell_exec in production.",
+      steps: [
+        "Move WebSec-style command-execution labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Eliminate shell_exec/system/passthru on any user-controlled input."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level26 route exposes shell_exec($code) behind a blacklist filter. Show how to retire public labs and ban shell invocation sinks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level28-upload-include-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level28 upload include type-juggling route live oracle",
+    description:
+      "When scanning /level28/, GET source.php confirms flag_file upload with md5_file equality and crc32 loose == before include($filename) — route-specific upload-to-include RCE oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level28 exposes upload-to-include RCE gated by md5_file and crc32 type confusion.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel28UploadIncludeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host upload labs offline; never include user-uploaded files in production.",
+      steps: [
+        "Move WebSec-style upload/include labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Never include uploaded files; validate checksums with strict type-safe comparisons.",
+        "Store uploads outside webroot with content-type allowlists."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level28 route exposes include($filename) after md5_file and crc32 type juggling. Show secure file upload remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level30-unserialize-destruct-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level30 unserialize __destruct route live oracle",
+    description:
+      "When scanning /level30/, GET source.php confirms unserialize($_POST['payload']) into class B __destruct that echoes $flag after tragic exception — route-specific PHP destructor gadget oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level30 exposes unserialize gadget chain via class B __destruct flag oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel30PhpUnserializeDestructRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host unserialize labs offline; never unserialize attacker-controlled data in production.",
+      steps: [
+        "Move WebSec-style deserialization labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Replace PHP serialize/unserialize with JSON and strict schema validation.",
+        "Eliminate __destruct/__wakeup gadgets on attacker-reachable object graphs."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level30 route exposes unserialize($_POST['payload']) with class B __destruct flag oracle. Show secure deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level31-open-basedir-eval-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level31 open_basedir eval route live oracle",
+    description:
+      "When scanning /level31/, GET source.php confirms open_basedir=/sandbox with chdir('/sandbox') then eval($_GET['c']) — route-specific PHP sandbox-escape code execution oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level31 exposes eval on user input inside open_basedir-restricted PHP sandbox.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel31OpenBasedirEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host PHP eval labs offline; never eval user-controlled code even behind open_basedir.",
+      steps: [
+        "Move WebSec-style sandbox-escape labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Eliminate eval/create_function on any user input; open_basedir is not a sandbox boundary."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level31 route exposes eval($_GET['c']) with open_basedir=/sandbox. Show secure sandbox and eval remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "websec-level33-unserialize-destruct-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level33 blind unserialize __destruct route live oracle",
+    description:
+      "When scanning /level33/, GET source.php confirms unserialize($_POST[...]) into class B __destruct that emits hidden Almost there? comment — route-specific blind destructor gadget oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level33 exposes blind PHP unserialize gadget via class B __destruct.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel33UnserializeDestructRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host unserialize labs offline; never unserialize attacker-controlled data in production.",
+      steps: [
+        "Move WebSec-style deserialization labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Replace PHP serialize/unserialize with JSON and strict schema validation.",
+        "Eliminate __destruct/__wakeup gadgets on attacker-reachable object graphs."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level33 route exposes unserialize($_POST[...]) with class B __destruct hidden output. Show secure deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-websec-cloud-storage-challenge-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr cloud storage sandbox file-write lab disclosed",
+    description:
+      "WebSec.fr level24 chdirs into a session-scoped upload directory with open_basedir('.') then file_put_contents on attacker-controlled filename/data — only blocks literal <? and script substrings.",
+    impactOneline:
+      "Public challenge source documents sandboxed arbitrary file write with bypassable PHP tag filters inside a per-session upload directory.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideWebsecCloudStorageChallengeEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Host file-write labs offline; never expose writable directories with weak content filters in production.",
+      steps: [
+        "Move WebSec-style file-write labs to VPN-only environments.",
+        "Remove public /source.php disclosure on internet-facing hosts.",
+        "Reject user-controlled filenames and validate file contents with strict allowlists.",
+        "Disable open_basedir bypass via chdir and never write attacker-controlled paths."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr level24 lab exposes chdir plus file_put_contents with weak <?/script filters inside a session upload sandbox. Show how to retire public labs and secure file uploads.",
     version: 1,
     enabled: true
   },
@@ -19867,6 +21384,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "appsecmaster-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "high",
+    title: "AppSecMaster SSRF lab category route live oracle",
+    description:
+      "When scanning /labs/ssrf, AppSecMaster documents blind SSRF, cloud metadata theft, and internal network pivoting Docker lab challenges — route-specific SSRF category hub oracle.",
+    impactOneline:
+      "Public AppSecMaster SSRF lab hub documents server-side request forgery training infrastructure for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecmasterSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AppSecMaster SSRF labs are intentional training — gate lab instances behind paid accounts.",
+      steps: [
+        "Require authentication before spawning SSRF lab containers.",
+        "Block server-side fetches to internal metadata and RFC1918 targets.",
+        "Isolate Docker lab instances from production networks."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/ssrf route documents blind SSRF Docker lab challenges. Show route-specific SSRF remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "appsecmaster-command-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "AppSecMaster command injection lab category route live oracle",
+    description:
+      "When scanning /labs/command-injection, AppSecMaster documents OS command injection via unsanitized shell arguments in Docker lab instances — route-specific command injection category hub oracle.",
+    impactOneline:
+      "Public AppSecMaster command injection lab hub documents shell metacharacter abuse training infrastructure for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecmasterCommandInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AppSecMaster command injection labs are intentional training — gate lab instances behind paid accounts.",
+      steps: [
+        "Require authentication before spawning command injection lab containers.",
+        "Never pass user input to shell interpreters — use parameterized APIs.",
+        "Isolate Docker lab instances from production networks."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/command-injection route documents OS command injection Docker lab challenges. Show route-specific command injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "appsecmaster-ci-pipeline-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "AppSecMaster CI/CD pipeline lab category route live oracle",
+    description:
+      "When scanning /labs/ci-pipeline, AppSecMaster documents CI/CD pipeline injection and build-system abuse in Docker lab instances — route-specific pipeline security category hub oracle.",
+    impactOneline:
+      "Public AppSecMaster CI/CD pipeline lab hub documents pipeline injection training infrastructure for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecmasterCiPipelineRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AppSecMaster CI/CD pipeline labs are intentional training — gate lab instances behind paid accounts.",
+      steps: [
+        "Require authentication before spawning pipeline security lab containers.",
+        "Sanitize CI/CD inputs and restrict pipeline script permissions.",
+        "Isolate Docker lab instances from production networks."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/ci-pipeline route documents CI/CD pipeline injection Docker lab challenges. Show route-specific pipeline security remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "appsecmaster-deserialization-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "AppSecMaster deserialization lab category route live oracle",
+    description:
+      "When scanning /labs/deserialization, AppSecMaster documents pickle, YAML, and Java/PHP object injection in Docker lab instances — route-specific insecure deserialization category hub oracle.",
+    impactOneline:
+      "Public AppSecMaster deserialization lab hub documents gadget chain abuse training infrastructure for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecmasterDeserializationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AppSecMaster deserialization labs are intentional training — gate lab instances behind paid accounts.",
+      steps: [
+        "Require authentication before spawning deserialization lab containers.",
+        "Use safe deserialization APIs and block untrusted object graphs.",
+        "Isolate Docker lab instances from production networks."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/deserialization route documents insecure deserialization Docker lab challenges. Show route-specific deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-ist-edu-vuln-portal-evidence",
     platform: "generic",
     category: "Injection",
@@ -20283,6 +21904,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnerable-chatbot-prompt-injection-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "ShopBot prompt injection live oracle",
+    description:
+      "POST /api/chat with a system-prompt extraction probe returns ShopBot instructions including sk-fake API key and admin123 DB password — the QualityMax intentionally vulnerable chatbot oracle.",
+    impactOneline:
+      "Direct prompt injection on ShopBot leaks system prompts, embedded API keys, and database credentials from the LLM context.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableChatbotPromptInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass unsanitized user input to LLM system prompts — ShopBot demo is intentional lab software.",
+      steps: [
+        "Strip jailbreak and system-prompt extraction phrases before sending user messages to the model.",
+        "Never embed API keys or database passwords in prompts reachable via prompt injection.",
+        "Run intentionally vulnerable chatbot demos only on isolated training subdomains."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/chat endpoint leaks the full ShopBot system prompt via a system-prompt extraction probe. Show prompt-injection hardening for LLM customer-support bots.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnerable-chatbot-prompt-injection-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "ShopBot /api/chat prompt-injection route live oracle",
+    description:
+      "When scanning /api/chat on vulnerable-chatbot-demo.vercel.app, POST with a system-prompt probe returns ShopBot instructions including sk-fake API key and admin123 DB password — route-specific LLM prompt-injection oracle.",
+    impactOneline:
+      "Route scans on ShopBot /api/chat confirm live LLM prompt injection leaking system prompts and embedded secrets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnerableChatbotPromptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass unsanitized user input to LLM system prompts — ShopBot demo is intentional lab software.",
+      steps: [
+        "Strip jailbreak and system-prompt extraction phrases before sending user messages to the model.",
+        "Never embed API keys or database passwords in prompts reachable via prompt injection.",
+        "Run intentionally vulnerable chatbot demos only on isolated training subdomains."
+      ]
+    },
+    fixPrompt:
+      "Our /api/chat route scan confirms POST /api/chat leaks the full ShopBot system prompt. Show route-specific prompt-injection hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-security-writeup-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -20669,6 +22342,136 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We mirror Hacksplaining-style weak session ID exploit-then-fix lessons. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hacksplaining-session-fixation-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Hacksplaining session fixation lesson live oracle",
+    description:
+      "GET hacksplaining.com/lessons/session-fixation/start returns the Session Fixation secure-coding lesson with exploit-then-fix walkthrough markers — live training-lab oracle.",
+    impactOneline:
+      "Public session fixation lesson /start pages confirm attacker-controlled session ID injection patterns for unauthenticated scanner evaluation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hacksplainingSessionFixationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining session fixation lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable session fixation lesson instances on private deployments.",
+        "Regenerate session IDs after authentication in production.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "Our Hacksplaining session fixation /start probe confirms live lesson content. Show how to auth-gate training lab instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hacksplaining-session-fixation-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Hacksplaining session fixation route live oracle",
+    description:
+      "When scanning /lessons/session-fixation, the interactive exploit-then-fix walkthrough documents attacker-controlled session IDs that enable hijacking after victim login — route-specific session fixation training oracle.",
+    impactOneline:
+      "Route scans on Hacksplaining session fixation lessons should confirm pre-auth session ID injection walkthrough content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hacksplainingSessionFixationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining session fixation lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable session fixation lesson instances on private deployments.",
+        "Regenerate session IDs after authentication in production.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "Our /lessons/session-fixation route scan documents session fixation exploit-then-fix training. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hacksplaining-weak-session-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Hacksplaining weak session IDs live oracle",
+    description:
+      "GET /lessons/weak-session/start documents guessable session identifier exploit-then-fix walkthrough — Hacksplaining weak session training oracle.",
+    impactOneline:
+      "Public weak-session lesson pages document predictable session ID patterns for unauthenticated security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hacksplainingWeakSessionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining weak session lessons are intentional training — use cryptographically random session IDs in production.",
+      steps: [
+        "Generate session IDs with CSPRNG instead of predictable sequences.",
+        "Regenerate session IDs after authentication.",
+        "Run Hacksplaining lesson mirrors only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Hacksplaining weak-session lesson documents guessable session ID hijacking. Show secure session ID generation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hacksplaining-weak-session-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Hacksplaining weak session IDs route live oracle",
+    description:
+      "When scanning /lessons/weak-session, the interactive walkthrough documents guessable session identifiers that enable session hijacking — route-specific weak session training oracle.",
+    impactOneline:
+      "Route scans on Hacksplaining weak session lessons should confirm predictable session ID walkthrough content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hacksplainingWeakSessionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hacksplaining weak session lessons are intentional training — gate live lesson instances behind authentication.",
+      steps: [
+        "Require login before serving runnable weak session lesson instances on private deployments.",
+        "Use cryptographically random session IDs in production.",
+        "Rate-limit unauthenticated probing of lesson step endpoints on self-hosted mirrors."
+      ]
+    },
+    fixPrompt:
+      "Our /lessons/weak-session route scan documents guessable session ID exploit-then-fix training. Show how to auth-gate live lesson instances on private deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "kontra-session-fixation-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Kontra session fixation route live oracle",
+    description:
+      "When scanning /free-application-security-training/owasp-top-10-session-fixation, Kontra's interactive OWASP lab documents pre-auth session ID injection enabling hijacking after login — route-specific session fixation training oracle.",
+    impactOneline:
+      "Route scans on Kontra session fixation labs should confirm interactive OWASP session fixation training content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "kontraSessionFixationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Kontra session fixation labs are intentional training — gate free exercises behind business email verification.",
+      steps: [
+        "Require authenticated accounts before launching session fixation lab instances.",
+        "Regenerate session IDs after authentication in production.",
+        "Isolate Kontra-style training environments from production authentication services."
+      ]
+    },
+    fixPrompt:
+      "Our /owasp-top-10-session-fixation route scan documents Kontra session fixation training. Show how to gate lab modules behind auth and regenerate session IDs after login.",
     version: 1,
     enabled: true
   },
@@ -21066,6 +22869,112 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-orders-search-sqli-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store orders-search SQLi walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/sql-injection-writeup documents UNION-based SQL injection via unsanitized status filter in POST /api/orders/search — order dropdown to database dump.",
+    impactOneline:
+      "Public walkthrough teaches SQL injection against e-commerce order status filters that concatenate user input into raw SQL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecOrdersSearchSqliEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Never concatenate order status filters into SQL; use parameterized queries or allowlisted enum values.",
+      steps: [
+        "Replace string-interpolated status filters with Prisma findMany and bound parameters.",
+        "Use allowlists for dropdown status values instead of interpolating POST body strings.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/orders/search endpoint concatenates the status filter into raw SQL. Show parameterized query fixes for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-orders-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store orders-search SQLi route live oracle",
+    description:
+      "When scanning /posts/sql-injection-writeup, the walkthrough documents UNION-based SQLi via unsanitized status filter in POST /api/orders/search — route-specific live oracle.",
+    impactOneline:
+      "OopsSec order search drops dropdown status into raw SQL, enabling UNION SELECT credential extraction from the users table.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecOrdersSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never concatenate order status filters into SQL; use parameterized queries or allowlisted enum values.",
+      steps: [
+        "Replace string-interpolated status filters with Prisma findMany and bound parameters.",
+        "Use allowlists for dropdown status values instead of interpolating POST body strings.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/sql-injection-writeup route scan confirms order status SQLi. Show parameterized query fixes for /api/orders/search.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-second-order-sqli-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store second-order SQLi walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/second-order-sql-injection documents stored review author names later interpolated into db.exec() queries in /api/admin/reviews — second-order SQL injection via trusted database data.",
+    impactOneline:
+      "Public walkthrough teaches second-order SQLi where stored display names execute as multi-statement SQL when reused in unparameterized admin filter queries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecSecondOrderSqliEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Parameterize every query regardless of data source; never use db.exec() with interpolated values from the database.",
+      steps: [
+        "Replace raw db.exec() author filters with Prisma findMany and bound parameters.",
+        "Use allowlists for filter dropdown values instead of interpolating stored author strings.",
+        "Host OopsSec SQLi walkthroughs on localhost only, not public GitHub Pages deploys."
+      ]
+    },
+    fixPrompt:
+      "Our /api/admin/reviews endpoint interpolates stored author names into db.exec() SQL. Show parameterized query fixes for second-order injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-second-order-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OopsSec Store second-order SQLi route live oracle",
+    description:
+      "When scanning /posts/second-order-sql-injection, the walkthrough documents stored author names later interpolated into db.exec() in /api/admin/reviews — route-specific second-order SQLi oracle.",
+    impactOneline:
+      "OopsSec review moderation reuses stored author strings in raw multi-statement SQL, enabling DROP TABLE via second-order injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecSecondOrderSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Parameterize admin filter queries; never trust database-sourced strings in raw SQL.",
+      steps: [
+        "Replace db.exec() with Prisma findMany where: { author: authorFilter }.",
+        "Allowlist valid author filter values from a server-side enum.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/second-order-sql-injection route documents second-order SQLi via /api/admin/reviews. Show parameterized query remediation for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-price-manipulation-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -21218,6 +23127,136 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host a VoidSec Shopping Cart-style vulnerable e-commerce lab. Show how to isolate the hack-lab from production traffic and retire public marketing pages that document injectable endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "voidsec-shopping-cart-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "VoidSec Shopping Cart route live oracle",
+    description:
+      "When scanning voidsec.github.io/shopping-cart/, the GitHub Pages landing confirms XSS, SQLi, auth bypass, clickjacking, and response-splitting hack-lab scope — route-specific e-commerce training oracle.",
+    impactOneline:
+      "Route-specific confirmation that VoidSec Shopping Cart documents deliberately vulnerable e-commerce training targets for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "voidsecShoppingCartRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VoidSec Shopping Cart is intentional training — isolate hack-lab instances from production e-commerce.",
+      steps: [
+        "Deploy Shopping Cart only on local XAMPP or Docker lab instances.",
+        "Gate live vulnerable instances behind VPN-only access.",
+        "Do not copy Shopping Cart vulnerability patterns into production e-commerce code."
+      ]
+    },
+    fixPrompt:
+      "Our VoidSec Shopping Cart route scan confirms deliberately vulnerable e-commerce training scope. Show lab isolation and marketing-page hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-dvmcp-evidence",
+    platform: "generic",
+    category: "AI / LLM security",
+    severityDefault: "medium",
+    title: "DVMCP Damn Vulnerable MCP Server hub disclosed",
+    description:
+      "DVMCP marketing hub documents a deliberately insecure MCP server with 10 vulnerabilities mapping OWASP MCP Top 10 categories including tool poisoning, command injection, and SSRF.",
+    impactOneline:
+      "Public DVMCP docs advertise MCP-specific attack classes attackers use to tune scanners against AI agent infrastructure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDvmcpEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVMCP is intentional MCP security training — host only in isolated lab environments.",
+      steps: [
+        "Run DVMCP Docker images only on private lab networks.",
+        "Validate MCP tool schemas and block dynamic tool poisoning in production.",
+        "Use OWASP MCP Top 10 guidance to harden production MCP servers."
+      ]
+    },
+    fixPrompt:
+      "We host DVMCP-style vulnerable MCP server training. Show how to isolate MCP CTF labs from production agent deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvmcp-route-live-oracle",
+    platform: "generic",
+    category: "AI / LLM security",
+    severityDefault: "medium",
+    title: "DVMCP hub route live oracle",
+    description:
+      "When scanning dvmcp.co.uk/, the hub confirms 10 OWASP MCP Top 10 vulnerabilities (MCP-001 through MCP-010) across auth bypass, tool poisoning, command injection, SSRF, and data exfiltration — route-specific MCP security lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that DVMCP documents deliberately vulnerable MCP server training scope for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvmcpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVMCP is intentional MCP training — isolate MCP lab infrastructure from production agent deployments.",
+      steps: [
+        "Run DVMCP only on private lab networks.",
+        "Validate MCP tool schemas and block dynamic tool poisoning in production.",
+        "Use OWASP MCP Top 10 guidance to harden production MCP servers."
+      ]
+    },
+    fixPrompt:
+      "Our DVMCP route scan confirms deliberately vulnerable MCP server training scope. Show MCP tool validation and lab isolation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-mcpgoat-evidence",
+    platform: "generic",
+    category: "AI / LLM security",
+    severityDefault: "medium",
+    title: "MCPGoat deliberately vulnerable MCP server hub disclosed",
+    description:
+      "MCPGoat GitHub Pages hub documents 26 MCP CTF challenges with 78 flags across tool poisoning, prompt injection, rug-pulls, SSRF, SQL injection, and RCE training modules.",
+    impactOneline:
+      "Public MCPGoat marketing documents intentionally insecure Model Context Protocol server challenges attackers use to practice AI supply-chain attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideMcpgoatEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "MCPGoat is intentional MCP security training — host only in isolated lab environments.",
+      steps: [
+        "Deploy MCPGoat via Docker on private lab networks, not public marketing pages alone.",
+        "Gate MCP tool servers behind authentication and tool-schema validation.",
+        "Do not copy MCPGoat vulnerability patterns into production AI agent infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host MCPGoat-style vulnerable MCP server training. Show how to isolate MCP CTF labs from production agent deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "mcpgoat-route-live-oracle",
+    platform: "generic",
+    category: "AI / LLM security",
+    severityDefault: "medium",
+    title: "MCPGoat hub route live oracle",
+    description:
+      "When scanning sabyasachidhal.github.io/MCPGoat/, the hub confirms 26 challenges and 78 flags across MCP tool poisoning, prompt injection, SSRF, SQLi, and RCE training scope — route-specific MCP security lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that MCPGoat documents deliberately vulnerable MCP server CTF challenges for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "mcpgoatRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "MCPGoat is intentional training — isolate MCP CTF infrastructure from production agent deployments.",
+      steps: [
+        "Run MCPGoat only on private lab networks.",
+        "Validate MCP tool schemas and block dynamic tool poisoning in production.",
+        "Use OWASP MCP Top 10 guidance to harden production MCP servers."
+      ]
+    },
+    fixPrompt:
+      "Our MCPGoat route scan confirms deliberately vulnerable MCP server training scope. Show MCP tool validation and lab isolation remediation.",
     version: 1,
     enabled: true
   },
@@ -22466,6 +24505,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-pwnshop-avatar-ssrf-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Pwnshop avatar URL SSRF oracle (PWN-029)",
+    description:
+      "Pwnshop documents POST /profile/update-avatar fetching attacker-controlled avatar_url server-side and returning the response — the PWN-029 avatar URL SSRF training oracle.",
+    impactOneline:
+      "Server-side avatar URL fetch can reach internal services or cloud metadata when avatar_url is attacker-controlled.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSidePwnshopAvatarSsrfOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side avatar URL fetches to internal hosts — Pwnshop PWN-029 is intentional lab software.",
+      steps: [
+        "Validate avatar_url hosts against an allowlist before fetch.",
+        "Block RFC1918, link-local, and metadata IP ranges.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /profile/update-avatar endpoint fetches avatar_url server-side. Show SSRF-safe avatar import remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pwnshop-wallet-topup-oracle",
     platform: "generic",
     category: "Business logic",
@@ -22726,6 +24791,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-forgot-password-email-enumeration-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Pwnshop /forgot-password email enumeration route live oracle",
+    description:
+      "When scanning /forgot-password, POST returns distinct success vs no-account HTML messages for registered vs unknown emails — route-specific password-reset enumeration oracle.",
+    impactOneline:
+      "Route-specific confirmation that Pwnshop /forgot-password leaks whether an email is registered via distinct reset responses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopForgotPasswordEmailEnumerationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic responses for forgot-password lookups — Pwnshop is intentional lab software.",
+      steps: [
+        "Use identical success messages for registered and unregistered emails on /forgot-password.",
+        "Never echo the submitted email address in success responses.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /forgot-password route scan confirms distinct messages for known vs unknown emails. Show route-specific username enumeration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-track-idor-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -22826,6 +24917,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /wishlist/:user_id route scan confirms wishlist IDOR. Show route-specific ownership remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-product-api-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop REST product API IDOR live oracle",
+    description:
+      "GET /api/v1/products/:id returns product catalog JSON without authentication or ownership validation — the Pwnshop REST product IDOR/BOLA oracle.",
+    impactOneline:
+      "Unauthenticated product API access can expose catalog pricing and seller metadata across sequential product IDs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopProductApiIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and verify product ownership on REST catalog APIs — Pwnshop is intentional lab software.",
+      steps: [
+        "Bind product reads to authenticated sessions when data is user-specific.",
+        "Reject unauthenticated GET /api/v1/products/:id for non-public catalog fields.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/v1/products/:id endpoint returns product JSON without auth. Show BOLA remediation for REST product APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-product-api-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Pwnshop /api/v1/products/:id REST product IDOR route live oracle",
+    description:
+      "When scanning /api/v1/products/:id, live JSON probe or vulnerability registry corpus confirms REST product catalog IDOR/BOLA training surface.",
+    impactOneline:
+      "Route scans on /api/v1/products/:id confirm missing authorization on product catalog JSON endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopProductApiIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate product catalog APIs behind authentication and ownership checks.",
+      steps: [
+        "Require auth for GET /api/v1/products/:id when responses include seller or cost fields.",
+        "Return 404 for cross-tenant product IDs instead of leaking catalog JSON.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/products/:id route scan confirms REST product IDOR/BOLA. Show route-specific authorization remediation.",
     version: 1,
     enabled: true
   },
@@ -23090,6 +25233,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-open-redirect-login-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwnshop login open redirect live oracle (PWN-017)",
+    description:
+      "POST /login with next= stores attacker URLs through OTP verification and reflects them in the 302 Location header without validation — the Pwnshop login open redirect oracle.",
+    impactOneline:
+      "Open redirects on login enable phishing attacks that steal credentials or session tokens via trusted-domain post-auth redirects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOpenRedirectLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate post-login redirect targets against an allowlist — Pwnshop PWN-017 is intentional lab software.",
+      steps: [
+        "Allowlist relative paths or known-safe redirect hosts for next/return parameters.",
+        "Reject absolute URLs pointing to external domains on login and OTP verification flows.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our POST /login endpoint preserves next= through OTP verification and reflects it into a 302 Location to external hosts. Show open-redirect remediation for login flows.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-open-redirect-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwnshop /login?next= open redirect route live oracle (PWN-017)",
+    description:
+      "When scanning /login?next=, POST /login with next= reflects attacker URLs in the 302 Location header after OTP verification — route-specific login open redirect oracle.",
+    impactOneline:
+      "Route scans on /login?next= should confirm unvalidated post-auth redirects enable phishing via trusted-domain login flows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopOpenRedirectLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate post-login redirect targets against an allowlist — Pwnshop PWN-017 is intentional lab software.",
+      steps: [
+        "Allowlist relative paths or known-safe redirect hosts for next/return parameters.",
+        "Reject absolute URLs pointing to external domains on login and OTP verification flows.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /login?next= route preserves attacker URLs through OTP verification. Show route-specific open-redirect remediation for login flows.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-verify-otp-bruteforce-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -23112,6 +25307,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our POST /verify-otp endpoint has no rate limiting. Show OTP brute-force protection with lockouts and backoff.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-verify-otp-bruteforce-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Pwnshop OTP brute-force route live oracle (PWN-015)",
+    description:
+      "When scanning /reset-password, /verify-otp, or /login, POST /verify-otp accepts rapid sequential OTP guesses without HTTP 429 or lockout — route-specific PWN-015 brute-force oracle.",
+    impactOneline:
+      "Route scans on reset-password and verify-otp should confirm missing OTP rate limits enable 2FA bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopVerifyOtpBruteforceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rate-limit OTP verification and lock accounts after repeated failures — Pwnshop PWN-015 is intentional lab software.",
+      steps: [
+        "Return HTTP 429 after a small number of failed OTP attempts per session.",
+        "Use exponential backoff and temporary lockouts on repeated failures.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /reset-password route scan confirms POST /verify-otp has no rate limiting. Show route-specific OTP brute-force protection.",
     version: 1,
     enabled: true
   },
@@ -23506,6 +25727,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-vulnerabilities-index-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Pwnshop vulnerability index live oracle",
+    description:
+      "GET /vulnerabilities on pwnshop.ctfsecurity.com returns the interactive PWN-001+ registry catalog mapped to OWASP Top 10 2025 and AI/LLM tiers — training-lab vulnerability disclosure oracle.",
+    impactOneline:
+      "Unauthenticated /vulnerabilities index exposes full intentional vulnerability catalog for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopVulnerabilitiesIndexLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict vulnerability registry disclosure on production-facing Pwnshop deployments.",
+      steps: [
+        "Gate /vulnerabilities behind authenticated lab enrollment.",
+        "Run Pwnshop only in isolated lab environments.",
+        "Remove PWN- ID mappings from public HTML when not in training mode."
+      ]
+    },
+    fixPrompt:
+      "Our /vulnerabilities endpoint exposes the full PWN- registry. Show access control for training-lab vulnerability catalogs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-vulnerabilities-index-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Pwnshop /vulnerabilities route live oracle",
+    description:
+      "When scanning /vulnerabilities on pwnshop.ctfsecurity.com, the page documents 45+ intentional vulnerabilities with PWN- IDs and OWASP 2025 mappings — route-specific training oracle.",
+    impactOneline:
+      "Route-specific Pwnshop vulnerability index scans should confirm the interactive PWN- registry is exposed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopVulnerabilitiesIndexRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict /vulnerabilities route disclosure on Pwnshop training deployments.",
+      steps: [
+        "Gate vulnerability index behind authenticated lab enrollment.",
+        "Run Pwnshop only in isolated lab environments.",
+        "Remove PWN- ID mappings from public route scans when not in training mode."
+      ]
+    },
+    fixPrompt:
+      "Our /vulnerabilities route scan confirms the PWN- registry is exposed. Show route-specific access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-seller-preview-ssti-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -23719,7 +25992,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Pwnshop order details IDOR route live oracle (PWN-001)",
     description:
-      "When scanning /order/:id, authenticated buyers can read order #1 shipping address without ownership validation — route-specific order IDOR oracle.",
+      "When scanning /order/:id or /api/v1/orders/:id, authenticated buyers can read order #1 shipping address without ownership validation — route-specific order IDOR oracle.",
     impactOneline:
       "Route scans on order pages need live IDOR confirmation with scannedUrl evidence.",
     detectorKind: "rule_ref",
@@ -24023,6 +26296,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-admin-dashboard-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Pwnshop admin dashboard route live oracle (PWN-021)",
+    description:
+      "When scanning /admin/dashboard, mass-assignment admin OTP session exposes the privileged admin panel without real admin credentials — route-specific broken access control oracle.",
+    impactOneline:
+      "Route scans on admin dashboard paths should confirm mass-assignment privilege escalation reaches the admin UI.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopAdminDashboardRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject is_admin/role mass-assignment on registration and enforce server-side admin authorization — Pwnshop is intentional lab software.",
+      steps: [
+        "Strip privileged fields from registration request bodies.",
+        "Require verified admin credentials before serving /admin/dashboard.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/dashboard route scan confirms mass-assignment admin reaches the admin panel. Show route-specific access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-export-orders-csv-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -24148,6 +26447,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/transfer route processes POST requests with only a session cookie. Show route-specific CSRF token validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-auth-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "FauxBank auth login API route live oracle",
+    description:
+      "When scanning /api/auth/login on pentest-fauxbank.vercel.app, POST accepts alice/password or admin/admin without MFA — route-specific weak-credentials authentication oracle.",
+    impactOneline:
+      "Route scans on login APIs need live weak-credential confirmation with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankAuthLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce strong passwords, MFA, and rate limiting on authentication endpoints.",
+      steps: [
+        "Remove seeded demo credentials from production-like deployments.",
+        "Require MFA for all banking accounts.",
+        "Add progressive lockout after failed login attempts."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/login route accepts alice/password without MFA. Show route-specific authentication hardening.",
     version: 1,
     enabled: true
   },
@@ -24751,6 +27076,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-checkout-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "VulnShop /api/checkout payment manipulation route live oracle",
+    description:
+      "When scanning /api/checkout, live Railway backend probe or README oracle #33 documents checkout payment manipulation via stacked discounts on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/checkout documents checkout payment manipulation training modules.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopCheckoutRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Re-validate checkout totals server-side on VulnShop — intentional training software.",
+      steps: [
+        "Reject stacked discount codes that exceed 100% off.",
+        "Recalculate checkout totals server-side on every discount application.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/checkout route documents payment manipulation. Show route-specific checkout validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-wallet-add-funds-race-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -25251,7 +27602,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu GraphQL lab route live oracle",
     description:
-      "When scanning /labs/graphql, POST /api/portal SQLi bypass or live GraphQL introspection confirms the GraphQL injection training lab on the IST Edu vulnerability portal.",
+      "When scanning /graphql or /labs/graphql, POST /api/portal SQLi bypass or live GraphQL introspection confirms the GraphQL injection training lab on the IST Edu vulnerability portal.",
     impactOneline:
       "Route-specific confirmation that IST Edu /labs/graphql documents GraphQL or SQL injection training scenarios.",
     detectorKind: "rule_ref",
@@ -25266,7 +27617,7 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our IST Edu /labs/graphql route confirms injection or introspection exposure. Show GraphQL hardening remediation.",
+      "Our IST Edu /graphql or /labs/graphql route confirms injection or introspection exposure. Show GraphQL hardening remediation.",
     version: 1,
     enabled: true
   },
@@ -25277,7 +27628,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "IST Edu SSTI lab route live oracle",
     description:
-      "When scanning /labs/ssti, POST /api/portal SQLi bypass confirms the server-side template injection training lab on the IST Edu vulnerability portal.",
+      "When scanning /labs/ssti or /ssti, POST /api/portal SQLi bypass confirms the server-side template injection training lab on the IST Edu vulnerability portal.",
     impactOneline:
       "Route-specific confirmation that IST Edu /labs/ssti documents SSTI training scenarios with live injection oracle.",
     detectorKind: "rule_ref",
@@ -25293,6 +27644,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our IST Edu /labs/ssti route confirms server-side template injection training. Show SSTI-safe templating remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-command-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "IST Edu command injection route live oracle",
+    description:
+      "When scanning /command-injection on ist-edu-bd.vercel.app, POST /api/portal SQLi bypass confirms the OS command injection training lab on the IST Edu vulnerability portal.",
+    impactOneline:
+      "Route-specific confirmation that IST Edu /command-injection documents command injection training scenarios with live injection oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduCommandInjectionLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands — IST Edu is intentional training software.",
+      steps: [
+        "Use allow-listed arguments and avoid shell invocation for user-controlled input.",
+        "Run subprocesses with fixed command arrays instead of shell string interpolation.",
+        "Run IST Edu labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our IST Edu /command-injection route confirms OS command injection training. Show safe subprocess and input validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "IST Edu XXE route live oracle",
+    description:
+      "When scanning /xxe on ist-edu-bd.vercel.app, GET /api/notices?file= path traversal or POST /api/portal SQLi bypass confirms the XML external entity training lab on the IST Edu vulnerability portal.",
+    impactOneline:
+      "Route-specific confirmation that IST Edu /xxe documents XXE or file-read training scenarios with live injection oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduXxeLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity processing in XML parsers — IST Edu is intentional training software.",
+      steps: [
+        "Disable DTD and external entity resolution in all XML parsers.",
+        "Use JSON or other safe formats instead of XML where possible.",
+        "Run IST Edu labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our IST Edu /xxe route confirms XML external entity or file-read training. Show XXE-safe parser configuration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-jwt-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "IST Edu JWT route live oracle",
+    description:
+      "When scanning /jwt on ist-edu-bd.vercel.app, POST /api/portal SQLi bypass confirms the JWT algorithm-confusion training lab on the IST Edu vulnerability portal.",
+    impactOneline:
+      "Route-specific confirmation that IST Edu /jwt documents JWT weak-verification training scenarios with live injection oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduJwtLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject JWT alg:none and enforce HMAC/RSA signature verification — IST Edu is intentional training software.",
+      steps: [
+        "Use a standards-compliant JWT library that rejects the none algorithm.",
+        "Pin expected signing algorithms and validate issuer/audience claims.",
+        "Run IST Edu labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our IST Edu /jwt route confirms JWT algorithm-confusion training. Show JWT verification hardening remediation.",
     version: 1,
     enabled: true
   },
@@ -25739,6 +28168,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-ping-cmd-injection-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnShop /api/ping command injection live oracle",
+    description:
+      "GET /api/ping?host= passes attacker input into shell ping — command injection and SSRF training oracle when the Railway backend is reachable.",
+    impactOneline:
+      "Unsanitized host parameters in ping utilities enable command injection and internal network probing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopPingCmdInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands — use strict host allow-lists or disable ping utilities.",
+      steps: [
+        "Validate host against an allow-list of IP addresses or hostnames.",
+        "Use parameterized APIs instead of shelling out to ping.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop GET /api/ping?host= endpoint shells out to ping with user input. Show command injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-ping-cmd-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnShop /api/ping command injection route live oracle",
+    description:
+      "When scanning /api/ping, host= query parameter is passed into shell ping — route-specific command injection / SSRF oracle (README A10).",
+    impactOneline:
+      "Route-specific confirmation that VulnShop documents command injection via the ping API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopPingCmdInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands on API route handlers.",
+      steps: [
+        "Validate host against an allow-list on the /api/ping route.",
+        "Use parameterized APIs instead of shelling out to ping.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/ping route shells out to ping with user input. Show route-specific command injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-template-ssti-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -25891,6 +28372,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnShop /track-order route documents SSRF. Show route-specific outbound fetch remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-proxy-fetch-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop proxy fetch SSRF live oracle",
+    description:
+      "POST /api/v1/proxy/fetch fetches attacker-controlled URLs for internal port and network scanning — VulnShop API SSRF oracle (README #81).",
+    impactOneline:
+      "Attackers can coerce VulnShop to scan internal networks and reach private services via unvalidated proxy fetch URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProxyFetchSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to internal networks on proxy routes.",
+      steps: [
+        "Deny requests to link-local, metadata, and private IP ranges.",
+        "Use an allowlisted outbound fetch pipeline instead of arbitrary URL proxying.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/proxy/fetch is SSRF-vulnerable for internal scanning. Show URL allowlist and SSRF guard remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-proxy-fetch-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/proxy/fetch SSRF route live oracle",
+    description:
+      "When scanning /api/v1/proxy/fetch, live Railway backend probe or README oracle #81 documents internal port/network scanning SSRF on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/proxy/fetch documents internal network scanning SSRF.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProxyFetchSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block internal URL fetches on /api/v1/proxy/fetch.",
+      steps: [
+        "Deny requests to link-local, metadata, and private IP ranges.",
+        "Use an allowlisted outbound fetch pipeline instead of arbitrary URL proxying.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/proxy/fetch route documents internal scanning SSRF. Show route-specific URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-cloud-metadata-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop cloud metadata SSRF live oracle",
+    description:
+      "GET /api/v1/cloud/metadata exposes cloud metadata endpoint URLs (169.254.169.254) for SSRF credential theft — VulnShop API oracle (README #82).",
+    impactOneline:
+      "Metadata endpoint disclosure enables SSRF chains that steal cloud instance credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopCloudMetadataSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or authenticate cloud metadata disclosure routes.",
+      steps: [
+        "Do not expose metadata endpoint URLs to unauthenticated callers.",
+        "Block server-side fetches to link-local and metadata IP ranges.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop GET /api/v1/cloud/metadata exposes metadata SSRF targets. Show route removal and SSRF guard remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-cloud-metadata-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/cloud/metadata SSRF route live oracle",
+    description:
+      "When scanning /api/v1/cloud/metadata, live backend probe or README oracle #82 documents cloud metadata endpoint disclosure for SSRF chaining.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/cloud/metadata documents metadata SSRF target disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopCloudMetadataSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove metadata disclosure from /api/v1/cloud/metadata routes.",
+      steps: [
+        "Do not expose metadata endpoint URLs to unauthenticated callers.",
+        "Block server-side fetches to link-local and metadata IP ranges.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/cloud/metadata route documents metadata SSRF targets. Show route-specific remediation.",
     version: 1,
     enabled: true
   },
@@ -26519,6 +29104,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "securebank-blog-csrf-attack-page-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "SecureBank blog CSRF attack page route live oracle",
+    description:
+      "When scanning /csrf on securebank-blog.vercel.app, the Attack Mode demo hosts a fake prize voucher page that auto-submits a hidden bank transfer form using the victim session cookie — route-specific CSRF attack-page training oracle (Vercel checkpoint uses curated blog corpus fallback).",
+    impactOneline:
+      "Educational SecureBank CSRF attack page exposes intentional cross-site transfer form POST patterns for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "secureBankBlogCsrfAttackPageRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Educational attack/secure mode toggles must never ship to production deployments.",
+      steps: [
+        "Include a unique CSRF token in every state-changing form.",
+        "Validate the CSRF token server-side before processing transfers.",
+        "Host vulnerable demos on isolated lab subdomains with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our securebank-blog /csrf route hosts a fake prize voucher page that posts hidden bank transfers. Show CSRF token remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-bugbountyhunter-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -26593,6 +29204,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host Zero Health-style intentionally vulnerable healthcare apps. Show how to enforce JWT validation and HIPAA access controls.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-hub-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Zero Health security lab hub route live oracle",
+    description:
+      "When scanning zerohealth.aliyu.dev/, the Zero Health security lab documents intentionally vulnerable healthcare modules including JWT bypass, IDOR, XSS, SQLi, and LLM prompt injection — route-specific training hub oracle.",
+    impactOneline:
+      "Route-specific confirmation that Zero Health hub catalogs healthcare-themed vulnerability training modules.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — never deploy to production healthcare networks.",
+      steps: [
+        "Run Zero Health only in isolated Docker containers on lab networks.",
+        "Enforce JWT validation and HIPAA-compliant access controls in production healthcare apps.",
+        "Do not expose medical data APIs without authentication."
+      ]
+    },
+    fixPrompt:
+      "Our zerohealth.aliyu.dev hub route scan confirms intentionally vulnerable healthcare training modules. Show HIPAA-compliant access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zero-health-vercel-dashboard-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "low",
+    title: "Zero Health Vercel dashboard deployment identity route live oracle",
+    description:
+      "When scanning zero-health.vercel.app/, the host serves a benign Next.js Google Health API dashboard — NOT the aligorithm/Zero-Health security lab — suppressing reflexion SSTI/SQLi/XSS false positives.",
+    impactOneline:
+      "Route-specific confirmation that zero-health.vercel.app is a non-vulnerable dashboard deployment distinct from the Zero Health security lab.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zeroHealthVercelDashboardRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use zerohealth.aliyu.dev for Zero Health security lab training — zero-health.vercel.app is a different product.",
+      steps: [
+        "Remove zero-health.vercel.app from vulnerability discovery queues when targeting the Zero Health security lab.",
+        "Point security training scans to zerohealth.aliyu.dev instead.",
+        "Do not treat reflexion probe hits on static Next.js dashboards as confirmed injection."
+      ]
+    },
+    fixPrompt:
+      "Our zero-health.vercel.app route is a benign Google Health API dashboard, not the Zero Health security lab. Show how to avoid false-positive reflexion findings on static SPAs.",
     version: 1,
     enabled: true
   },
@@ -26957,6 +29620,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Code-Breaking /puzzle route scan confirms open source-code audit CTF content. Show how to isolate challenge instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "code-breaking-easy-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Code-Breaking /easy tier route live oracle",
+    description:
+      "When scanning /easy/{slug}, Code-Breaking maps to /puzzle/{id} source-code audit puzzles with GitHub source archives and flag submission forms — route-specific easy-tier code-audit CTF oracle.",
+    impactOneline:
+      "Route-scoped scans of /easy/* paths should confirm source-code audit CTF puzzle content even when the short URL returns 404.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "codeBreakingEasyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Code-Breaking is intentional training — isolate puzzle instances from production codebases.",
+      steps: [
+        "Run source-audit CTF puzzles only on dedicated lab infrastructure.",
+        "Require authentication before serving downloadable challenge source archives.",
+        "Use puzzle findings to train reviewers without copying vulnerable patterns into production."
+      ]
+    },
+    fixPrompt:
+      "Our Code-Breaking /easy route scan confirms open source-code audit CTF content. Show how to isolate challenge instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "code-breaking-medium-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Code-Breaking /medium tier route live oracle",
+    description:
+      "When scanning /medium/{slug}, Code-Breaking maps to /puzzle/{id} source-code audit puzzles (javacon, lumenserial) with GitHub source archives and flag submission forms — route-specific medium-tier code-audit CTF oracle.",
+    impactOneline:
+      "Route-scoped scans of /medium/* paths should confirm medium-tier source-code audit CTF puzzle content even when the short URL returns 404.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "codeBreakingMediumRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Code-Breaking is intentional training — isolate puzzle instances from production codebases.",
+      steps: [
+        "Run source-audit CTF puzzles only on dedicated lab infrastructure.",
+        "Require authentication before serving downloadable challenge source archives.",
+        "Use puzzle findings to train reviewers without copying vulnerable patterns into production."
+      ]
+    },
+    fixPrompt:
+      "Our Code-Breaking /medium route scan confirms medium-tier source-code audit CTF content. Show how to isolate challenge instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "code-breaking-hard-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Code-Breaking /hard tier route live oracle",
+    description:
+      "When scanning /hard/{slug}, Code-Breaking maps to /puzzle/{id} source-code audit puzzles (picklecode, thejs) with GitHub source archives and flag submission forms — route-specific hard-tier code-audit CTF oracle.",
+    impactOneline:
+      "Route-scoped scans of /hard/* paths should confirm hard-tier source-code audit CTF puzzle content even when the short URL returns 404.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "codeBreakingHardRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Code-Breaking is intentional training — isolate puzzle instances from production codebases.",
+      steps: [
+        "Run source-audit CTF puzzles only on dedicated lab infrastructure.",
+        "Require authentication before serving downloadable challenge source archives.",
+        "Use puzzle findings to train reviewers without copying vulnerable patterns into production."
+      ]
+    },
+    fixPrompt:
+      "Our Code-Breaking /hard route scan confirms hard-tier source-code audit CTF content. Show how to isolate challenge instances from production.",
     version: 1,
     enabled: true
   },
@@ -28358,6 +31099,107 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnlab-validate-security-headers-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "VulnLab security-headers validate API live oracle",
+    description:
+      "GET /api/validate/security-headers returns JSON with labId security-headers and a hint describing missing CSP/HSTS/X-Frame-Options expectations.",
+    impactOneline:
+      "Live validation API confirms security-headers lab checker is reachable on VulnLab Academy.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidateSecurityHeadersLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab validation APIs behind authenticated sessions.",
+      steps: [
+        "Require lab login before /api/validate/security-headers responds.",
+        "Deploy Content-Security-Policy, HSTS, and X-Frame-Options on production apps."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/security-headers endpoint leaks security-headers lab hints. Show header hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-validate-ssti-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnLab SSTI validate API live oracle",
+    description:
+      "GET /api/validate/ssti returns JSON with labId ssti and a hint describing server-side template injection payload expectations for the hands-on lab.",
+    impactOneline:
+      "Live validation API confirms SSTI lab checker is reachable on VulnLab Academy when deployed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidateSstiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab validation APIs behind authenticated sessions.",
+      steps: [
+        "Require lab login before /api/validate/ssti responds.",
+        "Never pass user input into template render functions.",
+        "Use server-side grading for SSTI labs."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/ssti endpoint leaks SSTI lab hints. Show how to gate validation behind auth.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-validate-ssti-api-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnLab /api/validate/ssti route live oracle",
+    description:
+      "When scanning /api/validate/ssti, probes the live SSTI validation checker API for labId ssti + hint JSON — route-specific SSTI lab oracle distinct from generic VulnLab hub fingerprint.",
+    impactOneline:
+      "Route-scoped scans of /api/validate/ssti should confirm SSTI lab checker API without relying on shared SPA bundle markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidateSstiApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab validation APIs behind authenticated sessions.",
+      steps: [
+        "Require lab login before /api/validate/ssti responds.",
+        "Never pass user input into template render functions."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/ssti route scan confirms SSTI lab checker API. Show template injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnlab-validate-sqli-api-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnLab /api/validate/sqli-error route live oracle",
+    description:
+      "When scanning /api/validate/sqli-error, probes the live SQLi validation checker API for labId sqli-error + hint JSON — route-specific SQLi lab oracle distinct from generic VulnLab hub fingerprint.",
+    impactOneline:
+      "Route-scoped scans of /api/validate/sqli-error should confirm SQLi lab checker API without relying on shared SPA bundle markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnlabValidateSqliApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate lab validation APIs behind authenticated sessions.",
+      steps: [
+        "Require lab login before /api/validate/sqli-error responds.",
+        "Use parameterized queries for all database access."
+      ]
+    },
+    fixPrompt:
+      "Our /api/validate/sqli-error route scan confirms SQLi lab checker API. Show SQL injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnlab-input-validation-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -28457,6 +31299,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our juicy-coupon-bot AWS API key was committed to git history and still works. Show how to rotate it and prevent future leaks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-iac-terraform-tls-key-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Juice Shop IaC Terraform TLS private key live oracle",
+    description:
+      "GET /infrastructure/terraform/networking.tf exposes an inline RSA TLS private_key in aws_iam_server_certificate — the Juice Shop v20.2+ IaC leaked key challenge oracle.",
+    impactOneline:
+      "Hardcoded TLS private keys in committed Terraform enable impersonation and decrypt traffic protected by the leaked certificate.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopIacTerraformTlsKeyLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove private keys from Terraform; load TLS material from a secrets manager.",
+      steps: [
+        "Store TLS private keys in AWS Secrets Manager or ACM — never inline in .tf files.",
+        "Add infrastructure/terraform/*.tf to deployment review gates.",
+        "Rotate any TLS keys that were committed to version control."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /infrastructure/terraform/networking.tf exposes an RSA private_key inline. Show IaC secret management remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-iac-terraform-tls-key-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Juice Shop /infrastructure/terraform route IaC TLS key live oracle",
+    description:
+      "When scanning /infrastructure/terraform/networking.tf, the exposed networking.tf contains inline RSA TLS private_key in aws_iam_server_certificate — route-specific IaC leaked key oracle.",
+    impactOneline:
+      "Route-specific confirmation that Juice Shop Terraform networking config leaks TLS private key material.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopIacTerraformTlsKeyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove private keys from Terraform; load TLS material from a secrets manager.",
+      steps: [
+        "Store TLS private keys in AWS Secrets Manager or ACM — never inline in .tf files.",
+        "Add infrastructure/terraform/*.tf to deployment review gates.",
+        "Rotate any TLS keys that were committed to version control."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /infrastructure/terraform route scan exposes inline RSA TLS private_key. Show IaC secret management remediation.",
     version: 1,
     enabled: true
   },
@@ -29319,6 +32213,1055 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "yogsec-xss-lab1-reflected-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #1 GET parameter reflection route live oracle",
+    description:
+      "When scanning /labs/lab1.html, yogsec documents ?q= URL parameter reflected into element.innerHTML without sanitization — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #1 exposes query-parameter → innerHTML reflected XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab1ReflectedInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — use textContent instead of innerHTML in production.",
+      steps: [
+        "Replace innerHTML with textContent or DOMPurify-sanitized output for user-controlled data.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #1 route scan documents reflected query XSS via innerHTML. Show textContent/DOMPurify remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab2-post-sessionstorage-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #2 POST sessionStorage route live oracle",
+    description:
+      "When scanning /labs/lab2.html, yogsec documents POST form data stored in sessionStorage then reflected via innerHTML — route-specific stored XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #2 exposes sessionStorage → innerHTML stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab2PostSessionstorageRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — use textContent instead of innerHTML in production.",
+      steps: [
+        "Replace innerHTML with textContent or DOMPurify-sanitized output for user-controlled data.",
+        "Never reflect POST responses via client-side sessionStorage into innerHTML.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #2 route scan documents POST/sessionStorage XSS via innerHTML. Show textContent/DOMPurify remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab4-referer-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #4 Referer header route live oracle",
+    description:
+      "When scanning /labs/lab4.html, yogsec documents document.referrer reflected into innerHTML without sanitization — route-specific Referer XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #4 exposes Referer/document.referrer → innerHTML reflected XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab4RefererRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never reflect Referer headers via innerHTML in production.",
+      steps: [
+        "Encode Referer values with textContent or contextual output encoding before DOM insertion.",
+        "Validate and allow-list Referer URLs when they must be displayed.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #4 route scan documents Referer header XSS via innerHTML. Show safe Referer handling and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab5-user-agent-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #5 User-Agent route live oracle",
+    description:
+      "When scanning /labs/lab5.html, yogsec documents navigator.userAgent assigned to innerHTML without sanitization — route-specific User-Agent XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #5 exposes User-Agent → innerHTML reflected XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab5UserAgentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never render User-Agent strings via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying User-Agent or other request metadata.",
+        "Treat all HTTP header values as untrusted when reflected in HTML.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #5 route scan documents User-Agent XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab6-localstorage-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #6 localStorage route live oracle",
+    description:
+      "When scanning /labs/lab6.html, yogsec documents localStorage userData assigned to innerHTML without sanitization — route-specific stored XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #6 exposes localStorage → innerHTML stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab6LocalstorageRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never render localStorage values via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying localStorage or cookie data.",
+        "Validate and sanitize client-side storage before DOM insertion.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #6 route scan documents localStorage XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab7-document-title-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #7 document.title route live oracle",
+    description:
+      "When scanning /labs/lab7.html, yogsec documents document.title assigned to innerHTML without sanitization — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #7 exposes document.title → innerHTML DOM XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab7DocumentTitleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never render document.title via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying page titles in the DOM.",
+        "Treat document.title as untrusted when reflected in HTML contexts.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #7 route scan documents document.title XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab8-windowname-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #8 window.name route live oracle",
+    description:
+      "When scanning /labs/lab8.html, yogsec documents window.name passed to eval() without validation — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #8 exposes window.name → eval() DOM XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab8WindownameRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never pass window.name to eval() in production.",
+      steps: [
+        "Never use eval() with window.name or other cross-page persistent properties.",
+        "Clear window.name after use and avoid reading it into executable contexts.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #8 route scan documents window.name XSS via eval(). Show safe alternatives and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab9-localstorage-key-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #9 localStorage key route live oracle",
+    description:
+      "When scanning /labs/lab9.html, yogsec documents localStorage userData key assigned to innerHTML without sanitization — route-specific stored XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #9 exposes localStorage key reflection → innerHTML stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab9LocalstorageKeyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never render localStorage values via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying localStorage data.",
+        "Validate and sanitize client-side storage before DOM insertion.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #9 route scan documents localStorage key reflection XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab11-localstorage-stored-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #11 localStorage stored route live oracle",
+    description:
+      "When scanning /labs/lab11.html, yogsec documents localStorage messages rendered via innerHTML on page load — route-specific stored XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #11 exposes localStorage save-for-later → innerHTML stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab11LocalstorageStoredRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never render persisted localStorage messages via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying saved messages from localStorage.",
+        "Sanitize stored user content before persistence and on retrieval.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #11 route scan documents localStorage stored XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab12-sessionstorage-stored-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #12 sessionStorage route live oracle",
+    description:
+      "When scanning /labs/lab12.html, yogsec documents sessionStorage storedData rendered via innerHTML on page reload — route-specific stored XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #12 exposes sessionStorage save-on-reload → innerHTML stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab12SessionstorageStoredRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never render persisted sessionStorage values via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying sessionStorage data on page load.",
+        "Sanitize stored user content before persistence and on retrieval.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #12 route scan documents sessionStorage stored XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab13-indexeddb-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #13 IndexedDB route live oracle",
+    description:
+      "When scanning /labs/lab13.html, yogsec documents IndexedDB notes rendered via innerHTML after read — route-specific stored XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #13 exposes IndexedDB notes → innerHTML stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab13IndexeddbRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never render IndexedDB records via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying notes loaded from IndexedDB.",
+        "Escape HTML entities before inserting database-backed content into the DOM.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #13 route scan documents IndexedDB stored XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab14-cookie-stored-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #14 cookie route live oracle",
+    description:
+      "When scanning /labs/lab14.html, yogsec documents userPref cookie value assigned to innerHTML on page load — route-specific stored XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #14 exposes cookie read-and-inject → innerHTML stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab14CookieStoredRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never render cookie values via innerHTML in production.",
+      steps: [
+        "Use textContent instead of innerHTML when displaying cookie-backed preferences.",
+        "Treat all cookie data as untrusted when reflected in HTML contexts.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #14 route scan documents cookie stored XSS via innerHTML. Show textContent remediation and lab isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab15-windowname-persistent-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #15 window.name persistent route live oracle",
+    description:
+      "When scanning /labs/lab15.html, yogsec documents window.name persisting across reloads/navigation and executed via eval() — route-specific persistent DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #15 exposes cross-page window.name → eval() persistent XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab15WindownamePersistentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never pass window.name or navigation state to eval() in production.",
+      steps: [
+        "Never use eval() with window.name or other cross-page persistent browser state.",
+        "Clear or validate window.name before page scripts execute on load.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #15 route scan documents persistent window.name eval XSS. Show eval removal and safe state handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab16-history-state-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #16 history.state route live oracle",
+    description:
+      "When scanning /labs/lab16.html, yogsec documents history.state.data executed via eval() on reload/back/forward — route-specific stored DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #16 exposes history.state pushState → eval() stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab16HistoryStateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never execute history.state payloads with eval() in production.",
+      steps: [
+        "Treat history.state as untrusted when deserialized on navigation events.",
+        "Use structured JSON parsing instead of eval() for history state data.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #16 route scan documents history.state eval XSS. Show safe state serialization and eval removal.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab17-sessionstorage-search-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #17 sessionStorage search route live oracle",
+    description:
+      "When scanning /labs/lab17.html, yogsec documents sessionStorage search matches executed via eval(match) — route-specific stored DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #17 exposes sessionStorage search → eval(match) stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab17SessionstorageSearchRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never execute sessionStorage search hits with eval() in production.",
+      steps: [
+        "Use textContent or safe filtering instead of eval() when searching stored client data.",
+        "Sanitize data before persisting to sessionStorage.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #17 route scan documents sessionStorage search eval XSS. Show safe search rendering and eval removal.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab18-localstorage-json-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #18 localStorage JSON route live oracle",
+    description:
+      "When scanning /labs/lab18.html, yogsec documents JSON payloads in localStorage parsed and executed via eval() — route-specific stored DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #18 exposes localStorage JSON → eval(payload) stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab18LocalstorageJsonRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never eval() JSON payloads from localStorage in production.",
+      steps: [
+        "Parse localStorage JSON with safe schemas instead of eval().",
+        "Treat all client-side stored payloads as untrusted when deserialized.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #18 route scan documents localStorage JSON eval XSS. Show safe JSON parsing and eval removal.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab19-cross-key-injection-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #19 cross-key injection route live oracle",
+    description:
+      "When scanning /labs/lab19.html, yogsec documents JavaScript split across multiple localStorage keys joined and executed via eval() — route-specific cross-key stored DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #19 exposes multi-key localStorage → eval(combined) cross-key XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab19CrossKeyInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never concatenate localStorage keys into eval() in production.",
+      steps: [
+        "Avoid assembling executable code from multiple client-side storage keys.",
+        "Use structured data formats with strict validation instead of eval().",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #19 route scan documents cross-key localStorage eval XSS. Show safe storage handling and eval removal.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab20-base64-decode-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #20 Base64 decode route live oracle",
+    description:
+      "When scanning /labs/lab20.html, yogsec documents Base64-encoded payloads in localStorage decoded via atob() and executed with eval() — route-specific stored DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #20 exposes localStorage Base64 → atob() → eval(decoded) stored XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab20Base64DecodeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "yogsec lab modules are intentional training — never decode and eval() Base64 payloads from localStorage in production.",
+      steps: [
+        "Treat Base64 encoding as obfuscation, not sanitization — never pass decoded output to eval().",
+        "Use safe data formats and strict allowlists for client-side storage.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #20 route scan documents Base64 decode eval XSS. Show safe decoding and eval removal.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab21-search-box-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #21 search box route live oracle",
+    description:
+      "When scanning /labs/lab21.html, yogsec documents ?code= URL parameter read from search box and executed with eval() — route-specific reflected DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #21 exposes search-box ?code= → eval() reflected XSS sink for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab21SearchBoxRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never pass URL parameters to eval() in production.",
+      steps: [
+        "Replace eval() with safe parsing and never execute user-controlled code strings.",
+        "Use textContent instead of dynamic code execution for search results.",
+        "Use Content-Security-Policy to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #21 route scan documents search-box eval XSS via ?code=. Show safe alternatives and eval removal.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab22-innerhtml-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #22 innerHTML eval route live oracle",
+    description:
+      "When scanning /labs/lab22.html, yogsec documents user input rendered via innerHTML then executed with eval() — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #22 exposes innerHTML + eval() sinks for DOM XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab22InnerhtmlEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec lab modules are intentional training — never use eval() with user input in production.",
+      steps: [
+        "Replace eval() with safe parsing and textContent rendering for user-controlled data.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #22 route scan documents innerHTML + eval DOM XSS. Show safe output encoding and eval removal.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab23-insertadjacenthtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #23 insertAdjacentHTML route live oracle",
+    description:
+      "When scanning /labs/lab23.html, yogsec documents insertAdjacentHTML combined with eval(userInput) — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #23 exposes insertAdjacentHTML + eval() sinks for DOM XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab23InsertadjacenthtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never combine insertAdjacentHTML with eval() in production.",
+      steps: [
+        "Avoid insertAdjacentHTML with user-controlled HTML; use textContent or DOMPurify.",
+        "Never pass user input to eval().",
+        "Use Content-Security-Policy to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #23 route documents insertAdjacentHTML + eval XSS. Show safe DOM updates and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab24-outerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #24 outerHTML replacement route live oracle",
+    description:
+      "When scanning /labs/lab24.html, yogsec documents outerHTML replacement combined with eval(userInput) — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #24 exposes outerHTML + eval sinks for DOM XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab24OuterhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — use textContent instead of outerHTML/eval in production.",
+      steps: [
+        "Never pass user input to eval() or assign unsanitized HTML via outerHTML.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy to block inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #24 route documents outerHTML + eval XSS. Show safe DOM updates and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab25-eval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "critical",
+    title: "yogsec XSS Lab #25 eval user string route live oracle",
+    description:
+      "When scanning /labs/lab25.html, yogsec documents eval() of user-controlled strings — route-specific code execution XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #25 exposes direct eval(userCode) for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab25EvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never eval() user-controlled strings in production.",
+      steps: [
+        "Remove eval() of any user-supplied input.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #25 route documents eval(userCode) XSS. Show safe alternatives and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab26-settimeout-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #26 setTimeout userString route live oracle",
+    description:
+      "When scanning /labs/lab26.html, yogsec documents setTimeout(userString) passing attacker code to timer callbacks — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #26 exposes setTimeout(userString) for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab26SettimeoutRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never pass user strings to setTimeout/setInterval in production.",
+      steps: [
+        "Use function references instead of string arguments to setTimeout.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy to mitigate script injection."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #26 route documents setTimeout(userString) XSS. Show safe timer callbacks and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab27-setinterval-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #27 setInterval eval route live oracle",
+    description:
+      "When scanning /labs/lab27.html, yogsec documents setInterval(function(){ eval(userCode); }, interval) repeating attacker code — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #27 exposes setInterval + eval for repeating XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab27SetintervalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never pass user strings to setInterval/eval in production.",
+      steps: [
+        "Use function references instead of string arguments to setInterval.",
+        "Remove eval() of any user-supplied input.",
+        "Use Content-Security-Policy to mitigate script injection."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #27 route documents setInterval + eval repeating XSS. Show safe timer callbacks and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab28-function-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "critical",
+    title: "yogsec XSS Lab #28 Function constructor route live oracle",
+    description:
+      "When scanning /labs/lab28.html, yogsec documents new Function(...params, userCode)() executing user-controlled strings — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #28 exposes Function() constructor code execution for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab28FunctionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never pass user strings to the Function constructor in production.",
+      steps: [
+        "Remove Function() constructor usage with user-supplied code.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy script-src restrictions."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #28 route documents Function() constructor XSS. Show safe alternatives and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab29-javascript-href-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #29 javascript href route live oracle",
+    description:
+      "When scanning /labs/lab29.html, yogsec documents location.href = javascript: URLs and href=javascript: links — route-specific URL-based XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #29 exposes javascript: pseudo-protocol in location.href for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab29JavascriptHrefRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — block javascript: URLs and validate user-controlled hrefs in production.",
+      steps: [
+        "Reject javascript: and data: schemes in user-supplied URLs.",
+        "Use allowlists for redirect and navigation targets.",
+        "Use Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #29 route documents javascript: href XSS. Show URL validation and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab30-dynamic-script-src-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "critical",
+    title: "yogsec XSS Lab #30 dynamic script src route live oracle",
+    description:
+      "When scanning /labs/lab30.html, yogsec documents document.createElement('script') with user-controlled script.src — route-specific remote script injection training oracle.",
+    impactOneline:
+      "yogsec Lab #30 exposes dynamic script tag creation with attacker-controlled src for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab30DynamicScriptSrcRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never let users control script src attributes in production.",
+      steps: [
+        "Validate and allowlist script sources; block data: and blob: schemes for script tags.",
+        "Use Subresource Integrity (SRI) for third-party scripts.",
+        "Use Content-Security-Policy script-src to restrict script origins."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #30 route documents createElement('script') + user-controlled src XSS. Show safe script loading and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab31-onclick-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #31 onclick attribute route live oracle",
+    description:
+      "When scanning /labs/lab31.html, yogsec documents button.onclick = new Function(userCode) — route-specific event-handler XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #31 exposes onclick attribute injection with user-controlled JavaScript for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab31OnclickRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never set onclick with user-controlled code in production.",
+      steps: [
+        "Use addEventListener with safe function references instead of string-based event handlers.",
+        "Remove Function() constructor usage with user-supplied code.",
+        "Use Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #31 route documents onclick = new Function(userCode) XSS. Show safe event binding and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab32-onmouseover-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #32 onmouseover attribute route live oracle",
+    description:
+      "When scanning /labs/lab32.html, yogsec documents setAttribute('onmouseover', userCode) — route-specific hover-triggered XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #32 exposes onmouseover attribute injection with user-controlled JavaScript for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab32OnmouseoverRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never set onmouseover with user-controlled strings in production.",
+      steps: [
+        "Use addEventListener('mouseover', safeFn) instead of setAttribute with user input.",
+        "Sanitize or reject user-controlled event handler attributes.",
+        "Use Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #32 route documents onmouseover injection XSS. Show safe event listeners and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab33-onerror-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #33 img onerror route live oracle",
+    description:
+      "When scanning /labs/lab33.html, yogsec documents img.setAttribute('onerror', userCode) — route-specific image error-handler XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #33 exposes img onerror attribute injection with user-controlled JavaScript for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab33OnerrorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never set onerror with user-controlled strings in production.",
+      steps: [
+        "Use addEventListener('error', safeFn) instead of setAttribute with user input.",
+        "Sanitize or reject user-controlled event handler attributes on img tags.",
+        "Use Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #33 route documents img onerror injection XSS. Show safe error handlers and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab34-onload-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #34 body onload route live oracle",
+    description:
+      "When scanning /labs/lab34.html, yogsec documents document.body.setAttribute('onload', userCode) — route-specific page-load XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #34 exposes body onload attribute injection with user-controlled JavaScript for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab34OnloadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never set onload with user-controlled code in production.",
+      steps: [
+        "Use DOMContentLoaded event listeners instead of string-based onload handlers.",
+        "Sanitize or reject user-controlled event handler attributes on body elements.",
+        "Use Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #34 route documents body onload injection XSS. Show safe page-load handlers and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab35-onfocus-autofocus-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #35 onfocus autofocus route live oracle",
+    description:
+      "When scanning /labs/lab35.html, yogsec documents setAttribute('onfocus', userCode) with autofocus — route-specific auto-triggered XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #35 exposes onfocus + autofocus attribute injection with user-controlled JavaScript for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab35OnfocusAutofocusRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never set onfocus or autofocus with user-controlled strings in production.",
+      steps: [
+        "Use addEventListener('focus', safeFn) instead of setAttribute with user input.",
+        "Reject user-controlled autofocus and event handler attributes on form inputs.",
+        "Use Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #35 route documents onfocus + autofocus injection XSS. Show safe focus handlers and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab36-oninput-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "yogsec XSS Lab #36 oninput route live oracle",
+    description:
+      "When scanning /labs/lab36.html, yogsec documents newInput.oninput with new Function('event', code) — route-specific per-keystroke XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #36 exposes oninput event injection with user-controlled JavaScript that executes on every keystroke for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab36OninputRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never assign oninput handlers from user-controlled code in production.",
+      steps: [
+        "Use addEventListener('input', safeFn) instead of new Function with user input.",
+        "Reject user-controlled event handler attributes on dynamically created inputs.",
+        "Use Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #36 route documents oninput injection XSS. Show safe input event handlers and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab37-onchange-select-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "critical",
+    title: "yogsec XSS Lab #37 select onchange route live oracle",
+    description:
+      "When scanning /labs/lab37.html, yogsec documents select.onchange with eval(code) — route-specific dropdown-change XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #37 exposes select onchange with eval(userCode) that executes attacker JavaScript when the dropdown changes for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab37OnchangeSelectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never use eval() in onchange handlers with user-controlled code in production.",
+      steps: [
+        "Use addEventListener('change', safeFn) instead of eval with user input.",
+        "Never pass user-controlled strings to eval() in select change handlers.",
+        "Use Content-Security-Policy to block eval and inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #37 route documents select onchange eval XSS. Show safe change handlers and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab38-onkeyup-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "critical",
+    title: "yogsec XSS Lab #38 onkeyup route live oracle",
+    description:
+      "When scanning /labs/lab38.html, yogsec documents input.onkeyup with eval(code) — route-specific key-release XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #38 exposes onkeyup event injection with eval(userCode) that executes attacker JavaScript on every key release for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab38OnkeyupRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never use eval() in onkeyup handlers with user-controlled code in production.",
+      steps: [
+        "Use addEventListener('keyup', safeFn) instead of eval with user input.",
+        "Never pass user-controlled strings to eval() in keyboard event handlers.",
+        "Use Content-Security-Policy to block eval and inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #38 route documents onkeyup eval XSS. Show safe keyboard event handlers and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-xss-lab39-onsubmit-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "critical",
+    title: "yogsec XSS Lab #39 onsubmit route live oracle",
+    description:
+      "When scanning /labs/lab39.html, yogsec documents form.onsubmit with eval(code) — route-specific form-submission XSS training oracle.",
+    impactOneline:
+      "yogsec Lab #39 exposes onsubmit event injection with eval(userCode) that executes attacker JavaScript on form submission for XSS practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecXssLab39OnsubmitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec labs are intentional training — never use eval() in onsubmit handlers with user-controlled code in production.",
+      steps: [
+        "Use addEventListener('submit', safeFn) instead of eval with user input.",
+        "Never pass user-controlled strings to eval() in form submission handlers.",
+        "Use Content-Security-Policy to block eval and inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Lab #39 route documents onsubmit eval XSS. Show safe form submission handlers and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "yogsec Open-Redirect hub route live oracle",
+    description:
+      "When scanning yogsec.github.io/Open-Redirect/, the education lab documents redirectForm assigning window.location.href from user input without destination validation — route-specific open redirect training oracle.",
+    impactOneline:
+      "yogsec Open-Redirect simulator exposes unvalidated redirect destinations via window.location.href for phishing and OAuth bypass practice on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec Open-Redirect is intentional training — validate and whitelist redirect destinations in production.",
+      steps: [
+        "Allowlist permitted redirect hosts instead of accepting arbitrary URLs.",
+        "Use relative paths or signed redirect tokens for post-login navigation.",
+        "Run open-redirect training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Open-Redirect hub documents unvalidated window.location.href redirects. Show allowlist validation and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-vulnerable-login-route-live-oracle",
+    platform: "generic",
+    category: "Authentication bypass",
+    severityDefault: "critical",
+    title: "yogsec Vulnerable-Login hub route live oracle",
+    description:
+      "When scanning yogsec.github.io/Vulnerable-Login/, the education lab documents SQL injection authentication bypass via concatenated login queries (VULN-001) — route-specific auth-bypass training oracle.",
+    impactOneline:
+      "yogsec Vulnerable-Login exposes client-side SQL injection login bypass with plaintext password storage and missing rate limiting for authentication training on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecVulnerableLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec Vulnerable-Login is intentional training — use parameterized queries and server-side authentication in production.",
+      steps: [
+        "Use parameterized queries or ORM bindings instead of string-concatenated SQL.",
+        "Hash passwords with bcrypt/argon2 and enforce rate limiting on login endpoints.",
+        "Run authentication training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Vulnerable-Login hub documents SQL injection auth bypass. Show parameterized query remediation and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "yogsec-vulnerable-shopping-cart-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "yogsec Vulnerable-Shopping-Cart hub route live oracle",
+    description:
+      "When scanning yogsec.github.io/Vulnerable-Shopping-Cart/, the education lab documents DOM XSS, IDOR, price manipulation, coupon reuse, and gift-card balance tampering via localStorage — route-specific business logic training oracle.",
+    impactOneline:
+      "yogsec Vulnerable-Shopping-Cart exposes client-side business logic flaws including coupon reuse, negative quantity manipulation, and gift-card balance hacking for e-commerce security training on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yogsecVulnerableShoppingCartRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "yogsec Vulnerable-Shopping-Cart is intentional training — validate prices server-side and never trust client-side cart state in production.",
+      steps: [
+        "Validate cart quantities, prices, and discounts on the server before checkout.",
+        "Store gift-card balances and coupon usage in server-side sessions with atomic redemption.",
+        "Run business-logic training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our yogsec Vulnerable-Shopping-Cart hub documents client-side business logic flaws. Show server-side price validation and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-labs-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -29341,6 +33284,57 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host the0x-pwn-style XSS training labs with eval and innerHTML sinks. Show safe output encoding and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-the0x-pwn-xss-query-param-lab-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn reflected query innerHTML XSS lab disclosed",
+    description:
+      "the0x-pwn lab-1 reads the q query parameter via URLSearchParams and assigns it to resultQuery.innerHTML without sanitization — a beginner reflected XSS training module.",
+    impactOneline:
+      "Public the0x-pwn lab-1 page documents query-parameter → innerHTML reflected XSS sink for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideThe0xPwnXssQueryParamLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign URL query parameters to innerHTML — use textContent and output encoding in production.",
+      steps: [
+        "Replace innerHTML assignments with textContent for user-controlled search results.",
+        "HTML-encode all dynamic output before rendering in the DOM.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host the0x-pwn lab-1-style reflected query XSS labs. Show safe output encoding and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the0x-pwn-xss-query-param-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn reflected query innerHTML XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-1 on the0x-pwn.github.io, URLSearchParams q is assigned to resultQuery.innerHTML without sanitization — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-1 documents query-parameter → innerHTML reflected XSS sink for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssQueryParamRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign URL query parameters to innerHTML — use textContent in production.",
+      steps: [
+        "Replace innerHTML assignments with textContent for user-controlled search results.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-1 route documents reflected query XSS. Show safe output encoding remediation.",
     version: 1,
     enabled: true
   },
@@ -29371,6 +33365,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the0x-pwn-xss-dom-hash-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn DOM hash innerHTML XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-3 on the0x-pwn.github.io, location.hash is decoded and assigned to resultQuery.innerHTML without sanitization — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-3 documents location.hash → innerHTML DOM XSS sink for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssDomHashRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign location.hash to innerHTML — use textContent in production.",
+      steps: [
+        "Decode hash fragments with textContent or DOMPurify instead of innerHTML.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-3 route documents DOM hash XSS. Show safe hash handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-document-write-lab-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -29393,6 +33412,31 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host the0x-pwn lab-5-style document.write XSS labs. Show safe DOM construction and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the0x-pwn-xss-document-write-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn document.write option injection XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-5 on the0x-pwn.github.io, document.write injects unsanitized query into option elements — route-specific DOM XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-5 documents document.write query concatenation XSS sink for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssDocumentWriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Avoid document.write with user-controlled data — build DOM nodes with createElement in production.",
+      steps: [
+        "Replace document.write concatenation with safe DOM APIs and output encoding.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-5 route documents document.write XSS. Show safe DOM construction remediation.",
     version: 1,
     enabled: true
   },
@@ -29423,6 +33467,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the0x-pwn-xss-javascript-url-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn javascript: URL XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-7 on the0x-pwn.github.io, back.href is assigned to a javascript: URL with an analytics fetch callback — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-7 documents javascript: URL injection via href assignment for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssJavascriptUrlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never assign user input to javascript: href URLs — validate and block dangerous URL schemes.",
+      steps: [
+        "Block javascript: and data: schemes in dynamic href assignments.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-7 route documents javascript: URL XSS. Show URL scheme validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-iframe-data-uri-lab-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -29445,6 +33514,31 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host the0x-pwn lab-10-style iframe data: URI XSS labs. Show data: URI blocking and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the0x-pwn-xss-iframe-data-uri-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn iframe data: URI XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-10 on the0x-pwn.github.io, iframe elements with data:text/html payloads are injected into resultQuery.innerHTML behind an HTML-tag filter bypass — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-10 documents iframe data: URI injection with HTML-tag filter bypass for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssIframeDataUriRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block data: URIs and sanitize iframe src attributes in production.",
+      steps: [
+        "Disallow data: and javascript: URI schemes in iframe src attributes.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-10 route documents iframe data: URI XSS. Show data: URI blocking remediation.",
     version: 1,
     enabled: true
   },
@@ -29475,6 +33569,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the0x-pwn-xss-template-literal-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn template literal eval XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-2 on the0x-pwn.github.io, eval() executes a template literal assigning resultQuery.textContent from the query parameter — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-2 documents eval(templateLiteral) XSS sink for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssTemplateLiteralRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into eval() — use textContent in production.",
+      steps: [
+        "Remove eval() from client-side code paths that touch user-controlled query parameters.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-2 route documents eval(templateLiteral) XSS. Show safe output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-filter-bypass-tags-lab-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -29497,6 +33616,31 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host the0x-pwn lab-4-style filter-bypass XSS labs. Show proper sanitization and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the0x-pwn-xss-filter-bypass-tags-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn HTML tag filter bypass XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-4 on the0x-pwn.github.io, angle-bracket replacement still leaves innerHTML assignment vulnerable to filter-bypass XSS — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-4 documents partial tag filtering before innerHTML assignment for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssFilterBypassTagsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Angle-bracket replacement alone does not prevent XSS — use textContent in production.",
+      steps: [
+        "Replace innerHTML assignments with textContent for user-controlled data.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-4 route documents filter-bypass XSS. Show proper sanitization remediation.",
     version: 1,
     enabled: true
   },
@@ -29527,6 +33671,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the0x-pwn-xss-href-angle-brackets-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn href attribute XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-8 on the0x-pwn.github.io, innerHTML injects decodeURIComponent(query) into an anchor href — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-8 documents href-attribute XSS via innerHTML concatenation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssHrefAngleBracketsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encoding angle brackets does not protect href attributes — validate URLs in production.",
+      steps: [
+        "Block javascript: and data: schemes in dynamic href values.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-8 route documents href XSS via innerHTML. Show URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-tag-filter-bypass-lab-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -29553,6 +33722,31 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "the0x-pwn-xss-tag-filter-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn HTML tag filter bypass XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-6 on the0x-pwn.github.io, query is reflected into resultQuery.innerHTML behind a blockTag denylist bypassable via unknown elements and onfocus autofocus — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-6 documents denylist-based tag filtering bypass before innerHTML assignment.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssTagFilterBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Tag denylists are bypassable — use textContent or a strict HTML sanitizer instead of innerHTML.",
+      steps: [
+        "Replace innerHTML assignments with textContent for user-controlled data.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-6 route documents tag-filter bypass XSS. Show proper sanitization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-the0x-pwn-xss-svg-script-injection-lab-evidence",
     platform: "generic",
     category: "Cross-site scripting",
@@ -29575,6 +33769,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host the0x-pwn lab-9-style SVG injection XSS labs. Show proper sanitization and lab isolation from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "the0x-pwn-xss-svg-script-injection-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "the0x-pwn SVG script injection XSS route live oracle",
+    description:
+      "When scanning /lab-xss/lab-9 on the0x-pwn.github.io, query is reflected into resultQuery.innerHTML when SVG/animatetransform tags are omitted from the blockTag denylist — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the0x-pwn lab-9 documents SVG/animatetransform injection via partial tag filtering.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "the0xPwnXssSvgScriptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Incomplete SVG tag blocking leaves animatetransform event handlers exploitable via innerHTML.",
+      steps: [
+        "Replace innerHTML with textContent for reflected search results.",
+        "Use a strict HTML sanitizer that strips SVG event handlers.",
+        "Host XSS training labs only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our the0x-pwn /lab-xss/lab-9 route documents SVG script injection XSS. Show proper sanitization remediation.",
     version: 1,
     enabled: true
   },
@@ -31009,6 +35229,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ssrf-vulnlab-open-redirector-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "ssrf.vulnlab.dev /r open redirector route SSRF live oracle",
+    description:
+      "When scanning /r/?to=, the self-hosted open redirector chains into /redirect/?url= allowlist bypass and returns AWS metadata — route-specific follow-redirect SSRF oracle for discovery queue entrypoints.",
+    impactOneline:
+      "Same-site open redirectors on allowlisted hosts enable SSRF redirect chains to internal and cloud metadata endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ssrfVulnlabOpenRedirectorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate final fetch destinations after redirects — ssrf.vulnlab.dev is intentional training software.",
+      steps: [
+        "Resolve URLs after all redirects and reject private/link-local/metadata ranges.",
+        "Do not treat same-site redirectors as inherently trusted fetch targets.",
+        "Run SSRF training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /r/?to= open redirector chains into SSRF allowlist bypass. Show redirect-chain SSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ssrf-vulnlab-allowlist-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -32055,7 +36301,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "xss.vulnlab.dev /mxss route XSS live oracle",
     description:
-      "When scanning /mxss/, innerHTML round-trip after regex sanitizer confirms mutation XSS sink — route-specific mXSS oracle.",
+      "When scanning /mxss/ or catalog alias /mutation/, innerHTML round-trip after regex sanitizer confirms mutation XSS sink — route-specific mXSS oracle.",
     impactOneline:
       "Route-specific mXSS oracle confirms parser-mode escape without relying on shared vulnlab hub fingerprinting.",
     detectorKind: "rule_ref",
@@ -32071,6 +36317,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /mxss route reparses regex-sanitized markup via innerHTML. Show route-specific mXSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-vulnlab-filter-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "xss.vulnlab.dev /filter route XSS filter-bypass live oracle",
+    description:
+      "When scanning catalog alias /filter/, the live mutation XSS lab at /mxss/ confirms regex sanitizer bypass via innerHTML round-trip — route-specific filter-bypass oracle.",
+    impactOneline:
+      "Route-specific filter-bypass oracle confirms sanitizer defeat without relying on shared vulnlab hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssVulnlabFilterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Avoid innerHTML round-trips after sanitization — xss.vulnlab.dev is intentional training software.",
+      steps: [
+        "Use DOMParser or trusted Types instead of regex HTML sanitizers.",
+        "Never reassign sanitized markup through innerHTML on a live DOM node.",
+        "Run XSS training labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /filter route alias maps to the /mxss regex-sanitizer bypass lab. Show route-specific mXSS remediation.",
     version: 1,
     enabled: true
   },
@@ -32256,6 +36528,83 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-ctf-hub-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets CTF hub route live oracle",
+    description:
+      "When scanning wrongsecrets-ctf.herokuapp.com hub homepage, challenge-0 through challenge-8 walkthrough routes are listed without authentication — route-specific condensed CTF training oracle.",
+    impactOneline:
+      "Route-scoped scans on the WrongSecrets CTF hub should confirm multiple secret-hiding challenge walkthroughs are exposed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsCtfHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets CTF is intentional training software — isolate it from production secret stores.",
+      steps: [
+        "Run CTF instances only on isolated scanner evaluation infrastructure.",
+        "Never reuse CTF challenge secrets or patterns in production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets CTF hub route scan lists challenge-0 through challenge-8 walkthroughs. Show route-specific CTF isolation guidance.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bingoctf-auth-gated-ctf-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "bingoCTF NextAuth-gated CTF platform live oracle",
+    description:
+      "bingoctf.vercel.app is a beginner CTF platform where /problems and GET /api/problems require NextAuth session — unauthenticated API calls return {\"error\":{}} while /authentication exposes Sign in/Sign up.",
+    impactOneline:
+      "Public bingoCTF deployments gate challenge listings behind authentication but expose the auth-gated API contract to unauthenticated scanners.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bingoctfAuthGatedCtfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "bingoCTF is intentional training software — run CTF instances on isolated infrastructure with rate-limited auth endpoints.",
+      steps: [
+        "Require authentication before listing challenge metadata.",
+        "Rate-limit /api/problems and flag-submission endpoints.",
+        "Never reuse CTF challenge secrets in production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our bingoCTF platform gates /api/problems behind NextAuth but returns {\"error\":{}} to unauthenticated callers. Show session-gated API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bingoctf-auth-gated-ctf-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "bingoCTF auth-gated CTF route live oracle",
+    description:
+      "When scanning bingoctf.vercel.app /, /problems, or /authentication, the platform confirms a NextAuth-gated beginner CTF hub with session-protected /api/problems challenge listing.",
+    impactOneline:
+      "Route-specific bingoCTF scans should confirm auth-gated challenge APIs without relying on generic header misconfig findings alone.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bingoctfAuthGatedCtfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "bingoCTF is intentional training software — run CTF instances on isolated infrastructure with rate-limited auth endpoints.",
+      steps: [
+        "Require authentication before listing challenge metadata.",
+        "Rate-limit /api/problems and flag-submission endpoints.",
+        "Never reuse CTF challenge secrets in production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our bingoCTF /problems route scan confirms NextAuth-gated challenge APIs. Show session enforcement for CTF platforms.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -32304,6 +36653,56 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our WrongSecrets challenge route exposes secret walkthrough content. Show how to detect secrets in Docker layers, Spring config, and K8s configmaps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-0-opening-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "medium",
+    title: "OWASP WrongSecrets challenge-0 opening live oracle",
+    description:
+      "GET /challenge/challenge-0 documents the WrongSecrets intro onboarding walkthrough with The first answer submission UI — opening challenge training oracle.",
+    impactOneline:
+      "WrongSecrets challenge-0 exposes the onboarding walkthrough that teaches players how to submit answers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge0OpeningLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-0 is intentional — ensure production apps never embed tutorial answers in walkthrough pages.",
+      steps: [
+        "Keep training CTF instances isolated from production infrastructure.",
+        "Scan public challenge pages only on authorized training targets."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-0 route documents the opening onboarding walkthrough. Show how to isolate CTF training instances.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-0-opening-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "medium",
+    title: "OWASP WrongSecrets challenge-0 opening route live oracle",
+    description:
+      "When scanning /challenge/0 or /challenge/challenge-0, the walkthrough documents the WrongSecrets intro onboarding with The first answer — route-specific challenge-0 opening oracle.",
+    impactOneline:
+      "Route-specific confirmation that WrongSecrets challenge-0 Opening Challenge walkthrough is reachable from the challenge page scan.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge0OpeningRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-0 is intentional — keep CTF training hubs isolated from production.",
+      steps: [
+        "Run WrongSecrets CTF instances only on isolated training infrastructure.",
+        "Do not expose challenge walkthrough pages on production domains."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-0 route documents the opening onboarding walkthrough. Show route-specific CTF isolation guidance.",
     version: 1,
     enabled: true
   },
@@ -33676,6 +38075,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-28-github-issue-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-28 GitHub issue live oracle",
+    description:
+      "GET /challenge/challenge-28 documents an AWS secret key leaked in a closed GitHub issue — documentation secret exposure live oracle.",
+    impactOneline:
+      "Closed GitHub issues can permanently expose credentials in comment history even after the issue is closed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge28GithubIssueLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-28 is intentional — never post secrets in GitHub issues, even when closed.",
+      steps: [
+        "Rotate any credentials that appeared in issue comments or attachments.",
+        "Use private secret managers instead of issue trackers for credential sharing.",
+        "Scan closed issues for accidental secret leaks before archiving."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-28 documents AWS keys leaked in closed GitHub issues. Show remediation for issue-tracker secret hygiene.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-28-github-issue-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -33702,6 +38127,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "wrongsecrets-challenge-29-screenshot-log-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-29 screenshot log live oracle",
+    description:
+      "GET /challenge/challenge-29 documents secrets leaked via log screenshots in closed GitHub issues — documentation log exposure live oracle.",
+    impactOneline:
+      "Log screenshots attached to issue trackers can leak credentials that survive issue closure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge29ScreenshotLogLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-29 is intentional — never post log screenshots containing secrets in GitHub issues.",
+      steps: [
+        "Redact secrets from logs before attaching screenshots to issues.",
+        "Use markdown code blocks with redaction for log excerpts instead of screenshots.",
+        "Rotate credentials that appeared in any posted log images."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-29 documents secrets in log screenshots on GitHub issues. Show remediation for safe log sharing.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "wrongsecrets-challenge-29-screenshot-log-route-live-oracle",
     platform: "generic",
     category: "Exposed secret",
@@ -33724,6 +38175,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our WrongSecrets challenge-29 route documents secrets in log screenshots on GitHub issues. Show remediation for safe log sharing.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "wrongsecrets-challenge-30-localstorage-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OWASP WrongSecrets challenge-30 localStorage live oracle",
+    description:
+      "GET /challenge/challenge-30 documents secrets stored in browser localStorage — front-end secret exposure live oracle.",
+    impactOneline:
+      "Secrets persisted in localStorage are readable by any script on the origin and survive browser restarts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "wrongsecretsChallenge30LocalStorageLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WrongSecrets challenge-30 is intentional — never store secrets in localStorage or other client-side persistence.",
+      steps: [
+        "Keep session secrets server-side with HttpOnly cookies.",
+        "Avoid storing API keys or tokens in localStorage, sessionStorage, or IndexedDB.",
+        "Rotate any credentials that were ever persisted in browser storage."
+      ]
+    },
+    fixPrompt:
+      "Our WrongSecrets challenge-30 documents secrets in browser localStorage. Show remediation for client-side secret storage.",
     version: 1,
     enabled: true
   },
@@ -34356,9 +38833,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Injection",
     severityDefault: "critical",
-    title: "Broken Crystals /api/render route doT SSTI oracle",
+    title: "Broken Crystals render doT SSTI route oracle",
     description:
-      "When scanning /api/render, POST Hello {{=7*7}} evaluates doT template to Hello 49 — route-specific SSTI oracle with scannedUrl evidence.",
+      "When scanning /api/render or /render.dot, POST Hello {{=7*7}} evaluates doT template to Hello 49 — route-specific SSTI oracle with scannedUrl evidence.",
     impactOneline:
       "Route-scoped scans of /api/render should confirm doT SSTI with scannedUrl evidence.",
     detectorKind: "rule_ref",
@@ -34878,7 +39355,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Zero Health medical-records BOLA route live oracle",
     description:
-      "When scanning /api/medical-records, GET returns PHI scoped only by forgeable JWT user id from /api/debug/token — route-specific medical-records BOLA oracle.",
+      "When scanning /api/medical-records or /api/records, GET returns PHI scoped only by forgeable JWT user id from /api/debug/token — route-specific medical-records BOLA oracle.",
     impactOneline:
       "Route-specific oracle confirms medical-records broken object-level authorization without relying on shared Zero Health hub fingerprinting.",
     detectorKind: "rule_ref",
@@ -34893,7 +39370,7 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our GET /api/medical-records endpoint trusts forgeable JWT user ids. Show BOLA remediation for healthcare PHI APIs.",
+      "Our GET /api/medical-records or /api/records endpoint trusts forgeable JWT user ids. Show BOLA remediation for healthcare PHI APIs.",
     version: 1,
     enabled: true
   },
@@ -34920,6 +39397,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/patients route returns full patient PHI for doctor JWTs. Show least-privilege PHI access controls and audit logging.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-doctors-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Zero Health doctors excessive-data route live oracle",
+    description:
+      "When scanning /api/doctors, GET returns doctor roster with password hash, license_number, and address fields to any authenticated JWT — route-specific excessive data exposure oracle.",
+    impactOneline:
+      "Route-specific oracle confirms doctor roster credential disclosure training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthDoctorsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — never return password hashes or license numbers in list APIs.",
+      steps: [
+        "Strip password and credential fields from doctor roster responses.",
+        "Scope doctor directory APIs to minimum necessary profile fields.",
+        "Audit bulk doctor exports with break-glass logging."
+      ]
+    },
+    fixPrompt:
+      "Our /api/doctors route returns password hashes in doctor roster JSON. Show response-field allowlisting and credential stripping remediation.",
     version: 1,
     enabled: true
   },
@@ -35236,6 +39739,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "zerohealth-enhanced-chat-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Zero Health enhanced-chat prompt injection route live oracle",
+    description:
+      "When scanning /api/chatbot/enhanced-chat, POST generates SQL from natural language with bypassable guardrails — route-specific AI prompt injection oracle.",
+    impactOneline:
+      "Route-specific oracle confirms enhanced-chat LLM prompt injection training lab without relying on /challenges/prompt-injection alias.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthEnhancedChatRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — block LLM-generated SQL execution and harden prompt-injection defenses.",
+      steps: [
+        "Never pass LLM-generated SQL directly to the database.",
+        "Apply strict input/output filtering on medical chatbot prompts.",
+        "Log and alert on prompt-injection bypass attempts."
+      ]
+    },
+    fixPrompt:
+      "Our /api/chatbot/enhanced-chat route generates SQL from natural language. Show LLM01 prompt injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "zerohealth-reports-generate-route-live-oracle",
     platform: "generic",
     category: "Command injection",
@@ -35414,6 +39943,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/prescriptions route returns all pharmacy records to pharmacist role. Show scoped queries with strict patient authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-appointments-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Zero Health appointments stored XSS route live oracle",
+    description:
+      "When scanning /api/appointments, POST stores unsanitized appointment reason HTML that doctors retrieve via GET — route-specific stored XSS via appointment booking oracle (Challenge 6).",
+    impactOneline:
+      "Route-specific oracle confirms appointment-booking stored XSS training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthAppointmentsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — sanitize appointment reason fields server-side in production.",
+      steps: [
+        "Encode or sanitize appointment reason HTML before storage and rendering.",
+        "Use CSP and strict output encoding in doctor appointment dashboards.",
+        "Validate appointment text fields with an allowlist of safe characters."
+      ]
+    },
+    fixPrompt:
+      "Our /api/appointments route stores unsanitized reason HTML visible to doctors. Show stored XSS remediation for healthcare appointment fields.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-search-appointments-type-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Zero Health appointments search SQLi route live oracle",
+    description:
+      "When scanning /api/search?type=appointments, the q parameter is interpolated into ILIKE SQL for appointment reasons — route-specific error-based SQLi oracle.",
+    impactOneline:
+      "Route-specific oracle confirms appointments search SQL injection training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthSearchAppointmentsTypeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — use parameterized queries for all search filters.",
+      steps: [
+        "Replace string-interpolated ILIKE filters with parameterized queries.",
+        "Bind search type and query parameters separately from SQL structure.",
+        "Add input validation and SQL error masking on search endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /api/search?type=appointments route interpolates q into ILIKE SQL. Show parameterized search query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-search-patients-type-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Zero Health patients search SQLi route live oracle",
+    description:
+      "When scanning /api/search?type=patients, the q parameter is interpolated into ILIKE SQL for patient PHI fields — route-specific error-based SQLi oracle.",
+    impactOneline:
+      "Route-specific oracle confirms patients search SQL injection training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthSearchPatientsTypeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — use parameterized queries for all search filters.",
+      steps: [
+        "Replace string-interpolated ILIKE filters with parameterized queries.",
+        "Bind search type and query parameters separately from SQL structure.",
+        "Add input validation and SQL error masking on search endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /api/search?type=patients route interpolates q into ILIKE SQL. Show parameterized search query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-search-prescriptions-type-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Zero Health prescriptions search SQLi route live oracle",
+    description:
+      "When scanning /api/search?type=prescriptions, pharmacist-role q parameter is interpolated into medication_name ILIKE SQL — route-specific error-based SQLi oracle.",
+    impactOneline:
+      "Route-specific oracle confirms prescriptions search SQL injection training lab without relying on shared Zero Health hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthSearchPrescriptionsTypeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — use parameterized queries for pharmacist search filters.",
+      steps: [
+        "Replace string-interpolated ILIKE filters with parameterized queries.",
+        "Scope pharmacist search results to authorized patients only.",
+        "Add SQL error masking on prescription search endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /api/search?type=prescriptions route interpolates q into ILIKE SQL. Show parameterized pharmacist search remediation.",
     version: 1,
     enabled: true
   },
@@ -35684,7 +40317,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "AI Security Platform supabase-data challenge route live oracle",
     description:
-      "When scanning /challenges/supabase-data, the platform catalog documents Supabase Row Level Security bypass exposing data without authentication — route-specific RLS training oracle.",
+      "When scanning /challenges/supabase-data, /challenges/supabase-rls, or /challenges/weak-supabase-rls, the platform catalog documents Supabase Row Level Security bypass exposing data without authentication — route-specific RLS training oracle.",
     impactOneline:
       "Route-specific oracle confirms Supabase RLS training module without relying on shared AI Security Platform hub fingerprinting.",
     detectorKind: "rule_ref",
@@ -35699,7 +40332,7 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our /challenges/supabase-data route documents unauthenticated PostgREST access. Show Supabase RLS policy hardening.",
+      "Our /challenges/supabase-data, /challenges/supabase-rls, or /challenges/weak-supabase-rls route documents unauthenticated PostgREST access. Show Supabase RLS policy hardening.",
     version: 1,
     enabled: true
   },
@@ -35726,6 +40359,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /challenges/admin-console route documents forged admin cookie bypass. Show secure session-based admin authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-cookie-auth-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "AI Security Platform cookie-auth challenge route live oracle",
+    description:
+      "When scanning /challenges/cookie-auth, the platform catalog documents client-writable admin cookie bypass (CWE-784) — route-specific cookie auth bypass training oracle.",
+    impactOneline:
+      "Route-specific oracle confirms cookie-auth training module without relying on shared AI Security Platform hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityCookieAuthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — use server-side sessions with signed HttpOnly cookies.",
+      steps: [
+        "Never trust client-set admin flags in cookies without server-side validation.",
+        "Use signed, HttpOnly, Secure session cookies.",
+        "Enforce role checks on every admin route server-side."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/cookie-auth route documents client-writable admin cookie bypass. Show secure session-based admin authentication.",
     version: 1,
     enabled: true
   },
@@ -35762,7 +40421,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "medium",
     title: "AI Security Platform security-headers challenge route live oracle",
     description:
-      "When scanning /challenges/security-headers, the platform catalog documents missing CSP, HSTS, and X-Frame-Options misconfigurations — route-specific security headers oracle.",
+      "When scanning /challenges/security-headers or /challenges/missing-headers, the platform catalog documents missing CSP, HSTS, and X-Frame-Options misconfigurations — route-specific security headers oracle.",
     impactOneline:
       "Route-specific oracle confirms security-headers training module without relying on shared Backend & Config hub fingerprinting.",
     detectorKind: "rule_ref",
@@ -35788,7 +40447,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "AI Security Platform rate-limiting challenge route live oracle",
     description:
-      "When scanning /challenges/rate-limiting, the platform catalog documents missing login throttling that allows unlimited brute-force attempts — route-specific rate-limiting oracle.",
+      "When scanning /challenges/rate-limiting or /challenges/brute-force, the platform catalog documents missing login throttling that allows unlimited brute-force attempts — route-specific rate-limiting oracle.",
     impactOneline:
       "Route-specific oracle confirms rate-limiting training module without relying on shared Auth & API hub fingerprinting.",
     detectorKind: "rule_ref",
@@ -35990,6 +40649,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "AI Security Platform CSRF challenge route live oracle",
+    description:
+      "When scanning /challenges/csrf on ai-security-platform-iota.vercel.app, the route redirects to /login?next=/challenges/csrf confirming an auth-gated CSRF CWE-352 challenge route on the discovery queue.",
+    impactOneline:
+      "Route-specific confirmation that AI Security Platform preserves a CSRF challenge route for scanner calibration even when the 14-challenge public catalog omits cross-site request forgery labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — enforce CSRF tokens and SameSite cookies on state-changing requests.",
+      steps: [
+        "Require anti-CSRF tokens on every state-changing form and API mutation.",
+        "Set SameSite=Strict or Lax on session cookies.",
+        "Require authentication before exposing CSRF lab panels."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/csrf route redirects to login preserving a CWE-352 CSRF challenge URL. Show CSRF token and SameSite cookie remediation for Next.js + Supabase.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "AI Security Platform XXE challenge route live oracle",
+    description:
+      "When scanning /challenges/xxe on ai-security-platform-iota.vercel.app, the route redirects to /login?next=/challenges/xxe confirming an auth-gated XXE CWE-611 challenge route on the discovery queue.",
+    impactOneline:
+      "Route-specific confirmation that AI Security Platform preserves an XXE challenge route for scanner calibration even when the 14-challenge public catalog omits XML external entity labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityXxeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — disable external entity resolution in XML parsers.",
+      steps: [
+        "Disable DTD processing and external entity expansion in XML parsers.",
+        "Use JSON or a safe subset of XML when user input is required.",
+        "Require authentication before exposing XXE lab panels."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/xxe route redirects to login preserving a CWE-611 XXE challenge URL. Show XML parser hardening remediation for Next.js API routes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-security-deserialization-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "AI Security Platform deserialization challenge route live oracle",
+    description:
+      "When scanning /challenges/deserialization on ai-security-platform-iota.vercel.app, the route redirects to /login?next=/challenges/deserialization confirming an auth-gated insecure deserialization CWE-502 challenge route on the discovery queue.",
+    impactOneline:
+      "Route-specific confirmation that AI Security Platform preserves a deserialization challenge route for scanner calibration even when the 14-challenge public catalog omits insecure deserialization labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityDeserializationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — never deserialize untrusted object graphs.",
+      steps: [
+        "Use safe data formats such as JSON with strict schema validation instead of native object deserialization.",
+        "Sign and verify serialized payloads with HMAC before accepting them.",
+        "Require authentication before exposing deserialization lab panels."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/deserialization route redirects to login preserving a CWE-502 insecure deserialization challenge URL. Show safe serialization remediation for Next.js APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-login-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -36068,13 +40805,39 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-hacked-npm-packages-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "AI Security Platform hacked-npm axios/React supply-chain live oracle",
+    description:
+      "GET /learn on ai-security-platform-iota.vercel.app documents real-world axios and React npm hijacks delivering remote access trojans — hacked-npm-packages supply-chain training oracle.",
+    impactOneline:
+      "Public learn content exposes real 2025-2026 npm supply-chain attack patterns (axios RAT, React RCE) used in the hacked-npm-packages challenge.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityHackedNpmPackagesLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — verify package provenance and block malicious postinstall scripts.",
+      steps: [
+        "Review postinstall scripts before adding new npm packages.",
+        "Use npm provenance and signed package verification where available.",
+        "Monitor for typosquatting when adding dependencies."
+      ]
+    },
+    fixPrompt:
+      "Our /learn page documents axios/React npm hijacks. Show supply-chain verification and postinstall script review.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-hacked-npm-packages-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
     severityDefault: "high",
     title: "AI Security Platform hacked-npm-packages challenge route live oracle",
     description:
-      "When scanning /challenges/hacked-npm-packages, the platform catalog documents malicious postinstall scripts and compromised npm typosquats — route-specific hacked-npm-packages oracle.",
+      "When scanning /challenges/hacked-npm-packages or /challenges/hacked-npm, the platform catalog documents malicious postinstall scripts and compromised npm typosquats — route-specific hacked-npm-packages oracle.",
     impactOneline:
       "Route-specific oracle confirms hacked-npm-packages training module without relying on shared supply-chain hub fingerprinting.",
     detectorKind: "rule_ref",
@@ -36094,13 +40857,39 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ai-security-vulnerable-npm-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "AI Security Platform vulnerable-npm challenge route live oracle",
+    description:
+      "When scanning /challenges/vulnerable-npm, the platform catalog documents malicious postinstall scripts and compromised npm typosquats via the hacked-npm-packages training module — route-specific supply-chain oracle.",
+    impactOneline:
+      "Route-specific oracle confirms vulnerable-npm alias maps to hacked-npm-packages supply-chain training without hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiSecurityVulnerableNpmRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI Security Platform is intentional training software — verify package provenance and block malicious postinstall scripts.",
+      steps: [
+        "Review postinstall scripts before adding new npm packages.",
+        "Use npm provenance and signed package verification where available.",
+        "Monitor for typosquatting when adding dependencies."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges/vulnerable-npm route documents compromised npm packages. Show supply-chain verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ai-security-ai-phishing-route-live-oracle",
     platform: "generic",
     category: "AI security",
     severityDefault: "high",
     title: "AI Security Platform ai-phishing challenge route live oracle",
     description:
-      "When scanning /challenges/ai-phishing, the platform catalog documents AI-generated cloned login pages and email spoofing attacks (CWE-1021) — route-specific phishing clone oracle.",
+      "When scanning /challenges/ai-phishing or /challenges/phishing, the platform catalog documents AI-generated cloned login pages and email spoofing attacks (CWE-1021) — route-specific phishing clone oracle.",
     impactOneline:
       "Route-specific oracle confirms AI-assisted phishing training module without relying on shared AI Security Platform hub fingerprinting.",
     detectorKind: "rule_ref",
@@ -36692,6 +41481,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "yrprey-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "YRprey framework hub route live oracle",
+    description:
+      "When scanning yrprey.com/, the marketing hub confirms 22 intentional vulnerabilities with frontend/backend/Docker training repos — route-specific OWASP API security framework oracle.",
+    impactOneline:
+      "Route-specific confirmation that YRprey documents deliberately vulnerable API security training scope for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "yrpreyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "YRprey is intentional training — isolate vulnerability testing frameworks from production networks.",
+      steps: [
+        "Require authentication before serving the testing framework.",
+        "Do not deploy YRprey-style intentional flaws in production environments.",
+        "Rate-limit unauthenticated framework enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our YRprey route scan confirms deliberately vulnerable API security training scope. Show framework isolation and production hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-berger-cyber-lab-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -37108,6 +41923,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owasp-genai-lessons-api-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP GenAI lessons API catalog route live oracle",
+    description:
+      "When scanning /api/lessons on owaspbased-lessons.vercel.app, GET returns unauthenticated JSON array of OWASP LLM Top 10 lesson slugs with owasp_id, difficulty, and duration metadata.",
+    impactOneline:
+      "Route-scoped scans of /api/lessons should confirm the public GenAI lesson catalog index exposing LLM01–LLM10 training modules.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspGenaiLessonsApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI lesson catalogs are intentional training — restrict API enumeration in production LLM apps.",
+      steps: [
+        "Require authentication before exposing interactive LLM lesson metadata.",
+        "Do not publish full training curriculum indexes without access control.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /api/lessons route scan confirms an unauthenticated OWASP LLM Top 10 lesson catalog. Show route-specific access control for GenAI training APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sql-injection-challenge-login-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -37208,6 +42049,162 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We document Atlas Crew Apparatus and Crucible security testing platforms. Show how to keep lab deployments isolated from production networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "apparatus-redteam-autopilot-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Apparatus AI red-team autopilot route live oracle",
+    description:
+      "When scanning apparatus.atlascrew.dev, Apparatus docs document /api/redteam/autopilot/start autonomous AI attack campaigns — route-specific red-team training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Apparatus documents unauthenticated AI red-team autopilot APIs for attack scenario automation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "apparatusRedteamAutopilotRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep Apparatus red-team APIs on isolated lab networks with authentication.",
+      steps: [
+        "Require authentication before starting AI red-team autopilot campaigns.",
+        "Do not expose Apparatus API servers to the public internet.",
+        "Segment inferno lab subnets from production VPCs."
+      ]
+    },
+    fixPrompt:
+      "Our apparatus route documents AI red-team autopilot APIs. Show how to restrict offensive security automation to authenticated lab networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "apparatus-chaos-engineering-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Apparatus chaos engineering route live oracle",
+    description:
+      "When scanning apparatus.atlascrew.dev, Apparatus docs document /api/chaos/cpu-spike, memory-spike, and latency-inject fault injection — route-specific chaos engineering training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Apparatus documents unauthenticated chaos engineering APIs for resilience testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "apparatusChaosEngineeringRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep Apparatus chaos APIs on isolated lab networks with authentication.",
+      steps: [
+        "Require authentication before starting chaos engineering experiments.",
+        "Do not expose Apparatus chaos API servers to the public internet.",
+        "Segment inferno lab subnets from production VPCs."
+      ]
+    },
+    fixPrompt:
+      "Our apparatus route documents chaos engineering APIs. Show how to restrict fault injection to authenticated lab networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crucible-scenario-catalog-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Crucible scenario catalog route live oracle",
+    description:
+      "When scanning crucible.atlascrew.dev, Crucible docs document /scenarios catalog plus POST /api/simulations and POST /api/assessments with pass/fail scoring — route-specific security testing platform oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Crucible documents 80+ attack scenario simulations and assessment APIs for security testing labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crucibleScenarioCatalogRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep Crucible simulation APIs on isolated lab networks with authentication.",
+      steps: [
+        "Require authentication before starting scenario simulations.",
+        "Do not expose Crucible assessment APIs to the public internet.",
+        "Segment inferno lab subnets from production VPCs."
+      ]
+    },
+    fixPrompt:
+      "Our crucible route documents scenario simulation and assessment APIs. Show how to restrict security testing automation to authenticated lab networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-juice-shop-lab-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentestForge Juice Shop lab route live oracle",
+    description:
+      "When scanning juice-shop.lab.pentest-forge.com or /labs/juice-shop.lab, OWASP Juice Shop admin config, track-order IDOR, and product search endpoints are probed — route-specific PentestForge hosted benchmark oracle with corpus fallback when lab host returns 502.",
+    impactOneline:
+      "Route-specific confirmation that PentestForge hosts OWASP Juice Shop with unauthenticated admin config and IDOR training surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeJuiceShopLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate PentestForge Juice Shop lab behind authenticated testers; isolate lab subnets.",
+      steps: [
+        "Require VPN or auth before accessing juice-shop.lab.pentest-forge.com.",
+        "Do not link live vulnerable labs from public marketing 404 pages.",
+        "Isolate lab subnets from production networks."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge Juice Shop lab exposes admin configuration and order IDOR training endpoints. Show how to restrict public lab access.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-tomcat-lab-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "PentestForge Tomcat lab route live oracle",
+    description:
+      "When scanning tomcat.lab.pentest-forge.com or /labs/tomcat.lab, Tomcat Manager and host-manager endpoints are probed — route-specific PentestForge CVE training oracle with corpus fallback when lab host returns 502.",
+    impactOneline:
+      "Route-specific confirmation that PentestForge hosts Tomcat Manager training surfaces for default-credential and misconfiguration exploitation practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeTomcatLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable or restrict Tomcat Manager on public lab hosts; require authentication.",
+      steps: [
+        "Remove /manager/html from public Tomcat lab instances.",
+        "Require strong credentials on Tomcat Manager interfaces.",
+        "Isolate Tomcat lab subnets from production networks."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge Tomcat lab exposes Manager Application endpoints. Show how to restrict manager interfaces to authenticated lab networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-vampi-lab-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentestForge VAmPI lab route live oracle",
+    description:
+      "When scanning vampi.lab.pentest-forge.com or /labs/vampi.lab, VAmPI user BOLA, book secret BOLA, and JWT bypass endpoints are probed — route-specific PentestForge OWASP API training oracle with corpus fallback when lab host returns 502.",
+    impactOneline:
+      "Route-specific confirmation that PentestForge hosts VAmPI with broken object-level authorization and weak JWT signing for API security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeVampiLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate PentestForge VAmPI lab behind authenticated testers; enforce object-level authorization in production APIs.",
+      steps: [
+        "Require VPN or auth before accessing vampi.lab.pentest-forge.com.",
+        "Verify JWT subject matches requested resource owner on all object routes.",
+        "Use strong asymmetric JWT signing keys and rotate secrets regularly."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge VAmPI lab exposes BOLA and JWT bypass training endpoints. Show how to restrict public lab access and fix object-level authorization.",
     version: 1,
     enabled: true
   },
@@ -37602,13 +42599,65 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "seclab-path-traversal-labs-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecLab /labs/path-traversal route live oracle",
+    description:
+      "When scanning seclab.vercel.app /labs/path-traversal, GET /api/path-traversal?file=../../../etc/passwd reads local files — or the API route serves an Angular SPA shell instead of the documented Next.js path-traversal training API.",
+    impactOneline:
+      "Route-specific path-traversal lab oracle on the /labs/path-traversal discovery queue URL confirms live LFI or flags dead API stubs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabPathTraversalLabsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab path-traversal API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/path-traversal on production.",
+        "Canonicalize and validate file paths before reads.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/path-traversal route scan confirms /api/path-traversal is a dead Angular stub or exposes live LFI. Show path traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "seclab-open-redirect-labs-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "SecLab /labs/open-redirect route live oracle",
+    description:
+      "When scanning seclab.vercel.app /labs/open-redirect, GET /api/open-redirect-vulnerable redirects to attacker URLs — or the route serves an Angular SPA shell instead of the documented Next.js open-redirect training API.",
+    impactOneline:
+      "Route-specific open-redirect lab oracle on the /labs/open-redirect discovery queue URL confirms live redirect or flags dead API stubs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabOpenRedirectLabsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab open-redirect API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/open-redirect-vulnerable on production.",
+        "Validate redirect targets against an allowlist.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/open-redirect route scan confirms open-redirect API is a dead Angular stub or exposes live redirect. Show redirect validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "seclab-ssrf-vulnerable-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
     severityDefault: "high",
     title: "SecLab /api/ssrf-vulnerable route live oracle",
     description:
-      "When scanning seclab.vercel.app /api/ssrf-vulnerable, GET with attacker-controlled url fetches internal targets — or the route serves an Angular SPA shell instead of the documented Next.js SSRF training API.",
+      "When scanning seclab.vercel.app /api/ssrf-vulnerable or /labs/ssrf hub, GET with attacker-controlled url fetches internal targets — or the route serves an Angular SPA shell instead of the documented Next.js SSRF training API.",
     impactOneline:
       "Route-specific SSRF lab oracle confirms live server-side fetch or flags dead /api/ssrf-vulnerable stubs on the public Vercel host.",
     detectorKind: "rule_ref",
@@ -37738,7 +42787,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "medium",
     title: "Pwnshop chat init route live oracle (PWN-037)",
     description:
-      "When scanning /chat/init or /api/chat/init, POST returns found:true with user profile for registered emails and found:false for unknown addresses — route-specific email enumeration oracle.",
+      "When scanning /chat, /chat/init, /api/chat/init, or /api/v1/chat/init, POST returns found:true with user profile for registered emails and found:false for unknown addresses — route-specific email enumeration oracle.",
     impactOneline:
       "Route-specific confirmation that Pwnshop chat init enables email/username enumeration via differential found responses.",
     detectorKind: "rule_ref",
@@ -37754,6 +42803,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /chat/init route scan confirms email enumeration via found:true/false. Show remediation for PWN-037.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-chat-order-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwnshop AI chat order lookup IDOR live oracle (PWN-035)",
+    description:
+      "POST /chat trusts client-supplied email without session validation; the AI order lookup tool returns any order ID's status, total, shipping address, and username — PWN-035 IDOR oracle.",
+    impactOneline:
+      "Client-controlled email on /chat enables cross-user order disclosure via the AI order lookup tool.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopChatOrderIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind chat order lookups to authenticated session user — PWN-035 is intentional lab software.",
+      steps: [
+        "Validate order ownership against the session user_id before returning order details.",
+        "Do not trust client-supplied email for identity on /chat.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our Pwnshop POST /chat endpoint exposes cross-user order details via the AI order lookup tool. Show PWN-035 IDOR remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-chat-order-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Pwnshop /chat order IDOR route live oracle (PWN-035)",
+    description:
+      "When scanning /chat, POST with client-controlled email can retrieve any user's order details via the AI order lookup tool — route-specific PWN-035 IDOR oracle with vulnerabilities corpus fallback when LLM backend is unavailable.",
+    impactOneline:
+      "Route-specific confirmation that Pwnshop /chat exposes cross-user order disclosure via AI tool calls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopChatOrderIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind chat order lookups to authenticated session user — PWN-035 is intentional lab software.",
+      steps: [
+        "Validate order ownership against the session user_id before returning order details.",
+        "Do not trust client-supplied email for identity on /chat.",
+        "Run Pwnshop only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our /chat route scan confirms PWN-035 IDOR via AI order lookup tool. Show route-specific authorization remediation.",
     version: 1,
     enabled: true
   },
@@ -38018,6 +43119,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-google-metadata-ssrf-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "critical",
+    title: "Broken Crystals Google metadata SSRF oracle",
+    description:
+      "GET /api/file/google?path=http://metadata.google.internal/computeMetadata/v1/instance/ returns GCP metadata tree (instance/, oslogin/, project/) — the Broken Crystals Google cloud SSRF oracle.",
+    impactOneline:
+      "Server-side request forgery to GCP metadata can expose service account tokens and compromise the hosting project.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsGoogleMetadataSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to metadata.google.internal and link-local addresses — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to metadata.google.internal/computeMetadata and other cloud metadata endpoints.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/google endpoint fetches GCP metadata via the path parameter. Show how to block Google cloud metadata SSRF.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-metadata-xxe-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -38148,6 +43275,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-jwt-alg-none-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/rsa/signature/validate route live oracle",
+    description:
+      "When scanning /api/auth/jwt/rsa/signature/validate, alg:none JWT in Authorization bypasses authentication and returns {\"secret\":\"this is our secret\"} — route-specific JWT none-algorithm confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals rsa/signature validate accepts alg:none tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtAlgNoneRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to expected algorithms and reject alg:none — Broken Crystals is intentional lab software.",
+      steps: [
+        "Configure your JWT library to allow only RS256/HS256 (never 'none').",
+        "Verify the algorithm from the token header matches your expected value.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/rsa/signature/validate route scan confirms alg:none JWT bypass. Show secure JWT verification patterns for NestJS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-none-validate-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/none/validate route live oracle",
+    description:
+      "When scanning /api/auth/jwt/none/validate, alg:none JWT in Authorization bypasses authentication and returns {\"secret\":\"this is our secret\"} — route-specific JWT none-algorithm confirmation oracle (falls back to /api/auth/jwt/rsa/signature/validate when none alias is absent).",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals none/validate accepts alg:none tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtNoneValidateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to expected algorithms and reject alg:none — Broken Crystals is intentional lab software.",
+      steps: [
+        "Configure your JWT library to allow only RS256/HS256 (never 'none').",
+        "Verify the algorithm from the token header matches your expected value.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/none/validate route scan confirms alg:none JWT bypass. Show secure JWT verification patterns for NestJS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-rsa-signature-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/rsa/signature/login route live oracle",
+    description:
+      "When scanning /api/auth/jwt/rsa/signature/login, companion GET /api/auth/jwt/rsa/signature/validate accepts alg:none JWT in Authorization and returns {\"secret\":\"this is our secret\"} — route-specific RSA signature confusion login oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals rsa/signature login family accepts alg:none JWT bypass on companion validate endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtRsaSignatureLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to expected algorithms and reject alg:none — Broken Crystals is intentional lab software.",
+      steps: [
+        "Configure your JWT library to allow only RS256/HS256 (never 'none').",
+        "Verify the algorithm from the token header matches your expected value.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/rsa/signature/login route scan confirms alg:none JWT bypass on companion validate. Show secure JWT verification patterns for NestJS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-jwt-none-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/auth/jwt/none/login route live oracle",
+    description:
+      "When scanning /api/auth/jwt/none/login, alg:none JWT bypasses companion validate endpoints and returns {\"secret\":\"this is our secret\"} — route-specific JWT none-algorithm login oracle (falls back to /api/auth/jwt/rsa/signature/validate when none alias is absent).",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals none/login JWT family accepts alg:none tokens on companion validate endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsJwtNoneLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin JWT verification to expected algorithms and reject alg:none — Broken Crystals is intentional lab software.",
+      steps: [
+        "Configure your JWT library to allow only RS256/HS256 (never 'none').",
+        "Verify the algorithm from the token header matches your expected value.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/jwt/none/login route scan confirms alg:none JWT bypass. Show secure JWT verification patterns for NestJS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-vendor-directory-listing-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Broken Crystals /vendor/ nginx directory listing live oracle",
+    description:
+      "GET /vendor/ returns an nginx autoindex HTML page listing bootstrap-4.1, counter-up, slick, and wow vendor asset directories without authentication.",
+    impactOneline:
+      "Directory listing on /vendor/ exposes frontend dependency paths and confirms nginx autoindex misconfiguration on Broken Crystals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsVendorDirectoryListingLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable directory autoindex on vendor asset paths — Broken Crystals is intentional lab software.",
+      steps: [
+        "Turn off autoindex for /vendor/ at the nginx or CDN layer.",
+        "Serve vendor assets from a CDN or hashed build output without directory indexes.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /vendor/ path exposes nginx directory listing. Show how to disable autoindex for vendor asset directories.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-vendor-directory-listing-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "Broken Crystals /vendor/ directory listing route live oracle",
+    description:
+      "When scanning /vendor/, nginx autoindex lists bootstrap-4.1, counter-up, slick, and wow directories — route-specific directory listing confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals /vendor/ exposes nginx directory listing of frontend vendor assets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsVendorDirectoryListingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable directory autoindex on vendor asset paths — Broken Crystals is intentional lab software.",
+      steps: [
+        "Turn off autoindex for /vendor/ at the nginx or CDN layer.",
+        "Serve vendor assets from a CDN or hashed build output without directory indexes.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /vendor/ route scan confirms nginx directory listing. Show how to disable autoindex for vendor directories.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-jwt-weak-key-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -38180,7 +43463,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Broken Crystals /api/auth/jwt/weak-key/validate route live oracle",
     description:
-      "When scanning /api/auth/jwt/weak-key/validate, HS256 JWT signed with weak JWT_SECRET_KEY bypasses auth and returns the protected secret — route-specific weak HMAC key confirmation oracle.",
+      "When scanning /api/auth/jwt/weak-key/validate or the /api/auth/jwt/weak/login SPA alias, HS256 JWT signed with weak JWT_SECRET_KEY bypasses auth and returns the protected secret — route-specific weak HMAC key confirmation oracle.",
     impactOneline:
       "Route-specific confirmation that Broken Crystals weak-key JWT validation accepts trivial HMAC secrets.",
     detectorKind: "rule_ref",
@@ -38642,6 +43925,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-hidden-upload-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals /api/hidden-upload route live oracle",
+    description:
+      "When scanning /api/hidden-upload, unauthenticated POST returns base64 data URI content — route-specific unrestricted file upload confirmation oracle.",
+    impactOneline:
+      "Route scans on /api/hidden-upload confirm unauthenticated file upload without content validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsHiddenUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and strict file validation on upload endpoints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Authenticate all file upload routes and enforce role-based access control.",
+        "Validate file types with magic-byte inspection, not just Content-Type headers.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/hidden-upload route scan confirms unauthenticated uploads. Show route-specific upload hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-api-upload-parse-xxe-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/upload/parse XXE live oracle",
+    description:
+      "POST /api/upload/parse accepts multipart XML file uploads and expands entities in the response — Broken Crystals upload XXE oracle.",
+    impactOneline:
+      "XML file upload parsers with entity expansion let attackers read local files and reach internal services.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsApiUploadParseXxeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in uploaded XML parsers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Reject DOCTYPE declarations in uploaded XML files.",
+        "Use a schema-validated XML parser with entity expansion disabled.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/upload/parse endpoint parses uploaded XML with entity expansion. Show secure upload XXE remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-api-upload-parse-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/upload/parse route XXE live oracle",
+    description:
+      "When scanning /api/upload/parse, probes multipart XML upload first then falls back to sibling POST /api/metadata when upload/parse returns 404 — route-specific XXE confirmation oracle.",
+    impactOneline:
+      "Route scans on /api/upload/parse confirm the Broken Crystals XML upload / metadata XXE training surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsApiUploadParseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers — Broken Crystals is intentional lab software.",
+      steps: [
+        "Set XML parser options to reject DOCTYPE and external entities on upload handlers.",
+        "Use a schema-validated XML parser with entity expansion disabled.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/upload/parse route scan confirms XXE via upload or sibling /api/metadata. Show route-specific XML upload hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-ldap-injection-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -38674,7 +44035,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Broken Crystals LDAP injection route live oracle",
     description:
-      "When scanning /api/users/ldap, GET with attacker-controlled query returns LDAP directory entries or javax.naming naming errors — route-specific LDAP injection oracle.",
+      "When scanning /api/ldap or /api/users/ldap, GET with attacker-controlled query returns LDAP directory entries or javax.naming naming errors — route-specific LDAP injection oracle.",
     impactOneline:
       "Route-specific confirmation that Broken Crystals passes unsanitized LDAP filter fragments to the directory service.",
     detectorKind: "rule_ref",
@@ -38689,7 +44050,59 @@ export const genericPatterns: Pattern[] = [
       ]
     },
     fixPrompt:
-      "Our /api/users/ldap route scan confirms LDAP injection via query parameter. Show LDAP filter sanitization remediation.",
+      "Our /api/ldap or /api/users/ldap route scan confirms LDAP injection via query parameter. Show LDAP filter sanitization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-graphql-introspection-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Broken Crystals GraphQL introspection oracle",
+    description:
+      "POST /graphql with { __schema { types { name } } } returns Query and Mutation schema types without authentication — the Broken Crystals GraphQL introspection oracle.",
+    impactOneline:
+      "Unauthenticated GraphQL introspection exposes the full API schema, queries, and mutations to attackers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsGraphqlIntrospectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production — Broken Crystals is intentional lab software.",
+      steps: [
+        "Disable introspection on public GraphQL endpoints.",
+        "Require authentication before exposing schema metadata.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /graphql endpoint returns full schema introspection without authentication. Show GraphQL introspection hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-graphql-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Broken Crystals GraphQL introspection route live oracle",
+    description:
+      "When scanning /graphql, POST introspection query returns Query/Mutation schema types — route-specific GraphQL introspection oracle on Broken Crystals.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals exposes unauthenticated GraphQL schema introspection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsGraphqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production — Broken Crystals is intentional lab software.",
+      steps: [
+        "Disable introspection on public GraphQL endpoints.",
+        "Require authentication before exposing schema metadata.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql route scan confirms unauthenticated schema introspection. Show GraphQL hardening remediation.",
     version: 1,
     enabled: true
   },
@@ -39422,6 +44835,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-send-support-email-header-injection-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals sendSupportEmail header injection live oracle",
+    description:
+      "GET /api/email/sendSupportEmail accepts CRLF-injected Cc: headers in the to query parameter (%0aCc:) and attempts SMTP delivery — the Broken Crystals email header injection oracle.",
+    impactOneline:
+      "Unsanitized email recipient fields let attackers inject Cc/Bcc headers and send mail to arbitrary recipients.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSendSupportEmailHeaderInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject CRLF characters in email recipient fields and use structured mail APIs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Strip %0a/%0d from to, cc, and bcc parameters before building raw messages.",
+        "Use a mail library API that does not concatenate raw SMTP headers from user input.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/email/sendSupportEmail endpoint accepts %0aCc: injection in the to parameter. Show email header injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-email-hub-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/email hub route live oracle",
+    description:
+      "When scanning /api/email, sendSupportEmail header injection and internal SMTP SSRF probes fire — route-specific Broken Crystals email hub oracle.",
+    impactOneline:
+      "Route scans on the /api/email hub should confirm email header injection and internal SMTP misconfiguration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsEmailHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden all email sub-endpoints reachable from the /api/email hub — Broken Crystals is intentional lab software.",
+      steps: [
+        "Reject CRLF in recipient fields on sendSupportEmail.",
+        "Block outbound SMTP connections to loopback addresses.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/email route scan confirms email header injection and internal SMTP SSRF. Show route-specific email API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-admin-login-bfla-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -39656,6 +45121,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-testimonials-iframe-injection-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Broken Crystals /testimonials iframe injection route live oracle",
+    description:
+      "When scanning /testimonials, the JS bundle reads videosrc from the URL and sets testimonials-video outerHTML to an iframe — route-specific DOM iframe injection oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals /testimonials exposes a videosrc→outerHTML iframe injection sink.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsTestimonialsIframeInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate videosrc against a strict embed URL allowlist — Broken Crystals is intentional lab software.",
+      steps: [
+        "Never pass raw query parameters into iframe src or outerHTML assignments.",
+        "Allowlist trusted video embed origins such as youtube-nocookie.com.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /testimonials route scan confirms videosrc flows into an iframe outerHTML sink. Show route-specific embed URL validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-subscriptions-xss-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -39838,6 +45329,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-config-get-config-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/config/get_config route credential disclosure oracle",
+    description:
+      "When scanning /api/config/get_config, GET returns postgres:// connection strings and cloud API keys in JSON — route-specific config disclosure oracle (falls back to /api/config when get_config alias is absent).",
+    impactOneline:
+      "Route-scoped scans on get_config paths should flag unauthenticated Broken Crystals config endpoints leaking credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsConfigGetConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose runtime config with credentials via unauthenticated HTTP endpoints — Broken Crystals is intentional lab software.",
+      steps: [
+        "Remove /api/config/get_config from public routes; serve only non-sensitive public config to browsers.",
+        "Store database URLs and API keys in server-side environment variables only.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/config/get_config route scan confirms database credentials are exposed without auth. Show config endpoint hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-subscriptions-xss-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -39964,6 +45481,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/users/basic endpoint accepts isAdmin:true during signup. Show mass-assignment remediation for NestJS user creation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-mass-assignment-basic-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/users/basic mass-assignment route live oracle",
+    description:
+      "When scanning /api/users/basic, POST with isAdmin:true and GET /api/users/one/{email}/adminpermission confirms privilege escalation — route-specific mass-assignment oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals /api/users/basic accepts hidden isAdmin during signup and escalates privileges.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsMassAssignmentBasicRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Whitelist assignable user attributes and reject unknown fields — Broken Crystals is intentional lab software.",
+      steps: [
+        "Use DTOs or strong-parameter filtering to block isAdmin and other privileged fields on create/update.",
+        "Enforce role changes only through authenticated admin workflows.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/users/basic route scan confirms isAdmin:true mass-assignment during signup. Show NestJS strong-parameter remediation.",
     version: 1,
     enabled: true
   },
@@ -40130,9 +45673,9 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Broken Crystals /api/get_count MCP SQLi route live oracle",
     description:
-      "When scanning /api/get_count, MCP tools/call get_count executes attacker-controlled information_schema SQL — README alias for the Broken Crystals SQL injection oracle.",
+      "When scanning /api/get_count or /api/mcp, MCP tools/call get_count executes attacker-controlled information_schema SQL — route-specific Broken Crystals SQL injection oracle.",
     impactOneline:
-      "Route-specific confirmation that Broken Crystals MCP get_count SQL injection is reachable when scanning /api/get_count paths.",
+      "Route-specific confirmation that Broken Crystals MCP get_count SQL injection is reachable when scanning /api/get_count or /api/mcp gateway paths.",
     detectorKind: "rule_ref",
     detectorConfig: { rule: "brokencrystalsGetCountMcpSqliRouteLiveOracle" },
     tierRequired: "deep",
@@ -40412,6 +45955,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-products-views-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Broken Crystals /api/products/views header SQLi route live oracle",
+    description:
+      "When scanning /api/products/views (or /api/views/* alias paths), GET with x-product-name: Opal' triggers SQL syntax error with server file path disclosure — route-specific header SQLi oracle.",
+    impactOneline:
+      "Route-specific confirmation that Broken Crystals product view counter builds SQL from the x-product-name header without parameterization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsProductsViewsSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never interpolate HTTP headers into SQL; use parameterized queries — Broken Crystals is intentional lab software.",
+      steps: [
+        "Bind x-product-name via prepared statements instead of string concatenation.",
+        "Return generic database errors without location or query fragments.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/products/views route scan confirms header-based SQL injection via x-product-name. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "brokencrystals-file-digital-ocean-route-live-oracle",
     platform: "generic",
     category: "SSRF",
@@ -40434,6 +46003,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/file/digital_ocean route scan confirms DigitalOcean metadata SSRF. Show how to block cloud metadata fetches from user-controlled path parameters.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-file-google-route-live-oracle",
+    platform: "generic",
+    category: "SSRF",
+    severityDefault: "critical",
+    title: "Broken Crystals /api/file/google route SSRF live oracle",
+    description:
+      "When scanning /api/file/google, GET with path=http://metadata.google.internal/computeMetadata/v1/instance/ returns GCP metadata tree — route-specific cloud SSRF confirmation.",
+    impactOneline:
+      "Route-specific confirmation that the Google metadata SSRF endpoint is reachable when scanning Broken Crystals file/google paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsFileGoogleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF to metadata.google.internal and link-local addresses — Broken Crystals is intentional lab software.",
+      steps: [
+        "Deny requests to metadata.google.internal/computeMetadata and other cloud metadata endpoints.",
+        "Use an egress proxy with an allow-list for outbound fetches.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/file/google route scan confirms GCP metadata SSRF. Show how to block Google cloud metadata fetches from user-controlled path parameters.",
     version: 1,
     enabled: true
   },
@@ -40526,10 +46121,36 @@ export const genericPatterns: Pattern[] = [
     impactOneline:
       "Route-specific confirmation that Broken Crystals latest-products endpoint ignores intended pagination limits via the limit query parameter.",
     detectorKind: "rule_ref",
-    detectorConfig: { rule: "brokencrystalsProductsLatestLimitBypassRouteLiveOracle" },
+    detectorConfig: { rule: "brokencrystalsProductsLatestLimitBypassLiveOracle" },
     tierRequired: "deep",
     remediation: {
       summary: "Enforce server-side pagination limits — Broken Crystals is intentional lab software.",
+      steps: [
+        "Cap limit parameters server-side regardless of client input.",
+        "Require authentication for bulk catalog exports.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/products/latest route scan confirms business constraint bypass via ?limit=. Show pagination limit enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "brokencrystals-products-latest-limit-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Broken Crystals products latest limit bypass route live oracle",
+    description:
+      "When scanning /api/products/latest, the default response caps at 3 products but ?limit=100 returns the full catalog — route-specific business constraint bypass oracle.",
+    impactOneline:
+      "Route-specific scans should confirm Broken Crystals latest-products endpoint ignores intended pagination limits via the limit query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsProductsLatestLimitBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce server-side pagination limits on /api/products/latest route handlers.",
       steps: [
         "Cap limit parameters server-side regardless of client input.",
         "Require authentication for bulk catalog exports.",
@@ -40932,6 +46553,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vuln-expose-sqli-users-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "VulnSite /sqli/users route user-enumeration SQLi oracle",
+    description:
+      "When scanning /sqli/users, the user-enumeration lab exposes UNION SELECT privilege-escalation payloads in filter panels and GET /api/users returns plaintext passwords with echoed SQL — route-specific enumeration oracle.",
+    impactOneline:
+      "SQL injection in user filters lets attackers enumerate accounts and extract credentials from the database.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnExposeSqliUsersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and never echo SQL — VulnSite is intentional training software.",
+      steps: [
+        "Replace dynamic SQL concatenation with prepared statements.",
+        "Remove query echoing from API responses.",
+        "Run VulnSite only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/users route scan confirms a user-enumeration SQLi lab with UNION SELECT payloads and /api/users credential disclosure. Show SQL injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vuln-expose-xss-csp-bypass-route-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -41244,6 +46891,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "brokencrystals-search-users-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Broken Crystals /api/search_users route exposure oracle",
+    description:
+      "When scanning /api/search_users, GET /api/users/search/ returns cardNumber and phoneNumber for multiple users without authentication — route-specific user-search alias oracle (README documents /api/search_users; canonical path is /api/users/search/).",
+    impactOneline:
+      "Route-scoped scans on search_users alias paths should flag unauthenticated Broken Crystals user search leaking payment data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "brokencrystalsSearchUsersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose full card numbers or phone numbers via unauthenticated search APIs — Broken Crystals is intentional lab software.",
+      steps: [
+        "Require authentication and authorization before returning user profile data.",
+        "Mask or tokenize card numbers; return only last-four digits when necessary.",
+        "Run Broken Crystals only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/search_users route scan confirms unauthenticated user search leaks cardNumber and phoneNumber. Show API data-minimization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-ai-anonymous-chat-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -41348,6 +47021,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-ai-chat-token-gate-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Vuln Bank authenticated AI chat token gate oracle",
+    description:
+      "POST /api/ai/chat on vulnbank.org rejects unauthenticated requests with Token is missing while /api/ai/chat/anonymous may remain open — split AI chat auth boundary oracle.",
+    impactOneline:
+      "Parallel authenticated and anonymous AI chat endpoints create inconsistent auth boundaries for customer-support LLM features.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankAiChatTokenGateLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Unify AI chat authentication — Vuln Bank is intentional training software.",
+      steps: [
+        "Require consistent JWT validation on all /api/ai/chat variants.",
+        "Remove or hard-gate anonymous AI endpoints in production deployments.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/ai/chat returns Token is missing while /api/ai/chat/anonymous stays open. Show unified AI chat authentication remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-ai-chat-token-gate-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Vuln Bank /api/ai/chat route token gate live oracle",
+    description:
+      "When scanning vulnbank.org/api/ai/chat, POST without JWT returns Token is missing while anonymous sibling endpoint may remain exposed — route-specific AI auth boundary oracle.",
+    impactOneline:
+      "Route-specific /api/ai/chat scans should confirm authenticated chat rejects missing tokens while anonymous endpoints may bypass the same controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankAiChatTokenGateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Unify AI chat route authentication — Vuln Bank is intentional training software.",
+      steps: [
+        "Require consistent JWT validation on all /api/ai/chat routes.",
+        "Remove or hard-gate anonymous AI endpoints in production deployments.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/ai/chat route scan confirms Token is missing without JWT while anonymous chat may stay open. Show route-specific AI auth hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-bopla-register-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -41446,6 +47171,108 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /login route scan shows SQLi bypass with admin' OR '1'='1. Show parameterized query remediation for authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-merchant-sqli-login-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vuln Bank merchant portal SQL injection login bypass oracle",
+    description:
+      "POST /api/v1/merchants/login with email admin' OR '1'='1 bypasses merchant authentication and returns api_key plus JWT without valid credentials — the Vuln Bank merchant portal SQL injection login oracle.",
+    impactOneline:
+      "SQL injection in merchant login endpoints lets attackers obtain merchant API keys and session tokens without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantSqliLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all merchant authentication SQL — Vuln Bank is intentional training software.",
+      steps: [
+        "Replace string-concatenated merchant login queries with prepared statements or ORM bindings.",
+        "Apply account lockout and MFA for merchant administrative accounts.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/merchants/login endpoint is bypassed with email admin' OR '1'='1 and returns api_key + JWT. Show parameterized query remediation for merchant authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-merchant-sqli-login-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vuln Bank /api/v1/merchants/login SQL injection route live oracle",
+    description:
+      "When scanning /api/v1/merchants/login or the /merchant/login SPA portal on vulnbank.org, POST with email admin' OR '1'='1 bypasses merchant authentication and returns api_key plus JWT — route-specific merchant portal SQL injection login oracle.",
+    impactOneline:
+      "Route-specific scans confirm merchant login APIs are vulnerable to SQL injection credential bypass on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantSqliLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all merchant authentication SQL — Vuln Bank is intentional training software.",
+      steps: [
+        "Replace string-concatenated merchant login queries with prepared statements or ORM bindings.",
+        "Apply account lockout and MFA for merchant administrative accounts."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/merchants/login route scan shows SQLi bypass with email admin' OR '1'='1. Show route-specific parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-merchant-me-debug-disclosure-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Vuln Bank merchant profile debug_info api_key disclosure oracle",
+    description:
+      "GET /api/v1/merchants/me with a merchant JWT echoes debug_info.api_key in the JSON response — the Vuln Bank merchant profile sensitive-data disclosure oracle.",
+    impactOneline:
+      "Merchant profile endpoints that echo API keys in debug_info leak payment-integration credentials to authenticated attackers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantMeDebugDisclosureLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove debug_info blocks from merchant profile responses — Vuln Bank is intentional training software.",
+      steps: [
+        "Never echo raw merchant api_key values in profile or debug responses.",
+        "Return API keys only once at registration via a secure channel.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/merchants/me endpoint echoes debug_info.api_key in the JSON body. Show merchant profile response hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-merchant-me-debug-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Vuln Bank /api/v1/merchants/me debug disclosure route live oracle",
+    description:
+      "When scanning /api/v1/merchants/me on vulnbank.org, GET with a merchant JWT echoes debug_info.api_key — route-specific merchant profile sensitive-data disclosure oracle.",
+    impactOneline:
+      "Route-specific scans confirm merchant profile APIs leak API keys in debug_info on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantMeDebugDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove debug_info blocks from merchant profile responses — Vuln Bank is intentional training software.",
+      steps: [
+        "Never echo raw merchant api_key values in profile or debug responses.",
+        "Return API keys only once at registration via a secure channel."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/merchants/me route scan confirms debug_info.api_key disclosure. Show route-specific merchant profile hardening.",
     version: 1,
     enabled: true
   },
@@ -41553,6 +47380,56 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-merchant-register-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Vuln Bank /merchant/dashboard merchant-registration route live oracle",
+    description:
+      "When scanning /merchant/dashboard on vulnbank.org, POST /api/v1/merchants/register returns a live merchant api_key and echoes debug_info.password — route-specific merchant registration sensitive-data oracle.",
+    impactOneline:
+      "Route-specific scans confirm merchant dashboard pages expose registration APIs that leak passwords and API keys on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantRegisterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never echo passwords or raw API keys in registration responses — Vuln Bank is intentional training software.",
+      steps: [
+        "Return API keys only once via a secure channel and hash stored merchant passwords.",
+        "Remove debug_info blocks from production registration responses."
+      ]
+    },
+    fixPrompt:
+      "Our /merchant/dashboard route scan confirms /api/v1/merchants/register echoes debug_info.password. Show route-specific merchant registration hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-merchant-payment-charge-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vuln Bank /merchant/dashboard payment-charge route live oracle",
+    description:
+      "When scanning /merchant/dashboard on vulnbank.org, POST /api/v1/payments/charge with a merchant api_key echoes debug_info.submitted_card_number — route-specific merchant payment gateway oracle.",
+    impactOneline:
+      "Route-specific scans confirm merchant dashboard pages expose payment gateway debug disclosure on Vuln Bank training instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankMerchantPaymentChargeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove debug_info from payment responses and tokenize card data — Vuln Bank is intentional training software.",
+      steps: [
+        "Never echo raw card numbers in payment API responses.",
+        "Remove debug_info blocks from production payment gateway endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /merchant/dashboard route scan confirms /api/v1/payments/charge echoes debug_info.submitted_card_number. Show route-specific merchant payment gateway hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-virtual-cards-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -41610,7 +47487,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Vuln Bank profile-picture URL SSRF live oracle",
     description:
-      "POST /upload_profile_picture_url fetches attacker-controlled image_url server-side with no allowlist and saves the response as the user's profile picture — the Vuln Bank profile-picture SSRF oracle.",
+      "POST /upload_profile_picture_url fetches attacker-controlled image_url server-side with no allowlist and saves the response as the user's profile picture — including loopback http://127.0.0.1:5000/internal/secret JSON exfiltration to a public static path.",
     impactOneline:
       "Server-side URL fetch on profile uploads enables SSRF against internal services and cloud metadata endpoints.",
     detectorKind: "rule_ref",
@@ -41863,6 +47740,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-v1-forgot-password-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Vuln Bank v1 forgot-password route live oracle",
+    description:
+      "When scanning /v1/forgot-password or /api/v1/forgot-password, POST returns debug_info.pin with the 3-digit password-reset PIN while /api/v2/forgot-password omits it — route-specific API version confusion oracle.",
+    impactOneline:
+      "Route scans on v1 forgot-password need live confirmation that legacy API versions still leak reset PINs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankV1ForgotPasswordRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Retire or harden legacy API versions and never return reset secrets in responses.",
+      steps: [
+        "Remove debug_info.pin from all forgot-password API versions.",
+        "Deprecate /api/v1/forgot-password and block version downgrade.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/forgot-password route scan confirms debug_info.pin leaks reset PINs while v2 hides them. Show route-specific API versioning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-v2-forgot-password-enumeration-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -42015,6 +47918,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/v3/reset-password route scan confirms v1 PIN leaks reset accounts on v3. Show API versioning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-v2-reset-password-versioning-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Vuln Bank v2 reset-password route API versioning oracle",
+    description:
+      "When scanning /api/v2/reset-password, v1 forgot-password PIN leaks reset the account on the v2 endpoint — route-specific API version confusion oracle.",
+    impactOneline:
+      "Route scans on v2 reset-password should confirm legacy PIN leaks remain exploitable across API versions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankV2ResetPasswordVersioningRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Retire legacy forgot-password versions and isolate reset PIN handling per API version — Vuln Bank is intentional training software.",
+      steps: [
+        "Remove debug_info.pin from all forgot-password API versions.",
+        "Block cross-version reset flows or use version-specific PIN stores.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v2/reset-password route scan confirms v1 PIN leaks reset accounts on v2. Show API versioning remediation.",
     version: 1,
     enabled: true
   },
@@ -43160,6 +49089,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-workshop-shop-orders-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "vAPI workshop crAPI shop orders route live oracle",
+    description:
+      "When scanning /workshop/api/shop/orders/{id} on vapi.tools.escape.tech, embedded OWASP crAPI shop order BOLA and mass-assignment challenges fire — route-specific workshop oracle.",
+    impactOneline:
+      "Escape-hosted vAPI embeds crAPI shop order endpoints vulnerable to BOLA and status mass-assignment abuse.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiWorkshopShopOrdersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on shop order endpoints and validate status transitions server-side.",
+      steps: [
+        "Bind order access to the authenticated principal on GET /shop/orders/{id}.",
+        "Reject status=returned transitions without verified return shipment.",
+        "Run vAPI workshop labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vAPI /workshop/api/shop/orders/{id} route exposes crAPI BOLA and mass-assignment flaws. Show API authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-workshop-contact-mechanic-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "vAPI workshop crAPI contact_mechanic SSRF route live oracle",
+    description:
+      "When scanning /workshop/api/merchant/contact_mechanic on vapi.tools.escape.tech, embedded OWASP crAPI SSRF challenge fires — route-specific workshop oracle (API7).",
+    impactOneline:
+      "Escape-hosted vAPI embeds crAPI contact_mechanic endpoint that fetches attacker-controlled mechanic_api URLs server-side.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiWorkshopContactMechanicRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to attacker-controlled URLs and restrict egress from mechanic integration endpoints.",
+      steps: [
+        "Validate mechanic_api against an allowlist of trusted integration hosts.",
+        "Disable repeat_request_if_failed loops that amplify SSRF.",
+        "Run vAPI workshop labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vAPI /workshop/api/merchant/contact_mechanic route exposes crAPI SSRF via mechanic_api. Show egress filtering remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vapi-api3-comment-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -43706,6 +49687,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vapi-jwt-weak-token-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "vAPI JustWeakToken JWT live oracle",
+    description:
+      "POST /jwt/user registers a user then forged admin JWT (alg:none or HS256 re-sign with known weak key) returns flag{jwt_*} — the vAPI JustWeakToken oracle.",
+    impactOneline:
+      "Accepting alg:none or weak HS256 secrets lets attackers forge admin JWTs and read protected flags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiJwtWeakTokenLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — pin JWT algorithms and use strong secrets in production.",
+      steps: [
+        "Reject alg:none and enforce an allowlist of signing algorithms (RS256/HS256 only).",
+        "Use strong, rotated signing secrets never embedded in client code.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /jwt/user accepts forged admin JWTs with a known weak HS256 secret. Show secure JWT verification patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-serversurfer-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "vAPI ServerSurfer SSRF live oracle",
+    description:
+      "GET /serversurfer?url= fetches attacker-controlled URLs server-side (blocks 127.0.0.1 but accepts example.com) — the vAPI ServerSurfer SSRF oracle.",
+    impactOneline:
+      "Server-side URL fetchers without strict allowlists let attackers reach internal services or exfiltrate cloud metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiServerSurferLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "vAPI is intentional API security training — block internal IPs and use URL allowlists in production.",
+      steps: [
+        "Deny private/link-local/metadata IP ranges in server-side fetchers.",
+        "Use an allowlist of permitted outbound hosts instead of blocklists.",
+        "Run vAPI only on isolated lab infrastructure with no production data."
+      ]
+    },
+    fixPrompt:
+      "Our /serversurfer endpoint fetches arbitrary external URLs server-side. Show SSRF-safe URL validation patterns.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vapi-jwt-weak-token-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -43888,6 +49921,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "crapi-user-vehicles-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI user vehicles route BOLA live oracle",
+    description:
+      "When scanning /identity/api/v2/user/vehicles, community vehicleid leaks confirm cross-user location reads — route-specific crAPI Challenge 1 vehicle BOLA oracle.",
+    impactOneline:
+      "Route scans on user vehicle list endpoints should confirm object-level authorization failures when community posts expose other users' vehicle UUIDs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiUserVehiclesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — enforce object-level authorization on vehicle endpoints in production.",
+      steps: [
+        "Verify the authenticated user owns the vehicle before returning location or roster data.",
+        "Strip vehicleid from community post author objects or use opaque non-guessable IDs.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI /identity/api/v2/user/vehicles route scan confirms Challenge 1 vehicle BOLA via leaked UUIDs. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi-vehicle-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -43992,6 +50051,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "crapi-community-posts-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "crAPI community posts BOLA live oracle",
+    description:
+      "GET /identity/api/v2/community/posts/recent leaks vehicleid UUIDs in author objects enabling cross-user GPS reads via /identity/api/v2/vehicle/{uuid}/location — the crAPI community posts BOLA oracle (API1).",
+    impactOneline:
+      "Community post feeds that expose internal vehicle IDs enable location BOLA against other users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiCommunityPostsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — strip vehicleid from community posts and enforce object-level authorization on location endpoints in production.",
+      steps: [
+        "Verify the authenticated user owns the vehicle before returning location data.",
+        "Strip vehicleid from community post author objects or use opaque non-guessable IDs.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI community posts feed leaks vehicleid UUIDs enabling location BOLA. Show API data-minimization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "crapi-community-posts-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -44066,6 +50151,214 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our crAPI /identity/api/v2/user/dashboard route returns full PII and credit balance. Show route-specific data minimization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-convert-video-command-injection-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "crAPI convert_video command injection live oracle",
+    description:
+      "PUT /identity/api/v2/user/videos/{id} accepts conversion_params mass assignment and GET /identity/api/v2/user/videos/convert_video?video_id={id} reflects shell output or discloses the internal convert endpoint — crAPI command injection chain oracle (Challenge 7).",
+    impactOneline:
+      "User-controlled conversion_params passed to ffmpeg-style shell commands enable remote code execution when the convert endpoint is triggered.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiConvertVideoCommandInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — never pass user input to shell commands and block internal endpoints from external access.",
+      steps: [
+        "Use allow-listed codec parameters instead of shell string concatenation.",
+        "Restrict convert_video to internal service mesh only.",
+        "Strip conversion_params from user-writable video properties."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI convert_video endpoint chains conversion_params mass assignment to OS command execution. Show safe parameterization and internal-only endpoint hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-convert-video-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "crAPI /user/videos/convert_video command injection route live oracle",
+    description:
+      "When scanning /identity/api/v2/user/videos/convert_video, conversion_params mass assignment enables command injection or discloses internal endpoint_url — route-specific crAPI Challenge 7 oracle.",
+    impactOneline:
+      "Route scans on convert_video should confirm conversion_params command injection chain or internal endpoint disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiConvertVideoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — never pass user input to shell commands and block internal endpoints from external access.",
+      steps: [
+        "Use allow-listed codec parameters instead of shell string concatenation.",
+        "Restrict convert_video to internal service mesh only.",
+        "Strip conversion_params from user-writable video properties."
+      ]
+    },
+    fixPrompt:
+      "Our /identity/api/v2/user/videos/convert_video route scan confirms conversion_params command injection chain. Show route-specific shell hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-validate-coupon-nosql-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "crAPI validate-coupon NoSQL injection live oracle",
+    description:
+      "POST /community/api/v2/coupon/validate-coupon accepts MongoDB operator injection in coupon_code and returns a valid coupon without knowing the code — crAPI NoSQL injection oracle (Challenge 12).",
+    impactOneline:
+      "MongoDB query operators in coupon_code bypass coupon validation and leak arbitrary coupon documents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiValidateCouponNosqlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — validate coupon_code as a string and reject object payloads in production.",
+      steps: [
+        "Reject non-string coupon_code values at the API schema layer.",
+        "Use parameterized MongoDB queries without operator injection.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI validate-coupon endpoint accepts MongoDB operators in coupon_code. Show schema validation and safe NoSQL query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-validate-coupon-nosql-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "crAPI validate-coupon NoSQL injection route live oracle",
+    description:
+      "When scanning /community/api/v2/coupon/validate-coupon or /workshop/api/shop/validate-coupon, MongoDB operator injection in coupon_code returns valid coupons — route-specific crAPI Challenge 12 oracle.",
+    impactOneline:
+      "Route scans on validate-coupon should confirm MongoDB NoSQL injection via coupon_code operators.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiValidateCouponNosqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — validate coupon_code as a string and reject object payloads in production.",
+      steps: [
+        "Reject non-string coupon_code values at the API schema layer.",
+        "Use parameterized MongoDB queries without operator injection.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /community/api/v2/coupon/validate-coupon route scan confirms MongoDB NoSQL injection. Show route-specific schema validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-apply-coupon-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "crAPI apply_coupon SQL injection live oracle",
+    description:
+      "POST /workshop/api/shop/apply_coupon concatenates coupon_code into SQL queries enabling authentication bypass and data extraction — crAPI SQL injection oracle (Challenge 13).",
+    impactOneline:
+      "SQL injection in coupon_code bypasses coupon redemption checks and can extract database contents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiApplyCouponSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — use parameterized queries for coupon redemption in production.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries.",
+        "Validate coupon_code format before database lookup.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI apply_coupon endpoint is vulnerable to SQL injection in coupon_code. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-apply-coupon-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "crAPI apply_coupon SQL injection route live oracle",
+    description:
+      "When scanning /workshop/api/shop/apply_coupon, SQL injection in coupon_code bypasses redemption checks — route-specific crAPI Challenge 13 oracle.",
+    impactOneline:
+      "Route scans on apply_coupon should confirm SQL injection via coupon_code concatenation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiApplyCouponSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — use parameterized queries for coupon redemption in production.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries.",
+        "Validate coupon_code format before database lookup.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /workshop/api/shop/apply_coupon route scan confirms SQL injection in coupon_code. Show route-specific parameterized query fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-admin-videos-bfla-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "crAPI admin videos BFLA live oracle",
+    description:
+      "DELETE /identity/api/v2/admin/videos/{id} succeeds for a regular user JWT — crAPI broken function level authorization oracle (API5 / Challenge 7).",
+    impactOneline:
+      "Admin-only video deletion reachable by non-admin users lets attackers delete other users' content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiAdminVideosBflaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — enforce admin role checks on all /admin/* endpoints.",
+      steps: [
+        "Require admin role claim on DELETE /identity/api/v2/admin/videos/{id}.",
+        "Return 403 for non-admin JWTs before processing delete.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crAPI DELETE /identity/api/v2/admin/videos/{id} succeeds for regular users. Show BFLA remediation for admin video endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "crapi-admin-videos-bfla-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "crAPI /admin/videos BFLA route live oracle",
+    description:
+      "When scanning /identity/api/v2/admin/videos/{id}, DELETE succeeds for regular user JWT — route-specific crAPI BFLA oracle (API5 / Challenge 7).",
+    impactOneline:
+      "Route scans on admin video endpoints should confirm non-admin users cannot delete videos.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "crapiAdminVideosBflaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "crAPI is intentional API security training — enforce admin role checks on all /admin/* endpoints.",
+      steps: [
+        "Require admin role claim on DELETE /identity/api/v2/admin/videos/{id}.",
+        "Return 403 for non-admin JWTs before processing delete.",
+        "Run crAPI only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /identity/api/v2/admin/videos route scan confirms BFLA via admin video delete. Show route-specific authorization fixes.",
     version: 1,
     enabled: true
   },
@@ -44382,13 +50675,39 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-ctf-challenges-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot CTF prompt-injection challenges live oracle",
+    description:
+      "GET /ctf/api/v1/challenges exposes agentic prompt-injection challenges (system_prompt_leak) including recon-onboarding and recon-invoice — FinBot CTF live oracle.",
+    impactOneline:
+      "Publicly reachable agentic AI challenge APIs document prompt-injection attack surfaces for FinBot vendor and invoice agents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotCtfChallengesLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — gate challenge APIs behind authentication in production.",
+      steps: [
+        "Do not expose agent challenge metadata on unauthenticated routes.",
+        "Isolate FinBot demo namespaces from production LLM deployments.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /ctf/api/v1/challenges endpoint exposes prompt-injection challenge metadata. Show how to protect agentic CTF APIs in production.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-ctf-challenges-route-live-oracle",
     platform: "generic",
     category: "AI security",
     severityDefault: "high",
     title: "OWASP FinBot CTF prompt-injection challenges route live oracle",
     description:
-      "When scanning /ctf or /portals, GET /ctf/api/v1/challenges exposes agentic prompt-injection challenges (system_prompt_leak) including recon-onboarding — route-specific FinBot CTF oracle.",
+      "When scanning /ctf, /portals, or /ctf/api/v1/challenges, GET /ctf/api/v1/challenges exposes agentic prompt-injection challenges (system_prompt_leak) including recon-onboarding — route-specific FinBot CTF oracle.",
     impactOneline:
       "Publicly reachable agentic AI challenge APIs document prompt-injection attack surfaces for FinBot vendor and invoice agents.",
     detectorKind: "rule_ref",
@@ -44434,6 +50753,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "finbot-ctf-sidecar-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP FinBot CTF sidecar live oracle",
+    description:
+      "GET /ctf/api/v1/sidecar returns public challenge progress JSON (total, completed, points) without authentication on FinBot CTF hosts.",
+    impactOneline:
+      "Unauthenticated CTF sidecar APIs leak agentic challenge catalog size and participant progress on FinBot training platforms.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotCtfSidecarLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — restrict sidecar APIs to authenticated CTF participants.",
+      steps: [
+        "Require session authentication on /ctf/api/v1/sidecar.",
+        "Avoid exposing toolkit dead-drop and exfil metadata without auth.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /ctf/api/v1/sidecar endpoint is publicly reachable. Show how to gate agentic CTF progress APIs behind authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-ctf-sidecar-api-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP FinBot CTF sidecar API route live oracle",
+    description:
+      "When scanning /ctf/api/v1/sidecar directly, the JSON response exposes total challenge count and completion progress — route-specific FinBot sidecar API oracle.",
+    impactOneline:
+      "Direct scans of /ctf/api/v1/sidecar confirm unauthenticated agentic challenge progress disclosure on FinBot CTF hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotCtfSidecarApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — restrict sidecar APIs to authenticated CTF participants.",
+      steps: [
+        "Require session authentication on /ctf/api/v1/sidecar.",
+        "Avoid exposing toolkit dead-drop and exfil metadata without auth.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /ctf/api/v1/sidecar API route scan confirms public progress JSON. Show remediation for agentic CTF sidecar endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "finbot-vendor-sidecar-route-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -44456,6 +50827,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our FinBot /vendor portal scan reaches /ctf/api/v1/sidecar without auth. Show how to gate agentic CTF progress APIs behind authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-admin-copilot-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot admin copilot live oracle",
+    description:
+      "POST /admin/api/v1/copilot/chat streams Finance Co-Pilot agentic capabilities (vendor data, reports, compliance) with session-only CSRF — FinBot admin copilot live oracle.",
+    impactOneline:
+      "Agentic copilot chat APIs expose financial data access and report-generation tools on FinBot admin portals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotAdminCopilotLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot admin copilot is intentional agentic AI training — require strong authentication before exposing copilot chat APIs.",
+      steps: [
+        "Require authenticated admin sessions before /admin/api/v1/copilot/chat.",
+        "Scope copilot tool access to least-privilege financial data.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /admin/api/v1/copilot/chat streams agentic financial copilot capabilities. Show how to protect admin copilot APIs in production.",
     version: 1,
     enabled: true
   },
@@ -44534,6 +50931,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our FinBot /how-it-works route documents MCP tool-poisoning with public supply-chain APIs. Show how to protect agentic supply-chain surfaces in production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-portals-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot four-portal hub live oracle",
+    description:
+      "GET /portals on owasp-finbot-ctf.org exposes Vendor, Admin, Dark Lab, and CTF portal cards — agentic AI security training entry point oracle.",
+    impactOneline:
+      "Public FinBot portal hubs enumerate four distinct agentic AI training surfaces without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotPortalsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — gate portal hubs behind auth in production deployments.",
+      steps: [
+        "Require authentication before exposing agentic training portal navigation.",
+        "Monitor portal hub access for reconnaissance patterns.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /portals page lists four agentic AI training portals publicly. Show how to protect production agentic platform entry points.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-portals-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot /portals four-portal hub route live oracle",
+    description:
+      "When scanning /portals on owasp-finbot-ctf.org, the four-portal hub confirms Vendor/Admin/Dark Lab/CTF training entry points — route-specific hub oracle distinct from /ctf or /darklab fingerprints.",
+    impactOneline:
+      "Route scans on FinBot /portals should confirm the four-portal hub layout, not only generic CTF supply-chain probes shared across portal routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotPortalsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot CTF is intentional agentic AI training — isolate portal hub navigation from production agent ecosystems.",
+      steps: [
+        "Validate portal hub links point only to authorized training environments.",
+        "Monitor cross-portal navigation for reconnaissance.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /portals route scan confirms four agentic AI training portals. Show how to protect production multi-portal agentic platforms.",
     version: 1,
     enabled: true
   },
@@ -44744,6 +51193,600 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our FinBot /taxcalc/tools route scan confirms writable MCP tool definitions. Show remediation for agentic supply-chain tool poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finmail-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinMail MCP tools write live oracle",
+    description:
+      "PUT /darklab/api/v1/supply-chain/servers/finmail/tools accepts MCP tool definition updates for send_email — supply-chain tool-poisoning write surface.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinmailToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinMail MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finmail/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes a writable MCP tool API at /finmail/tools. Show how to protect agentic email tool catalogs from supply-chain poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finmail-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinMail /tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/finmail/tools, PUT confirms MCP tool-poisoning write API for FinMail send_email tool definitions.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinmailToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinMail MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finmail/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /finmail/tools route scan confirms writable MCP tool definitions. Show remediation for agentic supply-chain tool poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-findrive-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinDrive MCP tools write live oracle",
+    description:
+      "PUT /darklab/api/v1/supply-chain/servers/findrive/tools accepts MCP tool definition updates for upload_file — supply-chain tool-poisoning write surface.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFindriveToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinDrive MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/findrive/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes a writable MCP tool API at /findrive/tools. Show how to protect agentic document-storage tool catalogs from supply-chain poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-findrive-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinDrive /tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/findrive/tools, PUT confirms MCP tool-poisoning write API for FinDrive upload_file tool definitions.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFindriveToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinDrive MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/findrive/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /findrive/tools route scan confirms writable MCP tool definitions. Show remediation for agentic supply-chain tool poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finstripe-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinStripe MCP tools write live oracle",
+    description:
+      "PUT /darklab/api/v1/supply-chain/servers/finstripe/tools accepts MCP tool definition updates for create_transfer — supply-chain tool-poisoning write surface.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent payment tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinstripeToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinStripe MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finstripe/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes a writable MCP tool API at /finstripe/tools. Show how to protect agentic payment tool catalogs from supply-chain poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finstripe-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinStripe /tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/finstripe/tools, PUT confirms MCP tool-poisoning write API for FinStripe create_transfer tool definitions.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent payment tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinstripeToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinStripe MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finstripe/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /finstripe/tools route scan confirms writable MCP tool definitions. Show remediation for agentic supply-chain tool poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finstripe-reset-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinStripe reset-tools write live oracle",
+    description:
+      "POST /darklab/api/v1/supply-chain/servers/finstripe/reset-tools resets FinStripe MCP tool overrides — writable supply-chain reset surface.",
+    impactOneline:
+      "Writable FinStripe MCP tool reset APIs let attackers manipulate agent payment tool catalogs during supply-chain poisoning labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinstripeResetToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinStripe MCP reset APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finstripe/reset-tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes POST /finstripe/reset-tools for MCP tool resets. Show how to protect agentic payment tool catalogs from unauthorized resets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finstripe-reset-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinStripe /reset-tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/finstripe/reset-tools, POST confirms writable MCP tool-reset API for supply-chain poisoning labs.",
+    impactOneline:
+      "Writable FinStripe MCP tool reset APIs let attackers manipulate agent payment tool catalogs during supply-chain poisoning labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinstripeResetToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinStripe MCP reset APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finstripe/reset-tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /finstripe/reset-tools route scan confirms writable MCP tool reset API. Show remediation for agentic supply-chain labs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-systemutils-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab SystemUtils MCP tools write live oracle",
+    description:
+      "PUT /darklab/api/v1/supply-chain/servers/systemutils/tools accepts MCP tool definition updates for execute_script — supply-chain tool-poisoning write surface.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent system-utility tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabSystemutilsToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict SystemUtils MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/systemutils/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes a writable MCP tool API at /systemutils/tools. Show how to protect agentic system-utility tool catalogs from supply-chain poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-systemutils-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab SystemUtils /tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/systemutils/tools, PUT confirms MCP tool-poisoning write API for SystemUtils execute_script tool definitions.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent system-utility tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabSystemutilsToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict SystemUtils MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/systemutils/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /systemutils/tools route scan confirms writable MCP tool definitions. Show remediation for agentic supply-chain tool poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-systemutils-reset-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab SystemUtils reset-tools write live oracle",
+    description:
+      "POST /darklab/api/v1/supply-chain/servers/systemutils/reset-tools resets SystemUtils MCP tool overrides — writable supply-chain reset surface.",
+    impactOneline:
+      "Writable SystemUtils MCP tool reset APIs let attackers manipulate agent system-utility tool catalogs during supply-chain poisoning labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabSystemutilsResetToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict SystemUtils MCP reset APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/systemutils/reset-tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes POST /systemutils/reset-tools for MCP tool resets. Show how to protect agentic system-utility tool catalogs from unauthorized resets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-systemutils-reset-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab SystemUtils /reset-tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/systemutils/reset-tools, POST confirms writable MCP tool-reset API for supply-chain poisoning labs.",
+    impactOneline:
+      "Writable SystemUtils MCP tool reset APIs let attackers manipulate agent system-utility tool catalogs during supply-chain poisoning labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabSystemutilsResetToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict SystemUtils MCP reset APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/systemutils/reset-tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /systemutils/reset-tools route scan confirms writable MCP tool reset API. Show remediation for agentic supply-chain labs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finbank-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinBank MCP tools write live oracle",
+    description:
+      "PUT /darklab/api/v1/supply-chain/servers/finbank/tools accepts MCP tool definition updates for get_account_balance — supply-chain tool-poisoning write surface.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinbankToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinBank MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finbank/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes a writable MCP tool API at /finbank/tools. Show how to protect agentic banking tool catalogs from supply-chain poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finbank-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinBank /tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/finbank/tools, PUT confirms MCP tool-poisoning write API for FinBank get_account_balance tool definitions.",
+    impactOneline:
+      "Writable MCP tool catalogs let attackers poison agent tool schemas for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinbankToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinBank MCP tool write APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finbank/tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /finbank/tools route scan confirms writable MCP tool definitions. Show remediation for agentic supply-chain tool poisoning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finmail-server-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinMail MCP server live oracle",
+    description:
+      "GET /darklab/api/v1/supply-chain/servers/finmail returns FinMail MCP server config with send_email tool definitions without authentication.",
+    impactOneline:
+      "Unauthenticated FinMail MCP server configs expose email tool schemas attackers can poison for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinmailServerLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinMail MCP server APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finmail.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes FinMail MCP server config at /darklab/api/v1/supply-chain/servers/finmail. Show how to protect agentic email tool catalogs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finmail-server-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinMail server route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/finmail, GET confirms FinMail MCP server config with send_email tool definitions — route-specific tool-poisoning oracle.",
+    impactOneline:
+      "Unauthenticated FinMail MCP server configs expose email tool schemas attackers can poison for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinmailServerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinMail MCP server APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finmail.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot FinMail MCP server route scan confirms unauthenticated send_email tool definitions. Show remediation for agentic supply-chain tool catalogs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finmail-reset-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinMail reset-tools write live oracle",
+    description:
+      "POST /darklab/api/v1/supply-chain/servers/finmail/reset-tools resets FinMail MCP tool overrides — writable supply-chain reset surface.",
+    impactOneline:
+      "Writable FinMail MCP tool reset APIs let attackers manipulate agent email tool catalogs during supply-chain poisoning labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinmailResetToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinMail MCP reset APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finmail/reset-tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes POST /finmail/reset-tools for MCP tool resets. Show how to protect agentic email tool catalogs from unauthorized resets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-finmail-reset-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinMail /reset-tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/finmail/reset-tools, POST confirms writable MCP tool-reset API for supply-chain poisoning labs.",
+    impactOneline:
+      "Writable FinMail MCP tool reset APIs let attackers manipulate agent email tool catalogs during supply-chain poisoning labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFinmailResetToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinMail MCP reset APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/finmail/reset-tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /finmail/reset-tools route scan confirms writable MCP tool reset API. Show remediation for agentic supply-chain labs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-findrive-server-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinDrive MCP server live oracle",
+    description:
+      "GET /darklab/api/v1/supply-chain/servers/findrive returns FinDrive MCP server config with upload_file/get_file tool definitions without authentication.",
+    impactOneline:
+      "Unauthenticated FinDrive MCP server configs expose document tool schemas attackers can poison for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFindriveServerLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinDrive MCP server APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/findrive.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes FinDrive MCP server config at /darklab/api/v1/supply-chain/servers/findrive. Show how to protect agentic document tool catalogs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-findrive-server-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinDrive server route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/findrive, GET confirms FinDrive MCP server config with upload_file/get_file tool definitions — route-specific tool-poisoning oracle.",
+    impactOneline:
+      "Unauthenticated FinDrive MCP server configs expose document tool schemas attackers can poison for indirect prompt injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFindriveServerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinDrive MCP server APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/findrive.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot FinDrive MCP server route scan confirms unauthenticated upload_file/get_file tool definitions. Show remediation for agentic supply-chain tool catalogs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-findrive-reset-tools-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinDrive reset-tools write live oracle",
+    description:
+      "POST /darklab/api/v1/supply-chain/servers/findrive/reset-tools resets FinDrive MCP tool overrides — writable supply-chain reset surface.",
+    impactOneline:
+      "Writable FinDrive MCP tool reset APIs let attackers manipulate agent document tool catalogs during supply-chain poisoning labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFindriveResetToolsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinDrive MCP reset APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/findrive/reset-tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot Dark Lab exposes POST /findrive/reset-tools for MCP tool resets. Show how to protect agentic document tool catalogs from unauthorized resets.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-darklab-findrive-reset-tools-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot Dark Lab FinDrive /reset-tools route live oracle",
+    description:
+      "When scanning /darklab/api/v1/supply-chain/servers/findrive/reset-tools, POST confirms writable MCP tool-reset API for supply-chain poisoning labs.",
+    impactOneline:
+      "Writable FinDrive MCP tool reset APIs let attackers manipulate agent document tool catalogs during supply-chain poisoning labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotDarklabFindriveResetToolsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "FinBot Dark Lab is intentional agentic AI training — restrict FinDrive MCP reset APIs to authenticated lab participants.",
+      steps: [
+        "Require authentication on /darklab/api/v1/supply-chain/servers/findrive/reset-tools.",
+        "Validate and sandbox MCP tool overrides before agents execute them.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /findrive/reset-tools route scan confirms writable MCP tool reset API. Show remediation for agentic supply-chain labs.",
     version: 1,
     enabled: true
   },
@@ -45042,7 +52085,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "IST Edu insecure deserialization lab route live oracle",
     description:
-      "When scanning /labs/deserialization on ist-edu-bd.vercel.app, confirm the insecure deserialization training lab route with live IST Edu injection oracle — route-specific deserialization lab oracle.",
+      "When scanning /labs/deserialization or /deserialization on ist-edu-bd.vercel.app, confirm the insecure deserialization training lab route with live IST Edu injection oracle — route-specific deserialization lab oracle.",
     impactOneline:
       "Route-specific confirmation that IST Edu exposes an insecure deserialization training lab entry on the discovery queue.",
     detectorKind: "rule_ref",
@@ -45068,7 +52111,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu file-upload lab route live oracle",
     description:
-      "When scanning /labs/file-upload on ist-edu-bd.vercel.app, the SPA bundle documents SVG/img stored-XSS upload bypass payloads — route-specific unrestricted file upload training oracle.",
+      "When scanning /labs/file-upload or /file-upload on ist-edu-bd.vercel.app, the SPA bundle documents SVG/img stored-XSS upload bypass payloads — route-specific unrestricted file upload training oracle.",
     impactOneline:
       "Route-specific confirmation that IST Edu /labs/file-upload documents dangerous upload bypass payloads in the client bundle.",
     detectorKind: "rule_ref",
@@ -45682,6 +52725,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /login route documents Attack Mode SQLi against /api/auth/login. Show parameterized query remediation for Node banking APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sql-injection-lab-login-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "SQL Injection Lab login route live oracle",
+    description:
+      "When scanning /login on sql-injection-lab.vercel.app, the Layer Zero UNLV Flask practice lab documents intentional authentication-bypass SQL injection with admin flag capture — route-specific SQLi training oracle.",
+    impactOneline:
+      "Educational Flask SQLi lab exposes intentional login bypass patterns for route-specific scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sqlInjectionLabLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SQL Injection Lab is intentional training software — use parameterized queries in production.",
+      steps: [
+        "Never concatenate user input into SQL queries.",
+        "Use parameterized queries or ORM bindings for all authentication.",
+        "Run practice labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login route documents intentional SQLi auth bypass. Show parameterized query remediation for Flask login handlers.",
     version: 1,
     enabled: true
   },
@@ -47319,6 +54388,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nodegoat-tutorial-hub-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "NodeGoat OWASP Top 10 tutorial hub route live oracle",
+    description:
+      "When scanning /tutorial, the hub documents OWASP Top 10 A1–A10 fixing walkthroughs with nav links to /tutorial/a1–a10 lesson routes — route-specific NodeGoat training hub oracle.",
+    impactOneline:
+      "Public NodeGoat tutorial hub documents the full OWASP Top 10 lesson catalog for unauthenticated discovery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nodegoatTutorialHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "NodeGoat is intentional OWASP training — gate tutorial hubs behind authentication in production.",
+      steps: [
+        "Run NodeGoat only on isolated lab hosts or localhost.",
+        "Require authentication if self-hosting NodeGoat outside classroom sandboxes.",
+        "Do not expose OWASP training walkthroughs on production-facing domains."
+      ]
+    },
+    fixPrompt:
+      "Our /tutorial hub documents OWASP Top 10 lesson navigation. Show how to isolate NodeGoat training from production deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "nodegoat-tutorial-a1-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -48362,6 +55457,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnforge-academy-level-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnForge Academy level SSRF live oracle",
+    description:
+      "GET /api/levels/ssrf/level13–15 returns SSRF filter-bypass flags or blocklist training responses — VulnForge Academy SSRF live oracle.",
+    impactOneline:
+      "VulnForge Academy SSRF levels expose server-side fetch with weak URL blocklists bypassable via IP encoding.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevelSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — validate and restrict outbound fetch destinations in production apps.",
+      steps: [
+        "Resolve URLs and deny link-local, loopback, and metadata IP ranges.",
+        "Use an allowlist of permitted fetch destinations.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy SSRF levels have bypassable localhost blocklists. Show SSRF egress control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnforge-academy-level-ssrf-route-live-oracle",
     platform: "generic",
     category: "Server-side request forgery",
@@ -48674,6 +55795,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnforge-academy-level16-double-extension-upload-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnForge Academy level 16 double-extension upload route live oracle",
+    description:
+      "When scanning level16.php routes, VulnForge Academy documents double extension or null-byte tricks to bypass file extension validation — route-specific level 16 file upload training oracle (README corpus fallback).",
+    impactOneline:
+      "VulnForge Academy level 16 exposes intentional double-extension/null-byte upload bypass patterns distinct from generic levels 16–18 upload oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevel16DoubleExtensionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — validate uploads with allowlisted extensions and magic bytes, rejecting double extensions.",
+      steps: [
+        "Normalize filenames and reject double extensions like .php.jpg.",
+        "Strip null bytes and validate magic bytes server-side.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 16 route documents double-extension upload bypass. Show secure upload validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level17-content-type-upload-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnForge Academy level 17 Content-Type upload route live oracle",
+    description:
+      "When scanning level17.php routes, VulnForge Academy documents Content-Type header spoofing to bypass image-only upload validation — route-specific file upload training oracle (README corpus fallback).",
+    impactOneline:
+      "VulnForge Academy level 17 exposes intentional Content-Type spoofing bypass patterns for unrestricted file upload labs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevel17ContentTypeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — validate uploads with magic bytes, not client Content-Type headers.",
+      steps: [
+        "Verify file magic bytes server-side instead of trusting Content-Type.",
+        "Allowlist permitted extensions and store uploads outside the web root.",
+        "Run VulnForge Academy only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 17 route documents Content-Type spoofing upload bypass. Show secure upload validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level18-extension-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "VulnForge Academy level 18 extension blacklist bypass route live oracle",
+    description:
+      "When scanning level18.php routes, VulnForge Academy documents extension blacklist bypass via alternate executable extensions (.php5, .phtml) — route-specific level 18 file upload training oracle.",
+    impactOneline:
+      "VulnForge Academy level 18 exposes intentional extension blacklist bypass patterns distinct from generic levels 16–18 upload oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevel18ExtensionBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — use extension allowlists and content inspection in production apps.",
+      steps: [
+        "Allowlist permitted extensions and verify file magic bytes server-side.",
+        "Reject double extensions and alternate PHP handlers (.php5, .phtml).",
+        "Store uploads outside the web root and serve via authenticated download endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 18 route documents extension blacklist bypass via .php5/.phtml. Show secure upload validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnforge-academy-level20-final-boss-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "VulnForge Academy level 20 Final Boss route live oracle",
+    description:
+      "When scanning level 20 / Final Boss routes, VulnForge Academy /api/levels lists nightmare-tier multi-vector chain exploitation challenge — route-specific chain oracle (README corpus fallback when Vercel checkpoint blocks API).",
+    impactOneline:
+      "VulnForge Academy level 20 Final Boss documents chained exploitation across multiple vulnerability classes for full compromise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnforgeAcademyLevelFinalBossRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "VulnForge Academy is intentional training — chain exploitation requires defense-in-depth across all OWASP Top 10 categories.",
+      steps: [
+        "Patch each vulnerability class independently — chains fail when any link is secured.",
+        "Run VulnForge Academy only on isolated training infrastructure.",
+        "Use layered monitoring to detect multi-step attack sequences in production."
+      ]
+    },
+    fixPrompt:
+      "Our VulnForge Academy level 20 Final Boss chains multiple vulnerabilities. Show defense-in-depth remediation across injection, auth, and access control layers.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "agentpwn-attack-route-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -48778,6 +56003,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-live-stream-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store live-stream BFLA walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/live-stream-hijack documents unprotected GET/POST /api/live/stream exposing RTMP ingest keys to any authenticated user.",
+    impactOneline:
+      "Public walkthrough teaches BFLA on live broadcast APIs where admin UI hides controls but the API never checks roles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecLiveStreamEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce server-side admin role checks on stream management APIs.",
+      steps: [
+        "Require admin role on POST /api/live/stream.",
+        "Do not return RTMP keys to non-admin users.",
+        "Host OopsSec walkthroughs on localhost-only training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/live/stream exposes RTMP keys to any authenticated user. Show BFLA remediation for broadcast APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-live-stream-bfla-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store live-stream BFLA live oracle",
+    description:
+      "OopsSec Store walkthrough corpus confirms GET/POST /api/live/stream BFLA with RTMP ingest key exposure — live walkthrough validation oracle.",
+    impactOneline:
+      "Walkthrough corpus validates unprotected live-stream API documented in Challenge 07 live-stream-hijack.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecLiveStreamBflaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — enforce server-side role checks on stream APIs.",
+      steps: [
+        "Require admin role on POST /api/live/stream.",
+        "Do not return RTMP ingest URLs to non-admin authenticated users.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our walkthrough confirms /api/live/stream BFLA. Show server-side role enforcement for stream management.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-bola-wishlist-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store BOLA wishlist route live oracle",
+    description:
+      "When scanning /posts/bola-wishlist-access, the walkthrough documents missing ownership verification on GET /api/wishlists/[id] — any authenticated user can read wl-internal-001 admin wishlist notes — route-specific BOLA oracle.",
+    impactOneline:
+      "OopsSec wishlist API authenticates users but never verifies wishlist ownership — cross-user wishlist reads including admin internal notes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecBolaWishlistRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — compare wishlist.userId to user.id before returning data.",
+      steps: [
+        "Verify wishlist.userId matches the authenticated user before returning wishlist contents.",
+        "Apply the same ownership check consistently across GET and DELETE handlers.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/wishlists/[id] endpoint returns any wishlist without ownership checks. Show BOLA remediation for wishlist reads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-idor-order-privacy-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store IDOR order privacy route live oracle",
+    description:
+      "When scanning /posts/idor-order-privacy-breach, the walkthrough documents missing ownership verification on GET /orders/ORD-* — sequential order IDs expose other customers' PII — route-specific IDOR oracle.",
+    impactOneline:
+      "OopsSec order confirmation API authenticates users but never verifies order.userId — cross-user order reads via ORD-001 enumeration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecIdorOrderPrivacyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — compare order.userId to user.id before returning order details.",
+      steps: [
+        "Verify order.userId matches the authenticated user before returning order confirmation data.",
+        "Use non-sequential order IDs and filter by ownership in the database query.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /orders/[id] endpoint returns any order without ownership checks. Show IDOR remediation for order confirmation pages.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-session-fixation-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "OopsSec Store session fixation support-access route live oracle",
+    description:
+      "When scanning /posts/session-fixation-weak-session-management, the walkthrough documents mass assignment on POST /api/user/support-access — body.email generates admin support tokens — route-specific session hijack oracle.",
+    impactOneline:
+      "OopsSec support-access endpoint trusts client-supplied email — any authenticated user can mint admin@oss.com supportLoginUrl sessions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecSessionFixationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind support tokens to the authenticated user only; enforce revocation and short token lifetimes.",
+      steps: [
+        "Set targetEmail = user.email server-side — never accept email from request body.",
+        "Check supportToken.revoked before creating sessions on /support-login.",
+        "Reduce support token lifetime from 365 days to hours and rate-limit generation."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/user/support-access accepts body.email to generate tokens for arbitrary accounts. Show mass-assignment and support-token remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-mcp-malicious-server-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "critical",
+    title: "OopsSec Store malicious MCP server route live oracle",
+    description:
+      "When scanning /posts/mcp-malicious-server, the walkthrough documents indirect prompt injection via external MCP tool responses bypassing get_compliance_report restrictions — route-specific MCP poisoning oracle.",
+    impactOneline:
+      "OopsSec OSSBot merges untrusted external MCP tools with privileged internal tools — poisoned tool responses trigger restricted get_compliance_report calls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecMcpMaliciousServerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate external MCP tools from privileged internal tools; validate tool responses before passing to the LLM.",
+      steps: [
+        "Do not merge external MCP tool pools with internal privileged tools in the same agent context.",
+        "Strip instruction-like patterns from tool responses before LLM ingestion.",
+        "Allowlist approved MCP server URLs and block private/internal IP ranges (SSRF)."
+      ]
+    },
+    fixPrompt:
+      "Our AI assistant accepts arbitrary mcpServerUrl and passes poisoned tool responses to the LLM. Show MCP trust-boundary and SSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-jwt-alg-confusion-evidence",
     platform: "generic",
     category: "Broken authentication",
@@ -48826,6 +56207,136 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/partner/orders verifier branches on alg and reuses the public key in HS256 HMAC. Show algorithm pinning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-jwt-weak-secret-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "OopsSec Store JWT weak secret admin bypass walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/jwt-weak-secret-admin-bypass documents cracking a weak JWT_SECRET with hashcat and forging role:ADMIN tokens to access restricted /admin endpoints.",
+    impactOneline:
+      "Public walkthrough teaches HS256 JWT forgery after offline hashcat crack of JWT_SECRET — admin dashboard access without valid credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecJwtWeakSecretEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically strong JWT secrets and enforce server-side role checks independent of token claims.",
+      steps: [
+        "Generate JWT_SECRET with openssl rand -base64 64 — never use dictionary words.",
+        "Verify role claims server-side on every /admin request; do not trust client-forged tokens.",
+        "Host OopsSec JWT walkthroughs on localhost only, not public GitHub Pages deploys."
+      ]
+    },
+    fixPrompt:
+      "Our JWT_SECRET is crackable via hashcat and role:ADMIN in the payload grants /admin access. Show strong secret generation and server-side authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-jwt-weak-secret-admin-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "OopsSec Store JWT weak secret admin bypass route live oracle",
+    description:
+      "When scanning /posts/jwt-weak-secret-admin-bypass, the walkthrough documents cracking JWT_SECRET with hashcat and forging role:ADMIN to access /admin — route-specific weak-secret JWT oracle.",
+    impactOneline:
+      "OopsSec JWT verifier accepts HS256 tokens signed with crackable JWT_SECRET — attackers forge admin role after offline dictionary attack.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecJwtWeakSecretAdminBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rotate to a strong JWT secret and verify admin role server-side on every protected route.",
+      steps: [
+        "Replace JWT_SECRET with openssl rand -base64 64 output.",
+        "Add server-side role middleware on /admin routes independent of JWT claims alone.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/jwt-weak-secret-admin-bypass walkthrough documents hashcat JWT_SECRET crack and role:ADMIN forgery. Show strong secret and authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ctf-challange-3-middleware-bypass-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+    description:
+      "Gowreesh-VT/CTF_Challange_3 documents a Next.js middleware authorization bypass on GET /api/hacker via x-middleware-subrequest header forgery.",
+    impactOneline:
+      "Public CTF lab teaches skipping Next.js middleware auth checks to reach protected /api/hacker routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideCtfChallange3MiddlewareBypassEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Next.js to a fixed version and strip internal middleware headers at the edge.",
+      steps: [
+        "Upgrade Next.js past CVE-2025-29927 fixed releases.",
+        "Strip x-middleware-subrequest at the reverse proxy before requests reach the app.",
+        "Do not rely on middleware alone for authorization on sensitive API routes."
+      ]
+    },
+    fixPrompt:
+      "Our /api/hacker route is protected only by bypassable Next.js middleware. Show CVE-2025-29927 remediation and edge header stripping.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ctf-challange-3-middleware-auth-bypass-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "CTF Challenge 3 middleware auth bypass live oracle",
+    description:
+      "GET /api/hacker on ctf-challange-3.vercel.app with x-middleware-subrequest bypasses Next.js middleware auth — CTF_Challange_3 training oracle.",
+    impactOneline:
+      "Middleware-only protection on /api/hacker is bypassable via forged internal subrequest headers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ctfChallange3MiddlewareAuthBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Next.js and add server-side authorization on /api/hacker.",
+      steps: [
+        "Upgrade Next.js past CVE-2025-29927.",
+        "Strip x-middleware-subrequest at the edge.",
+        "Enforce auth checks in the /api/hacker route handler itself."
+      ]
+    },
+    fixPrompt:
+      "Our /api/hacker endpoint relies on bypassable Next.js middleware. Show patch and in-route authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ctf-challange-3-middleware-auth-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "CTF Challenge 3 /api/hacker middleware bypass route live oracle",
+    description:
+      "When scanning ctf-challange-3.vercel.app /api/hacker or hub, the CTF_Challange_3 lab documents Next.js middleware authorization bypass — route-specific training oracle.",
+    impactOneline:
+      "Route scan confirms CTF_Challange_3 middleware auth bypass training surface on /api/hacker.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ctfChallange3MiddlewareAuthBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Next.js middleware bypass and enforce route-handler authorization.",
+      steps: [
+        "Upgrade Next.js past CVE-2025-29927.",
+        "Strip internal middleware headers at the edge.",
+        "Add explicit auth checks in /api/hacker handler code."
+      ]
+    },
+    fixPrompt:
+      "Our ctf-challange-3 /api/hacker route scan confirms middleware-only auth. Show CVE-2025-29927 remediation.",
     version: 1,
     enabled: true
   },
@@ -48930,6 +56441,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our admin order PATCH endpoint is CSRF-vulnerable with sameSite:lax cookies. Show CSRF token and Origin validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-self-xss-csrf-profile-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "OopsSec Store Self-XSS + CSRF profile takeover walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/self-xss-csrf-profile-takeover documents Self-XSS via dangerouslySetInnerHTML bio rendering chained with missing CSRF on POST /api/user/profile.",
+    impactOneline:
+      "Public walkthrough teaches profile takeover by planting stored XSS in victim profiles via cross-site profile update requests.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecSelfXssCsrfProfileEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize bio HTML and require CSRF tokens on profile updates.",
+      steps: [
+        "Render profile bios as text nodes or sanitize with DOMPurify instead of dangerouslySetInnerHTML.",
+        "Require CSRF tokens on POST /api/user/profile.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our profile bio uses dangerouslySetInnerHTML and POST /api/user/profile lacks CSRF protection. Show sanitization and CSRF token fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-self-xss-csrf-profile-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "OopsSec Store Self-XSS + CSRF profile route live oracle",
+    description:
+      "When scanning /posts/self-xss-csrf-profile-takeover, the walkthrough documents Self-XSS in profile bio plus missing CSRF on POST /api/user/profile — route-specific attack-chain oracle.",
+    impactOneline:
+      "OopsSec profile takeover chains stored Self-XSS with cross-site profile updates lacking CSRF defenses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecSelfXssCsrfProfileRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize bio HTML and require CSRF tokens on profile updates.",
+      steps: [
+        "Render profile bios as text nodes or sanitize with DOMPurify instead of dangerouslySetInnerHTML.",
+        "Require CSRF tokens on POST /api/user/profile.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/self-xss-csrf-profile-takeover route documents Self-XSS + CSRF profile takeover. Show route-level sanitization and CSRF remediation.",
     version: 1,
     enabled: true
   },
@@ -49142,6 +56705,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-plaintext-password-logs-evidence",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "OopsSec Store plaintext password in logs walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/plaintext-password-in-logs documents POST /api/auth/login debug logging plaintext passwords readable via /monitoring/siem with default credentials.",
+    impactOneline:
+      "Public walkthrough teaches CWE-532 logging of cleartext credentials on a hidden SIEM dashboard protected by weak default creds.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecPlaintextPasswordLogsEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never log passwords and protect monitoring dashboards with strong authentication.",
+      steps: [
+        "Remove debug logging of credentials from authentication routes.",
+        "Restrict /monitoring/siem to authenticated administrators with MFA.",
+        "Host OopsSec logging walkthroughs on localhost only."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/login logs plaintext passwords to /monitoring/siem. Show secure logging and SIEM access remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-plaintext-password-logs-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "OopsSec Store plaintext password in logs route live oracle",
+    description:
+      "When scanning /posts/plaintext-password-in-logs, the walkthrough documents debug login logging and /monitoring/siem SIEM exposure — route-specific sensitive data oracle.",
+    impactOneline:
+      "OopsSec SIEM dashboard leaks cleartext passwords from auth debug logs when reachable with default credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecPlaintextPasswordLogsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never log passwords and protect monitoring dashboards with strong authentication.",
+      steps: [
+        "Remove debug logging of credentials from authentication routes.",
+        "Restrict /monitoring/siem to authenticated administrators with MFA.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/plaintext-password-in-logs route scan confirms SIEM password logging. Show route-level logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-oopssec-next-public-env-evidence",
     platform: "generic",
     category: "Exposed secret",
@@ -49190,6 +56805,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /checkout route leaks NEXT_PUBLIC_PAYMENT_SECRET in X-Payment-Auth. Show route-specific env leak remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-next-public-env-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OopsSec Store NEXT_PUBLIC_ env leak live oracle",
+    description:
+      "OopsSec Store walkthrough corpus validates NEXT_PUBLIC_PAYMENT_SECRET leaked as X-Payment-Auth on POST /api/orders with decodable OSS flag — live walkthrough validation oracle.",
+    impactOneline:
+      "Walkthrough corpus contains base64 payment secret proving NEXT_PUBLIC_ build-time client bundle exposure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecNextPublicEnvLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep payment credentials server-side; never use NEXT_PUBLIC_ for secrets.",
+      steps: [
+        "Proxy POST /api/orders through a server route that attaches auth headers.",
+        "Add CI grep for NEXT_PUBLIC_ secret-like variable names.",
+        "Rotate any credential ever built into client bundles."
+      ]
+    },
+    fixPrompt:
+      "Our walkthrough corpus exposes X-Payment-Auth payment secret. Show server-side secret handling remediation.",
     version: 1,
     enabled: true
   },
@@ -49298,6 +56939,422 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-insecure-password-reset-evidence",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "OopsSec Store insecure password reset walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/insecure-password-reset documents predictable MD5(email+timestamp) reset tokens with requestedAt timestamp leaked in POST /api/auth/forgot-password response.",
+    impactOneline:
+      "Public password-reset walkthrough teaches token forgery via leaked server timestamps on a live e-commerce API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecInsecurePasswordResetEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use crypto.randomBytes for reset tokens; never leak timestamps in forgot-password responses; add rate limiting.",
+      steps: [
+        "Replace MD5(email+timestamp) with crypto.randomBytes(32).toString('hex').",
+        "Remove requestedAt from forgot-password JSON responses.",
+        "Rate-limit POST /api/auth/forgot-password per IP and per email."
+      ]
+    },
+    fixPrompt:
+      "Our OopsSec Store walkthrough documents predictable password-reset tokens. Show crypto.randomBytes remediation and response hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-insecure-password-reset-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "OopsSec Store insecure password reset route live oracle",
+    description:
+      "When scanning /posts/insecure-password-reset, the walkthrough documents MD5(email+timestamp) reset tokens with requestedAt timestamp leaked via POST /api/auth/forgot-password — route-specific live oracle.",
+    impactOneline:
+      "OopsSec forgot-password endpoint leaks the exact timestamp used in predictable MD5 reset token generation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecInsecurePasswordResetRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use crypto.randomBytes for reset tokens; never leak timestamps in forgot-password responses.",
+      steps: [
+        "Replace MD5(email+timestamp) with crypto.randomBytes(32).toString('hex').",
+        "Remove requestedAt from forgot-password JSON responses.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/insecure-password-reset route documents predictable reset tokens. Show route-specific crypto.randomBytes remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-weak-md5-hashing-admin-evidence",
+    platform: "generic",
+    category: "Cryptographic failure",
+    severityDefault: "critical",
+    title: "OopsSec Store weak MD5 admin compromise walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/weak-md5-hashing-admin-compromise documents chaining SQLi users-table dump with unsalted MD5 admin hash 21232f297a57a5a743894a0e4a801fc3 to log in as admin@oss.com and capture OSS{w34k_md5_h4sh1ng}.",
+    impactOneline:
+      "Public walkthrough teaches instant MD5 rainbow-table recovery of admin credentials after SQL injection credential exfiltration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecWeakMd5HashingAdminEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use bcrypt or argon2 for password hashing with per-user salts; fix SQL injection in order search.",
+      steps: [
+        "Replace crypto.createHash('md5') with bcrypt.hash(password, 12).",
+        "Parameterize POST /api/orders/search status filter queries.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our OopsSec Store walkthrough documents unsalted MD5 admin password hashing after SQLi. Show bcrypt remediation and parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-weak-md5-hashing-admin-route-live-oracle",
+    platform: "generic",
+    category: "Cryptographic failure",
+    severityDefault: "critical",
+    title: "OopsSec Store weak MD5 admin compromise route live oracle",
+    description:
+      "When scanning /posts/weak-md5-hashing-admin-compromise, the walkthrough documents SQLi credential dump plus unsalted MD5 admin hash enabling admin@oss.com login — route-specific cryptographic failure oracle.",
+    impactOneline:
+      "OopsSec weak-MD5 chain ends with trivial admin hash crack and unauthenticated /admin access after SQL injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecWeakMd5HashingAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use bcrypt or argon2 for password hashing; parameterize order search SQL.",
+      steps: [
+        "Replace MD5 password hashing with bcrypt.hash(password, 12).",
+        "Parameterize POST /api/orders/search status filter.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/weak-md5-hashing-admin-compromise route documents MD5 admin hash cracking. Show route-specific bcrypt and SQLi remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-open-redirect-login-bypass-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store open-redirect login bypass walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/open-redirect-login-bypass documents unvalidated login redirect parameter enabling access to /internal/oauth/callback via window.location.href.",
+    impactOneline:
+      "Public open-redirect walkthrough teaches post-login navigation to internal endpoints gated only by oauth_callback cookie presence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecOpenRedirectLoginBypassEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets against same-origin allowlist before post-login navigation.",
+      steps: [
+        "Only allow relative paths starting with a single / and reject protocol-relative URLs.",
+        "Use router.push() instead of window.location.href for same-origin redirects.",
+        "Host OopsSec open-redirect walkthroughs on localhost only."
+      ]
+    },
+    fixPrompt:
+      "Our OopsSec Store walkthrough documents open-redirect login bypass to internal pages. Show redirect validation and allowlist fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-open-redirect-login-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store open-redirect login bypass route live oracle",
+    description:
+      "When scanning /posts/open-redirect-login-bypass, the walkthrough documents unvalidated redirect query parameter reaching /internal/oauth/callback after login — route-specific live oracle.",
+    impactOneline:
+      "OopsSec login redirect accepts arbitrary targets via window.location.href, exposing internal oauth callback pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecOpenRedirectLoginBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets against same-origin allowlist before post-login navigation.",
+      steps: [
+        "Only allow relative paths starting with a single / and reject external URLs.",
+        "Use router.push() instead of window.location.href for same-origin redirects.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/open-redirect-login-bypass route documents internal page access via login redirect. Show route-specific redirect validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-mass-assignment-admin-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "OopsSec Store mass-assignment admin escalation walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/mass-assignment-admin-privilege-escalation documents POST /api/auth/signup spreading request body to inject role: ADMIN during registration.",
+    impactOneline:
+      "Public mass-assignment walkthrough teaches admin privilege escalation via unfiltered signup JSON fields.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecMassAssignmentAdminEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Explicitly allowlist signup fields and hardcode role to CUSTOMER server-side.",
+      steps: [
+        "Destructure only email and password from req.body; set role: CUSTOMER explicitly.",
+        "Validate signup input with Zod schema rejecting unexpected fields.",
+        "Host OopsSec mass-assignment walkthroughs on localhost only."
+      ]
+    },
+    fixPrompt:
+      "Our OopsSec Store walkthrough documents signup mass-assignment to ADMIN. Show explicit field extraction and schema validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-mass-assignment-admin-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "OopsSec Store mass-assignment admin escalation route live oracle",
+    description:
+      "When scanning /posts/mass-assignment-admin-privilege-escalation, the walkthrough documents POST /api/auth/signup spreading request body to set role: ADMIN — route-specific live oracle.",
+    impactOneline:
+      "OopsSec signup endpoint persists all JSON fields including attacker-supplied role: ADMIN via Prisma spread operator.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecMassAssignmentAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Explicitly allowlist signup fields and hardcode role to CUSTOMER server-side.",
+      steps: [
+        "Destructure only email and password from req.body; set role: CUSTOMER explicitly.",
+        "Validate signup input with Zod schema rejecting unexpected fields.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/mass-assignment-admin-privilege-escalation route documents signup role injection. Show route-specific allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-aes-cbc-padding-oracle-evidence",
+    platform: "generic",
+    category: "Cryptographic failure",
+    severityDefault: "critical",
+    title: "OopsSec Store AES-CBC padding oracle walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/aes-cbc-padding-oracle-forged-share-token documents AES-256-CBC share tokens with PKCS#7 padding-oracle differentiation on /api/documents/share?token=.",
+    impactOneline:
+      "Public walkthrough teaches forging encrypted share tokens via PKCS#7 padding oracle on unauthenticated /api/documents/share.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecAesCbcPaddingOracleEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use authenticated encryption (AES-GCM) and constant-time error responses for ciphertext validation.",
+      steps: [
+        "Replace AES-CBC share tokens with AES-GCM or encrypt-then-MAC.",
+        "Return identical error responses for bad padding and missing resources.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/documents/share?token= leaks PKCS#7 padding validity. Show AES-GCM and constant-time error remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-aes-cbc-padding-oracle-route-live-oracle",
+    platform: "generic",
+    category: "Cryptographic failure",
+    severityDefault: "critical",
+    title: "OopsSec Store AES-CBC padding oracle route live oracle",
+    description:
+      "When scanning /posts/aes-cbc-padding-oracle-forged-share-token, the walkthrough documents PKCS#7 padding oracle on /api/documents/share?token= enabling forged share-token decryption — route-specific cryptographic oracle.",
+    impactOneline:
+      "OopsSec share tokens use unauthenticated AES-CBC with distinguishable padding vs not-found errors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecAesCbcPaddingOracleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use authenticated encryption (AES-GCM) and constant-time error responses for ciphertext validation.",
+      steps: [
+        "Replace AES-CBC share tokens with AES-GCM or encrypt-then-MAC.",
+        "Return identical error responses for bad padding and missing resources.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/aes-cbc-padding-oracle-forged-share-token route documents padding-oracle share-token forgery. Show route-specific AES-GCM remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-brute-force-no-rate-limit-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "OopsSec Store brute-force no rate-limit route live oracle",
+    description:
+      "When scanning /posts/brute-force-no-rate-limiting, the walkthrough documents POST /api/auth/login brute-force with no rate limiting or account lockout — route-specific authentication oracle.",
+    impactOneline:
+      "OopsSec login API accepts unlimited password guesses enabling offline wordlist attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecBruteForceNoRateLimitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce rate limiting, account lockout, and CAPTCHA on authentication endpoints.",
+      steps: [
+        "Add progressive delays after failed login attempts.",
+        "Lock accounts temporarily after repeated failures.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/brute-force-no-rate-limiting route documents unprotected POST /api/auth/login. Show rate-limiting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-xxe-supplier-import-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "OopsSec Store XXE supplier import route live oracle",
+    description:
+      "When scanning /posts/xxe-supplier-order-import, the walkthrough documents XXE via POST /api/admin/suppliers/import-order parsing attacker-controlled XML — route-specific injection oracle.",
+    impactOneline:
+      "OopsSec supplier import endpoint parses external XML entities enabling arbitrary file disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecXxeSupplierImportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers.",
+      steps: [
+        "Set XML parser options to reject DOCTYPE and external entities.",
+        "Validate uploaded XML against a strict schema before parsing.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/xxe-supplier-order-import route documents XXE via POST /api/admin/suppliers/import-order. Show XML parser hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-react2shell-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "OopsSec Store React2Shell CVE-2025-55182 walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/react2shell-cve-2025-55182 documents CVE-2025-55182 Flight protocol deserialization RCE via constructor property chain in React Server Components.",
+    impactOneline:
+      "Public walkthrough teaches unauthenticated server-side code execution via malicious Flight protocol payloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecReact2shellEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade React and Next.js to patched versions that validate Flight deserialization property names.",
+      steps: [
+        "Upgrade React to the latest patched release addressing CVE-2025-55182.",
+        "Upgrade Next.js and redeploy all RSC-enabled applications.",
+        "Run OopsSec RCE walkthroughs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our React Server Components Flight deserializer trusts client-controlled property names. Show CVE-2025-55182 patching and deserialization hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-react2shell-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "OopsSec Store React2Shell route live oracle",
+    description:
+      "When scanning /posts/react2shell-cve-2025-55182, the walkthrough documents CVE-2025-55182 Flight protocol deserialization reaching Function constructor for unauthenticated RCE — route-specific RSC oracle.",
+    impactOneline:
+      "OopsSec React2Shell lab confirms attacker-controlled Flight payloads execute arbitrary server-side JavaScript.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecReact2shellRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade React/Next.js and restrict Flight deserialization to allowlisted property names.",
+      steps: [
+        "Patch React and Next.js to versions fixing CVE-2025-55182.",
+        "Validate property names during Flight deserialization with own-property checks.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/react2shell-cve-2025-55182 route documents Flight protocol RCE. Show route-specific RSC deserialization hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-oopssec-malicious-file-upload-evidence",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "OopsSec Store malicious SVG upload walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/malicious-file-upload-stored-xss documents stored XSS via SVG upload to admin product image field served at /api/uploads with <object> tag script execution.",
+    impactOneline:
+      "Public walkthrough teaches stored XSS when SVG uploads with embedded scripts are rendered via <object> tags on product pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecMaliciousFileUploadEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject SVG uploads or sanitize/strip script handlers; serve uploads with Content-Disposition attachment.",
+      steps: [
+        "Allow only raster image formats (PNG/JPEG/WebP) for product image uploads.",
+        "Sanitize SVG with DOMPurify server-side before saving if SVG support is required.",
+        "Serve user uploads from a separate origin without script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /admin/products image upload accepts SVG with executable scripts served via <object>. Show upload validation and safe rendering remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-malicious-file-upload-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "OopsSec Store malicious SVG upload route live oracle",
+    description:
+      "When scanning /posts/malicious-file-upload-stored-xss, the walkthrough documents stored XSS via SVG upload to /admin/products served at /api/uploads with <object> tag execution — route-specific file-upload XSS oracle.",
+    impactOneline:
+      "OopsSec admin product image upload stores malicious SVG that executes JavaScript for every visitor viewing the product.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecMaliciousFileUploadStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject SVG uploads or sanitize before serving; use <img> instead of <object> for untrusted SVG.",
+      steps: [
+        "Block SVG uploads or strip script/event handlers server-side.",
+        "Render product images with safe tags that do not execute embedded scripts.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /posts/malicious-file-upload-stored-xss route documents SVG stored XSS. Show route-specific upload validation fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "oopssec-roadmap-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -49346,6 +57403,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our OopsSec Store home route documents 35 CTF flags across 11 chapters. Show route-specific training-platform access control.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-challenges-json-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "OopsSec Store challenges.json route live oracle",
+    description:
+      "When scanning /challenges.json on koadt.github.io/oss-oopssec-store, the machine-readable feed exposes totalChallenges, difficulty tiers, and per-challenge slugs with walkthrough metadata — route-specific CTF oracle index.",
+    impactOneline:
+      "OopsSec Store challenges.json discloses the full machine-readable CTF challenge catalog for unauthenticated reconnaissance on training infrastructure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecChallengesJsonRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — gate machine-readable challenge feeds on isolated lab infrastructure.",
+      steps: [
+        "Require authentication before exposing the full CTF challenge JSON feed.",
+        "Run OopsSec Store only on isolated training infrastructure.",
+        "Do not publish walkthrough metadata in public JSON feeds on production-like hosts."
+      ]
+    },
+    fixPrompt:
+      "Our /challenges.json route exposes a machine-readable CTF oracle index. Show route-specific access control for training JSON feeds.",
     version: 1,
     enabled: true
   },
@@ -49895,6 +57978,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-crlf-set-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /crlf/set route CRLF live oracle",
+    description:
+      "When scanning /crlf/set, GET ?lang= copies the query parameter unsanitized into Set-Cookie and X-Custom-Lang response headers — route-specific CRLF/header injection profile oracle.",
+    impactOneline:
+      "Route-specific CRLF oracle confirms response-header injection when scanning the Burp Bounty Lab /crlf/set practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCrlfSetRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip CR/LF characters from values placed in HTTP response headers.",
+      steps: [
+        "Reject or encode newline characters in header values.",
+        "Use framework APIs that sanitize header injection by default.",
+        "Isolate Burp Bounty Lab CRLF routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /crlf/set route scan confirms lang reflects into Set-Cookie without CRLF sanitization. Show HTTP response splitting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-xss-js-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -49999,6 +58108,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-ai-completions-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab AI completions route live oracle",
+    description:
+      "When scanning /ai/v1/completions or /ai/chat/completions, GET returns legacy text_completion JSON plus X-AI-Backend, X-LLM-Provider, and X-MCP-Enabled headers — route-specific OpenAI completions disclosure profile oracle.",
+    impactOneline:
+      "Route-specific legacy completions oracle confirms LLM gateway header leakage when scanning Burp Bounty Lab AI completion practice endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAiCompletionsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip internal LLM gateway headers from public API responses.",
+      steps: [
+        "Remove X-AI-Backend, X-LLM-Provider, and X-MCP-Enabled from outward-facing responses.",
+        "Disable legacy /v1/completions routes on production gateways.",
+        "Isolate Burp Bounty Lab AI disclosure routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /ai/v1/completions route scan leaks LLM gateway headers and legacy completion JSON. Show how to strip internal AI metadata from API responses.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-rce-eval-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -50021,6 +58156,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /rce/eval endpoint evaluates user code (code=7*7 returns 49). Show how to remove unsafe eval endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-rce-eval-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /rce/eval route RCE live oracle",
+    description:
+      "When scanning /rce/eval, GET ?code= evaluates attacker-supplied expressions server-side and returns the computed result (e.g. 7*7→49) — route-specific code injection/RCE profile oracle.",
+    impactOneline:
+      "Route-specific RCE eval oracle confirms code execution when scanning the Burp Bounty Lab /rce/eval practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRceEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never evaluate user-supplied code — remove eval/exec endpoints from production.",
+      steps: [
+        "Delete or sandbox any endpoint that evaluates attacker-controlled expressions.",
+        "Use safe expression parsers with strict allow-lists if computation is required.",
+        "Run Burp Bounty Lab only in isolated training environments."
+      ]
+    },
+    fixPrompt:
+      "Our /rce/eval route scan confirms code=7*7 evaluates to 49. Show how to remove unsafe eval endpoints.",
     version: 1,
     enabled: true
   },
@@ -51221,6 +59382,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-tomcat-cve-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /cve/tomcat/ route live oracle",
+    description:
+      "When scanning /cve/tomcat/, GET returns Apache Tomcat and JSESSIONID=../groovy triggers PersistentManagerBase session deserialization — route-specific CVE-2020-9484 Tomcat profile oracle.",
+    impactOneline:
+      "Route-specific Tomcat session-deserialization probe confirms CVE-2020-9484-style oracle when scanning the Burp Bounty Lab /cve/tomcat/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyTomcatCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Tomcat and disable PersistentManager file-based session storage with untrusted paths.",
+      steps: [
+        "Patch Tomcat to a version that fixes CVE-2020-9484.",
+        "Avoid storing sessions in user-influenced directories.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/tomcat/ route scan swaps sessions when JSESSIONID contains path traversal. Show Tomcat CVE-2020-9484 mitigations.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-wp-login-live-oracle",
     platform: "generic",
     category: "Broken authentication",
@@ -51269,6 +59456,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /grafana/ endpoint exposes an unauthenticated Grafana dashboard shell. Show Grafana hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-grafana-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Grafana route live oracle",
+    description:
+      "When scanning /cve/grafana/ or /grafana/, GET returns a Grafana dashboard shell with title Grafana and LoadingGrafana markers — route-specific Grafana CVE/profile oracle.",
+    impactOneline:
+      "Route-specific Grafana dashboard probe confirms exposed monitoring UI when scanning the Burp Bounty Lab Grafana CVE practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyGrafanaCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose Grafana dashboards without authentication on public networks.",
+      steps: [
+        "Require SSO or strong credentials for Grafana.",
+        "Patch Grafana CVEs and restrict admin API access.",
+        "Isolate Burp Bounty Lab Grafana routes from production monitoring."
+      ]
+    },
+    fixPrompt:
+      "Our Grafana route scan exposes an unauthenticated Grafana dashboard shell. Show Grafana hardening and CVE patching.",
     version: 1,
     enabled: true
   },
@@ -51351,6 +59564,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-ai-gateway-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab /ai/gateway route live oracle",
+    description:
+      "When scanning /ai/gateway, GET returns HTML disclosing Kong + Envoy reverse-proxy infrastructure behind the AI service — route-specific AI gateway disclosure oracle.",
+    impactOneline:
+      "Route-specific AI gateway probe confirms Kong/Envoy infrastructure disclosure when scanning the Burp Bounty Lab /ai/gateway practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyAiGatewayRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Avoid exposing reverse-proxy vendor names and gateway topology on public AI routes.",
+      steps: [
+        "Return generic health responses without Kong/Envoy branding.",
+        "Strip gateway disclosure headers from public AI endpoints.",
+        "Place AI gateways behind authenticated API management layers."
+      ]
+    },
+    fixPrompt:
+      "Our /ai/gateway route scan discloses Kong + Envoy infrastructure. Show how to harden AI gateway health endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-backup-listing-live-oracle",
     platform: "generic",
     category: "Information disclosure",
@@ -51373,6 +59612,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /backup/ directory is browsable and lists db_backup.sql. Show how to disable directory listing and secure backup files.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-backup-listing-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /backup/ route live oracle",
+    description:
+      "When scanning /backup/, GET returns an HTML directory index listing db_backup.sql and site_backup.tar.gz without authentication — route-specific backup listing oracle.",
+    impactOneline:
+      "Route-specific backup listing probe confirms sensitive backup file enumeration when scanning the Burp Bounty Lab /backup/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyBackupListingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable directory listings and block public access to /backup/ paths.",
+      steps: [
+        "Turn off autoindex for backup directories at the web server.",
+        "Store backups outside the web root or behind authentication.",
+        "Remove db_backup.sql and site_backup.tar.gz from publicly reachable paths."
+      ]
+    },
+    fixPrompt:
+      "Our /backup/ route scan confirms browsable backup directory listing. Show how to disable directory listing and secure backup files.",
     version: 1,
     enabled: true
   },
@@ -51559,6 +59824,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-pulse-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/pulse/ route live oracle",
+    description:
+      "When scanning /cve/pulse/, GET returns a Pulse Secure appliance heading — route-specific Pulse Connect Secure CVE profile oracle.",
+    impactOneline:
+      "Route-specific Pulse Secure fingerprint probe confirms VPN appliance CVE oracle when scanning the Burp Bounty Lab /cve/pulse/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyPulseCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Pulse Connect Secure and restrict VPN admin interfaces to trusted networks.",
+      steps: [
+        "Apply vendor security advisories for Pulse Connect Secure CVEs.",
+        "Require MFA and network segmentation for VPN management consoles.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/pulse/ route scan exposes a Pulse Secure appliance fingerprint. Show Pulse Connect Secure hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-cisco-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -51581,6 +59872,188 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/cisco/ endpoint exposes a Cisco appliance fingerprint. Show Cisco management interface hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-cisco-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/cisco/ route live oracle",
+    description:
+      "When scanning /cve/cisco/, GET returns a Cisco appliance heading — route-specific Cisco network appliance CVE profile oracle.",
+    impactOneline:
+      "Route-specific Cisco fingerprint probe confirms network appliance CVE oracle when scanning the Burp Bounty Lab /cve/cisco/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCiscoCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Cisco appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Cisco PSIRT advisories promptly on exposed appliances.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/cisco/ route scan exposes a Cisco appliance fingerprint. Show Cisco management interface hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-traefik-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab Traefik CVE live oracle",
+    description:
+      "GET /cve/traefik/ returns a Traefik Dashboard heading — the Burp Bounty Traefik reverse-proxy CVE profile oracle.",
+    impactOneline:
+      "Live Traefik fingerprint probe confirms route-specific reverse-proxy CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyTraefikCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Traefik and restrict dashboard access to trusted networks.",
+      steps: [
+        "Apply Traefik security advisories for exposed dashboard and API routes.",
+        "Disable public dashboard access and enforce authentication.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/traefik/ endpoint exposes a Traefik Dashboard fingerprint. Show Traefik dashboard hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-traefik-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/traefik/ route live oracle",
+    description:
+      "When scanning /cve/traefik/, GET returns a Traefik Dashboard heading — route-specific Traefik reverse-proxy CVE profile oracle.",
+    impactOneline:
+      "Route-specific Traefik fingerprint probe confirms reverse-proxy CVE oracle when scanning the Burp Bounty Lab /cve/traefik/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyTraefikCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Traefik and restrict dashboard access to trusted networks.",
+      steps: [
+        "Apply Traefik security advisories for exposed dashboard and API routes.",
+        "Disable public dashboard access and enforce authentication.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/traefik/ route scan exposes a Traefik Dashboard fingerprint. Show Traefik dashboard hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-solarwinds-cve-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab SolarWinds CVE live oracle",
+    description:
+      "GET /cve/solarwinds/ returns a SolarWinds Orion heading — the Burp Bounty SolarWinds Orion CVE profile oracle.",
+    impactOneline:
+      "Live SolarWinds fingerprint probe confirms route-specific Orion appliance CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySolarwindsCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch SolarWinds Orion and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply SolarWinds security advisories promptly on exposed Orion instances.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/solarwinds/ endpoint exposes a SolarWinds Orion fingerprint. Show SolarWinds Orion hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-solarwinds-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/solarwinds/ route live oracle",
+    description:
+      "When scanning /cve/solarwinds/, GET returns a SolarWinds Orion heading — route-specific SolarWinds Orion CVE profile oracle.",
+    impactOneline:
+      "Route-specific SolarWinds fingerprint probe confirms Orion appliance CVE oracle when scanning the Burp Bounty Lab /cve/solarwinds/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySolarwindsCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch SolarWinds Orion and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply SolarWinds security advisories promptly on exposed Orion instances.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/solarwinds/ route scan exposes a SolarWinds Orion fingerprint. Show SolarWinds Orion hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-svn-entries-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab SVN entries exposure live oracle",
+    description:
+      "GET /.svn/entries returns SVN metadata with committed-date and committed-rev — the Burp Bounty SVN repository exposure profile oracle.",
+    impactOneline:
+      "Live SVN entries probe confirms unauthenticated repository metadata disclosure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySvnEntriesLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block public access to .svn metadata directories.",
+      steps: [
+        "Remove .svn directories from web-accessible paths and deploy from clean checkouts.",
+        "Deny HTTP access to /.svn/* at the web server or WAF layer.",
+        "Isolate Burp Bounty Lab SVN exposure routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /.svn/entries endpoint leaks SVN metadata without auth. Show how to block .svn exposure and secure deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-svn-entries-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /.svn/entries route live oracle",
+    description:
+      "When scanning /.svn/entries, GET returns SVN metadata with committed-date and committed-rev — route-specific SVN repository exposure profile oracle.",
+    impactOneline:
+      "Route-specific SVN entries probe confirms repository metadata disclosure when scanning the Burp Bounty Lab /.svn/entries practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySvnEntriesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block public access to .svn metadata directories.",
+      steps: [
+        "Remove .svn directories from web-accessible paths and deploy from clean checkouts.",
+        "Deny HTTP access to /.svn/* at the web server or WAF layer.",
+        "Isolate Burp Bounty Lab SVN exposure routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /.svn/entries route scan leaks SVN metadata without auth. Show how to block .svn exposure and secure deployments.",
     version: 1,
     enabled: true
   },
@@ -51611,6 +60084,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-n8n-settings-cve-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/n8n/rest/settings route live oracle",
+    description:
+      "When scanning /cve/n8n/rest/settings, GET returns JSON with n8nVersion, releaseChannel, and authenticationMethod — route-specific n8n workflow automation CVE profile oracle.",
+    impactOneline:
+      "Route-specific n8n settings probe confirms unauthenticated workflow automation configuration disclosure when scanning the Burp Bounty Lab n8n CVE practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyN8nSettingsCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose n8n /rest/settings without authentication on public networks.",
+      steps: [
+        "Require authentication for all n8n REST API routes.",
+        "Patch n8n CVEs and restrict admin UI to internal networks.",
+        "Isolate Burp Bounty Lab n8n CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/n8n/rest/settings route scan leaks n8nVersion and authenticationMethod without auth. Show n8n hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-couchdb-all-dbs-live-oracle",
     platform: "generic",
     category: "Information disclosure",
@@ -51633,6 +60132,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/couchdb/_all_dbs endpoint leaks database names without auth. Show CouchDB hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-couchdb-all-dbs-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/couchdb/_all_dbs route live oracle",
+    description:
+      "When scanning /cve/couchdb/_all_dbs, GET returns a JSON database list including _replicator and _users — route-specific CouchDB CVE profile oracle.",
+    impactOneline:
+      "Route-specific CouchDB _all_dbs probe confirms unauthenticated database enumeration when scanning the Burp Bounty Lab CouchDB CVE practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCouchdbAllDbsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose CouchDB _all_dbs without authentication on public networks.",
+      steps: [
+        "Require authentication for all CouchDB HTTP API routes.",
+        "Bind CouchDB to internal interfaces and apply network ACLs.",
+        "Isolate Burp Bounty Lab CouchDB CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/couchdb/_all_dbs route scan leaks database names without auth. Show CouchDB hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-actuator-heapdump-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab Spring Boot actuator heapdump live oracle",
+    description:
+      "GET /actuator/heapdump returns Binary heap dump data without authentication — the Burp Bounty Spring Boot actuator heapdump exposure profile oracle.",
+    impactOneline:
+      "Live actuator heapdump probe confirms unauthenticated JVM memory dump exposure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyActuatorHeapdumpLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable /actuator/heapdump on public Spring Boot deployments.",
+      steps: [
+        "Disable heapdump and other sensitive actuator endpoints in production.",
+        "Require authentication for all actuator routes exposed beyond internal networks.",
+        "Isolate Burp Bounty Lab actuator routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /actuator/heapdump endpoint returns Binary heap dump data without auth. Show Spring Boot actuator hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-actuator-heapdump-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /actuator/heapdump route live oracle",
+    description:
+      "When scanning /actuator/heapdump, GET returns Binary heap dump data without authentication — route-specific Spring Boot actuator heapdump exposure oracle.",
+    impactOneline:
+      "Route-specific actuator heapdump probe confirms JVM memory dump exposure when scanning the Burp Bounty Lab /actuator/heapdump practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyActuatorHeapdumpRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable /actuator/heapdump on public Spring Boot deployments.",
+      steps: [
+        "Disable heapdump and other sensitive actuator endpoints in production.",
+        "Require authentication for all actuator routes exposed beyond internal networks.",
+        "Isolate Burp Bounty Lab actuator routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /actuator/heapdump route scan returns Binary heap dump data without auth. Show Spring Boot actuator hardening.",
     version: 1,
     enabled: true
   },
@@ -51689,6 +60266,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-citrix-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/citrix/ route live oracle",
+    description:
+      "When scanning /cve/citrix/, GET returns a Citrix appliance heading — route-specific Citrix ADC CVE profile oracle.",
+    impactOneline:
+      "Route-specific Citrix fingerprint probe confirms ADC appliance CVE oracle when scanning the Burp Bounty Lab /cve/citrix/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCitrixCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Citrix ADC appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Citrix security advisories for ADC and Gateway CVEs.",
+        "Disable unused management services and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/citrix/ route scan exposes a Citrix appliance fingerprint. Show Citrix ADC hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-crowd-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -51711,6 +60314,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/crowd/ endpoint exposes an Atlassian Crowd fingerprint. Show Crowd hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-crowd-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/crowd/ route live oracle",
+    description:
+      "When scanning /cve/crowd/, GET returns an Atlassian Crowd heading — route-specific Crowd identity management CVE profile oracle.",
+    impactOneline:
+      "Route-specific Crowd fingerprint probe confirms identity management CVE oracle when scanning the Burp Bounty Lab /cve/crowd/ practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyCrowdCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Atlassian Crowd and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Atlassian Crowd security advisories promptly.",
+        "Disable unused management services and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/crowd/ route scan exposes an Atlassian Crowd fingerprint. Show Crowd hardening and CVE patching.",
     version: 1,
     enabled: true
   },
@@ -51741,6 +60370,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-firebase-cve-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/firebase/ route live oracle",
+    description:
+      "When scanning /cve/firebase/, GET .json returns user records and config.debug=true — route-specific Firebase realtime database CVE profile oracle.",
+    impactOneline:
+      "Route-specific Firebase oracle confirms unauthenticated user data disclosure when scanning Burp Bounty Lab Firebase CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyFirebaseCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Do not expose Firebase realtime database JSON without authentication on public networks.",
+      steps: [
+        "Require authentication for all Firebase database reads and writes.",
+        "Disable debug mode in production Firebase configurations.",
+        "Isolate Burp Bounty Lab Firebase CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/firebase/ route scan confirms user email and debug config disclosure. Show Firebase realtime DB hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-netsweeper-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -51763,6 +60418,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/netsweeper/ endpoint exposes a Netsweeper WebAdmin fingerprint. Show Netsweeper hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-netsweeper-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/netsweeper/ route live oracle",
+    description:
+      "When scanning /cve/netsweeper/, GET confirms Netsweeper WebAdmin heading — route-specific Netsweeper web filter CVE profile oracle.",
+    impactOneline:
+      "Route-specific Netsweeper oracle confirms WebAdmin fingerprint when scanning Burp Bounty Lab Netsweeper CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyNetsweeperCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Netsweeper appliances and restrict WebAdmin to trusted networks.",
+      steps: [
+        "Apply Netsweeper security advisories for WebAdmin CVEs.",
+        "Disable unused management services and enforce strong credentials.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/netsweeper/ route scan confirms a Netsweeper WebAdmin fingerprint. Show Netsweeper hardening for route-specific scans.",
     version: 1,
     enabled: true
   },
@@ -51793,6 +60474,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-zoho-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/zoho/ route live oracle",
+    description:
+      "When scanning /cve/zoho/, GET confirms ManageEngine heading — route-specific Zoho ManageEngine CVE profile oracle.",
+    impactOneline:
+      "Route-specific Zoho oracle confirms ManageEngine fingerprint when scanning Burp Bounty Lab Zoho CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyZohoCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Zoho ManageEngine appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Zoho ManageEngine security advisories promptly.",
+        "Disable unused management services and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/zoho/ route scan confirms a ManageEngine fingerprint. Show Zoho ManageEngine hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-ruby-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -51815,6 +60522,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/ruby/ endpoint exposes a Ruby on Rails fingerprint. Show Rails path-traversal hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-ruby-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/ruby/ route live oracle",
+    description:
+      "When scanning /cve/ruby/, GET confirms Ruby on Rails App heading — route-specific Rails path-traversal CVE profile oracle.",
+    impactOneline:
+      "Route-specific Rails oracle confirms application fingerprint when scanning Burp Bounty Lab Ruby CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyRubyCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Ruby on Rails and restrict file-serving endpoints that accept traversal sequences.",
+      steps: [
+        "Upgrade Rails to patched versions for known path-traversal CVEs.",
+        "Validate and canonicalize file paths before serving static assets.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/ruby/ route scan confirms a Ruby on Rails fingerprint. Show Rails path-traversal hardening for route-specific scans.",
     version: 1,
     enabled: true
   },
@@ -51845,6 +60578,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-wp-lfi-cve-route-live-oracle",
+    platform: "generic",
+    category: "Path traversal",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /cve/wp/local-file-inclusion route live oracle",
+    description:
+      "When scanning /cve/wp/local-file-inclusion, GET with file=../../../etc/passwd returns passwd contents — route-specific WordPress Duplicator LFI CVE profile oracle.",
+    impactOneline:
+      "Route-specific WordPress LFI oracle confirms arbitrary file read when scanning Burp Bounty Lab WP LFI CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWpLfiCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch WordPress plugins with known LFI flaws and block traversal sequences in file parameters.",
+      steps: [
+        "Upgrade Duplicator and other file-handling plugins to patched versions.",
+        "Reject file parameters containing ../ traversal sequences.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/wp/local-file-inclusion route scan confirms passwd disclosure via traversal. Show WordPress LFI remediation for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-wp-config-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab WordPress wp-config.php exposure live oracle",
+    description:
+      "GET /wp/wp-config.php returns live WordPress configuration with DB_PASSWORD and table_prefix — the Burp Bounty wp-config exposure profile oracle.",
+    impactOneline:
+      "Live wp-config.php probe confirms database credential disclosure distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWpConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block public access to wp-config.php and rotate exposed database credentials.",
+      steps: [
+        "Deny web access to wp-config.php via web server rules.",
+        "Move configuration outside the web root or use environment variables.",
+        "Rotate database passwords after any wp-config exposure."
+      ]
+    },
+    fixPrompt:
+      "Our /wp/wp-config.php endpoint exposes DB_PASSWORD and table_prefix. Show WordPress configuration hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-wp-config-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab wp-config route live oracle",
+    description:
+      "When scanning /wp/wp-config.php, GET returns live WordPress configuration with database credentials — route-specific wp-config exposure profile oracle.",
+    impactOneline:
+      "Route-specific wp-config oracle confirms database credential disclosure when scanning Burp Bounty Lab WordPress config routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWpConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block public access to wp-config.php and rotate exposed database credentials.",
+      steps: [
+        "Deny web access to wp-config.php via web server rules.",
+        "Move configuration outside the web root or use environment variables.",
+        "Rotate database passwords after any wp-config exposure."
+      ]
+    },
+    fixPrompt:
+      "Our /wp/wp-config.php route scan confirms database credential exposure. Show WordPress configuration hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-sharefile-cve-live-oracle",
     platform: "generic",
     category: "Path traversal",
@@ -51867,6 +60678,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /citrix/sharefile/download endpoint reads win.ini via path=../../../windows/win.ini. Show ShareFile path-traversal remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-sharefile-cve-route-live-oracle",
+    platform: "generic",
+    category: "Path traversal",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /citrix/sharefile route live oracle",
+    description:
+      "When scanning /citrix/sharefile/, GET download?path=../../../windows/win.ini returns win.ini contents — route-specific Citrix ShareFile path-traversal CVE profile oracle.",
+    impactOneline:
+      "Route-specific ShareFile oracle confirms arbitrary file read when scanning Burp Bounty Lab ShareFile CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountySharefileCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Citrix ShareFile and validate path parameters before serving files.",
+      steps: [
+        "Apply Citrix ShareFile security advisories for path-traversal CVEs.",
+        "Canonicalize and reject download paths containing ../ traversal sequences.",
+        "Isolate Burp Bounty Lab ShareFile routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /citrix/sharefile route scan confirms win.ini disclosure via traversal. Show ShareFile path-traversal remediation for route-specific scans.",
     version: 1,
     enabled: true
   },
@@ -51897,6 +60734,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-artica-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/artica/ route live oracle",
+    description:
+      "When scanning /cve/artica/, GET fw.login.php returns Artica Web Proxy login with apikey field — route-specific Artica proxy CVE profile oracle.",
+    impactOneline:
+      "Route-specific Artica oracle confirms proxy appliance fingerprint when scanning Burp Bounty Lab Artica CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyArticaCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Artica Web Proxy appliances and restrict management interfaces to trusted networks.",
+      steps: [
+        "Apply Artica security advisories for proxy management CVEs.",
+        "Disable unused management services and enforce strong API keys.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/artica/ route scan confirms an Artica Web Proxy login with apikey field. Show Artica proxy hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-magmi-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -51919,6 +60782,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /cve/magmi/ endpoint exposes MAGMI Utils JS. Show Magento MAGMI plugin hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-magmi-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /cve/magmi/ route live oracle",
+    description:
+      "When scanning /cve/magmi/, GET returns MAGMI Utils JS — route-specific Magento MAGMI plugin CVE profile oracle.",
+    impactOneline:
+      "Route-specific MAGMI oracle confirms Magento plugin fingerprint when scanning Burp Bounty Lab MAGMI CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyMagmiCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch or remove MAGMI Magento plugins and restrict web access to admin utilities.",
+      steps: [
+        "Upgrade MAGMI to patched versions or uninstall unused Magento plugins.",
+        "Block public access to MAGMI web utilities behind authentication.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /cve/magmi/ route scan confirms MAGMI Utils JS exposure. Show Magento MAGMI plugin hardening for route-specific scans.",
     version: 1,
     enabled: true
   },
@@ -51949,6 +60838,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "burpbounty-f5-bash-cve-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Burp Bounty Lab /mgmt/tm/util/bash route F5 CVE live oracle",
+    description:
+      "When scanning /mgmt/tm/util/bash, POST returns Unauthorized confirming the F5 BIG-IP tm.util.bash management API after /cve/f5/ fingerprint — route-specific F5 bash RCE CVE profile oracle.",
+    impactOneline:
+      "Route-specific F5 bash CVE oracle confirms management API exposure when scanning the Burp Bounty Lab /mgmt/tm/util/bash practice endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyF5BashCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch F5 BIG-IP appliances and restrict /mgmt/tm/util/bash to trusted management networks.",
+      steps: [
+        "Apply F5 security advisories for tm.util.bash RCE CVEs.",
+        "Block public access to BIG-IP management interfaces.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /mgmt/tm/util/bash route scan confirms F5 BIG-IP tm.util.bash management API exposure. Show BIG-IP hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "burpbounty-netsweeper-systemstatus-cve-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -51971,6 +60886,188 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /webadmin/tools/systemstatus_remote.php endpoint exposes Netsweeper system status. Show appliance hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-netsweeper-systemstatus-cve-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab /webadmin/tools/systemstatus_remote.php route live oracle",
+    description:
+      "When scanning /webadmin/tools/systemstatus_remote.php, GET confirms System Status heading — route-specific Netsweeper systemstatus CVE profile oracle.",
+    impactOneline:
+      "Route-specific Netsweeper systemstatus oracle confirms webadmin fingerprint when scanning Burp Bounty Lab systemstatus CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyNetsweeperSystemstatusCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch Netsweeper appliances and restrict webadmin tools to trusted management networks.",
+      steps: [
+        "Apply Netsweeper security advisories for systemstatus_remote.php CVEs.",
+        "Block public access to /webadmin/tools/ management endpoints.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /webadmin/tools/systemstatus_remote.php route scan confirms Netsweeper system status exposure. Show appliance hardening for route-specific scans.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-fortios-remote-login-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab FortiOS SSL VPN login live oracle",
+    description:
+      "GET /cve/fortios/remote/login returns FortiOS SSL VPN login fingerprint — the Burp Bounty FortiOS CVE profile oracle.",
+    impactOneline:
+      "Live FortiOS VPN fingerprint probe confirms route-specific FortiOS CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyFortiosRemoteLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch FortiOS appliances and restrict SSL VPN interfaces to trusted networks.",
+      steps: [
+        "Apply Fortinet security advisories for FortiOS CVEs promptly.",
+        "Disable unused VPN interfaces and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our FortiOS SSL VPN login endpoint is publicly reachable. Show FortiOS hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-fortios-remote-login-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab FortiOS route live oracle",
+    description:
+      "When scanning /cve/fortios/remote/login or /cve/forti/, GET confirms FortiOS SSL VPN login fingerprint — route-specific FortiOS CVE profile oracle.",
+    impactOneline:
+      "Route-specific FortiOS oracle confirms SSL VPN login fingerprint when scanning Burp Bounty Lab FortiOS CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyFortiosRemoteLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch FortiOS appliances and restrict SSL VPN interfaces to trusted networks.",
+      steps: [
+        "Apply Fortinet security advisories for FortiOS CVEs promptly.",
+        "Disable unused VPN interfaces and enforce MFA.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our FortiOS route scan confirms an SSL VPN login fingerprint. Show FortiOS hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-weblogic-console-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab WebLogic console live oracle",
+    description:
+      "GET /console/login/LoginForm.jsp returns Oracle WebLogic Server Administration Console fingerprint — the Burp Bounty WebLogic CVE profile oracle.",
+    impactOneline:
+      "Live WebLogic console fingerprint probe confirms route-specific WebLogic CVE oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWeblogicConsoleLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch WebLogic and restrict administration consoles to trusted management networks.",
+      steps: [
+        "Apply Oracle WebLogic security advisories promptly.",
+        "Block public access to /console/ management paths.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our WebLogic administration console is publicly reachable. Show WebLogic hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-weblogic-console-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Burp Bounty Lab WebLogic route live oracle",
+    description:
+      "When scanning /cve/weblogic/ or /console/login/LoginForm.jsp, GET confirms Oracle WebLogic Server Administration Console fingerprint — route-specific WebLogic CVE profile oracle.",
+    impactOneline:
+      "Route-specific WebLogic oracle confirms administration console fingerprint when scanning Burp Bounty Lab WebLogic CVE routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyWeblogicConsoleRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Patch WebLogic and restrict administration consoles to trusted management networks.",
+      steps: [
+        "Apply Oracle WebLogic security advisories promptly.",
+        "Block public access to /console/ management paths.",
+        "Isolate Burp Bounty Lab CVE routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our WebLogic route scan confirms an administration console fingerprint. Show WebLogic hardening and CVE patching.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-graphql-query-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab GraphQL endpoint live oracle",
+    description:
+      "POST /graphql with { __typename } returns Query typename JSON — the Burp Bounty GraphQL endpoint profile oracle.",
+    impactOneline:
+      "Live GraphQL typename probe confirms route-specific GraphQL endpoint oracle distinct from generic hub fingerprinting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyGraphqlQueryLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production and restrict GraphQL endpoints to authenticated clients.",
+      steps: [
+        "Reject unauthenticated GraphQL queries on public endpoints.",
+        "Disable introspection and limit query depth/complexity.",
+        "Isolate Burp Bounty Lab GraphQL routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql endpoint responds to typename probes. Show GraphQL hardening and introspection controls.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "burpbounty-graphql-query-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Burp Bounty Lab GraphQL route live oracle",
+    description:
+      "When scanning /graphql or /graphql/query, POST { __typename } returns Query typename JSON — route-specific GraphQL endpoint profile oracle.",
+    impactOneline:
+      "Route-specific GraphQL oracle confirms typename JSON response when scanning Burp Bounty Lab GraphQL routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "burpbountyGraphqlQueryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production and restrict GraphQL endpoints to authenticated clients.",
+      steps: [
+        "Reject unauthenticated GraphQL queries on public endpoints.",
+        "Disable introspection and limit query depth/complexity.",
+        "Isolate Burp Bounty Lab GraphQL routes from production deployments."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql route scan confirms typename JSON responses. Show GraphQL hardening and introspection controls.",
     version: 1,
     enabled: true
   },
@@ -52157,6 +61254,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pc-parts-store-checkout-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PC Parts Store checkout IDOR live oracle",
+    description:
+      "On pc-parts-store.vercel.app, checkout.php accepts spoofed user_id and captures credit card numbers without session ownership checks — jgpython/pc-parts-store-lab README corpus oracle on Vercel SPA deploy.",
+    impactOneline:
+      "Checkout IDOR lets attackers submit orders and card data for arbitrary user IDs without authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pcPartsStoreCheckoutIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind checkout to authenticated session user_id server-side; never trust hidden form fields.",
+      steps: [
+        "Derive user_id from server-side session, not client-supplied hidden inputs.",
+        "Require authentication before checkout and validate order ownership.",
+        "Tokenize credit card data via PCI-compliant payment processor instead of raw capture."
+      ]
+    },
+    fixPrompt:
+      "Our checkout.php trusts hidden user_id and stores raw credit card numbers. Show session-bound checkout remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pc-parts-store-checkout-idor-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -52313,6 +61436,136 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "sekumart-search-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SekuMart search.php reflected XSS live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/search.php?q=<b>marker</b> reflects the search term inside <b> without HTML encoding — the SekuriPy sqlmap playground reflected XSS training oracle.",
+    impactOneline:
+      "Unsanitized q parameter in search.php enables reflected HTML injection on the SekuMart demo shop search results page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartSearchXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — encode output and validate search input.",
+      steps: [
+        "HTML-encode search terms before rendering in the results page.",
+        "Use parameterized queries for the underlying SQL search.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart search.php reflects q inside <b> without encoding. Show output encoding remediation for PHP search results.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-search-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "SekuMart /search.php route reflected XSS live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/search.php, GET ?q= reflects HTML markup unescaped in the You searched for line — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route scans on /search.php should confirm live reflected XSS alongside mysqli SQLi on the same q parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartSearchXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — encode output and validate search input.",
+      steps: [
+        "HTML-encode search terms before rendering.",
+        "Use parameterized queries for search SQL.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /search.php route reflects q unescaped in HTML. Show output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-directory-xpath-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart directory.php XPath injection live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/directory.php?q=' or '1'='1 concatenates into an XPath expression and dumps the hidden svc-directory account with FLAG{xp4th_1nj3ct10n_pwn3d} — sqlmap --xpath training oracle.",
+    impactOneline:
+      "Unsanitized q parameter in directory.php enables XPath injection exposing hidden staff records and CTF flags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartDirectoryXPathLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — never concatenate user input into XPath expressions.",
+      steps: [
+        "Use parameterized XPath or map names to IDs instead of string concatenation.",
+        "Validate employee lookup input against an allow-list.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart directory.php concatenates q into XPath. Show safe XPath query construction remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-directory-xpath-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /directory.php route XPath injection live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/directory.php, GET ?q=' or '1'='1 dumps svc-directory FLAG via XPath injection — route-specific sqlmap --xpath training oracle.",
+    impactOneline:
+      "Route scans on /directory.php should confirm live XPath injection dumping hidden staff directory records.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartDirectoryXPathRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — never concatenate user input into XPath.",
+      steps: [
+        "Use safe XPath APIs instead of string-built expressions.",
+        "Restrict directory lookups to validated employee names.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /directory.php route has XPath injection on q. Show parameterized XPath remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-openapi-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart OpenAPI sqlmap SQLi live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/openapi.json documents sqlmap --openapi training endpoints and live product.php?id= probe confirms mysqli SQLi.",
+    impactOneline:
+      "OpenAPI spec exposes deliberately vulnerable SQLi endpoints for sqlmap practice — live probe confirms injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartOpenapiSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — do not expose vulnerable OpenAPI specs in production.",
+      steps: [
+        "Remove public OpenAPI specs listing injection-prone endpoints from production.",
+        "Use parameterized queries on all documented endpoints.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart OpenAPI spec documents sqlmap-vulnerable endpoints. Show how to secure API specs and SQL queries.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sekumart-openapi-sqli-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -52335,6 +61588,162 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our SekuMart OpenAPI spec documents sqlmap-vulnerable endpoints. Show how to secure API specs and SQL queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-track-blind-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart track.php blind SQLi live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/track.php?order=SK-1001' AND '1'='1 returns shipped while AND '1'='2 returns no match — the SekuriPy sqlmap playground boolean blind SQLi training oracle.",
+    impactOneline:
+      "Unsanitized order parameter in track.php enables boolean blind SQL injection on the SekuMart order tracking page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartTrackBlindSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — use parameterized queries for order lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements for order tracking.",
+        "Validate order codes against an allowlist format before querying.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart track.php concatenates order into SQL enabling blind SQLi. Show parameterized query remediation for PHP order tracking.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-track-blind-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /track.php route blind SQLi live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/track.php, GET ?order= boolean blind payloads differentiate shipped vs no-match — route-specific sqlmap blind training oracle.",
+    impactOneline:
+      "Route scans on /track.php should confirm live boolean blind SQL injection for sqlmap --technique=B practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartTrackBlindSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — use parameterized queries.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Validate order code format before querying.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /track.php route has boolean blind SQLi on the order parameter. Show prepared statement remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-catalog-orderby-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart catalog.php ORDER BY SQLi live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/catalog.php?sort=id' triggers mysqli_sql_exception in catalog_low.php — the SekuriPy sqlmap playground ORDER BY SQLi training oracle.",
+    impactOneline:
+      "Unsanitized sort parameter in catalog.php enables ORDER BY clause SQL injection on the SekuMart product catalog.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartCatalogOrderBySqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — whitelist sort columns instead of concatenating ORDER BY.",
+      steps: [
+        "Map sort query values to a fixed allowlist of column names.",
+        "Never concatenate user input into ORDER BY clauses.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart catalog.php concatenates sort into ORDER BY causing mysqli errors. Show allowlist-based sort remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-catalog-orderby-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /catalog.php route ORDER BY SQLi live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/catalog.php, GET ?sort=id' returns mysqli_sql_exception — route-specific ORDER BY SQLi sqlmap training oracle.",
+    impactOneline:
+      "Route scans on /catalog.php should confirm live ORDER BY SQL injection for sqlmap --technique=E practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartCatalogOrderBySqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — whitelist sort columns.",
+      steps: [
+        "Map sort values to a fixed allowlist of column names.",
+        "Never concatenate user input into ORDER BY.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /catalog.php route has ORDER BY SQLi on the sort parameter. Show allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-members-nosql-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart members.php NoSQL injection live oracle",
+    description:
+      "GET sekumart.sekuripy.hr/members.php?user[$ne]=nobody dumps hidden svc-loyalty FLAG{n0sql_0p3rator_1nj3ct10n} — the SekuriPy sqlmap --nosql playground operator injection training oracle.",
+    impactOneline:
+      "Unsanitized user parameter in members.php enables MongoDB-style operator injection dumping loyalty tier records.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartMembersNosqlLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — validate input types and reject operator objects.",
+      steps: [
+        "Treat user as a plain string; reject array/object query parameters.",
+        "Use typed query builders that do not accept operator injection.",
+        "Run SekuMart only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart members.php accepts MongoDB operators in the user parameter. Show typed query remediation for NoSQL injection.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "sekumart-members-nosql-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SekuMart /members.php route NoSQL injection live oracle",
+    description:
+      "When scanning sekumart.sekuripy.hr/members.php, GET ?user[$ne]=nobody dumps svc-loyalty FLAG — route-specific sqlmap --nosql training oracle.",
+    impactOneline:
+      "Route scans on /members.php should confirm live NoSQL operator injection for sqlmap --nosql practice.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "sekumartMembersNosqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "SekuMart is intentional training software — reject operator objects in query parameters.",
+      steps: [
+        "Treat user as a plain string; reject array/object parameters.",
+        "Use typed query builders for document store lookups.",
+        "Run SekuMart labs only on isolated staging infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our SekuMart /members.php route accepts NoSQL operators in user. Show typed query remediation.",
     version: 1,
     enabled: true
   },
@@ -52547,6 +61956,214 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvai-ai-chat-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "DreamVator Aviation LLM proxy live oracle",
+    description:
+      "POST /api/ai on dvai.vercel.app proxies chat messages to Google Gemini and returns model text rendered via dangerouslySetInnerHTML.",
+    impactOneline:
+      "Unauthenticated LLM proxy endpoints enable prompt injection; unsanitized model HTML becomes DOM XSS.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaiAiChatLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate chatbot endpoints and render LLM output as text, not HTML.",
+      steps: [
+        "Replace dangerouslySetInnerHTML on model responses with textContent or sanitized markdown.",
+        "Require authentication before accepting /api/ai chat messages.",
+        "Monitor chatbot endpoints for adversarial prompt-injection probes."
+      ]
+    },
+    fixPrompt:
+      "Our DreamVator Aviation /api/ai endpoint proxies to Gemini and renders responses as HTML. Show prompt-injection hardening and safe text rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvai-ai-chat-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "DreamVator Aviation LLM proxy route live oracle",
+    description:
+      "When scanning dvai.vercel.app, POST /api/ai confirms an unauthenticated Google Gemini LLM proxy — route-specific prompt-injection oracle with scannedUrl evidence.",
+    impactOneline:
+      "Route scans on DVAI hosts need live /api/ai confirmation with deployment-not-found corpus fallback for dvai-red.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaiAiChatRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate chatbot endpoints and render LLM output as text, not HTML.",
+      steps: [
+        "Replace dangerouslySetInnerHTML on model responses with textContent or sanitized markdown.",
+        "Require authentication before accepting /api/ai chat messages.",
+        "Monitor chatbot endpoints for adversarial prompt-injection probes."
+      ]
+    },
+    fixPrompt:
+      "Our DreamVator Aviation route scan confirms an unauthenticated /api/ai LLM proxy. Show route-level chatbot hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvai-ai-chat-html-sink-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "DreamVator Aviation chat HTML sink route live oracle",
+    description:
+      "When scanning dvai hosts, client bundle markers confirm dangerouslySetInnerHTML on /api/ai model responses — route-specific DOM XSS oracle with deployment-not-found corpus fallback.",
+    impactOneline:
+      "DVAI chat UIs trust LLM HTML output; prompt injection becomes reflected DOM XSS when rendered unsanitized.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaiAiChatHtmlSinkRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never render LLM output as HTML — sanitize or use text-only rendering.",
+      steps: [
+        "Replace dangerouslySetInnerHTML on model responses with textContent or markdown-to-safe-html.",
+        "Sanitize LLM output with DOMPurify before any HTML rendering.",
+        "Treat /api/ai endpoints as untrusted input sources in threat models."
+      ]
+    },
+    fixPrompt:
+      "Our DreamVator Aviation route scan confirms dangerouslySetInnerHTML on LLM chat responses. Show safe text-only rendering.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-dvai-ecosystem-evidence",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "DVAI ecosystem documents adversarial LLM operations",
+    description:
+      "bb1nfosec/dvai Damn Vulnerable AI Ecosystem bundles OP-ORACLE logprob side-channel and OP-SCHEMAPOISON RAG poisoning operations with Groq-proxied API routes.",
+    impactOneline:
+      "DVAI training range exposes logprob side-channels and RAG knowledge-base poisoning as deliberate AI red-team attack surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDvaiEcosystemEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVAI is intentional training software — never deploy logprob-exposing proxies or unauthenticated RAG inject endpoints in production.",
+      steps: [
+        "Disable logprob output on production LLM proxies unless strictly required.",
+        "Authenticate and audit RAG knowledge-base write paths.",
+        "Treat player-supplied API key flows as untrusted in production threat models."
+      ]
+    },
+    fixPrompt:
+      "Our DVAI deployment documents OP-ORACLE logprob extraction and OP-SCHEMAPOISON RAG poisoning. Show production hardening for LLM side-channels and RAG integrity.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvai-oracle-logprob-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "DVAI OP-ORACLE logprob side-channel live oracle",
+    description:
+      "POST /api/oracle/init on DVAI hosts initializes OP-ORACLE — Groq-backed logprob side-channel secret extraction with full token probability output.",
+    impactOneline:
+      "Logprob side-channels leak embedded system-prompt secrets statistically even when model output appears benign.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaiOracleLogprobLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose full logprob distributions on production LLM APIs to untrusted callers.",
+      steps: [
+        "Disable logprob output for external API consumers.",
+        "Rate-limit and monitor statistical probing patterns on inference endpoints.",
+        "Rotate secrets when logprob side-channel exposure is suspected."
+      ]
+    },
+    fixPrompt:
+      "DVAI OP-ORACLE exposes Groq logprobs for secret extraction. Show how to disable logprob leakage on production LLM proxies.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvai-oracle-logprob-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "DVAI /api/oracle OP-ORACLE logprob route live oracle",
+    description:
+      "When scanning /api/oracle routes on DVAI hosts, POST /api/oracle/init confirms OP-ORACLE logprob side-channel challenge initialization — route-specific oracle with README corpus fallback.",
+    impactOneline:
+      "Route-scoped DVAI scans should flag OP-ORACLE logprob side-channel training endpoints on /api/oracle/* paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaiOracleLogprobRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose full logprob distributions on production LLM APIs to untrusted callers.",
+      steps: [
+        "Disable logprob output for external API consumers.",
+        "Rate-limit and monitor statistical probing patterns on inference endpoints.",
+        "Rotate secrets when logprob side-channel exposure is suspected."
+      ]
+    },
+    fixPrompt:
+      "Our DVAI /api/oracle route scan confirms OP-ORACLE logprob side-channel initialization. Show production logprob hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvai-schemapoison-rag-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "DVAI OP-SCHEMAPOISON RAG poisoning live oracle",
+    description:
+      "POST /api/schemapoison/init on DVAI hosts initializes OP-SCHEMAPOISON — simulated RAG pipeline knowledge-base poisoning without explicit trigger words.",
+    impactOneline:
+      "RAG knowledge-base poisoning shifts model answers persistently when untrusted documents are injected into retrieval corpora.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaiSchemapoisonRagLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate RAG corpus writes and validate document provenance before indexing.",
+      steps: [
+        "Require auth on knowledge-base injection endpoints.",
+        "Scan indexed documents for schema-poisoning and authority-forging patterns.",
+        "Monitor retrieval drift after corpus updates."
+      ]
+    },
+    fixPrompt:
+      "DVAI OP-SCHEMAPOISON allows RAG knowledge-base poisoning via /api/schemapoison/inject. Show RAG integrity controls.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvai-schemapoison-rag-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "DVAI /api/schemapoison RAG poisoning route live oracle",
+    description:
+      "When scanning /api/schemapoison routes on DVAI hosts, POST /api/schemapoison/init confirms OP-SCHEMAPOISON RAG knowledge-base poisoning challenge — route-specific oracle with README corpus fallback.",
+    impactOneline:
+      "Route-scoped DVAI scans should flag OP-SCHEMAPOISON RAG poisoning training endpoints on /api/schemapoison/* paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvaiSchemapoisonRagRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate RAG corpus writes and validate document provenance before indexing.",
+      steps: [
+        "Require auth on knowledge-base injection endpoints.",
+        "Scan indexed documents for schema-poisoning patterns.",
+        "Monitor retrieval drift after corpus updates."
+      ]
+    },
+    fixPrompt:
+      "Our DVAI /api/schemapoison route scan confirms OP-SCHEMAPOISON RAG poisoning initialization. Show RAG corpus integrity controls.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-avid-vuln-registry-evidence",
     platform: "generic",
     category: "Information disclosure",
@@ -52647,6 +62264,318 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host Bugforge-style web exploitation labs. Show how to isolate on-demand lab instances from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugforge-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Bugforge SSRF lab route live oracle",
+    description:
+      "When scanning /labs/ssrf on bugforge.io or app.bugforge.io, the SSRF learning-path module documents on-demand lab instances for WAF bypass and allowlist SSRF chains (MesaNet, FurHire writeups) — route-specific SSRF training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/ssrf documents SSRF exploitation training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge SSRF labs are intentional training — restrict server-side fetchers and validate URL allowlists.",
+      steps: [
+        "Block internal IP ranges and metadata endpoints in server-side fetchers.",
+        "Validate URL allowlists against DNS rebinding and wildcard bypass.",
+        "Run Bugforge lab instances only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/ssrf route documents MesaNet-style allowlist SSRF labs. Show SSRF allowlist and gateway hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugforge-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Bugforge IDOR lab route live oracle",
+    description:
+      "When scanning /labs/idor on bugforge.io or app.bugforge.io, the IDOR learning-path module documents parameter-tampering labs (Tanuki, Ottergram, Copy Pasta writeups) — route-specific IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/idor documents IDOR parameter-tampering training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge IDOR labs are intentional training — enforce object-level authorization on every API route.",
+      steps: [
+        "Authorize object access against the authenticated user's ownership.",
+        "Avoid predictable sequential identifiers without access checks.",
+        "Run Bugforge lab instances only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/idor route documents Tanuki-style parameter-tampering IDOR labs. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugforge-graphql-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Bugforge GraphQL lab route live oracle",
+    description:
+      "When scanning /labs/graphql on bugforge.io or app.bugforge.io, the GraphQL learning-path module documents introspection and authorization flaws (Ottergram, Sokudo writeups) — route-specific GraphQL training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/graphql documents GraphQL introspection and IDOR training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeGraphqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge GraphQL labs are intentional training — disable introspection in production and enforce field-level authorization.",
+      steps: [
+        "Disable GraphQL introspection on production API endpoints.",
+        "Authorize every query field and argument against the authenticated principal.",
+        "Run Bugforge lab instances only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/graphql route documents Ottergram-style GraphQL introspection and IDOR labs. Show GraphQL authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugforge-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Bugforge XSS lab route live oracle",
+    description:
+      "When scanning /labs/xss on bugforge.io or app.bugforge.io, the XSS learning-path module documents stored and reflected XSS labs (Ottergram stored XSS JWT theft writeups) — route-specific XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/xss documents cross-site scripting training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge XSS labs are intentional training — encode output and use context-aware sanitization.",
+      steps: [
+        "Replace unsafe .html() sinks with text encoding or strict allowlist sanitizers.",
+        "Set Content-Security-Policy to block inline script execution.",
+        "Run Bugforge lab instances only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/xss route documents Ottergram-style stored XSS labs. Show output encoding and CSP remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugforge-auth-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Bugforge auth lab route live oracle",
+    description:
+      "When scanning /labs/auth on bugforge.io or app.bugforge.io, the broken authentication learning-path module documents JWT refresh brute force, weak timestamp tokens, and missing bearer checks (FurHire, Sokudo, Ottergram writeups) — route-specific auth training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/auth documents broken authentication training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeAuthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge auth labs are intentional training — bind sessions to cryptographically secure tokens and enforce bearer validation.",
+      steps: [
+        "Use unpredictable refresh tokens with rotation and rate limiting.",
+        "Reject JWT alg:none and validate signatures on every request.",
+        "Require bearer tokens on all state-changing API routes."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/auth route documents FurHire-style refresh_token and Sokudo weak-token labs. Show authentication hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugforge-csrf-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "Bugforge CSRF lab route live oracle",
+    description:
+      "When scanning /labs/csrf on bugforge.io or app.bugforge.io, the CSRF learning-path module documents token validation bypass, SameSite restrictions, and Referer defenses — route-specific CSRF training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/csrf documents cross-site request forgery training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeCsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge CSRF labs are intentional training — require anti-CSRF tokens on all state-changing requests.",
+      steps: [
+        "Bind CSRF tokens to the user session and reject missing or mismatched tokens.",
+        "Set SameSite=Strict or Lax on session cookies for sensitive actions.",
+        "Validate Referer/Origin headers on state-changing POST endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/csrf route documents CSRF token validation bypass labs. Show anti-CSRF token and SameSite cookie remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugforge-sqli-route-live-oracle",
+    platform: "generic",
+    category: "SQL injection",
+    severityDefault: "high",
+    title: "Bugforge SQLi lab route live oracle",
+    description:
+      "When scanning /labs/sqli on bugforge.io or app.bugforge.io, the SQL injection learning-path module documents login bypass and UNION search labs (Cheesy Does it, MedNode writeups) — route-specific SQLi training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Bugforge /labs/sqli documents SQL injection training with on-demand lab instances.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugforgeSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bugforge SQLi labs are intentional training — use parameterized queries and prepared statements.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries.",
+        "Apply least-privilege database accounts for application connections.",
+        "Run Bugforge lab instances only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/sqli route documents Cheesy Does it-style login SQLi labs. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "webverselabs-fixture-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "WebVerse Pro Fixture lab route live oracle",
+    description:
+      "When scanning /labs/fixture on webverselabs-pro.com, the ScoutLens fixture lab documents BOLA on scouting APIs plus wkhtmltopdf SSRF via wildcard allowlist bypass — route-specific SSRF+SQLi PDF template training oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebVerse Pro Fixture medium lab documents chained BOLA and SSRF exploitation paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webverselabsFixtureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WebVerse Pro labs are intentional training — restrict PDF renderers and enforce object-level authorization.",
+      steps: [
+        "Validate PDF renderer URL allowlists against DNS rebinding and wildcard bypass.",
+        "Authorize scouting report API access per authenticated user.",
+        "Run WebVerse Pro labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/fixture route documents BOLA plus wkhtmltopdf SSRF wildcard bypass. Show SSRF allowlist and BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "webverselabs-orbitdesk-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "WebVerse Pro OrbitDesk lab route live oracle",
+    description:
+      "When scanning /labs/orbitdesk on webverselabs-pro.com, the OrbitDesk hard lab documents a five-stage chain — weak reset token, GraphQL IDOR, signed-URL path traversal, SSRF via /api/v2/integrations/test, diagnostics RCE.",
+    impactOneline:
+      "Route-specific confirmation that WebVerse Pro OrbitDesk documents multi-stage GraphQL + SSRF exploitation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webverselabsOrbitdeskRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "WebVerse Pro labs are intentional training — harden JWT secrets, GraphQL authz, and outbound fetch controls.",
+      steps: [
+        "Rotate leaked AUTH_SECRET and enforce strong signing keys.",
+        "Authorize GraphQL resolvers per object ownership.",
+        "Block server-side fetch to internal hostnames from integration test endpoints."
+      ]
+    },
+    fixPrompt:
+      "Our /labs/orbitdesk route documents GraphQL IDOR plus SSRF via integrations/test. Show JWT hardening and SSRF egress controls.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nosql-injection-lab-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "NoSQL Injection Lab route live oracle",
+    description:
+      "When scanning nosql-injection-lab.vercel.app, the educational SPA documents MongoDB operator injection ($ne, $regex, $gt) bypassing Express login via JSON body-parser — route-specific NoSQL injection training oracle.",
+    impactOneline:
+      "Route-specific confirmation that the NoSQL Injection Lab documents operator-based authentication bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nosqlInjectionLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Cast user inputs to expected types and sanitize MongoDB query operators.",
+      steps: [
+        "Reject object-typed password fields — require strict string validation.",
+        "Use mongo-sanitize or equivalent to strip $-prefixed operator keys.",
+        "Prefer parameterized ODM queries with explicit schemas."
+      ]
+    },
+    fixPrompt:
+      "Our nosql-injection-lab route documents $ne/$regex operator bypass. Show type casting and mongo-sanitize remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "todoer-tasks-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Todoer task API BOLA/IDOR live oracle",
+    description:
+      "todoer.site GET /api/tasks/:id reflects arbitrary Origin with Access-Control-Allow-Credentials while exposing sequential task IDs behind session auth — CORS credential theft plus BOLA training surface.",
+    impactOneline:
+      "Live confirmation that Todoer task APIs enable cross-origin credential theft and sequential ID access testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "todoerTasksIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict CORS to trusted origins and enforce object-level authorization on task APIs.",
+      steps: [
+        "Never reflect arbitrary Origin when Access-Control-Allow-Credentials is true.",
+        "Authorize task reads against the authenticated session user.",
+        "Use non-sequential task identifiers."
+      ]
+    },
+    fixPrompt:
+      "Our /api/tasks/:id reflects arbitrary Origin with credentials and may allow cross-user task access. Show CORS and BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "todoer-tasks-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Todoer /api/tasks/:id route live oracle",
+    description:
+      "When scanning todoer.site /api/tasks/:id or /api/todos/:id discovery URLs, confirms CORS origin reflection with credentials on the task API plus auth-gated BOLA/IDOR training surface.",
+    impactOneline:
+      "Route-specific Todoer task API oracle confirms CORS misconfiguration and sequential task ID access control testing target.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "todoerTasksIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict CORS to trusted origins and enforce object-level authorization on task APIs.",
+      steps: [
+        "Never reflect arbitrary Origin when Access-Control-Allow-Credentials is true.",
+        "Authorize task reads against the authenticated session user.",
+        "Use non-sequential task identifiers."
+      ]
+    },
+    fixPrompt:
+      "Our /api/tasks/:id route scan confirms CORS credential reflection and BOLA surface. Show authorization and CORS remediation.",
     version: 1,
     enabled: true
   },
@@ -52881,6 +62810,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /pages/read route scan confirms path traversal via /api/read. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-python-execute-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Aikido Zen Python /pages/execute route shell injection oracle",
+    description:
+      "When scanning /pages/execute on zen-demo-python.fly.dev, POST /api/execute spawns userCommand via subprocess and returns /bin/sh not found error — Python-variant route-specific shell injection oracle.",
+    impactOneline:
+      "Route-scoped scans of zen-demo-python /pages/execute confirm shell injection via the /api/execute JSON API on the Python WAF playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoPythonExecuteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — never pass user input to shell in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Use allow-listed command APIs instead of arbitrary shell execution.",
+        "Keep Aikido Zen WAF rules enabled to block obvious injection payloads in production."
+      ]
+    },
+    fixPrompt:
+      "Our zen-demo-python /pages/execute route confirms shell injection via /api/execute. Show route-specific remediation for Python subprocess APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-python-create-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Aikido Zen Python /pages/create route SQLi oracle",
+    description:
+      "When scanning /pages/create on zen-demo-python.fly.dev, POST /api/create with SQLi payload triggers blocked SQL Injection — Python-variant route-specific SQLi oracle.",
+    impactOneline:
+      "Route-scoped scans of zen-demo-python /pages/create confirm SQL injection via the /api/create JSON API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoPythonCreateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — use parameterized queries in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Use prepared statements for all database queries.",
+        "Keep Aikido Zen WAF rules enabled to block SQL injection in production."
+      ]
+    },
+    fixPrompt:
+      "Our zen-demo-python /pages/create route confirms SQL injection via /api/create. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-python-request-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Aikido Zen Python /pages/request route SSRF oracle",
+    description:
+      "When scanning /pages/request on zen-demo-python.fly.dev, POST /api/request with internal URL triggers SSRF block — Python-variant route-specific SSRF oracle.",
+    impactOneline:
+      "Route-scoped scans of zen-demo-python /pages/request confirm SSRF via the /api/request JSON API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoPythonRequestRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — allowlist outbound fetch destinations in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Block SSRF to internal IPs and metadata endpoints.",
+        "Keep Aikido Zen WAF rules enabled to block SSRF in production."
+      ]
+    },
+    fixPrompt:
+      "Our zen-demo-python /pages/request route confirms SSRF via /api/request. Show route-specific URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zen-demo-python-read-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Aikido Zen Python /pages/read route path traversal oracle",
+    description:
+      "When scanning /pages/read on zen-demo-python.fly.dev, GET /api/read with traversal path triggers blocked Path Traversal — Python-variant route-specific path traversal oracle.",
+    impactOneline:
+      "Route-scoped scans of zen-demo-python /pages/read confirm path traversal via the /api/read endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zenDemoPythonReadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zen demos are intentional — canonicalize and jail file paths in production.",
+      steps: [
+        "Run Zen evaluation demos only on isolated fly.dev lab infrastructure.",
+        "Resolve paths against a chrooted base directory and reject .. segments.",
+        "Keep Aikido Zen WAF rules enabled to block path traversal in production."
+      ]
+    },
+    fixPrompt:
+      "Our zen-demo-python /pages/read route confirms path traversal via /api/read. Show route-specific path canonicalization remediation.",
     version: 1,
     enabled: true
   },
@@ -53428,6 +63461,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "We host povzayd-style XSS training labs. Show how to isolate reflected and DOM XSS exercises from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "povzayd-xss-lab1-document-write-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "povzayd XSS Lab 1 document.write route live oracle",
+    description:
+      "When scanning /LABS/lab1.html, povzayd reflects ?search= via document.write plus hash/localStorage innerHTML sinks — route-specific reflected/stored/DOM XSS training oracle.",
+    impactOneline:
+      "povzayd Lab 1 exposes document.write and innerHTML XSS sinks for scanner calibration on GitHub Pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "povzaydXssLab1DocumentWriteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "povzayd lab modules are intentional training — use textContent instead of document.write/innerHTML in production.",
+      steps: [
+        "Replace document.write and innerHTML with textContent or DOMPurify-sanitized output.",
+        "Run XSS training labs only on dedicated lab infrastructure.",
+        "Use Content-Security-Policy to mitigate XSS in production apps."
+      ]
+    },
+    fixPrompt:
+      "Our povzayd Lab 1 route scan documents document.write and innerHTML XSS sinks. Show textContent/DOMPurify remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "povzayd-xss-lab2-reflected-filtered-innerhtml-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "povzayd XSS Lab 2 filtered reflected innerHTML route live oracle",
+    description:
+      "When scanning /LABS/lab2.html, povzayd reflects ?query= through filterReflected into reflected-output innerHTML — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "povzayd Lab 2 exposes script-tag-only filter bypass reflected XSS via innerHTML for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "povzaydXssLab2ReflectedFilteredInnerhtmlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "povzayd lab modules are intentional training — encode output instead of blacklist filters.",
+      steps: [
+        "Replace innerHTML with textContent or context-aware encoding for user-controlled data.",
+        "Avoid blacklist-only XSS filters that miss event handlers and non-script tags.",
+        "Run XSS training labs only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our povzayd Lab 2 route scan documents filterReflected innerHTML XSS. Show encoding-based remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "povzayd-xss-lab2-dom-hash-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "povzayd XSS Lab 2 DOM hash route live oracle",
+    description:
+      "When scanning /LABS/lab2.html, povzayd assigns location.hash to dom-box innerHTML plus lvl2_comments localStorage stored XSS — route-specific DOM/stored XSS training oracle.",
+    impactOneline:
+      "povzayd Lab 2 exposes location.hash and localStorage innerHTML sinks for DOM/stored XSS scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "povzaydXssLab2DomHashRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "povzayd lab modules are intentional training — never assign location.hash to innerHTML in production.",
+      steps: [
+        "Use textContent for hash-fragment and stored-comment rendering.",
+        "Sanitize client-side storage round-trips before DOM insertion.",
+        "Run XSS training labs only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our povzayd Lab 2 route scan documents DOM hash and localStorage innerHTML XSS. Show safe fragment handling.",
     version: 1,
     enabled: true
   },
@@ -54212,6 +64323,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-vwad-goof-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "OWASP VWAD Snyk Goof vulnerable Node.js lab disclosed",
+    description:
+      "Snyk Goof VWAD listing documents intentionally vulnerable Express/MongoDB todo app with NoSQL injection, XSS, open redirect, hardcoded secrets, and exploits/ walkthrough catalog.",
+    impactOneline:
+      "Public VWAD Goof catalog exposes offline-deployable Node.js training lab with documented default credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideVwadGoofEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Goof is intentional Snyk training — isolate lab instances from production networks.",
+      steps: [
+        "Deploy Goof only on isolated lab infrastructure.",
+        "Rotate default admin@snyk.io credentials before any public exposure.",
+        "Monitor VWAD-linked Goof containers for abuse."
+      ]
+    },
+    fixPrompt:
+      "Our Snyk Goof instance is listed in OWASP VWAD with documented default credentials. Show how to isolate Node.js training labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vwad-goof-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "OWASP VWAD Snyk Goof route live oracle",
+    description:
+      "When scanning vwad.owasp.org/app/goof/, the VWAD listing documents Snyk's vulnerable Express/MongoDB todo app with NoSQL injection, XSS, and hardcoded secrets — route-specific Goof training oracle.",
+    impactOneline:
+      "VWAD Goof listing exposes offline container deploy scope and documented admin@snyk.io default credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vwadGoofRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Goof is intentional training — limit public disclosure of exploit catalog on VWAD-linked hosts.",
+      steps: [
+        "Gate Goof challenge details behind authenticated lab enrollment.",
+        "Run Goof only on isolated training infrastructure.",
+        "Rotate default credentials before publishing VWAD listings."
+      ]
+    },
+    fixPrompt:
+      "Our VWAD Goof listing documents a vulnerable Node.js todo app with default credentials. Show route-specific training-platform access control.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vwad-dvr-restaurant-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP VWAD Damn Vulnerable Restaurant route live oracle",
+    description:
+      "When scanning vwad.owasp.org/app/damn-vulnerable-restaurant/, the VWAD listing documents theowni's FastAPI/PostgreSQL Docker CTF game with Swagger/Redoc at localhost:8091 — route-specific training oracle.",
+    impactOneline:
+      "VWAD DVR listing exposes offline FastAPI CTF deploy scope and GitHub repo for intentional Web API vulnerability training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vwadDvrRestaurantRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVR is intentional training — limit public disclosure of exploit catalog on VWAD-linked hosts.",
+      steps: [
+        "Gate DVR challenge details behind authenticated lab enrollment.",
+        "Run DVR only on isolated training infrastructure.",
+        "Do not expose Swagger/Redoc on public-facing hosts."
+      ]
+    },
+    fixPrompt:
+      "Our VWAD Damn Vulnerable Restaurant listing documents a FastAPI CTF game. Show route-specific training-platform access control.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ai-threatlab-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "AI-Threatlab OWASP LLM/ASI interactive lab disclosed",
+    description:
+      "rootabhi1.github.io/AI-Threatlab documents interactive OWASP LLM Top 10 (2025) and Agentic ASI Top 10 (2026) attack/defense walkthroughs with MITRE ATLAS mappings.",
+    impactOneline:
+      "Public AI security lab exposes LLM01 prompt injection and ASI agentic attack modules for reconnaissance and exploit rehearsal.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAiThreatlabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI-Threatlab is intentional training — isolate lab instances and gate behind authenticated sessions.",
+      steps: [
+        "Do not mirror AI-Threatlab attack patterns in production LLM agents.",
+        "Rate-limit unauthenticated enumeration of challenge modules.",
+        "Run agentic red-team labs only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host AI-Threatlab-style OWASP LLM/ASI walkthroughs. Show how to isolate AI security labs from production agents.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-threatlab-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "AI-Threatlab OWASP LLM/ASI route live oracle",
+    description:
+      "When scanning rootabhi1.github.io/AI-Threatlab/, the SPA embeds LLM01-LLM10 and ASI01-ASI10 interactive modules with MITRE ATLAS attack references — route-specific AI security training oracle.",
+    impactOneline:
+      "AI-Threatlab route scan confirms interactive agentic red-team curriculum with prompt injection and guardrail bypass modules.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiThreatlabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI-Threatlab is intentional training — isolate lab instances from production LLM deployments.",
+      steps: [
+        "Gate AI security walkthroughs behind authenticated lab enrollment.",
+        "Do not expose production agent APIs on the same origin as training labs.",
+        "Monitor for reconnaissance against public AI challenge catalogs."
+      ]
+    },
+    fixPrompt:
+      "Our AI-Threatlab route scan confirms OWASP LLM/ASI interactive modules. Show route-specific AI lab access control.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vwad-voice-goat-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "low",
+    title: "OWASP VWAD Voice Goat stale listing route live oracle",
+    description:
+      "When scanning vwad.owasp.org/app/voice-goat/, the OWASP VWAD directory may still reference Voice Goat but the detail URL returns the site-wide 404 shell — route-specific stale listing oracle.",
+    impactOneline:
+      "Stale VWAD Voice Goat URLs mislead scanners into false positives from sibling app crawls on the 404 page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vwadVoiceGoatRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or update stale VWAD listings when training apps go offline.",
+      steps: [
+        "Open a VWAD GitHub issue to delist removed training instances.",
+        "Do not link production security tools to VWAD URLs without verifying the app still loads.",
+        "Gate scanner benchmarks on live oracle checks, not directory metadata alone."
+      ]
+    },
+    fixPrompt:
+      "Our VWAD Voice Goat listing returns 404. Show how to delist stale entries and avoid false-positive scans from sibling app crawls.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-vwad-vulnerableapp-evidence",
     platform: "generic",
     category: "Injection",
@@ -54602,6 +64869,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pentest-ground-restflaw-hub-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Pentest-Ground RestFlaw hub route live oracle",
+    description:
+      "When scanning pentest-ground.com:9000/ hub, companion probes delegate to /eval code injection, /tokens SQLi, /search XXE, and /uptime command injection — route-specific RestFlaw training catalog oracle.",
+    impactOneline:
+      "RestFlaw hub scans should confirm the full intentional flaw surface, not only generic misconfiguration findings.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundRestflawHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "RestFlaw is intentional security training — restrict hub scans to authorized lab environments.",
+      steps: [
+        "Keep RestFlaw instances on VPN-only lab networks.",
+        "Do not point production DAST scanners at public RestFlaw without authorization.",
+        "Treat eval/tokens/search endpoints as sensitive reconnaissance data on training apps."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground RestFlaw hub route scan confirmed multiple injection training oracles. Show how to scope scanner targets to authorized lab infrastructure.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-pentest-ground-hub-evidence",
     platform: "generic",
     category: "Broken access control",
@@ -54686,7 +64979,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Pentest-Ground DVWA SQL injection route live oracle",
     description:
-      "When scanning /vulnerabilities/sqli/, POST id=1' OR '1'='1 returns multiple user rows — Pentest-Ground hosted DVWA SQL injection route oracle.",
+      "When scanning /vulnerabilities/sqli/, POST id=1' OR '1'='1 returns multiple user rows, or DVWA SQL Injection module corpus confirms training oracle — Pentest-Ground hosted DVWA SQL injection route oracle.",
     impactOneline:
       "Unsanitized SQL concatenation on DVWA id parameters lets attackers dump every user record with a tautology payload.",
     detectorKind: "rule_ref",
@@ -54780,6 +65073,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Pentest-Ground DVWA /vulnerabilities/csrf/ route changes admin passwords without CSRF tokens. Show token-based CSRF defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-ground-dvwa-hub-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Pentest-Ground DVWA hub route live oracle",
+    description:
+      "When scanning pentest-ground.com:4280/, hub route scan delegates to /vulnerabilities/sqli/, /exec/, and /xss_r/ live probes — Pentest-Ground DVWA training oracle bridge.",
+    impactOneline:
+      "DVWA hub scans should confirm SQLi, command injection, or reflected XSS training oracles without requiring per-module route URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestGroundDvwaHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — isolate lab instances from production networks.",
+      steps: [
+        "Run DVWA only on isolated Pentest-Ground lab infrastructure.",
+        "Do not expose DVWA vulnerability modules on production hosts.",
+        "Use hub scans to validate training coverage, not production attack surface."
+      ]
+    },
+    fixPrompt:
+      "Our Pentest-Ground DVWA hub scan confirms SQLi, command injection, or XSS training oracles. Show how to isolate DVWA lab instances.",
     version: 1,
     enabled: true
   },
@@ -55248,6 +65567,162 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our PentestForge DVWA /vulnerabilities/sqli/ route concatenates id into SQL. Show injection remediation with parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-dvwa-sqli-blind-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentestForge DVWA blind SQL injection route live oracle",
+    description:
+      "When scanning /vulnerabilities/sqli_blind/ on dvwa.lab.pentest-forge.com, boolean blind SQLi payloads produce differing responses — PentestForge hosted DVWA blind SQLi route oracle.",
+    impactOneline:
+      "Blind SQL injection on PentestForge DVWA lets attackers exfiltrate data one bit at a time without visible error messages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeDvwaSqliBlindRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — use parameterized queries and disable verbose error leakage.",
+      steps: [
+        "Bind user input with prepared statements.",
+        "Normalize response sizes to prevent boolean inference.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge DVWA /vulnerabilities/sqli_blind/ route is vulnerable to boolean blind SQLi. Show remediation with parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-dvwa-xss-r-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentestForge DVWA reflected XSS route live oracle",
+    description:
+      "When scanning /vulnerabilities/xss_r/ on dvwa.lab.pentest-forge.com, GET ?name= reflects attacker input in Hello <name> — PentestForge hosted DVWA reflected XSS route oracle.",
+    impactOneline:
+      "Reflected XSS on PentestForge DVWA name parameter lets attackers execute JavaScript in victim browsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeDvwaXssRRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — HTML-encode all reflected output.",
+      steps: [
+        "Encode dynamic output before rendering in HTML.",
+        "Use Content-Security-Policy to mitigate inline script execution.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge DVWA /vulnerabilities/xss_r/ route reflects the name query parameter. Show XSS output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-dvwa-xss-d-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PentestForge DVWA DOM XSS route live oracle",
+    description:
+      "When scanning /vulnerabilities/xss_d/ on dvwa.lab.pentest-forge.com, the page reads default= from document.location.href into document.write without encoding — PentestForge hosted DVWA DOM-based XSS route oracle.",
+    impactOneline:
+      "DOM-based XSS on PentestForge DVWA default= parameter lets attackers inject scripts via crafted URLs without server-side reflection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeDvwaXssDRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVWA is intentional security training — never pass URL parameters to document.write.",
+      steps: [
+        "Avoid document.write and other dangerous DOM sinks for user-controlled data.",
+        "Use textContent or safe DOM APIs instead of innerHTML/document.write.",
+        "Run DVWA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge DVWA /vulnerabilities/xss_d/ route passes default= URL param to document.write. Show DOM XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-mutillidae-user-info-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "PentestForge Mutillidae user-info auth bypass route live oracle",
+    description:
+      "When scanning index.php?page=user-info.php on mutillidae.lab.pentest-forge.com, View Account Details form exposes auth bypass / parameter tampering training surface.",
+    impactOneline:
+      "Mutillidae user-info.php lets attackers view or modify account details without proper session authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeMutillidaeUserInfoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Mutillidae is intentional security training — enforce server-side session checks before account detail views.",
+      steps: [
+        "Require authenticated sessions before rendering account details.",
+        "Bind account lookups to the logged-in user ID server-side.",
+        "Run Mutillidae only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge Mutillidae user-info.php route allows viewing account details without auth. Show access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-mutillidae-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentestForge Mutillidae login SQL injection route live oracle",
+    description:
+      "When scanning index.php?page=login.php on mutillidae.lab.pentest-forge.com, POST username=' OR 1=1 -- bypasses authentication — PentestForge hosted Mutillidae SQL injection login bypass route oracle.",
+    impactOneline:
+      "Unsanitized SQL concatenation on Mutillidae login lets attackers bypass authentication with tautology payloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeMutillidaeLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Mutillidae is intentional security training — use parameterized queries for login lookups.",
+      steps: [
+        "Bind username and password with prepared statements.",
+        "Hash passwords server-side and compare digests, never store plaintext.",
+        "Run Mutillidae only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge Mutillidae login.php route concatenates credentials into SQL. Show authentication bypass remediation with parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-mutillidae-register-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentestForge Mutillidae register INSERT SQL injection route live oracle",
+    description:
+      "When scanning index.php?page=register.php on mutillidae.lab.pentest-forge.com, username field is concatenated into INSERT without sanitization — PentestForge hosted Mutillidae INSERT SQL injection route oracle.",
+    impactOneline:
+      "INSERT SQL injection on Mutillidae register lets attackers manipulate account creation queries and exfiltrate database contents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeMutillidaeRegisterSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Mutillidae is intentional security training — use parameterized INSERT statements.",
+      steps: [
+        "Bind registration fields with prepared statements.",
+        "Validate and reject SQL metacharacters in username and signature fields.",
+        "Run Mutillidae only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge Mutillidae register.php route concatenates username into INSERT SQL. Show INSERT injection remediation with parameterized queries.",
     version: 1,
     enabled: true
   },
@@ -57150,6 +67625,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "juice-shop-snippets-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop vulnerable code snippets API live oracle",
+    description:
+      "GET /snippets/:challengeKey returns vulnerable source code plus vulnLines array without auth — Vulnerable Code Snippets API oracle (help.owasp-juice.shop integration).",
+    impactOneline:
+      "Public code-snippet endpoints expose exact vulnerable lines for many Juice Shop challenges.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopSnippetsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Juice Shop is intentional security training — restrict snippet APIs to authorized lab instances.",
+      steps: [
+        "Require authentication before returning challenge source snippets.",
+        "Disable snippet endpoints in production deployments.",
+        "Scope scanner targets to authorized OWASP Juice Shop lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Juice Shop /snippets/:challengeKey returns vulnerable source with vulnLines. Show how to disable or protect code-snippet APIs outside training environments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-snippets-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop /snippets route live oracle",
+    description:
+      "When scanning /snippets, GET /snippets/:challengeKey returns vulnerable source with vulnLines JSON — route-specific Vulnerable Code Snippets API oracle.",
+    impactOneline:
+      "Route-scoped scans on /snippets should confirm the code-snippet challenge API is exposed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopSnippetsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Juice Shop is intentional security training — restrict snippet APIs to authorized lab instances.",
+      steps: [
+        "Require authentication before returning challenge source snippets.",
+        "Disable snippet endpoints in production deployments.",
+        "Scope scanner targets to authorized OWASP Juice Shop lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop /snippets route scan confirms the Vulnerable Code Snippets API. Show route-level access controls for snippet endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "juice-shop-recycles-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -57406,6 +67933,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Juice Shop /rest/memories route scan exposes cross-user PII via BOLA. Show route-level authorization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "juice-shop-rest-api-hub-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Juice Shop REST API hub route live oracle",
+    description:
+      "When scanning any Juice Shop /rest/* or /api/* endpoint, companion probes confirm multiple unauthenticated training oracles (security questions, inventory, hints, challenges) beyond the single route slug — REST API hub delegation oracle.",
+    impactOneline:
+      "Single-endpoint Juice Shop REST scans should surface the full intentional flaw surface, not only the matched route resource.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "juiceShopRestApiHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Juice Shop is intentional security training — scope REST API route scans to authorized lab instances.",
+      steps: [
+        "Require authentication before returning security questions, hints, or challenge scoreboards.",
+        "Scope inventory and memory APIs to the authenticated user.",
+        "Treat unauthenticated REST responses as sensitive reconnaissance data on training apps."
+      ]
+    },
+    fixPrompt:
+      "Our Juice Shop REST API route scan confirmed multiple unauthenticated training oracles via companion probes. Show how to scope scanner targets to authorized lab infrastructure.",
     version: 1,
     enabled: true
   },
@@ -58476,7 +69029,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Duck Store /api/v1/users route BOLA live oracle",
     description:
-      "When scanning /api/v1/users, unauthenticated list+detail probes return admin email and role — route-specific BOLA oracle.",
+      "When scanning /api/v1/users/, unauthenticated list+detail probes return admin email and role — route-specific user enumeration BOLA oracle.",
     impactOneline:
       "Route-specific scans should surface broken object-level authorization on user APIs.",
     detectorKind: "rule_ref",
@@ -58492,6 +69045,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/v1/users route leaks admin profiles without auth. Show route-specific BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-users-enumeration-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Duck Store user enumeration live oracle",
+    description:
+      "GET /api/v1/users/ returns a full username and UUID roster without authentication — the Escape Duck Store user enumeration oracle (API3).",
+    impactOneline:
+      "Public user directory endpoints help attackers harvest valid accounts for credential stuffing and targeted attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreUsersEnumerationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose full user directories without authentication in production.",
+      steps: [
+        "Require authentication before listing user accounts.",
+        "Return only the caller's own profile unless the caller is an admin.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/v1/users/ returns all usernames and UUIDs without auth. Show user enumeration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-users-enumeration-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Duck Store /api/v1/users user enumeration route live oracle",
+    description:
+      "When scanning /api/v1/users/, the API returns seeded demo usernames and UUIDs without authentication — route-specific user enumeration oracle (API3).",
+    impactOneline:
+      "Route scans on user list endpoints should confirm excessive data exposure and enumeration risk.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreUsersEnumerationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict user list endpoints to authenticated admins in production.",
+      steps: [
+        "Return 401 for unauthenticated GET /api/v1/users/ requests.",
+        "Paginate and scope user lists to authorized callers only.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/users/ route scan confirms unauthenticated user enumeration. Show access control remediation.",
     version: 1,
     enabled: true
   },
@@ -58518,6 +69123,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/v1/testimonials endpoint returns user_id and linked user objects without auth. Show BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-testimonials-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Duck Store testimonials route BOLA live oracle",
+    description:
+      "When scanning /testimonials or /api/v1/testimonials routes, unauthenticated probes return user-linked testimonial records with names, roles, and user_id — route-specific BOLA oracle.",
+    impactOneline:
+      "Route-specific testimonial scans should surface excessive data exposure on testimonial APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreTestimonialsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Strip internal user identifiers from public testimonial route handlers.",
+      steps: [
+        "Return only public guest_name fields for unauthenticated clients.",
+        "Require auth to read user_id-linked testimonial metadata.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /testimonials route leaks user_id-linked testimonial metadata without auth. Show route-specific BOLA remediation.",
     version: 1,
     enabled: true
   },
@@ -58622,6 +69253,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our coupons route exposes private promotion codes without auth. Show route-specific business-logic remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-coupons-validate-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store coupon validate live oracle",
+    description:
+      "GET /api/v1/orders/coupons/validate?code=INTERNAL100 returns is_valid:true with 100% discount without authentication — private coupon validation business-logic oracle.",
+    impactOneline:
+      "Unauthenticated coupon validation exposes private promotion codes and enables unauthorized discounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreCouponsValidateLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication before validating private coupon codes.",
+      steps: [
+        "Reject is_public:false coupon validation for anonymous callers.",
+        "Rate-limit coupon validation endpoints to prevent brute-force scanning.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/orders/coupons/validate endpoint confirms private INTERNAL100 without auth. Show coupon validation access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-coupons-apply-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store coupons apply/validate route live oracle",
+    description:
+      "When scanning /api/v1/coupons/apply or /api/v1/orders/coupons/validate, unauthenticated probes confirm private INTERNAL100 coupon validates with 100% discount — route-specific coupon business-logic oracle.",
+    impactOneline:
+      "Route-specific scans should surface unauthorized private coupon validation on Duck Store coupon APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreCouponsApplyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate coupon apply/validate routes behind authenticated checkout flows.",
+      steps: [
+        "Reject private coupon validation for anonymous callers.",
+        "Map /api/v1/coupons/apply aliases to authenticated checkout handlers only.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our coupons apply/validate route confirms private INTERNAL100 without auth. Show route-specific coupon business-logic remediation.",
     version: 1,
     enabled: true
   },
@@ -58886,6 +69569,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-mcp-info-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store MCP server info live oracle",
+    description:
+      "POST /mcp/info initialize returns unauthenticated MCP server metadata (serverInfo.name duck-store) without session — the Escape Duck Store MCP gateway info disclosure oracle.",
+    impactOneline:
+      "Unauthenticated MCP initialize responses expose server identity and protocol capabilities to anonymous clients.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreMcpInfoLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on MCP gateway initialize and restrict server metadata visibility.",
+      steps: [
+        "Gate MCP initialize behind session or API-key authentication.",
+        "Do not expose MCP serverInfo on anonymous gateway endpoints.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our MCP /mcp/info initialize endpoint exposes server metadata without auth. Show MCP gateway access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-mcp-info-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Duck Store MCP info route live oracle",
+    description:
+      "When scanning /mcp/info, unauthenticated MCP initialize JSON-RPC returns duck-store serverInfo without authentication — route-specific MCP info disclosure oracle.",
+    impactOneline:
+      "Route-specific scans should surface exposed MCP server metadata on /mcp/info paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreMcpInfoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict MCP initialize to authenticated clients.",
+      steps: [
+        "Require auth on /mcp/info initialize.",
+        "Filter sensitive server metadata from anonymous MCP responses.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /mcp/info route scan confirms unauthenticated MCP server metadata. Show route-specific MCP remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "duck-store-products-filter-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -59022,7 +69757,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Duck Store admin users BFLA route live oracle",
     description:
-      "When scanning /api/v1/admin/users, a freshly registered user JWT lists admin accounts — route-specific BFLA oracle.",
+      "When scanning /admin/users or /api/v1/admin/users, a freshly registered user JWT lists admin accounts — route-specific BFLA oracle.",
     impactOneline:
       "Route-specific scans should confirm broken function-level authorization on admin user listing endpoints.",
     detectorKind: "rule_ref",
@@ -59178,7 +69913,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Duck Store testimonials stored XSS route live oracle",
     description:
-      "When scanning /api/v1/testimonials, POST stores unsanitized HTML testimonial content served back without encoding — route-specific stored XSS oracle.",
+      "When scanning /api/v1/testimonials or /testimonials SPA route, POST stores unsanitized HTML testimonial content served back without encoding — route-specific stored XSS oracle.",
     impactOneline:
       "Route-specific scans should confirm testimonial APIs do not persist executable HTML.",
     detectorKind: "rule_ref",
@@ -59220,6 +69955,240 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our testimonials/guest route stores raw HTML XSS payloads via POST /api/v1/testimonials/. Show route-specific stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-testimonials-page-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Duck Store /testimonials SPA stored XSS route live oracle",
+    description:
+      "When scanning /testimonials, POST /api/v1/testimonials/ stores unsanitized HTML testimonial content served back without encoding — SPA route-specific stored XSS oracle.",
+    impactOneline:
+      "Route-specific SPA testimonial page scans should confirm APIs do not persist executable HTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreTestimonialsPageStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize testimonial content on the /testimonials SPA route handlers.",
+      steps: [
+        "Reject HTML tags in testimonial POST bodies.",
+        "Encode testimonial content in list responses.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /testimonials SPA route stores raw HTML XSS payloads via POST /api/v1/testimonials/. Show route-specific stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-reviews-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Duck Store product reviews stored XSS live oracle",
+    description:
+      "POST /api/v1/reviews/product/{id} stores unsanitized HTML (e.g. <img onerror>) in content and serves it back via GET /api/v1/reviews/product/{id} without encoding — the Escape Duck Store product review stored XSS training oracle.",
+    impactOneline:
+      "Stored XSS in product review content lets attackers persist script execution for any user viewing product reviews.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreReviewsStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize or encode user-supplied HTML in review content before storage and rendering.",
+      steps: [
+        "Strip HTML tags from review content on input.",
+        "Encode output when rendering reviews in HTML contexts.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/v1/reviews/product/{id} stores raw HTML with onerror handlers. Show stored XSS remediation for product review APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-reviews-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Duck Store product reviews stored XSS route live oracle",
+    description:
+      "When scanning /api/v1/reviews/product/{id}, POST stores unsanitized HTML review content served back without encoding — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm product review APIs do not persist executable HTML.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreReviewsStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize review content on /api/v1/reviews/product/{id} route handlers.",
+      steps: [
+        "Reject HTML tags in review POST bodies.",
+        "Encode review content in list responses.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/reviews route stores raw HTML XSS payloads. Show route-specific stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-reviews-unauth-read-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Duck Store product reviews unauthenticated read live oracle",
+    description:
+      "GET /api/v1/reviews/product/{id} returns customer reviews with linked usernames and content without authentication — the Escape Duck Store product review disclosure training oracle.",
+    impactOneline:
+      "Unauthenticated review lists expose customer identities and review content on product pages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreReviewsUnauthReadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication or redact user metadata from public review list endpoints.",
+      steps: [
+        "Gate review list APIs behind authentication when reviews contain PII.",
+        "Redact linked usernames from unauthenticated product review responses.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/v1/reviews/product/{id} returns customer usernames without auth. Show review disclosure remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-reviews-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Duck Store product reviews route live oracle",
+    description:
+      "When scanning /api/v1/reviews/product/{id}, unauthenticated GET returns customer reviews with linked usernames — route-specific product review disclosure oracle.",
+    impactOneline:
+      "Route-specific scans should confirm product review APIs do not leak customer identities without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreReviewsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact user metadata from unauthenticated /api/v1/reviews route handlers.",
+      steps: [
+        "Require authentication before returning linked user objects in review lists.",
+        "Return anonymous review summaries for public product pages.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/reviews route scan confirms unauthenticated customer review disclosure. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-products-reviews-misroute-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Duck Store /api/v1/products/reviews misroute live oracle",
+    description:
+      "GET /api/v1/products/reviews hits /products/{product_id} with product_id='reviews' (422 int_parsing) instead of GET /api/v1/reviews/product/{id} which returns unauthenticated customer review data — the Escape Duck Store product reviews API misroute oracle.",
+    impactOneline:
+      "API route ambiguity hides the real reviews endpoint from scanners probing /products/reviews while review data remains publicly readable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreProductsReviewsMisrouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use distinct URL namespaces for product resources and review collections.",
+      steps: [
+        "Reserve /api/v1/reviews/product/{id} for review list endpoints.",
+        "Reject or redirect /api/v1/products/reviews to the canonical reviews route.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /api/v1/products/reviews returns 422 while /api/v1/reviews/product/{id} leaks review data. Show API route design remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-products-reviews-misroute-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "Duck Store /api/v1/products/reviews misroute route live oracle",
+    description:
+      "When scanning /api/v1/products/reviews, FastAPI misroutes 'reviews' as product_id (422) while /api/v1/reviews/product/{id} exposes customer review data without authentication — route-specific misroute oracle.",
+    impactOneline:
+      "Route-specific scans on /products/reviews should detect the 422 misroute and pivot to the unauthenticated reviews API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreProductsReviewsMisrouteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Normalize review API paths and block ambiguous /products/reviews lookups.",
+      steps: [
+        "Return 404 or redirect from /api/v1/products/reviews to the canonical reviews endpoint.",
+        "Document review routes in OpenAPI with distinct path segments.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/products/reviews route scan hits a 422 misroute instead of review data. Show route-specific API normalization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-wishlist-phantom-api-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Duck Store wishlist phantom API live oracle",
+    description:
+      "GET /api/v1/wishlist returns 404 while SPA /wishlist route exists but OpenAPI lists no wishlist REST endpoint — the Escape Duck Store phantom wishlist API oracle.",
+    impactOneline:
+      "Undocumented or absent wishlist APIs leave client-side wishlist state untested and may hide BOLA vectors in shadow endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreWishlistPhantomApiLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Document wishlist APIs in OpenAPI or remove phantom SPA routes.",
+      steps: [
+        "Implement /api/v1/wishlist with authentication and ownership checks if the SPA exposes wishlist features.",
+        "Remove /wishlist SPA routes when no backing API exists.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/v1/wishlist returns 404 while /wishlist SPA exists without OpenAPI docs. Show wishlist API documentation and access-control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "duck-store-wishlist-phantom-api-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Duck Store /wishlist phantom API route live oracle",
+    description:
+      "When scanning /wishlist or /api/v1/wishlist, REST wishlist API is absent (404) while SPA route renders without OpenAPI documentation — route-specific phantom wishlist endpoint oracle.",
+    impactOneline:
+      "Route-specific scans should flag undocumented SPA routes that lack backing REST APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreWishlistPhantomApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Align SPA wishlist routes with documented authenticated APIs.",
+      steps: [
+        "Add /api/v1/wishlist to OpenAPI with ownership validation.",
+        "Remove client-side wishlist routes when no server API exists.",
+        "Run Duck Store only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /wishlist route scan finds SPA UI without a backing REST API. Show route-specific wishlist API remediation.",
     version: 1,
     enabled: true
   },
@@ -59380,6 +70349,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "duck-store-vulnerabilities-hub-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Duck Store vulnerability index hub route live oracle",
+    description:
+      "When scanning /vulnerabilities, the Escape Duck Store hub documents intentional OWASP Top 10 flaws and OpenAPI lists SSRF, SQLi, BOLA, and coupon-abuse API routes — route-specific vulnerability catalog oracle.",
+    impactOneline:
+      "Published vulnerability indexes on training apps disclose the full intentional flaw surface for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "duckStoreVulnerabilitiesHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Duck Store is intentional security training — restrict vulnerability catalog pages to authorized lab environments.",
+      steps: [
+        "Keep vulnerability index documentation on VPN-only lab networks.",
+        "Do not point production DAST scanners at public Duck Store instances without authorization.",
+        "Treat OpenAPI paths as sensitive reconnaissance data on vulnerable training apps."
+      ]
+    },
+    fixPrompt:
+      "Our Duck Store /vulnerabilities route publishes the intentional flaw catalog. Show how to scope scanner targets to authorized lab infrastructure.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "duck-store-referral-code-abuse-live-oracle",
     platform: "generic",
     category: "Business logic",
@@ -59464,7 +70459,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Duck Store admin products negative price route live oracle",
     description:
-      "When scanning /api/v1/admin/products, POST with price:-99.99 is accepted — route-specific negative price oracle.",
+      "When scanning /admin/products or /api/v1/admin/products, POST with price:-99.99 is accepted — route-specific negative price oracle.",
     impactOneline:
       "Route-specific scans should confirm admin product endpoints reject negative or zero prices.",
     detectorKind: "rule_ref",
@@ -59516,7 +70511,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Duck Store admin orders exposure route live oracle",
     description:
-      "When scanning /api/v1/admin/orders, default admin credentials return orders from multiple distinct user_id values — route-specific admin order exposure oracle.",
+      "When scanning /admin/orders or /api/v1/admin/orders, default admin credentials return orders from multiple distinct user_id values — route-specific admin order exposure oracle.",
     impactOneline:
       "Route-specific scans should confirm admin order endpoints leak cross-customer order data when protected only by weak credentials.",
     detectorKind: "rule_ref",
@@ -59568,7 +70563,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Duck Store testimonials PUT BOLA route live oracle",
     description:
-      "When scanning /api/v1/testimonials/{id}, PUT by a different user overwrites another account's testimonial — route-specific BOLA oracle.",
+      "When scanning /api/v1/testimonials/{id} or /testimonials SPA route, PUT by a different user overwrites another account's testimonial — route-specific BOLA oracle.",
     impactOneline:
       "Route-specific scans should confirm testimonial update endpoints enforce object ownership.",
     detectorKind: "rule_ref",
@@ -59620,7 +70615,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "critical",
     title: "Duck Store testimonials unauthenticated PUT route live oracle",
     description:
-      "When scanning /api/v1/testimonials/{id}, PUT without Authorization header overwrites testimonial content — route-specific unauthenticated write oracle.",
+      "When scanning /api/v1/testimonials/{id} or /testimonials SPA route, PUT without Authorization header overwrites testimonial content — route-specific unauthenticated write oracle.",
     impactOneline:
       "Route-specific scans should confirm testimonial update endpoints require authentication.",
     detectorKind: "rule_ref",
@@ -59774,9 +70769,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Information disclosure",
     severityDefault: "high",
-    title: "Duck Store /api/v1/admin/stats route live oracle",
+    title: "Duck Store admin stats route live oracle",
     description:
-      "When scanning /api/v1/admin/stats, weak admin:admin login returns full dashboard metrics JSON — route-specific admin stats oracle.",
+      "When scanning /admin/stats or /api/v1/admin/stats, weak admin:admin login returns full dashboard metrics JSON — route-specific admin stats oracle.",
     impactOneline:
       "Route scans on admin stats endpoints should confirm strong authentication before exposing operational metrics.",
     detectorKind: "rule_ref",
@@ -59818,6 +70813,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our DVGA deployment exposes GraphQL introspection on route scans. Show how to auth-gate and disable introspection on lab hosts.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga2-expert-hardened-mode-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "DVGA2 Expert hardened mode route live oracle",
+    description:
+      "When scanning dvga2.tools.escape.tech, home re-fetch confirms Expert (Hardened) game mode with X-DVGA-MODE header and cost/depth GraphQL query controls — Escape.tech hardened DVGA training tier oracle.",
+    impactOneline:
+      "DVGA2 Expert mode documents hardened GraphQL controls while still exposing introspection for security training calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvga2ExpertHardenedModeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVGA2 is intentional GraphQL training — isolate hardened-mode labs from production infrastructure.",
+      steps: [
+        "Run DVGA2 only on isolated lab hosts with authorized scanner access.",
+        "Disable GraphQL introspection on any non-training GraphQL endpoints.",
+        "Document X-DVGA-MODE as a lab-only header not used in production APIs."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA2 deployment documents Expert hardened mode with X-DVGA-MODE. Show how to isolate hardened GraphQL training from production APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-graphiql-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "DVGA GraphiQL IDE route live oracle",
+    description:
+      "When scanning /graphiql on DVGA hosts, Accept: text/html returns the unauthenticated GraphiQL in-browser IDE — route-specific schema exploration oracle.",
+    impactOneline:
+      "Public GraphiQL IDE enables unauthenticated schema introspection and mutation testing on DVGA lab routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaGraphiqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or auth-gate GraphiQL IDE routes on internet-facing GraphQL endpoints.",
+      steps: [
+        "Disable GraphiQL in production deployments.",
+        "Require authentication before exposing interactive GraphQL explorers.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphiql route scan exposes an unauthenticated GraphiQL IDE. Show how to auth-gate or remove GraphiQL from production.",
     version: 1,
     enabled: true
   },
@@ -60446,6 +71493,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "dvga-graphql-dos-resource-exhaustion-live-oracle",
+    platform: "generic",
+    category: "Denial of service",
+    severityDefault: "high",
+    title: "DVGA GraphQL resource exhaustion live oracle",
+    description:
+      "POST /graphql { systemUpdate } or { systemHealth } stalls or times out while benign pastes queries return promptly — the DVGA GraphQL DoS oracle.",
+    impactOneline:
+      "Expensive GraphQL queries can exhaust server resources and deny service to legitimate users.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaGraphqlDosResourceExhaustionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce query depth/complexity limits and timeouts on GraphQL endpoints.",
+      steps: [
+        "Add query cost analysis and reject expensive system* resolver chains.",
+        "Set per-request timeouts and rate limits on /graphql.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphql endpoint allows expensive systemUpdate queries that stall the server. Show GraphQL DoS defenses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvga-graphql-dos-resource-exhaustion-route-live-oracle",
+    platform: "generic",
+    category: "Denial of service",
+    severityDefault: "high",
+    title: "DVGA /graphql DoS resource exhaustion route live oracle",
+    description:
+      "When scanning /graphql on DVGA hosts, systemUpdate/systemHealth queries stall while benign queries complete — route-specific GraphQL DoS oracle.",
+    impactOneline:
+      "Route scans on DVGA /graphql confirm resource exhaustion via expensive system resolver queries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvgaGraphqlDosResourceExhaustionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply query cost limits on DVGA /graphql route scans.",
+      steps: [
+        "Reject or timeout expensive system* GraphQL fields.",
+        "Add depth limiting and per-IP rate limits.",
+        "Run DVGA only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our DVGA /graphql route scan confirms DoS via systemUpdate. Show route-specific GraphQL query cost controls.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-angular-csti-live-oracle",
     platform: "generic",
     category: "Cross-site scripting",
@@ -60520,6 +71619,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /catalog?searchTerm= reflects raw input into searchText. Show XSS/SQLi remediation for the catalog route.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-catalog-search-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop catalog search XSS route live oracle",
+    description:
+      "When scanning /catalog, /catalog/search, or /catalog/product-search-results routes, searchTerm reflects into the searchText JavaScript variable without encoding — route-specific reflected XSS oracle.",
+    impactOneline:
+      "Route-specific scans should confirm catalog search parameters are not reflected into executable script context.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCatalogSearchXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode user input before embedding in script context on catalog search routes.",
+      steps: [
+        "Never interpolate query parameters into inline JavaScript.",
+        "Use context-appropriate output encoding in catalog templates.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our catalog search route scan reflects raw searchTerm into searchText. Show route-specific XSS remediation.",
     version: 1,
     enabled: true
   },
@@ -60810,6 +71935,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-login-next-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /login?next= open redirect route live oracle",
+    description:
+      "When scanning /login?next= with an external URL, the client bundle documents post-login redirect validation that can be abused via the next query parameter — route-specific open redirect oracle (FINDING-020 chain).",
+    impactOneline:
+      "Route scans on /login?next= should confirm client-side redirect validation can be abused for phishing via trusted-domain login flows.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceLoginNextOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate post-login redirect targets server-side against an allowlist before client-side navigation.",
+      steps: [
+        "Allowlist relative paths or known-safe redirect hosts for next/return parameters.",
+        "Reject absolute URLs pointing to external domains on login flows.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /login?next= route documents client-side redirect validation that can be abused. Show route-specific open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-register-atob-redirect-live-oracle",
     platform: "generic",
     category: "Open redirect",
@@ -60962,6 +72113,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /order/details route scan confirms unauthenticated order PII disclosure. Show route-specific IDOR remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-view-order-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /my-account/view-order/{id} IDOR route live oracle",
+    description:
+      "When scanning /my-account/view-order/{id}, canonical GET /order/details?orderId= confirms unauthenticated access to another customer's billing address and masked card — route-specific order details IDOR oracle.",
+    impactOneline:
+      "Route-specific confirmation that authenticated view-order paths map to an IDOR-vulnerable order lookup endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceViewOrderIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and ownership checks on /my-account/view-order/{id} before returning PII.",
+      steps: [
+        "Bind order lookups to the authenticated user's session.",
+        "Use unpredictable order identifiers instead of sequential IDs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /my-account/view-order/{id} route scan confirms unauthenticated order PII disclosure via /order/details. Show route-specific IDOR remediation.",
     version: 1,
     enabled: true
   },
@@ -61382,6 +72559,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-vulnerabilities-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop vulnerabilities disclosure route live oracle",
+    description:
+      "When scanning /vulnerabilities on ginandjuice.shop, the public oracle table lists paths, difficulties, technologies, and vulnerability classes plus ACCOUNT LOGIN DETAILS — route-specific scanner benchmark disclosure oracle.",
+    impactOneline:
+      "Direct /vulnerabilities route scans confirm PortSwigger Gin & Juice scanner evaluation oracle content is reachable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceVulnerabilitiesDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gin & Juice Shop is an intentional scanner benchmark — restrict /vulnerabilities oracle pages to isolated lab infrastructure.",
+      steps: [
+        "Do not mirror Gin & Juice vulnerability oracle tables in production apps.",
+        "Remove embedded credentials from public oracle pages.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /vulnerabilities route scan confirms Gin & Juice scanner evaluation oracle disclosure. Show route-specific information disclosure remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-logout-session-regeneration-live-oracle",
     platform: "generic",
     category: "Session management",
@@ -61538,6 +72741,136 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-newsletter-subscribe-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /api/newsletter/subscribe route live oracle",
+    description:
+      "When scanning /api/newsletter/subscribe, POST /catalog/subscribe echoes attacker email with coupon code — route-specific newsletter subscribe reflected-data oracle (alias path; canonical API is /catalog/subscribe).",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice newsletter subscribe APIs reflect unsanitized email values.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceNewsletterSubscribeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode subscribe API responses and avoid rendering raw email in the DOM.",
+      steps: [
+        "Never reflect raw user input in JSON fields rendered via innerHTML or document.write.",
+        "Use textContent or strict output encoding for subscribe confirmation UIs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/newsletter/subscribe route scan confirms email reflection via /catalog/subscribe. Show route-specific subscribe XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-feedback-submit-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /api/feedback/submit route live oracle",
+    description:
+      "When scanning /api/feedback/submit, GET /catalog?searchTerm= reflects attacker input into searchText — route-specific reflected XSS oracle (alias path; /api/feedback/submit returns SPA 404; PortSwigger FINDING-021).",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice XSS training surfaces are reachable from scanner evaluation alias API paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceFeedbackSubmitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode searchTerm before embedding in client-side searchText variables.",
+      steps: [
+        "Never reflect raw query parameters into JavaScript string literals.",
+        "Use strict output encoding for catalog search reflection sinks.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/feedback/submit route scan confirms catalog searchTerm XSS via searchText reflection. Show route-specific XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-identity-auth-login-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /api/identity/auth/login route live oracle",
+    description:
+      "When scanning /api/identity/auth/login, POST /login reflects failed username into inline var username without escaping — route-specific JavaScript-context XSS oracle (alias path; API returns SPA 404).",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice login XSS training oracle is reachable from identity auth alias API scans.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceIdentityAuthLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode all user input before embedding in JavaScript string literals on login error pages.",
+      steps: [
+        "HTML-encode or JSON-encode usernames before inserting into inline scripts.",
+        "Avoid echoing raw request parameters into script blocks.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/identity/auth/login route scan confirms login username reflection XSS. Show JavaScript-context XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-newsletter-subscribe-rate-limit-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop newsletter subscribe missing rate-limit live oracle",
+    description:
+      "POST /catalog/subscribe accepts rapid repeated newsletter subscriptions without HTTP 429 or quota lockout — the PortSwigger Gin & Juice missing rate-limit / resource-quota training oracle.",
+    impactOneline:
+      "Unlimited newsletter subscriptions enable resource exhaustion, coupon abuse, and email spam without throttling.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceNewsletterSubscribeRateLimitLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply per-IP and per-session rate limits on newsletter subscribe endpoints.",
+      steps: [
+        "Return HTTP 429 after a small number of subscribe attempts per session or IP.",
+        "Require CAPTCHA or proof-of-work for repeated subscriptions.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /catalog/subscribe endpoint accepts unlimited rapid subscriptions. Show rate-limiting and resource-quota remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-newsletter-subscribe-rate-limit-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /api/newsletter/subscribe rate-limit route live oracle",
+    description:
+      "When scanning /api/newsletter/subscribe or /catalog/subscribe, rapid POST requests succeed without HTTP 429 — route-specific missing rate-limit / resource-quota oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice newsletter subscribe lacks throttling on repeated requests.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceNewsletterSubscribeRateLimitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply per-IP and per-session rate limits on newsletter subscribe endpoints.",
+      steps: [
+        "Return HTTP 429 after a small number of subscribe attempts per session or IP.",
+        "Require CAPTCHA or proof-of-work for repeated subscriptions.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/newsletter/subscribe route scan confirms missing subscribe rate limits. Show route-specific throttling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-catalog-product-route-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -61564,6 +72897,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "ginandjuice-change-email-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop change-email POST live oracle",
+    description:
+      "POST /my-account/change-email without an active session redirects unauthenticated callers to /login; GET renders login-gated email-change form — PortSwigger race-condition training oracle.",
+    impactOneline:
+      "Session-gated email-change endpoint confirms race-condition TOCTOU attack surface on Gin & Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceChangeEmailLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Serialize email-change requests and verify ownership atomically before updating accounts.",
+      steps: [
+        "Use database transactions or row locks when processing email-change requests.",
+        "Require re-authentication and out-of-band confirmation before applying email updates.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /my-account/change-email endpoint is vulnerable to race-condition email takeover. Show atomic email-change validation and TOCTOU remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "ginandjuice-change-email-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -61586,6 +72945,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /my-account/change-email route is vulnerable to race-condition email takeover. Show atomic email-change validation and TOCTOU remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-change-password-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop change-password live oracle",
+    description:
+      "POST /my-account/change-password without an authenticated session redirects to /login — the PortSwigger account-takeover password-change training oracle entry point.",
+    impactOneline:
+      "Unauthenticated POST to the password-change endpoint confirms an account-takeover-prone surface on Gin & Juice Shop.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceChangePasswordLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authenticated sessions and re-verification before applying password changes.",
+      steps: [
+        "Reject password-change POSTs without a valid authenticated session.",
+        "Require current-password verification and CSRF tokens on state-changing account forms.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /my-account/change-password accepts unauthenticated requests and redirects to login. Show session-gated password-change remediation.",
     version: 1,
     enabled: true
   },
@@ -61664,6 +73049,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /my-account/orders route is login-gated but /order/details?orderId= leaks PII without auth. Show route-specific IDOR remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-transactions-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /transactions route live oracle",
+    description:
+      "When scanning /transactions, the phantom transactions page returns 404 while GET /order/details?orderId= still returns billing and payment metadata without authentication — route-specific order-history IDOR training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop transaction history is absent but order detail lookups remain unauthenticated IDOR vectors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceTransactionsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind order and transaction lookups to the authenticated user's session and verify ownership server-side.",
+      steps: [
+        "Reject order detail requests when the session user does not own the order.",
+        "Use unpredictable order identifiers instead of sequential IDs.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /transactions route is a 404 shell but /order/details?orderId= leaks PII without auth. Show route-specific IDOR remediation.",
     version: 1,
     enabled: true
   },
@@ -61828,9 +73239,9 @@ export const genericPatterns: Pattern[] = [
     platform: "generic",
     category: "Broken access control",
     severityDefault: "medium",
-    title: "Gin & Juice Shop /catalog/cart route live oracle",
+    title: "Gin & Juice Shop cart route live oracle",
     description:
-      "When scanning /catalog/cart, add-to-cart POST populates coupon and checkout forms and unauthenticated checkout redirects to /login?redirect=cart — route-specific cart business-logic oracle.",
+      "When scanning /cart or /catalog/cart, phantom /cart returns 404 while POST /catalog/cart populates coupon and checkout forms and unauthenticated checkout redirects to /login?redirect=cart — route-specific cart business-logic oracle.",
     impactOneline:
       "Route-specific confirmation that Gin & Juice Shop cart exposes coupon application and checkout business-logic surfaces.",
     detectorKind: "rule_ref",
@@ -61846,6 +73257,188 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /catalog/cart route scan confirms coupon/checkout business-logic surfaces. Show route-specific cart remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-basket-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /api/basket route live oracle",
+    description:
+      "When scanning /api/basket, the SPA alias returns 404 while POST /catalog/cart adds items and unauthenticated checkout redirects to /login?redirect=cart — route-specific basket/cart business-logic oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop /api/basket alias exposes cart checkout business-logic training surfaces.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceBasketRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate cart totals server-side and gate checkout behind authentication.",
+      steps: [
+        "Recompute cart totals server-side on checkout.",
+        "Require authentication before order placement.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/basket route scan is an SPA alias for cart checkout business-logic. Show route-specific cart remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-checkout-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /checkout route live oracle",
+    description:
+      "When scanning /checkout, phantom checkout page returns 404 while POST /catalog/cart/checkout redirects unauthenticated sessions to /login?redirect=cart — route-specific checkout business-logic oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop checkout settlement is gated behind login after cart manipulation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceCheckoutRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate cart totals server-side and require authentication before checkout settlement.",
+      steps: [
+        "Recompute cart totals server-side on checkout; never trust client-submitted prices.",
+        "Require authenticated sessions before order placement.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /checkout route scan confirms unauthenticated checkout redirects to login after cart manipulation. Show route-specific checkout remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-product-price-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop product price manipulation live oracle",
+    description:
+      "Authenticated PATCH /api/products/{id}/price updates catalog price without admin authorization — the PortSwigger unused API endpoint price manipulation oracle.",
+    impactOneline:
+      "Hidden price-update endpoints let any logged-in user zero out product costs before checkout.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceProductPriceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict price updates to admin roles and recompute cart totals server-side.",
+      steps: [
+        "Remove unused PATCH handlers or gate them behind admin authorization.",
+        "Recompute order totals from authoritative catalog prices on checkout.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PATCH /api/products/{id}/price endpoint lets authenticated users change product prices. Show API authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-product-price-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Gin & Juice Shop /api/products/{id}/price route live oracle",
+    description:
+      "When scanning /api/products/{id}/price, the SPA alias returns 404 while authenticated PATCH updates catalog price — route-specific unused API endpoint oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop exposes hidden price-manipulation API endpoints from client JavaScript.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceProductPriceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict price updates to admin roles and recompute cart totals server-side.",
+      steps: [
+        "Remove unused PATCH handlers or gate them behind admin authorization.",
+        "Recompute order totals from authoritative catalog prices on checkout.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/products/{id}/price route scan documents hidden PATCH price manipulation. Show route-specific API authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-forgot-password-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop password-reset surface live oracle",
+    description:
+      "POST /my-account/forgot-password accepts password-reset requests and redirects unauthenticated callers to /login while phantom /forgot-password returns 404 — password-reset training oracle.",
+    impactOneline:
+      "Exposed password-reset endpoints without rate limiting enable account enumeration and reset-poisoning attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceForgotPasswordLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect password-reset endpoints with rate limiting, anti-enumeration, and secure token delivery.",
+      steps: [
+        "Return generic responses for password-reset requests regardless of account existence.",
+        "Bind reset tokens to the requesting session and expire them quickly.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /my-account/forgot-password accepts reset requests and redirects unauthenticated users to /login. Show password-reset flow remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-forgot-password-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /forgot-password route live oracle",
+    description:
+      "When scanning /forgot-password, phantom 404 page returns missing-content shell while POST /my-account/forgot-password handles password-reset and redirects unauthenticated callers to /login — route-specific password-reset oracle.",
+    impactOneline:
+      "Route-specific confirmation that Gin & Juice Shop exposes a discoverable password-reset surface behind phantom navigation routes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceForgotPasswordRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect password-reset endpoints with rate limiting, anti-enumeration, and secure token delivery.",
+      steps: [
+        "Return generic responses for password-reset requests regardless of account existence.",
+        "Bind reset tokens to the requesting session and expire them quickly.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /forgot-password route scan confirms password-reset handling on /my-account/forgot-password. Show route-specific reset-flow remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ginandjuice-my-account-forgot-password-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Gin & Juice Shop /my-account/forgot-password route live oracle",
+    description:
+      "When scanning /my-account/forgot-password, POST accepts password-reset requests and redirects unauthenticated callers to /login — route-specific password-reset training oracle.",
+    impactOneline:
+      "Route-scoped scans should confirm Gin & Juice Shop exposes a live password-reset surface on /my-account/forgot-password.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ginAndJuiceMyAccountForgotPasswordRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect password-reset endpoints with rate limiting, anti-enumeration, and secure token delivery.",
+      steps: [
+        "Return generic responses for password-reset requests regardless of account existence.",
+        "Bind reset tokens to the requesting session and expire them quickly.",
+        "Run Gin & Juice Shop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /my-account/forgot-password route scan confirms POST redirects unauthenticated users to /login. Show route-specific password-reset remediation.",
     version: 1,
     enabled: true
   },
@@ -62506,7 +74099,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Pwnshop /api/v1/events audit-log route live oracle",
     description:
-      "When scanning /api/v1/events, GET returns unauthenticated security audit logs with action and detail fields — route-specific PWN-005 events API oracle.",
+      "When scanning any /api/v1/* REST path (including /api/v1/events or /api/v1/products/:id), GET /api/v1/events returns unauthenticated security audit logs with action and detail fields — route-specific PWN-005 events API oracle.",
     impactOneline:
       "Route-specific scans should confirm audit logs are exposed without authentication.",
     detectorKind: "rule_ref",
@@ -62522,6 +74115,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/v1/events route returns full audit logs without auth. Show route-specific API authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-lab-stats-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Pwnshop /lab-stats visitor statistics route live oracle",
+    description:
+      "When scanning /lab-stats on pwnshop.ctfsecurity.com, GET returns unauthenticated JSON with visitor counts and lab dirty state — route-specific platform statistics training oracle (ctfsec/pwnshop README corpus fallback when live endpoint returns 404).",
+    impactOneline:
+      "Route-specific scans should confirm unauthenticated lab statistics JSON exposes visitor metrics and dirty-state indicators.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopLabStatsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authenticate or remove lab statistics endpoints — Pwnshop is intentional lab software.",
+      steps: [
+        "Require admin authentication before returning visitor statistics.",
+        "Do not expose lab dirty-state indicators on public endpoints.",
+        "Run Pwnshop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /lab-stats route returns visitor counts without auth. Show route-specific statistics endpoint remediation.",
     version: 1,
     enabled: true
   },
@@ -63104,7 +74723,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "IST Edu redirect whitelist bypass SSRF route live oracle",
     description:
-      "GET /api/redirect?url= accepts //https:/// malformed bypass payloads with HTTP 302 while blocking AWS metadata — IST Edu SSRF/open redirect training oracle on /labs/ssrf.",
+      "When scanning /labs/ssrf or /ssrf on ist-edu-bd.vercel.app, GET /api/redirect?url= accepts //https:/// malformed bypass while blocking AWS metadata — IST Edu SSRF/open redirect training oracle.",
     impactOneline:
       "Broken redirect allow-lists let attackers chain open redirects toward internal or attacker-controlled targets.",
     detectorKind: "rule_ref",
@@ -63120,6 +74739,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/redirect route accepts //https:/// bypass while blocking metadata URLs. Show redirect allow-list hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-lab-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "FauxBank /lab route live oracle",
+    description:
+      "When scanning /lab on pentest-fauxbank.vercel.app, the OWASP guided pentest scenarios hub documents seeded fictional accounts and intentionally weak credentials — route-specific FauxBank training lab oracle.",
+    impactOneline:
+      "Route scans on /lab need live confirmation that the FauxBank pentest training hub is reachable with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run FauxBank only on isolated pentest training infrastructure with clear disclaimers.",
+      steps: [
+        "Keep training labs off production domains and behind authentication where possible.",
+        "Rotate seeded demo credentials between training sessions.",
+        "Label all simulated vulnerabilities with visible training banners."
+      ]
+    },
+    fixPrompt:
+      "Our /lab route exposes the FauxBank OWASP pentest training hub with intentionally weak credentials. Show how to isolate training labs from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-diagnostics-hub-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin diagnostics hub route live oracle",
+    description:
+      "When scanning /api/v1/admin/diagnostics on chimera.atlascrew.dev, CHM-ADMIN-001 ping RCE and CHM-ADMIN-002 webhook SSRF diagnostics endpoints are catalogued — route-specific admin diagnostics hub training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional diagnostics RCE and SSRF flaws on the admin diagnostics hub for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminDiagnosticsHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict diagnostics endpoints to authenticated admin roles on private networks.",
+      steps: [
+        "Never pass user input to shell commands in diagnostics utilities.",
+        "Validate outbound webhook URLs against private IP and metadata blocklists.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/diagnostics route documents CHM-ADMIN-001 ping RCE and CHM-ADMIN-002 webhook SSRF. Show diagnostics endpoint hardening remediation.",
     version: 1,
     enabled: true
   },
@@ -63146,6 +74817,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /labs/open-redirect route documents unvalidated /redirect?url= phishing chains. Show redirect allow-list hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ist-edu-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "high",
+    title: "IST Edu /redirect route live oracle",
+    description:
+      "When scanning /redirect on ist-edu-bd.vercel.app, the SPA implements a countdown redirect UI with approved-domain allowlist training for /redirect?url= open redirect chains.",
+    impactOneline:
+      "Route-specific oracle confirms open redirect training surface on the live /redirect page without relying on /labs/open-redirect catalog alone.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "istEduRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "IST Edu is intentional security training — validate redirect targets against a strict hostname allowlist.",
+      steps: [
+        "Parse redirect URLs with a strict URL library and compare hostnames exactly.",
+        "Reject protocol-relative and external redirect targets on logout/login flows.",
+        "Run intentionally vulnerable training apps only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /redirect route implements countdown open redirects via /redirect?url=. Show redirect allow-list hardening.",
     version: 1,
     enabled: true
   },
@@ -65262,7 +76959,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "AppSec CI Pipeline /comments/ stored XSS route live oracle",
     description:
-      "When scanning /comments/, POST with CSRF token stores unsanitized HTML in comment cards — route-specific stored XSS oracle.",
+      "When scanning /comments/ or /api/comments, POST with CSRF token stores unsanitized HTML in comment cards — route-specific stored XSS oracle.",
     impactOneline:
       "Route-scoped scans should flag stored XSS on AppSec CI Pipeline comment endpoints.",
     detectorKind: "rule_ref",
@@ -65334,6 +77031,2658 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "appsec-ci-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "AppSec CI Pipeline /login dead-route live oracle",
+    description:
+      "When scanning /login on appsec-ci-pipeline.onrender.com, the SQLi login bypass route returns HTTP 404 on the current Render deploy — route-specific dead-login oracle redirecting scanners to /comments/ stored XSS and /admin/ Django panel labs.",
+    impactOneline:
+      "Route-scoped scans should document removed login bypass routes and point to active training surfaces on partial deploys.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecCiLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep training route catalogs aligned with deployed endpoints.",
+      steps: [
+        "Remove or redirect dead /login routes to active lab entrypoints.",
+        "Document which CWE challenges are live on each deploy.",
+        "Use health checks to detect route drift between README and production."
+      ]
+    },
+    fixPrompt:
+      "Our AppSec CI Pipeline /login route returns 404 while /comments/ stored XSS remains live. Show how to document partial training deploys.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-sqli-login-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 SQL login bypass live oracle",
+    description:
+      "POST attacks/sql_login/login_insecure.php on owaspsecure.com accepts tautology SQLi (email=' OR '1'='1'--) and returns insecure login success with echoed query — A03 injection training oracle.",
+    impactOneline:
+      "String-concatenated SQL login enables authentication bypass on the owaspsecure.com injection demo lab.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Hash passwords with bcrypt/argon2 instead of plaintext comparison.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com login_insecure.php accepts SQL tautology bypass. Show parameterized query remediation for PHP login.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-sqli-login-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 injection route SQLi live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, Attack 1 POST login_insecure.php confirms live SQL authentication bypass — route-specific A03 injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm live SQLi, not only client-side evidence markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements.",
+        "Hash passwords with bcrypt/argon2 instead of plaintext comparison.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms SQL login bypass. Show route-level parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-fetch-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF fetch live oracle",
+    description:
+      "GET attacks/fetch_insecure.php?url= on owaspsecure.com fetches attacker-controlled URLs server-side and returns the response body — A10 SSRF training oracle.",
+    impactOneline:
+      "Open server-side fetchers on owaspsecure.com enable SSRF against internal and external targets.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfFetchLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and allowlist outbound fetch targets.",
+      steps: [
+        "Block private IP ranges and link-local addresses in URL fetchers.",
+        "Use an allowlist of permitted fetch destinations.",
+        "Run owaspsecure.com SSRF labs only on isolated training networks."
+      ]
+    },
+    fixPrompt:
+      "Our fetch_insecure.php echoes example.com via server-side fetch. Show SSRF URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-fetch-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF route live oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, GET fetch_insecure.php confirms live open fetcher SSRF — route-specific A10 SSRF oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm live SSRF fetch, not only client-side XXE evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfFetchRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and allowlist outbound fetch targets.",
+      steps: [
+        "Block private IP ranges and link-local addresses in URL fetchers.",
+        "Use an allowlist of permitted fetch destinations.",
+        "Run owaspsecure.com SSRF labs only on isolated training networks."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms open fetcher SSRF. Show route-level URL allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-idor-numeric-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 numeric IDOR live oracle",
+    description:
+      "GET attacks/idor_numeric.php?id=1 on owaspsecure.com returns another user's private note JSON without owner authorization — A01 broken access control training oracle.",
+    impactOneline:
+      "Numeric IDOR on owaspsecure.com exposes private notes across user boundaries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacIdorNumericLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize object access against the authenticated session owner.",
+      steps: [
+        "Verify note.user_id matches the session user before returning records.",
+        "Use non-guessable UUIDs instead of sequential numeric identifiers.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our idor_numeric.php returns private notes by id without owner check. Show authorization remediation for object access.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-idor-numeric-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 BAC route IDOR live oracle",
+    description:
+      "When scanning /demo/a01_bac/insecure.php on owaspsecure.com, GET idor_numeric.php confirms live numeric IDOR — route-specific A01 broken access control oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A01 lab should confirm live BOLA/IDOR, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacIdorNumericRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize object access against the authenticated session owner.",
+      steps: [
+        "Verify note.user_id matches the session user before returning records.",
+        "Use non-guessable UUIDs instead of sequential numeric identifiers.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a01_bac route scan confirms numeric IDOR. Show route-level object authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-phpinfo-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A05 phpinfo exposure live oracle",
+    description:
+      "GET attacks/phpinfo_exposed.php on owaspsecure.com returns full phpinfo() output with PHP version and server configuration — A05 security misconfiguration training oracle.",
+    impactOneline:
+      "Exposed phpinfo() on owaspsecure.com leaks server paths, extensions, and environment details useful for targeted attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigPhpinfoLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove phpinfo() from production and restrict diagnostic endpoints.",
+      steps: [
+        "Delete or block phpinfo() endpoints in production deployments.",
+        "Replace with minimal health checks that omit sensitive configuration.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com phpinfo_exposed.php returns full phpinfo() output. Show how to remove or restrict diagnostic endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-phpinfo-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A05 misconfig route phpinfo live oracle",
+    description:
+      "When scanning /demo/a05_misconfig/insecure.php on owaspsecure.com, Attack 1 phpinfo() exposure confirms live server configuration leak — route-specific A05 misconfiguration oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A05 lab should confirm live phpinfo exposure, not only directory probing noise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigPhpinfoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove phpinfo() from production and restrict diagnostic endpoints.",
+      steps: [
+        "Delete or block phpinfo() endpoints in production deployments.",
+        "Replace with minimal health checks that omit sensitive configuration.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a05_misconfig route scan confirms phpinfo() exposure. Show route-level diagnostic endpoint remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-default-creds-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A05 default credentials live oracle",
+    description:
+      "POST attacks/default_creds_panel.php on owaspsecure.com accepts admin/admin default credentials and grants panel access — A05 security misconfiguration training oracle.",
+    impactOneline:
+      "Default admin credentials on owaspsecure.com enable immediate privileged access without credential guessing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigDefaultCredsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable default credentials and enforce password change on first login.",
+      steps: [
+        "Remove shipped default admin passwords from all deployments.",
+        "Force password change on first login for administrative accounts.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com default_creds_panel.php accepts admin/admin. Show default credential remediation for admin panels.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-default-creds-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A05 misconfig route default creds live oracle",
+    description:
+      "When scanning /demo/a05_misconfig/insecure.php on owaspsecure.com, Attack 5 default admin/admin credentials grant panel access — route-specific A05 misconfiguration oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A05 lab should confirm live default credential acceptance, not only generic misconfig headers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigDefaultCredsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable default credentials and enforce password change on first login.",
+      steps: [
+        "Remove shipped default admin passwords from all deployments.",
+        "Force password change on first login for administrative accounts.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a05_misconfig route scan confirms default admin credentials work. Show route-level default credential remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-exposed-config-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A05 exposed config live oracle",
+    description:
+      "GET attacks/exposed_config/insecure/config.php on owaspsecure.com returns DB_PASSWORD, API_KEY, and SERVICE_TOKEN from webroot — A05 security misconfiguration training oracle.",
+    impactOneline:
+      "Webroot config.php on owaspsecure.com exposes database credentials and API keys without authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigExposedConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Move configuration files outside the webroot and deny direct HTTP access to secrets.",
+      steps: [
+        "Store .env and config.php outside public_html.",
+        "Deny direct access via web server rules.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com exposed config.php leaks DB_PASSWORD and API_KEY. Show webroot secret isolation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-exposed-config-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A05 misconfig route exposed config live oracle",
+    description:
+      "When scanning /demo/a05_misconfig/insecure.php or /attacks/exposed_config/ on owaspsecure.com, Attack 4 config.php leaks credentials from webroot — route-specific A05 misconfiguration oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A05 lab should confirm live exposed config.php, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigExposedConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Move configuration files outside the webroot and deny direct HTTP access to secrets.",
+      steps: [
+        "Store .env and config.php outside public_html.",
+        "Deny direct access via web server rules.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a05_misconfig route scan confirms exposed config.php credentials. Show route-level secret isolation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-verbose-error-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A05 verbose error live oracle",
+    description:
+      "GET attacks/verbose_error_insecure.php on owaspsecure.com enables display_errors and leaks PHP stack traces with server filesystem paths — A05 security misconfiguration training oracle.",
+    impactOneline:
+      "Verbose PHP error pages on owaspsecure.com disclose stack traces and absolute server paths useful for targeted exploitation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigVerboseErrorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable display_errors in production and log detailed errors server-side only.",
+      steps: [
+        "Set display_errors=Off in production php.ini.",
+        "Return generic user-facing error messages.",
+        "Log stack traces to protected server-side log files."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com verbose_error_insecure.php leaks stack traces and paths. Show production error handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-misconfig-verbose-error-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A05 misconfig route verbose error live oracle",
+    description:
+      "When scanning /demo/a05_misconfig/insecure.php or /attacks/verbose_error_insecure.php on owaspsecure.com, Attack 2 verbose errors leak stack traces and paths — route-specific A05 misconfiguration oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A05 lab should confirm live verbose error disclosure, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureMisconfigVerboseErrorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable display_errors in production and log detailed errors server-side only.",
+      steps: [
+        "Set display_errors=Off in production php.ini.",
+        "Return generic user-facing error messages.",
+        "Log stack traces to protected server-side log files."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a05_misconfig route scan confirms verbose PHP error disclosure. Show route-level error handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-password-md5-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 insecure password storage live oracle",
+    description:
+      "POST attacks/passwords/signup_insecure.php on owaspsecure.com stores passwords as plaintext and MD5 hashes — A02 cryptographic failure training oracle.",
+    impactOneline:
+      "Plaintext and MD5 password storage on owaspsecure.com enables trivial credential recovery after database leaks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoPasswordMd5LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hash passwords with bcrypt or argon2 and never store plaintext credentials.",
+      steps: [
+        "Replace MD5/plaintext storage with bcrypt or argon2 password hashing.",
+        "Use per-user salts and adaptive work factors.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com signup_insecure.php stores plaintext and MD5 passwords. Show bcrypt/argon2 password hashing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-password-md5-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 crypto route password storage live oracle",
+    description:
+      "When scanning /demo/a02_crypto/insecure.php on owaspsecure.com, Attack 1 insecure signup stores plaintext and MD5 password hashes — route-specific A02 cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 lab should confirm live weak password storage, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoPasswordMd5RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Hash passwords with bcrypt or argon2 and never store plaintext credentials.",
+      steps: [
+        "Replace MD5/plaintext storage with bcrypt or argon2 password hashing.",
+        "Use per-user salts and adaptive work factors.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto route scan confirms plaintext and MD5 password storage. Show route-level password hashing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-predictable-tokens-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A02 predictable session tokens live oracle",
+    description:
+      "GET attacks/tokens/gen_insecure.php on owaspsecure.com mints session tokens via uniqid()/mt_rand()/time() after insecure signup/login — A02 cryptographic failure training oracle.",
+    impactOneline:
+      "Predictable session tokens on owaspsecure.com enable token guessing after observing generation patterns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoPredictableTokensLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Generate session tokens with cryptographically secure random bytes.",
+      steps: [
+        "Replace uniqid()/mt_rand() token minting with random_bytes(32).",
+        "Use server-side session stores instead of predictable client tokens.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com gen_insecure.php mints predictable tokens. Show crypto.random_bytes remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-predictable-tokens-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A02 predictable tokens attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/tokens/gen_insecure.php on owaspsecure.com, Attack 2 mints predictable session tokens via uniqid()/mt_rand()/time() — route-specific A02 cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 token attack path should confirm live predictable token generation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoPredictableTokensRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Generate session tokens with cryptographically secure random bytes.",
+      steps: [
+        "Replace uniqid()/mt_rand() token minting with random_bytes(32).",
+        "Use server-side session stores instead of predictable client tokens.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto token attack path confirms predictable token minting. Show route-level secure random remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-data-at-rest-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 plaintext data-at-rest live oracle",
+    description:
+      "GET attacks/data_at_rest/dump.php on owaspsecure.com exposes plaintext SSN values in ssn_plain column — A02 data-at-rest cryptographic failure training oracle.",
+    impactOneline:
+      "Plaintext SSN storage on owaspsecure.com enables bulk PII exfiltration from the data-at-rest lab dump endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoDataAtRestLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encrypt sensitive data at rest with per-record keys and authenticated encryption.",
+      steps: [
+        "Replace plaintext ssn_plain storage with AES-GCM ciphertext columns.",
+        "Use envelope encryption with a KMS-managed master key.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com data_at_rest dump.php exposes plaintext SSNs. Show encryption-at-rest remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-data-at-rest-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 data-at-rest attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/data_at_rest/dump.php on owaspsecure.com, Attack 3 exposes plaintext SSN rows — route-specific A02 data-at-rest cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 data-at-rest attack path should confirm live plaintext PII dump.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoDataAtRestRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encrypt sensitive data at rest with per-record keys and authenticated encryption.",
+      steps: [
+        "Replace plaintext ssn_plain storage with AES-GCM ciphertext columns.",
+        "Use envelope encryption with a KMS-managed master key.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto data-at-rest attack path confirms plaintext SSN dump. Show route-level encryption remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-iv-reuse-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A02 static IV encryption live oracle",
+    description:
+      "POST attacks/iv_reuse/encrypt_static_insecure.php on owaspsecure.com encrypts with a fixed key and IV (nonce reuse) — A02 cryptographic failure training oracle.",
+    impactOneline:
+      "Static IV encryption on owaspsecure.com enables ciphertext pattern analysis and key recovery attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoIvReuseLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Generate a unique random IV per encryption operation and never reuse keys with static nonces.",
+      steps: [
+        "Use random_bytes(12) for AES-GCM IVs on every encrypt call.",
+        "Store IV alongside ciphertext and rotate keys with version metadata.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com encrypt_static_insecure.php uses a fixed IV. Show per-operation random IV remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-iv-reuse-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A02 IV-reuse attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/iv_reuse/ on owaspsecure.com, Attack 4 confirms static IV encryption with nonce reuse — route-specific A02 cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 IV-reuse attack path should confirm live static-IV encryption.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoIvReuseRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Generate a unique random IV per encryption operation and never reuse keys with static nonces.",
+      steps: [
+        "Use random_bytes(12) for AES-GCM IVs on every encrypt call.",
+        "Store IV alongside ciphertext and rotate keys with version metadata.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto IV-reuse attack path confirms static IV encryption. Show route-level nonce remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-key-rotation-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 hard-coded key live oracle",
+    description:
+      "GET attacks/key_rotation/rotate_insecure.php on owaspsecure.com exposes a hard-coded encryption key with null key_version and no rotation workflow — A02 cryptographic failure training oracle.",
+    impactOneline:
+      "Hard-coded encryption keys on owaspsecure.com prevent safe key rotation after compromise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoKeyRotationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Store encryption keys in a KMS with versioned rotation and envelope encryption.",
+      steps: [
+        "Move active_key out of source code into a secrets manager.",
+        "Add key_version column and support decrypt-with-old re-encrypt-with-new workflows.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com rotate_insecure.php uses a hard-coded key with no rotation. Show KMS key versioning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-key-rotation-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 key-rotation attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/key_rotation/ on owaspsecure.com, Attack 5 confirms hard-coded key with null key_version — route-specific A02 cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 key-rotation attack path should confirm live hard-coded key exposure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoKeyRotationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Store encryption keys in a KMS with versioned rotation and envelope encryption.",
+      steps: [
+        "Move active_key out of source code into a secrets manager.",
+        "Add key_version column and support decrypt-with-old re-encrypt-with-new workflows.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto key-rotation attack path confirms hard-coded keys. Show route-level KMS rotation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-save-plain-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 plaintext SSN save live oracle",
+    description:
+      "POST attacks/data_at_rest/save_plain.php on owaspsecure.com stores SSN values as plaintext without encryption — A02 data-at-rest cryptographic failure training oracle.",
+    impactOneline:
+      "Plaintext SSN writes on owaspsecure.com confirm unencrypted PII storage at rest.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoSavePlainLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encrypt sensitive data at rest with per-record keys and authenticated encryption.",
+      steps: [
+        "Replace plaintext ssn_plain column writes with AES-GCM ciphertext.",
+        "Use envelope encryption with a KMS-managed master key.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com save_plain.php stores plaintext SSNs. Show encryption-at-rest remediation for the save path.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-crypto-save-plain-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "owaspsecure.com A02 save-plain attack-path route live oracle",
+    description:
+      "When scanning /demo/a02_crypto/attacks/data_at_rest/save_plain.php on owaspsecure.com, Attack 3 confirms plaintext SSN storage on write — route-specific A02 data-at-rest cryptographic failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A02 save-plain attack path should confirm live unencrypted PII writes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureCryptoSavePlainRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encrypt sensitive data at rest with per-record keys and authenticated encryption.",
+      steps: [
+        "Replace plaintext ssn_plain column writes with AES-GCM ciphertext.",
+        "Use envelope encryption with a KMS-managed master key.",
+        "Run owaspsecure.com crypto labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a02_crypto save-plain attack path confirms plaintext SSN writes. Show route-level encryption remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-outdated-jquery-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 outdated jQuery live oracle",
+    description:
+      "GET attacks/outdated_jquery/demo_insecure.html on owaspsecure.com loads jQuery 1.12.4 with unsafe .html() sink — A06 vulnerable components training oracle.",
+    impactOneline:
+      "Outdated jQuery 1.x on owaspsecure.com enables XSS gadgets via deprecated DOM manipulation patterns.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocOutdatedJqueryLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade to supported library versions and avoid unsafe HTML sinks.",
+      steps: [
+        "Replace jQuery 1.x with a maintained 3.x release.",
+        "Use .text() or a strict sanitizer instead of .html() on untrusted input.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com outdated_jquery demo loads jQuery 1.12.4 with .html() sinks. Show dependency upgrade and output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-outdated-jquery-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 VOC route outdated jQuery live oracle",
+    description:
+      "When scanning /demo/a06_voc/insecure.php on owaspsecure.com, Attack 1 outdated jQuery demo confirms live jQuery 1.12.4 with unsafe .html() sink — route-specific A06 vulnerable components oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A06 VOC lab should confirm live outdated jQuery exposure, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocOutdatedJqueryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade to supported library versions and avoid unsafe HTML sinks.",
+      steps: [
+        "Replace jQuery 1.x with a maintained 3.x release.",
+        "Use .text() or a strict sanitizer instead of .html() on untrusted input.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a06_voc route scan confirms outdated jQuery 1.12.4. Show route-level dependency upgrade remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-cdn-no-sri-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 CDN without SRI live oracle",
+    description:
+      "GET attacks/cdn_no_sri/demo_insecure.html on owaspsecure.com loads malicious_cdn/jquery.min.js without Subresource Integrity — A06 vulnerable components training oracle.",
+    impactOneline:
+      "CDN scripts without SRI on owaspsecure.com allow supply-chain tampering if the CDN path is compromised.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocCdnNoSriLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin third-party scripts with Subresource Integrity hashes.",
+      steps: [
+        "Add integrity and crossorigin attributes to all CDN script tags.",
+        "Self-host critical libraries when SRI is not available.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com cdn_no_sri demo loads scripts without integrity checks. Show SRI pinning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-cdn-no-sri-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 VOC route CDN-no-SRI live oracle",
+    description:
+      "When scanning /demo/a06_voc/insecure.php on owaspsecure.com, Attack 2 CDN-without-SRI demo confirms compromised script execution — route-specific A06 vulnerable components oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A06 VOC lab should confirm live missing SRI on CDN scripts, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocCdnNoSriRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin third-party scripts with Subresource Integrity hashes.",
+      steps: [
+        "Add integrity and crossorigin attributes to all CDN script tags.",
+        "Self-host critical libraries when SRI is not available.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a06_voc route scan confirms CDN scripts without SRI. Show route-level integrity pinning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-mixed-content-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A06 mixed content live oracle",
+    description:
+      "GET attacks/mixed_content/demo_insecure.html on owaspsecure.com loads HTTP scripts and images on an HTTPS page — A06 vulnerable components training oracle.",
+    impactOneline:
+      "Mixed HTTP subresources on owaspsecure.com HTTPS pages enable downgrade and MITM tampering of active/passive content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocMixedContentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Serve all subresources over HTTPS and avoid mixed content.",
+      steps: [
+        "Upgrade every script, stylesheet, and image URL to https://.",
+        "Use Content-Security-Policy upgrade-insecure-requests on legacy pages.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com mixed_content demo loads HTTP scripts on HTTPS. Show mixed-content remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-mixed-content-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A06 VOC route mixed-content live oracle",
+    description:
+      "When scanning /demo/a06_voc/insecure.php on owaspsecure.com, Attack 3 mixed-content demo confirms HTTP subresources on HTTPS — route-specific A06 vulnerable components oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A06 VOC lab should confirm live mixed-content exposure, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocMixedContentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Serve all subresources over HTTPS and avoid mixed content.",
+      steps: [
+        "Upgrade every script, stylesheet, and image URL to https://.",
+        "Use Content-Security-Policy upgrade-insecure-requests on legacy pages.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a06_voc route scan confirms mixed HTTP/HTTPS subresources. Show route-level mixed-content remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-lodash-outdated-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 outdated Lodash live oracle",
+    description:
+      "GET attacks/lodash_outdated/demo_insecure.html on owaspsecure.com loads Lodash 4.17.15 with unsafe _.merge prototype pollution pattern — A06 vulnerable components training oracle.",
+    impactOneline:
+      "Outdated Lodash on owaspsecure.com enables prototype pollution via deep merge on untrusted JSON.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocLodashOutdatedLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Lodash and never deep-merge untrusted input.",
+      steps: [
+        "Upgrade to a patched Lodash release and audit merge usage.",
+        "Reject __proto__ and constructor.prototype keys in user JSON.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com lodash_outdated demo uses Lodash 4.17.15 with _.merge on untrusted input. Show dependency upgrade remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-lodash-outdated-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 VOC route outdated Lodash live oracle",
+    description:
+      "When scanning /demo/a06_voc/insecure.php on owaspsecure.com, Attack 4 outdated Lodash demo confirms Lodash 4.17.15 with prototype pollution merge sink — route-specific A06 vulnerable components oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A06 VOC lab should confirm live outdated Lodash exposure, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocLodashOutdatedRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Lodash and never deep-merge untrusted input.",
+      steps: [
+        "Upgrade to a patched Lodash release and audit merge usage.",
+        "Reject __proto__ and constructor.prototype keys in user JSON.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a06_voc route scan confirms outdated Lodash 4.17.15. Show route-level dependency upgrade remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-unpinned-latest-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 unpinned @latest CDN live oracle",
+    description:
+      "GET attacks/pinned_versions/demo_insecure.html on owaspsecure.com loads lodash@latest from CDN without integrity hash — A06 vulnerable components training oracle.",
+    impactOneline:
+      "Floating @latest CDN tags on owaspsecure.com break reproducibility and enable silent supply-chain changes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocUnpinnedLatestLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin exact dependency versions and add SRI hashes.",
+      steps: [
+        "Replace @latest tags with locked semver versions in CDN URLs.",
+        "Add integrity and crossorigin attributes to third-party scripts.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com pinned_versions demo loads lodash@latest without integrity. Show version pinning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-voc-unpinned-latest-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "owaspsecure.com A06 VOC route unpinned @latest live oracle",
+    description:
+      "When scanning /demo/a06_voc/insecure.php on owaspsecure.com, Attack 5 unpinned @latest demo confirms lodash@latest CDN without SRI — route-specific A06 vulnerable components oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A06 VOC lab should confirm live unpinned CDN tags, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureVocUnpinnedLatestRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Pin exact dependency versions and add SRI hashes.",
+      steps: [
+        "Replace @latest tags with locked semver versions in CDN URLs.",
+        "Add integrity and crossorigin attributes to third-party scripts.",
+        "Run owaspsecure.com VOC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a06_voc route scan confirms unpinned lodash@latest CDN. Show route-level version pinning remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-auth-session-fixation-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A07 session fixation live oracle",
+    description:
+      "GET attacks/session_fixation/begin.php on owaspsecure.com issues a pre-login session ID without rotation — A07 authentication failure training oracle.",
+    impactOneline:
+      "Reusable pre-login session IDs on owaspsecure.com enable session fixation before authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureAuthSessionFixationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Regenerate session IDs on login and set secure cookie flags.",
+      steps: [
+        "Call session_regenerate_id(true) after successful authentication.",
+        "Set HttpOnly, Secure, and SameSite on session cookies.",
+        "Run owaspsecure.com auth labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com session_fixation/begin.php reuses pre-login SIDs. Show session regeneration and secure cookie remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-auth-session-fixation-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A07 auth route session fixation live oracle",
+    description:
+      "When scanning /demo/a07_auth/insecure.php on owaspsecure.com, Attack 2 session fixation begin confirms live pre-login SID issuance — route-specific A07 authentication oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A07 lab should confirm live session fixation, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureAuthSessionFixationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Regenerate session IDs on login and set secure cookie flags.",
+      steps: [
+        "Call session_regenerate_id(true) after successful authentication.",
+        "Set HttpOnly, Secure, and SameSite on session cookies.",
+        "Run owaspsecure.com auth labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a07_auth route scan confirms session fixation via pre-login SID. Show route-level session hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-auth-mfa-bypass-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "owaspsecure.com A07 weak MFA bypass live oracle",
+    description:
+      "GET attacks/mfa_flow/begin_insecure.php?mfa=ok on owaspsecure.com bypasses MFA and POST verify_insecure.php accepts universal code 000000 — A07 authentication failure training oracle.",
+    impactOneline:
+      "Bypassable MFA and universal OTP codes on owaspsecure.com enable account takeover without possession factors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureAuthMfaBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind MFA to per-user secrets, reject bypass query params, and block universal OTP codes.",
+      steps: [
+        "Require TOTP/WebAuthn verification with per-user secrets and rate limiting.",
+        "Reject MFA bypass flags in query strings and enforce server-side MFA state.",
+        "Run owaspsecure.com auth labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com MFA flow accepts ?mfa=ok bypass and code 000000. Show MFA hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-auth-mfa-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "owaspsecure.com A07 auth route MFA bypass live oracle",
+    description:
+      "When scanning /demo/a07_auth/insecure.php on owaspsecure.com, Attack 4 MFA flow confirms ?mfa=ok bypass and universal code 000000 acceptance — route-specific A07 authentication oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A07 lab should confirm live weak MFA bypass, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureAuthMfaBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind MFA to per-user secrets, reject bypass query params, and block universal OTP codes.",
+      steps: [
+        "Require TOTP/WebAuthn verification with per-user secrets and rate limiting.",
+        "Reject MFA bypass flags in query strings and enforce server-side MFA state.",
+        "Run owaspsecure.com auth labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a07_auth route scan confirms MFA bypass via ?mfa=ok and universal code 000000. Show route-level MFA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-password-reset-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 predictable password-reset live oracle",
+    description:
+      "GET attacks/reset_flow/generate_insecure.php on owaspsecure.com mints predictable email|timestamp reset tokens with no TTL and reusable reset.php acceptance — A04 insecure design training oracle.",
+    impactOneline:
+      "Predictable reusable password-reset tokens on owaspsecure.com enable account takeover without out-of-band delivery.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignPasswordResetLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically random single-use reset tokens with short TTL and server-side storage.",
+      steps: [
+        "Generate reset tokens with random_bytes() instead of email|timestamp concatenation.",
+        "Store hashed tokens server-side with expiry and invalidate after first use.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com generate_insecure.php mints predictable reusable reset tokens. Show secure password-reset token remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-password-reset-route-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route password-reset live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 1 password reset flow confirms predictable email|timestamp tokens with no TTL and reusable reset links — route-specific A04 insecure design oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live password-reset design flaws, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignPasswordResetRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically random single-use reset tokens with short TTL and server-side storage.",
+      steps: [
+        "Generate reset tokens with random_bytes() instead of email|timestamp concatenation.",
+        "Store hashed tokens server-side with expiry and invalidate after first use.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms predictable reusable password-reset tokens. Show route-level reset-flow remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-password-reset-attack-path-route-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 reset_flow attack-path route live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/attacks/reset_flow/ on owaspsecure.com, generate_insecure.php mints predictable email|timestamp tokens accepted by reset.php without TTL or single-use binding — route-specific A04 password-reset oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 reset_flow attack paths should confirm live predictable password-reset tokens, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignPasswordResetAttackPathRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically random single-use reset tokens with short TTL and server-side storage.",
+      steps: [
+        "Generate reset tokens with random_bytes() instead of email|timestamp concatenation.",
+        "Store hashed tokens server-side with expiry and invalidate after first use.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design/attacks/reset_flow route scan confirms predictable reusable reset tokens. Show attack-path password-reset remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-reauth-email-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 sensitive email change live oracle",
+    description:
+      "POST attacks/reauth_sensitive/change_email_insecure.php on owaspsecure.com changes account email without password re-auth or CSRF — A04 insecure design training oracle.",
+    impactOneline:
+      "Missing re-authentication on sensitive account changes on owaspsecure.com enables account takeover via email hijack.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignReauthEmailLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require step-up authentication and CSRF protection for sensitive account changes.",
+      steps: [
+        "Prompt for current password before email or MFA changes.",
+        "Validate CSRF tokens on all state-changing account settings endpoints.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com change_email_insecure.php accepts email changes without re-auth. Show step-up authentication remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-reauth-email-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route reauth live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 2 sensitive email change confirms missing re-auth — route-specific A04 insecure design oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live missing re-auth on sensitive changes, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignReauthEmailRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require step-up authentication and CSRF protection for sensitive account changes.",
+      steps: [
+        "Prompt for current password before email or MFA changes.",
+        "Validate CSRF tokens on all state-changing account settings endpoints.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms email change without re-auth. Show route-level step-up auth remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-coupon-logic-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 coupon logic live oracle",
+    description:
+      "POST attacks/coupon_logic/cart_insecure.php on owaspsecure.com re-applies SAVE50 without one-time or cap limits — A04 insecure design training oracle.",
+    impactOneline:
+      "Unlimited coupon re-application on owaspsecure.com enables negative cart totals and payment bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignCouponLogicLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce one-time coupon redemption and cap total discounts.",
+      steps: [
+        "Track coupon usage per user and reject repeat applications.",
+        "Cap discount amounts so totals cannot go negative.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com cart_insecure.php re-applies SAVE50 without limits. Show coupon logic remediation with one-time redemption and discount caps.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-coupon-logic-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route coupon live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 5 coupon logic accepts unlimited SAVE50 re-application — route-specific A04 insecure design oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live coupon abuse, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignCouponLogicRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce one-time coupon redemption and cap total discounts.",
+      steps: [
+        "Track coupon usage per user and reject repeat applications.",
+        "Cap discount amounts so totals cannot go negative.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms unlimited coupon re-application. Show route-level coupon logic remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-csrf-settings-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 CSRF settings change live oracle",
+    description:
+      "POST attacks/csrf_settings/change_settings_insecure.php on owaspsecure.com accepts cross-site POSTs without CSRF token or origin checks — A04 insecure design training oracle.",
+    impactOneline:
+      "Missing CSRF protection on owaspsecure.com settings endpoints enables cross-site state changes.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignCsrfSettingsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens and validate Origin/Referer on state-changing POST endpoints.",
+      steps: [
+        "Issue per-session CSRF tokens for all settings forms.",
+        "Reject POST requests with missing or invalid Origin/Referer headers.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com change_settings_insecure.php accepts cross-site POSTs without CSRF protection. Show CSRF token and origin validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-csrf-settings-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route CSRF live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 3 CSRF settings change confirms missing token and origin checks — route-specific A04 CSRF oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live CSRF on settings changes, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignCsrfSettingsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require CSRF tokens and validate Origin/Referer on state-changing POST endpoints.",
+      steps: [
+        "Issue per-session CSRF tokens for all settings forms.",
+        "Reject POST requests with missing or invalid Origin/Referer headers.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms CSRF on settings changes. Show route-level CSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-magic-link-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 reusable magic link live oracle",
+    description:
+      "POST attacks/magic_link/link_insecure.php on owaspsecure.com mints reusable magic-login links with no expiry or single-use binding — A04 insecure design training oracle.",
+    impactOneline:
+      "Reusable magic links on owaspsecure.com enable permanent account access for anyone who obtains the URL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignMagicLinkLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use single-use, short-lived magic links bound to the requesting device or session.",
+      steps: [
+        "Store magic-link tokens server-side with expiry and single-use flags.",
+        "Invalidate tokens after first successful login.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com magic_link/link_insecure.php mints reusable login links. Show single-use expiring magic link remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-design-magic-link-route-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "high",
+    title: "owaspsecure.com A04 insecure design route magic link live oracle",
+    description:
+      "When scanning /demo/a04_insecure_design/insecure.php on owaspsecure.com, Attack 4 magic link never expires and is reusable — route-specific A04 authentication oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A04 lab should confirm live reusable magic links, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureDesignMagicLinkRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use single-use, short-lived magic links bound to the requesting device or session.",
+      steps: [
+        "Store magic-link tokens server-side with expiry and single-use flags.",
+        "Invalidate tokens after first successful login.",
+        "Run owaspsecure.com design labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a04_insecure_design route scan confirms reusable magic links. Show route-level single-use magic link remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-unserialize-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 unsafe unserialize live oracle",
+    description:
+      "POST attacks/unserialize/insecure.php on owaspsecure.com accepts attacker-controlled serialized PHP objects — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Unsafe PHP unserialize on owaspsecure.com enables gadget-chain remote code execution when matching classes exist.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityUnserializeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never unserialize untrusted input; use JSON or signed data formats.",
+      steps: [
+        "Replace PHP unserialize with json_decode for structured data.",
+        "If serialization is required, use allowlisted classes and signed payloads.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com unserialize/insecure.php accepts attacker objects. Show safe deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-unserialize-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route unserialize live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 2 unsafe unserialize confirms live object deserialization — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live unsafe unserialize, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityUnserializeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never unserialize untrusted input; use JSON or signed data formats.",
+      steps: [
+        "Replace PHP unserialize with json_decode for structured data.",
+        "If serialization is required, use allowlisted classes and signed payloads.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms unsafe PHP unserialize. Show route-level safe deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-signed-update-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 unsigned update install live oracle",
+    description:
+      "GET attacks/signed_updates/insecure_install.php on owaspsecure.com installs update packages without sha256 or signature validation — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Blind update installation on owaspsecure.com enables supply-chain compromise via unsigned zip payloads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegritySignedUpdateLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify update packages with cryptographic signatures before installation.",
+      steps: [
+        "Require signed manifests with sha256 hashes for every update artifact.",
+        "Reject packages missing valid publisher signatures.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com insecure_install.php installs updates without signature checks. Show signed update verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-signed-update-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route signed-update live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 1 confirms unsigned update installation — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live unsigned update installs, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegritySignedUpdateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify update packages with cryptographic signatures before installation.",
+      steps: [
+        "Require signed manifests with sha256 hashes for every update artifact.",
+        "Reject packages missing valid publisher signatures.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms unsigned update installs. Show route-level signed update verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-plugin-upload-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 plugin upload RCE live oracle",
+    description:
+      "POST attacks/plugin_loader/upload_insecure.php on owaspsecure.com uploads and includes attacker-controlled PHP from webroot — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Unvalidated plugin uploads on owaspsecure.com execute arbitrary PHP code straight from the uploads directory.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityPluginUploadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never include uploaded files; validate extensions and store outside webroot.",
+      steps: [
+        "Block executable extensions and scan uploads with an allowlist.",
+        "Store uploads outside the webroot and serve via controlled handlers.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com plugin_loader/upload_insecure.php executes uploaded PHP. Show safe plugin upload remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-plugin-upload-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route plugin-upload live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 4 plugin loader confirms uploaded PHP execution — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live plugin upload RCE, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityPluginUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never include uploaded files; validate extensions and store outside webroot.",
+      steps: [
+        "Block executable extensions and scan uploads with an allowlist.",
+        "Store uploads outside the webroot and serve via controlled handlers.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms plugin upload RCE. Show route-level upload validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-cicd-deploy-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 CI/CD unsigned deploy live oracle",
+    description:
+      "POST attacks/cicd/deploy_insecure.php on owaspsecure.com unzips build artifacts without manifest or signature checks — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Unsigned CI/CD deploys on owaspsecure.com let attackers push malicious build artifacts directly into the app.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityCicdDeployLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify CI/CD artifacts against signed manifests before deployment.",
+      steps: [
+        "Require signed build manifests and hash verification on every deploy.",
+        "Reject archives that fail signature or provenance checks.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com cicd/deploy_insecure.php deploys unsigned zips. Show signed CI/CD artifact verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-cicd-deploy-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route cicd-deploy live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 5 CI/CD deploy confirms unsigned artifact extraction — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live unsigned CI/CD deploys, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityCicdDeployRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify CI/CD artifacts against signed manifests before deployment.",
+      steps: [
+        "Require signed build manifests and hash verification on every deploy.",
+        "Reject archives that fail signature or provenance checks.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms unsigned CI/CD deploys. Show route-level artifact verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-remote-config-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 remote config blind apply live oracle",
+    description:
+      "GET attacks/remote_config/config_insecure.php on owaspsecure.com fetches remote JSON and applies featureFlags without signature/HMAC — A08 software integrity failure training oracle.",
+    impactOneline:
+      "Unsigned remote config on owaspsecure.com lets attackers swap feature flags and API endpoints via a poisoned config URL.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityRemoteConfigLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify remote configuration with signatures or allowlisted sources before applying.",
+      steps: [
+        "Require HMAC or signature verification on every remote config fetch.",
+        "Allowlist trusted config origins and reject arbitrary src URLs.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com remote_config/config_insecure.php applies JSON blindly. Show signed remote configuration verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-integrity-remote-config-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "critical",
+    title: "owaspsecure.com A08 integrity route remote-config live oracle",
+    description:
+      "When scanning /demo/a08_integrity/insecure.php on owaspsecure.com, Attack 3 remote config confirms blind JSON apply without signature — route-specific A08 integrity oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A08 lab should confirm live unsigned remote config apply, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureIntegrityRemoteConfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify remote configuration with signatures or allowlisted sources before applying.",
+      steps: [
+        "Require HMAC or signature verification on every remote config fetch.",
+        "Allowlist trusted config origins and reject arbitrary src URLs.",
+        "Run owaspsecure.com integrity labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a08_integrity route scan confirms unsigned remote config apply. Show route-level config integrity verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-auth-events-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 missing auth audit logging live oracle",
+    description:
+      "POST attacks/auth_events/login_insecure.php on owaspsecure.com succeeds without meaningful auth audit logging — A09 security logging failure training oracle.",
+    impactOneline:
+      "Missing auth audit trails on owaspsecure.com hide credential stuffing and privilege abuse during incident response.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingAuthEventsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Log authentication outcomes with user, IP, timestamp, and correlation IDs.",
+      steps: [
+        "Emit structured audit events for login success, failure, and privileged actions.",
+        "Include user id, source IP, user-agent, and outcome in every auth log line.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com login_insecure.php succeeds without audit logging. Show structured auth audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-auth-events-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route auth events live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 1 login confirms missing audit trail — route-specific A09 logging failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live missing auth audit logging, not only client-side evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingAuthEventsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Log authentication outcomes with user, IP, timestamp, and correlation IDs.",
+      steps: [
+        "Emit structured audit events for login success, failure, and privileged actions.",
+        "Include user id, source IP, user-agent, and outcome in every auth log line.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms login without audit trail. Show route-level auth audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-pii-secrets-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A09 sensitive data in logs live oracle",
+    description:
+      "POST attacks/pii_in_logs/capture_insecure.php on owaspsecure.com writes passwords, tokens, and SSNs to app.log in cleartext — A09 sensitive logging training oracle.",
+    impactOneline:
+      "Cleartext secrets in logs on owaspsecure.com turn operator log access into a secondary data breach.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingPiiSecretsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact secrets and PII from application logs before write or ship.",
+      steps: [
+        "Never log passwords, tokens, or full SSNs — hash or mask sensitive fields.",
+        "Add log scrubbers for Bearer tokens and credit-card/SSN patterns.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com capture_insecure.php writes raw secrets to app.log. Show log redaction and PII scrubbing remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-pii-secrets-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "owaspsecure.com A09 logging route PII in logs live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 2 confirms raw secrets/PII written to app.log — route-specific A09 sensitive logging oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live secret leakage into logs, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingPiiSecretsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact secrets and PII from application logs before write or ship.",
+      steps: [
+        "Never log passwords, tokens, or full SSNs — hash or mask sensitive fields.",
+        "Add log scrubbers for Bearer tokens and credit-card/SSN patterns.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms secrets written to app.log. Show route-level log redaction remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-threshold-alerts-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 missing threshold alerts live oracle",
+    description:
+      "POST attacks/threshold_alerts/fail_insecure.php on owaspsecure.com records repeated auth failures without threshold alerting — A09 monitoring failure training oracle.",
+    impactOneline:
+      "Missing brute-force alerts on owaspsecure.com let credential-stuffing attacks continue undetected.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingThresholdAlertsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Alert on repeated authentication failures and anomalous access patterns.",
+      steps: [
+        "Define SIEM thresholds for failed logins per user/IP within a sliding window.",
+        "Page on-call when brute-force or credential-stuffing patterns exceed baseline.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com fail_insecure.php never triggers alerts on repeated failures. Show threshold alerting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-threshold-alerts-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route threshold alerts live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 4 confirms repeated failures never trigger alerts — route-specific A09 monitoring failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live missing threshold alerting, not only client-side evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingThresholdAlertsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Alert on repeated authentication failures and anomalous access patterns.",
+      steps: [
+        "Define SIEM thresholds for failed logins per user/IP within a sliding window.",
+        "Page on-call when brute-force or credential-stuffing patterns exceed baseline.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms no alerts on repeated failures. Show route-level SIEM threshold remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-admin-action-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 privileged action audit logging live oracle",
+    description:
+      "POST attacks/auth_events/admin_action_insecure.php on owaspsecure.com performs privileged delete_user without actor or correlation audit logging — A09 privileged-action logging failure training oracle.",
+    impactOneline:
+      "Missing privileged-action audit trails on owaspsecure.com hide destructive admin abuse during incident response.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingAdminActionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Log privileged actions with actor identity, target object, and correlation IDs.",
+      steps: [
+        "Emit structured audit events for every admin or destructive action.",
+        "Include actor user id, action type, target resource, and corr_id in every privileged log line.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com admin_action_insecure.php performs delete_user without actor audit logging. Show privileged-action audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-admin-action-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route admin action live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 1 admin_action confirms privileged delete without actor/correlation audit trail — route-specific A09 logging failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live missing privileged-action audit logging, not only client-side evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingAdminActionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Log privileged actions with actor identity, target object, and correlation IDs.",
+      steps: [
+        "Emit structured audit events for every admin or destructive action.",
+        "Include actor user id, action type, target resource, and corr_id in every privileged log line.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms admin delete without audit trail. Show route-level privileged-action audit logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-structure-time-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 unstructured log format live oracle",
+    description:
+      "POST attacks/structure_time/write_insecure.php on owaspsecure.com writes free-form local-time log lines without structured timestamps — A09 log structure failure training oracle.",
+    impactOneline:
+      "Unstructured free-form logs on owaspsecure.com break SIEM parsing and cross-event correlation during investigations.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingStructureTimeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Emit structured JSON logs with UTC timestamps and consistent field names.",
+      steps: [
+        "Replace free-form log strings with structured JSON containing timestamp, level, and event fields.",
+        "Use UTC ISO-8601 timestamps for cross-region correlation.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com write_insecure.php writes brittle free-form log lines. Show structured logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-structure-time-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route structure/time live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 3 confirms free-form unstructured log lines — route-specific A09 log structure failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live unstructured logging, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingStructureTimeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Emit structured JSON logs with UTC timestamps and consistent field names.",
+      steps: [
+        "Replace free-form log strings with structured JSON containing timestamp, level, and event fields.",
+        "Use UTC ISO-8601 timestamps for cross-region correlation.",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms brittle free-form logs. Show route-level structured logging remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-integrity-chain-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 log integrity chain live oracle",
+    description:
+      "POST attacks/integrity_chain/append_insecure.php on owaspsecure.com appends plain-text log lines without signatures or hash chains — A09 log integrity failure training oracle.",
+    impactOneline:
+      "Tamper-undetectable logs on owaspsecure.com let attackers cover tracks by editing or deleting audit entries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingIntegrityChainLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect audit logs with hash chains, signatures, or append-only WORM storage.",
+      steps: [
+        "Sign each log entry or maintain a Merkle/hash chain for tamper detection.",
+        "Ship logs to immutable append-only storage (WORM bucket or SIEM with write-once policy).",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our owaspsecure.com append_insecure.php writes tamper-undetectable plain-text logs. Show log integrity chain remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-logging-integrity-chain-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "owaspsecure.com A09 logging route integrity chain live oracle",
+    description:
+      "When scanning /demo/a09_logging/insecure.php on owaspsecure.com, Attack 5 confirms append-only logs without integrity protection — route-specific A09 log integrity failure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A09 lab should confirm live missing log integrity chains, not only client-side evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureLoggingIntegrityChainRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Protect audit logs with hash chains, signatures, or append-only WORM storage.",
+      steps: [
+        "Sign each log entry or maintain a Merkle/hash chain for tamper detection.",
+        "Ship logs to immutable append-only storage (WORM bucket or SIEM with write-once policy).",
+        "Run owaspsecure.com logging labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a09_logging route scan confirms tamper-undetectable logs. Show route-level log integrity chain remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-xss-stored-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 stored XSS live oracle",
+    description:
+      "POST attacks/xss_stored/xss_demo.php?mode=raw on owaspsecure.com stores attacker-controlled HTML in session comments without sanitization — A03 stored XSS training oracle.",
+    impactOneline:
+      "Unsanitized stored comments on owaspsecure.com enable persistent XSS against other users viewing the demo.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionXssStoredLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize all user HTML before storage and on output.",
+      steps: [
+        "Use a strict HTML sanitizer or encode output with htmlspecialchars.",
+        "Apply Content-Security-Policy to block inline script execution.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our xss_demo.php stores raw HTML in session comments. Show output encoding and CSP remediation for stored XSS.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-xss-stored-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 injection route stored XSS live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, POST xss_stored/xss_demo.php confirms live stored XSS — route-specific A03 injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm live stored XSS, not only client-side evidence markers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionXssStoredRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode or sanitize all user HTML before storage and on output.",
+      steps: [
+        "Use a strict HTML sanitizer or encode output with htmlspecialchars.",
+        "Apply Content-Security-Policy to block inline script execution.",
+        "Run owaspsecure.com labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms stored XSS in session comments. Show route-level output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-union-search-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 UNION search SQLi live oracle",
+    description:
+      "GET attacks/sql_union_search/search_insecure.php on owaspsecure.com accepts UNION SELECT payloads that exfiltrate a03_users emails — A03 injection training oracle.",
+    impactOneline:
+      "Shape-compatible UNION injection on owaspsecure.com product search leaks user emails from other tables.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionUnionSearchLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and block UNION in search filters.",
+      steps: [
+        "Replace string-concatenated LIKE clauses with prepared statements.",
+        "Validate search input against strict allowlists before query execution.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our sql_union_search/search_insecure.php concatenates q into LIKE and allows UNION SELECT. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-union-search-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 injection route UNION search live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, Attack 2 UNION search exfiltrates a03_users via shape-compatible UNION SELECT — route-specific A03 injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm live UNION SQLi, not only login bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionUnionSearchRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and block UNION in search filters.",
+      steps: [
+        "Replace string-concatenated LIKE clauses with prepared statements.",
+        "Validate search input against strict allowlists before query execution.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms UNION search SQLi. Show route-level parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-sqli-blind-time-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 blind/time SQLi live oracle",
+    description:
+      "GET attacks/sql_blind_time/count_insecure.php on owaspsecure.com concatenates id into COUNT queries — id=1 AND SLEEP(2) delays ~2s in the ms field — A03 time-based blind injection training oracle.",
+    impactOneline:
+      "Concatenated id filters on owaspsecure.com enable boolean-based SQL inference without error messages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliBlindTimeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and cast id parameters to integers.",
+      steps: [
+        "Bind id as an integer parameter instead of concatenating into SQL.",
+        "Reject non-numeric id values before query execution.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our sql_blind_time/count_insecure.php concatenates id into COUNT. Show parameterized integer binding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-sqli-blind-time-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 injection route blind/time SQLi live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php or /attacks/sql_blind_time/ on owaspsecure.com, Attack 3 blind/time SQLi confirms SLEEP(2) timing differential — route-specific A03 injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm live blind SQLi, not only login bypass and UNION search.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliBlindTimeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and cast id parameters to integers.",
+      steps: [
+        "Bind id as an integer parameter instead of concatenating into SQL.",
+        "Reject non-numeric id values before query execution.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms blind SQLi via COUNT inflation. Show route-level parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-sqli-second-order-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 second-order SQLi live oracle",
+    description:
+      "GET attacks/sql_second_order/admin_view_insecure.php on owaspsecure.com builds LIKE filters from stored profile bio fields — needle=%' OR 1=1 -- detonates stored SQL fragments — A03 second-order injection training oracle.",
+    impactOneline:
+      "Stored profile fields on owaspsecure.com detonate later in admin queries built via string concatenation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliSecondOrderLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate stored user content and parameterize all downstream queries.",
+      steps: [
+        "Sanitize profile bio on write and escape on read.",
+        "Use prepared statements when filtering stored fields in admin views.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our sql_second_order/admin_view_insecure.php concatenates stored bio into LIKE. Show second-order SQLi remediation with parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-sqli-second-order-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "owaspsecure.com A03 injection route second-order SQLi live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php or /attacks/sql_second_order/ on owaspsecure.com, Attack 4 second-order SQLi exfiltrates multiple a03_users via stored bio payload in admin_view — route-specific A03 injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm live second-order SQLi, not only first-order injection vectors.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionSqliSecondOrderRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate stored user content and parameterize all downstream queries.",
+      steps: [
+        "Sanitize profile bio on write and escape on read.",
+        "Use prepared statements when filtering stored fields in admin views.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms second-order SQLi in admin_view. Show route-level stored-field validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-function-level-promote-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "owaspsecure.com A01 function-level promote live oracle",
+    description:
+      "POST attacks/function_level/promote_insecure.php on owaspsecure.com grants admin role to arbitrary user_id without authorization — A01 function-level access control training oracle.",
+    impactOneline:
+      "Missing function-level authorization on owaspsecure.com enables vertical privilege escalation to admin.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacFunctionLevelPromoteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce role checks on every privileged function endpoint.",
+      steps: [
+        "Require authenticated admin session before role-promotion endpoints execute.",
+        "Use server-side authorization middleware on all privileged actions.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our promote_insecure.php grants admin without authorization. Show function-level access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-function-level-promote-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "owaspsecure.com A01 BAC route function-level promote live oracle",
+    description:
+      "When scanning /demo/a01_bac/insecure.php on owaspsecure.com, POST function_level/promote_insecure.php confirms live vertical privilege escalation — route-specific A01 broken access control oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A01 lab should confirm live function-level privilege escalation, not only hub documentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacFunctionLevelPromoteRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce role checks on every privileged function endpoint.",
+      steps: [
+        "Require authenticated admin session before role-promotion endpoints execute.",
+        "Use server-side authorization middleware on all privileged actions.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a01_bac route scan confirms unauthenticated admin promotion. Show route-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-file-dor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 file DOR live oracle",
+    description:
+      "GET attacks/file_dor.php?id= on owaspsecure.com returns another user's private report file by numeric id without owner check — A01 direct object reference training oracle.",
+    impactOneline:
+      "Numeric file DOR on owaspsecure.com exposes private per-user report files across user boundaries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacFileDorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize file access against the authenticated session owner.",
+      steps: [
+        "Verify file.user_id matches the session user before serving downloads.",
+        "Use non-guessable file tokens instead of sequential numeric ids.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our file_dor.php returns private files by id without owner check. Show authorization remediation for file downloads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-file-dor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 BAC route file DOR live oracle",
+    description:
+      "When scanning /demo/a01_bac/insecure.php on owaspsecure.com, GET file_dor.php confirms live direct object reference on private files — route-specific A01 broken access control oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A01 lab should confirm live file DOR, not only numeric note IDOR.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacFileDorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize file access against the authenticated session owner.",
+      steps: [
+        "Verify file.user_id matches the session user before serving downloads.",
+        "Use non-guessable file tokens instead of sequential numeric ids.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a01_bac route scan confirms file DOR on private reports. Show route-level file authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "owaspsecure.com A01 mass-assignment live oracle",
+    description:
+      "POST attacks/mass_assignment.php on owaspsecure.com accepts client-supplied is_admin=1 without field allowlist — A01 mass-assignment training oracle.",
+    impactOneline:
+      "Unrestricted mass assignment on owaspsecure.com enables privilege escalation via is_admin field injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist updatable profile fields server-side.",
+      steps: [
+        "Reject unknown POST fields instead of blindly applying them to user records.",
+        "Never accept role or privilege flags from client requests.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our mass_assignment.php accepts is_admin=1 from POST body. Show allowlist-based mass-assignment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "owaspsecure.com A01 BAC route mass-assignment live oracle",
+    description:
+      "When scanning /demo/a01_bac/insecure.php on owaspsecure.com, POST mass_assignment.php confirms live is_admin=1 acceptance — route-specific A01 broken access control oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A01 lab should confirm live mass assignment, not only IDOR and promote oracles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Allowlist updatable profile fields server-side.",
+      steps: [
+        "Reject unknown POST fields instead of blindly applying them to user records.",
+        "Never accept role or privilege flags from client requests.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a01_bac route scan confirms mass assignment via is_admin=1. Show route-level field allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-idor-uuid-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 UUID IDOR live oracle",
+    description:
+      "GET attacks/idor_uuid.php on owaspsecure.com returns another user's note by guessable public_id without owner check — A01 broken access control training oracle.",
+    impactOneline:
+      "UUID-only authorization on owaspsecure.com still permits IDOR when public_id values are predictable.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacIdorUuidLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize object access against the authenticated session owner, not only public_id lookup.",
+      steps: [
+        "Verify note.user_id matches the session user before returning records.",
+        "Use non-guessable public_id tokens instead of predictable slugs.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our idor_uuid.php returns notes by guessable public_id without owner check. Show authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-bac-idor-uuid-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "owaspsecure.com A01 BAC route UUID IDOR live oracle",
+    description:
+      "When scanning /demo/a01_bac/insecure.php on owaspsecure.com, GET idor_uuid.php confirms live public_id IDOR — route-specific A01 broken access control oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A01 lab should confirm live UUID IDOR, not only numeric idor_numeric oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureBacIdorUuidRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize object access against the authenticated session owner.",
+      steps: [
+        "Verify note.user_id matches the session user before returning records.",
+        "Use non-guessable public_id tokens instead of predictable slugs.",
+        "Run owaspsecure.com BAC labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a01_bac route scan confirms UUID IDOR via public_id. Show route-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-health-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF internal health live oracle",
+    description:
+      "GET attacks/fetch_insecure.php on owaspsecure.com fetches attacks/internal/health.json and returns internal-gateway JSON — A10 SSRF training oracle beyond public URL fetch.",
+    impactOneline:
+      "Open fetcher on owaspsecure.com reaches internal-only health endpoints without network segmentation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalHealthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side requests to internal paths and enforce URL allowlists.",
+      steps: [
+        "Deny fetcher requests targeting same-origin internal/admin paths.",
+        "Segment internal health endpoints on non-routable networks.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our fetch_insecure.php reaches internal/health.json. Show SSRF allowlist and network segmentation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-health-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF route internal health live oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, open fetcher returns internal-gateway health JSON — route-specific A10 SSRF oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm internal SSRF, not only example.com fetch oracle.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalHealthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side requests to internal paths and enforce URL allowlists.",
+      steps: [
+        "Deny fetcher requests targeting same-origin internal/admin paths.",
+        "Segment internal health endpoints on non-routable networks.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms internal health SSRF. Show route-level fetch allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-socket-probe-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF socket probe live oracle",
+    description:
+      "GET attacks/socket_probe.php on owaspsecure.com performs server-side TCP port scans from attacker-controlled host:port parameters — A10 SSRF port-scanning training oracle.",
+    impactOneline:
+      "Server-side port scanning on owaspsecure.com lets attackers map internal services from the application network.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfSocketProbeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove server-side socket probes from user input and block outbound connections to internal networks.",
+      steps: [
+        "Never expose raw fsockopen/connect wrappers on attacker-controlled host:port pairs.",
+        "Enforce egress firewalls and network segmentation for application servers.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our socket_probe.php performs server-side port scans. Show SSRF egress control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-socket-probe-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "owaspsecure.com A10 SSRF route socket probe live oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, Attack 4 socket_probe.php confirms server-side TCP reachability tests — route-specific A10 SSRF oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm live port-scanning SSRF, not only HTTP fetch oracles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfSocketProbeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove server-side socket probes from user input and block outbound connections to internal networks.",
+      steps: [
+        "Never expose raw fsockopen/connect wrappers on attacker-controlled host:port pairs.",
+        "Enforce egress firewalls and network segmentation for application servers.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms socket_probe port scanning. Show route-level SSRF egress remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-health-direct-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "owaspsecure.com A10 internal health direct exposure live oracle",
+    description:
+      "GET attacks/internal/health.json on owaspsecure.com returns internal-gateway JSON without authentication — A10 internal endpoint exposure training oracle.",
+    impactOneline:
+      "Directly reachable internal health endpoints on owaspsecure.com leak service topology without SSRF chaining.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalHealthDirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict internal health endpoints to private networks and require authentication.",
+      steps: [
+        "Move health checks off public web roots and bind to internal interfaces only.",
+        "Require service authentication for operational endpoints.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our attacks/internal/health.json is publicly reachable. Show internal endpoint access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-health-direct-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "owaspsecure.com A10 SSRF route internal health direct exposure oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, attacks/internal/health.json is directly reachable and returns internal-gateway status — route-specific A10 exposure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm internal health JSON is exposed without auth.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalHealthDirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict internal health endpoints to private networks and require authentication.",
+      steps: [
+        "Move health checks off public web roots and bind to internal interfaces only.",
+        "Require service authentication for operational endpoints.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms internal health.json is publicly reachable. Show route-level access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-admin-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "owaspsecure.com A10 SSRF internal admin live oracle",
+    description:
+      "GET attacks/fetch_insecure.php on owaspsecure.com fetches attacks/internal/admin.php and returns Internal Admin Panel secrets — A10 SSRF training oracle beyond health.json.",
+    impactOneline:
+      "Open fetcher on owaspsecure.com reaches internal admin panels and leaks fake credentials via SSRF.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalAdminLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side requests to internal admin paths and enforce URL allowlists.",
+      steps: [
+        "Deny fetcher requests targeting same-origin internal/admin paths.",
+        "Require authentication and network segmentation for admin panels.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our fetch_insecure.php reaches internal/admin.php and echoes SuperSecret123!. Show SSRF allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-admin-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "owaspsecure.com A10 SSRF route internal admin live oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, open fetcher returns Internal Admin Panel with SuperSecret123! — route-specific A10 SSRF oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm internal admin SSRF, not only health.json or example.com fetch.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalAdminRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side requests to internal admin paths and enforce URL allowlists.",
+      steps: [
+        "Deny fetcher requests targeting same-origin internal/admin paths.",
+        "Require authentication and network segmentation for admin panels.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms internal admin SSRF. Show route-level fetch allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-index-direct-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "owaspsecure.com A10 internal services index direct exposure live oracle",
+    description:
+      "GET attacks/internal/index.php on owaspsecure.com lists admin panel and health.json links without authentication — A10 internal endpoint exposure training oracle.",
+    impactOneline:
+      "Directly reachable internal services index on owaspsecure.com maps sensitive endpoints without SSRF chaining.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalIndexDirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict internal service indexes to private networks and require authentication.",
+      steps: [
+        "Remove internal endpoint catalogs from public web roots.",
+        "Bind operational endpoints to internal interfaces only.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our attacks/internal/index.php is publicly reachable. Show internal endpoint access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-ssrf-internal-index-direct-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "medium",
+    title: "owaspsecure.com A10 SSRF route internal index direct exposure oracle",
+    description:
+      "When scanning /demo/a10_ssrf/insecure.php on owaspsecure.com, attacks/internal/index.php is directly reachable and links admin/health endpoints — route-specific A10 exposure oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A10 lab should confirm internal services index is exposed without auth.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureSsrfInternalIndexDirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict internal service indexes to private networks and require authentication.",
+      steps: [
+        "Remove internal endpoint catalogs from public web roots.",
+        "Bind operational endpoints to internal interfaces only.",
+        "Run owaspsecure.com SSRF labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a10_ssrf route scan confirms internal services index is publicly reachable. Show route-level access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-store-bio-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 second-order bio writer live oracle",
+    description:
+      "POST attacks/sql_second_order/store_bio_insecure.php on owaspsecure.com persists attacker-controlled bio text without validation — A03 second-order SQLi writer training oracle.",
+    impactOneline:
+      "Unvalidated bio storage on owaspsecure.com enables second-order SQL injection when admin views concatenate stored values.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionStoreBioLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and parameterize all stored profile fields before persistence and query use.",
+      steps: [
+        "Sanitize bio input and use prepared statements in admin search queries.",
+        "Separate writer and reader authorization for profile updates.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our store_bio_insecure.php persists raw attacker bio for later admin_view detonation. Show second-order SQLi remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owaspsecure-injection-store-bio-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "owaspsecure.com A03 injection route store-bio live oracle",
+    description:
+      "When scanning /demo/a03_injection/insecure.php on owaspsecure.com, POST store_bio_insecure.php confirms raw bio persistence — route-specific A03 second-order injection oracle.",
+    impactOneline:
+      "Route scans on owaspsecure A03 lab should confirm second-order writer step, not only admin_view detonation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspsecureInjectionStoreBioRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and parameterize all stored profile fields before persistence and query use.",
+      steps: [
+        "Sanitize bio input and use prepared statements in admin search queries.",
+        "Separate writer and reader authorization for profile updates.",
+        "Run owaspsecure.com injection labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /demo/a03_injection route scan confirms store_bio raw persistence. Show route-level second-order SQLi remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "web-pentest-playground-login-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -65382,6 +79731,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /login route scan accepts SQLi auth bypass. Show route-level parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-pentest-playground-register-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "medium",
+    title: "Web Pentest Playground open registration live oracle",
+    description:
+      "POST /register creates an account without email verification (redirects to /login) and new credentials authenticate to /dashboard — the Web Pentest Playground weak open-registration oracle.",
+    impactOneline:
+      "Open registration without verification allows automated account creation and immediate authenticated access.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundRegisterLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require email verification and rate-limit registration — Web Pentest Playground is intentional training software.",
+      steps: [
+        "Require email verification before activating new accounts.",
+        "Apply CAPTCHA and rate limits on registration endpoints.",
+        "Run Web Pentest Playground only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /register endpoint creates accounts without verification and auto-logs users in. Show email verification and rate-limit remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "web-pentest-playground-register-route-live-oracle",
+    platform: "generic",
+    category: "Authentication",
+    severityDefault: "medium",
+    title: "Web Pentest Playground /register route live oracle",
+    description:
+      "When scanning /register, POST registration succeeds without verification and new credentials authenticate to /dashboard — route-specific weak registration oracle.",
+    impactOneline:
+      "Route-scoped scans should flag open registration without verification on Web Pentest Playground /register.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "webPentestPlaygroundRegisterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require email verification and rate-limit registration.",
+      steps: [
+        "Require email verification before activating new accounts.",
+        "Apply CAPTCHA and rate limits on registration endpoints.",
+        "Run Web Pentest Playground only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /register route scan confirms open registration without verification. Show route-level email verification remediation.",
     version: 1,
     enabled: true
   },
@@ -66608,13 +81009,481 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "javaseclab-ssrf-vul-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "JavaSecLab /ssrf/vul SSRF live oracle",
+    description:
+      "GET /ssrf/vul?url= on JavaSecLab fetches attacker-controlled URLs server-side via URLConnection — file:// and internal metadata SSRF training oracle.",
+    impactOneline:
+      "SSRF lets attackers use the server to read local files or reach internal services and cloud metadata.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabSsrfVulLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block internal IPs, restrict URL schemes, and validate redirect chains — JavaSecLab is intentional lab software.",
+      steps: [
+        "Allowlist permitted URL schemes (https only) and destination hosts.",
+        "Resolve and block private/link-local IP ranges before connecting.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /ssrf/vul endpoint fetches arbitrary URLs server-side. Show SSRF remediation with allowlists and IP blocklists.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-ssrf-vul-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "JavaSecLab /ssrf/vul route live oracle",
+    description:
+      "When scanning /ssrf/vul on whgojp.top, live file:// or internal metadata probe or curated wiki corpus confirms JavaSecLab SSRF training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents SSRF via URLConnection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabSsrfVulRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block internal IPs and restrict URL schemes on SSRF routes.",
+      steps: [
+        "Allowlist permitted URL schemes and destination hosts.",
+        "Resolve and block private IP ranges before connecting.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /ssrf/vul route is a JavaSecLab SSRF training module. Show route-specific SSRF remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-jdbc-sqli-vul1-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "JavaSecLab JDBC SQLi vul1 live oracle",
+    description:
+      "GET /sqli/jdbc/vul1?type=select&id=1 OR 1=1 on JavaSecLab uses native JDBC string concatenation — SQL injection training oracle.",
+    impactOneline:
+      "SQL injection via JDBC concatenation enables unauthorized data reads and database compromise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabJdbcSqliVul1LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized PreparedStatement queries — JavaSecLab is intentional lab software.",
+      steps: [
+        "Never concatenate user input into SQL strings.",
+        "Use PreparedStatement with bound parameters for all dynamic queries.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /sqli/jdbc/vul1 endpoint concatenates id into SQL. Show JDBC parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-jdbc-sqli-vul1-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "JavaSecLab /sqli/jdbc/vul1 route live oracle",
+    description:
+      "When scanning /sqli/jdbc/vul1 on whgojp.top, live OR 1=1 probe or curated wiki corpus confirms JavaSecLab native JDBC SQLi training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents JDBC string concatenation SQLi.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabJdbcSqliVul1RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries on JDBC routes.",
+      steps: [
+        "Never concatenate user input into SQL strings.",
+        "Use PreparedStatement with bound parameters.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /sqli/jdbc/vul1 route is a JavaSecLab SQLi training module. Show route-specific JDBC remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-xxe-vul1-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "JavaSecLab XXE vul1 live oracle",
+    description:
+      "GET /xxe/vul1?payload= on JavaSecLab resolves external entities via XMLReader — XXE file read and internal SSRF training oracle.",
+    impactOneline:
+      "XXE enables local file reads and server-side requests via malicious XML external entities.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabXxeVul1LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entities on all XML parsers — JavaSecLab is intentional lab software.",
+      steps: [
+        "Set XMLReader/SAXParser/DocumentBuilder to disallow DOCTYPE and external entities.",
+        "Use JSON or safer serialization formats where possible.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /xxe/vul1 endpoint resolves external XML entities. Show XXE remediation for XMLReader.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-xxe-vul1-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "JavaSecLab /xxe/vul1 route live oracle",
+    description:
+      "When scanning /xxe/vul1 on whgojp.top, live external entity probe or curated wiki corpus confirms JavaSecLab XMLReader XXE training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents XMLReader external entity injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabXxeVul1RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entities on XML parser routes.",
+      steps: [
+        "Disallow DOCTYPE and external entities on XMLReader.",
+        "Restrict ACCESS_EXTERNAL_DTD and ACCESS_EXTERNAL_SCHEMA.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /xxe/vul1 route is a JavaSecLab XXE training module. Show route-specific XML parser hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-spel-vul-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "JavaSecLab SpEL vul live oracle",
+    description:
+      "GET /spel/vul?ex= on JavaSecLab evaluates Spring Expression Language server-side — SpEL injection training oracle.",
+    impactOneline:
+      "SpEL injection enables arbitrary code execution via server-side expression evaluation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabSpelVulLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never evaluate user input as SpEL — JavaSecLab is intentional lab software.",
+      steps: [
+        "Avoid SpelExpressionParser on untrusted input.",
+        "Use allow-listed expression contexts or disable dynamic evaluation.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /spel/vul endpoint evaluates SpEL expressions. Show SpEL injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-spel-vul-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "JavaSecLab /spel/vul route live oracle",
+    description:
+      "When scanning /spel/vul on whgojp.top, live arithmetic probe or curated wiki corpus confirms JavaSecLab SpEL injection training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents Spring Expression Language injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabSpelVulRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never evaluate user input as SpEL on expression routes.",
+      steps: [
+        "Avoid SpelExpressionParser on untrusted input.",
+        "Use allow-listed expression contexts.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /spel/vul route is a JavaSecLab SpEL injection training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-ssti-vul1-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "JavaSecLab SSTI vul1 live oracle",
+    description:
+      "GET /ssti/vul1?para= on JavaSecLab evaluates Thymeleaf template expressions server-side — SSTI training oracle.",
+    impactOneline:
+      "Server-side template injection enables remote code execution via template engine evaluation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabSstiVul1LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into template expressions — JavaSecLab is intentional lab software.",
+      steps: [
+        "Use logic-less templating or sandboxed template engines.",
+        "Keep user data out of template expression contexts.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /ssti/vul1 endpoint evaluates Thymeleaf expressions. Show SSTI remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-ssti-vul1-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "JavaSecLab /ssti/vul1 route live oracle",
+    description:
+      "When scanning /ssti/vul1 on whgojp.top, live ${7*7} probe or curated wiki corpus confirms JavaSecLab Thymeleaf SSTI training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents server-side template injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabSstiVul1RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input into template expressions on SSTI routes.",
+      steps: [
+        "Use logic-less templating or sandboxed engines.",
+        "Keep user data out of expression contexts.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /ssti/vul1 route is a JavaSecLab SSTI training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-xpath-vul-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "JavaSecLab XPath vul live oracle",
+    description:
+      "GET /other/xpath/vul with XPath injection bypasses authentication on JavaSecLab — XPath injection training oracle.",
+    impactOneline:
+      "XPath injection in authentication queries enables credential bypass and unauthorized access.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabXPathVulLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized XPath queries — JavaSecLab is intentional lab software.",
+      steps: [
+        "Never concatenate user input into XPath expressions.",
+        "Use XPath variables with bound parameters.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /other/xpath/vul endpoint is vulnerable to XPath injection. Show parameterized XPath remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-xpath-vul-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "JavaSecLab /other/xpath/vul route live oracle",
+    description:
+      "When scanning /other/xpath/vul on whgojp.top, live auth-bypass probe or curated wiki corpus confirms JavaSecLab XPath injection training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents XPath authentication bypass injection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabXPathVulRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized XPath queries on authentication routes.",
+      steps: [
+        "Never concatenate user input into XPath expressions.",
+        "Use XPath variables with bound parameters.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /other/xpath/vul route is a JavaSecLab XPath injection training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-horizontal-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "JavaSecLab horizontal IDOR live oracle",
+    description:
+      "GET /logic/idor/horizontal/getUserInfo?username= on JavaSecLab returns another user's profile without ownership check — horizontal IDOR training oracle.",
+    impactOneline:
+      "Horizontal IDOR lets any authenticated user read peer profiles by changing the username parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabHorizontalIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind profile lookups to the authenticated session user — JavaSecLab is intentional lab software.",
+      steps: [
+        "Never accept a client-supplied username for profile reads without ownership verification.",
+        "Query profiles with WHERE user_id = session.user_id.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /logic/idor/horizontal/getUserInfo endpoint exposes horizontal IDOR. Show ownership-check remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-horizontal-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "JavaSecLab horizontal IDOR route live oracle",
+    description:
+      "When scanning /logic/idor/horizontal/getUserInfo on whgojp.top, live cross-user profile probe or curated wiki corpus confirms JavaSecLab horizontal IDOR training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents horizontal IDOR on user profile APIs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabHorizontalIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind profile lookups to the authenticated session user on IDOR routes.",
+      steps: [
+        "Never accept a client-supplied username for profile reads without ownership verification.",
+        "Query profiles with WHERE user_id = session.user_id.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /logic/idor/horizontal/getUserInfo route is a JavaSecLab horizontal IDOR training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-csrf-vul-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "JavaSecLab CSRF vul live oracle",
+    description:
+      "GET /csrf/vul?receiver=zhangsan&amount=100 on JavaSecLab performs state-changing transfer relying only on session cookie — CSRF training oracle.",
+    impactOneline:
+      "GET-based CSRF lets attackers trigger authenticated transfers via img/link tags without anti-CSRF tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabCsrfVulLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use POST with CSRF tokens for all state-changing operations — JavaSecLab is intentional lab software.",
+      steps: [
+        "Require synchronizer tokens on all state-changing requests.",
+        "Use SameSite=Strict cookies as a defense-in-depth measure.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /csrf/vul endpoint allows GET state-changing transfers. Show CSRF token remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-csrf-vul-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site request forgery",
+    severityDefault: "high",
+    title: "JavaSecLab CSRF vul route live oracle",
+    description:
+      "When scanning /csrf/vul on whgojp.top, live transfer probe or curated wiki corpus confirms JavaSecLab GET CSRF training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents GET-based CSRF on authenticated transfer endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabCsrfVulRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use POST with CSRF tokens for all state-changing operations on CSRF routes.",
+      steps: [
+        "Require synchronizer tokens on all state-changing requests.",
+        "Use SameSite=Strict cookies as a defense-in-depth measure.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /csrf/vul route is a JavaSecLab CSRF training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-xff-vul2-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "JavaSecLab XFF vul2 live oracle",
+    description:
+      "GET /other/xff/vul2?xff=true with X-Forwarded-For: 8.8.8.8 on JavaSecLab trusts client IP header and leaks credentials — XFF spoofing training oracle.",
+    impactOneline:
+      "Trusting X-Forwarded-For from untrusted clients lets attackers spoof IP-based access controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabXffVul2LiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Only trust X-Forwarded-For from known reverse proxies — JavaSecLab is intentional lab software.",
+      steps: [
+        "Validate client IP against a trusted proxy allow-list before using X-Forwarded-For.",
+        "Use direct connection source IP when not behind a trusted proxy.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /other/xff/vul2 endpoint trusts X-Forwarded-For for access control. Show trusted-proxy remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-xff-vul2-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "JavaSecLab XFF vul2 route live oracle",
+    description:
+      "When scanning /other/xff/vul2 on whgojp.top, live X-Forwarded-For spoof probe or curated wiki corpus confirms JavaSecLab IP header trust training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents XFF header spoofing for IP-based access control bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabXffVul2RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Only trust X-Forwarded-For from known reverse proxies on XFF routes.",
+      steps: [
+        "Validate client IP against a trusted proxy allow-list before using X-Forwarded-For.",
+        "Use direct connection source IP when not behind a trusted proxy.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /other/xff/vul2 route is a JavaSecLab XFF spoofing training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "seclab-labs-dead-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
     severityDefault: "medium",
     title: "SecLab /labs/* dead route live oracle",
     description:
-      "seclab.vercel.app /labs/sqli and sibling navigation routes serve Angular SPA stubs without live SQLi/XSS lab UI — live training APIs are on /api/sqli-vulnerable and /api/sqli/search instead.",
+      "seclab.vercel.app /labs/sqli, /labs/command-injection, and sibling navigation routes serve Angular SPA stubs without live lab UI — live training APIs are on /api/*-vulnerable routes instead.",
     impactOneline:
       "Advertised /labs/* training pages are Angular stubs — scanners should probe /api/*-vulnerable routes for live SQLi/XSS confirmation.",
     detectorKind: "rule_ref",
@@ -66656,6 +81525,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our seclab.vercel.app /labs/sqli route scan hits an Angular stub. Show route-specific deployment fixes for the SQLi lab UI.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "seclab-command-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "SecLab command-injection lab route live oracle",
+    description:
+      "When scanning /labs/command-injection on seclab.vercel.app, the Angular SPA stub documents the planned OS command injection lab — route-specific CWE-78 training oracle (DaniSam-STU/security-lab README corpus).",
+    impactOneline:
+      "Route scans on /labs/command-injection confirm advertised command injection lab is an Angular stub pointing scanners to /api/*-vulnerable live endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabCommandInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy live command injection lab UI on /labs/command-injection or redirect to working /api/* training endpoints.",
+      steps: [
+        "Wire /labs/command-injection to documented OS command injection APIs in DaniSam-STU/security-lab README.",
+        "Remove /labs/command-injection from discovery queues until live UI deploys.",
+        "Run training labs only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /labs/command-injection route scan hits an Angular stub. Show route-specific deployment fixes for the command injection lab UI.",
     version: 1,
     enabled: true
   },
@@ -66900,7 +81795,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Fabraix data-exfiltration-001 challenge route live oracle",
     description:
-      "When scanning /challenges/data-exfiltration-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the data-exfil challenge (Iris + SentinelID verify_identity) — route-specific exfil oracle.",
+      "When scanning /challenges/data-exfiltration-001 or /challenges/data-exfil-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the data-exfil challenge (Iris + SentinelID verify_identity) — route-specific exfil oracle.",
     impactOneline:
       "Route-scoped Fabraix data-exfiltration-001 scans should confirm unauthenticated agent sessions targeting verify_identity outbound exfiltration.",
     detectorKind: "rule_ref",
@@ -66917,6 +81812,60 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Fabraix /challenges/data-exfiltration-001 route scan confirms unauthenticated exfil challenge sessions. Show verify_identity outbound host allowlisting.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-access-code-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix access-code-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/access-code-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the Gatekeeper access-code extraction challenge — maps to access-code-001 backend.",
+    impactOneline:
+      "Route-scoped Fabraix access-code-001 scans should confirm unauthenticated Gatekeeper agent red-team sessions on the canonical challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixAccessCode001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Protect classified access codes with server-side authorization, not prompt secrecy alone.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/access-code-001 route scan confirms unauthenticated Gatekeeper agent sessions. Show access-code protection for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-guardrail-bypass-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix guardrail-bypass challenge route live oracle",
+    description:
+      "When scanning /challenges/01-guardrail-bypass, Fabraix documents guardrail scoring and bypass objectives — live session probe maps to access-code-001 Gatekeeper backend when API available.",
+    impactOneline:
+      "Route-scoped Fabraix 01-guardrail-bypass scans should confirm guardrail bypass training challenge markers and unauthenticated agent sessions.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixGuardrailBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — layer guardrails and auth on agent session endpoints in production.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Score and block guardrail bypass attempts with layered input/output filters.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/01-guardrail-bypass route scan confirms guardrail bypass training objectives. Show guardrail hardening for agentic AI deployments.",
     version: 1,
     enabled: true
   },
@@ -66944,6 +81893,276 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Fabraix /challenges/indirect-prompt-injection-001 route scan confirms unauthenticated agent sessions. Show indirect prompt-injection defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-prompt-injection-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix prompt-injection-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/prompt-injection-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the direct prompt-injection challenge — maps to access-code-001 Gatekeeper backend.",
+    impactOneline:
+      "Route-scoped Fabraix prompt-injection-001 scans should confirm unauthenticated agent red-team sessions on the discovery queue challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixPromptInjection001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/prompt-injection-001 route scan confirms unauthenticated Gatekeeper agent sessions. Show direct prompt-injection defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-biosafety-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix biosafety-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/biosafety-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for The Biosafety Officer challenge (Wren + release_restricted_protocol Tier-4 archive oracle).",
+    impactOneline:
+      "Route-scoped Fabraix biosafety-001 scans should confirm unauthenticated agent red-team sessions targeting restricted tool invocation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixBiosafety001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/biosafety-001 route scan confirms unauthenticated biosafety challenge sessions. Show restricted-tool invocation defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-tool-poisoning-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix tool-poisoning-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/tool-poisoning-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the MCP tool-poisoning challenge — maps to biosafety-001 Biosafety Officer backend.",
+    impactOneline:
+      "Route-scoped Fabraix tool-poisoning-001 scans should confirm unauthenticated agent red-team sessions on the discovery queue challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixToolPoisoning001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/tool-poisoning-001 route scan confirms unauthenticated Biosafety Officer agent sessions. Show MCP tool-poisoning defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-tool-poisoning-002-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix tool-poisoning-002 challenge route live oracle",
+    description:
+      "When scanning /challenges/tool-poisoning-002, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the v2 MCP tool-poisoning challenge — maps to biosafety-001 Biosafety Officer backend.",
+    impactOneline:
+      "Route-scoped Fabraix tool-poisoning-002 scans should confirm unauthenticated agent red-team sessions on the hardened v2 tool-poisoning challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixToolPoisoning002RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/tool-poisoning-002 route scan confirms unauthenticated Biosafety Officer agent sessions. Show hardened MCP tool-poisoning defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-jailbreak-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix jailbreak-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/jailbreak-001, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the LLM jailbreak / guardrail bypass challenge — maps to access-code-001 Gatekeeper backend.",
+    impactOneline:
+      "Route-scoped Fabraix jailbreak-001 scans should confirm unauthenticated agent red-team sessions on the jailbreak challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixJailbreak001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/jailbreak-001 route scan confirms unauthenticated Gatekeeper agent sessions. Show jailbreak and guardrail-bypass defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-jailbreak-002-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix jailbreak-002 challenge route live oracle",
+    description:
+      "When scanning /challenges/jailbreak-002, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the v2 LLM jailbreak / multi-turn guardrail bypass challenge — maps to access-code-001 Gatekeeper backend.",
+    impactOneline:
+      "Route-scoped Fabraix jailbreak-002 scans should confirm unauthenticated agent red-team sessions on the v2 jailbreak challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixJailbreak002RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/jailbreak-002 route scan confirms unauthenticated Gatekeeper agent sessions. Show multi-turn jailbreak and guardrail-bypass defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-jwt-verifier-001-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix jwt-verifier-001 challenge route live oracle",
+    description:
+      "When scanning /challenges/jwt-verifier-001 or /challenges/jwt-verifier, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the JWT verifier / alg:none challenge — maps to jwt-verifier-001 Maintainer backend.",
+    impactOneline:
+      "Route-scoped Fabraix jwt-verifier scans should confirm unauthenticated agent red-team sessions on the JWT algorithm-confusion challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixJwtVerifier001RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/jwt-verifier-001 route scan confirms unauthenticated Maintainer agent sessions. Show JWT alg:none and algorithm-confusion defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-challenges-hub-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix challenges hub route live oracle",
+    description:
+      "When scanning playground.fabraix.com/challenges, the challenge catalog lists agent red-team scenarios and POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated sessions — route-specific hub oracle.",
+    impactOneline:
+      "Route-scoped Fabraix /challenges hub scans should confirm the published agentic red-team challenge catalog and unauthenticated session creation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixChallengesHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges hub route scan confirms unauthenticated agent session creation from the challenge catalog. Show route-specific agent red-team API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-playground-home-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix playground home route live oracle",
+    description:
+      "When scanning playground.fabraix.com/, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent red-team sessions from the landing page — route-specific home oracle.",
+    impactOneline:
+      "Route-scoped Fabraix playground home scans should confirm unauthenticated agent session creation from the public landing page.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixPlaygroundHomeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix playground.fabraix.com home route scan confirms unauthenticated session creation. Show route-specific agent red-team API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fabraix-playground-landing-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix playground landing route live oracle",
+    description:
+      "When scanning fabraix.com/playground, the marketing landing links to playground.fabraix.com and POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions — route-specific landing oracle.",
+    impactOneline:
+      "Route-scoped fabraix.com/playground scans should confirm the public agent red-team playground entry point and unauthenticated session creation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixPlaygroundLandingRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our fabraix.com/playground landing route scan confirms unauthenticated agent session creation. Show route-specific agent red-team API hardening.",
     version: 1,
     enabled: true
   },
@@ -67100,6 +82319,3334 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our dockerworkshop.vercel.app DevBoard lab documents pagination and authorization bugs in FastAPI issue routes. Show secure pagination and object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owasp-andreabrioschi-top10-2025-hub-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OWASP Interactive Learning Lab Top 10:2025 hub live oracle",
+    description:
+      "GET /data/vulnerabilities.json on owasp.andreabrioschi.it lists interactive OWASP Top 10:2025 simulators (sqli, xss, idor, csrf, ssrf) backed by AttackSimulator client-side demos.",
+    impactOneline:
+      "Educational hubs that ship interactive injection simulators document realistic SQLi/XSS patterns for scanner calibration.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspAndreabrioschiTop102025HubLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Treat client-side vulnerability simulators as training-only — never mirror raw string concatenation patterns in production SQL or HTML sinks.",
+      steps: [
+        "Use parameterized queries and prepared statements for all database access.",
+        "Encode or sanitize output before rendering user-controlled data in HTML.",
+        "Keep interactive demo catalogs off production attack surfaces."
+      ]
+    },
+    fixPrompt:
+      "Our OWASP Interactive Learning Lab hosts client-side SQLi simulators with ' OR '1'='1 payloads. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "owasp-andreabrioschi-top10-2025-hub-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "OWASP Interactive Learning Lab Top 10:2025 hub route live oracle",
+    description:
+      "When scanning owasp.andreabrioschi.it, /data/vulnerabilities.json confirms interactive Top 10:2025 demo modules and /js/simulator.js implements SQLi/XSS/IDOR client-side attack simulations.",
+    impactOneline:
+      "Route-specific confirmation that the OWASP Top 10:2025 interactive learning hub exposes simulated vulnerability demos.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspAndreabrioschiTop102025HubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate training simulators from production apps and block scanner UA fingerprinting that hides lab content behind 403.",
+      steps: [
+        "Serve vulnerability catalogs only on dedicated training hosts.",
+        "Use parameterized queries in all production code paths.",
+        "Do not rely on User-Agent blocking for security — enforce authZ on sensitive resources."
+      ]
+    },
+    fixPrompt:
+      "Our owasp.andreabrioschi.it route scan exposes OWASP Top 10:2025 interactive simulators. Show how to keep training demos separate from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-jwt-secret-leak-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Vault Notes JWT signing secret leaked in frontend bundle",
+    description:
+      "Vault Notes VAPT training app assigns window.__leakedJwtSecret in the React SPA bundle and points API calls at vault-notes-backend.onrender.com — hardcoded JWT secret oracle.",
+    impactOneline:
+      "Hardcoded JWT signing secrets in client bundles let attackers forge arbitrary session tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesJwtSecretLeakLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never embed JWT signing secrets in frontend code; rotate compromised keys immediately.",
+      steps: [
+        "Store JWT secrets only in server-side environment variables.",
+        "Remove window.__leakedJwtSecret and any client-side secret assignments.",
+        "Rotate the JWT secret and invalidate all outstanding tokens."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes frontend exposes window.__leakedJwtSecret in the SPA bundle. Show how to move JWT secrets server-side and rotate keys.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-jwt-secret-leak-route-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "critical",
+    title: "Vault Notes JWT secret leak route live oracle",
+    description:
+      "When scanning vault-notes-frontend-gules.vercel.app, the SPA bundle exposes window.__leakedJwtSecret used to sign API JWTs against vault-notes-backend.onrender.com.",
+    impactOneline:
+      "Route-specific confirmation that the Vault Notes training frontend leaks its JWT signing secret.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesJwtSecretLeakRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove hardcoded secrets from client bundles on training and production apps alike.",
+      steps: [
+        "Delete window.__leakedJwtSecret from the frontend build.",
+        "Load JWT secrets from server environment only.",
+        "Rotate signing keys after removal."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes frontend route scan exposes window.__leakedJwtSecret. Show client-bundle secret removal and key rotation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-login-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vault Notes login SQL injection live oracle",
+    description:
+      "Vault Notes VAPT training app POST /login builds SQL via string concatenation — ' OR '1'='1' -- bypasses authentication without valid credentials (finding #1).",
+    impactOneline:
+      "SQL injection on login lets attackers authenticate as arbitrary users without knowing passwords.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesLoginSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all Vault Notes login database lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements on POST /login.",
+        "Validate and sanitize username/password inputs server-side.",
+        "Audit all database queries for similar concatenation patterns."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes POST /login is SQL-injectable via username concatenation. Show parameterized query remediation for authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vault Notes login SQLi route live oracle",
+    description:
+      "When scanning vault-notes-frontend-gules.vercel.app, live POST /login SQLi probe or VAPT findings.md corpus documents authentication bypass via ' OR '1'='1' --.",
+    impactOneline:
+      "Route-specific confirmation that Vault Notes documents SQL injection authentication bypass on POST /login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries on Vault Notes login routes.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements on POST /login.",
+        "Validate and sanitize username/password inputs server-side.",
+        "Audit all database queries for similar concatenation patterns."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes frontend route scan documents POST /login SQL injection. Show route-specific parameterized query fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-notes-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vault Notes note-by-ID IDOR live oracle",
+    description:
+      "Vault Notes GET /notes/:id omits the user_id ownership check; JWT forged with the leaked __leakedJwtSecret reads another user's private notes.",
+    impactOneline:
+      "Missing object-level authorization lets attackers read any note by sequential ID.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesNotesIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce per-user ownership on every note read; never trust client-supplied IDs alone.",
+      steps: [
+        "Add AND user_id = ? to GET /notes/:id queries.",
+        "Bind note access to the authenticated user's ID from the JWT.",
+        "Audit all ID-based endpoints for similar BOLA gaps."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes GET /notes/:id returns notes without checking user_id ownership. Show BOLA fixes with parameterized ownership checks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-notes-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Vault Notes notes IDOR route live oracle",
+    description:
+      "When scanning vault-notes-frontend-gules.vercel.app, forged JWT from leaked __leakedJwtSecret accesses GET /notes/:id without ownership validation on vault-notes-backend.onrender.com.",
+    impactOneline:
+      "Route-specific confirmation that Vault Notes note reads lack object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesNotesIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require ownership checks on all note-by-ID API routes.",
+      steps: [
+        "Filter note queries by authenticated user_id.",
+        "Remove public note IDs from responses for unauthorized callers.",
+        "Add integration tests for cross-user note access attempts."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes route scan confirms IDOR on GET /notes/:id via forged JWT. Show ownership enforcement remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vapi-identity-auth-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "vAPI identity auth login route live oracle",
+    description:
+      "When scanning vapi.tools.escape.tech/identity/api/auth/login, POST signup/login returns a JWT — crAPI broken-authentication training oracle on the Escape-hosted vAPI identity mirror.",
+    impactOneline:
+      "Route-specific confirmation that vAPI identity mirror exposes crAPI JWT authentication on /identity/api/auth/login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vapiIdentityAuthLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Harden API authentication endpoints against weak signup/login flows.",
+      steps: [
+        "Enforce strong password policies and rate-limit authentication endpoints.",
+        "Use short-lived JWTs with proper signature validation.",
+        "Run vAPI identity labs only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our vapi.tools.escape.tech /identity/api/auth/login route accepts signup/login and returns JWTs. Show production API authentication hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-telecom-sim-swap-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Chimera telecom SIM-swap route live oracle",
+    description:
+      "When scanning /api/v1/telecom/sim-swap on chimera.atlascrew.dev, Chimera openapi documents CHM-TELCO-002 SIM swap identity bypass without verification — route-specific telecom business logic training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SIM swap business logic bypass on the telecom endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraTelecomSimSwapRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require multi-factor verification before SIM swaps and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce out-of-band identity verification before processing SIM swap requests.",
+        "Reject bypass_verification flags on subscriber SIM swap endpoints.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/telecom/sim-swap route documents SIM swap identity bypass. Show telecom business logic verification remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-energy-scada-commands-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera energy SCADA commands route live oracle",
+    description:
+      "When scanning /api/v1/energy/scada/commands on chimera.atlascrew.dev, Chimera openapi documents SCADA dispatch command injection for grid control — route-specific energy utilities OT training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SCADA command injection on energy utilities dispatch endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraEnergyScadaCommandsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict SCADA dispatch to authenticated OT operators and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Require mutual TLS and role-based access for SCADA dispatch commands.",
+        "Validate and sanitize all grid control command parameters server-side.",
+        "Do not expose Chimera energy utilities endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/energy/scada/commands route documents SCADA dispatch command injection. Show OT network segmentation and command validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-gov-benefits-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera government benefits search SQLi route live oracle",
+    description:
+      "When scanning /api/v1/gov/benefits/search on chimera.atlascrew.dev, CHM-GOV-001 documents classic SQL injection via benefits search query parameter when USE_DATABASE=true — route-specific government SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SQL injection on the government benefits search endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGovBenefitsSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries on government benefits search endpoints.",
+        "Validate and sanitize q query parameters server-side before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/gov/benefits/search route documents CHM-GOV-001 SQL injection. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-saas-tenants-projects-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Chimera SaaS cross-tenant projects IDOR route live oracle",
+    description:
+      "When scanning /api/v1/saas/tenants/{tenant_id}/projects on chimera.atlascrew.dev, CHM-SAAS-001 documents cross-tenant project enumeration without tenant isolation — route-specific SaaS IDOR training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional cross-tenant IDOR on SaaS project listing endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraSaasTenantsProjectsIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce tenant isolation on SaaS project routes and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Verify JWT tenant_id matches the requested tenant before returning project data.",
+        "Scope all SaaS queries by authenticated tenant context.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/saas/tenants/{tenant_id}/projects route documents CHM-SAAS-001 cross-tenant IDOR. Show tenant isolation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-saas-tenants-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Chimera SaaS tenant BOLA route live oracle",
+    description:
+      "When scanning /api/v1/saas/tenants/{tenant_id} on chimera.atlascrew.dev, CHM-SAAS-001 documents cross-tenant project enumeration without tenant isolation — route-specific SaaS tenant BOLA training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional cross-tenant access on SaaS tenant endpoints for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraSaasTenantsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce tenant isolation on all SaaS tenant routes and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Verify JWT tenant_id matches the requested tenant before returning tenant data.",
+        "Scope all SaaS queries by authenticated tenant context.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/saas/tenants/{tenant_id} route documents CHM-SAAS-001 cross-tenant BOLA. Show tenant isolation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-cart-update-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Chimera retail cart negative-quantity route live oracle",
+    description:
+      "When scanning /api/cart/update on chimera.atlascrew.dev, the endpoints catalog documents cart updates accepting negative quantities — route-specific retail business logic training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional negative-quantity cart manipulation for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraCartUpdateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate cart quantities server-side and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Reject negative or zero cart quantities on all cart mutation endpoints.",
+        "Bind cart line totals to authoritative product catalog prices server-side.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/cart/update route documents negative-quantity cart manipulation. Show server-side quantity validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-loyalty-points-transfer-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "critical",
+    title: "Chimera loyalty points transfer route live oracle",
+    description:
+      "When scanning /api/loyalty/points/transfer on chimera.atlascrew.dev, CHM-LOYAL-001 documents loyalty points transfer manipulation without authorization — route-specific loyalty fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional loyalty points transfer business logic flaws.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraLoyaltyPointsTransferRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce authorization on loyalty point transfers and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Require authenticated sessions and account ownership checks before transferring loyalty points.",
+        "Validate transfer amounts and recipient accounts server-side.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/loyalty/points/transfer route documents CHM-LOYAL-001 points manipulation. Show authorization and transfer validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-loyalty-transactions-export-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera loyalty transactions export route live oracle",
+    description:
+      "When scanning /api/loyalty/transactions/export on chimera.atlascrew.dev, the vulnerability inventory documents BOLA/IDOR on loyalty transaction export via customer_id — route-specific loyalty BOLA training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents cross-customer loyalty transaction export without authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraLoyaltyTransactionsExportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on loyalty transaction exports and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Bind exported transaction data to the authenticated customer account.",
+        "Reject customer_id parameters that do not match the session owner.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/loyalty/transactions/export route documents cross-customer transaction BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-orders-override-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Chimera admin orders override route live oracle",
+    description:
+      "When scanning /api/admin/orders/override on chimera.atlascrew.dev, the endpoints catalog documents administrative order manipulation without authorization — route-specific admin order fraud training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional administrative order override flaws for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminOrdersOverrideRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authorization on order override endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce role-based access control on all administrative order mutation endpoints.",
+        "Audit and alert on privileged order override operations.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/admin/orders/override route documents administrative order manipulation. Show admin authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-healthcare-records-second-order-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera healthcare records second-order SQLi route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/records on chimera.atlascrew.dev, the vuln-api README documents second-order SQLi via POST when USE_DATABASE=true — route-specific healthcare injection training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional second-order SQLi on healthcare record creation for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcareRecordsSecondOrderSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries on all healthcare record endpoints.",
+        "Sanitize stored payloads before they are used in subsequent queries.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/records route documents second-order SQLi. Show parameterized query and stored-data sanitization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-healthcare-records-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera healthcare records search SQLi route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/records/search on chimera.atlascrew.dev, CHM-HEALTH-001 documents SQL injection on the search query parameter when USE_DATABASE=true — route-specific healthcare SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SQL injection on healthcare record search for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcareRecordsSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries on healthcare search endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace string-concatenated SQL with parameterized queries on /api/v1/healthcare/records/search.",
+        "Validate and sanitize all search query parameters server-side.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/records/search route documents CHM-HEALTH-001 SQL injection. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-healthcare-records-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera healthcare records BOLA route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/records/{record_id} on chimera.atlascrew.dev, CHM-HEALTH-002 documents BOLA/IDOR via predictable record_id without ownership checks — route-specific healthcare access control training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional healthcare record BOLA for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcareRecordsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind healthcare record reads to the authenticated principal and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Scope GET /api/v1/healthcare/records/{record_id} queries with owner_id = authenticated user.",
+        "Return 404 for records the caller does not own instead of leaking PHI.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/records/{record_id} route documents CHM-HEALTH-002 BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-healthcare-patients-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera healthcare patients BOLA route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/patients/{patient_id} on chimera.atlascrew.dev, CHM-HEALTH-002 patient-record BOLA documents cross-patient PHI reads via predictable patient_id without ownership checks — route-specific healthcare access control training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional healthcare patient-record BOLA for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcarePatientsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind healthcare patient reads to the authenticated principal and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Scope GET /api/v1/healthcare/patients/{patient_id} queries with owner_id = authenticated user.",
+        "Return 404 for patients the caller does not own instead of leaking PHI.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/patients/{patient_id} route documents patient-record BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-healthcare-imaging-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera healthcare imaging IDOR route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/imaging/{record_id}/download on chimera.atlascrew.dev, Chimera healthcare routes document imaging record download IDOR without authorization — route-specific healthcare imaging access control training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional imaging record IDOR for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcareImagingIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Authorize imaging downloads per patient record ownership and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Verify the authenticated user owns the imaging record before serving downloads.",
+        "Use signed, short-lived download URLs instead of predictable record_id paths.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/imaging/{record_id}/download route documents imaging IDOR. Show authorization remediation for medical imaging downloads.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-healthcare-records-phi-exposure-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Chimera healthcare records PHI exposure route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/records on chimera.atlascrew.dev, CHM-HEALTH-003 documents unauthenticated bulk PHI listing without authorization — route-specific healthcare sensitive data exposure training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional unauthenticated PHI bulk listing for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcareRecordsPhiExposureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication and authorization before listing healthcare records and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Gate GET /api/v1/healthcare/records behind authenticated sessions with role-based access control.",
+        "Scope record listings to the authenticated clinician or patient principal.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/records route documents CHM-HEALTH-003 PHI bulk exposure. Show HIPAA-compliant access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-hipaa-records-patient-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera HIPAA patient lookup IDOR route live oracle",
+    description:
+      "When scanning /api/hipaa/records/patient on chimera.atlascrew.dev, the API reference documents patient lookup IDOR without role filtering — route-specific HIPAA access control training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional HIPAA patient lookup IDOR for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHipaaRecordsPatientIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind HIPAA patient lookups to authenticated principals and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Require authentication and role checks before returning patient record details.",
+        "Scope patient lookups to the authenticated clinician or patient principal.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/hipaa/records/patient route documents HIPAA patient lookup IDOR. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-hipaa-records-bulk-export-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Chimera HIPAA bulk PHI export route live oracle",
+    description:
+      "When scanning /api/hipaa/records/bulk-export on chimera.atlascrew.dev, the API reference documents bulk PHI export without authorization — route-specific HIPAA sensitive data exposure training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional bulk PHI export for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHipaaRecordsBulkExportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict bulk PHI export endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Require authentication and HIPAA role checks before bulk-exporting patient records.",
+        "Log all bulk PHI export requests with tamper-evident audit trails.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/hipaa/records/bulk-export route documents bulk PHI export without authorization. Show HIPAA-compliant access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-healthcare-records-emergency-access-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Chimera healthcare emergency access route live oracle",
+    description:
+      "When scanning /api/v1/healthcare/records/emergency-access on chimera.atlascrew.dev, HIPAA evidence routes document emergency break-glass PHI access with weak justification controls — route-specific healthcare compliance training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional emergency break-glass PHI access for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHealthcareRecordsEmergencyAccessRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce strong justification and audit controls on emergency PHI access and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Require multi-factor authentication and supervisor approval for emergency break-glass access.",
+        "Reject emergency access requests without documented clinical justification.",
+        "Always log emergency PHI access with tamper-evident audit trails."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/healthcare/records/emergency-access route documents emergency break-glass PHI access. Show HIPAA-compliant emergency access remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-genai-chat-prompt-injection-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "critical",
+    title: "Chimera GenAI chat prompt injection route live oracle",
+    description:
+      "When scanning /api/v1/genai/chat on chimera.atlascrew.dev, CHM-AI-001 documents direct/indirect GenAI prompt injection — route-specific LLM prompt injection training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional GenAI prompt injection on the chat endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGenaiChatPromptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize LLM inputs and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Treat all user-supplied chat content as untrusted and apply output encoding.",
+        "Restrict LLM tool permissions and isolate model inference from sensitive data.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/genai/chat route documents CHM-AI-001 prompt injection. Show LLM input validation and tool permission remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-genai-agent-browse-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Chimera GenAI agent browse SSRF route live oracle",
+    description:
+      "When scanning /api/v1/genai/agent/browse on chimera.atlascrew.dev, CHM-AI-002 documents SSRF via autonomous agent URL fetch — route-specific GenAI agent SSRF training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional agent-driven SSRF on the GenAI browse endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGenaiAgentBrowseSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block agent URL fetches to internal networks and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Denylist internal IP ranges and metadata endpoints from agent browse targets.",
+        "Require URL allowlists for autonomous agent fetch capabilities.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/genai/agent/browse route documents CHM-AI-002 agent SSRF. Show URL allowlist and network segmentation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-genai-models-config-disclosure-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Chimera GenAI models config disclosure route live oracle",
+    description:
+      "When scanning /api/v1/genai/models/config on chimera.atlascrew.dev, CHM-AI-003 documents unauthenticated GenAI model configuration exposure — route-specific model config disclosure training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional sensitive model configuration disclosure for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGenaiModelsConfigDisclosureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication on model configuration endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Restrict model configuration APIs to authenticated admin roles.",
+        "Remove API keys and internal model parameters from public config responses.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/genai/models/config route documents CHM-AI-003 model config exposure. Show authentication and config redaction remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-genai-knowledge-upload-route-live-oracle",
+    platform: "generic",
+    category: "Unrestricted file upload",
+    severityDefault: "critical",
+    title: "Chimera GenAI knowledge upload unrestricted file upload route live oracle",
+    description:
+      "When scanning /api/v1/genai/knowledge/upload on chimera.atlascrew.dev, CHM-AI-004 documents unrestricted file upload on GenAI RAG knowledge ingestion — route-specific file upload training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional unrestricted file upload on the GenAI knowledge ingestion endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGenaiKnowledgeUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate uploaded file types and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce allowlisted MIME types and scan uploaded knowledge documents before ingestion.",
+        "Store uploaded files outside the web root with randomized names.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/genai/knowledge/upload route documents CHM-AI-004 unrestricted file upload. Show file validation and sandboxed storage remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-genai-graphql-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera GenAI GraphQL introspection route live oracle",
+    description:
+      "When scanning /api/v1/genai/graphql on chimera.atlascrew.dev, vuln-api genai/routes.py documents GraphQL introspection and depth/complexity DoS — route-specific GenAI GraphQL training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional GenAI GraphQL introspection and depth DoS for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGenaiGraphqlRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Disable __schema introspection on public GraphQL endpoints.",
+        "Enforce query depth and complexity limits before execution.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/genai/graphql route documents GraphQL introspection and depth DoS. Show query cost analysis and introspection lockdown remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-genai-rag-query-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Chimera GenAI RAG query route live oracle",
+    description:
+      "When scanning /api/v1/genai/rag/query on chimera.atlascrew.dev, the queued GenAI RAG query alias maps to documented /api/v1/genai/graphql introspection + depth DoS training content — route-specific GenAI query oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents GenAI query-layer GraphQL abuse patterns for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGenaiRagQueryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Treat GenAI query endpoints like GraphQL APIs and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Apply query depth and complexity limits on GenAI retrieval/query endpoints.",
+        "Disable schema introspection on any GenAI query interfaces exposed to users.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/genai/rag/query route documents GenAI query-layer GraphQL abuse. Show retrieval query validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "guardmarly-scan-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Guardmarly SAST scan API live oracle",
+    description:
+      "ansede.onrender.com hosts Guardmarly — a zero-dependency SAST scanner with POST /scan returning CWE-639 IDOR, CWE-89 SQLi, and CWE-798 hardcoded-secret findings on embedded probe code.",
+    impactOneline:
+      "Live confirmation that Guardmarly's public SAST demo API detects IDOR, SQL injection, and hardcoded secrets in submitted source code.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "guardmarlyScanLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Guardmarly is an intentional SAST training demo — gate /scan behind auth on production deployments.",
+      steps: [
+        "Require authentication before accepting arbitrary code submissions to /scan.",
+        "Rate-limit scan API usage to prevent abuse.",
+        "Run SAST demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Guardmarly /scan API documents live SAST detection of IDOR, SQLi, and hardcoded secrets. Show secure API access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "guardmarly-scan-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Guardmarly SAST scan route live oracle",
+    description:
+      "When scanning /scan on anside.onrender.com, POST /scan returns CWE-639 IDOR, CWE-89 SQLi, and CWE-798 hardcoded-secret findings — route-specific SAST training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Guardmarly's /scan endpoint performs live static analysis with IDOR, SQLi, and secret detection.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "guardmarlyScanRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Guardmarly is an intentional SAST training demo — gate /scan behind auth on production deployments.",
+      steps: [
+        "Require authentication before accepting arbitrary code submissions to /scan.",
+        "Rate-limit scan API usage to prevent abuse.",
+        "Run SAST demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Guardmarly /scan route documents live SAST detection. Show API authentication and rate-limiting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-payments-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "OpenVault Bank payments BOLA route live oracle",
+    description:
+      "When scanning /api/v1/payments on openvaultbank.com, /learn documents unauthorized fund transfer via manipulated source account ID — route-specific payment BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional payment BOLA on the fund transfer endpoint for API security training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultPaymentsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate account ownership on payment source fields and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Bind payment source account IDs to the authenticated user's owned accounts.",
+        "Reject transfers when the source account does not belong to the token subject.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/payments route documents unauthorized fund transfer. Show account ownership validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-admin-accounts-bfla-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "OpenVault Bank admin accounts BFLA route live oracle",
+    description:
+      "When scanning /api/v1/admin/accounts on openvaultbank.com, /learn documents RBAC bypass allowing customer tokens to list all accounts — route-specific BFLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional broken function-level authorization on the admin accounts endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultAdminAccountsBflaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce admin role checks on privileged endpoints and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Require admin role claims on all /admin/* API routes.",
+        "Return 403 for non-admin tokens before querying privileged data.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/admin/accounts route documents RBAC bypass. Show function-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-diagnostics-ping-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera diagnostics ping RCE route live oracle",
+    description:
+      "When scanning /api/v1/diagnostics/ping on chimera.atlascrew.dev, CHM-ADMIN-001 documents remote command execution via ping diagnostics — route-specific RCE training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional command injection on the diagnostics ping endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraDiagnosticsPingRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Use parameterized APIs instead of shelling out to ping or similar utilities.",
+        "Restrict diagnostics endpoints to authenticated admin roles on private networks.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/diagnostics/ping route documents CHM-ADMIN-001 RCE. Show safe diagnostics and input validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-diagnostics-webhook-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Chimera diagnostics webhook SSRF route live oracle",
+    description:
+      "When scanning /api/v1/diagnostics/webhook on chimera.atlascrew.dev, CHM-ADMIN-002 documents SSRF via diagnostics webhook callback URL — route-specific SSRF training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SSRF on the diagnostics webhook endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraDiagnosticsWebhookSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate outbound webhook URLs and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Block private IP ranges and metadata endpoints in outbound webhook fetches.",
+        "Use an allowlist of permitted callback hostnames for diagnostics webhooks.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/diagnostics/webhook route documents CHM-ADMIN-002 SSRF. Show outbound URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-diagnostics-resolve-dns-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Chimera diagnostics resolve DNS SSRF route live oracle",
+    description:
+      "When scanning /api/v1/diagnostics/resolve on chimera.atlascrew.dev, api-reference documents DNS resolution diagnostic with SSRF risk — route-specific DNS SSRF training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional DNS resolution diagnostic SSRF risk for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraDiagnosticsResolveDnsSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate DNS resolution targets and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Block internal hostnames and metadata endpoints in DNS resolution diagnostics.",
+        "Require authentication before running DNS lookup diagnostics.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/diagnostics/resolve route documents DNS resolution SSRF risk. Show outbound DNS validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-attack-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "Chimera admin attack XXE route live oracle",
+    description:
+      "When scanning /api/v1/admin/attack/xxe on chimera.atlascrew.dev, CHM-ADMIN-003 documents XXE in legacy import behavior — route-specific XXE training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional XXE on the admin legacy import endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminAttackXxeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Disable DTD and external entity processing in all XML parsers.",
+        "Use JSON or strictly schema-validated XML for configuration imports.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/attack/xxe route documents CHM-ADMIN-003 XXE. Show secure XML parser configuration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-execute-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin execute RCE route live oracle",
+    description:
+      "When scanning /api/v1/admin/execute on chimera.atlascrew.dev, vulnerability inventory documents unauthenticated direct command execution — route-specific admin RCE training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional admin command execution without authorization for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminExecuteRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose admin command execution endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Require admin authentication and authorization before any command execution.",
+        "Remove or sandbox admin execute endpoints from production deployments.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/execute route documents unauthenticated command execution. Show admin endpoint hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-system-execute-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin system execute RCE route live oracle",
+    description:
+      "When scanning /api/v1/admin/system/execute on chimera.atlascrew.dev, api-reference documents unauthenticated command injection — route-specific admin RCE training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional admin system command injection for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminSystemExecuteRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose admin command execution endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Require admin authentication and authorization before any command execution.",
+        "Remove or sandbox admin system execute endpoints from production deployments.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/system/execute route documents command injection. Show admin endpoint hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-config-import-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin config import XXE route live oracle",
+    description:
+      "When scanning /api/v1/admin/config/import on chimera.atlascrew.dev, api-reference documents XXE injection via configuration import — route-specific XXE training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional XXE injection on admin config import for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminConfigImportXxeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Disable DTD and external entity processing in all XML parsers.",
+        "Use JSON or strictly schema-validated XML for configuration imports.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/config/import route documents XXE injection. Show secure XML parser configuration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-data-deserialize-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin data deserialize route live oracle",
+    description:
+      "When scanning /api/v1/admin/data/deserialize on chimera.atlascrew.dev, api-reference documents insecure deserialization RCE — route-specific deserialization training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional insecure deserialization RCE for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminDataDeserializeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never deserialize untrusted serialized data and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace pickle deserialization with JSON or signed message formats.",
+        "Require authentication before accepting serialized admin payloads.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/data/deserialize route documents insecure deserialization RCE. Show secure deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-deserialize-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin deserialize route live oracle",
+    description:
+      "When scanning /api/admin/attack/deserialize on chimera.atlascrew.dev, vulnerability inventory documents Python pickle insecure deserialization RCE — route-specific deserialization training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional pickle deserialization RCE for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminDeserializeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never deserialize untrusted pickle data and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace pickle deserialization with JSON or signed message formats.",
+        "Require authentication before accepting serialized admin payloads.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/admin/attack/deserialize route documents pickle RCE. Show secure deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-files-read-path-traversal-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin files read path traversal route live oracle",
+    description:
+      "When scanning /api/v1/admin/files/read on chimera.atlascrew.dev, api-reference documents unauthenticated path traversal file read — route-specific path traversal training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional admin path traversal file read for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminFilesReadPathTraversalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate file paths and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Reject path traversal sequences in file read parameters.",
+        "Require admin authentication before any file read operations.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/files/read route documents path traversal. Show secure file access remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-users-export-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Chimera admin users export route live oracle",
+    description:
+      "When scanning /api/v1/admin/users/export on chimera.atlascrew.dev, the vulnerability inventory documents unauthenticated bulk user data export — route-specific admin data exfiltration training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional unauthenticated admin user export for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminUsersExportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication on bulk export endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce role-based access control on all /admin/users/export endpoints.",
+        "Audit and rate-limit bulk data export operations.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/users/export route documents unauthenticated bulk user export. Show admin authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-integrations-webhook-register-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Chimera integrations webhook register SSRF route live oracle",
+    description:
+      "When scanning /api/integrations/webhook/register on chimera.atlascrew.dev, api-reference documents SSRF via webhook callback registration — route-specific integrations SSRF training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SSRF on webhook registration for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraIntegrationsWebhookRegisterSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate webhook callback URLs and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Block private IP ranges and cloud metadata endpoints in webhook callback URLs.",
+        "Require authentication before registering webhook endpoints.",
+        "Do not expose Chimera integrations API to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/integrations/webhook/register route documents SSRF via webhook. Show outbound URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-oauth-token-forge-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Chimera OAuth token forge route live oracle",
+    description:
+      "When scanning /api/oauth/token/forge on chimera.atlascrew.dev, the endpoints catalog documents OAuth token forgery allowing arbitrary access token minting — route-specific attack simulation training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional OAuth token forgery for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraOauthTokenForgeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose token-forging endpoints and enforce strict OAuth client validation.",
+      steps: [
+        "Require client credentials and signed JWT assertions for all token issuance.",
+        "Remove or sandbox token-forge endpoints from production deployments.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/oauth/token/forge route documents OAuth token forgery. Show secure OAuth token issuance remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-auth-token-forge-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Chimera auth token forge route live oracle",
+    description:
+      "When scanning /api/v1/auth/token/forge on chimera.atlascrew.dev, api-reference documents JWT token forgery endpoint — route-specific attack simulation training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional JWT token forgery for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAuthTokenForgeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose token-forging endpoints and enforce strict JWT signing key protection.",
+      steps: [
+        "Require client credentials and signed JWT assertions for all token issuance.",
+        "Remove or sandbox token-forge endpoints from production deployments.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/auth/token/forge route documents JWT token forgery. Show secure token issuance remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-mobile-instant-transfer-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "critical",
+    title: "Chimera mobile instant transfer route live oracle",
+    description:
+      "When scanning /api/mobile/v2/transfers/instant on chimera.atlascrew.dev, endpoints catalog documents fraudulent instant transfers without authorization — route-specific mobile banking business logic training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional fraudulent mobile instant transfers for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraMobileInstantTransferRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce transfer authorization and velocity limits on mobile banking endpoints.",
+      steps: [
+        "Require multi-factor authentication before instant transfers above threshold amounts.",
+        "Validate account ownership and available balance server-side before transfer execution.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/mobile/v2/transfers/instant route documents fraudulent transfers. Show mobile transfer authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-inventory-reserve-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "Chimera inventory reserve route live oracle",
+    description:
+      "When scanning /api/inventory/reserve on chimera.atlascrew.dev, endpoints catalog documents inventory reservation bypass without stock validation — route-specific retail business logic training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional inventory reservation bypass for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraInventoryReserveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate inventory availability server-side before accepting reservations.",
+      steps: [
+        "Check real-time stock levels atomically when processing reservation requests.",
+        "Reject reservations that exceed available inventory quantities.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/inventory/reserve route documents inventory reservation bypass. Show server-side stock validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-sanctions-check-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Chimera sanctions check route live oracle",
+    description:
+      "When scanning /api/sanctions/check on chimera.atlascrew.dev, endpoints catalog documents sanctions screening without authorization — route-specific compliance business logic training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional sanctions screening bypass for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraSanctionsCheckRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require authentication for compliance screening endpoints and enforce sanctions list checks.",
+      steps: [
+        "Restrict sanctions screening APIs to authenticated compliance officers.",
+        "Enforce mandatory sanctions list validation on all outbound transfers.",
+        "Do not expose Chimera compliance endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/sanctions/check route documents sanctions screening bypass. Show compliance endpoint authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-gov-cases-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera government cases BOLA route live oracle",
+    description:
+      "When scanning /api/v1/gov/cases on chimera.atlascrew.dev, api-reference documents citizen case creation and case-detail access without authorization — route-specific government BOLA training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional citizen case management BOLA for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGovCasesBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce authorization on government case management endpoints.",
+      steps: [
+        "Require authenticated citizen or caseworker identity before creating or viewing cases.",
+        "Validate case ownership server-side on every case detail request.",
+        "Do not expose Chimera government endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/gov/cases route documents citizen case BOLA. Show case-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-gov-records-pii-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "Chimera government public records PII route live oracle",
+    description:
+      "When scanning /api/v1/gov/records on chimera.atlascrew.dev, api-reference documents public records search returning citizen PII without authorization — route-specific government records PII training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional public records PII exposure for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraGovRecordsPiiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce authorization and redact PII from government records search endpoints.",
+      steps: [
+        "Require authenticated citizen or caseworker identity before returning records search results.",
+        "Redact SSN and other sensitive fields from public records API responses.",
+        "Do not expose Chimera government endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/gov/records route documents public records PII exposure. Show records search authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-cards-data-export-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "Chimera card data export route live oracle",
+    description:
+      "When scanning /api/cards/data/export on chimera.atlascrew.dev, endpoints catalog documents unauthenticated card data extraction — route-specific PCI data exposure training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional card data extraction for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraCardsDataExportRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict card data export to authenticated PCI-compliant processes.",
+      steps: [
+        "Never expose raw card data via unauthenticated export endpoints.",
+        "Require strong authentication and audit logging for any card data access.",
+        "Do not expose Chimera payment endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/cards/data/export route documents card data extraction. Show PCI-compliant card data access remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-mobile-biometric-verify-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Chimera mobile biometric verify route live oracle",
+    description:
+      "When scanning /api/mobile/v2/auth/biometric/verify on chimera.atlascrew.dev, endpoints catalog documents biometric authentication bypass without device binding — route-specific mobile auth bypass training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional mobile biometric auth bypass for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraMobileBiometricVerifyRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Bind biometric verification to registered device attestations.",
+      steps: [
+        "Validate device integrity and biometric attestation server-side before granting access.",
+        "Reject biometric verify requests from unregistered or untrusted devices.",
+        "Do not expose Chimera mobile auth endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/mobile/v2/auth/biometric/verify route documents biometric bypass. Show device-bound biometric auth remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-ot-modbus-command-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera OT Modbus command injection route live oracle",
+    description:
+      "When scanning /api/ot/protocols/modbus on chimera.atlascrew.dev, vulnerability inventory documents CHM-ICS-001 remote command injection on Modbus protocol operations — route-specific ICS/OT Modbus command injection training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional Modbus protocol command injection for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraOtModbusCommandInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict Modbus protocol endpoints to authorized OT operators and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Validate and sanitize all Modbus command parameters server-side.",
+        "Segment OT protocol endpoints from public-facing API gateways.",
+        "Do not expose Chimera ICS/OT endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/ot/protocols/modbus route documents CHM-ICS-001 Modbus command injection. Show OT protocol input validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-ics-scada-systems-discovery-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "medium",
+    title: "Chimera ICS SCADA systems discovery route live oracle",
+    description:
+      "When scanning /api/ics/scada/systems on chimera.atlascrew.dev, vulnerability inventory documents CHM-ICS-003 unauthorized SCADA systems inventory discovery — route-specific ICS/OT SCADA discovery training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional unauthenticated SCADA systems inventory disclosure for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraIcsScadaSystemsDiscoveryRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict SCADA systems inventory to authorized OT operators.",
+      steps: [
+        "Require authenticated OT operator sessions before listing SCADA systems.",
+        "Segment ICS/OT inventory endpoints from public API gateways.",
+        "Do not expose Chimera SCADA endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/ics/scada/systems route documents CHM-ICS-003 unauthorized system discovery. Show ICS/OT inventory access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-insurance-policies-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera insurance policies BOLA route live oracle",
+    description:
+      "When scanning /api/v1/insurance/policies/{id} on chimera.atlascrew.dev, vulnerability inventory documents CHM-INS-001 BOLA on insurance policy details — route-specific insurance policy BOLA training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional insurance policy BOLA for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraInsurancePoliciesBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce authorization on insurance policy detail endpoints.",
+      steps: [
+        "Validate policy ownership server-side before returning policy details.",
+        "Require authenticated sessions tied to the policyholder account.",
+        "Do not expose Chimera insurance endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/insurance/policies/{id} route documents CHM-INS-001 policy BOLA. Show policy-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-hipaa-transfer-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Chimera HIPAA transfer SSRF route live oracle",
+    description:
+      "When scanning /api/hipaa/transfer/encrypted on chimera.atlascrew.dev, vulnerability inventory documents SSRF to cloud metadata with encryption:none — route-specific HIPAA transfer SSRF training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SSRF on HIPAA PHI transfer endpoints for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraHipaaTransferSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate HIPAA transfer destinations and enforce encryption in transit for all PHI transfers.",
+      steps: [
+        "Block private IP ranges and cloud metadata endpoints in transfer destination URLs.",
+        "Require authenticated authorization before initiating PHI transfers.",
+        "Do not expose Chimera HIPAA endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/hipaa/transfer/encrypted route documents SSRF and unencrypted PHI transfer. Show outbound URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-energy-utilities-calibration-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Chimera energy utilities calibration SSRF route live oracle",
+    description:
+      "When scanning /api/v1/energy-utilities/assets/calibration on chimera.atlascrew.dev, CHM-ENERGY-001 documents SSRF via asset calibration callback URL — route-specific energy utilities SSRF training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SSRF on energy utilities asset calibration endpoints for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraEnergyUtilitiesCalibrationSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate outbound calibration callback URLs and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Block private IP ranges and metadata endpoints in outbound calibration fetches.",
+        "Use an allowlist of permitted callback hostnames for asset calibration webhooks.",
+        "Do not expose Chimera energy utilities endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/energy-utilities/assets/calibration route documents CHM-ENERGY-001 SSRF. Show outbound URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-auth-token-enumeration-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "OpenVault Bank auth token login enumeration route live oracle",
+    description:
+      "When scanning /api/v1/auth/token on openvaultbank.com, /learn documents distinguishable login error messages enabling email enumeration — route-specific user enumeration training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional login enumeration via user-not-found vs wrong-password error messages.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultAuthTokenEnumerationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return generic login failure messages and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Use a single generic error message for invalid username and invalid password.",
+        "Apply rate limiting and account lockout on authentication endpoints.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/auth/token route documents login enumeration. Show generic authentication error remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-users-enumeration-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "OpenVault Bank users enumeration route live oracle",
+    description:
+      "When scanning /api/v1/users on openvaultbank.com, /learn documents mass-assignment privilege escalation unlocking GET /api/v1/admin/users with full user roster — route-specific user enumeration training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional user roster disclosure after mass-assignment privilege escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultUsersEnumerationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use allowlisted writable fields on profile updates and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Reject role and privilege fields in customer profile update requests.",
+        "Enforce admin role checks before returning user roster data.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/users route documents mass-assignment user roster disclosure. Show mass assignment and authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-energy-utilities-outages-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "Chimera energy utilities outages BOLA route live oracle",
+    description:
+      "When scanning /api/v1/energy-utilities/outages/{outage_id} on chimera.atlascrew.dev, CHM-ENERGY-002 documents BOLA on outage records — route-specific energy utilities outage BOLA training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional BOLA on energy utilities outage records for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraEnergyUtilitiesOutagesBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on outage records and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Verify the authenticated user owns or is authorized to view each outage record.",
+        "Use unpredictable outage identifiers instead of sequential IDs.",
+        "Do not expose Chimera energy utilities endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/energy-utilities/outages route documents CHM-ENERGY-002 BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-ics-controllers-status-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera ICS controllers status BOLA route live oracle",
+    description:
+      "When scanning /api/ics/controllers/status on chimera.atlascrew.dev, CHM-ICS-002 documents BOLA on ICS controller status — route-specific ICS/OT controller status BOLA training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional BOLA on ICS controller status endpoints for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraIcsControllersStatusBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict ICS controller status to authorized OT operators and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Enforce role-based access control for ICS/OT controller status endpoints.",
+        "Segment OT networks from public-facing API gateways.",
+        "Do not expose Chimera ICS endpoints to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/ics/controllers/status route documents CHM-ICS-002 BOLA. Show ICS/OT access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-transactions-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OpenVault Bank transactions BOLA route live oracle",
+    description:
+      "When scanning /api/v1/accounts/{id}/transactions on openvaultbank.com, /learn documents BOLA via account ID manipulation on transaction history — route-specific transaction BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional transaction history IDOR via predictable account IDs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultTransactionsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Verify account ownership before returning transaction history and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Enforce object-level authorization so users can only read transactions for accounts they own.",
+        "Reject cross-account transaction history requests even with a valid customer token.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/accounts/{id}/transactions route documents transaction history BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-profile-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OpenVault Bank profile mass-assignment route live oracle",
+    description:
+      "When scanning /api/v1/profile on openvaultbank.com, /cheatsheet documents privilege escalation via mass assignment on PUT /api/v1/profile unlocking GET /api/v1/admin/users — route-specific profile mass-assignment training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional profile mass-assignment privilege escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultProfileMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject client-supplied role and balance fields on profile updates and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Whitelist allowed profile fields and block role, is_admin, and balance mutations from customer tokens.",
+        "Enforce server-side authorization before returning admin user rosters.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/profile route documents privilege escalation via mass assignment. Show profile field whitelisting remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-health-misconfig-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "OpenVault Bank health misconfiguration route live oracle",
+    description:
+      "When scanning /api/v1/health on openvaultbank.com, /learn documents unauthenticated debug health endpoint exposing infrastructure status — route-specific security misconfiguration training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional health endpoint information disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultHealthMisconfigRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict health endpoints to internal monitoring and remove debug details from public responses.",
+      steps: [
+        "Require authentication or internal network access for /api/v1/health.",
+        "Return minimal liveness status without database or dependency details.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/health route documents debug health disclosure. Show health endpoint hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-reset-request-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "OpenVault Bank reset-request route live oracle",
+    description:
+      "When scanning /api/v1/auth/reset-request on openvaultbank.com, /learn documents password reset responses leaking reset tokens — route-specific sensitive data exposure training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional password reset token leakage.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultResetRequestRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never return password reset tokens in API responses and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Send reset tokens only via out-of-band email delivery.",
+        "Return generic success messages without token values in API responses.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/auth/reset-request route documents reset token leakage. Show password reset response hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-admin-users-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "high",
+    title: "OpenVault Bank admin users route live oracle",
+    description:
+      "When scanning /api/v1/admin/users on openvaultbank.com, /cheatsheet documents admin user roster with emails and hashed passwords after mass-assignment privilege escalation — route-specific admin user enumeration training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional admin user roster disclosure with hashed passwords.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultAdminUsersRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce admin role checks and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Require admin role claims before returning user roster data on /admin/users.",
+        "Reject role and privilege fields in customer profile update requests.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/admin/users route documents admin user roster with hashed passwords. Show authorization and mass-assignment remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-accounts-exposure-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "OpenVault Bank accounts excessive data exposure route live oracle",
+    description:
+      "When scanning /api/v1/accounts on openvaultbank.com, /learn documents excessive data exposure returning SSN last-4 and routing numbers regardless of token scope — route-specific accounts exposure training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional excessive data exposure on the accounts listing endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultAccountsExposureRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Scope API responses to token claims and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Return only fields authorized by the authenticated user's token scope.",
+        "Strip SSN, routing numbers, and other sensitive fields from list endpoints.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/accounts route documents excessive data exposure. Show response field scoping remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-accounts-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "OpenVault Bank accounts BOLA route live oracle",
+    description:
+      "When scanning /api/v1/accounts/{id} on openvaultbank.com, /learn documents broken object-level authorization via account ID manipulation without ownership validation — route-specific account BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional account BOLA on GET /accounts/{id}.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultAccountsBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate account ownership on object-level reads and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Bind account ID parameters to the authenticated user's owned accounts.",
+        "Return 403 when the requested account does not belong to the token subject.",
+        "Run OpenVault Bank demo instances only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/accounts/{id} route documents account BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "openvault-reset-confirm-rate-limit-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "OpenVault Bank reset-confirm rate-limit route live oracle",
+    description:
+      "When scanning /api/v1/auth/reset-confirm on openvaultbank.com, /cheatsheet documents no rate limiting on 3-digit password reset codes enabling brute-force — route-specific password reset brute-force training oracle.",
+    impactOneline:
+      "Route-specific confirmation that OpenVault Bank documents intentional missing rate limiting on password reset confirm.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "openvaultResetConfirmRateLimitRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Lock accounts after failed reset attempts and isolate OpenVault demo instances to lab networks.",
+      steps: [
+        "Lock the account after 5 failed reset-confirm attempts.",
+        "Add cooldown periods between password reset confirm requests.",
+        "Use reset codes longer than 3 digits and run OpenVault Bank only on dedicated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our openvaultbank /api/v1/auth/reset-confirm route documents brute-forceable 3-digit reset codes with no rate limiting. Show password reset rate-limit remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "fauxbank-scanner-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "FauxBank /scanner route live oracle",
+    description:
+      "When scanning /scanner on pentest-fauxbank.vercel.app, the in-process OWASP vulnerability scanner hub documents fetch /api/scanner with severity/module/evidence table — route-specific pentest scanner training oracle.",
+    impactOneline:
+      "Route scans on /scanner need live confirmation that the FauxBank simulated pentest scanner hub is reachable with scannedUrl evidence.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fauxbankScannerRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run FauxBank only on isolated pentest training infrastructure with clear disclaimers.",
+      steps: [
+        "Keep training labs off production domains and behind authentication where possible.",
+        "Label all simulated scanner findings with visible training banners.",
+        "Do not expose in-process scanner APIs on production banking domains."
+      ]
+    },
+    fixPrompt:
+      "Our /scanner route exposes the FauxBank OWASP pentest scanner hub with in-process /api/scanner findings. Show how to isolate training scanner tools from production.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "xss-payload-lab-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "XSS Payload Lab route live oracle",
+    description:
+      "When scanning xss-payload-lab.vercel.app, the static browser security playground documents XSS payload contexts, sandboxed preview, DOM sinks, and CSP behavior — route-specific XSS training lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that XSS Payload Lab documents intentional XSS context training with sandboxed payload preview.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "xssPayloadLabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "XSS Payload Lab is intentional browser security training — use context-aware output encoding in production apps.",
+      steps: [
+        "Encode user input based on the output context (HTML, attribute, JavaScript, URL).",
+        "Use a strict Content-Security-Policy to block inline script execution.",
+        "Run intentionally vulnerable XSS labs only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our xss-payload-lab route documents XSS context explorer and sandboxed payload preview. Show context-aware output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-ecommerce-products-catalog-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera ecommerce products catalog SQLi route live oracle",
+    description:
+      "When scanning /api/v1/ecommerce/products on chimera.atlascrew.dev, CHM-ECOM-002 documents SQL injection on the ecommerce product catalog — route-specific catalog SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SQL injection on the ecommerce product catalog endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraEcommerceProductsCatalogSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries on catalog endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace dynamic SQL in product catalog queries with prepared statements.",
+        "Restrict catalog APIs to authenticated sessions with least-privilege scopes.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/ecommerce/products route documents CHM-ECOM-002 catalog SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-ecommerce-products-search-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Chimera ecommerce products search XSS route live oracle",
+    description:
+      "When scanning /api/v1/ecommerce/products/search on chimera.atlascrew.dev, the vulnerability inventory documents reflected XSS on the product search query parameter — route-specific ecommerce search XSS training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional reflected XSS on ecommerce product search for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraEcommerceProductsSearchXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Encode search output and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "HTML-encode user-supplied search query parameters in API responses.",
+        "Set Content-Type: application/json and avoid reflecting raw query strings in HTML.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/ecommerce/products/search route documents reflected XSS. Show output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-telecom-integrations-webhooks-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Chimera telecom integrations webhooks SSRF route live oracle",
+    description:
+      "When scanning /api/v1/telecom/integrations/webhooks on chimera.atlascrew.dev, the openapi documents Webhook registration (SSRF risk) on telecom integrations — route-specific telecom SSRF training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SSRF on telecom integrations webhook registration for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraTelecomIntegrationsWebhooksSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate outbound webhook URLs on telecom integrations and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Block private IP ranges and metadata endpoints in telecom webhook callback fetches.",
+        "Use an allowlist of permitted callback hostnames for integrations webhooks.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/telecom/integrations/webhooks route documents Webhook registration (SSRF risk). Show outbound URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-telecom-subscribers-profile-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera telecom subscriber profile BOLA route live oracle",
+    description:
+      "When scanning /api/v1/telecom/subscribers/{subscriber_id}/profile on chimera.atlascrew.dev, CHM-TELCO-001 documents BOLA/IDOR on telecom subscriber profiles — route-specific subscriber BOLA training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional subscriber profile BOLA via predictable identifiers for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraTelecomSubscribersProfileBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce subscriber-level authorization and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Verify the authenticated principal owns the requested subscriber_id before returning profile data.",
+        "Use non-enumerable subscriber identifiers instead of sequential IDs.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/telecom/subscribers/{subscriber_id}/profile route documents CHM-TELCO-001 subscriber BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-insurance-claims-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera insurance claims search SQLi route live oracle",
+    description:
+      "When scanning /api/v1/insurance/claims/search on chimera.atlascrew.dev, CHM-INS-002 documents SQL injection on insurance claims search — route-specific claims SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SQL injection on the insurance claims search endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraInsuranceClaimsSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries on claims search and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace dynamic SQL in claims search with prepared statements.",
+        "Validate and sanitize all query parameters before database lookup.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/insurance/claims/search route documents CHM-INS-002 claims SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-dvla-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVLA Damn Vulnerable Laravel Application disclosed",
+    description:
+      "dvla.jcadima.dev documents 13 intentional Laravel/LEMP stack misconfigurations spanning mass assignment, SQLi, SSRF, Redis job injection, and docker.sock host escape.",
+    impactOneline:
+      "Public DVLA hub teaches modern Laravel kill-chain exploitation from .env leak to full host compromise.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDvlaEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVLA is intentional training — run only on local Docker lab networks.",
+      steps: [
+        "Never deploy DVLA on public-facing servers.",
+        "Block .env and docker.sock exposure in production Nginx configs.",
+        "Use parameterized queries and Eloquent $fillable guards on all models."
+      ]
+    },
+    fixPrompt:
+      "We host DVLA-style Laravel security training. Show how to isolate intentional vulnerability labs from production deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dvla-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "DVLA Laravel security lab route live oracle",
+    description:
+      "When scanning dvla.jcadima.dev, the hub confirms 13 intentional Laravel/LEMP misconfigurations with companion exploit walkthroughs — route-specific OSWE/AppSec training oracle.",
+    impactOneline:
+      "Route-specific confirmation that DVLA documents a full Laravel kill chain from .env exposure to docker.sock host escape.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dvlaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run DVLA only on local Docker lab networks; never expose on public hosts.",
+      steps: [
+        "Block HTTP access to .env and storage directories in Nginx.",
+        "Pin JWT/session algorithms and use separate signing keys.",
+        "Remove docker.sock mounts from application containers."
+      ]
+    },
+    fixPrompt:
+      "Our DVLA route scan confirms intentionally vulnerable Laravel training scope. Show production Laravel hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ucu-owasp-ctf-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "UCU OWASP CTF injection lab route live oracle",
+    description:
+      "When scanning /injection/ on ucu-owasp-ctf.vercel.app, the UCU OWASP Top 10 CTF 2025 hub documents SQL injection login bypass and command injection training (OWASP A03).",
+    impactOneline:
+      "Route-specific confirmation that UCU CTF documents intentional SQLi and command injection on the injection challenge app.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ucuOwaspCtfInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run UCU CTF labs only on isolated Docker networks; use parameterized queries in production.",
+      steps: [
+        "Gate CTF challenge apps behind team authentication.",
+        "Use prepared statements for all database queries.",
+        "Never pass user input to shell commands."
+      ]
+    },
+    fixPrompt:
+      "Our ucu-owasp-ctf /injection/ route documents SQLi and command injection. Show parameterized query and input validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ucu-owasp-ctf-access-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "UCU OWASP CTF access control lab route live oracle",
+    description:
+      "When scanning /access/ on ucu-owasp-ctf.vercel.app, the UCU OWASP Top 10 CTF 2025 hub documents admin panel bypass and path traversal via ?file= (OWASP A01).",
+    impactOneline:
+      "Route-specific confirmation that UCU CTF documents broken access control and directory traversal on the access challenge app.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ucuOwaspCtfAccessRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce server-side role checks; validate file paths against an allowlist.",
+      steps: [
+        "Require admin role server-side before rendering admin panels.",
+        "Reject path traversal sequences in file viewer parameters.",
+        "Run CTF labs on isolated infrastructure only."
+      ]
+    },
+    fixPrompt:
+      "Our ucu-owasp-ctf /access/ route documents admin bypass and path traversal. Show access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ucu-owasp-ctf-crypto-route-live-oracle",
+    platform: "generic",
+    category: "Cryptographic failures",
+    severityDefault: "high",
+    title: "UCU OWASP CTF cryptographic failures lab route live oracle",
+    description:
+      "When scanning /crypto/ on ucu-owasp-ctf.vercel.app, the UCU OWASP Top 10 CTF 2025 hub documents weak MD5 hashing and predictable random number generation (OWASP A02).",
+    impactOneline:
+      "Route-specific confirmation that UCU CTF documents cryptographic failures on the crypto challenge app.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ucuOwaspCtfCryptoRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use bcrypt/Argon2 for passwords; use cryptographically secure random for tokens.",
+      steps: [
+        "Replace MD5 with bcrypt or Argon2id for password hashing.",
+        "Use crypto.randomBytes for session and token generation.",
+        "Run CTF labs on isolated infrastructure only."
+      ]
+    },
+    fixPrompt:
+      "Our ucu-owasp-ctf /crypto/ route documents weak MD5 and predictable RNG. Show cryptographic remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ucu-owasp-ctf-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "UCU OWASP CTF SSRF lab route live oracle",
+    description:
+      "When scanning /ssrf/ on ucu-owasp-ctf.vercel.app, the UCU OWASP Top 10 CTF 2025 hub documents SSRF to internal flag-server:8080 (OWASP A10).",
+    impactOneline:
+      "Route-specific confirmation that UCU CTF documents server-side request forgery and internal service access on the SSRF challenge app.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ucuOwaspCtfSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block SSRF with URL allowlists and network egress controls.",
+      steps: [
+        "Validate outbound URLs against an allowlist of permitted hosts.",
+        "Block requests to link-local, metadata, and private IP ranges.",
+        "Run CTF labs on isolated Docker networks only."
+      ]
+    },
+    fixPrompt:
+      "Our ucu-owasp-ctf /ssrf/ route documents SSRF to internal flag-server. Show SSRF defense-in-depth remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ucu-owasp-ctf-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "UCU OWASP CTF XSS-adjacent auth failures lab route live oracle",
+    description:
+      "When scanning /xss/ on ucu-owasp-ctf.vercel.app, the UCU OWASP Top 10 CTF 2025 Firebase hub documents OWASP A07 Authentication Failures with session cookie theft on external Railway challenge apps — vanity /xss/ SPA route returns 404.",
+    impactOneline:
+      "Route-specific confirmation that UCU CTF documents XSS-adjacent session hijacking drills even when the /xss/ vanity path is not deployed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ucuOwaspCtfXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use HttpOnly/Secure/SameSite cookies and server-side session validation.",
+      steps: [
+        "Set HttpOnly and Secure flags on session cookies.",
+        "Enforce SameSite=Lax or Strict on authentication cookies.",
+        "Run CTF labs on isolated Docker networks only."
+      ]
+    },
+    fixPrompt:
+      "Our ucu-owasp-ctf /xss/ route documents A07 session cookie theft. Show secure cookie and session management remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pentest-forge-mutillidae-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "PentestForge Mutillidae user-info SQL injection route live oracle",
+    description:
+      "When scanning index.php?page=sqlinjection.php on mutillidae.lab.pentest-forge.com, POST username=' OR 1=1 -- triggers classic SQL injection on the User Info lookup form.",
+    impactOneline:
+      "Unsanitized SQL concatenation on Mutillidae sqlinjection.php lets attackers bypass lookups and extract database contents.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pentestForgeMutillidaeSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Mutillidae is intentional security training — use parameterized queries for user lookups.",
+      steps: [
+        "Bind username with prepared statements.",
+        "Validate and reject SQL metacharacters in lookup fields.",
+        "Run Mutillidae only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our PentestForge Mutillidae sqlinjection.php route concatenates username into SQL. Show classic SQLi remediation with parameterized queries.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "restful-booker-auth-weak-creds-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Restful Booker weak credential token oracle",
+    description:
+      "POST /auth on restful-booker.herokuapp.com returns an API token for default admin/password123 credentials — intentional API testing playground weak authentication.",
+    impactOneline:
+      "Default admin credentials issue bearer tokens, enabling authenticated booking modification on the Restful Booker demo API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restfulBookerAuthWeakCredsLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restful Booker is intentional API training — enforce strong credentials and rate-limit auth in production APIs.",
+      steps: [
+        "Reject default or well-known credentials at account creation.",
+        "Rate-limit POST /auth and monitor for credential stuffing.",
+        "Use short-lived tokens with refresh rotation for API authentication."
+      ]
+    },
+    fixPrompt:
+      "Our Restful Booker scan confirms POST /auth issues tokens for admin/password123. Show strong credential policy and auth hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "restful-booker-auth-weak-creds-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Restful Booker /auth weak credential route live oracle",
+    description:
+      "When scanning /auth on restful-booker.herokuapp.com, POST /auth returns an API token for default admin/password123 credentials.",
+    impactOneline:
+      "Route-scoped Restful Booker /auth scans should confirm weak default credentials issue bearer tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restfulBookerAuthWeakCredsRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restful Booker is intentional API training — enforce strong credentials on auth endpoints.",
+      steps: [
+        "Reject default credentials and enforce password complexity.",
+        "Rate-limit authentication endpoints.",
+        "Use short-lived API tokens with rotation."
+      ]
+    },
+    fixPrompt:
+      "Our Restful Booker /auth route scan confirms weak default credentials issue API tokens. Show auth endpoint hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "restful-booker-booking-unauth-access-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Restful Booker unauthenticated booking access oracle",
+    description:
+      "GET /booking lists reservation IDs and GET /booking/{id} returns guest PII (firstname, lastname, totalprice) without authentication on restful-booker.herokuapp.com.",
+    impactOneline:
+      "Unauthenticated callers can enumerate and read guest booking details — broken object level authorization on the demo booking API.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restfulBookerBookingUnauthAccessLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restful Booker is intentional API training — require authentication for booking reads in production.",
+      steps: [
+        "Require valid session or bearer token for GET /booking and GET /booking/{id}.",
+        "Authorize each booking read against the authenticated principal.",
+        "Avoid exposing sequential booking IDs without access controls."
+      ]
+    },
+    fixPrompt:
+      "Our Restful Booker scan confirms unauthenticated booking enumeration and PII reads. Show BOLA remediation with per-object authorization.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "restful-booker-booking-unauth-access-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Restful Booker /booking unauthenticated access route live oracle",
+    description:
+      "When scanning /booking on restful-booker.herokuapp.com, GET /booking enumerates reservations and GET /booking/{id} returns guest PII without authentication.",
+    impactOneline:
+      "Route-scoped Restful Booker /booking scans should confirm unauthenticated booking enumeration and guest PII disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restfulBookerBookingUnauthAccessRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restful Booker is intentional API training — gate booking reads behind authentication.",
+      steps: [
+        "Require authentication for all booking read endpoints.",
+        "Enforce per-booking authorization checks.",
+        "Rate-limit unauthenticated enumeration attempts."
+      ]
+    },
+    fixPrompt:
+      "Our Restful Booker /booking route scan confirms unauthenticated booking reads. Show BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "restful-booker-booking-create-unauth-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Restful Booker unauthenticated booking creation oracle",
+    description:
+      "POST /booking on restful-booker.herokuapp.com creates new reservations without authentication — unauthenticated write on the demo booking API.",
+    impactOneline:
+      "Anonymous callers can create bookings, enabling spam reservations and integrity abuse on the Restful Booker playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restfulBookerBookingCreateUnauthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restful Booker is intentional API training — require authentication for booking creation in production.",
+      steps: [
+        "Require valid session or bearer token before POST /booking.",
+        "Validate booking payloads server-side and rate-limit anonymous writes.",
+        "Monitor for mass booking creation abuse."
+      ]
+    },
+    fixPrompt:
+      "Our Restful Booker scan confirms unauthenticated POST /booking creates reservations. Show write-access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "restful-booker-booking-create-unauth-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Restful Booker /booking unauthenticated creation route live oracle",
+    description:
+      "When scanning /booking on restful-booker.herokuapp.com, POST /booking creates reservations without authentication.",
+    impactOneline:
+      "Route-scoped Restful Booker /booking scans should confirm unauthenticated booking creation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "restfulBookerBookingCreateUnauthRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restful Booker is intentional API training — gate booking writes behind authentication.",
+      steps: [
+        "Require authentication before accepting POST /booking.",
+        "Validate and sanitize all booking fields server-side.",
+        "Rate-limit anonymous write attempts."
+      ]
+    },
+    fixPrompt:
+      "Our Restful Booker /booking route scan confirms unauthenticated reservation creation. Show write-access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-product-search-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore product search SQL injection live oracle (V-001/V-012)",
+    description:
+      "GET /api/products/?search=test' triggers HTTP 500 Internal Server Error vs baseline 200 on BugStore — concatenated product search SQL injection oracle.",
+    impactOneline:
+      "SQL injection in product search lets attackers extract database contents from the BugTraceAI BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProductSearchSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BugStore is intentional training software — use parameterized queries for product search.",
+      steps: [
+        "Replace string-concatenated search filters with prepared statements.",
+        "Return generic errors without revealing SQL failure modes.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore GET /api/products search parameter is vulnerable to SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-product-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore product search SQLi route live oracle (V-001/V-012)",
+    description:
+      "When scanning /api/products on bugstore.bugtraceai.com, GET /api/products/?search=test' confirms HTTP 500 vs baseline 200 — route-specific SQL injection oracle.",
+    impactOneline:
+      "Route-specific BugStore catalog scans should surface SQL injection in the search filter endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProductSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for BugStore product search SQL.",
+      steps: [
+        "Replace string-concatenated search filters with prepared statements.",
+        "Return generic errors without revealing SQL failure modes.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/products route scan confirms SQLi on the search parameter. Show route-specific parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-product-image-path-traversal-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "BugStore product image path traversal live oracle (V-014)",
+    description:
+      "GET /api/products/1/image?file=../../../etc/passwd returns /etc/passwd contents on BugStore — product image path traversal oracle.",
+    impactOneline:
+      "Path traversal in product image serving lets attackers read arbitrary server files from the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProductImagePathTraversalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BugStore is intentional training software — canonicalize and block traversal in image paths.",
+      steps: [
+        "Resolve paths against a fixed images directory and reject .. segments.",
+        "Use an allowlist of filenames instead of user-controlled paths.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/products/{id}/image file parameter reads /etc/passwd via traversal. Show safe path handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-product-image-path-traversal-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "BugStore product image path traversal route live oracle (V-014)",
+    description:
+      "When scanning /api/products/{id}/image on bugstore.bugtraceai.com, GET with file=../../../etc/passwd returns passwd contents — route-specific path traversal oracle.",
+    impactOneline:
+      "Route-specific BugStore image endpoint scans should confirm arbitrary file read via the file query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProductImagePathTraversalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block traversal sequences in BugStore image file paths.",
+      steps: [
+        "Resolve paths against a fixed images directory and reject .. segments.",
+        "Use an allowlist of filenames instead of user-controlled paths.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/products/{id}/image route scan confirms path traversal. Show route-specific safe path handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-admin-debug-stats-bac-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore admin debug stats broken access control live oracle (V-012)",
+    description:
+      "GET /api/admin/vulnerable-debug-stats on BugStore returns admin_emails and session stats without authentication — debug endpoint broken access control oracle.",
+    impactOneline:
+      "Unauthenticated access to admin debug stats exposes administrator emails and operational metrics from the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAdminDebugStatsBacLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication before exposing debug statistics.",
+      steps: [
+        "Protect /api/admin/* routes with role-based access control.",
+        "Remove or redact admin_emails from debug responses.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/admin/vulnerable-debug-stats endpoint leaks admin emails without auth. Show access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-admin-debug-stats-bac-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore admin debug stats BAC route live oracle (V-012)",
+    description:
+      "When scanning /api/admin/vulnerable-debug-stats on bugstore.bugtraceai.com, unauthenticated GET confirms admin_emails disclosure — route-specific broken access control oracle.",
+    impactOneline:
+      "Route-specific BugStore admin debug scans should confirm unauthenticated exposure of administrator contact data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAdminDebugStatsBacRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication on BugStore debug stats routes.",
+      steps: [
+        "Protect /api/admin/* routes with role-based access control.",
+        "Remove or redact admin_emails from debug responses.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/admin/vulnerable-debug-stats route scan confirms unauthenticated admin stats exposure. Show route-specific access control fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-forum-thread-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore forum thread_id SQL injection live oracle (V-001)",
+    description:
+      "GET /api/forum/threads/1' on BugStore discloses SQL syntax error with SELECT * FROM threads WHERE id query fragment — forum thread_id SQL injection oracle.",
+    impactOneline:
+      "SQL injection in forum thread_id lets attackers extract database contents from the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreForumThreadSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for BugStore forum thread lookups.",
+      steps: [
+        "Replace string-concatenated thread_id filters with prepared statements.",
+        "Return generic errors without revealing SQL failure modes.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/forum/threads/{id} parameter is vulnerable to SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-forum-thread-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore forum thread SQLi route live oracle (V-001)",
+    description:
+      "When scanning /api/forum/threads on bugstore.bugtraceai.com, GET /api/forum/threads/1' confirms disclosed SQL syntax error — route-specific forum SQL injection oracle.",
+    impactOneline:
+      "Route-specific BugStore forum scans should surface SQL injection in the thread_id path parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreForumThreadSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for BugStore forum thread lookups.",
+      steps: [
+        "Replace string-concatenated thread_id filters with prepared statements.",
+        "Return generic errors without revealing SQL failure modes.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/forum/threads route scan confirms thread_id SQLi. Show route-specific parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-orders-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore orders IDOR live oracle (V-009)",
+    description:
+      "GET /api/orders/ and /api/orders/{id} on BugStore return customer order PII including shipping_address without authentication — order IDOR/BOLA oracle.",
+    impactOneline:
+      "Missing authorization on BugStore order endpoints lets anyone read other customers' order details and shipping addresses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreOrdersIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce owner-scoped authorization on BugStore order reads.",
+      steps: [
+        "Require authenticated sessions and verify order.user_id matches the caller.",
+        "Avoid exposing full order lists without admin role checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/orders endpoints expose other users' orders without auth. Show BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-orders-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore orders IDOR route live oracle (V-009)",
+    description:
+      "When scanning /api/orders on bugstore.bugtraceai.com, unauthenticated GET confirms cross-customer order PII exposure — route-specific IDOR oracle.",
+    impactOneline:
+      "Route-specific BugStore order API scans should confirm broken object-level authorization on order reads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreOrdersIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce owner-scoped authorization on BugStore order routes.",
+      steps: [
+        "Require authenticated sessions and verify order.user_id matches the caller.",
+        "Avoid exposing full order lists without admin role checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/orders route scan confirms unauthenticated order IDOR. Show route-specific BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-checkout-client-total-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "BugStore checkout client-trusted total live oracle (V-023)",
+    description:
+      "POST /api/checkout/process on BugStore accepts attacker-controlled total=0.01 while cart total is higher — client-trusted payment total oracle.",
+    impactOneline:
+      "Trusting client-supplied checkout totals lets attackers pay pennies for full cart value on the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreCheckoutClientTotalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Recalculate order totals server-side from cart line items.",
+      steps: [
+        "Ignore client-supplied total fields during checkout.",
+        "Compute tax, shipping, and subtotal on the server from authoritative cart state.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore POST /api/checkout/process honors client total=0.01. Show server-side total validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-checkout-client-total-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "BugStore checkout client-trusted total route live oracle (V-023)",
+    description:
+      "When scanning /api/checkout/process on bugstore.bugtraceai.com, POST with total=0.01 confirms client-trusted payment — route-specific business-logic oracle.",
+    impactOneline:
+      "Route-specific BugStore checkout scans should confirm the server trusts attacker-controlled payment totals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreCheckoutClientTotalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Recalculate checkout totals server-side on BugStore checkout routes.",
+      steps: [
+        "Ignore client-supplied total fields during checkout.",
+        "Compute tax, shipping, and subtotal on the server from authoritative cart state.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore checkout route scan confirms client-trusted total manipulation. Show route-specific server-side total validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-cart-negative-quantity-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "BugStore cart negative-quantity live oracle (V-022)",
+    description:
+      "POST /api/cart/add on BugStore accepts quantity:-5 and cart subtotal goes negative — negative cart quantity business-logic oracle.",
+    impactOneline:
+      "Accepting negative cart quantities lets attackers zero out or credit cart totals on the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreCartNegativeQuantityLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject non-positive quantities on cart add and update endpoints.",
+      steps: [
+        "Validate quantity is a positive integer before persisting cart line items.",
+        "Recalculate subtotals server-side from authoritative product prices.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore POST /api/cart/add accepts negative quantities. Show server-side quantity validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-cart-negative-quantity-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "BugStore cart negative-quantity route live oracle (V-022)",
+    description:
+      "When scanning /api/cart/add on bugstore.bugtraceai.com, POST with quantity:-5 yields negative cart subtotal — route-specific business-logic oracle.",
+    impactOneline:
+      "Route-specific BugStore cart scans should confirm the server accepts negative quantities without validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreCartNegativeQuantityRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject non-positive quantities on BugStore cart routes.",
+      steps: [
+        "Validate quantity is a positive integer before persisting cart line items.",
+        "Recalculate subtotals server-side from authoritative product prices.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/cart/add route scan confirms negative quantity acceptance. Show route-specific quantity validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-profile-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "BugStore profile role mass-assignment live oracle (V-015)",
+    description:
+      "PUT /api/user/profile on BugStore accepts role:admin after registration — profile mass-assignment privilege escalation oracle.",
+    impactOneline:
+      "Mass-assigning admin role via profile update lets regular users escalate privileges on the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProfileMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block role and privilege fields from user-controlled profile updates.",
+      steps: [
+        "Use an allowlist of updatable profile fields.",
+        "Assign roles only through admin workflows with authorization checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore PUT /api/user/profile accepts role:admin mass-assignment. Show field allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-profile-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "BugStore profile mass-assignment route live oracle (V-015)",
+    description:
+      "When scanning /api/user/profile or /api/auth/register on bugstore.bugtraceai.com, PUT with role:admin confirms privilege escalation — route-specific mass-assignment oracle.",
+    impactOneline:
+      "Route-specific BugStore profile/auth scans should confirm role mass-assignment escalates users to admin.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProfileMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block role fields from BugStore profile update routes.",
+      steps: [
+        "Use an allowlist of updatable profile fields.",
+        "Assign roles only through admin workflows with authorization checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore profile route scan confirms role mass-assignment escalation. Show route-specific field allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-auth-signup-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "BugStore /api/auth/signup mass-assignment route live oracle (V-015)",
+    description:
+      "When scanning /api/auth/signup on bugstore.bugtraceai.com, POST signup is rejected (HTTP 405) but /api/auth/register + PUT /api/user/profile role:admin confirms privilege escalation — route-specific signup mass-assignment oracle.",
+    impactOneline:
+      "Route-specific BugStore signup scans should confirm role mass-assignment via the registration flow even when the signup endpoint rejects POST.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAuthSignupRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block role fields from BugStore registration and profile update routes.",
+      steps: [
+        "Use an allowlist of updatable profile fields.",
+        "Assign roles only through admin workflows with authorization checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/auth/signup route scan confirms role mass-assignment via register+profile. Show route-specific field allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-secure-portal-totp-login-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "BugStore secure-portal TOTP brute-force live oracle (V-031/V-032)",
+    description:
+      "POST /api/secure-portal/login on BugStore requires totp_code and accepts repeated TOTP guesses without lockout — 2FA brute-force oracle for the secure admin portal.",
+    impactOneline:
+      "Missing TOTP rate limiting on BugStore secure-portal login lets attackers brute-force 2FA codes to hijack admin accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreSecurePortalTotpLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rate-limit TOTP verification and lock accounts after failed 2FA attempts.",
+      steps: [
+        "Enforce per-IP and per-account rate limits on /api/secure-portal/login.",
+        "Lock or delay accounts after repeated invalid totp_code submissions.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/secure-portal/login endpoint accepts unlimited TOTP guesses. Show 2FA brute-force hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-secure-portal-totp-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "BugStore secure-portal TOTP brute-force route live oracle (V-031/V-032)",
+    description:
+      "When scanning /api/secure-portal/login on bugstore.bugtraceai.com, POST requires totp_code and accepts brute-force TOTP guesses — route-specific 2FA oracle.",
+    impactOneline:
+      "Route-specific BugStore secure-portal scans should confirm missing TOTP rate limiting on admin 2FA login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreSecurePortalTotpLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rate-limit TOTP verification on BugStore secure-portal login routes.",
+      steps: [
+        "Enforce per-IP and per-account rate limits on /api/secure-portal/login.",
+        "Lock or delay accounts after repeated invalid totp_code submissions.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/secure-portal/login route scan confirms TOTP brute-force exposure. Show route-specific 2FA rate-limit fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-health-rce-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "BugStore health check RCE live oracle (V-021)",
+    description:
+      "GET /api/health?cmd=id on BugStore returns Unauthorized execution without admin, then cmd_output with uid= after role:admin mass-assignment — health check command injection RCE oracle.",
+    impactOneline:
+      "Admin-only cmd parameter on BugStore health endpoint passes attacker input to subprocess shell=True — full server compromise after privilege escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreHealthRceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands on health or diagnostic endpoints.",
+      steps: [
+        "Remove cmd parameters from health check routes entirely.",
+        "Use subprocess with shell=False and strict allowlists if diagnostics are required.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/health?cmd= executes shell commands after admin escalation. Show safe health-check remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-health-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "BugStore health check RCE route live oracle (V-021)",
+    description:
+      "When scanning /api/health on bugstore.bugtraceai.com, cmd parameter executes id via subprocess after admin mass-assignment — route-specific RCE oracle.",
+    impactOneline:
+      "Route-specific BugStore health scans should confirm cmd parameter remote code execution after privilege escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreHealthRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove shell execution from BugStore health check routes.",
+      steps: [
+        "Remove cmd parameters from health check routes entirely.",
+        "Use subprocess with shell=False and strict allowlists if diagnostics are required.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/health route scan confirms cmd-parameter RCE. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-admin-users-bac-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore admin users enumeration live oracle (V-005/V-006)",
+    description:
+      "GET /api/admin/users on BugStore returns full user roster with password_hash fields after role:admin mass-assignment — admin user enumeration oracle.",
+    impactOneline:
+      "BugStore admin user management exposes password hashes and emails to any escalated admin account.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAdminUsersBacLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact password hashes and enforce strict admin authorization on user management.",
+      steps: [
+        "Never return password_hash in API responses.",
+        "Require multi-factor authentication for admin user listing.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore GET /api/admin/users leaks password_hash for all users. Show admin API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-admin-users-bac-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore admin users BAC route live oracle (V-005/V-006)",
+    description:
+      "When scanning /api/admin/users on bugstore.bugtraceai.com, escalated admin token returns password_hash for admin@bugstore.com — route-specific user enumeration oracle.",
+    impactOneline:
+      "Route-specific BugStore admin user scans should confirm sensitive credential data exposure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAdminUsersBacRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact password hashes on BugStore admin user routes.",
+      steps: [
+        "Never return password_hash in API responses.",
+        "Require multi-factor authentication for admin user listing.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/admin/users route scan confirms password hash disclosure. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-forum-posts-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore forum reply stored XSS live oracle (V-003)",
+    description:
+      "POST /api/forum/threads/1/replies on BugStore stores raw script tags in reply content without sanitization — forum stored XSS oracle.",
+    impactOneline:
+      "Unsanitized forum reply content lets attackers persist XSS payloads affecting every user viewing the thread.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreForumPostsStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize forum reply content server-side before storage and rendering.",
+      steps: [
+        "HTML-encode user-generated forum content on output.",
+        "Reject or strip script tags from reply submissions.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore forum replies store unsanitized HTML/script. Show stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-forum-posts-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore forum posts stored XSS route live oracle (V-003)",
+    description:
+      "When scanning /api/forum/posts on bugstore.bugtraceai.com, POST /api/forum/threads/1/replies persists unsanitized script in thread JSON — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route-specific BugStore forum scans should confirm stored XSS in reply content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreForumPostsStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize forum reply content on BugStore forum routes.",
+      steps: [
+        "HTML-encode user-generated forum content on output.",
+        "Reject or strip script tags from reply submissions.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/forum/posts route scan confirms stored XSS in replies. Show route-specific sanitization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-graphql-introspection-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore GraphQL introspection and users BOLA live oracle (V-008/V-009)",
+    description:
+      "POST /api/graphql on BugStore returns schema introspection and unauthenticated users{email,role} plus orders enumeration — GraphQL authorization oracle.",
+    impactOneline:
+      "Unauthenticated GraphQL introspection and user/order queries expose admin emails and purchase history without authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreGraphqlIntrospectionBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production and enforce field-level authorization.",
+      steps: [
+        "Require authentication before GraphQL queries.",
+        "Disable __schema introspection on public endpoints.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/graphql endpoint exposes introspection and unauthenticated users/orders queries. Show GraphQL authorization hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-graphql-introspection-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore GraphQL route introspection BOLA live oracle (V-008/V-009)",
+    description:
+      "When scanning /graphql on bugstore.bugtraceai.com, POST /api/graphql confirms introspection plus unauthenticated users and orders BOLA — route-specific GraphQL oracle.",
+    impactOneline:
+      "Route-specific BugStore GraphQL scans should confirm introspection and broken object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreGraphqlIntrospectionBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection and enforce authorization on BugStore GraphQL routes.",
+      steps: [
+        "Require authentication before GraphQL queries.",
+        "Disable __schema introspection on public endpoints.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /graphql route scan confirms unauthenticated GraphQL introspection and users BOLA. Show route-specific GraphQL hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "seclab-xxe-vulnerable-route-live-oracle",
+    platform: "generic",
+    category: "XML external entity",
+    severityDefault: "high",
+    title: "SecLab /api/xxe-vulnerable route live oracle",
+    description:
+      "When scanning seclab.vercel.app /api/xxe-vulnerable or /labs/xxe hub, POST with external entity payload resolves file contents — or the route serves an Angular SPA shell instead of the documented Next.js XXE training API.",
+    impactOneline:
+      "Route-specific XXE lab oracle confirms live XML entity expansion or flags dead /api/xxe-vulnerable stubs on the public Vercel host.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabXxeVulnerableRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab XXE API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/xxe-vulnerable on production.",
+        "Disable external entity resolution in XML parsers.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /api/xxe-vulnerable route is a dead Angular stub or exposes live XXE. Show XML parser hardening and deploy fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-reviews-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Mass assignment",
+    severityDefault: "high",
+    title: "BugStore reviews is_approved mass-assignment live oracle (V-020)",
+    description:
+      "POST /api/reviews/ on bugstore.bugtraceai.com accepts client-supplied is_approved:true — reviews auto-approve without moderator workflow.",
+    impactOneline:
+      "BugStore review submission lets attackers bypass moderation by mass-assigning is_approved on create.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreReviewsMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block client-controlled is_approved on BugStore review creation.",
+      steps: [
+        "Allowlist writable fields on POST /api/reviews/.",
+        "Require moderator role to set is_approved.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore POST /api/reviews/ accepts is_approved:true from clients. Show mass-assignment remediation for review moderation fields.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-reviews-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Mass assignment",
+    severityDefault: "high",
+    title: "BugStore /api/reviews route mass-assignment live oracle (V-020)",
+    description:
+      "When scanning /api/reviews or /api/reviews/create on bugstore.bugtraceai.com, POST confirms is_approved mass-assignment auto-approves reviews.",
+    impactOneline:
+      "Route-specific BugStore review scans should confirm is_approved mass-assignment bypasses moderation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreReviewsMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block client-controlled is_approved on BugStore review routes.",
+      steps: [
+        "Allowlist writable fields on POST /api/reviews/.",
+        "Require moderator role to set is_approved.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/reviews route scan confirms is_approved mass-assignment. Show route-specific review moderation hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-open-redirect-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "BugStore open redirect live oracle (V-005/V-006)",
+    description:
+      "GET /api/redirect?url= on bugstore.bugtraceai.com issues 307 Location to attacker-controlled URLs without validation.",
+    impactOneline:
+      "BugStore redirect endpoint enables phishing via unvalidated outbound redirects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreOpenRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets against an allowlist on BugStore /api/redirect.",
+      steps: [
+        "Allowlist permitted redirect hostnames.",
+        "Reject external URLs on open redirect parameters.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore GET /api/redirect?url= reflects attacker URLs in Location. Show open redirect validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "BugStore /api/redirect route open redirect live oracle (V-005/V-006)",
+    description:
+      "When scanning /api/redirect on bugstore.bugtraceai.com, GET ?url= confirms unvalidated 307 redirect to attacker domain.",
+    impactOneline:
+      "Route-specific BugStore redirect scans should confirm open redirect without target validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets on BugStore /api/redirect route scans.",
+      steps: [
+        "Allowlist permitted redirect hostnames.",
+        "Reject external URLs on open redirect parameters.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/redirect route scan confirms unvalidated open redirect. Show route-specific redirect allowlist remediation.",
     version: 1,
     enabled: true
   }

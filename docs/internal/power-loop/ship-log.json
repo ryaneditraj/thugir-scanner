@@ -48,6 +48,18 @@
       "commit_range": "f3f782f4ddd1c388032c7f3a04b04580cc1593eb..5a0070e7932a5c884aa9ef37ccc2e42001e84f61",
       "gate": "pass",
       "notes": "Sacred zone untouched; ship-gate/typecheck passed; benchmark scan passed with 14 findings; PR tool was scoped to cursor/power-loop-main-shipping-cede, so main was promoted with a normal Git merge commit."
+    },
+    {
+      "shipped_at": "2026-08-25T12:06:50Z",
+      "method": "direct_git_merge",
+      "from_branch": "cursor/power-loop-9ec4",
+      "pr_number": 60,
+      "merge_commit": "05a5b8a1e28ddd5699d03da1cd923bab0ee4ab99",
+      "improvements_shipped": 0,
+      "improvements_total": 1161,
+      "commit_range": "6b13e86b6cad4d5a7c3650943ebb0b270c2e8dd7..5b80b5a02dff9c1c2e2053abc625f8a52042084f",
+      "gate": "pass",
+      "notes": "Sacred zone untouched; ship-gate/typecheck passed; benchmark scan passed with 48 findings; periodic sync condition satisfied (last ship 2026-07-26T12:04:47Z)."
     }
   ]
 }

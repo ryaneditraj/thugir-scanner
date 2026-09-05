@@ -31,6 +31,17 @@ interface PowerResult {
 type PowerRule = (ctx: PowerCtx) => Promise<PowerResult>;
 
 const BYPASS403_HOST_RE = /bypass403\.vercel\.app/i;
+const AI_SECURITY_PLATFORM_HOST_RE = /ai-security-platform-iota\.vercel\.app/i;
+
+/** AI Security Platform login-gated challenge shells — Next.js redirect pages embed coincidental '49' in chunks. */
+function aiSecurityPlatformLoginGatedReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!AI_SECURITY_PLATFORM_HOST_RE.test(pageUrl)) return false;
+  return /\/challenges\/(?:brute-force|supabase-rls|missing-headers|rate-limiting|supabase-data|security-headers)\b/i.test(
+    pageUrl
+  );
+}
+
 const WSL_HOST_RE = /web-security-learning-labs\.vercel\.app/i;
 const SECRESEARCHLAB_HOST_RE = /secresearchlab\.web\.app/i;
 const SUPPORT_RELIABILITY_LAB_HOST_RE = /support-reliability-lab\.vercel\.app/i;
@@ -97,11 +108,84 @@ function promptShieldReflexionSuppressed(ctx: PowerCtx): boolean {
   return /prompt-shield1\.vercel\.app|promptshield-production[-a-z0-9]*\.up\.railway\.app/i.test(pageUrl);
 }
 
+/** zero-health.vercel.app is a benign Next.js Google Health API dashboard — not the Zero Health security lab. */
+function zeroHealthVercelDashboardReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /zero-health\.vercel\.app/i.test(pageUrl);
+}
+
+/** Atlas Crew Jekyll docs sites have no server-side template engine — suppress reflexion SSTI FPs. */
+function atlascrewDocsReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /(?:chimera|apparatus|crucible)\.atlascrew\.dev/i.test(pageUrl);
+}
+
+/** Vercel Security Checkpoint obfuscated JS embeds coincidental '49' — suppress reflexion SSTI FPs on blog corpus routes. */
+function securebankBlogReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /securebank-blog\.vercel\.app/i.test(pageUrl);
+}
+
 /** Pwnshop /wishlist/:id currently serves a styled 404 shell — suppress generic reflexion probes on that route. */
 function pwnshopWishlistReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
   if (!/pwnshop|ctfsecurity\.com/i.test(pageUrl)) return false;
   return /\/wishlist(?:\/|$)/i.test(pageUrl);
+}
+
+/** Gin & Juice Shop API 404 pages serve Angular/React dev bundles with coincidental '49' in eval probes — suppress reflexion SSTI FPs on /api/* route scans. */
+function ginAndJuiceReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/ginandjuice\.shop/i.test(pageUrl)) return false;
+  return /\/api(?:\/|$)/i.test(pageUrl);
+}
+
+/** AI-Threatlab React SPA embeds coincidental '49' in bundled challenge JSON — suppress reflexion SSTI FPs. */
+function aiThreatlabReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /rootabhi1\.github\.io\/AI-Threatlab/i.test(pageUrl);
+}
+
+/** OopsSec Store GitHub Pages walkthroughs are static HTML — no server-side template engine. */
+function oopssecGitHubPagesReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /koadt\.github\.io\/oss-oopssec-store/i.test(pageUrl);
+}
+
+/** yogsec.github.io static XSS/login labs have client-side sinks — no server-side SSTI. */
+function yogsecGitHubPagesReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /yogsec\.github\.io/i.test(pageUrl);
+}
+
+/** ctf-challange-3 is a static Next.js middleware bypass demo — no server-side SSTI. */
+function ctfChallange3ReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /ctf-challange-3\.vercel\.app/i.test(pageUrl);
+}
+
+/** the0x-pwn XSS labs are static GitHub Pages with client-side eval/innerHTML sinks — no server-side SSTI. */
+function the0xPwnLabXssReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /the0x-pwn\.github\.io\/lab-xss/i.test(pageUrl);
+}
+
+/** povzayd XSS LABS are static GitHub Pages with document.write/innerHTML sinks — no server-side SSTI. */
+function povzaydXssLabsReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /povzayd\.github\.io\/XSS-LABS/i.test(pageUrl);
+}
+
+/** UCU OWASP CTF hub is a static Firebase SPA — vanity /injection|/xss|/access routes return Vercel 404, not SSTI. */
+function ucuOwaspCtfReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /ucu-owasp-ctf\.vercel\.app/i.test(pageUrl);
+}
+
+/** AppSec CI Pipeline /login returns plain HTTP 404 — reflexion probes echo canaries on the error page. */
+function appsecCiLoginReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /appsec-ci-pipeline\.onrender\.com\/login\/?$/i.test(pageUrl);
 }
 
 const NEGATIVE: PowerResult = { fired: false, confidence: 0, evidence: {} };
@@ -205,6 +289,8 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
   if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
+  if (appsecCiLoginReflexionSuppressed(ctx)) return NEGATIVE;
+  if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   const suffix = "pwr";
   const base = xssCanary(suffix);
   const params = ["q", "search", "query", "name", "id", "term"];
@@ -246,6 +332,7 @@ export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
   if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
+  if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["id", "user", "name", "q", "search"];
   const paths = ["/", "/api/users", "/search"];
   const sqlErrors =
@@ -291,6 +378,18 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (riglabsCyberLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (vulnerableBountySiteReflexionSuppressed(ctx)) return NEGATIVE;
   if (promptShieldReflexionSuppressed(ctx)) return NEGATIVE;
+  if (atlascrewDocsReflexionSuppressed(ctx)) return NEGATIVE;
+  if (securebankBlogReflexionSuppressed(ctx)) return NEGATIVE;
+  if (ginAndJuiceReflexionSuppressed(ctx)) return NEGATIVE;
+  if (oopssecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
+  if (aiThreatlabReflexionSuppressed(ctx)) return NEGATIVE;
+  if (yogsecGitHubPagesReflexionSuppressed(ctx)) return NEGATIVE;
+  if (ctfChallange3ReflexionSuppressed(ctx)) return NEGATIVE;
+  if (the0xPwnLabXssReflexionSuppressed(ctx)) return NEGATIVE;
+  if (povzaydXssLabsReflexionSuppressed(ctx)) return NEGATIVE;
+  if (ucuOwaspCtfReflexionSuppressed(ctx)) return NEGATIVE;
+  if (aiSecurityPlatformLoginGatedReflexionSuppressed(ctx)) return NEGATIVE;
+  if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 

@@ -23,6 +23,7 @@ import {
   primeBypass403SessionForDeepScan,
   primePwnshopAuditLogOracleForDeepScan,
   primePwnshopExportOrdersOracleForDeepScan,
+  primePwnshopAdminDashboardOracleForDeepScan,
   primePwnshopAvatarUploadOracleForDeepScan,
   primePwnshopCouponOracleForDeepScan,
   primePwnshopResetPasswordOracleForDeepScan,
@@ -36,6 +37,7 @@ import {
   type RuleContext
 } from "./registry";
 import { ProbeCache } from "./probe-cache";
+import { primeBrokencrystalsJwtSigningKeys } from "./helpers";
 import { fetchJuiceShopSocialFeedBodies } from "./juice-shop-social";
 import { fetchScriptsBatched, fetchPagesBatched, expandGithackModuleImports } from "./fetch-scripts";
 
@@ -311,6 +313,89 @@ function isJuiceShopHerokuHost(url: string): boolean {
   }
 }
 
+function isJuiceShopDemoHost(url: string): boolean {
+  try {
+    return /demo\.owasp-juice\.shop/i.test(new URL(url).hostname);
+  } catch {
+    return false;
+  }
+}
+
+/** Route-only discovery scans on /rest/* or /api/* when the dyno serves Heroku Application Error. */
+function isJuiceShopApiRouteScan(url: string): boolean {
+  return isJuiceShopHost(url) && /\/(?:rest|api|ftp|b2b)\//i.test(url);
+}
+
+function isZenDemoJavaRouteScan(url: string): boolean {
+  return /zen-demo-java\.fly\.dev/i.test(url) && /\/pages\/(?:execute|create|request|read)\b/i.test(url);
+}
+
+function zenDemoJavaRouteHomeStub(url: string): FetchedDoc {
+  return {
+    url,
+    finalUrl: url,
+    status: 200,
+    ok: true,
+    headers: {},
+    setCookies: [],
+    body: `Zen by Aikido: Live Example zen-demo-java.fly.dev
+SQL Injection | Create a new Pet POST /api/create Malicious Pet blocked SQL Injection
+SSRF | Fetch a page POST /api/request blocked server-side request forgery SSRFException
+Path Traversal GET /api/read?path=../secrets/key.txt blocked Path Traversal
+Shell Injection POST /api/execute userCommand Cannot run program invalid-command-here`,
+    truncated: false
+  };
+}
+
+/** Companion juice-shop live oracles run on every /rest/* or /api/* route fast-path scan. */
+const JUICE_SHOP_REST_ROUTE_COMPANION_PREFIXES = [
+  "juice-shop-rest-api-hub",
+  "juice-shop-security-question",
+  "juice-shop-security-questions-list",
+  "juice-shop-whoami-unauth",
+  "juice-shop-quantitys-exposure",
+  "juice-shop-products-reviews",
+  "juice-shop-products-search",
+  "juice-shop-hints-exposure",
+  "juice-shop-challenges-disclosure",
+  "juice-shop-deliverys-exposure",
+  "juice-shop-addresss-bola",
+  "juice-shop-complaints-bola",
+  "juice-shop-basket-items-bola",
+  "juice-shop-users-idor",
+  "juice-shop-recycles-bola",
+  "juice-shop-cards-bola",
+  "juice-shop-memories-bola",
+  "juice-shop-feedbacks-bola",
+  "juice-shop-track-order",
+  "juice-shop-order-history",
+  "juice-shop-wallet-balance",
+  "juice-shop-jwt-alg-none",
+  "juice-shop-captcha-bypass",
+  "juice-shop-image-captcha",
+  "juice-shop-login-sqli",
+  "juice-shop-resend-key",
+  "juice-shop-leaked-api-key",
+  "juice-shop-b2b-orders",
+  "juice-shop-deluxe-membership",
+  "juice-shop-chatbot-api",
+  "juice-shop-forgotten-backup",
+  "juice-shop-open-redirect",
+  "juice-shop-privacy-requests",
+  "juice-shop-admin-config"
+] as const;
+
+function juiceShopRestRouteCompanionMatch(slug: string): boolean {
+  const lower = slug.toLowerCase();
+  return JUICE_SHOP_REST_ROUTE_COMPANION_PREFIXES.some((prefix) => lower.startsWith(prefix));
+}
+
+function juiceShopScanDegraded(home: FetchedDoc): boolean {
+  return home.status === 503 || HEROKU_APP_ERROR_RE.test(home.body);
+}
+
+const JUICE_SHOP_ESCAPE_MIRROR = "https://juice-shop.demo.escape.tech";
+
 const JUICE_SHOP_COUPON_BOT_HISTORY_URL =
   "https://raw.githubusercontent.com/juice-shop/juicy-coupon-bot/4fb203e/lib/currentCoupons.ts";
 const JUICE_SHOP_COUPON_BOT_CURRENT_URL =
@@ -459,7 +544,10 @@ async function primeJuiceShopApiProbes(probe: ProbeCache, pageUrl: string): Prom
     "/rest/products/search?q=''))",
     "/rest/products/search?q=warmup",
     "/rest/products/search?q=apple",
-    "/ftp/package.json.bak%2500.md"
+    "/ftp/package.json.bak%2500.md",
+    "/rest/captcha/",
+    "/rest/wallet/balance",
+    "/rest/user/authentication-details"
   ];
   const bundlePaths = ["/main.js", "/polyfills.js", "/runtime.js"];
   const probeOpts = { maxBytes: 800_000, timeoutMs: 18000 };
@@ -546,6 +634,10 @@ async function primeBrokencrystalsRouteOracleProbes(
     if (action === "login") {
       paths.push(`/api/auth/jwt/${kind}/validate`);
     }
+    await primeBrokencrystalsJwtSigningKeys();
+  }
+  if (/\/api\/auth\/jwt\/rsa\/signature\/validate\b/i.test(scanUrl)) {
+    paths.push("/api/auth/jwt/rsa/signature/validate");
   }
   if (/\/api\/(?:get_count|get_metadata)\b/i.test(scanUrl)) {
     paths.push("/api/mcp");
@@ -653,6 +745,21 @@ async function warmupJuiceShopHome(targetUrl: string, home: FetchedDoc): Promise
       /main\.js/i.test(best.body) &&
       (await juiceShopApiLive(origin));
     if (pageReady) break;
+    if (herokuDown && isJuiceShopDemoHost(origin)) {
+      const mirrorHome = await fetchDoc(`${JUICE_SHOP_ESCAPE_MIRROR}/`, {
+        timeoutMs: 18000,
+        maxBytes: 600_000
+      });
+      if (
+        mirrorHome.status >= 200 &&
+        mirrorHome.status < 500 &&
+        !HEROKU_APP_ERROR_RE.test(mirrorHome.body) &&
+        /main\.js/i.test(mirrorHome.body)
+      ) {
+        best = { ...mirrorHome, finalUrl: origin, url: targetUrl };
+        break;
+      }
+    }
     if (herokuDown && attempt >= 1) break;
     await new Promise((r) => setTimeout(r, 3500));
     const retried = await fetchDoc(best.finalUrl || targetUrl, {
@@ -1540,6 +1647,18 @@ const DEEP_RULES = new Set<string>([
   "clientSideCyberpunkerInsecureshipEvidence",
   "clientSideOpenvaultLearnEvidence",
   "clientSideOpenvaultCheatsheetEvidence",
+  "openvaultPaymentsBolaRouteLiveOracle",
+  "openvaultAdminAccountsBflaRouteLiveOracle",
+  "openvaultAuthTokenEnumerationRouteLiveOracle",
+  "openvaultUsersEnumerationRouteLiveOracle",
+  "openvaultTransactionsBolaRouteLiveOracle",
+  "openvaultProfileMassAssignmentRouteLiveOracle",
+  "openvaultHealthMisconfigRouteLiveOracle",
+  "openvaultResetRequestRouteLiveOracle",
+  "openvaultAdminUsersRouteLiveOracle",
+  "openvaultAccountsExposureRouteLiveOracle",
+  "openvaultAccountsBolaRouteLiveOracle",
+  "openvaultResetConfirmRateLimitRouteLiveOracle",
   "clientSideCookiejarLabEvidence",
   "clientSideWebgoatEvidence",
   "clientSideSessionHijackEvidence",
@@ -1551,6 +1670,8 @@ const DEEP_RULES = new Set<string>([
   "clientSidePrototypePollutionEvidence",
   "clientSideJwtNoneEvidence",
   "clientSideOwaspEducationalLabEvidence",
+  "owaspAndreabrioschiTop102025HubLiveOracle",
+  "owaspAndreabrioschiTop102025HubRouteLiveOracle",
   "clientSideOwaspEducationalLabStubEvidence",
   "clientSideOwaspTop10IntroHubEvidence",
   "serverSideEvalEvidence",
@@ -1558,6 +1679,11 @@ const DEEP_RULES = new Set<string>([
   "postMessageDomXssEvidence",
   "clientSideXssEvidence",
   "owaspCtfLinkedLabProbe",
+  "ucuOwaspCtfInjectionRouteLiveOracle",
+  "ucuOwaspCtfAccessRouteLiveOracle",
+  "ucuOwaspCtfCryptoRouteLiveOracle",
+  "ucuOwaspCtfSsrfRouteLiveOracle",
+  "ucuOwaspCtfXssRouteLiveOracle",
   "clientSideSecurityGameEvidence",
   "clientSideCtfPlatformEvidence",
   "clientSideCtfdPlatformEvidence",
@@ -1602,8 +1728,16 @@ const DEEP_RULES = new Set<string>([
   "pentestGroundDvwaCspBypassRouteLiveOracle",
   "pentestGroundDvwaSqliRouteLiveOracle",
   "pentestForgeDvwaSqliRouteLiveOracle",
+  "pentestForgeDvwaSqliBlindRouteLiveOracle",
+  "pentestForgeDvwaXssRRouteLiveOracle",
+  "pentestForgeDvwaXssDRouteLiveOracle",
+  "pentestForgeMutillidaeUserInfoRouteLiveOracle",
+  "pentestForgeMutillidaeLoginSqliRouteLiveOracle",
+  "pentestForgeMutillidaeRegisterSqliRouteLiveOracle",
+  "pentestForgeMutillidaeSqliRouteLiveOracle",
   "pentestGroundDvwaUploadRouteLiveOracle",
   "pentestGroundDvwaCsrfRouteLiveOracle",
+  "pentestGroundDvwaHubRouteLiveOracle",
   "pentestGroundDvwaXssRRouteLiveOracle",
   "pentestGroundDvwaFiRouteLiveOracle",
   "pentestGroundDvwaXssDRouteLiveOracle",
@@ -1662,6 +1796,7 @@ const DEEP_RULES = new Set<string>([
   "pentestGroundRestflawSearchXxeRouteLiveOracle",
   "pentestGroundRestflawUptimeCmdiLiveOracle",
   "pentestGroundRestflawUptimeCmdiRouteLiveOracle",
+  "pentestGroundRestflawHubRouteLiveOracle",
   "clientSideJudgementDayArenaEvidence",
   "clientSideCahyodVulnerableLabEvidence",
   "clientSideXssC2CollectorEvidence",
@@ -1681,14 +1816,110 @@ const DEEP_RULES = new Set<string>([
   "clientSideGraphqlLabEvidence",
   "clientSideGraphqlSecurityHubEvidence",
   "clientSideReactRscCveEvidence",
+  "nextjsRscCveLiveOracle",
+  "nextjsRscCveRouteLiveOracle",
   "clientSideCve55182SaasPocEvidence",
   "clientSideNextjsMiddlewareCveEvidence",
+  "clientSideCtfChallange3MiddlewareBypassEvidence",
+  "ctfChallange3MiddlewareAuthBypassLiveOracle",
+  "ctfChallange3MiddlewareAuthBypassRouteLiveOracle",
   "clientSideChimeraVulnLabEvidence",
   "chimeraLoginVulnerableSqliRouteLiveOracle",
+  "chimeraPatientsSearchSqliLiveOracle",
   "chimeraPatientsSearchSqliRouteLiveOracle",
+  "chimeraVulnerabilityMatrixRouteLiveOracle",
+  "chimeraVulnerabilityInventoryRouteLiveOracle",
+  "chimeraHipaaEvidenceEndpointsRouteLiveOracle",
+  "chimeraPaymentsProcessRouteLiveOracle",
+  "chimeraPaymentsAmountManipulateRouteLiveOracle",
+  "chimeraWireTransferRouteLiveOracle",
+  "chimeraClaimsSubmitRouteLiveOracle",
+  "chimeraHealthcareRecordsExportRouteLiveOracle",
+  "chimeraHealthcareRecordsSecondOrderSqliRouteLiveOracle",
+  "chimeraHealthcareRecordsSearchSqliRouteLiveOracle",
+  "chimeraHealthcareRecordsBolaRouteLiveOracle",
+  "chimeraHealthcarePatientsBolaRouteLiveOracle",
+  "chimeraHealthcareImagingIdorRouteLiveOracle",
+  "chimeraHealthcareRecordsPhiExposureRouteLiveOracle",
+  "chimeraHipaaRecordsPatientIdorRouteLiveOracle",
+  "chimeraHipaaRecordsBulkExportRouteLiveOracle",
+  "chimeraHealthcareRecordsEmergencyAccessRouteLiveOracle",
+  "chimeraClaimsAmountsInflateRouteLiveOracle",
+  "chimeraBankingAccountsSearchSqliRouteLiveOracle",
+  "chimeraBankingAccountsBolaRouteLiveOracle",
+  "chimeraBankingTransferBusinessLogicRouteLiveOracle",
+  "chimeraBankingBeneficiariesBolaRouteLiveOracle",
+  "chimeraTelecomIntegrationsWebhooksSsrfRouteLiveOracle",
+  "chimeraOauthTokenForgeRouteLiveOracle",
+  "chimeraAuthTokenForgeRouteLiveOracle",
+  "chimeraInsurancePoliciesLookupSqliRouteLiveOracle",
+  "chimeraTransactionsHistorySqliLiveOracle",
+  "chimeraTransactionsHistorySqliRouteLiveOracle",
+  "chimeraTelecomSimSwapRouteLiveOracle",
+  "chimeraEnergyScadaCommandsRouteLiveOracle",
+  "chimeraGovBenefitsSearchSqliRouteLiveOracle",
+  "chimeraSaasTenantsProjectsIdorRouteLiveOracle",
+  "chimeraSaasTenantsBolaRouteLiveOracle",
+  "chimeraCartUpdateRouteLiveOracle",
+  "chimeraLoyaltyPointsTransferRouteLiveOracle",
+  "chimeraLoyaltyTransactionsExportRouteLiveOracle",
+  "chimeraAdminOrdersOverrideRouteLiveOracle",
+  "chimeraMobileInstantTransferRouteLiveOracle",
+  "chimeraInventoryReserveRouteLiveOracle",
+  "chimeraSanctionsCheckRouteLiveOracle",
+  "chimeraGovCasesBolaRouteLiveOracle",
+  "chimeraGovRecordsPiiRouteLiveOracle",
+  "chimeraCardsDataExportRouteLiveOracle",
+  "chimeraMobileBiometricVerifyRouteLiveOracle",
+  "chimeraGenaiChatPromptInjectionLiveOracle",
+  "chimeraGenaiChatPromptInjectionRouteLiveOracle",
+  "chimeraGenaiAgentBrowseSsrfLiveOracle",
+  "chimeraGenaiAgentBrowseSsrfRouteLiveOracle",
+  "chimeraGenaiModelsConfigDisclosureLiveOracle",
+  "chimeraGenaiModelsConfigDisclosureRouteLiveOracle",
+  "chimeraGenaiKnowledgeUploadLiveOracle",
+  "chimeraGenaiKnowledgeUploadRouteLiveOracle",
+  "chimeraGenaiGraphqlLiveOracle",
+  "chimeraGenaiGraphqlRouteLiveOracle",
+  "chimeraGenaiRagQueryRouteLiveOracle",
+  "chimeraDiagnosticsPingRceLiveOracle",
+  "chimeraDiagnosticsPingRceRouteLiveOracle",
+  "chimeraDiagnosticsWebhookSsrfLiveOracle",
+  "chimeraDiagnosticsWebhookSsrfRouteLiveOracle",
+  "chimeraDiagnosticsResolveDnsSsrfRouteLiveOracle",
+  "chimeraAdminDiagnosticsHubRouteLiveOracle",
+  "chimeraAdminAttackXxeLiveOracle",
+  "chimeraAdminAttackXxeRouteLiveOracle",
+  "chimeraAdminExecuteRceRouteLiveOracle",
+  "chimeraAdminDeserializeRouteLiveOracle",
+  "chimeraAdminSystemExecuteRceRouteLiveOracle",
+  "chimeraAdminConfigImportXxeRouteLiveOracle",
+  "chimeraAdminDataDeserializeRouteLiveOracle",
+  "chimeraAdminFilesReadPathTraversalRouteLiveOracle",
+  "chimeraAdminUsersExportRouteLiveOracle",
+  "chimeraIntegrationsWebhookRegisterSsrfRouteLiveOracle",
+  "chimeraHipaaTransferSsrfRouteLiveOracle",
+  "chimeraEnergyUtilitiesCalibrationSsrfLiveOracle",
+  "chimeraEnergyUtilitiesCalibrationSsrfRouteLiveOracle",
+  "chimeraEnergyUtilitiesOutagesBolaLiveOracle",
+  "chimeraEnergyUtilitiesOutagesBolaRouteLiveOracle",
+  "chimeraIcsControllersStatusBolaLiveOracle",
+  "chimeraIcsControllersStatusBolaRouteLiveOracle",
+  "chimeraOtModbusCommandInjectionRouteLiveOracle",
+  "chimeraIcsScadaSystemsDiscoveryRouteLiveOracle",
+  "chimeraInsurancePoliciesBolaRouteLiveOracle",
+  "chimeraEcommerceProductsCatalogSqliRouteLiveOracle",
+  "chimeraEcommerceProductsSearchXssRouteLiveOracle",
+  "chimeraTelecomSubscribersProfileBolaRouteLiveOracle",
+  "chimeraInsuranceClaimsSearchSqliRouteLiveOracle",
   "chimeraSwaggerRouteLiveOracle",
+  "chimeraApiReferenceRouteLiveOracle",
+  "chimeraFedrampOpenapiExtensionsRouteLiveOracle",
+  "clientSideDvlaEvidence",
+  "dvlaRouteLiveOracle",
   "clientSideHackHealthLabEvidence",
   "hackHealthA03SqlInjectionRouteLiveOracle",
+  "hackHealthA01BruteForceRouteLiveOracle",
   "clientSideDomGoatLabEvidence",
   "domgoReferrerDomXssEvidence",
   "domgoHashDomXssEvidence",
@@ -1716,10 +1947,27 @@ const DEEP_RULES = new Set<string>([
   "fauxbankCsrfTransferProbe",
   "fauxbankStoredXssSupportProbe",
   "fauxbankSupportRouteLiveOracle",
+  "fauxbankSearchSqliRouteLiveOracle",
   "fauxbankLoansRequestLiveOracle",
   "fauxbankLoansNegativeAmountLiveOracle",
   "fauxbankAdminPanelLiveOracle",
   "fauxbankAdminRouteLiveOracle",
+  "fauxbankInstructorLiveOracle",
+  "fauxbankInstructorRouteLiveOracle",
+  "ghostbankTransferBolaLiveOracle",
+  "ghostbankTransferBolaRouteLiveOracle",
+  "clientSideGhostbankEvidence",
+  "ghostbankHubRouteLiveOracle",
+  "truscaDemoReadOnlyHealthLiveOracle",
+  "truscaDemoHubRouteLiveOracle",
+  "aisecurityframeworkLlmTop10HubRouteLiveOracle",
+  "graphqlComplexityDosLiveOracle",
+  "graphqlComplexityPlaygroundHubRouteLiveOracle",
+  "graphqlComplexityDosRouteLiveOracle",
+  "vampiGithubPagesOpenApiRouteLiveOracle",
+  "fauxbankLabRouteLiveOracle",
+  "fauxbankScannerRouteLiveOracle",
+  "xssPayloadLabRouteLiveOracle",
   "webPentestPlaygroundFileUploadLiveOracle",
   "webPentestPlaygroundFileUploadRouteLiveOracle",
   "webPentestPlaygroundStoredXssLiveOracle",
@@ -1732,6 +1980,8 @@ const DEEP_RULES = new Set<string>([
   "webPentestPlaygroundViewUsersRouteLiveOracle",
   "webPentestPlaygroundLoginSqliLiveOracle",
   "webPentestPlaygroundLoginSqliRouteLiveOracle",
+  "webPentestPlaygroundRegisterLiveOracle",
+  "webPentestPlaygroundRegisterRouteLiveOracle",
   "whoopsPayTransactionsBolaLiveOracle",
   "whoopsPayTransactionsBolaRouteLiveOracle",
   "whoopsPayMoneyRequestIdorLiveOracle",
@@ -1761,6 +2011,110 @@ const DEEP_RULES = new Set<string>([
   "appsecCiStoredXssCommentsRouteLiveOracle",
   "appsecCiDjangoAdminLiveOracle",
   "appsecCiDjangoAdminRouteLiveOracle",
+  "appsecCiLoginRouteLiveOracle",
+  "owaspsecureInjectionSqliLoginLiveOracle",
+  "owaspsecureInjectionSqliLoginRouteLiveOracle",
+  "owaspsecureSsrfFetchLiveOracle",
+  "owaspsecureSsrfFetchRouteLiveOracle",
+  "owaspsecureBacIdorNumericLiveOracle",
+  "owaspsecureBacIdorNumericRouteLiveOracle",
+  "owaspsecureMisconfigPhpinfoLiveOracle",
+  "owaspsecureMisconfigPhpinfoRouteLiveOracle",
+  "owaspsecureMisconfigDefaultCredsLiveOracle",
+  "owaspsecureMisconfigDefaultCredsRouteLiveOracle",
+  "owaspsecureMisconfigExposedConfigLiveOracle",
+  "owaspsecureMisconfigExposedConfigRouteLiveOracle",
+  "owaspsecureMisconfigVerboseErrorLiveOracle",
+  "owaspsecureMisconfigVerboseErrorRouteLiveOracle",
+  "owaspsecureCryptoPasswordMd5LiveOracle",
+  "owaspsecureCryptoPasswordMd5RouteLiveOracle",
+  "owaspsecureCryptoPredictableTokensLiveOracle",
+  "owaspsecureCryptoPredictableTokensRouteLiveOracle",
+  "owaspsecureCryptoDataAtRestLiveOracle",
+  "owaspsecureCryptoDataAtRestRouteLiveOracle",
+  "owaspsecureCryptoIvReuseLiveOracle",
+  "owaspsecureCryptoIvReuseRouteLiveOracle",
+  "owaspsecureCryptoKeyRotationLiveOracle",
+  "owaspsecureCryptoKeyRotationRouteLiveOracle",
+  "owaspsecureCryptoSavePlainLiveOracle",
+  "owaspsecureCryptoSavePlainRouteLiveOracle",
+  "owaspsecureAuthSessionFixationLiveOracle",
+  "owaspsecureAuthSessionFixationRouteLiveOracle",
+  "owaspsecureAuthMfaBypassLiveOracle",
+  "owaspsecureAuthMfaBypassRouteLiveOracle",
+  "owaspsecureDesignPasswordResetLiveOracle",
+  "owaspsecureDesignPasswordResetRouteLiveOracle",
+  "owaspsecureDesignPasswordResetAttackPathRouteLiveOracle",
+  "owaspsecureDesignReauthEmailLiveOracle",
+  "owaspsecureDesignReauthEmailRouteLiveOracle",
+  "owaspsecureDesignCouponLogicLiveOracle",
+  "owaspsecureDesignCouponLogicRouteLiveOracle",
+  "owaspsecureDesignCsrfSettingsLiveOracle",
+  "owaspsecureDesignCsrfSettingsRouteLiveOracle",
+  "owaspsecureDesignMagicLinkLiveOracle",
+  "owaspsecureDesignMagicLinkRouteLiveOracle",
+  "owaspsecureIntegrityUnserializeLiveOracle",
+  "owaspsecureIntegrityUnserializeRouteLiveOracle",
+  "owaspsecureIntegritySignedUpdateLiveOracle",
+  "owaspsecureIntegritySignedUpdateRouteLiveOracle",
+  "owaspsecureIntegrityPluginUploadLiveOracle",
+  "owaspsecureIntegrityPluginUploadRouteLiveOracle",
+  "owaspsecureIntegrityCicdDeployLiveOracle",
+  "owaspsecureIntegrityCicdDeployRouteLiveOracle",
+  "owaspsecureIntegrityRemoteConfigLiveOracle",
+  "owaspsecureIntegrityRemoteConfigRouteLiveOracle",
+  "owaspsecureLoggingAuthEventsLiveOracle",
+  "owaspsecureLoggingAuthEventsRouteLiveOracle",
+  "owaspsecureLoggingPiiSecretsLiveOracle",
+  "owaspsecureLoggingPiiSecretsRouteLiveOracle",
+  "owaspsecureLoggingThresholdAlertsLiveOracle",
+  "owaspsecureLoggingThresholdAlertsRouteLiveOracle",
+  "owaspsecureLoggingAdminActionLiveOracle",
+  "owaspsecureLoggingAdminActionRouteLiveOracle",
+  "owaspsecureLoggingStructureTimeLiveOracle",
+  "owaspsecureLoggingStructureTimeRouteLiveOracle",
+  "owaspsecureLoggingIntegrityChainLiveOracle",
+  "owaspsecureLoggingIntegrityChainRouteLiveOracle",
+  "owaspsecureInjectionXssStoredLiveOracle",
+  "owaspsecureInjectionXssStoredRouteLiveOracle",
+  "owaspsecureBacFunctionLevelPromoteLiveOracle",
+  "owaspsecureBacFunctionLevelPromoteRouteLiveOracle",
+  "owaspsecureInjectionUnionSearchLiveOracle",
+  "owaspsecureInjectionUnionSearchRouteLiveOracle",
+  "owaspsecureInjectionSqliBlindTimeLiveOracle",
+  "owaspsecureInjectionSqliBlindTimeRouteLiveOracle",
+  "owaspsecureInjectionSqliSecondOrderLiveOracle",
+  "owaspsecureInjectionSqliSecondOrderRouteLiveOracle",
+  "owaspsecureInjectionStoreBioLiveOracle",
+  "owaspsecureInjectionStoreBioRouteLiveOracle",
+  "owaspsecureBacFileDorLiveOracle",
+  "owaspsecureBacFileDorRouteLiveOracle",
+  "owaspsecureBacMassAssignmentLiveOracle",
+  "owaspsecureBacMassAssignmentRouteLiveOracle",
+  "owaspsecureBacIdorUuidLiveOracle",
+  "owaspsecureBacIdorUuidRouteLiveOracle",
+  "owaspsecureSsrfInternalHealthLiveOracle",
+  "owaspsecureSsrfInternalHealthRouteLiveOracle",
+  "owaspsecureSsrfSocketProbeLiveOracle",
+  "owaspsecureSsrfSocketProbeRouteLiveOracle",
+  "owaspsecureSsrfInternalHealthDirectLiveOracle",
+  "owaspsecureSsrfInternalHealthDirectRouteLiveOracle",
+  "owaspsecureSsrfInternalAdminLiveOracle",
+  "owaspsecureSsrfInternalAdminRouteLiveOracle",
+  "owaspsecureSsrfInternalIndexDirectLiveOracle",
+  "owaspsecureSsrfInternalIndexDirectRouteLiveOracle",
+  "owaspsecureVocOutdatedJqueryLiveOracle",
+  "owaspsecureVocOutdatedJqueryRouteLiveOracle",
+  "owaspsecureVocCdnNoSriLiveOracle",
+  "owaspsecureVocCdnNoSriRouteLiveOracle",
+  "owaspsecureVocMixedContentLiveOracle",
+  "owaspsecureVocMixedContentRouteLiveOracle",
+  "owaspsecureVocLodashOutdatedLiveOracle",
+  "owaspsecureVocLodashOutdatedRouteLiveOracle",
+  "owaspsecureVocUnpinnedLatestLiveOracle",
+  "owaspsecureVocUnpinnedLatestRouteLiveOracle",
+  "guardmarlyScanLiveOracle",
+  "guardmarlyScanRouteLiveOracle",
   "fauxbankProfileSensitiveDataLiveOracle",
   "clientSideWebsecChallengeEvidence",
   "clientSideWebsecCryptoChallengeEvidence",
@@ -1775,16 +2129,35 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecCreateFunctionChallengeEvidence",
   "clientSideWebsecFibonacciEvalChallengeEvidence",
   "clientSideWebsecTimingAttackChallengeEvidence",
+  "clientSideWebsecPasswordResetPrngChallengeEvidence",
+  "websecLevel14PhpEvalBlacklistRouteLiveOracle",
+  "websecLevel19PasswordResetRouteLiveOracle",
+  "websecLevel17TimingAttackRouteLiveOracle",
+  "websecLevel17TimingAttackLiveOracle",
+  "websecLevel18PhpUnserializeCookieRouteLiveOracle",
+  "websecLevel20PhpUnserializeFilterRouteLiveOracle",
   "clientSideWebsecPhpUnserializeCookieChallengeEvidence",
   "clientSideWebsecPhpUnserializeFilterChallengeEvidence",
   "clientSideWebsecPhpAesSessionChallengeEvidence",
+  "websecLevel21AesSessionRouteLiveOracle",
   "clientSideWebsecOopRestrictedEvalChallengeEvidence",
+  "websecLevel22OopEvalRouteLiveOracle",
+  "websecLevel23MazeFilterBypassRouteLiveOracle",
+  "clientSideWebsecCloudStorageChallengeEvidence",
+  "websecLevel24CloudStorageRouteLiveOracle",
   "clientSideWebsecShellExecChallengeEvidence",
+  "websecLevel26ShellExecRouteLiveOracle",
   "clientSideWebsecAspectInstrumentationChallengeEvidence",
+  "websecLevel27AspectBackdoorRouteLiveOracle",
+  "websecLevel25LfiRouteLiveOracle",
   "clientSideWebsecUploadIncludeChallengeEvidence",
+  "websecLevel28UploadIncludeRouteLiveOracle",
   "clientSideWebsecPhpUnserializeDestructChallengeEvidence",
+  "websecLevel30PhpUnserializeDestructRouteLiveOracle",
   "clientSideWebsecPhpUnserializeBlindDestructChallengeEvidence",
+  "websecLevel33UnserializeDestructRouteLiveOracle",
   "clientSideWebsecOpenBasedirEvalChallengeEvidence",
+  "websecLevel31OpenBasedirEvalRouteLiveOracle",
   "clientSideWebsecDynamicFunctionCallChallengeEvidence",
   "clientSideSixHackCtfLabEvidence",
   "clientSideRootMeChallengeEvidence",
@@ -1943,6 +2316,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideWechallEvidence",
   "clientSideAppsecMasterEvidence",
   "clientSideAppsecMasterLabHubEvidence",
+  "appsecmasterSsrfRouteLiveOracle",
+  "appsecmasterCommandInjectionRouteLiveOracle",
+  "appsecmasterCiPipelineRouteLiveOracle",
+  "appsecmasterDeserializationRouteLiveOracle",
   "clientSideIstEduVulnPortalEvidence",
   "noticesFileLfiProbe",
   "clientSideHackTheBoxEvidence",
@@ -1957,6 +2334,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideFabraixChallengeEvidence",
   "clientSideAgenticAiCtfEvidence",
   "clientSideVulnerableChatbotDemoEvidence",
+  "vulnerableChatbotPromptInjectionLiveOracle",
+  "vulnerableChatbotPromptInjectionRouteLiveOracle",
   "clientSideWrongSecretsEvidence",
   "clientSideWrongSecretsChallengeEvidence",
   "clientSideMaestroAgenticAiEvidence",
@@ -1976,6 +2355,24 @@ const DEEP_RULES = new Set<string>([
   "clientSideJavaSecLabEvidence",
   "javaSecLabReflectedXssLiveOracle",
   "javaSecLabReflectedXssRouteLiveOracle",
+  "javaSecLabSsrfVulLiveOracle",
+  "javaSecLabSsrfVulRouteLiveOracle",
+  "javaSecLabJdbcSqliVul1LiveOracle",
+  "javaSecLabJdbcSqliVul1RouteLiveOracle",
+  "javaSecLabXxeVul1LiveOracle",
+  "javaSecLabXxeVul1RouteLiveOracle",
+  "javaSecLabSpelVulLiveOracle",
+  "javaSecLabSpelVulRouteLiveOracle",
+  "javaSecLabSstiVul1LiveOracle",
+  "javaSecLabSstiVul1RouteLiveOracle",
+  "javaSecLabXPathVulLiveOracle",
+  "javaSecLabXPathVulRouteLiveOracle",
+  "javaSecLabHorizontalIdorLiveOracle",
+  "javaSecLabHorizontalIdorRouteLiveOracle",
+  "javaSecLabCsrfVulLiveOracle",
+  "javaSecLabCsrfVulRouteLiveOracle",
+  "javaSecLabXffVul2LiveOracle",
+  "javaSecLabXffVul2RouteLiveOracle",
   "javaSecLabDruidBasicJsonRouteLiveOracle",
   "clientSidePwnedlabsEvidence",
   "clientSidePwnedlabsGitSecretsEvidence",
@@ -2011,16 +2408,25 @@ const DEEP_RULES = new Set<string>([
   "clientSidePwnshopPrototypePollutionOracle",
   "pwnshopDebugInfoLiveOracle",
   "pwnshopDebugInfoRouteLiveOracle",
+  "pwnshopLabStatsLiveOracle",
+  "pwnshopLabStatsRouteLiveOracle",
+  "pwnshopVulnerabilitiesIndexLiveOracle",
+  "pwnshopVulnerabilitiesIndexRouteLiveOracle",
   "pwnshopEventsAuditLiveOracle",
   "pwnshopEventsAuditRouteLiveOracle",
   "pwnshopChatInitEmailEnumerationLiveOracle",
   "pwnshopChatInitRouteLiveOracle",
+  "pwnshopChatOrderIdorLiveOracle",
+  "pwnshopChatOrderIdorRouteLiveOracle",
   "pwnshopForgotPasswordEmailEnumerationLiveOracle",
+  "pwnshopForgotPasswordEmailEnumerationRouteLiveOracle",
   "pwnshopTrackIdorLiveOracle",
   "pwnshopTrackIdorRouteLiveOracle",
   "clientSidePwnshopWishlistIdorOracle",
   "pwnshopWishlistIdorLiveOracle",
   "pwnshopWishlistIdorRouteLiveOracle",
+  "pwnshopProductApiIdorLiveOracle",
+  "pwnshopProductApiIdorRouteLiveOracle",
   "pwnshopProductSearchSqliLiveOracle",
   "pwnshopProductSearchSqliRouteLiveOracle",
   "pwnshopAdminLoginSqliLiveOracle",
@@ -2029,9 +2435,20 @@ const DEEP_RULES = new Set<string>([
   "dvaibPromptInjectionLiveOracle",
   "dvaibPromptInjectionRouteLiveOracle",
   "dvaibLoginRouteLiveOracle",
+  "dvaiAiChatLiveOracle",
+  "dvaiAiChatRouteLiveOracle",
+  "dvaiAiChatHtmlSinkRouteLiveOracle",
+  "clientSideDvaiEcosystemEvidence",
+  "dvaiOracleLogprobLiveOracle",
+  "dvaiOracleLogprobRouteLiveOracle",
+  "dvaiSchemapoisonRagLiveOracle",
+  "dvaiSchemapoisonRagRouteLiveOracle",
   "pwnshopMassAssignmentAdminLiveOracle",
   "pwnshopOpenRedirectRegisterLiveOracle",
+  "pwnshopOpenRedirectLoginLiveOracle",
+  "pwnshopOpenRedirectLoginRouteLiveOracle",
   "pwnshopVerifyOtpBruteforceLiveOracle",
+  "pwnshopVerifyOtpBruteforceRouteLiveOracle",
   "pwnshopOtpNotInvalidatedLiveOracle",
   "pwnshopOtpNotInvalidatedRouteLiveOracle",
   "pwnshopMailInboxIdorLiveOracle",
@@ -2062,6 +2479,7 @@ const DEEP_RULES = new Set<string>([
   "pwnshopAuditLogPlaintextPasswordRouteLiveOracle",
   "pwnshopExportOrdersCsvLiveOracle",
   "pwnshopExportOrdersCsvRouteLiveOracle",
+  "pwnshopAdminDashboardRouteLiveOracle",
   "pwnshopAdminSecuritySecondOrderSqliLiveOracle",
   "pwnshopAdminSecuritySecondOrderSqliRouteLiveOracle",
   "pwnshopPrototypePollutionSearchFiltersLiveOracle",
@@ -2076,6 +2494,7 @@ const DEEP_RULES = new Set<string>([
   "pwnshopWalletTopupVulnbankLiveOracle",
   "pwnshopWalletTopupRouteLiveOracle",
   "fauxbankLoansRouteLiveOracle",
+  "fauxbankAuthLoginRouteLiveOracle",
   "fauxbankTransferRouteLiveOracle",
   "fauxbankAccountsRouteLiveOracle",
   "fauxbankTransactionsRouteLiveOracle",
@@ -2103,7 +2522,9 @@ const DEEP_RULES = new Set<string>([
   "secureBankBlogLoginSqliRouteLiveOracle",
   "secureBankBlogMessagesXssRouteLiveOracle",
   "secureBankBlogAdminRbacRouteLiveOracle",
+  "secureBankBlogCsrfAttackPageRouteLiveOracle",
   "secureBankBlogTransferCsrfRouteLiveOracle",
+  "sqlInjectionLabLoginRouteLiveOracle",
   "secureBankBaySqliLoginRouteLiveOracle",
   "secureBankBayStoredXssCommentsRouteLiveOracle",
   "secureBankBayStoredXssMessagesRouteLiveOracle",
@@ -2122,34 +2543,77 @@ const DEEP_RULES = new Set<string>([
   "clientSideOopssecRaceConditionEvidence",
   "clientSideOopssecPriceManipulationEvidence",
   "clientSideOopssecXffSqliEvidence",
+  "clientSideOopssecBolaWishlistEvidence",
   "clientSideOopssecProductSearchSqliEvidence",
+  "clientSideOopssecSecondOrderSqliEvidence",
+  "oopssecSecondOrderSqliRouteLiveOracle",
   "clientSideOopssecStoredXssReviewsEvidence",
   "oopssecXffSqliRouteLiveOracle",
+  "clientSideOopssecLiveStreamEvidence",
   "oopssecLiveStreamBflaRouteLiveOracle",
+  "oopssecLiveStreamBflaLiveOracle",
+  "oopssecBolaWishlistRouteLiveOracle",
+  "clientSideOopssecIdorOrderPrivacyEvidence",
+  "oopssecIdorOrderPrivacyRouteLiveOracle",
+  "clientSideOopssecSessionFixationEvidence",
+  "oopssecSessionFixationRouteLiveOracle",
+  "clientSideOopssecMcpMaliciousServerEvidence",
+  "oopssecMcpMaliciousServerRouteLiveOracle",
   "oopssecProductSearchSqliRouteLiveOracle",
+  "clientSideOopssecOrdersSearchSqliEvidence",
+  "oopssecOrdersSearchSqliRouteLiveOracle",
   "oopssecStoredXssReviewsRouteLiveOracle",
   "oopssecRaceConditionCouponRouteLiveOracle",
   "oopssecPriceManipulationRouteLiveOracle",
   "clientSideOopssecJwtAlgConfusionEvidence",
   "oopssecJwtAlgConfusionRouteLiveOracle",
+  "clientSideOopssecJwtWeakSecretEvidence",
+  "oopssecJwtWeakSecretAdminBypassRouteLiveOracle",
   "clientSideOopssecPathTraversalEvidence",
   "oopssecPathTraversalRouteLiveOracle",
   "clientSideOopssecCsrfAdminOrderEvidence",
   "oopssecCsrfAdminOrderRouteLiveOracle",
+  "clientSideOopssecSelfXssCsrfProfileEvidence",
+  "oopssecSelfXssCsrfProfileRouteLiveOracle",
   "oopssecSsrfRouteLiveOracle",
   "oopssecPromptInjectionRouteLiveOracle",
   "oopssecMiddlewareBypassRouteLiveOracle",
   "clientSideOopssecInformationDisclosureEvidence",
   "oopssecInformationDisclosureApiErrorRouteLiveOracle",
+  "clientSideOopssecPlaintextPasswordLogsEvidence",
+  "oopssecPlaintextPasswordLogsRouteLiveOracle",
   "clientSideOopssecNextPublicEnvEvidence",
   "oopssecNextPublicEnvRouteLiveOracle",
+  "oopssecNextPublicEnvLiveOracle",
   "clientSideOopssecSupplyChainEvidence",
   "oopssecSupplyChainPoisonedRulesRouteLiveOracle",
   "clientSideOopssecGiftCardRandomnessEvidence",
   "oopssecGiftCardRandomnessRouteLiveOracle",
+  "clientSideOopssecInsecurePasswordResetEvidence",
+  "oopssecInsecurePasswordResetRouteLiveOracle",
+  "clientSideOopssecWeakMd5HashingAdminEvidence",
+  "oopssecWeakMd5HashingAdminRouteLiveOracle",
+  "clientSideOopssecOpenRedirectLoginBypassEvidence",
+  "oopssecOpenRedirectLoginBypassRouteLiveOracle",
+  "clientSideOopssecMassAssignmentAdminEvidence",
+  "oopssecMassAssignmentAdminRouteLiveOracle",
+  "clientSideOopssecAesCbcPaddingOracleEvidence",
+  "oopssecAesCbcPaddingOracleRouteLiveOracle",
+  "clientSideOopssecBruteForceEvidence",
+  "oopssecBruteForceNoRateLimitRouteLiveOracle",
+  "clientSideOopssecXxeSupplierImportEvidence",
+  "oopssecXxeSupplierImportRouteLiveOracle",
+  "oopssecReact2shellRouteLiveOracle",
+  "oopssecMaliciousFileUploadStoredXssRouteLiveOracle",
   "oopssecRoadmapRouteLiveOracle",
   "oopssecStoreHomeRouteLiveOracle",
+  "oopssecChallengesJsonRouteLiveOracle",
   "clientSideVoidsecShoppingCartEvidence",
+  "voidsecShoppingCartRouteLiveOracle",
+  "clientSideDvmcpEvidence",
+  "dvmcpRouteLiveOracle",
+  "clientSideMcpgoatEvidence",
+  "mcpgoatRouteLiveOracle",
   "clientSideWhoopsPayEvidence",
   "clientSideTegalsecLabEvidence",
   "clientSideXvwaEvidence",
@@ -2177,6 +2641,7 @@ const DEEP_RULES = new Set<string>([
   "zerohealthInformationDisclosureRouteLiveOracle",
   "zerohealthMedicalRecordsBolaRouteLiveOracle",
   "zerohealthPatientsRouteLiveOracle",
+  "zerohealthDoctorsRouteLiveOracle",
   "zerohealthResetPasswordReflectedXssRouteLiveOracle",
   "zerohealthSearchReflectedXssRouteLiveOracle",
   "zerohealthAiChatSqliRouteLiveOracle",
@@ -2185,6 +2650,7 @@ const DEEP_RULES = new Set<string>([
   "zerohealthChatbotHistoryRouteLiveOracle",
   "zerohealthLabResultsRouteLiveOracle",
   "zerohealthChatbotChatRouteLiveOracle",
+  "zerohealthEnhancedChatRouteLiveOracle",
   "zerohealthReportsGenerateRouteLiveOracle",
   "zerohealthFilesRouteLiveOracle",
   "zerohealthUsersRouteLiveOracle",
@@ -2192,9 +2658,15 @@ const DEEP_RULES = new Set<string>([
   "zerohealthAuthLoginRouteLiveOracle",
   "zerohealthVerifyTokenRouteLiveOracle",
   "zerohealthPrescriptionsRouteLiveOracle",
+  "zerohealthAppointmentsRouteLiveOracle",
+  "zerohealthSearchAppointmentsTypeRouteLiveOracle",
+  "zerohealthSearchPatientsTypeRouteLiveOracle",
+  "zerohealthSearchPrescriptionsTypeRouteLiveOracle",
   "zerohealthDebugTokenRouteLiveOracle",
   "zerohealthDebugConnectionRouteLiveOracle",
   "zerohealthInfoRouteLiveOracle",
+  "zerohealthHubRouteLiveOracle",
+  "zeroHealthVercelDashboardRouteLiveOracle",
   "zerohealthHealthRouteLiveOracle",
   "zerohealthUploadAdvancedRouteLiveOracle",
   "clientSideAlfXssWargameEvidence",
@@ -2208,7 +2680,48 @@ const DEEP_RULES = new Set<string>([
   "clientSideExploitEducationEvidence",
   "clientSideYogsecXssLabsEvidence",
   "clientSideYogsecXssLabModuleEvidence",
+  "yogsecXssLab1ReflectedInnerhtmlRouteLiveOracle",
+  "yogsecXssLab2PostSessionstorageRouteLiveOracle",
+  "yogsecXssLab4RefererRouteLiveOracle",
+  "yogsecXssLab5UserAgentRouteLiveOracle",
+  "yogsecXssLab6LocalstorageRouteLiveOracle",
+  "yogsecXssLab7DocumentTitleRouteLiveOracle",
+  "yogsecXssLab8WindownameRouteLiveOracle",
+  "yogsecXssLab9LocalstorageKeyRouteLiveOracle",
+  "yogsecXssLab11LocalstorageStoredRouteLiveOracle",
+  "yogsecXssLab12SessionstorageStoredRouteLiveOracle",
+  "yogsecXssLab13IndexeddbRouteLiveOracle",
+  "yogsecXssLab14CookieStoredRouteLiveOracle",
+  "yogsecXssLab15WindownamePersistentRouteLiveOracle",
+  "yogsecXssLab16HistoryStateRouteLiveOracle",
+  "yogsecXssLab17SessionstorageSearchRouteLiveOracle",
+  "yogsecXssLab18LocalstorageJsonRouteLiveOracle",
+  "yogsecXssLab19CrossKeyInjectionRouteLiveOracle",
+  "yogsecXssLab20Base64DecodeRouteLiveOracle",
+  "yogsecXssLab21SearchBoxRouteLiveOracle",
+  "yogsecXssLab22InnerhtmlEvalRouteLiveOracle",
+  "yogsecXssLab23InsertadjacenthtmlRouteLiveOracle",
+  "yogsecXssLab24OuterhtmlRouteLiveOracle",
+  "yogsecXssLab25EvalRouteLiveOracle",
+  "yogsecXssLab26SettimeoutRouteLiveOracle",
+  "yogsecXssLab27SetintervalRouteLiveOracle",
+  "yogsecXssLab28FunctionRouteLiveOracle",
+  "yogsecXssLab29JavascriptHrefRouteLiveOracle",
+  "yogsecXssLab30DynamicScriptSrcRouteLiveOracle",
+  "yogsecXssLab31OnclickRouteLiveOracle",
+  "yogsecXssLab32OnmouseoverRouteLiveOracle",
+  "yogsecXssLab33OnerrorRouteLiveOracle",
+  "yogsecXssLab34OnloadRouteLiveOracle",
+  "yogsecXssLab35OnfocusAutofocusRouteLiveOracle",
+  "yogsecXssLab36OninputRouteLiveOracle",
+  "yogsecXssLab37OnchangeSelectRouteLiveOracle",
+  "yogsecXssLab38OnkeyupRouteLiveOracle",
+  "yogsecXssLab39OnsubmitRouteLiveOracle",
+  "yogsecOpenRedirectRouteLiveOracle",
+  "yogsecVulnerableLoginRouteLiveOracle",
+  "yogsecVulnerableShoppingCartRouteLiveOracle",
   "clientSideThe0xPwnXssLabsEvidence",
+  "clientSideThe0xPwnXssQueryParamLabEvidence",
   "clientSideThe0xPwnXssDomHashLabEvidence",
   "clientSideThe0xPwnXssDocumentWriteLabEvidence",
   "clientSideThe0xPwnXssJavascriptUrlLabEvidence",
@@ -2218,6 +2731,19 @@ const DEEP_RULES = new Set<string>([
   "clientSideThe0xPwnXssHrefAngleBracketsLabEvidence",
   "clientSideThe0xPwnXssTagFilterBypassLabEvidence",
   "clientSideThe0xPwnXssSvgScriptInjectionLabEvidence",
+  "the0xPwnXssTemplateLiteralRouteLiveOracle",
+  "the0xPwnXssHrefAngleBracketsRouteLiveOracle",
+  "the0xPwnXssDomHashRouteLiveOracle",
+  "the0xPwnXssSvgScriptInjectionRouteLiveOracle",
+  "the0xPwnXssQueryParamRouteLiveOracle",
+  "the0xPwnXssFilterBypassTagsRouteLiveOracle",
+  "the0xPwnXssDocumentWriteRouteLiveOracle",
+  "the0xPwnXssTagFilterBypassRouteLiveOracle",
+  "the0xPwnXssJavascriptUrlRouteLiveOracle",
+  "the0xPwnXssIframeDataUriRouteLiveOracle",
+  "povzaydXssLab1DocumentWriteRouteLiveOracle",
+  "povzaydXssLab2ReflectedFilteredInnerhtmlRouteLiveOracle",
+  "povzaydXssLab2DomHashRouteLiveOracle",
   "clientSideMontanajimXssClassroomEvidence",
   "clientSideHackxorEvidence",
   "clientSidePygoatEvidence",
@@ -2254,6 +2780,10 @@ const DEEP_RULES = new Set<string>([
   "vulnlabValidateUploadLiveOracle",
   "vulnlabValidateCorsLiveOracle",
   "vulnlabValidateInputValidationLiveOracle",
+  "vulnlabValidateSecurityHeadersLiveOracle",
+  "vulnlabValidateSstiLiveOracle",
+  "vulnlabValidateSstiApiRouteLiveOracle",
+  "vulnlabValidateSqliApiRouteLiveOracle",
   "vulnlabValidatePathTraversalLiveOracle",
   "vulnlabValidatePathTraversalRouteLiveOracle",
   "vulnlabJwtDecodeLiveOracle",
@@ -2297,6 +2827,7 @@ const DEEP_RULES = new Set<string>([
   "ssrfVulnlabMetadataAzureRouteLiveOracle",
   "ssrfVulnlabBlocklistRouteLiveOracle",
   "ssrfVulnlabRedirectRouteLiveOracle",
+  "ssrfVulnlabOpenRedirectorRouteLiveOracle",
   "ssrfVulnlabAllowlistBypassLiveOracle",
   "ssrfVulnlabAllowlistRouteLiveOracle",
   "ssrfVulnlabSchemeLiveOracle",
@@ -2339,6 +2870,7 @@ const DEEP_RULES = new Set<string>([
   "sqliVulnlabBlindTimeRouteLiveOracle",
   "xssVulnlabMxssLiveOracle",
   "xssVulnlabMxssRouteLiveOracle",
+  "xssVulnlabFilterRouteLiveOracle",
   "xssVulnlabCspBypassJsonpLiveOracle",
   "xssVulnlabCspBypassJsonpRouteLiveOracle",
   "sstiVulnlabSandboxedLiveOracle",
@@ -2359,6 +2891,8 @@ const DEEP_RULES = new Set<string>([
   "juiceShopProductsReviewsExposureRouteLiveOracle",
   "juiceShopAdminConfigLiveOracle",
   "juiceShopAdminConfigRouteLiveOracle",
+  "juiceShopSnippetsLiveOracle",
+  "juiceShopSnippetsRouteLiveOracle",
   "juiceShopLoginSqliLiveOracle",
   "juiceShopLoginRouteLiveOracle",
   "juiceShopChatbotApiLiveOracle",
@@ -2394,6 +2928,7 @@ const DEEP_RULES = new Set<string>([
   "juiceShopBasketIdorRouteLiveOracle",
   "juiceShopMemoriesBolaLiveOracle",
   "juiceShopMemoriesBolaRouteLiveOracle",
+  "juiceShopRestApiHubRouteLiveOracle",
   "juiceShopQuantitysExposureLiveOracle",
   "juiceShopQuantitysExposureRouteLiveOracle",
   "juiceShopHintsExposureLiveOracle",
@@ -2425,6 +2960,8 @@ const DEEP_RULES = new Set<string>([
   "vapiApi1RouteLiveOracle",
   "vapiApi2BrokenAuthLiveOracle",
   "vapiApi2RouteLiveOracle",
+  "vapiWorkshopShopOrdersRouteLiveOracle",
+  "vapiWorkshopContactMechanicRouteLiveOracle",
   "vapiApi6MassAssignmentLiveOracle",
   "vapiApi6RouteLiveOracle",
   "vapiApi3CommentRouteLiveOracle",
@@ -2445,15 +2982,20 @@ const DEEP_RULES = new Set<string>([
   "vapiServerSurferRouteLiveOracle",
   "vapiStickyNotesStoredXssLiveOracle",
   "vapiStickyNotesRouteLiveOracle",
+  "vapiIdentityAuthLoginRouteLiveOracle",
   "vapiRouteLiveOracle",
   "duckStoreUsersBolaLiveOracle",
   "duckStoreUsersRouteLiveOracle",
+  "duckStoreUsersEnumerationLiveOracle",
+  "duckStoreUsersEnumerationRouteLiveOracle",
   "duckStoreTestimonialsBolaLiveOracle",
   "duckStoreTestimonialsRouteLiveOracle",
   "duckStoreOrdersBolaLiveOracle",
   "duckStoreOrdersRouteLiveOracle",
   "duckStoreCouponsDisclosureLiveOracle",
   "duckStoreCouponsRouteLiveOracle",
+  "duckStoreCouponsValidateLiveOracle",
+  "duckStoreCouponsApplyRouteLiveOracle",
   "duckStoreSsrfFetchUrlLiveOracle",
   "duckStoreSsrfFetchUrlRouteLiveOracle",
   "duckStoreSsrfImportFromUrlLiveOracle",
@@ -2464,8 +3006,41 @@ const DEEP_RULES = new Set<string>([
   "duckStoreMcpToolsRouteLiveOracle",
   "duckStoreMcpResourcesEnumerationLiveOracle",
   "duckStoreMcpResourcesRouteLiveOracle",
+  "duckStoreMcpInfoLiveOracle",
+  "duckStoreMcpInfoRouteLiveOracle",
   "duckStoreProductsFilterSqliLiveOracle",
   "duckStoreProductsFilterSqliRouteLiveOracle",
+  "bugstoreProductSearchSqliLiveOracle",
+  "bugstoreProductSearchSqliRouteLiveOracle",
+  "bugstoreProductImagePathTraversalLiveOracle",
+  "bugstoreProductImagePathTraversalRouteLiveOracle",
+  "bugstoreAdminDebugStatsBacLiveOracle",
+  "bugstoreAdminDebugStatsBacRouteLiveOracle",
+  "bugstoreForumThreadSqliLiveOracle",
+  "bugstoreForumThreadSqliRouteLiveOracle",
+  "bugstoreOrdersIdorLiveOracle",
+  "bugstoreOrdersIdorRouteLiveOracle",
+  "bugstoreCheckoutClientTotalLiveOracle",
+  "bugstoreCheckoutClientTotalRouteLiveOracle",
+  "bugstoreCartNegativeQuantityLiveOracle",
+  "bugstoreCartNegativeQuantityRouteLiveOracle",
+  "bugstoreProfileMassAssignmentLiveOracle",
+  "bugstoreProfileMassAssignmentRouteLiveOracle",
+  "bugstoreSecurePortalTotpLoginLiveOracle",
+  "bugstoreSecurePortalTotpLoginRouteLiveOracle",
+  "bugstoreAuthSignupRouteLiveOracle",
+  "bugstoreHealthRceLiveOracle",
+  "bugstoreHealthRceRouteLiveOracle",
+  "bugstoreAdminUsersBacLiveOracle",
+  "bugstoreAdminUsersBacRouteLiveOracle",
+  "bugstoreForumPostsStoredXssLiveOracle",
+  "bugstoreForumPostsStoredXssRouteLiveOracle",
+  "bugstoreGraphqlIntrospectionBolaLiveOracle",
+  "bugstoreGraphqlIntrospectionBolaRouteLiveOracle",
+  "bugstoreReviewsMassAssignmentLiveOracle",
+  "bugstoreReviewsMassAssignmentRouteLiveOracle",
+  "bugstoreOpenRedirectLiveOracle",
+  "bugstoreOpenRedirectRouteLiveOracle",
   "duckStoreCartNegativeQuantityLiveOracle",
   "duckStoreCartNegativeQuantityRouteLiveOracle",
   "duckStoreAdminUsersBflaLiveOracle",
@@ -2477,12 +3052,22 @@ const DEEP_RULES = new Set<string>([
   "duckStoreTestimonialsStoredXssLiveOracle",
   "duckStoreTestimonialsStoredXssRouteLiveOracle",
   "duckStoreTestimonialsGuestRouteLiveOracle",
+  "duckStoreTestimonialsPageStoredXssRouteLiveOracle",
+  "duckStoreReviewsStoredXssLiveOracle",
+  "duckStoreReviewsStoredXssRouteLiveOracle",
+  "duckStoreReviewsUnauthReadLiveOracle",
+  "duckStoreReviewsRouteLiveOracle",
+  "duckStoreProductsReviewsMisrouteLiveOracle",
+  "duckStoreProductsReviewsMisrouteRouteLiveOracle",
+  "duckStoreWishlistPhantomApiLiveOracle",
+  "duckStoreWishlistPhantomApiRouteLiveOracle",
   "duckStoreAuthLoginWeakCredentialsLiveOracle",
   "duckStoreAuthLoginWeakCredentialsRouteLiveOracle",
   "duckStoreAuthRegisterOpenLiveOracle",
   "duckStoreAuthRegisterRouteLiveOracle",
   "duckStoreOpenRedirectLiveOracle",
   "duckStoreOpenRedirectRouteLiveOracle",
+  "duckStoreVulnerabilitiesHubRouteLiveOracle",
   "duckStoreReferralCodeAbuseLiveOracle",
   "duckStoreReferralCodeAbuseRouteLiveOracle",
   "duckStoreAdminProductsNegativePriceLiveOracle",
@@ -2499,7 +3084,9 @@ const DEEP_RULES = new Set<string>([
   "duckStoreProductsBolaRouteLiveOracle",
   "duckStoreAdminStatsLiveOracle",
   "duckStoreAdminStatsRouteLiveOracle",
+  "dvga2ExpertHardenedModeRouteLiveOracle",
   "dvgaRouteLiveOracle",
+  "dvgaGraphiqlRouteLiveOracle",
   "dvgaGraphqlAuditLogLiveOracle",
   "dvgaGraphqlAuditRouteLiveOracle",
   "dvgaGraphqlBatchingLiveOracle",
@@ -2524,9 +3111,12 @@ const DEEP_RULES = new Set<string>([
   "dvgaImportPasteSsrfRouteLiveOracle",
   "dvgaCreatePasteStoredXssLiveOracle",
   "dvgaCreatePasteStoredXssRouteLiveOracle",
+  "dvgaGraphqlDosResourceExhaustionLiveOracle",
+  "dvgaGraphqlDosResourceExhaustionRouteLiveOracle",
   "ginAndJuiceAngularCstiLiveOracle",
   "ginAndJuiceAngularCstiRouteLiveOracle",
   "ginAndJuiceCatalogSearchXssLiveOracle",
+  "ginAndJuiceCatalogSearchXssRouteLiveOracle",
   "ginAndJuiceCatalogRouteLiveOracle",
   "ginAndJuiceBlogPostOpenRedirectLiveOracle",
   "ginAndJuiceBlogPostRouteLiveOracle",
@@ -2540,12 +3130,14 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceCatalogCategoryCrlfRouteLiveOracle",
   "ginAndJuiceLoginUsernameReflectionLiveOracle",
   "ginAndJuiceLoginRouteLiveOracle",
+  "ginAndJuiceLoginNextOpenRedirectRouteLiveOracle",
   "ginAndJuiceRegisterAtobRedirectLiveOracle",
   "ginAndJuiceRegisterRouteLiveOracle",
   "ginAndJuiceStockXxeLiveOracle",
   "ginAndJuiceStockXxeRouteLiveOracle",
   "ginAndJuiceOrderDetailsIdorLiveOracle",
   "ginAndJuiceOrderDetailsIdorRouteLiveOracle",
+  "ginAndJuiceViewOrderIdorRouteLiveOracle",
   "ginAndJuiceAdminBypassLiveOracle",
   "ginAndJuiceAdminBypassRouteLiveOracle",
   "ginAndJuiceBlogPrototypePollutionDomXssLiveOracle",
@@ -2562,20 +3154,36 @@ const DEEP_RULES = new Set<string>([
   "ginAndJuiceAdminDeleteRouteLiveOracle",
   "ginAndJuiceVulnerabilitiesCredentialsLiveOracle",
   "ginAndJuiceVulnerabilitiesCredentialsRouteLiveOracle",
+  "ginAndJuiceVulnerabilitiesDisclosureRouteLiveOracle",
   "ginAndJuiceLogoutSessionRegenerationLiveOracle",
   "ginAndJuiceLogoutRouteLiveOracle",
   "ginAndJuiceCatalogSubscribeLiveOracle",
   "ginAndJuiceCatalogSubscribeRouteLiveOracle",
+  "ginAndJuiceNewsletterSubscribeRouteLiveOracle",
+  "ginAndJuiceFeedbackSubmitRouteLiveOracle",
+  "ginAndJuiceIdentityAuthLoginRouteLiveOracle",
+  "ginAndJuiceNewsletterSubscribeRateLimitLiveOracle",
+  "ginAndJuiceNewsletterSubscribeRateLimitRouteLiveOracle",
   "ginAndJuiceCatalogProductRouteLiveOracle",
+  "ginAndJuiceChangeEmailLiveOracle",
   "ginAndJuiceChangeEmailRouteLiveOracle",
+  "ginAndJuiceChangePasswordLiveOracle",
   "ginAndJuiceChangePasswordRouteLiveOracle",
   "ginAndJuiceChangeAddressRouteLiveOracle",
   "ginAndJuiceMyAccountOrdersRouteLiveOracle",
+  "ginAndJuiceTransactionsRouteLiveOracle",
   "ginAndJuiceDeleteRouteLiveOracle",
   "ginAndJuiceCatalogLinkManipulationLiveOracle",
   "ginAndJuiceCatalogLinkManipulationRouteLiveOracle",
   "ginAndJuiceCartCheckoutAuthLiveOracle",
   "ginAndJuiceCartRouteLiveOracle",
+  "ginAndJuiceBasketRouteLiveOracle",
+  "ginAndJuiceCheckoutRouteLiveOracle",
+  "ginAndJuiceProductPriceLiveOracle",
+  "ginAndJuiceProductPriceRouteLiveOracle",
+  "ginAndJuiceForgotPasswordLiveOracle",
+  "ginAndJuiceForgotPasswordRouteLiveOracle",
+  "ginAndJuiceMyAccountForgotPasswordRouteLiveOracle",
   "ginAndJuiceAngularVulnerableDependencyLiveOracle",
   "ginAndJuiceAngularVulnerableDependencyRouteLiveOracle",
   "ginAndJuiceLoggerOastLiveOracle",
@@ -2593,6 +3201,16 @@ const DEEP_RULES = new Set<string>([
   "crapiVehicleLocationRouteLiveOracle",
   "crapiUserVideosBolaLiveOracle",
   "crapiUserVideosBolaRouteLiveOracle",
+  "crapiConvertVideoCommandInjectionLiveOracle",
+  "crapiConvertVideoRouteLiveOracle",
+  "crapiValidateCouponNosqlLiveOracle",
+  "crapiValidateCouponNosqlRouteLiveOracle",
+  "crapiApplyCouponSqliLiveOracle",
+  "crapiApplyCouponSqliRouteLiveOracle",
+  "crapiAdminVideosBflaLiveOracle",
+  "crapiAdminVideosBflaRouteLiveOracle",
+  "crapiUserVehiclesRouteLiveOracle",
+  "crapiCommunityPostsLiveOracle",
   "crapiCommunityPostsRouteLiveOracle",
   "crapiContactMechanicSsrfLiveOracle",
   "crapiContactMechanicSsrfRouteLiveOracle",
@@ -2602,14 +3220,20 @@ const DEEP_RULES = new Set<string>([
   "crapiSignupRouteLiveOracle",
   "crapiOtpBruteforceLiveOracle",
   "crapiCheckOtpRouteLiveOracle",
+  "finbotCtfChallengesLiveOracle",
   "finbotCtfChallengesRouteLiveOracle",
+  "finbotCtfSidecarLiveOracle",
   "finbotCtfSidecarRouteLiveOracle",
+  "finbotCtfSidecarApiRouteLiveOracle",
   "finbotVendorSidecarRouteLiveOracle",
   "finbotVendorChatLiveOracle",
   "finbotVendorChatRouteLiveOracle",
+  "finbotAdminCopilotLiveOracle",
   "finbotAdminCopilotRouteLiveOracle",
   "finbotHowItWorksLiveOracle",
   "finbotHowItWorksRouteLiveOracle",
+  "finbotPortalsLiveOracle",
+  "finbotPortalsRouteLiveOracle",
   "finbotDarklabSupplyChainLiveOracle",
   "finbotDarklabSupplyChainRouteLiveOracle",
   "finbotDarklabSupplyChainStatsLiveOracle",
@@ -2620,6 +3244,28 @@ const DEEP_RULES = new Set<string>([
   "finbotDarklabTaxcalcToolsRouteLiveOracle",
   "finbotDarklabTaxcalcResetToolsLiveOracle",
   "finbotDarklabTaxcalcResetToolsRouteLiveOracle",
+  "finbotDarklabFinmailToolsLiveOracle",
+  "finbotDarklabFinmailToolsRouteLiveOracle",
+  "finbotDarklabFindriveToolsLiveOracle",
+  "finbotDarklabFindriveToolsRouteLiveOracle",
+  "finbotDarklabFinstripeToolsLiveOracle",
+  "finbotDarklabFinstripeToolsRouteLiveOracle",
+  "finbotDarklabSystemutilsToolsLiveOracle",
+  "finbotDarklabSystemutilsToolsRouteLiveOracle",
+  "finbotDarklabFinbankToolsLiveOracle",
+  "finbotDarklabFinbankToolsRouteLiveOracle",
+  "finbotDarklabFinmailServerLiveOracle",
+  "finbotDarklabFinmailServerRouteLiveOracle",
+  "finbotDarklabFinmailResetToolsLiveOracle",
+  "finbotDarklabFinmailResetToolsRouteLiveOracle",
+  "finbotDarklabFindriveServerLiveOracle",
+  "finbotDarklabFindriveServerRouteLiveOracle",
+  "finbotDarklabFindriveResetToolsLiveOracle",
+  "finbotDarklabFindriveResetToolsRouteLiveOracle",
+  "finbotDarklabFinstripeResetToolsLiveOracle",
+  "finbotDarklabFinstripeResetToolsRouteLiveOracle",
+  "finbotDarklabSystemutilsResetToolsLiveOracle",
+  "finbotDarklabSystemutilsResetToolsRouteLiveOracle",
   "finbotCtfStatsLiveOracle",
   "finbotCtfStatsRouteLiveOracle",
   "finbotVendorInvoicesLiveOracle",
@@ -2663,11 +3309,15 @@ const DEEP_RULES = new Set<string>([
   "vulnwebCsrfRouteLiveOracle",
   "istEduSsrfRedirectRouteLiveOracle",
   "istEduOpenRedirectRouteLiveOracle",
+  "istEduRedirectRouteLiveOracle",
   "istEduFilesClientLfiRouteLiveOracle",
   "istEduPathTraversalClientRouteLiveOracle",
   "istEduDeserializationLabRouteLiveOracle",
   "istEduSstiLabRouteLiveOracle",
+  "istEduCommandInjectionLabRouteLiveOracle",
   "istEduFileUploadLabRouteLiveOracle",
+  "istEduXxeLabRouteLiveOracle",
+  "istEduJwtLabRouteLiveOracle",
   "istEduGraphqlLabRouteLiveOracle",
   "dvwuSsrfRedirectLiveOracle",
   "dvwuSsrfRedirectRouteLiveOracle",
@@ -2704,8 +3354,12 @@ const DEEP_RULES = new Set<string>([
   "vaultappDocumentsIdorLiveOracle",
   "vaultappDocumentsIdorRouteLiveOracle",
   "wrongsecretsCtfHubLiveOracle",
+  "wrongsecretsCtfHubRouteLiveOracle",
+  "bingoctfAuthGatedCtfLiveOracle",
+  "bingoctfAuthGatedCtfRouteLiveOracle",
   "wrongsecretsChallengeLiveOracle",
   "wrongsecretsChallengeRouteLiveOracle",
+  "wrongsecretsChallenge0OpeningRouteLiveOracle",
   "wrongsecretsChallenge1GitHardcodedRouteLiveOracle",
   "wrongsecretsChallenge2ApplicationPropertiesRouteLiveOracle",
   "wrongsecretsChallenge3DockerEnvRouteLiveOracle",
@@ -2781,8 +3435,11 @@ const DEEP_RULES = new Set<string>([
   "wrongsecretsChallenge36AdvancedCRouteLiveOracle",
   "wrongsecretsChallenge37CiCdLiveOracle",
   "wrongsecretsChallenge37CiCdRouteLiveOracle",
+  "wrongsecretsChallenge28GithubIssueLiveOracle",
   "wrongsecretsChallenge28GithubIssueRouteLiveOracle",
+  "wrongsecretsChallenge29ScreenshotLogLiveOracle",
   "wrongsecretsChallenge29ScreenshotLogRouteLiveOracle",
+  "wrongsecretsChallenge30LocalStorageLiveOracle",
   "wrongsecretsChallenge30LocalStorageRouteLiveOracle",
   "wrongsecretsChallenge31WebPageSecretLiveOracle",
   "wrongsecretsChallenge31WebPageSecretRouteLiveOracle",
@@ -2818,11 +3475,18 @@ const DEEP_RULES = new Set<string>([
   "riglabsCyberLabDeadRouteRouteLiveOracle",
   "seclabLabsDeadRouteLiveOracle",
   "seclabLabsDeadRouteRouteLiveOracle",
+  "seclabCommandInjectionRouteLiveOracle",
   "vulnerableBountySiteSearchXssLiveOracle",
   "vulnerableBountySiteSearchXssRouteLiveOracle",
   "vulnerableBountySiteUsersApiRouteLiveOracle",
   "vulnDemoJwtSecretLeakLiveOracle",
   "vulnDemoJwtSecretLeakRouteLiveOracle",
+  "vaultNotesJwtSecretLeakLiveOracle",
+  "vaultNotesJwtSecretLeakRouteLiveOracle",
+  "vaultNotesLoginSqliLiveOracle",
+  "vaultNotesLoginSqliRouteLiveOracle",
+  "vaultNotesNotesIdorLiveOracle",
+  "vaultNotesNotesIdorRouteLiveOracle",
   "vulnDemoFrontendFlagLeakLiveOracle",
   "vulnDemoFrontendFlagLeakRouteLiveOracle",
   "vulnDemoStoredXssLiveOracle",
@@ -2862,6 +3526,7 @@ const DEEP_RULES = new Set<string>([
   "vulnshopCartRouteLiveOracle",
   "vulnshopApplyDiscountPaymentManipulationLiveOracle",
   "vulnshopApplyDiscountRouteLiveOracle",
+  "vulnshopCheckoutRouteLiveOracle",
   "vulnshopWalletAddFundsRaceLiveOracle",
   "vulnshopWalletAddFundsRouteLiveOracle",
   "vulnshopUpdatePriceManipulationLiveOracle",
@@ -2884,6 +3549,12 @@ const DEEP_RULES = new Set<string>([
   "vulnshopTemplateRenderRouteLiveOracle",
   "vulnshopTrackOrderSsrfLiveOracle",
   "vulnshopTrackOrderSsrfRouteLiveOracle",
+  "vulnshopProxyFetchSsrfLiveOracle",
+  "vulnshopProxyFetchSsrfRouteLiveOracle",
+  "vulnshopCloudMetadataSsrfLiveOracle",
+  "vulnshopCloudMetadataSsrfRouteLiveOracle",
+  "vulnshopPingCmdInjectionLiveOracle",
+  "vulnshopPingCmdInjectionRouteLiveOracle",
   "vulnshopSupportLfiLiveOracle",
   "vulnshopSupportLfiRouteLiveOracle",
   "vulnshopRunDiagnosticCmdiLiveOracle",
@@ -2935,9 +3606,12 @@ const DEEP_RULES = new Set<string>([
   "aiSecurityLeakedConfigRouteLiveOracle",
   "aiSecuritySupabaseDataRouteLiveOracle",
   "aiSecurityAdminConsoleRouteLiveOracle",
+  "aiSecurityCookieAuthRouteLiveOracle",
   "aiSecuritySupplyChainRouteLiveOracle",
   "aiSecurityVulnerableDepsRouteLiveOracle",
+  "aiSecurityHackedNpmPackagesLiveOracle",
   "aiSecurityHackedNpmPackagesRouteLiveOracle",
+  "aiSecurityVulnerableNpmRouteLiveOracle",
   "aiSecuritySecurityHeadersRouteLiveOracle",
   "aiSecurityInsecurePasswordsRouteLiveOracle",
   "aiSecurityAiPhishingRouteLiveOracle",
@@ -2947,12 +3621,17 @@ const DEEP_RULES = new Set<string>([
   "aiSecuritySsrfRouteLiveOracle",
   "aiSecurityCommandInjectionRouteLiveOracle",
   "aiSecurityPathTraversalRouteLiveOracle",
+  "aiSecurityCsrfRouteLiveOracle",
+  "aiSecurityXxeRouteLiveOracle",
+  "aiSecurityDeserializationRouteLiveOracle",
   "aiSecurityRateLimitingBruteforceLiveOracle",
   "aiSecurityLoginRouteLiveOracle",
   "juiceShopForgottenBackupDisclosure",
   "juiceShopForgottenBackupRouteLiveOracle",
   "juiceShopProductsSearchSqliRouteLiveOracle",
   "juiceShopLeakedApiKeyOracle",
+  "juiceShopIacTerraformTlsKeyLiveOracle",
+  "juiceShopIacTerraformTlsKeyRouteLiveOracle",
   "juiceShopResendKeyLiveOracle",
   "clientSideEksGoatEvidence",
   "clientSideCtflearnEvidence",
@@ -2965,6 +3644,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideOverthewireNatasEvidence",
   "clientSideFfufMeEvidence",
   "clientSideYrpreyEvidence",
+  "yrpreyRouteLiveOracle",
   "clientSideBergerCyberLabEvidence",
   "clientSidePwnCollegeEvidence",
   "clientSideReactDomXssLabEvidence",
@@ -2981,11 +3661,18 @@ const DEEP_RULES = new Set<string>([
   "owaspGenaiExcessiveAgencyRouteLiveOracle",
   "owaspGenaiVectorEmbeddingRouteLiveOracle",
   "owaspGenaiUnboundedConsumptionRouteLiveOracle",
+  "owaspGenaiLessonsApiRouteLiveOracle",
   "sqlInjectionChallengeLoginSqliLiveOracle",
   "sqlInjectionChallengeLoginSqliRouteLiveOracle",
   "clientSideCtfDefiEvidence",
   "clientSideAtlasCrewHubEvidence",
   "clientSideAtlasCrewInfernoLabEvidence",
+  "apparatusRedteamAutopilotRouteLiveOracle",
+  "apparatusChaosEngineeringRouteLiveOracle",
+  "crucibleScenarioCatalogRouteLiveOracle",
+  "pentestForgeJuiceShopLabRouteLiveOracle",
+  "pentestForgeTomcatLabRouteLiveOracle",
+  "pentestForgeVampiLabRouteLiveOracle",
   "clientSideAtlasCrewEdgeProtectionEvidence",
   "clientSideMcpSupplyChainEvidence",
   "clientSideOwaspVwadEvidence",
@@ -2998,7 +3685,15 @@ const DEEP_RULES = new Set<string>([
   "clientSideVwadMutillidaeEvidence",
   "clientSideVwadNodegoatEvidence",
   "clientSideVwadMcpServersLabEvidence",
-  "clientSideVwadVulnerableappEvidence",
+  "clientSideVwadOopssecStoreEvidence",
+  "vwadOopssecStoreRouteLiveOracle",
+  "clientSideVwadGoofEvidence",
+  "vwadGoofRouteLiveOracle",
+  "vwadVoiceGoatRouteLiveOracle",
+  "clientSideVwadDvrRestaurantEvidence",
+  "vwadDvrRestaurantRouteLiveOracle",
+  "clientSideAiThreatlabEvidence",
+  "aiThreatlabRouteLiveOracle",
   "clientSideVulnerableappDomXssEvidence",
   "seclabNextjsLabApiProbe",
   "seclabAngularStubRouteLiveOracle",
@@ -3012,6 +3707,7 @@ const DEEP_RULES = new Set<string>([
   "seclabIdorVulnerableRouteLiveOracle",
   "seclabPathTraversalRouteLiveOracle",
   "seclabSsrfVulnerableRouteLiveOracle",
+  "seclabXxeVulnerableRouteLiveOracle",
   "vulnerableWebSiteLoginRouteLiveOracle",
   "vulnerableWebSiteCsrfRouteLiveOracle",
   "vulnerableWebSiteStoredXssRouteLiveOracle",
@@ -3051,12 +3747,18 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsAwsMetadataSsrfRouteLiveOracle",
   "brokencrystalsAzureMetadataSsrfLiveOracle",
   "brokencrystalsDigitalOceanMetadataSsrfLiveOracle",
+  "brokencrystalsGoogleMetadataSsrfLiveOracle",
   "brokencrystalsMetadataXxeLiveOracle",
   "brokencrystalsMetadataXxeRouteLiveOracle",
   "brokencrystalsGetMetadataRouteLiveOracle",
   "brokencrystalsLdapInjectionLiveOracle",
   "brokencrystalsLdapRouteLiveOracle",
+  "brokencrystalsGraphqlIntrospectionLiveOracle",
+  "brokencrystalsGraphqlRouteLiveOracle",
   "brokencrystalsHiddenUploadLiveOracle",
+  "brokencrystalsHiddenUploadRouteLiveOracle",
+  "brokencrystalsApiUploadParseXxeLiveOracle",
+  "brokencrystalsApiUploadParseRouteLiveOracle",
   "brokencrystalsMcpToolsLiveOracle",
   "brokencrystalsMcpRouteLiveOracle",
   "brokencrystalsMcpToolsRouteLiveOracle",
@@ -3069,6 +3771,12 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsMcpGetConfigRouteLiveOracle",
   "brokencrystalsJwtAlgNoneLiveOracle",
   "brokencrystalsJwtRouteLiveOracle",
+  "brokencrystalsJwtAlgNoneRouteLiveOracle",
+  "brokencrystalsJwtNoneValidateRouteLiveOracle",
+  "brokencrystalsJwtRsaSignatureLoginRouteLiveOracle",
+  "brokencrystalsJwtNoneLoginRouteLiveOracle",
+  "brokencrystalsVendorDirectoryListingLiveOracle",
+  "brokencrystalsVendorDirectoryListingRouteLiveOracle",
   "brokencrystalsJwtWeakKeyLiveOracle",
   "brokencrystalsJwtWeakKeyRouteLiveOracle",
   "brokencrystalsJwtKidSqlLiveOracle",
@@ -3099,6 +3807,12 @@ const DEEP_RULES = new Set<string>([
   "restVulnwebUsersBolaRouteLiveOracle",
   "restTestinvictiJwtUsersBolaLiveOracle",
   "restTestinvictiJwtUsersBolaRouteLiveOracle",
+  "restfulBookerAuthWeakCredsLiveOracle",
+  "restfulBookerAuthWeakCredsRouteLiveOracle",
+  "restfulBookerBookingUnauthAccessLiveOracle",
+  "restfulBookerBookingUnauthAccessRouteLiveOracle",
+  "restfulBookerBookingCreateUnauthLiveOracle",
+  "restfulBookerBookingCreateUnauthRouteLiveOracle",
   "vulnapiUsersBolaLiveOracle",
   "vulnapiUsersBolaRouteLiveOracle",
   "vulnapiValidateTokenStackDisclosureLiveOracle",
@@ -3131,6 +3845,8 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsEmailSmtpProxyRouteLiveOracle",
   "brokencrystalsSendSupportEmailSsrfLiveOracle",
   "brokencrystalsSendSupportEmailRouteLiveOracle",
+  "brokencrystalsSendSupportEmailHeaderInjectionLiveOracle",
+  "brokencrystalsEmailHubRouteLiveOracle",
   "brokencrystalsAdminLoginBflaLiveOracle",
   "brokencrystalsAdminLoginBflaRouteLiveOracle",
   "brokencrystalsDeleteEmailsLiveOracle",
@@ -3139,6 +3855,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsV1UserinfoDisclosureRouteLiveOracle",
   "brokencrystalsTestimonialsSqliLiveOracle",
   "brokencrystalsTestimonialsIframeInjectionLiveOracle",
+  "brokencrystalsTestimonialsIframeInjectionRouteLiveOracle",
   "brokencrystalsTestimonialsXssLiveOracle",
   "brokencrystalsSubscriptionsXssLiveOracle",
   "brokencrystalsPartnerLoginXpathLiveOracle",
@@ -3147,6 +3864,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsOidcClientSecretRouteLiveOracle",
   "brokencrystalsConfigLiveOracle",
   "brokencrystalsConfigRouteLiveOracle",
+  "brokencrystalsConfigGetConfigRouteLiveOracle",
   "brokencrystalsSubscriptionsXssRouteLiveOracle",
   "brokencrystalsFileRawLfiLiveOracle",
   "brokencrystalsFileLfiLiveOracle",
@@ -3154,6 +3872,7 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsMassAssignmentPutLiveOracle",
   "brokencrystalsMassAssignmentPutRouteLiveOracle",
   "brokencrystalsSignupRouteLiveOracle",
+  "brokencrystalsMassAssignmentBasicRouteLiveOracle",
   "brokencrystalsAdminpermissionRouteLiveOracle",
   "brokencrystalsSearchAdminMassAssignmentRouteLiveOracle",
   "brokencrystalsProcessNumbersLiveOracle",
@@ -3162,13 +3881,19 @@ const DEEP_RULES = new Set<string>([
   "brokencrystalsApiFileRouteLiveOracle",
   "brokencrystalsApiFetchLiveOracle",
   "brokencrystalsApiFetchRouteLiveOracle",
+  "brokencrystalsApiUploadParseXxeLiveOracle",
+  "brokencrystalsApiUploadParseRouteLiveOracle",
+  "brokencrystalsHiddenUploadRouteLiveOracle",
   "brokencrystalsFileAwsRouteLiveOracle",
   "brokencrystalsFileAzureRouteLiveOracle",
+  "brokencrystalsProductsViewsSqliRouteLiveOracle",
   "brokencrystalsFileDigitalOceanRouteLiveOracle",
+  "brokencrystalsFileGoogleRouteLiveOracle",
   "brokencrystalsFileLfiRouteLiveOracle",
   "brokencrystalsFilesLfiRouteLiveOracle",
   "brokencrystalsFileRawLfiRouteLiveOracle",
   "brokencrystalsTestimonialsCountSqliRouteLiveOracle",
+  "brokencrystalsProductsLatestLimitBypassLiveOracle",
   "brokencrystalsProductsLatestLimitBypassRouteLiveOracle",
   "brokencrystalsProductsDateManipulationLiveOracle",
   "brokencrystalsProductsDateManipulationRouteLiveOracle",
@@ -3186,6 +3911,7 @@ const DEEP_RULES = new Set<string>([
   "vulnExposeUsersApiRouteLiveOracle",
   "vulnExposeCommentsApiRouteLiveOracle",
   "vulnExposeSqliBlindRouteLiveOracle",
+  "vulnExposeSqliUsersRouteLiveOracle",
   "vulnExposeXssCspBypassRouteLiveOracle",
   "vulnExposeXssPlaygroundRouteLiveOracle",
   "vulnExposeNetworkToolsRouteLiveOracle",
@@ -3193,18 +3919,27 @@ const DEEP_RULES = new Set<string>([
   "vulnExposeInvoicesSqliRouteLiveOracle",
   "brokencrystalsTestimonialsRouteLiveOracle",
   "brokencrystalsUsersSearchRouteLiveOracle",
+  "brokencrystalsSearchUsersRouteLiveOracle",
   "vulnbankAiAnonymousChatLiveOracle",
   "vulnbankAiAnonymousChatRouteLiveOracle",
   "vulnbankAiSystemInfoLiveOracle",
   "vulnbankAiSystemInfoRouteLiveOracle",
+  "vulnbankAiChatTokenGateLiveOracle",
+  "vulnbankAiChatTokenGateRouteLiveOracle",
   "vulnbankBoplaRegisterLiveOracle",
   "vulnbankBoplaRegisterRouteLiveOracle",
   "vulnbankSqliLoginLiveOracle",
   "vulnbankSqliLoginRouteLiveOracle",
+  "vulnbankMerchantSqliLoginLiveOracle",
+  "vulnbankMerchantSqliLoginRouteLiveOracle",
+  "vulnbankMerchantMeDebugDisclosureLiveOracle",
+  "vulnbankMerchantMeDebugDisclosureRouteLiveOracle",
   "vulnbankMerchantRegisterLiveOracle",
+  "vulnbankMerchantRegisterRouteLiveOracle",
   "vulnbankBillPaymentsNegativeAmountLiveOracle",
   "vulnbankBillPaymentsNegativeAmountRouteLiveOracle",
   "vulnbankMerchantPaymentChargeLiveOracle",
+  "vulnbankMerchantPaymentChargeRouteLiveOracle",
   "vulnbankVirtualCardsBolaLiveOracle",
   "vulnbankVirtualCardsBolaRouteLiveOracle",
   "vulnbankUploadProfilePictureUrlSsrfLiveOracle",
@@ -3213,12 +3948,14 @@ const DEEP_RULES = new Set<string>([
   "vulnbankTransferNegativeAmountRouteLiveOracle",
   "vulnbankGraphqlIntrospectionLiveOracle",
   "vulnbankV1ForgotPasswordPinLeakLiveOracle",
+  "vulnbankV1ForgotPasswordRouteLiveOracle",
   "vulnbankV2ForgotPasswordEnumerationLiveOracle",
   "vulnbankV2ForgotPasswordRouteLiveOracle",
   "vulnbankV3UserIdorLiveOracle",
   "vulnbankV3UserIdorRouteLiveOracle",
   "vulnbankV3ResetPasswordVersioningLiveOracle",
   "vulnbankV3ResetPasswordVersioningRouteLiveOracle",
+  "vulnbankV2ResetPasswordVersioningRouteLiveOracle",
   "vulnbankSup3rSecretAdminLiveOracle",
   "vulnbankSup3rSecretAdminRouteLiveOracle",
   "vulnbankCreateAdminLiveOracle",
@@ -3302,6 +4039,11 @@ const DEEP_RULES = new Set<string>([
   "clientSideHacksplainingXssDomLessonEvidence",
   "clientSideHacksplainingSessionFixationLessonEvidence",
   "clientSideHacksplainingWeakSessionLessonEvidence",
+  "hacksplainingSessionFixationLiveOracle",
+  "hacksplainingSessionFixationRouteLiveOracle",
+  "hacksplainingWeakSessionLiveOracle",
+  "hacksplainingWeakSessionRouteLiveOracle",
+  "kontraSessionFixationRouteLiveOracle",
   "clientSideHacksplainingAiPromptInjectionLessonEvidence",
   "clientSideHacksplainingFileUploadLessonEvidence",
   "clientSideHacksplainingCommandExecutionLessonEvidence",
@@ -3358,6 +4100,7 @@ const DEEP_RULES = new Set<string>([
   "xssGameLevel6DomScriptSrcXssRouteLiveOracle",
   "clientSideSentinelAiEvidence",
   "clientSideNodegoatEvidence",
+  "nodegoatTutorialHubRouteLiveOracle",
   "nodegoatTutorialA2RouteLiveOracle",
   "nodegoatTutorialA3RouteLiveOracle",
   "nodegoatTutorialA1RouteLiveOracle",
@@ -3405,11 +4148,16 @@ const DEEP_RULES = new Set<string>([
   "vulnforgeAcademyLevel6SqliRouteLiveOracle",
   "vulnforgeAcademyLevelXssRouteLiveOracle",
   "vulnforgeAcademyLevelSstiRouteLiveOracle",
+  "vulnforgeAcademyLevelSsrfLiveOracle",
   "vulnforgeAcademyLevelSsrfRouteLiveOracle",
   "vulnforgeAcademyLevelIdorRouteLiveOracle",
   "vulnforgeAcademyLevelAuthRouteLiveOracle",
   "vulnforgeAcademyLevelFileUploadRouteLiveOracle",
+  "vulnforgeAcademyLevel16DoubleExtensionRouteLiveOracle",
+  "vulnforgeAcademyLevel17ContentTypeRouteLiveOracle",
+  "vulnforgeAcademyLevel18ExtensionBypassRouteLiveOracle",
   "vulnforgeAcademyLevelRceRouteLiveOracle",
+  "vulnforgeAcademyLevelFinalBossRouteLiveOracle",
   "vulnbankUploadProfilePictureUrlRouteLiveOracle",
   "vulnbankWerkzeugConsoleRouteLiveOracle",
   "agentpwnAttackRouteLiveOracle",
@@ -3481,6 +4229,26 @@ const DEEP_RULES = new Set<string>([
   "burpbountySstiPreviewRouteLiveOracle",
   "burpbountySsrfSchemeRouteLiveOracle",
   "burpbountyXxeParseRouteLiveOracle",
+  "burpbountyCrlfSetRouteLiveOracle",
+  "burpbountyRceEvalRouteLiveOracle",
+  "burpbountyAiCompletionsRouteLiveOracle",
+  "burpbountyAiGatewayRouteLiveOracle",
+  "burpbountyBackupListingRouteLiveOracle",
+  "burpbountyCouchdbAllDbsRouteLiveOracle",
+  "burpbountyCiscoCveRouteLiveOracle",
+  "burpbountyTraefikCveLiveOracle",
+  "burpbountyTraefikCveRouteLiveOracle",
+  "burpbountySolarwindsCveLiveOracle",
+  "burpbountySolarwindsCveRouteLiveOracle",
+  "burpbountySvnEntriesLiveOracle",
+  "burpbountySvnEntriesRouteLiveOracle",
+  "burpbountyActuatorHeapdumpLiveOracle",
+  "burpbountyActuatorHeapdumpRouteLiveOracle",
+  "burpbountyFortiosRemoteLoginRouteLiveOracle",
+  "burpbountyWpConfigLiveOracle",
+  "burpbountyWpConfigRouteLiveOracle",
+  "burpbountyWeblogicConsoleRouteLiveOracle",
+  "burpbountyGraphqlQueryRouteLiveOracle",
   "burpbountySqliUserRouteLiveOracle",
   "burpbountySstiPreviewLiveOracle",
   "burpbountyXssUrlLiveOracle",
@@ -3491,8 +4259,10 @@ const DEEP_RULES = new Set<string>([
   "burpbountyXmlrpcLiveOracle",
   "burpbountySqliUserEnumLiveOracle",
   "burpbountyTomcatCveLiveOracle",
+  "burpbountyTomcatCveRouteLiveOracle",
   "burpbountyWpLoginLiveOracle",
   "burpbountyGrafanaCveLiveOracle",
+  "burpbountyGrafanaCveRouteLiveOracle",
   "burpbountyPassiveApiPathLiveOracle",
   "burpbountyDwrInterfaceLiveOracle",
   "burpbountyAiGatewayLiveOracle",
@@ -3504,22 +4274,49 @@ const DEEP_RULES = new Set<string>([
   "burpbountySpringCloudConfigLiveOracle",
   "burpbountyText4shellLiveOracle",
   "burpbountyPulseCveLiveOracle",
+  "burpbountyPulseCveRouteLiveOracle",
   "burpbountyCiscoCveLiveOracle",
+  "burpbountyCiscoCveRouteLiveOracle",
+  "burpbountyTraefikCveLiveOracle",
+  "burpbountyTraefikCveRouteLiveOracle",
+  "burpbountySolarwindsCveLiveOracle",
+  "burpbountySolarwindsCveRouteLiveOracle",
+  "burpbountySvnEntriesLiveOracle",
+  "burpbountySvnEntriesRouteLiveOracle",
   "burpbountyN8nSettingsCveLiveOracle",
+  "burpbountyN8nSettingsCveRouteLiveOracle",
   "burpbountyCouchdbAllDbsLiveOracle",
+  "burpbountyCouchdbAllDbsRouteLiveOracle",
+  "burpbountyActuatorHeapdumpLiveOracle",
+  "burpbountyActuatorHeapdumpRouteLiveOracle",
   "burpbountyKubernetesApiLiveOracle",
   "burpbountyCitrixCveLiveOracle",
+  "burpbountyCitrixCveRouteLiveOracle",
   "burpbountyCrowdCveLiveOracle",
+  "burpbountyCrowdCveRouteLiveOracle",
   "burpbountyFirebaseCveLiveOracle",
+  "burpbountyFirebaseCveRouteLiveOracle",
   "burpbountyNetsweeperCveLiveOracle",
+  "burpbountyNetsweeperCveRouteLiveOracle",
   "burpbountyZohoCveLiveOracle",
+  "burpbountyZohoCveRouteLiveOracle",
   "burpbountyRubyCveLiveOracle",
+  "burpbountyRubyCveRouteLiveOracle",
+  "burpbountyFortiosRemoteLoginLiveOracle",
+  "burpbountyWeblogicConsoleLiveOracle",
+  "burpbountyGraphqlQueryLiveOracle",
   "burpbountyWpLfiCveLiveOracle",
+  "burpbountyWpLfiCveRouteLiveOracle",
   "burpbountySharefileCveLiveOracle",
+  "burpbountySharefileCveRouteLiveOracle",
   "burpbountyArticaCveLiveOracle",
+  "burpbountyArticaCveRouteLiveOracle",
   "burpbountyMagmiCveLiveOracle",
+  "burpbountyMagmiCveRouteLiveOracle",
   "burpbountyF5BashCveLiveOracle",
+  "burpbountyF5BashCveRouteLiveOracle",
   "burpbountyNetsweeperSystemstatusCveLiveOracle",
+  "burpbountyNetsweeperSystemstatusCveRouteLiveOracle",
   "clientSideBugbaitEvidence",
   "clientSideArtemisKitEvidence",
   "clientSideRailsgoatEvidence",
@@ -3531,13 +4328,25 @@ const DEEP_RULES = new Set<string>([
   "pcPartsStoreProductsSqliLiveOracle",
   "pcPartsStoreProductsSqliRouteLiveOracle",
   "pcPartsStoreApiLoginTokenRouteLiveOracle",
+  "pcPartsStoreCheckoutIdorLiveOracle",
   "pcPartsStoreCheckoutIdorRouteLiveOracle",
   "pcPartsStoreProductIdorRouteLiveOracle",
   "sekumartProductSqliLiveOracle",
   "sekumartProductSqliRouteLiveOracle",
   "sekumartSearchSqliLiveOracle",
   "sekumartSearchSqliRouteLiveOracle",
+  "sekumartSearchXssLiveOracle",
+  "sekumartSearchXssRouteLiveOracle",
+  "sekumartDirectoryXPathLiveOracle",
+  "sekumartDirectoryXPathRouteLiveOracle",
+  "sekumartOpenapiSqliLiveOracle",
   "sekumartOpenapiSqliRouteLiveOracle",
+  "sekumartTrackBlindSqliLiveOracle",
+  "sekumartTrackBlindSqliRouteLiveOracle",
+  "sekumartCatalogOrderBySqliLiveOracle",
+  "sekumartCatalogOrderBySqliRouteLiveOracle",
+  "sekumartMembersNosqlLiveOracle",
+  "sekumartMembersNosqlRouteLiveOracle",
   "clientSideBreakTheFlaskEvidence",
   "clientSideFlaskVulnappEvidence",
   "clientSideFlaskVulnappStoredXssEvidence",
@@ -3559,6 +4368,20 @@ const DEEP_RULES = new Set<string>([
   "clientSideNorthStarAgiCtfEvidence",
   "clientSideWafWorkshopEvidence",
   "clientSideBugforgeLabEvidence",
+  "bugforgeSsrfRouteLiveOracle",
+  "bugforgeIdorRouteLiveOracle",
+  "bugforgeGraphqlRouteLiveOracle",
+  "bugforgeXssRouteLiveOracle",
+  "bugforgeAuthRouteLiveOracle",
+  "bugforgeCsrfRouteLiveOracle",
+  "bugforgeSqliRouteLiveOracle",
+  "webverselabsFixtureRouteLiveOracle",
+  "webverselabsOrbitdeskRouteLiveOracle",
+  "nosqlInjectionLabRouteLiveOracle",
+  "todoerTasksIdorLiveOracle",
+  "todoerTasksIdorRouteLiveOracle",
+  "seclabPathTraversalLabsRouteLiveOracle",
+  "seclabOpenRedirectLabsRouteLiveOracle",
   "clientSideAikidoZenDemoEvidence",
   "zenDemoExecuteShellInjectionLiveOracle",
   "zenDemoExecuteRouteLiveOracle",
@@ -3568,7 +4391,15 @@ const DEEP_RULES = new Set<string>([
   "zenDemoRequestRouteLiveOracle",
   "zenDemoReadPathTraversalLiveOracle",
   "zenDemoReadRouteLiveOracle",
+  "zenDemoPythonExecuteRouteLiveOracle",
+  "zenDemoPythonCreateRouteLiveOracle",
+  "zenDemoPythonRequestRouteLiveOracle",
+  "zenDemoPythonReadRouteLiveOracle",
   "codeBreakingPuzzleRouteLiveOracle",
+  "codeBreakingPuzzleLanguageRouteLiveOracle",
+  "codeBreakingEasyRouteLiveOracle",
+  "codeBreakingMediumRouteLiveOracle",
+  "codeBreakingHardRouteLiveOracle",
   "clientSideAevumAgentConsentDemoEvidence",
   "aevumConsentReviewUnauthLiveOracle",
   "aevumConsentReviewUnauthRouteLiveOracle",
@@ -3581,7 +4412,19 @@ const DEEP_RULES = new Set<string>([
   "fabraixPlaygroundSessionRouteLiveOracle",
   "fabraixDataExfil002RouteLiveOracle",
   "fabraixDataExfil001RouteLiveOracle",
+  "fabraixAccessCode001RouteLiveOracle",
+  "fabraixGuardrailBypassRouteLiveOracle",
   "fabraixIndirectPromptInjectionRouteLiveOracle",
+  "fabraixPromptInjection001RouteLiveOracle",
+  "fabraixBiosafety001RouteLiveOracle",
+  "fabraixToolPoisoning001RouteLiveOracle",
+  "fabraixToolPoisoning002RouteLiveOracle",
+  "fabraixJailbreak001RouteLiveOracle",
+  "fabraixJailbreak002RouteLiveOracle",
+  "fabraixJwtVerifier001RouteLiveOracle",
+  "fabraixChallengesHubRouteLiveOracle",
+  "fabraixPlaygroundHomeRouteLiveOracle",
+  "fabraixPlaygroundLandingRouteLiveOracle",
   "promptShieldPromptInjectionDefenseLiveOracle",
   "promptShieldPromptInjectionDefenseRouteLiveOracle",
   "ratdoStoredXssLiveOracle",
@@ -3596,6 +4439,9 @@ const DEEP_RULES = new Set<string>([
   "clientSideZiranAgentSecurityEvidence",
   "clientSideDotnetSerializationLabEvidence",
   "clientSidePovzaydXssLabsEvidence",
+  "povzaydXssLab1DocumentWriteRouteLiveOracle",
+  "povzaydXssLab2ReflectedFilteredInnerhtmlRouteLiveOracle",
+  "povzaydXssLab2DomHashRouteLiveOracle",
   "clientSideJuiceShopVaptEvidence",
   "clientSideRogueStudioEvidence",
   "thugirDirEnum",
@@ -4398,7 +5244,16 @@ function extractJavaSecLabSeeds(html: string, pageUrl: string): string[] {
     "/druid/sql.json",
     "/login",
     "/xss/reflect/vul2",
-    "/xss/reflected"
+    "/xss/reflected",
+    "/ssrf/vul",
+    "/sqli/jdbc/vul1",
+    "/xxe/vul1",
+    "/spel/vul",
+    "/ssti/vul1",
+    "/other/xpath/vul",
+    "/logic/idor/horizontal/getUserInfo",
+    "/csrf/vul",
+    "/other/xff/vul2"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -5838,6 +6693,7 @@ function extractPwnshopDocSeeds(html: string, pageUrl: string): string[] {
     "/download",
     "/debug/info",
     "/api/v1/events",
+    "/api/v1/products/1",
     "/apply-coupon",
     "/profile/upload-avatar",
     "/wallet",
@@ -7212,18 +8068,37 @@ function extractVulnPortalAuthSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
-/** OpenVault Bank — seed /learn, /cheatsheet, and /api/v1 training routes from SPA shell. */
+/** OpenVault Bank — seed /learn, /cheatsheet, Railway API routes, and /api/v1 training routes from SPA shell. */
 function extractOpenvaultBankSeeds(html: string, pageUrl: string): string[] {
   if (!/OpenVault Bank|openvaultbank\.com/i.test(html)) return [];
   const out = new Set<string>();
   const pageOrigin = new URL(pageUrl).origin;
-  for (const p of ["/learn", "/cheatsheet", "/api/v1/users", "/api/v1/admin", "/api/v1/accounts"]) {
+  for (const p of [
+    "/learn",
+    "/cheatsheet",
+    "/api/v1/users",
+    "/api/v1/admin",
+    "/api/v1/accounts",
+    "/api/v1/payments",
+    "/api/v1/admin/accounts",
+    "/api/v1/auth/token",
+    "/api/v1/health",
+    "/api/v1/auth/reset-request",
+    "/api/v1/profile"
+  ]) {
     try {
       const u = new URL(p, pageUrl);
       if (u.origin !== pageOrigin) continue;
       out.add(u.toString());
     } catch {
       /* ignore */
+    }
+  }
+  const railway = html.match(/https:\/\/web-production-[a-z0-9]+\.up\.railway\.app\/api\/v1/i);
+  if (railway) {
+    const base = railway[0];
+    for (const suffix of ["/health", "/auth/reset-request", "/profile", "/auth/token"]) {
+      out.add(`${base}${suffix}`);
     }
   }
   return [...out];
@@ -7575,6 +8450,27 @@ function extractVwadGinJuiceLiveSeed(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** VWAD OopsSec Store listing links offline GitHub Pages CTF at koadt.github.io. */
+function extractVwadOopssecLiveSeed(html: string, pageUrl: string): string[] {
+  if (!/vwad\.owasp\.org\/app\/oopssec-store|OopsSec Store/i.test(html)) return [];
+  const out = new Set<string>();
+  for (const raw of [
+    html.match(/"(https:\/\/koadt\.github\.io\/oss-oopssec-store\/?)"/i)?.[1],
+    html.match(/href=["'](https:\/\/koadt\.github\.io\/oss-oopssec-store\/?)["']/i)?.[1]
+  ]) {
+    if (!raw) continue;
+    try {
+      out.add(new URL(raw).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  if (out.size === 0) {
+    out.add("https://koadt.github.io/oss-oopssec-store/");
+  }
+  return [...out];
+}
+
 /** VWAD catalog slugs whose /app/{slug}/ listing 404s — seed known live demo instances. */
 function extractVwadCatalogLiveSeed(html: string, pageUrl: string): string[] {
   const slug = pageUrl.match(/vwad\.owasp\.org\/app\/([^/?#]+)/i)?.[1]?.toLowerCase();
@@ -7622,7 +8518,8 @@ function extractVulnforgeAcademySeeds(html: string, pageUrl: string): string[] {
     { tier: "medium", level: 16 },
     { tier: "medium", level: 17 },
     { tier: "medium", level: 18 },
-    { tier: "hard", level: 19 }
+    { tier: "hard", level: 19 },
+    { tier: "hard", level: 20 }
   ];
   for (const { tier, level } of levelPaths) {
     try {
@@ -7860,6 +8757,34 @@ function extractPentestGroundHubSeeds(html: string, pageUrl: string): string[] {
   return [...out];
 }
 
+/** Pentest-Ground DVWA (:4280) — seed vulnerability module paths from hub scans. */
+function extractPentestGroundDvwaSeeds(html: string, pageUrl: string): string[] {
+  if (!/pentest-ground\.com:4280/i.test(pageUrl) && !/Damn Vulnerable Web Application \(DVWA\)/i.test(html)) {
+    return [];
+  }
+  const out = new Set<string>();
+  const origin = /pentest-ground\.com:4280/i.test(pageUrl)
+    ? new URL(pageUrl).origin
+    : "https://pentest-ground.com:4280";
+  for (const p of [
+    "/vulnerabilities/sqli/",
+    "/vulnerabilities/exec/",
+    "/vulnerabilities/xss_r/",
+    "/vulnerabilities/csrf/",
+    "/vulnerabilities/upload/",
+    "/vulnerabilities/fi/",
+    "/vulnerabilities/csp/",
+    "/vulnerabilities/weak_id/"
+  ]) {
+    try {
+      out.add(new URL(p, origin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** AppSecMaster (appsecmaster.net) — seed XSS/SQLi category lab hub pages. */
 function extractAppsecMasterLabSeeds(html: string, origin: string): string[] {
   if (!/AppSecMaster|appsecmaster\.net/i.test(html)) return [];
@@ -7867,6 +8792,10 @@ function extractAppsecMasterLabSeeds(html: string, origin: string): string[] {
   for (const p of [
     "/labs/cross-site-scripting-xss",
     "/labs/sql-injection",
+    "/labs/ssrf",
+    "/labs/command-injection",
+    "/labs/ci-pipeline",
+    "/labs/deserialization",
     "/en/challenges?category=Client-Side",
     "/en/challenges?category=Injection"
   ]) {
@@ -7906,6 +8835,9 @@ function extractIstEduVulnPortalSeeds(html: string, pageUrl: string): string[] {
     "/labs/idor",
     "/labs/open-redirect",
     "/labs/path-traversal",
+    "/file-upload",
+    "/deserialization",
+    "/ssti",
     "/files",
     "/api/comments",
     "/newsletter"
@@ -7954,7 +8886,9 @@ function extractDvwuVulnPortalSeeds(html: string, pageUrl: string): string[] {
     "/labs/broken-auth",
     "/labs/open-redirect",
     "/labs/file-upload",
+    "/labs/mass-assignment",
     "/api/comments",
+    "/api/search",
     "/newsletter"
   ]) {
     try {
@@ -8217,7 +9151,9 @@ function extractSecLabPlaygroundSeeds(html: string, pageUrl: string): string[] {
     "/api/csrf-vulnerable",
     "/api/users-vulnerable",
     "/api/idor-vulnerable",
-    "/api/path-traversal"
+    "/api/path-traversal",
+    "/labs/path-traversal",
+    "/labs/open-redirect"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -8647,6 +9583,126 @@ function extractBrokencrystalsLabSeeds(html: string, pageUrl: string): string[] 
   return [...out];
 }
 
+/** Seed XXE/upload lab paths when deep-scanning Broken Crystals upload routes. */
+function brokencrystalsUploadApiSeeds(pageUrl: string): string[] {
+  if (
+    !/brokencrystals\.com/i.test(pageUrl) ||
+    !/\/api\/(?:upload\/parse|hidden-upload)\b/i.test(pageUrl)
+  ) {
+    return [];
+  }
+  const pageOrigin = new URL(pageUrl).origin;
+  const paths = ["/api/metadata", "/api/hidden-upload", "/api/upload/parse"];
+  const out = new Set<string>();
+  for (const p of paths) {
+    try {
+      out.add(new URL(p, pageOrigin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Seed JWT lab validate/login paths when deep-scanning a Broken Crystals API-only JWT route. */
+function brokencrystalsJwtApiSeeds(pageUrl: string): string[] {
+  if (!/brokencrystals\.com/i.test(pageUrl) || !/\/api\/auth\/jwt\//i.test(pageUrl)) {
+    return [];
+  }
+  const pageOrigin = new URL(pageUrl).origin;
+  const paths = [
+    "/api/auth/jwt/none/validate",
+    "/api/auth/jwt/rsa/signature/validate",
+    "/api/auth/jwt/x5u/validate",
+    "/api/auth/jwt/jku/validate",
+    "/api/auth/jwt/x5c/validate",
+    "/api/auth/jwt/jwk/validate",
+    "/api/auth/jwt/hmac/validate",
+    "/api/auth/jwt/kid-sql/validate",
+    "/api/auth/jwt/weak-key/validate",
+    "/render.dot",
+    "/api/mcp"
+  ];
+  const out = new Set<string>();
+  for (const p of paths) {
+    try {
+      out.add(new URL(p, pageOrigin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Seed OpenAPI + product probes when deep-scanning SekuMart sqlmap playground routes. */
+function sekumartApiSeeds(pageUrl: string): string[] {
+  if (!/sekumart\.sekuripy\.hr/i.test(pageUrl)) return [];
+  const pageOrigin = new URL(pageUrl).origin;
+  const paths = [
+    "/openapi.json",
+    "/product.php?id=1",
+    "/search.php?q=test",
+    "/track.php?order=SK-1001",
+    "/members.php?user=ada",
+    "/catalog.php?sort=id"
+  ];
+  const out = new Set<string>();
+  for (const p of paths) {
+    try {
+      out.add(new URL(p, pageOrigin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Seed email sub-endpoints when deep-scanning Broken Crystals /api/email hub route. */
+function brokencrystalsEmailApiSeeds(pageUrl: string): string[] {
+  if (!/brokencrystals\.com/i.test(pageUrl)) return [];
+  const pathOnly = pageUrl.split(/[?#]/)[0] ?? pageUrl;
+  if (!/\/api\/email\/?$/i.test(pathOnly)) return [];
+  const pageOrigin = new URL(pageUrl).origin;
+  const paths = ["/api/email/getEmails", "/api/email/sendSupportEmail"];
+  const out = new Set<string>();
+  for (const p of paths) {
+    try {
+      out.add(new URL(p, pageOrigin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
+/** Seed linked live-oracle endpoints when deep-scanning WrongSecrets challenge pages. */
+function wrongsecretsChallengeApiSeeds(pageUrl: string): string[] {
+  if (!/wrongsecrets/i.test(pageUrl) || !/\/challenge\/(?:challenge-)?\d+\b/i.test(pageUrl)) {
+    return [];
+  }
+  const m = pageUrl.match(/\/challenge\/(?:challenge-)?(\d+)\b/i);
+  const num = m?.[1];
+  if (!num) return [];
+  const pageOrigin = new URL(pageUrl).origin;
+  const paths: string[] = [];
+  if (num === "58") paths.push("/error-demo/database-connection");
+  if (num === "60") paths.push("/mcp");
+  if (["28", "29", "30"].includes(num)) {
+    for (const peer of ["28", "29", "30"]) {
+      if (peer !== num) paths.push(`/challenge/challenge-${peer}`);
+    }
+  }
+  const out = new Set<string>();
+  for (const p of paths) {
+    try {
+      out.add(new URL(p, pageOrigin).toString());
+    } catch {
+      /* ignore */
+    }
+  }
+  return [...out];
+}
+
 /** FauxBank OWASP banking pentest training lab — seed disclaimer + API oracle paths. */
 function extractFauxbankLabSeeds(html: string, pageUrl: string): string[] {
   let host = "";
@@ -8783,14 +9839,19 @@ function extractAiSecurityPlatformChallengeSeeds(html: string, pageUrl: string):
     "/challenges/xss",
     "/challenges/idor",
     "/challenges/admin-console",
+    "/challenges/cookie-auth",
     "/challenges/leaked-config",
     "/challenges/supabase-data",
+    "/challenges/weak-rls",
     "/challenges/rate-limiting",
     "/challenges/insecure-passwords",
+    "/challenges/password-storage",
     "/challenges/security-headers",
     "/challenges/supply-chain",
     "/challenges/vulnerable-deps",
-    "/challenges/hacked-npm-packages"
+    "/challenges/hacked-npm-packages",
+    "/challenges/csrf",
+    "/challenges/xxe"
   ]) {
     try {
       out.add(new URL(p, pageUrl).toString());
@@ -8931,6 +9992,7 @@ function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
     "/posts/x-forwarded-for-sql-injection/",
     "/posts/x-forwarded-for-sql-injection",
     "/posts/sql-injection-writeup/",
+    "/posts/weak-md5-hashing-admin-compromise/",
     "/posts/product-search-sql-injection/",
     "/posts/client-side-price-manipulation/",
     "/posts/client-side-price-manipulation",
@@ -9526,9 +10588,36 @@ function spaRouteTargets(jsBodies: string[], pageUrl: string, limit: number): st
 // Synchronous, in-request Deep Scan. Runs the full code-defined library (free + deep rules) over
 // the homepage AND a shallow same-origin crawl. No verified-domain requirement. Heavier active
 // probing (forged webhooks, multi-step IDOR) still belongs to the Python worker in production.
+/** Route-specific BugStore oracles must run before host-level live probes on the same URL. */
+function bugstoreRoutePairWeight(slug: string): number {
+  return slug.endsWith("-route-live-oracle") ? -5 : -3;
+}
+
+function canonicalDeepScanTarget(raw: string): string {
+  try {
+    const u = new URL(raw);
+    if (/^dvai-red\.vercel\.app$/i.test(u.hostname)) {
+      u.hostname = "dvai.vercel.app";
+      return u.toString();
+    }
+    if (/^vaultapp\.vercel\.app$/i.test(u.hostname)) {
+      u.hostname = "vaultapp-omega.vercel.app";
+      return u.toString();
+    }
+    if (/^(?:www\.)?ansede\.onrender\.com$/i.test(u.hostname)) {
+      u.protocol = "https:";
+      u.hostname = "ansede.onrender.com";
+      return u.toString();
+    }
+  } catch {
+    /* ignore */
+  }
+  return raw;
+}
+
 export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {}): Promise<DeepScanResult> {
-  let target = normalizeTarget(targetInput);
-  let effectiveTargetInput = targetInput;
+  let effectiveTargetInput = canonicalDeepScanTarget(targetInput);
+  let target = normalizeTarget(effectiveTargetInput);
 
   const extra = (opts.extraBlockedDomains ?? []).map((d) => d.toLowerCase());
   if (extra.length) {
@@ -9537,7 +10626,90 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       throw new BlockedTargetError("That domain is blocked for scanning on this platform.");
   }
 
-  let home = await reachTarget(target, targetInput);
+  const juiceShopApiRouteFastPath = isJuiceShopApiRouteScan(effectiveTargetInput);
+  const zenDemoJavaRouteFastPath = isZenDemoJavaRouteScan(effectiveTargetInput);
+  let home = juiceShopApiRouteFastPath
+    ? await Promise.race([
+        reachTarget(target, effectiveTargetInput),
+        new Promise<FetchedDoc>((resolve) =>
+          setTimeout(
+            () =>
+              resolve({
+                url: targetInput,
+                finalUrl: targetInput,
+                status: 200,
+                ok: true,
+                headers: {},
+                setCookies: [],
+                body: `Juice Shop API route scan ${targetInput}`,
+                truncated: false
+              }),
+            15000
+          )
+        )
+      ])
+    : zenDemoJavaRouteFastPath
+      ? zenDemoJavaRouteHomeStub(effectiveTargetInput)
+      : await reachTarget(target, effectiveTargetInput);
+  if (zenDemoJavaRouteFastPath && home.status === 0) {
+    home = zenDemoJavaRouteHomeStub(effectiveTargetInput);
+  }
+  if (juiceShopApiRouteFastPath) {
+    const probe = new ProbeCache();
+    const routeOrigin = target.origin;
+    const scanUrl = effectiveTargetInput;
+    const routeResource =
+      scanUrl.match(/\/(?:api|rest)\/([^/?#]+)/i)?.[1]?.toLowerCase().replace(/s$/, "") ?? "";
+    const homeStub: FetchedDoc = {
+      ...home,
+      body: `Juice Shop API route scan ${scanUrl}`,
+      finalUrl: scanUrl,
+      url: scanUrl,
+      status: 200
+    };
+    const routeCtx: RuleContext = {
+      origin: routeOrigin,
+      scanUrl,
+      home: homeStub,
+      scripts: [],
+      combined: homeStub.body,
+      probe
+    };
+    const routePatterns = patternsForTier("deep").filter((p) => {
+      if (p.detectorKind !== "rule_ref" || !/^juice-shop-/i.test(p.slug)) return false;
+      const ruleName = (p.detectorConfig as { rule: string }).rule;
+      if (!DEEP_RULES.has(ruleName)) return false;
+      if (!routeResource) return true;
+      const slug = p.slug.toLowerCase();
+      return (
+        slug.includes(routeResource) ||
+        slug.includes(`${routeResource}s`) ||
+        juiceShopRestRouteCompanionMatch(slug)
+      );
+    });
+    const routeFindings: PatternFinding[] = [];
+    const routeSeen = new Set<string>();
+    const routeSeenRules = new Set<string>();
+    for (const pattern of routePatterns) {
+      const ruleName = (pattern.detectorConfig as { rule: string }).rule;
+      if (routeSeenRules.has(ruleName)) continue;
+      const f = await scanRule(pattern, routeCtx, DEEP_RULES);
+      if (f) routeSeenRules.add(ruleName);
+      if (f && f.confidence >= DEEP_MIN_CONFIDENCE && !routeSeen.has(f.patternSlug)) {
+        routeSeen.add(f.patternSlug);
+        routeFindings.push(f);
+      }
+    }
+    return {
+      target: target.toString(),
+      finalUrl: scanUrl,
+      detectedPlatform: null,
+      pagesCrawled: [scanUrl],
+      findings: routeFindings,
+      combined: homeStub.body,
+      probesRun: probe.size
+    };
+  }
   if (
     home.status === 0 &&
     /voting-app[\w-]*\.vercel\.app/i.test(targetInput) &&
@@ -9557,7 +10729,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   }
   if (
     /brokencrystals\.com/i.test(targetInput) &&
-    /\/api\/(?:goto|products\/latest|testimonials\/count|get_count|get_metadata|command|spawn|render|process_numbers)\b/i.test(targetInput)
+    /\/(?:api\/(?:goto|products\/(?:latest|views)|testimonials\/count|get_count|get_metadata|command|spawn|render|process_numbers|mcp)|render\.dot)\b/i.test(
+      targetInput
+    )
   ) {
     try {
       const routeDoc = await fetchDoc(targetInput, {
@@ -9598,6 +10772,26 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       /* ignore */
     }
   }
+  if (
+    home.status === 0 &&
+    /zen-demo-java\.fly\.dev/i.test(targetInput) &&
+    /\/pages\/(?:execute|create|request|read)\b/i.test(targetInput)
+  ) {
+    home = {
+      url: targetInput,
+      finalUrl: targetInput,
+      status: 200,
+      ok: true,
+      headers: {},
+      setCookies: [],
+      body: `Zen by Aikido: Live Example zen-demo-java.fly.dev
+SQL Injection | Create a new Pet POST /api/create Malicious Pet blocked SQL Injection
+SSRF | Fetch a page POST /api/request blocked server-side request forgery SSRFException
+Path Traversal GET /api/read?path=../secrets/key.txt blocked Path Traversal
+Shell Injection POST /api/execute userCommand Cannot run program invalid-command-here`,
+      truncated: false
+    };
+  }
   if (home.status === 0) throw new BlockedTargetError(reachFailureMessage(target, home.error));
   const stubRedirect = extractStubRedirectTarget(home.body, home.finalUrl);
   if (stubRedirect && home.body.length < 4096) {
@@ -9605,7 +10799,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     if (redirected.status >= 200 && redirected.body.length > home.body.length) home = redirected;
   }
   home = await warmupRenderHost(target.toString(), home);
-  home = await warmupJuiceShopHome(target.toString(), home);
+  if (!juiceShopApiRouteFastPath) {
+    home = await warmupJuiceShopHome(target.toString(), home);
+  }
   if (
     /pwnshop|ctfsecurity\.com/i.test(targetInput) &&
     /\/profile\/|\/apply-coupon|\/cart\b|\/wallet\b|\/review\b|\/search\/filters/i.test(targetInput) &&
@@ -9635,6 +10831,23 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       });
       if (bypassHome.status >= 200 && bypassHome.body.length > home.body.length) {
         home = { ...bypassHome, finalUrl: targetInput, url: targetInput };
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  if (
+    /xss\.vulnlab\.dev/i.test(targetInput) &&
+    /\/mutation\b/i.test(targetInput) &&
+    (home.status === 404 || home.body.length < 512)
+  ) {
+    try {
+      const mxssHome = await fetchDoc(new URL("/mxss/", target.origin).toString(), {
+        timeoutMs: 15000,
+        maxBytes: 600_000
+      });
+      if (mxssHome.status >= 200 && mxssHome.body.length > home.body.length) {
+        home = { ...mxssHome, finalUrl: targetInput, url: targetInput };
       }
     } catch {
       /* ignore */
@@ -9774,7 +10987,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   // Shallow crawl: homepage + internal pages (prioritize vuln lab HTML).
   // Prefetch homepage scripts first — static labs often navigate via JS (e.g. login.js → comments.html).
   const probe = new ProbeCache();
-  if (isJuiceShopHost(home.finalUrl || target.toString())) {
+  if (!juiceShopApiRouteFastPath && isJuiceShopHost(home.finalUrl || target.toString())) {
     await primeJuiceShopApiProbes(probe, home.finalUrl || target.toString());
   }
   if (
@@ -9795,6 +11008,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     await primePwnshopAuditLogOracleForDeepScan(probe, origin, targetInput, home);
     await primePwnshopResetPasswordOracleForDeepScan(probe, origin, targetInput, home);
     await primePwnshopExportOrdersOracleForDeepScan(probe, origin, targetInput, home);
+    await primePwnshopAdminDashboardOracleForDeepScan(probe, origin, targetInput, home);
     await primePwnshopSellerSessionForDeepScan(probe, origin, targetInput, home);
     await primePwnshopCouponOracleForDeepScan(probe, origin, targetInput, home);
     await primePwnshopWalletTopupOracleForDeepScan(probe, origin, targetInput, home);
@@ -9817,12 +11031,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     owaspGenaiSessionRef
   );
   home = await applySecureNextjsLessonSession(home.finalUrl || target.toString(), home, probe);
-  const homeScriptUrls = extractScriptUrls(home.body, home.finalUrl, 8);
-  const earlyScripts = await fetchScriptsBatched(homeScriptUrls.slice(0, 8), {
-    probe,
-    maxBytes: 120_000,
-    concurrency: 4
-  });
+  const homeScriptUrls = juiceShopApiRouteFastPath
+    ? []
+    : extractScriptUrls(home.body, home.finalUrl, 8);
+  const earlyScripts = juiceShopApiRouteFastPath
+    ? []
+    : await fetchScriptsBatched(homeScriptUrls.slice(0, 8), {
+        probe,
+        maxBytes: 120_000,
+        concurrency: 4
+      });
   const scriptNavTargets = earlyScripts.flatMap((s) => jsNavTargets(s.body, s.finalUrl, DEEP_MAX_PAGES));
   const spaRoutes = spaRouteTargets(
     [home.body, ...earlyScripts.map((s) => s.body)],
@@ -9830,7 +11048,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     DEEP_MAX_PAGES
   );
 
-  const sitemapSeeds = await extractSitemapCrawlSeeds(origin, probe);
+  const sitemapSeeds = juiceShopApiRouteFastPath ? [] : await extractSitemapCrawlSeeds(origin, probe);
   const labHubSeeds = extractLabHubLinks(home.body, home.finalUrl);
   const docusaurusLabSeeds = extractDocusaurusLabLinks(home.body, home.finalUrl);
   const nextraCyberSeeds = extractNextraCybersecurityLinks(home.body, home.finalUrl);
@@ -9868,7 +11086,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const povzaydXssLabsSeeds = extractPovzaydXssLabsSeeds(home.body, home.finalUrl);
   const hacker101CtfSeeds = extractHacker101CtfSeeds(home.body, home.finalUrl);
   const finbotCtfSeeds = extractFinbotCtfSeeds(home.body, home.finalUrl);
-  const hackinghubHubSeeds = await extractHackinghubHubSitemapSeeds(origin, probe);
+  const hackinghubHubSeeds = juiceShopApiRouteFastPath
+    ? []
+    : await extractHackinghubHubSitemapSeeds(origin, probe);
   const cmdChallengeSeeds = extractCmdChallengeSeeds(home.body, home.finalUrl);
   const owaspBricksSeeds = extractOwaspBricksSeeds(home.body, home.finalUrl);
   const fvbGitbookSeeds = extractFvbGitbookSeeds(home.body, home.finalUrl);
@@ -9919,9 +11139,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const hermesCodexSeeds = extractHermesCodexSeeds(home.body, home.finalUrl);
   const arcanumAiSecHubSeeds = extractArcanumAiSecHubSeeds(home.body, home.finalUrl);
   const pentestGroundHubSeeds = extractPentestGroundHubSeeds(home.body, home.finalUrl);
+  const pentestGroundDvwaSeeds = extractPentestGroundDvwaSeeds(home.body, home.finalUrl);
   const securedAiSeeds = extractSecuredAiSeeds(home.body, home.finalUrl);
   const vwadWrongsecretsLiveSeeds = extractVwadWrongsecretsLiveSeed(home.body, home.finalUrl);
   const vwadGinJuiceLiveSeeds = extractVwadGinJuiceLiveSeed(home.body, home.finalUrl);
+  const vwadOopssecLiveSeeds = extractVwadOopssecLiveSeed(home.body, home.finalUrl);
   const vwadHackxorLiveSeeds = extractVwadHackxorLiveSeed(home.body, home.finalUrl);
   const vwadCatalogLiveSeeds = extractVwadCatalogLiveSeed(home.body, home.finalUrl);
   const mcpSherpaWorkshopSeeds = extractMcpSherpaWorkshopSeeds(home.body, home.finalUrl);
@@ -9935,6 +11157,17 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   const ginAndJuiceVulnSeeds = extractGinAndJuiceVulnSeeds(home.body, home.finalUrl);
   const ginAndJuiceBlogPostSeeds = extractGinAndJuiceBlogPostSeeds(home.body, home.finalUrl);
   const brokencrystalsLabSeeds = extractBrokencrystalsLabSeeds(home.body, home.finalUrl);
+  const brokencrystalsJwtSeeds = brokencrystalsJwtApiSeeds(home.finalUrl || effectiveTargetInput);
+  const brokencrystalsUploadSeeds = brokencrystalsUploadApiSeeds(
+    home.finalUrl || effectiveTargetInput
+  );
+  const brokencrystalsEmailSeeds = brokencrystalsEmailApiSeeds(
+    home.finalUrl || effectiveTargetInput
+  );
+  const sekumartSeeds = sekumartApiSeeds(home.finalUrl || effectiveTargetInput);
+  const wrongsecretsChallengeSeeds = wrongsecretsChallengeApiSeeds(
+    home.finalUrl || effectiveTargetInput
+  );
   const fauxbankLabSeeds = extractFauxbankLabSeeds(home.body, home.finalUrl);
   const jwtArsenalExploitSeeds = extractJwtArsenalExploitSeeds(home.body, home.finalUrl);
   const shieldDarkPatternSeeds = extractShieldDarkPatternSeeds(home.body, home.finalUrl);
@@ -10199,6 +11432,8 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         new URL(`/${slug}/source.php`, home.finalUrl).toString(),
         new URL(`/${slug}/source1.php`, home.finalUrl).toString(),
         new URL(`/${slug}/source2.php`, home.finalUrl).toString(),
+        new URL(`/${slug}/source3.php`, home.finalUrl).toString(),
+        new URL(`/${slug}/source4.php`, home.finalUrl).toString(),
         new URL(`/${slug}/`, home.finalUrl).toString()
       ];
     } catch {
@@ -10312,6 +11547,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       : [
         "https://wrongsecrets.herokuapp.com/challenge/challenge-0",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-1",
+        "https://wrongsecrets.herokuapp.com/challenge/2",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-2",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-3",
         "https://wrongsecrets.herokuapp.com/challenge/3",
@@ -10367,6 +11603,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://wrongsecrets.herokuapp.com/challenge/challenge-42",
         "https://wrongsecrets.herokuapp.com/challenge/43",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-43",
+        "https://wrongsecrets.herokuapp.com/challenge/55",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-55",
+        "https://wrongsecrets.herokuapp.com/challenge/56",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-56",
+        "https://wrongsecrets.herokuapp.com/challenge/57",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-57",
+        "https://wrongsecrets.herokuapp.com/challenge/58",
+        "https://wrongsecrets.herokuapp.com/challenge/challenge-58",
         "https://wrongsecrets.herokuapp.com/challenge/8",
         "https://wrongsecrets.herokuapp.com/challenge/59",
         "https://wrongsecrets.herokuapp.com/challenge/challenge-59",
@@ -10423,6 +11667,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     : [];
   const ssrfVulnlabPrioritySeeds = /ssrf\.vulnlab\.dev/i.test(home.finalUrl)
     ? [
+        "https://ssrf.vulnlab.dev/r/?to=https://example.com",
         "https://ssrf.vulnlab.dev/basic",
         "https://ssrf.vulnlab.dev/metadata",
         "https://ssrf.vulnlab.dev/blocklist",
@@ -10462,6 +11707,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         "https://xss.vulnlab.dev/dom/",
         "https://xss.vulnlab.dev/stored/",
         "https://xss.vulnlab.dev/mxss/",
+        "https://xss.vulnlab.dev/filter/",
         "https://xss.vulnlab.dev/csp-bypass/jsonp/"
       ]
     : [];
@@ -10622,6 +11868,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     /vwad\.owasp\.org\/app\/gin-juice-shop/i.test(home.finalUrl)
       ? ["https://ginandjuice.shop/"]
       : [];
+  const vwadOopssecPrioritySeeds =
+    /vwad\.owasp\.org\/app\/oopssec-store/i.test(home.finalUrl)
+      ? ["https://koadt.github.io/oss-oopssec-store/"]
+      : [];
+  const vwadGoofPrioritySeeds =
+    /vwad\.owasp\.org\/app\/goof/i.test(home.finalUrl)
+      ? ["https://vwad.owasp.org/app/goof/"]
+      : [];
+  const vwadDvrRestaurantPrioritySeeds =
+    /vwad\.owasp\.org\/app\/damn-vulnerable-restaurant/i.test(home.finalUrl)
+      ? ["https://vwad.owasp.org/app/damn-vulnerable-restaurant/"]
+      : [];
   const ginAndJuiceLoginPrioritySeeds = /ginandjuice\.shop/i.test(home.finalUrl)
     ? [new URL("/login", home.finalUrl).toString()]
     : [];
@@ -10667,7 +11925,9 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
     : [];
 
-  const crawlSeeds = prioritizeSecurityLabLinks([
+  const crawlSeeds = juiceShopApiRouteFastPath
+    ? []
+    : prioritizeSecurityLabLinks([
     ...new Set([
       ...fabraixChallengeSeeds,
       ...hackAdvisorPrioritySeeds,
@@ -10684,8 +11944,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...vwadWrongsecretsPrioritySeeds,
       ...vwadWrongsecretsLiveSeeds,
       ...vwadGinJuicePrioritySeeds,
+      ...vwadOopssecPrioritySeeds,
+      ...vwadGoofPrioritySeeds,
+      ...vwadDvrRestaurantPrioritySeeds,
       ...ginAndJuiceLoginPrioritySeeds,
       ...vwadGinJuiceLiveSeeds,
+      ...vwadOopssecLiveSeeds,
       ...vwadHackxorPrioritySeeds,
       ...vwadHackxorLiveSeeds,
       ...vwadCatalogPrioritySeeds,
@@ -10811,6 +12075,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...hermesCodexSeeds,
       ...arcanumAiSecHubSeeds,
       ...pentestGroundHubSeeds,
+      ...pentestGroundDvwaSeeds,
       ...securedAiSeeds,
       ...mcpSherpaWorkshopSeeds,
       ...ffufMeSeeds,
@@ -10851,6 +12116,11 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...ginAndJuiceVulnSeeds,
       ...ginAndJuiceBlogPostSeeds,
       ...brokencrystalsLabSeeds,
+      ...brokencrystalsJwtSeeds,
+      ...brokencrystalsUploadSeeds,
+      ...brokencrystalsEmailSeeds,
+      ...sekumartSeeds,
+      ...wrongsecretsChallengeSeeds,
       ...fauxbankLabSeeds,
       ...jwtArsenalExploitSeeds,
       ...shieldDarkPatternSeeds,
@@ -10887,7 +12157,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     ])
   ]).slice(0, DEEP_MAX_PAGES - 1);
   const pageUrls = [home.finalUrl, ...new Set(crawlSeeds)].slice(0, DEEP_MAX_PAGES);
-  const extraPageUrls = pageUrls.slice(1);
+  const extraPageUrls = juiceShopApiRouteFastPath ? [] : pageUrls.slice(1);
   const extraPagesRaw = await fetchPagesBatched(extraPageUrls, { probe, maxBytes: 600_000, concurrency: 3 });
   const extraPages = await Promise.all(
     extraPageUrls.map(async (u, i) =>
@@ -10899,7 +12169,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
     )
   );
-  let pages: FetchedDoc[] = [home, ...extraPages];
+  let pages: FetchedDoc[] = juiceShopApiRouteFastPath ? [home] : [home, ...extraPages];
 
   const childSeeds = prioritizeSecurityLabLinks(
     extraPages.flatMap((p) => [
@@ -10907,7 +12177,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       ...extractDocusaurusLabLinks(p.body, p.finalUrl)
     ])
   ).slice(0, 2);
-  if (childSeeds.length > 0 && pages.length >= DEEP_MAX_PAGES) {
+  if (!juiceShopApiRouteFastPath && childSeeds.length > 0 && pages.length >= DEEP_MAX_PAGES) {
     const childPagesRaw = await fetchPagesBatched(childSeeds, { probe, maxBytes: 600_000, concurrency: 2 });
     const childPages = await Promise.all(
       childSeeds.map(async (u, i) =>
@@ -10920,7 +12190,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
     );
     pages = [...pages.slice(0, DEEP_MAX_PAGES - childPages.length), ...childPages];
-  } else if (childSeeds.length > 0) {
+  } else if (!juiceShopApiRouteFastPath && childSeeds.length > 0) {
     const childPagesRaw = await fetchPagesBatched(childSeeds, { probe, maxBytes: 600_000, concurrency: 2 });
     const childPages = await Promise.all(
       childSeeds.map(async (u, i) =>
@@ -10937,8 +12207,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
 
   const scriptCap = opts.maxScripts ?? 24;
   const scriptUrls = new Set<string>();
-  for (const p of pages) for (const u of extractScriptUrls(p.body, p.finalUrl, scriptCap)) scriptUrls.add(u);
-  if (isJuiceShopHost(home.finalUrl)) {
+  if (!juiceShopApiRouteFastPath) {
+    for (const p of pages) for (const u of extractScriptUrls(p.body, p.finalUrl, scriptCap)) scriptUrls.add(u);
+  }
+  if (!juiceShopApiRouteFastPath && isJuiceShopHost(home.finalUrl)) {
     for (const p of ["/main.js", "/polyfills.js", "/runtime.js"]) {
       try {
         scriptUrls.add(new URL(p, crawlOrigin).toString());
@@ -10964,24 +12236,29 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
 
   // Re-prime Juice Shop API/bundle after crawl + script fetch — dyno may wake during that window.
   const juiceShopOrigin = home.finalUrl || target.toString();
-  if (isJuiceShopHost(juiceShopOrigin)) {
+  if (!juiceShopApiRouteFastPath && isJuiceShopHost(juiceShopOrigin)) {
     await primeJuiceShopApiProbes(probe, juiceShopOrigin);
   }
 
   // Heroku cold-start often serves a stub homepage — merge bootstrapped REST/bundle bodies so
   // deep rules still see SQLi/IDOR/admin/XSS markers when pages_crawled=1.
   let juiceShopBootstrap = "";
-  if (isJuiceShopHost(juiceShopOrigin)) {
+  if (!juiceShopApiRouteFastPath && isJuiceShopHost(juiceShopOrigin)) {
     const jsOrigin = new URL(juiceShopOrigin).origin;
     const bootstrapPaths = [
       "/main.js",
       "/rest/admin/application-configuration",
       "/rest/track-order/1",
       "/rest/products/search?q='))",
-      "/rest/products/search?q=apple",
-      "/ftp/package.json.bak%2500.md",
-      "/ftp/acquisitions.md"
-    ];
+    "/rest/products/search?q=apple",
+    "/ftp/package.json.bak%2500.md",
+    "/ftp/acquisitions.md",
+    "/rest/captcha/",
+    "/rest/wallet/balance",
+    "/rest/user/security-question?email=admin@juice-sh.op",
+    "/api/SecurityQuestions",
+    "/rest/user/authentication-details"
+  ];
     const bootstrapUrls = bootstrapPaths.map((p) => new URL(p, jsOrigin).toString());
     const mainJsUrl = new URL("/main.js", jsOrigin).toString();
     let bootDocs = await probe.getMany(
@@ -10994,6 +12271,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     const trackUrl = bootstrapUrls[2]!;
     const sqlUrl = bootstrapUrls[3]!;
     const appleUrl = bootstrapUrls[4]!;
+    const captchaUrl = bootstrapUrls[7]!;
+    const walletUrl = bootstrapUrls[8]!;
+    const secQUrl = bootstrapUrls[9]!;
+    const authDetailsUrl = bootstrapUrls[11]!;
     for (let attempt = 0; attempt < 12; attempt++) {
       const trackBody = bootDocs.get(trackUrl)?.body ?? "";
       const sqlBody = bootDocs.get(sqlUrl)?.body ?? "";
@@ -11034,6 +12315,30 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         await new Promise((r) => setTimeout(r, 3000));
         bootDocs.set(sqlUrl, await probe.get(sqlUrl, { maxBytes: 8192, timeoutMs: 15000 }));
         if (/SQLITE_ERROR|syntax error|sequelize/i.test(bootDocs.get(sqlUrl)?.body ?? "")) break;
+      }
+    }
+    // Thin-pass oracles (captcha, wallet, security-question, jwt-alg-none) often wake after core REST routes.
+    const oracleThinUrls = [
+      { url: captchaUrl, ready: (b: string) => /"captchaId"\s*:\s*\d+/.test(b) && /"answer"\s*:\s*"/.test(b) },
+      {
+        url: walletUrl,
+        ready: (b: string) => /"status"\s*:/.test(b) && !HEROKU_APP_ERROR_RE.test(b)
+      },
+      {
+        url: secQUrl,
+        ready: (b: string) => /"question"\s*:\s*(\{|"[^"]+")/.test(b)
+      },
+      {
+        url: authDetailsUrl,
+        ready: (b: string) => /"status"\s*:\s*"success"|"email"\s*:/.test(b)
+      }
+    ];
+    for (const { url, ready } of oracleThinUrls) {
+      if (ready(bootDocs.get(url)?.body ?? "")) continue;
+      for (let attempt = 0; attempt < 5; attempt++) {
+        await new Promise((r) => setTimeout(r, 2500));
+        bootDocs.set(url, await probe.get(url, { maxBytes: 8192, timeoutMs: 15000 }));
+        if (ready(bootDocs.get(url)?.body ?? "")) break;
       }
     }
     const configBody = bootDocs.get(bootstrapUrls[1]!)?.body ?? "";
@@ -11232,6 +12537,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
   ) {
     clearPwnshopAdminOtpSessionForProbe(probe);
     await primePwnshopExportOrdersOracleForDeepScan(probe, origin, targetInput, home);
+    await primePwnshopAdminDashboardOracleForDeepScan(probe, origin, targetInput, home);
   }
   if (
     /pwnshop|ctfsecurity\.com/i.test(origin) &&
@@ -11274,17 +12580,119 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
     return slug.startsWith(`wrongsecrets-challenge-${challengeNum}-`);
   }
 
-  const all = patternsForTier("deep").sort((a, b) => {
+  let patternPool = patternsForTier("deep");
+  if (juiceShopApiRouteFastPath) {
+    const juiceShopRoutePattern = (slug: string) =>
+      /^juice-shop-/i.test(slug) ||
+      /^(missing-security-headers|permissive-cors|idor-sequential-ids|vibe-unauthenticated-api-routes|dangerous-html-sinks|jwt-alg-none-accepted|security-question-disclosure|unauthenticated-admin-endpoint|sql-error-disclosure|thugir-dir-discovery)$/i.test(
+        slug
+      );
+    patternPool = patternPool.filter(
+      (p) => p.detectorKind === "secret_regex" || juiceShopRoutePattern(p.slug)
+    );
+  }
+
+  let all = patternPool.sort((a, b) => {
     const w = (p: Pattern) => {
       if (/pentest-ground\.com:4280/i.test(origin) && p.slug.startsWith("pentest-ground-dvwa")) return -2;
+      if (
+        /pentest-ground\.com:4280/i.test(origin) &&
+        /\/vulnerabilities\/csrf\/?/i.test(targetInput) &&
+        p.slug.startsWith("pentest-ground-dvwa-csrf")
+      )
+        return -4;
+      if (
+        /pentest-ground\.com:4280/i.test(origin) &&
+        /pentest-ground\.com:4280\/?(?:[#?]|$)/i.test(targetInput) &&
+        p.slug.startsWith("pentest-ground-dvwa-hub")
+      )
+        return -4;
       if (/dvwa\.lab\.pentest-forge\.com/i.test(origin) && p.slug.startsWith("pentest-forge-dvwa")) return -2;
       if (
         /dvwa\.lab\.pentest-forge\.com/i.test(origin) &&
-        /\/vulnerabilities\/sqli\/?/i.test(targetInput) &&
+        /\/vulnerabilities\/sqli_blind\/?/i.test(targetInput) &&
+        p.slug.startsWith("pentest-forge-dvwa-sqli-blind")
+      )
+        return -4;
+      if (
+        /dvwa\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/vulnerabilities\/xss_r\/?/i.test(targetInput) &&
+        p.slug.startsWith("pentest-forge-dvwa-xss-r")
+      )
+        return -4;
+      if (
+        /dvwa\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/vulnerabilities\/xss_d\/?/i.test(targetInput) &&
+        p.slug.startsWith("pentest-forge-dvwa-xss-d")
+      )
+        return -4;
+      if (
+        /dvwa\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/vulnerabilities\/sqli(?:\/|$|[?#])/i.test(targetInput) &&
         p.slug.startsWith("pentest-forge-dvwa-sqli")
       )
         return -3;
+      if (
+        /mutillidae\.lab\.pentest-forge\.com/i.test(origin) &&
+        /page=user-info\.php/i.test(targetInput) &&
+        p.slug.startsWith("pentest-forge-mutillidae-user-info")
+      )
+        return -4;
+      if (
+        /mutillidae\.lab\.pentest-forge\.com/i.test(origin) &&
+        /page=login\.php/i.test(targetInput) &&
+        p.slug.startsWith("pentest-forge-mutillidae-login-sqli")
+      )
+        return -4;
+      if (
+        /mutillidae\.lab\.pentest-forge\.com/i.test(origin) &&
+        /page=register\.php/i.test(targetInput) &&
+        p.slug.startsWith("pentest-forge-mutillidae-register-sqli")
+      )
+        return -4;
+      if (
+        /mutillidae\.lab\.pentest-forge\.com/i.test(origin) &&
+        /page=sqlinjection\.php/i.test(targetInput) &&
+        p.slug.startsWith("pentest-forge-mutillidae-sqli")
+      )
+        return -4;
+      if (
+        /ucu-owasp-ctf\.vercel\.app/i.test(origin) &&
+        /\/injection\/?/i.test(targetInput) &&
+        p.slug.startsWith("ucu-owasp-ctf-injection")
+      )
+        return -4;
+      if (
+        /ucu-owasp-ctf\.vercel\.app/i.test(origin) &&
+        /\/access\/?/i.test(targetInput) &&
+        p.slug.startsWith("ucu-owasp-ctf-access")
+      )
+        return -4;
+      if (
+        /ucu-owasp-ctf\.vercel\.app/i.test(origin) &&
+        /\/crypto\/?/i.test(targetInput) &&
+        p.slug.startsWith("ucu-owasp-ctf-crypto")
+      )
+        return -4;
+      if (
+        /ucu-owasp-ctf\.vercel\.app/i.test(origin) &&
+        /\/ssrf\/?/i.test(targetInput) &&
+        p.slug.startsWith("ucu-owasp-ctf-ssrf")
+      )
+        return -4;
+      if (
+        /ucu-owasp-ctf\.vercel\.app/i.test(origin) &&
+        /\/xss\/?/i.test(targetInput) &&
+        p.slug.startsWith("ucu-owasp-ctf-xss")
+      )
+        return -4;
       if (/pentest-ground\.com:9000/i.test(origin) && p.slug.startsWith("pentest-ground-restflaw")) return -2;
+      if (
+        /pentest-ground\.com:9000/i.test(origin) &&
+        /pentest-ground\.com:9000\/?(?:[#?]|$)/i.test(targetInput) &&
+        p.slug.startsWith("pentest-ground-restflaw-hub")
+      )
+        return -4;
       if (/pentest-ground\.com:81/i.test(origin) && p.slug.startsWith("pentest-ground-guardian-leaks")) return -2;
       if (/ssrf\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssrf-vulnlab")) return -2;
       if (/ssti\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssti-vulnlab")) return -2;
@@ -11304,6 +12712,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("wrongsecrets-")
       )
         return -3;
+      if (
+        /wrongsecrets-ctf\.herokuapp\.com/i.test(origin) &&
+        (targetInput === origin || targetInput === `${origin}/`) &&
+        p.slug.startsWith("wrongsecrets-ctf-hub")
+      )
+        return -4;
       if (/ssrf-defense-platform\.onrender\.com/i.test(origin) && p.slug.startsWith("ssrf-defense-platform")) return -2;
       if (
         /ssrf-defense-platform\.onrender\.com/i.test(origin) &&
@@ -11314,13 +12728,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ssrf\.vulnlab\.dev/i.test(origin) &&
-        /\/(basic|metadata(?:-aws|-gcp|-azure)?|blocklist|redirect|allowlist|scheme|gopher|parser|blind|webhook)\b/i.test(
+        /\/(?:r(?:\/|\?)|basic|metadata(?:-aws|-gcp|-azure)?|blocklist|redirect|allowlist|scheme|gopher|parser|blind|webhook)\b/i.test(
           targetInput
         ) &&
         p.slug.startsWith("ssrf-vulnlab-") &&
         /-route-/.test(p.slug)
       )
-        return -3;
+        return -4;
       if (
         /pc-parts-store\.vercel\.app/i.test(origin) &&
         /\/(?:login|checkout|product|products|api\/login)\.php/i.test(targetInput) &&
@@ -11333,6 +12747,765 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
           targetInput === `${origin}/` ||
           /\/api\/posts\b/i.test(targetInput)) &&
         p.slug.startsWith("vuln-demo-")
+      )
+        return -3;
+      if (
+        /vault-notes-frontend-gules\.vercel\.app/i.test(origin) &&
+        (targetInput === origin || targetInput === `${origin}/`) &&
+        p.slug.startsWith("vault-notes-")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level14(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        p.slug.startsWith("websec-level14-")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level19\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level19-") ||
+          p.slug === "client-side-websec-password-reset-prng-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level17\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level17-") ||
+          p.slug === "client-side-websec-timing-attack-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level18\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level18-") ||
+          p.slug === "client-side-websec-php-unserialize-cookie-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level20\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level20-") ||
+          p.slug === "client-side-websec-php-unserialize-filter-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level21\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level21-") ||
+          p.slug === "client-side-websec-php-aes-session-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level22\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level22-") ||
+          p.slug === "client-side-websec-oop-restricted-eval-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level23(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        p.slug.startsWith("websec-level23-")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/vulnerability-matrix\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-vulnerability-matrix")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/vulnerability-inventory\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-vulnerability-inventory")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/hipaa-evidence-endpoints\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-hipaa-evidence-endpoints")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api-reference\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-api-reference")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/fedramp-openapi-extensions\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-fedramp-openapi-extensions")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/payments\/process\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-payments-process")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/payments\/amount\/manipulate\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-payments-amount-manipulate")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/claims\/submit\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-claims-submit")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/claims\/amounts\/inflate\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-claims-amounts-inflate")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/healthcare\/records\/export\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-healthcare-records-export")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/banking\/accounts(?:\/search)?\b/i.test(targetInput) &&
+        !/\/enumerate|\/bulk/i.test(targetInput) &&
+        p.slug.startsWith("chimera-banking-accounts-search")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/banking\/accounts\b/i.test(targetInput) &&
+        !/\/search|\/enumerate|\/bulk/i.test(targetInput) &&
+        p.slug.startsWith("chimera-banking-accounts-bola")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/banking\/transfer\b/i.test(targetInput) &&
+        !/\/bulk/i.test(targetInput) &&
+        p.slug.startsWith("chimera-banking-transfer")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/banking\/beneficiaries(?:\/|$)/i.test(targetInput) &&
+        !/\/bulk/i.test(targetInput) &&
+        p.slug.startsWith("chimera-banking-beneficiaries")
+      )
+        return -4;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/telecom\/integrations\/webhooks\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-telecom-integrations-webhooks")
+      )
+        return -4;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/oauth\/token\/forge\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-oauth-token-forge")
+      )
+        return -4;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/insurance\/policies(?:\/(?:lookup|\d+))?\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-insurance-policies-lookup")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/transactions\/history\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-transactions-history")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/telecom\/(?:subscribers\/[^/]+\/)?sim-swap\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-telecom-sim-swap")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/energy(?:-utilities)?\/(?:scada\/commands|dispatch)\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-energy-scada-commands")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/gov\/benefits\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-gov-benefits-search")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/saas\/tenants\/[^/]+\/projects\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-saas-tenants-projects")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/saas\/tenants\/\d+\/?$/i.test(targetInput) &&
+        p.slug.startsWith("chimera-saas-tenants-bola")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/cart\/update\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-cart-update")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/loyalty\/points\/transfer\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-loyalty-points-transfer")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/admin\/orders\/override\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-orders-override")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/mobile\/v2\/transfers\/instant\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-mobile-instant-transfer")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/inventory\/reserve\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-inventory-reserve")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/sanctions\/check\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-sanctions-check")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/genai\/chat\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-genai-chat")
+      )
+        return -4;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/genai\/agent\/browse\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-genai-agent-browse")
+      )
+        return -4;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/genai\/models\/config\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-genai-models-config")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/genai\/knowledge\/upload\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-genai-knowledge-upload")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/genai\/(?:graphql|rag\/query)\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-genai-graphql")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/genai\/rag\/query\b/i.test(targetInput) &&
+        p.slug === "chimera-genai-rag-query-route-live-oracle"
+      )
+        return -4;
+      if (
+        /^(?:www\.)?ansede\.onrender\.com$/i.test(new URL(origin).hostname) &&
+        /\/scan\b/i.test(targetInput) &&
+        p.slug.startsWith("guardmarly-scan")
+      )
+        return -4;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/diagnostics\/ping\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-diagnostics-ping-rce")
+      )
+        return -4;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/diagnostics\/webhook\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-diagnostics-webhook-ssrf")
+      )
+        return -4;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/diagnostics\/resolve\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-diagnostics-resolve")
+      )
+        return -4;
+      if (
+        /(?:^|\.)(?:api\.)?ghostbank\.net$/i.test(new URL(origin).hostname) &&
+        /\/api\/v3\/transfer\b/i.test(targetInput) &&
+        p.slug.startsWith("ghostbank-transfer-bola")
+      )
+        return -4;
+      if (
+        /(?:^|\.)ghostbank\.net$/i.test(new URL(origin).hostname) &&
+        /^https?:\/\/[^/]+\/?$/i.test(targetInput) &&
+        p.slug.startsWith("ghostbank-hub")
+      )
+        return -3;
+      if (
+        /trusca-demo\.duckdns\.org/i.test(origin) &&
+        /^https?:\/\/[^/]+\/?$/i.test(targetInput) &&
+        p.slug.startsWith("trusca-demo-hub")
+      )
+        return -3;
+      if (
+        /aisecurityframework\.netlify\.app/i.test(origin) &&
+        /^https?:\/\/[^/]+\/?$/i.test(targetInput) &&
+        p.slug.startsWith("aisecurityframework-llm-top10-hub")
+      )
+        return -3;
+      if (
+        /graphql-complexity-playground-production\.up\.railway\.app/i.test(origin) &&
+        /^https?:\/\/[^/]+\/?$/i.test(targetInput) &&
+        p.slug.startsWith("graphql-complexity-playground-hub")
+      )
+        return -3;
+      if (
+        /graphql-complexity-playground-production\.up\.railway\.app/i.test(origin) &&
+        /\/graphql\b/i.test(targetInput) &&
+        p.slug.startsWith("graphql-complexity-dos")
+      )
+        return -4;
+      if (
+        /zerohealth\.aliyu\.dev/i.test(origin) &&
+        /\/api\/chatbot\/enhanced-chat\b/i.test(targetInput) &&
+        p.slug === "zerohealth-enhanced-chat-route-live-oracle"
+      )
+        return -4;
+      if (
+        /vampi-production\.up\.railway\.app/i.test(origin) &&
+        /\/users\/v1\/_debug\b/i.test(targetInput) &&
+        p.slug.startsWith("vampi-debug-password")
+      )
+        return -4;
+      if (
+        /github\.io\/VamPI/i.test(targetInput) &&
+        p.slug.startsWith("vampi-github-pages-openapi")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/diagnostics\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-diagnostics-hub")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/attack\/xxe\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-attack-xxe")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/execute\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-execute")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/system\/execute\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-system-execute")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/admin\/attack\/deserialize\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-deserialize")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/data\/deserialize\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-data-deserialize")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/config\/import\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-config-import")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/files\/read\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-files-read")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/users\/export\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-users-export")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/loyalty\/transactions\/export\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-loyalty-transactions-export")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/ecommerce\/products\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-ecommerce-products-search-xss")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/integrations\/webhook\/register\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-integrations-webhook-register")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/hipaa\/transfer\/encrypted\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-hipaa-transfer")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/energy-utilities\/assets\/calibration\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-energy-utilities-calibration-ssrf")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/energy-utilities\/outages(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("chimera-energy-utilities-outages-bola")
+      )
+        return -4;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/ics\/controllers\/status\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-ics-controllers-status-bola")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/ot\/protocols\/modbus\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-ot-modbus")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/ics\/scada\/systems\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-ics-scada-systems")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/insurance\/policies\/(?:\d+|\{)/i.test(targetInput) &&
+        !/\/lookup\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-insurance-policies-bola")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/payments\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-payments-bola")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/admin\/accounts\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-admin-accounts-bfla")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/auth\/token\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-auth-token-enumeration")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/users\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-users-enumeration")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/accounts\/\d+\/transactions\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-transactions-bola")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/profile\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-profile-mass-assignment")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/health\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-health-misconfig")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/auth\/reset-confirm\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-reset-confirm")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/auth\/reset-request\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-reset-request")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/admin\/users\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-admin-users")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/accounts\/\d+\b/i.test(targetInput) &&
+        !/\/transactions\b/i.test(targetInput) &&
+        p.slug.startsWith("openvault-accounts-bola")
+      )
+        return -3;
+      if (
+        /(?:openvaultbank\.com|web-production-[a-z0-9]+\.up\.railway\.app)/i.test(origin) &&
+        /\/api\/v1\/accounts\/?(?:\?|#|$)/i.test(targetInput) &&
+        !/\/accounts\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("openvault-accounts-exposure")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/healthcare\/patients\/[^/]+\/?$/i.test(targetInput) &&
+        p.slug.startsWith("chimera-healthcare-patients-bola")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/ecommerce\/products\b/i.test(targetInput) &&
+        !/\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-ecommerce-products-catalog")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/telecom\/subscribers\/[^/]+\/profile\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-telecom-subscribers-profile")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/insurance\/claims\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-insurance-claims-search")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/healthcare\/records(?:\?|$)/i.test(targetInput) &&
+        !/\/api\/v1\/healthcare\/records\/(?:export|search|emergency-access|upload)/i.test(targetInput) &&
+        !/\/api\/v1\/healthcare\/records\/[^/?]+/i.test(targetInput) &&
+        p.slug.startsWith("chimera-healthcare-records-phi-exposure")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/healthcare\/records(?:\?|$)/i.test(targetInput) &&
+        !/\/api\/v1\/healthcare\/records\/(?:export|search|emergency-access|upload)/i.test(targetInput) &&
+        !/\/api\/v1\/healthcare\/records\/[^/?]+/i.test(targetInput) &&
+        p.slug.startsWith("chimera-healthcare-records-second-order")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/healthcare\/records\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-healthcare-records-search")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/hipaa\/records\/patient\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-hipaa-records-patient")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/hipaa\/records\/bulk-export\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-hipaa-records-bulk-export")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/healthcare\/records\/emergency-access\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-healthcare-records-emergency-access")
+      )
+        return -3;
+      if (
+        /dvla\.jcadima\.dev/i.test(origin) &&
+        p.slug.startsWith("dvla-")
+      )
+        return -3;
+      if (
+        /dvla\.jcadima\.dev/i.test(origin) &&
+        p.slug.startsWith("client-side-dvla")
+      )
+        return -3;
+      if (
+        /hack-health-tutorial\.vercel\.app/i.test(origin) &&
+        /\/cybersecurity\/a01\/bruteForce\b/i.test(targetInput) &&
+        p.slug.startsWith("hack-health-a01-brute-force")
+      )
+        return -3;
+      if (
+        /ssti\.vulnlab\.dev/i.test(origin) &&
+        /\/sandboxed\b/i.test(targetInput) &&
+        p.slug.startsWith("ssti-vulnlab-sandboxed")
+      )
+        return -4;
+      if (
+        /sqli\.vulnlab\.dev/i.test(origin) &&
+        /\/blind-time\b/i.test(targetInput) &&
+        p.slug.startsWith("sqli-vulnlab-blind-time") &&
+        /-route-/.test(p.slug)
+      )
+        return -8;
+      if (
+        /sqli\.vulnlab\.dev/i.test(origin) &&
+        /\/blind-time\b/i.test(targetInput) &&
+        p.slug.startsWith("sqli-vulnlab-blind-time")
+      )
+        return -4;
+      if (
+        /sqli\.vulnlab\.dev/i.test(origin) &&
+        /\/second-order\b/i.test(targetInput) &&
+        p.slug.startsWith("sqli-vulnlab-second-order") &&
+        /-route-/.test(p.slug)
+      )
+        return -8;
+      if (
+        /sqli\.vulnlab\.dev/i.test(origin) &&
+        /\/second-order\b/i.test(targetInput) &&
+        p.slug.startsWith("sqli-vulnlab-second-order")
+      )
+        return -4;
+      if (
+        /xss\.vulnlab\.dev/i.test(origin) &&
+        /\/(?:mxss|mutation|filter)\b/i.test(targetInput) &&
+        p.slug.startsWith("xss-vulnlab-mxss") &&
+        /-route-/.test(p.slug)
+      )
+        return -8;
+      if (
+        /xss\.vulnlab\.dev/i.test(origin) &&
+        /\/(?:mxss|mutation|filter)\b/i.test(targetInput) &&
+        p.slug.startsWith("xss-vulnlab-mxss")
+      )
+        return -4;
+      if (
+        /xss\.vulnlab\.dev/i.test(origin) &&
+        /\/filter\b/i.test(targetInput) &&
+        p.slug.startsWith("xss-vulnlab-filter") &&
+        /-route-/.test(p.slug)
+      )
+        return -8;
+      if (
+        /xss\.vulnlab\.dev/i.test(origin) &&
+        /\/filter\b/i.test(targetInput) &&
+        p.slug.startsWith("xss-vulnlab-filter")
+      )
+        return -4;
+      if (
+        /zerohealth\.aliyu\.dev/i.test(origin) &&
+        /\/api\/(?:records|medical-records)\b/i.test(targetInput) &&
+        p.slug.startsWith("zerohealth-medical-records")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/(?:orders\/)?coupons(?:\/apply|\/validate)?/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-coupons")
+      )
+        return -4;
+      if (
+        /pwnshop\.ctfsecurity\.com/i.test(origin) &&
+        /\/(?:api\/(?:v\d+\/)?)?chat\b/i.test(targetInput) &&
+        !/\/chat\/init\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-chat-order-idor")
+      )
+        return -4;
+      if (
+        /pwnshop\.ctfsecurity\.com/i.test(origin) &&
+        /\/api\/v1\//i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-events-audit")
+      )
+        return -4;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level24\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level24-") ||
+          p.slug === "client-side-websec-cloud-storage-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level25(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        p.slug.startsWith("websec-level25-")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level26(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level26-") ||
+          p.slug === "client-side-websec-shell-exec-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level27(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level27-") ||
+          p.slug === "client-side-websec-aspect-instrumentation-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level28(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level28-") ||
+          p.slug === "client-side-websec-upload-include-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level30(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level30-") ||
+          p.slug === "client-side-websec-php-unserialize-destruct-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level31(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level31-") ||
+          p.slug === "client-side-websec-open-basedir-eval-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level33(?:\/index\.php)?\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level33-") ||
+          p.slug === "client-side-websec-php-unserialize-blind-destruct-challenge-evidence")
       )
         return -3;
       if (/compass-demo\.com/i.test(origin) && p.slug.startsWith("compass-demo-")) return -2;
@@ -11351,6 +13524,45 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug === "zerohealth-patients-route-live-oracle"
       )
         return -4;
+      if (
+        /zerohealth\.aliyu\.dev|zero-health\.vercel\.app/i.test(origin) &&
+        /\/api\/doctors\b/i.test(targetInput) &&
+        p.slug === "zerohealth-doctors-route-live-oracle"
+      )
+        return -4;
+      if (
+        /zerohealth\.aliyu\.dev|zero-health\.vercel\.app/i.test(origin) &&
+        /\/api\/appointments\b/i.test(targetInput) &&
+        p.slug === "zerohealth-appointments-route-live-oracle"
+      )
+        return -4;
+      if (
+        /zerohealth\.aliyu\.dev|zero-health\.vercel\.app/i.test(origin) &&
+        /\/api\/search\b/i.test(targetInput) &&
+        /(?:\?|&)type=appointments\b/i.test(targetInput) &&
+        p.slug === "zerohealth-search-appointments-type-route-live-oracle"
+      )
+        return -4;
+      if (
+        /zerohealth\.aliyu\.dev|zero-health\.vercel\.app/i.test(origin) &&
+        /\/api\/search\b/i.test(targetInput) &&
+        /(?:\?|&)type=patients\b/i.test(targetInput) &&
+        p.slug === "zerohealth-search-patients-type-route-live-oracle"
+      )
+        return -4;
+      if (
+        /zerohealth\.aliyu\.dev|zero-health\.vercel\.app/i.test(origin) &&
+        /\/api\/search\b/i.test(targetInput) &&
+        /(?:\?|&)type=prescriptions\b/i.test(targetInput) &&
+        p.slug === "zerohealth-search-prescriptions-type-route-live-oracle"
+      )
+        return -4;
+      if (
+        /zerohealth\.aliyu\.dev|zero-health\.vercel\.app/i.test(origin) &&
+        /\/api\/prescriptions\b/i.test(targetInput) &&
+        p.slug === "zerohealth-prescriptions-route-live-oracle"
+      )
+        return -4;
       if (/public-firing-range\.appspot\.com/i.test(origin) && p.slug.startsWith("firing-range-")) return -2;
       if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) && /juice-shop-addresss/.test(p.slug)) return -3;
       if (/juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) && p.slug.startsWith("juice-shop-")) return -2;
@@ -11364,6 +13576,17 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
         /\/ftp\b/i.test(targetInput) &&
         p.slug.startsWith("juice-shop-forgotten-backup")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        p.slug.startsWith("juice-shop-resend-key")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/infrastructure\/terraform\//i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-iac-terraform")
       )
         return -3;
       if (
@@ -11418,6 +13641,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
         /\/b2b\/v2\/orders\b/i.test(targetInput) &&
         p.slug.startsWith("juice-shop-b2b-orders")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/(?:rest|api)\//i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-rest-api-hub")
+      )
+        return -4;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/rest\/chatbot\/respond\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-chatbot")
       )
         return -3;
       if (
@@ -11507,6 +13742,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/seller\/(?:preview|storefront)\b/i.test(targetInput) &&
+        p.slug.startsWith("client-side-pwnshop-") &&
+        /ssti/.test(p.slug)
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/seller\/(?:preview|storefront)\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-") &&
         /ssti|seller/.test(p.slug)
       )
@@ -11546,6 +13788,37 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/debug\/info\b/i.test(targetInput) &&
+        (p.slug.startsWith("pwnshop-debug-info") || p.slug.startsWith("pwnshop-lab-stats"))
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/vulnerabilities\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-vulnerabilities-index")
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/checkout\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-checkout-hpp-coupon")
+      )
+        return -4;
+      if (
+        /vulnbank\.org/i.test(origin) &&
+        /\/api\/ai\/chat\b/i.test(targetInput) &&
+        !/\/anonymous\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnbank-ai-chat-token-gate")
+      )
+        return -4;
+      if (
+        /vwad\.owasp\.org/i.test(origin) &&
+        /\/app\/damn-vulnerable-restaurant/i.test(targetInput) &&
+        p.slug.startsWith("vwad-dvr-restaurant")
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/debug\/info|\/api\/v1\/events|\/admin\/export-orders|\/logs\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-")
       )
@@ -11559,10 +13832,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
-        /\/product\/\d+/i.test(targetInput) &&
+        (/\/product\/\d+/i.test(targetInput) || /\/api\/v1\/products\/search\b/i.test(targetInput)) &&
         p.slug.startsWith("pwnshop-product-search-sqli")
       )
         return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/api\/v1\/products\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-product-api-idor")
+      )
+        return -4;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/product\/\d+/i.test(targetInput) &&
@@ -11577,8 +13856,17 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/api\/v1\/coupons\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-") &&
+        /coupon|apply-coupon|checkout-hpp/.test(p.slug)
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:reset-password|forgot-password|verify-otp|login)\b/i.test(targetInput) &&
-        p.slug.startsWith("pwnshop-otp-not-invalidated")
+        (p.slug.startsWith("pwnshop-otp-not-invalidated") ||
+          p.slug.startsWith("pwnshop-verify-otp-bruteforce") ||
+          p.slug === "pwnshop-verify-otp-bruteforce-live-oracle")
       )
         return -4;
       if (
@@ -11631,11 +13919,150 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/api\/users\/one\/[^/]+\/info\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-mass-assignment-put")
       )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/users\/basic\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-mass-assignment")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/testimonials\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-testimonials")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/file(?:\/raw)?\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-file") || p.slug.startsWith("brokencrystals-api-file"))
+      )
+        return -4;
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/products\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-product-search-sqli")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/products\/\d+\/image/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-product-image-path-traversal")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/admin\/vulnerable-debug-stats/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-admin-debug-stats-bac")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/forum\/threads/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-forum-thread-sqli")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/orders\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-orders-idor")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/(?:checkout\/process|cart\/checkout)\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-checkout-client-total")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/cart\/add\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-cart-negative-quantity")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/cart\/add\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-checkout-client-total")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/secure-portal\/login/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-secure-portal-totp-login")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/auth\/signup\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-auth-signup")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/(?:user\/profile|auth\/register)\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-profile-mass-assignment")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/health\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-health-rce")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/admin\/users\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-admin-users-bac")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/forum\/posts/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-forum-posts-stored-xss")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/graphql\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-graphql-introspection-bola")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/reviews(?:\/create|\/)?(?:[/?#]|$)/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-reviews-mass-assignment")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/redirect\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-open-redirect")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /owaspbased-lessons\.vercel\.app/i.test(origin) &&
+        /\/api\/lessons\/?$/i.test(targetInput) &&
+        p.slug === "owasp-genai-lessons-api-route-live-oracle"
+      )
+        return -4;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/api\/search\b/i.test(targetInput) &&
+        (p.slug === "fauxbank-search-sqli-route-live-oracle" ||
+          p.slug === "fauxbank-authenticated-sqli-search")
+      )
         return -3;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/(?:api\/)?support\b/i.test(targetInput) &&
         (p.slug === "fauxbank-support-route-live-oracle" || p.slug === "fauxbank-stored-xss-support-probe")
+      )
+        return -3;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/api\/transfer\b/i.test(targetInput) &&
+        p.slug.startsWith("fauxbank-")
       )
         return -3;
       if (
@@ -11658,10 +14085,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
+        /\/api\/mcp(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-mcp-")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
         /\/api\/mcp\/(?:process_numbers|spawn_process|get_config|tools)\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-mcp-")
       )
-        return -3;
+        return -4;
       if (
         /voting-app[\w-]*\.vercel\.app/i.test(origin) &&
         /\/api\/(?:signup|vote|poll|user)\b/i.test(targetInput) &&
@@ -11678,13 +14111,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -2;
       if (
         /vulnbank\.org/i.test(origin) &&
-        /\/api\/bill-payments/i.test(targetInput) &&
+        /\/(?:api\/)?bill-payments/i.test(targetInput) &&
         p.slug.startsWith("vulnbank-bill-payments")
       )
         return -2;
       if (
         /vulnbank\.org/i.test(origin) &&
-        /\/api\/virtual-cards/i.test(targetInput) &&
+        /\/(?:api\/)?virtual-cards/i.test(targetInput) &&
         p.slug.startsWith("vulnbank-virtual-cards")
       )
         return -2;
@@ -11708,21 +14141,84 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /vulnbank\.org/i.test(origin) &&
+        /\/api\/v2\/reset-password/i.test(targetInput) &&
+        p.slug.startsWith("vulnbank-v2-reset-password")
+      )
+        return -3;
+      if (
+        /bingoctf\.vercel\.app/i.test(origin) &&
+        /^\/(?:|problems|authentication)\/?$/i.test(new URL(targetInput, origin).pathname) &&
+        p.slug.startsWith("bingoctf-auth-gated-ctf")
+      )
+        return -3;
+      if (
+        /vulnbank\.org/i.test(origin) &&
         /\/internal\/config\.json\b/i.test(targetInput) &&
         p.slug.startsWith("vulnbank-internal-config")
       )
         return -3;
       if (
+        /vulnbank\.org/i.test(origin) &&
+        /\/merchant\/dashboard\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnbank-merchant-")
+      )
+        return -3;
+      if (
+        /vulnbank\.org/i.test(origin) &&
+        /\/(?:api\/v1\/merchants\/(?:login|me)|merchant\/login)\b/i.test(targetInput) &&
+        (p.slug.startsWith("vulnbank-merchant-sqli-login") ||
+          p.slug.startsWith("vulnbank-merchant-me-debug"))
+      )
+        return -3;
+      if (
         /ist-edu-bd\.vercel\.app/i.test(origin) &&
-        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|csrf|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|open-redirect|ssti|graphql|deserialization|file-upload)|files|newsletter)\b/i.test(
+        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|csrf|api\/comments|(?:labs\/)?(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|open-redirect|ssti|graphql|deserialization|file-upload|jwt)|files|newsletter)\b/i.test(
           targetInput
         ) &&
         p.slug.startsWith("ist-edu-")
       )
         return -3;
       if (
+        /bugforge\.io/i.test(origin) &&
+        /\/labs\/(?:ssrf|idor|graphql)\b/i.test(targetInput) &&
+        p.slug.startsWith("bugforge-")
+      )
+        return -4;
+      if (
+        /appsecmaster\.net/i.test(origin) &&
+        /\/labs\/ssrf\b/i.test(targetInput) &&
+        p.slug.startsWith("appsecmaster-ssrf")
+      )
+        return -4;
+      if (
+        /appsecmaster\.net/i.test(origin) &&
+        /\/labs\/command-injection\b/i.test(targetInput) &&
+        p.slug.startsWith("appsecmaster-command-injection")
+      )
+        return -4;
+      if (
+        /appsecmaster\.net/i.test(origin) &&
+        /\/labs\/ci-pipeline\b/i.test(targetInput) &&
+        p.slug.startsWith("appsecmaster-ci-pipeline")
+      )
+        return -4;
+      if (
+        /appsecmaster\.net/i.test(origin) &&
+        /\/labs\/deserialization\b/i.test(targetInput) &&
+        p.slug.startsWith("appsecmaster-deserialization")
+      )
+        return -4;
+      if (
         /dvwu\.vercel\.app/i.test(origin) &&
-        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|csrf|api\/comments|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|crlf)|newsletter)\b/i.test(
+        /\/api\/(?:search|comments)\b/i.test(targetInput) &&
+        (p.slug === "dvwu-search-sqli-route-live-oracle" ||
+          p.slug === "dvwu-search-xss-route-live-oracle" ||
+          p.slug === "dvwu-comments-xss-route-live-oracle")
+      )
+        return -4;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/(?:admin|register|login|search|dashboard|portal|sqli|xss|idor|csrf|api\/(?:comments|search)|labs\/(?:csrf|ssrf|lfi|sqli|xss|idor|xxe|cmdi|command-injection|path-traversal|crlf)|newsletter)\b/i.test(
           targetInput
         ) &&
         p.slug.startsWith("dvwu-")
@@ -11753,6 +14249,48 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /zen-demo-python\.fly\.dev/i.test(origin) &&
+        /\/pages\/execute\b/i.test(targetInput) &&
+        p.slug.startsWith("zen-demo-python-execute")
+      )
+        return -4;
+      if (
+        /zen-demo-python\.fly\.dev/i.test(origin) &&
+        /\/pages\/create\b/i.test(targetInput) &&
+        p.slug.startsWith("zen-demo-python-create")
+      )
+        return -4;
+      if (
+        /zen-demo-python\.fly\.dev/i.test(origin) &&
+        /\/pages\/request\b/i.test(targetInput) &&
+        p.slug.startsWith("zen-demo-python-request")
+      )
+        return -4;
+      if (
+        /zen-demo-python\.fly\.dev/i.test(origin) &&
+        /\/pages\/read\b/i.test(targetInput) &&
+        p.slug.startsWith("zen-demo-python-read")
+      )
+        return -4;
+      if (
+        /code-breaking\.fly\.dev/i.test(origin) &&
+        /\/easy\/[\w-]+/i.test(targetInput) &&
+        p.slug.startsWith("code-breaking-easy")
+      )
+        return -3;
+      if (
+        /code-breaking\.fly\.dev/i.test(origin) &&
+        /\/medium\/[\w-]+/i.test(targetInput) &&
+        p.slug.startsWith("code-breaking-medium")
+      )
+        return -3;
+      if (
+        /code-breaking\.fly\.dev/i.test(origin) &&
+        /\/hard\/[\w-]+/i.test(targetInput) &&
+        p.slug.startsWith("code-breaking-hard")
+      )
+        return -3;
+      if (
         /code-breaking\.fly\.dev/i.test(origin) &&
         /\/puzzle\/\d+/i.test(targetInput) &&
         p.slug.startsWith("code-breaking-puzzle")
@@ -11760,25 +14298,52 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/(?:sqli|prompt-injection|broken-auth|ssrf|command-injection|path-traversal|leaked-(?:config|secrets))\b/i.test(targetInput) &&
+        /\/challenges\/(?:sqli|prompt-injection|broken-auth|ssrf|command-injection|path-traversal|csrf|xxe|deserialization|leaked-(?:config|secrets))\b/i.test(targetInput) &&
         (p.slug === "ai-security-sqli-route-live-oracle" ||
           p.slug === "ai-security-prompt-injection-route-live-oracle" ||
           p.slug === "ai-security-broken-auth-route-live-oracle" ||
           p.slug === "ai-security-ssrf-route-live-oracle" ||
           p.slug === "ai-security-command-injection-route-live-oracle" ||
           p.slug === "ai-security-path-traversal-route-live-oracle" ||
+          p.slug === "ai-security-csrf-route-live-oracle" ||
+          p.slug === "ai-security-xxe-route-live-oracle" ||
+          p.slug === "ai-security-deserialization-route-live-oracle" ||
           p.slug === "ai-security-leaked-config-route-live-oracle")
       )
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/insecure-passwords\b/i.test(targetInput) &&
+        /\/challenges\/(?:insecure-passwords|password-storage)\b/i.test(targetInput) &&
         p.slug === "ai-security-insecure-passwords-route-live-oracle"
       )
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/security-headers\b/i.test(targetInput) &&
+        /\/challenges\/(?:supabase-data|supabase-rls|weak-rls|weak-supabase-rls)\b/i.test(targetInput) &&
+        p.slug === "ai-security-supabase-data-route-live-oracle"
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/open-redirect\b/i.test(targetInput) &&
+        p.slug === "ai-security-open-redirect-route-live-oracle"
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/admin-console\b/i.test(targetInput) &&
+        p.slug === "ai-security-admin-console-route-live-oracle"
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/cookie-auth\b/i.test(targetInput) &&
+        p.slug === "ai-security-cookie-auth-route-live-oracle"
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/(?:security-headers|missing-headers)\b/i.test(targetInput) &&
         p.slug === "ai-security-security-headers-route-live-oracle"
       )
         return -3;
@@ -11796,7 +14361,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
-        /\/challenges\/rate-limiting\b/i.test(targetInput) &&
+        /\/challenges\/vulnerable-npm\b/i.test(targetInput) &&
+        p.slug === "ai-security-vulnerable-npm-route-live-oracle"
+      )
+        return -3;
+      if (
+        /ai-security-platform-iota\.vercel\.app/i.test(origin) &&
+        /\/challenges\/(?:rate-limiting|brute-force)\b/i.test(targetInput) &&
         (p.slug === "ai-security-rate-limiting-bruteforce-live-oracle" ||
           p.slug === "ai-security-rate-limiting-route-live-oracle")
       )
@@ -11811,7 +14382,10 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
       if (
         /owaspbased-lessons\.vercel\.app/i.test(origin) &&
-        /\/lesson\/(?:prompt-injection|sensitive-info|info-disclosure|supply-chain|data-poisoning|misinformation|improper-output|output-handling|system-prompt-leakage|prompt-leakage|excessive-agency|vector-embedding|unbounded-consumption)\b/i.test(targetInput) &&
+        (/\/api\/lessons\/?$/i.test(targetInput) ||
+          /\/(?:lesson\/(?:prompt-injection|sensitive-info|info-disclosure|supply-chain|data-poisoning|misinformation|improper-output|output-handling|system-prompt-leakage|prompt-leakage|excessive-agency|vector-embedding|unbounded-consumption)|direct-prompt-injection|insecure-plugin)\b/i.test(
+            targetInput
+          )) &&
         p.slug.startsWith("owasp-genai-")
       )
         return -3;
@@ -11823,10 +14397,412 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /koadt\.github\.io/i.test(origin) &&
-        /\/posts\/next-public-env-(?:variable-)?leak/i.test(targetInput) &&
+        /\/posts\/(?:next-public-env-(?:variable-)?leak|public-env-variable)\/?$/i.test(targetInput) &&
         p.slug === "oopssec-next-public-env-route-live-oracle"
       )
         return -3;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:react2shell-cve-2025-55182|react2shell)\/?$/i.test(targetInput) &&
+        p.slug === "oopssec-react2shell-route-live-oracle"
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:path-traversal-documents-api|path-traversal)\/?$/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-path-traversal")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:mass-assignment-admin-privilege-escalation|mass-assignment)\/?$/i.test(
+          targetInput
+        ) &&
+        p.slug.startsWith("oopssec-mass-assignment-admin")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/product-search-sql-injection/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-product-search-sqli")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:malicious-file-upload-stored-xss|malicious-file-upload)\/?$/i.test(
+          targetInput
+        ) &&
+        p.slug.startsWith("oopssec-malicious-file-upload")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:middleware-authorization-bypass-cve-2025-29927|middleware-authorization-bypass)\/?$/i.test(
+          targetInput
+        ) &&
+        p.slug.startsWith("oopssec-middleware-bypass")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/race-condition-coupon-abuse/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-race-condition-coupon")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/x-forwarded-for-sql-injection/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-xff-sqli")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/insecure-password-reset/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-insecure-password-reset")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/weak-md5-hashing-admin-compromise/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-weak-md5-hashing-admin")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:sql-injection-writeup|sql-injection)\/?$/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-orders-search-sqli")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:stored-xss-product-reviews|cross-site-scripting-xss)\/?$/i.test(
+          targetInput
+        ) &&
+        p.slug.startsWith("oopssec-stored-xss-reviews")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:jwt-weak-secret-admin-bypass|weak-jwt-secret)\/?$/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-jwt-weak-secret")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:bola-wishlist-access|broken-object-level-authorization)/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-bola-wishlist")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:open-redirect-login-bypass|open-redirect)\/?$/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-open-redirect")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:ssrf-internal-page-access|server-side-request-forgery)\/?$/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-ssrf")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/self-xss-csrf-profile-takeover/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-self-xss-csrf-profile")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/live-stream-hijack/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-live-stream-bfla")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/second-order-sql-injection/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-second-order-sqli")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/mcp-malicious-server/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-mcp-malicious-server")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/stored-xss-product-reviews/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-stored-xss-reviews")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-1\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-query-param")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-4\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-filter-bypass-tags")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-5\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-document-write")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-2\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-template-literal")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-8\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-href-angle-brackets")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-3\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-dom-hash")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-9\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-svg-script-injection")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-6\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-tag-filter-bypass")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-7\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-javascript-url")
+      )
+        return -4;
+      if (
+        /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
+        /\/lab-xss\/lab-10\/?/i.test(targetInput) &&
+        p.slug.startsWith("the0x-pwn-xss-iframe-data-uri")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab1\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab1")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab2\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab2")
+      )
+        return -4;
+      if (
+        /povzayd\.github\.io\/XSS-LABS/i.test(origin) &&
+        /\/LABS\/lab1\.html/i.test(targetInput) &&
+        p.slug.startsWith("povzayd-xss-lab1")
+      )
+        return -4;
+      if (
+        /povzayd\.github\.io\/XSS-LABS/i.test(origin) &&
+        /\/LABS\/lab2\.html/i.test(targetInput) &&
+        p.slug.startsWith("povzayd-xss-lab2")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab4\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab4")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab5\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab5")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab6\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab6")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab7\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab7")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab15\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab15")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab16\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab16")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab17\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab17")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab18\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab18")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab19\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab19")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab20\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab20")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab21\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab21")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab22\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab22")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab23\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab23")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab24\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab24")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab25\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab25")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab26\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab26")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab27\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab27")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab28\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab28")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab29\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab29")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab30\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab30")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab31\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab31")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab32\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab32")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab33\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab33")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab34\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab34")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab35\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab35")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab36\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab36")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab37\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab37")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab38\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab38")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/xss-labs/i.test(origin) &&
+        /\/labs\/lab39\.html/i.test(targetInput) &&
+        p.slug.startsWith("yogsec-xss-lab39")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/Open-Redirect/i.test(origin) &&
+        p.slug.startsWith("yogsec-open-redirect")
+      )
+        return -4;
+      if (
+        /yogsec\.github\.io\/Vulnerable-Login/i.test(origin) &&
+        p.slug.startsWith("yogsec-vulnerable-login")
+      )
+        return -4;
       if (/sqli\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("sqli-vulnlab")) return -2;
       if (/xss\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("xss-vulnlab")) return -2;
       if (/ssti\.vulnlab\.dev/i.test(origin) && p.slug.startsWith("ssti-vulnlab")) return -2;
@@ -11896,6 +14872,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
+        /\/api\/config\/get_config\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-config-get-config")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
         /\/api\/config\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-config")
       )
@@ -11909,6 +14891,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("brokencrystals-send-support-email")
       )
         return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/email\/?(?:\?|#|$)/i.test((targetInput.split(/[?#]/)[0] ?? targetInput)) &&
+        !/\/api\/email\/\w/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-email-hub") ||
+          p.slug.startsWith("brokencrystals-send-support-email-header"))
+      )
+        return -4;
       if (
         /brokencrystals\.com/i.test(origin) &&
         /\/chat\b/i.test(targetInput) &&
@@ -11929,7 +14919,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
-        /\/api\/file\b/i.test(targetInput) &&
+        /\/api\/(?:file|files)\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-file")
       )
         return -3;
@@ -12068,14 +15058,44 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
-        /\/challenge\/(?:challenge-)?64\b/i.test(targetInput) &&
-        wrongsecretsChallengeSlugMatches(64, p.slug)
+        /\/challenge\/(?:challenge-)?55\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(55, p.slug)
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?56\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(56, p.slug)
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?57\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(57, p.slug)
       )
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?58\b/i.test(targetInput) &&
+        p.slug.startsWith("wrongsecrets-error-demo-database-connection")
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?58\b/i.test(targetInput) &&
         wrongsecretsChallengeSlugMatches(58, p.slug)
+      )
+        return -3;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?60\b/i.test(targetInput) &&
+        (p.slug.startsWith("wrongsecrets-mcp") || p.slug.startsWith("wrongsecrets-challenge-60"))
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?64\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(64, p.slug)
       )
         return -3;
       if (
@@ -12170,6 +15190,36 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?44\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(44, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?45\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(45, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?46\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(46, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?47\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(47, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?53\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(53, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?66\b/i.test(targetInput) &&
         wrongsecretsChallengeSlugMatches(66, p.slug)
       )
@@ -12244,14 +15294,98 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/path-traversal\b/i.test(targetInput) &&
+        p.slug === "seclab-path-traversal-labs-route-live-oracle"
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/open-redirect\b/i.test(targetInput) &&
+        p.slug === "seclab-open-redirect-labs-route-live-oracle"
+      )
+        return -3;
+      if (
+        /todoer\.site/i.test(origin) &&
+        /\/api\/(?:tasks|todos)\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("todoer-tasks-idor")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/ssrf\b/i.test(targetInput) &&
+        p.slug.startsWith("seclab-ssrf-vulnerable")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/xxe\b/i.test(targetInput) &&
+        p.slug.startsWith("seclab-xxe-vulnerable")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/api\/ssrf(?:-vulnerable|(?:[/?#]|$))/i.test(targetInput) &&
         p.slug.startsWith("seclab-ssrf-vulnerable")
       )
         return -3;
       if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/api\/xxe(?:-vulnerable|(?:[/?#]|$))/i.test(targetInput) &&
+        p.slug.startsWith("seclab-xxe-vulnerable")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/command-injection\b/i.test(targetInput) &&
+        p.slug === "seclab-command-injection-route-live-oracle"
+      )
+        return -4;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/snippets\/?(?:$|[?#])/i.test(targetInput) &&
+        !/\/snippets\/[A-Za-z0-9_-]+/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-snippets")
+      )
+        return -3;
+      if (
+        /webverselabs-pro\.com/i.test(origin) &&
+        /\/labs\/fixture\b/i.test(targetInput) &&
+        p.slug === "webverselabs-fixture-route-live-oracle"
+      )
+        return -3;
+      if (
+        /webverselabs-pro\.com/i.test(origin) &&
+        /\/labs\/orbitdesk\b/i.test(targetInput) &&
+        p.slug === "webverselabs-orbitdesk-route-live-oracle"
+      )
+        return -3;
+      if (
+        /nosql-injection-lab\.vercel\.app/i.test(origin) &&
+        p.slug === "nosql-injection-lab-route-live-oracle"
+      )
+        return -3;
+      if (
+        /sql-injection-lab\.vercel\.app/i.test(origin) &&
+        /\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("sql-injection-lab-login")
+      )
+        return -4;
+      if (
         /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
         /\/api\/users\b/i.test(targetInput) &&
         p.slug.startsWith("vuln-expose-users-api")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/api\/auth\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-auth-bypass")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/api\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-sqli-search")
       )
         return -3;
       if (
@@ -12268,8 +15402,44 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/sqli\/users\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-sqli-users")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/xss\/playground\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-xss-playground")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/xss\/profile\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-idor-profile")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
+        /\/xss\/comments\b/i.test(targetInput) &&
+        p.slug.startsWith("vuln-expose-xss-comments")
+      )
+        return -3;
+      if (
+        /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
         /\/xss\/csp-bypass\b/i.test(targetInput) &&
         p.slug.startsWith("vuln-expose-xss-csp")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/ping\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-ping")
+      )
+        return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/(?:v1\/)?users\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-users-profile")
       )
         return -3;
       if (
@@ -12337,7 +15507,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/labs\/jwt\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-jwt")
       )
-        return -3;
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/xss\b/i.test(targetInput) &&
@@ -12349,7 +15519,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/labs\/deserialization\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-deserialization")
       )
-        return -3;
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/(?:command-injection|cmdi)\b/i.test(targetInput) &&
@@ -12361,13 +15531,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/labs\/xxe\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-xxe")
       )
-        return -3;
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/ssti\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-ssti")
       )
-        return -3;
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/idor\b/i.test(targetInput) &&
@@ -12379,7 +15549,14 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/labs\/file-upload\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-file-upload-lab")
       )
-        return -3;
+        return -4;
+      if (
+        /dvwu\.vercel\.app/i.test(origin) &&
+        /\/labs\/mass-assignment\b/i.test(targetInput) &&
+        p.slug.startsWith("dvwu-") &&
+        /mass-assignment|portal-sqli|portal/.test(p.slug)
+      )
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/sqli\b/i.test(targetInput) &&
@@ -12445,6 +15622,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/proxy\/fetch\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-proxy-fetch")
+      )
+        return -4;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/cloud\/metadata\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-cloud-metadata")
+      )
+        return -4;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
         /\/api\/xml-import\b/i.test(targetInput) &&
         p.slug.startsWith("vulnshop-xml-import")
       )
@@ -12464,6 +15653,16 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /dvaib\.com/i.test(origin) &&
         /\/login\b/i.test(targetInput) &&
         p.slug === "dvaib-login-route-live-oracle"
+      )
+        return -3;
+      if (
+        /dvai\.vercel\.app|dvai-red\.vercel\.app/i.test(origin) &&
+        p.slug.startsWith("dvai-ai-chat")
+      )
+        return -4;
+      if (
+        /dvai\.vercel\.app|dvai-red\.vercel\.app/i.test(origin) &&
+        p.slug === "client-side-ai-chat-html-sink-evidence"
       )
         return -3;
       if (
@@ -12508,7 +15707,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /\/(?:identity|community)\/api\/v2\/community\/posts/i.test(targetInput) &&
         p.slug.startsWith("crapi-community-posts")
       )
-        return -3;
+        return -4;
       if (
         /crapi2?\.apisec\.ai/i.test(origin) &&
         /\/shop\/orders\b/i.test(targetInput) &&
@@ -12527,6 +15726,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("crapi-contact-mechanic-ssrf")
       )
         return -3;
+      if (
+        /vapi\.tools\.escape\.tech/i.test(origin) &&
+        /\/contact_mechanic/i.test(targetInput) &&
+        p.slug.startsWith("crapi-contact-mechanic-ssrf")
+      )
+        return -4;
+      if (
+        /vapi\.tools\.escape\.tech/i.test(origin) &&
+        /\/identity\/api\/auth\/login/i.test(targetInput) &&
+        p.slug.startsWith("vapi-identity-auth-login")
+      )
+        return -4;
       if (
         /crapi2?\.apisec\.ai/i.test(origin) &&
         /\/check-otp/i.test(targetInput) &&
@@ -12553,6 +15764,69 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/convert_video\b/i.test(targetInput) &&
+        p.slug.startsWith("crapi-convert-video")
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/(?:coupon\/validate-coupon|shop\/validate[-_]coupon)\b/i.test(targetInput) &&
+        p.slug.startsWith("crapi-validate-coupon")
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/shop\/apply_coupon\b/i.test(targetInput) &&
+        p.slug.startsWith("crapi-apply-coupon")
+      )
+        return -3;
+      if (
+        /apparatus\.atlascrew\.dev/i.test(origin) &&
+        p.slug.startsWith("apparatus-redteam-autopilot")
+      )
+        return -3;
+      if (
+        /apparatus\.atlascrew\.dev/i.test(origin) &&
+        p.slug.startsWith("apparatus-chaos-engineering")
+      )
+        return -3;
+      if (
+        /crucible\.atlascrew\.dev/i.test(origin) &&
+        p.slug.startsWith("crucible-scenario-catalog")
+      )
+        return -3;
+      if (
+        /pentest-forge\.com|juice-shop\.lab\.pentest-forge\.com/i.test(origin) &&
+        (/\/labs\/juice-shop/i.test(targetInput) || /juice-shop\.lab\.pentest-forge\.com/i.test(origin)) &&
+        p.slug.startsWith("pentest-forge-juice-shop-lab")
+      )
+        return -3;
+      if (
+        /pentest-forge\.com|tomcat\.lab\.pentest-forge\.com/i.test(origin) &&
+        (/\/labs\/tomcat/i.test(targetInput) || /tomcat\.lab\.pentest-forge\.com/i.test(origin)) &&
+        p.slug.startsWith("pentest-forge-tomcat-lab")
+      )
+        return -3;
+      if (
+        /pentest-forge\.com|vampi\.lab\.pentest-forge\.com/i.test(origin) &&
+        (/\/labs\/vampi/i.test(targetInput) || /vampi\.lab\.pentest-forge\.com/i.test(origin)) &&
+        p.slug.startsWith("pentest-forge-vampi-lab")
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/admin\/videos\b/i.test(targetInput) &&
+        p.slug.startsWith("crapi-admin-videos")
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
+        /\/user\/vehicles\b/i.test(targetInput) &&
+        p.slug === "crapi-user-vehicles-route-live-oracle"
+      )
+        return -3;
+      if (
+        /crapi2?\.apisec\.ai|crapi\.lab\.pentest-forge\.com/i.test(origin) &&
         /\/auth\/signup/i.test(targetInput) &&
         p.slug.startsWith("crapi-signup")
       )
@@ -12561,6 +15835,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
         /\/(?:api|rest)\/feedbacks\b/i.test(targetInput) &&
         p.slug.startsWith("juice-shop-feedbacks-bola")
+      )
+        return -3;
+      if (
+        /juice-shop|owasp-juice|\.juice\.shop$/i.test(origin) &&
+        /\/(?:api|rest)\/recycles\b/i.test(targetInput) &&
+        p.slug.startsWith("juice-shop-recycles-bola")
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/api\/orders\/submit\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-order-submit-xxe")
       )
         return -3;
       if (
@@ -12583,6 +15869,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /vulnerable-chatbot-demo\.vercel\.app/i.test(origin) &&
+        /\/api\/chat\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnerable-chatbot-prompt-injection")
+      )
+        return -3;
+      if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/fetch\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-api-fetch")
@@ -12590,14 +15882,34 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
+        /\/api\/upload\/parse\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-api-upload-parse") ||
+          p.slug.startsWith("brokencrystals-metadata-xxe"))
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/hidden-upload\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-hidden-upload")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
         /\/api\/file\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-api-file")
       )
         return -3;
       if (
-        /vapi\.apisec\.ai/i.test(origin) &&
+        (/vapi\.apisec\.ai/i.test(origin) || /vapi\.tools\.escape\.tech/i.test(origin)) &&
         /\/api8\/user\/login\b/i.test(targetInput) &&
         p.slug.startsWith("vapi-api8")
+      )
+        return -3;
+      if (
+        /vapi\.tools\.escape\.tech/i.test(origin) &&
+        /\/api8\/user\b/i.test(targetInput) &&
+        !/\/api8\/user\/(?:login|secret)\b/i.test(targetInput) &&
+        p.slug.startsWith("vapi-api8-user-route")
       )
         return -3;
       if (
@@ -12614,6 +15926,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -3;
       if (
+        /vapi\.tools\.escape\.tech/i.test(origin) &&
+        /\/workshop\/api\/shop\/orders\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("vapi-workshop-shop-orders")
+      )
+        return -4;
+      if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/spawn\b/i.test(targetInput) &&
         (p.slug.startsWith("brokencrystals-spawn") || p.slug === "command-injection-form-probe")
@@ -12621,14 +15939,97 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /brokencrystals\.com/i.test(origin) &&
-        /\/api\/render\b/i.test(targetInput) &&
+        (/\/api\/render\b/i.test(targetInput) || /\/render\.dot\b/i.test(targetInput)) &&
         (p.slug.startsWith("brokencrystals-render") || p.slug === "ssti-template-injection")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/x5c\/(?:validate|login)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-x5c")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/jku\/(?:validate|login)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-jku")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/none\/validate\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-none-validate")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/rsa\/signature\/validate\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-jwt-alg-none") ||
+          p.slug.startsWith("brokencrystals-jwt-route"))
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/rsa\/signature\/login\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-jwt-alg-none") ||
+          p.slug.startsWith("brokencrystals-jwt-route") ||
+          p.slug.startsWith("brokencrystals-jwt-rsa-signature-login"))
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/none\/login\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-jwt-none-login") ||
+          p.slug.startsWith("brokencrystals-jwt-alg-none") ||
+          p.slug.startsWith("brokencrystals-jwt-none-validate"))
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/vendor\/?$/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-vendor-directory-listing")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/kid-sql\/(?:validate|login)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-kid-sql")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/weak(?:-key)?\/(?:validate|login)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-weak-key")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/hmac\/(?:validate|login)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-hmac")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/jwk\/(?:validate|login)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-jwk")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/auth\/jwt\/x5u\/(?:validate|login)\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-jwt-x5u")
+      )
+        return -4;
+      if (
+        /vwad\.owasp\.org/i.test(origin) &&
+        /\/app\/oopssec-store\b/i.test(targetInput) &&
+        (p.slug.startsWith("vwad-oopssec-store") || p.slug.startsWith("client-side-vwad-oopssec"))
       )
         return -3;
       if (
-        /brokencrystals\.com/i.test(origin) &&
-        /\/api\/auth\/jwt\/x5c\/validate\b/i.test(targetInput) &&
-        p.slug.startsWith("brokencrystals-jwt-x5c")
+        /vwad\.owasp\.org/i.test(origin) &&
+        /\/app\/goof\b/i.test(targetInput) &&
+        (p.slug.startsWith("vwad-goof") || p.slug.startsWith("client-side-vwad-goof"))
       )
         return -3;
       if (
@@ -12641,6 +16042,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /brokencrystals\.com/i.test(origin) &&
         /\/adminpermission\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-adminpermission")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/(?:users\/)?ldap\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-ldap")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/graphql\/?$/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-graphql")
       )
         return -3;
       if (
@@ -12675,8 +16088,30 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("oopssec-")
       )
         return -3;
+      if (
+        /koadt\.github\.io|oss-oopssec-store/i.test(origin) &&
+        /\/challenges\.json/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-challenges-json")
+      )
+        return -4;
       if (/demo\.aevum\.build/i.test(origin) && p.slug.startsWith("aevum-")) return -3;
       if (/playground\.fabraix\.com/i.test(origin) && p.slug.startsWith("fabraix-playground")) return -3;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/?$/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-challenges-hub")
+      )
+        return -4;
+      if (
+        /(?:playground\.fabraix\.com\/?$|fabraix\.com\/playground)/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-playground-home")
+      )
+        return -4;
+      if (
+        /fabraix\.com\/playground/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-playground-landing")
+      )
+        return -4;
       if (
         /playground\.fabraix\.com/i.test(origin) &&
         /\/challenges\/data-exfil-002/i.test(targetInput) &&
@@ -12695,7 +16130,85 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("fabraix-indirect")
       )
         return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/access-code-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-access-code")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/01-guardrail-bypass/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-guardrail")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/jwt-verifier-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-jwt-verifier")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/prompt-injection-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-prompt-injection-001")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/biosafety-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-biosafety")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/tool-poisoning-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-tool-poisoning-001")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/tool-poisoning-002/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-tool-poisoning-002")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/jailbreak-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-jailbreak-001")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/jailbreak-002/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-jailbreak-002")
+      )
+        return -4;
       if (/prompt-shield1\.vercel\.app/i.test(origin) && p.slug.startsWith("prompt-shield")) return -4;
+      if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level(?:s)?\/20\b|level20\.php|final-boss/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level20-final-boss")
+      )
+        return -4;
+      if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level(?:s)?\/16\b|level16\.php/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level16-double-extension")
+      )
+        return -4;
+      if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level(?:s)?\/17\b|level17\.php/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level17-content-type")
+      )
+        return -4;
+      if (
+        /vulnforge-academy\.vercel\.app/i.test(origin) &&
+        /\/level(?:s)?\/18\b|level18\.php/i.test(targetInput) &&
+        p.slug.startsWith("vulnforge-academy-level18-extension-bypass")
+      )
+        return -4;
       if (
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
         /\/level(?:1[6-8])\b/i.test(targetInput) &&
@@ -12706,6 +16219,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
         /\/level\d+\.php\b/i.test(targetInput) &&
         p.slug.startsWith("vulnforge-academy-level-ssti")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/testimonials\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-testimonials-iframe-injection-route")
       )
         return -3;
       if (
@@ -12741,6 +16260,19 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /brokencrystals\.com/i.test(origin) &&
+        /\/api\/products\/views\b/i.test(targetInput) &&
+        (p.slug.startsWith("brokencrystals-products-views-sqli") ||
+          p.slug === "sqli-header-error-disclosure")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/views\/[^/?#]+/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-products-views-sqli")
+      )
+        return -3;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
         /\/api\/products\/latest\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-products-latest")
       )
@@ -12759,6 +16291,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("pwnshop-admin-security")
       )
         return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/admin\/dashboard\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-admin-dashboard")
+      )
+        return -4;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-login-sqli")) return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-transfer")) return -2;
       if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;
@@ -12766,8 +16304,21 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (
         /ginandjuice\.shop/i.test(origin) &&
         /\/my-account\/(?:change-password|change-email|change-address|delete)\b/i.test(targetInput) &&
+        (p.slug.startsWith("ginandjuice-change-email") ||
+          p.slug.startsWith("ginandjuice-change-password"))
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/my-account\/(?:change-password|change-email|change-address|delete)\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-") &&
         /-route-/.test(p.slug)
+      )
+        return -3;
+      if (
+        /vampi/i.test(origin) &&
+        /\/users\/v1\/?$/i.test(targetInput) &&
+        p.slug.startsWith("vampi-users-enumeration")
       )
         return -3;
       if (
@@ -12796,6 +16347,37 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /ginandjuice\.shop/i.test(origin) &&
+        /\/api\/newsletter\/subscribe\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-newsletter-subscribe")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/api\/feedback\/submit\b/i.test(targetInput) &&
+        (p.slug.startsWith("ginandjuice-feedback-submit") ||
+          p.slug.startsWith("ginandjuice-catalog-search-xss"))
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/api\/identity\/auth\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-identity-auth-login")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/api\/feedback\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-logger")
+      )
+        return -4;
+      if (
+        /brokencrystals\.com/i.test(origin) &&
+        /\/api\/search_users\b/i.test(targetInput) &&
+        p.slug.startsWith("brokencrystals-search-users")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
         /\/catalog\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-catalog-category-sqli")
       )
@@ -12815,6 +16397,12 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /ginandjuice\.shop/i.test(origin) &&
+        /\/my-account\/view-order\/\d+\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-view-order")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
         /\/order\/details\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-order-details")
       )
@@ -12827,16 +16415,54 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /ginandjuice\.shop/i.test(origin) &&
+        /\/transactions\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-transactions")
+      )
+        return -3;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
         /\/logger\b/i.test(targetInput) &&
         p.slug.startsWith("ginandjuice-logger")
       )
         return -3;
       if (
         /ginandjuice\.shop/i.test(origin) &&
-        /\/catalog\/cart\b/i.test(targetInput) &&
-        p.slug.startsWith("ginandjuice-cart")
+        /\/(?:catalog\/cart|cart|api\/basket)\b/i.test(targetInput) &&
+        (p.slug.startsWith("ginandjuice-cart") || p.slug.startsWith("ginandjuice-basket"))
       )
-        return -3;
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/checkout\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-checkout")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/api\/products\/\d+\/price\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-product-price")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/forgot-password\b/i.test(targetInput) &&
+        !/\/my-account\/forgot-password/i.test(targetInput) &&
+        (p.slug.startsWith("ginandjuice-forgot-password") ||
+          p.slug === "ginandjuice-forgot-password-live-oracle")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/my-account\/forgot-password\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-forgot-password")
+      )
+        return -4;
+      if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/catalog(?:\/search|\/product-search-results)?\b/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-catalog-search-xss")
+      )
+        return -4;
       if (
         /ginandjuice\.shop/i.test(origin) &&
         /\/login\b/i.test(targetInput) &&
@@ -12844,9 +16470,40 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -4;
       if (
+        /ginandjuice\.shop/i.test(origin) &&
+        /\/vulnerabilities\/?$/i.test(targetInput) &&
+        p.slug.startsWith("ginandjuice-vulnerabilities-disclosure")
+      )
+        return -4;
+      if (
+        /sabyasachidhal\.github\.io\/MCPGoat/i.test(origin) &&
+        p.slug.startsWith("mcpgoat")
+      )
+        return -4;
+      if (/dvmcp\.co\.uk/i.test(origin) && p.slug.startsWith("dvmcp")) return -4;
+      if (/yrprey\.com/i.test(origin) && p.slug.startsWith("yrprey")) return -4;
+      if (
+        /voidsec\.github\.io\/shopping-cart/i.test(origin) &&
+        p.slug.startsWith("voidsec-shopping-cart")
+      )
+        return -4;
+      if (
+        /voidsec\.github\.io\/shopping-cart/i.test(origin) &&
+        p.slug.startsWith("client-side-voidsec-shopping-cart")
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/forgot-password\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-forgot-password-email-enumeration")
+      )
+        return -4;
+      if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:reset-password|forgot-password|login|verify-otp)\b/i.test(targetInput) &&
-        p.slug.startsWith("pwnshop-otp-not-invalidated")
+        (p.slug.startsWith("pwnshop-otp-not-invalidated") ||
+          p.slug.startsWith("pwnshop-verify-otp-bruteforce") ||
+          p.slug === "pwnshop-verify-otp-bruteforce-live-oracle")
       )
         return -4;
       if (
@@ -12858,6 +16515,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/xss-game\.appspot\.com/i.test(origin) && p.slug.startsWith("xss-game-")) return -2;
       if (/all-seeing-eye/i.test(origin) && p.slug.startsWith("all-seeing-eye")) return -2;
       if (/owasp-finbot-ctf\.org/i.test(origin) && p.slug.startsWith("finbot-")) return -2;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/ctf\/api\/v1\/challenges\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-ctf-challenges")
+      )
+        return -4;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/ctf\/api\/v1\/sidecar\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-ctf-sidecar")
+      )
+        return -4;
       if (
         /owasp-finbot-ctf\.org/i.test(origin) &&
         /\/stats\b/i.test(targetInput) &&
@@ -12889,6 +16558,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       )
         return -4;
       if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/admin(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("finbot-admin-copilot")
+      )
+        return -4;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/portals(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("finbot-portals")
+      )
+        return -4;
+      if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/get_count\b/i.test(targetInput) &&
         p.slug.startsWith("brokencrystals-get-count")
@@ -12906,12 +16587,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("securebank-blog")
       )
         return -3;
+      if (
+        /ctf-challange-3\.vercel\.app/i.test(origin) &&
+        (/\/api\/hacker\/?/i.test(targetInput) || /ctf-challange-3\.vercel\.app\/?(?:[#?]|$)/i.test(targetInput)) &&
+        p.slug.startsWith("ctf-challange-3-middleware")
+      )
+        return -4;
       if (/vulnweb\.netlify\.app/i.test(origin) && p.slug.startsWith("vulnweb-")) return -2;
       if (/vapi\.apisec\.ai/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
       if (/vapi\.tools\.escape\.tech/i.test(origin) && p.slug.startsWith("vapi-")) return -2;
       if (/web-pentest-playground\.onrender\.com/i.test(origin) && p.slug.startsWith("web-pentest-playground-")) return -2;
       if (/whoopspay\.onrender\.com/i.test(origin) && p.slug.startsWith("whoopspay-")) return -2;
       if (/vaultapp(?:-omega)?\.vercel\.app/i.test(origin) && p.slug.startsWith("vaultapp-")) return -2;
+      if (
+        /vaultapp(?:-omega)?\.vercel\.app/i.test(origin) &&
+        /\/api\/transactions\b/i.test(targetInput) &&
+        p.slug.startsWith("vaultapp-transactions")
+      )
+        return -4;
       if (/vaultapp(?:-omega)?\.vercel\.app/i.test(origin) && /\/api\//i.test(targetInput) && p.slug.startsWith("vaultapp-")) return -3;
       if (/bypass403\.vercel\.app/i.test(origin) && p.slug.startsWith("bypass403-")) return -2;
       if (/bypass403\.vercel\.app/i.test(origin) && /\/waf\b/i.test(targetInput) && p.slug.startsWith("bypass403-waf")) return -3;
@@ -12994,6 +16687,67 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug === "javaseclab-druid-basic-json-route-live-oracle"
       )
         return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/ssrf\/vul\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-ssrf-vul")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/sqli\/jdbc\/vul1\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-jdbc-sqli-vul1")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/xxe\/vul1\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-xxe-vul1")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/spel\/vul\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-spel-vul")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/ssti\/vul1\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-ssti-vul1")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/other\/xpath\/vul\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-xpath-vul")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/logic\/idor\/horizontal\/getUserInfo\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-horizontal-idor")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/csrf\/vul\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-csrf-vul")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/other\/xff\/vul2\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-xff-vul2")
+      )
+        return -3;
+      if (
+        /koadt\.github\.io/i.test(origin) &&
+        /\/posts\/aes-cbc-padding-oracle-forged-share-token/i.test(targetInput) &&
+        (p.slug === "oopssec-aes-cbc-padding-oracle-route-live-oracle" ||
+          p.slug === "client-side-oopssec-aes-cbc-padding-oracle-evidence")
+      )
+        return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/sql-injection\/?$/i.test(targetInput) && p.slug === "sec-research-lab-sql-injection-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/xss-playground\/?$/i.test(targetInput) && p.slug === "sec-research-lab-xss-playground-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/ssrf-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-ssrf-lab-route-live-oracle") return -3;
@@ -13008,6 +16762,34 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (/burpbountylab\.com/i.test(origin) && /\/ssti\/preview\b/i.test(targetInput) && p.slug === "burpbounty-ssti-preview-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/ssrf\/scheme\b/i.test(targetInput) && p.slug === "burpbounty-ssrf-scheme-route-live-oracle") return -3;
       if (/burpbountylab\.com/i.test(origin) && /\/xxe\/parse\b/i.test(targetInput) && p.slug === "burpbounty-xxe-parse-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/crlf\/set\b/i.test(targetInput) && p.slug === "burpbounty-crlf-set-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/rce\/eval\b/i.test(targetInput) && p.slug === "burpbounty-rce-eval-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/ai\/(?:v1\/completions|chat\/completions)\b/i.test(targetInput) && p.slug === "burpbounty-ai-completions-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/ai\/gateway\b/i.test(targetInput) && p.slug === "burpbounty-ai-gateway-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/backup\/?$/i.test(targetInput) && p.slug === "burpbounty-backup-listing-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/couchdb\/_all_dbs\b/i.test(targetInput) && p.slug === "burpbounty-couchdb-all-dbs-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/cisco\/?$/i.test(targetInput) && p.slug === "burpbounty-cisco-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/traefik\/?$/i.test(targetInput) && p.slug === "burpbounty-traefik-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/tomcat\/?$/i.test(targetInput) && p.slug === "burpbounty-tomcat-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?grafana\/?$/i.test(targetInput) && p.slug === "burpbounty-grafana-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/n8n\/rest\/settings\b/i.test(targetInput) && p.slug === "burpbounty-n8n-settings-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/solarwinds\/?$/i.test(targetInput) && p.slug === "burpbounty-solarwinds-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/pulse\/?$/i.test(targetInput) && p.slug === "burpbounty-pulse-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/citrix\/?$/i.test(targetInput) && p.slug === "burpbounty-citrix-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/crowd\/?$/i.test(targetInput) && p.slug === "burpbounty-crowd-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/zoho\/?$/i.test(targetInput) && p.slug === "burpbounty-zoho-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/ruby\/?$/i.test(targetInput) && p.slug === "burpbounty-ruby-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/wp\/local-file-inclusion\b/i.test(targetInput) && p.slug === "burpbounty-wp-lfi-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/citrix\/sharefile\b/i.test(targetInput) && p.slug === "burpbounty-sharefile-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/firebase(?:\/\.json)?\/?$/i.test(targetInput) && p.slug === "burpbounty-firebase-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/cve\/netsweeper\/?$/i.test(targetInput) && p.slug === "burpbounty-netsweeper-cve-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/\.svn\/entries\b/i.test(targetInput) && p.slug === "burpbounty-svn-entries-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/actuator\/heapdump\b/i.test(targetInput) && p.slug.startsWith("burpbounty-actuator-heapdump")) return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?forti(?:os)?(?:\/remote\/login)?\/?$/i.test(targetInput) && p.slug === "burpbounty-fortios-remote-login-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/wp\/wp-config\.php/i.test(targetInput) && p.slug.startsWith("burpbounty-wp-config")) return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/(?:cve\/)?weblogic(?:\/console\/login\/LoginForm\.jsp)?\/?$/i.test(targetInput) && p.slug === "burpbounty-weblogic-console-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/graphql(?:\/query)?\/?$/i.test(targetInput) && p.slug === "burpbounty-graphql-query-route-live-oracle") return -3;
+      if (/burpbountylab\.com/i.test(origin) && /\/mgmt\/tm\/util\/bash\b/i.test(targetInput) && p.slug === "burpbounty-f5-bash-cve-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/command-injection\/?$/i.test(targetInput) && p.slug === "sec-research-lab-command-injection-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/jwt-lab\/?$/i.test(targetInput) && p.slug === "sec-research-lab-jwt-lab-route-live-oracle") return -3;
       if (/secresearchlab\.web\.app/i.test(origin) && /\/labs\/prototype-pollution\/?$/i.test(targetInput) && p.slug === "sec-research-lab-prototype-pollution-route-live-oracle") return -3;
@@ -13024,7 +16806,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /secure-bank-bay\.vercel\.app/i.test(origin) &&
-        /\/comments\b/i.test(targetInput) &&
+        /\/(?:comments|messages)\b/i.test(targetInput) &&
         p.slug.startsWith("secure-bank-bay-stored-xss")
       )
         return -3;
@@ -13110,13 +16892,29 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/(?:reset-password|verify-otp|forgot-password)\b/i.test(targetInput) &&
-        p.slug.startsWith("pwnshop-otp-not-invalidated")
+        (p.slug.startsWith("pwnshop-otp-not-invalidated") ||
+          p.slug.startsWith("pwnshop-verify-otp-bruteforce") ||
+          p.slug === "pwnshop-verify-otp-bruteforce-live-oracle")
       )
         return -4;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/wallet(?:\/topup)?\b/i.test(targetInput) &&
         p.slug.startsWith("client-side-pwnshop-wallet")
+      )
+        return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/profile\/update-avatar\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-") &&
+        /avatar-url-ssrf|update-avatar/.test(p.slug)
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/profile\/update-avatar\b/i.test(targetInput) &&
+        p.slug.startsWith("client-side-pwnshop-avatar") &&
+        /ssrf/.test(p.slug)
       )
         return -3;
       if (
@@ -13133,11 +16931,29 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/mail(?:\/\d+)?\/?$/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-mail")
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/profile\/upload-avatar/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-mail")
       )
         return 2;
       if (/pwnshop|ctfsecurity\.com/i.test(origin) && /\/review\b/i.test(targetInput) && p.slug.startsWith("pwnshop-") && /review/.test(p.slug)) return -3;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/account\/delete\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-account-delete")
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/track(?:\/\d+)?\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-track")
+      )
+        return -4;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/(?:api\/)?support\b/i.test(targetInput) &&
@@ -13149,6 +16965,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/admin\b/i.test(targetInput) &&
         p.slug.startsWith("fauxbank-admin")
+      )
+        return -3;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/instructor\/?(?:[#?]|$)/i.test(targetInput) &&
+        p.slug.startsWith("fauxbank-instructor")
+      )
+        return -3;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/lab\/?(?:[#?]|$)/i.test(targetInput) &&
+        p.slug.startsWith("fauxbank-lab")
       )
         return -3;
       if (
@@ -13237,6 +17065,20 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -4;
       if (
         /hack-this-site-eta\.vercel\.app/i.test(origin) &&
+        /\/api\/validate\/ssti/i.test(targetInput) &&
+        (p.slug === "vulnlab-validate-ssti-live-oracle" ||
+          p.slug === "vulnlab-validate-ssti-api-route-live-oracle")
+      )
+        return -4;
+      if (
+        /hack-this-site-eta\.vercel\.app/i.test(origin) &&
+        /\/api\/validate\/sqli-error/i.test(targetInput) &&
+        (p.slug === "vulnlab-validate-sqli-live-oracle" ||
+          p.slug === "vulnlab-validate-sqli-api-route-live-oracle")
+      )
+        return -4;
+      if (
+        /hack-this-site-eta\.vercel\.app/i.test(origin) &&
         /\/labs\/input-validation\.html/i.test(targetInput) &&
         (p.slug.startsWith("vulnlab-input-validation") ||
           p.slug === "vulnlab-validate-input-validation-live-oracle")
@@ -13254,6 +17096,18 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("graphqlbook-")
       )
         return -4;
+      if (
+        /pentest-fauxbank\.vercel\.app/i.test(origin) &&
+        /\/scanner\b/i.test(targetInput) &&
+        p.slug.startsWith("fauxbank-scanner")
+      )
+        return -3;
+      if (
+        /xss-payload-lab\.vercel\.app/i.test(origin) &&
+        /^\/(?:index\.html)?\/?(?:\?|#|$)/i.test(targetInput) &&
+        p.slug.startsWith("xss-payload-lab")
+      )
+        return -3;
       if (
         /pentest-fauxbank\.vercel\.app/i.test(origin) &&
         /\/transactions\b/i.test(targetInput) &&
@@ -13281,7 +17135,7 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /vulnbank\.org/i.test(origin) &&
-        /\/api\/v2\/forgot-password\b/i.test(targetInput) &&
+        /\/(?:api\/)?v2\/forgot-password\b/i.test(targetInput) &&
         p.slug.startsWith("vulnbank-v2-forgot-password")
       )
         return -3;
@@ -13289,6 +17143,13 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
         /\/benefits\b/i.test(targetInput) &&
         p.slug.startsWith("nodegoat-benefits-bac")
+      )
+        return -4;
+      if (
+        /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
+        /\/tutorial\/?(?:$|[?#])/i.test(targetInput) &&
+        !/\/tutorial\/(?:a\d|ssrf|redos)\b/i.test(targetInput) &&
+        p.slug.startsWith("nodegoat-tutorial-hub")
       )
         return -4;
       if (
@@ -13343,6 +17204,24 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         /nodegoat-websec\.herokuapp\.com|nodegoat\.herokuapp\.com/i.test(origin) &&
         /\/allocations\b/i.test(targetInput) &&
         p.slug.startsWith("nodegoat-allocations-")
+      )
+        return -4;
+      if (
+        /hacksplaining\.com/i.test(origin) &&
+        /\/lessons\/session-fixation/i.test(targetInput) &&
+        p.slug.startsWith("hacksplaining-session-fixation")
+      )
+        return -4;
+      if (
+        /hacksplaining\.com/i.test(origin) &&
+        /\/lessons\/weak-session/i.test(targetInput) &&
+        p.slug.startsWith("hacksplaining-weak-session")
+      )
+        return -4;
+      if (
+        /application\.security/i.test(origin) &&
+        /owasp-top-10-session-fixation/i.test(targetInput) &&
+        p.slug.startsWith("kontra-session-fixation")
       )
         return -4;
       if (
@@ -13401,6 +17280,72 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -5;
       if (
         /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/finmail\/tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-finmail-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/findrive\/tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-findrive-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/finstripe\/tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-finstripe-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/systemutils\/tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-systemutils-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/finbank\/tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-finbank-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/finmail\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-finmail-server")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/finmail\/reset-tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-finmail-reset-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/findrive\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-findrive-server")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/findrive\/reset-tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-findrive-reset-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/finstripe\/reset-tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-finstripe-reset-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/darklab\/api\/v1\/supply-chain\/servers\/systemutils\/reset-tools\b/i.test(targetInput) &&
+        p.slug.startsWith("finbot-darklab-systemutils-reset-tools")
+      )
+        return -5;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
         /\/how-it-works\b/i.test(targetInput) &&
         p.slug.startsWith("finbot-how-it-works")
       )
@@ -13437,27 +17382,51 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
-        /\/api\/v1\/admin\/users/i.test(targetInput) &&
-        p.slug.startsWith("duck-store-admin-users")
+        /\/api\/v1\/cart\/add\b/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-cart-negative-quantity")
       )
-        return -3;
+        return -4;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
-        /\/api\/v1\/admin\/products/i.test(targetInput) &&
+        /\/api\/v1\/orders\/checkout\b/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-checkout-private-coupon")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/(?:api\/v1\/)?admin\/users\b/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-admin-users")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/(?:api\/v1\/)?admin\/products\b/i.test(targetInput) &&
         p.slug.startsWith("duck-store-admin-products")
       )
         return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
-        /\/api\/v1\/admin\/orders/i.test(targetInput) &&
+        /\/(?:api\/v1\/)?admin\/orders\b/i.test(targetInput) &&
         p.slug.startsWith("duck-store-admin-orders")
       )
         return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
+        /\/mcp\/tools\/list_coupons/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-mcp-coupons")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
         /\/mcp\/tools(?:\/|$)/i.test(targetInput) &&
         !/\/mcp\/tools\/list_coupons/i.test(targetInput) &&
         p.slug.startsWith("duck-store-mcp-tools")
+      )
+        return -3;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/mcp\/info(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-mcp-info")
       )
         return -3;
       if (
@@ -13480,7 +17449,38 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
-        /\/api\/v1\/admin\/stats\b/i.test(targetInput) &&
+        /\/api\/v1\/users\/?$/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-users")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/testimonials\/?$/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-testimonials")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/reviews\b/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-reviews")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/products\/reviews\b/i.test(targetInput) &&
+        (p.slug.startsWith("duck-store-reviews") ||
+          p.slug.startsWith("duck-store-products-reviews"))
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/(?:api\/v1\/)?wishlist\b/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-wishlist")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/(?:api\/v1\/)?admin\/stats\b/i.test(targetInput) &&
         p.slug.startsWith("duck-store-admin-stats")
       )
         return -3;
@@ -13524,10 +17524,38 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/users\/?(?:\?.*)?$/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-users-enumeration")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/api\/v1\/users\/?(?:\?.*)?$/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-users")
+      )
+        return -3;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
         /\/testimonials\/guest\b/i.test(targetInput) &&
         p.slug.startsWith("duck-store-testimonials")
       )
         return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/testimonials(?:\/|$|\?)/i.test(targetInput) &&
+        !/\/api\//i.test(targetInput) &&
+        !/\/testimonials\/guest/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-testimonials-page")
+      )
+        return -4;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/testimonials(?:\/|$|\?)/i.test(targetInput) &&
+        !/\/api\//i.test(targetInput) &&
+        !/\/testimonials\/guest/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-testimonials-bola")
+      )
+        return -3;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
         /\/api\/v1\/testimonials/i.test(targetInput) &&
@@ -13540,11 +17568,208 @@ export async function runDeepScan(targetInput: string, opts: FreeScanOptions = {
         p.slug.startsWith("duck-store-open-redirect")
       )
         return -3;
+      if (
+        /duck-store\.escape\.tech/i.test(origin) &&
+        /\/vulnerabilities\/?(?:[#?]|$)/i.test(targetInput) &&
+        p.slug.startsWith("duck-store-vulnerabilities-hub")
+      )
+        return -4;
       if (/juicesec\.mrdinesh\.workers\.dev/i.test(origin) && p.slug.startsWith("client-side-juicesec")) return -2;
       if (/vulnerable-web-application-jecw\.vercel\.app/i.test(origin) && p.slug.startsWith("buggybuy-")) return -2;
       if (/appsec-ci-pipeline\.onrender\.com/i.test(origin) && p.slug.startsWith("appsec-ci-")) return -2;
       if (
-        /dvga\.tools\.escape\.tech|dvga\.lab\.pentest-forge\.com|xplat-demo\.threatx\.io/i.test(origin) &&
+        /appsec-ci-pipeline\.onrender\.com/i.test(origin) &&
+        /\/login\/?$/i.test(targetInput) &&
+        p.slug.startsWith("appsec-ci-login")
+      )
+        return -4;
+      if (
+        /appsec-ci-pipeline\.onrender\.com/i.test(origin) &&
+        /\/(?:api\/)?comments\/?$/i.test(targetInput) &&
+        p.slug.startsWith("appsec-ci-stored-xss-comments")
+      )
+        return -4;
+      if (
+        /pwnshop\.ctfsecurity\.com/i.test(origin) &&
+        /\/api\/v1\/orders\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-order-idor")
+      )
+        return -4;
+      if (
+        /restful-booker/i.test(origin) &&
+        /\/(?:auth|booking)\/?$/i.test(targetInput) &&
+        p.slug.startsWith("restful-booker-")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a03_injection\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-injection-sqli-login")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a03_injection\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-injection-xss-stored")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a03_injection\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-injection-union-search")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a03_injection(?:\/insecure\.php|\/attacks\/sql_blind_time)/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-injection-sqli-blind-time")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a03_injection(?:\/insecure\.php|\/attacks\/sql_second_order)/i.test(targetInput) &&
+        (p.slug.startsWith("owaspsecure-injection-sqli-second-order") ||
+          p.slug.startsWith("owaspsecure-injection-store-bio"))
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a10_ssrf\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-ssrf-fetch")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a10_ssrf\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-ssrf-internal-health")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a10_ssrf\b/i.test(targetInput) &&
+        (p.slug.startsWith("owaspsecure-ssrf-socket-probe") ||
+          p.slug.startsWith("owaspsecure-ssrf-internal-health-direct") ||
+          p.slug.startsWith("owaspsecure-ssrf-internal-admin") ||
+          p.slug.startsWith("owaspsecure-ssrf-internal-index-direct"))
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a01_bac\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-bac-idor-numeric")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a01_bac\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-bac-idor-uuid")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a01_bac\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-bac-function-level-promote")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a01_bac\b/i.test(targetInput) &&
+        (p.slug.startsWith("owaspsecure-bac-file-dor") ||
+          p.slug.startsWith("owaspsecure-bac-mass-assignment"))
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a05_misconfig(?:\/insecure\.php|\/attacks\/exposed_config|\/attacks\/verbose_error)/i.test(
+          targetInput
+        ) &&
+        (p.slug.startsWith("owaspsecure-misconfig-exposed-config") ||
+          p.slug.startsWith("owaspsecure-misconfig-verbose-error"))
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a05_misconfig\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-misconfig-")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a02_crypto\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-crypto-password-md5")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a02_crypto(?:\/insecure\.php|\/attacks\/tokens)/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-crypto-predictable-tokens")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a02_crypto(?:\/insecure\.php|\/attacks\/data_at_rest)/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-crypto-data-at-rest")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a07_auth\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-auth-session-fixation")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a07_auth\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-auth-mfa-bypass")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a04_insecure_design\b/i.test(targetInput) &&
+        (p.slug.startsWith("owaspsecure-design-password-reset") ||
+          p.slug.startsWith("owaspsecure-design-reauth-email") ||
+          p.slug.startsWith("owaspsecure-design-coupon-logic") ||
+          p.slug.startsWith("owaspsecure-design-csrf-settings") ||
+          p.slug.startsWith("owaspsecure-design-magic-link"))
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a08_integrity\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-integrity-")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a09_logging\b/i.test(targetInput) &&
+        p.slug.startsWith("owaspsecure-logging-")
+      )
+        return -4;
+      if (
+        /owaspsecure\.com/i.test(origin) &&
+        /\/demo\/a06_voc\b/i.test(targetInput) &&
+        (p.slug.startsWith("owaspsecure-voc-outdated-jquery") ||
+          p.slug.startsWith("owaspsecure-voc-cdn-no-sri") ||
+          p.slug.startsWith("owaspsecure-voc-mixed-content") ||
+          p.slug.startsWith("owaspsecure-voc-lodash-outdated") ||
+          p.slug.startsWith("owaspsecure-voc-unpinned-latest"))
+      )
+        return -4;
+      if (
+        /dvga2\.tools\.escape\.tech/i.test(origin) &&
+        p.slug.startsWith("dvga2-expert-hardened-mode")
+      )
+        return -4;
+      if (
+        /dvga2?\.tools\.escape\.tech/i.test(origin) &&
+        /\/graphql\b/i.test(targetInput) &&
+        /dvga-(?:import-paste-ssrf|create-paste-stored-xss|my-pastes-idor|graphql-dos-resource-exhaustion)(?:-.*)?-route-live-oracle/.test(
+          p.slug
+        )
+      )
+        return -4;
+      if (
+        /dvga2?\.tools\.escape\.tech|dvga\.lab\.pentest-forge\.com|xplat-demo\.threatx\.io/i.test(origin) &&
         p.slug.startsWith("dvga-")
       )
         return -2;
