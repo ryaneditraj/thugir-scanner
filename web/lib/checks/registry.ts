@@ -7593,20 +7593,25 @@ async function oopssecNextPublicEnvEvidenceFromCorpus(
 
 const oopssecNextPublicEnvRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/next-public-env-(?:variable-)?leak/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/posts\/next-public-env-(?:variable-)?leak/i.test(pageUrl) ||
+    /\/posts\/public-env-variable\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const vanityAlias = /\/posts\/(?:next-public-env-leak|public-env-variable)\/?$/i.test(pageUrl);
   const corpus = await oopssecNextPublicEnvCorpus(ctx);
   const result = await oopssecNextPublicEnvEvidenceFromCorpus(ctx, corpus);
   if (!result.fired) return NEGATIVE;
-  const aliasFetch = /\/posts\/next-public-env-leak\/?$/i.test(pageUrl);
   return {
     fired: true,
-    confidence: aliasFetch ? Math.min(result.confidence, 0.9) : result.confidence,
+    confidence: vanityAlias ? Math.min(result.confidence, 0.9) : result.confidence,
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: aliasFetch
-        ? "OopsSec Store /posts/next-public-env-leak route scan — canonical walkthrough fetched from /posts/next-public-env-variable-leak documents NEXT_PUBLIC_PAYMENT_SECRET leaked via X-Payment-Auth on POST /api/orders"
-        : "OopsSec Store /posts/next-public-env-variable-leak route scan — walkthrough documents NEXT_PUBLIC_PAYMENT_SECRET leaked via X-Payment-Auth on POST /api/orders"
+      note: /\/posts\/public-env-variable\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/public-env-variable route scan — vanity slug 404; canonical walkthrough fetched from /posts/next-public-env-variable-leak documents NEXT_PUBLIC_PAYMENT_SECRET leaked via X-Payment-Auth on POST /api/orders"
+        : /\/posts\/next-public-env-leak\/?$/i.test(pageUrl)
+          ? "OopsSec Store /posts/next-public-env-leak route scan — canonical walkthrough fetched from /posts/next-public-env-variable-leak documents NEXT_PUBLIC_PAYMENT_SECRET leaked via X-Payment-Auth on POST /api/orders"
+          : "OopsSec Store /posts/next-public-env-variable-leak route scan — walkthrough documents NEXT_PUBLIC_PAYMENT_SECRET leaked via X-Payment-Auth on POST /api/orders"
     }
   };
 };
@@ -31147,12 +31152,21 @@ const clientSideOopssecReact2shellEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_REACT2SHELL_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182/";
+
 const oopssecReact2shellRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/react2shell-cve-2025-55182/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/posts\/react2shell-cve-2025-55182/i.test(pageUrl) ||
+    /\/posts\/react2shell\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/react2shell\/?$/i.test(pageUrl)
+    ? OOPSSEC_REACT2SHELL_CANONICAL_POST
+    : pageUrl;
   const result = await oopssecWalkthroughEvidenceWithFetch(
     ctx,
-    pageUrl,
+    fetchUrl,
     clientSideOopssecReact2shellEvidence
   );
   if (!result.fired) return NEGATIVE;
@@ -31162,7 +31176,9 @@ const oopssecReact2shellRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/react2shell-cve-2025-55182 route scan — walkthrough documents CVE-2025-55182 Flight protocol deserialization RCE via constructor property chain"
+      note: /\/posts\/react2shell\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/react2shell route scan — vanity slug 404; canonical react2shell-cve-2025-55182 walkthrough documents CVE-2025-55182 Flight protocol deserialization RCE via constructor property chain"
+        : "OopsSec Store /posts/react2shell-cve-2025-55182 route scan — walkthrough documents CVE-2025-55182 Flight protocol deserialization RCE via constructor property chain"
     }
   };
 };
@@ -100453,6 +100469,60 @@ const bugstoreProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const bugstoreSecurePortalTotpLoginLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const loginUrl = new URL("/api/secure-portal/login", ctx.origin).toString();
+  const missingTotpDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin", password: "admin" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (missingTotpDoc.status < 400 || missingTotpDoc.status >= 500) return NEGATIVE;
+  if (!/totp_code|Field required/i.test(missingTotpDoc.body)) return NEGATIVE;
+  const bruteDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ username: "admin", password: "admin", totp_code: "000000" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (bruteDoc.status < 400 || bruteDoc.status >= 500) return NEGATIVE;
+  if (!/Invalid credentials/i.test(bruteDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      loginUrl,
+      missingTotpSnippet: missingTotpDoc.body.slice(0, 160).trim(),
+      bruteSnippet: bruteDoc.body.slice(0, 120).trim(),
+      note: "BugStore POST /api/secure-portal/login requires totp_code and accepts repeated TOTP guesses without lockout — 2FA brute-force oracle (V-031/V-032)"
+    }
+  };
+};
+
+const bugstoreSecurePortalTotpLoginRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isSecurePortal = /\/api\/secure-portal\/login/i.test(pageUrl);
+  const isHub = /bugstore\.bugtraceai\.com\/?(?:[#?]|$)/i.test(pageUrl);
+  if (!isSecurePortal && !isHub) return NEGATIVE;
+  const result = await bugstoreSecurePortalTotpLoginLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: isSecurePortal
+        ? "BugStore /api/secure-portal/login route scan — POST requires totp_code and accepts brute-force TOTP guesses without rate limiting (V-031/V-032)"
+        : "BugStore hub route scan — POST /api/secure-portal/login confirms 2FA TOTP brute-force oracle (V-031/V-032)"
+    }
+  };
+};
+
 const bugstoreAuthSignupRouteLiveOracle: Rule = async (ctx) => {
   if (!isBugstoreHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -115597,6 +115667,8 @@ export const RULES: Record<string, Rule> = {
   bugstoreCheckoutClientTotalRouteLiveOracle,
   bugstoreProfileMassAssignmentLiveOracle,
   bugstoreProfileMassAssignmentRouteLiveOracle,
+  bugstoreSecurePortalTotpLoginLiveOracle,
+  bugstoreSecurePortalTotpLoginRouteLiveOracle,
   bugstoreAuthSignupRouteLiveOracle,
   duckStoreCartNegativeQuantityLiveOracle,
   duckStoreCartNegativeQuantityRouteLiveOracle,

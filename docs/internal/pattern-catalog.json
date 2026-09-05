@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-05T07:03:12.608Z",
-  "total": 3306,
-  "uniqueSlugs": 3298,
+  "generatedAt": "2026-09-05T08:09:01.596Z",
+  "total": 3308,
+  "uniqueSlugs": 3300,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3288,
+    "generic": 3290,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3221,
+    "deep": 3223,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 154,
     "Security misconfiguration": 280,
-    "Broken authentication": 207,
+    "Broken authentication": 209,
     "Injection": 534,
     "Cross-site scripting": 798,
     "Open redirect": 27,
@@ -278,6 +278,8 @@
     "bugstore-product-search-sqli-route-live-oracle",
     "bugstore-profile-mass-assignment-live-oracle",
     "bugstore-profile-mass-assignment-route-live-oracle",
+    "bugstore-secure-portal-totp-login-live-oracle",
+    "bugstore-secure-portal-totp-login-route-live-oracle",
     "burpbounty-actuator-heapdump-live-oracle",
     "burpbounty-actuator-heapdump-route-live-oracle",
     "burpbounty-admin-panel-live-oracle",

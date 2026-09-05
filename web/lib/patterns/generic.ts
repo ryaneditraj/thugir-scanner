@@ -84479,5 +84479,57 @@ export const genericPatterns: Pattern[] = [
       "Our BugStore /api/auth/signup route scan confirms role mass-assignment via register+profile. Show route-specific field allowlist remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "bugstore-secure-portal-totp-login-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "BugStore secure-portal TOTP brute-force live oracle (V-031/V-032)",
+    description:
+      "POST /api/secure-portal/login on BugStore requires totp_code and accepts repeated TOTP guesses without lockout — 2FA brute-force oracle for the secure admin portal.",
+    impactOneline:
+      "Missing TOTP rate limiting on BugStore secure-portal login lets attackers brute-force 2FA codes to hijack admin accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreSecurePortalTotpLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rate-limit TOTP verification and lock accounts after failed 2FA attempts.",
+      steps: [
+        "Enforce per-IP and per-account rate limits on /api/secure-portal/login.",
+        "Lock or delay accounts after repeated invalid totp_code submissions.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/secure-portal/login endpoint accepts unlimited TOTP guesses. Show 2FA brute-force hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-secure-portal-totp-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "BugStore secure-portal TOTP brute-force route live oracle (V-031/V-032)",
+    description:
+      "When scanning /api/secure-portal/login on bugstore.bugtraceai.com, POST requires totp_code and accepts brute-force TOTP guesses — route-specific 2FA oracle.",
+    impactOneline:
+      "Route-specific BugStore secure-portal scans should confirm missing TOTP rate limiting on admin 2FA login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreSecurePortalTotpLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rate-limit TOTP verification on BugStore secure-portal login routes.",
+      steps: [
+        "Enforce per-IP and per-account rate limits on /api/secure-portal/login.",
+        "Lock or delay accounts after repeated invalid totp_code submissions.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/secure-portal/login route scan confirms TOTP brute-force exposure. Show route-specific 2FA rate-limit fixes.",
+    version: 1,
+    enabled: true
   }
 ];
