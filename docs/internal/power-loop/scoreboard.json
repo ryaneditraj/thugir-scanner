@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T06:12:00.000Z",
+  "updated_at": "2026-09-05T06:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3112,
-  "total_findings": 35226,
+  "total_sites_scanned": 3121,
+  "total_findings": 35370,
   "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2161,
-  "discovery_findings": 28724,
+  "discovery_urls_added": 2166,
+  "discovery_findings": 28815,
   "improvements_shipped": 1447,
-  "last_run": "2026-09-05T06:12:00.000Z",
+  "last_run": "2026-09-05T06:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "06",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,37 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall on primary Heroku (52 findings; secret-resend present)"
+      "note": "Stable 6/6 first-pass recall on primary Heroku (53 findings, 40 live oracles; secret-resend + juice-shop-resend-key-live-oracle present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 3,
-      "findings": 17,
-      "focus": "owaspbased /api/lessons catalog + oopssec middleware-authorization-bypass + malicious-file-upload vanity slugs",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 91,
+      "focus": "oopssec ch.05-09 auth/crypto SQLi walkthroughs (orders-search SQLi, self-XSS+CSRF profile, session fixation, password reset, weak MD5) + drained middleware/malicious-file-upload/price-manipulation vanity slugs",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings)",
-      "owaspbased-lessons.vercel.app/api/lessons: 2→3 (+owasp-genai-lessons-api-route-live-oracle)",
-      "koadt.github.io/.../middleware-authorization-bypass/: 0→7 (+oopssec-middleware-bypass-route-live-oracle via vanity alias)",
-      "koadt.github.io/.../malicious-file-upload/: 0→7 (+oopssec-malicious-file-upload-stored-xss-route-live-oracle via vanity alias)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
+      "koadt.github.io/.../sql-injection-writeup/: 11 findings — oopssec-orders-search-sqli-route-live-oracle",
+      "koadt.github.io/.../self-xss-csrf-profile-takeover/: 18 findings — oopssec-self-xss-csrf-profile-route-live-oracle",
+      "koadt.github.io/.../session-fixation-weak-session-management/: 11 findings — oopssec-session-fixation-route-live-oracle",
+      "koadt.github.io/.../insecure-password-reset/: 14 findings — oopssec-insecure-password-reset-route-live-oracle",
+      "koadt.github.io/.../weak-md5-hashing-admin-compromise/: 12 findings — oopssec-weak-md5-hashing-admin-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "oopssec vanity slugs still absent for cross-site-request-forgery, broken-function-level-authorization, jwt-algorithm-confusion, react2shell, public-env-variable",
+      "oopssec vanity slugs still absent for cross-site-request-forgery, broken-function-level-authorization, jwt-algorithm-confusion, react2shell, public-env-variable, aes-cbc-padding-oracle",
       "zero.webappsecurity.com/signup.html: SSL unsupported from cloud agent",
-      "r2s-arena.fly.dev unreachable from cloud agent"
+      "r2s-arena.fly.dev unreachable from cloud agent",
+      "qa.brokencrystals.com/api/file/aws + chimera diagnostics routes still queued (48h skip)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "owaspbased-lessons.vercel.app/api/lessons": 3,
-    "koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass": 7,
-    "koadt.github.io/oss-oopssec-store/posts/malicious-file-upload": 7,
+    "juice-shop.herokuapp.com": 53,
+    "koadt.github.io/oss-oopssec-store/posts/self-xss-csrf-profile-takeover": 18,
+    "koadt.github.io/oss-oopssec-store/posts/insecure-password-reset": 14,
+    "koadt.github.io/oss-oopssec-store/posts/weak-md5-hashing-admin-compromise": 12,
+    "koadt.github.io/oss-oopssec-store/posts/sql-injection-writeup": 11,
+    "koadt.github.io/oss-oopssec-store/posts/session-fixation-weak-session-management": 11,
     "koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927": 12,
-    "owaspsecure.com/demo/a06_voc/insecure.php": 19,
-    "pwnshop.ctfsecurity.com/debug/info": 49,
     "qa.brokencrystals.com/api/chat": 88
   }
 }
