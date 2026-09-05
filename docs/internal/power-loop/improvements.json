@@ -8705,6 +8705,24 @@
       "slug": "vapi-api1-v1-users-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: vapiApi1RouteLiveOracle path matcher extended to /api/v1/users/{id} on vapi.tools.escape.tech; GET /vapi/api1/user/1 BOLA probe returns Michaels flag; vapi.tools.escape.tech/api/v1/users/1 findings 16→17 (+vapi-api1-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-open-redirect-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/open-redirect returns 404; oopssecOpenRedirectLoginBypassRouteLiveOracle fetches canonical /posts/open-redirect-login-bypass walkthrough; koadt.github.io/oss-oopssec-store/posts/open-redirect/ findings 6→7 (+oopssec-open-redirect-login-bypass-route-live-oracle); benchmark juice-shop-staging 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-bola-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/broken-object-level-authorization returns 404; oopssecBolaWishlistRouteLiveOracle fetches canonical /posts/bola-wishlist-access walkthrough; koadt.github.io/oss-oopssec-store/posts/broken-object-level-authorization/ findings 6→7 (+oopssec-bola-wishlist-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-ssrf-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/server-side-request-forgery returns 404; oopssecSsrfRouteLiveOracle fetches canonical /posts/ssrf-internal-page-access walkthrough; koadt.github.io/oss-oopssec-store/posts/server-side-request-forgery/ findings 6→7 (+oopssec-ssrf-route-live-oracle); benchmark juice-shop-staging 53 findings 6/6 maintained"
     }
   ]
 }
