@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T07:10:00.000Z",
+  "updated_at": "2026-09-05T07:18:36.398Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3124,
-  "total_findings": 35391,
+  "total_sites_scanned": 3133,
+  "total_findings": 35558,
   "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2166,
-  "discovery_findings": 28836,
+  "discovery_urls_added": 2171,
+  "discovery_findings": 28950,
   "improvements_shipped": 1450,
-  "last_run": "2026-09-05T07:10:00.000Z",
+  "last_run": "2026-09-05T07:18:36.398Z",
   "last_run_summary": {
     "hour_utc": "07",
     "benchmark": {
@@ -48,37 +48,39 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall on primary Heroku (53 findings, 40 live oracles)"
+      "note": "Stable 6/6 first-pass recall on primary Heroku (53 findings, 40 live oracles; secret-resend + juice-shop-resend-key-live-oracle present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 21,
-      "focus": "oopssec vanity slug aliases for cross-site-request-forgery, broken-function-level-authorization, jwt-algorithm-confusion",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 114,
+      "focus": "FinBot guardrails API + BugStore graphql/secure-portal/forum/admin + oopssec stored-xss/xff-sqli/second-order-sqli walkthroughs",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
-      "koadt.github.io/.../cross-site-request-forgery/: 7 findings — oopssec-csrf-admin-order-route-live-oracle vanity alias (0→7)",
-      "koadt.github.io/.../broken-function-level-authorization/: 7 findings — oopssec-live-stream-bfla-route-live-oracle vanity alias (0→7)",
-      "koadt.github.io/.../jwt-algorithm-confusion/: 7 findings — oopssec-jwt-alg-confusion-route-live-oracle vanity alias (0→7)"
+      "owasp-finbot-ctf.org/labs/api/v1/guardrails: 6 findings — finbot-labs-guardrails-webhook-route-live-oracle",
+      "bugstore.bugtraceai.com/graphql: 17 findings — graphql introspection + bugstore-product-search-sqli + path-traversal live oracles",
+      "koadt.github.io/.../stored-xss-product-reviews/: 20 findings — oopssec-stored-xss-reviews-route-live-oracle",
+      "koadt.github.io/.../x-forwarded-for-sql-injection/: 14 findings — oopssec-xff-sqli-route-live-oracle",
+      "koadt.github.io/.../second-order-sql-injection/: 12 findings — oopssec-second-order-sqli-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "oopssec vanity slugs still absent for react2shell, public-env-variable (aes-cbc-padding-oracle alias already shipped)",
-      "zero.webappsecurity.com/signup.html: SSL unsupported from cloud agent",
+      "bugstore secure-portal/login + forum/posts + admin/users: 15-finding generic hub fingerprint without route-specific secure-portal/forum/admin live oracles",
+      "oopssec react2shell + public-env-variable vanity slugs still queued (next-public-env covered via stored-xss pass)",
       "r2s-arena.fly.dev unreachable from cloud agent",
       "qa.brokencrystals.com/api/file/aws + chimera diagnostics routes still queued (48h skip)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "koadt.github.io/oss-oopssec-store/posts/cross-site-request-forgery": 7,
-    "koadt.github.io/oss-oopssec-store/posts/broken-function-level-authorization": 7,
-    "koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion": 7,
-    "koadt.github.io/oss-oopssec-store/posts/self-xss-csrf-profile-takeover": 18,
-    "koadt.github.io/oss-oopssec-store/posts/insecure-password-reset": 14,
+    "bugstore.bugtraceai.com/graphql": 17,
+    "koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews": 20,
+    "koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection": 14,
+    "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection": 12,
+    "owasp-finbot-ctf.org/labs/api/v1/guardrails": 6,
     "qa.brokencrystals.com/api/chat": 88
   }
 }

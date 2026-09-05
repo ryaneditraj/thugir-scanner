@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T06:18:00.000Z",
+  "updated_at": "2026-09-05T07:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://owasp-finbot-ctf.org/labs/api/v1/guardrails",
+      "source": "OWASP FinBot CTF — labs-guardrail-101 webhook SSRF configuration API GET/PUT /labs/api/v1/guardrails (GenAI-Security-Project/finbot-ctf PR#538; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/graphql",
+      "source": "BugTraceAI/BugStore — GraphQL introspection + BOLA oracle (32-vuln OWASP shop; GitHub README routes; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/secure-portal/login",
+      "source": "BugTraceAI/BugStore — V-031/032 TOTP brute-force 2FA login oracle POST /api/secure-portal/login (BugTraceAI-CLI test_auth.py; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/forum/posts",
+      "source": "BugTraceAI/BugStore — V-003/004 stored XSS forum posts oracle GET /api/forum/posts (routes/forum.py; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/admin/users",
+      "source": "BugTraceAI/BugStore — V-005/006/007 admin BAC + mass-assignment oracle GET /api/admin/users (routes/admin.py; web search 07 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/sql-injection-writeup/",
       "source": "kOaDT/oss-oopssec-store — Challenge 17 order-search SQLi walkthrough (challenges.json scrape 06 UTC)",
@@ -11087,5 +11112,5 @@
     }
   ],
   "discovery_urls": [],
-  "discovery_urls_added": 2058
+  "discovery_urls_added": 2063
 }
