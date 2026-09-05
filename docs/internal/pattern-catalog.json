@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-05T21:12:37.652Z",
-  "total": 3348,
-  "uniqueSlugs": 3340,
+  "generatedAt": "2026-09-05T22:12:01.805Z",
+  "total": 3349,
+  "uniqueSlugs": 3341,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3330,
+    "generic": 3331,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3263,
+    "deep": 3264,
     "continuous": 0
   },
   "byCategory": {
@@ -26,7 +26,7 @@
     "Information exposure": 1,
     "Information disclosure": 155,
     "Security misconfiguration": 286,
-    "Broken authentication": 210,
+    "Broken authentication": 211,
     "Injection": 544,
     "Cross-site scripting": 798,
     "Open redirect": 29,
@@ -457,6 +457,7 @@
     "chimera-admin-system-execute-rce-route-live-oracle",
     "chimera-admin-users-export-route-live-oracle",
     "chimera-api-reference-route-live-oracle",
+    "chimera-auth-token-forge-route-live-oracle",
     "chimera-banking-accounts-bola-route-live-oracle",
     "chimera-banking-accounts-search-sqli-route-live-oracle",
     "chimera-banking-beneficiaries-bola-route-live-oracle",

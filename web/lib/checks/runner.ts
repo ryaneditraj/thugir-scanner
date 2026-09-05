@@ -1851,6 +1851,7 @@ const DEEP_RULES = new Set<string>([
   "chimeraBankingBeneficiariesBolaRouteLiveOracle",
   "chimeraTelecomIntegrationsWebhooksSsrfRouteLiveOracle",
   "chimeraOauthTokenForgeRouteLiveOracle",
+  "chimeraAuthTokenForgeRouteLiveOracle",
   "chimeraInsurancePoliciesLookupSqliRouteLiveOracle",
   "chimeraTransactionsHistorySqliLiveOracle",
   "chimeraTransactionsHistorySqliRouteLiveOracle",
