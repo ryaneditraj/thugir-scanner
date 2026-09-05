@@ -8723,6 +8723,24 @@
       "slug": "oopssec-ssrf-vanity-slug-alias",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /posts/server-side-request-forgery returns 404; oopssecSsrfRouteLiveOracle fetches canonical /posts/ssrf-internal-page-access walkthrough; koadt.github.io/oss-oopssec-store/posts/server-side-request-forgery/ findings 6→7 (+oopssec-ssrf-route-live-oracle); benchmark juice-shop-staging 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-auth-signup-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/signup returns HTTP 405; register+PUT /api/user/profile role:admin confirms V-015 mass-assignment; bugstore.bugtraceai.com/api/auth/signup findings 10→16 (+bugstore-auth-signup-route-live-oracle +bugstore-profile-mass-assignment-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-path-traversal-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/path-traversal returns 404; oopssecPathTraversalRouteLiveOracle fetches canonical /posts/path-traversal-documents-api walkthrough via oopssecWalkthroughEvidenceWithFetch; koadt.github.io/oss-oopssec-store/posts/path-traversal/ findings 0→7 (+oopssec-path-traversal-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-diagnostics-genai-outages-priority-drain",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended chimera diagnostics/webhook + diagnostics/ping + genai/chat + genai/agent/browse + energy-utilities/outages/1 to priority_discovery_urls front; runner -4 priority for route oracles; chimera.atlascrew.dev/api/v1/diagnostics/webhook findings 7→8 (+chimera-diagnostics-webhook-ssrf-route-live-oracle), /diagnostics/ping 8 (+chimera-diagnostics-ping-rce-route-live-oracle), /genai/chat 8 (+chimera-genai-chat-prompt-injection-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

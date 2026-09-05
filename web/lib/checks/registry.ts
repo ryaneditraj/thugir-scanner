@@ -6953,10 +6953,23 @@ const clientSideOopssecPathTraversalEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_PATH_TRAVERSAL_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/path-traversal-documents-api/";
+
 const oopssecPathTraversalRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/path-traversal-documents-api/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecPathTraversalEvidence(ctx);
+  const routeOk =
+    /\/posts\/path-traversal-documents-api/i.test(pageUrl) ||
+    /\/posts\/path-traversal\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/path-traversal\/?$/i.test(pageUrl)
+    ? OOPSSEC_PATH_TRAVERSAL_CANONICAL_POST
+    : pageUrl;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    fetchUrl,
+    clientSideOopssecPathTraversalEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -6964,7 +6977,9 @@ const oopssecPathTraversalRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/path-traversal-documents-api route scan — walkthrough documents /api/files?file=../flag.txt path traversal via unsanitized path.join"
+      note: /\/posts\/path-traversal\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/path-traversal route scan — vanity slug 404; canonical path-traversal-documents-api walkthrough documents /api/files?file=../flag.txt path traversal via unsanitized path.join"
+        : "OopsSec Store /posts/path-traversal-documents-api route scan — walkthrough documents /api/files?file=../flag.txt path traversal via unsanitized path.join"
     }
   };
 };
@@ -100293,7 +100308,7 @@ const bugstoreProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const isProfile =
     /\/api\/user\/profile/i.test(pageUrl) ||
-    /\/api\/auth\/(?:register|signup)/i.test(pageUrl);
+    /\/api\/auth\/register/i.test(pageUrl);
   const isHub = /bugstore\.bugtraceai\.com\/?(?:[#?]|$)/i.test(pageUrl);
   if (!isProfile && !isHub) return NEGATIVE;
   const result = await bugstoreProfileMassAssignmentLiveOracle(ctx);
@@ -100307,6 +100322,41 @@ const bugstoreProfileMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
       note: isProfile
         ? "BugStore profile/auth route scan — PUT /api/user/profile role:admin mass-assignment escalates privileges (V-015)"
         : "BugStore hub route scan — PUT /api/user/profile confirms role mass-assignment oracle (V-015)"
+    }
+  };
+};
+
+const bugstoreAuthSignupRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/auth\/signup/i.test(pageUrl)) return NEGATIVE;
+  const signupUrl = new URL("/api/auth/signup", ctx.origin).toString();
+  const signupDoc = await ctx.probe.get(signupUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username: `thugir_probe_${Date.now()}`,
+      email: `probe_${Date.now()}@probe.local`,
+      password: "ThugirTest123!"
+    }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 512,
+    timeoutMs: 15000
+  });
+  const signupPostRejected = signupDoc.status === 405 || signupDoc.status === 404;
+  const result = await bugstoreProfileMassAssignmentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      signupUrl,
+      signupStatus: signupDoc.status,
+      signupPostRejected,
+      scannedUrl: pageUrl,
+      note: signupPostRejected
+        ? "BugStore /api/auth/signup route scan — POST signup rejected (HTTP 405); privilege escalation confirmed via /api/auth/register + PUT /api/user/profile role:admin mass-assignment (V-015)"
+        : "BugStore /api/auth/signup route scan — signup accepts registration and PUT /api/user/profile role:admin mass-assignment escalates privileges (V-015)"
     }
   };
 };
@@ -115419,6 +115469,7 @@ export const RULES: Record<string, Rule> = {
   bugstoreCheckoutClientTotalRouteLiveOracle,
   bugstoreProfileMassAssignmentLiveOracle,
   bugstoreProfileMassAssignmentRouteLiveOracle,
+  bugstoreAuthSignupRouteLiveOracle,
   duckStoreCartNegativeQuantityLiveOracle,
   duckStoreCartNegativeQuantityRouteLiveOracle,
   duckStoreAdminUsersBflaLiveOracle,

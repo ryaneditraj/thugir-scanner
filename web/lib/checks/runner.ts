@@ -3002,6 +3002,7 @@ const DEEP_RULES = new Set<string>([
   "bugstoreCheckoutClientTotalRouteLiveOracle",
   "bugstoreProfileMassAssignmentLiveOracle",
   "bugstoreProfileMassAssignmentRouteLiveOracle",
+  "bugstoreAuthSignupRouteLiveOracle",
   "duckStoreCartNegativeQuantityLiveOracle",
   "duckStoreCartNegativeQuantityRouteLiveOracle",
   "duckStoreAdminUsersBflaLiveOracle",
@@ -12921,13 +12922,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/api\/v1\/genai\/chat\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-genai-chat")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/genai\/agent\/browse\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-genai-agent-browse")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/genai\/models\/config\b/i.test(targetInput) &&
@@ -12963,13 +12964,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/api\/v1\/diagnostics\/ping\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-diagnostics-ping-rce")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/diagnostics\/webhook\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-diagnostics-webhook-ssrf")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/admin\/diagnostics\b/i.test(targetInput) &&
@@ -13041,7 +13042,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/api\/v1\/energy-utilities\/outages(?:\/|$)/i.test(targetInput) &&
         p.slug.startsWith("chimera-energy-utilities-outages-bola")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/ics\/controllers\/status\b/i.test(targetInput) &&
@@ -13828,7 +13829,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
-        /\/api\/(?:user\/profile|auth\/(?:register|signup))\b/i.test(targetInput) &&
+        /\/api\/auth\/signup\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-auth-signup")
+      )
+        return -4;
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/(?:user\/profile|auth\/register)\b/i.test(targetInput) &&
         p.slug.startsWith("bugstore-profile-mass-assignment")
       )
         return -4;
@@ -14186,7 +14193,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
-        /\/posts\/path-traversal-documents-api/i.test(targetInput) &&
+        /\/posts\/(?:path-traversal-documents-api|path-traversal)\/?$/i.test(targetInput) &&
         p.slug.startsWith("oopssec-path-traversal")
       )
         return -4;
