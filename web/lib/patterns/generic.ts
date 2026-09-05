@@ -28064,6 +28064,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnshop-proxy-fetch-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop proxy fetch SSRF live oracle",
+    description:
+      "POST /api/v1/proxy/fetch fetches attacker-controlled URLs for internal port and network scanning — VulnShop API SSRF oracle (README #81).",
+    impactOneline:
+      "Attackers can coerce VulnShop to scan internal networks and reach private services via unvalidated proxy fetch URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProxyFetchSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to internal networks on proxy routes.",
+      steps: [
+        "Deny requests to link-local, metadata, and private IP ranges.",
+        "Use an allowlisted outbound fetch pipeline instead of arbitrary URL proxying.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/proxy/fetch is SSRF-vulnerable for internal scanning. Show URL allowlist and SSRF guard remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-proxy-fetch-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/proxy/fetch SSRF route live oracle",
+    description:
+      "When scanning /api/v1/proxy/fetch, live Railway backend probe or README oracle #81 documents internal port/network scanning SSRF on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/proxy/fetch documents internal network scanning SSRF.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProxyFetchSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block internal URL fetches on /api/v1/proxy/fetch.",
+      steps: [
+        "Deny requests to link-local, metadata, and private IP ranges.",
+        "Use an allowlisted outbound fetch pipeline instead of arbitrary URL proxying.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/proxy/fetch route documents internal scanning SSRF. Show route-specific URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-cloud-metadata-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop cloud metadata SSRF live oracle",
+    description:
+      "GET /api/v1/cloud/metadata exposes cloud metadata endpoint URLs (169.254.169.254) for SSRF credential theft — VulnShop API oracle (README #82).",
+    impactOneline:
+      "Metadata endpoint disclosure enables SSRF chains that steal cloud instance credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopCloudMetadataSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or authenticate cloud metadata disclosure routes.",
+      steps: [
+        "Do not expose metadata endpoint URLs to unauthenticated callers.",
+        "Block server-side fetches to link-local and metadata IP ranges.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop GET /api/v1/cloud/metadata exposes metadata SSRF targets. Show route removal and SSRF guard remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-cloud-metadata-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/cloud/metadata SSRF route live oracle",
+    description:
+      "When scanning /api/v1/cloud/metadata, live backend probe or README oracle #82 documents cloud metadata endpoint disclosure for SSRF chaining.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/cloud/metadata documents metadata SSRF target disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopCloudMetadataSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove metadata disclosure from /api/v1/cloud/metadata routes.",
+      steps: [
+        "Do not expose metadata endpoint URLs to unauthenticated callers.",
+        "Block server-side fetches to link-local and metadata IP ranges.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/cloud/metadata route documents metadata SSRF targets. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnshop-support-lfi-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -81929,6 +82033,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Vault Notes frontend route scan exposes window.__leakedJwtSecret. Show client-bundle secret removal and key rotation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-login-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vault Notes login SQL injection live oracle",
+    description:
+      "Vault Notes VAPT training app POST /login builds SQL via string concatenation — ' OR '1'='1' -- bypasses authentication without valid credentials (finding #1).",
+    impactOneline:
+      "SQL injection on login lets attackers authenticate as arbitrary users without knowing passwords.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesLoginSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all Vault Notes login database lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements on POST /login.",
+        "Validate and sanitize username/password inputs server-side.",
+        "Audit all database queries for similar concatenation patterns."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes POST /login is SQL-injectable via username concatenation. Show parameterized query remediation for authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vault Notes login SQLi route live oracle",
+    description:
+      "When scanning vault-notes-frontend-gules.vercel.app, live POST /login SQLi probe or VAPT findings.md corpus documents authentication bypass via ' OR '1'='1' --.",
+    impactOneline:
+      "Route-specific confirmation that Vault Notes documents SQL injection authentication bypass on POST /login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries on Vault Notes login routes.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements on POST /login.",
+        "Validate and sanitize username/password inputs server-side.",
+        "Audit all database queries for similar concatenation patterns."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes frontend route scan documents POST /login SQL injection. Show route-specific parameterized query fixes.",
     version: 1,
     enabled: true
   },

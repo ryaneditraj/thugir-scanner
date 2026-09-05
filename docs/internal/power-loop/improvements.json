@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-proxy-fetch-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chethan-vinayak/vulnshop README oracle #81 POST /api/v1/proxy/fetch ssrf_scan internal port/network scanning; vulnshop.vercel.app/api/v1/proxy/fetch findings 18→21 (+vulnshop-proxy-fetch-ssrf-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-cloud-metadata-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: chethan-vinayak/vulnshop README oracle #82 GET /api/v1/cloud/metadata ssrf_cloud exposes metadata endpoint URLs; vulnshop.vercel.app/api/v1/cloud/metadata findings 18→21 (+vulnshop-cloud-metadata-ssrf-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vault-notes-frontend-gules.vercel.app",
+      "slug": "vault-notes-login-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Raghavtripathii/vault-notes-vapt findings.md POST /login SQLi auth bypass payload ' OR '1'='1' --; vault-notes-frontend-gules.vercel.app findings 8→9 (+vault-notes-login-sqli-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:bugstore.bugtraceai.com",
       "slug": "bugstore-health-rce-route-live-oracle",
       "status": "shipped",
