@@ -8669,6 +8669,24 @@
       "slug": "nextjs-rsc-cve-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: probeNextjsRscCveLab confirms CVE-2025-66478 banner + Run Server Action + VERCEL_PLATFORM_PROTECTION + Next.js 16.0.6 deps on GET /; nextjs-cve-hackerone.vercel.app/ findings 7→8 (+nextjs-rsc-cve-live-oracle +nextjs-rsc-cve-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:playground.fabraix.com",
+      "slug": "fabraix-jailbreak-002-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST api.fabraix.com/v1/playground/sessions/start with challenge_id access-code-001 returns sessionId+guardrailsRunId on /challenges/jailbreak-002 route scan; playground.fabraix.com/challenges/jailbreak-002 findings 6→7 (+fabraix-jailbreak-002-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:sql-injection-lab.vercel.app",
+      "slug": "sql-injection-lab-login-runner-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for sql-injection-lab-login-* on /login + prepended sql-injection-lab.vercel.app/login to priority_discovery_urls; sql-injection-lab.vercel.app/login findings fire +sql-injection-lab-login-route-live-oracle (Layer Zero UNLV auth-bypass corpus); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets.herokuapp.com",
+      "slug": "wrongsecrets-47-53-runner-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for wrongsecrets-challenge-44/45/46/47/53 on matching /challenge/challenge-N routes + prepended challenge-47/53 to priority_discovery_urls front; wrongsecrets.herokuapp.com/challenge/challenge-47 findings 19 (+wrongsecrets-challenge-47-vault-template-hardcoded-route-live-oracle), challenge-53 findings 19 (+wrongsecrets-challenge-53-debugging-container-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
