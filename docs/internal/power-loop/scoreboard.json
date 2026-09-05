@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T23:15:00.000Z",
+  "updated_at": "2026-09-05T00:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2812,
-  "total_findings": 28414,
+  "total_sites_scanned": 2821,
+  "total_findings": 28634,
   "critical_findings": 60,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2033,
+  "discovery_urls_added": 2038,
   "discovery_findings": 23966,
   "improvements_shipped": 1428,
-  "last_run": "2026-09-04T23:15:00.000Z",
+  "last_run": "2026-09-05T00:20:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,41 +48,46 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles); secret-resend present"
+      "note": "Stable 6/6 first-pass recall (52 findings, 39 live oracles); secret-resend present"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 28,
-      "focus": "AI-Threatlab route oracle + OopsSec live-stream/next-public-env live oracles shipped",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 168,
+      "focus": "Duck Store testimonials BOLA + DVGA GraphQL + vAPI OWASP API Top 10 hub + fabraix jailbreak-002 + oopssec plaintext/idor/xxe walkthrough drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
-      "rootabhi1.github.io/AI-Threatlab: 5→6 findings — ai-threatlab-route-live-oracle (+client-side evidence, -reflexion-escalated-ssti FP)",
-      "koadt.github.io/.../live-stream-hijack: 8→11 findings — oopssec-live-stream-bfla-live-oracle +client-side evidence",
-      "koadt.github.io/.../next-public-env-variable-leak: 9→11 findings — oopssec-next-public-env-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles; secret-resend present)",
+      "duck-store.escape.tech/api/v1/testimonials/: 43 findings — duck-store-testimonials-bola-route-live-oracle + SSRF/coupon MCP oracles",
+      "duck-store.escape.tech/vulnerabilities: 43 findings — vulnerability index hub fingerprint",
+      "dvga.tools.escape.tech/graphql: 19 findings — GraphQL introspection/injection surface",
+      "vapi.tools.escape.tech/: 21 findings — vapi-api1-bola through vapi-api10-misconfig live oracles",
+      "playground.fabraix.com/challenges/jailbreak-002: 6 findings — thin static SPA (no dedicated route oracle yet)",
+      "koadt.github.io/.../plaintext-password-in-logs: 12 findings — oopssec-plaintext-password-logs-route-live-oracle",
+      "koadt.github.io/.../idor-order-privacy-breach: 11 findings — oopssec-idor-order-privacy-route-live-oracle",
+      "koadt.github.io/.../xxe-supplier-order-import: 13 findings — oopssec-xxe-supplier-import-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "owaspsecure A09 logging oracles present but prior scan predates full drain — re-queue for validation pass",
-      "fabraix jailbreak-001 maps to access-code-001 backend until dedicated API ships",
-      "qa.brokencrystals /api/file/aws already at 96 findings with route oracle",
-      "OopsSec walkthroughs still queued: open-redirect, bola-wishlist, client-side-price, jwt-weak-secret, ssrf-internal-page"
+      "benchmark thin vs prior 53-finding pass — missing jwt-alg-none-live-oracle + captcha-bypass-live-oracle slugs this run",
+      "fabraix jailbreak-002 thin (6 findings) — needs dedicated prompt-injection route oracle",
+      "qa.brokencrystals /api/file/aws + owaspsecure A09 + fabraix tool-poisoning-002 still queued (48h skip)",
+      "wrongsecrets challenge-47/53 queued not drained this run (8-URL limit)"
     ]
   },
   "discovery_highlights": {
+    "duck-store.escape.tech/api/v1/testimonials/": 43,
+    "duck-store.escape.tech/vulnerabilities": 43,
     "qa.brokencrystals.com/api/file/aws": 96,
-    "juice-shop.herokuapp.com": 53,
+    "juice-shop.herokuapp.com": 52,
+    "vapi.tools.escape.tech/": 21,
+    "dvga.tools.escape.tech/graphql": 19,
     "pwnshop.ctfsecurity.com/vulnerabilities": 51,
-    "pwnshop.ctfsecurity.com/debug/info": 48,
-    "vulnbank.org/api/ai/chat": 34,
-    "preview.owasp-juice.shop/rest/products/search?q=test": 34,
-    "koadt.github.io/oss-oopssec-store/posts/next-public-env-variable-leak": 11,
-    "koadt.github.io/oss-oopssec-store/posts/live-stream-hijack": 11,
-    "rootabhi1.github.io/AI-Threatlab": 6,
-    "pwnshop.ctfsecurity.com/checkout": 39,
-    "vwad.owasp.org/app/damn-vulnerable-restaurant": 6
+    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import": 13,
+    "koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs": 12,
+    "koadt.github.io/oss-oopssec-store/posts/idor-order-privacy-breach": 11,
+    "playground.fabraix.com/challenges/jailbreak-002": 6
   }
 }

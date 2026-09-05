@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-04T23:05:11.000Z",
+  "updated_at": "2026-09-05T00:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/testimonials/",
+      "source": "Escape Duck Store — unauthenticated PUT testimonial BOLA oracle (escape.tech benchmarking blog; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/vulnerabilities",
+      "source": "Escape Duck Store — published vulnerability index + OpenAPI pointer (escape.tech blog; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga.tools.escape.tech/graphql",
+      "source": "DVGA — GraphQL introspection/injection oracle endpoint (dvga.tools.escape.tech; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/",
+      "source": "vAPI — OWASP API Top 10 self-hostable demo hub (vapi.tools.escape.tech; awesome-vulnerable-apps scrape 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://playground.fabraix.com/challenges/jailbreak-002",
+      "source": "fabraix/playground — Show HN AI agent jailbreak-002 challenge (GitHub challenges/; web search 00 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs/",
       "source": "kOaDT/oss-oopssec-store \u2014 Challenge 3 plaintext password in SIEM logs walkthrough (challenges.json scrape 23 UTC)",
