@@ -4373,6 +4373,7 @@ const DEEP_RULES = new Set<string>([
   "fabraixToolPoisoning001RouteLiveOracle",
   "fabraixToolPoisoning002RouteLiveOracle",
   "fabraixJailbreak001RouteLiveOracle",
+  "fabraixJailbreak002RouteLiveOracle",
   "fabraixJwtVerifier001RouteLiveOracle",
   "fabraixChallengesHubRouteLiveOracle",
   "fabraixPlaygroundHomeRouteLiveOracle",
@@ -14910,6 +14911,36 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?44\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(44, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?45\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(45, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?46\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(46, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?47\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(47, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?53\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(53, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?66\b/i.test(targetInput) &&
         wrongsecretsChallengeSlugMatches(66, p.slug)
       )
@@ -15042,6 +15073,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         p.slug === "nosql-injection-lab-route-live-oracle"
       )
         return -3;
+      if (
+        /sql-injection-lab\.vercel\.app/i.test(origin) &&
+        /\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("sql-injection-lab-login")
+      )
+        return -4;
       if (
         /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
         /\/api\/users\b/i.test(targetInput) &&
@@ -15824,6 +15861,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /playground\.fabraix\.com/i.test(origin) &&
         /\/challenges\/tool-poisoning-001/i.test(targetInput) &&
         p.slug.startsWith("fabraix-tool-poisoning-001")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/tool-poisoning-002/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-tool-poisoning-002")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/jailbreak-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-jailbreak-001")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/jailbreak-002/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-jailbreak-002")
       )
         return -4;
       if (/prompt-shield1\.vercel\.app/i.test(origin) && p.slug.startsWith("prompt-shield")) return -4;

@@ -13259,7 +13259,8 @@ function fabraixChallengeIdFromScan(ctx: RuleContext): string {
   if (
     slug === "indirect-prompt-injection-001" ||
     slug === "prompt-injection-001" ||
-    slug === "jailbreak-001"
+    slug === "jailbreak-001" ||
+    slug === "jailbreak-002"
   ) {
     return "access-code-001";
   }
@@ -13531,6 +13532,24 @@ const fabraixJailbreak001RouteLiveOracle: Rule = async (ctx) => {
       challengeRoute: "jailbreak-001",
       scannedUrl: pageUrl,
       note: "Fabraix /challenges/jailbreak-001 route scan — LLM jailbreak / guardrail bypass challenge maps to access-code-001 Gatekeeper backend until dedicated jailbreak-001 API ships"
+    }
+  };
+};
+
+const fabraixJailbreak002RouteLiveOracle: Rule = async (ctx) => {
+  if (!isFabraixPlaygroundHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/challenges\/jailbreak-002/i.test(pageUrl)) return NEGATIVE;
+  const probe = await probeFabraixPlaygroundSession(ctx, "access-code-001");
+  if (!probe) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      ...probe,
+      challengeRoute: "jailbreak-002",
+      scannedUrl: pageUrl,
+      note: "Fabraix /challenges/jailbreak-002 route scan — v2 LLM jailbreak / multi-turn guardrail bypass challenge maps to access-code-001 Gatekeeper backend until dedicated jailbreak-002 API ships"
     }
   };
 };
@@ -116575,6 +116594,7 @@ export const RULES: Record<string, Rule> = {
   fabraixToolPoisoning001RouteLiveOracle,
   fabraixToolPoisoning002RouteLiveOracle,
   fabraixJailbreak001RouteLiveOracle,
+  fabraixJailbreak002RouteLiveOracle,
   fabraixJwtVerifier001RouteLiveOracle,
   fabraixChallengesHubRouteLiveOracle,
   fabraixPlaygroundHomeRouteLiveOracle,
