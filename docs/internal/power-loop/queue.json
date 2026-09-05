@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T04:30:00.000Z",
+  "updated_at": "2026-09-05T05:06:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927/",
+      "source": "kOaDT/oss-oopssec-store \u2014 CVE-2025-29927 Next.js middleware auth bypass walkthrough (posts index scrape 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/labs",
+      "source": "OWASP FinBot CTF \u2014 guardrail webhook SSRF configuration lab (owasp.org/PwnzzAI labs manual; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/how-it-works",
+      "source": "OWASP FinBot CTF \u2014 Dark Lab MCP supply-chain attack overview hub (web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspbased-lessons.vercel.app/api/lessons",
+      "source": "OWASP GenAI Security Lab \u2014 lesson index API (10 OWASP LLM Top 10 modules; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://zero.webappsecurity.com/signup.html",
+      "source": "Watchfire Zero Bank \u2014 registration/account-enumeration training surface (VWAD companion demo; web search 05 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/client-side-price-manipulation/",
       "source": "kOaDT/oss-oopssec-store \u2014 Challenge 9 client-side price manipulation walkthrough (challenges.json scrape 04 UTC)",
@@ -11022,5 +11047,5 @@
     }
   ],
   "discovery_urls": [],
-  "discovery_urls_added": 2053
+  "discovery_urls_added": 2058
 }
