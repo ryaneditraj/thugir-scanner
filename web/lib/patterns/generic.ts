@@ -16434,6 +16434,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "graphql-complexity-dos-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "GraphQL Complexity Playground rejects over-limit queries",
+    description:
+      "POST /graphql on graphql-complexity-playground rejects deeply nested queries when estimated complexity exceeds max 10 — GraphQL DoS/complexity-limit training oracle.",
+    impactOneline:
+      "Unbounded GraphQL query complexity enables resource exhaustion; enforce complexity limits before execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlComplexityDosLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce GraphQL query complexity and depth limits in production APIs.",
+      steps: [
+        "Calculate query cost before execution using a complexity analyzer.",
+        "Reject queries exceeding configured max complexity.",
+        "Monitor for nested alias/batching DoS patterns."
+      ]
+    },
+    fixPrompt:
+      "Our GraphQL endpoint rejected an over-complexity query. Show graphql-complexity limit enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graphql-complexity-playground-hub-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "GraphQL Complexity Playground hub route live oracle",
+    description:
+      "When scanning graphql-complexity-playground/, the hub documents max-complexity-10 DoS protection with nested query examples — route-specific GraphQL complexity training hub oracle.",
+    impactOneline:
+      "Route-specific confirmation that the playground demonstrates GraphQL complexity-limit defenses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlComplexityPlaygroundHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply graphql-complexity limits to all production GraphQL endpoints.",
+      steps: [
+        "Integrate complexity estimation middleware.",
+        "Document safe query depth for clients.",
+        "Block batching abuse alongside complexity limits."
+      ]
+    },
+    fixPrompt:
+      "Our GraphQL Complexity Playground hub confirms DoS training scope. Show production complexity enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "graphql-complexity-dos-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "GraphQL Complexity Playground DoS route live oracle",
+    description:
+      "When scanning /graphql on graphql-complexity-playground, live probe confirms complexity-limit rejection of deeply nested queries — route-specific GraphQL DoS oracle.",
+    impactOneline:
+      "Route-specific confirmation that /graphql enforces complexity limits against expensive nested queries.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "graphqlComplexityDosRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject over-complex GraphQL queries at the API gateway or resolver layer.",
+      steps: [
+        "Return HTTP 400 with complexity error for over-limit queries.",
+        "Log rejected query complexity for monitoring.",
+        "Tune limits per authenticated role."
+      ]
+    },
+    fixPrompt:
+      "Our /graphql route scan confirmed complexity-limit DoS protection. Show resolver-level enforcement.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vampi-github-pages-openapi-route-live-oracle",
     platform: "generic",
     category: "Sensitive data exposure",
@@ -39657,6 +39735,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /api/chatbot/chat route uses string-interpolated SQL on chat_history. Show parameterized inserts and LLM SQL validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "zerohealth-enhanced-chat-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "Zero Health enhanced-chat prompt injection route live oracle",
+    description:
+      "When scanning /api/chatbot/enhanced-chat, POST generates SQL from natural language with bypassable guardrails — route-specific AI prompt injection oracle.",
+    impactOneline:
+      "Route-specific oracle confirms enhanced-chat LLM prompt injection training lab without relying on /challenges/prompt-injection alias.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "zerohealthEnhancedChatRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Zero Health is intentional training software — block LLM-generated SQL execution and harden prompt-injection defenses.",
+      steps: [
+        "Never pass LLM-generated SQL directly to the database.",
+        "Apply strict input/output filtering on medical chatbot prompts.",
+        "Log and alert on prompt-injection bypass attempts."
+      ]
+    },
+    fixPrompt:
+      "Our /api/chatbot/enhanced-chat route generates SQL from natural language. Show LLM01 prompt injection remediation.",
     version: 1,
     enabled: true
   },

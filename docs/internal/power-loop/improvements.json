@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:graphql-complexity-playground-production.up.railway.app",
+      "slug": "graphql-complexity-playground-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: hub HTML documents GraphQL Complexity Playground max complexity 10 + DeepNesting example; POST /graphql returns Query is too complex estimated complexity 14; graphql-complexity-playground-production.up.railway.app/ findings 6→8 (+graphql-complexity-playground-hub-route-live-oracle +graphql-complexity-dos-live-oracle); benchmark juice-shop 6/6 maintained"
+    },
+    {
+      "source": "discovery:graphql-complexity-playground-production.up.railway.app",
+      "slug": "graphql-complexity-dos-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /graphql query DeepNesting returns errors message Query is too complex Max complexity is 10 estimated complexity is 14 extensions.complexity.value=14; /graphql route scan fires graphql-complexity-dos-route-live-oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-enhanced-chat-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: challenges.md Challenge AI Prompt Injection documents POST /api/chatbot/enhanced-chat SQL generation; zerohealth.aliyu.dev/api/chatbot/enhanced-chat findings 5→6 (+zerohealth-enhanced-chat-route-live-oracle corpus fallback); benchmark juice-shop 6/6 maintained"
+    },
+    {
       "source": "discovery:zerohealth.aliyu.dev",
       "slug": "zerohealth-hub-route-live-oracle",
       "status": "shipped",
