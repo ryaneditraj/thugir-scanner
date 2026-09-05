@@ -1,772 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-09-03T03:14:50.967Z",
-      "url": "https://ai-security-platform-iota.vercel.app/challenges/phishing",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 8,
-      "findings": [
-        {
-          "slug": "ai-security-ai-phishing-route-live-oracle",
-          "title": "AI Security Platform ai-phishing challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ai-security-platform-evidence",
-          "title": "AI Security Platform hands-on challenge catalog disclosed",
-          "severity": "medium",
-          "confidence": 0.9,
-          "category": "AI security"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 573,
-      "status": "ok",
-      "scanned_at": "2026-09-03T03:14:50.967Z"
-    },
-    {
-      "run_id": "2026-09-03T03:15:25.457Z",
-      "url": "https://playground.fabraix.com/challenges/tool-poisoning-002",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "fabraix-playground-session-live-oracle",
-          "title": "Fabraix playground session unauthenticated live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "AI security"
-        },
-        {
-          "slug": "fabraix-playground-session-route-live-oracle",
-          "title": "Fabraix playground challenge session route live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "AI security"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-fabraix-challenge-evidence",
-          "title": "Fabraix agentic red-team challenge route disclosed",
-          "severity": "medium",
-          "confidence": 0.87,
-          "category": "AI security"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "fabraix-tool-poisoning-002-route-live-oracle",
-          "title": "Fabraix tool-poisoning-002 challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "AI security"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 4,
-      "probes_run": 553,
-      "status": "ok",
-      "scanned_at": "2026-09-03T03:15:25.457Z"
-    },
-    {
-      "run_id": "2026-09-03T03:16:03.466Z",
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-53",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 19,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wrongsecrets-evidence",
-          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-wrongsecrets-challenge-evidence",
-          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-live-oracle",
-          "title": "OWASP WrongSecrets challenge live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-route-live-oracle",
-          "title": "OWASP WrongSecrets challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-53-debugging-container-route-live-oracle",
-          "title": "OWASP WrongSecrets challenge-53 debugging container route live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-28-github-issue-live-oracle",
-          "title": "OWASP WrongSecrets challenge-28 GitHub issue live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-29-screenshot-log-live-oracle",
-          "title": "OWASP WrongSecrets challenge-29 screenshot log live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-30-localstorage-live-oracle",
-          "title": "OWASP WrongSecrets challenge-30 localStorage live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
-          "title": "OWASP WrongSecrets database connection error live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
-          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
-          "severity": "critical",
-          "confidence": 0.96,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
-          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
-          "severity": "critical",
-          "confidence": 0.96,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "stack-database-url-in-bundle",
-          "title": "Database connection string in client bundle",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 573,
-      "status": "ok",
-      "scanned_at": "2026-09-03T03:16:03.466Z"
-    },
-    {
-      "run_id": "2026-09-03T03:16:34.386Z",
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-47",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 19,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wrongsecrets-evidence",
-          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-wrongsecrets-challenge-evidence",
-          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-live-oracle",
-          "title": "OWASP WrongSecrets challenge live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-route-live-oracle",
-          "title": "OWASP WrongSecrets challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-47-vault-template-hardcoded-route-live-oracle",
-          "title": "OWASP WrongSecrets challenge-47 Vault template hardcoded secret route live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-28-github-issue-live-oracle",
-          "title": "OWASP WrongSecrets challenge-28 GitHub issue live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-29-screenshot-log-live-oracle",
-          "title": "OWASP WrongSecrets challenge-29 screenshot log live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-30-localstorage-live-oracle",
-          "title": "OWASP WrongSecrets challenge-30 localStorage live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
-          "title": "OWASP WrongSecrets database connection error live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
-          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
-          "severity": "critical",
-          "confidence": 0.96,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
-          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
-          "severity": "critical",
-          "confidence": 0.96,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "stack-database-url-in-bundle",
-          "title": "Database connection string in client bundle",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 573,
-      "status": "ok",
-      "scanned_at": "2026-09-03T03:16:34.386Z"
-    },
-    {
-      "run_id": "2026-09-03T03:17:04.801Z",
-      "url": "https://vulnshop.vercel.app/api/v1/products",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 20,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-vulnshop-evidence",
-          "title": "VulnShop pentest practice lab disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-vulnshop-module-evidence",
-          "title": "VulnShop route-specific vulnerability module disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "vulnshop-apply-discount-payment-manipulation-live-oracle",
-          "title": "VulnShop checkout apply-discount payment manipulation live oracle",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vulnshop-wallet-add-funds-race-live-oracle",
-          "title": "VulnShop wallet add-funds race condition live oracle",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vulnshop-update-price-manipulation-live-oracle",
-          "title": "VulnShop cart update-price manipulation live oracle",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vulnshop-payment-process-unsafe-api-live-oracle",
-          "title": "VulnShop payment process unsafe API live oracle",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vulnshop-orders-modify-live-oracle",
-          "title": "VulnShop order status manipulation live oracle",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Business logic"
-        },
-        {
-          "slug": "vulnshop-products-import-ssrf-live-oracle",
-          "title": "VulnShop products import SSRF live oracle",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Server-side request forgery"
-        },
-        {
-          "slug": "vulnshop-deploy-status-live-oracle",
-          "title": "VulnShop deploy status infrastructure disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.86,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vulnshop-admin-config-live-oracle",
-          "title": "VulnShop admin configuration disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "vulnshop-admin-users-bfla-live-oracle",
-          "title": "VulnShop admin users BFLA live oracle",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "vulnshop-products-sqli-route-live-oracle",
-          "title": "VulnShop /products SQLi route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "vulnshop-product-sqli-live-oracle",
-          "title": "VulnShop product ID SQLi live oracle",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "vulnshop-template-render-el-injection-live-oracle",
-          "title": "VulnShop Expression Language injection live oracle",
-          "severity": "critical",
-          "confidence": 0.86,
-          "category": "Injection"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 626,
-      "status": "ok",
-      "scanned_at": "2026-09-03T03:17:04.801Z"
-    },
-    {
-      "run_id": "2026-09-03T03:17:11.673Z",
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-60",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 19,
-      "findings": [
-        {
-          "slug": "wrongsecrets-mcp-execute-command-live-oracle",
-          "title": "OWASP WrongSecrets MCP execute_command env leak live oracle",
-          "severity": "critical",
-          "confidence": 0.96,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-mcp62-google-sa-live-oracle",
-          "title": "OWASP WrongSecrets MCP62 Google SA live oracle",
-          "severity": "critical",
-          "confidence": 0.96,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-60-mcp-route-live-oracle",
-          "title": "OWASP WrongSecrets challenge-60 MCP route live oracle",
-          "severity": "critical",
-          "confidence": 0.96,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "spring-boot-actuator-exposed",
-          "title": "Spring Boot actuator endpoints exposed",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "postmessage-dom-xss-evidence",
-          "title": "DOM XSS via postMessage → innerHTML sink",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-wrongsecrets-evidence",
-          "title": "OWASP WrongSecrets secrets-management CTF disclosed",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-wrongsecrets-challenge-evidence",
-          "title": "OWASP WrongSecrets challenge walkthrough page disclosed",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-live-oracle",
-          "title": "OWASP WrongSecrets challenge live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-route-live-oracle",
-          "title": "OWASP WrongSecrets challenge route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-28-github-issue-live-oracle",
-          "title": "OWASP WrongSecrets challenge-28 GitHub issue live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-29-screenshot-log-live-oracle",
-          "title": "OWASP WrongSecrets challenge-29 screenshot log live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-challenge-30-localstorage-live-oracle",
-          "title": "OWASP WrongSecrets challenge-30 localStorage live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "wrongsecrets-error-demo-database-connection-live-oracle",
-          "title": "OWASP WrongSecrets database connection error live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-weak-csp",
-          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "stack-database-url-in-bundle",
-          "title": "Database connection string in client bundle",
-          "severity": "critical",
-          "confidence": 0.9,
-          "category": "Exposed secret"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 573,
-      "status": "ok",
-      "scanned_at": "2026-09-03T03:17:11.673Z"
-    },
-    {
-      "run_id": "2026-09-03T04:11:46.394Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-09-03T04:11:46.394Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
-    },
-    {
-      "run_id": "2026-09-03T04:12:27.156Z",
-      "url": "https://juice-shop-staging.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-09-03T04:12:27.156Z",
-      "error": "Juice Shop Heroku dyno unavailable (503) — use staging fallback."
-    },
-    {
       "run_id": "2026-09-03T04:12:47.400Z",
       "url": "https://juice-shop.demo.escape.tech",
       "target_id": "juice-shop",
@@ -30218,6 +29452,1001 @@
       "probes_run": 597,
       "status": "ok",
       "scanned_at": "2026-09-05T22:19:53.064Z"
+    },
+    {
+      "run_id": "2026-09-05T22:22:33.237Z",
+      "url": "https://urban-vampi-production.up.railway.app/users/v1/1/email",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "openapi-debug-password-exposure",
+          "title": "OpenAPI debug endpoint exposes cleartext passwords",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vampi-user-bola-live-oracle",
+          "title": "VAmPI user profile BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vampi-user-bola-route-live-oracle",
+          "title": "VAmPI user profile route BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vampi-books-excessive-data-live-oracle",
+          "title": "VAmPI books excessive data exposure live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "vampi-books-stale-catalog-live-oracle",
+          "title": "VAmPI stale book catalog live oracle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vampi-admin-profile-unauth-live-oracle",
+          "title": "VAmPI admin profile unauthenticated live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vampi-users-enumeration-live-oracle",
+          "title": "VAmPI user enumeration live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "vampi-createdb-unauth-live-oracle",
+          "title": "VAmPI unauthenticated database reset live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vampi-debug-password-live-oracle",
+          "title": "VAmPI debug endpoint cleartext password live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 575,
+      "status": "ok",
+      "scanned_at": "2026-09-05T22:22:33.237Z"
+    },
+    {
+      "run_id": "2026-09-05T22:22:41.348Z",
+      "url": "https://urban-vampi-production.up.railway.app/books/v1/bookTitle1",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 15,
+      "findings": [
+        {
+          "slug": "vampi-books-stale-catalog-live-oracle",
+          "title": "VAmPI stale book catalog live oracle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vampi-books-stale-catalog-route-live-oracle",
+          "title": "VAmPI stale book catalog route live oracle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "openapi-debug-password-exposure",
+          "title": "OpenAPI debug endpoint exposes cleartext passwords",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vampi-user-bola-live-oracle",
+          "title": "VAmPI user profile BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vampi-books-excessive-data-live-oracle",
+          "title": "VAmPI books excessive data exposure live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "vampi-admin-profile-unauth-live-oracle",
+          "title": "VAmPI admin profile unauthenticated live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vampi-users-enumeration-live-oracle",
+          "title": "VAmPI user enumeration live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "vampi-createdb-unauth-live-oracle",
+          "title": "VAmPI unauthenticated database reset live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vampi-debug-password-live-oracle",
+          "title": "VAmPI debug endpoint cleartext password live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 575,
+      "status": "ok",
+      "scanned_at": "2026-09-05T22:22:41.348Z"
+    },
+    {
+      "run_id": "2026-09-05T22:22:49.082Z",
+      "url": "https://vulnerable-ecommerce.vercel.app/",
+      "auth": "oss_deploy",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "exposed-config-backup",
+          "title": "Config or backup file reachable over HTTP",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-sql-evidence",
+          "title": "Client bundle builds SQL via string concatenation",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 5,
+      "probes_run": 598,
+      "status": "ok",
+      "scanned_at": "2026-09-05T22:22:49.082Z"
+    },
+    {
+      "run_id": "2026-09-05T22:22:53.025Z",
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 13,
+      "findings": [
+        {
+          "slug": "oopssec-live-stream-bfla-live-oracle",
+          "title": "OopsSec Store live-stream BFLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "oopssec-next-public-env-live-oracle",
+          "title": "OopsSec Store NEXT_PUBLIC_ env leak live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "oopssec-xxe-supplier-import-route-live-oracle",
+          "title": "OopsSec Store XXE supplier import route live oracle",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-xxe-evidence",
+          "title": "Client bundle documents XXE via external entity expansion",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-oopssec-store-evidence",
+          "title": "OopsSec Store CTF walkthrough roadmap disclosed",
+          "severity": "medium",
+          "confidence": 0.89,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-oopssec-second-order-sqli-evidence",
+          "title": "OopsSec Store second-order SQLi walkthrough disclosed",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "client-side-oopssec-plaintext-password-logs-evidence",
+          "title": "OopsSec Store plaintext password in logs walkthrough disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "client-side-oopssec-insecure-password-reset-evidence",
+          "title": "OopsSec Store insecure password reset walkthrough disclosed",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "client-side-oopssec-weak-md5-hashing-admin-evidence",
+          "title": "OopsSec Store weak MD5 admin compromise walkthrough disclosed",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Cryptographic failure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 480,
+      "status": "ok",
+      "scanned_at": "2026-09-05T22:22:53.025Z"
+    },
+    {
+      "run_id": "2026-09-05T22:22:57.309Z",
+      "url": "https://seclab.vercel.app/labs/ssrf",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "seclab-ssrf-vulnerable-route-live-oracle",
+          "title": "SecLab /api/ssrf-vulnerable route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "client-side-seclab-playground-evidence",
+          "title": "SecLab web vulnerability playground disclosed",
+          "severity": "medium",
+          "confidence": 0.86,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "seclab-labs-dead-route-live-oracle",
+          "title": "SecLab /labs/* dead route live oracle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 573,
+      "status": "ok",
+      "scanned_at": "2026-09-05T22:22:57.309Z"
+    },
+    {
+      "run_id": "2026-09-05T22:23:03.817Z",
+      "url": "https://bugstore.bugtraceai.com/api/cart/add",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 22,
+      "findings": [
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "bugstore-product-search-sqli-live-oracle",
+          "title": "BugStore product search SQL injection live oracle (V-001/V-012)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "bugstore-product-image-path-traversal-live-oracle",
+          "title": "BugStore product image path traversal live oracle (V-014)",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "bugstore-admin-debug-stats-bac-live-oracle",
+          "title": "BugStore admin debug stats broken access control live oracle (V-012)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-forum-thread-sqli-live-oracle",
+          "title": "BugStore forum thread_id SQL injection live oracle (V-001)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "bugstore-orders-idor-live-oracle",
+          "title": "BugStore orders IDOR live oracle (V-009)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-checkout-client-total-live-oracle",
+          "title": "BugStore checkout client-trusted total live oracle (V-023)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "bugstore-profile-mass-assignment-live-oracle",
+          "title": "BugStore profile role mass-assignment live oracle (V-015)",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-secure-portal-totp-login-live-oracle",
+          "title": "BugStore secure-portal TOTP brute-force live oracle (V-031/V-032)",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "bugstore-health-rce-live-oracle",
+          "title": "BugStore health check RCE live oracle (V-021)",
+          "severity": "critical",
+          "confidence": 0.95,
+          "category": "Injection"
+        },
+        {
+          "slug": "bugstore-admin-users-bac-live-oracle",
+          "title": "BugStore admin users enumeration live oracle (V-005/V-006)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-forum-posts-stored-xss-live-oracle",
+          "title": "BugStore forum reply stored XSS live oracle (V-003)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "bugstore-graphql-introspection-bola-live-oracle",
+          "title": "BugStore GraphQL introspection and users BOLA live oracle (V-008/V-009)",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-reviews-mass-assignment-live-oracle",
+          "title": "BugStore reviews is_approved mass-assignment live oracle (V-020)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Mass assignment"
+        },
+        {
+          "slug": "bugstore-open-redirect-live-oracle",
+          "title": "BugStore open redirect live oracle (V-005/V-006)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "stack-vercel-env-exposure",
+          "title": "Vercel / Next build manifest or env debug endpoint",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 579,
+      "status": "ok",
+      "scanned_at": "2026-09-05T22:23:03.817Z"
+    },
+    {
+      "run_id": "2026-09-05T22:23:39.955Z",
+      "url": "https://bugstore.bugtraceai.com/api/orders/1",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 23,
+      "findings": [
+        {
+          "slug": "bugstore-orders-idor-route-live-oracle",
+          "title": "BugStore orders IDOR route live oracle (V-009)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-orders-idor-live-oracle",
+          "title": "BugStore orders IDOR live oracle (V-009)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "bugstore-product-search-sqli-live-oracle",
+          "title": "BugStore product search SQL injection live oracle (V-001/V-012)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "bugstore-product-image-path-traversal-live-oracle",
+          "title": "BugStore product image path traversal live oracle (V-014)",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "bugstore-admin-debug-stats-bac-live-oracle",
+          "title": "BugStore admin debug stats broken access control live oracle (V-012)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-forum-thread-sqli-live-oracle",
+          "title": "BugStore forum thread_id SQL injection live oracle (V-001)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "bugstore-checkout-client-total-live-oracle",
+          "title": "BugStore checkout client-trusted total live oracle (V-023)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "bugstore-profile-mass-assignment-live-oracle",
+          "title": "BugStore profile role mass-assignment live oracle (V-015)",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-secure-portal-totp-login-live-oracle",
+          "title": "BugStore secure-portal TOTP brute-force live oracle (V-031/V-032)",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "bugstore-health-rce-live-oracle",
+          "title": "BugStore health check RCE live oracle (V-021)",
+          "severity": "critical",
+          "confidence": 0.95,
+          "category": "Injection"
+        },
+        {
+          "slug": "bugstore-admin-users-bac-live-oracle",
+          "title": "BugStore admin users enumeration live oracle (V-005/V-006)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-forum-posts-stored-xss-live-oracle",
+          "title": "BugStore forum reply stored XSS live oracle (V-003)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "bugstore-graphql-introspection-bola-live-oracle",
+          "title": "BugStore GraphQL introspection and users BOLA live oracle (V-008/V-009)",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-reviews-mass-assignment-live-oracle",
+          "title": "BugStore reviews is_approved mass-assignment live oracle (V-020)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Mass assignment"
+        },
+        {
+          "slug": "bugstore-open-redirect-live-oracle",
+          "title": "BugStore open redirect live oracle (V-005/V-006)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "stack-vercel-env-exposure",
+          "title": "Vercel / Next build manifest or env debug endpoint",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 580,
+      "status": "ok",
+      "scanned_at": "2026-09-05T22:23:39.955Z"
+    },
+    {
+      "run_id": "2026-09-05T22:24:15.698Z",
+      "url": "https://bugstore.bugtraceai.com/api/reviews/create",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 23,
+      "findings": [
+        {
+          "slug": "bugstore-reviews-mass-assignment-route-live-oracle",
+          "title": "BugStore /api/reviews route mass-assignment live oracle (V-020)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Mass assignment"
+        },
+        {
+          "slug": "bugstore-reviews-mass-assignment-live-oracle",
+          "title": "BugStore reviews is_approved mass-assignment live oracle (V-020)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Mass assignment"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "bugstore-product-search-sqli-live-oracle",
+          "title": "BugStore product search SQL injection live oracle (V-001/V-012)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "bugstore-product-image-path-traversal-live-oracle",
+          "title": "BugStore product image path traversal live oracle (V-014)",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "bugstore-admin-debug-stats-bac-live-oracle",
+          "title": "BugStore admin debug stats broken access control live oracle (V-012)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-forum-thread-sqli-live-oracle",
+          "title": "BugStore forum thread_id SQL injection live oracle (V-001)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "bugstore-orders-idor-live-oracle",
+          "title": "BugStore orders IDOR live oracle (V-009)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-checkout-client-total-live-oracle",
+          "title": "BugStore checkout client-trusted total live oracle (V-023)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "bugstore-profile-mass-assignment-live-oracle",
+          "title": "BugStore profile role mass-assignment live oracle (V-015)",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-secure-portal-totp-login-live-oracle",
+          "title": "BugStore secure-portal TOTP brute-force live oracle (V-031/V-032)",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "bugstore-health-rce-live-oracle",
+          "title": "BugStore health check RCE live oracle (V-021)",
+          "severity": "critical",
+          "confidence": 0.95,
+          "category": "Injection"
+        },
+        {
+          "slug": "bugstore-admin-users-bac-live-oracle",
+          "title": "BugStore admin users enumeration live oracle (V-005/V-006)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-forum-posts-stored-xss-live-oracle",
+          "title": "BugStore forum reply stored XSS live oracle (V-003)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "bugstore-graphql-introspection-bola-live-oracle",
+          "title": "BugStore GraphQL introspection and users BOLA live oracle (V-008/V-009)",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-open-redirect-live-oracle",
+          "title": "BugStore open redirect live oracle (V-005/V-006)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "stack-vercel-env-exposure",
+          "title": "Vercel / Next build manifest or env debug endpoint",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 581,
+      "status": "ok",
+      "scanned_at": "2026-09-05T22:24:15.698Z"
     }
   ],
   "teacher_delta_runs": [
