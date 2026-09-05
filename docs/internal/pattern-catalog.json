@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-05T19:14:13.189Z",
-  "total": 3339,
-  "uniqueSlugs": 3331,
+  "generatedAt": "2026-09-05T20:03:36.224Z",
+  "total": 3343,
+  "uniqueSlugs": 3335,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3321,
+    "generic": 3325,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3254,
+    "deep": 3258,
     "continuous": 0
   },
   "byCategory": {
@@ -25,9 +25,9 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 155,
-    "Security misconfiguration": 283,
+    "Security misconfiguration": 286,
     "Broken authentication": 210,
-    "Injection": 543,
+    "Injection": 544,
     "Cross-site scripting": 798,
     "Open redirect": 27,
     "general": 20,
@@ -1978,6 +1978,9 @@
     "ginandjuice-vulnerabilities-credentials-route-live-oracle",
     "ginandjuice-vulnerabilities-disclosure-route-live-oracle",
     "graphiql-ui-exposed",
+    "graphql-complexity-dos-live-oracle",
+    "graphql-complexity-dos-route-live-oracle",
+    "graphql-complexity-playground-hub-route-live-oracle",
     "graphql-endpoint-disclosed-in-docs",
     "graphql-introspection-enabled",
     "graphql-lab-hasura-admin-live-oracle",
@@ -3357,6 +3360,7 @@
     "zerohealth-debug-token-route-live-oracle",
     "zerohealth-deserialization-route-live-oracle",
     "zerohealth-doctors-route-live-oracle",
+    "zerohealth-enhanced-chat-route-live-oracle",
     "zerohealth-file-upload-route-live-oracle",
     "zerohealth-files-route-live-oracle",
     "zerohealth-health-route-live-oracle",

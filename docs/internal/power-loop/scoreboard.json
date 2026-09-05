@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T19:30:00.000Z",
+  "updated_at": "2026-09-05T20:05:13.061Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3261,
-  "total_findings": 37791,
+  "total_sites_scanned": 3265,
+  "total_findings": 37857,
   "critical_findings": 76,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2103,
-  "discovery_findings": 30064,
-  "improvements_shipped": 1447,
-  "last_run": "2026-09-05T19:30:00.000Z",
+  "discovery_findings": 30078,
+  "improvements_shipped": 1450,
+  "last_run": "2026-09-05T20:05:13.061Z",
   "last_run_summary": {
-    "hour_utc": "19",
+    "hour_utc": "20",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,43 +48,35 @@
           ]
         }
       },
-      "note": "Primary Heroku timeout (600s) then staging fallback 6/6 (53 findings); parallel run also hit primary 52/6"
+      "note": "Stable 6/6 first-pass recall on primary Heroku (52 findings, 40 live oracles)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 109,
-      "focus": "GraphQL complexity + DVGA2 + VaultApp IDOR + Chimera banking drain + zerohealth/VAmPI books",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 20,
+      "focus": "GraphQL complexity DoS oracles + zerohealth enhanced-chat API route",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (53 findings; gap=[]; primary Heroku timeout)",
-      "dvga2.tools.escape.tech/graphql: 18 findings — full DVGA GraphQL suite",
-      "vaultapp-omega.vercel.app/api/documents/1: 14 findings — vaultapp-documents-idor-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/banking/transfer: 8 findings — chimera-banking-transfer-business-logic-route-live-oracle",
-      "zerohealth.aliyu.dev/: 6 findings — zerohealth-hub-route-live-oracle",
-      "zero-health.vercel.app/: 6 findings — zero-health-vercel-dashboard-route-live-oracle",
-      "vampi-production.up.railway.app/books/v1: 3 findings — vampi-books-route-live-oracle corpus fallback"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings; gap=[])",
+      "graphql-complexity-playground-production.up.railway.app/: 8 findings — graphql-complexity-playground-hub-route-live-oracle + graphql-complexity-dos-live-oracle",
+      "graphql-complexity-playground-production.up.railway.app/graphql: graphql-complexity-dos-route-live-oracle (Query is too complex max 10)",
+      "zerohealth.aliyu.dev/api/chatbot/enhanced-chat: 6 findings — zerohealth-enhanced-chat-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop.herokuapp.com primary oracle cold-start timeout (600s)",
-      "graphql-complexity-playground thin hub without GraphQL DoS route oracle",
-      "oopssec react2shell/weak-jwt still queued; qa.brokencrystals.com/api/file/aws 48h skip",
-      "zerohealth.aliyu.dev API routes need individual route scans beyond hub"
+      "oopssec react2shell/weak-jwt vanity slugs queued for drain",
+      "qa.brokencrystals.com/api/file/aws 48h skip",
+      "zerohealth.aliyu.dev remaining API routes beyond enhanced-chat still queued"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 53,
+    "juice-shop.herokuapp.com": 52,
+    "graphql-complexity-playground-production.up.railway.app": 8,
+    "zerohealth.aliyu.dev/api/chatbot/enhanced-chat": 6,
     "dvga2.tools.escape.tech/graphql": 18,
-    "dvga2.tools.escape.tech": 17,
     "vaultapp-omega.vercel.app/api/documents/1": 14,
-    "vaultapp-omega.vercel.app/api/notes/1": 14,
-    "chimera.atlascrew.dev/api/v1/banking/transfer": 8,
-    "chimera.atlascrew.dev/api/v1/banking/accounts": 9,
-    "zerohealth.aliyu.dev": 6,
-    "zero-health.vercel.app": 6,
-    "graphql-complexity-playground-production.up.railway.app": 6
+    "zerohealth.aliyu.dev": 6
   }
 }
