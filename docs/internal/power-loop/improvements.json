@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-health-rce-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/health?cmd=id returns HTTP 403 Unauthorized execution without admin; after role:admin mass-assignment cmd_output=uid=0(root); bugstore.bugtraceai.com/api/health findings 15→20 (+bugstore-health-rce-live-oracle +route); benchmark juice-shop-staging 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-admin-users-bac-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/admin/users returns HTTP 401 without auth; escalated admin token returns password_hash for admin@bugstore.com; bugstore.bugtraceai.com/api/admin/users findings 15→20 (+bugstore-admin-users-bac-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-forum-posts-stored-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/forum/threads/1/replies stores <script> marker persisted in GET /api/forum/threads/1 JSON (V-003); bugstore.bugtraceai.com/api/forum/posts findings 15→19 (+bugstore-forum-posts-stored-xss-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:rootabhi1.github.io/AI-Threatlab",
       "slug": "ai-threatlab-route-live-oracle",
       "status": "shipped",
