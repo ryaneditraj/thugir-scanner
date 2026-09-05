@@ -3034,6 +3034,10 @@ const DEEP_RULES = new Set<string>([
   "bugstoreForumPostsStoredXssRouteLiveOracle",
   "bugstoreGraphqlIntrospectionBolaLiveOracle",
   "bugstoreGraphqlIntrospectionBolaRouteLiveOracle",
+  "bugstoreReviewsMassAssignmentLiveOracle",
+  "bugstoreReviewsMassAssignmentRouteLiveOracle",
+  "bugstoreOpenRedirectLiveOracle",
+  "bugstoreOpenRedirectRouteLiveOracle",
   "duckStoreCartNegativeQuantityLiveOracle",
   "duckStoreCartNegativeQuantityRouteLiveOracle",
   "duckStoreAdminUsersBflaLiveOracle",
@@ -3700,6 +3704,7 @@ const DEEP_RULES = new Set<string>([
   "seclabIdorVulnerableRouteLiveOracle",
   "seclabPathTraversalRouteLiveOracle",
   "seclabSsrfVulnerableRouteLiveOracle",
+  "seclabXxeVulnerableRouteLiveOracle",
   "vulnerableWebSiteLoginRouteLiveOracle",
   "vulnerableWebSiteCsrfRouteLiveOracle",
   "vulnerableWebSiteStoredXssRouteLiveOracle",
@@ -14009,6 +14014,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       )
         return bugstoreRoutePairWeight(p.slug);
       if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/reviews(?:\/create|\/)?(?:[/?#]|$)/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-reviews-mass-assignment")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/redirect\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-open-redirect")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
         /owaspbased-lessons\.vercel\.app/i.test(origin) &&
         /\/api\/lessons\/?$/i.test(targetInput) &&
         p.slug === "owasp-genai-lessons-api-route-live-oracle"
@@ -15286,8 +15303,20 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/labs\/xxe\b/i.test(targetInput) &&
+        p.slug.startsWith("seclab-xxe-vulnerable")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/api\/ssrf(?:-vulnerable|(?:[/?#]|$))/i.test(targetInput) &&
         p.slug.startsWith("seclab-ssrf-vulnerable")
+      )
+        return -3;
+      if (
+        /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
+        /\/api\/xxe(?:-vulnerable|(?:[/?#]|$))/i.test(targetInput) &&
+        p.slug.startsWith("seclab-xxe-vulnerable")
       )
         return -3;
       if (

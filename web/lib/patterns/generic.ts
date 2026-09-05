@@ -85441,5 +85441,135 @@ export const genericPatterns: Pattern[] = [
       "Our BugStore /graphql route scan confirms unauthenticated GraphQL introspection and users BOLA. Show route-specific GraphQL hardening.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "seclab-xxe-vulnerable-route-live-oracle",
+    platform: "generic",
+    category: "XML external entity",
+    severityDefault: "high",
+    title: "SecLab /api/xxe-vulnerable route live oracle",
+    description:
+      "When scanning seclab.vercel.app /api/xxe-vulnerable or /labs/xxe hub, POST with external entity payload resolves file contents — or the route serves an Angular SPA shell instead of the documented Next.js XXE training API.",
+    impactOneline:
+      "Route-specific XXE lab oracle confirms live XML entity expansion or flags dead /api/xxe-vulnerable stubs on the public Vercel host.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "seclabXxeVulnerableRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Deploy the Next.js SecLab XXE API or remove advertised dead routes.",
+      steps: [
+        "Ship DaniSam-STU/security-lab /api/xxe-vulnerable on production.",
+        "Disable external entity resolution in XML parsers.",
+        "Gate unreleased lab routes behind auth until content ships."
+      ]
+    },
+    fixPrompt:
+      "Our seclab.vercel.app /api/xxe-vulnerable route is a dead Angular stub or exposes live XXE. Show XML parser hardening and deploy fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-reviews-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Mass assignment",
+    severityDefault: "high",
+    title: "BugStore reviews is_approved mass-assignment live oracle (V-020)",
+    description:
+      "POST /api/reviews/ on bugstore.bugtraceai.com accepts client-supplied is_approved:true — reviews auto-approve without moderator workflow.",
+    impactOneline:
+      "BugStore review submission lets attackers bypass moderation by mass-assigning is_approved on create.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreReviewsMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block client-controlled is_approved on BugStore review creation.",
+      steps: [
+        "Allowlist writable fields on POST /api/reviews/.",
+        "Require moderator role to set is_approved.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore POST /api/reviews/ accepts is_approved:true from clients. Show mass-assignment remediation for review moderation fields.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-reviews-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Mass assignment",
+    severityDefault: "high",
+    title: "BugStore /api/reviews route mass-assignment live oracle (V-020)",
+    description:
+      "When scanning /api/reviews or /api/reviews/create on bugstore.bugtraceai.com, POST confirms is_approved mass-assignment auto-approves reviews.",
+    impactOneline:
+      "Route-specific BugStore review scans should confirm is_approved mass-assignment bypasses moderation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreReviewsMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block client-controlled is_approved on BugStore review routes.",
+      steps: [
+        "Allowlist writable fields on POST /api/reviews/.",
+        "Require moderator role to set is_approved.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/reviews route scan confirms is_approved mass-assignment. Show route-specific review moderation hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-open-redirect-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "BugStore open redirect live oracle (V-005/V-006)",
+    description:
+      "GET /api/redirect?url= on bugstore.bugtraceai.com issues 307 Location to attacker-controlled URLs without validation.",
+    impactOneline:
+      "BugStore redirect endpoint enables phishing via unvalidated outbound redirects.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreOpenRedirectLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets against an allowlist on BugStore /api/redirect.",
+      steps: [
+        "Allowlist permitted redirect hostnames.",
+        "Reject external URLs on open redirect parameters.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore GET /api/redirect?url= reflects attacker URLs in Location. Show open redirect validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-open-redirect-route-live-oracle",
+    platform: "generic",
+    category: "Open redirect",
+    severityDefault: "medium",
+    title: "BugStore /api/redirect route open redirect live oracle (V-005/V-006)",
+    description:
+      "When scanning /api/redirect on bugstore.bugtraceai.com, GET ?url= confirms unvalidated 307 redirect to attacker domain.",
+    impactOneline:
+      "Route-specific BugStore redirect scans should confirm open redirect without target validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreOpenRedirectRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets on BugStore /api/redirect route scans.",
+      steps: [
+        "Allowlist permitted redirect hostnames.",
+        "Reject external URLs on open redirect parameters.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/redirect route scan confirms unvalidated open redirect. Show route-specific redirect allowlist remediation.",
+    version: 1,
+    enabled: true
   }
 ];
