@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:owasp-finbot-ctf.org",
+      "slug": "finbot-host-live-oracle-route-scoping",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: finbotHostLiveOracleAllowed gates host-level finbot-darklab/how-it-works/ctf/portals live oracles on route-scoped scans; owasp-finbot-ctf.org/vendor findings 32→11 (0 finbot-darklab host-live duplicates); /portals 31→11; route oracles retained on /darklab and /vendor; benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-walkthrough-runner-priority-live-stream-second-order-mcp",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for oopssec-live-stream-bfla/second-order-sqli/mcp-malicious-server/stored-xss-reviews on matching /posts/* routes; koadt.github.io/.../live-stream-hijack findings 8 (+oopssec-live-stream-bfla-route-live-oracle); second-order-sql-injection 10 (+oopssec-second-order-sqli-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-walkthrough-queue-priority-prepend",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: prepended live-stream-hijack + second-order-sql-injection + mcp-malicious-server + owasp-finbot-ctf.org/vendor to priority_discovery_urls; POWER_SCAN_LIMIT=2 drained live-stream (8) + second-order (10) first; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:owaspsecure.com",
       "slug": "owaspsecure-integrity-remote-config-route-live-oracle",
       "status": "shipped",
