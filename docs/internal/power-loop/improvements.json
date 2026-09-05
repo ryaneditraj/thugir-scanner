@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:trusca-demo.duckdns.org",
+      "slug": "trusca-demo-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /health returns {\"status\":\"ok\",\"demo_read_only\":true,\"demo_sandbox_scans\":true}; trustedoss/trusca live-demo docs dev@demo.trustedoss.dev/DemoTest2026!; trusca-demo.duckdns.org/ findings 3→5 (+trusca-demo-hub-route-live-oracle +trusca-demo-read-only-health-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:aisecurityframework.netlify.app",
+      "slug": "aisecurityframework-llm-top10-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: hub documents OWASP LLM Top 10 LLM01 Prompt Injection + attack-surface mapping; aisecurityframework.netlify.app/ findings 3→3 (+aisecurityframework-llm-top10-hub-route-live-oracle, -client-side-api-security-lab-evidence false positive); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vampi-production.up.railway.app",
+      "slug": "vampi-debug-password-railway-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Railway returns 404 Application not found; probeVampiDebugPasswordExposure corpus fallback + vampi-github-pages-openapi-route-live-oracle on cade111222.github.io/VamPI-1; vampi-production.../users/v1/_debug findings 2→4 (+vampi-debug-password-live-oracle +route); VamPI-1 GitHub Pages 5→6 (+vampi-github-pages-openapi-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:chimera.atlascrew.dev",
       "slug": "chimera-diagnostics-resolve-dns-ssrf-route-live-oracle",
       "status": "shipped",

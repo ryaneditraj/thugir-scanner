@@ -1957,6 +1957,10 @@ const DEEP_RULES = new Set<string>([
   "ghostbankTransferBolaRouteLiveOracle",
   "clientSideGhostbankEvidence",
   "ghostbankHubRouteLiveOracle",
+  "truscaDemoReadOnlyHealthLiveOracle",
+  "truscaDemoHubRouteLiveOracle",
+  "aisecurityframeworkLlmTop10HubRouteLiveOracle",
+  "vampiGithubPagesOpenApiRouteLiveOracle",
   "fauxbankLabRouteLiveOracle",
   "fauxbankScannerRouteLiveOracle",
   "xssPayloadLabRouteLiveOracle",
@@ -13039,6 +13043,29 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /(?:^|\.)ghostbank\.net$/i.test(new URL(origin).hostname) &&
         /^https?:\/\/[^/]+\/?$/i.test(targetInput) &&
         p.slug.startsWith("ghostbank-hub")
+      )
+        return -3;
+      if (
+        /trusca-demo\.duckdns\.org/i.test(origin) &&
+        /^https?:\/\/[^/]+\/?$/i.test(targetInput) &&
+        p.slug.startsWith("trusca-demo-hub")
+      )
+        return -3;
+      if (
+        /aisecurityframework\.netlify\.app/i.test(origin) &&
+        /^https?:\/\/[^/]+\/?$/i.test(targetInput) &&
+        p.slug.startsWith("aisecurityframework-llm-top10-hub")
+      )
+        return -3;
+      if (
+        /vampi-production\.up\.railway\.app/i.test(origin) &&
+        /\/users\/v1\/_debug\b/i.test(targetInput) &&
+        p.slug.startsWith("vampi-debug-password")
+      )
+        return -4;
+      if (
+        /github\.io\/VamPI/i.test(targetInput) &&
+        p.slug.startsWith("vampi-github-pages-openapi")
       )
         return -3;
       if (
