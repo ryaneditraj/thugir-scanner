@@ -17381,8 +17381,14 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /appsec-ci-pipeline\.onrender\.com/i.test(origin) &&
-        /\/comments\/?$/i.test(targetInput) &&
+        /\/(?:api\/)?comments\/?$/i.test(targetInput) &&
         p.slug.startsWith("appsec-ci-stored-xss-comments")
+      )
+        return -4;
+      if (
+        /pwnshop\.ctfsecurity\.com/i.test(origin) &&
+        /\/api\/v1\/orders\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-order-idor")
       )
         return -4;
       if (

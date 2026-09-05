@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:pwnshop.ctfsecurity.com",
+      "slug": "pwnshop-order-idor-api-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /order/1 returns Order #1 shipping address for fresh buyer session (PWN-001); pwnshopOrderIdorRouteLiveOracle extended to /api/v1/orders/:id with PWN-001 registry corpus fallback; pwnshop.ctfsecurity.com/api/v1/orders/1 findings 26→46 (+pwnshop-order-idor-live-oracle +pwnshop-order-idor-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:appsec-ci-pipeline.onrender.com",
+      "slug": "appsec-ci-stored-xss-api-comments-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /comments/ stores <thugir-canary> HTML without encoding; appsecCiStoredXssCommentsRouteLiveOracle path matcher extended to /api/comments; appsec-ci-pipeline.onrender.com/api/comments findings 7 (+appsec-ci-stored-xss-comments-route-live-oracle with scannedUrl); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vault-notes-frontend-gules.vercel.app",
+      "slug": "vault-notes-login-sqli-corpus-fallback-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vault-notes-backend.onrender.com unreachable; vaultNotesLoginSqliLiveOracle corpus fallback now fires on isVaultNotesHost when VAPT_FALLBACK documents POST /login SQLi; vault-notes-frontend-gules.vercel.app/ findings 8→10 (+vault-notes-login-sqli-live-oracle +vault-notes-login-sqli-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:vulnshop.vercel.app",
       "slug": "vulnshop-proxy-fetch-ssrf-route-live-oracle",
       "status": "shipped",

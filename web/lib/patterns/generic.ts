@@ -25680,7 +25680,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Pwnshop order details IDOR route live oracle (PWN-001)",
     description:
-      "When scanning /order/:id, authenticated buyers can read order #1 shipping address without ownership validation — route-specific order IDOR oracle.",
+      "When scanning /order/:id or /api/v1/orders/:id, authenticated buyers can read order #1 shipping address without ownership validation — route-specific order IDOR oracle.",
     impactOneline:
       "Route scans on order pages need live IDOR confirmation with scannedUrl evidence.",
     detectorKind: "rule_ref",
@@ -76569,7 +76569,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "AppSec CI Pipeline /comments/ stored XSS route live oracle",
     description:
-      "When scanning /comments/, POST with CSRF token stores unsanitized HTML in comment cards — route-specific stored XSS oracle.",
+      "When scanning /comments/ or /api/comments, POST with CSRF token stores unsanitized HTML in comment cards — route-specific stored XSS oracle.",
     impactOneline:
       "Route-scoped scans should flag stored XSS on AppSec CI Pipeline comment endpoints.",
     detectorKind: "rule_ref",
