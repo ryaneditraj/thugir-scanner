@@ -13733,6 +13733,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nextjs-rsc-cve-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Next.js RSC CVE server-action live oracle",
+    description:
+      "Live probe confirms CVE-2025-66478 / CVE-2025-55182 HackerOne demo markers (Run Server Action, VERCEL_PLATFORM_PROTECTION, vulnerable Next.js 15/16) on intentional RSC labs.",
+    impactOneline:
+      "Public Next.js RSC CVE lab exposes reachable server-action RCE chain for platform-protection bypass testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nextjsRscCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Next.js/React; remove public CVE demos.",
+      steps: [
+        "Upgrade Next.js and React to patched RSC releases.",
+        "Remove HackerOne/react2shell demo deployments from public URLs.",
+        "Auth-gate or disable server actions on production domains."
+      ]
+    },
+    fixPrompt:
+      "Our Next.js app hosts a CVE-2025-66478 RSC lab with Run Server Action. Show patched versions and how to remove public RCE demos.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nextjs-rsc-cve-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Next.js RSC CVE route live oracle",
+    description:
+      "When scanning nextjs-cve-hackerone.vercel.app or similar RSC CVE demos, route scan confirms CVE-2025-66478 banner plus server-action lab markers — route-specific RSC training oracle.",
+    impactOneline:
+      "Route-specific Next.js RSC CVE demo confirms intentional server-action exploitation surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nextjsRscCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Next.js/React; remove public CVE demos.",
+      steps: [
+        "Upgrade Next.js and React to patched RSC releases.",
+        "Remove HackerOne/react2shell demo deployments from public URLs.",
+        "Auth-gate or disable server actions on production domains."
+      ]
+    },
+    fixPrompt:
+      "Our Next.js RSC CVE route scan confirms CVE-2025-66478 demo markers. Show patched versions and demo isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-cve-55182-saas-poc-evidence",
     platform: "generic",
     category: "Injection",

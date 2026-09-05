@@ -1816,6 +1816,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideGraphqlLabEvidence",
   "clientSideGraphqlSecurityHubEvidence",
   "clientSideReactRscCveEvidence",
+  "nextjsRscCveLiveOracle",
+  "nextjsRscCveRouteLiveOracle",
   "clientSideCve55182SaasPocEvidence",
   "clientSideNextjsMiddlewareCveEvidence",
   "clientSideCtfChallange3MiddlewareBypassEvidence",
