@@ -6180,12 +6180,21 @@ const clientSideOopssecBolaWishlistEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_BOLA_WISHLIST_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/bola-wishlist-access/";
+
 const oopssecBolaWishlistRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/bola-wishlist-access/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/posts\/bola-wishlist-access/i.test(pageUrl) ||
+    /\/posts\/broken-object-level-authorization\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/broken-object-level-authorization\/?$/i.test(pageUrl)
+    ? OOPSSEC_BOLA_WISHLIST_CANONICAL_POST
+    : pageUrl;
   const result = await oopssecWalkthroughEvidenceWithFetch(
     ctx,
-    pageUrl,
+    fetchUrl,
     clientSideOopssecBolaWishlistEvidence
   );
   if (!result.fired) return NEGATIVE;
@@ -6195,7 +6204,9 @@ const oopssecBolaWishlistRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/bola-wishlist-access route scan — walkthrough documents missing ownership check on GET /api/wishlists/[id] exposing wl-internal-001 admin wishlist"
+      note: /\/posts\/broken-object-level-authorization\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/broken-object-level-authorization route scan — vanity slug 404; canonical bola-wishlist-access walkthrough documents missing ownership check on GET /api/wishlists/[id] exposing wl-internal-001 admin wishlist"
+        : "OopsSec Store /posts/bola-wishlist-access route scan — walkthrough documents missing ownership check on GET /api/wishlists/[id] exposing wl-internal-001 admin wishlist"
     }
   };
 };
@@ -7126,10 +7137,23 @@ const clientSideOopssecSsrfEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_SSRF_INTERNAL_PAGE_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/ssrf-internal-page-access/";
+
 const oopssecSsrfRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/ssrf-internal-page-access/i.test(pageUrl)) return NEGATIVE;
-  const result = await oopssecWalkthroughEvidenceWithFetch(ctx, pageUrl, clientSideOopssecSsrfEvidence);
+  const routeOk =
+    /\/posts\/ssrf-internal-page-access/i.test(pageUrl) ||
+    /\/posts\/server-side-request-forgery\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/server-side-request-forgery\/?$/i.test(pageUrl)
+    ? OOPSSEC_SSRF_INTERNAL_PAGE_CANONICAL_POST
+    : pageUrl;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    fetchUrl,
+    clientSideOopssecSsrfEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -7137,7 +7161,9 @@ const oopssecSsrfRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/ssrf-internal-page-access route scan — walkthrough documents support-form screenshot URL SSRF to http://localhost:3000/internal"
+      note: /\/posts\/server-side-request-forgery\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/server-side-request-forgery route scan — vanity slug 404; canonical ssrf-internal-page-access walkthrough documents support-form screenshot URL SSRF to http://localhost:3000/internal"
+        : "OopsSec Store /posts/ssrf-internal-page-access route scan — walkthrough documents support-form screenshot URL SSRF to http://localhost:3000/internal"
     }
   };
 };
@@ -7850,12 +7876,21 @@ const clientSideOopssecOpenRedirectLoginBypassEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_OPEN_REDIRECT_LOGIN_BYPASS_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/open-redirect-login-bypass/";
+
 const oopssecOpenRedirectLoginBypassRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/open-redirect-login-bypass/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/posts\/open-redirect-login-bypass/i.test(pageUrl) ||
+    /\/posts\/open-redirect\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/open-redirect\/?$/i.test(pageUrl)
+    ? OOPSSEC_OPEN_REDIRECT_LOGIN_BYPASS_CANONICAL_POST
+    : pageUrl;
   const result = await oopssecWalkthroughEvidenceWithFetch(
     ctx,
-    pageUrl,
+    fetchUrl,
     clientSideOopssecOpenRedirectLoginBypassEvidence
   );
   if (!result.fired) return NEGATIVE;
@@ -7865,7 +7900,9 @@ const oopssecOpenRedirectLoginBypassRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/open-redirect-login-bypass route scan — walkthrough documents unvalidated redirect query parameter reaching /internal/oauth/callback after login"
+      note: /\/posts\/open-redirect\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/open-redirect route scan — vanity slug 404; canonical open-redirect-login-bypass walkthrough documents unvalidated redirect query parameter reaching /internal/oauth/callback after login"
+        : "OopsSec Store /posts/open-redirect-login-bypass route scan — walkthrough documents unvalidated redirect query parameter reaching /internal/oauth/callback after login"
     }
   };
 };

@@ -14246,8 +14246,20 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
-        /\/posts\/bola-wishlist-access/i.test(targetInput) &&
+        /\/posts\/(?:bola-wishlist-access|broken-object-level-authorization)/i.test(targetInput) &&
         p.slug.startsWith("oopssec-bola-wishlist")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:open-redirect-login-bypass|open-redirect)\/?$/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-open-redirect")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:ssrf-internal-page-access|server-side-request-forgery)\/?$/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-ssrf")
       )
         return -4;
       if (
