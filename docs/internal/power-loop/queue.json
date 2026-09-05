@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T21:15:00.000Z",
+  "updated_at": "2026-09-05T22:25:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://urban-vampi-production.up.railway.app/users/v1/1/email",
+      "source": "apisec-inc/urban-VAmPI — email enumeration / BOLA oracle GET /users/v1/{id}/email (README Railway deploy; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://urban-vampi-production.up.railway.app/books/v1/bookTitle1",
+      "source": "apisec-inc/urban-VAmPI — secret book disclosure oracle GET /books/v1/{title} (VAmPI README; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-ecommerce.vercel.app/",
+      "source": "vulnerable-ecommerce — intentionally vulnerable Next.js e-commerce demo (Vercel deploy; web search 22 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import/",
+      "source": "kOaDT/oss-oopssec-store — Challenge 22 XXE supplier order import walkthrough (challenges.json; web search 22 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/ssrf",
+      "source": "DaniSam-STU/security-lab — interactive SSRF lab page with live exploit UI (seclab.vercel.app; web search 22 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/api/v1/auth/register",
       "source": "Escape Duck Store — referral code abuse oracle POST /api/v1/auth/register (vulnerabilities index; web search 21 UTC)",
