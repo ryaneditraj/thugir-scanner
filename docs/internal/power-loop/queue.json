@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T14:14:10.000Z",
+  "updated_at": "2026-09-05T14:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/healthcare/records/search?q=test",
+      "source": "atlas-crew/Chimera — CHM-HEALTH-001 patient search SQLi oracle GET /api/v1/healthcare/records/search?q= (vuln_registry; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/telecom/integrations/webhooks",
+      "source": "atlas-crew/Chimera — telecom webhook SSRF oracle POST /api/v1/telecom/integrations/webhooks (integrations blueprint; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/insurance/claims/search?q=test",
+      "source": "atlas-crew/Chimera — CHM-INS-002 claims search SQLi oracle GET /api/v1/insurance/claims/search?q= (vuln_registry; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/beneficiaries/1",
+      "source": "atlas-crew/Chimera — banking beneficiary IDOR oracle GET /api/v1/banking/beneficiaries/{id} (banking/routes.py; web search 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/insurance/policies/1",
+      "source": "atlas-crew/Chimera — CHM-INS-001 policy BOLA oracle GET /api/v1/insurance/policies/{policy_id} (vuln_registry; web search 14 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/auth/token/forge",
       "source": "atlas-crew/Chimera \u2014 JWT token forgery oracle POST /api/v1/auth/token/forge (api-reference Auth section; web search 13 UTC)",
