@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T00:10:00.000Z",
+  "updated_at": "2026-09-05T01:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/users/",
+      "source": "Escape Duck Store — unauthenticated user enumeration + BOLA oracle GET /api/v1/users/ (escape.tech blog + vulnerabilities index; web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vapi.tools.escape.tech/api/v1/users/1",
+      "source": "vAPI — OWASP API1 BOLA oracle GET /api/v1/users/{id} (vapi.tools.escape.tech hub; web search 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting/",
+      "source": "kOaDT/oss-oopssec-store — brute-force no rate limiting walkthrough (challenges.json scrape 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-direct-object-reference/",
+      "source": "kOaDT/oss-oopssec-store — IDOR order access walkthrough (challenges.json scrape 01 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/weak-jwt-secret/",
+      "source": "kOaDT/oss-oopssec-store — weak JWT HS256 secret walkthrough (challenges.json scrape 01 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/api/v1/testimonials/",
       "source": "Escape Duck Store — unauthenticated PUT testimonial BOLA oracle (escape.tech benchmarking blog; web search 00 UTC)",
@@ -21542,5 +21567,5 @@
       "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 1998
+  "discovery_urls_added": 2043
 }

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T00:22:00.000Z",
+  "updated_at": "2026-09-05T01:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2821,
-  "total_findings": 28634,
-  "critical_findings": 60,
+  "total_sites_scanned": 2838,
+  "total_findings": 28888,
+  "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2038,
-  "discovery_findings": 23966,
+  "discovery_urls_added": 2043,
+  "discovery_findings": 24114,
   "improvements_shipped": 1429,
-  "last_run": "2026-09-05T00:22:00.000Z",
+  "last_run": "2026-09-05T01:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "00",
+    "hour_utc": "01",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,44 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 39 live oracles); secret-resend present"
+      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles); secret-resend + jwt-alg-none + captcha-bypass present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 168,
-      "focus": "Duck Store testimonials BOLA + DVGA GraphQL + vAPI OWASP API Top 10 hub + fabraix jailbreak-002 + oopssec plaintext/idor/xxe walkthrough drain",
-      "improvements_shipped_this_run": 1
+      "findings": 148,
+      "focus": "Duck Store users BOLA enumeration + vAPI API1 BOLA route + oopssec brute-force/IDOR/weak-JWT walkthroughs + drained mcp-malicious-server/react2shell/pwnshop vulnerabilities",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 39 live oracles; secret-resend present)",
-      "duck-store.escape.tech/api/v1/testimonials/: 43 findings — duck-store-testimonials-bola-route-live-oracle + SSRF/coupon MCP oracles",
-      "duck-store.escape.tech/vulnerabilities: 43 findings — vulnerability index hub fingerprint",
-      "dvga.tools.escape.tech/graphql: 19 findings — GraphQL introspection/injection surface",
-      "vapi.tools.escape.tech/: 21 findings — vapi-api1-bola through vapi-api10-misconfig live oracles",
-      "playground.fabraix.com/challenges/jailbreak-002: 6 findings — thin static SPA (no dedicated route oracle yet)",
-      "nextjs-cve-hackerone.vercel.app/: 8 findings — nextjs-rsc-cve-live-oracle + route oracle (parallel engine commit)"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; secret-resend present)",
+      "duck-store.escape.tech/api/v1/users/: 41 findings — duck-store-users-enumeration + duck-store-users-bola route oracles",
+      "vapi.tools.escape.tech/api/v1/users/1: 16 findings — vapi-api1-bola through vapi-api10 + jwt-weak-token live oracles",
+      "koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting/: 9 findings — oopssec-brute-force-no-rate-limit-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/insecure-direct-object-reference/: 6 findings — thin hub fingerprint (no IDOR route oracle yet)",
+      "koadt.github.io/oss-oopssec-store/posts/weak-jwt-secret/: 6 findings — thin hub fingerprint (no weak-JWT route oracle yet)",
+      "pwnshop.ctfsecurity.com/vulnerabilities: 51 findings — pwnshop vulnerability index hub"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "benchmark thin vs prior 53-finding pass — missing jwt-alg-none-live-oracle + captcha-bypass-live-oracle slugs this run",
-      "fabraix jailbreak-002 thin (6 findings) — needs dedicated prompt-injection route oracle",
-      "qa.brokencrystals /api/file/aws + owaspsecure A09 + fabraix tool-poisoning-002 still queued (48h skip)",
-      "wrongsecrets challenge-47/53 queued not drained this run (8-URL limit)"
+      "oopssec IDOR + weak-JWT walkthroughs thin (6 findings) — need route-specific live oracles",
+      "wrongsecrets challenge-47/53 + qa.brokencrystals /api/file/aws + owaspsecure A09 still queued (48h skip)",
+      "fabraix tool-poisoning-002 + jailbreak-001 queued not drained (8-URL limit)"
     ]
   },
   "discovery_highlights": {
-    "duck-store.escape.tech/api/v1/testimonials/": 43,
-    "duck-store.escape.tech/vulnerabilities": 43,
-    "qa.brokencrystals.com/api/file/aws": 96,
-    "juice-shop.herokuapp.com": 52,
-    "vapi.tools.escape.tech/": 21,
-    "dvga.tools.escape.tech/graphql": 19,
+    "duck-store.escape.tech/api/v1/users/": 41,
+    "vapi.tools.escape.tech/api/v1/users/1": 16,
     "pwnshop.ctfsecurity.com/vulnerabilities": 51,
-    "nextjs-cve-hackerone.vercel.app": 8,
-    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import": 13,
-    "koadt.github.io/oss-oopssec-store/posts/plaintext-password-in-logs": 12,
-    "playground.fabraix.com/challenges/jailbreak-002": 6
+    "juice-shop.herokuapp.com": 53,
+    "koadt.github.io/oss-oopssec-store/posts/brute-force-no-rate-limiting/": 9,
+    "koadt.github.io/oss-oopssec-store/posts/mcp-malicious-server/": 9,
+    "koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182/": 10,
+    "duck-store.escape.tech/api/v1/testimonials/": 43,
+    "qa.brokencrystals.com/api/file/aws": 96,
+    "vapi.tools.escape.tech/": 21
   }
 }
