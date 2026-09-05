@@ -84531,5 +84531,161 @@ export const genericPatterns: Pattern[] = [
       "Our BugStore /api/secure-portal/login route scan confirms TOTP brute-force exposure. Show route-specific 2FA rate-limit fixes.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "bugstore-health-rce-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "BugStore health check RCE live oracle (V-021)",
+    description:
+      "GET /api/health?cmd=id on BugStore returns Unauthorized execution without admin, then cmd_output with uid= after role:admin mass-assignment — health check command injection RCE oracle.",
+    impactOneline:
+      "Admin-only cmd parameter on BugStore health endpoint passes attacker input to subprocess shell=True — full server compromise after privilege escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreHealthRceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands on health or diagnostic endpoints.",
+      steps: [
+        "Remove cmd parameters from health check routes entirely.",
+        "Use subprocess with shell=False and strict allowlists if diagnostics are required.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/health?cmd= executes shell commands after admin escalation. Show safe health-check remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-health-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "BugStore health check RCE route live oracle (V-021)",
+    description:
+      "When scanning /api/health on bugstore.bugtraceai.com, cmd parameter executes id via subprocess after admin mass-assignment — route-specific RCE oracle.",
+    impactOneline:
+      "Route-specific BugStore health scans should confirm cmd parameter remote code execution after privilege escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreHealthRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove shell execution from BugStore health check routes.",
+      steps: [
+        "Remove cmd parameters from health check routes entirely.",
+        "Use subprocess with shell=False and strict allowlists if diagnostics are required.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/health route scan confirms cmd-parameter RCE. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-admin-users-bac-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore admin users enumeration live oracle (V-005/V-006)",
+    description:
+      "GET /api/admin/users on BugStore returns full user roster with password_hash fields after role:admin mass-assignment — admin user enumeration oracle.",
+    impactOneline:
+      "BugStore admin user management exposes password hashes and emails to any escalated admin account.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAdminUsersBacLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact password hashes and enforce strict admin authorization on user management.",
+      steps: [
+        "Never return password_hash in API responses.",
+        "Require multi-factor authentication for admin user listing.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore GET /api/admin/users leaks password_hash for all users. Show admin API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-admin-users-bac-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore admin users BAC route live oracle (V-005/V-006)",
+    description:
+      "When scanning /api/admin/users on bugstore.bugtraceai.com, escalated admin token returns password_hash for admin@bugstore.com — route-specific user enumeration oracle.",
+    impactOneline:
+      "Route-specific BugStore admin user scans should confirm sensitive credential data exposure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAdminUsersBacRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact password hashes on BugStore admin user routes.",
+      steps: [
+        "Never return password_hash in API responses.",
+        "Require multi-factor authentication for admin user listing.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/admin/users route scan confirms password hash disclosure. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-forum-posts-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore forum reply stored XSS live oracle (V-003)",
+    description:
+      "POST /api/forum/threads/1/replies on BugStore stores raw script tags in reply content without sanitization — forum stored XSS oracle.",
+    impactOneline:
+      "Unsanitized forum reply content lets attackers persist XSS payloads affecting every user viewing the thread.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreForumPostsStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize forum reply content server-side before storage and rendering.",
+      steps: [
+        "HTML-encode user-generated forum content on output.",
+        "Reject or strip script tags from reply submissions.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore forum replies store unsanitized HTML/script. Show stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-forum-posts-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore forum posts stored XSS route live oracle (V-003)",
+    description:
+      "When scanning /api/forum/posts on bugstore.bugtraceai.com, POST /api/forum/threads/1/replies persists unsanitized script in thread JSON — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route-specific BugStore forum scans should confirm stored XSS in reply content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreForumPostsStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize forum reply content on BugStore forum routes.",
+      steps: [
+        "HTML-encode user-generated forum content on output.",
+        "Reject or strip script tags from reply submissions.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/forum/posts route scan confirms stored XSS in replies. Show route-specific sanitization fixes.",
+    version: 1,
+    enabled: true
   }
 ];

@@ -3005,6 +3005,12 @@ const DEEP_RULES = new Set<string>([
   "bugstoreSecurePortalTotpLoginLiveOracle",
   "bugstoreSecurePortalTotpLoginRouteLiveOracle",
   "bugstoreAuthSignupRouteLiveOracle",
+  "bugstoreHealthRceLiveOracle",
+  "bugstoreHealthRceRouteLiveOracle",
+  "bugstoreAdminUsersBacLiveOracle",
+  "bugstoreAdminUsersBacRouteLiveOracle",
+  "bugstoreForumPostsStoredXssLiveOracle",
+  "bugstoreForumPostsStoredXssRouteLiveOracle",
   "duckStoreCartNegativeQuantityLiveOracle",
   "duckStoreCartNegativeQuantityRouteLiveOracle",
   "duckStoreAdminUsersBflaLiveOracle",
@@ -13846,6 +13852,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/(?:user\/profile|auth\/register)\b/i.test(targetInput) &&
         p.slug.startsWith("bugstore-profile-mass-assignment")
+      )
+        return -4;
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/health\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-health-rce")
+      )
+        return -4;
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/admin\/users\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-admin-users-bac")
+      )
+        return -4;
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/forum\/(?:posts|threads)\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-forum-posts-stored-xss")
       )
         return -4;
       if (
