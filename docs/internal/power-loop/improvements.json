@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-admin-users-bac-response-size-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/admin/users roster exceeds 16KB — JSON.parse failed on truncated 16384-byte probe; increased maxBytes to 131072 with regex fallback for admin@bugstore.com password_hash; bugstore.bugtraceai.com/api/admin/users findings 19→21 (+bugstore-admin-users-bac-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-route-oracle-priority-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bugstoreRoutePairWeight gives -route-live-oracle -5 vs live -3 on matching route scans — prevents ProbeCache poisoning when stateful live probes run before route oracles; bugstore.bugtraceai.com/api/forum/posts findings 20→20 (+bugstore-forum-posts-stored-xss-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-template-ssti-live-spa-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnshopTemplateSstiLiveOracle falls back to vulnshopFlaskRouteUrlOracle README oracle #6 when Vercel SPA shell blocks live GET /template?name={{7*7}}; vulnshop.vercel.app/template?name={{7*7}} findings 21→22 (+vulnshop-template-ssti-live-oracle +route); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
       "slug": "bugstore-graphql-introspection-bola-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/graphql { __schema } returns Query type; { users { email role } } returns admin@bugstore.com without auth; { orders { id total } } enumerates purchase history; bugstore.bugtraceai.com/graphql findings 21→23 (+bugstore-graphql-introspection-bola-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
