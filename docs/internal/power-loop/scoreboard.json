@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T08:12:00.000Z",
+  "updated_at": "2026-09-05T09:17:01.483Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3141,
-  "total_findings": 35683,
+  "total_sites_scanned": 3149,
+  "total_findings": 35834,
   "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2068,
-  "discovery_findings": 29022,
+  "discovery_urls_added": 2073,
+  "discovery_findings": 29120,
   "improvements_shipped": 1453,
-  "last_run": "2026-09-05T08:12:00.000Z",
+  "last_run": "2026-09-05T09:17:01.483Z",
   "last_run_summary": {
-    "hour_utc": "08",
+    "hour_utc": "09",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -53,37 +53,36 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 72,
-      "focus": "BugStore /api/health RCE + VaultApp-omega IDOR + VulnForge level15 SSRF + SecLab command-injection + chimera diagnostics drain; parallel run shipped secure-portal TOTP + oopssec vanity aliases",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 7,
+      "findings": 98,
+      "focus": "vault-notes VAPT lab + vulnshop proxy/fetch SSRF + track-order SSRF + cloud/metadata + /api/info component disclosure; drained chimera diagnostics/ping + genai/chat (48h skip cleared)",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
-      "vaultapp-omega.vercel.app/api/users/42: 14 findings — vaultapp-users-idor-route-live-oracle",
-      "vaultapp-omega.vercel.app/api/transactions/1: 15 findings — vaultapp-transactions-idor-live-oracle",
-      "bugstore.bugtraceai.com/api/health: 15 findings — generic bundle (no health-rce route oracle)",
-      "vulnforge-academy level15: 6 findings — vulnforge-academy-level-ssrf-route-live-oracle",
-      "seclab.vercel.app/labs/command-injection: 6 findings — seclab-command-injection-route-live-oracle",
-      "bugstore.bugtraceai.com/api/secure-portal/login: 17 findings — bugstore-secure-portal-totp-login-route-live-oracle (parallel run)",
-      "oopssec react2shell + public-env vanity slug aliases shipped (parallel run)"
+      "vault-notes-frontend-gules.vercel.app: 8 findings — vault-notes-jwt-secret-leak-route-live-oracle",
+      "vulnshop.vercel.app/track-order?url=: 19 findings — vulnshop-track-order-ssrf-route-live-oracle",
+      "vulnshop.vercel.app/api/info: 19 findings — vulnshop-api-info-component-disclosure-route-live-oracle",
+      "vulnshop.vercel.app/api/v1/proxy/fetch: 18 findings — generic vulnshop bundle (no proxy/fetch route oracle)",
+      "chimera.atlascrew.dev/api/v1/diagnostics/ping: 8 findings — chimera-diagnostics-ping-rce-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/genai/chat: 8 findings — chimera-genai-chat-prompt-injection-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "bugstore /api/health (V-021 RCE): no route-specific health-rce live oracle",
-      "bugstore forum/posts + admin/users still thin without route-specific live oracles",
+      "vulnshop /api/v1/proxy/fetch + /api/v1/cloud/metadata: thin hub without route-specific SSRF/metadata oracles",
+      "vault-notes passcode-gated — JWT leak confirmed but SQLi/IDOR backend routes need passcode session",
       "r2s-arena.fly.dev unreachable from cloud agent",
       "qa.brokencrystals.com/api/file/aws still queued (48h skip)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "vaultapp-omega.vercel.app/api/users/42": 14,
-    "vaultapp-omega.vercel.app/api/transactions/1": 15,
-    "bugstore.bugtraceai.com/api/health": 15,
-    "bugstore.bugtraceai.com/api/secure-portal/login": 17,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level15.php": 6,
-    "seclab.vercel.app/labs/command-injection": 6,
-    "chimera.atlascrew.dev/api/v1/diagnostics/webhook": 8
+    "vault-notes-frontend-gules.vercel.app": 8,
+    "vulnshop.vercel.app/track-order?url=https://httpbin.org/get": 19,
+    "vulnshop.vercel.app/api/info": 19,
+    "vulnshop.vercel.app/api/v1/proxy/fetch": 18,
+    "vulnshop.vercel.app/api/v1/cloud/metadata": 18,
+    "chimera.atlascrew.dev/api/v1/diagnostics/ping": 8,
+    "chimera.atlascrew.dev/api/v1/genai/chat": 8
   }
 }
