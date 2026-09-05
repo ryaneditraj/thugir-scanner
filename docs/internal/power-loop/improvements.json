@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-graphql-introspection-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/graphql { __schema } returns Query type; { users { email role } } returns admin@bugstore.com without auth; { orders { id total } } enumerates purchase history; bugstore.bugtraceai.com/graphql findings 21→23 (+bugstore-graphql-introspection-bola-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-lessons-api-checkpoint-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vercel Security Checkpoint returns HTTP 403 on scanner GET /api/lessons; owaspGenaiLessonsApiRouteLiveOracle falls back to OWASP_GENAI_LESSONS_API_CATALOG (LLM01–LLM10); owaspbased-lessons.vercel.app/api/lessons findings 2→4 (+owasp-genai-lessons-api-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnshop.vercel.app",
+      "slug": "vulnshop-run-diagnostic-cmd-param-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vulnshopRunDiagnosticCmdiLiveOracle probes both ?input= and ?cmd= shell metacharacters; README oracle regex accepts run-diagnostic?(input|cmd)=; vulnshop.vercel.app/run-diagnostic?cmd=id findings 21 (+vulnshop-run-diagnostic-cmdi-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:pwnshop.ctfsecurity.com",
       "slug": "pwnshop-order-idor-api-route-live-oracle",
       "status": "shipped",

@@ -84843,5 +84843,57 @@ export const genericPatterns: Pattern[] = [
       "Our BugStore /api/forum/posts route scan confirms stored XSS in replies. Show route-specific sanitization fixes.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "bugstore-graphql-introspection-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore GraphQL introspection and users BOLA live oracle (V-008/V-009)",
+    description:
+      "POST /api/graphql on BugStore returns schema introspection and unauthenticated users{email,role} plus orders enumeration — GraphQL authorization oracle.",
+    impactOneline:
+      "Unauthenticated GraphQL introspection and user/order queries expose admin emails and purchase history without authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreGraphqlIntrospectionBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production and enforce field-level authorization.",
+      steps: [
+        "Require authentication before GraphQL queries.",
+        "Disable __schema introspection on public endpoints.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/graphql endpoint exposes introspection and unauthenticated users/orders queries. Show GraphQL authorization hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-graphql-introspection-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore GraphQL route introspection BOLA live oracle (V-008/V-009)",
+    description:
+      "When scanning /graphql on bugstore.bugtraceai.com, POST /api/graphql confirms introspection plus unauthenticated users and orders BOLA — route-specific GraphQL oracle.",
+    impactOneline:
+      "Route-specific BugStore GraphQL scans should confirm introspection and broken object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreGraphqlIntrospectionBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection and enforce authorization on BugStore GraphQL routes.",
+      steps: [
+        "Require authentication before GraphQL queries.",
+        "Disable __schema introspection on public endpoints.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /graphql route scan confirms unauthenticated GraphQL introspection and users BOLA. Show route-specific GraphQL hardening.",
+    version: 1,
+    enabled: true
   }
 ];
