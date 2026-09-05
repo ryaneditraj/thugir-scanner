@@ -14150,6 +14150,30 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       )
         return -4;
       if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/live-stream-hijack/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-live-stream-bfla")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/second-order-sql-injection/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-second-order-sqli")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/mcp-malicious-server/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-mcp-malicious-server")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/stored-xss-product-reviews/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-stored-xss-reviews")
+      )
+        return -4;
+      if (
         /the0x-pwn\.github\.io\/lab-xss/i.test(origin) &&
         /\/lab-xss\/lab-1\/?/i.test(targetInput) &&
         p.slug.startsWith("the0x-pwn-xss-query-param")

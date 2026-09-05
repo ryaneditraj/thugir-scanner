@@ -2,6 +2,26 @@
   "updated_at": "2026-09-04T14:20:00.000Z",
   "priority_discovery_urls": [
     {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/",
+      "source": "kOaDT/oss-oopssec-store — BFLA live-stream hijack via /api/live/stream (ch.04 access control; scoreboard gap 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection/",
+      "source": "kOaDT/oss-oopssec-store — second-order SQLi via stored author names at /api/admin/reviews (ch.05 SQLi; scoreboard gap 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/mcp-malicious-server/",
+      "source": "kOaDT/oss-oopssec-store — MCP tool-response poisoning / indirect prompt injection walkthrough (AI security; scoreboard gap 14 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owasp-finbot-ctf.org/vendor",
+      "source": "OWASP FinBot CTF — vendor portal agentic AI policy bypass / prompt injection (route-scoped oracle validation 05 Sep UTC)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://pwnshop.ctfsecurity.com/debug/info",
       "source": "ctfsec/pwnshop — PWN-018 public debug endpoint leaks session secret + DB creds (vulnerabilities index; web search 14 UTC)",
       "auth": "public_demo"
