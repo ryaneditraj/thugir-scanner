@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T09:15:00.000Z",
+  "updated_at": "2026-09-05T10:20:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://pwnshop.ctfsecurity.com/profile/update-avatar",
+      "source": "ctfsec/pwnshop — PWN-029 SSRF avatar URL fetched server-side POST /profile/update-avatar (vulnerabilities index; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pwnshop.ctfsecurity.com/api/v1/orders/1",
+      "source": "ctfsec/pwnshop — PWN-001 order details IDOR oracle GET /api/v1/orders/:id (vulnerabilities index; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/path-traversal",
+      "source": "DaniSam-STU/security-lab — interactive path-traversal lab page with live exploit UI (seclab.vercel.app; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://appsec-ci-pipeline.onrender.com/api/comments",
+      "source": "gauthamram57/appsec-ci-pipeline — stored XSS comments API oracle GET/POST /api/comments (Render deploy README; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/open-redirect",
+      "source": "DaniSam-STU/security-lab — interactive open-redirect lab page with live exploit UI (seclab.vercel.app; web search 10 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://vault-notes-frontend-gules.vercel.app",
       "source": "Raghavtripathii/vault-notes-vapt — passcode-gated full-stack VAPT lab with SQLi/IDOR/XSS/plaintext passwords/exposed JWT secret (GitHub README live demo; web search 09 UTC)",
