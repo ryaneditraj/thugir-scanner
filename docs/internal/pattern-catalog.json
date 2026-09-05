@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-05T11:25:08.664Z",
-  "total": 3320,
-  "uniqueSlugs": 3312,
+  "generatedAt": "2026-09-05T12:10:04.248Z",
+  "total": 3322,
+  "uniqueSlugs": 3314,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3302,
+    "generic": 3304,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3235,
+    "deep": 3237,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 656,
+    "Broken access control": 658,
     "Exposed secret": 120,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -274,6 +274,8 @@
     "bugstore-forum-posts-stored-xss-route-live-oracle",
     "bugstore-forum-thread-sqli-live-oracle",
     "bugstore-forum-thread-sqli-route-live-oracle",
+    "bugstore-graphql-introspection-bola-live-oracle",
+    "bugstore-graphql-introspection-bola-route-live-oracle",
     "bugstore-health-rce-live-oracle",
     "bugstore-health-rce-route-live-oracle",
     "bugstore-orders-idor-live-oracle",
