@@ -83623,6 +83623,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-auth-token-forge-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Chimera auth token forge route live oracle",
+    description:
+      "When scanning /api/v1/auth/token/forge on chimera.atlascrew.dev, api-reference documents JWT token forgery endpoint — route-specific attack simulation training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional JWT token forgery for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAuthTokenForgeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose token-forging endpoints and enforce strict JWT signing key protection.",
+      steps: [
+        "Require client credentials and signed JWT assertions for all token issuance.",
+        "Remove or sandbox token-forge endpoints from production deployments.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/auth/token/forge route documents JWT token forgery. Show secure token issuance remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-mobile-instant-transfer-route-live-oracle",
     platform: "generic",
     category: "Business logic",
