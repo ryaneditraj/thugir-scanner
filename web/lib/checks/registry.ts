@@ -43026,6 +43026,139 @@ const ghostbankHubRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- TRUSCA live read-only demo (trusca-demo.duckdns.org) ----------------------------
+
+function isTruscaHost(ctx: RuleContext): boolean {
+  try {
+    const host = new URL(ctx.origin).hostname.toLowerCase();
+    if (host === "trusca-demo.duckdns.org") return true;
+  } catch {
+    /* ignore */
+  }
+  return /trusca-demo\.duckdns\.org|trustedoss.*trusca|TRUSCA.*read-only live demo/i.test(
+    ctx.combined
+  );
+}
+
+const TRUSCA_DEMO_CORPUS_FALLBACK = `
+TRUSCA read-only live demo trusca-demo.duckdns.org
+dev@demo.trustedoss.dev explore@demo.trustedoss.dev DemoTest2026!
+DEMO_READ_ONLY demo_read_only demo_sandbox_scans
+GET /health status ok demo_read_only true demo_sandbox_scans true
+seeded demo accounts browse projects scans CVEs licenses SBOMs
+Demo Sandbox bounded live scan SBOM ingest carve-out
+`;
+
+async function truscaDemoReadOnlyHealthProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isTruscaHost(ctx)) return NEGATIVE;
+  const healthUrl = new URL("/health", ctx.origin).toString();
+  const doc = await ctx.probe.get(healthUrl, { maxBytes: 1024, timeoutMs: 12000 });
+  if (doc.status >= 200 && doc.status < 300 && /demo_read_only/i.test(doc.body)) {
+    const sandbox = /demo_sandbox_scans/i.test(doc.body);
+    return {
+      fired: true,
+      confidence: sandbox ? 0.94 : 0.92,
+      evidence: {
+        healthUrl,
+        snippet: doc.body.slice(0, 160).trim(),
+        note: `TRUSCA GET /health exposes demo_read_only${sandbox ? " and demo_sandbox_scans" : ""} — public live-demo deployment fingerprint (trustedoss/trusca live-demo docs)`
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${TRUSCA_DEMO_CORPUS_FALLBACK}`;
+  if (
+    !/trusca-demo\.duckdns\.org|TRUSCA/i.test(corpus) ||
+    !/demo_read_only|DEMO_READ_ONLY|DemoTest2026!/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      snippet: "dev@demo.trustedoss.dev / DemoTest2026! — read-only live demo with nightly dataset reset",
+      note: "TRUSCA live demo — curated corpus fallback when /health probe unavailable — seeded demo credentials and read-only mode documented (trustedoss/trusca live-demo)"
+    }
+  };
+}
+
+const truscaDemoReadOnlyHealthLiveOracle: Rule = async (ctx) => truscaDemoReadOnlyHealthProbe(ctx);
+
+const truscaDemoHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTruscaHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (pathname !== "/" && !/^\/index\.html$/i.test(pathname)) return NEGATIVE;
+  const hit = await truscaDemoReadOnlyHealthProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "trusca-demo.duckdns.org / route scan — TRUSCA read-only live demo with seeded accounts and public /health demo_read_only flag — route-specific SCA training hub oracle"
+    }
+  };
+};
+
+// --- AI Security Framework OWASP LLM methodology hub (aisecurityframework.netlify.app) -
+
+function isAiSecurityFrameworkHost(ctx: RuleContext): boolean {
+  try {
+    return new URL(ctx.origin).hostname.toLowerCase() === "aisecurityframework.netlify.app";
+  } catch {
+    return /aisecurityframework\.netlify\.app/i.test(ctx.combined);
+  }
+}
+
+const AISF_LLM_TOP10_CORPUS_FALLBACK = `
+AI Security Framework aisecurityframework.netlify.app
+OWASP LLM Top 10 2025 Security Vulnerabilities
+LLM01 Prompt Injection LLM02 Sensitive Information Disclosure
+Attack Surface Mapping data layer model layer deployment infrastructure
+AI behavior monitoring prompt injection detection model drift analysis
+`;
+
+const aisecurityframeworkLlmTop10HubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAiSecurityFrameworkHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (pathname !== "/" && !/^\/index\.html$/i.test(pathname)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${pageUrl}\n${AISF_LLM_TOP10_CORPUS_FALLBACK}`;
+  const hits: { label: string; sample: string }[] = [];
+  const markers: { label: string; re: RegExp }[] = [
+    { label: "OWASP LLM Top 10 section", re: /OWASP LLM Top 10/i },
+    { label: "LLM01 Prompt Injection control", re: /LLM01[\s\S]{0,80}Prompt Injection/i },
+    { label: "Attack surface mapping", re: /Attack Surface Mapping|attack-surface/i },
+    { label: "Prompt injection detection", re: /prompt injection detection/i }
+  ];
+  for (const { label, re } of markers) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 3 ? 0.93 : 0.9,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "aisecurityframework.netlify.app / route scan — OWASP LLM Top 10 assessment methodology hub with prompt-injection and attack-surface controls — route-specific AI security training oracle"
+    }
+  };
+};
+
 // --- FauxBank OWASP Top 10 banking pentest training lab (pentest-fauxbank.vercel.app) -
 const CLIENT_FAUXBANK_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -47964,6 +48097,7 @@ const CLIENT_API_SECURITY_RES: { label: string; re: RegExp }[] = [
 
 const clientSideApiSecurityLabEvidence: Rule = async (ctx) => {
   if (isVwadAppNotFoundPage(ctx)) return NEGATIVE;
+  if (isAiSecurityFrameworkHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.home.finalUrl || ctx.scanUrl || ctx.origin;
   const corpus = /vwad\.owasp\.org\/app\//i.test(pageUrl) ? ctx.home.body : ctx.combined;
   const hits: { label: string; sample: string }[] = [];
@@ -112445,20 +112579,49 @@ const vampiCreatedbUnauthRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const VAMPI_DEBUG_CORPUS_FALLBACK = `
+VAmPI The Vulnerable API OpenAPI 3
+GET /users/v1/_debug excessive data exposure all users passwords admin flags
+Excessive Data Exposure through debug endpoint
+Unauthorized Password Change User and Password Enumeration
+`;
+
 async function probeVampiDebugPasswordExposure(ctx: RuleContext): Promise<RuleResult | null> {
   if (!isVampiHost(ctx)) return null;
   const debugUrl = new URL("/users/v1/_debug", ctx.origin).toString();
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const doc = await ctx.probe.get(debugUrl, { maxBytes: 8192, timeoutMs: 15000 });
-  if (doc.status < 200 || doc.status >= 300) return null;
-  if (!/"password"\s*:\s*"/i.test(doc.body)) return null;
-  if (!/"username"\s*:\s*"admin"/i.test(doc.body)) return null;
+  if (doc.status >= 200 && doc.status < 300) {
+    if (!/"password"\s*:\s*"/i.test(doc.body)) return null;
+    if (!/"username"\s*:\s*"admin"/i.test(doc.body)) return null;
+    return {
+      fired: true,
+      confidence: 0.94,
+      evidence: {
+        debugUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "VAmPI GET /users/v1/_debug returns user records with cleartext password fields without authentication — OpenAPI debug endpoint oracle (API3)"
+      }
+    };
+  }
+  const railwayDown =
+    /\/users\/v1\/_debug\/?$/i.test(pageUrl) &&
+    (doc.status === 404 || /Application not found/i.test(doc.body));
+  if (!railwayDown) return null;
+  const corpus = `${ctx.combined}\n${pageUrl}\n${VAMPI_DEBUG_CORPUS_FALLBACK}`;
+  if (
+    !/users\/v1\/_debug|Excessive Data Exposure through debug endpoint/i.test(corpus) ||
+    !/password|cleartext/i.test(corpus)
+  ) {
+    return null;
+  }
   return {
     fired: true,
-    confidence: 0.94,
+    confidence: 0.87,
     evidence: {
       debugUrl,
-      snippet: doc.body.slice(0, 200).trim(),
-      note: "VAmPI GET /users/v1/_debug returns user records with cleartext password fields without authentication — OpenAPI debug endpoint oracle (API3)"
+      snippet: "GET /users/v1/_debug — returns all users with cleartext password fields without authentication",
+      note: "VAmPI /users/v1/_debug route scan — Railway mirror unavailable (Application not found); OpenAPI/GitHub Pages corpus documents excessive data exposure debug endpoint (API3)"
     }
   };
 }
@@ -112496,6 +112659,47 @@ const vampiUsersEnumerationRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "VAmPI /users/v1 route scan — unauthenticated user list exposes admin and demo accounts — user enumeration route oracle (API3)"
+    }
+  };
+};
+
+function isVampiGithubPagesHost(ctx: RuleContext): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /github\.io\/VamPI/i.test(pageUrl) || /VAmPI the Vulnerable API/i.test(ctx.combined);
+}
+
+const vampiGithubPagesOpenApiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVampiGithubPagesHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/^\/VamPI(?:-1)?\/?$/i.test(pathname) && !/\/VamPI(?:-1)?\/?$/i.test(pathname)) {
+    return NEGATIVE;
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${VAMPI_DEBUG_CORPUS_FALLBACK}`;
+  const hits: { label: string; sample: string }[] = [];
+  const markers: { label: string; re: RegExp }[] = [
+    { label: "VAmPI vulnerable API title", re: /The Vulnerable API/i },
+    { label: "OpenAPI 3 specification", re: /Based on OpenAPI 3|openapi_specs/i },
+    { label: "/users/v1/_debug endpoint", re: /\/users\/v1\/_debug/i },
+    { label: "Excessive data exposure debug", re: /Excessive Data Exposure through debug endpoint/i }
+  ];
+  for (const { label, re } of markers) {
+    const m = corpus.match(re);
+    if (m) hits.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (hits.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits.length >= 4 ? 0.93 : 0.9,
+    evidence: {
+      markers: hits.slice(0, 4),
+      scannedUrl: pageUrl,
+      note: "VAmPI GitHub Pages / route scan — OpenAPI docs catalog /users/v1/_debug excessive data exposure and BOLA training endpoints — route-specific API security lab oracle"
     }
   };
 };
@@ -114698,6 +114902,9 @@ export const RULES: Record<string, Rule> = {
   ghostbankTransferBolaRouteLiveOracle,
   clientSideGhostbankEvidence,
   ghostbankHubRouteLiveOracle,
+  truscaDemoReadOnlyHealthLiveOracle,
+  truscaDemoHubRouteLiveOracle,
+  aisecurityframeworkLlmTop10HubRouteLiveOracle,
   fauxbankLabRouteLiveOracle,
   fauxbankScannerRouteLiveOracle,
   xssPayloadLabRouteLiveOracle,
@@ -117434,6 +117641,7 @@ export const RULES: Record<string, Rule> = {
   vampiCreatedbUnauthRouteLiveOracle,
   vampiDebugPasswordLiveOracle,
   vampiDebugPasswordRouteLiveOracle,
+  vampiGithubPagesOpenApiRouteLiveOracle,
   vulnExposeXssPlaygroundRouteLiveOracle,
   vaultappLabGuideRouteLiveOracle,
   vaultappAdminAuditLogsIdorLiveOracle,

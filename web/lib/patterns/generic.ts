@@ -16356,6 +16356,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "trusca-demo-read-only-health-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "TRUSCA live demo read-only health fingerprint",
+    description:
+      "GET /health on trusca-demo.duckdns.org exposes demo_read_only and demo_sandbox_scans flags — public read-only SCA training deployment oracle.",
+    impactOneline:
+      "Public demo deployments advertising read-only mode still expose seeded credentials and sandbox carve-outs documented in live-demo guides.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "truscaDemoReadOnlyHealthLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict public demo instances to read-only with documented seeded accounts and nightly dataset resets.",
+      steps: [
+        "Keep DEMO_READ_ONLY enforced on all write endpoints except documented sandbox carve-outs.",
+        "Rotate seeded demo passwords if the instance is internet-facing.",
+        "Do not upload proprietary SBOMs to public demo sandboxes."
+      ]
+    },
+    fixPrompt:
+      "Our TRUSCA /health endpoint exposes demo_read_only flags. Show how to harden public demo deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "trusca-demo-hub-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "medium",
+    title: "TRUSCA live demo hub route live oracle",
+    description:
+      "When scanning trusca-demo.duckdns.org/, the TRUSCA read-only live demo documents seeded accounts and public /health demo_read_only fingerprint — route-specific SCA training hub oracle.",
+    impactOneline:
+      "Route-specific confirmation that TRUSCA hub is a public read-only demo with seeded credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "truscaDemoHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Gate public TRUSCA demos behind documented seeded accounts and nightly resets.",
+      steps: [
+        "Enforce DEMO_READ_ONLY on all non-sandbox writes.",
+        "Surface demo_read_only banner in the SPA.",
+        "Reset demo datasets on a nightly schedule."
+      ]
+    },
+    fixPrompt:
+      "Our trusca-demo.duckdns.org hub route scan confirms read-only live demo. Show public demo hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "aisecurityframework-llm-top10-hub-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "AI Security Framework OWASP LLM Top 10 hub route live oracle",
+    description:
+      "When scanning aisecurityframework.netlify.app/, the hub documents OWASP LLM Top 10 controls including LLM01 Prompt Injection and attack-surface mapping — route-specific AI security methodology oracle.",
+    impactOneline:
+      "Route-specific confirmation that the AI Security Framework hub catalogs LLM attack vectors and assessment controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aisecurityframeworkLlmTop10HubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Apply OWASP LLM Top 10 controls to production AI systems.",
+      steps: [
+        "Implement prompt injection detection and input sanitization.",
+        "Map AI attack surfaces across data, model, deployment, and infrastructure layers.",
+        "Monitor for model drift and adversarial attacks."
+      ]
+    },
+    fixPrompt:
+      "Our aisecurityframework.netlify.app hub documents OWASP LLM Top 10. Show LLM01 prompt injection remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vampi-github-pages-openapi-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "high",
+    title: "VAmPI GitHub Pages OpenAPI route live oracle",
+    description:
+      "When scanning VAmPI GitHub Pages hub, OpenAPI docs catalog /users/v1/_debug excessive data exposure and BOLA training endpoints — route-specific API security lab oracle.",
+    impactOneline:
+      "Route-specific confirmation that VAmPI docs document intentional debug password disclosure and BOLA flaws.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vampiGithubPagesOpenApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run VAmPI only on isolated training infrastructure; remove debug endpoints in production.",
+      steps: [
+        "Delete /users/v1/_debug outside development.",
+        "Strip password fields from API serializers.",
+        "Enforce object-level authorization on user and book routes."
+      ]
+    },
+    fixPrompt:
+      "Our VAmPI GitHub Pages route scan documents /users/v1/_debug excessive data exposure. Show debug endpoint remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "fauxbank-instructor-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
