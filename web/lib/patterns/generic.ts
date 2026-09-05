@@ -84427,5 +84427,31 @@ export const genericPatterns: Pattern[] = [
       "Our BugStore profile route scan confirms role mass-assignment escalation. Show route-specific field allowlist remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "bugstore-auth-signup-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "BugStore /api/auth/signup mass-assignment route live oracle (V-015)",
+    description:
+      "When scanning /api/auth/signup on bugstore.bugtraceai.com, POST signup is rejected (HTTP 405) but /api/auth/register + PUT /api/user/profile role:admin confirms privilege escalation — route-specific signup mass-assignment oracle.",
+    impactOneline:
+      "Route-specific BugStore signup scans should confirm role mass-assignment via the registration flow even when the signup endpoint rejects POST.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAuthSignupRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block role fields from BugStore registration and profile update routes.",
+      steps: [
+        "Use an allowlist of updatable profile fields.",
+        "Assign roles only through admin workflows with authorization checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/auth/signup route scan confirms role mass-assignment via register+profile. Show route-specific field allowlist remediation.",
+    version: 1,
+    enabled: true
   }
 ];
