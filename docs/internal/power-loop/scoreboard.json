@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T14:12:00.000Z",
+  "updated_at": "2026-09-05T14:14:10.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 3108,
-  "total_findings": 35266,
-  "critical_findings": 58,
+  "total_sites_scanned": 3194,
+  "total_findings": 36827,
+  "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2147,
-  "discovery_findings": 28760,
-  "improvements_shipped": 1407,
-  "last_run": "2026-09-05T14:12:00.000Z",
+  "discovery_urls_added": 2088,
+  "discovery_findings": 29506,
+  "improvements_shipped": 1432,
+  "last_run": "2026-09-05T14:14:10.000Z",
   "last_run_summary": {
     "hour_utc": "14",
     "benchmark": {
@@ -48,37 +48,35 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall on primary Heroku (53 findings; secret-resend present)"
+      "note": "Stable 6/6 first-pass recall (53 findings; secret-resend present)"
     },
-    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped \u2014 nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 2,
       "findings": 18,
-      "focus": "oopssec live-stream BFLA + second-order SQLi priority drain; finbot vendor route-scoped oracle dedup",
-      "improvements_shipped_this_run": 3
+      "focus": "oopssec live-stream BFLA + second-order SQLi runner priority + queue prepend",
+      "improvements_shipped_this_run": 2
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings)",
-      "owasp-finbot-ctf.org/vendor: 32→11 findings — finbot-darklab host-live oracles suppressed on non-darklab routes",
       "koadt.github.io/.../live-stream-hijack: 8 findings (+oopssec-live-stream-bfla-route-live-oracle)",
-      "koadt.github.io/.../second-order-sql-injection: 10 findings (+oopssec-second-order-sqli-route-live-oracle)"
+      "koadt.github.io/.../second-order-sql-injection: 10 findings (+oopssec-second-order-sqli-route-live-oracle)",
+      "finbot-scoped-live-oracle-guards shipped in parallel 13 UTC run (vendor 32\u219211)"
     ],
     "learning_gaps": [
-      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "finbot /ctf and /portals still fire ctf-challenges host-live on hub routes (route oracles cover; lower priority cleanup)",
-      "oopssec stored-xss-product-reviews + mcp-malicious-server queued for next drain"
+      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "Chimera Attack Simulation routes still thin 7-finding generic hub \u2014 route oracles needed",
+      "oopssec mcp-malicious-server + stored-xss-product-reviews queued for next drain"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "owasp-finbot-ctf.org/vendor": 11,
-    "owasp-finbot-ctf.org/portals": 11,
-    "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection": 10,
     "koadt.github.io/oss-oopssec-store/posts/live-stream-hijack": 8,
-    "owaspsecure.com/demo/a06_voc/insecure.php": 19,
-    "pwnshop.ctfsecurity.com/debug/info": 49,
-    "qa.brokencrystals.com/api/chat": 88,
-    "vulnbank.org/api/v1/transactions": 32
+    "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection": 10,
+    "bugstore.bugtraceai.com/api/admin/users": 20,
+    "brokencrystals.com/api/products/latest": 86,
+    "pwnshop.ctfsecurity.com/account/delete": 49,
+    "chimera.atlascrew.dev/api/v1/auth/token/forge": 7
   }
 }

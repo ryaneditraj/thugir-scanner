@@ -13733,6 +13733,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "nextjs-rsc-cve-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Next.js RSC CVE server-action live oracle",
+    description:
+      "Live probe confirms CVE-2025-66478 / CVE-2025-55182 HackerOne demo markers (Run Server Action, VERCEL_PLATFORM_PROTECTION, vulnerable Next.js 15/16) on intentional RSC labs.",
+    impactOneline:
+      "Public Next.js RSC CVE lab exposes reachable server-action RCE chain for platform-protection bypass testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nextjsRscCveLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Next.js/React; remove public CVE demos.",
+      steps: [
+        "Upgrade Next.js and React to patched RSC releases.",
+        "Remove HackerOne/react2shell demo deployments from public URLs.",
+        "Auth-gate or disable server actions on production domains."
+      ]
+    },
+    fixPrompt:
+      "Our Next.js app hosts a CVE-2025-66478 RSC lab with Run Server Action. Show patched versions and how to remove public RCE demos.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "nextjs-rsc-cve-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Next.js RSC CVE route live oracle",
+    description:
+      "When scanning nextjs-cve-hackerone.vercel.app or similar RSC CVE demos, route scan confirms CVE-2025-66478 banner plus server-action lab markers — route-specific RSC training oracle.",
+    impactOneline:
+      "Route-specific Next.js RSC CVE demo confirms intentional server-action exploitation surface.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "nextjsRscCveRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Upgrade Next.js/React; remove public CVE demos.",
+      steps: [
+        "Upgrade Next.js and React to patched RSC releases.",
+        "Remove HackerOne/react2shell demo deployments from public URLs.",
+        "Auth-gate or disable server actions on production domains."
+      ]
+    },
+    fixPrompt:
+      "Our Next.js RSC CVE route scan confirms CVE-2025-66478 demo markers. Show patched versions and demo isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-cve-55182-saas-poc-evidence",
     platform: "generic",
     category: "Injection",
@@ -25363,6 +25415,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pwnshop-vulnerabilities-index-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Pwnshop vulnerability index live oracle",
+    description:
+      "GET /vulnerabilities on pwnshop.ctfsecurity.com returns the interactive PWN-001+ registry catalog mapped to OWASP Top 10 2025 and AI/LLM tiers — training-lab vulnerability disclosure oracle.",
+    impactOneline:
+      "Unauthenticated /vulnerabilities index exposes full intentional vulnerability catalog for scanner benchmarking.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopVulnerabilitiesIndexLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict vulnerability registry disclosure on production-facing Pwnshop deployments.",
+      steps: [
+        "Gate /vulnerabilities behind authenticated lab enrollment.",
+        "Run Pwnshop only in isolated lab environments.",
+        "Remove PWN- ID mappings from public HTML when not in training mode."
+      ]
+    },
+    fixPrompt:
+      "Our /vulnerabilities endpoint exposes the full PWN- registry. Show access control for training-lab vulnerability catalogs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pwnshop-vulnerabilities-index-route-live-oracle",
+    platform: "generic",
+    category: "Information disclosure",
+    severityDefault: "medium",
+    title: "Pwnshop /vulnerabilities route live oracle",
+    description:
+      "When scanning /vulnerabilities on pwnshop.ctfsecurity.com, the page documents 45+ intentional vulnerabilities with PWN- IDs and OWASP 2025 mappings — route-specific training oracle.",
+    impactOneline:
+      "Route-specific Pwnshop vulnerability index scans should confirm the interactive PWN- registry is exposed.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pwnshopVulnerabilitiesIndexRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Restrict /vulnerabilities route disclosure on Pwnshop training deployments.",
+      steps: [
+        "Gate vulnerability index behind authenticated lab enrollment.",
+        "Run Pwnshop only in isolated lab environments.",
+        "Remove PWN- ID mappings from public route scans when not in training mode."
+      ]
+    },
+    fixPrompt:
+      "Our /vulnerabilities route scan confirms the PWN- registry is exposed. Show route-specific access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pwnshop-seller-preview-ssti-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -25576,7 +25680,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Pwnshop order details IDOR route live oracle (PWN-001)",
     description:
-      "When scanning /order/:id, authenticated buyers can read order #1 shipping address without ownership validation — route-specific order IDOR oracle.",
+      "When scanning /order/:id or /api/v1/orders/:id, authenticated buyers can read order #1 shipping address without ownership validation — route-specific order IDOR oracle.",
     impactOneline:
       "Route scans on order pages need live IDOR confirmation with scannedUrl evidence.",
     detectorKind: "rule_ref",
@@ -27956,6 +28060,110 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VulnShop /track-order route documents SSRF. Show route-specific outbound fetch remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-proxy-fetch-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop proxy fetch SSRF live oracle",
+    description:
+      "POST /api/v1/proxy/fetch fetches attacker-controlled URLs for internal port and network scanning — VulnShop API SSRF oracle (README #81).",
+    impactOneline:
+      "Attackers can coerce VulnShop to scan internal networks and reach private services via unvalidated proxy fetch URLs.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProxyFetchSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block server-side fetches to internal networks on proxy routes.",
+      steps: [
+        "Deny requests to link-local, metadata, and private IP ranges.",
+        "Use an allowlisted outbound fetch pipeline instead of arbitrary URL proxying.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop POST /api/v1/proxy/fetch is SSRF-vulnerable for internal scanning. Show URL allowlist and SSRF guard remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-proxy-fetch-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/proxy/fetch SSRF route live oracle",
+    description:
+      "When scanning /api/v1/proxy/fetch, live Railway backend probe or README oracle #81 documents internal port/network scanning SSRF on the Vercel SPA shell.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/proxy/fetch documents internal network scanning SSRF.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopProxyFetchSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block internal URL fetches on /api/v1/proxy/fetch.",
+      steps: [
+        "Deny requests to link-local, metadata, and private IP ranges.",
+        "Use an allowlisted outbound fetch pipeline instead of arbitrary URL proxying.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/proxy/fetch route documents internal scanning SSRF. Show route-specific URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-cloud-metadata-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop cloud metadata SSRF live oracle",
+    description:
+      "GET /api/v1/cloud/metadata exposes cloud metadata endpoint URLs (169.254.169.254) for SSRF credential theft — VulnShop API oracle (README #82).",
+    impactOneline:
+      "Metadata endpoint disclosure enables SSRF chains that steal cloud instance credentials.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopCloudMetadataSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove or authenticate cloud metadata disclosure routes.",
+      steps: [
+        "Do not expose metadata endpoint URLs to unauthenticated callers.",
+        "Block server-side fetches to link-local and metadata IP ranges.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop GET /api/v1/cloud/metadata exposes metadata SSRF targets. Show route removal and SSRF guard remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnshop-cloud-metadata-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "VulnShop /api/v1/cloud/metadata SSRF route live oracle",
+    description:
+      "When scanning /api/v1/cloud/metadata, live backend probe or README oracle #82 documents cloud metadata endpoint disclosure for SSRF chaining.",
+    impactOneline:
+      "Route-specific confirmation that VulnShop /api/v1/cloud/metadata documents metadata SSRF target disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnshopCloudMetadataSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove metadata disclosure from /api/v1/cloud/metadata routes.",
+      steps: [
+        "Do not expose metadata endpoint URLs to unauthenticated callers.",
+        "Block server-side fetches to link-local and metadata IP ranges.",
+        "Run VulnShop only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our VulnShop /api/v1/cloud/metadata route documents metadata SSRF targets. Show route-specific remediation.",
     version: 1,
     enabled: true
   },
@@ -41325,6 +41533,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owasp-genai-lessons-api-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP GenAI lessons API catalog route live oracle",
+    description:
+      "When scanning /api/lessons on owaspbased-lessons.vercel.app, GET returns unauthenticated JSON array of OWASP LLM Top 10 lesson slugs with owasp_id, difficulty, and duration metadata.",
+    impactOneline:
+      "Route-scoped scans of /api/lessons should confirm the public GenAI lesson catalog index exposing LLM01–LLM10 training modules.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspGenaiLessonsApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI lesson catalogs are intentional training — restrict API enumeration in production LLM apps.",
+      steps: [
+        "Require authentication before exposing interactive LLM lesson metadata.",
+        "Do not publish full training curriculum indexes without access control.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /api/lessons route scan confirms an unauthenticated OWASP LLM Top 10 lesson catalog. Show route-specific access control for GenAI training APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sql-injection-challenge-login-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
@@ -46397,6 +46631,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnbank-ai-chat-token-gate-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Vuln Bank authenticated AI chat token gate oracle",
+    description:
+      "POST /api/ai/chat on vulnbank.org rejects unauthenticated requests with Token is missing while /api/ai/chat/anonymous may remain open — split AI chat auth boundary oracle.",
+    impactOneline:
+      "Parallel authenticated and anonymous AI chat endpoints create inconsistent auth boundaries for customer-support LLM features.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankAiChatTokenGateLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Unify AI chat authentication — Vuln Bank is intentional training software.",
+      steps: [
+        "Require consistent JWT validation on all /api/ai/chat variants.",
+        "Remove or hard-gate anonymous AI endpoints in production deployments.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /api/ai/chat returns Token is missing while /api/ai/chat/anonymous stays open. Show unified AI chat authentication remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnbank-ai-chat-token-gate-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Vuln Bank /api/ai/chat route token gate live oracle",
+    description:
+      "When scanning vulnbank.org/api/ai/chat, POST without JWT returns Token is missing while anonymous sibling endpoint may remain exposed — route-specific AI auth boundary oracle.",
+    impactOneline:
+      "Route-specific /api/ai/chat scans should confirm authenticated chat rejects missing tokens while anonymous endpoints may bypass the same controls.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnbankAiChatTokenGateRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Unify AI chat route authentication — Vuln Bank is intentional training software.",
+      steps: [
+        "Require consistent JWT validation on all /api/ai/chat routes.",
+        "Remove or hard-gate anonymous AI endpoints in production deployments.",
+        "Run Vuln Bank only on isolated pentest training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/ai/chat route scan confirms Token is missing without JWT while anonymous chat may stay open. Show route-specific AI auth hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-bopla-register-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -50151,6 +50437,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our FinBot /vendor portal scan reaches /ctf/api/v1/sidecar without auth. Show how to gate agentic CTF progress APIs behind authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "finbot-admin-copilot-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "OWASP FinBot admin copilot live oracle",
+    description:
+      "POST /admin/api/v1/copilot/chat streams Finance Co-Pilot agentic capabilities (vendor data, reports, compliance) with session-only CSRF — FinBot admin copilot live oracle.",
+    impactOneline:
+      "Agentic copilot chat APIs expose financial data access and report-generation tools on FinBot admin portals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "finbotAdminCopilotLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "FinBot admin copilot is intentional agentic AI training — require strong authentication before exposing copilot chat APIs.",
+      steps: [
+        "Require authenticated admin sessions before /admin/api/v1/copilot/chat.",
+        "Scope copilot tool access to least-privilege financial data.",
+        "Run FinBot CTF only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our FinBot /admin/api/v1/copilot/chat streams agentic financial copilot capabilities. Show how to protect admin copilot APIs in production.",
     version: 1,
     enabled: true
   },
@@ -55301,6 +55613,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-oopssec-live-stream-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store live-stream BFLA walkthrough disclosed",
+    description:
+      "OopsSec Store walkthrough at /posts/live-stream-hijack documents unprotected GET/POST /api/live/stream exposing RTMP ingest keys to any authenticated user.",
+    impactOneline:
+      "Public walkthrough teaches BFLA on live broadcast APIs where admin UI hides controls but the API never checks roles.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideOopssecLiveStreamEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce server-side admin role checks on stream management APIs.",
+      steps: [
+        "Require admin role on POST /api/live/stream.",
+        "Do not return RTMP keys to non-admin users.",
+        "Host OopsSec walkthroughs on localhost-only training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /api/live/stream exposes RTMP keys to any authenticated user. Show BFLA remediation for broadcast APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-live-stream-bfla-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "OopsSec Store live-stream BFLA live oracle",
+    description:
+      "OopsSec Store walkthrough corpus confirms GET/POST /api/live/stream BFLA with RTMP ingest key exposure — live walkthrough validation oracle.",
+    impactOneline:
+      "Walkthrough corpus validates unprotected live-stream API documented in Challenge 07 live-stream-hijack.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecLiveStreamBflaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "OopsSec Store is intentional CTF training — enforce server-side role checks on stream APIs.",
+      steps: [
+        "Require admin role on POST /api/live/stream.",
+        "Do not return RTMP ingest URLs to non-admin authenticated users.",
+        "Run OopsSec Store only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our walkthrough confirms /api/live/stream BFLA. Show server-side role enforcement for stream management.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "oopssec-bola-wishlist-route-live-oracle",
     platform: "generic",
     category: "Broken access control",
@@ -56051,6 +56415,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our /checkout route leaks NEXT_PUBLIC_PAYMENT_SECRET in X-Payment-Auth. Show route-specific env leak remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "oopssec-next-public-env-live-oracle",
+    platform: "generic",
+    category: "Exposed secret",
+    severityDefault: "high",
+    title: "OopsSec Store NEXT_PUBLIC_ env leak live oracle",
+    description:
+      "OopsSec Store walkthrough corpus validates NEXT_PUBLIC_PAYMENT_SECRET leaked as X-Payment-Auth on POST /api/orders with decodable OSS flag — live walkthrough validation oracle.",
+    impactOneline:
+      "Walkthrough corpus contains base64 payment secret proving NEXT_PUBLIC_ build-time client bundle exposure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "oopssecNextPublicEnvLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Keep payment credentials server-side; never use NEXT_PUBLIC_ for secrets.",
+      steps: [
+        "Proxy POST /api/orders through a server route that attaches auth headers.",
+        "Add CI grep for NEXT_PUBLIC_ secret-like variable names.",
+        "Rotate any credential ever built into client bundles."
+      ]
+    },
+    fixPrompt:
+      "Our walkthrough corpus exposes X-Payment-Auth payment secret. Show server-side secret handling remediation.",
     version: 1,
     enabled: true
   },
@@ -63591,6 +63981,84 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our VWAD Goof listing documents a vulnerable Node.js todo app with default credentials. Show route-specific training-platform access control.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vwad-dvr-restaurant-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "medium",
+    title: "OWASP VWAD Damn Vulnerable Restaurant route live oracle",
+    description:
+      "When scanning vwad.owasp.org/app/damn-vulnerable-restaurant/, the VWAD listing documents theowni's FastAPI/PostgreSQL Docker CTF game with Swagger/Redoc at localhost:8091 — route-specific training oracle.",
+    impactOneline:
+      "VWAD DVR listing exposes offline FastAPI CTF deploy scope and GitHub repo for intentional Web API vulnerability training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vwadDvrRestaurantRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "DVR is intentional training — limit public disclosure of exploit catalog on VWAD-linked hosts.",
+      steps: [
+        "Gate DVR challenge details behind authenticated lab enrollment.",
+        "Run DVR only on isolated training infrastructure.",
+        "Do not expose Swagger/Redoc on public-facing hosts."
+      ]
+    },
+    fixPrompt:
+      "Our VWAD Damn Vulnerable Restaurant listing documents a FastAPI CTF game. Show route-specific training-platform access control.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-ai-threatlab-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "AI-Threatlab OWASP LLM/ASI interactive lab disclosed",
+    description:
+      "rootabhi1.github.io/AI-Threatlab documents interactive OWASP LLM Top 10 (2025) and Agentic ASI Top 10 (2026) attack/defense walkthroughs with MITRE ATLAS mappings.",
+    impactOneline:
+      "Public AI security lab exposes LLM01 prompt injection and ASI agentic attack modules for reconnaissance and exploit rehearsal.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideAiThreatlabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI-Threatlab is intentional training — isolate lab instances and gate behind authenticated sessions.",
+      steps: [
+        "Do not mirror AI-Threatlab attack patterns in production LLM agents.",
+        "Rate-limit unauthenticated enumeration of challenge modules.",
+        "Run agentic red-team labs only on isolated infrastructure."
+      ]
+    },
+    fixPrompt:
+      "We host AI-Threatlab-style OWASP LLM/ASI walkthroughs. Show how to isolate AI security labs from production agents.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ai-threatlab-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "AI-Threatlab OWASP LLM/ASI route live oracle",
+    description:
+      "When scanning rootabhi1.github.io/AI-Threatlab/, the SPA embeds LLM01-LLM10 and ASI01-ASI10 interactive modules with MITRE ATLAS attack references — route-specific AI security training oracle.",
+    impactOneline:
+      "AI-Threatlab route scan confirms interactive agentic red-team curriculum with prompt injection and guardrail bypass modules.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "aiThreatlabRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "AI-Threatlab is intentional training — isolate lab instances from production LLM deployments.",
+      steps: [
+        "Gate AI security walkthroughs behind authenticated lab enrollment.",
+        "Do not expose production agent APIs on the same origin as training labs.",
+        "Monitor for reconnaissance against public AI challenge catalogs."
+      ]
+    },
+    fixPrompt:
+      "Our AI-Threatlab route scan confirms OWASP LLM/ASI interactive modules. Show route-specific AI lab access control.",
     version: 1,
     enabled: true
   },
@@ -76101,7 +76569,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "AppSec CI Pipeline /comments/ stored XSS route live oracle",
     description:
-      "When scanning /comments/, POST with CSRF token stores unsanitized HTML in comment cards — route-specific stored XSS oracle.",
+      "When scanning /comments/ or /api/comments, POST with CSRF token stores unsanitized HTML in comment cards — route-specific stored XSS oracle.",
     impactOneline:
       "Route-scoped scans should flag stored XSS on AppSec CI Pipeline comment endpoints.",
     detectorKind: "rule_ref",
@@ -81174,6 +81642,33 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "fabraix-jailbreak-002-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "high",
+    title: "Fabraix jailbreak-002 challenge route live oracle",
+    description:
+      "When scanning /challenges/jailbreak-002, POST api.fabraix.com/v1/playground/sessions/start creates unauthenticated agent sessions for the v2 LLM jailbreak / multi-turn guardrail bypass challenge — maps to access-code-001 Gatekeeper backend.",
+    impactOneline:
+      "Route-scoped Fabraix jailbreak-002 scans should confirm unauthenticated agent red-team sessions on the v2 jailbreak challenge route.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "fabraixJailbreak002RouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary:
+        "Fabraix Playground is intentional red-team infrastructure — gate session creation behind auth in production agent deployments.",
+      steps: [
+        "Require authenticated users before starting agent red-team sessions.",
+        "Rate-limit /playground/sessions/start on public demo hosts.",
+        "Isolate Fabraix challenge infrastructure from production agent APIs."
+      ]
+    },
+    fixPrompt:
+      "Our Fabraix /challenges/jailbreak-002 route scan confirms unauthenticated Gatekeeper agent sessions. Show multi-turn jailbreak and guardrail-bypass defenses for agentic AI deployments.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "fabraix-jwt-verifier-001-route-live-oracle",
     platform: "generic",
     category: "AI security",
@@ -81538,6 +82033,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Vault Notes frontend route scan exposes window.__leakedJwtSecret. Show client-bundle secret removal and key rotation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-login-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vault Notes login SQL injection live oracle",
+    description:
+      "Vault Notes VAPT training app POST /login builds SQL via string concatenation — ' OR '1'='1' -- bypasses authentication without valid credentials (finding #1).",
+    impactOneline:
+      "SQL injection on login lets attackers authenticate as arbitrary users without knowing passwords.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesLoginSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all Vault Notes login database lookups.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements on POST /login.",
+        "Validate and sanitize username/password inputs server-side.",
+        "Audit all database queries for similar concatenation patterns."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes POST /login is SQL-injectable via username concatenation. Show parameterized query remediation for authentication.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vault-notes-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Vault Notes login SQLi route live oracle",
+    description:
+      "When scanning vault-notes-frontend-gules.vercel.app, live POST /login SQLi probe or VAPT findings.md corpus documents authentication bypass via ' OR '1'='1' --.",
+    impactOneline:
+      "Route-specific confirmation that Vault Notes documents SQL injection authentication bypass on POST /login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vaultNotesLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries on Vault Notes login routes.",
+      steps: [
+        "Replace string-concatenated SQL with prepared statements on POST /login.",
+        "Validate and sanitize username/password inputs server-side.",
+        "Audit all database queries for similar concatenation patterns."
+      ]
+    },
+    fixPrompt:
+      "Our Vault Notes frontend route scan documents POST /login SQL injection. Show route-specific parameterized query fixes.",
     version: 1,
     enabled: true
   },
@@ -83696,6 +84243,656 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our Restful Booker /booking route scan confirms unauthenticated reservation creation. Show write-access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-product-search-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore product search SQL injection live oracle (V-001/V-012)",
+    description:
+      "GET /api/products/?search=test' triggers HTTP 500 Internal Server Error vs baseline 200 on BugStore — concatenated product search SQL injection oracle.",
+    impactOneline:
+      "SQL injection in product search lets attackers extract database contents from the BugTraceAI BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProductSearchSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BugStore is intentional training software — use parameterized queries for product search.",
+      steps: [
+        "Replace string-concatenated search filters with prepared statements.",
+        "Return generic errors without revealing SQL failure modes.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore GET /api/products search parameter is vulnerable to SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-product-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore product search SQLi route live oracle (V-001/V-012)",
+    description:
+      "When scanning /api/products on bugstore.bugtraceai.com, GET /api/products/?search=test' confirms HTTP 500 vs baseline 200 — route-specific SQL injection oracle.",
+    impactOneline:
+      "Route-specific BugStore catalog scans should surface SQL injection in the search filter endpoint.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProductSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for BugStore product search SQL.",
+      steps: [
+        "Replace string-concatenated search filters with prepared statements.",
+        "Return generic errors without revealing SQL failure modes.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/products route scan confirms SQLi on the search parameter. Show route-specific parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-product-image-path-traversal-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "BugStore product image path traversal live oracle (V-014)",
+    description:
+      "GET /api/products/1/image?file=../../../etc/passwd returns /etc/passwd contents on BugStore — product image path traversal oracle.",
+    impactOneline:
+      "Path traversal in product image serving lets attackers read arbitrary server files from the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProductImagePathTraversalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "BugStore is intentional training software — canonicalize and block traversal in image paths.",
+      steps: [
+        "Resolve paths against a fixed images directory and reject .. segments.",
+        "Use an allowlist of filenames instead of user-controlled paths.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/products/{id}/image file parameter reads /etc/passwd via traversal. Show safe path handling remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-product-image-path-traversal-route-live-oracle",
+    platform: "generic",
+    category: "Sensitive data exposure",
+    severityDefault: "critical",
+    title: "BugStore product image path traversal route live oracle (V-014)",
+    description:
+      "When scanning /api/products/{id}/image on bugstore.bugtraceai.com, GET with file=../../../etc/passwd returns passwd contents — route-specific path traversal oracle.",
+    impactOneline:
+      "Route-specific BugStore image endpoint scans should confirm arbitrary file read via the file query parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProductImagePathTraversalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block traversal sequences in BugStore image file paths.",
+      steps: [
+        "Resolve paths against a fixed images directory and reject .. segments.",
+        "Use an allowlist of filenames instead of user-controlled paths.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/products/{id}/image route scan confirms path traversal. Show route-specific safe path handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-admin-debug-stats-bac-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore admin debug stats broken access control live oracle (V-012)",
+    description:
+      "GET /api/admin/vulnerable-debug-stats on BugStore returns admin_emails and session stats without authentication — debug endpoint broken access control oracle.",
+    impactOneline:
+      "Unauthenticated access to admin debug stats exposes administrator emails and operational metrics from the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAdminDebugStatsBacLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication before exposing debug statistics.",
+      steps: [
+        "Protect /api/admin/* routes with role-based access control.",
+        "Remove or redact admin_emails from debug responses.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/admin/vulnerable-debug-stats endpoint leaks admin emails without auth. Show access control remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-admin-debug-stats-bac-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore admin debug stats BAC route live oracle (V-012)",
+    description:
+      "When scanning /api/admin/vulnerable-debug-stats on bugstore.bugtraceai.com, unauthenticated GET confirms admin_emails disclosure — route-specific broken access control oracle.",
+    impactOneline:
+      "Route-specific BugStore admin debug scans should confirm unauthenticated exposure of administrator contact data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAdminDebugStatsBacRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Require admin authentication on BugStore debug stats routes.",
+      steps: [
+        "Protect /api/admin/* routes with role-based access control.",
+        "Remove or redact admin_emails from debug responses.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/admin/vulnerable-debug-stats route scan confirms unauthenticated admin stats exposure. Show route-specific access control fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-forum-thread-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore forum thread_id SQL injection live oracle (V-001)",
+    description:
+      "GET /api/forum/threads/1' on BugStore discloses SQL syntax error with SELECT * FROM threads WHERE id query fragment — forum thread_id SQL injection oracle.",
+    impactOneline:
+      "SQL injection in forum thread_id lets attackers extract database contents from the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreForumThreadSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for BugStore forum thread lookups.",
+      steps: [
+        "Replace string-concatenated thread_id filters with prepared statements.",
+        "Return generic errors without revealing SQL failure modes.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/forum/threads/{id} parameter is vulnerable to SQLi. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-forum-thread-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore forum thread SQLi route live oracle (V-001)",
+    description:
+      "When scanning /api/forum/threads on bugstore.bugtraceai.com, GET /api/forum/threads/1' confirms disclosed SQL syntax error — route-specific forum SQL injection oracle.",
+    impactOneline:
+      "Route-specific BugStore forum scans should surface SQL injection in the thread_id path parameter.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreForumThreadSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for BugStore forum thread lookups.",
+      steps: [
+        "Replace string-concatenated thread_id filters with prepared statements.",
+        "Return generic errors without revealing SQL failure modes.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/forum/threads route scan confirms thread_id SQLi. Show route-specific parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-orders-idor-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore orders IDOR live oracle (V-009)",
+    description:
+      "GET /api/orders/ and /api/orders/{id} on BugStore return customer order PII including shipping_address without authentication — order IDOR/BOLA oracle.",
+    impactOneline:
+      "Missing authorization on BugStore order endpoints lets anyone read other customers' order details and shipping addresses.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreOrdersIdorLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce owner-scoped authorization on BugStore order reads.",
+      steps: [
+        "Require authenticated sessions and verify order.user_id matches the caller.",
+        "Avoid exposing full order lists without admin role checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/orders endpoints expose other users' orders without auth. Show BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-orders-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore orders IDOR route live oracle (V-009)",
+    description:
+      "When scanning /api/orders on bugstore.bugtraceai.com, unauthenticated GET confirms cross-customer order PII exposure — route-specific IDOR oracle.",
+    impactOneline:
+      "Route-specific BugStore order API scans should confirm broken object-level authorization on order reads.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreOrdersIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce owner-scoped authorization on BugStore order routes.",
+      steps: [
+        "Require authenticated sessions and verify order.user_id matches the caller.",
+        "Avoid exposing full order lists without admin role checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/orders route scan confirms unauthenticated order IDOR. Show route-specific BOLA remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-checkout-client-total-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "BugStore checkout client-trusted total live oracle (V-023)",
+    description:
+      "POST /api/checkout/process on BugStore accepts attacker-controlled total=0.01 while cart total is higher — client-trusted payment total oracle.",
+    impactOneline:
+      "Trusting client-supplied checkout totals lets attackers pay pennies for full cart value on the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreCheckoutClientTotalLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Recalculate order totals server-side from cart line items.",
+      steps: [
+        "Ignore client-supplied total fields during checkout.",
+        "Compute tax, shipping, and subtotal on the server from authoritative cart state.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore POST /api/checkout/process honors client total=0.01. Show server-side total validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-checkout-client-total-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "BugStore checkout client-trusted total route live oracle (V-023)",
+    description:
+      "When scanning /api/checkout/process on bugstore.bugtraceai.com, POST with total=0.01 confirms client-trusted payment — route-specific business-logic oracle.",
+    impactOneline:
+      "Route-specific BugStore checkout scans should confirm the server trusts attacker-controlled payment totals.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreCheckoutClientTotalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Recalculate checkout totals server-side on BugStore checkout routes.",
+      steps: [
+        "Ignore client-supplied total fields during checkout.",
+        "Compute tax, shipping, and subtotal on the server from authoritative cart state.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore checkout route scan confirms client-trusted total manipulation. Show route-specific server-side total validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-profile-mass-assignment-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "BugStore profile role mass-assignment live oracle (V-015)",
+    description:
+      "PUT /api/user/profile on BugStore accepts role:admin after registration — profile mass-assignment privilege escalation oracle.",
+    impactOneline:
+      "Mass-assigning admin role via profile update lets regular users escalate privileges on the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProfileMassAssignmentLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block role and privilege fields from user-controlled profile updates.",
+      steps: [
+        "Use an allowlist of updatable profile fields.",
+        "Assign roles only through admin workflows with authorization checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore PUT /api/user/profile accepts role:admin mass-assignment. Show field allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-profile-mass-assignment-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "BugStore profile mass-assignment route live oracle (V-015)",
+    description:
+      "When scanning /api/user/profile or /api/auth/register on bugstore.bugtraceai.com, PUT with role:admin confirms privilege escalation — route-specific mass-assignment oracle.",
+    impactOneline:
+      "Route-specific BugStore profile/auth scans should confirm role mass-assignment escalates users to admin.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreProfileMassAssignmentRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block role fields from BugStore profile update routes.",
+      steps: [
+        "Use an allowlist of updatable profile fields.",
+        "Assign roles only through admin workflows with authorization checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore profile route scan confirms role mass-assignment escalation. Show route-specific field allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-auth-signup-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "BugStore /api/auth/signup mass-assignment route live oracle (V-015)",
+    description:
+      "When scanning /api/auth/signup on bugstore.bugtraceai.com, POST signup is rejected (HTTP 405) but /api/auth/register + PUT /api/user/profile role:admin confirms privilege escalation — route-specific signup mass-assignment oracle.",
+    impactOneline:
+      "Route-specific BugStore signup scans should confirm role mass-assignment via the registration flow even when the signup endpoint rejects POST.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAuthSignupRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Block role fields from BugStore registration and profile update routes.",
+      steps: [
+        "Use an allowlist of updatable profile fields.",
+        "Assign roles only through admin workflows with authorization checks.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/auth/signup route scan confirms role mass-assignment via register+profile. Show route-specific field allowlist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-secure-portal-totp-login-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "BugStore secure-portal TOTP brute-force live oracle (V-031/V-032)",
+    description:
+      "POST /api/secure-portal/login on BugStore requires totp_code and accepts repeated TOTP guesses without lockout — 2FA brute-force oracle for the secure admin portal.",
+    impactOneline:
+      "Missing TOTP rate limiting on BugStore secure-portal login lets attackers brute-force 2FA codes to hijack admin accounts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreSecurePortalTotpLoginLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rate-limit TOTP verification and lock accounts after failed 2FA attempts.",
+      steps: [
+        "Enforce per-IP and per-account rate limits on /api/secure-portal/login.",
+        "Lock or delay accounts after repeated invalid totp_code submissions.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/secure-portal/login endpoint accepts unlimited TOTP guesses. Show 2FA brute-force hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-secure-portal-totp-login-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "BugStore secure-portal TOTP brute-force route live oracle (V-031/V-032)",
+    description:
+      "When scanning /api/secure-portal/login on bugstore.bugtraceai.com, POST requires totp_code and accepts brute-force TOTP guesses — route-specific 2FA oracle.",
+    impactOneline:
+      "Route-specific BugStore secure-portal scans should confirm missing TOTP rate limiting on admin 2FA login.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreSecurePortalTotpLoginRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Rate-limit TOTP verification on BugStore secure-portal login routes.",
+      steps: [
+        "Enforce per-IP and per-account rate limits on /api/secure-portal/login.",
+        "Lock or delay accounts after repeated invalid totp_code submissions.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/secure-portal/login route scan confirms TOTP brute-force exposure. Show route-specific 2FA rate-limit fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-health-rce-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "BugStore health check RCE live oracle (V-021)",
+    description:
+      "GET /api/health?cmd=id on BugStore returns Unauthorized execution without admin, then cmd_output with uid= after role:admin mass-assignment — health check command injection RCE oracle.",
+    impactOneline:
+      "Admin-only cmd parameter on BugStore health endpoint passes attacker input to subprocess shell=True — full server compromise after privilege escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreHealthRceLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands on health or diagnostic endpoints.",
+      steps: [
+        "Remove cmd parameters from health check routes entirely.",
+        "Use subprocess with shell=False and strict allowlists if diagnostics are required.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/health?cmd= executes shell commands after admin escalation. Show safe health-check remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-health-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "BugStore health check RCE route live oracle (V-021)",
+    description:
+      "When scanning /api/health on bugstore.bugtraceai.com, cmd parameter executes id via subprocess after admin mass-assignment — route-specific RCE oracle.",
+    impactOneline:
+      "Route-specific BugStore health scans should confirm cmd parameter remote code execution after privilege escalation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreHealthRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Remove shell execution from BugStore health check routes.",
+      steps: [
+        "Remove cmd parameters from health check routes entirely.",
+        "Use subprocess with shell=False and strict allowlists if diagnostics are required.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/health route scan confirms cmd-parameter RCE. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-admin-users-bac-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore admin users enumeration live oracle (V-005/V-006)",
+    description:
+      "GET /api/admin/users on BugStore returns full user roster with password_hash fields after role:admin mass-assignment — admin user enumeration oracle.",
+    impactOneline:
+      "BugStore admin user management exposes password hashes and emails to any escalated admin account.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAdminUsersBacLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact password hashes and enforce strict admin authorization on user management.",
+      steps: [
+        "Never return password_hash in API responses.",
+        "Require multi-factor authentication for admin user listing.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore GET /api/admin/users leaks password_hash for all users. Show admin API hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-admin-users-bac-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore admin users BAC route live oracle (V-005/V-006)",
+    description:
+      "When scanning /api/admin/users on bugstore.bugtraceai.com, escalated admin token returns password_hash for admin@bugstore.com — route-specific user enumeration oracle.",
+    impactOneline:
+      "Route-specific BugStore admin user scans should confirm sensitive credential data exposure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreAdminUsersBacRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Redact password hashes on BugStore admin user routes.",
+      steps: [
+        "Never return password_hash in API responses.",
+        "Require multi-factor authentication for admin user listing.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/admin/users route scan confirms password hash disclosure. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-forum-posts-stored-xss-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore forum reply stored XSS live oracle (V-003)",
+    description:
+      "POST /api/forum/threads/1/replies on BugStore stores raw script tags in reply content without sanitization — forum stored XSS oracle.",
+    impactOneline:
+      "Unsanitized forum reply content lets attackers persist XSS payloads affecting every user viewing the thread.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreForumPostsStoredXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize forum reply content server-side before storage and rendering.",
+      steps: [
+        "HTML-encode user-generated forum content on output.",
+        "Reject or strip script tags from reply submissions.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore forum replies store unsanitized HTML/script. Show stored XSS remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-forum-posts-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "BugStore forum posts stored XSS route live oracle (V-003)",
+    description:
+      "When scanning /api/forum/posts on bugstore.bugtraceai.com, POST /api/forum/threads/1/replies persists unsanitized script in thread JSON — route-specific stored XSS oracle.",
+    impactOneline:
+      "Route-specific BugStore forum scans should confirm stored XSS in reply content.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreForumPostsStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Sanitize forum reply content on BugStore forum routes.",
+      steps: [
+        "HTML-encode user-generated forum content on output.",
+        "Reject or strip script tags from reply submissions.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/forum/posts route scan confirms stored XSS in replies. Show route-specific sanitization fixes.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-graphql-introspection-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore GraphQL introspection and users BOLA live oracle (V-008/V-009)",
+    description:
+      "POST /api/graphql on BugStore returns schema introspection and unauthenticated users{email,role} plus orders enumeration — GraphQL authorization oracle.",
+    impactOneline:
+      "Unauthenticated GraphQL introspection and user/order queries expose admin emails and purchase history without authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreGraphqlIntrospectionBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection in production and enforce field-level authorization.",
+      steps: [
+        "Require authentication before GraphQL queries.",
+        "Disable __schema introspection on public endpoints.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/graphql endpoint exposes introspection and unauthenticated users/orders queries. Show GraphQL authorization hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-graphql-introspection-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BugStore GraphQL route introspection BOLA live oracle (V-008/V-009)",
+    description:
+      "When scanning /graphql on bugstore.bugtraceai.com, POST /api/graphql confirms introspection plus unauthenticated users and orders BOLA — route-specific GraphQL oracle.",
+    impactOneline:
+      "Route-specific BugStore GraphQL scans should confirm introspection and broken object-level authorization.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreGraphqlIntrospectionBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable GraphQL introspection and enforce authorization on BugStore GraphQL routes.",
+      steps: [
+        "Require authentication before GraphQL queries.",
+        "Disable __schema introspection on public endpoints.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /graphql route scan confirms unauthenticated GraphQL introspection and users BOLA. Show route-specific GraphQL hardening.",
     version: 1,
     enabled: true
   }
