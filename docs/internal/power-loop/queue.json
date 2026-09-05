@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T05:06:00.000Z",
+  "updated_at": "2026-09-05T06:18:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/sql-injection-writeup/",
+      "source": "kOaDT/oss-oopssec-store — Challenge 17 order-search SQLi walkthrough (challenges.json scrape 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/self-xss-csrf-profile-takeover/",
+      "source": "kOaDT/oss-oopssec-store — Challenge 14/16 self-XSS + CSRF profile takeover chain (challenges.json scrape 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/session-fixation-weak-session-management/",
+      "source": "kOaDT/oss-oopssec-store — Challenge 25 session fixation via support access token (challenges.json scrape 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/insecure-password-reset/",
+      "source": "kOaDT/oss-oopssec-store — Challenge 26 predictable password reset token (challenges.json scrape 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/weak-md5-hashing-admin-compromise/",
+      "source": "kOaDT/oss-oopssec-store — Challenge 28 SQLi + weak MD5 admin compromise chain (challenges.json scrape 06 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://owaspbased-lessons.vercel.app/api/lessons",
       "source": "owaspbased-lessons — unauthenticated LLM Top 10 lesson catalog JSON index (scoreboard gap 06 UTC)",
