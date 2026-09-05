@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-05T20:03:36.224Z",
-  "total": 3343,
-  "uniqueSlugs": 3335,
+  "generatedAt": "2026-09-05T21:12:37.652Z",
+  "total": 3348,
+  "uniqueSlugs": 3340,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3325,
+    "generic": 3330,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3258,
+    "deep": 3263,
     "continuous": 0
   },
   "byCategory": {
@@ -29,7 +29,7 @@
     "Broken authentication": 210,
     "Injection": 544,
     "Cross-site scripting": 798,
-    "Open redirect": 27,
+    "Open redirect": 29,
     "general": 20,
     "SSRF": 19,
     "Server-side request forgery": 125,
@@ -52,7 +52,9 @@
     "Session management": 2,
     "Authentication": 7,
     "Unrestricted file upload": 1,
-    "Cryptographic failures": 1
+    "Cryptographic failures": 1,
+    "XML external entity": 1,
+    "Mass assignment": 2
   },
   "slugs": [
     "aevum-consent-review-unauth-live-oracle",
@@ -279,6 +281,8 @@
     "bugstore-graphql-introspection-bola-route-live-oracle",
     "bugstore-health-rce-live-oracle",
     "bugstore-health-rce-route-live-oracle",
+    "bugstore-open-redirect-live-oracle",
+    "bugstore-open-redirect-route-live-oracle",
     "bugstore-orders-idor-live-oracle",
     "bugstore-orders-idor-route-live-oracle",
     "bugstore-product-image-path-traversal-live-oracle",
@@ -287,6 +291,8 @@
     "bugstore-product-search-sqli-route-live-oracle",
     "bugstore-profile-mass-assignment-live-oracle",
     "bugstore-profile-mass-assignment-route-live-oracle",
+    "bugstore-reviews-mass-assignment-live-oracle",
+    "bugstore-reviews-mass-assignment-route-live-oracle",
     "bugstore-secure-portal-totp-login-live-oracle",
     "bugstore-secure-portal-totp-login-route-live-oracle",
     "burpbounty-actuator-heapdump-live-oracle",
@@ -2551,6 +2557,7 @@
     "seclab-ssrf-vulnerable-route-live-oracle",
     "seclab-users-vulnerable-route-live-oracle",
     "seclab-xss-vulnerable-route-live-oracle",
+    "seclab-xxe-vulnerable-route-live-oracle",
     "secret-anthropic",
     "secret-aws-akid",
     "secret-convex-deploy-key",

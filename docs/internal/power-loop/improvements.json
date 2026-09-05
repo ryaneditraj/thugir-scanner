@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:seclab.vercel.app",
+      "slug": "seclab-xxe-vulnerable-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /labs/xxe returns Angular <app-root> SPA shell; POST /api/xxe-vulnerable serves same stub (README lists XXE planned, not deployed); seclab.vercel.app/labs/xxe findings 4→6 (+seclab-xxe-vulnerable-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-reviews-mass-assignment-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/reviews/ with is_approved:true returns review.is_approved=true without moderator (V-020 OpenAPI); bugstore.bugtraceai.com/api/reviews/create findings 20→23 (+bugstore-reviews-mass-assignment-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-open-redirect-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/redirect?url=https://evil.example/thugir-open-redirect-probe returns HTTP 307 Location evil.example (V-005/V-006); bugstore.bugtraceai.com/api/redirect findings 20→23 (+bugstore-open-redirect-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:graphql-complexity-playground-production.up.railway.app",
       "slug": "graphql-complexity-playground-hub-route-live-oracle",
       "status": "shipped",

