@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T02:04:36.964Z",
+  "updated_at": "2026-09-05T03:05:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://pwnshop.ctfsecurity.com/wallet/topup",
@@ -21635,7 +21635,32 @@
       "url": "https://dvwu.vercel.app/labs/ssti",
       "source": "zahidoverflow/dvwu — SSTI training lab route (Vercel live demo)",
       "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/diagnostics/webhook",
+      "source": "atlas-crew/Chimera — CHM-DIAG-001 diagnostic webhook SSRF (vulnerability-inventory.md; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/genai/agent/browse",
+      "source": "atlas-crew/Chimera — CHM-AI-002 GenAI agent browse SSRF (vulnerability-inventory.md; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/energy-utilities/outages/1",
+      "source": "atlas-crew/Chimera — CHM-ENERGY-002 BOLA/IDOR on outages endpoint (vulnerability-inventory.md; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/diagnostics/ping",
+      "source": "atlas-crew/Chimera — CHM-DIAG-002 diagnostics ping command injection (GitHub routes.py; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/genai/chat",
+      "source": "atlas-crew/Chimera — CHM-AI-001 GenAI chat prompt injection (vulnerability-inventory.md; web search 03 UTC)",
+      "auth": "public_demo"
     }
   ],
-  "discovery_urls_added": 2043
+  "discovery_urls_added": 2048
 }
