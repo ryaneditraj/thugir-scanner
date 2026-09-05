@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-admin-system-execute-rce-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: api-reference POST /api/v1/admin/system/execute — Command injection; chimera.atlascrew.dev/api/v1/admin/system/execute findings 7→8 (+chimera-admin-system-execute-rce-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-admin-config-import-xxe-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: api-reference POST /api/v1/admin/config/import — XXE injection; chimera.atlascrew.dev/api/v1/admin/config/import findings 7→8 (+chimera-admin-config-import-xxe-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-admin-data-deserialize-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: api-reference POST /api/v1/admin/data/deserialize — Insecure deserialization; chimera.atlascrew.dev/api/v1/admin/data/deserialize findings 7→8 (+chimera-admin-data-deserialize-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:koadt.github.io",
       "slug": "oopssec-walkthrough-runner-priority-live-stream-second-order-mcp",
       "status": "shipped",

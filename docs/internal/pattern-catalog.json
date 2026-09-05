@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-05T15:04:54.395Z",
-  "total": 3325,
-  "uniqueSlugs": 3317,
+  "generatedAt": "2026-09-05T16:01:54.550Z",
+  "total": 3328,
+  "uniqueSlugs": 3320,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3307,
+    "generic": 3310,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3240,
+    "deep": 3243,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 154,
     "Security misconfiguration": 280,
     "Broken authentication": 210,
-    "Injection": 540,
+    "Injection": 543,
     "Cross-site scripting": 798,
     "Open redirect": 27,
     "general": 20,
@@ -440,11 +440,14 @@
     "bypass403-waf-live-oracle",
     "bypass403-waf-route-live-oracle",
     "chimera-admin-attack-xxe-route-live-oracle",
+    "chimera-admin-config-import-xxe-route-live-oracle",
+    "chimera-admin-data-deserialize-route-live-oracle",
     "chimera-admin-deserialize-route-live-oracle",
     "chimera-admin-diagnostics-hub-route-live-oracle",
     "chimera-admin-execute-rce-route-live-oracle",
     "chimera-admin-files-read-path-traversal-route-live-oracle",
     "chimera-admin-orders-override-route-live-oracle",
+    "chimera-admin-system-execute-rce-route-live-oracle",
     "chimera-admin-users-export-route-live-oracle",
     "chimera-api-reference-route-live-oracle",
     "chimera-banking-accounts-bola-route-live-oracle",

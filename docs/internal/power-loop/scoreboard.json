@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T15:15:00.000Z",
+  "updated_at": "2026-09-05T16:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3213,
-  "total_findings": 37072,
-  "critical_findings": 70,
+  "total_sites_scanned": 3216,
+  "total_findings": 37096,
+  "critical_findings": 73,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2098,
-  "discovery_findings": 29645,
-  "improvements_shipped": 1435,
-  "last_run": "2026-09-05T15:15:00.000Z",
+  "discovery_findings": 29669,
+  "improvements_shipped": 1438,
+  "last_run": "2026-09-05T16:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "15",
+    "hour_utc": "16",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,44 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles; secret-resend + juice-shop-resend-key present)"
+      "note": "Stable 6/6 first-pass recall (52 findings, 40 live oracles)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 57,
-      "focus": "Chimera emergency-access PHI + HIPAA patient IDOR + telecom SIM-swap + admin files path traversal + integrations webhook SSRF + drained oopssec middleware-bypass/malicious-file-upload",
-      "improvements_shipped_this_run": 5
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 24,
+      "focus": "Chimera attack-simulation api-reference routes: system/execute command injection, config/import XXE, data/deserialize insecure deserialization",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; gap=[]; secret-resend present)",
-      "chimera.atlascrew.dev/api/v1/healthcare/records/emergency-access: 8 findings — chimera-healthcare-records-emergency-access-route-live-oracle",
-      "chimera.atlascrew.dev/api/hipaa/records/patient: 8 findings — chimera-hipaa-records-patient-idor-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/telecom/sim-swap: 8 findings — chimera-telecom-sim-swap-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/admin/files/read: 8 findings — chimera-admin-files-read-path-traversal-route-live-oracle",
-      "chimera.atlascrew.dev/api/integrations/webhook/register: 8 findings — chimera-integrations-webhook-register-ssrf-route-live-oracle",
-      "koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass/: 7 findings — oopssec-middleware-authorization-bypass-route-live-oracle",
-      "koadt.github.io/oss-oopssec-store/posts/malicious-file-upload/: 7 findings — oopssec-malicious-file-upload-stored-xss-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 40 live oracles; gap=[])",
+      "chimera.atlascrew.dev/api/v1/admin/system/execute: 8 findings — chimera-admin-system-execute-rce-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/admin/config/import: 8 findings — chimera-admin-config-import-xxe-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/admin/data/deserialize: 8 findings — chimera-admin-data-deserialize-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "Chimera routes still thin 8-finding generic hub beyond route-specific oracles",
+      "Chimera diagnostics/resolve + auth/token/forge routes still thin 7-finding hub",
       "oopssec react2shell/public-env/jwt-alg/weak-jwt vanity slugs still queued",
       "qa.brokencrystals.com/api/file/aws still queued (48h skip)",
       "owaspbased-lessons.vercel.app/api/lessons thin 3-finding hub without route-specific LLM oracle"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 53,
+    "juice-shop.herokuapp.com": 52,
+    "chimera.atlascrew.dev/api/v1/admin/system/execute": 8,
+    "chimera.atlascrew.dev/api/v1/admin/config/import": 8,
+    "chimera.atlascrew.dev/api/v1/admin/data/deserialize": 8,
     "chimera.atlascrew.dev/api/v1/healthcare/records/emergency-access": 8,
     "chimera.atlascrew.dev/api/hipaa/records/patient": 8,
     "chimera.atlascrew.dev/api/v1/telecom/sim-swap": 8,
-    "chimera.atlascrew.dev/api/v1/admin/files/read": 8,
-    "chimera.atlascrew.dev/api/integrations/webhook/register": 8,
-    "koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass/": 7,
-    "koadt.github.io/oss-oopssec-store/posts/malicious-file-upload/": 7,
-    "chimera.atlascrew.dev/api/v1/telecom/integrations/webhooks": 8,
-    "bugstore.bugtraceai.com/api/admin/users": 20
+    "chimera.atlascrew.dev/api/v1/admin/files/read": 8
   }
 }

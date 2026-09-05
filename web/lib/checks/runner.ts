@@ -1890,6 +1890,9 @@ const DEEP_RULES = new Set<string>([
   "chimeraAdminAttackXxeRouteLiveOracle",
   "chimeraAdminExecuteRceRouteLiveOracle",
   "chimeraAdminDeserializeRouteLiveOracle",
+  "chimeraAdminSystemExecuteRceRouteLiveOracle",
+  "chimeraAdminConfigImportXxeRouteLiveOracle",
+  "chimeraAdminDataDeserializeRouteLiveOracle",
   "chimeraAdminFilesReadPathTraversalRouteLiveOracle",
   "chimeraAdminUsersExportRouteLiveOracle",
   "chimeraIntegrationsWebhookRegisterSsrfRouteLiveOracle",
@@ -13035,8 +13038,26 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/system\/execute\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-system-execute")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/admin\/attack\/deserialize\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-admin-deserialize")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/data\/deserialize\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-data-deserialize")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/admin\/config\/import\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-admin-config-import")
       )
         return -3;
       if (

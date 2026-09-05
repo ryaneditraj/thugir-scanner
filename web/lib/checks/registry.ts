@@ -21352,6 +21352,9 @@ POST /api/v1/diagnostics/webhook
 CHM-ADMIN-003 XML External Entity (XXE)
 POST /api/v1/admin/attack/xxe
 XXE in legacy import behavior
+POST /api/v1/admin/system/execute          # Command injection
+POST /api/v1/admin/config/import           # XXE injection
+POST /api/v1/admin/data/deserialize        # Insecure deserialization
 POST /api/v1/admin/files/read              # Path traversal
 GET /api/v1/admin/users/export             # Data exfiltration
 POST /api/integrations/webhook/register     # SSRF via webhook
@@ -23102,6 +23105,121 @@ const chimeraAdminDeserializeRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/admin/attack/deserialize route scan — vulnerability inventory documents Python pickle insecure deserialization RCE (Jekyll docs corpus fallback) — route-specific deserialization training oracle"
+    }
+  };
+};
+
+async function chimeraAdminSystemExecuteRceProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const executeOk =
+    /admin\/system\/execute/i.test(corpus) &&
+    (/Command injection|Remote Code Execution|cat \/etc\/passwd/i.test(corpus) ||
+      /POST\s+\/api\/v1\/admin\/system\/execute/i.test(corpus)) &&
+    (/No authorization required|Full system compromise|admin|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!executeOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Command injection/i.test(corpus) ? 0.93 : 0.9,
+    evidence: {
+      snippet: 'POST /api/v1/admin/system/execute — Command injection {"command":"cat /etc/passwd"}',
+      note: "chimera.atlascrew.dev — Chimera api-reference documents unauthenticated admin system command injection on POST /api/v1/admin/system/execute (Jekyll docs corpus fallback) — admin RCE training oracle"
+    }
+  };
+}
+
+const chimeraAdminSystemExecuteRceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/system\/execute\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraAdminSystemExecuteRceProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/admin/system/execute route scan — api-reference documents unauthenticated command injection (Jekyll docs corpus fallback) — route-specific admin RCE training oracle"
+    }
+  };
+};
+
+async function chimeraAdminConfigImportXxeProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const xxeOk =
+    /admin\/config\/import/i.test(corpus) &&
+    (/XXE injection|XML External Entity|XXE in legacy import/i.test(corpus) ||
+      /POST\s+\/api\/v1\/admin\/config\/import/i.test(corpus)) &&
+    (/No authorization required|admin|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!xxeOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /XXE injection/i.test(corpus) ? 0.93 : 0.9,
+    evidence: {
+      snippet: "POST /api/v1/admin/config/import — XXE injection via malicious XML configuration import",
+      note: "chimera.atlascrew.dev — Chimera api-reference documents XXE injection on POST /api/v1/admin/config/import (Jekyll docs corpus fallback) — admin XXE training oracle"
+    }
+  };
+}
+
+const chimeraAdminConfigImportXxeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/config\/import\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraAdminConfigImportXxeProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/admin/config/import route scan — api-reference documents XXE injection via configuration import (Jekyll docs corpus fallback) — route-specific XXE training oracle"
+    }
+  };
+};
+
+async function chimeraAdminDataDeserializeProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const deserializeOk =
+    /admin\/data\/deserialize/i.test(corpus) &&
+    (/Insecure deserialization|Python pickle|base64_pickle_payload/i.test(corpus) ||
+      /POST\s+\/api\/v1\/admin\/data\/deserialize/i.test(corpus)) &&
+    (/Remote code execution|Command execution|admin|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!deserializeOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Insecure deserialization/i.test(corpus) ? 0.93 : 0.9,
+    evidence: {
+      snippet:
+        'POST /api/v1/admin/data/deserialize — Insecure deserialization {"data":"base64_pickle_payload"}',
+      note: "chimera.atlascrew.dev — Chimera api-reference documents insecure deserialization RCE on POST /api/v1/admin/data/deserialize (Jekyll docs corpus fallback) — deserialization training oracle"
+    }
+  };
+}
+
+const chimeraAdminDataDeserializeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/admin\/data\/deserialize\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraAdminDataDeserializeProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/admin/data/deserialize route scan — api-reference documents insecure deserialization RCE (Jekyll docs corpus fallback) — route-specific deserialization training oracle"
     }
   };
 };
@@ -114662,6 +114780,9 @@ export const RULES: Record<string, Rule> = {
   chimeraAdminAttackXxeRouteLiveOracle,
   chimeraAdminExecuteRceRouteLiveOracle,
   chimeraAdminDeserializeRouteLiveOracle,
+  chimeraAdminSystemExecuteRceRouteLiveOracle,
+  chimeraAdminConfigImportXxeRouteLiveOracle,
+  chimeraAdminDataDeserializeRouteLiveOracle,
   chimeraAdminFilesReadPathTraversalRouteLiveOracle,
   chimeraAdminUsersExportRouteLiveOracle,
   chimeraIntegrationsWebhookRegisterSsrfRouteLiveOracle,
