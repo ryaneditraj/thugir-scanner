@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T16:22:00.000Z",
+  "updated_at": "2026-09-05T17:15:15.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3225,
-  "total_findings": 37220,
+  "total_sites_scanned": 3235,
+  "total_findings": 37379,
   "critical_findings": 73,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2103,
-  "discovery_findings": 29741,
+  "discovery_urls_added": 2108,
+  "discovery_findings": 29794,
   "improvements_shipped": 1438,
-  "last_run": "2026-09-05T16:22:00.000Z",
+  "last_run": "2026-09-05T17:15:15.000Z",
   "last_run_summary": {
-    "hour_utc": "16",
+    "hour_utc": "17",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,37 +48,37 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings, 40 live oracles; secret-resend present)"
+      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles; secret-resend present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 72,
-      "focus": "Ghostbank BOLA demo + Zero-Health healthcare lab + FauxBank instructor + oopssec JWT alg confusion; queue drain: middleware-bypass + owasp-finbot-ctf",
+      "findings": 53,
+      "focus": "TRUSCA live demo + VAmPI OpenAPI oracles + AI Security Framework hub; queue drain: zero.webappsecurity signup + oopssec price-manipulation/stored-xss-reviews",
       "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 40 live oracles; gap=[])",
-      "pentest-fauxbank.vercel.app/instructor: 18 findings — fauxbank-instructor-route-live-oracle + fauxbank-admin-panel-live-oracle",
-      "koadt.github.io/.../jwt-algorithm-confusion-partner-api: 10 findings — oopssec-jwt-alg-confusion-route-live-oracle",
-      "zero-health.vercel.app: 9 findings — reflexion-escalated-sqli + reflexion-escalated-ssti + reflexion-escalated-xss",
-      "ghostbank.net: 3 findings — thin hub; api.ghostbank.net/api/v3/transfer 2 findings without BOLA route oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; gap=[])",
+      "koadt.github.io/.../stored-xss-product-reviews: 20 findings — oopssec-stored-xss-reviews-route-live-oracle + oopssec-next-public-env-live-oracle",
+      "koadt.github.io/.../client-side-price-manipulation: 11 findings — oopssec-price-manipulation-route-live-oracle + oopssec-next-public-env-live-oracle",
+      "zero.webappsecurity.com/signup.html: 7 findings — Watchfire training demo fingerprint",
+      "cade111222.github.io/VamPI-1: 5 findings — OWASP API lab docs (reflexion SSTI false-positive risk on static pages)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "ghostbank.net + api/v3/transfer thin 2–3 finding hub without BOLA/IDOR route live oracle",
-      "zero-health.vercel.app reflexion probes without healthcare/LLM route-specific oracles",
-      "oopssec react2shell/public-env/weak-jwt vanity slugs still queued",
+      "trusca-demo.duckdns.org + aisecurityframework.netlify.app thin 3-finding hub without route-specific oracles",
+      "vampi-production Railway /users/v1/_debug returns 404 JSON — no VAmPI excessive-data-exposure route oracle",
+      "oopssec react2shell/weak-jwt vanity slugs still queued",
       "qa.brokencrystals.com/api/file/aws still queued (48h skip)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "pentest-fauxbank.vercel.app/instructor": 18,
-    "koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api": 10,
-    "zero-health.vercel.app": 9,
-    "owasp-finbot-ctf.org/labs": 9,
-    "ghostbank.net": 3
+    "juice-shop.herokuapp.com": 53,
+    "koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews": 20,
+    "koadt.github.io/oss-oopssec-store/posts/client-side-price-manipulation": 11,
+    "zero.webappsecurity.com/signup.html": 7,
+    "cade111222.github.io/VamPI-1": 5,
+    "trusca-demo.duckdns.org": 3
   }
 }
