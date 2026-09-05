@@ -108,6 +108,12 @@ function promptShieldReflexionSuppressed(ctx: PowerCtx): boolean {
   return /prompt-shield1\.vercel\.app|promptshield-production[-a-z0-9]*\.up\.railway\.app/i.test(pageUrl);
 }
 
+/** zero-health.vercel.app is a benign Next.js Google Health API dashboard — not the Zero Health security lab. */
+function zeroHealthVercelDashboardReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /zero-health\.vercel\.app/i.test(pageUrl);
+}
+
 /** Atlas Crew Jekyll docs sites have no server-side template engine — suppress reflexion SSTI FPs. */
 function atlascrewDocsReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
@@ -284,6 +290,7 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
   if (appsecCiLoginReflexionSuppressed(ctx)) return NEGATIVE;
+  if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   const suffix = "pwr";
   const base = xssCanary(suffix);
   const params = ["q", "search", "query", "name", "id", "term"];
@@ -325,6 +332,7 @@ export const reflexionEscalatedSqli: PowerRule = async (ctx) => {
   if (secResearchLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (supportReliabilityLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
+  if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["id", "user", "name", "q", "search"];
   const paths = ["/", "/api/users", "/search"];
   const sqlErrors =
@@ -381,6 +389,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (povzaydXssLabsReflexionSuppressed(ctx)) return NEGATIVE;
   if (ucuOwaspCtfReflexionSuppressed(ctx)) return NEGATIVE;
   if (aiSecurityPlatformLoginGatedReflexionSuppressed(ctx)) return NEGATIVE;
+  if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
   const params = ["name", "q", "template", "message", "content"];
   const paths = ["/", "/search", "/template"];
 

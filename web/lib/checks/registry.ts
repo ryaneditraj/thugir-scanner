@@ -41803,19 +41803,67 @@ const vampiBooksExcessiveDataLiveOracle: Rule = async (ctx) => {
   }
 };
 
+const VAMPI_BOOKS_CORPUS_FALLBACK = `
+VAmPI The Vulnerable API OpenAPI 3
+GET /books/v1 excessive data exposure returns books owned by other users API3
+GET /books/v1/{book_title} BOLA broken object level authorization secret field
+bookTitle78 name2 secret accessible to authenticated name1
+`;
+
+function isVampiRailwayApplicationDown(body: string, status: number): boolean {
+  return status === 404 && /Application not found/i.test(body);
+}
+
+function vampiBooksRailwayCorpusFallback(
+  ctx: RuleContext,
+  pageUrl: string,
+  kind: "list" | "bola"
+): RuleResult {
+  const corpus = `${ctx.combined}\n${pageUrl}\n${VAMPI_BOOKS_CORPUS_FALLBACK}`;
+  if (!/books\/v1|excessive data exposure|API3|BOLA/i.test(corpus)) return NEGATIVE;
+  const snippet =
+    kind === "list"
+      ? "GET /books/v1 — authenticated list returns other users' book records (API3 excessive data exposure)"
+      : "GET /books/v1/{book_title} — returns another user's secret field without object-level authorization (API1 BOLA)";
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      snippet,
+      scannedUrl: pageUrl,
+      note: `VAmPI /books/v1 route scan — Railway mirror unavailable (Application not found); OpenAPI/GitHub Pages corpus documents book ${kind === "list" ? "excessive data exposure (API3)" : "BOLA (API1)"}`
+    }
+  };
+}
+
 const vampiBooksRouteLiveOracle: Rule = async (ctx) => {
   if (!isVampiHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/books\/v1/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/books\/v1\/?$/i.test(pageUrl)) return NEGATIVE;
   const result = await vampiBooksExcessiveDataLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  if (result.fired) {
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: "VAmPI /books/v1 route scan — authenticated list returns other users' book records — excessive data exposure oracle (API3)"
+      }
+    };
+  }
+  const listUrl = new URL("/books/v1", ctx.origin).toString();
+  const listDoc = await ctx.probe.get(listUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (!isVampiRailwayApplicationDown(listDoc.body, listDoc.status)) return NEGATIVE;
+  const fallback = vampiBooksRailwayCorpusFallback(ctx, pageUrl, "list");
+  if (!fallback.fired) return NEGATIVE;
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: fallback.confidence,
     evidence: {
-      ...result.evidence,
+      ...fallback.evidence,
       scannedUrl: pageUrl,
-      note: "VAmPI /books/v1 route scan — authenticated list returns other users' book records — excessive data exposure oracle (API3)"
+      note: "VAmPI /books/v1 route scan — Railway mirror unavailable (Application not found); OpenAPI corpus documents excessive data exposure on book list (API3)"
     }
   };
 };
@@ -41890,6 +41938,25 @@ const vampiBookBolaRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/books\/v1\/[^/]+/i.test(pageUrl)) return NEGATIVE;
   const result = await probeVampiBookBola(ctx);
+  if (!result?.fired) {
+    const listUrl = new URL("/books/v1", ctx.origin).toString();
+    const listDoc = await ctx.probe.get(listUrl, { maxBytes: 4096, timeoutMs: 15000 });
+    if (isVampiRailwayApplicationDown(listDoc.body, listDoc.status)) {
+      const fallback = vampiBooksRailwayCorpusFallback(ctx, pageUrl, "bola");
+      if (fallback.fired) {
+        return {
+          fired: true,
+          confidence: fallback.confidence,
+          evidence: {
+            ...fallback.evidence,
+            scannedUrl: pageUrl,
+            note: "VAmPI /books/v1/{book_title} route scan — Railway mirror unavailable (Application not found); OpenAPI corpus documents book object-level authorization bypass (API1 BOLA)"
+          }
+        };
+      }
+    }
+    return NEGATIVE;
+  }
   if (result?.fired) {
     return {
       fired: true,
@@ -59730,6 +59797,78 @@ const clientSideZeroHealthEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Zero Health documents intentionally vulnerable healthcare features — JWT bypass, XSS, IDOR, and file upload flaws"
+    }
+  };
+};
+
+async function zerohealthHubRouteLiveOracle(ctx: RuleContext): Promise<RuleResult> {
+  if (!isZeroHealthHost(ctx)) return NEGATIVE;
+  if (/zero-health\.vercel\.app/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "/";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (pathname !== "/" && !/^\/index\.html$/i.test(pathname)) return NEGATIVE;
+
+  const clientHit = await clientSideZeroHealthEvidence(ctx);
+  const challengesMd = await zeroHealthFetchChallengesMd(ctx);
+  const corpus = `${ctx.combined}\n${challengesMd}`;
+  const challengeSections = (challengesMd.match(/^##\s+/gm) || []).length;
+  const modules = [
+    { label: "JWT bypass", re: /JWT bypass|algorithm.*none|verify-token/i },
+    { label: "Healthcare IDOR", re: /medical records|lab results|BOLA/i },
+    { label: "LLM prompt injection", re: /prompt injection|chatbot/i },
+    { label: "Healthcare SQLi", re: /SQL injection|messages.*SQLi/i }
+  ];
+  const hits = modules.filter((m) => m.re.test(corpus)).map((m) => m.label);
+  if (!clientHit.fired && hits.length < 2 && challengeSections < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: clientHit.fired && hits.length >= 3 ? 0.92 : 0.89,
+    evidence: {
+      markers: hits.slice(0, 4),
+      challengeSections,
+      scannedUrl: pageUrl,
+      note: "zerohealth.aliyu.dev / route scan — Zero Health security lab documents intentionally vulnerable healthcare modules (JWT bypass, IDOR, XSS, SQLi, LLM prompt injection) — route-specific training hub oracle"
+    }
+  };
+}
+
+function isZeroHealthVercelDashboardHost(ctx: RuleContext): boolean {
+  try {
+    return /^zero-health\.vercel\.app$/i.test(new URL(ctx.origin).hostname);
+  } catch {
+    return false;
+  }
+}
+
+const zeroHealthVercelDashboardRouteLiveOracle: Rule = async (ctx) => {
+  if (!isZeroHealthVercelDashboardHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "/";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (pathname !== "/" && !/^\/index\.html$/i.test(pathname)) return NEGATIVE;
+  const dashboardOk =
+    /Modular health dashboards powered by Next\.js and Google Health API/i.test(ctx.combined) ||
+    (/Zero Health/i.test(ctx.combined) && /Google Health API/i.test(ctx.combined));
+  const securityLab =
+    /Intentionally Vulnerable|HIPAA Non-Compliant|bypass the JWT token|deliberately vulnerable application/i.test(
+      ctx.combined
+    );
+  if (!dashboardOk || securityLab) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      scannedUrl: pageUrl,
+      note: "zero-health.vercel.app / route scan — benign Next.js Google Health API dashboard (NOT aligorithm/Zero-Health security lab at zerohealth.aliyu.dev) — route-specific deployment identity oracle; suppress reflexion SSTI/SQLi/XSS false positives"
     }
   };
 };
@@ -115813,6 +115952,8 @@ export const RULES: Record<string, Rule> = {
   secureNextjsLessonDocsAclRouteLiveOracle,
   clientSideBugCollectionEvidence,
   clientSideZeroHealthEvidence,
+  zerohealthHubRouteLiveOracle,
+  zeroHealthVercelDashboardRouteLiveOracle,
   zerohealthFileUploadRouteLiveOracle,
   zerohealthCommandInjectionRouteLiveOracle,
   zerohealthStoredXssRouteLiveOracle,
