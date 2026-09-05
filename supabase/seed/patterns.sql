@@ -32465,6 +32465,16 @@ values
    'deep',
    '{"summary":"Block role fields from BugStore profile update routes.","steps":["Use an allowlist of updatable profile fields.","Assign roles only through admin workflows with authorization checks.","Run BugStore only in isolated lab environments."]}'::jsonb,
    'Our BugStore profile route scan confirms role mass-assignment escalation. Show route-specific field allowlist remediation.',
+   true),
+  ('bugstore-auth-signup-route-live-oracle', 'generic', 'Broken access control', 'critical',
+   'BugStore /api/auth/signup mass-assignment route live oracle (V-015)',
+   'When scanning /api/auth/signup on bugstore.bugtraceai.com, POST signup is rejected (HTTP 405) but /api/auth/register + PUT /api/user/profile role:admin confirms privilege escalation — route-specific signup mass-assignment oracle.',
+   'Route-specific BugStore signup scans should confirm role mass-assignment via the registration flow even when the signup endpoint rejects POST.',
+   'rule_ref',
+   '{"rule":"bugstoreAuthSignupRouteLiveOracle"}'::jsonb,
+   'deep',
+   '{"summary":"Block role fields from BugStore registration and profile update routes.","steps":["Use an allowlist of updatable profile fields.","Assign roles only through admin workflows with authorization checks.","Run BugStore only in isolated lab environments."]}'::jsonb,
+   'Our BugStore /api/auth/signup route scan confirms role mass-assignment via register+profile. Show route-specific field allowlist remediation.',
    true)
 on conflict (slug) do update set
   platform = excluded.platform,

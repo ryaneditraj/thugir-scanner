@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-05T03:18:48.461Z",
-  "total": 3304,
-  "uniqueSlugs": 3296,
+  "generatedAt": "2026-09-05T04:04:56.028Z",
+  "total": 3305,
+  "uniqueSlugs": 3297,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3286,
+    "generic": 3287,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3219,
+    "deep": 3220,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 653,
+    "Broken access control": 654,
     "Exposed secret": 120,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -265,6 +265,7 @@
     "buggybuy-api-bola-route-live-oracle",
     "bugstore-admin-debug-stats-bac-live-oracle",
     "bugstore-admin-debug-stats-bac-route-live-oracle",
+    "bugstore-auth-signup-route-live-oracle",
     "bugstore-checkout-client-total-live-oracle",
     "bugstore-checkout-client-total-route-live-oracle",
     "bugstore-forum-thread-sqli-live-oracle",
