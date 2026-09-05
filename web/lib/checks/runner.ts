@@ -3002,6 +3002,8 @@ const DEEP_RULES = new Set<string>([
   "bugstoreCheckoutClientTotalRouteLiveOracle",
   "bugstoreProfileMassAssignmentLiveOracle",
   "bugstoreProfileMassAssignmentRouteLiveOracle",
+  "bugstoreSecurePortalTotpLoginLiveOracle",
+  "bugstoreSecurePortalTotpLoginRouteLiveOracle",
   "bugstoreAuthSignupRouteLiveOracle",
   "duckStoreCartNegativeQuantityLiveOracle",
   "duckStoreCartNegativeQuantityRouteLiveOracle",
@@ -13830,6 +13832,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/secure-portal\/login/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-secure-portal-totp-login")
+      )
+        return -4;
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/auth\/signup\b/i.test(targetInput) &&
         p.slug.startsWith("bugstore-auth-signup")
       )
@@ -14191,10 +14199,16 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /koadt\.github\.io/i.test(origin) &&
-        /\/posts\/next-public-env-(?:variable-)?leak/i.test(targetInput) &&
+        /\/posts\/(?:next-public-env-(?:variable-)?leak|public-env-variable)\/?$/i.test(targetInput) &&
         p.slug === "oopssec-next-public-env-route-live-oracle"
       )
         return -3;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:react2shell-cve-2025-55182|react2shell)\/?$/i.test(targetInput) &&
+        p.slug === "oopssec-react2shell-route-live-oracle"
+      )
+        return -4;
       if (
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
         /\/posts\/(?:path-traversal-documents-api|path-traversal)\/?$/i.test(targetInput) &&
