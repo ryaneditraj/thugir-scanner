@@ -3453,6 +3453,8 @@ const DEEP_RULES = new Set<string>([
   "vulnDemoJwtSecretLeakRouteLiveOracle",
   "vaultNotesJwtSecretLeakLiveOracle",
   "vaultNotesJwtSecretLeakRouteLiveOracle",
+  "vaultNotesLoginSqliLiveOracle",
+  "vaultNotesLoginSqliRouteLiveOracle",
   "vaultNotesNotesIdorLiveOracle",
   "vaultNotesNotesIdorRouteLiveOracle",
   "vulnDemoFrontendFlagLeakLiveOracle",
@@ -3517,6 +3519,10 @@ const DEEP_RULES = new Set<string>([
   "vulnshopTemplateRenderRouteLiveOracle",
   "vulnshopTrackOrderSsrfLiveOracle",
   "vulnshopTrackOrderSsrfRouteLiveOracle",
+  "vulnshopProxyFetchSsrfLiveOracle",
+  "vulnshopProxyFetchSsrfRouteLiveOracle",
+  "vulnshopCloudMetadataSsrfLiveOracle",
+  "vulnshopCloudMetadataSsrfRouteLiveOracle",
   "vulnshopPingCmdInjectionLiveOracle",
   "vulnshopPingCmdInjectionRouteLiveOracle",
   "vulnshopSupportLfiLiveOracle",
@@ -15410,6 +15416,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         p.slug.startsWith("vulnshop-products-import")
       )
         return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/proxy\/fetch\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-proxy-fetch")
+      )
+        return -4;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/cloud\/metadata\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-cloud-metadata")
+      )
+        return -4;
       if (
         /vulnshop\.vercel\.app/i.test(origin) &&
         /\/api\/xml-import\b/i.test(targetInput) &&

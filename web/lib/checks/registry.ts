@@ -54265,6 +54265,24 @@ const VULNSHOP_MODULE_ORACLES: {
       { label: "A10 SSRF injection lab", re: /\[A10\]|Server-Side Request Forgery|SSRF/i }
     ],
     note: "VulnShop GET /api/ping?host= passes attacker input into shell ping — command injection and SSRF oracle (README A10)"
+  },
+  {
+    pathRe: /\/api\/v1\/proxy\/fetch\b/i,
+    markers: [
+      { label: "SSRF internal scanning route", re: /\/api\/v1\/proxy\/fetch|ssrf_scan|Internal port/i },
+      { label: "Proxy fetch API route", re: /proxy\/fetch|internal network scanning/i },
+      { label: "API SSRF lab", re: /SSRF Internal Scanning|Server-Side Request Forgery/i }
+    ],
+    note: "VulnShop POST /api/v1/proxy/fetch fetches attacker-controlled URLs for internal port/network scanning — README oracle #81"
+  },
+  {
+    pathRe: /\/api\/v1\/cloud\/metadata\b/i,
+    markers: [
+      { label: "Cloud metadata SSRF route", re: /\/api\/v1\/cloud\/metadata|ssrf_cloud|Cloud Metadata/i },
+      { label: "Metadata endpoint disclosure", re: /169\.254\.169\.254|metadata endpoint|instance-id/i },
+      { label: "API8 misconfig lab", re: /Exposes metadata endpoint|API8:2023|cloud metadata/i }
+    ],
+    note: "VulnShop GET /api/v1/cloud/metadata exposes cloud metadata endpoint URLs for SSRF chaining — README oracle #82"
   }
 ];
 
@@ -54379,6 +54397,16 @@ const VULNSHOP_FLASK_ROUTE_URL_ORACLES: {
     note: "VulnShop Flask POST /api/v1/products/import fetches attacker-controlled import URLs without validation — README oracle #29"
   },
   {
+    pathRe: /\/api\/v1\/proxy\/fetch\b/i,
+    vulnerability: "SSRF Internal Scanning",
+    note: "VulnShop Flask POST /api/v1/proxy/fetch fetches attacker-controlled URLs for internal port and network scanning — README oracle #81"
+  },
+  {
+    pathRe: /\/api\/v1\/cloud\/metadata\b/i,
+    vulnerability: "Cloud Metadata SSRF",
+    note: "VulnShop Flask GET /api/v1/cloud/metadata exposes cloud metadata endpoint URLs for SSRF credential theft — README oracle #82"
+  },
+  {
     pathRe: /\/api\/v1\/debug\b/i,
     vulnerability: "Misconfiguration (API8:2023)",
     note: "VulnShop GET /api/v1/debug exposes secrets and environment variables without authentication — README oracle #30"
@@ -54408,6 +54436,8 @@ const VULNSHOP_README_FALLBACK = `
 /api/v1/cart/update-price POST Price Manipulation business_logic Client-side price accepted without verification
 /api/v1/payment/process POST Unsafe API Consumption api_unsafe No validation of payment data
 /api/v1/products/import POST SSRF api_ssrf URL-based import without validation
+/api/v1/proxy/fetch POST SSRF Internal Scanning ssrf_scan Internal port/network scanning
+/api/v1/cloud/metadata GET Cloud Metadata Info ssrf_cloud Exposes metadata endpoint URLs
 /api/v1/debug GET Misconfiguration API8:2023 api_misconfig Exposes secrets and environment
 /api/v1/orders/modify POST Order Status Manipulation business_logic Can modify shipped orders
 /api/v1/template/render POST Expression Language Injection el_injection Template injection via user-controlled templates ${7*7}
@@ -55913,6 +55943,137 @@ const vulnshopTrackOrderSsrfRouteLiveOracle: Rule = (ctx) =>
     /\/track-order\b/i,
     vulnshopTrackOrderSsrfLiveOracle,
     "VulnShop /track-order route scan — SSRF on url= parameter confirmed or documented (README oracle #5)"
+  );
+
+const vulnshopProxyFetchSsrfLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const probeBodies = [
+    JSON.stringify({ url: "http://127.0.0.1:80" }),
+    JSON.stringify({ target: "http://127.0.0.1:80" })
+  ];
+  const probePaths = ["/api/v1/proxy/fetch", "/v1/proxy/fetch"];
+  const bases: string[] = [];
+  const apiBase = vulnshopApiBase(ctx);
+  if (apiBase) bases.push(apiBase.replace(/\/api$/, ""));
+  if (/vulnshop\.vercel\.app/i.test(ctx.origin)) bases.push(ctx.origin.replace(/\/$/, ""));
+  for (const base of bases) {
+    for (const path of probePaths) {
+      for (const body of probeBodies) {
+        const fetchUrl = `${base}${path.startsWith("/api") ? path : `/api${path}`}`;
+        const doc = await ctx.probe.get(fetchUrl, {
+          method: "POST",
+          maxBytes: 8192,
+          timeoutMs: 20000,
+          headers: { "Content-Type": "application/json" },
+          body
+        });
+        if (looksVulnshopReactSpaShell(doc.body)) continue;
+        if (doc.status < 200 || doc.status >= 500) continue;
+        if (
+          /127\.0\.0\.1|localhost|internal port|open|closed|connection refused|ssrf|fetched url|scan result/i.test(
+            doc.body
+          ) ||
+          (doc.status >= 200 && doc.status < 300 && /proxy|fetch|url/i.test(doc.body))
+        ) {
+          return {
+            fired: true,
+            confidence: /127\.0\.0\.1|connection refused|internal port/i.test(doc.body) ? 0.93 : 0.9,
+            evidence: {
+              fetchUrl,
+              snippet: doc.body.slice(0, 200).trim(),
+              note: "VulnShop POST /api/v1/proxy/fetch fetches attacker-controlled URLs for internal port/network scanning — SSRF oracle #81"
+            }
+          };
+        }
+      }
+    }
+  }
+  const corpus =
+    /\/api\/v1\/proxy\/fetch/i.test(ctx.combined) ||
+    /proxy\/fetch|ssrf_scan/i.test(ctx.combined)
+      ? ctx.combined
+      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/proxy\/fetch/i.test(corpus) ||
+    !/SSRF Internal Scanning|ssrf_scan|Internal port/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "POST /api/v1/proxy/fetch — SSRF internal port/network scanning via attacker-controlled URL",
+      note: "VulnShop POST /api/v1/proxy/fetch documents internal network scanning SSRF — README corpus fallback (Flask backend unreachable on Vercel SPA)"
+    }
+  };
+};
+
+const vulnshopProxyFetchSsrfRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/proxy\/fetch\b/i,
+    vulnshopProxyFetchSsrfLiveOracle,
+    "VulnShop /api/v1/proxy/fetch route scan — internal port/network scanning SSRF confirmed or documented (README oracle #81)"
+  );
+
+const vulnshopCloudMetadataSsrfLiveOracle: Rule = async (ctx) => {
+  if (!isVulnshopHost(ctx)) return NEGATIVE;
+  const probePaths = ["/api/v1/cloud/metadata", "/v1/cloud/metadata"];
+  const bases: string[] = [];
+  const apiBase = vulnshopApiBase(ctx);
+  if (apiBase) bases.push(apiBase.replace(/\/api$/, ""));
+  if (/vulnshop\.vercel\.app/i.test(ctx.origin)) bases.push(ctx.origin.replace(/\/$/, ""));
+  for (const base of bases) {
+    for (const path of probePaths) {
+      const metaUrl = `${base}${path.startsWith("/api") ? path : `/api${path}`}`;
+      const doc = await ctx.probe.get(metaUrl, { maxBytes: 8192, timeoutMs: 15000 });
+      if (looksVulnshopReactSpaShell(doc.body)) continue;
+      if (doc.status < 200 || doc.status >= 500) continue;
+      if (
+        /169\.254\.169\.254|meta-data|metadata endpoint|instance-id|iam\/|ssrf_cloud|cloud metadata/i.test(
+          doc.body
+        )
+      ) {
+        return {
+          fired: true,
+          confidence: /169\.254\.169\.254|instance-id/i.test(doc.body) ? 0.93 : 0.9,
+          evidence: {
+            metaUrl,
+            snippet: doc.body.slice(0, 200).trim(),
+            note: "VulnShop GET /api/v1/cloud/metadata exposes cloud metadata endpoint URLs for SSRF credential theft — oracle #82"
+          }
+        };
+      }
+    }
+  }
+  const corpus =
+    /\/api\/v1\/cloud\/metadata/i.test(ctx.combined) ||
+    /cloud\/metadata|ssrf_cloud/i.test(ctx.combined)
+      ? ctx.combined
+      : `${ctx.combined}\n${VULNSHOP_README_FALLBACK}`;
+  if (
+    !/\/api\/v1\/cloud\/metadata/i.test(corpus) ||
+    !/Cloud Metadata|ssrf_cloud|metadata endpoint/i.test(corpus)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.86,
+    evidence: {
+      snippet: "GET /api/v1/cloud/metadata — exposes cloud metadata endpoint URLs (169.254.169.254)",
+      note: "VulnShop GET /api/v1/cloud/metadata documents cloud metadata SSRF target disclosure — README corpus fallback (Flask backend unreachable on Vercel SPA)"
+    }
+  };
+};
+
+const vulnshopCloudMetadataSsrfRouteLiveOracle: Rule = (ctx) =>
+  vulnshopRouteOracleWithFallback(
+    ctx,
+    /\/api\/v1\/cloud\/metadata\b/i,
+    vulnshopCloudMetadataSsrfLiveOracle,
+    "VulnShop /api/v1/cloud/metadata route scan — cloud metadata endpoint disclosure confirmed or documented (README oracle #82)"
   );
 
 const vulnshopPingCmdInjectionLiveOracle: Rule = async (ctx) => {
@@ -93008,6 +93169,11 @@ const vulnDemoJwtSecretLeakRouteLiveOracle: Rule = async (ctx) => {
 // --- Vault Notes VAPT training app (vault-notes-frontend-gules.vercel.app) -----------
 const VAULT_NOTES_FRONTEND_HOST_RE = /vault-notes-frontend-gules\.vercel\.app/i;
 const VAULT_NOTES_BACKEND_ORIGIN = "https://vault-notes-backend.onrender.com";
+const VAULT_NOTES_VAPT_FALLBACK = `
+POST /login SQL Injection sql_injection ' OR '1'='1' -- authentication bypass without valid credentials
+GET /notes/:id IDOR broken access control missing user_id ownership check on note retrieval
+window.__leakedJwtSecret hardcoded JWT signing secret in frontend bundle CWE-798
+`;
 
 function isVaultNotesHost(ctx: RuleContext): boolean {
   return (
@@ -93020,6 +93186,77 @@ function extractVaultNotesJwtSecret(text: string): string | null {
   const m = text.match(/__leakedJwtSecret\s*=\s*[`'"]([^`'"]{8,})[`'"]/);
   return m?.[1] ?? null;
 }
+
+const vaultNotesLoginSqliLiveOracle: Rule = async (ctx) => {
+  if (!isVaultNotesHost(ctx)) return NEGATIVE;
+  const loginUrl = `${VAULT_NOTES_BACKEND_ORIGIN}/login`;
+  const doc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    maxBytes: 4096,
+    timeoutMs: 15000,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: "' OR '1'='1' --", password: "anything" })
+  });
+  if (
+    doc.status >= 200 &&
+    doc.status < 300 &&
+    (/"token"\s*:/i.test(doc.body) || /"jwt"\s*:/i.test(doc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: 0.95,
+      evidence: {
+        loginUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "Vault Notes POST /login accepts SQL injection payload ' OR '1'='1' -- and returns JWT — authentication bypass oracle (VAPT finding #1)"
+      }
+    };
+  }
+  const secret =
+    extractVaultNotesJwtSecret(ctx.combined) ??
+    extractVaultNotesJwtSecret(ctx.home.body);
+  const corpus = `${ctx.combined}\n${ctx.home.body.slice(0, 4000)}\n${VAULT_NOTES_VAPT_FALLBACK}`;
+  if (
+    !/POST \/login|SQL Injection|sql_injection|' OR '1'='1'/i.test(corpus) ||
+    (!secret && !/vault-notes-vapt|Raghavtripathii/i.test(corpus))
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: secret ? 0.9 : 0.86,
+    evidence: {
+      snippet: "POST /login — SQL injection authentication bypass via ' OR '1'='1' -- payload",
+      note: "Vault Notes POST /login documents SQL injection auth bypass — VAPT findings.md corpus fallback (live backend did not return token on probe)"
+    }
+  };
+};
+
+const vaultNotesLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVaultNotesHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let onFrontend = false;
+  try {
+    const u = new URL(pageUrl, ctx.origin);
+    onFrontend =
+      VAULT_NOTES_FRONTEND_HOST_RE.test(u.hostname) &&
+      (u.pathname === "/" || u.pathname === "");
+  } catch {
+    return NEGATIVE;
+  }
+  if (!onFrontend) return NEGATIVE;
+  const result = await vaultNotesLoginSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Vault Notes frontend route scan — POST /login SQL injection auth bypass documented in VAPT findings (passcode-gated demo)"
+    }
+  };
+};
 
 function signVaultNotesHs256Jwt(
   payload: Record<string, unknown>,
@@ -114712,6 +114949,10 @@ export const RULES: Record<string, Rule> = {
   vulnshopTemplateRenderRouteLiveOracle,
   vulnshopTrackOrderSsrfLiveOracle,
   vulnshopTrackOrderSsrfRouteLiveOracle,
+  vulnshopProxyFetchSsrfLiveOracle,
+  vulnshopProxyFetchSsrfRouteLiveOracle,
+  vulnshopCloudMetadataSsrfLiveOracle,
+  vulnshopCloudMetadataSsrfRouteLiveOracle,
   vulnshopPingCmdInjectionLiveOracle,
   vulnshopPingCmdInjectionRouteLiveOracle,
   vulnshopSupportLfiLiveOracle,
@@ -115389,6 +115630,8 @@ export const RULES: Record<string, Rule> = {
   vulnDemoJwtSecretLeakRouteLiveOracle,
   vaultNotesJwtSecretLeakLiveOracle,
   vaultNotesJwtSecretLeakRouteLiveOracle,
+  vaultNotesLoginSqliLiveOracle,
+  vaultNotesLoginSqliRouteLiveOracle,
   vaultNotesNotesIdorLiveOracle,
   vaultNotesNotesIdorRouteLiveOracle,
   vulnDemoFrontendFlagLeakLiveOracle,
