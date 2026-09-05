@@ -16252,6 +16252,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-ghostbank-evidence",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Ghostbank BOLA training app disclosed",
+    description:
+      "ghostbank.net documents Ghost Security's fictional banking SPA with intentional BOLA/IDOR on POST /api/v3/transfer via account_from manipulation.",
+    impactOneline:
+      "Public Ghostbank demo teaches Broken Object Level Authorization fund-transfer exploitation for Reaper training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideGhostbankEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Ghostbank is intentional training — enforce server-side account ownership checks in production banking APIs.",
+      steps: [
+        "Verify account_from belongs to the authenticated user before processing transfers.",
+        "Use non-enumerable account identifiers instead of sequential integers.",
+        "Run Ghostbank only on isolated training networks."
+      ]
+    },
+    fixPrompt:
+      "We host Ghostbank-style BOLA training. Show how to enforce object-level authorization on fund transfer APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ghostbank-transfer-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Ghostbank transfer BOLA live oracle",
+    description:
+      "On api.ghostbank.net, POST /api/v3/transfer accepts account_from manipulation allowing transfers from other customers' accounts — BOLA training oracle (Reaper walkthrough corpus fallback).",
+    impactOneline:
+      "Ghostbank documents intentional BOLA on fund transfers when authenticated users change account_from.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ghostbankTransferBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce account ownership on transfer endpoints and keep Ghostbank on isolated training networks.",
+      steps: [
+        "Validate account_from matches the authenticated customer's accounts.",
+        "Reject cross-account transfers without explicit authorization.",
+        "Do not deploy Ghostbank training endpoints on production banking infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Ghostbank /api/v3/transfer documents BOLA via account_from. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ghostbank-transfer-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "critical",
+    title: "Ghostbank transfer BOLA route live oracle",
+    description:
+      "When scanning /api/v3/transfer on api.ghostbank.net, Reaper walkthrough documents BOLA via account_from manipulation — route-specific transfer BOLA training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Ghostbank documents intentional transfer BOLA for Reaper training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ghostbankTransferBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce account ownership on transfer endpoints and keep Ghostbank on isolated training networks.",
+      steps: [
+        "Validate account_from matches the authenticated customer's accounts.",
+        "Reject cross-account transfers without explicit authorization.",
+        "Do not deploy Ghostbank training endpoints on production banking infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our Ghostbank /api/v3/transfer route scan documents BOLA. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "ghostbank-hub-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Ghostbank hub route live oracle",
+    description:
+      "When scanning ghostbank.net/, the Ghost Security fictional banking SPA documents BOLA training on POST /api/v3/transfer — route-specific hub training oracle.",
+    impactOneline:
+      "Route-specific confirmation that Ghostbank hub documents intentional transfer BOLA for Reaper training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "ghostbankHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run Ghostbank only on isolated training networks; enforce BOLA checks in production banking APIs.",
+      steps: [
+        "Gate Ghostbank demo behind training authentication.",
+        "Validate account ownership on all fund transfer endpoints.",
+        "Never expose sequential account IDs in production APIs."
+      ]
+    },
+    fixPrompt:
+      "Our ghostbank.net hub route scan confirms BOLA training scope. Show production transfer authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "fauxbank-instructor-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
@@ -82969,6 +83073,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our chimera /api/v1/diagnostics/webhook route documents CHM-ADMIN-002 SSRF. Show outbound URL validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-diagnostics-resolve-dns-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Chimera diagnostics resolve DNS SSRF route live oracle",
+    description:
+      "When scanning /api/v1/diagnostics/resolve on chimera.atlascrew.dev, api-reference documents DNS resolution diagnostic with SSRF risk — route-specific DNS SSRF training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional DNS resolution diagnostic SSRF risk for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraDiagnosticsResolveDnsSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate DNS resolution targets and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Block internal hostnames and metadata endpoints in DNS resolution diagnostics.",
+        "Require authentication before running DNS lookup diagnostics.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/diagnostics/resolve route documents DNS resolution SSRF risk. Show outbound DNS validation remediation.",
     version: 1,
     enabled: true
   },

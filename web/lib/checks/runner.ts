@@ -1885,6 +1885,7 @@ const DEEP_RULES = new Set<string>([
   "chimeraDiagnosticsPingRceRouteLiveOracle",
   "chimeraDiagnosticsWebhookSsrfLiveOracle",
   "chimeraDiagnosticsWebhookSsrfRouteLiveOracle",
+  "chimeraDiagnosticsResolveDnsSsrfRouteLiveOracle",
   "chimeraAdminDiagnosticsHubRouteLiveOracle",
   "chimeraAdminAttackXxeLiveOracle",
   "chimeraAdminAttackXxeRouteLiveOracle",
@@ -1952,6 +1953,10 @@ const DEEP_RULES = new Set<string>([
   "fauxbankAdminRouteLiveOracle",
   "fauxbankInstructorLiveOracle",
   "fauxbankInstructorRouteLiveOracle",
+  "ghostbankTransferBolaLiveOracle",
+  "ghostbankTransferBolaRouteLiveOracle",
+  "clientSideGhostbankEvidence",
+  "ghostbankHubRouteLiveOracle",
   "fauxbankLabRouteLiveOracle",
   "fauxbankScannerRouteLiveOracle",
   "xssPayloadLabRouteLiveOracle",
@@ -13018,6 +13023,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         p.slug.startsWith("chimera-diagnostics-webhook-ssrf")
       )
         return -4;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/diagnostics\/resolve\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-diagnostics-resolve")
+      )
+        return -4;
+      if (
+        /(?:^|\.)(?:api\.)?ghostbank\.net$/i.test(new URL(origin).hostname) &&
+        /\/api\/v3\/transfer\b/i.test(targetInput) &&
+        p.slug.startsWith("ghostbank-transfer-bola")
+      )
+        return -4;
+      if (
+        /(?:^|\.)ghostbank\.net$/i.test(new URL(origin).hostname) &&
+        /^https?:\/\/[^/]+\/?$/i.test(targetInput) &&
+        p.slug.startsWith("ghostbank-hub")
+      )
+        return -3;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/admin\/diagnostics\b/i.test(targetInput) &&

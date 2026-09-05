@@ -2,6 +2,24 @@
   "candidates": [
     {
       "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-diagnostics-resolve-dns-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: api-reference POST /api/v1/diagnostics/resolve summary DNS resolution; chimera.atlascrew.dev/api/v1/diagnostics/resolve findings 7→8 (+chimera-diagnostics-resolve-dns-ssrf-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:ghostbank.net",
+      "slug": "ghostbank-transfer-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Reaper walkthrough POST /api/v3/transfer BOLA via account_from manipulation; api.ghostbank.net/api/v3/transfer findings 2→5 (+ghostbank-transfer-bola-route-live-oracle +ghostbank-transfer-bola-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ghostbank.net",
+      "slug": "ghostbank-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ghostbank.net SPA + Reaper docs document BOLA training on /api/v3/transfer; ghostbank.net/ findings 3→5 (+ghostbank-hub-route-live-oracle +client-side-ghostbank-evidence); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
       "slug": "chimera-admin-system-execute-rce-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: api-reference POST /api/v1/admin/system/execute — Command injection; chimera.atlascrew.dev/api/v1/admin/system/execute findings 7→8 (+chimera-admin-system-execute-rce-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"

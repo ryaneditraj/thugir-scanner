@@ -1,6 +1,11 @@
 {
-  "updated_at": "2026-09-05T16:19:28.859Z",
+  "updated_at": "2026-09-05T17:22:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/diagnostics/resolve",
+      "source": "atlas-crew/Chimera — DNS resolution diagnostic oracle POST /api/v1/diagnostics/resolve (api-reference Diagnostics; web search 17 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ghostbank.net",
       "source": "ghostsecurity/reaper — public Ghostbank BOLA banking demo for Reaper fuzzer (web search 16 UTC)",
