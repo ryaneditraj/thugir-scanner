@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T16:19:28.859Z",
+  "updated_at": "2026-09-05T17:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://trusca-demo.duckdns.org/",
+      "source": "trustedoss/trusca — hosted read-only security scanner demo with seeded accounts (live-demo docs; web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://cade111222.github.io/VamPI-1/",
+      "source": "erev0s/VAmPI — OWASP API Top 10 vulnerable REST API docs + OpenAPI oracle routes (GitHub Pages deploy; web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://aisecurityframework.netlify.app/",
+      "source": "AI Security Framework — OWASP LLM Top 10 assessment methodology + red-team demo hub (web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vampi-production.up.railway.app/users/v1/_debug",
+      "source": "erev0s/VAmPI — excessive data exposure debug endpoint GET /users/v1/_debug (OpenAPI oracle; web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vampi-production.up.railway.app/books/v1",
+      "source": "erev0s/VAmPI — BOLA books collection oracle GET /books/v1 (OpenAPI oracle; web search 17 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ghostbank.net",
       "source": "ghostsecurity/reaper — public Ghostbank BOLA banking demo for Reaper fuzzer (web search 16 UTC)",
