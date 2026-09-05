@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T01:22:00.000Z",
+  "updated_at": "2026-09-05T02:10:18.364Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2838,
-  "total_findings": 28888,
+  "total_sites_scanned": 2847,
+  "total_findings": 29094,
   "critical_findings": 62,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2043,
-  "discovery_findings": 24114,
+  "discovery_urls_added": 2048,
+  "discovery_findings": 24267,
   "improvements_shipped": 1432,
-  "last_run": "2026-09-05T01:22:00.000Z",
+  "last_run": "2026-09-05T02:10:18.364Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,42 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (52 findings validation pass); secret-resend present"
+      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles); secret-resend + jwt-alg-none + captcha-bypass present"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 4,
-      "findings": 0,
-      "focus": "fabraix jailbreak-002 route oracle + sql-injection-lab /login runner priority + wrongsecrets challenge-47/53 runner priority drain",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 153,
+      "focus": "pwnshop wallet/topup PWN-042 + fabraix biosafety/jwt-verifier + chimera XXE + bugstore product search SQLi",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings validation pass)",
-      "playground.fabraix.com/challenges/jailbreak-002: 6→7 findings — fabraix-jailbreak-002-route-live-oracle",
-      "sql-injection-lab.vercel.app/login: +sql-injection-lab-login-route-live-oracle with runner -4 priority",
-      "wrongsecrets.herokuapp.com/challenge/challenge-47: 19 findings — wrongsecrets-challenge-47-vault-template-hardcoded-route-live-oracle",
-      "wrongsecrets.herokuapp.com/challenge/challenge-53: 19 findings — wrongsecrets-challenge-53-debugging-container-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
+      "pwnshop.ctfsecurity.com/wallet/topup: 49 findings — pwnshop-wallet-topup-route-live-oracle + vulnbank override",
+      "playground.fabraix.com/challenges/biosafety-001: 7 findings — fabraix-biosafety-001-route-live-oracle (prior gap closed)",
+      "chimera.atlascrew.dev/api/v1/admin/attack/xxe: 8 findings — chimera-admin-attack-xxe-route-live-oracle",
+      "bugstore.bugtraceai.com/api/products/search: 16 findings — bugstore-product-search-sqli-route-live-oracle",
+      "playground.fabraix.com/challenges/jwt-verifier-001: 7 findings — fabraix-jwt-verifier-001-route-live-oracle",
+      "vwad.owasp.org/app/damn-vulnerable-restaurant/: 6 findings — vwad-dvr-restaurant-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "oopssec IDOR + weak-JWT walkthroughs thin (6 findings) — need route-specific live oracles",
-      "fabraix tool-poisoning-002 + owaspsecure A09 still queued (48h skip on some URLs)",
-      "qa.brokencrystals /api/file/aws queued not drained (8-URL limit)"
+      "wrongsecrets challenge-47/53 + qa.brokencrystals /api/file/aws + owaspsecure A09 still queued (48h skip)",
+      "oopssec IDOR + weak-JWT walkthroughs thin without route-specific live oracles",
+      "pwnshop checkout 56 findings — hub fingerprint dominates; route-specific XXE on /api/orders/submit still queued"
     ]
   },
   "discovery_highlights": {
-    "playground.fabraix.com/challenges/jailbreak-002": 7,
+    "juice-shop.herokuapp.com": 53,
+    "pwnshop.ctfsecurity.com/wallet/topup": 49,
+    "pwnshop.ctfsecurity.com/checkout": 56,
+    "playground.fabraix.com/challenges/biosafety-001": 7,
+    "chimera.atlascrew.dev/api/v1/admin/attack/xxe": 8,
+    "bugstore.bugtraceai.com/api/products/search": 16,
+    "playground.fabraix.com/challenges/jwt-verifier-001": 7,
     "sql-injection-lab.vercel.app/login": 4,
-    "wrongsecrets.herokuapp.com/challenge/challenge-47": 19,
-    "wrongsecrets.herokuapp.com/challenge/challenge-53": 19,
-    "duck-store.escape.tech/api/v1/users/": 41,
-    "vapi.tools.escape.tech/api/v1/users/1": 16,
-    "pwnshop.ctfsecurity.com/vulnerabilities": 51,
-    "juice-shop.herokuapp.com": 52,
-    "duck-store.escape.tech/api/v1/testimonials/": 43,
-    "qa.brokencrystals.com/api/file/aws": 96,
-    "vapi.tools.escape.tech/": 21
+    "vwad.owasp.org/app/damn-vulnerable-restaurant/": 6,
+    "qa.brokencrystals.com/api/file/aws": 96
   }
 }
