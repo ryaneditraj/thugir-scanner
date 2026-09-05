@@ -10559,6 +10559,11 @@ function spaRouteTargets(jsBodies: string[], pageUrl: string, limit: number): st
 // Synchronous, in-request Deep Scan. Runs the full code-defined library (free + deep rules) over
 // the homepage AND a shallow same-origin crawl. No verified-domain requirement. Heavier active
 // probing (forged webhooks, multi-step IDOR) still belongs to the Python worker in production.
+/** Route-specific BugStore oracles must run before host-level live probes on the same URL. */
+function bugstoreRoutePairWeight(slug: string): number {
+  return slug.endsWith("-route-live-oracle") ? -5 : -3;
+}
+
 function canonicalDeepScanTarget(raw: string): string {
   try {
     const u = new URL(raw);
@@ -13813,79 +13818,79 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/api\/products\b/i.test(targetInput) &&
         p.slug.startsWith("bugstore-product-search-sqli")
       )
-        return -4;
+        return bugstoreRoutePairWeight(p.slug);
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/products\/\d+\/image/i.test(targetInput) &&
         p.slug.startsWith("bugstore-product-image-path-traversal")
       )
-        return -4;
+        return bugstoreRoutePairWeight(p.slug);
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/admin\/vulnerable-debug-stats/i.test(targetInput) &&
         p.slug.startsWith("bugstore-admin-debug-stats-bac")
       )
-        return -4;
+        return bugstoreRoutePairWeight(p.slug);
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/forum\/threads/i.test(targetInput) &&
         p.slug.startsWith("bugstore-forum-thread-sqli")
       )
-        return -4;
+        return bugstoreRoutePairWeight(p.slug);
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/orders\b/i.test(targetInput) &&
         p.slug.startsWith("bugstore-orders-idor")
       )
-        return -4;
+        return bugstoreRoutePairWeight(p.slug);
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/(?:checkout\/process|cart\/checkout)\b/i.test(targetInput) &&
         p.slug.startsWith("bugstore-checkout-client-total")
       )
-        return -4;
+        return bugstoreRoutePairWeight(p.slug);
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/secure-portal\/login/i.test(targetInput) &&
         p.slug.startsWith("bugstore-secure-portal-totp-login")
       )
-        return -4;
+        return bugstoreRoutePairWeight(p.slug);
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/auth\/signup\b/i.test(targetInput) &&
         p.slug.startsWith("bugstore-auth-signup")
       )
-        return -4;
+        return bugstoreRoutePairWeight(p.slug);
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/(?:user\/profile|auth\/register)\b/i.test(targetInput) &&
         p.slug.startsWith("bugstore-profile-mass-assignment")
       )
-        return -4;
+        return bugstoreRoutePairWeight(p.slug);
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/health\b/i.test(targetInput) &&
         p.slug.startsWith("bugstore-health-rce")
       )
-        return -4;
+        return bugstoreRoutePairWeight(p.slug);
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/admin\/users\b/i.test(targetInput) &&
         p.slug.startsWith("bugstore-admin-users-bac")
       )
-        return -4;
+        return bugstoreRoutePairWeight(p.slug);
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
-        /\/api\/forum\/(?:posts|threads)\b/i.test(targetInput) &&
+        /\/api\/forum\/posts/i.test(targetInput) &&
         p.slug.startsWith("bugstore-forum-posts-stored-xss")
       )
-        return -4;
+        return bugstoreRoutePairWeight(p.slug);
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/graphql\b/i.test(targetInput) &&
         p.slug.startsWith("bugstore-graphql-introspection-bola")
       )
-        return -4;
+        return bugstoreRoutePairWeight(p.slug);
       if (
         /owaspbased-lessons\.vercel\.app/i.test(origin) &&
         /\/api\/lessons\/?$/i.test(targetInput) &&
