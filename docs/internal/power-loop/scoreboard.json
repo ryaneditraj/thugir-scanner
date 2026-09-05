@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T17:15:15.000Z",
+  "updated_at": "2026-09-05T18:16:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3235,
-  "total_findings": 37379,
+  "total_sites_scanned": 3244,
+  "total_findings": 37546,
   "critical_findings": 76,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2108,
-  "discovery_findings": 29794,
+  "discovery_urls_added": 2098,
+  "discovery_findings": 29861,
   "improvements_shipped": 1441,
-  "last_run": "2026-09-05T17:15:15.000Z",
+  "last_run": "2026-09-05T18:16:30.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_findings": 50,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
+      "probes_run": 583,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,40 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles; secret-resend present)"
+      "note": "Stable 6/6 first-pass recall (50 findings, 37 live oracles; secret-resend present; iac-terraform-tls-key absent this pass)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 53,
-      "focus": "TRUSCA live demo + VAmPI OpenAPI oracles + AI Security Framework hub; queue drain: zero.webappsecurity signup + oopssec price-manipulation/stored-xss-reviews",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 7,
+      "findings": 67,
+      "focus": "Chimera banking/auth/patients/saas oracles (CHM-BANK-001/002, login-vulnerable, patients/search, CHM-SAAS-001) + queue drain: oopssec XFF-SQLi + second-order SQLi",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; gap=[])",
-      "koadt.github.io/.../stored-xss-product-reviews: 20 findings — oopssec-stored-xss-reviews-route-live-oracle + oopssec-next-public-env-live-oracle",
-      "koadt.github.io/.../client-side-price-manipulation: 11 findings — oopssec-price-manipulation-route-live-oracle + oopssec-next-public-env-live-oracle",
-      "zero.webappsecurity.com/signup.html: 7 findings — Watchfire training demo fingerprint",
-      "engine evolve (parallel): chimera-diagnostics-resolve-dns-ssrf + ghostbank-transfer-bola + ghostbank-hub route oracles shipped"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (50 findings, 37 live oracles; gap=[])",
+      "chimera.atlascrew.dev/api/v1/banking/transfer: 8 findings — chimera-banking-transfer-business-logic-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/banking/accounts: 9 findings — chimera-banking-accounts-bola-route-live-oracle + chimera-banking-accounts-search-sqli-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/auth/login-vulnerable: 8 findings — chimera-login-vulnerable-sqli-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/patients/search: 8 findings — chimera-patients-search-sqli-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/saas/tenants/1/projects: 8 findings — chimera-saas-tenants-projects-idor-route-live-oracle",
+      "oopssec x-forwarded-for-sql-injection: 14 findings — oopssec-xff-sqli-route-live-oracle",
+      "oopssec second-order-sql-injection: 12 findings — oopssec-second-order-sqli-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "trusca-demo.duckdns.org + aisecurityframework.netlify.app thin 3-finding hub without route-specific oracles",
-      "vampi-production Railway /users/v1/_debug returns 404 JSON — no VAmPI excessive-data-exposure route oracle",
-      "zero-health.vercel.app reflexion probes without healthcare/LLM route-specific oracles",
-      "oopssec react2shell/weak-jwt vanity slugs still queued; qa.brokencrystals.com/api/file/aws 48h skip"
+      "benchmark thin pass — 50 findings vs 53 prior hour; juice-shop-iac-terraform-tls-key-live-oracle absent",
+      "r2s-arena.fly.dev unreachable from cloud agent (React2Shell demo blocked)",
+      "oopssec react2shell/weak-jwt vanity slugs still queued; qa.brokencrystals.com/api/file/aws 48h skip",
+      "trusca-demo.duckdns.org + aisecurityframework.netlify.app still 48h-skipped at queue head"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 53,
-    "koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews": 20,
-    "koadt.github.io/oss-oopssec-store/posts/client-side-price-manipulation": 11,
-    "zero.webappsecurity.com/signup.html": 7,
-    "cade111222.github.io/VamPI-1": 5,
-    "trusca-demo.duckdns.org": 3
+    "juice-shop.herokuapp.com": 50,
+    "chimera.atlascrew.dev/api/v1/banking/accounts": 9,
+    "koadt.github.io/oss-oopssec-store/posts/x-forwarded-for-sql-injection": 14,
+    "koadt.github.io/oss-oopssec-store/posts/second-order-sql-injection": 12,
+    "chimera.atlascrew.dev/api/v1/banking/transfer": 8,
+    "chimera.atlascrew.dev/api/v1/patients/search": 8
   }
 }
