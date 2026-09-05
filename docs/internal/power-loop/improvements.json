@@ -8663,6 +8663,12 @@
       "slug": "vulnbank-ai-chat-token-gate-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/ai/chat returns {\"error\":\"Token is missing\"} while POST /api/ai/chat/anonymous returns mode:anonymous success; vulnbank.org/api/ai/chat findings 0→34 (+vulnbank-ai-chat-token-gate-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:nextjs-cve-hackerone.vercel.app",
+      "slug": "nextjs-rsc-cve-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: probeNextjsRscCveLab confirms CVE-2025-66478 banner + Run Server Action + VERCEL_PLATFORM_PROTECTION + Next.js 16.0.6 deps on GET /; nextjs-cve-hackerone.vercel.app/ findings 7→8 (+nextjs-rsc-cve-live-oracle +nextjs-rsc-cve-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
