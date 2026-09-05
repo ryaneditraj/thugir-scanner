@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T18:15:00.000Z",
+  "updated_at": "2026-09-05T19:20:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://graphql-complexity-playground-production.up.railway.app/",
+      "source": "graphql-complexity Python library — interactive GraphQL DoS/complexity-limit demo (Railway deploy; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga2.tools.escape.tech/graphql",
+      "source": "Escape DVGA2 — Damn Vulnerable GraphQL Application POST /graphql injection/IDOR/SSRF oracles (escape.tech; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvga2.tools.escape.tech/",
+      "source": "Escape DVGA2 — GraphQL security training hub + Expert hardened-mode oracle (escape.tech; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/documents/1",
+      "source": "MRMcyber/vaultapp — documents IDOR oracle GET /api/documents/:id (10-challenge lab; vaultapp-omega canonical; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vaultapp-omega.vercel.app/api/notes/1",
+      "source": "MRMcyber/vaultapp — notes IDOR oracle GET /api/notes/:id (10-challenge lab; vaultapp-omega canonical; web search 19 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/banking/transfer",
       "source": "atlas-crew/Chimera — CHM-BANK-001 business-logic transfer manipulation oracle POST /api/v1/banking/transfer (vuln_registry; web search 18 UTC)",
@@ -11387,5 +11412,5 @@
     }
   ],
   "discovery_urls": [],
-  "discovery_urls_added": 2098
+  "discovery_urls_added": 2103
 }
