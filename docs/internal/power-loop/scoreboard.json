@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T03:30:00.000Z",
+  "updated_at": "2026-09-05T04:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2860,
-  "total_findings": 29404,
-  "critical_findings": 62,
+  "total_sites_scanned": 2879,
+  "total_findings": 29593,
+  "critical_findings": 63,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2056,
-  "discovery_findings": 24422,
-  "improvements_shipped": 1438,
-  "last_run": "2026-09-05T03:30:00.000Z",
+  "discovery_urls_added": 2058,
+  "discovery_findings": 24490,
+  "improvements_shipped": 1441,
+  "last_run": "2026-09-05T04:10:00.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -52,38 +52,34 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 3,
-      "urls_scanned": 8,
-      "findings": 149,
-      "focus": "oopssec vanity slug 404 aliases (open-redirect, broken-object-level-authorization, server-side-request-forgery) + queue drain (pwnshop wallet/checkout, fabraix, chimera XXE, bugstore SQLi, sql-injection-lab login, vwad DVR)",
+      "urls_added": 2,
+      "urls_scanned": 9,
+      "findings": 68,
+      "focus": "Chimera diagnostics/genai/outages queue drain + bugstore signup mass-assignment + oopssec path-traversal vanity slug",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
-      "koadt.github.io/oss-oopssec-store/posts/open-redirect/: 6→7 (+oopssec-open-redirect-login-bypass-route-live-oracle via canonical fetch)",
-      "koadt.github.io/oss-oopssec-store/posts/broken-object-level-authorization/: 6→7 (+oopssec-bola-wishlist-route-live-oracle via canonical fetch)",
-      "koadt.github.io/oss-oopssec-store/posts/server-side-request-forgery/: 6→7 (+oopssec-ssrf-route-live-oracle via canonical fetch)",
-      "pwnshop.ctfsecurity.com/checkout: 53 findings — pwnshop-checkout-hpp-coupon-route-live-oracle",
-      "pwnshop.ctfsecurity.com/wallet/topup: 48 findings — pwnshop-wallet-topup-route-live-oracle",
-      "sql-injection-lab.vercel.app/login: 4 findings — sql-injection-lab-login-route-live-oracle"
+      "bugstore.bugtraceai.com/api/auth/signup: 10→16 (+bugstore-auth-signup-route-live-oracle)",
+      "koadt.github.io/oss-oopssec-store/posts/path-traversal/: 0→7 (+oopssec-path-traversal-route-live-oracle via canonical fetch)",
+      "chimera.atlascrew.dev/api/v1/diagnostics/webhook: 7→8 (+chimera-diagnostics-webhook-ssrf-route-live-oracle)",
+      "chimera.atlascrew.dev/api/v1/diagnostics/ping: 8 (+chimera-diagnostics-ping-rce-route-live-oracle)",
+      "chimera.atlascrew.dev/api/v1/genai/chat: 8 (+chimera-genai-chat-prompt-injection-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "remaining oopssec vanity slugs (mass-assignment, sql-injection, path-traversal, cross-site-scripting-xss) still 404 without canonical aliases",
-      "Chimera diagnostics/webhook + genai/agent/browse + energy-utilities/outages queued but not drained",
+      "remaining oopssec vanity slugs (mass-assignment, sql-injection, cross-site-scripting-xss) still 404 without canonical aliases",
       "wrongsecrets challenge-47/53 + qa.brokencrystals /api/file/aws still queued (48h skip)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "koadt.github.io/oss-oopssec-store/posts/open-redirect/": 7,
-    "koadt.github.io/oss-oopssec-store/posts/broken-object-level-authorization/": 7,
-    "koadt.github.io/oss-oopssec-store/posts/server-side-request-forgery/": 7,
-    "pwnshop.ctfsecurity.com/checkout": 53,
-    "pwnshop.ctfsecurity.com/wallet/topup": 48,
-    "bugstore.bugtraceai.com/api/products/search": 16,
-    "chimera.atlascrew.dev/api/v1/admin/attack/xxe": 8,
-    "playground.fabraix.com/challenges/biosafety-001": 7,
-    "sql-injection-lab.vercel.app/login": 4
+    "bugstore.bugtraceai.com/api/auth/signup": 16,
+    "koadt.github.io/oss-oopssec-store/posts/path-traversal/": 7,
+    "chimera.atlascrew.dev/api/v1/diagnostics/webhook": 8,
+    "chimera.atlascrew.dev/api/v1/diagnostics/ping": 8,
+    "chimera.atlascrew.dev/api/v1/genai/chat": 8,
+    "chimera.atlascrew.dev/api/v1/genai/agent/browse": 8,
+    "chimera.atlascrew.dev/api/v1/energy-utilities/outages/1": 8
   }
 }
