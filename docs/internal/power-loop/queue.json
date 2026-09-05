@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T17:10:00.000Z",
+  "updated_at": "2026-09-05T18:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/transfer",
+      "source": "atlas-crew/Chimera — CHM-BANK-001 business-logic transfer manipulation oracle POST /api/v1/banking/transfer (vuln_registry; web search 18 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/accounts",
+      "source": "atlas-crew/Chimera — CHM-BANK-002 BOLA/IDOR accounts oracle GET /api/v1/banking/accounts (vuln_registry; web search 18 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/auth/login-vulnerable",
+      "source": "atlas-crew/Chimera — auth-bypass SQLi oracle POST /api/v1/auth/login-vulnerable (API-DOCUMENTATION.md; web search 18 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/patients/search?ssn=test",
+      "source": "atlas-crew/Chimera — classic SQLi oracle GET /api/v1/patients/search?ssn= (vuln-api README; web search 18 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/saas/tenants/1/projects",
+      "source": "atlas-crew/Chimera — CHM-SAAS-001 cross-tenant IDOR oracle GET /api/v1/saas/tenants/{tenant_id}/projects (vuln_registry; web search 18 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://trusca-demo.duckdns.org/",
       "source": "trustedoss/trusca — hosted read-only security scanner demo with seeded accounts (live-demo docs; web search 17 UTC)",
@@ -11362,5 +11387,5 @@
     }
   ],
   "discovery_urls": [],
-  "discovery_urls_added": 2093
+  "discovery_urls_added": 2098
 }
