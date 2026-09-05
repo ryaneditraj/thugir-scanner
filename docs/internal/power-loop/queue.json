@@ -2,6 +2,21 @@
   "updated_at": "2026-09-05T05:06:00.000Z",
   "priority_discovery_urls": [
     {
+      "url": "https://owaspbased-lessons.vercel.app/api/lessons",
+      "source": "owaspbased-lessons — unauthenticated LLM Top 10 lesson catalog JSON index (scoreboard gap 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass/",
+      "source": "kOaDT/oss-oopssec-store — challenges.json vanity slug middleware-authorization-bypass → CVE-2025-29927 walkthrough (06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/malicious-file-upload/",
+      "source": "kOaDT/oss-oopssec-store — challenges.json vanity slug malicious-file-upload → stored-xss walkthrough (06 UTC)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927/",
       "source": "kOaDT/oss-oopssec-store \u2014 CVE-2025-29927 Next.js middleware auth bypass walkthrough (posts index scrape 05 UTC)",
       "auth": "public_demo"

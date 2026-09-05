@@ -8759,6 +8759,24 @@
       "slug": "oopssec-sql-injection-vanity-slug-alias",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /posts/sql-injection returns 404; oopssecOrdersSearchSqliRouteLiveOracle fetches canonical /posts/sql-injection-writeup walkthrough; koadt.github.io/oss-oopssec-store/posts/sql-injection/ findings 0→7 (+oopssec-orders-search-sqli-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:owaspbased-lessons.vercel.app",
+      "slug": "owasp-genai-lessons-api-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/lessons returns JSON array with LLM01-LLM10 owasp_id fields; owaspbased-lessons.vercel.app/api/lessons findings 2→3 (+owasp-genai-lessons-api-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-middleware-authorization-bypass-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/middleware-authorization-bypass returns 404; oopssecMiddlewareBypassRouteLiveOracle fetches canonical middleware-authorization-bypass-cve-2025-29927 walkthrough; koadt.github.io/.../middleware-authorization-bypass/ findings 0→7 (+oopssec-middleware-bypass-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-malicious-file-upload-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/malicious-file-upload returns 404; oopssecMaliciousFileUploadStoredXssRouteLiveOracle fetches canonical malicious-file-upload-stored-xss walkthrough; koadt.github.io/.../malicious-file-upload/ findings 0→7 (+oopssec-malicious-file-upload-stored-xss-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

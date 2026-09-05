@@ -41429,6 +41429,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "owasp-genai-lessons-api-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "OWASP GenAI lessons API catalog route live oracle",
+    description:
+      "When scanning /api/lessons on owaspbased-lessons.vercel.app, GET returns unauthenticated JSON array of OWASP LLM Top 10 lesson slugs with owasp_id, difficulty, and duration metadata.",
+    impactOneline:
+      "Route-scoped scans of /api/lessons should confirm the public GenAI lesson catalog index exposing LLM01–LLM10 training modules.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "owaspGenaiLessonsApiRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "GenAI lesson catalogs are intentional training — restrict API enumeration in production LLM apps.",
+      steps: [
+        "Require authentication before exposing interactive LLM lesson metadata.",
+        "Do not publish full training curriculum indexes without access control.",
+        "Rate-limit unauthenticated GenAI lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "Our /api/lessons route scan confirms an unauthenticated OWASP LLM Top 10 lesson catalog. Show route-specific access control for GenAI training APIs.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "sql-injection-challenge-login-sqli-live-oracle",
     platform: "generic",
     category: "Injection",
