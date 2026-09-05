@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T19:30:00.000Z",
+  "updated_at": "2026-09-05T20:20:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://bugstore.bugtraceai.com/api/cart/add",
+      "source": "BugTraceAI/BugStore — mass-assignment / price manipulation oracle POST /api/cart/add (32-vuln shop playground; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/orders/1",
+      "source": "BugTraceAI/BugStore — order IDOR oracle GET /api/orders/:id (32-vuln shop playground; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/reviews/create",
+      "source": "BugTraceAI/BugStore — stored XSS via product reviews oracle POST /api/reviews/create (32-vuln shop playground; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/ssrf",
+      "source": "DaniSam-STU/security-lab — interactive SSRF lab page with live exploit UI (seclab.vercel.app; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://seclab.vercel.app/labs/xxe",
+      "source": "DaniSam-STU/security-lab — interactive XXE lab page with live exploit UI (seclab.vercel.app; web search 20 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://graphql-complexity-playground-production.up.railway.app/",
       "source": "graphql-complexity Python library — interactive GraphQL DoS/complexity-limit demo (Railway deploy; web search 19 UTC)",
