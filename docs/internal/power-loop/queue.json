@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T20:20:00.000Z",
+  "updated_at": "2026-09-05T21:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://duck-store.escape.tech/api/v1/auth/register",
+      "source": "Escape Duck Store — referral code abuse oracle POST /api/v1/auth/register (vulnerabilities index; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/admin/users",
+      "source": "Escape Duck Store — broken access control oracle GET /api/v1/admin/users (vulnerabilities index; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/cart/add",
+      "source": "Escape Duck Store — negative quantity business-logic oracle POST /api/v1/cart/add (vulnerabilities index; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://duck-store.escape.tech/api/v1/orders/checkout",
+      "source": "Escape Duck Store — discount coupon business-logic oracle POST /api/v1/orders/checkout (vulnerabilities index; web search 21 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/admin/attack/xxe",
+      "source": "atlas-crew/Chimera — CHM-ADMIN-003 XXE legacy import oracle POST /api/v1/admin/attack/xxe (vuln_registry; HN Chimera 21 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://bugstore.bugtraceai.com/api/cart/add",
       "source": "BugTraceAI/BugStore — mass-assignment / price manipulation oracle POST /api/cart/add (32-vuln shop playground; web search 20 UTC)",
