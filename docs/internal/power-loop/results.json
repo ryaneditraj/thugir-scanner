@@ -1,681 +1,6 @@
 {
   "runs": [
     {
-      "run_id": "2026-09-03T13:04:40.524Z",
-      "url": "https://juice-shop.herokuapp.com",
-      "target_id": "juice-shop",
-      "auth": "public_benchmark",
-      "scan_kind": "benchmark",
-      "platform": null,
-      "finding_count": 52,
-      "findings": [
-        {
-          "slug": "juice-shop-addresss-bola-live-oracle",
-          "title": "Juice Shop shipping addresses BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-addresss-id-bola-live-oracle",
-          "title": "Juice Shop address-by-ID BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-leaked-api-key",
-          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "juice-shop-iac-terraform-tls-key-live-oracle",
-          "title": "Juice Shop IaC Terraform TLS private key live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "juice-shop-resend-key-live-oracle",
-          "title": "Juice Shop Resend API key live oracle",
-          "severity": "high",
-          "confidence": 0.84,
-          "category": "Exposed secret"
-        },
-        {
-          "slug": "juice-shop-forgotten-backup-disclosure",
-          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-jwt-alg-none-live-oracle",
-          "title": "Juice Shop JWT none-algorithm live oracle",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-captcha-bypass-live-oracle",
-          "title": "Juice Shop captcha bypass live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-image-captcha-bypass-live-oracle",
-          "title": "Juice Shop image captcha bypass live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-save-login-ip-live-oracle",
-          "title": "Juice Shop login IP spoofing live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "juice-shop-whoami-unauth-live-oracle",
-          "title": "Juice Shop unauthenticated whoami live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "juice-shop-products-reviews-exposure-live-oracle",
-          "title": "Juice Shop product reviews disclosure live oracle",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-chatbot-api-live-oracle",
-          "title": "Juice Shop chatbot LLM proxy live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "juice-shop-chatbot-route-live-oracle",
-          "title": "Juice Shop chatbot route live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Prompt injection"
-        },
-        {
-          "slug": "juice-shop-login-sqli-live-oracle",
-          "title": "Juice Shop login SQL injection live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "juice-shop-login-route-live-oracle",
-          "title": "Juice Shop /rest/user/login SQLi route live oracle",
-          "severity": "critical",
-          "confidence": 0.93,
-          "category": "Injection"
-        },
-        {
-          "slug": "juice-shop-users-idor-live-oracle",
-          "title": "Juice Shop user profile IDOR live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-basket-items-bola-live-oracle",
-          "title": "Juice Shop basket items BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-complaints-bola-live-oracle",
-          "title": "Juice Shop complaints BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-security-questions-list-live-oracle",
-          "title": "Juice Shop security-question catalog live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-security-question-user-live-oracle",
-          "title": "Juice Shop user security-question disclosure live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-wallet-balance-bola-live-oracle",
-          "title": "Juice Shop wallet balance BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-deluxe-membership-live-oracle",
-          "title": "Juice Shop deluxe membership live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Business logic"
-        },
-        {
-          "slug": "juice-shop-b2b-orders-deserialization-live-oracle",
-          "title": "Juice Shop B2B orders insecure deserialization live oracle",
-          "severity": "critical",
-          "confidence": 0.94,
-          "category": "Injection"
-        },
-        {
-          "slug": "juice-shop-recycles-bola-live-oracle",
-          "title": "Juice Shop recycle requests BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-cards-bola-live-oracle",
-          "title": "Juice Shop payment cards BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-basket-idor-live-oracle",
-          "title": "Juice Shop basket IDOR live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-memories-bola-live-oracle",
-          "title": "Juice Shop memories BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.94,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-admin-config-live-oracle",
-          "title": "Juice Shop admin application-configuration live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "juice-shop-quantitys-exposure-live-oracle",
-          "title": "Juice Shop inventory quantities exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-hints-exposure-live-oracle",
-          "title": "Juice Shop challenge hints exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-challenges-disclosure-live-oracle",
-          "title": "Juice Shop challenge scoreboard exposed live oracle",
-          "severity": "medium",
-          "confidence": 0.92,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-deliverys-exposure-live-oracle",
-          "title": "Juice Shop delivery methods exposed live oracle",
-          "severity": "low",
-          "confidence": 0.89,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-feedbacks-bola-live-oracle",
-          "title": "Juice Shop product feedback BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-security-answers-disclosure-live-oracle",
-          "title": "Juice Shop security-answer hashes disclosed live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "juice-shop-privacy-requests-bola-live-oracle",
-          "title": "Juice Shop GDPR privacy-request BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-track-order-idor-live-oracle",
-          "title": "Juice Shop track-order IDOR live oracle",
-          "severity": "high",
-          "confidence": 0.92,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-order-history-bola-live-oracle",
-          "title": "Juice Shop order-history BOLA live oracle",
-          "severity": "high",
-          "confidence": 0.93,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "juice-shop-open-redirect-live-oracle",
-          "title": "Juice Shop allowlist-bypass open redirect live oracle",
-          "severity": "medium",
-          "confidence": 0.93,
-          "category": "Open redirect"
-        },
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "permissive-cors",
-          "title": "CORS allows any origin",
-          "severity": "medium",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "idor-sequential-ids",
-          "title": "Object access by predictable sequential IDs (IDOR)",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "sql-error-disclosure",
-          "title": "SQL syntax error disclosed on search/query input",
-          "severity": "high",
-          "confidence": 0.9,
-          "category": "Injection"
-        },
-        {
-          "slug": "unauthenticated-admin-endpoint",
-          "title": "Admin or application configuration reachable without authentication",
-          "severity": "critical",
-          "confidence": 0.92,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "security-question-disclosure",
-          "title": "Password-reset security question disclosed without authentication",
-          "severity": "high",
-          "confidence": 0.91,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "jwt-alg-none-accepted",
-          "title": "JWT \"none\" algorithm accepted on API route",
-          "severity": "critical",
-          "confidence": 0.88,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "vibe-unauthenticated-api-routes",
-          "title": "JSON API routes return data without authentication",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "secret-resend",
-          "title": "Resend API key exposed in client bundle",
-          "severity": "high",
-          "confidence": 0.84,
-          "category": "Exposed secret"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 6,
-      "probes_run": 596,
-      "status": "ok",
-      "scanned_at": "2026-09-03T13:04:40.524Z"
-    },
-    {
-      "run_id": "2026-09-03T12:09:07.447Z",
-      "url": "https://damn-vulnerable-startup.fly.dev/challenges/owasp",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-09-03T12:09:07.447Z",
-      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-09-03T12:09:07.425Z",
-      "url": "https://damn-vulnerable-startup.fly.dev/challenges/terminal",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-09-03T12:09:07.425Z",
-      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-09-03T12:09:07.398Z",
-      "url": "https://damn-vulnerable-startup.fly.dev/challenges/login",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 0,
-      "findings": [],
-      "ai_findings_added": 0,
-      "pages_crawled": 0,
-      "probes_run": 0,
-      "status": "error",
-      "scanned_at": "2026-09-03T12:09:07.398Z",
-      "error": "We couldn't reach damn-vulnerable-startup.fly.dev. Check the address is public and live, then try again — include https:// if it only serves one protocol."
-    },
-    {
-      "run_id": "2026-09-03T12:09:00.496Z",
-      "url": "https://owaspsecure.com/demo/a01_bac/insecure.php",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-api-security-lab-evidence",
-          "title": "Client bundle documents OWASP API Security Top 10 lab",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Broken access control"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 2,
-      "probes_run": 597,
-      "status": "ok",
-      "scanned_at": "2026-09-03T12:09:00.496Z"
-    },
-    {
-      "run_id": "2026-09-03T12:08:53.405Z",
-      "url": "https://owaspsecure.com/demo/a09_logging/insecure.php",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 5,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "robots-sensitive-paths",
-          "title": "robots.txt discloses sensitive paths",
-          "severity": "medium",
-          "confidence": 0.8,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 1,
-      "probes_run": 600,
-      "status": "ok",
-      "scanned_at": "2026-09-03T12:08:53.405Z"
-    },
-    {
-      "run_id": "2026-09-03T12:08:46.451Z",
-      "url": "https://owaspsecure.com/demo/a08_integrity/insecure.php",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 2,
-      "probes_run": 597,
-      "status": "ok",
-      "scanned_at": "2026-09-03T12:08:46.451Z"
-    },
-    {
-      "run_id": "2026-09-03T12:08:39.805Z",
-      "url": "https://owaspsecure.com/demo/a04_insecure_design/insecure.php",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 7,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "dangerous-html-sinks",
-          "title": "Dangerous HTML sinks in client bundle",
-          "severity": "high",
-          "confidence": 0.88,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-xss-evidence",
-          "title": "Source or bundle documents reflected XSS via unescaped input",
-          "severity": "high",
-          "confidence": 0.86,
-          "category": "Cross-site scripting"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-sensitive-js-endpoints",
-          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
-          "severity": "medium",
-          "confidence": 0.82,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 3,
-      "probes_run": 598,
-      "status": "ok",
-      "scanned_at": "2026-09-03T12:08:39.805Z"
-    },
-    {
-      "run_id": "2026-09-03T12:08:32.101Z",
-      "url": "https://owaspsecure.com/demo/a02_crypto/insecure.php",
-      "auth": "public_demo",
-      "scan_kind": "discovery",
-      "platform": null,
-      "finding_count": 4,
-      "findings": [
-        {
-          "slug": "missing-security-headers",
-          "title": "Critical security headers missing",
-          "severity": "medium",
-          "confidence": 0.95,
-          "category": "Security misconfiguration"
-        },
-        {
-          "slug": "tech-stack-disclosure",
-          "title": "Server/framework version disclosed in headers",
-          "severity": "low",
-          "confidence": 0.85,
-          "category": "Information disclosure"
-        },
-        {
-          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
-          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
-          "severity": "critical",
-          "confidence": 0.91,
-          "category": "Broken authentication"
-        },
-        {
-          "slug": "thugir-dir-discovery",
-          "title": "Sensitive paths exposed via directory probing",
-          "severity": "high",
-          "confidence": 0.85,
-          "category": "Security misconfiguration"
-        }
-      ],
-      "ai_findings_added": 0,
-      "pages_crawled": 5,
-      "probes_run": 604,
-      "status": "ok",
-      "scanned_at": "2026-09-03T12:08:32.101Z"
-    },
-    {
       "run_id": "2026-09-03T12:05:35.000Z",
       "url": "https://juice-shop.herokuapp.com",
       "target_id": "juice-shop",
@@ -32690,9 +32015,1613 @@
       "probes_run": 572,
       "status": "ok",
       "scanned_at": "2026-09-05T01:08:01.767Z"
+    },
+    {
+      "run_id": "2026-09-05T02:02:13.852Z",
+      "url": "https://juice-shop.herokuapp.com",
+      "target_id": "juice-shop",
+      "auth": "public_benchmark",
+      "scan_kind": "benchmark",
+      "platform": null,
+      "finding_count": 53,
+      "findings": [
+        {
+          "slug": "juice-shop-addresss-bola-live-oracle",
+          "title": "Juice Shop shipping addresses BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-addresss-id-bola-live-oracle",
+          "title": "Juice Shop address-by-ID BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-leaked-api-key",
+          "title": "Juice Shop coupon-bot AWS API key leaked in git history",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-iac-terraform-tls-key-live-oracle",
+          "title": "Juice Shop IaC Terraform TLS private key live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-resend-key-live-oracle",
+          "title": "Juice Shop Resend API key live oracle",
+          "severity": "high",
+          "confidence": 0.84,
+          "category": "Exposed secret"
+        },
+        {
+          "slug": "juice-shop-forgotten-backup-disclosure",
+          "title": "Forgotten developer backup exposed via FTP null-byte bypass",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-jwt-alg-none-live-oracle",
+          "title": "Juice Shop JWT none-algorithm live oracle",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-captcha-bypass-live-oracle",
+          "title": "Juice Shop captcha bypass live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-image-captcha-bypass-live-oracle",
+          "title": "Juice Shop image captcha bypass live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-save-login-ip-live-oracle",
+          "title": "Juice Shop login IP spoofing live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "juice-shop-whoami-unauth-live-oracle",
+          "title": "Juice Shop unauthenticated whoami live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "juice-shop-products-reviews-exposure-live-oracle",
+          "title": "Juice Shop product reviews disclosure live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-chatbot-api-live-oracle",
+          "title": "Juice Shop chatbot LLM proxy live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-chatbot-route-live-oracle",
+          "title": "Juice Shop chatbot route live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Prompt injection"
+        },
+        {
+          "slug": "juice-shop-login-sqli-live-oracle",
+          "title": "Juice Shop login SQL injection live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-login-route-live-oracle",
+          "title": "Juice Shop /rest/user/login SQLi route live oracle",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-users-idor-live-oracle",
+          "title": "Juice Shop user profile IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-basket-items-bola-live-oracle",
+          "title": "Juice Shop basket items BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-complaints-bola-live-oracle",
+          "title": "Juice Shop complaints BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-security-questions-list-live-oracle",
+          "title": "Juice Shop security-question catalog live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-security-question-user-live-oracle",
+          "title": "Juice Shop user security-question disclosure live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-wallet-balance-bola-live-oracle",
+          "title": "Juice Shop wallet balance BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-deluxe-membership-live-oracle",
+          "title": "Juice Shop deluxe membership live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Business logic"
+        },
+        {
+          "slug": "juice-shop-b2b-orders-deserialization-live-oracle",
+          "title": "Juice Shop B2B orders insecure deserialization live oracle",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "juice-shop-snippets-live-oracle",
+          "title": "Juice Shop vulnerable code snippets API live oracle",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-recycles-bola-live-oracle",
+          "title": "Juice Shop recycle requests BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-cards-bola-live-oracle",
+          "title": "Juice Shop payment cards BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-basket-idor-live-oracle",
+          "title": "Juice Shop basket IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-memories-bola-live-oracle",
+          "title": "Juice Shop memories BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-admin-config-live-oracle",
+          "title": "Juice Shop admin application-configuration live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "juice-shop-quantitys-exposure-live-oracle",
+          "title": "Juice Shop inventory quantities exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-hints-exposure-live-oracle",
+          "title": "Juice Shop challenge hints exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-challenges-disclosure-live-oracle",
+          "title": "Juice Shop challenge scoreboard exposed live oracle",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-deliverys-exposure-live-oracle",
+          "title": "Juice Shop delivery methods exposed live oracle",
+          "severity": "low",
+          "confidence": 0.89,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-feedbacks-bola-live-oracle",
+          "title": "Juice Shop product feedback BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-security-answers-disclosure-live-oracle",
+          "title": "Juice Shop security-answer hashes disclosed live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "juice-shop-privacy-requests-bola-live-oracle",
+          "title": "Juice Shop GDPR privacy-request BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-track-order-idor-live-oracle",
+          "title": "Juice Shop track-order IDOR live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-order-history-bola-live-oracle",
+          "title": "Juice Shop order-history BOLA live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "juice-shop-open-redirect-live-oracle",
+          "title": "Juice Shop allowlist-bypass open redirect live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Open redirect"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "unauthenticated-admin-endpoint",
+          "title": "Admin or application configuration reachable without authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "security-question-disclosure",
+          "title": "Password-reset security question disclosed without authentication",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "dangerous-html-sinks",
+          "title": "Dangerous HTML sinks in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "jwt-alg-none-accepted",
+          "title": "JWT \"none\" algorithm accepted on API route",
+          "severity": "critical",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-sensitive-js-endpoints",
+          "title": "Sensitive admin/API endpoints referenced in client JavaScript",
+          "severity": "medium",
+          "confidence": 0.82,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "secret-resend",
+          "title": "Resend API key exposed in client bundle",
+          "severity": "high",
+          "confidence": 0.84,
+          "category": "Exposed secret"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 595,
+      "status": "ok",
+      "scanned_at": "2026-09-05T02:02:13.852Z"
+    },
+    {
+      "run_id": "2026-09-05T02:04:42.500Z",
+      "url": "https://pwnshop.ctfsecurity.com/wallet/topup",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 49,
+      "findings": [
+        {
+          "slug": "client-side-pwnshop-wallet-topup-oracle",
+          "title": "Pwnshop wallet top-up credited_amount oracle (PWN-042)",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Business logic"
+        },
+        {
+          "slug": "pwnshop-wallet-topup-vulnbank-live-oracle",
+          "title": "Pwnshop Vulnbank wallet top-up live oracle (PWN-042)",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Business logic"
+        },
+        {
+          "slug": "pwnshop-wallet-topup-route-live-oracle",
+          "title": "Pwnshop wallet top-up route live oracle (PWN-042)",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Business logic"
+        },
+        {
+          "slug": "pwnshop-prototype-pollution-search-filters-live-oracle",
+          "title": "Pwnshop search filters prototype pollution live oracle (PWN-041)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-debug-info-live-oracle",
+          "title": "Pwnshop debug info endpoint leaks secrets (PWN-018)",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "pwnshop-events-audit-live-oracle",
+          "title": "Pwnshop events API exposes unauthenticated audit logs (PWN-005)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
+          "title": "Pwnshop chat init API enables email enumeration (PWN-037)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
+          "title": "Pwnshop forgot-password form enables email enumeration",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "pwnshop-track-idor-live-oracle",
+          "title": "Pwnshop order tracking IDOR live oracle (PWN-002)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-product-search-sqli-live-oracle",
+          "title": "Pwnshop product search SQL injection live oracle (PWN-010)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-admin-login-sqli-live-oracle",
+          "title": "Pwnshop admin login SQL injection live oracle (PWN-009)",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-mass-assignment-admin-live-oracle",
+          "title": "Pwnshop self-assigned admin role live oracle (PWN-021)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-open-redirect-register-live-oracle",
+          "title": "Pwnshop registration open redirect live oracle (PWN-017)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-open-redirect-login-live-oracle",
+          "title": "Pwnshop login open redirect live oracle (PWN-017)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-verify-otp-bruteforce-live-oracle",
+          "title": "Pwnshop OTP verification lacks rate limiting (PWN-015)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "pwnshop-mail-inbox-idor-live-oracle",
+          "title": "Pwnshop PwnMail inbox IDOR live oracle (PWN-004)",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-avatar-svg-xss-live-oracle",
+          "title": "Pwnshop stored XSS via SVG avatar upload (PWN-012)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "pwnshop-product-review-stored-xss-live-oracle",
+          "title": "Pwnshop stored XSS via product reviews (PWN-011)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "pwnshop-apply-coupon-live-oracle",
+          "title": "Pwnshop authenticated coupon application live oracle (PWN-016)",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Business logic"
+        },
+        {
+          "slug": "pwnshop-coupon-category-bypass-live-oracle",
+          "title": "Pwnshop coupon category restriction bypass live oracle (PWN-016)",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Business logic"
+        },
+        {
+          "slug": "pwnshop-checkout-hpp-coupon-live-oracle",
+          "title": "Pwnshop checkout HPP coupon bypass live oracle (PWN-039)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "pwnshop-vulnerabilities-index-live-oracle",
+          "title": "Pwnshop vulnerability index live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "pwnshop-seller-preview-ssti-live-oracle",
+          "title": "Pwnshop seller preview SSTI live oracle (PWN-040)",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-download-path-traversal-live-oracle",
+          "title": "Pwnshop download path traversal live oracle (PWN-038)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-avatar-url-ssrf-live-oracle",
+          "title": "Pwnshop avatar URL SSRF live oracle (PWN-029)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "pwnshop-order-idor-live-oracle",
+          "title": "Pwnshop order details IDOR live oracle (PWN-001)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-account-delete-csrf-live-oracle",
+          "title": "Pwnshop account self-deletion CSRF live oracle (PWN-026)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site request forgery"
+        },
+        {
+          "slug": "pwnshop-audit-log-plaintext-password-live-oracle",
+          "title": "Pwnshop audit log plaintext password live oracle (PWN-027)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "pwnshop-admin-security-second-order-sqli-live-oracle",
+          "title": "Pwnshop admin security audit-log SQLi live oracle (PWN-014)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-export-orders-csv-live-oracle",
+          "title": "Pwnshop admin CSV order export live oracle (PWN-013)",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-chat-order-idor-live-oracle",
+          "title": "Pwnshop AI chat order lookup IDOR live oracle (PWN-035)",
+          "severity": "medium",
+          "confidence": 0.88,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "cors-reflect-origin",
+          "title": "CORS reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-prototype-pollution-evidence",
+          "title": "Client bundle documents prototype pollution via __proto__ merge",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-evidence",
+          "title": "Pwnshop OWASP Top 10 2025 e-commerce lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-ssti-oracle",
+          "title": "Pwnshop seller preview SSTI oracle (PWN-040)",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-pwnshop-review-xss-oracle",
+          "title": "Pwnshop product review stored XSS oracle (PWN-011)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-pwnshop-avatar-xss-oracle",
+          "title": "Pwnshop avatar upload stored XSS oracle (PWN-012)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-pwnshop-export-orders-oracle",
+          "title": "Pwnshop CSV order export formula injection oracle (PWN-013)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-pwnshop-path-traversal-oracle",
+          "title": "Pwnshop invoice download path traversal oracle (PWN-038)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-prototype-pollution-oracle",
+          "title": "Pwnshop lodash prototype pollution oracle (PWN-041)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 617,
+      "status": "ok",
+      "scanned_at": "2026-09-05T02:04:42.500Z"
+    },
+    {
+      "run_id": "2026-09-05T02:06:11.265Z",
+      "url": "https://playground.fabraix.com/challenges/biosafety-001",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "fabraix-biosafety-001-route-live-oracle",
+          "title": "Fabraix biosafety-001 challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "AI security"
+        },
+        {
+          "slug": "fabraix-playground-session-live-oracle",
+          "title": "Fabraix playground session unauthenticated live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "AI security"
+        },
+        {
+          "slug": "fabraix-playground-session-route-live-oracle",
+          "title": "Fabraix playground challenge session route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "AI security"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-fabraix-challenge-evidence",
+          "title": "Fabraix agentic red-team challenge route disclosed",
+          "severity": "medium",
+          "confidence": 0.87,
+          "category": "AI security"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 4,
+      "probes_run": 553,
+      "status": "ok",
+      "scanned_at": "2026-09-05T02:06:11.265Z"
+    },
+    {
+      "run_id": "2026-09-05T02:06:50.516Z",
+      "url": "https://chimera.atlascrew.dev/api/v1/admin/attack/xxe",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 8,
+      "findings": [
+        {
+          "slug": "chimera-admin-attack-xxe-route-live-oracle",
+          "title": "Chimera admin attack XXE route live oracle",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-chimera-vuln-lab-evidence",
+          "title": "Chimera WAF honeypot documents 456+ intentional API vulnerabilities",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "chimera-patients-search-sqli-live-oracle",
+          "title": "Chimera patient SSN search SQLi live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "chimera-transactions-history-sqli-live-oracle",
+          "title": "Chimera transaction history SQLi live oracle",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vibe-weak-csp",
+          "title": "Content-Security-Policy allows unsafe-inline or unsafe-eval",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 2,
+      "probes_run": 474,
+      "status": "ok",
+      "scanned_at": "2026-09-05T02:06:50.516Z"
+    },
+    {
+      "run_id": "2026-09-05T02:07:01.474Z",
+      "url": "https://bugstore.bugtraceai.com/api/products/search",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 16,
+      "findings": [
+        {
+          "slug": "bugstore-product-search-sqli-live-oracle",
+          "title": "BugStore product search SQL injection live oracle (V-001/V-012)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "bugstore-product-search-sqli-route-live-oracle",
+          "title": "BugStore product search SQLi route live oracle (V-001/V-012)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "graphql-introspection-enabled",
+          "title": "GraphQL introspection is enabled in production",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "idor-sequential-ids",
+          "title": "Object access by predictable sequential IDs (IDOR)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "bugstore-product-image-path-traversal-live-oracle",
+          "title": "BugStore product image path traversal live oracle (V-014)",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "bugstore-admin-debug-stats-bac-live-oracle",
+          "title": "BugStore admin debug stats broken access control live oracle (V-012)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-forum-thread-sqli-live-oracle",
+          "title": "BugStore forum thread_id SQL injection live oracle (V-001)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "bugstore-orders-idor-live-oracle",
+          "title": "BugStore orders IDOR live oracle (V-009)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "bugstore-checkout-client-total-live-oracle",
+          "title": "BugStore checkout client-trusted total live oracle (V-023)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "bugstore-profile-mass-assignment-live-oracle",
+          "title": "BugStore profile role mass-assignment live oracle (V-015)",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "vibe-openapi-docs-exposed",
+          "title": "OpenAPI / Swagger docs publicly reachable",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "stack-vercel-env-exposure",
+          "title": "Vercel / Next build manifest or env debug endpoint",
+          "severity": "medium",
+          "confidence": 0.9,
+          "category": "Source exposure"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 1,
+      "probes_run": 560,
+      "status": "ok",
+      "scanned_at": "2026-09-05T02:07:01.474Z"
+    },
+    {
+      "run_id": "2026-09-05T02:07:36.506Z",
+      "url": "https://playground.fabraix.com/challenges/jwt-verifier-001",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 7,
+      "findings": [
+        {
+          "slug": "fabraix-jwt-verifier-001-route-live-oracle",
+          "title": "Fabraix jwt-verifier-001 challenge route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "AI security"
+        },
+        {
+          "slug": "fabraix-playground-session-live-oracle",
+          "title": "Fabraix playground session unauthenticated live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "AI security"
+        },
+        {
+          "slug": "fabraix-playground-session-route-live-oracle",
+          "title": "Fabraix playground challenge session route live oracle",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "AI security"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-fabraix-challenge-evidence",
+          "title": "Fabraix agentic red-team challenge route disclosed",
+          "severity": "medium",
+          "confidence": 0.87,
+          "category": "AI security"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 4,
+      "probes_run": 553,
+      "status": "ok",
+      "scanned_at": "2026-09-05T02:07:36.506Z"
+    },
+    {
+      "run_id": "2026-09-05T02:08:15.596Z",
+      "url": "https://sql-injection-lab.vercel.app/login",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 4,
+      "findings": [
+        {
+          "slug": "sql-injection-lab-login-route-live-oracle",
+          "title": "SQL Injection Lab login route live oracle",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "post-login-sql-bypass",
+          "title": "SQL injection bypasses POST login authentication",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 2,
+      "probes_run": 538,
+      "status": "ok",
+      "scanned_at": "2026-09-05T02:08:15.596Z"
+    },
+    {
+      "run_id": "2026-09-05T02:08:30.443Z",
+      "url": "https://pwnshop.ctfsecurity.com/checkout",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 56,
+      "findings": [
+        {
+          "slug": "pwnshop-checkout-hpp-coupon-live-oracle",
+          "title": "Pwnshop checkout HPP coupon bypass live oracle (PWN-039)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "pwnshop-checkout-hpp-coupon-route-live-oracle",
+          "title": "Pwnshop /cart checkout HPP coupon route live oracle (PWN-039)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Business logic"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "insecure-cookies",
+          "title": "Cookies set without the Secure flag",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "cors-reflect-origin",
+          "title": "CORS reflects arbitrary Origin",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "tech-stack-disclosure",
+          "title": "Server/framework version disclosed in headers",
+          "severity": "low",
+          "confidence": 0.85,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "sql-error-disclosure",
+          "title": "SQL syntax error disclosed on search/query input",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-prototype-pollution-evidence",
+          "title": "Client bundle documents prototype pollution via __proto__ merge",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflected-xss-query-param",
+          "title": "Reflected XSS via query parameter",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-api-security-lab-evidence",
+          "title": "Client bundle documents OWASP API Security Top 10 lab",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-evidence",
+          "title": "Pwnshop OWASP Top 10 2025 e-commerce lab disclosed",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-ssti-oracle",
+          "title": "Pwnshop seller preview SSTI oracle (PWN-040)",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-pwnshop-review-xss-oracle",
+          "title": "Pwnshop product review stored XSS oracle (PWN-011)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-pwnshop-avatar-xss-oracle",
+          "title": "Pwnshop avatar upload stored XSS oracle (PWN-012)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "client-side-pwnshop-wallet-topup-oracle",
+          "title": "Pwnshop wallet top-up credited_amount oracle (PWN-042)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Business logic"
+        },
+        {
+          "slug": "client-side-pwnshop-export-orders-oracle",
+          "title": "Pwnshop CSV order export formula injection oracle (PWN-013)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "client-side-pwnshop-path-traversal-oracle",
+          "title": "Pwnshop invoice download path traversal oracle (PWN-038)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-pwnshop-prototype-pollution-oracle",
+          "title": "Pwnshop lodash prototype pollution oracle (PWN-041)",
+          "severity": "high",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-prototype-pollution-search-filters-live-oracle",
+          "title": "Pwnshop search filters prototype pollution live oracle (PWN-041)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-debug-info-live-oracle",
+          "title": "Pwnshop debug info endpoint leaks secrets (PWN-018)",
+          "severity": "critical",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "pwnshop-events-audit-live-oracle",
+          "title": "Pwnshop events API exposes unauthenticated audit logs (PWN-005)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "pwnshop-chat-init-email-enumeration-live-oracle",
+          "title": "Pwnshop chat init API enables email enumeration (PWN-037)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "pwnshop-forgot-password-email-enumeration-live-oracle",
+          "title": "Pwnshop forgot-password form enables email enumeration",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "pwnshop-track-idor-live-oracle",
+          "title": "Pwnshop order tracking IDOR live oracle (PWN-002)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-product-search-sqli-live-oracle",
+          "title": "Pwnshop product search SQL injection live oracle (PWN-010)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-admin-login-sqli-live-oracle",
+          "title": "Pwnshop admin login SQL injection live oracle (PWN-009)",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-mass-assignment-admin-live-oracle",
+          "title": "Pwnshop self-assigned admin role live oracle (PWN-021)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-open-redirect-register-live-oracle",
+          "title": "Pwnshop registration open redirect live oracle (PWN-017)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-open-redirect-login-live-oracle",
+          "title": "Pwnshop login open redirect live oracle (PWN-017)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-verify-otp-bruteforce-live-oracle",
+          "title": "Pwnshop OTP verification lacks rate limiting (PWN-015)",
+          "severity": "high",
+          "confidence": 0.92,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "pwnshop-mail-inbox-idor-live-oracle",
+          "title": "Pwnshop PwnMail inbox IDOR live oracle (PWN-004)",
+          "severity": "high",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-avatar-svg-xss-live-oracle",
+          "title": "Pwnshop stored XSS via SVG avatar upload (PWN-012)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "pwnshop-product-review-stored-xss-live-oracle",
+          "title": "Pwnshop stored XSS via product reviews (PWN-011)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site scripting"
+        },
+        {
+          "slug": "pwnshop-apply-coupon-live-oracle",
+          "title": "Pwnshop authenticated coupon application live oracle (PWN-016)",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Business logic"
+        },
+        {
+          "slug": "pwnshop-coupon-category-bypass-live-oracle",
+          "title": "Pwnshop coupon category restriction bypass live oracle (PWN-016)",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Business logic"
+        },
+        {
+          "slug": "pwnshop-apply-coupon-route-live-oracle",
+          "title": "Pwnshop apply-coupon route live oracle (PWN-016)",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Business logic"
+        },
+        {
+          "slug": "pwnshop-coupon-category-bypass-route-live-oracle",
+          "title": "Pwnshop coupon category bypass route live oracle (PWN-016)",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Business logic"
+        },
+        {
+          "slug": "pwnshop-cart-checkout-route-live-oracle",
+          "title": "Pwnshop cart checkout business-logic route live oracle (PWN-016)",
+          "severity": "medium",
+          "confidence": 0.91,
+          "category": "Business logic"
+        },
+        {
+          "slug": "pwnshop-vulnerabilities-index-live-oracle",
+          "title": "Pwnshop vulnerability index live oracle",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Information disclosure"
+        },
+        {
+          "slug": "pwnshop-seller-preview-ssti-live-oracle",
+          "title": "Pwnshop seller preview SSTI live oracle (PWN-040)",
+          "severity": "critical",
+          "confidence": 0.94,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-download-path-traversal-live-oracle",
+          "title": "Pwnshop download path traversal live oracle (PWN-038)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-avatar-url-ssrf-live-oracle",
+          "title": "Pwnshop avatar URL SSRF live oracle (PWN-029)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Server-side request forgery"
+        },
+        {
+          "slug": "pwnshop-order-idor-live-oracle",
+          "title": "Pwnshop order details IDOR live oracle (PWN-001)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "pwnshop-account-delete-csrf-live-oracle",
+          "title": "Pwnshop account self-deletion CSRF live oracle (PWN-026)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Cross-site request forgery"
+        },
+        {
+          "slug": "pwnshop-audit-log-plaintext-password-live-oracle",
+          "title": "Pwnshop audit log plaintext password live oracle (PWN-027)",
+          "severity": "high",
+          "confidence": 0.93,
+          "category": "Sensitive data exposure"
+        },
+        {
+          "slug": "pwnshop-admin-security-second-order-sqli-live-oracle",
+          "title": "Pwnshop admin security audit-log SQLi live oracle (PWN-014)",
+          "severity": "medium",
+          "confidence": 0.93,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-export-orders-csv-live-oracle",
+          "title": "Pwnshop admin CSV order export live oracle (PWN-013)",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "pwnshop-wallet-topup-vulnbank-live-oracle",
+          "title": "Pwnshop Vulnbank wallet top-up live oracle (PWN-042)",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Business logic"
+        },
+        {
+          "slug": "pwnshop-chat-order-idor-live-oracle",
+          "title": "Pwnshop AI chat order lookup IDOR live oracle (PWN-035)",
+          "severity": "medium",
+          "confidence": 0.88,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "reflexion-escalated-xss",
+          "title": "Reflected XSS confirmed via encoding escalation probe",
+          "severity": "high",
+          "confidence": 0.91,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflexion-escalated-sqli",
+          "title": "SQL injection indicated by escalated error-based probe",
+          "severity": "critical",
+          "confidence": 0.9,
+          "category": "Injection"
+        },
+        {
+          "slug": "reflexion-escalated-ssti",
+          "title": "SSTI confirmed via multi-template reflexion probe",
+          "severity": "critical",
+          "confidence": 0.92,
+          "category": "Injection"
+        },
+        {
+          "slug": "vibe-hardcoded-demo-credentials",
+          "title": "Hardcoded demo credentials in client bundle",
+          "severity": "high",
+          "confidence": 0.88,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "vibe-unauthenticated-api-routes",
+          "title": "JSON API routes return data without authentication",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Broken access control"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 538,
+      "status": "ok",
+      "scanned_at": "2026-09-05T02:08:30.443Z"
+    },
+    {
+      "run_id": "2026-09-05T02:09:48.647Z",
+      "url": "https://vwad.owasp.org/app/damn-vulnerable-restaurant/",
+      "auth": "public_demo",
+      "scan_kind": "discovery",
+      "platform": null,
+      "finding_count": 6,
+      "findings": [
+        {
+          "slug": "vwad-dvr-restaurant-route-live-oracle",
+          "title": "OWASP VWAD Damn Vulnerable Restaurant route live oracle",
+          "severity": "medium",
+          "confidence": 0.94,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "missing-security-headers",
+          "title": "Critical security headers missing",
+          "severity": "medium",
+          "confidence": 0.95,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "permissive-cors",
+          "title": "CORS allows any origin",
+          "severity": "medium",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        },
+        {
+          "slug": "client-side-owasp-vwad-evidence",
+          "title": "OWASP Vulnerable Web Applications Directory disclosed",
+          "severity": "medium",
+          "confidence": 0.92,
+          "category": "Broken access control"
+        },
+        {
+          "slug": "client-side-ctf-challange-3-middleware-bypass-evidence",
+          "title": "CTF Challenge 3 Next.js middleware auth bypass lab disclosed",
+          "severity": "critical",
+          "confidence": 0.91,
+          "category": "Broken authentication"
+        },
+        {
+          "slug": "thugir-dir-discovery",
+          "title": "Sensitive paths exposed via directory probing",
+          "severity": "high",
+          "confidence": 0.85,
+          "category": "Security misconfiguration"
+        }
+      ],
+      "ai_findings_added": 0,
+      "pages_crawled": 6,
+      "probes_run": 558,
+      "status": "ok",
+      "scanned_at": "2026-09-05T02:09:48.647Z"
     }
   ],
   "teacher_delta_runs": [
+    {
+      "run_id": "2026-09-05T02:10:18.349Z",
+      "scan_kind": "teacher_delta",
+      "status": "skipped",
+      "reason": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+      "benchmark_url": "https://juice-shop.herokuapp.com",
+      "benchmark_status": "ok — 53 findings, 6/6 recall on primary Heroku first pass (pages_crawled=6 probes_run=595; gap=[]; 40 live oracles; secret-resend present)",
+      "teacher_delta": [],
+      "benchmark_recall": {
+        "juice-shop": {
+          "categories_expected": 6,
+          "categories_hit": 6,
+          "gap": [],
+          "hit": [
+            "xss",
+            "sqli",
+            "idor",
+            "auth_bypass",
+            "sensitive_data",
+            "misconfig"
+          ]
+        }
+      },
+      "notes": "No teacher tools available. 02 UTC power-scan: stable 6/6 first-pass recall on primary Heroku (53 findings, 40 live oracles; secret-resend + jwt-alg-none + captcha-bypass present). Discovery: +5 URLs (pwnshop wallet/topup PWN-042, fabraix biosafety-001 + jwt-verifier-001, chimera admin/attack/xxe, bugstore products/search) + drained sql-injection-lab/login, pwnshop/checkout, vwad DVR restaurant → 153 findings across 8 URLs. New route oracles: pwnshop-wallet-topup-route-live-oracle, fabraix-biosafety-001-route-live-oracle, chimera-admin-attack-xxe-route-live-oracle, bugstore-product-search-sqli-route-live-oracle, fabraix-jwt-verifier-001-route-live-oracle, vwad-dvr-restaurant-route-live-oracle. Gaps: wrongsecrets 47/53 + qa.brokencrystals file/aws + owaspsecure A09 still queued (48h skip).",
+      "scanned_at": "2026-09-05T02:10:18.350Z"
+    },
     {
       "run_id": "2026-09-05T01:10:00.000Z",
       "scan_kind": "teacher_delta",
