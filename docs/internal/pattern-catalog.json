@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-05T00:25:14.736Z",
-  "total": 3303,
-  "uniqueSlugs": 3295,
+  "generatedAt": "2026-09-05T01:02:11.588Z",
+  "total": 3304,
+  "uniqueSlugs": 3296,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3285,
+    "generic": 3286,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3218,
+    "deep": 3219,
     "continuous": 0
   },
   "byCategory": {
@@ -34,7 +34,7 @@
     "SSRF": 19,
     "Server-side request forgery": 119,
     "Sensitive data exposure": 108,
-    "AI security": 139,
+    "AI security": 140,
     "Business logic": 41,
     "AI / LLM security": 4,
     "Cross-site request forgery": 14,
@@ -1295,6 +1295,7 @@
     "fabraix-guardrail-bypass-route-live-oracle",
     "fabraix-indirect-prompt-injection-route-live-oracle",
     "fabraix-jailbreak-001-route-live-oracle",
+    "fabraix-jailbreak-002-route-live-oracle",
     "fabraix-jwt-verifier-001-route-live-oracle",
     "fabraix-playground-home-route-live-oracle",
     "fabraix-playground-landing-route-live-oracle",
