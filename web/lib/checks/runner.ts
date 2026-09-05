@@ -3617,6 +3617,7 @@ const DEEP_RULES = new Set<string>([
   "owaspGenaiExcessiveAgencyRouteLiveOracle",
   "owaspGenaiVectorEmbeddingRouteLiveOracle",
   "owaspGenaiUnboundedConsumptionRouteLiveOracle",
+  "owaspGenaiLessonsApiRouteLiveOracle",
   "sqlInjectionChallengeLoginSqliLiveOracle",
   "sqlInjectionChallengeLoginSqliRouteLiveOracle",
   "clientSideCtfDefiEvidence",
@@ -14175,7 +14176,10 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
       if (
         /owaspbased-lessons\.vercel\.app/i.test(origin) &&
-        /\/(?:lesson\/(?:prompt-injection|sensitive-info|info-disclosure|supply-chain|data-poisoning|misinformation|improper-output|output-handling|system-prompt-leakage|prompt-leakage|excessive-agency|vector-embedding|unbounded-consumption)|direct-prompt-injection|insecure-plugin)\b/i.test(targetInput) &&
+        (/\/api\/lessons\/?$/i.test(targetInput) ||
+          /\/(?:lesson\/(?:prompt-injection|sensitive-info|info-disclosure|supply-chain|data-poisoning|misinformation|improper-output|output-handling|system-prompt-leakage|prompt-leakage|excessive-agency|vector-embedding|unbounded-consumption)|direct-prompt-injection|insecure-plugin)\b/i.test(
+            targetInput
+          )) &&
         p.slug.startsWith("owasp-genai-")
       )
         return -3;
@@ -14213,8 +14217,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
-        /\/posts\/malicious-file-upload-stored-xss/i.test(targetInput) &&
+        /\/posts\/(?:malicious-file-upload-stored-xss|malicious-file-upload)\/?$/i.test(
+          targetInput
+        ) &&
         p.slug.startsWith("oopssec-malicious-file-upload")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:middleware-authorization-bypass-cve-2025-29927|middleware-authorization-bypass)\/?$/i.test(
+          targetInput
+        ) &&
+        p.slug.startsWith("oopssec-middleware-bypass")
       )
         return -4;
       if (

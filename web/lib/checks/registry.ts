@@ -7313,10 +7313,23 @@ const clientSideOopssecMiddlewareBypassEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_MIDDLEWARE_BYPASS_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/middleware-authorization-bypass-cve-2025-29927/";
+
 const oopssecMiddlewareBypassRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/middleware-authorization-bypass-cve-2025-29927/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecMiddlewareBypassEvidence(ctx);
+  const routeOk =
+    /\/posts\/middleware-authorization-bypass-cve-2025-29927/i.test(pageUrl) ||
+    /\/posts\/middleware-authorization-bypass\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/middleware-authorization-bypass\/?$/i.test(pageUrl)
+    ? OOPSSEC_MIDDLEWARE_BYPASS_CANONICAL_POST
+    : pageUrl;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    fetchUrl,
+    clientSideOopssecMiddlewareBypassEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -7324,7 +7337,9 @@ const oopssecMiddlewareBypassRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/middleware-authorization-bypass-cve-2025-29927 route scan — walkthrough documents CVE-2025-29927 x-middleware-subrequest bypass to /monitoring/internal-status"
+      note: /\/posts\/middleware-authorization-bypass\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/middleware-authorization-bypass route scan — vanity slug 404; canonical middleware-authorization-bypass-cve-2025-29927 walkthrough documents CVE-2025-29927 x-middleware-subrequest bypass to /monitoring/internal-status"
+        : "OopsSec Store /posts/middleware-authorization-bypass-cve-2025-29927 route scan — walkthrough documents CVE-2025-29927 x-middleware-subrequest bypass to /monitoring/internal-status"
     }
   };
 };
@@ -31160,12 +31175,21 @@ const clientSideOopssecMaliciousFileUploadEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_MALICIOUS_FILE_UPLOAD_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/malicious-file-upload-stored-xss/";
+
 const oopssecMaliciousFileUploadStoredXssRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/malicious-file-upload-stored-xss/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/posts\/malicious-file-upload-stored-xss/i.test(pageUrl) ||
+    /\/posts\/malicious-file-upload\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/malicious-file-upload\/?$/i.test(pageUrl)
+    ? OOPSSEC_MALICIOUS_FILE_UPLOAD_CANONICAL_POST
+    : pageUrl;
   const result = await oopssecWalkthroughEvidenceWithFetch(
     ctx,
-    pageUrl,
+    fetchUrl,
     clientSideOopssecMaliciousFileUploadEvidence
   );
   if (!result.fired) return NEGATIVE;
@@ -31175,7 +31199,9 @@ const oopssecMaliciousFileUploadStoredXssRouteLiveOracle: Rule = async (ctx) => 
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/malicious-file-upload-stored-xss route scan — walkthrough documents stored XSS via SVG upload to /admin/products served at /api/uploads with <object> tag script execution"
+      note: /\/posts\/malicious-file-upload\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/malicious-file-upload route scan — vanity slug 404; canonical malicious-file-upload-stored-xss walkthrough documents stored XSS via SVG upload to /admin/products served at /api/uploads with <object> tag script execution"
+        : "OopsSec Store /posts/malicious-file-upload-stored-xss route scan — walkthrough documents stored XSS via SVG upload to /admin/products served at /api/uploads with <object> tag script execution"
     }
   };
 };
@@ -98404,6 +98430,37 @@ const owaspGenaiVectorEmbeddingRouteLiveOracle: Rule = async (ctx) =>
 const owaspGenaiUnboundedConsumptionRouteLiveOracle: Rule = async (ctx) =>
   (await probeOwaspGenaiLessonRoute(ctx, "unbounded-consumption")) ?? NEGATIVE;
 
+const owaspGenaiLessonsApiRouteLiveOracle: Rule = async (ctx) => {
+  if (!isOwaspGenaiLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/lessons\/?$/i.test(pageUrl)) return NEGATIVE;
+  const apiUrl = new URL("/api/lessons", ctx.origin).toString();
+  const doc = await ctx.probe.get(apiUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  let lessons: { id?: string; owasp_id?: string; title?: string }[];
+  try {
+    lessons = JSON.parse(doc.body) as typeof lessons;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!Array.isArray(lessons) || lessons.length < 8) return NEGATIVE;
+  const llmIds = lessons.map((l) => l.owasp_id).filter((id): id is string => Boolean(id));
+  const required = ["LLM01", "LLM02", "LLM03", "LLM05", "LLM07"];
+  if (!required.every((id) => llmIds.includes(id))) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: lessons.length >= 10 ? 0.91 : 0.88,
+    evidence: {
+      url: apiUrl,
+      lessonCount: lessons.length,
+      llmIds: llmIds.slice(0, 10),
+      snippet: doc.body.slice(0, 120),
+      scannedUrl: pageUrl,
+      note: "owaspbased-lessons.vercel.app /api/lessons route scan — unauthenticated JSON catalog exposes OWASP LLM Top 10 lesson slugs with difficulty and duration metadata"
+    }
+  };
+};
+
 const SQL_INJECTION_CHALLENGE_HOST_RE = /sql-injection-challenge\.vercel\.app/i;
 /** Bypasses # blacklist via SQLite char(35) concat — see Jupiterian/SQL-Injection-Challenge main.py */
 const SQL_INJECTION_CHALLENGE_LOGIN_PASSWORD_PAYLOAD =
@@ -115121,6 +115178,7 @@ export const RULES: Record<string, Rule> = {
   owaspGenaiExcessiveAgencyRouteLiveOracle,
   owaspGenaiVectorEmbeddingRouteLiveOracle,
   owaspGenaiUnboundedConsumptionRouteLiveOracle,
+  owaspGenaiLessonsApiRouteLiveOracle,
   sqlInjectionChallengeLoginSqliLiveOracle,
   sqlInjectionChallengeLoginSqliRouteLiveOracle,
   clientSideCtfDefiEvidence,
