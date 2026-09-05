@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-04T23:06:54.325Z",
-  "total": 3301,
-  "uniqueSlugs": 3293,
+  "generatedAt": "2026-09-05T00:25:14.736Z",
+  "total": 3303,
+  "uniqueSlugs": 3295,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3283,
+    "generic": 3285,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3216,
+    "deep": 3218,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 154,
     "Security misconfiguration": 280,
     "Broken authentication": 207,
-    "Injection": 532,
+    "Injection": 534,
     "Cross-site scripting": 798,
     "Open redirect": 27,
     "general": 20,
@@ -2116,6 +2116,8 @@
     "lovable-supabase-storage-public",
     "mcpgoat-route-live-oracle",
     "missing-security-headers",
+    "nextjs-rsc-cve-live-oracle",
+    "nextjs-rsc-cve-route-live-oracle",
     "nodegoat-admin-route-live-oracle",
     "nodegoat-allocations-route-live-oracle",
     "nodegoat-benefits-bac-live-oracle",

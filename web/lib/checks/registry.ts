@@ -20778,6 +20778,87 @@ const clientSideReactRscCveEvidence: Rule = async (ctx) => {
   };
 };
 
+const NEXTJS_RSC_CVE_HOST_RE =
+  /nextjs-cve-hackerone\.vercel\.app|demo-of-cve-2025-55182-saas\.vercel\.app/i;
+
+function isNextjsRscCveLabHost(ctx: RuleContext): boolean {
+  return (
+    NEXTJS_RSC_CVE_HOST_RE.test(ctx.origin) ||
+    (/CVE-2025-66478|CVE-2025-55182/i.test(ctx.combined) &&
+      /Run Server Action|VERCEL_PLATFORM_PROTECTION/i.test(ctx.combined))
+  );
+}
+
+async function probeNextjsRscCveLab(ctx: RuleContext): Promise<RuleResult | null> {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  let corpus = ctx.combined;
+  if (!/CVE-2025-66478|CVE-2025-55182/i.test(corpus) || !/Run Server Action/i.test(corpus)) {
+    const doc = await ctx.probe.get(pageUrl, { maxBytes: 500_000, timeoutMs: 20000 });
+    if (doc.status >= 200 && doc.status < 400) corpus = `${corpus}\n${doc.body}`;
+  }
+  const markers: { label: string; sample: string }[] = [];
+  for (const { label, re } of CLIENT_RSC_CVE_RES) {
+    const m = corpus.match(re);
+    if (m) markers.push({ label, sample: m[0].slice(0, 100) });
+  }
+  if (markers.length < 3) return null;
+  let serverActionProbe: Record<string, unknown> | undefined;
+  try {
+    const actionDoc = await ctx.probe.get(pageUrl, {
+      method: "POST",
+      body: "0=[]",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Next-Action": "test"
+      },
+      maxBytes: 512,
+      redirect: "manual",
+      timeoutMs: 15000
+    });
+    serverActionProbe = {
+      status: actionDoc.status,
+      xActionRedirect:
+        actionDoc.headers["x-action-redirect"] ?? actionDoc.headers["X-Action-Redirect"] ?? undefined,
+      xNextjsActionNotFound: actionDoc.headers["x-nextjs-action-not-found"] ?? undefined,
+      bodySnippet: actionDoc.body.slice(0, 80).trim()
+    };
+  } catch {
+    /* optional live probe */
+  }
+  return {
+    fired: true,
+    confidence: serverActionProbe?.xActionRedirect ? 0.94 : 0.92,
+    evidence: {
+      scannedUrl: pageUrl,
+      markers: markers.slice(0, 4),
+      serverActionProbe,
+      note: "Next.js RSC CVE lab (CVE-2025-66478) exposes intentional server-action RCE chain with VERCEL_PLATFORM_PROTECTION HackerOne demo markers"
+    }
+  };
+}
+
+const nextjsRscCveLiveOracle: Rule = async (ctx) => {
+  if (!isNextjsRscCveLabHost(ctx)) return NEGATIVE;
+  const result = await probeNextjsRscCveLab(ctx);
+  return result?.fired ? result : NEGATIVE;
+};
+
+const nextjsRscCveRouteLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!pageUrl || !NEXTJS_RSC_CVE_HOST_RE.test(pageUrl)) return NEGATIVE;
+  const result = await probeNextjsRscCveLab(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Next.js RSC CVE route scan — HackerOne/Vercel platform-protection bypass demo with CVE-2025-66478 server-action lab surface"
+    }
+  };
+};
+
 // --- CVE-2025-55182 RSC SaaS PoC lab (demo-of-cve-2025-55182-saas.vercel.app) --------
 const CLIENT_CVE_55182_SAAS_POC_RES: { label: string; re: RegExp }[] = [
   {
@@ -113464,6 +113545,8 @@ export const RULES: Record<string, Rule> = {
   clientSideGraphqlLabEvidence,
   clientSideGraphqlSecurityHubEvidence,
   clientSideReactRscCveEvidence,
+  nextjsRscCveLiveOracle,
+  nextjsRscCveRouteLiveOracle,
   clientSideCve55182SaasPocEvidence,
   clientSideNextjsMiddlewareCveEvidence,
   clientSideCtfChallange3MiddlewareBypassEvidence,

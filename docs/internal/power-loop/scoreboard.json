@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-04T23:15:00.000Z",
+  "updated_at": "2026-09-05T00:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -22,10 +22,10 @@
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2033,
   "discovery_findings": 23966,
-  "improvements_shipped": 1428,
-  "last_run": "2026-09-04T23:15:00.000Z",
+  "improvements_shipped": 1429,
+  "last_run": "2026-09-05T00:20:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -53,36 +53,33 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 28,
-      "focus": "AI-Threatlab route oracle + OopsSec live-stream/next-public-env live oracles shipped",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 0,
+      "findings": 0,
+      "focus": "nextjs-cve-hackerone RSC CVE live+route oracles (finbot scoped guards already shipped 23 UTC)",
+      "improvements_shipped_this_run": 1
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
-      "rootabhi1.github.io/AI-Threatlab: 5→6 findings — ai-threatlab-route-live-oracle (+client-side evidence, -reflexion-escalated-ssti FP)",
-      "koadt.github.io/.../live-stream-hijack: 8→11 findings — oopssec-live-stream-bfla-live-oracle +client-side evidence",
-      "koadt.github.io/.../next-public-env-variable-leak: 9→11 findings — oopssec-next-public-env-live-oracle"
+      "nextjs-cve-hackerone.vercel.app/: 7→8 findings — nextjs-rsc-cve-live-oracle +nextjs-rsc-cve-route-live-oracle for CVE-2025-66478 server-action lab"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "owaspsecure A09 logging oracles present but prior scan predates full drain — re-queue for validation pass",
-      "fabraix jailbreak-001 maps to access-code-001 backend until dedicated API ships",
-      "qa.brokencrystals /api/file/aws already at 96 findings with route oracle",
-      "OopsSec walkthroughs still queued: open-redirect, bola-wishlist, client-side-price, jwt-weak-secret, ssrf-internal-page"
+      "nextjs-cve-2024-34351.deno.dev unreachable — Deno Deploy Classic sunset July 2026",
+      "finbot portals/ctf/darklab fingerprints differentiated via finbotScopedLiveOracleAllowed (shipped 23 UTC)"
     ]
   },
   "discovery_highlights": {
+    "nextjs-cve-hackerone.vercel.app": 8,
     "qa.brokencrystals.com/api/file/aws": 96,
     "juice-shop.herokuapp.com": 53,
     "pwnshop.ctfsecurity.com/vulnerabilities": 51,
     "pwnshop.ctfsecurity.com/debug/info": 48,
     "vulnbank.org/api/ai/chat": 34,
     "preview.owasp-juice.shop/rest/products/search?q=test": 34,
+    "owasp-finbot-ctf.org/portals": 11,
     "koadt.github.io/oss-oopssec-store/posts/next-public-env-variable-leak": 11,
     "koadt.github.io/oss-oopssec-store/posts/live-stream-hijack": 11,
     "rootabhi1.github.io/AI-Threatlab": 6,
-    "pwnshop.ctfsecurity.com/checkout": 39,
     "vwad.owasp.org/app/damn-vulnerable-restaurant": 6
   }
 }
