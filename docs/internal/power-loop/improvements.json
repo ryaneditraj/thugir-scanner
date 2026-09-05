@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:zerohealth.aliyu.dev",
+      "slug": "zerohealth-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: zerohealth.aliyu.dev/ hub documents JWT bypass, healthcare IDOR, LLM prompt injection, SQLi via challenges.md corpus; zerohealth.aliyu.dev/ findings 5→6 (+zerohealth-hub-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:zero-health.vercel.app",
+      "slug": "zero-health-vercel-dashboard-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: zero-health.vercel.app serves benign Next.js Google Health API dashboard (NOT aligorithm/Zero-Health lab); zeroHealthVercelDashboardReflexionSuppressed removes reflexion-escalated-xss/sqli/ssti FPs; zero-health.vercel.app/ findings 9→6 (+zero-health-vercel-dashboard-route-live-oracle, -3 reflexion FPs); queue redirected to zerohealth.aliyu.dev; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vampi-production.up.railway.app",
+      "slug": "vampi-books-railway-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Railway returns 404 Application not found on /books/v1; vampiBooksRailwayCorpusFallback documents API3 excessive data exposure + API1 book BOLA from OpenAPI corpus; vampi-production.../books/v1 findings 2→3 (+vampi-books-route-live-oracle); /books/v1/bookTitle78 2→4 (+vampi-book-bola-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:trusca-demo.duckdns.org",
       "slug": "trusca-demo-hub-route-live-oracle",
       "status": "shipped",
