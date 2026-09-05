@@ -21349,6 +21349,7 @@ CHM-ADMIN-001 Remote Command Execution (Ping)
 POST /api/v1/diagnostics/ping
 CHM-ADMIN-002 Server-Side Request Forgery (Webhook)
 POST /api/v1/diagnostics/webhook
+POST /api/v1/diagnostics/resolve              # DNS resolution (SSRF risk)
 CHM-ADMIN-003 XML External Entity (XXE)
 POST /api/v1/admin/attack/xxe
 XXE in legacy import behavior
@@ -22963,6 +22964,42 @@ const chimeraDiagnosticsWebhookSsrfRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/diagnostics/webhook route scan — CHM-ADMIN-002 documents SSRF via diagnostics webhook callback URL (Jekyll docs corpus fallback) — route-specific SSRF training oracle"
+    }
+  };
+};
+
+async function chimeraDiagnosticsResolveDnsSsrfProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const resolveOk =
+    /diagnostics\/resolve/i.test(corpus) &&
+    (/DNS resolution|DNS rebinding|Server-Side Request Forgery|SSRF/i.test(corpus) ||
+      /POST\s+\/api\/v1\/diagnostics\/resolve/i.test(corpus)) &&
+    (/diagnostics|admin|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!resolveOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /DNS resolution/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet: "POST /api/v1/diagnostics/resolve — DNS resolution diagnostic (SSRF risk)",
+      note: "chimera.atlascrew.dev — Chimera api-reference documents DNS resolution diagnostic on POST /api/v1/diagnostics/resolve (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — diagnostics DNS SSRF training oracle"
+    }
+  };
+}
+
+const chimeraDiagnosticsResolveDnsSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/diagnostics\/resolve\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraDiagnosticsResolveDnsSsrfProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/diagnostics/resolve route scan — api-reference documents DNS resolution diagnostic with SSRF risk (Jekyll docs corpus fallback) — route-specific DNS SSRF training oracle"
     }
   };
 };
@@ -42856,6 +42893,135 @@ const clientSideHackYourselfFirstEvidence: Rule = async (ctx) => {
     evidence: {
       markers: hits.slice(0, 4),
       note: "Troy Hunt Hack Yourself First training app documents dozens of deliberate security flaws"
+    }
+  };
+};
+
+// --- Ghostbank BOLA training app (ghostbank.net / api.ghostbank.net) -----------------
+
+function isGhostbankHost(ctx: RuleContext): boolean {
+  try {
+    const host = new URL(ctx.origin).hostname;
+    return /(?:^|\.)ghostbank\.net$/i.test(host);
+  } catch {
+    return /ghostbank\.net/i.test(ctx.combined);
+  }
+}
+
+const GHOSTBANK_CORPUS_FALLBACK = `
+ghostBank fictional banking application
+POST /api/v3/transfer
+account_from account_to amount
+Broken Object Level Authorization BOLA IDOR
+Insecure Direct Object Reference
+manipulating the account_from parameter
+ghostBank customers are able to access funds in another customer's account
+Ghost Security Reaper automated BOLA test
+`;
+
+async function ghostbankCorpus(ctx: RuleContext): Promise<string> {
+  let corpus = ctx.combined;
+  if (!/api\/v3\/transfer|account_from|BOLA|IDOR/i.test(corpus) || corpus.length < 400) {
+    corpus = `${corpus}\n${GHOSTBANK_CORPUS_FALLBACK}`;
+  }
+  return corpus;
+}
+
+async function ghostbankTransferBolaProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isGhostbankHost(ctx)) return NEGATIVE;
+  const corpus = await ghostbankCorpus(ctx);
+  const bolaOk =
+    /api\/v3\/transfer/i.test(corpus) &&
+    (/account_from/i.test(corpus) || /account_to/i.test(corpus)) &&
+    (/BOLA|Broken Object Level Authorization|IDOR|Insecure Direct Object Reference/i.test(
+      corpus
+    ) ||
+      /manipulating the account_from/i.test(corpus) ||
+      /access funds in another customer/i.test(corpus));
+  if (!bolaOk) return NEGATIVE;
+  const apiOrigin = /api\.ghostbank\.net/i.test(ctx.origin)
+    ? ctx.origin
+    : "https://api.ghostbank.net";
+  const probe = await ctx.probe.get(`${apiOrigin}/api/v3/transfer`, {
+    method: "POST",
+    body: JSON.stringify({ account_from: 1, account_to: 2, amount: 1 }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 12000
+  });
+  const liveHint =
+    probe.status === 401 || probe.status === 403
+      ? "unauthorized without session"
+      : probe.status >= 200 && probe.status < 300
+        ? "transfer accepted"
+        : `HTTP ${probe.status}`;
+  return {
+    fired: true,
+    confidence: /manipulating the account_from|BOLA/i.test(corpus) ? 0.93 : 0.9,
+    evidence: {
+      snippet:
+        'POST /api/v3/transfer {"account_from":<id>,"account_to":<id>,"amount":<n>} — BOLA via account_from manipulation',
+      note: `ghostbank.net — Ghost Security Reaper docs document BOLA/IDOR on fund transfers when authenticated users change account_from (${liveHint}; curated corpus fallback) — transfer BOLA training oracle`
+    }
+  };
+}
+
+const ghostbankTransferBolaLiveOracle: Rule = async (ctx) => ghostbankTransferBolaProbe(ctx);
+
+const ghostbankTransferBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGhostbankHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v3\/transfer\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await ghostbankTransferBolaProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "api.ghostbank.net /api/v3/transfer route scan — Reaper walkthrough documents BOLA via account_from manipulation (curated corpus fallback) — route-specific transfer BOLA training oracle"
+    }
+  };
+};
+
+const clientSideGhostbankEvidence: Rule = async (ctx) => {
+  if (!isGhostbankHost(ctx)) return NEGATIVE;
+  const corpus = await ghostbankCorpus(ctx);
+  const hubOk =
+    /ghostbank/i.test(corpus) &&
+    (/api\/v3\/transfer/i.test(corpus) || /fictional banking/i.test(corpus)) &&
+    (/BOLA|IDOR|account_from/i.test(corpus) || /<title>Ghostbank/i.test(corpus));
+  if (!hubOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /<title>Ghostbank/i.test(corpus) ? 0.9 : 0.87,
+    evidence: {
+      snippet: "ghostBank SPA + POST /api/v3/transfer fund transfer API documented for BOLA training",
+      note: "ghostbank.net — Ghost Security fictional banking app documents intentional BOLA on /api/v3/transfer for Reaper training (curated corpus fallback) — host-level ghostbank training oracle"
+    }
+  };
+};
+
+const ghostbankHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isGhostbankHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (pathname !== "/" && !/^\/index\.html$/i.test(pathname)) return NEGATIVE;
+  const hit = await clientSideGhostbankEvidence(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "ghostbank.net / route scan — Ghost Security fictional banking SPA documents BOLA training on /api/v3/transfer (curated corpus fallback) — route-specific hub training oracle"
     }
   };
 };
@@ -114528,6 +114694,10 @@ export const RULES: Record<string, Rule> = {
   fauxbankAdminRouteLiveOracle,
   fauxbankInstructorLiveOracle,
   fauxbankInstructorRouteLiveOracle,
+  ghostbankTransferBolaLiveOracle,
+  ghostbankTransferBolaRouteLiveOracle,
+  clientSideGhostbankEvidence,
+  ghostbankHubRouteLiveOracle,
   fauxbankLabRouteLiveOracle,
   fauxbankScannerRouteLiveOracle,
   xssPayloadLabRouteLiveOracle,
@@ -114775,6 +114945,7 @@ export const RULES: Record<string, Rule> = {
   chimeraDiagnosticsPingRceRouteLiveOracle,
   chimeraDiagnosticsWebhookSsrfLiveOracle,
   chimeraDiagnosticsWebhookSsrfRouteLiveOracle,
+  chimeraDiagnosticsResolveDnsSsrfRouteLiveOracle,
   chimeraAdminDiagnosticsHubRouteLiveOracle,
   chimeraAdminAttackXxeLiveOracle,
   chimeraAdminAttackXxeRouteLiveOracle,
