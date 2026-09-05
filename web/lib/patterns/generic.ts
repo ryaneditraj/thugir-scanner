@@ -83025,6 +83025,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-admin-system-execute-rce-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin system execute RCE route live oracle",
+    description:
+      "When scanning /api/v1/admin/system/execute on chimera.atlascrew.dev, api-reference documents unauthenticated command injection — route-specific admin RCE training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional admin system command injection for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminSystemExecuteRceRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose admin command execution endpoints and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Require admin authentication and authorization before any command execution.",
+        "Remove or sandbox admin system execute endpoints from production deployments.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/system/execute route documents command injection. Show admin endpoint hardening remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-config-import-xxe-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin config import XXE route live oracle",
+    description:
+      "When scanning /api/v1/admin/config/import on chimera.atlascrew.dev, api-reference documents XXE injection via configuration import — route-specific XXE training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional XXE injection on admin config import for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminConfigImportXxeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Disable external entity resolution in XML parsers and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Disable DTD and external entity processing in all XML parsers.",
+        "Use JSON or strictly schema-validated XML for configuration imports.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/config/import route documents XXE injection. Show secure XML parser configuration remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-admin-data-deserialize-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera admin data deserialize route live oracle",
+    description:
+      "When scanning /api/v1/admin/data/deserialize on chimera.atlascrew.dev, api-reference documents insecure deserialization RCE — route-specific deserialization training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional insecure deserialization RCE for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraAdminDataDeserializeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never deserialize untrusted serialized data and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Replace pickle deserialization with JSON or signed message formats.",
+        "Require authentication before accepting serialized admin payloads.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/admin/data/deserialize route documents insecure deserialization RCE. Show secure deserialization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-admin-deserialize-route-live-oracle",
     platform: "generic",
     category: "Injection",
