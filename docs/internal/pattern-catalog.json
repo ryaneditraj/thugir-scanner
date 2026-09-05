@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-05T18:06:07.222Z",
-  "total": 3337,
-  "uniqueSlugs": 3329,
+  "generatedAt": "2026-09-05T19:14:13.189Z",
+  "total": 3339,
+  "uniqueSlugs": 3331,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,22 +9,22 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3319,
+    "generic": 3321,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3252,
+    "deep": 3254,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 663,
+    "Broken access control": 664,
     "Exposed secret": 120,
     "Source exposure": 7,
     "Misconfiguration": 2,
     "Information exposure": 1,
-    "Information disclosure": 154,
+    "Information disclosure": 155,
     "Security misconfiguration": 283,
     "Broken authentication": 210,
     "Injection": 543,
@@ -3345,6 +3345,7 @@
     "zero-bank-login-route-live-oracle",
     "zero-bank-pay-bills-route-live-oracle",
     "zero-bank-transfer-funds-route-live-oracle",
+    "zero-health-vercel-dashboard-route-live-oracle",
     "zerohealth-admin-users-route-live-oracle",
     "zerohealth-ai-chat-sqli-route-live-oracle",
     "zerohealth-appointments-route-live-oracle",
@@ -3359,6 +3360,7 @@
     "zerohealth-file-upload-route-live-oracle",
     "zerohealth-files-route-live-oracle",
     "zerohealth-health-route-live-oracle",
+    "zerohealth-hub-route-live-oracle",
     "zerohealth-info-route-live-oracle",
     "zerohealth-information-disclosure-route-live-oracle",
     "zerohealth-lab-results-route-live-oracle",

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T18:15:00.000Z",
+  "updated_at": "2026-09-05T19:30:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://chimera.atlascrew.dev/api/v1/banking/transfer",
@@ -62,8 +62,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://zero-health.vercel.app/",
-      "source": "Zero-Health — deliberately vulnerable healthcare portal + AI chatbot OWASP web/API/LLM (market.dev; web search 16 UTC)",
+      "url": "https://zerohealth.aliyu.dev/",
+      "source": "aligorithm/Zero-Health — deliberately vulnerable healthcare portal + AI chatbot OWASP web/API/LLM (canonical lab host; zero-health.vercel.app is unrelated dashboard)",
       "auth": "oss_deploy"
     },
     {
@@ -6738,8 +6738,8 @@
       "auth": "public_demo"
     },
     {
-      "url": "https://zero-health.vercel.app/",
-      "source": "aligorithm/Zero-Health — deliberately vulnerable healthcare portal with OWASP Web/API/LLM flaws (Vercel deploy)",
+      "url": "https://zerohealth.aliyu.dev/",
+      "source": "aligorithm/Zero-Health — deliberately vulnerable healthcare portal with OWASP Web/API/LLM flaws (canonical lab host at zerohealth.aliyu.dev)",
       "auth": "oss_deploy"
     },
     {

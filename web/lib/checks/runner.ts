@@ -2660,6 +2660,8 @@ const DEEP_RULES = new Set<string>([
   "zerohealthDebugTokenRouteLiveOracle",
   "zerohealthDebugConnectionRouteLiveOracle",
   "zerohealthInfoRouteLiveOracle",
+  "zerohealthHubRouteLiveOracle",
+  "zeroHealthVercelDashboardRouteLiveOracle",
   "zerohealthHealthRouteLiveOracle",
   "zerohealthUploadAdvancedRouteLiveOracle",
   "clientSideAlfXssWargameEvidence",
