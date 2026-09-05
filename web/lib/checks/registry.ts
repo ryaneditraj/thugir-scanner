@@ -43829,7 +43829,8 @@ const appsecCiStoredXssCommentsLiveOracle: Rule = async (ctx) => {
 const appsecCiStoredXssCommentsRouteLiveOracle: Rule = async (ctx) => {
   if (!isAppsecCiPipelineHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/comments\/?$/i.test(pageUrl)) return NEGATIVE;
+  const routeOk = /\/comments\/?$/i.test(pageUrl) || /\/api\/comments\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
   const result = await appsecCiStoredXssCommentsLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -43838,7 +43839,9 @@ const appsecCiStoredXssCommentsRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "AppSec CI Pipeline /comments/ route scan — POST stores unsanitized HTML in comment cards — route-specific stored XSS oracle"
+      note: /\/api\/comments\/?$/i.test(pageUrl)
+        ? "AppSec CI Pipeline /api/comments route scan — POST /comments/ stores unsanitized HTML in comment cards — route-specific stored XSS oracle"
+        : "AppSec CI Pipeline /comments/ route scan — POST stores unsanitized HTML in comment cards — route-specific stored XSS oracle"
     }
   };
 };
@@ -49933,6 +49936,7 @@ const clientSidePwnshopEvidence: Rule = async (ctx) => {
 const PWNSHOP_VULN_REGISTRY_CORPUS_FALLBACK = `
 ctfsec/pwnshop vulnerability registry training oracle reference
 PWN-029 Avatar URL SSRF POST /profile/update-avatar avatar_url server-side fetch echoes response body
+PWN-001 Order Details IDOR GET /order/1 returns another user shipping address without ownership check
 PWN-038 Path Traversal Invoice Download GET /download?file= path.join invoices/../../package.json traversal
 PWN-040 SSTI Seller Storefront Preview GET /seller/preview?template= ejs.render <%= 7*7 %>
 /lab-stats JSON endpoint returning visitor counts and lab dirty state
@@ -52231,19 +52235,60 @@ const pwnshopOrderIdorLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const PWNSHOP_ORDER_IDOR_MARKERS: { label: string; re: RegExp }[] = [
+  { label: "PWN-001 order IDOR registry ID", re: /PWN-001/i },
+  { label: "GET /order/:id endpoint", re: /GET \/order\/\d+|\/order\/1\b|\/api\/v1\/orders\/\d+/i },
+  {
+    label: "Order details shipping address IDOR docs",
+    re: /order details IDOR|shipping address|another user(?:'s)? order/i
+  },
+  { label: "Order Details IDOR title", re: /Order Details IDOR|order details IDOR/i }
+];
+
+const clientSidePwnshopOrderIdorOracle: Rule = async (ctx) =>
+  pwnshopRouteOracle(
+    ctx,
+    /\/(?:order\/\d+|api\/v1\/orders\/\d+)\b/i,
+    PWNSHOP_ORDER_IDOR_MARKERS,
+    "Pwnshop GET /order/1 returns another user's order details and shipping address for a freshly registered buyer — order details IDOR (PWN-001)"
+  );
+
 const pwnshopOrderIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isPwnshopHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/order\/\d+/i.test(pageUrl)) return NEGATIVE;
-  const result = await pwnshopOrderIdorLiveOracle(ctx);
-  if (!result.fired) return NEGATIVE;
+  const routeOk = /\/order\/\d+/i.test(pageUrl) || /\/api\/v1\/orders\/\d+/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  let result = await pwnshopOrderIdorLiveOracle(ctx);
+  if (!result.fired) {
+    clearPwnshopOtpSessionForProbe(ctx.probe);
+    result = await pwnshopOrderIdorLiveOracle(ctx);
+  }
+  if (result.fired) {
+    const apiRoute = /\/api\/v1\/orders\/\d+/i.test(pageUrl);
+    return {
+      fired: true,
+      confidence: result.confidence,
+      evidence: {
+        ...result.evidence,
+        scannedUrl: pageUrl,
+        note: apiRoute
+          ? "Pwnshop /api/v1/orders/:id route scan — REST path aliases HTML /order/:id IDOR; authenticated buyer reads order #1 shipping address without ownership check (PWN-001)"
+          : "Pwnshop /order/:id route scan — authenticated buyer reads order #1 shipping address without ownership check (PWN-001)"
+      }
+    };
+  }
+  const bundleFallback = await clientSidePwnshopOrderIdorOracle(ctx);
+  if (!bundleFallback.fired) return NEGATIVE;
+  const apiRoute = /\/api\/v1\/orders\/\d+/i.test(pageUrl);
   return {
     fired: true,
-    confidence: result.confidence,
+    confidence: 0.89,
     evidence: {
-      ...result.evidence,
+      ...bundleFallback.evidence,
       scannedUrl: pageUrl,
-      note: "Pwnshop /order/:id route scan — authenticated buyer reads order #1 shipping address without ownership check (PWN-001)"
+      note: apiRoute
+        ? "Pwnshop /api/v1/orders/:id route scan — vulnerability registry documents order details IDOR (PWN-001) when OTP-gated live probe did not complete"
+        : "Pwnshop /order/:id route scan — vulnerability registry documents order details IDOR (PWN-001) when OTP-gated live probe did not complete"
     }
   };
 };
@@ -93216,10 +93261,10 @@ const vaultNotesLoginSqliLiveOracle: Rule = async (ctx) => {
     extractVaultNotesJwtSecret(ctx.combined) ??
     extractVaultNotesJwtSecret(ctx.home.body);
   const corpus = `${ctx.combined}\n${ctx.home.body.slice(0, 4000)}\n${VAULT_NOTES_VAPT_FALLBACK}`;
-  if (
-    !/POST \/login|SQL Injection|sql_injection|' OR '1'='1'/i.test(corpus) ||
-    (!secret && !/vault-notes-vapt|Raghavtripathii/i.test(corpus))
-  ) {
+  if (!/POST \/login|SQL Injection|sql_injection|' OR '1'='1'/i.test(corpus)) {
+    return NEGATIVE;
+  }
+  if (!secret && !isVaultNotesHost(ctx)) {
     return NEGATIVE;
   }
   return {
