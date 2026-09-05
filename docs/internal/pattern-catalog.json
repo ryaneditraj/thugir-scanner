@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-05T22:12:01.805Z",
-  "total": 3349,
-  "uniqueSlugs": 3341,
+  "generatedAt": "2026-09-05T23:22:52.065Z",
+  "total": 3351,
+  "uniqueSlugs": 3343,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3331,
+    "generic": 3333,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3264,
+    "deep": 3266,
     "continuous": 0
   },
   "byCategory": {
@@ -35,7 +35,7 @@
     "Server-side request forgery": 125,
     "Sensitive data exposure": 109,
     "AI security": 141,
-    "Business logic": 41,
+    "Business logic": 43,
     "AI / LLM security": 4,
     "Cross-site request forgery": 14,
     "Authentication bypass": 4,
@@ -271,6 +271,8 @@
     "bugstore-admin-users-bac-live-oracle",
     "bugstore-admin-users-bac-route-live-oracle",
     "bugstore-auth-signup-route-live-oracle",
+    "bugstore-cart-negative-quantity-live-oracle",
+    "bugstore-cart-negative-quantity-route-live-oracle",
     "bugstore-checkout-client-total-live-oracle",
     "bugstore-checkout-client-total-route-live-oracle",
     "bugstore-forum-posts-stored-xss-live-oracle",

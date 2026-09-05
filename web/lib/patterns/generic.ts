@@ -85131,6 +85131,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "bugstore-cart-negative-quantity-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "BugStore cart negative-quantity live oracle (V-022)",
+    description:
+      "POST /api/cart/add on BugStore accepts quantity:-5 and cart subtotal goes negative — negative cart quantity business-logic oracle.",
+    impactOneline:
+      "Accepting negative cart quantities lets attackers zero out or credit cart totals on the BugStore playground.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreCartNegativeQuantityLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject non-positive quantities on cart add and update endpoints.",
+      steps: [
+        "Validate quantity is a positive integer before persisting cart line items.",
+        "Recalculate subtotals server-side from authoritative product prices.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore POST /api/cart/add accepts negative quantities. Show server-side quantity validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "bugstore-cart-negative-quantity-route-live-oracle",
+    platform: "generic",
+    category: "Business logic",
+    severityDefault: "high",
+    title: "BugStore cart negative-quantity route live oracle (V-022)",
+    description:
+      "When scanning /api/cart/add on bugstore.bugtraceai.com, POST with quantity:-5 yields negative cart subtotal — route-specific business-logic oracle.",
+    impactOneline:
+      "Route-specific BugStore cart scans should confirm the server accepts negative quantities without validation.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bugstoreCartNegativeQuantityRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Reject non-positive quantities on BugStore cart routes.",
+      steps: [
+        "Validate quantity is a positive integer before persisting cart line items.",
+        "Recalculate subtotals server-side from authoritative product prices.",
+        "Run BugStore only in isolated lab environments."
+      ]
+    },
+    fixPrompt:
+      "Our BugStore /api/cart/add route scan confirms negative quantity acceptance. Show route-specific quantity validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "bugstore-profile-mass-assignment-live-oracle",
     platform: "generic",
     category: "Broken access control",

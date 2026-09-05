@@ -101726,8 +101726,9 @@ const bugstoreCheckoutClientTotalRouteLiveOracle: Rule = async (ctx) => {
   const isCheckout =
     /\/api\/checkout\/process/i.test(pageUrl) ||
     /\/api\/cart\/checkout/i.test(pageUrl);
+  const isCartAdd = /\/api\/cart\/add\b/i.test(pageUrl);
   const isHub = /bugstore\.bugtraceai\.com\/?(?:[#?]|$)/i.test(pageUrl);
-  if (!isCheckout && !isHub) return NEGATIVE;
+  if (!isCheckout && !isCartAdd && !isHub) return NEGATIVE;
   const result = await bugstoreCheckoutClientTotalLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -101738,7 +101739,58 @@ const bugstoreCheckoutClientTotalRouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       note: isCheckout
         ? "BugStore checkout route scan — POST /api/checkout/process honors attacker-controlled total=0.01 (V-023)"
-        : "BugStore hub route scan — POST /api/checkout/process confirms client-trusted checkout total oracle (V-023)"
+        : isCartAdd
+          ? "BugStore /api/cart/add route scan — cart session enables client-trusted checkout total=0.01 oracle (V-023)"
+          : "BugStore hub route scan — POST /api/checkout/process confirms client-trusted checkout total oracle (V-023)"
+    }
+  };
+};
+
+const bugstoreCartNegativeQuantityLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const addUrl = new URL("/api/cart/add", ctx.origin).toString();
+  const addDoc = await ctx.probe.get(addUrl, {
+    method: "POST",
+    body: JSON.stringify({ product_id: 1, quantity: -5 }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const cookie = bugstoreSessionCookieFromDoc(addDoc);
+  if (!cookie || addDoc.status < 200 || addDoc.status >= 400) return NEGATIVE;
+  const cartDoc = await ctx.probe.get(new URL("/api/cart/", ctx.origin).toString(), {
+    headers: { Cookie: cookie },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (cartDoc.status !== 200) return NEGATIVE;
+  if (!/"quantity"\s*:\s*-5/.test(cartDoc.body) || !/"subtotal"\s*:\s*-/.test(cartDoc.body)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      addUrl,
+      snippet: cartDoc.body.slice(0, 240).trim(),
+      note: "BugStore POST /api/cart/add accepts quantity:-5 and cart subtotal goes negative — business-logic oracle (V-022)"
+    }
+  };
+};
+
+const bugstoreCartNegativeQuantityRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBugstoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/cart\/add\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await bugstoreCartNegativeQuantityLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "BugStore /api/cart/add route scan — negative quantity accepted without server-side validation (V-022)"
     }
   };
 };
@@ -117446,6 +117498,8 @@ export const RULES: Record<string, Rule> = {
   bugstoreOrdersIdorRouteLiveOracle,
   bugstoreCheckoutClientTotalLiveOracle,
   bugstoreCheckoutClientTotalRouteLiveOracle,
+  bugstoreCartNegativeQuantityLiveOracle,
+  bugstoreCartNegativeQuantityRouteLiveOracle,
   bugstoreProfileMassAssignmentLiveOracle,
   bugstoreProfileMassAssignmentRouteLiveOracle,
   bugstoreSecurePortalTotpLoginLiveOracle,
