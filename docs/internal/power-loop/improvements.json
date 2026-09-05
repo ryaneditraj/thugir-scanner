@@ -8795,6 +8795,24 @@
       "slug": "oopssec-jwt-algorithm-confusion-vanity-slug-alias",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /posts/jwt-algorithm-confusion returns HTTP 404; oopssecJwtAlgConfusionRouteLiveOracle fetches canonical /posts/jwt-algorithm-confusion-partner-api walkthrough documenting RS256/HS256 confusion with partner-signing-key.pem reused as HMAC secret; koadt.github.io/.../jwt-algorithm-confusion/ findings 0→7 (+oopssec-jwt-alg-confusion-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-react2shell-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/react2shell returns HTTP 404; oopssecReact2shellRouteLiveOracle fetches canonical /posts/react2shell-cve-2025-55182 walkthrough documenting CVE-2025-55182 Flight protocol deserialization RCE via chunk.constructor.constructor === Function chain; koadt.github.io/.../react2shell/ findings 7→7 (+oopssec-react2shell-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-public-env-variable-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/public-env-variable returns HTTP 404; oopssecNextPublicEnvRouteLiveOracle fetches canonical /posts/next-public-env-variable-leak corpus with NEXT_PUBLIC_PAYMENT_SECRET + X-Payment-Auth; koadt.github.io/.../public-env-variable/ findings 7→7 (+oopssec-next-public-env-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-secure-portal-totp-login-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/secure-portal/login without totp_code returns HTTP 422 Field required; POST with totp_code 000000 returns HTTP 401 Invalid credentials without rate limiting (V-031/V-032); bugstore.bugtraceai.com/api/secure-portal/login findings 15→17 (+bugstore-secure-portal-totp-login-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
