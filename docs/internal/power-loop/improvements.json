@@ -8687,6 +8687,24 @@
       "slug": "wrongsecrets-47-53-runner-priority",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for wrongsecrets-challenge-44/45/46/47/53 on matching /challenge/challenge-N routes + prepended challenge-47/53 to priority_discovery_urls front; wrongsecrets.herokuapp.com/challenge/challenge-47 findings 19 (+wrongsecrets-challenge-47-vault-template-hardcoded-route-live-oracle), challenge-53 findings 19 (+wrongsecrets-challenge-53-debugging-container-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-weak-jwt-secret-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/weak-jwt-secret returns 404; oopssecJwtWeakSecretAdminBypassRouteLiveOracle fetches canonical /posts/jwt-weak-secret-admin-bypass walkthrough; koadt.github.io/oss-oopssec-store/posts/weak-jwt-secret/ findings 6→7 (+oopssec-jwt-weak-secret-admin-bypass-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-insecure-direct-object-reference-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/insecure-direct-object-reference returns 404; oopssecIdorOrderPrivacyRouteLiveOracle fetches canonical /posts/idor-order-privacy-breach walkthrough; koadt.github.io/oss-oopssec-store/posts/insecure-direct-object-reference/ findings 6→7 (+oopssec-idor-order-privacy-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vapi.tools.escape.tech",
+      "slug": "vapi-api1-v1-users-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: vapiApi1RouteLiveOracle path matcher extended to /api/v1/users/{id} on vapi.tools.escape.tech; GET /vapi/api1/user/1 BOLA probe returns Michaels flag; vapi.tools.escape.tech/api/v1/users/1 findings 16→17 (+vapi-api1-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
