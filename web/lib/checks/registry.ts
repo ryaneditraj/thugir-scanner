@@ -6116,12 +6116,21 @@ const clientSideOopssecLiveStreamEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_LIVE_STREAM_BFLA_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/live-stream-hijack/";
+
 const oopssecLiveStreamBflaRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/live-stream-hijack/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/posts\/live-stream-hijack/i.test(pageUrl) ||
+    /\/posts\/broken-function-level-authorization\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/broken-function-level-authorization\/?$/i.test(pageUrl)
+    ? OOPSSEC_LIVE_STREAM_BFLA_CANONICAL_POST
+    : pageUrl;
   const result = await oopssecWalkthroughEvidenceWithFetch(
     ctx,
-    pageUrl,
+    fetchUrl,
     clientSideOopssecLiveStreamEvidence
   );
   if (!result.fired) return NEGATIVE;
@@ -6131,7 +6140,9 @@ const oopssecLiveStreamBflaRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/live-stream-hijack route scan — walkthrough documents unprotected GET/POST /api/live/stream BFLA with RTMP stream key exposure"
+      note: /\/posts\/broken-function-level-authorization\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/broken-function-level-authorization route scan — vanity slug 404; canonical live-stream-hijack walkthrough documents unprotected GET/POST /api/live/stream BFLA with RTMP stream key exposure"
+        : "OopsSec Store /posts/live-stream-hijack route scan — walkthrough documents unprotected GET/POST /api/live/stream BFLA with RTMP stream key exposure"
     }
   };
 };
@@ -6832,12 +6843,21 @@ const clientSideOopssecJwtAlgConfusionEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_JWT_ALG_CONFUSION_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api/";
+
 const oopssecJwtAlgConfusionRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/jwt-algorithm-confusion-partner-api/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/posts\/jwt-algorithm-confusion-partner-api/i.test(pageUrl) ||
+    /\/posts\/jwt-algorithm-confusion\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/jwt-algorithm-confusion\/?$/i.test(pageUrl)
+    ? OOPSSEC_JWT_ALG_CONFUSION_CANONICAL_POST
+    : pageUrl;
   const result = await oopssecWalkthroughEvidenceWithFetch(
     ctx,
-    pageUrl,
+    fetchUrl,
     clientSideOopssecJwtAlgConfusionEvidence
   );
   if (!result.fired) return NEGATIVE;
@@ -6847,7 +6867,9 @@ const oopssecJwtAlgConfusionRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/jwt-algorithm-confusion-partner-api route scan — walkthrough documents RS256/HS256 algorithm confusion with published partner-signing-key.pem reused as HMAC secret"
+      note: /\/posts\/jwt-algorithm-confusion\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/jwt-algorithm-confusion route scan — vanity slug 404; canonical jwt-algorithm-confusion-partner-api walkthrough documents RS256/HS256 algorithm confusion with published partner-signing-key.pem reused as HMAC secret"
+        : "OopsSec Store /posts/jwt-algorithm-confusion-partner-api route scan — walkthrough documents RS256/HS256 algorithm confusion with published partner-signing-key.pem reused as HMAC secret"
     }
   };
 };
@@ -7050,10 +7072,23 @@ const clientSideOopssecCsrfAdminOrderEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_CSRF_ADMIN_ORDER_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/csrf-admin-order-update/";
+
 const oopssecCsrfAdminOrderRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/csrf-admin-order-update/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecCsrfAdminOrderEvidence(ctx);
+  const routeOk =
+    /\/posts\/csrf-admin-order-update/i.test(pageUrl) ||
+    /\/posts\/cross-site-request-forgery\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/cross-site-request-forgery\/?$/i.test(pageUrl)
+    ? OOPSSEC_CSRF_ADMIN_ORDER_CANONICAL_POST
+    : pageUrl;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    fetchUrl,
+    clientSideOopssecCsrfAdminOrderEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -7061,7 +7096,9 @@ const oopssecCsrfAdminOrderRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/csrf-admin-order-update route scan — walkthrough documents unauthenticated CSRF on PATCH /api/orders/:id via lax authToken cookie"
+      note: /\/posts\/cross-site-request-forgery\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/cross-site-request-forgery route scan — vanity slug 404; canonical csrf-admin-order-update walkthrough documents unauthenticated CSRF on PATCH /api/orders/:id via lax authToken cookie"
+        : "OopsSec Store /posts/csrf-admin-order-update route scan — walkthrough documents unauthenticated CSRF on PATCH /api/orders/:id via lax authToken cookie"
     }
   };
 };
