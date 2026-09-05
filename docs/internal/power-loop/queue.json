@@ -1,6 +1,26 @@
 {
-  "updated_at": "2026-09-05T01:10:00.000Z",
+  "updated_at": "2026-09-05T01:22:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://playground.fabraix.com/challenges/jailbreak-002",
+      "source": "fabraix/playground — v2 jailbreak-002 route oracle gap (00 UTC learning signal)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sql-injection-lab.vercel.app/login",
+      "source": "layer-zero-unlv/sql-injection-lab — Flask SQLi auth-bypass /login route oracle priority (01 UTC gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-47",
+      "source": "OWASP/wrongsecrets — challenge-47 Vault template hardcoded secret (queued 00 UTC; priority drain)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-53",
+      "source": "OWASP/wrongsecrets — challenge-53 debugging-container secrets (queued 00 UTC; priority drain)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://duck-store.escape.tech/api/v1/users/",
       "source": "Escape Duck Store — unauthenticated user enumeration + BOLA oracle GET /api/v1/users/ (escape.tech blog + vulnerabilities index; web search 01 UTC)",
