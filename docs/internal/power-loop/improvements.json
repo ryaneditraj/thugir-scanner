@@ -8741,6 +8741,24 @@
       "slug": "chimera-diagnostics-genai-outages-priority-drain",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: prepended chimera diagnostics/webhook + diagnostics/ping + genai/chat + genai/agent/browse + energy-utilities/outages/1 to priority_discovery_urls front; runner -4 priority for route oracles; chimera.atlascrew.dev/api/v1/diagnostics/webhook findings 7→8 (+chimera-diagnostics-webhook-ssrf-route-live-oracle), /diagnostics/ping 8 (+chimera-diagnostics-ping-rce-route-live-oracle), /genai/chat 8 (+chimera-genai-chat-prompt-injection-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-mass-assignment-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/mass-assignment returns 404; oopssecMassAssignmentAdminRouteLiveOracle fetches canonical /posts/mass-assignment-admin-privilege-escalation walkthrough; koadt.github.io/oss-oopssec-store/posts/mass-assignment/ findings 0→7 (+oopssec-mass-assignment-admin-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-cross-site-scripting-xss-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/cross-site-scripting-xss returns 404; oopssecStoredXssReviewsRouteLiveOracle fetches canonical /posts/stored-xss-product-reviews walkthrough; koadt.github.io/oss-oopssec-store/posts/cross-site-scripting-xss/ findings 0→7 (+oopssec-stored-xss-reviews-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-sql-injection-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/sql-injection returns 404; oopssecOrdersSearchSqliRouteLiveOracle fetches canonical /posts/sql-injection-writeup walkthrough; koadt.github.io/oss-oopssec-store/posts/sql-injection/ findings 0→7 (+oopssec-orders-search-sqli-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }
