@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T14:15:00.000Z",
+  "updated_at": "2026-09-05T15:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 3201,
-  "total_findings": 36938,
-  "critical_findings": 67,
+  "total_sites_scanned": 3204,
+  "total_findings": 36962,
+  "critical_findings": 70,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2093,
-  "discovery_findings": 29564,
-  "improvements_shipped": 1468,
-  "last_run": "2026-09-05T14:15:00.000Z",
+  "discovery_findings": 29588,
+  "improvements_shipped": 1471,
+  "last_run": "2026-09-05T15:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "14",
+    "hour_utc": "15",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,44 +48,38 @@
           ]
         }
       },
-      "note": "Stable 6/6 first-pass recall (53 findings, 40 live oracles; secret-resend + juice-shop-resend-key present)"
+      "note": "Stable 6/6 first-pass recall (52 findings, 43 live oracles)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 76,
-      "focus": "Chimera healthcare/insurance/banking verticals (records search SQLi, telecom webhook SSRF, claims search SQLi, beneficiaries IDOR, policies BOLA) + drained oopssec session-fixation/password-reset/weak-md5 walkthroughs",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 24,
+      "focus": "Chimera telecom integrations webhooks SSRF + banking beneficiaries IDOR + OAuth token forge attack simulation route oracles",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; gap=[]; secret-resend present)",
-      "chimera.atlascrew.dev/api/v1/healthcare/records/search?q=test: 8 findings — chimera-healthcare-records-search-sqli-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/insurance/claims/search?q=test: 8 findings — chimera-insurance-claims-search-sqli-route-live-oracle",
-      "chimera.atlascrew.dev/api/v1/insurance/policies/1: 9 findings — chimera-insurance-policies-bola-route-live-oracle + sqli route oracle",
-      "chimera.atlascrew.dev/api/v1/telecom/integrations/webhooks: 7 findings — thin generic Chimera hub (no webhook SSRF route oracle)",
-      "chimera.atlascrew.dev/api/v1/banking/beneficiaries/1: 7 findings — thin generic hub (no beneficiary IDOR route oracle)",
-      "koadt.github.io/.../session-fixation-weak-session-management: 11 findings — oopssec-session-fixation-route-live-oracle",
-      "koadt.github.io/.../insecure-password-reset: 14 findings — oopssec-insecure-password-reset-route-live-oracle",
-      "koadt.github.io/.../weak-md5-hashing-admin-compromise: 12 findings — oopssec-weak-md5-hashing-admin-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 43 live oracles; gap=[])",
+      "chimera.atlascrew.dev/api/v1/telecom/integrations/webhooks: 7→8 findings — chimera-telecom-integrations-webhooks-ssrf-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/banking/beneficiaries/1: 7→8 findings — chimera-banking-beneficiaries-bola-route-live-oracle",
+      "chimera.atlascrew.dev/api/oauth/token/forge: 0→8 findings — chimera-oauth-token-forge-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "Chimera telecom webhook SSRF + banking beneficiary IDOR routes return thin 7-finding generic hub — route-specific live oracles needed",
+      "Chimera Attack Simulation routes (commands/execute, config/import) still thin from prior runs",
       "oopssec react2shell/public-env/jwt-alg vanity slugs still queued",
-      "qa.brokencrystals.com/api/file/aws still queued (48h skip)",
-      "Chimera Attack Simulation routes (token/forge, system/execute, config/import) still thin from prior runs"
+      "qa.brokencrystals.com/api/file/aws still queued (48h skip)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 53,
+    "juice-shop.herokuapp.com": 52,
+    "chimera.atlascrew.dev/api/v1/telecom/integrations/webhooks": 8,
+    "chimera.atlascrew.dev/api/v1/banking/beneficiaries/1": 8,
+    "chimera.atlascrew.dev/api/oauth/token/forge": 8,
     "chimera.atlascrew.dev/api/v1/insurance/policies/1": 9,
     "chimera.atlascrew.dev/api/v1/healthcare/records/search?q=test": 8,
     "chimera.atlascrew.dev/api/v1/insurance/claims/search?q=test": 8,
     "koadt.github.io/oss-oopssec-store/posts/insecure-password-reset": 14,
-    "koadt.github.io/oss-oopssec-store/posts/weak-md5-hashing-admin-compromise": 12,
-    "koadt.github.io/oss-oopssec-store/posts/session-fixation-weak-session-management": 11,
-    "bugstore.bugtraceai.com/api/admin/users": 20,
-    "brokencrystals.com/api/products/latest": 86
+    "bugstore.bugtraceai.com/api/admin/users": 20
   }
 }

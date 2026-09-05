@@ -21303,6 +21303,7 @@ GET /api/v1/patients/search
 Account search by number (UNION-based SQLi, USE_DATABASE=true)
 GET /api/v1/banking/accounts/search
 GET /api/v1/banking/accounts                     # BOLA/IDOR (CHM-BANK-002)
+GET /api/v1/banking/beneficiaries/{beneficiary_id}  # Beneficiary lookup (IDOR)
 POST /api/v1/banking/transfer                    # Business Logic Manipulation (CHM-BANK-001)
 Policy lookup by number (blind boolean SQLi, USE_DATABASE=true)
 GET /api/v1/insurance/policies/lookup
@@ -21340,6 +21341,8 @@ GET /api/v1/ecommerce/products
 GET /api/v1/ecommerce/products/search?query=  # Reflected XSS (Search)
 CHM-TELCO-001 BOLA / IDOR (Subscriber Profile)
 GET /api/v1/telecom/subscribers/{subscriber_id}/profile
+POST /api/v1/telecom/integrations/webhooks       # Webhook registration (SSRF risk)
+POST /api/oauth/token/forge                      # OAuth token forgery
 CHM-INS-002 SQL Injection (Claims Search)
 GET /api/v1/insurance/claims/search?q=
 CHM-ADMIN-001 Remote Command Execution (Ping)
@@ -22021,6 +22024,127 @@ const chimeraBankingTransferBusinessLogicRouteLiveOracle: Rule = async (ctx) => 
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/banking/transfer route scan — CHM-BANK-001 documents business logic manipulation on banking transfers (Jekyll docs corpus fallback) — route-specific banking transfer fraud training oracle"
+    }
+  };
+};
+
+async function chimeraBankingBeneficiariesBolaProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const bolaOk =
+    /(?:GET\s+)?\/api\/v1\/banking\/beneficiaries(?:\/\{beneficiary_id\}|\b)/i.test(corpus) &&
+    (/Beneficiary lookup \(IDOR\)/i.test(corpus) ||
+      /beneficiar(?:y|ies).*IDOR/i.test(corpus) ||
+      /BOLA\s*\/\s*IDOR\s*\(Beneficiar/i.test(corpus)) &&
+    (/\/banking\/beneficiar/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!bolaOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Beneficiary lookup \(IDOR\)/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/banking/beneficiaries/{beneficiary_id} — Beneficiary lookup (IDOR) — view any beneficiary without authorization",
+      note: "chimera.atlascrew.dev — Chimera openapi documents banking beneficiary IDOR via predictable beneficiary identifiers (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — banking beneficiary BOLA training oracle"
+    }
+  };
+}
+
+const chimeraBankingBeneficiariesBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/banking\/beneficiaries(?:\/|$)/i.test(pageUrl) || /\/bulk\b/i.test(pageUrl)) {
+    return NEGATIVE;
+  }
+  const hit = await chimeraBankingBeneficiariesBolaProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/banking/beneficiaries/{beneficiary_id} route scan — openapi documents Beneficiary lookup (IDOR) without ownership checks (Jekyll docs corpus fallback) — route-specific banking beneficiary BOLA training oracle"
+    }
+  };
+};
+
+async function chimeraTelecomIntegrationsWebhooksSsrfProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const webhookOk =
+    /telecom\/integrations\/webhooks/i.test(corpus) &&
+    (/Webhook registration \(SSRF risk\)/i.test(corpus) ||
+      /Server-Side Request Forgery/i.test(corpus) ||
+      /POST\s+\/api\/v1\/telecom\/integrations\/webhooks/i.test(corpus)) &&
+    (/telecom|integrations|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!webhookOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Webhook registration \(SSRF risk\)/i.test(corpus) ? 0.92 : 0.88,
+    evidence: {
+      snippet:
+        "POST /api/v1/telecom/integrations/webhooks — Webhook registration (SSRF risk) — outbound callback URL fetch without validation",
+      note: "chimera.atlascrew.dev — Chimera openapi documents SSRF on telecom integrations webhook registration (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — telecom integrations SSRF training oracle"
+    }
+  };
+}
+
+const chimeraTelecomIntegrationsWebhooksSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/telecom\/integrations\/webhooks\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraTelecomIntegrationsWebhooksSsrfProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/telecom/integrations/webhooks route scan — openapi documents Webhook registration (SSRF risk) on telecom integrations (Jekyll docs corpus fallback) — route-specific telecom integrations SSRF training oracle"
+    }
+  };
+};
+
+async function chimeraOauthTokenForgeProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const forgeOk =
+    /(?:POST\s+)?\/api\/oauth\/token\/forge\b/i.test(corpus) &&
+    (/OAuth token forgery/i.test(corpus) ||
+      /token\/forge/i.test(corpus) ||
+      /Attack Sim/i.test(corpus)) &&
+    (/oauth|Authentication|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!forgeOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /OAuth token forgery/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "POST /api/oauth/token/forge — OAuth token forgery — forge arbitrary access tokens without client credentials",
+      note: "chimera.atlascrew.dev — Chimera endpoints catalog documents OAuth token forgery on POST /api/oauth/token/forge (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — attack simulation token forgery training oracle"
+    }
+  };
+}
+
+const chimeraOauthTokenForgeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/oauth\/token\/forge\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraOauthTokenForgeProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/oauth/token/forge route scan — endpoints catalog documents OAuth token forgery attack simulation (Jekyll docs corpus fallback) — route-specific token forgery training oracle"
     }
   };
 };
@@ -114496,6 +114620,9 @@ export const RULES: Record<string, Rule> = {
   chimeraBankingAccountsSearchSqliRouteLiveOracle,
   chimeraBankingAccountsBolaRouteLiveOracle,
   chimeraBankingTransferBusinessLogicRouteLiveOracle,
+  chimeraBankingBeneficiariesBolaRouteLiveOracle,
+  chimeraTelecomIntegrationsWebhooksSsrfRouteLiveOracle,
+  chimeraOauthTokenForgeRouteLiveOracle,
   chimeraInsurancePoliciesLookupSqliRouteLiveOracle,
   chimeraTransactionsHistorySqliLiveOracle,
   chimeraTransactionsHistorySqliRouteLiveOracle,

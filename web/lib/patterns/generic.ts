@@ -15160,6 +15160,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-banking-beneficiaries-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Chimera banking beneficiaries BOLA route live oracle",
+    description:
+      "When scanning /api/v1/banking/beneficiaries/{beneficiary_id} on chimera.atlascrew.dev, the openapi documents Beneficiary lookup (IDOR) via predictable beneficiary identifiers without ownership checks — route-specific banking beneficiary access control training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional banking beneficiary IDOR for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraBankingBeneficiariesBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on banking beneficiary endpoints.",
+      steps: [
+        "Verify the authenticated user owns each requested beneficiary before returning data.",
+        "Use unpredictable beneficiary identifiers instead of sequential IDs.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/banking/beneficiaries route documents Beneficiary lookup (IDOR). Show object-level authorization remediation for banking beneficiaries.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-banking-transfer-business-logic-route-live-oracle",
     platform: "generic",
     category: "Business logic",
@@ -83103,6 +83129,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-oauth-token-forge-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Chimera OAuth token forge route live oracle",
+    description:
+      "When scanning /api/oauth/token/forge on chimera.atlascrew.dev, the endpoints catalog documents OAuth token forgery allowing arbitrary access token minting — route-specific attack simulation training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional OAuth token forgery for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraOauthTokenForgeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose token-forging endpoints and enforce strict OAuth client validation.",
+      steps: [
+        "Require client credentials and signed JWT assertions for all token issuance.",
+        "Remove or sandbox token-forge endpoints from production deployments.",
+        "Do not expose Chimera vuln-api instances to the public internet."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/oauth/token/forge route documents OAuth token forgery. Show secure OAuth token issuance remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "chimera-mobile-instant-transfer-route-live-oracle",
     platform: "generic",
     category: "Business logic",
@@ -83827,6 +83879,32 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our chimera /api/v1/ecommerce/products/search route documents reflected XSS. Show output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "chimera-telecom-integrations-webhooks-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "critical",
+    title: "Chimera telecom integrations webhooks SSRF route live oracle",
+    description:
+      "When scanning /api/v1/telecom/integrations/webhooks on chimera.atlascrew.dev, the openapi documents Webhook registration (SSRF risk) on telecom integrations — route-specific telecom SSRF training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional SSRF on telecom integrations webhook registration for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraTelecomIntegrationsWebhooksSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate outbound webhook URLs on telecom integrations and keep Chimera vuln-api on isolated lab networks.",
+      steps: [
+        "Block private IP ranges and metadata endpoints in telecom webhook callback fetches.",
+        "Use an allowlist of permitted callback hostnames for integrations webhooks.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/telecom/integrations/webhooks route documents Webhook registration (SSRF risk). Show outbound URL validation remediation.",
     version: 1,
     enabled: true
   },

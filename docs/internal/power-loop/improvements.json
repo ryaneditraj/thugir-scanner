@@ -8675,6 +8675,24 @@
       "slug": "bugstore-secure-portal-totp-login-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/secure-portal/login without totp_code returns HTTP 422 Field required; POST with totp_code 000000 returns HTTP 401 Invalid credentials without rate limiting (V-031/V-032); bugstore.bugtraceai.com/api/secure-portal/login findings 15\u219217 (+bugstore-secure-portal-totp-login-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-telecom-integrations-webhooks-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: openapi POST /api/v1/telecom/integrations/webhooks summary Webhook registration (SSRF risk); chimera.atlascrew.dev/api/v1/telecom/integrations/webhooks findings 7\u21928 (+chimera-telecom-integrations-webhooks-ssrf-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-banking-beneficiaries-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: openapi GET /api/v1/banking/beneficiaries/{beneficiary_id} summary Beneficiary lookup (IDOR); chimera.atlascrew.dev/api/v1/banking/beneficiaries/1 findings 7\u21928 (+chimera-banking-beneficiaries-bola-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-oauth-token-forge-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: endpoints-catalog POST /api/oauth/token/forge # OAuth token forgery; chimera.atlascrew.dev/api/oauth/token/forge findings 0\u21928 (+chimera-oauth-token-forge-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

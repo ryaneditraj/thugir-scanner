@@ -1848,6 +1848,9 @@ const DEEP_RULES = new Set<string>([
   "chimeraBankingAccountsSearchSqliRouteLiveOracle",
   "chimeraBankingAccountsBolaRouteLiveOracle",
   "chimeraBankingTransferBusinessLogicRouteLiveOracle",
+  "chimeraBankingBeneficiariesBolaRouteLiveOracle",
+  "chimeraTelecomIntegrationsWebhooksSsrfRouteLiveOracle",
+  "chimeraOauthTokenForgeRouteLiveOracle",
   "chimeraInsurancePoliciesLookupSqliRouteLiveOracle",
   "chimeraTransactionsHistorySqliLiveOracle",
   "chimeraTransactionsHistorySqliRouteLiveOracle",
@@ -12861,6 +12864,25 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         p.slug.startsWith("chimera-banking-transfer")
       )
         return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/banking\/beneficiaries(?:\/|$)/i.test(targetInput) &&
+        !/\/bulk/i.test(targetInput) &&
+        p.slug.startsWith("chimera-banking-beneficiaries")
+      )
+        return -4;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/telecom\/integrations\/webhooks\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-telecom-integrations-webhooks")
+      )
+        return -4;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/oauth\/token\/forge\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-oauth-token-forge")
+      )
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/insurance\/policies(?:\/(?:lookup|\d+))?\b/i.test(targetInput) &&
