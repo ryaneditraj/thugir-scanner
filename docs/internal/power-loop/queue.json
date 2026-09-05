@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T15:11:33.203Z",
+  "updated_at": "2026-09-05T16:19:28.859Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ghostbank.net",
+      "source": "ghostsecurity/reaper — public Ghostbank BOLA banking demo for Reaper fuzzer (web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://api.ghostbank.net/api/v3/transfer",
+      "source": "ghostsecurity/reaper — BOLA transfer oracle POST /api/v3/transfer account_from IDOR (web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://zero-health.vercel.app/",
+      "source": "Zero-Health — deliberately vulnerable healthcare portal + AI chatbot OWASP web/API/LLM (market.dev; web search 16 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/instructor",
+      "source": "pentest-fauxbank — instructor panel auth bypass / privilege escalation oracle (prior run learning gap; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/jwt-algorithm-confusion-partner-api/",
+      "source": "kOaDT/oss-oopssec-store — JWT HS256/RS256 algorithm confusion partner API walkthrough (scoreboard gap; web search 16 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/healthcare/records/emergency-access",
       "source": "atlas-crew/Chimera — break-glass PHI emergency-access oracle POST /api/v1/healthcare/records/emergency-access (api-reference HIPAA; web search 15 UTC)",
@@ -11312,5 +11337,5 @@
     }
   ],
   "discovery_urls": [],
-  "discovery_urls_added": 2088
+  "discovery_urls_added": 2093
 }
