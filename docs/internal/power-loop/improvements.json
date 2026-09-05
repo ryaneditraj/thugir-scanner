@@ -8777,6 +8777,24 @@
       "slug": "oopssec-malicious-file-upload-vanity-slug-alias",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /posts/malicious-file-upload returns 404; oopssecMaliciousFileUploadStoredXssRouteLiveOracle fetches canonical malicious-file-upload-stored-xss walkthrough; koadt.github.io/.../malicious-file-upload/ findings 0→7 (+oopssec-malicious-file-upload-stored-xss-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-cross-site-request-forgery-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/cross-site-request-forgery returns HTTP 404; oopssecCsrfAdminOrderRouteLiveOracle fetches canonical /posts/csrf-admin-order-update walkthrough documenting PATCH /api/orders/:id CSRF via sameSite:lax authToken cookie; koadt.github.io/.../cross-site-request-forgery/ findings 0→7 (+oopssec-csrf-admin-order-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-broken-function-level-authorization-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/broken-function-level-authorization returns HTTP 404; oopssecLiveStreamBflaRouteLiveOracle fetches canonical /posts/live-stream-hijack walkthrough documenting unprotected GET/POST /api/live/stream BFLA with RTMP stream key exposure; koadt.github.io/.../broken-function-level-authorization/ findings 0→7 (+oopssec-live-stream-bfla-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-jwt-algorithm-confusion-vanity-slug-alias",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /posts/jwt-algorithm-confusion returns HTTP 404; oopssecJwtAlgConfusionRouteLiveOracle fetches canonical /posts/jwt-algorithm-confusion-partner-api walkthrough documenting RS256/HS256 confusion with partner-signing-key.pem reused as HMAC secret; koadt.github.io/.../jwt-algorithm-confusion/ findings 0→7 (+oopssec-jwt-alg-confusion-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
