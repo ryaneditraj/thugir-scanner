@@ -1,6 +1,12 @@
 {
   "candidates": [
     {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-auth-token-forge-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: api-reference POST /api/v1/auth/token/forge Token forgery endpoint; chimera.atlascrew.dev/api/v1/auth/token/forge findings 7→8 (+chimera-auth-token-forge-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:seclab.vercel.app",
       "slug": "seclab-xxe-vulnerable-route-live-oracle",
       "status": "shipped",
