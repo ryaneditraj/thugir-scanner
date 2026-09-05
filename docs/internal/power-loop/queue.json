@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T08:08:00.000Z",
+  "updated_at": "2026-09-05T09:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vault-notes-frontend-gules.vercel.app",
+      "source": "Raghavtripathii/vault-notes-vapt — passcode-gated full-stack VAPT lab with SQLi/IDOR/XSS/plaintext passwords/exposed JWT secret (GitHub README live demo; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/proxy/fetch",
+      "source": "chethan-vinayak/vulnshop — API SSRF internal port scan oracle POST /api/v1/proxy/fetch (README 84-vuln microservices lab; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/track-order?url=https://httpbin.org/get",
+      "source": "chethan-vinayak/vulnshop — track-order SSRF oracle GET /track-order?url= (README vuln #5; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/cloud/metadata",
+      "source": "chethan-vinayak/vulnshop — cloud metadata SSRF target disclosure GET /api/v1/cloud/metadata (README API8 misconfig; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/info",
+      "source": "chethan-vinayak/vulnshop — vulnerable component/version disclosure GET /api/info (README component_scan; web search 09 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://bugstore.bugtraceai.com/api/health",
       "source": "BugTraceAI/BugStore — V-021 RCE health endpoint oracle GET /api/health (routes/health.py; GitHub README; web search 08 UTC)",
