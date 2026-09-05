@@ -6518,12 +6518,21 @@ const clientSideOopssecOrdersSearchSqliEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_ORDERS_SEARCH_SQLI_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/sql-injection-writeup/";
+
 const oopssecOrdersSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/sql-injection-writeup/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/posts\/sql-injection-writeup/i.test(pageUrl) ||
+    /\/posts\/sql-injection\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/sql-injection\/?$/i.test(pageUrl)
+    ? OOPSSEC_ORDERS_SEARCH_SQLI_CANONICAL_POST
+    : pageUrl;
   const result = await oopssecWalkthroughEvidenceWithFetch(
     ctx,
-    pageUrl,
+    fetchUrl,
     clientSideOopssecOrdersSearchSqliEvidence
   );
   if (!result.fired) return NEGATIVE;
@@ -6533,7 +6542,9 @@ const oopssecOrdersSearchSqliRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/sql-injection-writeup route scan — walkthrough documents UNION-based SQLi via unsanitized status filter in POST /api/orders/search"
+      note: /\/posts\/sql-injection\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/sql-injection route scan — vanity slug 404; canonical sql-injection-writeup walkthrough documents UNION-based SQLi via unsanitized status filter in POST /api/orders/search"
+        : "OopsSec Store /posts/sql-injection-writeup route scan — walkthrough documents UNION-based SQLi via unsanitized status filter in POST /api/orders/search"
     }
   };
 };
@@ -6647,12 +6658,21 @@ const clientSideOopssecStoredXssReviewsEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_STORED_XSS_REVIEWS_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/stored-xss-product-reviews/";
+
 const oopssecStoredXssReviewsRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/stored-xss-product-reviews/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/posts\/stored-xss-product-reviews/i.test(pageUrl) ||
+    /\/posts\/cross-site-scripting-xss\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/cross-site-scripting-xss\/?$/i.test(pageUrl)
+    ? OOPSSEC_STORED_XSS_REVIEWS_CANONICAL_POST
+    : pageUrl;
   const result = await oopssecWalkthroughEvidenceWithFetch(
     ctx,
-    pageUrl,
+    fetchUrl,
     clientSideOopssecStoredXssReviewsEvidence
   );
   if (!result.fired) return NEGATIVE;
@@ -6662,7 +6682,9 @@ const oopssecStoredXssReviewsRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/stored-xss-product-reviews route scan — walkthrough documents stored XSS via unsanitized POST /api/products/[id]/reviews and raw HTML ref injection"
+      note: /\/posts\/cross-site-scripting-xss\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/cross-site-scripting-xss route scan — vanity slug 404; canonical stored-xss-product-reviews walkthrough documents stored XSS via unsanitized POST /api/products/[id]/reviews and raw HTML ref injection"
+        : "OopsSec Store /posts/stored-xss-product-reviews route scan — walkthrough documents stored XSS via unsanitized POST /api/products/[id]/reviews and raw HTML ref injection"
     }
   };
 };
@@ -7966,12 +7988,21 @@ const clientSideOopssecMassAssignmentAdminEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_MASS_ASSIGNMENT_ADMIN_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/";
+
 const oopssecMassAssignmentAdminRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/mass-assignment-admin-privilege-escalation/i.test(pageUrl)) return NEGATIVE;
+  const routeOk =
+    /\/posts\/mass-assignment-admin-privilege-escalation/i.test(pageUrl) ||
+    /\/posts\/mass-assignment\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/mass-assignment\/?$/i.test(pageUrl)
+    ? OOPSSEC_MASS_ASSIGNMENT_ADMIN_CANONICAL_POST
+    : pageUrl;
   const result = await oopssecWalkthroughEvidenceWithFetch(
     ctx,
-    pageUrl,
+    fetchUrl,
     clientSideOopssecMassAssignmentAdminEvidence
   );
   if (!result.fired) return NEGATIVE;
@@ -7981,7 +8012,9 @@ const oopssecMassAssignmentAdminRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/mass-assignment-admin-privilege-escalation route scan — walkthrough documents POST /api/auth/signup spreading request body to set role: ADMIN"
+      note: /\/posts\/mass-assignment\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/mass-assignment route scan — vanity slug 404; canonical mass-assignment-admin-privilege-escalation walkthrough documents POST /api/auth/signup spreading request body to set role: ADMIN"
+        : "OopsSec Store /posts/mass-assignment-admin-privilege-escalation route scan — walkthrough documents POST /api/auth/signup spreading request body to set role: ADMIN"
     }
   };
 };
