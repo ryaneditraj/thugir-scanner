@@ -22153,6 +22153,46 @@ const chimeraOauthTokenForgeRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+async function chimeraAuthTokenForgeProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const forgeOk =
+    /(?:POST\s+)?\/api\/v1\/auth\/token\/forge\b/i.test(corpus) &&
+    (/Token forgery endpoint/i.test(corpus) ||
+      /token\/forge/i.test(corpus) ||
+      /JWT|Bearer token/i.test(corpus)) &&
+    (/auth|Authentication|456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(
+      corpus
+    ));
+  if (!forgeOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /Token forgery endpoint/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "POST /api/v1/auth/token/forge — Token forgery endpoint — forge arbitrary JWT access tokens without client credentials",
+      note: "chimera.atlascrew.dev — Chimera api-reference documents JWT token forgery on POST /api/v1/auth/token/forge (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — auth token forgery training oracle"
+    }
+  };
+}
+
+const chimeraAuthTokenForgeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/auth\/token\/forge\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraAuthTokenForgeProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/auth/token/forge route scan — api-reference documents JWT token forgery endpoint (Jekyll docs corpus fallback) — route-specific auth token forgery training oracle"
+    }
+  };
+};
+
 async function chimeraInsurancePoliciesLookupSqliProbe(ctx: RuleContext): Promise<RuleResult> {
   if (!isChimeraHost(ctx)) return NEGATIVE;
   const corpus = await chimeraDocsCorpus(ctx);
@@ -115623,6 +115663,7 @@ export const RULES: Record<string, Rule> = {
   chimeraBankingBeneficiariesBolaRouteLiveOracle,
   chimeraTelecomIntegrationsWebhooksSsrfRouteLiveOracle,
   chimeraOauthTokenForgeRouteLiveOracle,
+  chimeraAuthTokenForgeRouteLiveOracle,
   chimeraInsurancePoliciesLookupSqliRouteLiveOracle,
   chimeraTransactionsHistorySqliLiveOracle,
   chimeraTransactionsHistorySqliRouteLiveOracle,
