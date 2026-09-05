@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T11:42:00.000Z",
+  "updated_at": "2026-09-05T12:15:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 3170,
-  "total_findings": 36329,
+  "total_sites_scanned": 3171,
+  "total_findings": 36382,
   "critical_findings": 67,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2078,
   "discovery_findings": 29356,
-  "improvements_shipped": 1462,
-  "last_run": "2026-09-05T11:42:00.000Z",
+  "improvements_shipped": 1465,
+  "last_run": "2026-09-05T12:15:00.000Z",
   "last_run_summary": {
-    "hour_utc": "11",
+    "hour_utc": "12",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -54,17 +54,15 @@
     "discovery": {
       "urls_added": 0,
       "urls_scanned": 3,
-      "findings": 63,
-      "focus": "10 UTC gap closure — pwnshop PWN-001 API route alias, appsec-ci /api/comments route oracle, vault-notes login SQLi corpus when backend down",
+      "findings": 48,
+      "focus": "12 UTC discovery gaps — BugStore GraphQL BOLA, OWASP GenAI lessons checkpoint corpus, VulnShop run-diagnostic cmd= alias",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; gap=[])",
-      "pwnshop.ctfsecurity.com/api/v1/orders/1: 26→46 findings — pwnshop-order-idor-route-live-oracle + PWN-001 corpus fallback on /api/v1/orders/:id",
-      "appsec-ci-pipeline.onrender.com/api/comments: 7 findings — appsec-ci-stored-xss-comments-route-live-oracle with /api/comments path alias",
-      "vault-notes-frontend-gules.vercel.app/: 8→10 findings — vault-notes-login-sqli-live-oracle +route via VAPT corpus when Render backend unreachable",
-      "vulnshop.vercel.app/template: 21 findings — vulnshop-template-ssti-route-live-oracle (prior 11 UTC parallel run)",
-      "qa.brokencrystals.com/api/users/one/admin/photo: 92 findings — brokencrystals-photo-bfla-route-live-oracle (prior run)"
+      "bugstore.bugtraceai.com/graphql: 21→23 findings — bugstore-graphql-introspection-bola-live-oracle +route (POST /api/graphql introspection + users/orders BOLA V-008/V-009)",
+      "owaspbased-lessons.vercel.app/api/lessons: 2→4 findings — owasp-genai-lessons-api-route-live-oracle via checkpoint corpus fallback (LLM01–LLM10 catalog)",
+      "vulnshop.vercel.app/run-diagnostic?cmd=id: 21 findings — vulnshop-run-diagnostic-cmdi-route-live-oracle with cmd= param alias"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -75,14 +73,12 @@
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
+    "bugstore.bugtraceai.com/graphql": 23,
     "qa.brokencrystals.com/api/users/one/admin/photo": 92,
     "pwnshop.ctfsecurity.com/api/v1/orders/1": 46,
-    "pwnshop.ctfsecurity.com/profile/update-avatar": 52,
-    "vulnshop.vercel.app/api/xml-import": 22,
-    "bugstore.bugtraceai.com/api/health": 20,
+    "vulnshop.vercel.app/run-diagnostic": 21,
+    "owaspbased-lessons.vercel.app/api/lessons": 4,
     "vault-notes-frontend-gules.vercel.app": 10,
-    "appsec-ci-pipeline.onrender.com/api/comments": 7,
-    "seclab.vercel.app/labs/path-traversal": 5,
-    "seclab.vercel.app/labs/open-redirect": 5
+    "appsec-ci-pipeline.onrender.com/api/comments": 7
   }
 }
