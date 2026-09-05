@@ -3022,6 +3022,8 @@ const DEEP_RULES = new Set<string>([
   "bugstoreOrdersIdorRouteLiveOracle",
   "bugstoreCheckoutClientTotalLiveOracle",
   "bugstoreCheckoutClientTotalRouteLiveOracle",
+  "bugstoreCartNegativeQuantityLiveOracle",
+  "bugstoreCartNegativeQuantityRouteLiveOracle",
   "bugstoreProfileMassAssignmentLiveOracle",
   "bugstoreProfileMassAssignmentRouteLiveOracle",
   "bugstoreSecurePortalTotpLoginLiveOracle",
@@ -13969,6 +13971,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       if (
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/(?:checkout\/process|cart\/checkout)\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-checkout-client-total")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/cart\/add\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-cart-negative-quantity")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/cart\/add\b/i.test(targetInput) &&
         p.slug.startsWith("bugstore-checkout-client-total")
       )
         return bugstoreRoutePairWeight(p.slug);

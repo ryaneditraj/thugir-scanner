@@ -1,6 +1,18 @@
 {
   "candidates": [
     {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-cart-negative-quantity-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/cart/add with quantity:-5 returns session cart subtotal:-225.0 (V-022); bugstore.bugtraceai.com/api/cart/add findings 22→25 (+bugstore-cart-negative-quantity-live-oracle +bugstore-cart-negative-quantity-route-live-oracle +bugstore-checkout-client-total-route-live-oracle); benchmark juice-shop staging 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:bugstore.bugtraceai.com",
+      "slug": "bugstore-checkout-client-total-cart-add-route-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: bugstoreCheckoutClientTotalRouteLiveOracle now matches /api/cart/add in addition to /api/checkout/process; cart/add route scan fires checkout client-trusted total route oracle (V-023); bugstore.bugtraceai.com/api/cart/add findings 22→25; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:chimera.atlascrew.dev",
       "slug": "chimera-auth-token-forge-route-live-oracle",
       "status": "shipped",
