@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T22:25:00.000Z",
+  "updated_at": "2026-09-05T23:17:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://crapi.apisec.ai/identity/api/v2/admin/videos/1",
+      "source": "OWASP crAPI public demo — BFLA privilege-tier substitution oracle DELETE /identity/api/v2/admin/videos/{id} (ASTF traceability live-confirmed; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.apisec.ai/identity/api/v2/user/videos/1",
+      "source": "OWASP crAPI public demo — BFLA decoy endpoint GET/DELETE /identity/api/v2/user/videos/{id} vs admin sibling (ASTF traceability; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crapi.apisec.ai/community/api/posts",
+      "source": "OWASP crAPI public demo — community posts API mass-assignment/BOLA oracle (crapi.apisec.ai; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sekumart.sekuripy.hr/members.php",
+      "source": "sekumart — NoSQL authentication bypass oracle members.php (openapi.json + scoreboard gap; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://sekumart.sekuripy.hr/catalog.php",
+      "source": "sekumart — ORDER BY SQLi oracle catalog.php sort param (openapi.json + scoreboard gap; web search 23 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://urban-vampi-production.up.railway.app/users/v1/1/email",
       "source": "apisec-inc/urban-VAmPI — email enumeration / BOLA oracle GET /users/v1/{id}/email (README Railway deploy; web search 22 UTC)",
