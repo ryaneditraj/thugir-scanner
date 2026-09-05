@@ -1816,6 +1816,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideGraphqlLabEvidence",
   "clientSideGraphqlSecurityHubEvidence",
   "clientSideReactRscCveEvidence",
+  "nextjsRscCveLiveOracle",
+  "nextjsRscCveRouteLiveOracle",
   "clientSideCve55182SaasPocEvidence",
   "clientSideNextjsMiddlewareCveEvidence",
   "clientSideCtfChallange3MiddlewareBypassEvidence",
@@ -2389,6 +2391,8 @@ const DEEP_RULES = new Set<string>([
   "pwnshopDebugInfoRouteLiveOracle",
   "pwnshopLabStatsLiveOracle",
   "pwnshopLabStatsRouteLiveOracle",
+  "pwnshopVulnerabilitiesIndexLiveOracle",
+  "pwnshopVulnerabilitiesIndexRouteLiveOracle",
   "pwnshopEventsAuditLiveOracle",
   "pwnshopEventsAuditRouteLiveOracle",
   "pwnshopChatInitEmailEnumerationLiveOracle",
@@ -2526,7 +2530,9 @@ const DEEP_RULES = new Set<string>([
   "oopssecSecondOrderSqliRouteLiveOracle",
   "clientSideOopssecStoredXssReviewsEvidence",
   "oopssecXffSqliRouteLiveOracle",
+  "clientSideOopssecLiveStreamEvidence",
   "oopssecLiveStreamBflaRouteLiveOracle",
+  "oopssecLiveStreamBflaLiveOracle",
   "oopssecBolaWishlistRouteLiveOracle",
   "clientSideOopssecIdorOrderPrivacyEvidence",
   "oopssecIdorOrderPrivacyRouteLiveOracle",
@@ -2559,6 +2565,7 @@ const DEEP_RULES = new Set<string>([
   "oopssecPlaintextPasswordLogsRouteLiveOracle",
   "clientSideOopssecNextPublicEnvEvidence",
   "oopssecNextPublicEnvRouteLiveOracle",
+  "oopssecNextPublicEnvLiveOracle",
   "clientSideOopssecSupplyChainEvidence",
   "oopssecSupplyChainPoisonedRulesRouteLiveOracle",
   "clientSideOopssecGiftCardRandomnessEvidence",
@@ -2981,6 +2988,31 @@ const DEEP_RULES = new Set<string>([
   "duckStoreMcpInfoRouteLiveOracle",
   "duckStoreProductsFilterSqliLiveOracle",
   "duckStoreProductsFilterSqliRouteLiveOracle",
+  "bugstoreProductSearchSqliLiveOracle",
+  "bugstoreProductSearchSqliRouteLiveOracle",
+  "bugstoreProductImagePathTraversalLiveOracle",
+  "bugstoreProductImagePathTraversalRouteLiveOracle",
+  "bugstoreAdminDebugStatsBacLiveOracle",
+  "bugstoreAdminDebugStatsBacRouteLiveOracle",
+  "bugstoreForumThreadSqliLiveOracle",
+  "bugstoreForumThreadSqliRouteLiveOracle",
+  "bugstoreOrdersIdorLiveOracle",
+  "bugstoreOrdersIdorRouteLiveOracle",
+  "bugstoreCheckoutClientTotalLiveOracle",
+  "bugstoreCheckoutClientTotalRouteLiveOracle",
+  "bugstoreProfileMassAssignmentLiveOracle",
+  "bugstoreProfileMassAssignmentRouteLiveOracle",
+  "bugstoreSecurePortalTotpLoginLiveOracle",
+  "bugstoreSecurePortalTotpLoginRouteLiveOracle",
+  "bugstoreAuthSignupRouteLiveOracle",
+  "bugstoreHealthRceLiveOracle",
+  "bugstoreHealthRceRouteLiveOracle",
+  "bugstoreAdminUsersBacLiveOracle",
+  "bugstoreAdminUsersBacRouteLiveOracle",
+  "bugstoreForumPostsStoredXssLiveOracle",
+  "bugstoreForumPostsStoredXssRouteLiveOracle",
+  "bugstoreGraphqlIntrospectionBolaLiveOracle",
+  "bugstoreGraphqlIntrospectionBolaRouteLiveOracle",
   "duckStoreCartNegativeQuantityLiveOracle",
   "duckStoreCartNegativeQuantityRouteLiveOracle",
   "duckStoreAdminUsersBflaLiveOracle",
@@ -3168,6 +3200,7 @@ const DEEP_RULES = new Set<string>([
   "finbotVendorSidecarRouteLiveOracle",
   "finbotVendorChatLiveOracle",
   "finbotVendorChatRouteLiveOracle",
+  "finbotAdminCopilotLiveOracle",
   "finbotAdminCopilotRouteLiveOracle",
   "finbotHowItWorksLiveOracle",
   "finbotHowItWorksRouteLiveOracle",
@@ -3422,6 +3455,8 @@ const DEEP_RULES = new Set<string>([
   "vulnDemoJwtSecretLeakRouteLiveOracle",
   "vaultNotesJwtSecretLeakLiveOracle",
   "vaultNotesJwtSecretLeakRouteLiveOracle",
+  "vaultNotesLoginSqliLiveOracle",
+  "vaultNotesLoginSqliRouteLiveOracle",
   "vaultNotesNotesIdorLiveOracle",
   "vaultNotesNotesIdorRouteLiveOracle",
   "vulnDemoFrontendFlagLeakLiveOracle",
@@ -3486,6 +3521,10 @@ const DEEP_RULES = new Set<string>([
   "vulnshopTemplateRenderRouteLiveOracle",
   "vulnshopTrackOrderSsrfLiveOracle",
   "vulnshopTrackOrderSsrfRouteLiveOracle",
+  "vulnshopProxyFetchSsrfLiveOracle",
+  "vulnshopProxyFetchSsrfRouteLiveOracle",
+  "vulnshopCloudMetadataSsrfLiveOracle",
+  "vulnshopCloudMetadataSsrfRouteLiveOracle",
   "vulnshopPingCmdInjectionLiveOracle",
   "vulnshopPingCmdInjectionRouteLiveOracle",
   "vulnshopSupportLfiLiveOracle",
@@ -3594,6 +3633,7 @@ const DEEP_RULES = new Set<string>([
   "owaspGenaiExcessiveAgencyRouteLiveOracle",
   "owaspGenaiVectorEmbeddingRouteLiveOracle",
   "owaspGenaiUnboundedConsumptionRouteLiveOracle",
+  "owaspGenaiLessonsApiRouteLiveOracle",
   "sqlInjectionChallengeLoginSqliLiveOracle",
   "sqlInjectionChallengeLoginSqliRouteLiveOracle",
   "clientSideCtfDefiEvidence",
@@ -3622,6 +3662,10 @@ const DEEP_RULES = new Set<string>([
   "clientSideVwadGoofEvidence",
   "vwadGoofRouteLiveOracle",
   "vwadVoiceGoatRouteLiveOracle",
+  "clientSideVwadDvrRestaurantEvidence",
+  "vwadDvrRestaurantRouteLiveOracle",
+  "clientSideAiThreatlabEvidence",
+  "aiThreatlabRouteLiveOracle",
   "clientSideVulnerableappDomXssEvidence",
   "seclabNextjsLabApiProbe",
   "seclabAngularStubRouteLiveOracle",
@@ -3851,6 +3895,8 @@ const DEEP_RULES = new Set<string>([
   "vulnbankAiAnonymousChatRouteLiveOracle",
   "vulnbankAiSystemInfoLiveOracle",
   "vulnbankAiSystemInfoRouteLiveOracle",
+  "vulnbankAiChatTokenGateLiveOracle",
+  "vulnbankAiChatTokenGateRouteLiveOracle",
   "vulnbankBoplaRegisterLiveOracle",
   "vulnbankBoplaRegisterRouteLiveOracle",
   "vulnbankSqliLoginLiveOracle",
@@ -4345,6 +4391,7 @@ const DEEP_RULES = new Set<string>([
   "fabraixToolPoisoning001RouteLiveOracle",
   "fabraixToolPoisoning002RouteLiveOracle",
   "fabraixJailbreak001RouteLiveOracle",
+  "fabraixJailbreak002RouteLiveOracle",
   "fabraixJwtVerifier001RouteLiveOracle",
   "fabraixChallengesHubRouteLiveOracle",
   "fabraixPlaygroundHomeRouteLiveOracle",
@@ -10512,6 +10559,11 @@ function spaRouteTargets(jsBodies: string[], pageUrl: string, limit: number): st
 // Synchronous, in-request Deep Scan. Runs the full code-defined library (free + deep rules) over
 // the homepage AND a shallow same-origin crawl. No verified-domain requirement. Heavier active
 // probing (forged webhooks, multi-step IDOR) still belongs to the Python worker in production.
+/** Route-specific BugStore oracles must run before host-level live probes on the same URL. */
+function bugstoreRoutePairWeight(slug: string): number {
+  return slug.endsWith("-route-live-oracle") ? -5 : -3;
+}
+
 function canonicalDeepScanTarget(raw: string): string {
   try {
     const u = new URL(raw);
@@ -11795,6 +11847,10 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
     /vwad\.owasp\.org\/app\/goof/i.test(home.finalUrl)
       ? ["https://vwad.owasp.org/app/goof/"]
       : [];
+  const vwadDvrRestaurantPrioritySeeds =
+    /vwad\.owasp\.org\/app\/damn-vulnerable-restaurant/i.test(home.finalUrl)
+      ? ["https://vwad.owasp.org/app/damn-vulnerable-restaurant/"]
+      : [];
   const ginAndJuiceLoginPrioritySeeds = /ginandjuice\.shop/i.test(home.finalUrl)
     ? [new URL("/login", home.finalUrl).toString()]
     : [];
@@ -11861,6 +11917,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       ...vwadGinJuicePrioritySeeds,
       ...vwadOopssecPrioritySeeds,
       ...vwadGoofPrioritySeeds,
+      ...vwadDvrRestaurantPrioritySeeds,
       ...ginAndJuiceLoginPrioritySeeds,
       ...vwadGinJuiceLiveSeeds,
       ...vwadOopssecLiveSeeds,
@@ -12887,13 +12944,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/api\/v1\/genai\/chat\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-genai-chat")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/genai\/agent\/browse\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-genai-agent-browse")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/genai\/models\/config\b/i.test(targetInput) &&
@@ -12929,13 +12986,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/api\/v1\/diagnostics\/ping\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-diagnostics-ping-rce")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/diagnostics\/webhook\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-diagnostics-webhook-ssrf")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/admin\/diagnostics\b/i.test(targetInput) &&
@@ -13007,7 +13064,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/api\/v1\/energy-utilities\/outages(?:\/|$)/i.test(targetInput) &&
         p.slug.startsWith("chimera-energy-utilities-outages-bola")
       )
-        return -3;
+        return -4;
       if (
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/ics\/controllers\/status\b/i.test(targetInput) &&
@@ -13606,6 +13663,37 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/debug\/info\b/i.test(targetInput) &&
+        (p.slug.startsWith("pwnshop-debug-info") || p.slug.startsWith("pwnshop-lab-stats"))
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/vulnerabilities\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-vulnerabilities-index")
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
+        /\/checkout\b/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-checkout-hpp-coupon")
+      )
+        return -4;
+      if (
+        /vulnbank\.org/i.test(origin) &&
+        /\/api\/ai\/chat\b/i.test(targetInput) &&
+        !/\/anonymous\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnbank-ai-chat-token-gate")
+      )
+        return -4;
+      if (
+        /vwad\.owasp\.org/i.test(origin) &&
+        /\/app\/damn-vulnerable-restaurant/i.test(targetInput) &&
+        p.slug.startsWith("vwad-dvr-restaurant")
+      )
+        return -4;
+      if (
+        /pwnshop|ctfsecurity\.com/i.test(origin) &&
         /\/debug\/info|\/api\/v1\/events|\/admin\/export-orders|\/logs\b/i.test(targetInput) &&
         p.slug.startsWith("pwnshop-")
       )
@@ -13723,6 +13811,90 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/file(?:\/raw)?\b/i.test(targetInput) &&
         (p.slug.startsWith("brokencrystals-file") || p.slug.startsWith("brokencrystals-api-file"))
+      )
+        return -4;
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/products\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-product-search-sqli")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/products\/\d+\/image/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-product-image-path-traversal")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/admin\/vulnerable-debug-stats/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-admin-debug-stats-bac")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/forum\/threads/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-forum-thread-sqli")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/orders\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-orders-idor")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/(?:checkout\/process|cart\/checkout)\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-checkout-client-total")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/secure-portal\/login/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-secure-portal-totp-login")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/auth\/signup\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-auth-signup")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/(?:user\/profile|auth\/register)\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-profile-mass-assignment")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/health\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-health-rce")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/admin\/users\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-admin-users-bac")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/api\/forum\/posts/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-forum-posts-stored-xss")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/graphql\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-graphql-introspection-bola")
+      )
+        return bugstoreRoutePairWeight(p.slug);
+      if (
+        /owaspbased-lessons\.vercel\.app/i.test(origin) &&
+        /\/api\/lessons\/?$/i.test(targetInput) &&
+        p.slug === "owasp-genai-lessons-api-route-live-oracle"
       )
         return -4;
       if (
@@ -14061,7 +14233,10 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       if (/ai-security-platform-iota\.vercel\.app/i.test(origin) && p.slug.startsWith("ai-security-")) return -2;
       if (
         /owaspbased-lessons\.vercel\.app/i.test(origin) &&
-        /\/(?:lesson\/(?:prompt-injection|sensitive-info|info-disclosure|supply-chain|data-poisoning|misinformation|improper-output|output-handling|system-prompt-leakage|prompt-leakage|excessive-agency|vector-embedding|unbounded-consumption)|direct-prompt-injection|insecure-plugin)\b/i.test(targetInput) &&
+        (/\/api\/lessons\/?$/i.test(targetInput) ||
+          /\/(?:lesson\/(?:prompt-injection|sensitive-info|info-disclosure|supply-chain|data-poisoning|misinformation|improper-output|output-handling|system-prompt-leakage|prompt-leakage|excessive-agency|vector-embedding|unbounded-consumption)|direct-prompt-injection|insecure-plugin)\b/i.test(
+            targetInput
+          )) &&
         p.slug.startsWith("owasp-genai-")
       )
         return -3;
@@ -14073,19 +14248,27 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /koadt\.github\.io/i.test(origin) &&
-        /\/posts\/next-public-env-(?:variable-)?leak/i.test(targetInput) &&
+        /\/posts\/(?:next-public-env-(?:variable-)?leak|public-env-variable)\/?$/i.test(targetInput) &&
         p.slug === "oopssec-next-public-env-route-live-oracle"
       )
         return -3;
       if (
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
-        /\/posts\/path-traversal-documents-api/i.test(targetInput) &&
+        /\/posts\/(?:react2shell-cve-2025-55182|react2shell)\/?$/i.test(targetInput) &&
+        p.slug === "oopssec-react2shell-route-live-oracle"
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:path-traversal-documents-api|path-traversal)\/?$/i.test(targetInput) &&
         p.slug.startsWith("oopssec-path-traversal")
       )
         return -4;
       if (
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
-        /\/posts\/mass-assignment-admin-privilege-escalation/i.test(targetInput) &&
+        /\/posts\/(?:mass-assignment-admin-privilege-escalation|mass-assignment)\/?$/i.test(
+          targetInput
+        ) &&
         p.slug.startsWith("oopssec-mass-assignment-admin")
       )
         return -4;
@@ -14097,8 +14280,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
-        /\/posts\/malicious-file-upload-stored-xss/i.test(targetInput) &&
+        /\/posts\/(?:malicious-file-upload-stored-xss|malicious-file-upload)\/?$/i.test(
+          targetInput
+        ) &&
         p.slug.startsWith("oopssec-malicious-file-upload")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:middleware-authorization-bypass-cve-2025-29927|middleware-authorization-bypass)\/?$/i.test(
+          targetInput
+        ) &&
+        p.slug.startsWith("oopssec-middleware-bypass")
       )
         return -4;
       if (
@@ -14127,8 +14320,16 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
-        /\/posts\/sql-injection-writeup/i.test(targetInput) &&
+        /\/posts\/(?:sql-injection-writeup|sql-injection)\/?$/i.test(targetInput) &&
         p.slug.startsWith("oopssec-orders-search-sqli")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:stored-xss-product-reviews|cross-site-scripting-xss)\/?$/i.test(
+          targetInput
+        ) &&
+        p.slug.startsWith("oopssec-stored-xss-reviews")
       )
         return -4;
       if (
@@ -14139,8 +14340,20 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
-        /\/posts\/bola-wishlist-access/i.test(targetInput) &&
+        /\/posts\/(?:bola-wishlist-access|broken-object-level-authorization)/i.test(targetInput) &&
         p.slug.startsWith("oopssec-bola-wishlist")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:open-redirect-login-bypass|open-redirect)\/?$/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-open-redirect")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/(?:ssrf-internal-page-access|server-side-request-forgery)\/?$/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-ssrf")
       )
         return -4;
       if (
@@ -14828,6 +15041,36 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?44\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(44, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?45\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(45, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?46\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(46, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?47\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(47, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
+        /\/challenge\/(?:challenge-)?53\b/i.test(targetInput) &&
+        wrongsecretsChallengeSlugMatches(53, p.slug)
+      )
+        return -4;
+      if (
+        /wrongsecrets\.herokuapp\.com/i.test(origin) &&
         /\/challenge\/(?:challenge-)?66\b/i.test(targetInput) &&
         wrongsecretsChallengeSlugMatches(66, p.slug)
       )
@@ -14960,6 +15203,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         p.slug === "nosql-injection-lab-route-live-oracle"
       )
         return -3;
+      if (
+        /sql-injection-lab\.vercel\.app/i.test(origin) &&
+        /\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("sql-injection-lab-login")
+      )
+        return -4;
       if (
         /vuln-expose\.vercel\.app|vulns-expose\.jveltri\.com\.ar/i.test(origin) &&
         /\/api\/users\b/i.test(targetInput) &&
@@ -15097,7 +15346,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/labs\/jwt\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-jwt")
       )
-        return -3;
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/xss\b/i.test(targetInput) &&
@@ -15109,7 +15358,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/labs\/deserialization\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-deserialization")
       )
-        return -3;
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/(?:command-injection|cmdi)\b/i.test(targetInput) &&
@@ -15121,13 +15370,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/labs\/xxe\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-xxe")
       )
-        return -3;
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/ssti\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-ssti")
       )
-        return -3;
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/idor\b/i.test(targetInput) &&
@@ -15139,7 +15388,7 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/labs\/file-upload\b/i.test(targetInput) &&
         p.slug.startsWith("dvwu-file-upload-lab")
       )
-        return -3;
+        return -4;
       if (
         /dvwu\.vercel\.app/i.test(origin) &&
         /\/labs\/mass-assignment\b/i.test(targetInput) &&
@@ -15210,6 +15459,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         p.slug.startsWith("vulnshop-products-import")
       )
         return -3;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/proxy\/fetch\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-proxy-fetch")
+      )
+        return -4;
+      if (
+        /vulnshop\.vercel\.app/i.test(origin) &&
+        /\/api\/v1\/cloud\/metadata\b/i.test(targetInput) &&
+        p.slug.startsWith("vulnshop-cloud-metadata")
+      )
+        return -4;
       if (
         /vulnshop\.vercel\.app/i.test(origin) &&
         /\/api\/xml-import\b/i.test(targetInput) &&
@@ -15744,6 +16005,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         p.slug.startsWith("fabraix-tool-poisoning-001")
       )
         return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/tool-poisoning-002/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-tool-poisoning-002")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/jailbreak-001/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-jailbreak-001")
+      )
+        return -4;
+      if (
+        /playground\.fabraix\.com/i.test(origin) &&
+        /\/challenges\/jailbreak-002/i.test(targetInput) &&
+        p.slug.startsWith("fabraix-jailbreak-002")
+      )
+        return -4;
       if (/prompt-shield1\.vercel\.app/i.test(origin) && p.slug.startsWith("prompt-shield")) return -4;
       if (
         /vulnforge-academy\.vercel\.app/i.test(origin) &&
@@ -16115,6 +16394,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /owasp-finbot-ctf\.org/i.test(origin) &&
         /\/vendor(?:\/|$)/i.test(targetInput) &&
         p.slug.startsWith("finbot-vendor-chat")
+      )
+        return -4;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/admin(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("finbot-admin-copilot")
+      )
+        return -4;
+      if (
+        /owasp-finbot-ctf\.org/i.test(origin) &&
+        /\/portals(?:\/|$)/i.test(targetInput) &&
+        p.slug.startsWith("finbot-portals")
       )
         return -4;
       if (
@@ -17133,8 +17424,14 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -4;
       if (
         /appsec-ci-pipeline\.onrender\.com/i.test(origin) &&
-        /\/comments\/?$/i.test(targetInput) &&
+        /\/(?:api\/)?comments\/?$/i.test(targetInput) &&
         p.slug.startsWith("appsec-ci-stored-xss-comments")
+      )
+        return -4;
+      if (
+        /pwnshop\.ctfsecurity\.com/i.test(origin) &&
+        /\/api\/v1\/orders\/\d+/i.test(targetInput) &&
+        p.slug.startsWith("pwnshop-order-idor")
       )
         return -4;
       if (
