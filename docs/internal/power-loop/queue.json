@@ -2,6 +2,21 @@
   "updated_at": "2026-09-05T03:05:00.000Z",
   "priority_discovery_urls": [
     {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/open-redirect/",
+      "source": "kOaDT/oss-oopssec-store — open-redirect vanity slug 404 → canonical open-redirect-login-bypass (challenges.json scrape 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/broken-object-level-authorization/",
+      "source": "kOaDT/oss-oopssec-store — BOLA vanity slug 404 → canonical bola-wishlist-access (challenges.json scrape 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/server-side-request-forgery/",
+      "source": "kOaDT/oss-oopssec-store — SSRF vanity slug 404 → canonical ssrf-internal-page-access (challenges.json scrape 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
       "url": "https://pwnshop.ctfsecurity.com/wallet/topup",
       "source": "ctfsec/pwnshop README — PWN-042 Vulnbank wallet credited_amount override business-logic lab (web search 02 UTC)",
       "auth": "public_demo"
