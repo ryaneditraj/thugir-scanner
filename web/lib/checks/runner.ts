@@ -3011,6 +3011,8 @@ const DEEP_RULES = new Set<string>([
   "bugstoreAdminUsersBacRouteLiveOracle",
   "bugstoreForumPostsStoredXssLiveOracle",
   "bugstoreForumPostsStoredXssRouteLiveOracle",
+  "bugstoreGraphqlIntrospectionBolaLiveOracle",
+  "bugstoreGraphqlIntrospectionBolaRouteLiveOracle",
   "duckStoreCartNegativeQuantityLiveOracle",
   "duckStoreCartNegativeQuantityRouteLiveOracle",
   "duckStoreAdminUsersBflaLiveOracle",
@@ -13876,6 +13878,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /bugstore\.bugtraceai\.com/i.test(origin) &&
         /\/api\/forum\/(?:posts|threads)\b/i.test(targetInput) &&
         p.slug.startsWith("bugstore-forum-posts-stored-xss")
+      )
+        return -4;
+      if (
+        /bugstore\.bugtraceai\.com/i.test(origin) &&
+        /\/graphql\b/i.test(targetInput) &&
+        p.slug.startsWith("bugstore-graphql-introspection-bola")
+      )
+        return -4;
+      if (
+        /owaspbased-lessons\.vercel\.app/i.test(origin) &&
+        /\/api\/lessons\/?$/i.test(targetInput) &&
+        p.slug === "owasp-genai-lessons-api-route-live-oracle"
       )
         return -4;
       if (
