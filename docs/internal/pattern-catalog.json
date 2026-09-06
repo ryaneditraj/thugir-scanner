@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-06T22:04:49.333Z",
-  "total": 3400,
-  "uniqueSlugs": 3392,
+  "generatedAt": "2026-09-06T23:03:36.804Z",
+  "total": 3405,
+  "uniqueSlugs": 3397,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3382,
+    "generic": 3387,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3315,
+    "deep": 3320,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 155,
     "Security misconfiguration": 288,
     "Broken authentication": 218,
-    "Injection": 560,
-    "Cross-site scripting": 804,
+    "Injection": 561,
+    "Cross-site scripting": 808,
     "Open redirect": 29,
     "general": 20,
     "SSRF": 19,
@@ -2747,8 +2747,13 @@
     "testasp-showforum-sqli-route-live-oracle",
     "testaspnet-comments-exposure-live-oracle",
     "testaspnet-comments-exposure-route-live-oracle",
+    "testfire-bank-login-sqli-route-live-oracle",
+    "testfire-feedback-reflected-xss-live-oracle",
+    "testfire-feedback-reflected-xss-route-live-oracle",
     "testfire-login-sqli-live-oracle",
     "testfire-login-sqli-route-live-oracle",
+    "testfire-search-reflected-xss-live-oracle",
+    "testfire-search-reflected-xss-route-live-oracle",
     "testfire-transfer-sqli-live-oracle",
     "testfire-transfer-sqli-route-live-oracle",
     "testfire-transfer-stored-xss-live-oracle",

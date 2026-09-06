@@ -3862,6 +3862,11 @@ const DEEP_RULES = new Set<string>([
   "testfireTransferSqliRouteLiveOracle",
   "testfireTransferStoredXssLiveOracle",
   "testfireTransferStoredXssRouteLiveOracle",
+  "testfireSearchReflectedXssLiveOracle",
+  "testfireSearchReflectedXssRouteLiveOracle",
+  "testfireFeedbackReflectedXssLiveOracle",
+  "testfireFeedbackReflectedXssRouteLiveOracle",
+  "testfireBankLoginSqliRouteLiveOracle",
   "euriSecCspDynamicScriptLiveOracle",
   "euriSecCspDynamicScriptRouteLiveOracle",
   "brokencrystalsSecretsLiveOracle",
@@ -16588,6 +16593,9 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       )
         return -4;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-login-sqli")) return -2;
+      if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-bank-login-sqli")) return -2;
+      if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-search-reflected-xss")) return -2;
+      if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-feedback-reflected-xss")) return -2;
       if (/testfire\.net/i.test(origin) && p.slug.startsWith("testfire-transfer")) return -2;
       if (/euri-sec-csp/i.test(origin) && p.slug.startsWith("euri-sec-csp")) return -2;
       if (/duck-store\.escape\.tech/i.test(origin) && p.slug.startsWith("duck-store")) return -2;

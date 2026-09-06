@@ -9209,6 +9209,24 @@
       "slug": "oopssec-xxe-path-traversal-runner-priority",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for oopssec-xxe-supplier-import-* on /posts/xxe-supplier-order-import; prepended path-traversal vanity + xxe-supplier-order-import to priority_discovery_urls; extractOopssecStoreSeeds adds path-traversal + xxe post paths; koadt.github.io/.../path-traversal/ findings 0→7 (+oopssec-path-traversal-route-live-oracle vanity canonical fallback), xxe-supplier-order-import 11 (+oopssec-xxe-supplier-import-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.testfire.net",
+      "slug": "testfire-search-reflected-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /search.jsp?query=<script>alert(1)</script> reflects unescaped script in search results (ZAP AltoroJ true positive); demo.testfire.net/search.jsp?query=test findings 11→14 (+testfire-search-reflected-xss-live-oracle +testfire-search-reflected-xss-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.testfire.net",
+      "slug": "testfire-feedback-reflected-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /sendFeedback with name=<script>alert(1)</script> reflects unescaped script in thank-you message; demo.testfire.net/feedback.jsp findings 11→14 (+testfire-feedback-reflected-xss-live-oracle +testfire-feedback-reflected-xss-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:demo.testfire.net",
+      "slug": "testfire-bank-login-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /bank/login.aspx route scan confirms POST /doLogin admin' OR '1'='1 redirects to /bank/main.jsp; demo.testfire.net/bank/login.aspx findings 11→14 (+testfire-bank-login-sqli-route-live-oracle alongside testfire-login-sqli-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

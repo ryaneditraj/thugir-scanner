@@ -109334,6 +109334,113 @@ const testfireTransferStoredXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const TESTFIRE_REFLECTED_XSS_PROBE = "<script>alert(1)</script>";
+
+const testfireSearchReflectedXssLiveOracle: Rule = async (ctx) => {
+  if (!isTestfireHost(ctx)) return NEGATIVE;
+  const searchUrl = new URL("/search.jsp", ctx.origin);
+  searchUrl.searchParams.set("query", TESTFIRE_REFLECTED_XSS_PROBE);
+  const doc = await ctx.probe.get(searchUrl.toString(), {
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!doc.body.includes(TESTFIRE_REFLECTED_XSS_PROBE)) return NEGATIVE;
+  if (!/<script>alert\(1\)<\/script>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: searchUrl.toString(),
+      payload: TESTFIRE_REFLECTED_XSS_PROBE,
+      note: "Altoro Mutual GET /search.jsp reflects unescaped <script>alert(1)</script> in search results — reflected XSS oracle"
+    }
+  };
+};
+
+const testfireSearchReflectedXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTestfireHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/search\.jsp/i.test(pageUrl)) return NEGATIVE;
+  const result = await testfireSearchReflectedXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Altoro Mutual /search.jsp route scan — GET query parameter reflects unescaped script tag — reflected XSS oracle"
+    }
+  };
+};
+
+const testfireFeedbackReflectedXssLiveOracle: Rule = async (ctx) => {
+  if (!isTestfireHost(ctx)) return NEGATIVE;
+  const feedbackUrl = new URL("/sendFeedback", ctx.origin).toString();
+  const body = new URLSearchParams({
+    cfile: "comments.txt",
+    name: TESTFIRE_REFLECTED_XSS_PROBE,
+    email_addr: "thugir-probe@test.local",
+    subject: "scanner-probe",
+    comments: "thugir scanner probe",
+    submit: " Submit "
+  }).toString();
+  const doc = await ctx.probe.get(feedbackUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!doc.body.includes(TESTFIRE_REFLECTED_XSS_PROBE)) return NEGATIVE;
+  if (!/thank you for your comments,\s*<script>/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: feedbackUrl,
+      payload: TESTFIRE_REFLECTED_XSS_PROBE,
+      note: "Altoro Mutual POST /sendFeedback reflects unescaped <script>alert(1)</script> in the thank-you name field — reflected XSS oracle"
+    }
+  };
+};
+
+const testfireFeedbackReflectedXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTestfireHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/feedback\.jsp/i.test(pageUrl)) return NEGATIVE;
+  const result = await testfireFeedbackReflectedXssLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Altoro Mutual /feedback.jsp route scan — POST /sendFeedback reflects unescaped script in thank-you message — reflected XSS oracle"
+    }
+  };
+};
+
+const testfireBankLoginSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTestfireHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/bank\/login\.aspx/i.test(pageUrl)) return NEGATIVE;
+  const result = await testfireLoginSqliLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Altoro Mutual /bank/login.aspx route scan — POST /doLogin SQLi payload redirects to /bank/main.jsp — SQL injection authentication bypass oracle"
+    }
+  };
+};
+
 function isEuriSecCspHost(ctx: RuleContext): boolean {
   return /euri-sec-csp/i.test(ctx.origin) || /content security policy demo/i.test(ctx.combined);
 }
@@ -119492,6 +119599,11 @@ export const RULES: Record<string, Rule> = {
   testfireTransferSqliRouteLiveOracle,
   testfireTransferStoredXssLiveOracle,
   testfireTransferStoredXssRouteLiveOracle,
+  testfireSearchReflectedXssLiveOracle,
+  testfireSearchReflectedXssRouteLiveOracle,
+  testfireFeedbackReflectedXssLiveOracle,
+  testfireFeedbackReflectedXssRouteLiveOracle,
+  testfireBankLoginSqliRouteLiveOracle,
   euriSecCspDynamicScriptLiveOracle,
   euriSecCspDynamicScriptRouteLiveOracle,
   brokencrystalsSecretsLiveOracle,

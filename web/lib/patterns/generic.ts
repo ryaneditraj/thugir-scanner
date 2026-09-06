@@ -44861,6 +44861,136 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "testfire-search-reflected-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Altoro Mutual search reflected XSS live oracle",
+    description:
+      "GET /search.jsp?query=<script>alert(1)</script> reflects the payload unescaped in search results — the IBM Altoro Mutual search-bar reflected XSS oracle.",
+    impactOneline:
+      "Reflected XSS in the search query parameter enables session hijacking when victims click crafted search links.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testfireSearchReflectedXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode all reflected search output — Altoro Mutual is intentional training software.",
+      steps: [
+        "Encode user-supplied query strings before rendering in search result pages.",
+        "Apply Content-Security-Policy to mitigate inline script execution.",
+        "Run Altoro Mutual only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our GET /search.jsp endpoint reflects <script> tags unescaped in results. Show output-encoding remediation for JSP search handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "testfire-search-reflected-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Altoro Mutual /search.jsp reflected XSS route oracle",
+    description:
+      "When scanning /search.jsp, GET query parameter reflects unescaped <script>alert(1)</script> — route-specific reflected XSS confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Altoro Mutual search results render attacker-controlled script tags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testfireSearchReflectedXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode all reflected search output — Altoro Mutual is intentional training software.",
+      steps: [
+        "Encode user-supplied query strings before rendering in search result pages.",
+        "Apply Content-Security-Policy to mitigate inline script execution.",
+        "Run Altoro Mutual only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /search.jsp route scan confirms reflected XSS via the query parameter. Show output-encoding remediation for JSP search handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "testfire-feedback-reflected-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Altoro Mutual feedback reflected XSS live oracle",
+    description:
+      "POST /sendFeedback with name=<script>alert(1)</script> reflects the payload unescaped in the thank-you message — the IBM Altoro Mutual feedback form reflected XSS oracle.",
+    impactOneline:
+      "Reflected XSS in the feedback name field executes when staff review submitted comments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testfireFeedbackReflectedXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode all user-supplied feedback fields before rendering — Altoro Mutual is intentional training software.",
+      steps: [
+        "Encode name and subject fields before inserting into thank-you or review pages.",
+        "Validate and strip HTML from feedback form inputs at submission time.",
+        "Run Altoro Mutual only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our POST /sendFeedback endpoint reflects <script> tags in the thank-you name field. Show output-encoding remediation for JSP feedback handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "testfire-feedback-reflected-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "Altoro Mutual /feedback.jsp reflected XSS route oracle",
+    description:
+      "When scanning /feedback.jsp, POST /sendFeedback reflects unescaped <script>alert(1)</script> in the thank-you message — route-specific reflected XSS confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Altoro Mutual feedback submissions render attacker-controlled script tags.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testfireFeedbackReflectedXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode all user-supplied feedback fields before rendering — Altoro Mutual is intentional training software.",
+      steps: [
+        "Encode name and subject fields before inserting into thank-you or review pages.",
+        "Validate and strip HTML from feedback form inputs at submission time.",
+        "Run Altoro Mutual only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /feedback.jsp route scan confirms reflected XSS via /sendFeedback. Show output-encoding remediation for JSP feedback handlers.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "testfire-bank-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Altoro Mutual /bank/login.aspx SQL injection route oracle",
+    description:
+      "When scanning /bank/login.aspx, POST /doLogin with admin' OR '1'='1 redirects to /bank/main.jsp — route-specific SQL injection authentication bypass confirmation oracle.",
+    impactOneline:
+      "Route-specific confirmation that Altoro Mutual online banking login is vulnerable to classic SQLi authentication bypass.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "testfireBankLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for all authentication lookups — Altoro Mutual is intentional training software.",
+      steps: [
+        "Replace string-concatenated SQL in login handlers with prepared statements.",
+        "Return generic authentication failures without distinguishing SQL errors.",
+        "Run Altoro Mutual only on isolated scanner evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /bank/login.aspx route scan confirms SQLi auth bypass via /doLogin. Show parameterized query remediation for Java login servlets.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "euri-sec-csp-dynamic-script-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",
