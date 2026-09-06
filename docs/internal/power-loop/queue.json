@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T02:12:00.000Z",
+  "updated_at": "2026-09-06T03:12:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/transactions/history?account_id=1",
+      "source": "atlas-crew/Chimera — CHM-BNK-003 time-based blind SQLi oracle GET /api/v1/transactions/history?account_id= (vuln-api README; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/banking/accounts/search?account_number=1",
+      "source": "atlas-crew/Chimera — CHM-BNK-002 UNION-based SQLi oracle GET /api/v1/banking/accounts/search?account_number= (vuln-api README; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/insurance/policies/lookup?policy_number=POL-001",
+      "source": "atlas-crew/Chimera — CHM-INS-003 blind boolean SQLi oracle GET /api/v1/insurance/policies/lookup?policy_number= (vuln-api README; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/claims/search?policy_id=1&order_by=id",
+      "source": "atlas-crew/Chimera — CHM-INS-004 ORDER BY SQLi oracle GET /api/v1/claims/search?policy_id&order_by= (vuln-api README; web search 03 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://brokencrystals.com/api/process_numbers?numbers=1,2,3",
+      "source": "NeuraLegion/brokencrystals — server-side JS injection oracle POST /api/process_numbers (README; web search 03 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://hackminaaziz.fly.dev/",
       "source": "minaaziz9/Vulnerable-Web-Application-MinaAziz — Flask DVWA-style lab with 7 active vulns (fly.io deploy README; web search 02 UTC)",
