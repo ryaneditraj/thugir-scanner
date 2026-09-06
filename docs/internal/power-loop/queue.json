@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T11:05:00.000Z",
+  "updated_at": "2026-09-06T12:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://crucible.dreadnode.io/challenges",
+      "source": "Dreadnode Crucible — AI red-team challenge catalog behind auth wall (sonuoffsec AI-Security-Hub; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugforge.io/deep-dives/client-side-path-traversal",
+      "source": "bugforge.io — CSPT deep-dive course hub with lab-backed modules (homepage deep-dive promo; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php",
+      "source": "webspoilt/vulnforge-academy — level 20 nightmare multi-vector chain (GitHub README levels table; web search 12 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-68",
+      "source": "OWASP WrongSecrets — challenge-68 walkthrough slug (scoreboard gap; Heroku may 404)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/telecom/subscribers/1/profile",
+      "source": "atlas-crew/Chimera — telecom subscriber profile BOLA oracle (vuln-api README endpoint catalog; web search 12 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://next-nosqli.vercel.app/",
       "source": "ankush-003/next-nosqli — NoSQL injection training app (GitHub homepage; web search 11 UTC)",
@@ -11742,5 +11767,5 @@
     }
   ],
   "discovery_urls": [],
-  "discovery_urls_added": 2123
+  "discovery_urls_added": 2128
 }
