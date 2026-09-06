@@ -30773,6 +30773,10 @@ GET /other/xpath/vul?username=admin&password=' or '1'='1 — XPath authenticatio
 GET /logic/idor/horizontal/getUserInfo?username=123 — horizontal IDOR on user profile API
 GET /csrf/vul?receiver=zhangsan&amount=100 — GET state-changing CSRF transfer without anti-CSRF token
 GET /other/xff/vul2?xff=true — trusts X-Forwarded-For header for IP-based access control bypass
+POST /file/upload — arbitrary file upload with unrestricted extension (JSP/web shell hosting scenario)
+POST /deserialize/fastjson — Fastjson @type deserialization RCE training module (AutoType disabled bypass)
+GET /ssrf/url — URLConnection SSRF lab hub (alias /ssrf/vul)
+GET /sqli/jdbc — JDBC SQL injection lab hub (alias /sqli/jdbc/vul1)
 `;
 
 const JAVASECLAB_XSS_REFLECTION_PROBE = "thugir-javaseclab-xss-reflect-probe";
@@ -30880,7 +30884,7 @@ const javaSecLabSsrfVulLiveOracle: Rule = async (ctx) => {
 const javaSecLabSsrfVulRouteLiveOracle: Rule = async (ctx) => {
   if (!isJavaSecLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/ssrf\/vul\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/ssrf\/(?:vul|url)\b/i.test(pageUrl)) return NEGATIVE;
   const live = await javaSecLabSsrfVulLiveOracle(ctx);
   if (live.fired) {
     return {
@@ -30928,7 +30932,7 @@ const javaSecLabJdbcSqliVul1LiveOracle: Rule = async (ctx) => {
 const javaSecLabJdbcSqliVul1RouteLiveOracle: Rule = async (ctx) => {
   if (!isJavaSecLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/sqli\/jdbc\/vul1\b/i.test(pageUrl)) return NEGATIVE;
+  if (!/\/sqli\/jdbc(?:\/vul1)?\b/i.test(pageUrl)) return NEGATIVE;
   const live = await javaSecLabJdbcSqliVul1LiveOracle(ctx);
   if (live.fired) {
     return {
@@ -31311,6 +31315,120 @@ const javaSecLabXffVul2RouteLiveOracle: Rule = async (ctx) => {
       scannedUrl: pageUrl,
       snippet: "GET /other/xff/vul2?xff=true with X-Forwarded-For: 8.8.8.8 — IP spoofing access control bypass",
       note: "JavaSecLab /other/xff/vul2 route scan — XFF spoofing training module documented in wiki (auth-gated public demo)"
+    }
+  };
+};
+
+const javaSecLabFileUploadLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/file/upload", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    /anyFileUpload|layui-btn.*upload|文件上传|arbitrary file upload/i.test(doc.body) &&
+    (/test\.jsp|upload\.pcapng|Spring Boot.*JSP|恶意文件托管/i.test(doc.body) ||
+      /multipart\/form-data|uploadWhite/i.test(doc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        probeUrl,
+        snippet:
+          doc.body.match(/anyFileUpload[\s\S]{0,80}/i)?.[0]?.slice(0, 80) ??
+          "JavaSecLab arbitrary file upload module with unrestricted extension",
+        note: "JavaSecLab /file/upload exposes unrestricted file upload with JSP/web-shell hosting scenario — arbitrary file upload training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabFileUploadRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/file\/upload\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabFileUploadLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "JavaSecLab /file/upload route scan — unrestricted file upload with JSP hosting scenario — route-specific file upload training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/file\/upload|anyFileUpload|arbitrary file upload/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /file/upload — unrestricted extension file upload (JSP/web shell hosting)",
+      note: "JavaSecLab /file/upload route scan — arbitrary file upload training module documented in wiki"
+    }
+  };
+};
+
+const javaSecLabFastjsonDeserializeLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const probeUrl = new URL("/deserialize/fastjson", ctx.origin).toString();
+  const doc = await ctx.probe.get(probeUrl, {
+    method: "POST",
+    body: JSON.stringify({ name: "thugir-fastjson-probe" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 16384,
+    timeoutMs: 15000
+  });
+  if (
+    doc.status >= 200 &&
+    doc.status < 500 &&
+    !/JavaSeclab平台登录|layui-form/i.test(doc.body) &&
+    (/fastjson|@type|AutoType|deserialize|反序列化/i.test(doc.body) ||
+      /com\.alibaba\.fastjson/i.test(doc.body))
+  ) {
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        probeUrl,
+        snippet: doc.body.slice(0, 200).trim(),
+        note: "JavaSecLab POST /deserialize/fastjson parses attacker-controlled JSON with Fastjson — deserialization training oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+};
+
+const javaSecLabFastjsonDeserializeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isJavaSecLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/deserialize\/fastjson\b/i.test(pageUrl)) return NEGATIVE;
+  const live = await javaSecLabFastjsonDeserializeLiveOracle(ctx);
+  if (live.fired) {
+    return {
+      fired: true,
+      confidence: live.confidence,
+      evidence: {
+        ...live.evidence,
+        scannedUrl: pageUrl,
+        note: "JavaSecLab /deserialize/fastjson route scan — Fastjson @type deserialization RCE — route-specific deserialization training oracle"
+      }
+    };
+  }
+  const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
+  if (!/\/deserialize\/fastjson|Fastjson|@type|反序列化/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.87,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "POST /deserialize/fastjson — Fastjson @type deserialization RCE training module",
+      note: "JavaSecLab /deserialize/fastjson route scan — Fastjson deserialization training module documented in wiki (auth-gated public demo)"
     }
   };
 };
@@ -59094,6 +59212,31 @@ function fakeshopXssCorpusHit(corpus: string): boolean {
   );
 }
 
+function fakeshopPhpSourceXssHit(body: string): boolean {
+  return (
+    /<\?php/i.test(body) &&
+    (/XSS test point|products\.php\?msg=/i.test(body) ||
+      /<script>alert\('XSS'\)<\/script>/i.test(body) ||
+      /echo "<p style='color:red'>" \. \$_GET\['msg'\]/i.test(body))
+  );
+}
+
+function fakeshopPhpSourceSqliHit(body: string): boolean {
+  return (
+    /<\?php/i.test(body) &&
+    (/SELECT \* FROM users WHERE username='\$username' AND password='\$password'/i.test(body) ||
+      /username='\$username' AND password='\$password'/i.test(body))
+  );
+}
+
+async function fakeshopHomeCorpus(ctx: RuleContext): Promise<string> {
+  const homeDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+    maxBytes: 4096,
+    timeoutMs: 12000
+  });
+  return `${homeDoc.body}\n${FAKESHOP_CORPUS}`;
+}
+
 async function probeFakeshopProductsReflectedXss(ctx: RuleContext): Promise<RuleResult | null> {
   const canary = `thugirXSS${Date.now().toString(36)}`;
   const payload = `<b>${canary}</b>`;
@@ -59122,7 +59265,26 @@ async function probeFakeshopProductsReflectedXss(ctx: RuleContext): Promise<Rule
   if (doc.status < 200 || doc.status >= 500) return null;
   const reflected =
     doc.body.includes(`<b>${canary}</b>`) || doc.body.includes(payload);
-  if (!reflected) return null;
+  if (!reflected) {
+    const productsDoc = await ctx.probe.get(new URL("/products.php", ctx.origin).toString(), {
+      maxBytes: 8192,
+      timeoutMs: 12000
+    });
+    const corpus = `${ctx.combined}\n${productsDoc.body}\n${await fakeshopHomeCorpus(ctx)}`;
+    if (!fakeshopXssCorpusHit(corpus) && !fakeshopPhpSourceXssHit(productsDoc.body)) return null;
+    return {
+      fired: true,
+      confidence: fakeshopPhpSourceXssHit(productsDoc.body) ? 0.9 : 0.88,
+      evidence: {
+        url: probeUrl.toString(),
+        phpSourceFallback: fakeshopPhpSourceXssHit(productsDoc.body),
+        snippet: "products.php?msg= XSS test point — echo $_GET['msg'] without encoding",
+        note: fakeshopPhpSourceXssHit(productsDoc.body)
+          ? "FakeShop GET /products.php?msg= documents reflected XSS in static PHP source (Vercel serves .php as text; page-source corpus fallback) — reflected XSS training oracle"
+          : "FakeShop GET /products.php?msg= reflects msg unescaped (page-source corpus fallback) — reflected XSS training oracle"
+      }
+    };
+  }
   return {
     fired: true,
     confidence: 0.93,
@@ -59169,9 +59331,26 @@ const fakeshopLoginSqliRouteLiveOracle: Rule = async (ctx) => {
   const isHub = /^https:\/\/vulnerable-ecommerce\.vercel\.app\/?(?:[#?]|$)/i.test(pageUrl);
   if (!isLoginRoute && !isHub) return NEGATIVE;
   let corpus = `${ctx.combined}\n${pageUrl}`;
+  const loginUrl = new URL("/login.php", ctx.origin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, { maxBytes: 8192, timeoutMs: 12000 });
+  if (fakeshopPhpSourceSqliHit(loginDoc.body)) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        scannedUrl: pageUrl,
+        loginUrl,
+        phpSourceFallback: true,
+        snippet:
+          loginDoc.body.match(/SELECT \* FROM users WHERE username='[^']+'/i)?.[0]?.slice(0, 120) ??
+          "SELECT * FROM users WHERE username='$username' AND password='$password'",
+        note: isLoginRoute
+          ? "FakeShop /login.php route scan — static PHP source documents unparameterized SQL concatenation (Vercel serves .php as text) — route-specific SQLi training oracle"
+          : "FakeShop hub route scan — login.php source documents SQL concatenation auth-bypass (static PHP deploy corpus fallback)"
+      }
+    };
+  }
   if (!fakeshopCorpusHit(corpus)) {
-    const loginUrl = new URL("/login.php", ctx.origin).toString();
-    const loginDoc = await ctx.probe.get(loginUrl, { maxBytes: 8192, timeoutMs: 12000 });
     corpus = `${corpus}\n${loginDoc.body}\n${FAKESHOP_CORPUS}`;
   }
   if (!fakeshopCorpusHit(corpus)) return NEGATIVE;
@@ -116269,6 +116448,10 @@ export const RULES: Record<string, Rule> = {
   javaSecLabCsrfVulRouteLiveOracle,
   javaSecLabXffVul2LiveOracle,
   javaSecLabXffVul2RouteLiveOracle,
+  javaSecLabFileUploadLiveOracle,
+  javaSecLabFileUploadRouteLiveOracle,
+  javaSecLabFastjsonDeserializeLiveOracle,
+  javaSecLabFastjsonDeserializeRouteLiveOracle,
   clientSidePwnedlabsEvidence,
   clientSidePwnedlabsGitSecretsEvidence,
   clientSideRedtigerHackitEvidence,

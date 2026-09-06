@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-06T01:16:43.370Z",
-  "total": 3356,
-  "uniqueSlugs": 3348,
+  "generatedAt": "2026-09-06T02:05:18.238Z",
+  "total": 3360,
+  "uniqueSlugs": 3352,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3338,
+    "generic": 3342,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3271,
+    "deep": 3275,
     "continuous": 0
   },
   "byCategory": {
@@ -25,9 +25,9 @@
     "Misconfiguration": 2,
     "Information exposure": 1,
     "Information disclosure": 155,
-    "Security misconfiguration": 286,
+    "Security misconfiguration": 288,
     "Broken authentication": 211,
-    "Injection": 545,
+    "Injection": 547,
     "Cross-site scripting": 802,
     "Open redirect": 29,
     "general": 20,
@@ -2051,6 +2051,10 @@
     "javaseclab-csrf-vul-live-oracle",
     "javaseclab-csrf-vul-route-live-oracle",
     "javaseclab-druid-basic-json-route-live-oracle",
+    "javaseclab-fastjson-deserialize-live-oracle",
+    "javaseclab-fastjson-deserialize-route-live-oracle",
+    "javaseclab-file-upload-live-oracle",
+    "javaseclab-file-upload-route-live-oracle",
     "javaseclab-horizontal-idor-live-oracle",
     "javaseclab-horizontal-idor-route-live-oracle",
     "javaseclab-jdbc-sqli-vul1-live-oracle",

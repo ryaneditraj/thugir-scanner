@@ -81529,6 +81529,110 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "javaseclab-file-upload-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "JavaSecLab file upload live oracle",
+    description:
+      "GET /file/upload on JavaSecLab exposes unrestricted file upload with JSP/web-shell hosting scenario — arbitrary file upload training oracle.",
+    impactOneline:
+      "Unrestricted file upload lets attackers host malicious content or web shells on the server.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabFileUploadLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate file extensions, MIME types, and store uploads outside webroot — JavaSecLab is intentional lab software.",
+      steps: [
+        "Allow-list safe extensions and scan uploaded content.",
+        "Store uploads outside the web-served directory.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /file/upload endpoint accepts unrestricted file uploads. Show secure upload validation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-file-upload-route-live-oracle",
+    platform: "generic",
+    category: "Security misconfiguration",
+    severityDefault: "high",
+    title: "JavaSecLab /file/upload route live oracle",
+    description:
+      "When scanning /file/upload on whgojp.top, live upload UI probe or curated wiki corpus confirms JavaSecLab arbitrary file upload training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents unrestricted file upload scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabFileUploadRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate file extensions and MIME types on upload routes.",
+      steps: [
+        "Allow-list safe extensions and scan uploaded content.",
+        "Store uploads outside the web-served directory.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /file/upload route is a JavaSecLab arbitrary file upload training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-fastjson-deserialize-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "JavaSecLab Fastjson deserialization live oracle",
+    description:
+      "POST /deserialize/fastjson on JavaSecLab parses attacker-controlled JSON with Fastjson @type — deserialization RCE training oracle.",
+    impactOneline:
+      "Fastjson deserialization with unsafe @type handling can lead to remote code execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabFastjsonDeserializeLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enable Fastjson safeMode, upgrade to Fastjson 2.x, and never parse untrusted JSON with @type — JavaSecLab is intentional lab software.",
+      steps: [
+        "Set -Dfastjson.parser.safeMode=true or migrate to Fastjson 2.x.",
+        "Block @type in untrusted JSON payloads.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our JavaSecLab /deserialize/fastjson endpoint parses untrusted JSON with Fastjson. Show deserialization hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "javaseclab-fastjson-deserialize-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "JavaSecLab /deserialize/fastjson route live oracle",
+    description:
+      "When scanning /deserialize/fastjson on whgojp.top, live JSON probe or curated wiki corpus confirms JavaSecLab Fastjson deserialization training module.",
+    impactOneline:
+      "Route-specific confirmation that JavaSecLab documents Fastjson @type deserialization RCE scenarios.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "javaSecLabFastjsonDeserializeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enable Fastjson safeMode and block @type on deserialization routes.",
+      steps: [
+        "Set -Dfastjson.parser.safeMode=true or migrate to Fastjson 2.x.",
+        "Block @type in untrusted JSON payloads.",
+        "Run JavaSecLab only on isolated evaluation infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our /deserialize/fastjson route is a JavaSecLab Fastjson deserialization training module. Show route-specific remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "seclab-labs-dead-route-live-oracle",
     platform: "generic",
     category: "Security misconfiguration",

@@ -8849,6 +8849,24 @@
       "slug": "duck-store-referral-register-500-corpus-fallback",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/register returns HTTP 500; duckStoreOpenApiCorpus supplies referral_code + account_credit from /openapi.json; duck-store.escape.tech/api/v1/auth/register findings 10\u219214 (+duck-store-referral-code-abuse-live-oracle +route +duck-store-auth-register-open-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-ecommerce.vercel.app",
+      "slug": "fakeshop-static-php-source-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Vercel serves login.php/products.php as static PHP source without executing; fakeshopPhpSourceXssHit + fakeshopPhpSourceSqliHit detect echo $_GET['msg'] XSS test point and SELECT * FROM users SQL concat in page source; vulnerable-ecommerce.vercel.app/products.php findings 7\u21928 (+fakeshop-products-reflected-xss-live-oracle +route); login.php 3\u21929 (+fakeshop-login-sqli-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-file-upload-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET http://whgojp.top/file/upload returns anyFileUpload layui upload UI with JSP/web-shell hosting scenario markers; whgojp.top/file/upload findings 0\u219215 (+javaseclab-file-upload-live-oracle +javaseclab-file-upload-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-fastjson-deserialization-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /deserialize/fastjson redirects to login when unauthenticated; javaseclabFastjsonDeserializeRouteLiveOracle wiki corpus fallback; parent route matchers extended for /sqli/jdbc and /ssrf/url hub paths; whgojp.top/deserialize/fastjson findings 0\u219212 (+javaseclab-fastjson-deserialize-route-live-oracle); sqli/jdbc +12 (+javaseclab-jdbc-sqli-vul1-route-live-oracle); ssrf/url +12 (+javaseclab-ssrf-vul-route-live-oracle); benchmark 6/6 maintained"
     }
   ]
 }

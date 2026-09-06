@@ -2373,6 +2373,10 @@ const DEEP_RULES = new Set<string>([
   "javaSecLabCsrfVulRouteLiveOracle",
   "javaSecLabXffVul2LiveOracle",
   "javaSecLabXffVul2RouteLiveOracle",
+  "javaSecLabFileUploadLiveOracle",
+  "javaSecLabFileUploadRouteLiveOracle",
+  "javaSecLabFastjsonDeserializeLiveOracle",
+  "javaSecLabFastjsonDeserializeRouteLiveOracle",
   "javaSecLabDruidBasicJsonRouteLiveOracle",
   "clientSidePwnedlabsEvidence",
   "clientSidePwnedlabsGitSecretsEvidence",
@@ -5258,7 +5262,11 @@ function extractJavaSecLabSeeds(html: string, pageUrl: string): string[] {
     "/other/xpath/vul",
     "/logic/idor/horizontal/getUserInfo",
     "/csrf/vul",
-    "/other/xff/vul2"
+    "/other/xff/vul2",
+    "/file/upload",
+    "/deserialize/fastjson",
+    "/ssrf/url",
+    "/sqli/jdbc"
   ]) {
     try {
       out.add(new URL(path, pageUrl).toString());
@@ -16694,13 +16702,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /whgojp\.top/i.test(origin) &&
-        /\/ssrf\/vul\b/i.test(targetInput) &&
+        /\/ssrf\/(?:vul|url)\b/i.test(targetInput) &&
         p.slug.startsWith("javaseclab-ssrf-vul")
       )
         return -3;
       if (
         /whgojp\.top/i.test(origin) &&
-        /\/sqli\/jdbc\/vul1\b/i.test(targetInput) &&
+        /\/sqli\/jdbc(?:\/vul1)?\b/i.test(targetInput) &&
         p.slug.startsWith("javaseclab-jdbc-sqli-vul1")
       )
         return -3;
@@ -16738,6 +16746,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /whgojp\.top/i.test(origin) &&
         /\/csrf\/vul\b/i.test(targetInput) &&
         p.slug.startsWith("javaseclab-csrf-vul")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/file\/upload\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-file-upload")
+      )
+        return -3;
+      if (
+        /whgojp\.top/i.test(origin) &&
+        /\/deserialize\/fastjson\b/i.test(targetInput) &&
+        p.slug.startsWith("javaseclab-fastjson-deserialize")
       )
         return -3;
       if (
