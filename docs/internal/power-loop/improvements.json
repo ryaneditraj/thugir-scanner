@@ -9191,6 +9191,24 @@
       "slug": "ist-edu-search-xss-api-route-match",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: istEduSearchXssRouteLiveOracle pathname matcher extended to /api/search (parity with SQLi route oracle); GET /api/search?q=<script> reflects unescaped; ist-edu-bd.vercel.app/api/search findings 9 (+ist-edu-search-xss-route-live-oracle alongside ist-edu-search-sqli-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets-ctf.herokuapp.com",
+      "slug": "wrongsecrets-challenge-13-cicd-ctf-forkable-actions",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CTF host challenge-13 uses shortened Github Forkable actions walkthrough (no Exfiltrate the secret using Github Actions paragraph); wrongsecretsChallenge13CicdLiveOracle accepts Github Forkable actions + find the secret using the Github action markers; wrongsecrets-ctf.herokuapp.com/challenge/challenge-13 findings 14→15 (+wrongsecrets-challenge-13-cicd-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets-ctf.herokuapp.com",
+      "slug": "wrongsecrets-ctf-hub-seeds-challenge-13-14",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with challenge-13/14 + /challenge/13 /challenge/14 short aliases on wrongsecrets-ctf.herokuapp.com; accelerates CTF host queue drain for CI/CD + password-manager route oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io",
+      "slug": "oopssec-xxe-path-traversal-runner-priority",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner -4 priority for oopssec-xxe-supplier-import-* on /posts/xxe-supplier-order-import; prepended path-traversal vanity + xxe-supplier-order-import to priority_discovery_urls; extractOopssecStoreSeeds adds path-traversal + xxe post paths; koadt.github.io/.../path-traversal/ findings 0→7 (+oopssec-path-traversal-route-live-oracle vanity canonical fallback), xxe-supplier-order-import 11 (+oopssec-xxe-supplier-import-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

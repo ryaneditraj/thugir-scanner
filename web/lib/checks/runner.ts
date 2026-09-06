@@ -10094,7 +10094,13 @@ function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
     "/posts/react2shell-cve-2025-55182/",
     "/posts/react2shell/",
     "/posts/jwt-weak-secret-admin-bypass/",
-    "/posts/weak-jwt-secret/"
+    "/posts/weak-jwt-secret/",
+    "/posts/path-traversal-documents-api/",
+    "/posts/path-traversal-documents-api",
+    "/posts/path-traversal/",
+    "/posts/path-traversal",
+    "/posts/xxe-supplier-order-import/",
+    "/posts/xxe-supplier-order-import"
   ]) {
     try {
       const u = new URL(p, pageUrl);
@@ -11648,7 +11654,11 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
           "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-11",
           "https://wrongsecrets-ctf.herokuapp.com/challenge/11",
           "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-12",
-          "https://wrongsecrets-ctf.herokuapp.com/challenge/12"
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/12",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-13",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/13",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-14",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/14"
         ]
       : [
         "https://wrongsecrets.herokuapp.com/challenge/challenge-0",
@@ -14634,6 +14644,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
         /\/posts\/(?:path-traversal-documents-api|path-traversal)\/?$/i.test(targetInput) &&
         p.slug.startsWith("oopssec-path-traversal")
+      )
+        return -4;
+      if (
+        /koadt\.github\.io\/oss-oopssec-store/i.test(origin) &&
+        /\/posts\/xxe-supplier-order-import\/?$/i.test(targetInput) &&
+        p.slug.startsWith("oopssec-xxe-supplier-import")
       )
         return -4;
       if (

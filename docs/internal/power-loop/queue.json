@@ -1,6 +1,16 @@
 {
-  "updated_at": "2026-09-06T21:05:00.000Z",
+  "updated_at": "2026-09-06T22:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/path-traversal/",
+      "source": "kOaDT/oss-oopssec-store — path-traversal vanity slug 404 → canonical path-traversal-documents-api (22 UTC power-loop)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import/",
+      "source": "kOaDT/oss-oopssec-store — Challenge 22 XXE supplier order import walkthrough (scoreboard gap; 22 UTC power-loop)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://nodegoat-websec.herokuapp.com/contributions",
       "source": "OWASP NodeGoat — authenticated RCE via eval() on POST /contributions preTax/afterTax/roth (PR#411; web search 21 UTC)",

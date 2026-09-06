@@ -93408,7 +93408,9 @@ const wrongsecretsChallenge13CicdLiveOracle: Rule = async (ctx) => {
   const body = doc.body;
   if (
     !/challenge focuses on.*CI\/CD|CI\/CD<\/strong>/i.test(body) ||
-    !/Github Actions|Exfiltrate the secret using Github|Get the challenge code 13/i.test(body) ||
+    !/Github Actions|Exfiltrate the secret using Github|Get the challenge code 13|Github Forkable actions|find the secret using the Github action/i.test(
+      body
+    ) ||
     !/data-cy="answer-textbox"/i.test(body)
   ) {
     return NEGATIVE;
@@ -93420,6 +93422,7 @@ const wrongsecretsChallenge13CicdLiveOracle: Rule = async (ctx) => {
       url: probeUrl,
       snippet:
         body.match(/Exfiltrate the secret using Github[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
+        body.match(/Github Forkable actions[\s\S]{0,100}/i)?.[0]?.slice(0, 100) ??
         "CI/CD challenge",
       note: "OWASP WrongSecrets challenge-13 documents CI/CD secret exfiltration via Github Actions workflow runs — pipeline secrets oracle"
     }
