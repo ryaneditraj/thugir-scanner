@@ -11646,7 +11646,9 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
           "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-10",
           "https://wrongsecrets-ctf.herokuapp.com/challenge/10",
           "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-11",
-          "https://wrongsecrets-ctf.herokuapp.com/challenge/11"
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/11",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-12",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/12"
         ]
       : [
         "https://wrongsecrets.herokuapp.com/challenge/challenge-0",
@@ -15975,7 +15977,8 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         return -3;
       if (
         /crapi2?\.apisec\.ai/i.test(origin) &&
-        /\/(?:identity|community)\/api\/v2\/community\/posts/i.test(targetInput) &&
+        (/\/(?:identity|community)\/api\/v2\/community\/posts/i.test(targetInput) ||
+          /\/community\/api\/posts\b/i.test(targetInput)) &&
         p.slug.startsWith("crapi-community-posts")
       )
         return -4;

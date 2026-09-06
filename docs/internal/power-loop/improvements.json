@@ -9173,6 +9173,24 @@
       "slug": "wrongsecrets-ctf-hub-seeds-challenge-11",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with challenge-11 + /challenge/11 short alias; wrongsecrets-ctf.herokuapp.com/challenge/challenge-11 findings 14 (+wrongsecrets-challenge-11-iam-escalation-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets-ctf.herokuapp.com",
+      "slug": "wrongsecrets-ctf-hub-seeds-challenge-12",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with challenge-12 + /challenge/12 short alias; wrongsecrets-ctf.herokuapp.com/challenge/challenge-12 findings 15 (+wrongsecrets-challenge-12-docker-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crapi.apisec.ai",
+      "slug": "crapi-community-posts-legacy-v1-path",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: crapiCommunityPostsRouteLiveOracle + crapiVehicleBolaLiveOracle extended to legacy /community/api/posts path; runner -4 priority on /community/api/posts route scans; crapi.apisec.ai/community/api/posts findings 11→14 (+crapi-community-posts-live-oracle +crapi-community-posts-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:ist-edu-bd.vercel.app",
+      "slug": "ist-edu-search-xss-api-route-match",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: istEduSearchXssRouteLiveOracle pathname matcher extended to /api/search (parity with SQLi route oracle); GET /api/search?q=<script> reflects unescaped; ist-edu-bd.vercel.app/api/search findings 9 (+ist-edu-search-xss-route-live-oracle alongside ist-edu-search-sqli-route-live-oracle); benchmark juice-shop 49 findings 6/6 maintained"
     }
   ]
 }

@@ -106036,7 +106036,9 @@ const crapiVehicleBolaLiveOracle: Rule = async (ctx) => {
   const authHeaders = { Authorization: `Bearer ${jwt}` };
   const postsPaths = [
     "/identity/api/v2/community/posts/recent",
-    "/community/api/v2/community/posts/recent"
+    "/community/api/v2/community/posts/recent",
+    "/community/api/posts",
+    "/community/api/posts/recent"
   ];
   let postsDoc: Awaited<ReturnType<typeof fetchDoc>> | null = null;
   let postsUrl = "";
@@ -106057,7 +106059,9 @@ const crapiVehicleBolaLiveOracle: Rule = async (ctx) => {
   }
   if (!postsDoc || postsDoc.status < 200 || postsDoc.status >= 400) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  const onCommunityPostsRoute = /\/(?:identity|community)\/api\/v2\/community\/posts/i.test(pageUrl);
+  const onCommunityPostsRoute =
+    /\/(?:identity|community)\/api\/v2\/community\/posts/i.test(pageUrl) ||
+    /\/community\/api\/posts\b/i.test(pageUrl);
   const leakedUuids = [
     ...new Set([
       ...extractCrapiVehicleUuids(postsDoc.body),
@@ -106897,7 +106901,11 @@ const crapiCommunityPostsLiveOracle: Rule = async (ctx) => {
 const crapiCommunityPostsRouteLiveOracle: Rule = async (ctx) => {
   if (!isCrapiLabHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/(?:identity|community)\/api\/v2\/community\/posts/i.test(pageUrl)) return NEGATIVE;
+  if (
+    !/\/(?:identity|community)\/api\/v2\/community\/posts/i.test(pageUrl) &&
+    !/\/community\/api\/posts\b/i.test(pageUrl)
+  )
+    return NEGATIVE;
   const result = await crapiVehicleBolaLiveOracle(ctx);
   if (result.fired) {
     return {
@@ -106906,13 +106914,16 @@ const crapiCommunityPostsRouteLiveOracle: Rule = async (ctx) => {
       evidence: {
         ...result.evidence,
         scannedUrl: pageUrl,
-        note: "crAPI /community/api/v2/community/posts route scan — vehicleid UUID leak in recent posts enables cross-user location BOLA (API1)"
+        note: /\/community\/api\/posts\b/i.test(pageUrl) && !/v2\/community\/posts/i.test(pageUrl)
+          ? "crAPI legacy /community/api/posts route scan — vehicleid UUID leak in community posts enables cross-user location BOLA (API1)"
+          : "crAPI /community/api/v2/community/posts route scan — vehicleid UUID leak in recent posts enables cross-user location BOLA (API1)"
       }
     };
   }
   const corpus = `${ctx.combined}\n${pageUrl}\n${CRAPI_COMMUNITY_POSTS_ROUTE_FALLBACK}`;
   if (
-    !/\/(?:identity|community)\/api\/v2\/community\/posts/i.test(corpus) ||
+    (!/\/(?:identity|community)\/api\/v2\/community\/posts/i.test(corpus) &&
+      !/\/community\/api\/posts\b/i.test(corpus)) ||
     !/vehicleid|community posts|latitude|longitude|BOLA|API1/i.test(corpus)
   ) {
     return NEGATIVE;
@@ -113281,7 +113292,7 @@ const istEduSearchXssRouteLiveOracle: Rule = async (ctx) => {
   } catch {
     return NEGATIVE;
   }
-  if (!/\/(?:labs\/xss|xss|search)\/?$/i.test(pathname)) return NEGATIVE;
+  if (!/\/(?:labs\/xss|xss|api\/search|search)\/?$/i.test(pathname)) return NEGATIVE;
   const searchUrl = new URL("/api/search", ctx.origin);
   searchUrl.searchParams.set("q", IST_EDU_XSS_PROBE);
   const doc = await ctx.probe.get(searchUrl.toString(), { maxBytes: 4096 });

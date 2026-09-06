@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T21:12:00.000Z",
+  "updated_at": "2026-09-06T21:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -17,22 +17,22 @@
   },
   "total_sites_scanned": 2923,
   "total_findings": 29642,
-  "critical_findings": 85,
+  "critical_findings": 86,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2163,
   "discovery_findings": 24348,
-  "improvements_shipped": 1515,
-  "last_run": "2026-09-06T21:12:00.000Z",
+  "improvements_shipped": 1518,
+  "last_run": "2026-09-06T21:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "21",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_findings": 49,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 602,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,24 +48,24 @@
           ]
         }
       },
-      "note": "6/6 on primary Heroku first pass (53 findings, 38 live oracles; secret-resend + jwt-alg-none + captcha-bypass present)"
+      "note": "6/6 on primary Heroku (49 findings validation pass; secret-resend present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 8,
-      "urls_ok": 8,
-      "findings": 119,
-      "focus": "21 UTC: NodeGoat contributions SSJS RCE + memos XSS + A1 tutorial + WrongSecrets CTF 13/14; queue drained oopssec mass-assignment/product-search/supply-chain",
-      "improvements_shipped_this_run": 0
+      "urls_scanned": 11,
+      "urls_ok": 11,
+      "findings": 157,
+      "focus": "21 UTC engine: wrongsecrets-ctf challenge-12 hub seeds + crAPI legacy /community/api/posts + ist-edu /api/search XSS route match; queue also drained NodeGoat + WrongSecrets CTF 13/14",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 38 live oracles; gap=[])",
-      "nodegoat-websec.herokuapp.com/contributions: 17 findings — nodegoat-contributions-ssjs-live-oracle + nodegoat-contributions-route-live-oracle",
-      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-13: 14 findings — generic wrongsecrets-challenge-route-live-oracle (no challenge-13 CI/CD-specific oracle on CTF host)",
-      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-14: 13 findings — wrongsecrets-challenge-14-password-manager-route-live-oracle",
-      "nodegoat-websec.herokuapp.com/memos: 17 findings — nodegoat-memos-stored-xss-live-oracle + nodegoat-memos-route-live-oracle",
-      "nodegoat-websec.herokuapp.com/tutorial/a1: 18 findings — nodegoat-tutorial-a1-route-live-oracle + nodegoat-nosql-login-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (49 findings validation; gap=[])",
+      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-12: 15 findings (+wrongsecrets-challenge-12-docker-route-live-oracle; hub seeds extended)",
+      "crapi.apisec.ai/community/api/posts: 14 findings (+crapi-community-posts-live-oracle +route; legacy v1 path)",
+      "ist-edu-bd.vercel.app/api/search: 9 findings (+ist-edu-search-xss-route-live-oracle on /api/search pathname)",
+      "nodegoat-websec.herokuapp.com/contributions: 17 findings — nodegoat-contributions-ssjs-live-oracle",
+      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-14: 13 findings — wrongsecrets-challenge-14-password-manager-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
@@ -76,7 +76,10 @@
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 53,
+    "juice-shop.herokuapp.com": 49,
+    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-12": 15,
+    "crapi.apisec.ai/community/api/posts": 14,
+    "ist-edu-bd.vercel.app/api/search": 9,
     "nodegoat-websec.herokuapp.com/contributions": 17,
     "wrongsecrets-ctf.herokuapp.com/challenge/challenge-13": 14,
     "wrongsecrets-ctf.herokuapp.com/challenge/challenge-14": 13,
