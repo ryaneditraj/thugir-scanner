@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T17:22:00.000Z",
+  "updated_at": "2026-09-06T18:13:45.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2893,
-  "total_findings": 29031,
+  "total_sites_scanned": 2901,
+  "total_findings": 29173,
   "critical_findings": 84,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2143,
-  "discovery_findings": 24002,
+  "discovery_urls_added": 2148,
+  "discovery_findings": 24090,
   "improvements_shipped": 1506,
-  "last_run": "2026-09-06T17:22:00.000Z",
+  "last_run": "2026-09-06T18:13:45.000Z",
   "last_run_summary": {
-    "hour_utc": "17",
+    "hour_utc": "18",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_url": "https://juice-shop.herokuapp.com",
+      "oracle_findings": 54,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
+      "probes_run": 570,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,37 +48,42 @@
           ]
         }
       },
-      "note": "6/6 on staging fallback (52 findings; primary Heroku timed out 600s)"
+      "note": "6/6 on primary Heroku first pass (54 findings, 41 live oracles; secret-resend present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 99,
-      "focus": "17 UTC: ist-edu-bd /api/newsletter + /api/redirect API route oracle matchers (15 UTC queue gap)",
-      "improvements_shipped_this_run": 3
+      "findings": 88,
+      "focus": "18 UTC: WrongSecrets CTF challenges 1/2/4/6/7 Git+Docker+K8s+Vault oracle surface",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (52 findings; gap=[])",
-      "ist-edu-bd.vercel.app/api/newsletter: 0→8 (+ist-edu-newsletter-crlf-route-live-oracle +ist-edu-csrf-state-change-live-oracle)",
-      "ist-edu-bd.vercel.app/api/redirect: 0→7 (+ist-edu-ssrf-redirect-route-live-oracle)",
-      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-0: 15 findings — wrongsecrets-challenge-0-opening-route-live-oracle",
-      "urban-vampi-staging.up.railway.app/users/v1/_debug: 17 findings — vampi-debug-password-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (54 findings, 41 live oracles; gap=[])",
+      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-1: 15 findings — wrongsecrets-challenge-1-git-hardcoded-route-live-oracle",
+      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-2: 15 findings — wrongsecrets-challenge-2-application-properties-route-live-oracle",
+      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-4: 15 findings — wrongsecrets-challenge-4-docker-build-arg-route-live-oracle",
+      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-6: 15 findings — wrongsecrets-challenge-6-k8s-secret-route-live-oracle",
+      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-7: 15 findings — wrongsecrets-challenge-7-vault-route-live-oracle",
+      "todoer.site/forgot-password: 7 findings — todoer-tasks-idor-live-oracle (no reset-specific oracle)",
+      "appsec-ci-pipeline.onrender.com/search?q=test: 6 findings — thin pass, no SQLi route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "todoer.site register/forgot-password share todoer-tasks-idor-live-oracle without route-specific signup oracle",
-      "appsec-ci-pipeline /search still queued — no SQLi route oracle",
-      "qa.brokencrystals.com/api/file/aws 48h skip until ~2026-09-08T18:14Z",
-      "primary Heroku juice-shop timed out — staging fallback 6/6"
+      "todoer.site forgot-password lacks password-reset-specific route oracle",
+      "appsec-ci-pipeline /search thin pass — no dedicated SQLi route oracle",
+      "vapi.roottusk.com unreachable (dead host in queue)",
+      "wrongsecrets-ctf challenge-9 (Terraform) not yet queued"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
-    "ist-edu-bd.vercel.app/api/newsletter": 8,
-    "ist-edu-bd.vercel.app/api/redirect": 7,
-    "urban-vampi-staging.up.railway.app/users/v1/_debug": 17,
-    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-0": 15,
-    "brokencrystals.com/api/process_numbers": 85
+    "juice-shop.herokuapp.com": 54,
+    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-1": 15,
+    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-2": 15,
+    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-4": 15,
+    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-6": 15,
+    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-7": 15,
+    "todoer.site/forgot-password": 7,
+    "appsec-ci-pipeline.onrender.com/search": 6
   }
 }

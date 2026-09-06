@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T17:05:00.000Z",
+  "updated_at": "2026-09-06T18:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-1",
+      "source": "OWASP WrongSecrets CTF — challenge-1 Git hardcoded secrets walkthrough (wrongsecrets-ctf.herokuapp.com; web search 18 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-2",
+      "source": "OWASP WrongSecrets CTF — challenge-2 Git history secrets walkthrough (wrongsecrets-ctf.herokuapp.com; web search 18 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-4",
+      "source": "OWASP WrongSecrets CTF — challenge-4 Docker secrets walkthrough (wrongsecrets-ctf.herokuapp.com; web search 18 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-6",
+      "source": "OWASP WrongSecrets CTF — challenge-6 K8s secrets walkthrough (wrongsecrets-ctf.herokuapp.com; web search 18 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-7",
+      "source": "OWASP WrongSecrets CTF — challenge-7 Vault secrets walkthrough (wrongsecrets-ctf.herokuapp.com; web search 18 UTC)",
+      "auth": "public_benchmark"
+    },
     {
       "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-0",
       "source": "OWASP WrongSecrets CTF — opening challenge walkthrough (wrongsecrets-ctf.herokuapp.com; web search 17 UTC)",
