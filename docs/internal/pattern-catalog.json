@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-05T23:22:52.065Z",
-  "total": 3351,
-  "uniqueSlugs": 3343,
+  "generatedAt": "2026-09-06T00:06:33.511Z",
+  "total": 3354,
+  "uniqueSlugs": 3346,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3333,
+    "generic": 3336,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3266,
+    "deep": 3269,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 155,
     "Security misconfiguration": 286,
     "Broken authentication": 211,
-    "Injection": 544,
-    "Cross-site scripting": 798,
+    "Injection": 545,
+    "Cross-site scripting": 800,
     "Open redirect": 29,
     "general": 20,
     "SSRF": 19,
@@ -1333,6 +1333,9 @@
     "fabraix-prompt-injection-001-route-live-oracle",
     "fabraix-tool-poisoning-001-route-live-oracle",
     "fabraix-tool-poisoning-002-route-live-oracle",
+    "fakeshop-login-sqli-route-live-oracle",
+    "fakeshop-products-reflected-xss-live-oracle",
+    "fakeshop-products-reflected-xss-route-live-oracle",
     "fauxbank-accounts-route-live-oracle",
     "fauxbank-admin-panel-live-oracle",
     "fauxbank-admin-route-live-oracle",

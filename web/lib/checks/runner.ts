@@ -2525,6 +2525,9 @@ const DEEP_RULES = new Set<string>([
   "secureBankBlogCsrfAttackPageRouteLiveOracle",
   "secureBankBlogTransferCsrfRouteLiveOracle",
   "sqlInjectionLabLoginRouteLiveOracle",
+  "fakeshopProductsReflectedXssLiveOracle",
+  "fakeshopProductsReflectedXssRouteLiveOracle",
+  "fakeshopLoginSqliRouteLiveOracle",
   "secureBankBaySqliLoginRouteLiveOracle",
   "secureBankBayStoredXssCommentsRouteLiveOracle",
   "secureBankBayStoredXssMessagesRouteLiveOracle",
@@ -17379,7 +17382,21 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/api\/v1\/auth\/register/i.test(targetInput) &&
         p.slug.startsWith("duck-store-referral-code-abuse")
       )
-        return -3;
+        return -4;
+      if (
+        /vulnerable-ecommerce\.vercel\.app/i.test(origin) &&
+        (/\/products\.php/i.test(targetInput) ||
+          /^https:\/\/vulnerable-ecommerce\.vercel\.app\/?(?:[#?]|$)/i.test(targetInput)) &&
+        p.slug.startsWith("fakeshop-products-reflected-xss")
+      )
+        return -4;
+      if (
+        /vulnerable-ecommerce\.vercel\.app/i.test(origin) &&
+        (/\/login\.php/i.test(targetInput) ||
+          /^https:\/\/vulnerable-ecommerce\.vercel\.app\/?(?:[#?]|$)/i.test(targetInput)) &&
+        p.slug.startsWith("fakeshop-login-sqli-route")
+      )
+        return -4;
       if (
         /duck-store\.escape\.tech/i.test(origin) &&
         /\/api\/v1\/cart\/add\b/i.test(targetInput) &&

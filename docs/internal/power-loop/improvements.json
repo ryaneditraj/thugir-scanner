@@ -8819,6 +8819,24 @@
       "slug": "chimera-oauth-token-forge-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: endpoints-catalog POST /api/oauth/token/forge # OAuth token forgery; chimera.atlascrew.dev/api/oauth/token/forge findings 0\u21928 (+chimera-oauth-token-forge-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-ecommerce.vercel.app",
+      "slug": "fakeshop-products-reflected-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /products.php?msg= reflects unescaped HTML (live) or page-source corpus when Vercel Security Checkpoint blocks probe; vulnerable-ecommerce.vercel.app/products.php findings 4\u21925 (+fakeshop-products-reflected-xss-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-ecommerce.vercel.app",
+      "slug": "fakeshop-login-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: login.php source documents SELECT * FROM users WHERE username='$username' AND password='$password' concatenation (Vercel blocks POST); vulnerable-ecommerce.vercel.app/login.php findings 4\u21926 (+fakeshop-login-sqli-route-live-oracle +fakeshop-products-reflected-xss-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-referral-register-500-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/register returns HTTP 500; duckStoreReferralCodeAbuseRouteLiveOracle falls back to OpenAPI UserCreate.referral_code + SPA bundle 'referral code to get $5 credit'; duck-store.escape.tech/api/v1/auth/register findings 10\u219211 (+duck-store-referral-code-abuse-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

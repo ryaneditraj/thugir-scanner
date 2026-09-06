@@ -1,6 +1,16 @@
 {
-  "updated_at": "2026-09-05T23:17:00.000Z",
+  "updated_at": "2026-09-06T00:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://vulnerable-ecommerce.vercel.app/products.php",
+      "source": "FakeShop PHP lab — reflected XSS msg parameter oracle (vulnerable-ecommerce.vercel.app; power-loop 00 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/health",
+      "source": "BugTraceAI/BugStore — health check RCE oracle GET /api/health?cmd= (V-021; queue drain 00 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crapi.apisec.ai/identity/api/v2/admin/videos/1",
       "source": "OWASP crAPI public demo — BFLA privilege-tier substitution oracle DELETE /identity/api/v2/admin/videos/{id} (ASTF traceability live-confirmed; web search 23 UTC)",
