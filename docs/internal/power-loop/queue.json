@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T15:05:00.000Z",
+  "updated_at": "2026-09-06T16:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/newsletter",
+      "source": "zahidoverflow/damn-vulnerable-web-university — CRLF injection newsletter API POST /api/newsletter (README vuln catalog; 15 UTC gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/redirect?url=https://example.com",
+      "source": "zahidoverflow/damn-vulnerable-web-university — open redirect API GET /api/redirect?url= (README; 15 UTC gap)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://todoer.site/register",
+      "source": "Entit-y/Todoer — intentionally vulnerable task manager registration (Nimbus Vault practice env; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://todoer.site/forgot-password",
+      "source": "Entit-y/Todoer — password reset / auth oracle surface (GitHub README; web search 16 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://appsec-ci-pipeline.onrender.com/search?q=test",
+      "source": "gauthamram57/appsec-ci-pipeline — Django SQLi search oracle GET /search?q= (Render deploy README; web search 16 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://ist-edu-bd.vercel.app/api/search",
       "source": "zahidoverflow/damn-vulnerable-web-university — SQLi search API oracle GET /api/search (README vuln catalog; web search 15 UTC)",
@@ -11842,5 +11867,5 @@
     }
   ],
   "discovery_urls": [],
-  "discovery_urls_added": 2133
+  "discovery_urls_added": 2138
 }
