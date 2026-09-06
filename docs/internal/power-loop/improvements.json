@@ -9047,6 +9047,24 @@
       "slug": "bugforge-cspt-deep-dive-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /deep-dives/client-side-path-traversal Bugforge CSPT research module documents client-side path traversal via fetch() route param interpolation; bugforge.io/deep-dives/client-side-path-traversal findings 4\u21925 (+bugforge-cspt-deep-dive-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crucible.dreadnode.io",
+      "slug": "dreadnode-crucible-challenges-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenges returns auth-gated Welcome to Dreadnode login with AIRTBench 70+ AI/ML CTF catalog behind OAuth; crucible.dreadnode.io/challenges findings 5\u21926 (+dreadnode-crucible-challenges-route-live-oracle +client-side-dreadnode-crucible-challenges-evidence, -dreadnode-crucible-platform-route-live-oracle on /challenges path); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:crucible.dreadnode.io",
+      "slug": "client-side-dreadnode-crucible-challenges-evidence",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: AIRTBench corpus documents 70+ prompt-injection/model-inversion/SSRF CTF challenges on crucible.dreadnode.io/challenges; crucible.dreadnode.io/challenges findings include +client-side-dreadnode-crucible-challenges-evidence; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crucible.dreadnode.io",
+      "slug": "dreadnode-crucible-platform-route-challenges-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: dreadnodeCruciblePlatformRouteLiveOracle skips /challenges path so route-specific challenges oracle replaces generic platform-route on thin hub; crucible.dreadnode.io/challenges no longer fires duplicate platform-route oracle; benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

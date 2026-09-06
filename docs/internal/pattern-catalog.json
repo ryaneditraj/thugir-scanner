@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-06T12:27:47.123Z",
-  "total": 3390,
-  "uniqueSlugs": 3382,
+  "generatedAt": "2026-09-06T13:10:41.565Z",
+  "total": 3392,
+  "uniqueSlugs": 3384,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3372,
+    "generic": 3374,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3305,
+    "deep": 3307,
     "continuous": 0
   },
   "byCategory": {
@@ -34,7 +34,7 @@
     "SSRF": 19,
     "Server-side request forgery": 127,
     "Sensitive data exposure": 109,
-    "AI security": 143,
+    "AI security": 145,
     "Business logic": 43,
     "AI / LLM security": 4,
     "Cross-site request forgery": 15,
@@ -625,6 +625,7 @@
     "client-side-dotnet-serialization-lab-evidence",
     "client-side-drag-security-flaws-evidence",
     "client-side-drag-security-flaws-lab-module-evidence",
+    "client-side-dreadnode-crucible-challenges-evidence",
     "client-side-dvai-ecosystem-evidence",
     "client-side-dvla-evidence",
     "client-side-dvmcp-evidence",
@@ -1179,6 +1180,7 @@
     "domgo-unescape-hash-dom-xss-evidence",
     "domgo-websocket-dom-xss-evidence",
     "domgo-window-name-dom-xss-evidence",
+    "dreadnode-crucible-challenges-route-live-oracle",
     "dreadnode-crucible-platform-live-oracle",
     "dreadnode-crucible-platform-route-live-oracle",
     "druid-monitor-exposed",

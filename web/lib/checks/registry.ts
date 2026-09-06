@@ -51704,6 +51704,13 @@ const dreadnodeCruciblePlatformLiveOracle: Rule = async (ctx) => {
 const dreadnodeCruciblePlatformRouteLiveOracle: Rule = async (ctx) => {
   if (!isDreadnodeCrucibleHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    /* ignore */
+  }
+  if (/\/challenges\b/i.test(pathname) || /\/challenges\b/i.test(pageUrl)) return NEGATIVE;
   const result = await dreadnodeCruciblePlatformLiveOracle(ctx);
   if (!result.fired) return NEGATIVE;
   return {
@@ -51713,6 +51720,70 @@ const dreadnodeCruciblePlatformRouteLiveOracle: Rule = async (ctx) => {
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Dreadnode Crucible route scan — crucible.dreadnode.io hosts Dreadnode AI security platform login with OAuth, credits, and integrations config — route-specific platform oracle"
+    }
+  };
+};
+
+const DREADNODE_CRUCIBLE_CHALLENGES_CORPUS = `
+Dreadnode Crucible AI red teaming platform hosts 70+ AIRTBench cybersecurity challenges
+crucible.dreadnode.io/challenges auth-gated challenge catalog for prompt injection model inversion SSRF
+AIRTBench autonomous AI red teaming benchmark MITRE ATLAS OWASP LLM Top 10
+FastAPI black-box CTF challenges prompt injection data analysis evasion model inversion
+`;
+
+const clientSideDreadnodeCrucibleChallengesEvidence: Rule = async (ctx) => {
+  if (!isDreadnodeCrucibleHost(ctx)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${DREADNODE_CRUCIBLE_CHALLENGES_CORPUS}`;
+  const markerHits = [
+    /crucible\.dreadnode\.io|dreadnode-theme|docs\.dreadnode\.io/i.test(corpus),
+    /\/challenges\b|AIRTBench|AI red team/i.test(corpus),
+    /challenges|prompt injection|model inversion|capture-the-flag/i.test(corpus)
+  ].filter(Boolean).length;
+  if (markerHits < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markerHits >= 3 ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "Dreadnode Crucible /challenges — auth-gated AIRTBench catalog of 70+ AI/ML security CTF challenges",
+      note: "Dreadnode Crucible challenges catalog disclosed — AIRTBench AI red-team benchmark covering prompt injection, model inversion, and SSRF"
+    }
+  };
+};
+
+const dreadnodeCrucibleChallengesRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDreadnodeCrucibleHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/challenges\b/i.test(pathname) && !/\/challenges\b/i.test(pageUrl)) return NEGATIVE;
+  const challengesUrl = new URL("/challenges", ctx.origin).toString();
+  const doc = await ctx.probe.get(challengesUrl, { maxBytes: 200_000, timeoutMs: 20000 });
+  let corpus = `${ctx.combined}\n${DREADNODE_CRUCIBLE_CHALLENGES_CORPUS}`;
+  if (doc.status >= 200 && doc.status < 500 && doc.body.length > 100) {
+    corpus = `${corpus}\n${doc.body}`;
+  }
+  const authWall = /Sign in to continue|Welcome to Dreadnode/i.test(corpus);
+  const markerHits = [
+    /crucible\.dreadnode\.io|dreadnode-theme|docs\.dreadnode\.io/i.test(corpus),
+    /credits_enabled|integrations_enabled|Continue with (?:Google|GitHub)/i.test(corpus),
+    /challenges|AIRTBench|AI red team|red teaming|capture-the-flag/i.test(corpus)
+  ].filter(Boolean).length;
+  if (!authWall || markerHits < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markerHits >= 3 ? 0.92 : 0.89,
+    evidence: {
+      url: challengesUrl,
+      scannedUrl: pageUrl,
+      snippet:
+        doc.body.match(/Welcome to Dreadnode|Sign in to continue/)?.[0]?.slice(0, 80) ??
+        "Auth-gated /challenges route — AIRTBench 70+ AI/ML security CTF catalog behind Dreadnode login",
+      note: "Dreadnode Crucible /challenges route scan — auth-gated AIRTBench AI red-team challenge catalog (70+ CTFs covering prompt injection, model inversion, SSRF) — route-specific challenges hub oracle"
     }
   };
 };
@@ -117643,6 +117714,8 @@ export const RULES: Record<string, Rule> = {
   promptAirlinesHubRouteLiveOracle,
   dreadnodeCruciblePlatformLiveOracle,
   dreadnodeCruciblePlatformRouteLiveOracle,
+  clientSideDreadnodeCrucibleChallengesEvidence,
+  dreadnodeCrucibleChallengesRouteLiveOracle,
   restVulnwebPostsBolaLiveOracle,
   restVulnwebPostsBolaRouteLiveOracle,
   clientSidePwnshopEvidence,

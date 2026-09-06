@@ -3838,6 +3838,8 @@ const DEEP_RULES = new Set<string>([
   "promptAirlinesHubRouteLiveOracle",
   "dreadnodeCruciblePlatformLiveOracle",
   "dreadnodeCruciblePlatformRouteLiveOracle",
+  "clientSideDreadnodeCrucibleChallengesEvidence",
+  "dreadnodeCrucibleChallengesRouteLiveOracle",
   "restVulnwebPostsBolaLiveOracle",
   "restVulnwebPostsBolaRouteLiveOracle",
   "testaspShowForumSqliLiveOracle",
@@ -14975,6 +14977,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         p.slug.startsWith("promptairlines-hub")
       )
         return -4;
+      if (
+        /crucible\.dreadnode\.io/i.test(origin) &&
+        /\/challenges\b/i.test(targetInput) &&
+        (p.slug.startsWith("dreadnode-crucible-challenges") ||
+          p.slug === "client-side-dreadnode-crucible-challenges-evidence")
+      )
+        return -5;
       if (/crucible\.dreadnode\.io/i.test(origin) && p.slug.startsWith("dreadnode-crucible")) return -4;
       if (/vulnbank\.org/i.test(origin) && p.slug.startsWith("vulnbank-transactions-bola")) return -2;
       if (

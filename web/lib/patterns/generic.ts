@@ -24687,6 +24687,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "client-side-dreadnode-crucible-challenges-evidence",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Dreadnode Crucible AIRTBench challenges catalog disclosed",
+    description:
+      "crucible.dreadnode.io/challenges hosts the auth-gated AIRTBench catalog of 70+ AI/ML security CTF challenges covering prompt injection, model inversion, and SSRF — Dreadnode red-team training oracle.",
+    impactOneline:
+      "Public disclosure of Dreadnode Crucible challenge catalog signals AI red-team training infrastructure and attack surface categories.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideDreadnodeCrucibleChallengesEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Treat crucible.dreadnode.io/challenges as Dreadnode platform infrastructure — require authentication before exposing challenge metadata.",
+      steps: [
+        "Require MFA on Dreadnode platform accounts.",
+        "Gate /challenges behind authenticated sessions with rate limiting.",
+        "Run crucible.dreadnode.io only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crucible.dreadnode.io /challenges route documents the AIRTBench AI security CTF catalog. Show platform authentication hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dreadnode-crucible-challenges-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Dreadnode Crucible /challenges route live oracle",
+    description:
+      "When scanning /challenges on crucible.dreadnode.io, the auth-gated route confirms the AIRTBench catalog of 70+ AI/ML security CTF challenges behind Dreadnode login — route-specific challenges hub oracle.",
+    impactOneline:
+      "Route-specific confirmation that Dreadnode Crucible /challenges hosts the AIRTBench AI red-team challenge catalog behind authentication.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dreadnodeCrucibleChallengesRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Treat crucible.dreadnode.io/challenges as Dreadnode platform infrastructure — require authentication before exposing challenge metadata.",
+      steps: [
+        "Require MFA on Dreadnode platform accounts.",
+        "Gate /challenges behind authenticated sessions with rate limiting.",
+        "Run crucible.dreadnode.io only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crucible.dreadnode.io /challenges route scan confirms the AIRTBench AI security CTF catalog. Show route-specific platform auth hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-transactions-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",
