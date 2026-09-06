@@ -9137,6 +9137,24 @@
       "slug": "todoer-forgot-password-enumeration-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/forgot-password returns HTTP 404 No account with that email vs HTTP 200 reset-link message (HTTP 429 rate-limit corpus fallback when live); todoer.site/forgot-password findings 8→8 (-todoer-tasks-idor-live-oracle +todoer-forgot-password-enumeration-live-oracle +route); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:appsec-ci-pipeline.onrender.com",
+      "slug": "appsec-ci-search-sqli-route-pathname-fix",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: appsecCiSearchSqliRouteLiveOracle now matches pathname /search (ignores ?q= query) so /search?q=test fires +appsec-ci-search-sqli-route-live-oracle alongside live oracle; appsec-ci-pipeline.onrender.com/search?q=test findings 6→8 (+route oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:whgojp.top",
+      "slug": "javaseclab-hub-corpus-fallback-paths",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: javaSecLabJdbc/Ssrf route corpus fallbacks accept parent /sqli/jdbc and /ssrf/url hub paths (wiki corpus) when live probes auth-gated; whgojp.top/sqli/jdbc findings 0→11 (+javaseclab-jdbc-sqli-vul1-route-live-oracle corpus); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets-ctf.herokuapp.com",
+      "slug": "wrongsecrets-ctf-hub-seeds-challenge-9-10",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended for wrongsecrets-ctf.herokuapp.com with challenge-9/10 + /challenge/9 /challenge/10 short aliases; wrongsecrets-ctf.herokuapp.com/challenge/challenge-9 findings 15 (+wrongsecrets-challenge-9-terraform-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

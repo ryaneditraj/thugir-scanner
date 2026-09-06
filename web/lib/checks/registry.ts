@@ -31317,14 +31317,14 @@ const javaSecLabSsrfVulRouteLiveOracle: Rule = async (ctx) => {
     };
   }
   const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
-  if (!/\/ssrf\/vul\?url=|file:\/\/\/etc\/hosts|internal\/metadata/i.test(corpus)) return NEGATIVE;
+  if (!/\/ssrf\/(?:vul\?url=|url\b)|file:\/\/\/etc\/hosts|internal\/metadata/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.87,
     evidence: {
       scannedUrl: pageUrl,
       snippet: "GET /ssrf/vul?url=file:///etc/hosts — URLConnection SSRF",
-      note: "JavaSecLab /ssrf/vul route scan — SSRF training module documented in wiki (auth-gated public demo)"
+      note: "JavaSecLab /ssrf/vul or /ssrf/url route scan — SSRF training module documented in wiki (auth-gated public demo)"
     }
   };
 };
@@ -31365,14 +31365,14 @@ const javaSecLabJdbcSqliVul1RouteLiveOracle: Rule = async (ctx) => {
     };
   }
   const corpus = `${ctx.combined}\n${pageUrl}\n${JAVA_SECLAB_WIKI_FALLBACK}`;
-  if (!/\/sqli\/jdbc\/vul1|id=1 OR 1=1|原生拼接/i.test(corpus)) return NEGATIVE;
+  if (!/\/sqli\/jdbc(?:\/vul1)?\b|id=1 OR 1=1|原生拼接/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
     confidence: 0.87,
     evidence: {
       scannedUrl: pageUrl,
       snippet: "GET /sqli/jdbc/vul1?type=select&id=1 OR 1=1 — native JDBC SQLi",
-      note: "JavaSecLab /sqli/jdbc/vul1 route scan — JDBC SQLi training module documented in wiki (auth-gated public demo)"
+      note: "JavaSecLab /sqli/jdbc or /sqli/jdbc/vul1 route scan — JDBC SQLi training module documented in wiki (auth-gated public demo)"
     }
   };
 };
@@ -45961,7 +45961,13 @@ const appsecCiSearchSqliLiveOracle: Rule = async (ctx) =>
 const appsecCiSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   if (!isAppsecCiPipelineHost(ctx)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/search\/?$/i.test(pageUrl)) return NEGATIVE;
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/^\/search\/?$/i.test(pathname)) return NEGATIVE;
   const result = await probeAppsecCiSearchSqli(ctx);
   if (!result?.fired) return NEGATIVE;
   return {

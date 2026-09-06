@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T18:30:00.000Z",
+  "updated_at": "2026-09-06T19:35:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2901,
-  "total_findings": 29173,
+  "total_sites_scanned": 2904,
+  "total_findings": 29204,
   "critical_findings": 85,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 2148,
-  "discovery_findings": 24090,
-  "improvements_shipped": 1509,
-  "last_run": "2026-09-06T18:30:00.000Z",
+  "discovery_findings": 24121,
+  "improvements_shipped": 1512,
+  "last_run": "2026-09-06T19:35:00.000Z",
   "last_run_summary": {
-    "hour_utc": "18",
+    "hour_utc": "19",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 54,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,37 +48,34 @@
           ]
         }
       },
-      "note": "6/6 on primary Heroku first pass (54 findings, 41 live oracles; secret-resend present)"
+      "note": "6/6 on primary Heroku (53 findings, 41 live oracles; secret-resend present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 88,
-      "focus": "18 UTC: appsec-ci /search SQLi + todoer register/forgot-password route oracles; WrongSecrets CTF challenges 1/2/4/6/7",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 27,
+      "focus": "19 UTC: appsec-ci /search?q= route pathname fix + JavaSecLab /sqli/jdbc hub corpus + wrongsecrets-ctf challenge-9/10 hub seeds",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (54 findings; gap=[])",
-      "appsec-ci-pipeline.onrender.com/search: 8 findings (+appsec-ci-search-sqli-live-oracle +route)",
-      "todoer.site/register: 7 findings (-todoer-tasks-idor +todoer-register-route-live-oracle)",
-      "todoer.site/forgot-password: 8 findings (-todoer-tasks-idor +todoer-forgot-password-enumeration-live-oracle +route)",
-      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-1: 15 findings — wrongsecrets-challenge-1-git-hardcoded-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings; gap=[])",
+      "appsec-ci-pipeline.onrender.com/search?q=test: 8 findings (+appsec-ci-search-sqli-route-live-oracle route pathname fix)",
+      "whgojp.top/sqli/jdbc: 11 findings (+javaseclab-jdbc-sqli-vul1-route-live-oracle hub corpus fallback)",
+      "wrongsecrets-ctf.herokuapp.com/challenge/challenge-9: 15 findings (+wrongsecrets-challenge-9-terraform-route-live-oracle; hub seeds extended)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "qa.brokencrystals.com/api/file/aws 48h skip until ~2026-09-08T18:14Z",
       "todoer.site auth APIs rate-limited (HTTP 429) after probe volume — corpus fallbacks active",
       "vapi.roottusk.com unreachable (dead host in queue)",
-      "wrongsecrets-ctf challenge-9 (Terraform) not yet queued"
+      "whgojp.top/ssrf/url hub corpus fallback pending slow-auth validation"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 54,
-    "appsec-ci-pipeline.onrender.com/search": 8,
-    "todoer.site/register": 7,
-    "todoer.site/forgot-password": 8,
-    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-1": 15,
-    "ist-edu-bd.vercel.app/api/newsletter": 8
+    "juice-shop.herokuapp.com": 53,
+    "appsec-ci-pipeline.onrender.com/search?q=test": 8,
+    "whgojp.top/sqli/jdbc": 11,
+    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-9": 15
   }
 }

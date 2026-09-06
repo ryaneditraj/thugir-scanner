@@ -11635,7 +11635,11 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
           "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-5",
           "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-6",
           "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-7",
-          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-8"
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-8",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-9",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/9",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-10",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/10"
         ]
       : [
         "https://wrongsecrets.herokuapp.com/challenge/challenge-0",
