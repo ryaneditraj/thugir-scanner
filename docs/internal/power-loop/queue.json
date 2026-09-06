@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T18:08:00.000Z",
+  "updated_at": "2026-09-06T19:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-9",
+      "source": "OWASP WrongSecrets CTF — challenge-9 Terraform state secrets walkthrough (scoreboard gap; web search 19 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-10",
+      "source": "OWASP WrongSecrets CTF — challenge-10 CSI driver secrets walkthrough (wrongsecrets-ctf.herokuapp.com; web search 19 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/react2shell-cve-2025-55182/",
+      "source": "kOaDT/oss-oopssec-store — React2Shell CVE-2025-55182 RSC RCE walkthrough (scoreboard gap; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/weak-jwt-secret/",
+      "source": "kOaDT/oss-oopssec-store — weak JWT HS256 secret admin bypass walkthrough (scoreboard gap; web search 19 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/next-public-env-variable-leak/",
+      "source": "kOaDT/oss-oopssec-store — NEXT_PUBLIC_ env leak walkthrough (scoreboard gap; web search 19 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-1",
       "source": "OWASP WrongSecrets CTF — challenge-1 Git hardcoded secrets walkthrough (wrongsecrets-ctf.herokuapp.com; web search 18 UTC)",
