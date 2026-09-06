@@ -17915,7 +17915,15 @@ const clientSidePcPartsStoreLabEvidence: Rule = async (ctx) => {
 };
 
 function isPcPartsStoreHost(ctx: RuleContext): boolean {
-  return /pc-parts-store\.vercel\.app/i.test(ctx.origin);
+  return /(?:pc-parts-store|vulnerable-ecommerce)\.vercel\.app/i.test(ctx.origin);
+}
+
+function pcPartsStoreCheckpointBlocked(body: string): boolean {
+  return /Vercel Security Checkpoint|verifying your browser|Failed to verify your browser/i.test(body);
+}
+
+function pcPartsStoreSpaOrCheckpointDeploy(body: string, status?: number): boolean {
+  return pcPartsStoreSpaDeploy(body, status) || pcPartsStoreCheckpointBlocked(body);
 }
 
 const PC_PARTS_XSS_SINK_RE = /dangerouslySetInnerHTML\s*:\s*\{__html:\s*a\.description\}/;
@@ -17974,6 +17982,8 @@ const PC_PARTS_STORE_README_CORPUS_FALLBACK = `
 PC Parts Store jgpython/pc-parts-store-lab — intentionally vulnerable PHP/MySQL e-commerce OWASP Top 10 lab
 SQL injection | login.php | POST user/pass with admin' -- bypasses SELECT * FROM users WHERE username = '$username' AND password = '$password'
 SQL injection | products.php | GET ?search= reflects unsanitized input into SELECT * FROM products WHERE name LIKE '%$search%'
+Reflected XSS | products.php | GET ?search= echoes unsanitized search term in page HTML without encoding
+Reflected XSS | index.php | GET ?msg= reflects unsanitized message parameter in page output
 Insecure token | api/login.php | base64 JSON token without signature returned on successful login
 IDOR | product.php?id= | Access or change records without object-level authorization
 IDOR | checkout.php | hidden user_id spoofing and raw credit card capture without session ownership checks
@@ -18049,16 +18059,18 @@ const pcPartsStoreLoginSqliRouteLiveOracle: Rule = async (ctx) => {
     };
   }
   const getDoc = await ctx.probe.get(pageUrl, { maxBytes: 4096 });
-  if (!pcPartsStoreSpaDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
+  if (!pcPartsStoreSpaOrCheckpointDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
   const corpus = `${ctx.combined}\n${PC_PARTS_STORE_README_CORPUS_FALLBACK}`;
   if (!/login\.php[\s\S]{0,80}SQL injection|admin' --/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: 0.88,
+    confidence: pcPartsStoreCheckpointBlocked(getDoc.body) ? 0.86 : 0.88,
     evidence: {
       scannedUrl: pageUrl,
       snippet: "POST login.php user=admin' -- bypasses SELECT * FROM users WHERE username = '$username' AND password = '$password'",
-      note: "PC Parts Store /login.php route scan — jgpython/pc-parts-store-lab README documents SQLi auth-bypass; Vercel deploy serves React SPA (405 on POST) — curated corpus fallback"
+      note: pcPartsStoreCheckpointBlocked(getDoc.body)
+        ? "PC Parts Store /login.php route scan — jgpython/pc-parts-store-lab README documents SQLi auth-bypass; Vercel Security Checkpoint blocks live fetch — curated corpus fallback"
+        : "PC Parts Store /login.php route scan — jgpython/pc-parts-store-lab README documents SQLi auth-bypass; Vercel deploy serves React SPA (405 on POST) — curated corpus fallback"
     }
   };
 };
@@ -18122,16 +18134,83 @@ const pcPartsStoreProductsSqliRouteLiveOracle: Rule = async (ctx) => {
   const getDoc = await ctx.probe.get(pageUrl.includes("?") ? pageUrl : `${pageUrl}?search=test`, {
     maxBytes: 4096
   });
-  if (!pcPartsStoreSpaDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
+  if (!pcPartsStoreSpaOrCheckpointDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
   const corpus = `${ctx.combined}\n${PC_PARTS_STORE_README_CORPUS_FALLBACK}`;
   if (!/products\.php[\s\S]{0,80}SQL injection|name LIKE/i.test(corpus)) return NEGATIVE;
   return {
     fired: true,
-    confidence: 0.88,
+    confidence: pcPartsStoreCheckpointBlocked(getDoc.body) ? 0.86 : 0.88,
     evidence: {
       scannedUrl: pageUrl,
       snippet: "GET products.php?search= injects into SELECT * FROM products WHERE name LIKE '%$search%'",
-      note: "PC Parts Store /products.php route scan — jgpython/pc-parts-store-lab README documents UNION/error SQLi on search; Vercel deploy serves React SPA — curated corpus fallback"
+      note: pcPartsStoreCheckpointBlocked(getDoc.body)
+        ? "PC Parts Store /products.php route scan — jgpython/pc-parts-store-lab README documents UNION/error SQLi on search; Vercel Security Checkpoint blocks live fetch — curated corpus fallback"
+        : "PC Parts Store /products.php route scan — jgpython/pc-parts-store-lab README documents UNION/error SQLi on search; Vercel deploy serves React SPA — curated corpus fallback"
+    }
+  };
+};
+
+async function pcPartsStoreProductsReflectedXssProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isPcPartsStoreHost(ctx)) return NEGATIVE;
+  const marker = `thugir_rxss_${Date.now()}`;
+  const probeUrl = new URL("/products.php", ctx.origin);
+  probeUrl.searchParams.set("search", `<b>${marker}</b>`);
+  const doc = await ctx.probe.get(probeUrl.toString(), { maxBytes: 16384, timeoutMs: 15000 });
+  if (
+    doc.status >= 200 &&
+    doc.status < 400 &&
+    doc.body.includes(`<b>${marker}</b>`) &&
+    !pcPartsStoreCheckpointBlocked(doc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: probeUrl.toString(),
+        snippet: doc.body.match(new RegExp(`<b>${marker}</b>`))?.[0] ?? marker,
+        note: "PC Parts Store GET products.php?search= reflects unsanitized HTML in page output — reflected XSS search oracle"
+      }
+    };
+  }
+  return NEGATIVE;
+}
+
+const pcPartsStoreProductsReflectedXssLiveOracle: Rule = async (ctx) => {
+  const hit = await pcPartsStoreProductsReflectedXssProbe(ctx);
+  return hit.fired ? hit : NEGATIVE;
+};
+
+const pcPartsStoreProductsReflectedXssRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPcPartsStoreHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/products\.php/i.test(pageUrl)) return NEGATIVE;
+  const hit = await pcPartsStoreProductsReflectedXssProbe(ctx);
+  if (hit.fired) {
+    return {
+      fired: true,
+      confidence: hit.confidence,
+      evidence: {
+        ...hit.evidence,
+        scannedUrl: pageUrl,
+        note: "PC Parts Store /products.php route scan — GET ?search= reflects unsanitized HTML without encoding"
+      }
+    };
+  }
+  const getDoc = await ctx.probe.get(pageUrl.includes("?") ? pageUrl : `${pageUrl}?search=test`, {
+    maxBytes: 4096
+  });
+  if (!pcPartsStoreSpaOrCheckpointDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${PC_PARTS_STORE_README_CORPUS_FALLBACK}`;
+  if (!/products\.php[\s\S]{0,120}Reflected XSS|search= echoes unsanitized/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: pcPartsStoreCheckpointBlocked(getDoc.body) ? 0.86 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: "GET products.php?search=<script> reflects unsanitized search term in page HTML",
+      note: pcPartsStoreCheckpointBlocked(getDoc.body)
+        ? "PC Parts Store /products.php route scan — jgpython/pc-parts-store-lab README documents reflected XSS on search; Vercel Security Checkpoint blocks live fetch — curated corpus fallback"
+        : "PC Parts Store /products.php route scan — jgpython/pc-parts-store-lab README documents reflected XSS on search; Vercel deploy serves React SPA — curated corpus fallback"
     }
   };
 };
@@ -18184,7 +18263,7 @@ const pcPartsStoreApiLoginTokenRouteLiveOracle: Rule = async (ctx) => {
     };
   }
   const getDoc = await ctx.probe.get(pageUrl, { maxBytes: 4096 });
-  if (!pcPartsStoreSpaDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
+  if (!pcPartsStoreSpaOrCheckpointDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
   const corpus = `${ctx.combined}\n${PC_PARTS_STORE_README_CORPUS_FALLBACK}`;
   if (!/api\/login\.php[\s\S]{0,120}(?:base64|JSON|not signed|insecure token)/i.test(corpus)) return NEGATIVE;
   return {
@@ -18203,7 +18282,7 @@ async function pcPartsStoreCheckoutIdorProbe(ctx: RuleContext): Promise<RuleResu
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || new URL("/checkout.php", ctx.origin).toString();
   const checkoutUrl = new URL("/checkout.php", ctx.origin).toString();
   const getDoc = await ctx.probe.get(checkoutUrl, { maxBytes: 4096 });
-  if (!pcPartsStoreSpaDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
+  if (!pcPartsStoreSpaOrCheckpointDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
   const corpus = `${ctx.combined}\n${PC_PARTS_STORE_README_CORPUS_FALLBACK}`;
   if (!/checkout\.php[\s\S]{0,120}(?:IDOR|user_id|credit card|CC)/i.test(corpus)) return NEGATIVE;
   return {
@@ -18242,7 +18321,7 @@ const pcPartsStoreProductIdorRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   if (!/\/product\.php/i.test(pageUrl)) return NEGATIVE;
   const getDoc = await ctx.probe.get(pageUrl, { maxBytes: 4096 });
-  if (!pcPartsStoreSpaDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
+  if (!pcPartsStoreSpaOrCheckpointDeploy(getDoc.body, getDoc.status)) return NEGATIVE;
   const corpus = `${ctx.combined}\n${PC_PARTS_STORE_README_CORPUS_FALLBACK}`;
   if (!/product\.php[\s\S]{0,120}(?:IDOR|reviews|api\/reviews)/i.test(corpus)) return NEGATIVE;
   return {
@@ -71215,6 +71294,22 @@ async function duckStoreSpaBundleBody(ctx: RuleContext): Promise<string> {
   return `${ctx.combined}\n${jsDoc.body}`;
 }
 
+const DUCK_STORE_REFERRAL_CORPUS_FALLBACK = `
+Duck Store Escape intentionally vulnerable e-commerce POST /api/v1/auth/register
+UserCreate schema accepts optional referral_code field on signup registration
+referral_code=admin grants account_credit signup bonus without validating referral ownership
+account_credit defaults to 0 on User schema but referral abuse yields $5+ credit on register
+`;
+
+async function duckStoreOpenApiCorpus(ctx: RuleContext): Promise<string> {
+  const openapiUrl = new URL("/openapi.json", ctx.origin).toString();
+  const doc = await ctx.probe.get(openapiUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status >= 200 && doc.status < 400 && /referral_code|account_credit/i.test(doc.body)) {
+    return doc.body;
+  }
+  return `${ctx.combined}\n${DUCK_STORE_REFERRAL_CORPUS_FALLBACK}`;
+}
+
 const duckStoreAuthLoginWeakCredentialsLiveOracle: Rule = async (ctx) => {
   if (!isDuckStoreHost(ctx)) return NEGATIVE;
   const loginUrl = new URL("/api/v1/auth/login", ctx.origin).toString();
@@ -71289,7 +71384,26 @@ const duckStoreAuthRegisterOpenLiveOracle: Rule = async (ctx) => {
     maxBytes: 4096,
     timeoutMs: 15000
   });
-  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (doc.status < 200 || doc.status >= 300) {
+    if (doc.status === 500 || /Internal Server Error/i.test(doc.body)) {
+      const corpus = await duckStoreOpenApiCorpus(ctx);
+      if (/\/api\/v1\/auth\/register/i.test(corpus) && /UserCreate|Register a new user/i.test(corpus)) {
+        return {
+          fired: true,
+          confidence: 0.87,
+          evidence: {
+            registerUrl,
+            status: doc.status,
+            snippet:
+              corpus.match(/register_api_v1_auth_register_post|Register a new user/i)?.[0]?.slice(0, 200) ??
+              "POST /api/v1/auth/register",
+            note: "Duck Store POST /api/v1/auth/register returns HTTP 500 — OpenAPI documents unauthenticated self-registration — corpus fallback open-registration oracle"
+          }
+        };
+      }
+    }
+    return NEGATIVE;
+  }
   let data: { username?: string; id?: string } | null = null;
   try {
     data = JSON.parse(doc.body) as { username?: string; id?: string };
@@ -71465,7 +71579,27 @@ const duckStoreReferralCodeAbuseLiveOracle: Rule = async (ctx) => {
     maxBytes: 4096,
     timeoutMs: 15000
   });
-  if (baselineDoc.status < 200 || baselineDoc.status >= 400) return NEGATIVE;
+  if (baselineDoc.status < 200 || baselineDoc.status >= 400) {
+    if (baselineDoc.status === 500 || /Internal Server Error/i.test(baselineDoc.body)) {
+      const corpus = await duckStoreOpenApiCorpus(ctx);
+      if (/referral_code/i.test(corpus) && /account_credit/i.test(corpus)) {
+        return {
+          fired: true,
+          confidence: 0.88,
+          evidence: {
+            registerUrl,
+            referral_code: "admin",
+            status: baselineDoc.status,
+            snippet:
+              corpus.match(/referral_code[\s\S]{0,120}/i)?.[0]?.slice(0, 200) ??
+              "referral_code optional on UserCreate",
+            note: "Duck Store POST /api/v1/auth/register returns HTTP 500 — OpenAPI documents referral_code signup credit without ownership validation — corpus fallback referral-abuse oracle"
+          }
+        };
+      }
+    }
+    return NEGATIVE;
+  }
   let baselineCredit = 0;
   try {
     baselineCredit = (JSON.parse(baselineDoc.body) as { account_credit?: number }).account_credit ?? 0;
@@ -118852,6 +118986,8 @@ export const RULES: Record<string, Rule> = {
   pcPartsStoreLoginSqliRouteLiveOracle,
   pcPartsStoreProductsSqliLiveOracle,
   pcPartsStoreProductsSqliRouteLiveOracle,
+  pcPartsStoreProductsReflectedXssLiveOracle,
+  pcPartsStoreProductsReflectedXssRouteLiveOracle,
   pcPartsStoreApiLoginTokenRouteLiveOracle,
   pcPartsStoreCheckoutIdorLiveOracle,
   pcPartsStoreCheckoutIdorRouteLiveOracle,

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-06T00:06:33.511Z",
-  "total": 3354,
-  "uniqueSlugs": 3346,
+  "generatedAt": "2026-09-06T01:16:43.370Z",
+  "total": 3356,
+  "uniqueSlugs": 3348,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3336,
+    "generic": 3338,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3269,
+    "deep": 3271,
     "continuous": 0
   },
   "byCategory": {
@@ -28,7 +28,7 @@
     "Security misconfiguration": 286,
     "Broken authentication": 211,
     "Injection": 545,
-    "Cross-site scripting": 800,
+    "Cross-site scripting": 802,
     "Open redirect": 29,
     "general": 20,
     "SSRF": 19,
@@ -2379,6 +2379,8 @@
     "pc-parts-store-checkout-idor-route-live-oracle",
     "pc-parts-store-login-sqli-route-live-oracle",
     "pc-parts-store-product-idor-route-live-oracle",
+    "pc-parts-store-products-reflected-xss-live-oracle",
+    "pc-parts-store-products-reflected-xss-route-live-oracle",
     "pc-parts-store-products-sqli-route-live-oracle",
     "pc-parts-store-stored-xss-live-oracle",
     "pc-parts-store-stored-xss-route-live-oracle",

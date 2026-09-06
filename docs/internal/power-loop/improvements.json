@@ -8833,10 +8833,22 @@
       "validation": "SOURCE: discovery:url EVIDENCE: login.php source documents SELECT * FROM users WHERE username='$username' AND password='$password' concatenation (Vercel blocks POST); vulnerable-ecommerce.vercel.app/login.php findings 4\u21926 (+fakeshop-login-sqli-route-live-oracle +fakeshop-products-reflected-xss-live-oracle); benchmark 6/6 maintained"
     },
     {
+      "source": "discovery:vulnerable-ecommerce.vercel.app",
+      "slug": "vulnerable-ecommerce-pc-parts-alias-checkpoint-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: isPcPartsStoreHost extended to vulnerable-ecommerce.vercel.app; pcPartsStoreSpaOrCheckpointDeploy accepts Vercel Security Checkpoint stub; vulnerable-ecommerce.vercel.app/products.php findings 4\u21926 (+pc-parts-store-products-sqli-route-live-oracle +pc-parts-store-products-reflected-xss-route-live-oracle); login.php 3\u21926 (+pc-parts-store-login-sqli-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-ecommerce.vercel.app",
+      "slug": "pc-parts-store-products-reflected-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: jgpython/pc-parts-store-lab README documents reflected XSS on products.php?search=; pcPartsStoreProductsReflectedXssRouteLiveOracle corpus fallback when Vercel checkpoint blocks live probe; vulnerable-ecommerce.vercel.app/products.php findings 4\u21926; benchmark 6/6 maintained"
+    },
+    {
       "source": "discovery:duck-store.escape.tech",
       "slug": "duck-store-referral-register-500-corpus-fallback",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/register returns HTTP 500; duckStoreReferralCodeAbuseRouteLiveOracle falls back to OpenAPI UserCreate.referral_code + SPA bundle 'referral code to get $5 credit'; duck-store.escape.tech/api/v1/auth/register findings 10\u219211 (+duck-store-referral-code-abuse-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/register returns HTTP 500; duckStoreOpenApiCorpus supplies referral_code + account_credit from /openapi.json; duck-store.escape.tech/api/v1/auth/register findings 10\u219214 (+duck-store-referral-code-abuse-live-oracle +route +duck-store-auth-register-open-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

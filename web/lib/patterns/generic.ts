@@ -61228,6 +61228,58 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "pc-parts-store-products-reflected-xss-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PC Parts Store products reflected XSS live oracle",
+    description:
+      "GET products.php?search= reflects unsanitized HTML in page output on the jgpython/pc-parts-store-lab PHP deploy, or falls back to README corpus when Vercel Security Checkpoint blocks live fetch.",
+    impactOneline:
+      "Reflected XSS via the products search parameter lets attackers run script in victim browsers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pcPartsStoreProductsReflectedXssLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode all reflected search output before rendering.",
+      steps: [
+        "Use htmlspecialchars() on search terms echoed in HTML.",
+        "Validate search input length and character set.",
+        "Add Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our products.php reflects ?search= without encoding. Show safe output encoding for reflected user input.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "pc-parts-store-products-reflected-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "PC Parts Store products reflected XSS route live oracle",
+    description:
+      "When scanning /products.php, live probe confirms reflected XSS on ?search= or falls back to jgpython/pc-parts-store-lab README corpus on Vercel checkpoint/SPA deploy.",
+    impactOneline:
+      "Route scans on products.php need reflected XSS confirmation or documented corpus fallback.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "pcPartsStoreProductsReflectedXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode all reflected search output before rendering.",
+      steps: [
+        "Use htmlspecialchars() on search terms echoed in HTML.",
+        "Validate search input length and character set.",
+        "Add Content-Security-Policy to mitigate inline script execution."
+      ]
+    },
+    fixPrompt:
+      "Our /products.php route reflects search without encoding. Show route-specific output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "pc-parts-store-api-login-token-route-live-oracle",
     platform: "generic",
     category: "Broken authentication",

@@ -4330,6 +4330,8 @@ const DEEP_RULES = new Set<string>([
   "pcPartsStoreLoginSqliRouteLiveOracle",
   "pcPartsStoreProductsSqliLiveOracle",
   "pcPartsStoreProductsSqliRouteLiveOracle",
+  "pcPartsStoreProductsReflectedXssLiveOracle",
+  "pcPartsStoreProductsReflectedXssRouteLiveOracle",
   "pcPartsStoreApiLoginTokenRouteLiveOracle",
   "pcPartsStoreCheckoutIdorLiveOracle",
   "pcPartsStoreCheckoutIdorRouteLiveOracle",
@@ -12739,9 +12741,9 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       )
         return -4;
       if (
-        /pc-parts-store\.vercel\.app/i.test(origin) &&
+        /(?:pc-parts-store|vulnerable-ecommerce)\.vercel\.app/i.test(origin) &&
         /\/(?:login|checkout|product|products|api\/login)\.php/i.test(targetInput) &&
-        p.slug.startsWith("pc-parts-store-stored-xss")
+        p.slug.startsWith("pc-parts-store-")
       )
         return -3;
       if (
