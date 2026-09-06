@@ -4377,6 +4377,11 @@ const DEEP_RULES = new Set<string>([
   "clientSideNorthStarAgiCtfEvidence",
   "clientSideWafWorkshopEvidence",
   "clientSideBugforgeLabEvidence",
+  "clientSideHackminaazizEvidence",
+  "hackminaazizLoginSqliRouteLiveOracle",
+  "hackminaazizProfileIdorRouteLiveOracle",
+  "clientSideExploitLabEvidence",
+  "exploitLabHubRouteLiveOracle",
   "bugforgeSsrfRouteLiveOracle",
   "bugforgeIdorRouteLiveOracle",
   "bugforgeGraphqlRouteLiveOracle",
@@ -13070,6 +13075,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /(?:^|\.)ghostbank\.net$/i.test(new URL(origin).hostname) &&
         /^https?:\/\/[^/]+\/?$/i.test(targetInput) &&
         p.slug.startsWith("ghostbank-hub")
+      )
+        return -3;
+      if (
+        /hackminaaziz\.fly\.dev/i.test(origin) &&
+        /\/login\b/i.test(targetInput) &&
+        p.slug.startsWith("hackminaaziz-login-sqli")
+      )
+        return -4;
+      if (
+        /hackminaaziz\.fly\.dev/i.test(origin) &&
+        /\/profile\b/i.test(targetInput) &&
+        p.slug.startsWith("hackminaaziz-profile-idor")
+      )
+        return -4;
+      if (
+        /nn0z\.github\.io/i.test(origin) &&
+        /\/Exploit-Lab\/?$/i.test(targetInput) &&
+        p.slug.startsWith("exploit-lab-hub")
       )
         return -3;
       if (

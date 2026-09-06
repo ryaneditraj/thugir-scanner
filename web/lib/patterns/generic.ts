@@ -85883,5 +85883,135 @@ export const genericPatterns: Pattern[] = [
       "Our FakeShop login.php concatenates credentials into SQL. Show prepared statement remediation.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "client-side-hackminaaziz-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "Mina Aziz vulnerable Flask lab disclosed",
+    description:
+      "hackminaaziz.fly.dev advertises a deliberately vulnerable Flask web application with seven active training vulnerabilities including SQL injection, XSS, IDOR, CSRF, and command injection.",
+    impactOneline:
+      "Public Flask training labs document intentional SQLi, XSS, IDOR, and command injection routes for AppSec education.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideHackminaazizEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run hackminaaziz labs only on isolated training infrastructure.",
+      steps: [
+        "Require authentication before exposing lab instances on private deployments.",
+        "Do not reuse hackminaaziz vulnerability patterns in production code.",
+        "Rate-limit unauthenticated lab enumeration."
+      ]
+    },
+    fixPrompt:
+      "We host hackminaaziz.fly.dev-style Flask training labs. Show how to isolate deliberately vulnerable apps from production networks.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hackminaaziz-login-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "hackminaaziz.fly.dev /login SQLi route live oracle",
+    description:
+      "When scanning /login on hackminaaziz.fly.dev, the login template documents SQL injection authentication bypass in the login query — route-specific SQLi training oracle.",
+    impactOneline:
+      "Route-specific confirmation that hackminaaziz /login documents SQL injection in the authentication query.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hackminaazizLoginSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries for Flask login authentication.",
+      steps: [
+        "Replace string-concatenated login SQL with prepared statements.",
+        "Add rate limiting and account lockout on failed logins.",
+        "Run hackminaaziz only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our hackminaaziz.fly.dev /login route documents SQL injection in the login query. Show parameterized query remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hackminaaziz-profile-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "hackminaaziz.fly.dev /profile IDOR route live oracle",
+    description:
+      "When scanning /profile on hackminaaziz.fly.dev, the profile template documents IDOR via user_id tampering without access control checks — route-specific broken access control oracle.",
+    impactOneline:
+      "Route-specific confirmation that hackminaaziz /profile exposes IDOR training via predictable user_id paths.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hackminaazizProfileIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce object-level authorization on profile lookups.",
+      steps: [
+        "Validate the authenticated user owns the requested profile ID.",
+        "Avoid exposing sensitive fields without authorization checks.",
+        "Run hackminaaziz only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our hackminaaziz.fly.dev /profile route documents IDOR via user_id tampering. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "client-side-exploit-lab-evidence",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "nn0z Exploit-Lab penetration testing sandbox disclosed",
+    description:
+      "nn0z.github.io/Exploit-Lab hosts a browser-based penetration testing sandbox with 16 simulated vulnerability modules (SQLi, XSS, IDOR, SSRF, SSTI, XXE, NoSQLi) using mock request/response repeaters.",
+    impactOneline:
+      "Public Exploit-Lab sandbox documents simulated bug bounty training modules without touching real servers.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "clientSideExploitLabEvidence" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Exploit-Lab is intentional simulated training — do not confuse with production targets.",
+      steps: [
+        "Label simulated labs clearly in discovery queues.",
+        "Do not port simulated vulnerability payloads into production apps.",
+        "Run Exploit-Lab only for offline security education."
+      ]
+    },
+    fixPrompt:
+      "We reference nn0z Exploit-Lab simulated training modules. Show how to keep simulated labs separate from production scanning.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "exploit-lab-hub-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "high",
+    title: "nn0z Exploit-Lab hub route live oracle",
+    description:
+      "When scanning nn0z.github.io/Exploit-Lab/, the sandbox documents 16 simulated vulnerability modules with SQLi, XSS, IDOR, SSRF, SSTI, and XXE repeater labs — route-specific training hub oracle.",
+    impactOneline:
+      "Route-specific confirmation that Exploit-Lab hub is a simulated penetration testing sandbox with 16 vulnerability modules.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "exploitLabHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Treat Exploit-Lab as simulated training only.",
+      steps: [
+        "Keep simulated repeater labs offline from production networks.",
+        "Document that all Exploit-Lab requests are mocked.",
+        "Use Exploit-Lab for education, not live exploitation practice on real targets."
+      ]
+    },
+    fixPrompt:
+      "Our nn0z.github.io/Exploit-Lab route scan confirms a simulated 16-module training sandbox. Show how to label simulated labs in security education platforms.",
+    version: 1,
+    enabled: true
   }
 ];

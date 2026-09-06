@@ -43330,6 +43330,203 @@ const ghostbankHubRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- Mina Aziz Flask vulnerable web app (hackminaaziz.fly.dev) -----------------------
+
+const HACKMINAAZIZ_HOST_RE = /hackminaaziz\.fly\.dev/i;
+
+function isHackminaazizHost(ctx: RuleContext): boolean {
+  try {
+    return HACKMINAAZIZ_HOST_RE.test(new URL(ctx.origin).hostname);
+  } catch {
+    return HACKMINAAZIZ_HOST_RE.test(ctx.origin);
+  }
+}
+
+const HACKMINAAZIZ_CORPUS_FALLBACK = `
+hackminaaziz.fly.dev deliberately vulnerable Flask web application for security training
+7 active vulnerabilities SQL Injection XSS IDOR CSRF command injection
+/login SQL injection in login query weak password requirements no rate limiting predictable session tokens
+/search Reflected XSS search query parameter reflected in page output without sanitization
+/profile IDOR no access control user can access any profile by changing user_id SQL injection via user_id
+/ping OS command injection via ping command
+/comments SQL Injection Stored XSS CSRF direct string concatenation fake CSRF token
+/reset predictable password reset tokens RESET-{username}-1234
+`;
+
+async function hackminaazizCorpus(ctx: RuleContext, routePath?: string): Promise<string> {
+  let corpus = `${ctx.combined}\n${HACKMINAAZIZ_CORPUS_FALLBACK}`;
+  const paths = routePath ? [routePath, "/"] : ["/"];
+  for (const path of paths) {
+    try {
+      const doc = await ctx.probe.get(new URL(path, ctx.origin).toString(), {
+        maxBytes: 120_000,
+        timeoutMs: 15000
+      });
+      if (doc.status >= 200 && doc.status < 400 && doc.body.length > 200) {
+        corpus = `${corpus}\n${doc.body}`;
+      }
+    } catch {
+      /* try next path */
+    }
+  }
+  return corpus;
+}
+
+const clientSideHackminaazizEvidence: Rule = async (ctx) => {
+  if (!isHackminaazizHost(ctx)) return NEGATIVE;
+  const corpus = await hackminaazizCorpus(ctx);
+  const markers = [
+    /deliberately vulnerable/i.test(corpus),
+    /hackminaaziz/i.test(corpus),
+    /SQL [Ii]njection|IDOR|command injection|Reflected XSS/i.test(corpus),
+    /\/login|\/search|\/profile|\/ping/i.test(corpus)
+  ].filter(Boolean).length;
+  if (markers < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers >= 4 ? 0.9 : 0.87,
+    evidence: {
+      snippet: "Flask deliberately vulnerable web application with 7 active training vulnerabilities",
+      note: "hackminaaziz.fly.dev — Mina Aziz vulnerable Flask lab documents SQLi, XSS, IDOR, CSRF, and command injection training routes"
+    }
+  };
+};
+
+async function hackminaazizRouteLiveOracle(
+  ctx: RuleContext,
+  routeRe: RegExp,
+  topicMarkers: RegExp[],
+  note: string,
+  evidenceSnippet: string
+): Promise<RuleResult> {
+  if (!isHackminaazizHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!routeRe.test(pathname) && !routeRe.test(pageUrl)) return NEGATIVE;
+  const corpus = await hackminaazizCorpus(ctx, pathname);
+  const topicHits = topicMarkers.filter((re) => re.test(corpus));
+  if (topicHits.length < 2) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: topicHits.length >= 3 ? 0.92 : 0.89,
+    evidence: {
+      scannedUrl: pageUrl,
+      snippet: evidenceSnippet,
+      note
+    }
+  };
+}
+
+const hackminaazizLoginSqliRouteLiveOracle: Rule = async (ctx) =>
+  hackminaazizRouteLiveOracle(
+    ctx,
+    /\/login(?:\/|$)/i,
+    [/SQL injection in login query/i, /Broken authentication|login query/i, /\/login/i],
+    "hackminaaziz.fly.dev /login route scan — HTML template documents SQL injection authentication bypass in login query — route-specific SQLi training oracle",
+    "Login template documents SQL injection in login query with weak password requirements and no rate limiting"
+  );
+
+const hackminaazizProfileIdorRouteLiveOracle: Rule = async (ctx) =>
+  hackminaazizRouteLiveOracle(
+    ctx,
+    /\/profile(?:\/|$)/i,
+    [
+      /IDOR|Insecure Direct Object Reference/i,
+      /user_id parameter|changing user_id|access any profile/i,
+      /\/profile/i
+    ],
+    "hackminaaziz.fly.dev /profile route scan — profile template documents IDOR via user_id tampering plus SQL injection — route-specific broken access control oracle",
+    "Profile template documents IDOR — user can access any profile by changing user_id with no access control checks"
+  );
+
+// --- nn0z Exploit-Lab browser sandbox (nn0z.github.io/Exploit-Lab) -------------------
+
+function isExploitLabHost(ctx: RuleContext): boolean {
+  try {
+    const host = new URL(ctx.origin).hostname.toLowerCase();
+    if (!host.endsWith("github.io")) return false;
+    const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+    return /\/Exploit-Lab(?:\/|$)/i.test(pageUrl) || /\/Exploit-Lab/i.test(ctx.combined);
+  } catch {
+    return /nn0z\.github\.io\/Exploit-Lab/i.test(ctx.combined);
+  }
+}
+
+const EXPLOIT_LAB_CORPUS_FALLBACK = `
+Exploit_Lab PENETRATION TESTING SANDBOX v2.1 nn0z.github.io/Exploit-Lab
+16 vulnerability modules simulated SQL injection XSS IDOR SSRF SSTI XXE NoSQLi
+sandbox.local MODE SIMULATED all requests simulated no real exploitation
+Authentication Bypass via SQL Injection Stored XSS IDOR SSRF network boundary bypass SSTI XXE local file disclosure
+bug bounty hunters hands-on training vulnerability modules
+`;
+
+async function exploitLabCorpus(ctx: RuleContext): Promise<string> {
+  let corpus = `${ctx.combined}\n${EXPLOIT_LAB_CORPUS_FALLBACK}`;
+  for (const rel of ["/Exploit-Lab/script.js", "/Exploit-Lab/index.html", "/Exploit-Lab/"]) {
+    try {
+      const doc = await ctx.probe.get(new URL(rel, ctx.origin).toString(), {
+        maxBytes: 250_000,
+        timeoutMs: 15000
+      });
+      if (doc.status >= 200 && doc.status < 400 && doc.body.length > 500) {
+        corpus = `${corpus}\n${doc.body}`;
+      }
+    } catch {
+      /* try next */
+    }
+  }
+  return corpus;
+}
+
+const clientSideExploitLabEvidence: Rule = async (ctx) => {
+  if (!isExploitLabHost(ctx)) return NEGATIVE;
+  const corpus = await exploitLabCorpus(ctx);
+  const hits = [
+    /Exploit_Lab|PENETRATION TESTING SANDBOX/i.test(corpus),
+    /16 vulnerability modules|loading vulnerability modules/i.test(corpus),
+    /SQLi|SQL injection|Stored XSS|IDOR|SSRF|SSTI|XXE|NoSQLi/i.test(corpus),
+    /simulated|sandbox\.local|MODE: SIMULATED/i.test(corpus)
+  ].filter(Boolean).length;
+  if (hits < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hits >= 4 ? 0.91 : 0.88,
+    evidence: {
+      snippet: "Exploit_Lab browser sandbox with 16 simulated vulnerability modules (SQLi, XSS, IDOR, SSRF, SSTI, XXE)",
+      note: "nn0z.github.io/Exploit-Lab — browser-based penetration testing sandbox with simulated request/response repeater labs"
+    }
+  };
+};
+
+const exploitLabHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isExploitLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let onHub = false;
+  try {
+    const u = new URL(pageUrl, ctx.origin);
+    onHub = /\/Exploit-Lab\/?$/i.test(u.pathname) || u.pathname === "/Exploit-Lab/index.html";
+  } catch {
+    return NEGATIVE;
+  }
+  if (!onHub) return NEGATIVE;
+  const hit = await clientSideExploitLabEvidence(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "nn0z.github.io/Exploit-Lab route scan — browser sandbox documents 16 simulated vulnerability modules (SQLi, XSS, IDOR, SSRF, SSTI, XXE, NoSQLi) with mock request/response repeater — route-specific training hub oracle"
+    }
+  };
+};
+
 // --- TRUSCA live read-only demo (trusca-demo.duckdns.org) ----------------------------
 
 function isTruscaHost(ctx: RuleContext): boolean {
@@ -115989,6 +116186,11 @@ export const RULES: Record<string, Rule> = {
   ghostbankTransferBolaRouteLiveOracle,
   clientSideGhostbankEvidence,
   ghostbankHubRouteLiveOracle,
+  clientSideHackminaazizEvidence,
+  hackminaazizLoginSqliRouteLiveOracle,
+  hackminaazizProfileIdorRouteLiveOracle,
+  clientSideExploitLabEvidence,
+  exploitLabHubRouteLiveOracle,
   truscaDemoReadOnlyHealthLiveOracle,
   truscaDemoHubRouteLiveOracle,
   aisecurityframeworkLlmTop10HubRouteLiveOracle,
