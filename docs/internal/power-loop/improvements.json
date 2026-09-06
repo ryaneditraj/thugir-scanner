@@ -8903,6 +8903,24 @@
       "slug": "hackminaaziz-comments-stored-xss-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /comments template documents stored XSS via Jinja |safe filter plus SQLi/CSRF; hackminaaziz.fly.dev/comments findings 6\u21927 (+hackminaaziz-comments-stored-xss-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackminaaziz.fly.dev",
+      "slug": "hackminaaziz-search-reflected-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /search HTML template documents reflected XSS via unsanitized query parameter; hackminaaziz.fly.dev/search findings 6\u21927 (+hackminaaziz-search-reflected-xss-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackminaaziz.fly.dev",
+      "slug": "hackminaaziz-reset-broken-password-reset-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /reset template documents predictable RESET-{username}-1234 tokens with no DB validation; hackminaaziz.fly.dev/reset findings 6\u21927 (+hackminaaziz-reset-broken-password-reset-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackminaaziz.fly.dev",
+      "slug": "hackminaaziz-home-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: / landing page documents 7 deliberate training vulnerabilities with linked lab routes; hackminaaziz.fly.dev/ findings 5\u21926 (+hackminaaziz-home-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

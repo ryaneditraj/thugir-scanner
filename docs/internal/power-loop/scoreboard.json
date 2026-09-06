@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T04:20:00.000Z",
+  "updated_at": "2026-09-06T05:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2755,
-  "total_findings": 26988,
-  "critical_findings": 79,
+  "total_sites_scanned": 2758,
+  "total_findings": 27007,
+  "critical_findings": 80,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1968,
-  "discovery_findings": 22861,
-  "improvements_shipped": 1470,
-  "last_run": "2026-09-06T04:20:00.000Z",
+  "discovery_findings": 22880,
+  "improvements_shipped": 1473,
+  "last_run": "2026-09-06T05:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "04",
+    "hour_utc": "05",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 53,
+      "oracle_findings": 52,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,39 +48,36 @@
           ]
         }
       },
-      "note": "6/6 stable first-pass recall on primary Heroku (53 findings, 40 live oracles; secret-resend + iac-terraform-tls-key + juice-shop-resend-key present)"
+      "note": "6/6 stable first-pass recall on primary Heroku (52 findings, 40+ live oracles)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 5,
-      "findings": 33,
-      "focus": "hackminaaziz.fly.dev route oracles: /ping cmdi, /comments stored XSS, /profile/1 IDOR + /search reflected XSS + /reset password-reset gaps",
-      "improvements_shipped_this_run": 0
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 20,
+      "focus": "hackminaaziz.fly.dev /search reflected XSS + /reset broken password reset + / home hub route oracle gaps from 04 UTC learning signal",
+      "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles, primary Heroku first pass)",
-      "hackminaaziz.fly.dev/ping: 7 findings — hackminaaziz-ping-command-injection-route-live-oracle confirmed",
-      "hackminaaziz.fly.dev/comments: 7 findings — hackminaaziz-comments-stored-xss-route-live-oracle confirmed",
-      "hackminaaziz.fly.dev/profile/1: 7 findings — hackminaaziz-profile-idor-route-live-oracle confirmed",
-      "hackminaaziz.fly.dev/search: 6 findings — reflected-xss-query-param + reflexion-escalated-xss without route-specific oracle",
-      "hackminaaziz.fly.dev/reset: 6 findings — thin hub without broken-password-reset route oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 40+ live oracles)",
+      "hackminaaziz.fly.dev/search: 6→7 (+hackminaaziz-search-reflected-xss-route-live-oracle)",
+      "hackminaaziz.fly.dev/reset: 6→7 (+hackminaaziz-reset-broken-password-reset-route-live-oracle)",
+      "hackminaaziz.fly.dev/: 5→6 (+hackminaaziz-home-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "hackminaaziz /search and /reset lack dedicated route live oracles despite README documenting reflected XSS and broken password reset",
       "vapi.roottusk.com unreachable from cloud agent (DNS/connection failure)",
-      "qa.brokencrystals.com/api/file/aws still queued (48h skip until ~2026-09-08T18:14Z)",
-      "oopssec react2shell/weak-jwt vanity slugs still queued"
+      "qa.brokencrystals.com/api/file/aws still queued (48h skip until ~2026-09-08T18:14Z)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 53,
+    "juice-shop.herokuapp.com": 52,
+    "hackminaaziz.fly.dev/search": 7,
+    "hackminaaziz.fly.dev/reset": 7,
+    "hackminaaziz.fly.dev/": 6,
     "hackminaaziz.fly.dev/ping": 7,
     "hackminaaziz.fly.dev/comments": 7,
     "hackminaaziz.fly.dev/profile/1": 7,
-    "hackminaaziz.fly.dev/search": 6,
-    "hackminaaziz.fly.dev/reset": 6,
     "brokencrystals.com/api/process_numbers": 86,
     "nn0z.github.io/Exploit-Lab/": 13
   }

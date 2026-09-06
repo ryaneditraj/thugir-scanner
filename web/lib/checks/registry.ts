@@ -43514,6 +43514,45 @@ const hackminaazizCommentsStoredXssRouteLiveOracle: Rule = async (ctx) =>
     "Comments template documents stored XSS via |safe filter with direct SQL string concatenation and fake CSRF token"
   );
 
+const hackminaazizSearchReflectedXssRouteLiveOracle: Rule = async (ctx) =>
+  hackminaazizRouteLiveOracle(
+    ctx,
+    /\/search(?:\/|$)/i,
+    [
+      /Reflected XSS|reflected in page output/i,
+      /search query parameter|search query is displayed/i,
+      /\/search/i
+    ],
+    "hackminaaziz.fly.dev /search route scan — search template documents reflected XSS via unsanitized query parameter — route-specific reflected XSS training oracle",
+    "Search template documents reflected XSS — search query parameter reflected in page output without sanitization or encoding"
+  );
+
+const hackminaazizResetBrokenPasswordResetRouteLiveOracle: Rule = async (ctx) =>
+  hackminaazizRouteLiveOracle(
+    ctx,
+    /\/reset(?:\/|$)/i,
+    [
+      /predictable.*reset token|RESET-\{username\}-1234/i,
+      /Broken password reset|password reset tokens/i,
+      /\/reset/i
+    ],
+    "hackminaaziz.fly.dev /reset route scan — password reset template documents predictable RESET-{username}-1234 tokens with no database validation — route-specific broken authentication training oracle",
+    "Password reset template documents predictable reset tokens RESET-{username}-1234 with no token storage or validation"
+  );
+
+const hackminaazizHomeRouteLiveOracle: Rule = async (ctx) =>
+  hackminaazizRouteLiveOracle(
+    ctx,
+    /^\/$/i,
+    [
+      /deliberately vulnerable|7 active vulnerabilities/i,
+      /SQL Injection|Reflected XSS|IDOR|command injection/i,
+      /\/login|\/search|\/profile|\/ping|\/comments|\/reset/i
+    ],
+    "hackminaaziz.fly.dev / home route scan — landing page documents seven deliberate training vulnerabilities with linked lab routes — route-specific vulnerable-app hub oracle",
+    "Home page documents deliberately vulnerable Flask lab with 7 active training routes including SQLi, XSS, IDOR, CSRF, and command injection"
+  );
+
 // --- nn0z Exploit-Lab browser sandbox (nn0z.github.io/Exploit-Lab) -------------------
 
 function isExploitLabHost(ctx: RuleContext): boolean {
@@ -116261,6 +116300,9 @@ export const RULES: Record<string, Rule> = {
   hackminaazizProfileIdorRouteLiveOracle,
   hackminaazizPingCommandInjectionRouteLiveOracle,
   hackminaazizCommentsStoredXssRouteLiveOracle,
+  hackminaazizSearchReflectedXssRouteLiveOracle,
+  hackminaazizResetBrokenPasswordResetRouteLiveOracle,
+  hackminaazizHomeRouteLiveOracle,
   clientSideExploitLabEvidence,
   exploitLabHubRouteLiveOracle,
   truscaDemoReadOnlyHealthLiveOracle,

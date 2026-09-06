@@ -86041,6 +86041,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "hackminaaziz-search-reflected-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "hackminaaziz.fly.dev /search reflected XSS route live oracle",
+    description:
+      "When scanning /search on hackminaaziz.fly.dev, the search template documents reflected XSS via unsanitized query parameter — route-specific reflected XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that hackminaaziz /search documents reflected XSS via unsanitized search query output.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hackminaazizSearchReflectedXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "HTML-encode all reflected user input in search results.",
+      steps: [
+        "Encode search query output before rendering in HTML templates.",
+        "Use Content-Security-Policy to mitigate XSS impact.",
+        "Run hackminaaziz only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our hackminaaziz.fly.dev /search route documents reflected XSS via search query. Show output encoding remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hackminaaziz-reset-broken-password-reset-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "hackminaaziz.fly.dev /reset broken password reset route live oracle",
+    description:
+      "When scanning /reset on hackminaaziz.fly.dev, the password reset template documents predictable RESET-{username}-1234 tokens with no database validation — route-specific broken authentication training oracle.",
+    impactOneline:
+      "Route-specific confirmation that hackminaaziz /reset documents predictable password reset tokens.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hackminaazizResetBrokenPasswordResetRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use cryptographically random single-use reset tokens stored server-side.",
+      steps: [
+        "Generate unpredictable reset tokens with sufficient entropy.",
+        "Store hashed tokens with expiry in the database.",
+        "Invalidate tokens after use and rate-limit reset requests."
+      ]
+    },
+    fixPrompt:
+      "Our hackminaaziz.fly.dev /reset route documents predictable reset tokens. Show secure password reset flow remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hackminaaziz-home-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "medium",
+    title: "hackminaaziz.fly.dev home hub route live oracle",
+    description:
+      "When scanning / on hackminaaziz.fly.dev, the landing page documents seven deliberate training vulnerabilities with linked lab routes — route-specific vulnerable-app hub oracle.",
+    impactOneline:
+      "Route-specific confirmation that hackminaaziz home page documents the full deliberately vulnerable Flask training lab catalog.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hackminaazizHomeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Run hackminaaziz labs only on isolated training infrastructure.",
+      steps: [
+        "Do not deploy deliberately vulnerable apps to production domains.",
+        "Restrict lab access to authorized trainees.",
+        "Use network isolation for training environments."
+      ]
+    },
+    fixPrompt:
+      "Our hackminaaziz.fly.dev home route documents a deliberately vulnerable Flask lab. Show training environment isolation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-exploit-lab-evidence",
     platform: "generic",
     category: "Injection",

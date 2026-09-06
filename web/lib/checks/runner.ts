@@ -4383,6 +4383,9 @@ const DEEP_RULES = new Set<string>([
   "hackminaazizProfileIdorRouteLiveOracle",
   "hackminaazizPingCommandInjectionRouteLiveOracle",
   "hackminaazizCommentsStoredXssRouteLiveOracle",
+  "hackminaazizSearchReflectedXssRouteLiveOracle",
+  "hackminaazizResetBrokenPasswordResetRouteLiveOracle",
+  "hackminaazizHomeRouteLiveOracle",
   "clientSideExploitLabEvidence",
   "exploitLabHubRouteLiveOracle",
   "bugforgeSsrfRouteLiveOracle",
@@ -13102,6 +13105,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /hackminaaziz\.fly\.dev/i.test(origin) &&
         /\/comments\b/i.test(targetInput) &&
         p.slug.startsWith("hackminaaziz-comments-stored-xss")
+      )
+        return -4;
+      if (
+        /hackminaaziz\.fly\.dev/i.test(origin) &&
+        /\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("hackminaaziz-search-reflected-xss")
+      )
+        return -4;
+      if (
+        /hackminaaziz\.fly\.dev/i.test(origin) &&
+        /\/reset\b/i.test(targetInput) &&
+        p.slug.startsWith("hackminaaziz-reset-broken-password-reset")
+      )
+        return -4;
+      if (
+        /hackminaaziz\.fly\.dev/i.test(origin) &&
+        /^https?:\/\/[^/]+\/?$/i.test(targetInput) &&
+        p.slug.startsWith("hackminaaziz-home")
       )
         return -4;
       if (

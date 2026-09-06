@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-06T04:07:53.138Z",
-  "total": 3368,
-  "uniqueSlugs": 3360,
+  "generatedAt": "2026-09-06T05:09:23.715Z",
+  "total": 3371,
+  "uniqueSlugs": 3363,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3350,
+    "generic": 3353,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3283,
+    "deep": 3286,
     "continuous": 0
   },
   "byCategory": {
@@ -26,9 +26,9 @@
     "Information exposure": 1,
     "Information disclosure": 155,
     "Security misconfiguration": 288,
-    "Broken authentication": 211,
-    "Injection": 553,
-    "Cross-site scripting": 803,
+    "Broken authentication": 212,
+    "Injection": 554,
+    "Cross-site scripting": 804,
     "Open redirect": 29,
     "general": 20,
     "SSRF": 19,
@@ -2014,9 +2014,12 @@
     "hack-health-a01-brute-force-route-live-oracle",
     "hack-health-a03-sql-injection-route-live-oracle",
     "hackminaaziz-comments-stored-xss-route-live-oracle",
+    "hackminaaziz-home-route-live-oracle",
     "hackminaaziz-login-sqli-route-live-oracle",
     "hackminaaziz-ping-command-injection-route-live-oracle",
     "hackminaaziz-profile-idor-route-live-oracle",
+    "hackminaaziz-reset-broken-password-reset-route-live-oracle",
+    "hackminaaziz-search-reflected-xss-route-live-oracle",
     "hacksplaining-session-fixation-live-oracle",
     "hacksplaining-session-fixation-route-live-oracle",
     "hacksplaining-weak-session-live-oracle",
