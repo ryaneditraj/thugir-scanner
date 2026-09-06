@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T16:05:00.000Z",
+  "updated_at": "2026-09-06T17:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-0",
+      "source": "OWASP WrongSecrets CTF — opening challenge walkthrough (wrongsecrets-ctf.herokuapp.com; web search 17 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-3",
+      "source": "OWASP WrongSecrets CTF — challenge-3 secrets walkthrough (wrongsecrets-ctf.herokuapp.com; web search 17 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-5",
+      "source": "OWASP WrongSecrets CTF — challenge-5 secrets walkthrough (wrongsecrets-ctf.herokuapp.com; web search 17 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://urban-vampi-staging.up.railway.app/users/v1/_debug",
+      "source": "VAmPI staging Railway — excessive data exposure debug endpoint GET /users/v1/_debug (web search 17 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-8",
+      "source": "OWASP WrongSecrets CTF — challenge-8 logging secrets walkthrough (wrongsecrets-ctf.herokuapp.com; web search 17 UTC)",
+      "auth": "public_benchmark"
+    },
     {
       "url": "https://ist-edu-bd.vercel.app/api/newsletter",
       "source": "zahidoverflow/damn-vulnerable-web-university — CRLF injection newsletter API POST /api/newsletter (README vuln catalog; 15 UTC gap)",
@@ -11867,5 +11892,5 @@
     }
   ],
   "discovery_urls": [],
-  "discovery_urls_added": 2138
+  "discovery_urls_added": 2143
 }
