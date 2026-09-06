@@ -691,7 +691,7 @@ export const genericPatterns: Pattern[] = [
     severityDefault: "high",
     title: "Code-Breaking puzzle language route live oracle",
     description:
-      "When scanning /puzzle/{id} on code-breaking.fly.dev, language-specific source-code audit puzzles (PHP function, Java javacon) are confirmed with tier titles and GitHub source paths — route-specific language CTF oracle.",
+      "When scanning /puzzle/{id} on code-breaking.fly.dev, language-specific source-code audit puzzles (PHP function, Java javacon, Python picklecode, JavaScript thejs) are confirmed with tier titles and GitHub source paths — route-specific language CTF oracle.",
     impactOneline:
       "Route-scoped scans of /puzzle routes should distinguish language-specific audit puzzles beyond generic hub fingerprinting.",
     detectorKind: "rule_ref",

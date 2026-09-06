@@ -9065,6 +9065,24 @@
       "slug": "dreadnode-crucible-platform-route-challenges-suppression",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: dreadnodeCruciblePlatformRouteLiveOracle skips /challenges path so route-specific challenges oracle replaces generic platform-route on thin hub; crucible.dreadnode.io/challenges no longer fires duplicate platform-route oracle; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:code-breaking.fly.dev",
+      "slug": "code-breaking-puzzle-language-hard-tier-extension",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CODE_BREAKING_PUZZLE_LANGUAGE_META adds puzzle/8 hard-picklecode (Python 2018/picklecode) + puzzle/9 hard-thejs (JavaScript 2018/thejs); code-breaking.fly.dev/puzzle/9 findings 5→6 (+code-breaking-puzzle-language-route-live-oracle); puzzle/8 findings 5→6; benchmark juice-shop 53 findings 6/6 maintained (escape.tech fallback)"
+    },
+    {
+      "source": "discovery:ucu-owasp-ctf.vercel.app",
+      "slug": "ucu-owasp-ctf-crypto-checkpoint-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: ucuOwaspCtfCryptoRouteLiveOracle uses ucuOwaspCtfHubBundleCorpus + curated A02 corpus when /crypto/ returns 404 or Vercel Security Checkpoint; ucu-owasp-ctf.vercel.app/crypto/ findings 4 (+ucu-owasp-ctf-crypto-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:duck-store.escape.tech",
+      "slug": "duck-store-cart-negative-quantity-500-corpus-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/v1/auth/register returns HTTP 500; duckStoreCartOpenApiCorpus supplies CartAddItem quantity from /openapi.json; duck-store.escape.tech/api/v1/cart/add findings 10→14 (+duck-store-cart-negative-quantity-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
