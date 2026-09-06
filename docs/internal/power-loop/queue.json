@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T20:12:00.000Z",
+  "updated_at": "2026-09-06T21:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/contributions",
+      "source": "OWASP NodeGoat — authenticated RCE via eval() on POST /contributions preTax/afterTax/roth (PR#411; web search 21 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-13",
+      "source": "OWASP WrongSecrets CTF — challenge-13 CI/CD GitHub Actions secret exfiltration (wrongsecrets-ctf.herokuapp.com; web search 21 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-14",
+      "source": "OWASP WrongSecrets CTF — challenge-14 password manager KeePass Docker secret (wrongsecrets-ctf.herokuapp.com; web search 21 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/memos",
+      "source": "OWASP NodeGoat — stored XSS via POST /memos memo field (nodegoat-websec.herokuapp.com; web search 21 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://nodegoat-websec.herokuapp.com/tutorial/a1",
+      "source": "OWASP NodeGoat — A1 injection SQLi tutorial lab (nodegoat-websec.herokuapp.com; web search 21 UTC)",
+      "auth": "public_benchmark"
+    },
     {
       "url": "https://koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/",
       "source": "kOaDT/oss-oopssec-store — mass-assignment role:ADMIN via POST /api/auth/signup walkthrough (ch.04; scoreboard gap; web search 20 UTC)",
