@@ -8921,6 +8921,24 @@
       "slug": "hackminaaziz-home-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: / landing page documents 7 deliberate training vulnerabilities with linked lab routes; hackminaaziz.fly.dev/ findings 5\u21926 (+hackminaaziz-home-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackminaaziz.fly.dev",
+      "slug": "hackminaaziz-register-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /register HTML template documents insecure registration with no input validation, weak password requirements (3 char min), user enumeration, and no CSRF protection; hackminaaziz.fly.dev/register findings 6\u21927 (+hackminaaziz-register-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackminaaziz.fly.dev",
+      "slug": "hackminaaziz-about-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /about page documents Implemented Vulnerabilities catalog with IDOR, stored/reflected XSS, SQL injection, command injection, and broken authentication sections; hackminaaziz.fly.dev/about findings 6\u21927 (+hackminaaziz-about-route-live-oracle); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-sqli-discovery-priority-boost",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: runner priority -3\u2192-4 for chimera-banking-accounts-search, chimera-insurance-policies-lookup, chimera-transactions-history, chimera-insurance-claims-search, and chimera-claims-search-order-by on queued discovery route scans; benchmark juice-shop 52 findings 6/6 maintained"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T06:10:00.000Z",
+  "updated_at": "2026-09-06T06:25:00.000Z",
   "priority_discovery_urls": [
     {
       "url": "https://hackminaaziz.fly.dev/reset/confirm",
@@ -139,11 +139,6 @@
     {
       "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php",
       "source": "webspoilt/vulnforge-academy — Level 16 file-upload validation bypass (README Medium tier 16-18; web search 00 UTC)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
-      "source": "webspoilt/vulnforge-academy — Level 17 file-upload validation bypass (README Medium tier 16-18; web search 00 UTC)",
       "auth": "oss_deploy"
     },
     {
@@ -1199,11 +1194,6 @@
     {
       "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-56",
       "source": "OWASP WrongSecrets — Challenge 56 secrets oracle (Heroku demo README: challenges 54-66 available)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-64",
-      "source": "OWASP WrongSecrets — Challenge 64 secrets oracle (Heroku demo README: challenges 54-66 available)",
       "auth": "public_demo"
     },
     {
@@ -3514,11 +3504,6 @@
     {
       "url": "https://pentest-fauxbank.vercel.app/support",
       "source": "alfredang/pentest FauxBank — stored XSS in support tickets lesson #3 (GitHub README)",
-      "auth": "oss_deploy"
-    },
-    {
-      "url": "https://pentest-fauxbank.vercel.app/transfer",
-      "source": "alfredang/pentest FauxBank — missing CSRF on transfers lesson #7 (GitHub README)",
       "auth": "oss_deploy"
     },
     {
@@ -10248,11 +10233,6 @@
     {
       "url": "http://www.net-force.nl/challenge/level209/index.php",
       "source": "Net-Force.nl challenge level 209 — web exploit training puzzle (net-force catalog)",
-      "auth": "public_demo"
-    },
-    {
-      "url": "https://websec.fr/level17/",
-      "source": "WebSec.fr level 17 — PHP strcasecmp type-juggling / loose comparison auth bypass challenge",
       "auth": "public_demo"
     },
     {
