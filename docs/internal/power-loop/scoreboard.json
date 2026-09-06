@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T04:16:30.000Z",
+  "updated_at": "2026-09-06T04:20:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2749,
-  "total_findings": 26902,
+  "total_sites_scanned": 2755,
+  "total_findings": 26988,
   "critical_findings": 79,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1963,
-  "discovery_findings": 22828,
+  "discovery_urls_added": 1968,
+  "discovery_findings": 22861,
   "improvements_shipped": 1470,
-  "last_run": "2026-09-06T04:16:30.000Z",
+  "last_run": "2026-09-06T04:20:00.000Z",
   "last_run_summary": {
     "hour_utc": "04",
     "benchmark": {
@@ -52,33 +52,36 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 22,
-      "focus": "Closed 03 UTC learning gaps: Chimera claims ORDER BY SQLi + hackminaaziz /ping cmdi + /comments stored XSS route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 5,
+      "findings": 33,
+      "focus": "hackminaaziz.fly.dev route oracles: /ping cmdi, /comments stored XSS, /profile/1 IDOR + /search reflected XSS + /reset password-reset gaps",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles, primary Heroku first pass)",
-      "chimera.atlascrew.dev/api/v1/claims/search: 8 findings — chimera-claims-search-order-by-sqli-route-live-oracle shipped (7→8)",
-      "hackminaaziz.fly.dev/ping: 7 findings — hackminaaziz-ping-command-injection-route-live-oracle shipped (6→7)",
-      "hackminaaziz.fly.dev/comments: 7 findings — hackminaaziz-comments-stored-xss-route-live-oracle shipped (6→7)"
+      "hackminaaziz.fly.dev/ping: 7 findings — hackminaaziz-ping-command-injection-route-live-oracle confirmed",
+      "hackminaaziz.fly.dev/comments: 7 findings — hackminaaziz-comments-stored-xss-route-live-oracle confirmed",
+      "hackminaaziz.fly.dev/profile/1: 7 findings — hackminaaziz-profile-idor-route-live-oracle confirmed",
+      "hackminaaziz.fly.dev/search: 6 findings — reflected-xss-query-param + reflexion-escalated-xss without route-specific oracle",
+      "hackminaaziz.fly.dev/reset: 6 findings — thin hub without broken-password-reset route oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "hackminaaziz /search and /reset lack dedicated route live oracles despite README documenting reflected XSS and broken password reset",
       "vapi.roottusk.com unreachable from cloud agent (DNS/connection failure)",
-      "qa.brokencrystals.com/api/file/aws still queued (48h skip)",
+      "qa.brokencrystals.com/api/file/aws still queued (48h skip until ~2026-09-08T18:14Z)",
       "oopssec react2shell/weak-jwt vanity slugs still queued"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "chimera.atlascrew.dev/api/v1/claims/search": 8,
     "hackminaaziz.fly.dev/ping": 7,
     "hackminaaziz.fly.dev/comments": 7,
+    "hackminaaziz.fly.dev/profile/1": 7,
+    "hackminaaziz.fly.dev/search": 6,
+    "hackminaaziz.fly.dev/reset": 6,
     "brokencrystals.com/api/process_numbers": 86,
-    "nn0z.github.io/Exploit-Lab/": 13,
-    "hackminaaziz.fly.dev/login": 7,
-    "hackminaaziz.fly.dev/profile/1": 7
+    "nn0z.github.io/Exploit-Lab/": 13
   }
 }

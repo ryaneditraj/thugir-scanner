@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T03:12:00.000Z",
+  "updated_at": "2026-09-06T04:18:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://hackminaaziz.fly.dev/ping",
+      "source": "minaaziz9/Vulnerable-Web-Application-MinaAziz — OS command injection oracle GET /ping (GitHub README; web search 04 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hackminaaziz.fly.dev/comments",
+      "source": "minaaziz9/Vulnerable-Web-Application-MinaAziz — stored XSS + SQLi oracle POST /comments (GitHub README; web search 04 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hackminaaziz.fly.dev/search",
+      "source": "minaaziz9/Vulnerable-Web-Application-MinaAziz — reflected XSS oracle GET /search?q= (GitHub README; web search 04 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hackminaaziz.fly.dev/profile/1",
+      "source": "minaaziz9/Vulnerable-Web-Application-MinaAziz — IDOR oracle GET /profile/<user_id> (GitHub README; web search 04 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hackminaaziz.fly.dev/reset",
+      "source": "minaaziz9/Vulnerable-Web-Application-MinaAziz — broken password reset token oracle /reset (GitHub README; web search 04 UTC)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://chimera.atlascrew.dev/api/v1/transactions/history?account_id=1",
       "source": "atlas-crew/Chimera — CHM-BNK-003 time-based blind SQLi oracle GET /api/v1/transactions/history?account_id= (vuln-api README; web search 03 UTC)",
