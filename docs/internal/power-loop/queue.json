@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T14:05:00.000Z",
+  "updated_at": "2026-09-06T15:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/search",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQLi search API oracle GET /api/search (README vuln catalog; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/comments",
+      "source": "zahidoverflow/damn-vulnerable-web-university — reflected/stored XSS comments API GET/POST /api/comments (README; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/portal",
+      "source": "zahidoverflow/damn-vulnerable-web-university — SQLi authentication portal API POST /api/portal (README; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://ist-edu-bd.vercel.app/api/notices",
+      "source": "zahidoverflow/damn-vulnerable-web-university — LFI/path traversal notices API GET /api/notices (README; web search 15 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vulnapi.testinvicti.com/api/users/search?q=admin",
+      "source": "cerberauth/invicti-vulnerable-api — user search BOLA oracle GET /api/users/search (Swagger + /vulns docs; web search 15 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://bac-vulnerability-lab.onrender.com/claim-airdrop",
       "source": "Abhi005shek/idor_vulnerability_lab — IDOR airdrop claim oracle POST /claim-airdrop (onrender.com public demo; web search 14 UTC)",
@@ -11817,5 +11842,5 @@
     }
   ],
   "discovery_urls": [],
-  "discovery_urls_added": 2128
+  "discovery_urls_added": 2133
 }
