@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-05T23:25:00.000Z",
+  "updated_at": "2026-09-06T00:16:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3301,
-  "total_findings": 38410,
+  "total_sites_scanned": 3310,
+  "total_findings": 38534,
   "critical_findings": 76,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2113,
-  "discovery_findings": 30289,
+  "discovery_urls_added": 2118,
+  "discovery_findings": 30360,
   "improvements_shipped": 1456,
-  "last_run": "2026-09-05T23:25:00.000Z",
+  "last_run": "2026-09-06T00:16:00.000Z",
   "last_run_summary": {
-    "hour_utc": "23",
+    "hour_utc": "00",
     "benchmark": {
-      "oracle_url": "https://juice-shop-staging.herokuapp.com",
+      "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 595,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,36 +48,40 @@
           ]
         }
       },
-      "note": "6/6 recall via staging fallback (primary Heroku timeout 600s; 53 findings, 40 live oracles; secret-resend present)"
+      "note": "6/6 stable first-pass recall on primary Heroku (53 findings, 40 live oracles; secret-resend + iac-terraform-tls-key + juice-shop-resend-key present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
+      "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 112,
-      "focus": "BugStore cart/add negative-quantity + checkout route oracles; queue drain seclab ssrf/xxe + bugstore cart/orders/reviews",
-      "improvements_shipped_this_run": 2
+      "findings": 71,
+      "focus": "restful-booker booking/auth BOLA + vulnforge file-upload levels 16-18 + crAPI admin/user videos + community posts drain",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
-      "juice-shop-staging.herokuapp.com: benchmark recall 6/6 (53 findings, staging fallback after primary timeout)",
-      "bugstore.bugtraceai.com/api/cart/add: 25 findings — bugstore-cart-negative-quantity-route-live-oracle + bugstore-checkout-client-total-route-live-oracle (22→25)",
-      "seclab.vercel.app/labs/ssrf: 7 findings — seclab-ssrf-vulnerable-route-live-oracle confirmed",
-      "seclab.vercel.app/labs/xxe: 6 findings — seclab-xxe-vulnerable-route-live-oracle confirmed"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, primary Heroku first pass)",
+      "restful-booker.herokuapp.com/booking: 8 findings — restful-booker-auth-weak-creds + booking-unauth-access/create route live oracles shipped",
+      "vulnforge-academy level16/17/18: 7 findings each — level16-double-extension + level17-content-type upload route live oracles confirmed",
+      "crapi.apisec.ai/identity/api/v2/admin/videos/1: 12 findings — crapi-admin-videos-bfla-route-live-oracle confirmed",
+      "crapi.apisec.ai/identity/api/v2/user/videos/1: 12 findings — crapi-user-videos-bola-route-live-oracle confirmed",
+      "crapi.apisec.ai/community/api/posts: 11 findings — thin hub without community-posts route-specific oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "duck-store.escape.tech /api/v1/auth/register returns HTTP 500 — referral/cart/checkout route oracles blocked",
-      "oopssec react2shell/weak-jwt vanity slugs still queued; qa.brokencrystals.com/api/file/aws 48h skip",
-      "r2s-arena.fly.dev still unreachable from cloud agent"
+      "crapi community posts hub fingerprint without route-specific community-posts oracle",
+      "restful-booker /booking/1 shares parent-hub fingerprint without booking-by-ID route-specific oracle",
+      "vulnforge level18 shares generic file-upload oracle without level18-specific route slug",
+      "sekumart members/catalog + urban-VAmPI + vulnerable-ecommerce still queued (48h skip drain pending)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop-staging.herokuapp.com": 53,
-    "bugstore.bugtraceai.com/api/cart/add": 25,
-    "bugstore.bugtraceai.com/api/orders/1": 23,
-    "bugstore.bugtraceai.com/api/reviews/create": 23,
-    "seclab.vercel.app/labs/ssrf": 7,
-    "seclab.vercel.app/labs/xxe": 6,
-    "chimera.atlascrew.dev/api/v1/auth/token/forge": 8
+    "juice-shop.herokuapp.com": 53,
+    "restful-booker.herokuapp.com/booking": 8,
+    "crapi.apisec.ai/identity/api/v2/admin/videos/1": 12,
+    "crapi.apisec.ai/identity/api/v2/user/videos/1": 12,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php": 7,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php": 7,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level18.php": 7,
+    "crapi.apisec.ai/community/api/posts": 11
   }
 }

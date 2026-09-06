@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-05T23:17:00.000Z",
+  "updated_at": "2026-09-06T00:12:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://restful-booker.herokuapp.com/booking",
+      "source": "mwinteringham/restful-booker — CRUD API playground with intentional auth/BOLA bugs (VWAD-style API testing lab; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://restful-booker.herokuapp.com/booking/1",
+      "source": "mwinteringham/restful-booker — booking-by-ID IDOR/BOLA oracle GET /booking/{id} (API docs; web search 00 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php",
+      "source": "webspoilt/vulnforge-academy — Level 16 file-upload validation bypass (README Medium tier 16-18; web search 00 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
+      "source": "webspoilt/vulnforge-academy — Level 17 file-upload validation bypass (README Medium tier 16-18; web search 00 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level18.php",
+      "source": "webspoilt/vulnforge-academy — Level 18 file-upload validation bypass (README Medium tier 16-18; web search 00 UTC)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://crapi.apisec.ai/identity/api/v2/admin/videos/1",
       "source": "OWASP crAPI public demo — BFLA privilege-tier substitution oracle DELETE /identity/api/v2/admin/videos/{id} (ASTF traceability live-confirmed; web search 23 UTC)",
