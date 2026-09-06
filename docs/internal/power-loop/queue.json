@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T01:10:00.000Z",
+  "updated_at": "2026-09-06T02:12:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://hackminaaziz.fly.dev/",
+      "source": "minaaziz9/Vulnerable-Web-Application-MinaAziz — Flask DVWA-style lab with 7 active vulns (fly.io deploy README; web search 02 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://nn0z.github.io/Exploit-Lab/",
+      "source": "nn0z/Exploit-Lab — browser-based SQLi/XSS/IDOR/SSRF/SSTI/XXE training sandbox (GitHub Pages; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "http://vapi.roottusk.com/vapi",
+      "source": "roottusk/vapi — public OWASP API Top 10 self-hostable lab instance (vAPI walkthrough docs; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://dvwa.lab.pentest-forge.com/vulnerabilities/sqli/",
+      "source": "PentestForge Lab — DVWA SQL injection oracle GET /vulnerabilities/sqli/ (lab.pentest-forge.com; web search 02 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://tomcat.lab.pentest-forge.com/manager/html",
+      "source": "PentestForge Lab — Apache Tomcat manager/html default-creds misconfig oracle (lab.pentest-forge.com; web search 02 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://restful-booker.herokuapp.com/booking",
       "source": "mwinteringham/restful-booker — CRUD API playground with intentional auth/BOLA bugs (VWAD-style API testing lab; web search 00 UTC)",
@@ -11527,5 +11552,5 @@
     }
   ],
   "discovery_urls": [],
-  "discovery_urls_added": 2108
+  "discovery_urls_added": 2113
 }

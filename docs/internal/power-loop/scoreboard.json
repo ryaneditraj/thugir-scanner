@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T01:16:00.000Z",
+  "updated_at": "2026-09-06T02:14:31.324Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 3324,
-  "total_findings": 38718,
+  "total_sites_scanned": 3330,
+  "total_findings": 38809,
   "critical_findings": 76,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2123,
-  "discovery_findings": 30544,
-  "improvements_shipped": 1462,
-  "last_run": "2026-09-06T01:16:00.000Z",
+  "discovery_urls_added": 2128,
+  "discovery_findings": 30582,
+  "improvements_shipped": 1461,
+  "last_run": "2026-09-06T02:14:31.324Z",
   "last_run_summary": {
-    "hour_utc": "01",
+    "hour_utc": "02",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 597,
+      "probes_run": 595,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -48,41 +48,43 @@
           ]
         }
       },
-      "note": "6/6 stable first-pass recall on primary Heroku (53 findings, 40 live oracles; secret-resend present)"
+      "note": "6/6 stable first-pass recall on primary Heroku (53 findings, 40 live oracles; secret-resend + iac-terraform-tls-key + juice-shop-resend-key present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "findings": 26,
-      "focus": "vulnerable-ecommerce pc-parts alias + checkpoint corpus; duck-store register HTTP 500 OpenAPI fallback",
-      "improvements_shipped_this_run": 3
+      "urls_added": 5,
+      "urls_scanned": 8,
+      "findings": 38,
+      "focus": "hackminaaziz Flask fly.io lab + nn0z Exploit-Lab + restful-booker booking routes + vulnforge level16 upload oracle",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, primary Heroku first pass)",
-      "vulnerable-ecommerce.vercel.app/products.php: 4→6 (+pc-parts-store-products-sqli-route-live-oracle +pc-parts-store-products-reflected-xss-route-live-oracle)",
-      "vulnerable-ecommerce.vercel.app/login.php: 3→6 (+pc-parts-store-login-sqli-route-live-oracle)",
-      "duck-store.escape.tech/api/v1/auth/register: 10→14 (+duck-store-referral-code-abuse-live-oracle +route +duck-store-auth-register-open-live-oracle +route)",
-      "sekumart.sekuripy.hr/members.php: 20 findings — sekumart-members-nosql-route-live-oracle",
-      "urban-vampi-production.up.railway.app/users/v1/1/email: 15 findings — vampi-user-bola-route-live-oracle"
+      "hackminaaziz.fly.dev/: 5 findings — reflected-xss-query-param + reflexion-escalated-xss",
+      "nn0z.github.io/Exploit-Lab/: 11 findings — client-side IDOR/NoSQL/XXE/SSTI evidence + reflexion-escalated-ssti",
+      "restful-booker.herokuapp.com/booking: 8 findings — restful-booker-auth-weak-creds + booking-unauth-access/create route live oracles",
+      "restful-booker.herokuapp.com/booking/1: 7 findings — restful-booker booking BOLA route oracles confirmed",
+      "vulnforge-academy.vercel.app/.../level16.php: 7 findings — level16-double-extension-upload-route-live-oracle"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "vapi.roottusk.com + dvwa/tomcat PentestForge routes unreachable from cloud agent (502/DNS)",
+      "hackminaaziz.fly.dev thin 5-finding hub without route-specific SQLi/auth oracles",
+      "nn0z Exploit-Lab client-side-only sandbox — no live server oracles",
       "oopssec react2shell/public-env/jwt-alg/weak-jwt vanity slugs still queued",
-      "qa.brokencrystals.com/api/file/aws still queued (48h skip)",
-      "wrongsecrets-63 + whgojp file-upload/sqli/ssrf/fastjson not yet drained"
+      "qa.brokencrystals.com/api/file/aws still queued (48h skip)"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
+    "nn0z.github.io/Exploit-Lab/": 11,
+    "restful-booker.herokuapp.com/booking": 8,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level16.php": 7,
+    "restful-booker.herokuapp.com/booking/1": 7,
+    "hackminaaziz.fly.dev/": 5,
     "vulnerable-ecommerce.vercel.app/products.php": 6,
-    "vulnerable-ecommerce.vercel.app/login.php": 6,
     "duck-store.escape.tech/api/v1/auth/register": 14,
     "sekumart.sekuripy.hr/members.php": 20,
-    "sekumart.sekuripy.hr/catalog.php": 20,
-    "urban-vampi-production.up.railway.app/users/v1/1/email": 15,
-    "vulnerable-ecommerce.vercel.app/": 8,
-    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import/": 13,
-    "seclab.vercel.app/labs/ssrf": 7
+    "urban-vampi-production.up.railway.app/users/v1/1/email": 15
   }
 }
