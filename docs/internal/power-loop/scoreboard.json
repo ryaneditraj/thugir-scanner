@@ -15,20 +15,20 @@
       ]
     }
   },
-  "total_sites_scanned": 2859,
-  "total_findings": 28488,
+  "total_sites_scanned": 2864,
+  "total_findings": 28550,
   "critical_findings": 84,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2011,
-  "discovery_findings": 23670,
+  "discovery_urls_added": 2016,
+  "discovery_findings": 23732,
   "improvements_shipped": 1497,
   "last_run": "2026-09-06T13:15:00.000Z",
   "last_run_summary": {
     "hour_utc": "13",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
-      "oracle_findings": 52,
+      "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
@@ -48,37 +48,42 @@
           ]
         }
       },
-      "note": "6/6 stable on primary Heroku (52 findings, 40 live oracles; gap=[])"
+      "note": "6/6 stable on primary Heroku (53 findings, 40 live oracles; gap=[]; secret-resend present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
+      "urls_added": 5,
       "urls_scanned": 8,
-      "findings": 48,
-      "focus": "13 UTC: Dreadnode Crucible /challenges route oracle + platform-route path suppression",
+      "findings": 110,
+      "focus": "13 UTC: fauxbank API oracles + owaspsecure A10 SSRF + code-breaking puzzles; parallel crucible route oracle",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (52 findings, 40 live oracles; gap=[])",
-      "crucible.dreadnode.io/challenges: 5→6 (+dreadnode-crucible-challenges-route-live-oracle +client-side-dreadnode-crucible-challenges-evidence; platform-route suppressed on /challenges)",
-      "ucu-owasp-ctf.vercel.app/ssrf/: drained with ucu-owasp-ctf-ssrf-route-live-oracle",
-      "ucu-owasp-ctf.vercel.app/injection/: drained with ucu-owasp-ctf-injection-route-live-oracle"
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; gap=[])",
+      "owaspsecure.com/demo/a10_ssrf/insecure.php: 19 (+owaspsecure-ssrf-fetch/internal-health/socket-probe route live oracles)",
+      "pentest-fauxbank.vercel.app/api/accounts/1: 16 (+fauxbank-accounts-route-live-oracle)",
+      "pentest-fauxbank.vercel.app/api/profile: 16 (+fauxbank-profile-route-live-oracle)",
+      "code-breaking.fly.dev/puzzle/6: 6 (+code-breaking-puzzle-language-route-live-oracle)",
+      "crucible.dreadnode.io/challenges: 6 (+dreadnode-crucible-challenges-route-live-oracle)",
+      "ucu-owasp-ctf.vercel.app/ssrf/: 4 (+ucu-owasp-ctf-ssrf-route-live-oracle)",
+      "ucu-owasp-ctf.vercel.app/injection/: 4 (+ucu-owasp-ctf-injection-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
+      "ucu-owasp-ctf /crypto/ returns HTTP 404 on Vercel deploy",
+      "code-breaking.fly.dev/puzzle/9: 5 findings without picklecode-specific oracle",
       "qa.brokencrystals.com/api/file/aws still queued (48h skip)",
-      "zero.webappsecurity.com/signup.html returns HTTP 404 — no signup route oracle possible",
       "vapi.roottusk.com unreachable from cloud agent"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.herokuapp.com": 52,
+    "juice-shop.herokuapp.com": 53,
+    "owaspsecure.com/demo/a10_ssrf/insecure.php": 19,
+    "pentest-fauxbank.vercel.app/api/accounts/1": 16,
+    "pentest-fauxbank.vercel.app/api/profile": 16,
     "crucible.dreadnode.io/challenges": 6,
-    "next-nosqli.vercel.app": 5,
-    "hackminaaziz.fly.dev/comments/csrf-demo": 6,
-    "bugforge.io/deep-dives/client-side-path-traversal": 5,
-    "chimera.atlascrew.dev/api/v1/telecom/subscribers/1/profile": 8,
-    "wrongsecrets.herokuapp.com/challenge/challenge-68": 18,
-    "vulnforge-academy.vercel.app/backend/includes/levels/hard/level20.php": 6
+    "code-breaking.fly.dev/puzzle/6": 6,
+    "hackminaaziz.fly.dev/comments": 6,
+    "code-breaking.fly.dev/puzzle/9": 5
   }
 }

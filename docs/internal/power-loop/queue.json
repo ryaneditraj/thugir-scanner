@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T12:05:00.000Z",
+  "updated_at": "2026-09-06T13:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://code-breaking.fly.dev/puzzle/6/",
+      "source": "code-breaking.fly.dev — medium javacon Java deserialization/source-audit CTF puzzle (public Fly deploy; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://code-breaking.fly.dev/puzzle/9/",
+      "source": "code-breaking.fly.dev — hard picklecode Python deserialization CTF puzzle (public Fly deploy; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/accounts/1",
+      "source": "pentest-fauxbank — broken access control IDOR oracle GET /api/accounts/[id] (alfredang/pentest README; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/api/profile",
+      "source": "pentest-fauxbank — sensitive data exposure oracle GET /api/profile (OWASP scenario #4; web search 13 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://owaspsecure.com/demo/a10_ssrf/insecure.php",
+      "source": "owaspsecure.com OWASP Top 10 demo hub — A10 SSRF insecure lab (scoreboard gap; web search 13 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://crucible.dreadnode.io/challenges",
       "source": "Dreadnode Crucible — AI red-team challenge catalog behind auth wall (sonuoffsec AI-Security-Hub; web search 12 UTC)",
