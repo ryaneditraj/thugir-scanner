@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T04:18:00.000Z",
+  "updated_at": "2026-09-06T05:18:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://hackminaaziz.fly.dev/login",
+      "source": "minaaziz9/Vulnerable-Web-Application-MinaAziz — SQLi login bypass oracle POST /login (GitHub README; web search 05 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://hackminaaziz.fly.dev/register",
+      "source": "minaaziz9/Vulnerable-Web-Application-MinaAziz — weak registration / mass-assignment oracle POST /register (GitHub README; web search 05 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://bugstore.bugtraceai.com/api/graphql",
+      "source": "BugTraceAI/BugStore — GraphQL introspection + product-search SQLi oracle POST /api/graphql (README; web search 05 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnshop.vercel.app/api/v1/products/search?q=test",
+      "source": "chethan-vinayak/vulnshop — product search SQLi oracle GET /api/v1/products/search?q= (Vercel OSS deploy; web search 05 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://demo.owasp-juice.shop/rest/cards",
+      "source": "Official demo.owasp-juice.shop — payment cards BOLA oracle GET /rest/cards (Pwning Juice Shop companion; web search 05 UTC)",
+      "auth": "benchmark"
+    },
     {
       "url": "https://hackminaaziz.fly.dev/ping",
       "source": "minaaziz9/Vulnerable-Web-Application-MinaAziz — OS command injection oracle GET /ping (GitHub README; web search 04 UTC)",
@@ -11602,5 +11627,5 @@
     }
   ],
   "discovery_urls": [],
-  "discovery_urls_added": 2113
+  "discovery_urls_added": 2118
 }
