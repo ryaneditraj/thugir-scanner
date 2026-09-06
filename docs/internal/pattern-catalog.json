@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-06T03:14:52.858Z",
-  "total": 3365,
-  "uniqueSlugs": 3357,
+  "generatedAt": "2026-09-06T04:07:53.138Z",
+  "total": 3368,
+  "uniqueSlugs": 3360,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3347,
+    "generic": 3350,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3280,
+    "deep": 3283,
     "continuous": 0
   },
   "byCategory": {
@@ -27,8 +27,8 @@
     "Information disclosure": 155,
     "Security misconfiguration": 288,
     "Broken authentication": 211,
-    "Injection": 551,
-    "Cross-site scripting": 802,
+    "Injection": 553,
+    "Cross-site scripting": 803,
     "Open redirect": 29,
     "general": 20,
     "SSRF": 19,
@@ -467,6 +467,7 @@
     "chimera-cards-data-export-route-live-oracle",
     "chimera-cart-update-route-live-oracle",
     "chimera-claims-amounts-inflate-route-live-oracle",
+    "chimera-claims-search-order-by-sqli-route-live-oracle",
     "chimera-claims-submit-route-live-oracle",
     "chimera-diagnostics-ping-rce-route-live-oracle",
     "chimera-diagnostics-resolve-dns-ssrf-route-live-oracle",
@@ -2012,7 +2013,9 @@
     "guardmarly-scan-route-live-oracle",
     "hack-health-a01-brute-force-route-live-oracle",
     "hack-health-a03-sql-injection-route-live-oracle",
+    "hackminaaziz-comments-stored-xss-route-live-oracle",
     "hackminaaziz-login-sqli-route-live-oracle",
+    "hackminaaziz-ping-command-injection-route-live-oracle",
     "hackminaaziz-profile-idor-route-live-oracle",
     "hacksplaining-session-fixation-live-oracle",
     "hacksplaining-session-fixation-route-live-oracle",

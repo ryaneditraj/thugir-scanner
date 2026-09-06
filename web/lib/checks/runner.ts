@@ -1912,6 +1912,7 @@ const DEEP_RULES = new Set<string>([
   "chimeraEcommerceProductsSearchXssRouteLiveOracle",
   "chimeraTelecomSubscribersProfileBolaRouteLiveOracle",
   "chimeraInsuranceClaimsSearchSqliRouteLiveOracle",
+  "chimeraClaimsSearchOrderBySqliRouteLiveOracle",
   "chimeraSwaggerRouteLiveOracle",
   "chimeraApiReferenceRouteLiveOracle",
   "chimeraFedrampOpenapiExtensionsRouteLiveOracle",
@@ -4380,6 +4381,8 @@ const DEEP_RULES = new Set<string>([
   "clientSideHackminaazizEvidence",
   "hackminaazizLoginSqliRouteLiveOracle",
   "hackminaazizProfileIdorRouteLiveOracle",
+  "hackminaazizPingCommandInjectionRouteLiveOracle",
+  "hackminaazizCommentsStoredXssRouteLiveOracle",
   "clientSideExploitLabEvidence",
   "exploitLabHubRouteLiveOracle",
   "bugforgeSsrfRouteLiveOracle",
@@ -13090,6 +13093,18 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       )
         return -4;
       if (
+        /hackminaaziz\.fly\.dev/i.test(origin) &&
+        /\/ping\b/i.test(targetInput) &&
+        p.slug.startsWith("hackminaaziz-ping-command-injection")
+      )
+        return -4;
+      if (
+        /hackminaaziz\.fly\.dev/i.test(origin) &&
+        /\/comments\b/i.test(targetInput) &&
+        p.slug.startsWith("hackminaaziz-comments-stored-xss")
+      )
+        return -4;
+      if (
         /nn0z\.github\.io/i.test(origin) &&
         /\/Exploit-Lab\/?$/i.test(targetInput) &&
         p.slug.startsWith("exploit-lab-hub")
@@ -13348,6 +13363,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /chimera\.atlascrew\.dev/i.test(origin) &&
         /\/api\/v1\/insurance\/claims\/search\b/i.test(targetInput) &&
         p.slug.startsWith("chimera-insurance-claims-search")
+      )
+        return -3;
+      if (
+        /chimera\.atlascrew\.dev/i.test(origin) &&
+        /\/api\/v1\/claims\/search\b/i.test(targetInput) &&
+        p.slug.startsWith("chimera-claims-search-order-by")
       )
         return -3;
       if (

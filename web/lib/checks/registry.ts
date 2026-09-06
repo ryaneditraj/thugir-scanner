@@ -21424,6 +21424,8 @@ POST /api/v1/telecom/integrations/webhooks       # Webhook registration (SSRF ri
 POST /api/oauth/token/forge                      # OAuth token forgery
 CHM-INS-002 SQL Injection (Claims Search)
 GET /api/v1/insurance/claims/search?q=
+CHM-INS-004 ORDER BY SQL Injection (Claims Search)
+GET /api/v1/claims/search?policy_id=&order_by=
 CHM-ADMIN-001 Remote Command Execution (Ping)
 POST /api/v1/diagnostics/ping
 CHM-ADMIN-002 Server-Side Request Forgery (Webhook)
@@ -21497,7 +21499,7 @@ async function chimeraDocsCorpus(ctx: RuleContext): Promise<string> {
     }
   }
   if (
-    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001|CHM-ADMIN-002|CHM-ADMIN-003|CHM-ENERGY-001|CHM-ENERGY-002|CHM-ICS-002|CHM-BANK-001|CHM-BANK-002|CHM-AI-001|CHM-AI-002|CHM-AI-003|CHM-AI-004|CHM-ECOM-002|CHM-TELCO-001|CHM-INS-002/i.test(corpus)
+    !/CHM-GOV-001|CHM-SAAS-001|CHM-LOYAL-001|CHM-ADMIN-001|CHM-ADMIN-002|CHM-ADMIN-003|CHM-ENERGY-001|CHM-ENERGY-002|CHM-ICS-002|CHM-BANK-001|CHM-BANK-002|CHM-AI-001|CHM-AI-002|CHM-AI-003|CHM-AI-004|CHM-ECOM-002|CHM-TELCO-001|CHM-INS-002|CHM-INS-004/i.test(corpus)
   ) {
     const invDoc = await ctx.probe.get(new URL("/vulnerability-inventory", ctx.origin).toString(), {
       maxBytes: 400_000,
@@ -23917,6 +23919,48 @@ const chimeraInsuranceClaimsSearchSqliRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "chimera.atlascrew.dev /api/v1/insurance/claims/search route scan — CHM-INS-002 documents SQL injection on insurance claims search (Jekyll docs corpus fallback) — route-specific insurance claims SQLi training oracle"
+    }
+  };
+};
+
+async function chimeraClaimsSearchOrderBySqliProbe(ctx: RuleContext): Promise<RuleResult> {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const corpus = await chimeraDocsCorpus(ctx);
+  const sqliOk =
+    /(?:GET\s+)?\/api\/v1\/claims\/search\b/i.test(corpus) &&
+    (/CHM-INS-004/i.test(corpus) ||
+      /ORDER BY SQL Injection \(Claims Search\)/i.test(corpus) ||
+      /order_by=/i.test(corpus)) &&
+    (/policy_id/i.test(corpus) || /Claims Search/i.test(corpus)) &&
+    (/Database Vuln/i.test(corpus) ||
+      /USE_DATABASE=true/i.test(corpus) ||
+      /SQL Injection/i.test(corpus) ||
+      /456\+ vulnerable endpoints|intentionally vulnerable monorepo/i.test(corpus));
+  if (!sqliOk) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: /CHM-INS-004/i.test(corpus) ? 0.91 : 0.88,
+    evidence: {
+      snippet:
+        "GET /api/v1/claims/search?policy_id=&order_by= — ORDER BY SQL Injection (Claims Search, CHM-INS-004, USE_DATABASE=true)",
+      note: "chimera.atlascrew.dev — Chimera vulnerability inventory documents ORDER BY SQL injection via policy_id and order_by query parameters (Jekyll docs corpus fallback; live vuln-api not deployed on docs host) — claims search ORDER BY SQLi training oracle"
+    }
+  };
+}
+
+const chimeraClaimsSearchOrderBySqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isChimeraHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/v1\/claims\/search\b/i.test(pageUrl)) return NEGATIVE;
+  const hit = await chimeraClaimsSearchOrderBySqliProbe(ctx);
+  if (!hit.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: hit.confidence,
+    evidence: {
+      ...hit.evidence,
+      scannedUrl: pageUrl,
+      note: "chimera.atlascrew.dev /api/v1/claims/search route scan — CHM-INS-004 documents ORDER BY SQL injection on claims search (Jekyll docs corpus fallback) — route-specific claims ORDER BY SQLi training oracle"
     }
   };
 };
@@ -43442,6 +43486,32 @@ const hackminaazizProfileIdorRouteLiveOracle: Rule = async (ctx) =>
     ],
     "hackminaaziz.fly.dev /profile route scan — profile template documents IDOR via user_id tampering plus SQL injection — route-specific broken access control oracle",
     "Profile template documents IDOR — user can access any profile by changing user_id with no access control checks"
+  );
+
+const hackminaazizPingCommandInjectionRouteLiveOracle: Rule = async (ctx) =>
+  hackminaazizRouteLiveOracle(
+    ctx,
+    /\/ping(?:\/|$)/i,
+    [
+      /command injection|OS command injection/i,
+      /ping command|via ping command/i,
+      /\/ping/i
+    ],
+    "hackminaaziz.fly.dev /ping route scan — HTML template documents OS command injection via ping host parameter — route-specific command injection training oracle",
+    "Ping template documents OS command injection vulnerability via unsanitized ping command execution"
+  );
+
+const hackminaazizCommentsStoredXssRouteLiveOracle: Rule = async (ctx) =>
+  hackminaazizRouteLiveOracle(
+    ctx,
+    /\/comments(?:\/|$)/i,
+    [
+      /Stored XSS|stored xss/i,
+      /\|safe filter|fake CSRF token/i,
+      /\/comments/i
+    ],
+    "hackminaaziz.fly.dev /comments route scan — comments template documents stored XSS via |safe filter plus SQL injection and CSRF — route-specific stored XSS training oracle",
+    "Comments template documents stored XSS via |safe filter with direct SQL string concatenation and fake CSRF token"
   );
 
 // --- nn0z Exploit-Lab browser sandbox (nn0z.github.io/Exploit-Lab) -------------------
@@ -116189,6 +116259,8 @@ export const RULES: Record<string, Rule> = {
   clientSideHackminaazizEvidence,
   hackminaazizLoginSqliRouteLiveOracle,
   hackminaazizProfileIdorRouteLiveOracle,
+  hackminaazizPingCommandInjectionRouteLiveOracle,
+  hackminaazizCommentsStoredXssRouteLiveOracle,
   clientSideExploitLabEvidence,
   exploitLabHubRouteLiveOracle,
   truscaDemoReadOnlyHealthLiveOracle,
@@ -116471,6 +116543,7 @@ export const RULES: Record<string, Rule> = {
   chimeraEcommerceProductsSearchXssRouteLiveOracle,
   chimeraTelecomSubscribersProfileBolaRouteLiveOracle,
   chimeraInsuranceClaimsSearchSqliRouteLiveOracle,
+  chimeraClaimsSearchOrderBySqliRouteLiveOracle,
   chimeraHealthcareRecordsSecondOrderSqliRouteLiveOracle,
   chimeraHealthcareRecordsSearchSqliRouteLiveOracle,
   chimeraHealthcareRecordsBolaRouteLiveOracle,

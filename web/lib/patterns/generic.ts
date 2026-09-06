@@ -84611,6 +84611,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "chimera-claims-search-order-by-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "Chimera claims search ORDER BY SQLi route live oracle",
+    description:
+      "When scanning /api/v1/claims/search on chimera.atlascrew.dev, CHM-INS-004 documents ORDER BY SQL injection via policy_id and order_by query parameters — route-specific claims search SQLi training oracle (Jekyll docs corpus fallback).",
+    impactOneline:
+      "Route-specific confirmation that Chimera documents intentional ORDER BY SQL injection on the claims search endpoint for WAF testing.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "chimeraClaimsSearchOrderBySqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries and whitelist ORDER BY columns on claims search.",
+      steps: [
+        "Replace dynamic ORDER BY clauses with a server-side column whitelist.",
+        "Bind policy_id as a parameterized query argument.",
+        "Do not expose Chimera vuln-api instances to the public internet without WAF protection."
+      ]
+    },
+    fixPrompt:
+      "Our chimera /api/v1/claims/search route documents CHM-INS-004 ORDER BY SQLi. Show parameterized query and ORDER BY whitelist remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-dvla-evidence",
     platform: "generic",
     category: "Injection",
@@ -85959,6 +85985,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our hackminaaziz.fly.dev /profile route documents IDOR via user_id tampering. Show object-level authorization remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hackminaaziz-ping-command-injection-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "hackminaaziz.fly.dev /ping command injection route live oracle",
+    description:
+      "When scanning /ping on hackminaaziz.fly.dev, the ping template documents OS command injection via unsanitized host parameter passed to a ping command — route-specific command injection training oracle.",
+    impactOneline:
+      "Route-specific confirmation that hackminaaziz /ping documents OS command injection via ping command execution.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hackminaazizPingCommandInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never pass user input to shell commands; use safe subprocess APIs with argument lists.",
+      steps: [
+        "Replace os.system or shell=True subprocess calls with argument-array execution.",
+        "Validate host input against a strict IP/hostname allowlist.",
+        "Run hackminaaziz only on isolated lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our hackminaaziz.fly.dev /ping route documents OS command injection via ping. Show safe subprocess and input validation remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "hackminaaziz-comments-stored-xss-route-live-oracle",
+    platform: "generic",
+    category: "Cross-site scripting",
+    severityDefault: "high",
+    title: "hackminaaziz.fly.dev /comments stored XSS route live oracle",
+    description:
+      "When scanning /comments on hackminaaziz.fly.dev, the comments template documents stored XSS via Jinja |safe filter plus SQL injection and fake CSRF token — route-specific stored XSS training oracle.",
+    impactOneline:
+      "Route-specific confirmation that hackminaaziz /comments documents stored XSS via unsafe template rendering.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "hackminaazizCommentsStoredXssRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Auto-escape template output and use parameterized SQL queries.",
+      steps: [
+        "Remove |safe filters and enable Jinja auto-escaping for user comments.",
+        "Use parameterized queries instead of string concatenation.",
+        "Implement real CSRF tokens validated server-side."
+      ]
+    },
+    fixPrompt:
+      "Our hackminaaziz.fly.dev /comments route documents stored XSS via |safe filter. Show template escaping and CSRF remediation.",
     version: 1,
     enabled: true
   },

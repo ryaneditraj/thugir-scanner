@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T03:16:30.000Z",
+  "updated_at": "2026-09-06T04:16:30.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2746,
-  "total_findings": 26896,
-  "critical_findings": 77,
+  "total_sites_scanned": 2749,
+  "total_findings": 26902,
+  "critical_findings": 79,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
   "discovery_urls_added": 1963,
-  "discovery_findings": 22822,
-  "improvements_shipped": 1167,
-  "last_run": "2026-09-06T03:16:30.000Z",
+  "discovery_findings": 22828,
+  "improvements_shipped": 1470,
+  "last_run": "2026-09-06T04:16:30.000Z",
   "last_run_summary": {
-    "hour_utc": "03",
+    "hour_utc": "04",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -52,40 +52,33 @@
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 5,
-      "urls_scanned": 8,
-      "findings": 133,
-      "focus": "Chimera banking/insurance SQLi oracles + brokencrystals process_numbers; parallel run drained hackminaaziz/nn0z with route oracles",
+      "urls_added": 0,
+      "urls_scanned": 3,
+      "findings": 22,
+      "focus": "Closed 03 UTC learning gaps: Chimera claims ORDER BY SQLi + hackminaaziz /ping cmdi + /comments stored XSS route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles, primary Heroku first pass)",
-      "chimera.atlascrew.dev/api/v1/transactions/history: 8 findings — chimera-transactions-history-sqli-route-live-oracle shipped",
-      "chimera.atlascrew.dev/api/v1/banking/accounts/search: 8 findings — chimera-banking-accounts-search-sqli-route-live-oracle shipped",
-      "chimera.atlascrew.dev/api/v1/insurance/policies/lookup: 8 findings — chimera-insurance-policies-lookup-sqli-route-live-oracle shipped",
-      "brokencrystals.com/api/process_numbers: 86 findings — brokencrystals-process-numbers-route-live-oracle confirmed",
-      "hackminaaziz.fly.dev/login: 7 findings — hackminaaziz-login-sqli-route-live-oracle shipped (parallel run)",
-      "hackminaaziz.fly.dev/profile/1: 7 findings — hackminaaziz-profile-idor-route-live-oracle shipped (parallel run)",
-      "nn0z.github.io/Exploit-Lab/: 13 findings — exploit-lab-hub-route-live-oracle shipped (parallel run)"
+      "chimera.atlascrew.dev/api/v1/claims/search: 8 findings — chimera-claims-search-order-by-sqli-route-live-oracle shipped (7→8)",
+      "hackminaaziz.fly.dev/ping: 7 findings — hackminaaziz-ping-command-injection-route-live-oracle shipped (6→7)",
+      "hackminaaziz.fly.dev/comments: 7 findings — hackminaaziz-comments-stored-xss-route-live-oracle shipped (6→7)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "chimera.atlascrew.dev/api/v1/claims/search?order_by= — thin 7-finding hub without ORDER BY SQLi route oracle",
       "vapi.roottusk.com unreachable from cloud agent (DNS/connection failure)",
-      "hackminaaziz /ping command-injection + /comments stored-XSS routes still queued",
       "qa.brokencrystals.com/api/file/aws still queued (48h skip)",
       "oopssec react2shell/weak-jwt vanity slugs still queued"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
+    "chimera.atlascrew.dev/api/v1/claims/search": 8,
+    "hackminaaziz.fly.dev/ping": 7,
+    "hackminaaziz.fly.dev/comments": 7,
     "brokencrystals.com/api/process_numbers": 86,
-    "chimera.atlascrew.dev/api/v1/transactions/history": 8,
-    "chimera.atlascrew.dev/api/v1/banking/accounts/search": 8,
-    "chimera.atlascrew.dev/api/v1/insurance/policies/lookup": 8,
     "nn0z.github.io/Exploit-Lab/": 13,
     "hackminaaziz.fly.dev/login": 7,
-    "hackminaaziz.fly.dev/profile/1": 7,
-    "chimera.atlascrew.dev/api/v1/claims/search": 7
+    "hackminaaziz.fly.dev/profile/1": 7
   }
 }

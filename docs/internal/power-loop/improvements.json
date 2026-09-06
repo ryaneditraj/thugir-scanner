@@ -8885,6 +8885,24 @@
       "slug": "exploit-lab-hub-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: Exploit_Lab script.js documents 16 simulated modules (SQLi/XSS/IDOR/SSRF/SSTI/XXE/NoSQLi) with mock repeater; nn0z.github.io/Exploit-Lab/ findings 11\u219213 (+exploit-lab-hub-route-live-oracle +client-side-exploit-lab-evidence); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:chimera.atlascrew.dev",
+      "slug": "chimera-claims-search-order-by-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: CHM-INS-004 GET /api/v1/claims/search?policy_id=&order_by= — ORDER BY SQL Injection (Claims Search) from vulnerability-inventory corpus; chimera.atlascrew.dev/api/v1/claims/search?policy_id=1&order_by=id findings 7\u21928 (+chimera-claims-search-order-by-sqli-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackminaaziz.fly.dev",
+      "slug": "hackminaaziz-ping-command-injection-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /ping HTML template documents OS command injection via ping host parameter; hackminaaziz.fly.dev/ping findings 6\u21927 (+hackminaaziz-ping-command-injection-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackminaaziz.fly.dev",
+      "slug": "hackminaaziz-comments-stored-xss-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /comments template documents stored XSS via Jinja |safe filter plus SQLi/CSRF; hackminaaziz.fly.dev/comments findings 6\u21927 (+hackminaaziz-comments-stored-xss-route-live-oracle); benchmark 6/6 maintained"
     }
   ]
 }
