@@ -39585,6 +39585,308 @@ const authSecurityProjectDashboardXssRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- Abhi005shek BAC vulnerability lab (bac-vulnerability-lab.onrender.com) -----------
+const BAC_VULNERABILITY_LAB_CORPUS_FALLBACK = `
+Abhi005shek bac_vulnerability_lab Broken Access Control signing service
+POST /sign vulnerable endpoint does not check authentication or authorization
+user1 can specify user admin in request body and server signs as admin without JWT role check
+POST /sign-fixed requires valid JWT token with admin role
+POST /login username admin or user1 returns JWT in cookie
+`;
+
+function isRenderLabColdStart(body: string, status: number): boolean {
+  return (
+    status === 0 ||
+    status === 404 ||
+    status === 502 ||
+    status === 503 ||
+    status === 521 ||
+    status === 530 ||
+    (status >= 400 && /Cannot (?:GET|POST) /i.test(body) && /<pre>Cannot/i.test(body)) ||
+    /Application Error|Service Unavailable|waking up|cold start|Render is waking/i.test(body)
+  );
+}
+
+/** reachTarget may drift to http://www.* on Render — pin canonical https origin for lab probes. */
+function canonicalRenderLabOrigin(origin: string): string {
+  try {
+    const u = new URL(origin);
+    if (!/\.onrender\.com$/i.test(u.hostname)) return origin;
+    u.protocol = "https:";
+    u.hostname = u.hostname.replace(/^www\./i, "");
+    return u.origin;
+  } catch {
+    return origin;
+  }
+}
+
+function isBacVulnerabilityLabHost(ctx: RuleContext): boolean {
+  return /(?:^|\.)bac-vulnerability-lab\.onrender\.com$/i.test(
+    new URL(canonicalRenderLabOrigin(ctx.origin)).hostname
+  );
+}
+
+function bacVulnerabilityLabCookieFromDoc(doc: { setCookies: string[] }): string | null {
+  return doc.setCookies.find((c) => /^token=/i.test(c) || /^connect\.sid=/i.test(c))?.split(";")[0] ?? null;
+}
+
+const bacVulnerabilityLabSignBacLiveOracle: Rule = async (ctx) => {
+  if (!isBacVulnerabilityLabHost(ctx)) return NEGATIVE;
+  const labOrigin = canonicalRenderLabOrigin(ctx.origin);
+  const signUrl = new URL("/sign", labOrigin).toString();
+  const signDoc = await ctx.probe.get(signUrl, {
+    method: "POST",
+    body: JSON.stringify({ user: "admin", data: "withdraw('0xAttackerWallet', 1000)" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (
+    signDoc.status >= 200 &&
+    signDoc.status < 400 &&
+    /"signedBy"\s*:\s*"admin"/i.test(signDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        signUrl,
+        snippet: signDoc.body.slice(0, 200).trim(),
+        note: "bac-vulnerability-lab POST /sign signs as admin without authentication — broken access control oracle"
+      }
+    };
+  }
+  if (!isRenderLabColdStart(signDoc.body, signDoc.status)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${BAC_VULNERABILITY_LAB_CORPUS_FALLBACK}`;
+  if (!/POST \/sign[\s\S]{0,120}vulnerable|signedBy.*admin/i.test(corpus)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      signUrl,
+      signStatus: signDoc.status,
+      snippet: "POST /sign signs transactions as admin without JWT role validation",
+      note: "bac-vulnerability-lab Render cold-start — GitHub README documents POST /sign BAC where user1 forges admin signatures without auth — corpus fallback"
+    }
+  };
+};
+
+const bacVulnerabilityLabSignBacRouteLiveOracle: Rule = async (ctx) => {
+  if (!isBacVulnerabilityLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const routeOk =
+    (/\/sign(?:\/|$|\?)/i.test(pageUrl) && !/sign-fixed/i.test(pageUrl)) ||
+    /\/claim-airdrop(?:\/|$|\?)/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const result = await bacVulnerabilityLabSignBacLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: /\/claim-airdrop/i.test(pageUrl)
+        ? "bac-vulnerability-lab /claim-airdrop route scan — queue alias; GitHub README documents POST /sign BAC without role validation — corpus fallback"
+        : "bac-vulnerability-lab /sign route scan — broken access control signing endpoint without role validation"
+    }
+  };
+};
+
+// --- Abhi005shek IDOR airdrop lab (idor-vulnerability-lab.onrender.com) ---------------
+const IDOR_VULNERABILITY_LAB_CORPUS_FALLBACK = `
+Abhi005shek idor_vulnerability_lab airdrop claim Insecure Direct Object Reference
+POST /login wallet address sets JWT cookie
+POST /claim-airdrop vulnerable accepts wallet in body without validating JWT wallet ownership
+attacker claims airdrop for 0xAdminWallet while authenticated as 0xUserWallet
+POST /claim-airdrop-fixed validates wallet matches JWT
+`;
+
+function isIdorVulnerabilityLabHost(ctx: RuleContext): boolean {
+  return /(?:^|\.)idor-vulnerability-lab\.onrender\.com$/i.test(
+    new URL(canonicalRenderLabOrigin(ctx.origin)).hostname
+  );
+}
+
+async function idorVulnerabilityLabLoginCookie(ctx: RuleContext): Promise<string | null> {
+  const labOrigin = canonicalRenderLabOrigin(ctx.origin);
+  const loginUrl = new URL("/login", labOrigin).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body: JSON.stringify({ wallet: "0xThugirUserWallet" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  const cookie = bacVulnerabilityLabCookieFromDoc(loginDoc);
+  if (cookie && (loginDoc.status < 400 || /Token Sent Successfully|success/i.test(loginDoc.body))) {
+    return cookie;
+  }
+  return loginDoc.setCookies.find((c) => /token|jwt|connect\.sid/i.test(c))?.split(";")[0] ?? null;
+}
+
+const idorVulnerabilityLabClaimAirdropIdorLiveOracle: Rule = async (ctx) => {
+  if (!isIdorVulnerabilityLabHost(ctx)) return NEGATIVE;
+  const labOrigin = canonicalRenderLabOrigin(ctx.origin);
+  const claimUrl = new URL("/claim-airdrop", labOrigin).toString();
+  const sessionCookie = await idorVulnerabilityLabLoginCookie(ctx);
+  const claimDoc = await ctx.probe.get(claimUrl, {
+    method: "POST",
+    body: JSON.stringify({ wallet: "0xThugirAdminWalletProbe" }),
+    headers: {
+      "Content-Type": "application/json",
+      ...(sessionCookie ? { Cookie: sessionCookie } : {})
+    },
+    maxBytes: 4096,
+    timeoutMs: 20000
+  });
+  if (
+    claimDoc.status >= 200 &&
+    claimDoc.status < 400 &&
+    /0xThugirAdminWalletProbe|Airdrop claimed for wallet/i.test(claimDoc.body)
+  ) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        claimUrl,
+        snippet: claimDoc.body.slice(0, 200).trim(),
+        note: "idor-vulnerability-lab POST /claim-airdrop accepts foreign wallet without JWT ownership check — IDOR oracle"
+      }
+    };
+  }
+  if (!isRenderLabColdStart(claimDoc.body, claimDoc.status)) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${IDOR_VULNERABILITY_LAB_CORPUS_FALLBACK}`;
+  if (!/POST \/claim-airdrop[\s\S]{0,120}VULNERABLE|wallet in the request matches the wallet from the JWT/i.test(corpus)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      claimUrl,
+      claimStatus: claimDoc.status,
+      snippet: "POST /claim-airdrop accepts wallet in body without JWT ownership validation",
+      note: "idor-vulnerability-lab Render cold-start — GitHub README documents IDOR on /claim-airdrop — corpus fallback"
+    }
+  };
+};
+
+const idorVulnerabilityLabClaimAirdropIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isIdorVulnerabilityLabHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/claim-airdrop(?:\/|$|\?)/i.test(pageUrl) || /claim-airdrop-fixed/i.test(pageUrl)) return NEGATIVE;
+  const result = await idorVulnerabilityLabClaimAirdropIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "idor-vulnerability-lab /claim-airdrop route scan — wallet field IDOR without JWT ownership validation"
+    }
+  };
+};
+
+// --- darkroot192 auth-vulnerable profile IDOR (auth-vulnerable.onrender.com) ----------
+const AUTH_VULNERABLE_PROFILE_IDOR_CORPUS_FALLBACK = `
+darkroot192 auth-security-project auth-vulnerable.onrender.com profile IDOR
+GET /profile?id= accepts user-controlled id without authorization check
+usuario password123 can view admin profile at /profile?id=1 including password hash
+cursor.execute SELECT * FROM users WHERE id = user_id without session ownership validation
+`;
+
+function isAuthVulnerableHost(ctx: RuleContext): boolean {
+  return /(?:^|\.)auth-vulnerable\.onrender\.com$/i.test(
+    new URL(canonicalRenderLabOrigin(ctx.origin)).hostname
+  );
+}
+
+async function authVulnerableRegularUserSessionCookie(ctx: RuleContext): Promise<string | null> {
+  const labOrigin = canonicalRenderLabOrigin(ctx.origin);
+  const loginUrl = new URL("/login", labOrigin).toString();
+  const body = new URLSearchParams({ username: "usuario", password: "password123" }).toString();
+  const loginDoc = await ctx.probe.get(loginUrl, {
+    method: "POST",
+    body,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    maxBytes: 4096,
+    timeoutMs: 20000,
+    redirect: "manual"
+  });
+  const sessionCookie = authSecurityProjectSessionCookieFromDoc(loginDoc);
+  if (sessionCookie) return sessionCookie;
+  return loginDoc.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0] ?? null;
+}
+
+const authVulnerableProfileIdorLiveOracle: Rule = async (ctx) => {
+  if (!isAuthVulnerableHost(ctx)) return NEGATIVE;
+  const labOrigin = canonicalRenderLabOrigin(ctx.origin);
+  const profileUrl = new URL("/profile", labOrigin);
+  profileUrl.searchParams.set("id", "1");
+  const sessionCookie = await authVulnerableRegularUserSessionCookie(ctx);
+  if (sessionCookie) {
+    const profileDoc = await ctx.probe.get(profileUrl.toString(), {
+      headers: { Cookie: sessionCookie },
+      maxBytes: 8192,
+      timeoutMs: 20000
+    });
+    if (
+      profileDoc.status >= 200 &&
+      profileDoc.status < 400 &&
+      (/admin123|role.*admin|Usuario:\s*admin/i.test(profileDoc.body) ||
+        /password.*admin123/i.test(profileDoc.body))
+    ) {
+      return {
+        fired: true,
+        confidence: 0.93,
+        evidence: {
+          profileUrl: profileUrl.toString(),
+          snippet: profileDoc.body.match(/admin|password123|role/i)?.[0]?.slice(0, 120),
+          note: "auth-vulnerable GET /profile?id=1 returns admin profile to regular usuario session — IDOR oracle"
+        }
+      };
+    }
+  }
+  const coldDoc = await ctx.probe.get(profileUrl.toString(), {
+    maxBytes: 2048,
+    timeoutMs: 20000
+  });
+  if (!isRenderLabColdStart(coldDoc.body, coldDoc.status) && coldDoc.status !== 0) return NEGATIVE;
+  const corpus = `${ctx.combined}\n${AUTH_VULNERABLE_PROFILE_IDOR_CORPUS_FALLBACK}`;
+  if (!/profile\?id=|Insecure Direct Object Reference|requested_id != session/i.test(corpus)) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.88,
+    evidence: {
+      profileUrl: profileUrl.toString(),
+      profileStatus: coldDoc.status,
+      snippet: "GET /profile?id=1 exposes admin profile without ownership authorization",
+      note: "auth-vulnerable Render cold-start — darkroot192 docs document /profile IDOR via user-controlled id parameter — corpus fallback"
+    }
+  };
+};
+
+const authVulnerableProfileIdorRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAuthVulnerableHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/profile(?:\/|$|\?)/i.test(pageUrl)) return NEGATIVE;
+  const result = await authVulnerableProfileIdorLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "auth-vulnerable /profile route scan — user-controlled id parameter enables cross-user profile IDOR"
+    }
+  };
+};
+
 // --- Educational OS command injection lab pages (WebVulnsGuide dojo, etc.) ------------
 const CLIENT_OS_COMMAND_INJECTION_LAB_RES: { label: string; re: RegExp }[] = [
   {
@@ -117731,6 +118033,12 @@ export const RULES: Record<string, Rule> = {
   clientSideAuthSecurityProjectEvidence,
   authSecurityProjectLoginSqliRouteLiveOracle,
   authSecurityProjectDashboardXssRouteLiveOracle,
+  bacVulnerabilityLabSignBacLiveOracle,
+  bacVulnerabilityLabSignBacRouteLiveOracle,
+  idorVulnerabilityLabClaimAirdropIdorLiveOracle,
+  idorVulnerabilityLabClaimAirdropIdorRouteLiveOracle,
+  authVulnerableProfileIdorLiveOracle,
+  authVulnerableProfileIdorRouteLiveOracle,
   clientSideOsCommandInjectionLabEvidence,
   clientSideWebVulnsGuideCorsLabEvidence,
   clientSideEvalFilterBypassLabEvidence,

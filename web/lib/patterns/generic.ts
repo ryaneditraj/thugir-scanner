@@ -86715,5 +86715,83 @@ export const genericPatterns: Pattern[] = [
       "Our nn0z.github.io/Exploit-Lab route scan confirms a simulated 16-module training sandbox. Show how to label simulated labs in security education platforms.",
     version: 1,
     enabled: true
+  },
+  {
+    slug: "bac-vulnerability-lab-sign-bac-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "BAC vulnerability lab /sign broken access control route live oracle",
+    description:
+      "When scanning bac-vulnerability-lab.onrender.com /sign routes, POST /sign signs transactions as admin without JWT role validation — Abhi005shek BAC signing-service training oracle (README corpus fallback on Render cold-start).",
+    impactOneline:
+      "Route-specific confirmation that the BAC lab /sign endpoint forges admin signatures without proper role-based access control.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "bacVulnerabilityLabSignBacRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "bac-vulnerability-lab is intentional training — enforce RBAC on signing endpoints in production.",
+      steps: [
+        "Require valid JWT with admin role before signing privileged transactions.",
+        "Ignore user-supplied identity fields; derive signer from authenticated session.",
+        "Run bac-vulnerability-lab only on ephemeral lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our bac-vulnerability-lab /sign route allows user1 to forge admin signatures. Show RBAC and JWT role validation for signing services.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "idor-vulnerability-lab-claim-airdrop-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "IDOR vulnerability lab /claim-airdrop IDOR route live oracle",
+    description:
+      "When scanning idor-vulnerability-lab.onrender.com /claim-airdrop routes, POST accepts a foreign wallet address without validating JWT ownership — Abhi005shek airdrop IDOR training oracle (README corpus fallback on Render cold-start).",
+    impactOneline:
+      "Route-specific confirmation that the airdrop lab allows claiming rewards for wallets the caller does not own.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "idorVulnerabilityLabClaimAirdropIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "idor-vulnerability-lab is intentional training — derive wallet ownership from JWT, not request body.",
+      steps: [
+        "Extract authenticated wallet from JWT claims only.",
+        "Reject wallet fields in request body that do not match the session.",
+        "Run idor-vulnerability-lab only on ephemeral lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our idor-vulnerability-lab /claim-airdrop accepts arbitrary wallet addresses. Show JWT-bound wallet ownership validation for airdrop claims.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "auth-vulnerable-profile-idor-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "auth-vulnerable /profile IDOR route live oracle",
+    description:
+      "When scanning auth-vulnerable.onrender.com /profile routes, GET /profile?id= returns other users' profiles without ownership checks — darkroot192 auth-security-project IDOR training oracle (docs corpus fallback on Render cold-start).",
+    impactOneline:
+      "Route-specific confirmation that auth-vulnerable profile pages expose cross-user data via predictable id parameters.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "authVulnerableProfileIdorRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "auth-vulnerable is intentional training — enforce object-level authorization on profile reads.",
+      steps: [
+        "Compare requested profile id against session user_id before querying.",
+        "Use parameterized queries and limit returned fields.",
+        "Run auth-vulnerable only on ephemeral lab infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our auth-vulnerable /profile?id= exposes admin data to regular users. Show IDOR remediation with session-scoped authorization.",
+    version: 1,
+    enabled: true
   }
 ];

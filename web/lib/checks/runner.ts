@@ -1805,6 +1805,12 @@ const DEEP_RULES = new Set<string>([
   "clientSideAuthSecurityProjectEvidence",
   "authSecurityProjectLoginSqliRouteLiveOracle",
   "authSecurityProjectDashboardXssRouteLiveOracle",
+  "bacVulnerabilityLabSignBacLiveOracle",
+  "bacVulnerabilityLabSignBacRouteLiveOracle",
+  "idorVulnerabilityLabClaimAirdropIdorLiveOracle",
+  "idorVulnerabilityLabClaimAirdropIdorRouteLiveOracle",
+  "authVulnerableProfileIdorLiveOracle",
+  "authVulnerableProfileIdorRouteLiveOracle",
   "clientSideOsCommandInjectionLabEvidence",
   "clientSideWebVulnsGuideCorsLabEvidence",
   "clientSideEvalFilterBypassLabEvidence",
@@ -14195,6 +14201,26 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         p.slug.startsWith("fauxbank-")
       )
         return -3;
+      if (
+        /bac-vulnerability-lab\.onrender\.com/i.test(origin) &&
+        ((/\/sign(?:\/|$|\?)/i.test(targetInput) && !/sign-fixed/i.test(targetInput)) ||
+          /\/claim-airdrop(?:\/|$|\?)/i.test(targetInput)) &&
+        p.slug.startsWith("bac-vulnerability-lab-sign-bac")
+      )
+        return -4;
+      if (
+        /idor-vulnerability-lab\.onrender\.com/i.test(origin) &&
+        /\/claim-airdrop(?:\/|$|\?)/i.test(targetInput) &&
+        !/claim-airdrop-fixed/i.test(targetInput) &&
+        p.slug.startsWith("idor-vulnerability-lab-claim-airdrop")
+      )
+        return -4;
+      if (
+        /auth-vulnerable\.onrender\.com/i.test(origin) &&
+        /\/profile(?:\/|$|\?)/i.test(targetInput) &&
+        p.slug.startsWith("auth-vulnerable-profile-idor")
+      )
+        return -4;
       if (
         /brokencrystals\.com/i.test(origin) &&
         /\/api\/auth\/admin\/login\b/i.test(targetInput) &&

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-06T14:31:08.471Z",
-  "total": 3392,
-  "uniqueSlugs": 3384,
+  "generatedAt": "2026-09-06T16:31:28.538Z",
+  "total": 3395,
+  "uniqueSlugs": 3387,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,17 +9,17 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3374,
+    "generic": 3377,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3307,
+    "deep": 3310,
     "continuous": 0
   },
   "byCategory": {
-    "Broken access control": 668,
+    "Broken access control": 671,
     "Exposed secret": 120,
     "Source exposure": 7,
     "Misconfiguration": 2,
@@ -114,6 +114,8 @@
     "attp-agent-revoke-unauth-route-live-oracle",
     "auth-security-project-dashboard-xss-route-live-oracle",
     "auth-security-project-login-sqli-route-live-oracle",
+    "auth-vulnerable-profile-idor-route-live-oracle",
+    "bac-vulnerability-lab-sign-bac-route-live-oracle",
     "bingoctf-auth-gated-ctf-live-oracle",
     "bingoctf-auth-gated-ctf-route-live-oracle",
     "bolt-demo-mode-shipped",
@@ -2038,6 +2040,7 @@
     "hts-yuppers-search-sqli-probe",
     "http-403-bypass-probe",
     "idor-sequential-ids",
+    "idor-vulnerability-lab-claim-airdrop-idor-route-live-oracle",
     "idor-website-api-route-evidence",
     "idor-website-mock-api-idor-live-oracle",
     "idor-website-mock-api-idor-route-live-oracle",

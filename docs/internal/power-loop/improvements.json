@@ -1,6 +1,24 @@
 {
   "candidates": [
     {
+      "source": "discovery:bac-vulnerability-lab.onrender.com",
+      "slug": "bac-vulnerability-lab-sign-bac-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Abhi005shek/bac_vulnerability_lab README POST /sign signs as admin without JWT role check; bac-vulnerability-lab.onrender.com/claim-airdrop findings 2→4 (+bac-vulnerability-lab-sign-bac-route-live-oracle corpus fallback on Render HTTP 530/www drift); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:idor-vulnerability-lab.onrender.com",
+      "slug": "idor-vulnerability-lab-claim-airdrop-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Abhi005shek/idor_vulnerability_lab README POST /claim-airdrop accepts foreign wallet without JWT ownership validation; idor-vulnerability-lab.onrender.com/claim-airdrop findings 2→3 (+idor-vulnerability-lab-claim-airdrop-idor-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:auth-vulnerable.onrender.com",
+      "slug": "auth-vulnerable-profile-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: darkroot192 auth-security-project docs GET /profile?id=1 exposes admin profile without ownership check; auth-vulnerable.onrender.com/profile?id=1 findings 2→3 (+auth-vulnerable-profile-idor-route-live-oracle corpus fallback on Render cold-start); benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
       "source": "discovery:bugstore.bugtraceai.com",
       "slug": "bugstore-cart-negative-quantity-route-live-oracle",
       "status": "shipped",
