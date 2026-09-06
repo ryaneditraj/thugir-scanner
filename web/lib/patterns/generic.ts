@@ -24609,6 +24609,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "promptairlines-hub-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "Wiz Prompt Airlines home hub route live oracle",
+    description:
+      "When scanning / on promptairlines.com, the hub documents the Wiz AI CTF with linked /challenge warmup and /chat prompt-injection labs — route-specific AI security training hub oracle.",
+    impactOneline:
+      "Route-specific confirmation that Prompt Airlines home hub publishes Wiz AI CTF challenges for LLM prompt-injection training.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "promptAirlinesHubRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Treat Prompt Airlines as intentional AI security CTF training — harden production chatbots against similar attacks.",
+      steps: [
+        "Never expose bot identifiers or system prompts in chat responses.",
+        "Add input/output guardrails and logging for jailbreak attempts.",
+        "Run promptairlines.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our promptairlines.com home route documents the Wiz AI CTF hub. Show route-specific prompt-injection hardening for AI chatbots.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "dreadnode-crucible-platform-live-oracle",
     platform: "generic",
     category: "AI security",

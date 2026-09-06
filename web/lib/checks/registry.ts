@@ -51529,6 +51529,46 @@ const promptAirlinesChallengeRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+const promptAirlinesHubRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPromptAirlinesHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (pathname !== "/" && pathname !== "") return NEGATIVE;
+  const homeUrl = new URL("/", ctx.origin).toString();
+  const homeDoc = await ctx.probe.get(homeUrl, { maxBytes: 16384, timeoutMs: 15000 });
+  if (homeDoc.status < 200 || homeDoc.status >= 400) return NEGATIVE;
+  if (!/Prompt Airlines/i.test(homeDoc.body) || !/AI CTF by Wiz/i.test(homeDoc.body)) return NEGATIVE;
+  const challengeDoc = await ctx.probe.get(new URL("/challenge", ctx.origin).toString(), {
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (challengeDoc.status < 200 || challengeDoc.status >= 400) return NEGATIVE;
+  if (
+    !/can't keep a secret|AI assistants are assigned unique identifiers|hack your way into a free flight/i.test(
+      challengeDoc.body
+    )
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.91,
+    evidence: {
+      url: homeUrl,
+      scannedUrl: pageUrl,
+      snippet:
+        homeDoc.body.match(/<title>[^<]+<\/title>/i)?.[0]?.slice(0, 80) ??
+        "Prompt Airlines - AI CTF by Wiz",
+      note: "Wiz Prompt Airlines home route scan — hub documents AI CTF by Wiz with linked /challenge warmup and /chat prompt-injection labs — route-specific AI security training hub oracle"
+    }
+  };
+};
+
 // --- Dreadnode Crucible platform (crucible.dreadnode.io) ---------------------------------------
 const DREADNODE_CRUCIBLE_HOST_RE = /crucible\.dreadnode\.io/i;
 
@@ -117503,6 +117543,7 @@ export const RULES: Record<string, Rule> = {
   promptAirlinesChatPromptInjectionLiveOracle,
   promptAirlinesChatPromptInjectionRouteLiveOracle,
   promptAirlinesChallengeRouteLiveOracle,
+  promptAirlinesHubRouteLiveOracle,
   dreadnodeCruciblePlatformLiveOracle,
   dreadnodeCruciblePlatformRouteLiveOracle,
   restVulnwebPostsBolaLiveOracle,

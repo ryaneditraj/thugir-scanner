@@ -3835,6 +3835,7 @@ const DEEP_RULES = new Set<string>([
   "promptAirlinesChatPromptInjectionLiveOracle",
   "promptAirlinesChatPromptInjectionRouteLiveOracle",
   "promptAirlinesChallengeRouteLiveOracle",
+  "promptAirlinesHubRouteLiveOracle",
   "dreadnodeCruciblePlatformLiveOracle",
   "dreadnodeCruciblePlatformRouteLiveOracle",
   "restVulnwebPostsBolaLiveOracle",
@@ -14946,6 +14947,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /promptairlines\.com/i.test(origin) &&
         /\/challenge\b/i.test(targetInput) &&
         p.slug.startsWith("promptairlines-challenge")
+      )
+        return -4;
+      if (
+        /promptairlines\.com/i.test(origin) &&
+        /^https:\/\/promptairlines\.com\/?(?:[#?]|$)/i.test(targetInput) &&
+        p.slug.startsWith("promptairlines-hub")
       )
         return -4;
       if (/crucible\.dreadnode\.io/i.test(origin) && p.slug.startsWith("dreadnode-crucible")) return -4;

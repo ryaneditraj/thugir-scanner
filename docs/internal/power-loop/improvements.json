@@ -9011,6 +9011,24 @@
       "slug": "dreadnode-crucible-platform-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: crucible.dreadnode.io SvelteKit login exposes appConfig with credits_enabled, integrations_enabled, docs.dreadnode.io, OAuth Google/GitHub; crucible.dreadnode.io/ findings 3→5 (+dreadnode-crucible-platform-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:pentest-fauxbank.vercel.app",
+      "slug": "fauxbank-transfer-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: fauxbankReflexionSuppressed skips reflexionEscalatedSsti on pentest-fauxbank.vercel.app Next.js banking SPA (no server-side template engine); pentest-fauxbank.vercel.app/transfer findings 18→16 (-reflexion-escalated-ssti false positive, +fauxbank-transfer-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackminaaziz.fly.dev",
+      "slug": "hackminaaziz-reflexion-xss-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: hackminaazizReflexionSuppressed skips reflexionEscalatedXss on deliberate XSS training routes documented by route oracles; hackminaaziz.fly.dev/ findings 7→6 (-reflexion-escalated-xss false positive, +hackminaaziz-home-route-live-oracle retained); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:promptairlines.com",
+      "slug": "promptairlines-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET / title Prompt Airlines - AI CTF by Wiz + GET /challenge warmup confirms bot-identifier prompt-injection goal; promptairlines.com/ findings 8→9 (+promptairlines-hub-route-live-oracle +promptairlines-chat-prompt-injection-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

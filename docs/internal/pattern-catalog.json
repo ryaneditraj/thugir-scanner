@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-06T10:03:00.396Z",
-  "total": 3386,
-  "uniqueSlugs": 3378,
+  "generatedAt": "2026-09-06T11:19:24.131Z",
+  "total": 3387,
+  "uniqueSlugs": 3379,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3368,
+    "generic": 3369,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3301,
+    "deep": 3302,
     "continuous": 0
   },
   "byCategory": {
@@ -38,7 +38,7 @@
     "Business logic": 43,
     "AI / LLM security": 4,
     "Cross-site request forgery": 14,
-    "Prompt injection": 16,
+    "Prompt injection": 17,
     "Authentication bypass": 4,
     "Insecure file upload": 2,
     "Command injection": 2,
@@ -2454,6 +2454,7 @@
     "promptairlines-challenge-route-live-oracle",
     "promptairlines-chat-prompt-injection-live-oracle",
     "promptairlines-chat-prompt-injection-route-live-oracle",
+    "promptairlines-hub-route-live-oracle",
     "pwnshop-account-delete-csrf-live-oracle",
     "pwnshop-account-delete-csrf-route-live-oracle",
     "pwnshop-admin-dashboard-route-live-oracle",

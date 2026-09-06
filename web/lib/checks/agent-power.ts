@@ -156,6 +156,18 @@ function fakeshopPhpReflexionSuppressed(ctx: PowerCtx): boolean {
   );
 }
 
+/** FauxBank pentest-fauxbank.vercel.app is a Next.js banking SPA — no server-side template engine. */
+function fauxbankReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /pentest-fauxbank\.vercel\.app/i.test(pageUrl);
+}
+
+/** hackminaaziz.fly.dev documents deliberate XSS/SQLi training routes — reflexion XSS duplicates route oracles. */
+function hackminaazizReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  return /hackminaaziz\.fly\.dev/i.test(pageUrl);
+}
+
 /** OopsSec Store GitHub Pages walkthroughs are static HTML — no server-side template engine. */
 function oopssecGitHubPagesReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
@@ -301,6 +313,7 @@ export const reflexionEscalatedXss: PowerRule = async (ctx) => {
   if (pwnshopWishlistReflexionSuppressed(ctx)) return NEGATIVE;
   if (appsecCiLoginReflexionSuppressed(ctx)) return NEGATIVE;
   if (zeroHealthVercelDashboardReflexionSuppressed(ctx)) return NEGATIVE;
+  if (hackminaazizReflexionSuppressed(ctx)) return NEGATIVE;
   const suffix = "pwr";
   const base = xssCanary(suffix);
   const params = ["q", "search", "query", "name", "id", "term"];
@@ -386,6 +399,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (vulnforgeAcademySsrfReflexionSuppressed(ctx)) return NEGATIVE;
   if (vulnforgeAcademyRceReflexionSuppressed(ctx)) return NEGATIVE;
   if (fakeshopPhpReflexionSuppressed(ctx)) return NEGATIVE;
+  if (fauxbankReflexionSuppressed(ctx)) return NEGATIVE;
   if (riglabsCyberLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (vulnerableBountySiteReflexionSuppressed(ctx)) return NEGATIVE;
   if (promptShieldReflexionSuppressed(ctx)) return NEGATIVE;
