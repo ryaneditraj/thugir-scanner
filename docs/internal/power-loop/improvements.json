@@ -8867,6 +8867,24 @@
       "slug": "javaseclab-fastjson-deserialization-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: /deserialize/fastjson redirects to login when unauthenticated; javaseclabFastjsonDeserializeRouteLiveOracle wiki corpus fallback; parent route matchers extended for /sqli/jdbc and /ssrf/url hub paths; whgojp.top/deserialize/fastjson findings 0\u219212 (+javaseclab-fastjson-deserialize-route-live-oracle); sqli/jdbc +12 (+javaseclab-jdbc-sqli-vul1-route-live-oracle); ssrf/url +12 (+javaseclab-ssrf-vul-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackminaaziz.fly.dev",
+      "slug": "hackminaaziz-login-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /login HTML template documents SQL injection in login query; hackminaaziz.fly.dev/login findings 5\u21927 (+hackminaaziz-login-sqli-route-live-oracle +client-side-hackminaaziz-evidence); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:hackminaaziz.fly.dev",
+      "slug": "hackminaaziz-profile-idor-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /profile template documents IDOR via user_id tampering without access control; hackminaaziz.fly.dev/profile/1 findings 5\u21927 (+hackminaaziz-profile-idor-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:nn0z.github.io",
+      "slug": "exploit-lab-hub-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: Exploit_Lab script.js documents 16 simulated modules (SQLi/XSS/IDOR/SSRF/SSTI/XXE/NoSQLi) with mock repeater; nn0z.github.io/Exploit-Lab/ findings 11\u219213 (+exploit-lab-hub-route-live-oracle +client-side-exploit-lab-evidence); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
