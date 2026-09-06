@@ -8938,7 +8938,25 @@
       "source": "discovery:chimera.atlascrew.dev",
       "slug": "chimera-sqli-discovery-priority-boost",
       "status": "shipped",
-      "validation": "SOURCE: discovery:url EVIDENCE: runner priority -3\u2192-4 for chimera-banking-accounts-search, chimera-insurance-policies-lookup, chimera-transactions-history, chimera-insurance-claims-search, and chimera-claims-search-order-by on queued discovery route scans; benchmark juice-shop 52 findings 6/6 maintained"
+      "validation": "SOURCE: discovery:url EVIDENCE: runner priority -3→-4 for chimera-banking-accounts-search, chimera-insurance-policies-lookup, chimera-transactions-history, chimera-insurance-claims-search, and chimera-claims-search-order-by on queued discovery route scans; benchmark juice-shop 52 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level16-fibonacci-eval-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /level16/source.php confirms eval($t . $prime_test) after HMAC gate on Fibonacci textpad; websec.fr/level16/ findings 5→5 (+websec-level16-fibonacci-eval-route-live-oracle, -websec-level17-timing-attack-live-oracle cross-level FP); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:websec.fr",
+      "slug": "websec-level17-timing-attack-live-oracle-cross-level-scope",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: websecLevel17TimingAttackLiveOracle now skips when scan target is /level16/ or /level18/ (not level17); websec.fr/level18/ findings 7→6 (-websec-level17-timing-attack-live-oracle false positive); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnerable-ecommerce.vercel.app",
+      "slug": "fakeshop-products-reflexion-ssti-suppression",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: fakeshopPhpReflexionSuppressed skips reflexionEscalatedSsti on vulnerable-ecommerce products.php/login.php static PHP source routes; vulnerable-ecommerce.vercel.app/products.php findings 9→8 (-reflexion-escalated-ssti false positive, +fakeshop-products-reflected-xss-route-live-oracle retained); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

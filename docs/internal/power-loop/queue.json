@@ -1,6 +1,11 @@
 {
-  "updated_at": "2026-09-06T06:25:00.000Z",
+  "updated_at": "2026-09-06T07:15:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://websec.fr/level16/",
+      "source": "websec.fr — Fibonacci eval code-injection oracle level 16 (public CTF lab; scoreboard gap 07 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://hackminaaziz.fly.dev/reset/confirm",
       "source": "minaaziz9/Vulnerable-Web-Application-MinaAziz — broken password-reset token oracle GET/POST /reset/confirm (GitHub README; web search 06 UTC)",

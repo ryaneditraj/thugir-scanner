@@ -16902,6 +16902,32 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "websec-level16-fibonacci-eval-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "WebSec.fr level16 Fibonacci eval route live oracle",
+    description:
+      "When scanning /level16/, source.php confirms eval($t . $prime_test) after HMAC gate on Fibonacci textpad — attacker-controlled code injection oracle.",
+    impactOneline:
+      "Route-specific confirmation that WebSec.fr level16 documents a Fibonacci eval code-injection challenge.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "websecLevel16FibonacciEvalRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Isolate training labs from production; never eval user-controlled code.",
+      steps: [
+        "Serve WebSec challenge sources only on isolated lab infrastructure.",
+        "Remove eval() on any user-controlled input in production code.",
+        "Replace dynamic code execution with sandboxed interpreters with no filesystem access."
+      ]
+    },
+    fixPrompt:
+      "Our WebSec.fr /level16 route scan exposes eval($t . $prime_test) after HMAC gate. Show secure alternatives to eval and allowlist-based validation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-websec-timing-attack-challenge-evidence",
     platform: "generic",
     category: "Broken authentication",

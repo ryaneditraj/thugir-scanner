@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-06T06:09:01.840Z",
-  "total": 3373,
-  "uniqueSlugs": 3365,
+  "generatedAt": "2026-09-06T07:09:50.207Z",
+  "total": 3374,
+  "uniqueSlugs": 3366,
   "byPlatform": {
     "lovable": 2,
     "bolt": 2,
@@ -9,13 +9,13 @@
     "replit": 2,
     "cursor": 1,
     "windsurf": 1,
-    "generic": 3355,
+    "generic": 3356,
     "firebase": 3,
     "supabase": 4
   },
   "byTier": {
     "free": 85,
-    "deep": 3288,
+    "deep": 3289,
     "continuous": 0
   },
   "byCategory": {
@@ -27,7 +27,7 @@
     "Information disclosure": 155,
     "Security misconfiguration": 288,
     "Broken authentication": 213,
-    "Injection": 555,
+    "Injection": 556,
     "Cross-site scripting": 804,
     "Open redirect": 29,
     "general": 20,
@@ -3160,6 +3160,7 @@
     "webexp05-c3-stored-xss-live-oracle",
     "webexp05-c3-stored-xss-route-live-oracle",
     "websec-level14-php-eval-blacklist-route-live-oracle",
+    "websec-level16-fibonacci-eval-route-live-oracle",
     "websec-level17-timing-attack-live-oracle",
     "websec-level17-timing-attack-route-live-oracle",
     "websec-level18-php-unserialize-cookie-route-live-oracle",
