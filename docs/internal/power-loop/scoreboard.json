@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T09:12:00.000Z",
+  "updated_at": "2026-09-06T10:12:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2804,
-  "total_findings": 27728,
+  "total_sites_scanned": 2813,
+  "total_findings": 27838,
   "critical_findings": 84,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1993,
-  "discovery_findings": 23333,
+  "discovery_urls_added": 1998,
+  "discovery_findings": 23390,
   "improvements_shipped": 1485,
-  "last_run": "2026-09-06T09:12:00.000Z",
+  "last_run": "2026-09-06T10:12:00.000Z",
   "last_run_summary": {
-    "hour_utc": "09",
+    "hour_utc": "10",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -48,44 +48,44 @@
           ]
         }
       },
-      "note": "6/6 stable on primary Heroku (53 findings, 40 live oracles); parallel run Escape.tech fallback 55 findings when Heroku+staging 503"
+      "note": "6/6 stable first-pass on primary Heroku (53 findings, 40 live oracles; secret-resend + iac-terraform-tls-key present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 114,
-      "focus": "Prompt Airlines AI CTF + Crucible dreadnode + bugforge IDOR/GraphQL + Invicti VulnAPI SSRF/orders/admin route oracles",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 57,
+      "focus": "bugforge auth/csrf/xss/ssrf lab modules + Apparatus atlascrew defense platform + drained vulnforge level18/websec level18/hackminaaziz reset",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
-      "juice-shop.demo.escape.tech: fallback 6/6 (55 findings, 42 live oracles; Heroku+staging 503)",
-      "vulnapi.testinvicti.com/api/fetch: 14 findings — vulnapi-fetch-ssrf-live-oracle shipped",
-      "vulnapi.testinvicti.com/api/orders/1: 14 findings — vulnapi-orders-bola-live-oracle shipped",
-      "vulnapi.testinvicti.com/api/admin/users: 14 findings — vulnapi-admin-users-host-bypass-live-oracle shipped",
-      "bugforge.io/labs/idor: 7 findings — bugforge-idor-route-live-oracle confirmed",
-      "bugforge.io/labs/graphql: 7 findings — bugforge-graphql-route-live-oracle confirmed",
-      "www.wrongsecrets.com/mcp: 16 findings — wrongsecrets-mcp-route-live-oracle confirmed"
+      "bugforge.io/labs/auth: 7 findings — bugforge-auth-route-live-oracle confirmed",
+      "bugforge.io/labs/csrf: 7 findings — bugforge-csrf-route-live-oracle confirmed",
+      "bugforge.io/labs/xss: 7 findings — bugforge-xss-route-live-oracle confirmed",
+      "bugforge.io/labs/ssrf: 7 findings — bugforge-ssrf-route-live-oracle confirmed",
+      "apparatus.atlascrew.dev/: 9 findings — apparatus-redteam-autopilot + chaos-engineering route oracles",
+      "vulnforge-academy level18: 7 findings — vulnforge-level18-extension-bypass-route-live-oracle confirmed",
+      "websec.fr/level18/: 6 findings — websec-level18-php-unserialize-cookie-route-live-oracle confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "juice-shop Heroku+staging intermittent 503 — Escape.tech fallback required on degraded passes",
       "promptairlines.com/chat thin hub without prompt-injection route live oracle",
       "crucible.dreadnode.io 3-finding hub without dreadnode route oracle",
       "qa.brokencrystals.com/api/file/aws still queued (48h skip)",
-      "oopssec react2shell/weak-jwt vanity slugs still queued"
+      "oopssec react2shell/weak-jwt vanity slugs still queued",
+      "wrongsecrets challenge-68 not deployed on Heroku (404)"
     ]
   },
   "discovery_highlights": {
-    "juice-shop.demo.escape.tech": 55,
-    "vulnapi.testinvicti.com/api/fetch": 14,
-    "vulnapi.testinvicti.com/api/orders/1": 14,
-    "vulnapi.testinvicti.com/api/admin/users": 14,
-    "bugforge.io/labs/idor": 7,
-    "bugforge.io/labs/graphql": 7,
-    "www.wrongsecrets.com/mcp": 16,
-    "wrongsecrets.herokuapp.com/challenge/challenge-65": 19,
-    "promptairlines.com/": 6
+    "juice-shop.herokuapp.com": 53,
+    "bugforge.io/labs/auth": 7,
+    "bugforge.io/labs/csrf": 7,
+    "bugforge.io/labs/xss": 7,
+    "bugforge.io/labs/ssrf": 7,
+    "apparatus.atlascrew.dev/": 9,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level18.php": 7,
+    "websec.fr/level18/": 6,
+    "hackminaaziz.fly.dev/reset/confirm": 7
   }
 }

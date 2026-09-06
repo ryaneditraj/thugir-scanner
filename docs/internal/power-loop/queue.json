@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T09:12:00.000Z",
+  "updated_at": "2026-09-06T10:08:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://bugforge.io/labs/auth",
+      "source": "bugforge.io — authentication bypass hands-on lab module (complements idor/graphql/sqli; web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugforge.io/labs/csrf",
+      "source": "bugforge.io — CSRF token validation bypass lab module (web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugforge.io/labs/xss",
+      "source": "bugforge.io — stored XSS hands-on lab module (web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugforge.io/labs/ssrf",
+      "source": "bugforge.io — SSRF allowlist-bypass lab module (web search 10 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://apparatus.atlascrew.dev/",
+      "source": "Atlas Crew Apparatus — WAF/deception defense validation platform paired with Chimera (atlascrew.dev; web search 10 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://promptairlines.com/",
       "source": "Wiz Prompt Airlines — AI CTF prompt-injection chatbot challenge hub (wiz.io blog; web search 09 UTC)",
