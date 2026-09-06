@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T07:16:00.000Z",
+  "updated_at": "2026-09-06T08:14:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,24 +15,24 @@
       ]
     }
   },
-  "total_sites_scanned": 2779,
-  "total_findings": 27389,
+  "total_sites_scanned": 2786,
+  "total_findings": 27499,
   "critical_findings": 80,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1983,
-  "discovery_findings": 23103,
+  "discovery_urls_added": 1988,
+  "discovery_findings": 23160,
   "improvements_shipped": 1479,
-  "last_run": "2026-09-06T07:16:00.000Z",
+  "last_run": "2026-09-06T08:14:00.000Z",
   "last_run_summary": {
-    "hour_utc": "07",
+    "hour_utc": "08",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
       "oracle_recall": "6/6",
       "gap": [],
       "pages_crawled": 6,
-      "probes_run": 588,
+      "probes_run": 597,
       "benchmark_recall": {
         "juice-shop": {
           "categories_expected": 6,
@@ -50,40 +50,38 @@
       },
       "note": "6/6 stable first-pass recall on primary Heroku (53 findings, 40 live oracles; secret-resend + iac-terraform-tls-key + juice-shop-resend-key present)"
     },
-    "teacher_delta": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
+    "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 11,
-      "findings": 78,
-      "focus": "wrongsecrets MCP/challenge-65 + vulnforge/websec level18 + FakeShop login + parallel websec level16 FP fixes",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 6,
+      "findings": 57,
+      "focus": "Invicti VulnAPI BOLA/SSRF/mass-assignment oracles + drained websec level16",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
-      "www.wrongsecrets.com/mcp: 16 findings \u2014 wrongsecrets-mcp-route-live-oracle confirmed",
-      "wrongsecrets.herokuapp.com/challenge/challenge-65: 19 findings \u2014 wrongsecrets-challenge-65-java-plain-cli-route-live-oracle confirmed",
-      "vulnerable-ecommerce.vercel.app/login.php: 10 findings \u2014 fakeshop-login-sqli-route-live-oracle confirmed",
-      "vulnforge-academy level18.php: 7 findings \u2014 vulnforge-level18-extension-bypass-route-live-oracle confirmed",
-      "websec.fr/level18/: 7 findings \u2014 websec-level18-php-unserialize-cookie-route-live-oracle confirmed",
-      "websec.fr/level16/: 5 findings \u2014 websec-level16-fibonacci-eval-route-live-oracle shipped (parallel run)",
-      "vulnerable-ecommerce.vercel.app/products.php: SSTI false-positive suppressed (parallel run)"
+      "vulnapi.testinvicti.com/api/users/1: 11 findings — vulnapi-users-bola-live-oracle + vulnapi-users-bola-route-live-oracle confirmed",
+      "vulnapi.testinvicti.com/api/users: 11 findings — mass-assignment signup oracle",
+      "vulnapi.testinvicti.com/api/fetch: 10 findings — SSRF fetch endpoint probed",
+      "vulnapi.testinvicti.com/api/orders/1: 10 findings — order BOLA oracle",
+      "vulnapi.testinvicti.com/api/admin/users: 10 findings — BFLA admin users list",
+      "websec.fr/level16/: 5 findings — websec-level17-timing-attack-live-oracle (drain)"
     ],
     "learning_gaps": [
-      "teacher_delta blocked \u2014 nuclei/engine unavailable in cloud agent",
+      "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "vapi.roottusk.com + PentestForge DVWA/Tomcat labs unreachable from cloud agent",
-      "qa.brokencrystals.com/api/file/aws still queued (48h skip until ~2026-09-08T18:14Z)",
-      "oopssec react2shell/weak-jwt vanity slugs still queued",
-      "wrongsecrets challenge-66 still queued",
-      "urban-vampi cross-user BOLA not reproducible on Railway mirror"
+      "wrongsecrets challenge-63/66/67 + whgojp JavaSecLab routes still queued",
+      "qa.brokencrystals.com/api/file/aws still queued (48h skip)",
+      "vulnapi SSRF route may need dedicated vulnapi-fetch-ssrf-route-live-oracle slug"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "wrongsecrets.herokuapp.com/challenge/challenge-65": 19,
-    "www.wrongsecrets.com/mcp": 16,
-    "vulnerable-ecommerce.vercel.app/login.php": 10,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level18.php": 7,
-    "websec.fr/level18/": 7,
+    "vulnapi.testinvicti.com/api/users/1": 11,
+    "vulnapi.testinvicti.com/api/users": 11,
+    "vulnapi.testinvicti.com/api/fetch": 10,
+    "vulnapi.testinvicti.com/api/orders/1": 10,
+    "vulnapi.testinvicti.com/api/admin/users": 10,
     "websec.fr/level16/": 5
   }
 }
