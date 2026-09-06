@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T05:18:00.000Z",
+  "updated_at": "2026-09-06T06:10:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://hackminaaziz.fly.dev/reset/confirm",
+      "source": "minaaziz9/Vulnerable-Web-Application-MinaAziz — broken password-reset token oracle GET/POST /reset/confirm (GitHub README; web search 06 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-64",
+      "source": "OWASP WrongSecrets — Challenge 64 secrets oracle (Heroku demo README: challenges 54-66 available; web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://pentest-fauxbank.vercel.app/transfer",
+      "source": "pentest-fauxbank — wire transfer business-logic / IDOR oracle (FauxBank training sim; web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://websec.fr/level17/",
+      "source": "websec.fr — timing side-channel flag oracle level 17 (public CTF lab; web search 06 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php",
+      "source": "vulnforge-academy — double-extension file upload bypass oracle level17 (Vercel OSS deploy; web search 06 UTC)",
+      "auth": "oss_deploy"
+    },
     {
       "url": "https://hackminaaziz.fly.dev/login",
       "source": "minaaziz9/Vulnerable-Web-Application-MinaAziz — SQLi login bypass oracle POST /login (GitHub README; web search 05 UTC)",
