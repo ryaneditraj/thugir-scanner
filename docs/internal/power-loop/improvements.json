@@ -8993,6 +8993,24 @@
       "slug": "vulnapi-admin-users-host-bypass-route-live-oracle",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: GET /api/admin/users with Host: dev returns adminpassword for all users without JWT; vulnapi.testinvicti.com/api/admin/users findings 10→14 (+vulnapi-admin-users-host-bypass-live-oracle +vulnapi-admin-users-host-bypass-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:promptairlines.com",
+      "slug": "promptairlines-chat-prompt-injection-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /chat with session cookie returns behind_the_scenes LLM system prompt with REDACTED FLAG bot identifier; promptairlines.com/chat findings 5→7 (+promptairlines-chat-prompt-injection-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:promptairlines.com",
+      "slug": "promptairlines-challenge-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /challenge returns JSON title This bot can't keep a secret with prompt-injection warmup to extract AI bot identifier; promptairlines.com/challenge route scan fires challenge oracle; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:crucible.dreadnode.io",
+      "slug": "dreadnode-crucible-platform-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: crucible.dreadnode.io SvelteKit login exposes appConfig with credits_enabled, integrations_enabled, docs.dreadnode.io, OAuth Google/GitHub; crucible.dreadnode.io/ findings 3→5 (+dreadnode-crucible-platform-live-oracle +route); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

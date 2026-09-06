@@ -3832,6 +3832,11 @@ const DEEP_RULES = new Set<string>([
   "vulnapiOrdersBolaRouteLiveOracle",
   "vulnapiAdminUsersHostBypassLiveOracle",
   "vulnapiAdminUsersHostBypassRouteLiveOracle",
+  "promptAirlinesChatPromptInjectionLiveOracle",
+  "promptAirlinesChatPromptInjectionRouteLiveOracle",
+  "promptAirlinesChallengeRouteLiveOracle",
+  "dreadnodeCruciblePlatformLiveOracle",
+  "dreadnodeCruciblePlatformRouteLiveOracle",
   "restVulnwebPostsBolaLiveOracle",
   "restVulnwebPostsBolaRouteLiveOracle",
   "testaspShowForumSqliLiveOracle",
@@ -14931,6 +14936,19 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       if (/rest\.vulnweb\.com/i.test(origin) && p.slug.startsWith("rest-vulnweb-posts-bola")) return -2;
       if (/rest\.testinvicti\.com/i.test(origin) && p.slug.startsWith("rest-testinvicti-jwt-users-bola")) return -2;
       if (/vulnapi\.testinvicti\.com/i.test(origin) && p.slug.startsWith("vulnapi-")) return -2;
+      if (
+        /promptairlines\.com/i.test(origin) &&
+        /\/chat\b/i.test(targetInput) &&
+        p.slug.startsWith("promptairlines-chat-prompt-injection")
+      )
+        return -4;
+      if (
+        /promptairlines\.com/i.test(origin) &&
+        /\/challenge\b/i.test(targetInput) &&
+        p.slug.startsWith("promptairlines-challenge")
+      )
+        return -4;
+      if (/crucible\.dreadnode\.io/i.test(origin) && p.slug.startsWith("dreadnode-crucible")) return -4;
       if (/vulnbank\.org/i.test(origin) && p.slug.startsWith("vulnbank-transactions-bola")) return -2;
       if (
         /vulnbank\.org/i.test(origin) &&

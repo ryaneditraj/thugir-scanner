@@ -24531,6 +24531,136 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "promptairlines-chat-prompt-injection-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "Wiz Prompt Airlines chat prompt-injection live oracle",
+    description:
+      "POST /chat on promptairlines.com returns behind_the_scenes LLM system prompt with redacted bot identifier flags — the Wiz Prompt Airlines AI CTF prompt-injection oracle.",
+    impactOneline:
+      "Chat endpoints that leak system prompts enable prompt-injection attacks to extract secrets and bypass guardrails.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "promptAirlinesChatPromptInjectionLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose LLM system prompts in API responses — Prompt Airlines is intentional CTF software.",
+      steps: [
+        "Strip behind_the_scenes and system-prompt fields from chat API responses.",
+        "Require authentication before accepting chat messages.",
+        "Run promptairlines.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our promptairlines.com /chat endpoint leaks behind_the_scenes LLM system prompts. Show prompt-injection hardening for AI chatbots.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "promptairlines-chat-prompt-injection-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "Wiz Prompt Airlines /chat prompt-injection route live oracle",
+    description:
+      "When scanning /chat on promptairlines.com, POST /chat leaks behind_the_scenes LLM system prompt with redacted bot identifier — route-specific prompt-injection CTF oracle.",
+    impactOneline:
+      "Route-specific confirmation that Prompt Airlines /chat exposes LLM system prompt leakage for prompt-injection CTF challenges.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "promptAirlinesChatPromptInjectionRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never expose LLM system prompts in API responses — Prompt Airlines is intentional CTF software.",
+      steps: [
+        "Strip behind_the_scenes and system-prompt fields from chat API responses.",
+        "Require authentication before accepting chat messages.",
+        "Run promptairlines.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our promptairlines.com /chat route scan leaks behind_the_scenes LLM system prompts. Show route-specific prompt-injection hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "promptairlines-challenge-route-live-oracle",
+    platform: "generic",
+    category: "Prompt injection",
+    severityDefault: "high",
+    title: "Wiz Prompt Airlines /challenge route live oracle",
+    description:
+      "When scanning /challenge on promptairlines.com, the warmup challenge documents prompt-injection goals to extract AI bot identifiers — route-specific AI CTF oracle.",
+    impactOneline:
+      "Route-specific confirmation that Prompt Airlines publishes prompt-injection CTF challenges targeting LLM bot identifier disclosure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "promptAirlinesChallengeRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Treat Prompt Airlines as intentional AI security CTF training — harden production chatbots against similar attacks.",
+      steps: [
+        "Never expose bot identifiers or system prompts in chat responses.",
+        "Add input/output guardrails and logging for jailbreak attempts.",
+        "Run promptairlines.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our promptairlines.com /challenge route documents prompt-injection warmup challenges. Show AI chatbot guardrail hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dreadnode-crucible-platform-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Dreadnode Crucible platform live oracle",
+    description:
+      "crucible.dreadnode.io hosts the Dreadnode AI security platform login with OAuth providers, credits, and integrations config — Dreadnode red-team training platform oracle.",
+    impactOneline:
+      "Dreadnode Crucible exposes AI security platform authentication surface — relevant for red-team and AI security training deployments.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dreadnodeCruciblePlatformLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Treat crucible.dreadnode.io as Dreadnode platform infrastructure — enforce MFA and rate-limit login endpoints.",
+      steps: [
+        "Require MFA on Dreadnode platform accounts.",
+        "Rate-limit OAuth and password login endpoints.",
+        "Run crucible.dreadnode.io only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crucible.dreadnode.io deployment exposes Dreadnode AI security platform login. Show platform authentication hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "dreadnode-crucible-platform-route-live-oracle",
+    platform: "generic",
+    category: "AI security",
+    severityDefault: "medium",
+    title: "Dreadnode Crucible platform route live oracle",
+    description:
+      "When scanning crucible.dreadnode.io, the Dreadnode AI security platform login portal with OAuth and credits config is confirmed — route-specific platform oracle.",
+    impactOneline:
+      "Route-specific confirmation that crucible.dreadnode.io hosts Dreadnode AI security red-team training platform infrastructure.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "dreadnodeCruciblePlatformRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Treat crucible.dreadnode.io as Dreadnode platform infrastructure — enforce MFA and rate-limit login endpoints.",
+      steps: [
+        "Require MFA on Dreadnode platform accounts.",
+        "Rate-limit OAuth and password login endpoints.",
+        "Run crucible.dreadnode.io only on isolated training infrastructure."
+      ]
+    },
+    fixPrompt:
+      "Our crucible.dreadnode.io route scan confirms Dreadnode AI security platform login. Show route-specific platform auth hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-transactions-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",

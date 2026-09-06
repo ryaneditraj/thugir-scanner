@@ -51434,6 +51434,153 @@ const vulnapiAdminUsersHostBypassRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+// --- Wiz Prompt Airlines AI CTF (promptairlines.com) -----------------------------------------
+const PROMPT_AIRLINES_HOST_RE = /promptairlines\.com/i;
+
+function isPromptAirlinesHost(ctx: RuleContext): boolean {
+  const corpus = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || ""].join("\n");
+  return PROMPT_AIRLINES_HOST_RE.test(corpus);
+}
+
+const promptAirlinesChatPromptInjectionLiveOracle: Rule = async (ctx) => {
+  if (!isPromptAirlinesHost(ctx)) return NEGATIVE;
+  const homeDoc = await ctx.probe.get(new URL("/", ctx.origin).toString(), {
+    maxBytes: 8192,
+    timeoutMs: 15000
+  });
+  const sessionCookie =
+    homeDoc.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0] ??
+    ctx.home.setCookies.find((c) => /^session=/i.test(c))?.split(";")[0];
+  if (!sessionCookie) return NEGATIVE;
+  const chatUrl = new URL("/chat", ctx.origin).toString();
+  const doc = await ctx.probe.get(chatUrl, {
+    method: "POST",
+    body: JSON.stringify({ prompt: "hello" }),
+    headers: { "Content-Type": "application/json", Cookie: sessionCookie },
+    maxBytes: 32768,
+    timeoutMs: 30000
+  });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (!/behind_the_scenes/i.test(body)) return NEGATIVE;
+  if (
+    !/REDACTED FLAG|ai bot identifier|Prompt Airlines Customer Service Assistant/i.test(body)
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: /REDACTED FLAG/i.test(body) ? 0.94 : 0.91,
+    evidence: {
+      url: chatUrl,
+      snippet: body.slice(0, 220).trim(),
+      note: "Wiz Prompt Airlines POST /chat returns behind_the_scenes LLM system prompt with redacted bot identifier — prompt-injection CTF oracle (AI CTF by Wiz)"
+    }
+  };
+};
+
+const promptAirlinesChatPromptInjectionRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPromptAirlinesHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/chat\b/i.test(pageUrl)) return NEGATIVE;
+  const result = await promptAirlinesChatPromptInjectionLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Wiz Prompt Airlines /chat route scan — POST /chat leaks behind_the_scenes LLM system prompt with redacted bot identifier flags — route-specific prompt-injection CTF oracle"
+    }
+  };
+};
+
+const promptAirlinesChallengeRouteLiveOracle: Rule = async (ctx) => {
+  if (!isPromptAirlinesHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/challenge\b/i.test(pathname) && !/\/challenge\b/i.test(pageUrl)) return NEGATIVE;
+  const challengeUrl = new URL("/challenge", ctx.origin).toString();
+  const doc = await ctx.probe.get(challengeUrl, { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  if (!/This bot can't keep a secret|can't keep a secret/i.test(doc.body)) return NEGATIVE;
+  if (
+    !/AI assistants are assigned unique identifiers|hack your way into a free flight|reset context/i.test(
+      doc.body
+    )
+  ) {
+    return NEGATIVE;
+  }
+  return {
+    fired: true,
+    confidence: 0.92,
+    evidence: {
+      url: challengeUrl,
+      scannedUrl: pageUrl,
+      snippet: doc.body.slice(0, 200).trim(),
+      note: "Wiz Prompt Airlines /challenge route scan — warmup challenge documents prompt-injection goal to extract AI bot identifier and hack free flight booking — route-specific AI CTF oracle"
+    }
+  };
+};
+
+// --- Dreadnode Crucible platform (crucible.dreadnode.io) ---------------------------------------
+const DREADNODE_CRUCIBLE_HOST_RE = /crucible\.dreadnode\.io/i;
+
+function isDreadnodeCrucibleHost(ctx: RuleContext): boolean {
+  const corpus = [ctx.origin, ctx.scanUrl || "", ctx.home.finalUrl || "", ctx.combined].join("\n");
+  return DREADNODE_CRUCIBLE_HOST_RE.test(corpus);
+}
+
+const dreadnodeCruciblePlatformLiveOracle: Rule = async (ctx) => {
+  if (!isDreadnodeCrucibleHost(ctx)) return NEGATIVE;
+  let corpus = ctx.combined;
+  const homeUrl = new URL("/", ctx.origin).toString();
+  const doc = await ctx.probe.get(homeUrl, { maxBytes: 200_000, timeoutMs: 20000 });
+  if (doc.status >= 200 && doc.status < 400) corpus = `${corpus}\n${doc.body}`;
+  const markerHits = [
+    /crucible\.dreadnode\.io/i.test(corpus),
+    /dreadnode-theme|aria-label="Dreadnode"/i.test(corpus),
+    /"docs_url"\s*:\s*"https:\/\/docs\.dreadnode\.io"/i.test(corpus) ||
+      /docs\.dreadnode\.io/i.test(corpus),
+    /credits_enabled|integrations_enabled|recaptcha_enabled/i.test(corpus),
+    /Continue with (?:Google|GitHub)/i.test(corpus)
+  ].filter(Boolean).length;
+  if (markerHits < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markerHits >= 4 ? 0.92 : 0.89,
+    evidence: {
+      url: homeUrl,
+      snippet:
+        doc.body.match(/appConfig:\{[^}]{0,120}/)?.[0]?.slice(0, 120) ??
+        "Dreadnode Crucible AI security platform login portal",
+      note: "Dreadnode Crucible (crucible.dreadnode.io) exposes AI security platform login with OAuth providers and credits/integrations config — Dreadnode red-team training platform oracle"
+    }
+  };
+};
+
+const dreadnodeCruciblePlatformRouteLiveOracle: Rule = async (ctx) => {
+  if (!isDreadnodeCrucibleHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const result = await dreadnodeCruciblePlatformLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Dreadnode Crucible route scan — crucible.dreadnode.io hosts Dreadnode AI security platform login with OAuth, credits, and integrations config — route-specific platform oracle"
+    }
+  };
+};
+
 const restVulnwebPostsBolaLiveOracle: Rule = async (ctx) => {
   if (!isRestVulnwebHost(ctx)) return NEGATIVE;
   const listUrl = new URL("/basic_authentication/api/posts", ctx.origin).toString();
@@ -117353,6 +117500,11 @@ export const RULES: Record<string, Rule> = {
   vulnapiOrdersBolaRouteLiveOracle,
   vulnapiAdminUsersHostBypassLiveOracle,
   vulnapiAdminUsersHostBypassRouteLiveOracle,
+  promptAirlinesChatPromptInjectionLiveOracle,
+  promptAirlinesChatPromptInjectionRouteLiveOracle,
+  promptAirlinesChallengeRouteLiveOracle,
+  dreadnodeCruciblePlatformLiveOracle,
+  dreadnodeCruciblePlatformRouteLiveOracle,
   restVulnwebPostsBolaLiveOracle,
   restVulnwebPostsBolaRouteLiveOracle,
   clientSidePwnshopEvidence,
