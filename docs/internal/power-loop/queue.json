@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T06:25:00.000Z",
+  "updated_at": "2026-09-06T07:12:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://www.wrongsecrets.com/mcp",
+      "source": "OWASP WrongSecrets — Challenge 60 MCP execute_command env-leak oracle POST /mcp (challenge walkthrough; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnerable-ecommerce.vercel.app/login.php",
+      "source": "FakeShop PHP lab — SQLi login bypass oracle POST /login.php (vulnerable-ecommerce.vercel.app companion to products.php XSS; web search 07 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://wrongsecrets.herokuapp.com/challenge/challenge-65",
+      "source": "OWASP WrongSecrets — Challenge 65 plain Java CLI binary secrets oracle (Heroku demo; web search 07 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://vulnforge-academy.vercel.app/backend/includes/levels/medium/level18.php",
+      "source": "vulnforge-academy — file upload bypass oracle level18 (Vercel OSS deploy; web search 07 UTC)",
+      "auth": "oss_deploy"
+    },
+    {
+      "url": "https://websec.fr/level18/",
+      "source": "websec.fr — PHP object deserialization oracle level 18 (public CTF lab; web search 07 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "https://hackminaaziz.fly.dev/reset/confirm",
       "source": "minaaziz9/Vulnerable-Web-Application-MinaAziz — broken password-reset token oracle GET/POST /reset/confirm (GitHub README; web search 06 UTC)",

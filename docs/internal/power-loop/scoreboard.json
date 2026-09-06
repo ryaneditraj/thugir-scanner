@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T06:25:00.000Z",
+  "updated_at": "2026-09-06T07:15:16.149Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,17 +15,17 @@
       ]
     }
   },
-  "total_sites_scanned": 2773,
-  "total_findings": 27277,
+  "total_sites_scanned": 2779,
+  "total_findings": 27389,
   "critical_findings": 80,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 1978,
-  "discovery_findings": 23044,
+  "discovery_urls_added": 1983,
+  "discovery_findings": 23103,
   "improvements_shipped": 1476,
-  "last_run": "2026-09-06T06:25:00.000Z",
+  "last_run": "2026-09-06T07:15:16.149Z",
   "last_run_summary": {
-    "hour_utc": "06",
+    "hour_utc": "07",
     "benchmark": {
       "oracle_url": "https://juice-shop.herokuapp.com",
       "oracle_findings": 53,
@@ -53,38 +53,34 @@
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (THUGIR_ENGINE_ROOT unset)",
     "discovery": {
       "urls_added": 5,
-      "urls_scanned": 7,
-      "findings": 71,
-      "focus": "hackminaaziz reset/confirm + wrongsecrets-64 + fauxbank transfer + websec level17 + vulnforge level17; parallel run drained register/about",
-      "improvements_shipped_this_run": 3
+      "urls_scanned": 8,
+      "findings": 59,
+      "focus": "wrongsecrets MCP + challenge-65 + vulnforge level18 + websec level18 + vulnerable-ecommerce login.php; drained vapi/PentestForge errors",
+      "improvements_shipped_this_run": 0
     },
     "notable_findings": [
       "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles)",
-      "hackminaaziz.fly.dev/reset/confirm: 7 findings — hackminaaziz-reset-broken-password-reset-route-live-oracle confirmed",
-      "wrongsecrets.herokuapp.com/challenge/challenge-64: 19 findings — wrongsecrets-challenge-64-swift-binary-route-live-oracle confirmed",
-      "pentest-fauxbank.vercel.app/transfer: 18 findings — fauxbank-transfer-route-live-oracle confirmed",
-      "websec.fr/level17/: 6 findings — websec-level17-timing-attack-route-live-oracle confirmed",
-      "vulnforge-academy level17.php: 7 findings — vulnforge-level17-content-type-upload-route-live-oracle confirmed",
-      "hackminaaziz.fly.dev/register: 7 findings — hackminaaziz-register-route-live-oracle shipped (parallel 06 UTC)",
-      "hackminaaziz.fly.dev/about: 7 findings — hackminaaziz-about-route-live-oracle shipped (parallel 06 UTC)"
+      "www.wrongsecrets.com/mcp: 16 findings — wrongsecrets-mcp-route-live-oracle confirmed",
+      "wrongsecrets.herokuapp.com/challenge/challenge-65: 19 findings — wrongsecrets-challenge-65-java-plain-cli-route-live-oracle confirmed",
+      "vulnerable-ecommerce.vercel.app/login.php: 10 findings — fakeshop-login-sqli-route-live-oracle confirmed",
+      "vulnforge-academy level18.php: 7 findings — vulnforge-academy-level18-extension-bypass-route-live-oracle confirmed",
+      "websec.fr/level18/: 7 findings — websec-level18-php-unserialize-cookie-route-live-oracle confirmed"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
       "vapi.roottusk.com + PentestForge DVWA/Tomcat labs unreachable from cloud agent",
       "qa.brokencrystals.com/api/file/aws still queued (48h skip until ~2026-09-08T18:14Z)",
       "oopssec react2shell/weak-jwt vanity slugs still queued",
-      "urban-vampi /users/v1/{id}/email PUT changes caller email only — cross-user BOLA not reproducible on Railway mirror",
-      "wrongsecrets challenge-65/66 + vulnforge level18 still queued"
+      "wrongsecrets challenge-66 still queued",
+      "urban-vampi cross-user BOLA not reproducible on Railway mirror"
     ]
   },
   "discovery_highlights": {
     "juice-shop.herokuapp.com": 53,
-    "wrongsecrets.herokuapp.com/challenge/challenge-64": 19,
-    "pentest-fauxbank.vercel.app/transfer": 18,
-    "hackminaaziz.fly.dev/reset/confirm": 7,
-    "hackminaaziz.fly.dev/register": 7,
-    "hackminaaziz.fly.dev/about": 7,
-    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level17.php": 7,
-    "websec.fr/level17/": 6
+    "wrongsecrets.herokuapp.com/challenge/challenge-65": 19,
+    "www.wrongsecrets.com/mcp": 16,
+    "vulnerable-ecommerce.vercel.app/login.php": 10,
+    "vulnforge-academy.vercel.app/backend/includes/levels/medium/level18.php": 7,
+    "websec.fr/level18/": 7
   }
 }
