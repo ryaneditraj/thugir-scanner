@@ -6,6 +6,7 @@
 // they exist so the worker / future deep flow can share the same registry keys.
 
 import { createHash, createHmac } from "crypto";
+import http from "node:http";
 import {
   thugirJwtClaims,
   thugirJsEndpoints,
@@ -51198,6 +51199,237 @@ const vulnapiValidateTokenStackDisclosureRouteLiveOracle: Rule = async (ctx) => 
       ...result.evidence,
       scannedUrl: pageUrl,
       note: "Invicti vulnapi.testinvicti.com /api/validateToken route scan — invalid JWT probe returns jsonwebtoken stack trace in JSON — route-specific error disclosure oracle"
+    }
+  };
+};
+
+const VULNAPI_SSRF_PROBE_URL = "http://bxss.me/";
+
+const vulnapiFetchSsrfLiveOracle: Rule = async (ctx) => {
+  if (!isVulnapiHost(ctx)) return NEGATIVE;
+  const url = new URL("/api/fetch", ctx.origin);
+  url.searchParams.set("url", VULNAPI_SSRF_PROBE_URL);
+  const doc = await ctx.probe.get(url.toString(), {
+    headers: { Authorization: `Bearer ${VULNAPI_USER1_BEARER}` },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/AcuMonitor|acunetix\.com\/vulnerability-scanner\/acumonitor/i.test(doc.body)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      url: url.toString(),
+      probeUrl: VULNAPI_SSRF_PROBE_URL,
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Invicti vulnapi.testinvicti.com GET /api/fetch?url=http://bxss.me/ with Bearer one fetches remote HTML server-side — SSRF oracle (API7:2023)"
+    }
+  };
+};
+
+const vulnapiFetchSsrfRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/fetch/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnapiFetchSsrfLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Invicti vulnapi.testinvicti.com /api/fetch route scan — server-side fetch of bxss.me confirms SSRF without URL allowlist validation"
+    }
+  };
+};
+
+const vulnapiOrdersBolaLiveOracle: Rule = async (ctx) => {
+  if (!isVulnapiHost(ctx)) return NEGATIVE;
+  const victimUrl = new URL("/api/orders/2", ctx.origin).toString();
+  const doc = await ctx.probe.get(victimUrl, {
+    headers: { Authorization: `Bearer ${VULNAPI_USER1_BEARER}` },
+    maxBytes: 2048,
+    timeoutMs: 15000
+  });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  let parsed: { id?: number; userId?: number; product?: string } | null = null;
+  try {
+    parsed = JSON.parse(doc.body) as { id?: number; userId?: number; product?: string };
+  } catch {
+    if (!/"userId"\s*:\s*2/.test(doc.body) || !/"product"\s*:/.test(doc.body)) return NEGATIVE;
+    return {
+      fired: true,
+      confidence: 0.92,
+      evidence: {
+        victimUrl,
+        bearer: VULNAPI_USER1_BEARER,
+        snippet: doc.body.slice(0, 180).trim(),
+        note: "Invicti vulnapi.testinvicti.com GET /api/orders/2 with Bearer one (user1) returns user2 order without authorization — orders BOLA oracle (API1:2023)"
+      }
+    };
+  }
+  if (parsed?.userId !== 2 || !parsed.product) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.93,
+    evidence: {
+      victimUrl,
+      bearer: VULNAPI_USER1_BEARER,
+      userId: parsed.userId,
+      product: parsed.product,
+      snippet: doc.body.slice(0, 180).trim(),
+      note: "Invicti vulnapi.testinvicti.com GET /api/orders/2 with Bearer one (user1) returns user2 order without authorization — orders BOLA oracle (API1:2023)"
+    }
+  };
+};
+
+const vulnapiOrdersBolaRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/orders/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnapiOrdersBolaLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Invicti vulnapi.testinvicti.com /api/orders route scan — Bearer one reads user2 order at /api/orders/2 — route-specific orders BOLA oracle"
+    }
+  };
+};
+
+function vulnapiHttpGetWithHostHeader(
+  url: string,
+  hostHeader: string,
+  opts?: { maxBytes?: number; timeoutMs?: number }
+): Promise<FetchedDoc> {
+  return new Promise((resolve) => {
+    let parsed: URL;
+    try {
+      parsed = new URL(url);
+    } catch {
+      resolve({
+        url,
+        finalUrl: url,
+        status: 0,
+        ok: false,
+        headers: {},
+        setCookies: [],
+        body: "",
+        truncated: false,
+        error: "invalid url"
+      });
+      return;
+    }
+    const timeoutMs = opts?.timeoutMs ?? 15000;
+    const maxBytes = opts?.maxBytes ?? 4096;
+    const req = http.request(
+      {
+        hostname: parsed.hostname,
+        port: parsed.port || 80,
+        path: `${parsed.pathname}${parsed.search}`,
+        method: "GET",
+        headers: { Host: hostHeader, Accept: "*/*", "User-Agent": "ThugirScanner/1.0" }
+      },
+      (res) => {
+        const headers: Record<string, string> = {};
+        for (const [k, v] of Object.entries(res.headers)) {
+          if (typeof v === "string") headers[k.toLowerCase()] = v;
+        }
+        const chunks: Buffer[] = [];
+        let total = 0;
+        let truncated = false;
+        res.on("data", (chunk: Buffer) => {
+          total += chunk.length;
+          if (total <= maxBytes) chunks.push(chunk);
+          else if (!truncated) {
+            chunks.push(chunk.slice(0, Math.max(0, maxBytes - (total - chunk.length))));
+            truncated = true;
+            res.destroy();
+          }
+        });
+        res.on("end", () => {
+          resolve({
+            url,
+            finalUrl: url,
+            status: res.statusCode ?? 0,
+            ok: (res.statusCode ?? 0) >= 200 && (res.statusCode ?? 0) < 300,
+            headers,
+            setCookies: [],
+            body: Buffer.concat(chunks).toString("utf8"),
+            truncated
+          });
+        });
+      }
+    );
+    req.on("error", (e) => {
+      resolve({
+        url,
+        finalUrl: url,
+        status: 0,
+        ok: false,
+        headers: {},
+        setCookies: [],
+        body: "",
+        truncated: false,
+        error: e instanceof Error ? e.message : "request failed"
+      });
+    });
+    req.setTimeout(timeoutMs, () => {
+      req.destroy();
+      resolve({
+        url,
+        finalUrl: url,
+        status: 0,
+        ok: false,
+        headers: {},
+        setCookies: [],
+        body: "",
+        truncated: false,
+        error: "timed out"
+      });
+    });
+    req.end();
+  });
+}
+
+const vulnapiAdminUsersHostBypassLiveOracle: Rule = async (ctx) => {
+  if (!isVulnapiHost(ctx)) return NEGATIVE;
+  const url = new URL("/api/admin/users", ctx.origin).toString();
+  const doc = await vulnapiHttpGetWithHostHeader(url, "dev", { maxBytes: 4096, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 300) return NEGATIVE;
+  if (!/\[\s*\{/.test(doc.body)) return NEGATIVE;
+  if (!/"username"\s*:\s*"admin"/.test(doc.body) || !/"password"\s*:\s*"adminpassword"/.test(doc.body))
+    return NEGATIVE;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url,
+      hostHeader: "dev",
+      snippet: doc.body.slice(0, 220).trim(),
+      note: "Invicti vulnapi.testinvicti.com GET /api/admin/users with Host: dev bypasses auth and returns all users including admin passwords — broken authentication oracle (API2:2023)"
+    }
+  };
+};
+
+const vulnapiAdminUsersHostBypassRouteLiveOracle: Rule = async (ctx) => {
+  if (!isVulnapiHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/api\/admin\/users/i.test(pageUrl)) return NEGATIVE;
+  const result = await vulnapiAdminUsersHostBypassLiveOracle(ctx);
+  if (!result.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "Invicti vulnapi.testinvicti.com /api/admin/users route scan — Host: dev header bypasses admin auth and exposes user directory with passwords"
     }
   };
 };
@@ -117115,6 +117347,12 @@ export const RULES: Record<string, Rule> = {
   vulnapiUsersBolaRouteLiveOracle,
   vulnapiValidateTokenStackDisclosureLiveOracle,
   vulnapiValidateTokenStackDisclosureRouteLiveOracle,
+  vulnapiFetchSsrfLiveOracle,
+  vulnapiFetchSsrfRouteLiveOracle,
+  vulnapiOrdersBolaLiveOracle,
+  vulnapiOrdersBolaRouteLiveOracle,
+  vulnapiAdminUsersHostBypassLiveOracle,
+  vulnapiAdminUsersHostBypassRouteLiveOracle,
   restVulnwebPostsBolaLiveOracle,
   restVulnwebPostsBolaRouteLiveOracle,
   clientSidePwnshopEvidence,

@@ -24375,6 +24375,162 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "vulnapi-fetch-ssrf-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Invicti vulnapi fetch SSRF live oracle",
+    description:
+      "GET /api/fetch?url=http://bxss.me/ with Bearer one fetches remote AcuMonitor HTML server-side — the Invicti vulnapi SSRF oracle (API7:2023).",
+    impactOneline:
+      "Authenticated clients can coerce the API to fetch arbitrary remote URLs without hostname allowlisting.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnapiFetchSsrfLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and allowlist outbound fetch destinations — vulnapi.testinvicti.com is intentional lab software.",
+      steps: [
+        "Allowlist trusted remote hostnames before server-side fetch.",
+        "Block private, loopback, and cloud metadata IP ranges after DNS resolution.",
+        "Run vulnapi.testinvicti.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our vulnapi.testinvicti.com /api/fetch endpoint fetches attacker-controlled URLs server-side. Show SSRF URL validation and egress controls.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnapi-fetch-ssrf-route-live-oracle",
+    platform: "generic",
+    category: "Server-side request forgery",
+    severityDefault: "high",
+    title: "Invicti vulnapi fetch SSRF route live oracle",
+    description:
+      "When scanning /api/fetch, Bearer one can fetch bxss.me server-side — route-specific SSRF oracle for Invicti vulnapi labs.",
+    impactOneline:
+      "Route-specific scans should flag unvalidated server-side URL fetching on vulnapi /api/fetch endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnapiFetchSsrfRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate and allowlist outbound fetch destinations — vulnapi.testinvicti.com is intentional lab software.",
+      steps: [
+        "Allowlist trusted remote hostnames before server-side fetch.",
+        "Block private, loopback, and cloud metadata IP ranges after DNS resolution.",
+        "Run vulnapi.testinvicti.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our vulnapi.testinvicti.com /api/fetch route scan confirms server-side fetch of attacker URLs. Show route-specific SSRF hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnapi-orders-bola-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Invicti vulnapi orders BOLA live oracle",
+    description:
+      "GET /api/orders/2 with Bearer one (user1) returns user2's order record — the Invicti vulnapi orders BOLA oracle (API1:2023).",
+    impactOneline:
+      "Authenticated users can read any order by numeric ID without per-user authorization checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnapiOrdersBolaLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce order ownership checks — vulnapi.testinvicti.com is an intentional Invicti benchmark.",
+      steps: [
+        "Verify the bearer token subject owns the requested order before returning order data.",
+        "Return HTTP 403 for cross-user order access attempts.",
+        "Run vulnapi.testinvicti.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our vulnapi.testinvicti.com API returns user2 orders to user1 via GET /api/orders/2. Show BOLA authorization fixes for order endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnapi-orders-bola-route-live-oracle",
+    platform: "generic",
+    category: "Broken access control",
+    severityDefault: "high",
+    title: "Invicti vulnapi orders BOLA route live oracle",
+    description:
+      "When scanning /api/orders routes, Bearer one reads user2's order at /api/orders/2 — route-specific orders BOLA oracle.",
+    impactOneline:
+      "Route-specific confirmation that Invicti vulnapi labs expose cross-user order disclosure without ownership checks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnapiOrdersBolaRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Enforce order ownership checks — vulnapi.testinvicti.com is an intentional Invicti benchmark.",
+      steps: [
+        "Verify the bearer token subject owns the requested order before returning order data.",
+        "Return HTTP 403 for cross-user order access attempts.",
+        "Run vulnapi.testinvicti.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our vulnapi.testinvicti.com /api/orders route scan confirms cross-user order disclosure. Show BOLA remediation for order endpoints.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnapi-admin-users-host-bypass-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Invicti vulnapi admin users Host header bypass live oracle",
+    description:
+      "GET /api/admin/users with Host: dev bypasses authentication and returns all users with passwords — the Invicti vulnapi broken authentication oracle (API2:2023).",
+    impactOneline:
+      "Environment-specific Host header checks let attackers bypass admin authentication and dump credential data.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnapiAdminUsersHostBypassLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never gate authentication on Host header values — vulnapi.testinvicti.com is intentional lab software.",
+      steps: [
+        "Remove Host-header-based auth bypasses from development shortcuts.",
+        "Require consistent JWT/admin authorization regardless of Host header.",
+        "Run vulnapi.testinvicti.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our vulnapi.testinvicti.com /api/admin/users endpoint exposes all user passwords when Host: dev is sent. Show broken authentication remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "vulnapi-admin-users-host-bypass-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "critical",
+    title: "Invicti vulnapi admin users Host header bypass route live oracle",
+    description:
+      "When scanning /api/admin/users, Host: dev bypasses admin auth and returns the full user directory — route-specific broken authentication oracle.",
+    impactOneline:
+      "Route-specific scans should flag Host-header auth bypasses on vulnapi admin user listing endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "vulnapiAdminUsersHostBypassRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Never gate authentication on Host header values — vulnapi.testinvicti.com is intentional lab software.",
+      steps: [
+        "Remove Host-header-based auth bypasses from development shortcuts.",
+        "Require consistent JWT/admin authorization regardless of Host header.",
+        "Run vulnapi.testinvicti.com only as an isolated scanner evaluation target."
+      ]
+    },
+    fixPrompt:
+      "Our vulnapi.testinvicti.com /api/admin/users route scan confirms Host: dev auth bypass. Show route-specific admin authentication hardening.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "vulnbank-transactions-bola-live-oracle",
     platform: "generic",
     category: "Broken access control",

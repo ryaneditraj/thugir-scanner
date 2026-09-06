@@ -8975,6 +8975,24 @@
       "slug": "oopssec-plaintext-password-vanity-slug-fallback",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: oopssecPlaintextPasswordLogsRouteLiveOracle accepts /posts/plaintext-password vanity slug and fetches canonical plaintext-password-in-logs walkthrough; koadt.github.io/oss-oopssec-store/posts/plaintext-password/ findings 7 (+oopssec-plaintext-password-logs-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnapi.testinvicti.com",
+      "slug": "vulnapi-fetch-ssrf-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/fetch?url=http://bxss.me/ with Bearer one returns AcuMonitor HTML server-side; vulnapi.testinvicti.com/api/fetch findings 10→14 (+vulnapi-fetch-ssrf-live-oracle +vulnapi-fetch-ssrf-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnapi.testinvicti.com",
+      "slug": "vulnapi-orders-bola-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/orders/2 with Bearer one (user1) returns userId:2 Gadget order; vulnapi.testinvicti.com/api/orders/1 findings 11→14 (+vulnapi-orders-bola-live-oracle +vulnapi-orders-bola-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:vulnapi.testinvicti.com",
+      "slug": "vulnapi-admin-users-host-bypass-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /api/admin/users with Host: dev returns adminpassword for all users without JWT; vulnapi.testinvicti.com/api/admin/users findings 10→14 (+vulnapi-admin-users-host-bypass-live-oracle +vulnapi-admin-users-host-bypass-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }
