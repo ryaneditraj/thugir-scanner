@@ -2019,6 +2019,8 @@ const DEEP_RULES = new Set<string>([
   "appsecCiDjangoAdminLiveOracle",
   "appsecCiDjangoAdminRouteLiveOracle",
   "appsecCiLoginRouteLiveOracle",
+  "appsecCiSearchSqliLiveOracle",
+  "appsecCiSearchSqliRouteLiveOracle",
   "owaspsecureInjectionSqliLoginLiveOracle",
   "owaspsecureInjectionSqliLoginRouteLiveOracle",
   "owaspsecureSsrfFetchLiveOracle",
@@ -4427,6 +4429,9 @@ const DEEP_RULES = new Set<string>([
   "nosqlInjectionLabRouteLiveOracle",
   "todoerTasksIdorLiveOracle",
   "todoerTasksIdorRouteLiveOracle",
+  "todoerForgotPasswordEnumerationLiveOracle",
+  "todoerForgotPasswordEnumerationRouteLiveOracle",
+  "todoerRegisterRouteLiveOracle",
   "seclabPathTraversalLabsRouteLiveOracle",
   "seclabOpenRedirectLabsRouteLiveOracle",
   "clientSideAikidoZenDemoEvidence",
@@ -15548,6 +15553,24 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
       )
         return -3;
       if (
+        /todoer\.site/i.test(origin) &&
+        /\/(?:register|forgot-password)\/?$/i.test(targetInput) &&
+        p.slug.startsWith("todoer-tasks-idor")
+      )
+        return -4;
+      if (
+        /todoer\.site/i.test(origin) &&
+        /\/register\/?$/i.test(targetInput) &&
+        p.slug.startsWith("todoer-register")
+      )
+        return -4;
+      if (
+        /todoer\.site/i.test(origin) &&
+        /\/forgot-password\/?$/i.test(targetInput) &&
+        p.slug.startsWith("todoer-forgot-password")
+      )
+        return -4;
+      if (
         /(?:^|\.)seclab\.vercel\.app$/i.test(origin) &&
         /\/labs\/ssrf\b/i.test(targetInput) &&
         p.slug.startsWith("seclab-ssrf-vulnerable")
@@ -17850,6 +17873,12 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /appsec-ci-pipeline\.onrender\.com/i.test(origin) &&
         /\/(?:api\/)?comments\/?$/i.test(targetInput) &&
         p.slug.startsWith("appsec-ci-stored-xss-comments")
+      )
+        return -4;
+      if (
+        /appsec-ci-pipeline\.onrender\.com/i.test(origin) &&
+        /\/search\/?$/i.test(targetInput) &&
+        p.slug.startsWith("appsec-ci-search-sqli")
       )
         return -4;
       if (

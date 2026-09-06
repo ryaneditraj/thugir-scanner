@@ -63074,6 +63074,84 @@ export const genericPatterns: Pattern[] = [
     enabled: true
   },
   {
+    slug: "todoer-forgot-password-enumeration-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Todoer password-reset enumeration live oracle",
+    description:
+      "todoer.site POST /api/auth/forgot-password returns HTTP 404 No account with that email for unknown addresses but HTTP 200 reset-link messaging for registered emails — password-reset enumeration training oracle.",
+    impactOneline:
+      "Distinguishable forgot-password responses let attackers enumerate valid accounts before credential attacks.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "todoerForgotPasswordEnumerationLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return identical responses for registered and unregistered emails on password reset.",
+      steps: [
+        "Always respond with HTTP 200 and a generic If that email is registered message.",
+        "Avoid error strings that confirm account absence.",
+        "Rate-limit forgot-password requests per IP and email."
+      ]
+    },
+    fixPrompt:
+      "Our /api/auth/forgot-password leaks account existence via 404 vs 200 responses. Show enumeration-safe password reset handling.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "todoer-forgot-password-enumeration-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "medium",
+    title: "Todoer /forgot-password enumeration route live oracle",
+    description:
+      "When scanning todoer.site /forgot-password, POST /api/auth/forgot-password distinguishes unknown vs registered emails — route-specific password-reset enumeration oracle.",
+    impactOneline:
+      "Route-scoped scans should flag distinguishable forgot-password responses on Todoer training hosts.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "todoerForgotPasswordEnumerationRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Return identical responses for registered and unregistered emails on password reset.",
+      steps: [
+        "Always respond with HTTP 200 and a generic If that email is registered message.",
+        "Avoid error strings that confirm account absence.",
+        "Rate-limit forgot-password requests per IP and email."
+      ]
+    },
+    fixPrompt:
+      "Our /forgot-password route scan leaks account existence. Show route-level enumeration-safe reset responses.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "todoer-register-route-live-oracle",
+    platform: "generic",
+    category: "Broken authentication",
+    severityDefault: "high",
+    title: "Todoer /register insecure registration route live oracle",
+    description:
+      "When scanning todoer.site /register, POST /api/auth/register creates accounts and chains redirect/next params through verify-email to window.location.href without validation — route-specific insecure registration + open redirect oracle.",
+    impactOneline:
+      "Insecure registration flows with client-side open redirects enable account takeover phishing chains.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "todoerRegisterRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Validate redirect targets and harden registration before issuing verification flows.",
+      steps: [
+        "Allowlist post-verification redirect destinations.",
+        "Require email verification before session issuance.",
+        "Avoid reflecting redirect parameters into window.location without server-side validation."
+      ]
+    },
+    fixPrompt:
+      "Our /register route chains redirect/next through verify-email to unvalidated window.location.href. Show registration and open-redirect remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
     slug: "client-side-aikido-zen-demo-evidence",
     platform: "generic",
     category: "Security misconfiguration",
@@ -77547,6 +77625,58 @@ export const genericPatterns: Pattern[] = [
     },
     fixPrompt:
       "Our AppSec CI Pipeline /login route returns 404 while /comments/ stored XSS remains live. Show how to document partial training deploys.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "appsec-ci-search-sqli-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "AppSec CI Pipeline search SQLi live oracle",
+    description:
+      "GET /search/?q= on appsec-ci-pipeline.onrender.com uses f-string raw SQL — UNION SELECT injects sqli_flag rows and renders captured FLAG{} in search results.",
+    impactOneline:
+      "Raw SQL search enables UNION-based extraction of sensitive rows from unrelated tables.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecCiSearchSqliLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries instead of f-string SQL interpolation.",
+      steps: [
+        "Pass user input via cursor.execute params with %s placeholders.",
+        "Avoid string formatting inside SQL statements.",
+        "Add CI SAST rules (Bandit B608, Semgrep django SQLi) on search views."
+      ]
+    },
+    fixPrompt:
+      "Our /search/ endpoint interpolates q into raw SQL with f-strings. Show parameterized Django cursor.execute remediation.",
+    version: 1,
+    enabled: true
+  },
+  {
+    slug: "appsec-ci-search-sqli-route-live-oracle",
+    platform: "generic",
+    category: "Injection",
+    severityDefault: "critical",
+    title: "AppSec CI Pipeline /search/ SQLi route live oracle",
+    description:
+      "When scanning /search/ on appsec-ci-pipeline.onrender.com, GET ?q= UNION SELECT pulls FLAG{} from sqli_flag via vulnerable raw SQL — route-specific SQL injection search oracle.",
+    impactOneline:
+      "Route-scoped scans should flag UNION-based SQLi on AppSec CI Pipeline search endpoints.",
+    detectorKind: "rule_ref",
+    detectorConfig: { rule: "appsecCiSearchSqliRouteLiveOracle" },
+    tierRequired: "deep",
+    remediation: {
+      summary: "Use parameterized queries instead of f-string SQL interpolation.",
+      steps: [
+        "Pass user input via cursor.execute params with %s placeholders.",
+        "Avoid string formatting inside SQL statements.",
+        "Add CI SAST rules (Bandit B608, Semgrep django SQLi) on search views."
+      ]
+    },
+    fixPrompt:
+      "Our /search/ route scan confirms UNION SELECT SQLi via raw SQL. Show route-level parameterized query remediation.",
     version: 1,
     enabled: true
   },

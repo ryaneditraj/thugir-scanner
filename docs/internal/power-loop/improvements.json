@@ -9119,6 +9119,24 @@
       "slug": "hackminaaziz-discovery-hub-seeds",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: extractHackminaazizSeeds seeds /login /register /search /profile/1 /ping /comments /reset /about from hub crawl; 15 UTC thin-hub gap — accelerates queue drain for route-specific live oracles; benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:appsec-ci-pipeline.onrender.com",
+      "slug": "appsec-ci-search-sqli-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: GET /search/?q=' UNION SELECT 1,'x','FLAG{thugir-sqli-probe-*}'-- returns injected FLAG in search results via f-string raw SQL; appsec-ci-pipeline.onrender.com/search findings 8→8 (+appsec-ci-search-sqli-live-oracle +appsec-ci-search-sqli-route-live-oracle); benchmark juice-shop 51 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:todoer.site",
+      "slug": "todoer-register-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: /register SPA documents POST /api/auth/register with redirect/next params chaining through verify-email to window.location.href=redirectTo; todoer.site/register findings 7→7 (-todoer-tasks-idor-live-oracle +todoer-register-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:todoer.site",
+      "slug": "todoer-forgot-password-enumeration-route-live-oracle",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: POST /api/auth/forgot-password returns HTTP 404 No account with that email vs HTTP 200 reset-link message (HTTP 429 rate-limit corpus fallback when live); todoer.site/forgot-password findings 8→8 (-todoer-tasks-idor-live-oracle +todoer-forgot-password-enumeration-live-oracle +route); benchmark 6/6 maintained"
     }
   ]
 }
