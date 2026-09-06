@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T22:35:00.000Z",
+  "updated_at": "2026-09-06T23:05:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://sabyasachidhal.github.io/MCPGoat/",
+      "source": "MCPGoat — deliberately vulnerable MCP server (26 challenges / 78 CTF flags; tool poisoning, prompt injection, SSRF; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/ecommerce/products/search?q=test",
+      "source": "atlas-crew/Chimera — CHM-ECOM-001 reflected XSS oracle GET /api/v1/ecommerce/products/search (vuln_registry; web search 23 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://chimera.atlascrew.dev/api/v1/ecommerce/products",
+      "source": "atlas-crew/Chimera — CHM-ECOM-002 catalog SQLi oracle GET /api/v1/ecommerce/products (vuln_registry; web search 23 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://riglabs-cyber-lab.vercel.app/crypto",
+      "source": "Riglabs Collective Cyber Lab — interactive cryptography module (riglabs-cyber-lab.vercel.app; web search 23 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://riglabs-cyber-lab.vercel.app/http-headers",
+      "source": "Riglabs Collective Cyber Lab — HTTP headers security lab module (riglabs-cyber-lab.vercel.app; web search 23 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://demo.testfire.net/bank/login.aspx",
       "source": "IBM Altoro Mutual demo.testfire.net \u2014 SQLi login oracle /bank/login.aspx (public benchmark; web search 22 UTC)",

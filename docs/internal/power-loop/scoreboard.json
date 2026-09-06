@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T23:06:23.299Z",
+  "updated_at": "2026-09-06T23:10:00.000Z",
   "benchmark_recall": {
     "juice-shop": {
       "categories_expected": 6,
@@ -15,15 +15,15 @@
       ]
     }
   },
-  "total_sites_scanned": 2937,
-  "total_findings": 29970,
+  "total_sites_scanned": 2946,
+  "total_findings": 30050,
   "critical_findings": 86,
   "teacher_delta_count": 0,
   "teacher_delta_skipped": "nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
-  "discovery_urls_added": 2168,
-  "discovery_findings": 24464,
+  "discovery_urls_added": 2173,
+  "discovery_findings": 24545,
   "improvements_shipped": 1524,
-  "last_run": "2026-09-06T23:06:23.299Z",
+  "last_run": "2026-09-06T23:10:00.000Z",
   "last_run_summary": {
     "hour_utc": "23",
     "benchmark": {
@@ -49,28 +49,35 @@
           ]
         }
       },
-      "note": "Primary Heroku 6/6 (53 findings, 40 live oracles)"
+      "note": "Stable 6/6 first-pass recall on primary Heroku (53 findings, 40 live oracles; secret-resend + jwt-alg-none + captcha-bypass present)"
     },
     "teacher_delta": "skipped — nuclei not in PATH; engine/ empty (.gitkeep only; THUGIR_ENGINE_ROOT unset)",
     "discovery": {
-      "urls_added": 0,
-      "urls_scanned": 3,
-      "urls_ok": 3,
-      "findings": 42,
-      "focus": "23 UTC: demo.testfire.net route-specific XSS/SQLi oracles for search.jsp, feedback.jsp, bank/login.aspx",
+      "urls_added": 5,
+      "urls_scanned": 11,
+      "urls_ok": 9,
+      "findings": 81,
+      "focus": "23 UTC: +5 MCPGoat/Chimera ecommerce/Riglabs + oopssec path-traversal drain; parallel testfire search/feedback/bank-login route oracles",
       "improvements_shipped_this_run": 3
     },
     "notable_findings": [
-      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings)",
-      "demo.testfire.net/search.jsp: 14 findings (+testfire-search-reflected-xss-live-oracle +testfire-search-reflected-xss-route-live-oracle)",
-      "demo.testfire.net/feedback.jsp: 14 findings (+testfire-feedback-reflected-xss-live-oracle +testfire-feedback-reflected-xss-route-live-oracle)",
+      "juice-shop.herokuapp.com: benchmark recall 6/6 (53 findings, 40 live oracles; gap=[])",
+      "sabyasachidhal.github.io/MCPGoat/: 6 findings — mcpgoat-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/ecommerce/products/search?q=test: 8 findings — chimera-ecommerce-products-search-xss-route-live-oracle",
+      "chimera.atlascrew.dev/api/v1/ecommerce/products: 8 findings — chimera-ecommerce-products-catalog-sqli-route-live-oracle",
+      "koadt.github.io/oss-oopssec-store/posts/path-traversal/: 7 findings — oopssec-path-traversal-route-live-oracle",
+      "demo.testfire.net/search.jsp: 14 findings (+testfire-search-reflected-xss-live-oracle)",
+      "demo.testfire.net/feedback.jsp: 14 findings (+testfire-feedback-reflected-xss-live-oracle)",
       "demo.testfire.net/bank/login.aspx: 14 findings (+testfire-bank-login-sqli-route-live-oracle)"
     ],
     "learning_gaps": [
       "teacher_delta blocked — nuclei/engine unavailable in cloud agent",
-      "demo.testfire.net/bank/apply.aspx returns 404 — ccApply POST endpoint may need separate oracle when form fields stabilize",
+      "riglabs crypto + http-headers modules lack route-specific live oracles (thin 5-finding hub)",
+      "demo.testfire.net/bank/apply.aspx returns 404 — ccApply POST endpoint may need separate oracle",
+      "oopssec xxe-supplier-order-import still queued (48h skip from 22 UTC scan)",
       "vapi.roottusk.com + PentestForge dvwa/tomcat unreachable (dead hosts in queue)",
-      "qa.brokencrystals.com/api/file/aws 48h skip until ~2026-09-08T18:14Z"
+      "qa.brokencrystals.com/api/file/aws 48h skip until ~2026-09-08T18:14Z",
+      "seclab idor/xss/csrf/sqli labs still queued for drain"
     ]
   },
   "discovery_highlights": {
@@ -78,10 +85,11 @@
     "demo.testfire.net/search.jsp?query=test": 14,
     "demo.testfire.net/feedback.jsp": 14,
     "demo.testfire.net/bank/login.aspx": 14,
-    "demo.testfire.net/login.jsp": 12,
-    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-11": 15,
-    "wrongsecrets-ctf.herokuapp.com/challenge/challenge-12": 15,
-    "seclab.vercel.app/labs/ssrf": 7,
-    "koadt.github.io/oss-oopssec-store/posts/xxe-supplier-order-import": 13
+    "sabyasachidhal.github.io/MCPGoat": 6,
+    "chimera.atlascrew.dev/api/v1/ecommerce/products/search": 8,
+    "chimera.atlascrew.dev/api/v1/ecommerce/products": 8,
+    "koadt.github.io/oss-oopssec-store/posts/path-traversal": 7,
+    "riglabs-cyber-lab.vercel.app/crypto": 5,
+    "riglabs-cyber-lab.vercel.app/http-headers": 5
   }
 }
