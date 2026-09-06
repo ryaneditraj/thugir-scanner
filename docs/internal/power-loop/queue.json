@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T08:12:33.112Z",
+  "updated_at": "2026-09-06T09:12:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://promptairlines.com/",
+      "source": "Wiz Prompt Airlines — AI CTF prompt-injection chatbot challenge hub (wiz.io blog; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://promptairlines.com/chat",
+      "source": "Wiz Prompt Airlines — LLM chat API endpoint POST /chat prompt-injection oracle (promptfoo red-team walkthrough; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://crucible.dreadnode.io/",
+      "source": "Dreadnode Crucible — 50+ AI red-team challenge platform hub (sonuoffsec AI-Security-Hub; web search 09 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugforge.io/labs/idor",
+      "source": "bugforge.io — beginner IDOR hands-on lab module (web search 09 UTC; complements sqli lab)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://bugforge.io/labs/graphql",
+      "source": "bugforge.io — GraphQL introspection/BOLA lab module (web search 09 UTC)",
+      "auth": "public_demo"
+    },
     {
       "url": "http://vulnapi.testinvicti.com/api/admin/users",
       "source": "Invicti Vulnerable API — BFLA admin users list GET /api/admin/users (swagger)",
