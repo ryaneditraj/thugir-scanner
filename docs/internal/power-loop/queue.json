@@ -1,6 +1,31 @@
 {
-  "updated_at": "2026-09-06T19:05:00.000Z",
+  "updated_at": "2026-09-06T20:12:00.000Z",
   "priority_discovery_urls": [
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/mass-assignment-admin-privilege-escalation/",
+      "source": "kOaDT/oss-oopssec-store — mass-assignment role:ADMIN via POST /api/auth/signup walkthrough (ch.04; scoreboard gap; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/",
+      "source": "kOaDT/oss-oopssec-store — product-search SQLi via q= tautology walkthrough (ch.05; scoreboard gap; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://koadt.github.io/oss-oopssec-store/posts/supply-chain-poisoned-rules-chain/",
+      "source": "kOaDT/oss-oopssec-store — typosquat npm + poisoned AI rules file backdoor chain walkthrough (ch.11; web search 20 UTC)",
+      "auth": "public_demo"
+    },
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-11",
+      "source": "OWASP WrongSecrets CTF — challenge-11 IAM privilege escalation / SSM Parameter Store (wrongsecrets-ctf.herokuapp.com; web search 20 UTC)",
+      "auth": "public_benchmark"
+    },
+    {
+      "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-12",
+      "source": "OWASP WrongSecrets CTF — challenge-12 Docker COPY secret in image history (wrongsecrets-ctf.herokuapp.com; web search 20 UTC)",
+      "auth": "public_benchmark"
+    },
     {
       "url": "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-9",
       "source": "OWASP WrongSecrets CTF — challenge-9 Terraform state secrets walkthrough (scoreboard gap; web search 19 UTC)",
