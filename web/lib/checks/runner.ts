@@ -2129,6 +2129,7 @@ const DEEP_RULES = new Set<string>([
   "clientSideWebsecRestrictedPhpExecChallengeEvidence",
   "clientSideWebsecCreateFunctionChallengeEvidence",
   "clientSideWebsecFibonacciEvalChallengeEvidence",
+  "websecLevel16FibonacciEvalRouteLiveOracle",
   "clientSideWebsecTimingAttackChallengeEvidence",
   "clientSideWebsecPasswordResetPrngChallengeEvidence",
   "websecLevel14PhpEvalBlacklistRouteLiveOracle",
@@ -12792,6 +12793,13 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
         /\/level19\/?$/i.test(targetInput) &&
         (p.slug.startsWith("websec-level19-") ||
           p.slug === "client-side-websec-password-reset-prng-challenge-evidence")
+      )
+        return -3;
+      if (
+        /websec\.fr/i.test(origin) &&
+        /\/level16\/?$/i.test(targetInput) &&
+        (p.slug.startsWith("websec-level16-") ||
+          p.slug === "client-side-websec-fibonacci-eval-challenge-evidence")
       )
         return -3;
       if (

@@ -146,6 +146,16 @@ function aiThreatlabReflexionSuppressed(ctx: PowerCtx): boolean {
   return /rootabhi1\.github\.io\/AI-Threatlab/i.test(pageUrl);
 }
 
+/** FakeShop vulnerable-ecommerce serves static PHP source as text — reflexion SSTI false-positives on $_GET echoes. */
+function fakeshopPhpReflexionSuppressed(ctx: PowerCtx): boolean {
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
+  if (!/vulnerable-ecommerce\.vercel\.app/i.test(pageUrl)) return false;
+  return (
+    /\/(?:products|login)\.php/i.test(pageUrl) ||
+    /^https:\/\/vulnerable-ecommerce\.vercel\.app\/?(?:[#?]|$)/i.test(pageUrl)
+  );
+}
+
 /** OopsSec Store GitHub Pages walkthroughs are static HTML — no server-side template engine. */
 function oopssecGitHubPagesReflexionSuppressed(ctx: PowerCtx): boolean {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || ctx.origin;
@@ -375,6 +385,7 @@ export const reflexionEscalatedSsti: PowerRule = async (ctx) => {
   if (vulnforgeAcademyFileUploadReflexionSuppressed(ctx)) return NEGATIVE;
   if (vulnforgeAcademySsrfReflexionSuppressed(ctx)) return NEGATIVE;
   if (vulnforgeAcademyRceReflexionSuppressed(ctx)) return NEGATIVE;
+  if (fakeshopPhpReflexionSuppressed(ctx)) return NEGATIVE;
   if (riglabsCyberLabReflexionSuppressed(ctx)) return NEGATIVE;
   if (vulnerableBountySiteReflexionSuppressed(ctx)) return NEGATIVE;
   if (promptShieldReflexionSuppressed(ctx)) return NEGATIVE;

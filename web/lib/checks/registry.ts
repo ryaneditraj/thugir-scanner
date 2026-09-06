@@ -26619,6 +26619,51 @@ const websecLevel19PasswordResetRouteLiveOracle: Rule = async (ctx) => {
   };
 };
 
+function websecSpecificLevelFromUrl(pageUrl: string, origin: string): number | null {
+  try {
+    const m = new URL(pageUrl, origin).pathname.match(/\/level(\d+)\/?$/i);
+    return m ? parseInt(m[1], 10) : null;
+  } catch {
+    return null;
+  }
+}
+
+const websecLevel16FibonacciEvalRouteLiveOracle: Rule = async (ctx) => {
+  if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  let pathname = "";
+  try {
+    pathname = new URL(pageUrl, ctx.origin).pathname;
+  } catch {
+    return NEGATIVE;
+  }
+  if (!/\/level16\/?$/i.test(pathname)) return NEGATIVE;
+  const sourceUrl = new URL("/level16/source.php", ctx.origin).toString();
+  const sourceDoc = await fetchDoc(sourceUrl, { maxBytes: 65536, timeoutMs: 15000 });
+  const corpus = `${ctx.combined}\n${sourceDoc.body}`;
+  const markers: string[] = [];
+  if (/Level\s+Sixteen|Fibonacci copy\/paste|It'?s just a/i.test(corpus))
+    markers.push("level16-fibonacci-title");
+  if (/only run trusted code|Fibonacci number calculator/i.test(corpus))
+    markers.push("trusted-code-gate");
+  if (/hash_hmac|in_array[\s\S]{0,40}\$hmac/i.test(corpus)) markers.push("hmac-allowlist-gate");
+  if (/eval[\s\S]{0,80}\$t[\s\S]{0,80}\$prime_test|\$prime_test[\s\S]{0,160}fib/i.test(corpus))
+    markers.push("eval-prime-test-concat");
+  if (/gcd[\s\S]{0,80}fib|relative[\s\S]{0,20}primes/i.test(corpus))
+    markers.push("gcd-relative-primes-oracle");
+  if (markers.length < 3) return NEGATIVE;
+  return {
+    fired: true,
+    confidence: markers.length >= 4 ? 0.92 : 0.9,
+    evidence: {
+      scannedUrl: pageUrl,
+      sourceUrl,
+      markers,
+      note: "WebSec.fr /level16 route scan — source.php confirms eval($t . $prime_test) after HMAC gate on Fibonacci textpad — code injection oracle"
+    }
+  };
+};
+
 const websecLevel17TimingAttackRouteLiveOracle: Rule = async (ctx) => {
   if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
@@ -26653,6 +26698,9 @@ const websecLevel17TimingAttackRouteLiveOracle: Rule = async (ctx) => {
 
 const websecLevel17TimingAttackLiveOracle: Rule = async (ctx) => {
   if (!/websec\.fr/i.test(ctx.origin)) return NEGATIVE;
+  const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
+  const level = websecSpecificLevelFromUrl(pageUrl, ctx.origin);
+  if (level !== null && level !== 17) return NEGATIVE;
   const postUrl = new URL("/level17/", ctx.origin).toString();
   const wrongBody = "flag=thugir-wrong-flag-probe&submit=Go";
   const wrongDoc = await ctx.probe.get(postUrl, {
@@ -116681,6 +116729,7 @@ export const RULES: Record<string, Rule> = {
   clientSideWebsecPasswordResetPrngChallengeEvidence,
   websecLevel14PhpEvalBlacklistRouteLiveOracle,
   websecLevel19PasswordResetRouteLiveOracle,
+  websecLevel16FibonacciEvalRouteLiveOracle,
   websecLevel17TimingAttackRouteLiveOracle,
   websecLevel17TimingAttackLiveOracle,
   websecLevel18PhpUnserializeCookieRouteLiveOracle,
