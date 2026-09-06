@@ -10082,6 +10082,11 @@ function extractOopssecStoreSeeds(html: string, pageUrl: string): string[] {
     "/posts/sql-injection-writeup/",
     "/posts/weak-md5-hashing-admin-compromise/",
     "/posts/product-search-sql-injection/",
+    "/posts/product-search/",
+    "/posts/product-search",
+    "/posts/jwt-algorithm-confusion-partner-api/",
+    "/posts/jwt-algorithm-confusion/",
+    "/posts/jwt-alg-confusion/",
     "/posts/client-side-price-manipulation/",
     "/posts/client-side-price-manipulation",
     "/posts/stored-xss-product-reviews/",
@@ -11639,7 +11644,9 @@ Shell Injection POST /api/execute userCommand Cannot run program invalid-command
           "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-9",
           "https://wrongsecrets-ctf.herokuapp.com/challenge/9",
           "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-10",
-          "https://wrongsecrets-ctf.herokuapp.com/challenge/10"
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/10",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/challenge-11",
+          "https://wrongsecrets-ctf.herokuapp.com/challenge/11"
         ]
       : [
         "https://wrongsecrets.herokuapp.com/challenge/challenge-0",

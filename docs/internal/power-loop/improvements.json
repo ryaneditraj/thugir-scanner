@@ -9155,6 +9155,24 @@
       "slug": "wrongsecrets-ctf-hub-seeds-challenge-9-10",
       "status": "shipped",
       "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended for wrongsecrets-ctf.herokuapp.com with challenge-9/10 + /challenge/9 /challenge/10 short aliases; wrongsecrets-ctf.herokuapp.com/challenge/challenge-9 findings 15 (+wrongsecrets-challenge-9-terraform-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-product-search-vanity-slug-canonical-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: oopssecProductSearchSqliRouteLiveOracle accepts /posts/product-search vanity slug and fetches canonical product-search-sql-injection walkthrough via oopssecWalkthroughEvidenceWithFetch; koadt.github.io/oss-oopssec-store/posts/product-search/ findings 6→7 (+oopssec-product-search-sqli-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
+    },
+    {
+      "source": "discovery:koadt.github.io/oss-oopssec-store",
+      "slug": "oopssec-jwt-alg-confusion-vanity-slug-canonical-fallback",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: oopssecJwtAlgConfusionRouteLiveOracle accepts /posts/jwt-alg-confusion vanity slug and fetches canonical jwt-algorithm-confusion-partner-api walkthrough; koadt.github.io/oss-oopssec-store/posts/jwt-alg-confusion/ findings 6→7 (+oopssec-jwt-alg-confusion-route-live-oracle); benchmark 6/6 maintained"
+    },
+    {
+      "source": "discovery:wrongsecrets-ctf.herokuapp.com",
+      "slug": "wrongsecrets-ctf-hub-seeds-challenge-11",
+      "status": "shipped",
+      "validation": "SOURCE: discovery:url EVIDENCE: wrongSecretsHubPrioritySeeds extended with challenge-11 + /challenge/11 short alias; wrongsecrets-ctf.herokuapp.com/challenge/challenge-11 findings 14 (+wrongsecrets-challenge-11-iam-escalation-route-live-oracle); benchmark juice-shop 53 findings 6/6 maintained"
     }
   ]
 }

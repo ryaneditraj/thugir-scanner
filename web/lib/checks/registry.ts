@@ -6470,10 +6470,23 @@ const clientSideOopssecProductSearchSqliEvidence: Rule = async (ctx) => {
   };
 };
 
+const OOPSSEC_PRODUCT_SEARCH_SQLI_CANONICAL_POST =
+  "https://koadt.github.io/oss-oopssec-store/posts/product-search-sql-injection/";
+
 const oopssecProductSearchSqliRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
-  if (!/\/posts\/product-search-sql-injection/i.test(pageUrl)) return NEGATIVE;
-  const result = await clientSideOopssecProductSearchSqliEvidence(ctx);
+  const routeOk =
+    /\/posts\/product-search-sql-injection/i.test(pageUrl) ||
+    /\/posts\/product-search\/?$/i.test(pageUrl);
+  if (!routeOk) return NEGATIVE;
+  const fetchUrl = /\/posts\/product-search\/?$/i.test(pageUrl)
+    ? OOPSSEC_PRODUCT_SEARCH_SQLI_CANONICAL_POST
+    : pageUrl;
+  const result = await oopssecWalkthroughEvidenceWithFetch(
+    ctx,
+    fetchUrl,
+    clientSideOopssecProductSearchSqliEvidence
+  );
   if (!result.fired) return NEGATIVE;
   return {
     fired: true,
@@ -6481,7 +6494,9 @@ const oopssecProductSearchSqliRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: "OopsSec Store /posts/product-search-sql-injection route scan — walkthrough documents UNION-based SQLi via unsanitized /api/products/search?q parameter"
+      note: /\/posts\/product-search\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/product-search route scan — vanity slug 404; canonical product-search-sql-injection walkthrough documents UNION-based SQLi via unsanitized /api/products/search?q parameter"
+        : "OopsSec Store /posts/product-search-sql-injection route scan — walkthrough documents UNION-based SQLi via unsanitized /api/products/search?q parameter"
     }
   };
 };
@@ -6851,11 +6866,14 @@ const oopssecJwtAlgConfusionRouteLiveOracle: Rule = async (ctx) => {
   const pageUrl = ctx.scanUrl || ctx.home.finalUrl || "";
   const routeOk =
     /\/posts\/jwt-algorithm-confusion-partner-api/i.test(pageUrl) ||
-    /\/posts\/jwt-algorithm-confusion\/?$/i.test(pageUrl);
+    /\/posts\/jwt-algorithm-confusion\/?$/i.test(pageUrl) ||
+    /\/posts\/jwt-alg-confusion\/?$/i.test(pageUrl);
   if (!routeOk) return NEGATIVE;
-  const fetchUrl = /\/posts\/jwt-algorithm-confusion\/?$/i.test(pageUrl)
-    ? OOPSSEC_JWT_ALG_CONFUSION_CANONICAL_POST
-    : pageUrl;
+  const fetchUrl =
+    /\/posts\/jwt-algorithm-confusion\/?$/i.test(pageUrl) ||
+    /\/posts\/jwt-alg-confusion\/?$/i.test(pageUrl)
+      ? OOPSSEC_JWT_ALG_CONFUSION_CANONICAL_POST
+      : pageUrl;
   const result = await oopssecWalkthroughEvidenceWithFetch(
     ctx,
     fetchUrl,
@@ -6868,9 +6886,11 @@ const oopssecJwtAlgConfusionRouteLiveOracle: Rule = async (ctx) => {
     evidence: {
       ...result.evidence,
       scannedUrl: pageUrl,
-      note: /\/posts\/jwt-algorithm-confusion\/?$/i.test(pageUrl)
-        ? "OopsSec Store /posts/jwt-algorithm-confusion route scan — vanity slug 404; canonical jwt-algorithm-confusion-partner-api walkthrough documents RS256/HS256 algorithm confusion with published partner-signing-key.pem reused as HMAC secret"
-        : "OopsSec Store /posts/jwt-algorithm-confusion-partner-api route scan — walkthrough documents RS256/HS256 algorithm confusion with published partner-signing-key.pem reused as HMAC secret"
+      note: /\/posts\/jwt-alg-confusion\/?$/i.test(pageUrl)
+        ? "OopsSec Store /posts/jwt-alg-confusion route scan — vanity slug 404; canonical jwt-algorithm-confusion-partner-api walkthrough documents RS256/HS256 algorithm confusion with published partner-signing-key.pem reused as HMAC secret"
+        : /\/posts\/jwt-algorithm-confusion\/?$/i.test(pageUrl)
+          ? "OopsSec Store /posts/jwt-algorithm-confusion route scan — vanity slug 404; canonical jwt-algorithm-confusion-partner-api walkthrough documents RS256/HS256 algorithm confusion with published partner-signing-key.pem reused as HMAC secret"
+          : "OopsSec Store /posts/jwt-algorithm-confusion-partner-api route scan — walkthrough documents RS256/HS256 algorithm confusion with published partner-signing-key.pem reused as HMAC secret"
     }
   };
 };
